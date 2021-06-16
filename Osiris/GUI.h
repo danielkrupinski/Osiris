@@ -19,9 +19,7 @@ private:
     void renderTriggerbotWindow(bool contentOnly = false) noexcept;
     void renderChamsWindow(bool contentOnly = false) noexcept;
     void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
-    void renderVisualsWindow(bool contentOnly = false) noexcept;
     void renderStyleWindow(bool contentOnly = false) noexcept;
-    void renderMiscWindow(bool contentOnly = false) noexcept;
     void renderConfigWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
@@ -30,10 +28,8 @@ private:
         bool triggerbot = false;
         bool chams = false;
         bool streamProofESP = false;
-        bool visuals = false;
         bool sound = false;
         bool style = false;
-        bool misc = false;
         bool config = false;
     } window;
 

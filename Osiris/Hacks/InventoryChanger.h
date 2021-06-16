@@ -48,4 +48,6 @@ namespace InventoryChanger
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
     void clearInventory() noexcept;
+
+    void onItemEquip(std::uint64_t itemID) noexcept;
 }

@@ -268,6 +268,13 @@ public:
     }
 };
 
+class SharedObject {
+public:
+    INCONSTRUCTIBLE(SharedObject)
+
+    VIRTUAL_METHOD_V(int, getTypeID, 1, (), (this))
+};
+
 template <typename T>
 class SharedObjectTypeCache {
 public:
@@ -298,10 +305,17 @@ public:
     }
 };
 
+struct SOID {
+    std::uint64_t id;
+    std::uint32_t type;
+    std::uint32_t padding;
+};
+
 class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
+    VIRTUAL_METHOD_V(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD_V(void*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
     VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
 
@@ -345,6 +359,11 @@ public:
     auto getAccountID() noexcept
     {
         return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
+    }
+
+    auto getSOID() noexcept
+    {
+        return *reinterpret_cast<SOID*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
     }
 };
 

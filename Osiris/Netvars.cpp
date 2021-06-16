@@ -5,6 +5,7 @@
 
 #include "Config.h"
 #include "Hacks/InventoryChanger.h"
+#include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Netvars.h"
 
@@ -21,7 +22,7 @@ static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxi
 
 static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (config->misc.radarHack)
+    if (Misc::isRadarHackOn())
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
@@ -34,7 +35,7 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void
 
     if (localPlayer && interfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
         if (const auto weapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
-            if (config->visuals.deagleSpinner && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             InventoryChanger::fixKnifeAnimation(weapon, data.value._int);

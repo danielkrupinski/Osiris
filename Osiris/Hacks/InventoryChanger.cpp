@@ -57,16 +57,20 @@ constexpr auto isKnife(WeaponId id) noexcept
 class StaticData {
 public:
     enum class Type : std::uint8_t {
+        // has paint kit, must match GameItem::hasPaintKit() below
         Sticker,
         Glove,
         Skin,
         Music,
-        Collectible,
-        NameTag,
         Patch,
         Graffiti,
         SealedGraffiti,
-        Agent
+
+        // has other data
+        Collectible,
+        NameTag,
+        Agent,
+        CaseKey
     };
 
     struct GameItem {
@@ -82,9 +86,9 @@ public:
         bool isGraffiti() const noexcept { return type == Type::Graffiti; }
         bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
         bool isAgent() const noexcept { return type == Type::Agent; }
+        bool isCaseKey() const noexcept { return type == Type::CaseKey; }
 
-        // TODO: We need a better name for this
-        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch() || isGraffiti() || isSealedGraffiti(); }
+        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
         Type type;
         std::uint8_t rarity;
@@ -176,7 +180,7 @@ private:
             if (stickerKit->id == 0)
                 continue;
 
-            const auto name = std::string_view{ stickerKit->name.data() };
+            const auto name = std::string_view{ stickerKit->name.data(), static_cast<std::size_t>(stickerKit->name.length - 1) };
             const auto isPatch = name.starts_with("patch");
             const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
             const auto isSticker = !isPatch && !isGraffiti;
@@ -242,6 +246,9 @@ private:
             } else if (item->isPatchable()) {
                 if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
+            } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
+                if (const auto image = item->getInventoryImage())
+                    _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, image);
             }
         }
     }
@@ -257,14 +264,9 @@ private:
         initItemData(itemSchema);
 
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
-            const auto compare = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
-            if (compare < 0)
-                return true;
-
-            if (a.hasPaintKit() && b.hasPaintKit() && compare == 0)
+            if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
-
-            return false;
+            return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
         });
 
         _gameItems.shrink_to_fit();
@@ -362,15 +364,16 @@ public:
     void markToDelete() noexcept { itemIndex = static_cast<std::size_t>(-2); }
     bool shouldDelete() const noexcept { return itemIndex == static_cast<std::size_t>(-2); }
 
-    bool isSticker() const noexcept { return !isDeleted() && get().isSticker(); }
-    bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
-    bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
-    bool isMusic() const noexcept { return !isDeleted() && get().isMusic(); }
-    bool isAgent() const noexcept { return !isDeleted() && get().isAgent(); }
+    bool isSticker() const noexcept { return !isDeleted() && !shouldDelete() && get().isSticker(); }
+    bool isSkin() const noexcept { return !isDeleted() && !shouldDelete() && get().isSkin(); }
+    bool isGlove() const noexcept { return !isDeleted() && !shouldDelete() && get().isGlove(); }
+    bool isMusic() const noexcept { return !isDeleted() && !shouldDelete() && get().isMusic(); }
+    bool isAgent() const noexcept { return !isDeleted() && !shouldDelete() && get().isAgent(); }
+    bool isCollectible() const noexcept { return !isDeleted() && !shouldDelete() && get().isCollectible(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
-    const StaticData::GameItem& get() const noexcept { assert(!isDeleted()); return StaticData::gameItems()[itemIndex]; }
+    const StaticData::GameItem& get() const noexcept { assert(!isDeleted() && !shouldDelete()); return StaticData::gameItems()[itemIndex]; }
 };
 
 static std::vector<InventoryItem> inventory;
@@ -416,13 +419,9 @@ static Entity* make_glove(int entry, int serial) noexcept
     return interfaces->entityList->getEntity(entry);
 }
 
-static void applyGloves(Entity* local) noexcept
+static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 41);
+    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 41);
     if (!itemView)
         return;
 
@@ -444,7 +443,7 @@ static void applyGloves(Entity* local) noexcept
         glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
     if (!glove) {
         const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
-        const auto serial = rand() % 0x1000;
+        const auto serial = randomInt(0, 0x1000);
         glove = make_glove(entry, serial);
     }
 
@@ -475,13 +474,11 @@ static void applyGloves(Entity* local) noexcept
     }
 }
 
-static void applyKnife(Entity* local) noexcept
+static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
+    const auto localXuid = local->getSteamId();
 
-    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 0);
+    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 0);
     if (!itemView)
         return;
 
@@ -507,6 +504,9 @@ static void applyKnife(Entity* local) noexcept
 
         auto& definitionIndex = weapon->itemDefinitionIndex2();
         if (!isKnife(definitionIndex))
+            continue;
+
+        if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
@@ -554,13 +554,10 @@ static void applyKnife(Entity* local) noexcept
     worldModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(Entity* local) noexcept
+static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
     const auto localTeam = local->getTeamNumber();
+    const auto localXuid = local->getSteamId();
 
     auto& weapons = local->weapons();
     for (auto weaponHandle : weapons) {
@@ -575,12 +572,15 @@ static void applyWeapons(Entity* local) noexcept
         if (isKnife(definitionIndex))
             continue;
 
+        if (weapon->originalOwnerXuid() != localXuid)
+            continue;
+
         const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(definitionIndex);
         if (!def)
             continue;
 
         const auto loadoutSlot = def->getLoadoutSlot(localTeam);
-        const auto itemView = localInventory->getItemInLoadout(localTeam, loadoutSlot);
+        const auto itemView = localInventory.getItemInLoadout(localTeam, loadoutSlot);
         if (!itemView)
             continue;
 
@@ -624,9 +624,13 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!local)
         return;
 
-    applyGloves(local);
-    applyKnife(local);
-    applyWeapons(local);
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    applyGloves(*localInventory, local);
+    applyKnife(*localInventory, local);
+    applyWeapons(*localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -640,51 +644,6 @@ static void updateHud() noexcept
     hudUpdateRequired = false;
 }
 
-static int slotToApplySticker;
-void InventoryChanger::setStickerApplySlot(int slot) noexcept
-{
-    slotToApplySticker = slot;
-}
-
-static std::uint64_t toolToUse = 0;
-static float useToolTime = 0.0f;
-void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept
-{
-    toolToUse = itemID;
-    useToolTime = memory->globalVars->realtime + randomFloat(0.3f, 0.7f);
-}
-
-static std::uint64_t itemToApplyTool = 0;
-void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
-{
-    itemToApplyTool = itemID;
-}
-
-static int slotToWearSticker;
-void InventoryChanger::setStickerSlotToWear(int slot) noexcept
-{
-    slotToWearSticker = slot;
-}
-
-static std::uint64_t itemToWearSticker = 0;
-void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept
-{
-    itemToWearSticker = itemID;
-    useToolTime = memory->globalVars->realtime + randomFloat(0.18f, 0.48f);
-}
-
-static std::string nameTagString;
-void InventoryChanger::setNameTagString(const char* str) noexcept
-{
-    nameTagString = str;
-}
-
-static std::uint64_t itemToRemoveNameTag = 0;
-void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
-{
-    itemToRemoveNameTag = itemID;
-}
-
 static void initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
@@ -693,12 +652,6 @@ static void initItemCustomizationNotification(const char* typeStr, const char* i
         if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
             interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
     }
-}
-
-static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
-{
-    inventory->removeItem(econItem->itemID);
-    cache->removeObject(econItem);
 }
 
 struct ToEquip {
@@ -710,6 +663,191 @@ struct ToEquip {
 };
 
 static std::vector<ToEquip> toEquip;
+
+static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
+{
+    inventory->removeItem(econItem->itemID);
+    cache->removeObject(econItem);
+}
+
+class ToolUser {
+public:
+    enum class Action {
+        Use,
+        WearSticker,
+        RemoveNameTag
+    };
+
+    static void setDestItem(std::uint64_t itemID, Action action) noexcept
+    {
+        instance().destItemID = itemID;
+        instance().action = action;
+        instance().useTime = memory->globalVars->realtime + randomFloat(0.18f, 0.48f);
+    }
+
+    static void setTool(std::uint64_t itemID) noexcept { instance().toolItemID = itemID; }
+    static void setNameTag(const char* nameTag) noexcept { instance().nameTag = nameTag; }
+    static void setStickerSlot(int slot) noexcept { instance().stickerSlot = slot; }
+
+    static void preAddItems(CSPlayerInventory& localInventory) noexcept
+    {
+        const auto destItemValid = wasItemCreatedByOsiris(instance().destItemID);
+
+        if (instance().action == Action::WearSticker && destItemValid && instance().useTime <= memory->globalVars->realtime) {
+            const auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+            if (dest.isSkin()) {
+                constexpr auto wearStep = 0.12f;
+                const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].wear += wearStep);
+                const auto shouldRemove = (newWear >= 1.0f + wearStep);
+
+                if (shouldRemove)
+                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot] = {};
+
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                    if (const auto soc = memory->getSOCData(view)) {
+                        if (shouldRemove) {
+                            soc->setStickerID(instance().stickerSlot, 0);
+                            soc->setStickerWear(instance().stickerSlot, 0.0f);
+                        } else {
+                            soc->setStickerWear(instance().stickerSlot, newWear);
+                        }
+                    }
+                }
+
+                sendInventoryUpdatedEvent();
+
+                if (shouldRemove)
+                    initItemCustomizationNotification("sticker_remove", std::to_string(instance().destItemID).c_str());
+
+                instance().destItemID = 0;
+            } else if (dest.isAgent()) {
+                dynamicAgentData[dest.getDynamicDataIndex()].patches[instance().stickerSlot] = {};
+
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                    if (const auto soc = memory->getSOCData(view))
+                        soc->setStickerID(instance().stickerSlot, 0);
+                }
+
+                sendInventoryUpdatedEvent();
+                initItemCustomizationNotification("patch_remove", std::to_string(instance().destItemID).c_str());
+                instance().destItemID = 0;
+            }
+        } else if (instance().action == Action::RemoveNameTag && destItemValid) {
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+                dynamicSkinData[dest.getDynamicDataIndex()].nameTag.clear();
+
+                if (const auto econItem = memory->getSOCData(view)) {
+                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
+                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
+                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                    }
+                    removeItemFromInventory(&localInventory, localInventory.getItemBaseTypeCache(), econItem);
+                }
+
+                auto itemCopy = dest;
+                dest.markAsDeleted();
+                inventory.push_back(std::move(itemCopy));
+            }
+        } else if (instance().action == Action::Use && wasItemCreatedByOsiris(instance().toolItemID)) {
+            auto& tool = inventory[static_cast<std::size_t>(instance().toolItemID - BASE_ITEMID)];
+            const auto& toolItem = tool.get();
+
+            if (toolItem.isSealedGraffiti()) {
+                const auto baseTypeCache = localInventory.getItemBaseTypeCache();
+                if (const auto toolView = memory->findOrCreateEconItemViewForItemID(instance().toolItemID))
+                    if (const auto econItem = memory->getSOCData(toolView))
+                        removeItemFromInventory(&localInventory, baseTypeCache, econItem);
+                tool.markAsDeleted();
+
+                const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
+                if (it != StaticData::gameItems().end()) {
+                    instance().recreatedItemID = BASE_ITEMID + inventory.size();
+                    instance().customizationString = "graffity_unseal";
+                    inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
+                }
+            } else if (destItemValid) {
+                auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+                if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch())) {
+                    if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                        if (dest.isSkin()) {
+                            if (toolItem.isSticker()) {
+                                const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
+                                dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].stickerID = sticker.id;
+                                dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].wear = 0.0f;
+                                instance().recreatedItemID = BASE_ITEMID + inventory.size();
+                                instance().customizationString = "sticker_apply";
+                            } else if (toolItem.isNameTag()) {
+                                dynamicSkinData[dest.getDynamicDataIndex()].nameTag = instance().nameTag;
+                                instance().recreatedItemID = BASE_ITEMID + inventory.size();
+                                instance().customizationString = "nametag_add";
+                            }
+                        } else if (dest.isAgent()) {
+                            const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
+                            dynamicAgentData[dest.getDynamicDataIndex()].patches[instance().stickerSlot].patchID = patch.id;
+                            instance().recreatedItemID = BASE_ITEMID + inventory.size();
+                            instance().customizationString = "patch_apply";
+                        }
+
+                        const auto baseTypeCache = localInventory.getItemBaseTypeCache();
+
+                        if (const auto toolView = memory->findOrCreateEconItemViewForItemID(instance().toolItemID))
+                            if (const auto econItem = memory->getSOCData(toolView))
+                                removeItemFromInventory(&localInventory, baseTypeCache, econItem);
+
+                        if (const auto econItem = memory->getSOCData(view)) {
+                            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                                if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
+                                    toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                                if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
+                                    toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                            }
+                            removeItemFromInventory(&localInventory, baseTypeCache, econItem);
+                        }
+                        tool.markAsDeleted();
+                        auto destCopy = dest;
+                        dest.markAsDeleted();
+                        inventory.push_back(std::move(destCopy));
+                    }
+                }
+            }
+            instance().toolItemID = instance().destItemID = 0;
+        }
+    }
+
+    static void postAddItems() noexcept
+    {
+        if (instance().recreatedItemID && instance().customizationString && instance().useTime <= memory->globalVars->realtime) {
+            initItemCustomizationNotification(instance().customizationString, std::to_string(instance().recreatedItemID).c_str());
+            instance().recreatedItemID = 0;
+        }
+    }
+private:
+    static ToolUser& instance() noexcept
+    {
+        static ToolUser toolUser;
+        return toolUser;
+    }
+
+    std::uint64_t toolItemID = 0;
+    std::uint64_t destItemID = 0;
+    std::uint64_t recreatedItemID = 0;
+    Action action;
+    float useTime = 0.0f;
+    int stickerSlot = 0;
+    const char* customizationString = nullptr;
+    std::string nameTag;
+};
+
+void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept { ToolUser::setTool(itemID); }
+void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::Use); }
+void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::WearSticker); }
+void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::RemoveNameTag);}
+void InventoryChanger::setStickerApplySlot(int slot) noexcept { ToolUser::setStickerSlot(slot); }
+void InventoryChanger::setStickerSlotToWear(int slot) noexcept { ToolUser::setStickerSlot(slot); }
+void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::setNameTag(str); }
 
 static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 {
@@ -774,6 +912,30 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
         ragdoll->setModelIndex(idx);
 }
 
+static void applyMedal(CSPlayerInventory& localInventory) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    const auto pr = *memory->playerResource;
+    if (!pr)
+        return;
+
+    const auto itemView = localInventory.getItemInLoadout(Team::None, 55);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isCollectible())
+        return;
+
+    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item.get().weaponID);
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -800,113 +962,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     applyMusicKit(*localInventory);
     applyPlayerAgent(*localInventory);
+    applyMedal(*localInventory);
 
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
-    std::uint64_t appliedStickerToItemID = 0;
-    std::uint64_t addedNameTagToItemID = 0;
-    std::uint64_t appliedPatchToItemID = 0;
-    if (useToolTime <= memory->globalVars->realtime) {
-        if (wasItemCreatedByOsiris(toolToUse) && wasItemCreatedByOsiris(itemToApplyTool)) {
-            auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
-            const auto& toolItem = tool.get();
-            auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
-
-            if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch())) {
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
-                    if (dest.isSkin()) {
-                        if (toolItem.isSticker()) {
-                            const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                            dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.id;
-                            dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
-                            appliedStickerToItemID = BASE_ITEMID + inventory.size();
-                        } else if (toolItem.isNameTag()) {
-                            dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTagString;
-                            addedNameTagToItemID = BASE_ITEMID + inventory.size();
-                        }
-                    } else if (dest.isAgent()) {
-                        const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                        dynamicAgentData[dest.getDynamicDataIndex()].patches[slotToApplySticker].patchID = patch.id;
-                        appliedPatchToItemID = BASE_ITEMID + inventory.size();
-                    }
-
-                    if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolToUse))
-                        if (const auto econItem = memory->getSOCData(toolView))
-                            removeItemFromInventory(localInventory, baseTypeCache, econItem);
-
-                    if (const auto econItem = memory->getSOCData(view)) {
-                        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
-                            if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory->getItemInLoadout(Team::CT, slotCT) == view)
-                                toEquip.emplace_back(Team::CT, slotCT, inventory.size());
-                            if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory->getItemInLoadout(Team::TT, slotTT) == view)
-                                toEquip.emplace_back(Team::TT, slotTT, inventory.size());
-                        }
-                        removeItemFromInventory(localInventory, baseTypeCache, econItem);
-                    }
-                    tool.markAsDeleted();
-                    auto destCopy = dest;
-                    dest.markAsDeleted();
-                    inventory.push_back(std::move(destCopy));
-                }
-            }
-        } else if (wasItemCreatedByOsiris(itemToWearSticker)) {
-            const auto& item = inventory[static_cast<std::size_t>(itemToWearSticker - BASE_ITEMID)];
-            if (item.isSkin()) {
-                constexpr auto wearStep = 0.12f;
-                const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += wearStep);
-                const auto shouldRemove = (newWear >= 1.0f + wearStep);
-
-                if (shouldRemove)
-                    dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker] = {};
-
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
-                    if (const auto soc = memory->getSOCData(view)) {
-                        if (shouldRemove) {
-                            soc->setStickerID(slotToWearSticker, 0);
-                            soc->setStickerWear(slotToWearSticker, 0.0f);
-                        } else {
-                            soc->setStickerWear(slotToWearSticker, newWear);
-                        }
-                    }
-                }
-
-                sendInventoryUpdatedEvent();
-
-                if (shouldRemove)
-                    initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
-            } else if (item.isAgent()) {
-                dynamicAgentData[item.getDynamicDataIndex()].patches[slotToWearSticker] = {};
-
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
-                    if (const auto soc = memory->getSOCData(view))
-                        soc->setStickerID(slotToWearSticker, 0);
-                }
-
-                sendInventoryUpdatedEvent();
-                initItemCustomizationNotification("patch_remove", std::to_string(itemToWearSticker).c_str());
-            }
-        } else if (wasItemCreatedByOsiris(itemToRemoveNameTag)) {
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToRemoveNameTag)) {
-                auto& item = inventory[static_cast<std::size_t>(itemToRemoveNameTag - BASE_ITEMID)];
-                dynamicSkinData[item.getDynamicDataIndex()].nameTag.clear();
-
-                if (const auto econItem = memory->getSOCData(view)) {
-                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
-                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory->getItemInLoadout(Team::CT, slotCT) == view)
-                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
-                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory->getItemInLoadout(Team::TT, slotTT) == view)
-                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
-                    }
-                    removeItemFromInventory(localInventory, baseTypeCache, econItem);
-                }
-
-                auto itemCopy = item;
-                item.markAsDeleted();
-                inventory.push_back(std::move(itemCopy));
-            }
-        }
-        itemToRemoveNameTag = itemToWearSticker = toolToUse = itemToApplyTool = 0;
-    }
+    ToolUser::preAddItems(*localInventory);
 
     bool inventoryUpdated = false;
     for (std::size_t i = 0; i < inventory.size(); ++i) {
@@ -993,12 +1053,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
     if (inventoryUpdated)
         sendInventoryUpdatedEvent();
 
-    if (appliedStickerToItemID)
-        initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
-    if (addedNameTagToItemID)
-        initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
-    if (appliedPatchToItemID)
-        initItemCustomizationNotification("patch_apply", std::to_string(appliedPatchToItemID).c_str());
+    ToolUser::postAddItems();
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
@@ -1393,8 +1448,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::EndChild();
     } else {
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            for (std::size_t i = 0; i < inventory.size(); ++i) {
-                if (inventory[i].isDeleted())
+            for (std::size_t i = inventory.size(); i-- > 0;) {
+                if (inventory[i].isDeleted() || inventory[i].shouldDelete())
                     continue;
 
                 ImGui::PushID(i);
@@ -1524,6 +1579,11 @@ json InventoryChanger::toJson() noexcept
                 patchConfig["Slot"] = i;
                 stickers.push_back(std::move(patchConfig));
             }
+            break;
+        }
+        case StaticData::Type::CaseKey: {
+            itemConfig["Type"] = "Case Key";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         }
@@ -1769,6 +1829,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     continue;
                 dynamicData.patches[slot].patchID = patchID;
             }
+        } else if (type == "Case Key") {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID](const auto& gameItem) { return gameItem.isCaseKey() && gameItem.weaponID == weaponID; });
+            if (staticData == StaticData::gameItems().end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         }
     }
 
@@ -1831,6 +1902,24 @@ void InventoryChanger::resetConfig() noexcept
 void InventoryChanger::clearInventory() noexcept
 {
     resetConfig();
+}
+
+void InventoryChanger::onItemEquip(std::uint64_t itemID) noexcept
+{
+    if (!wasItemCreatedByOsiris(itemID))
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+    if (item.isCollectible()) {
+        if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
+            if (const auto econItem = memory->getSOCData(view))
+                localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+        }
+    }
 }
 
 struct Icon {
