@@ -1881,7 +1881,20 @@ void InventoryChanger::clearInventory() noexcept
 
 void InventoryChanger::onItemEquip(std::uint64_t itemID) noexcept
 {
+    if (!wasItemCreatedByOsiris(itemID))
+        return;
 
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+    if (item.isCollectible()) {
+        if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
+            if (const auto econItem = memory->getSOCData(view))
+                localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+        }
+    }
 }
 
 struct Icon {
