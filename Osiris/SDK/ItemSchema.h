@@ -305,6 +305,12 @@ public:
     }
 };
 
+struct SOID {
+    std::uint64_t id;
+    std::uint32_t type;
+    std::uint32_t padding;
+};
+
 class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
