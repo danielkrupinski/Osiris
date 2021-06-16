@@ -498,14 +498,14 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 #ifdef _WIN32
 int __stdcall getUnverifiedFileHashes(void* thisPointer, int maxFiles)
 {
-    if (config->misc.bypassSvPure)
+    if (Misc::shouldEnableSvPureBypass())
         return 0;
     return hooks->fileSystem.callOriginal<int, 101>(thisPointer, maxFiles);
 }
 
 int __fastcall canLoadThirdPartyFiles(void* thisPointer, void* edx) noexcept
 {
-    if (config->misc.bypassSvPure)
+    if (Misc::shouldEnableSvPureBypass())
         return 1;
     return hooks->fileSystem.callOriginal<int, 127>(thisPointer);
 }

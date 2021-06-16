@@ -9,6 +9,7 @@ struct UserCmd;
 
 namespace Misc
 {
+    bool shouldEnableSvPureBypass() noexcept;
     bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
