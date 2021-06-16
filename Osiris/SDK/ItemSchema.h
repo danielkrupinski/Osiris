@@ -359,6 +359,11 @@ public:
     {
         return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
     }
+
+    auto getSOID() noexcept
+    {
+        return *reinterpret_cast<SOID*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
+    }
 };
 
 class InventoryManager {
