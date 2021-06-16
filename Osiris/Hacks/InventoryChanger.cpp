@@ -1878,6 +1878,11 @@ void InventoryChanger::clearInventory() noexcept
     resetConfig();
 }
 
+void InventoryChanger::onItemEquip(std::uint64_t itemID) noexcept
+{
+
+}
+
 struct Icon {
     Texture texture;
     int lastReferencedFrame = 0;
