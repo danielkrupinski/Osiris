@@ -498,6 +498,7 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
 static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
+    InventoryChanger::onItemEquip(itemID);
     return hooks->inventoryManager.callOriginal<bool, 20>(team, slot, itemID, swap);
 }
 
