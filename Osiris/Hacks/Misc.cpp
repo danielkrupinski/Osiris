@@ -141,6 +141,7 @@ struct MiscConfig {
     } reportbot;
 
     OffscreenEnemies offscreenEnemies;
+    bool bypassSvPure{ false };
 } miscConfig;
 
 bool Misc::shouldRevealMoney() noexcept
@@ -1408,6 +1409,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+    ImGui::Checkbox("Bypass sv pure", &config->misc.bypassSvPure);
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
@@ -1567,6 +1569,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
+    read(j, "Bypass sv pure", m.bypassSvPure);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
@@ -1705,6 +1708,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Grenade predict", nadePredict);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
+    WRITE("Bypass sv pure", bypassSvPure);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
