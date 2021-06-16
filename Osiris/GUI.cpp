@@ -130,11 +130,11 @@ void GUI::handleToggle() noexcept
 {
     auto esc = KeyBind::KeyCode::ESCAPE;
     KeyBind closeMenuKeybind(esc);
-
-    if (closeMenuKeybind.isPressed()) {
-        open = false;
-        interfaces->inputSystem->resetInputState();
-    }
+    
+	if (closeMenuKeybind.isPressed() && !ImGui::IsAnyItemActive()) {
+		open = false;
+		interfaces->inputSystem->resetInputState();
+	}
 
     if (Misc::isMenuKeyPressed()) {
         open = !open;
