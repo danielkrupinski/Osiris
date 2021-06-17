@@ -500,7 +500,7 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
    InventoryChanger::onItemEquip(team, slot, itemID);
-    return hooks->inventoryManager.callOriginal<bool, 20>(team, slot, itemID, swap);
+    return hooks->inventoryManager.callOriginal<bool, WIN32_LINUX(20, 21)>(team, slot, itemID, swap);
 }
 
 static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
@@ -617,7 +617,7 @@ void Hooks::install() noexcept
     inventory.hookAt(1, &soUpdated);
 
     inventoryManager.init(memory->inventoryManager);
-    inventoryManager.hookAt(20, &equipItemInLoadout);
+    inventoryManager.hookAt(WIN32_LINUX(20, 21), &equipItemInLoadout);
 
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, &drawModelExecute);
