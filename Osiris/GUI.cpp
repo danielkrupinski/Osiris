@@ -14,7 +14,6 @@
 #endif
 
 #include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 #include "imgui/imgui_stdlib.h"
 
 #include "imguiCustom.h"
@@ -25,7 +24,6 @@
 #include "Hacks/Misc.h"
 #include "Hacks/InventoryChanger.h"
 #include "Helpers.h"
-#include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
 #include "Hacks/Visuals.h"
