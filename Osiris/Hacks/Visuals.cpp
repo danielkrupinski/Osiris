@@ -613,10 +613,10 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     beamInfo.haloName = nullptr;
     beamInfo.haloIndex = -1;
 
-    beamInfo.red = 255.0f * visualsConfig.bulletTracers.color[0];
-    beamInfo.green = 255.0f * visualsConfig.bulletTracers.color[1];
-    beamInfo.blue = 255.0f * visualsConfig.bulletTracers.color[2];
-    beamInfo.brightness = 255.0f * visualsConfig.bulletTracers.color[3];
+    beamInfo.red = 255.0f * visualsConfig.bulletTracers.asColor4().color[0];
+    beamInfo.green = 255.0f * visualsConfig.bulletTracers.asColor4().color[1];
+    beamInfo.blue = 255.0f * visualsConfig.bulletTracers.asColor4().color[2];
+    beamInfo.brightness = 255.0f * visualsConfig.bulletTracers.asColor4().color[3];
 
     beamInfo.type = 0;
     beamInfo.life = 0.0f;
@@ -659,7 +659,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     if (!visualsConfig.molotovHull.enabled)
         return;
 
-    const auto color = Helpers::calculateColor(visualsConfig.molotovHull);
+    const auto color = Helpers::calculateColor(visualsConfig.molotovHull.asColor4());
 
     GameData::Lock lock;
 
@@ -809,7 +809,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit effect time", &visualsConfig.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Combo("Hit marker", &visualsConfig.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
-    ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.color.data(), &visualsConfig.bulletTracers.color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
+    ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);

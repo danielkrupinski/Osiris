@@ -835,7 +835,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
                 ImGui::Combo("Type", &playerConfig.healthBar.type, "Gradient\0Solid\0Health-based\0");
                 if (playerConfig.healthBar.type == HealthBar::Solid) {
                     ImGui::SameLine();
-                    ImGuiCustom::colorPicker("", static_cast<Color4&>(playerConfig.healthBar));
+                    ImGuiCustom::colorPicker("", playerConfig.healthBar.asColor4());
                 }
                 ImGui::EndPopup();
             }
