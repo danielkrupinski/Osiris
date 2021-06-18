@@ -86,12 +86,6 @@ Config::Config() noexcept
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
-static void from_json(const json& j, ColorToggle3& ct)
-{
-    from_json(j, static_cast<Color3&>(ct));
-    read(j, "Enabled", ct.enabled);
-}
-
 static void from_json(const json& j, ColorToggleRounding& ctr)
 {
     from_json(j, static_cast<ColorToggle&>(ctr));
