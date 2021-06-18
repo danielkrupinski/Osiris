@@ -9,9 +9,49 @@
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
 
-EventListener::EventListener() noexcept
+namespace
+{
+    class EventListenerImpl : public GameEventListener {
+    public:
+        void fireGameEvent(GameEvent* event) override
+        {
+            switch (fnv::hashRuntime(event->getName())) {
+            case fnv::hash("round_start"):
+                GameData::clearProjectileList();
+                Misc::preserveKillfeed(true);
+                [[fallthrough]];
+            case fnv::hash("round_freeze_end"):
+                Misc::purchaseList(event);
+                break;
+            case fnv::hash("player_death"):
+                InventoryChanger::updateStatTrak(*event);
+                InventoryChanger::overrideHudIcon(*event);
+                Misc::killMessage(*event);
+                Misc::killSound(*event);
+                break;
+            case fnv::hash("player_hurt"):
+                Misc::playHitSound(*event);
+                Visuals::hitEffect(event);
+                Visuals::hitMarker(event);
+                break;
+            case fnv::hash("vote_cast"):
+                Misc::voteRevealer(*event);
+                break;
+            }
+        }
+
+        static EventListenerImpl& instance() noexcept
+        {
+            static EventListenerImpl impl;
+            return impl;
+        }
+    };
+}
+
+void EventListener::init() noexcept
 {
     assert(interfaces);
 
@@ -19,12 +59,13 @@ EventListener::EventListener() noexcept
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
     const auto gameEventManager = interfaces->gameEventManager;
-    gameEventManager->addListener(this, "round_start");
-    gameEventManager->addListener(this, "round_freeze_end");
-    gameEventManager->addListener(this, "player_hurt");
-    gameEventManager->addListener(this, "player_death");
-    gameEventManager->addListener(this, "vote_cast");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "round_start");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "round_freeze_end");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_hurt");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
 
+    // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
@@ -35,32 +76,5 @@ void EventListener::remove() noexcept
 {
     assert(interfaces);
 
-    interfaces->gameEventManager->removeListener(this);
-}
-
-void EventListener::fireGameEvent(GameEvent* event)
-{
-    switch (fnv::hashRuntime(event->getName())) {
-    case fnv::hash("round_start"):
-        GameData::clearProjectileList();
-        Misc::preserveKillfeed(true);
-        [[fallthrough]];
-    case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(event);
-        break;
-    case fnv::hash("player_death"):
-        InventoryChanger::updateStatTrak(*event);
-        InventoryChanger::overrideHudIcon(*event);
-        Misc::killMessage(*event);
-        Misc::killSound(*event);
-        break;
-    case fnv::hash("player_hurt"):
-        Misc::playHitSound(*event);
-        Visuals::hitEffect(event);
-        Visuals::hitMarker(event);
-        break;
-    case fnv::hash("vote_cast"):
-        Misc::voteRevealer(*event);
-        break;
-    }
+    interfaces->gameEventManager->removeListener(&EventListenerImpl::instance());
 }

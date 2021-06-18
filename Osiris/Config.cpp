@@ -14,12 +14,12 @@
 #include "nlohmann/json.hpp"
 
 #include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 
 #include "Config.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
@@ -84,12 +84,6 @@ Config::Config() noexcept
 #endif
 
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
-}
-
-static void from_json(const json& j, ColorToggle3& ct)
-{
-    from_json(j, static_cast<Color3&>(ct));
-    read(j, "Enabled", ct.enabled);
 }
 
 static void from_json(const json& j, ColorToggleRounding& ctr)
@@ -292,7 +286,7 @@ static void from_json(const json& j, Config::Style& s)
 
 void Config::load(size_t id, bool incremental) noexcept
 {
-    load((const char8_t*)configs[id].c_str(), incremental);
+    load(configs[id].c_str(), incremental);
 }
 
 void Config::load(const char8_t* name, bool incremental) noexcept
@@ -550,11 +544,11 @@ void Config::save(size_t id) const noexcept
     removeEmptyObjects(j);
 
     createConfigDir();
-    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
+    if (std::ofstream out{ path / configs[id] }; out.good())
         out << std::setw(2) << j;
 }
 
-void Config::add(const char* name) noexcept
+void Config::add(const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
@@ -565,14 +559,14 @@ void Config::add(const char* name) noexcept
 void Config::remove(size_t id) noexcept
 {
     std::error_code ec;
-    std::filesystem::remove(path / (const char8_t*)configs[id].c_str(), ec);
+    std::filesystem::remove(path / configs[id], ec);
     configs.erase(configs.cbegin() + id);
 }
 
-void Config::rename(size_t item, const char* newName) noexcept
+void Config::rename(size_t item, const char8_t* newName) noexcept
 {
     std::error_code ec;
-    std::filesystem::rename(path / (const char8_t*)configs[item].c_str(), path / (const char8_t*)newName, ec);
+    std::filesystem::rename(path / configs[item], path / newName, ec);
     configs[item] = newName;
 }
 
@@ -599,9 +593,9 @@ void Config::listConfigs() noexcept
 
     std::error_code ec;
     std::transform(std::filesystem::directory_iterator{ path, ec },
-        std::filesystem::directory_iterator{ },
-        std::back_inserter(configs),
-        [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+                   std::filesystem::directory_iterator{ },
+                   std::back_inserter(configs),
+                   [](const auto& entry) { return entry.path().filename().u8string(); });
 }
 
 void Config::createConfigDir() const noexcept

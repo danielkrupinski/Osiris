@@ -130,8 +130,8 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
     if (!config.enabled)
         return;
 
-    const ImU32 color = Helpers::calculateColor(config);
-    const ImU32 fillColor = Helpers::calculateColor(config.fill);
+    const ImU32 color = Helpers::calculateColor(config.asColor4());
+    const ImU32 fillColor = Helpers::calculateColor(config.fill.asColor4());
 
     switch (config.type) {
     case Box::_2d:
@@ -258,7 +258,7 @@ static void drawSnapline(const Snapline& config, const ImVec2& min, const ImVec2
         return;
     }
 
-    drawList->AddLine(p1, p2, Helpers::calculateColor(config), config.thickness);
+    drawList->AddLine(p1, p2, Helpers::calculateColor(config.asColor4()), config.thickness);
 }
 
 struct FontPush {
@@ -310,7 +310,7 @@ static void drawHealthBar(const HealthBar& config, const ImVec2& pos, float heig
         max.y += height / 2.0f;
         drawList->AddRectFilledMultiColor(ImFloor(min), ImFloor(max), yellow, yellow, red, red);
     } else {
-        const auto color = config.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config);
+        const auto color = config.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config.asColor4());
         drawList->AddRectFilled(pos + ImVec2{ 1.0f, 1.0f }, pos + ImVec2{ width + 1.0f, height + 1.0f }, color & IM_COL32_A_MASK);
         drawList->AddRectFilled(pos, pos + ImVec2{ width, height }, color);
     }
@@ -334,7 +334,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
     FontPush font{ config.font.name, playerData.distanceToLocal };
 
     if (config.name.enabled) {
-        const auto nameSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.name, playerData.name.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
+        const auto nameSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.name.asColor4(), playerData.name.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
         offsetMins.y -= nameSize.y + 2;
     }
 
@@ -342,7 +342,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
         const auto radius = std::max(5.0f - playerData.distanceToLocal / 600.0f, 1.0f);
         ImVec2 flashDurationPos{ (bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f };
 
-        const auto color = Helpers::calculateColor(config.flashDuration);
+        const auto color = Helpers::calculateColor(config.flashDuration.asColor4());
         constexpr float pi = std::numbers::pi_v<float>;
         drawList->PathArcTo(flashDurationPos + ImVec2{ 1.0f, 1.0f }, radius, pi / 2 - (playerData.flashDuration / 255.0f * pi), pi / 2 + (playerData.flashDuration / 255.0f * pi), 40);
         drawList->PathStroke(color & IM_COL32_A_MASK, false, 0.9f + radius * 0.1f);
@@ -354,7 +354,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
     }
 
     if (config.weapon.enabled && !playerData.activeWeapon.empty()) {
-        const auto weaponTextSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.weapon, playerData.activeWeapon.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y + 1 }, true, false);
+        const auto weaponTextSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.weapon.asColor4(), playerData.activeWeapon.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y + 1 }, true, false);
         offsetMaxs.y += weaponTextSize.y + 2.0f;
     }
 
@@ -375,12 +375,12 @@ static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) 
     FontPush font{ config.font.name, weaponData.distanceToLocal };
 
     if (config.name.enabled && !weaponData.displayName.empty()) {
-        renderText(weaponData.distanceToLocal, config.textCullDistance, config.name, weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
+        renderText(weaponData.distanceToLocal, config.textCullDistance, config.name.asColor4(), weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
     }
 
     if (config.ammo.enabled && weaponData.clip != -1) {
         const auto text{ std::to_string(weaponData.clip) + " / " + std::to_string(weaponData.reserveAmmo) };
-        renderText(weaponData.distanceToLocal, config.textCullDistance, config.ammo, text.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y + 1 }, true, false);
+        renderText(weaponData.distanceToLocal, config.textCullDistance, config.ammo.asColor4(), text.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y + 1 }, true, false);
     }
 }
 
@@ -397,7 +397,7 @@ static void renderEntityBox(const BaseData& entityData, const char* name, const 
     FontPush font{ config.font.name, entityData.distanceToLocal };
 
     if (config.name.enabled)
-        renderText(entityData.distanceToLocal, config.textCullDistance, config.name, name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
+        renderText(entityData.distanceToLocal, config.textCullDistance, config.name.asColor4(), name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
 }
 
 static void drawProjectileTrajectory(const Trail& config, const std::vector<std::pair<float, Vector>>& trajectory) noexcept
@@ -407,7 +407,7 @@ static void drawProjectileTrajectory(const Trail& config, const std::vector<std:
 
     std::vector<ImVec2> points, shadowPoints;
 
-    const auto color = Helpers::calculateColor(config);
+    const auto color = Helpers::calculateColor(config.asColor4());
 
     for (const auto& [time, point] : trajectory) {
         if (ImVec2 pos; time + config.time >= memory->globalVars->realtime && worldToScreen(point, pos, false)) {
@@ -433,7 +433,7 @@ static void drawPlayerSkeleton(const ColorToggleThickness& config, const std::ve
     if (!config.enabled)
         return;
 
-    const auto color = Helpers::calculateColor(config);
+    const auto color = Helpers::calculateColor(config.asColor4());
 
     std::vector<std::pair<ImVec2, ImVec2>> points, shadowPoints;
 
