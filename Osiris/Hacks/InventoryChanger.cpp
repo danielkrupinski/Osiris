@@ -70,6 +70,7 @@ public:
         Collectible,
         NameTag,
         Agent,
+        Case,
         CaseKey
     };
 
@@ -86,6 +87,7 @@ public:
         bool isGraffiti() const noexcept { return type == Type::Graffiti; }
         bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
         bool isAgent() const noexcept { return type == Type::Agent; }
+        bool isCase() const noexcept { return type == Type::Case; }
         bool isCaseKey() const noexcept { return type == Type::CaseKey; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
@@ -245,6 +247,8 @@ private:
                 _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (item->isPatchable()) {
                 _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
+            } else if (itemTypeName == "#CSGO_Type_WeaponCase") {
+                _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
@@ -1579,6 +1583,11 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        case StaticData::Type::Case: {
+            itemConfig["Type"] = "Case";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
+            break;
+        }
         case StaticData::Type::CaseKey: {
             itemConfig["Type"] = "Case Key";
             itemConfig["Weapon ID"] = gameItem.weaponID;
@@ -1827,6 +1836,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     continue;
                 dynamicData.patches[slot].patchID = patchID;
             }
+        } else if (type == "Case") {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID](const auto& gameItem) { return gameItem.isCase() && gameItem.weaponID == weaponID; });
+            if (staticData == StaticData::gameItems().end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         } else if (type == "Case Key") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
