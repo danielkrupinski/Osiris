@@ -281,15 +281,15 @@ void Visuals::colorWorld() noexcept
         const std::string_view textureGroup = mat->getTextureGroupName();
 
         if (visualsConfig.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
-            if (visualsConfig.world.rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.world.rainbowSpeed));
+            if (visualsConfig.world.asColor3().rainbow)
+                mat->colorModulate(rainbowColor(visualsConfig.world.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.world.color);
+                mat->colorModulate(visualsConfig.world.asColor3().color);
         } else if (visualsConfig.sky.enabled && textureGroup.starts_with("SkyBox")) {
-            if (visualsConfig.sky.rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.sky.rainbowSpeed));
+            if (visualsConfig.sky.asColor3().rainbow)
+                mat->colorModulate(rainbowColor(visualsConfig.sky.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.sky.color);
+                mat->colorModulate(visualsConfig.sky.asColor3().color);
         }
     }
 }
