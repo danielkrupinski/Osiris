@@ -74,7 +74,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 {
     [[maybe_unused]] static const auto once = [](HWND window) noexcept {
         netvars = std::make_unique<Netvars>();
-        eventListener = std::make_unique<EventListener>();
+        EventListener::init();
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
@@ -669,7 +669,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
     Sleep(100);
 
     interfaces->inputSystem->enableInput(true);
-    eventListener->remove();
+    EventListener::remove();
 
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
@@ -741,7 +741,7 @@ static int pollEvent(SDL_Event* event) noexcept
 {
     [[maybe_unused]] static const auto once = []() noexcept {
         netvars = std::make_unique<Netvars>();
-        eventListener = std::make_unique<EventListener>();
+        EventListener::init();
 
         ImGui::CreateContext();
         config = std::make_unique<Config>();
