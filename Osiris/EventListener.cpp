@@ -25,6 +25,7 @@ EventListener::EventListener() noexcept
     gameEventManager->addListener(this, "player_death");
     gameEventManager->addListener(this, "vote_cast");
 
+    // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
