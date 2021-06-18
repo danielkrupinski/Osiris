@@ -232,23 +232,21 @@ private:
                 _weaponNamesUpper.emplace(item->getWeaponId(), Helpers::toUpper(nameWide));
             }
 
+            const auto inventoryImage = item->getInventoryImage();
+            if (!inventoryImage)
+                continue;
+
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
-                if (const auto image = item->getInventoryImage())
-                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), vanillaPaintIndex, image);
+                _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
-                if (const auto image = item->getInventoryImage()) {
-                    _collectibles.emplace_back(isOriginal);
-                    _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, image);
-                }
+                _collectibles.emplace_back(isOriginal);
+                _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
-                if (const auto image = item->getInventoryImage())
-                    _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, image);
+                _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (item->isPatchable()) {
-                if (const auto image = item->getInventoryImage())
-                    _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
+                _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                if (const auto image = item->getInventoryImage())
-                    _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, image);
+                _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
         }
     }
