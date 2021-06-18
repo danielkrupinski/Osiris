@@ -94,6 +94,12 @@ struct StickerKit {
 
 enum class Team;
 
+struct StaticAttrib {
+    std::uint16_t defIndex;
+    std::uint32_t value;
+    bool forceGCToGenerate;
+};
+
 class EconItemDefinition {
 public:
     INCONSTRUCTIBLE(EconItemDefinition)
