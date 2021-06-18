@@ -386,6 +386,12 @@ static void from_json(const json& j, Color3& c)
     read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
+static void from_json(const json& j, ColorToggle3& ct)
+{
+    from_json(j, static_cast<Color3&>(ct));
+    read(j, "Enabled", ct.enabled);
+}
+
 static void from_json(const json& j, HealthBar& o)
 {
     from_json(j, static_cast<ColorToggle&>(o));
