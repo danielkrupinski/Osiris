@@ -338,19 +338,19 @@ private:
     std::size_t itemIndex;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 public:
-    explicit InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
+    explicit InventoryItem(std::size_t itemIndex, bool factoryNewOnly = true)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
             const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicSkinData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, factoryNewOnly ? 0.07f : 1.0f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
         } else if (isGlove()) {
             const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicGloveData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, factoryNewOnly ? 0.07f : 1.0f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             dynamicDataIndex = dynamicGloveData.size() - 1;
@@ -815,7 +815,7 @@ private:
 
                                 const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
                                 if (grotto != StaticData::gameItems().end())
-                                    inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto));
+                                    inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto), false);
                             }
 
                             if (!isCase) {
@@ -852,7 +852,7 @@ private:
 
                     const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
                     if (ibuypowerHolo != StaticData::gameItems().end())
-                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo));
+                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo), false);
                 }
             }
             toolItemID = destItemID = 0;
