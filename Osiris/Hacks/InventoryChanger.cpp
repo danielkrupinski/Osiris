@@ -837,12 +837,17 @@ public:
 
     static void postAddItems() noexcept
     {
-        if (instance().recreatedItemID && instance().customizationString && instance().useTime <= memory->globalVars->realtime) {
-            initItemCustomizationNotification(instance().customizationString, std::to_string(instance().recreatedItemID).c_str());
-            instance().recreatedItemID = 0;
-        }
+        instance()._postAddItems();
     }
 private:
+    void _postAddItems() noexcept
+    {
+        if (recreatedItemID && customizationString && useTime <= memory->globalVars->realtime) {
+            initItemCustomizationNotification(customizationString, std::to_string(recreatedItemID).c_str());
+            recreatedItemID = 0;
+        }
+    }
+
     static ToolUser& instance() noexcept
     {
         static ToolUser toolUser;
