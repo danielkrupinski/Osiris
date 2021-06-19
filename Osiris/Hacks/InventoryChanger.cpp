@@ -693,27 +693,38 @@ public:
     static void setNameTag(const char* nameTag) noexcept { instance().nameTag = nameTag; }
     static void setStickerSlot(int slot) noexcept { instance().stickerSlot = slot; }
 
-    static void preAddItems(CSPlayerInventory& localInventory) noexcept
+    static void preAddItems(CSPlayerInventory& localInventory) noexcept { instance()._preAddItems(localInventory); }
+    static void postAddItems() noexcept { instance()._postAddItems(); }
+private:
+    void _postAddItems() noexcept
     {
-        const auto destItemValid = wasItemCreatedByOsiris(instance().destItemID);
+        if (recreatedItemID && customizationString && useTime <= memory->globalVars->realtime) {
+            initItemCustomizationNotification(customizationString, std::to_string(recreatedItemID).c_str());
+            recreatedItemID = 0;
+        }
+    }
 
-        if (instance().action == Action::WearSticker && destItemValid && instance().useTime <= memory->globalVars->realtime) {
-            const auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+    void _preAddItems(CSPlayerInventory& localInventory) noexcept
+    {
+        const auto destItemValid = wasItemCreatedByOsiris(destItemID);
+
+        if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
+            const auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
             if (dest.isSkin()) {
                 constexpr auto wearStep = 0.12f;
-                const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].wear += wearStep);
+                const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
                 const auto shouldRemove = (newWear >= 1.0f + wearStep);
 
                 if (shouldRemove)
-                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot] = {};
+                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot] = {};
 
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                     if (const auto soc = memory->getSOCData(view)) {
                         if (shouldRemove) {
-                            soc->setStickerID(instance().stickerSlot, 0);
-                            soc->setStickerWear(instance().stickerSlot, 0.0f);
+                            soc->setStickerID(stickerSlot, 0);
+                            soc->setStickerWear(stickerSlot, 0.0f);
                         } else {
-                            soc->setStickerWear(instance().stickerSlot, newWear);
+                            soc->setStickerWear(stickerSlot, newWear);
                         }
                     }
                 }
@@ -721,24 +732,24 @@ public:
                 sendInventoryUpdatedEvent();
 
                 if (shouldRemove)
-                    initItemCustomizationNotification("sticker_remove", std::to_string(instance().destItemID).c_str());
+                    initItemCustomizationNotification("sticker_remove", std::to_string(destItemID).c_str());
 
-                instance().destItemID = 0;
+                destItemID = 0;
             } else if (dest.isAgent()) {
-                dynamicAgentData[dest.getDynamicDataIndex()].patches[instance().stickerSlot] = {};
+                dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot] = {};
 
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                     if (const auto soc = memory->getSOCData(view))
-                        soc->setStickerID(instance().stickerSlot, 0);
+                        soc->setStickerID(stickerSlot, 0);
                 }
 
                 sendInventoryUpdatedEvent();
-                initItemCustomizationNotification("patch_remove", std::to_string(instance().destItemID).c_str());
-                instance().destItemID = 0;
+                initItemCustomizationNotification("patch_remove", std::to_string(destItemID).c_str());
+                destItemID = 0;
             }
-        } else if (instance().action == Action::RemoveNameTag && destItemValid) {
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
-                auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+        } else if (action == Action::RemoveNameTag && destItemValid) {
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+                auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                 dynamicSkinData[dest.getDynamicDataIndex()].nameTag.clear();
 
                 if (const auto econItem = memory->getSOCData(view)) {
@@ -755,50 +766,50 @@ public:
                 dest.markAsDeleted();
                 inventory.push_back(std::move(itemCopy));
             }
-        } else if (instance().action == Action::Use) {
-            if (wasItemCreatedByOsiris(instance().toolItemID)) {
-                auto& tool = inventory[static_cast<std::size_t>(instance().toolItemID - BASE_ITEMID)];
+        } else if (action == Action::Use) {
+            if (wasItemCreatedByOsiris(toolItemID)) {
+                auto& tool = inventory[static_cast<std::size_t>(toolItemID - BASE_ITEMID)];
                 const auto& toolItem = tool.get();
 
                 if (toolItem.isSealedGraffiti()) {
                     const auto baseTypeCache = localInventory.getItemBaseTypeCache();
-                    if (const auto toolView = memory->findOrCreateEconItemViewForItemID(instance().toolItemID))
+                    if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
                         if (const auto econItem = memory->getSOCData(toolView))
                             removeItemFromInventory(&localInventory, baseTypeCache, econItem);
                     tool.markAsDeleted();
 
                     const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
                     if (it != StaticData::gameItems().end()) {
-                        instance().recreatedItemID = BASE_ITEMID + inventory.size();
-                        instance().customizationString = "graffity_unseal";
+                        recreatedItemID = BASE_ITEMID + inventory.size();
+                        customizationString = "graffity_unseal";
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
                     }
                 } else if (destItemValid) {
-                    auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+                    auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                     if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch())) {
-                        if (const auto view = memory->findOrCreateEconItemViewForItemID(instance().destItemID)) {
+                        if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                             if (dest.isSkin()) {
                                 if (toolItem.isSticker()) {
                                     const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].stickerID = sticker.id;
-                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[instance().stickerSlot].wear = 0.0f;
-                                    instance().recreatedItemID = BASE_ITEMID + inventory.size();
-                                    instance().customizationString = "sticker_apply";
+                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].stickerID = sticker.id;
+                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear = 0.0f;
+                                    recreatedItemID = BASE_ITEMID + inventory.size();
+                                    customizationString = "sticker_apply";
                                 } else if (toolItem.isNameTag()) {
-                                    dynamicSkinData[dest.getDynamicDataIndex()].nameTag = instance().nameTag;
-                                    instance().recreatedItemID = BASE_ITEMID + inventory.size();
-                                    instance().customizationString = "nametag_add";
+                                    dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTag;
+                                    recreatedItemID = BASE_ITEMID + inventory.size();
+                                    customizationString = "nametag_add";
                                 }
                             } else if (dest.isAgent()) {
                                 const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                                dynamicAgentData[dest.getDynamicDataIndex()].patches[instance().stickerSlot].patchID = patch.id;
-                                instance().recreatedItemID = BASE_ITEMID + inventory.size();
-                                instance().customizationString = "patch_apply";
+                                dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot].patchID = patch.id;
+                                recreatedItemID = BASE_ITEMID + inventory.size();
+                                customizationString = "patch_apply";
                             }
 
                             const auto baseTypeCache = localInventory.getItemBaseTypeCache();
 
-                            if (const auto toolView = memory->findOrCreateEconItemViewForItemID(instance().toolItemID))
+                            if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
                                 if (const auto econItem = memory->getSOCData(toolView))
                                     removeItemFromInventory(&localInventory, baseTypeCache, econItem);
 
@@ -819,32 +830,19 @@ public:
                     }
                 }
             } else if (destItemValid) {
-                auto& dest = inventory[static_cast<std::size_t>(instance().destItemID - BASE_ITEMID)];
+                auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                 if (dest.isCase()) {
                     dest.markToDelete();
 
-                    instance().recreatedItemID = BASE_ITEMID + inventory.size();
-                    instance().customizationString = "crate_unlock";
+                    recreatedItemID = BASE_ITEMID + inventory.size();
+                    customizationString = "crate_unlock";
 
                     const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
                     if (ibuypowerHolo != StaticData::gameItems().end())
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo));
                 }
             }
-            instance().toolItemID = instance().destItemID = 0;
-        }
-    }
-
-    static void postAddItems() noexcept
-    {
-        instance()._postAddItems();
-    }
-private:
-    void _postAddItems() noexcept
-    {
-        if (recreatedItemID && customizationString && useTime <= memory->globalVars->realtime) {
-            initItemCustomizationNotification(customizationString, std::to_string(recreatedItemID).c_str());
-            recreatedItemID = 0;
+            toolItemID = destItemID = 0;
         }
     }
 
