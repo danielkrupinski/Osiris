@@ -247,7 +247,7 @@ private:
                 _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (item->isPatchable()) {
                 _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
-            } else if (itemTypeName == "#CSGO_Type_WeaponCase") {
+            } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
                 _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
