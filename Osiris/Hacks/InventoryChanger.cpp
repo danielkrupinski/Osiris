@@ -372,6 +372,7 @@ public:
     bool isMusic() const noexcept { return !isDeleted() && !shouldDelete() && get().isMusic(); }
     bool isAgent() const noexcept { return !isDeleted() && !shouldDelete() && get().isAgent(); }
     bool isCollectible() const noexcept { return !isDeleted() && !shouldDelete() && get().isCollectible(); }
+    bool isCase() const noexcept { return !isDeleted() && !shouldDelete() && get().isCase(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
