@@ -786,8 +786,9 @@ private:
                     }
                 } else if (destItemValid) {
                     auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-                    if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch())) {
+                    if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool.isCaseKey())) {
                         if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+                            const auto isCase = dest.isCase();
                             if (dest.isSkin()) {
                                 if (toolItem.isSticker()) {
                                     const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
@@ -805,27 +806,39 @@ private:
                                 dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot].patchID = patch.id;
                                 recreatedItemID = BASE_ITEMID + inventory.size();
                                 customizationString = "patch_apply";
+                            } else if (isCase) {
+                                dest.markToDelete();
+                                tool.markToDelete();
+
+                                recreatedItemID = BASE_ITEMID + inventory.size();
+                                customizationString = "crate_unlock";
+
+                                const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
+                                if (grotto != StaticData::gameItems().end())
+                                    inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto));
                             }
 
-                            const auto baseTypeCache = localInventory.getItemBaseTypeCache();
+                            if (!isCase) {
+                                const auto baseTypeCache = localInventory.getItemBaseTypeCache();
 
-                            if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
-                                if (const auto econItem = memory->getSOCData(toolView))
+                                if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
+                                    if (const auto econItem = memory->getSOCData(toolView))
+                                        removeItemFromInventory(&localInventory, baseTypeCache, econItem);
+
+                                if (const auto econItem = memory->getSOCData(view)) {
+                                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
+                                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
+                                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                                    }
                                     removeItemFromInventory(&localInventory, baseTypeCache, econItem);
-
-                            if (const auto econItem = memory->getSOCData(view)) {
-                                if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
-                                    if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
-                                        toEquip.emplace_back(Team::CT, slotCT, inventory.size());
-                                    if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
-                                        toEquip.emplace_back(Team::TT, slotTT, inventory.size());
                                 }
-                                removeItemFromInventory(&localInventory, baseTypeCache, econItem);
+                                tool.markAsDeleted();
+                                auto destCopy = dest;
+                                dest.markAsDeleted();
+                                inventory.push_back(std::move(destCopy));
                             }
-                            tool.markAsDeleted();
-                            auto destCopy = dest;
-                            dest.markAsDeleted();
-                            inventory.push_back(std::move(destCopy));
                         }
                     }
                 }
