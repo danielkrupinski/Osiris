@@ -373,6 +373,7 @@ public:
     bool isAgent() const noexcept { return !isDeleted() && !shouldDelete() && get().isAgent(); }
     bool isCollectible() const noexcept { return !isDeleted() && !shouldDelete() && get().isCollectible(); }
     bool isCase() const noexcept { return !isDeleted() && !shouldDelete() && get().isCase(); }
+    bool isCaseKey() const noexcept { return !isDeleted() && !shouldDelete() && get().isCaseKey(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
