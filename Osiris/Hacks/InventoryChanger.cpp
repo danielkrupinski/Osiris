@@ -337,20 +337,39 @@ struct InventoryItem {
 private:
     std::size_t itemIndex;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
+
+    static float generateWear(bool factoryNewOnly) noexcept
+    {
+        if (factoryNewOnly)
+            return randomFloat(0.0f, 0.07f);
+
+        float wear;
+        if (const auto condition = randomInt(1, 10000); condition <= 1471)
+            wear = randomFloat(0.0f, 0.07f);
+        else if (condition <= 3939)
+            wear = randomFloat(0.07f, 0.15f);
+        else if (condition <= 8257)
+            wear = randomFloat(0.15f, 0.38f);
+        else if (condition <= 9049)
+            wear = randomFloat(0.38f, 0.45f);
+        else
+            wear = randomFloat(0.45f, 1.0f);
+        return wear;
+    }
 public:
     explicit InventoryItem(std::size_t itemIndex, bool factoryNewOnly = true)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
             const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicSkinData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, factoryNewOnly ? 0.07f : 1.0f));
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear(factoryNewOnly));
             dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
         } else if (isGlove()) {
             const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicGloveData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, factoryNewOnly ? 0.07f : 1.0f));
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear(factoryNewOnly));
             dynamicData.seed = randomInt(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             dynamicDataIndex = dynamicGloveData.size() - 1;
