@@ -59,7 +59,7 @@ struct UtlMap {
     Node<Key, Value>* elements;
 };
 
-struct String {
+struct UtlString {
     UtlMemory<char> buffer;
     int length;
 
@@ -68,13 +68,13 @@ struct String {
 
 struct PaintKit {
     int id;
-    String name;
-    String description;
-    String itemName;
-    String sameNameFamilyAggregate;
-    String pattern;
-    String normal;
-    String logoMaterial;
+    UtlString name;
+    UtlString description;
+    UtlString itemName;
+    UtlString sameNameFamilyAggregate;
+    UtlString pattern;
+    UtlString normal;
+    UtlString logoMaterial;
     bool baseDiffuseOverride;
     int rarity;
     PAD(40)
@@ -85,14 +85,20 @@ struct PaintKit {
 struct StickerKit {
     int id;
     int rarity;
-    String name;
-    String description;
-    String itemName;
-    PAD(2 * sizeof(String))
-    String inventoryImage;
+    UtlString name;
+    UtlString description;
+    UtlString itemName;
+    PAD(2 * sizeof(UtlString))
+    UtlString inventoryImage;
 };
 
 enum class Team;
+
+struct StaticAttrib {
+    std::uint16_t defIndex;
+    std::uint32_t value;
+    bool forceGCToGenerate;
+};
 
 class EconItemDefinition {
 public:
@@ -114,6 +120,20 @@ public:
     int getCapabilities() noexcept
     {
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
+    }
+
+    const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
+    {
+        return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
+    }
+
+    bool hasCrateSeries() noexcept
+    {
+        const auto& staticAttributes = getStaticAttributes();
+        for (int i = 0; i < staticAttributes.size; ++i)
+            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
+                return true;
+        return false;
     }
 
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
@@ -171,10 +191,10 @@ struct EconItemQualityDefinition {
 };
 
 struct AlternateIconData {
-    String simpleName;
-    String largeSimpleName;
-    String iconURLSmall;
-    String iconURLLarge;
+    UtlString simpleName;
+    UtlString largeSimpleName;
+    UtlString iconURLSmall;
+    UtlString iconURLLarge;
     PAD(WIN32_LINUX(28, 48))
 };
 
@@ -315,7 +335,7 @@ class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
-    VIRTUAL_METHOD_V(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
+    VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD_V(void*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
     VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
 

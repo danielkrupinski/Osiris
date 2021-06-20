@@ -14,12 +14,12 @@
 #include "nlohmann/json.hpp"
 
 #include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 
 #include "Config.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
@@ -84,12 +84,6 @@ Config::Config() noexcept
 #endif
 
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
-}
-
-static void from_json(const json& j, ColorToggle3& ct)
-{
-    from_json(j, static_cast<Color3&>(ct));
-    read(j, "Enabled", ct.enabled);
 }
 
 static void from_json(const json& j, ColorToggleRounding& ctr)

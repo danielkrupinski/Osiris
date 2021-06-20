@@ -8,10 +8,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "imgui/imgui.h"
-#include "Hacks/InventoryChanger.h"
 #include "ConfigStructs.h"
 #include "InputUtil.h"
+
+struct ImFont;
 
 class Config {
 public:

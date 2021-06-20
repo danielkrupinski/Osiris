@@ -54,6 +54,7 @@ public:
     HookType clientMode;
     HookType engine;
     HookType fileSystem;
+    HookType inventory;
     HookType inventoryManager;
     HookType modelRender;
     HookType panoramaMarshallHelper;
