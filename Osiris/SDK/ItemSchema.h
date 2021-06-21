@@ -160,7 +160,13 @@ public:
 struct ItemListEntry {
     int itemDef;
     int paintKit;
-    PAD(20)
+    int paintKitSeed;
+    float paintKitWear;
+    std::uint32_t stickerKit;
+    std::uint32_t musicKit;
+    bool isNestedList;
+    bool isUnusualList;
+    PAD(2)
 
     auto weaponId() const noexcept
     {
