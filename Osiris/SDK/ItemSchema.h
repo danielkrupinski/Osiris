@@ -138,11 +138,7 @@ public:
 
     bool hasCrateSeries() noexcept
     {
-        const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
-                return true;
-        return false;
+        return getCrateSeriesNumber() != 0;
     }
 
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
