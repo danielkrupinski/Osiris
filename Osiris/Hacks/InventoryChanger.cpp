@@ -1973,7 +1973,7 @@ void InventoryChanger::clearInventory() noexcept
     resetConfig();
 }
 
-static std::uint64_t lastEquippedItemID = 0;
+static std::size_t lastEquippedCount = 0;
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
 {
     if (!wasItemCreatedByOsiris(itemID))
@@ -1996,15 +1996,15 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
         }
-        lastEquippedItemID = itemID;
+        ++lastEquippedCount;
     }
 }
 
 void InventoryChanger::onSoUpdated(SharedObject* object, int event) noexcept
 {
-    if (lastEquippedItemID != 0 && object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
+    if (lastEquippedCount > 0 && object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
         *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C)) = WeaponId::None;
-        lastEquippedItemID = 0;
+        --lastEquippedCount;
     }
 }
 
