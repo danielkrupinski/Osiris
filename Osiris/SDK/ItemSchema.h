@@ -127,6 +127,15 @@ public:
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
     }
 
+    std::uint32_t getCrateSeriesNumber() noexcept
+    {
+        const auto& staticAttributes = getStaticAttributes();
+        for (int i = 0; i < staticAttributes.size; ++i)
+            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
+                return staticAttributes[i].value;
+        return 0;
+    }
+
     bool hasCrateSeries() noexcept
     {
         const auto& staticAttributes = getStaticAttributes();
