@@ -899,14 +899,18 @@ private:
             } else if (destItemValid) {
                 auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                 if (dest.isCase()) {
-                    dest.markToDelete();
-
                     recreatedItemID = BASE_ITEMID + inventory.size();
                     customizationString = "crate_unlock";
 
-                    const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
-                    if (ibuypowerHolo != StaticData::gameItems().end())
-                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo), false);
+                    const auto& caseData = StaticData::cases()[dest.get().dataIndex];
+                    dest.markToDelete();
+                    if (caseData.loot.size() > 0)
+                        inventory.emplace_back(caseData.loot[randomInt(0, static_cast<int>(caseData.loot.size() - 1))], false);
+                    else {
+                        const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
+                        if (ibuypowerHolo != StaticData::gameItems().end())
+                            inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo), false);
+                    }
                 }
             }
             toolItemID = destItemID = 0;
