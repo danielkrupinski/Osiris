@@ -118,12 +118,16 @@ public:
 
     struct Case {
         bool willProduceStatTrak = false;
-        std::vector<std::size_t> loot;
+        std::size_t lootBeginIdx = 0;
+        std::size_t lootEndIdx = 0;
+
+        bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
     };
 
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
+    static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
     static const auto& getWeaponNameUpper(WeaponId weaponID) noexcept { return instance()._weaponNamesUpper[weaponID]; }
     static const auto& getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
@@ -296,8 +300,10 @@ private:
         assert(lootListIndices.size() == _cases.size());
 
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
+            _cases[i].lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value))
-                fillLootFromLootList(itemSchema, lootList, _cases[i].loot, _cases[i].willProduceStatTrak);
+                fillLootFromLootList(itemSchema, lootList, _caseLoot, _cases[i].willProduceStatTrak);
+            _cases[i].lootEndIdx = _caseLoot.size();
         }
     }
 
@@ -344,6 +350,7 @@ private:
     std::vector<GameItem> _gameItems;
     std::vector<Collectible> _collectibles;
     std::vector<Case> _cases;
+    std::vector<std::size_t> _caseLoot;
     std::vector<std::size_t> _stickersSorted;
     std::vector<PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
@@ -905,8 +912,8 @@ private:
 
                                 const auto& caseData = StaticData::cases()[dest.get().dataIndex];
                                 dest.markToDelete();
-                                if (caseData.loot.size() > 0) {
-                                    inventory.emplace_back(caseData.loot[randomInt(0, static_cast<int>(caseData.loot.size() - 1))], false);
+                                if (caseData.hasLoot()) {
+                                    inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
                                 } else {
                                     const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
                                     if (grotto != StaticData::gameItems().end())
@@ -946,8 +953,8 @@ private:
 
                     const auto& caseData = StaticData::cases()[dest.get().dataIndex];
                     dest.markToDelete();
-                    if (caseData.loot.size() > 0) {
-                        inventory.emplace_back(caseData.loot[randomInt(0, static_cast<int>(caseData.loot.size() - 1))], false);
+                    if (caseData.hasLoot()) {
+                        inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
                         if (caseData.willProduceStatTrak && inventory.back().isMusic()) {
                             auto& dynamicData = dynamicMusicData[inventory.back().getDynamicDataIndex()];
                             dynamicData.statTrak = 0;
