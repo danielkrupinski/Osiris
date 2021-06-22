@@ -117,6 +117,7 @@ public:
     };
 
     struct Case {
+        bool willProduceStatTrak = false;
         std::vector<std::size_t> loot;
     };
 
@@ -275,6 +276,7 @@ private:
             if (!lootList)
                 continue;
 
+            _cases[i].willProduceStatTrak = lootList->willProduceStatTrak();
             const auto& contents = lootList->getLootListContents();
             for (int j = 0; j < contents.size; ++j) {
                 if (contents[j].stickerKit != 0) {
