@@ -116,8 +116,13 @@ public:
         std::wstring nameUpperCase;
     };
 
+    struct Case {
+        std::vector<std::size_t> loot;
+    };
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
+    static const auto& cases() noexcept { return instance()._cases; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
     static const auto& getWeaponNameUpper(WeaponId weaponID) noexcept { return instance()._weaponNamesUpper[weaponID]; }
     static const auto& getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
@@ -253,7 +258,8 @@ private:
                     continue;
 
                 lootListIndices.push_back(lootListIdx);
-                _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), lootListIndices.size() - 1, inventoryImage);
+                _cases.push_back({});
+                _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
@@ -288,6 +294,7 @@ private:
 
     std::vector<GameItem> _gameItems;
     std::vector<Collectible> _collectibles;
+    std::vector<Case> _cases;
     std::vector<PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
