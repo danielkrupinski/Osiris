@@ -1106,6 +1106,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isMusic()) {
             econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
+            const auto& dynamicData = dynamicMusicData[inventory[i].getDynamicDataIndex()];
+            if (dynamicData.statTrak > -1) {
+                econItem->setStatTrak(dynamicData.statTrak);
+                econItem->setStatTrakType(1);
+                econItem->quality = 9;
+            }
         } else if (item.isSkin()) {
             if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
