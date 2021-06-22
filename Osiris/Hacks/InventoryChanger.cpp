@@ -273,7 +273,7 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return item.isSticker() && _paintKits[item.dataIndex].id == stickerKit; });
+                const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return (item.isSticker() || item.isPatch() || item.isGraffiti()) && _paintKits[item.dataIndex].id == stickerKit; });
                 if (it != _gameItems.cend())
                     loot.push_back(std::distance(_gameItems.cbegin(), it));
             } else if (contents[j].musicKit != 0) {
