@@ -266,6 +266,26 @@ private:
         }
     }
 
+    void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
+    {
+        assert(lootListIndices.size() == _cases.size());
+
+        for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
+            const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value);
+            if (!lootList)
+                continue;
+
+            const auto& contents = lootList->getLootListContents();
+            for (int j = 0; j < contents.size; ++j) {
+                if (contents[j].stickerKit != 0) {
+                    const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return item.isSticker() && _paintKits[item.dataIndex].id == stickerKit; });
+                    if (it != _gameItems.cend())
+                        _cases[i].loot.push_back(std::distance(_gameItems.cbegin(), it));
+                }
+            }
+        }
+    }
+
     StaticData()
     {
         assert(memory && interfaces);
@@ -282,6 +302,8 @@ private:
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
             return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
         });
+
+        buildLootLists(itemSchema, lootListIndices);
 
         _gameItems.shrink_to_fit();
     }
