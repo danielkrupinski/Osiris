@@ -273,9 +273,9 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return (item.isSticker() || item.isPatch() || item.isGraffiti()) && _paintKits[item.dataIndex].id == stickerKit; });
-                if (it != _gameItems.cend())
-                    loot.push_back(std::distance(_gameItems.cbegin(), it));
+                const auto it = std::ranges::lower_bound(std::as_const(_stickersSorted), contents[j].stickerKit, [this](std::size_t index, int stickerKit) { return _paintKits[_gameItems[index].dataIndex].id < stickerKit; });
+                if (it != _stickersSorted.cend() && _paintKits[_gameItems[*it].dataIndex].id == contents[j].stickerKit)
+                    loot.push_back(*it);
             } else if (contents[j].musicKit != 0) {
                 const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
                 if (it != _gameItems.cend())
@@ -301,6 +301,17 @@ private:
         }
     }
 
+    void initSortedVectors() noexcept
+    {
+        for (std::size_t i = 0; i < _gameItems.size(); ++i) {
+            const auto& item = _gameItems[i];
+            if (item.isSticker() || item.isPatch() || item.isGraffiti())
+                _stickersSorted.push_back(i);
+        }
+
+        std::ranges::sort(_stickersSorted, [this](std::size_t a, std::size_t b) { return _paintKits[_gameItems[a].dataIndex].id < _paintKits[_gameItems[b].dataIndex].id; });
+    }
+
     StaticData()
     {
         assert(memory && interfaces);
@@ -318,6 +329,7 @@ private:
             return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
         });
 
+        initSortedVectors();
         buildLootLists(itemSchema, lootListIndices);
 
         _gameItems.shrink_to_fit();
@@ -332,6 +344,7 @@ private:
     std::vector<GameItem> _gameItems;
     std::vector<Collectible> _collectibles;
     std::vector<Case> _cases;
+    std::vector<std::size_t> _stickersSorted;
     std::vector<PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
