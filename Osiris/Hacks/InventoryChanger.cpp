@@ -1246,6 +1246,11 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     */
 }
 
+void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
+{
+    memory->debugMsg("onRoundMVP\n");
+}
+
 static bool windowOpen = false;
 
 void InventoryChanger::menuBarItem() noexcept
