@@ -281,6 +281,10 @@ private:
                     const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return item.isSticker() && _paintKits[item.dataIndex].id == stickerKit; });
                     if (it != _gameItems.cend())
                         _cases[i].loot.push_back(std::distance(_gameItems.cbegin(), it));
+                } else if (contents[j].musicKit != 0) {
+                    const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
+                    if (it != _gameItems.cend())
+                        _cases[i].loot.push_back(std::distance(_gameItems.cbegin(), it));
                 }
             }
         }
