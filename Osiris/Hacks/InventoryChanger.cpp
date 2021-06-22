@@ -354,9 +354,14 @@ struct DynamicGloveData {
     int seed = 1;
 };
 
+struct DynamicMusicData {
+    int statTrak = -1;
+};
+
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
+static std::vector<DynamicMusicData> dynamicMusicData;
 
 constexpr auto BASE_ITEMID = 1152921504606746975;
 
@@ -418,6 +423,10 @@ public:
             DynamicAgentData dynamicData;
             dynamicAgentData.push_back(dynamicData);
             dynamicDataIndex = dynamicAgentData.size() - 1;
+        } else if (isMusic()) {
+            DynamicMusicData dynamicData;
+            dynamicMusicData.push_back(dynamicData);
+            dynamicDataIndex = dynamicMusicData.size() - 1;
         }
     }
 
@@ -1630,6 +1639,9 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Music";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
+            const auto& dynamicData = dynamicMusicData[item.getDynamicDataIndex()];
+            if (dynamicData.statTrak > -1)
+                itemConfig["StatTrak"] = dynamicData.statTrak;
             break;
         }
         case StaticData::Type::Collectible: {
@@ -1850,6 +1862,13 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 continue;
 
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+
+            auto& dynamicData = dynamicMusicData[inventory.back().getDynamicDataIndex()];
+
+            if (jsonItem.contains("StatTrak")) {
+                if (const auto& statTrak = jsonItem["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)
+                    dynamicData.statTrak = statTrak;
+            }
         } else if (type == "Collectible") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
