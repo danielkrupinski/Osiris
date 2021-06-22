@@ -215,7 +215,7 @@ private:
         }
     }
 
-    void initItemData(ItemSchema* itemSchema) noexcept
+    void initItemData(ItemSchema* itemSchema, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
@@ -248,7 +248,12 @@ private:
             } else if (item->isPatchable()) {
                 _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
-                _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
+                const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
+                if (lootListIdx == -1)
+                    continue;
+
+                lootListIndices.push_back(lootListIdx);
+                _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), lootListIndices.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
@@ -263,7 +268,8 @@ private:
         initSkinData(itemSchema);
         initStickerData(itemSchema);
         initMusicData(itemSchema);
-        initItemData(itemSchema);
+        std::vector<int> lootListIndices;
+        initItemData(itemSchema, lootListIndices);
 
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
