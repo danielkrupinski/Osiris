@@ -293,6 +293,7 @@ public:
     void setSeed(float seed) noexcept { setAttributeValue(7, &seed); }
     void setWear(float wear) noexcept { setAttributeValue(8, &wear); }
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
+    void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
