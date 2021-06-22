@@ -267,28 +267,33 @@ private:
         }
     }
 
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool& willProduceStatTrak) noexcept
+    {
+        willProduceStatTrak = willProduceStatTrak || lootList->willProduceStatTrak();
+        const auto& contents = lootList->getLootListContents();
+        for (int j = 0; j < contents.size; ++j) {
+            if (contents[j].stickerKit != 0) {
+                const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return item.isSticker() && _paintKits[item.dataIndex].id == stickerKit; });
+                if (it != _gameItems.cend())
+                    loot.push_back(std::distance(_gameItems.cbegin(), it));
+            } else if (contents[j].musicKit != 0) {
+                const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
+                if (it != _gameItems.cend())
+                    loot.push_back(std::distance(_gameItems.cbegin(), it));
+            } else if (contents[j].isNestedList) {
+                if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
+                    fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
+            }
+        }
+    }
+
     void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
     {
         assert(lootListIndices.size() == _cases.size());
 
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
-            const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value);
-            if (!lootList)
-                continue;
-
-            _cases[i].willProduceStatTrak = lootList->willProduceStatTrak();
-            const auto& contents = lootList->getLootListContents();
-            for (int j = 0; j < contents.size; ++j) {
-                if (contents[j].stickerKit != 0) {
-                    const auto it = std::ranges::find_if(std::as_const(_gameItems), [stickerKit = contents[j].stickerKit, this](const auto& item) { return item.isSticker() && _paintKits[item.dataIndex].id == stickerKit; });
-                    if (it != _gameItems.cend())
-                        _cases[i].loot.push_back(std::distance(_gameItems.cbegin(), it));
-                } else if (contents[j].musicKit != 0) {
-                    const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
-                    if (it != _gameItems.cend())
-                        _cases[i].loot.push_back(std::distance(_gameItems.cbegin(), it));
-                }
-            }
+            if (const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value))
+                fillLootFromLootList(itemSchema, lootList, _cases[i].loot, _cases[i].willProduceStatTrak);
         }
     }
 
