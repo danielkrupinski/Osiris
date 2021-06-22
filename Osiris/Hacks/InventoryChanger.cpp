@@ -283,8 +283,8 @@ private:
             } else if (contents[j].isNestedList) {
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
                     fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
-            } else if (contents[j].paintKit != 0) {
-                const auto it = std::ranges::find_if(std::as_const(_gameItems), [paintKit = contents[j].paintKit, weaponID = contents[j].weaponId(), this](const auto& item) { return item.weaponID == weaponID && _paintKits[item.dataIndex].id == paintKit; });
+            } else if (contents[j].itemDef != 0) {
+                const auto it = std::ranges::find_if(std::as_const(_gameItems), [paintKit = contents[j].paintKit, weaponID = contents[j].weaponId(), this](const auto& item) { return item.weaponID == weaponID && (!item.hasPaintKit() || _paintKits[item.dataIndex].id == paintKit); });
                 if (it != _gameItems.cend())
                     loot.push_back(std::distance(_gameItems.cbegin(), it));
             }
