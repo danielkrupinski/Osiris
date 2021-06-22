@@ -885,15 +885,20 @@ private:
                                 recreatedItemID = BASE_ITEMID + inventory.size();
                                 customizationString = "patch_apply";
                             } else if (isCase) {
-                                dest.markToDelete();
                                 tool.markToDelete();
 
                                 recreatedItemID = BASE_ITEMID + inventory.size();
                                 customizationString = "crate_unlock";
 
-                                const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
-                                if (grotto != StaticData::gameItems().end())
-                                    inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto), false);
+                                const auto& caseData = StaticData::cases()[dest.get().dataIndex];
+                                dest.markToDelete();
+                                if (caseData.loot.size() > 0) {
+                                    inventory.emplace_back(caseData.loot[randomInt(0, static_cast<int>(caseData.loot.size() - 1))], false);
+                                } else {
+                                    const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
+                                    if (grotto != StaticData::gameItems().end())
+                                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto), false);
+                                }
                             }
 
                             if (!isCase) {
