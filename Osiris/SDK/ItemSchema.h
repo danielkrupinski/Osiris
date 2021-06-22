@@ -180,6 +180,11 @@ public:
 
     VIRTUAL_METHOD(const char*, getName, 0, (), (this))
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), (this))
+
+    bool willProduceStatTrak() noexcept
+    {
+        return *reinterpret_cast<bool*>(std::uintptr_t(this) + WIN32_LINUX(0x36, 0x56));
+    }
 };
 
 class EconItemSetDefinition {
