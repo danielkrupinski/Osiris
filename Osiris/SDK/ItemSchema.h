@@ -294,6 +294,7 @@ public:
     void setWear(float wear) noexcept { setAttributeValue(8, &wear); }
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
     void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
+    void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
