@@ -1248,7 +1248,33 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
 
 void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
 {
-    memory->debugMsg("onRoundMVP\n");
+    if (!localPlayer)
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("userid") != localUserId)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(Team::None, 54);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isMusic())
+        return;
+
+    auto& dynamicData = dynamicMusicData[item.getDynamicDataIndex()];
+    if (dynamicData.statTrak > -1) {
+        ++dynamicData.statTrak;
+        event.setInt("musickitmvps", dynamicData.statTrak);
+    }
 }
 
 static bool windowOpen = false;
