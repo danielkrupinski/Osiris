@@ -271,9 +271,10 @@ private:
         }
     }
 
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool& willProduceStatTrak) noexcept
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) noexcept
     {
-        willProduceStatTrak = willProduceStatTrak || lootList->willProduceStatTrak();
+        if (willProduceStatTrak)
+            *willProduceStatTrak = *willProduceStatTrak || lootList->willProduceStatTrak();
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
@@ -304,10 +305,9 @@ private:
                 loot.push_back(std::distance(_gameItems.cbegin(), it));
         } else if (lootListID == 6) { // crate_dhw13_promo
             constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
-            bool dummy;
             for (const auto collection : dreamHack2013Collections) {
                 if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
-                    fillLootFromLootList(itemSchema, lootList, loot, dummy);
+                    fillLootFromLootList(itemSchema, lootList, loot);
             }
         }
     }
@@ -319,7 +319,7 @@ private:
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
             _cases[i].lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value))
-                fillLootFromLootList(itemSchema, lootList, _caseLoot, _cases[i].willProduceStatTrak);
+                fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[i].willProduceStatTrak);
             else
                 rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
             _cases[i].lootEndIdx = _caseLoot.size();
