@@ -150,6 +150,11 @@ public:
         return 0;
     }
 
+    bool hasTournamentEventID() noexcept
+    {
+        return getTournamentEventID() != 0;
+    }
+
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
     bool isPatchable() noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
 
