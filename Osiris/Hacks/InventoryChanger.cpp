@@ -295,6 +295,16 @@ private:
         }
     }
 
+    // a few loot lists aren't present in client item schema, so we need to provide them ourselves
+    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<std::size_t>& loot) noexcept
+    {
+        if (lootListID == 292) { // crate_xray_p250_lootlist
+            const auto it = std::ranges::find_if(std::as_const(_gameItems), [this](const auto& item) { return item.weaponID == WeaponId::P250 && item.hasPaintKit() && _paintKits[item.dataIndex].id == 125 /* cu_xray_p250 */; });
+            if (it != _gameItems.cend())
+                loot.push_back(std::distance(_gameItems.cbegin(), it));
+        }
+    }
+
     void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
     {
         assert(lootListIndices.size() == _cases.size());
@@ -303,6 +313,8 @@ private:
             _cases[i].lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value))
                 fillLootFromLootList(itemSchema, lootList, _caseLoot, _cases[i].willProduceStatTrak);
+            else
+                rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
             _cases[i].lootEndIdx = _caseLoot.size();
         }
     }
