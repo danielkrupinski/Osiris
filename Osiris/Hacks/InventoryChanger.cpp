@@ -720,9 +720,11 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
 
         const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
 
+        weapon->accountID() = localInventory.getAccountID();
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
 
+        /* Let the game fill this for us from SOC
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
         if (dynamicData.isSouvenir)
             weapon->entityQuality() = 12;
@@ -743,6 +745,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             memory->setOrAddAttributeValueByName(attributeList, ("sticker slot " + std::to_string(j) + " id").c_str(), sticker.stickerID);
             memory->setOrAddAttributeValueByName(attributeList, ("sticker slot " + std::to_string(j) + " wear").c_str(), sticker.wear);
         }
+        */
     }
 }
 
