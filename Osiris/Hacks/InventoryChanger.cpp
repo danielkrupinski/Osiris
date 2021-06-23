@@ -723,6 +723,8 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
 
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+        if (dynamicData.isSouvenir)
+            weapon->entityQuality() = 12;
 
         const auto attributeList = weapon->econItemView().getAttributeList();
         memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
@@ -1174,11 +1176,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 econItem->quality = 9;
             }
         } else if (item.isSkin()) {
-            if (isKnife(econItem->weaponId))
-                econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
+            if (dynamicData.isSouvenir)
+                econItem->quality = 12;
+            else if (isKnife(econItem->weaponId))
+                econItem->quality = 3;
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
             memory->setCustomName(econItem, dynamicData.nameTag.c_str());
