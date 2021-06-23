@@ -303,7 +303,7 @@ private:
             const auto it = std::ranges::find_if(std::as_const(_gameItems), [this](const auto& item) { return item.weaponID == WeaponId::P250 && item.hasPaintKit() && _paintKits[item.dataIndex].id == 125 /* cu_xray_p250 */; });
             if (it != _gameItems.cend())
                 loot.push_back(std::distance(_gameItems.cbegin(), it));
-        } else if (lootListID == 6) { // crate_dhw13_promo
+        } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
             constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
             for (const auto collection : dreamHack2013Collections) {
                 if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
