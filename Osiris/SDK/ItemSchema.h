@@ -141,6 +141,15 @@ public:
         return getCrateSeriesNumber() != 0;
     }
 
+    std::uint32_t getTournamentEventID() noexcept
+    {
+        const auto& staticAttributes = getStaticAttributes();
+        for (int i = 0; i < staticAttributes.size; ++i)
+            if (staticAttributes[i].defIndex == 137 /* "tournament event id" */)
+                return staticAttributes[i].value;
+        return 0;
+    }
+
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
     bool isPatchable() noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
 
