@@ -983,6 +983,9 @@ private:
                         if (caseData.willProduceStatTrak && inventory.back().isMusic()) {
                             auto& dynamicData = dynamicMusicData[inventory.back().getDynamicDataIndex()];
                             dynamicData.statTrak = 0;
+                        } else if (caseData.isSouvenirPackage && inventory.back().isSkin()) {
+                            auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
+                            dynamicData.isSouvenir = true;
                         }
                     } else {
                         const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
