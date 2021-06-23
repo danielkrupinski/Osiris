@@ -932,17 +932,13 @@ private:
                             } else if (isCase) {
                                 tool.markToDelete();
 
-                                recreatedItemID = BASE_ITEMID + inventory.size();
-                                customizationString = "crate_unlock";
-
                                 const auto& caseData = StaticData::cases()[dest.get().dataIndex];
                                 dest.markToDelete();
+                                assert(caseData.hasLoot());
                                 if (caseData.hasLoot()) {
+                                    recreatedItemID = BASE_ITEMID + inventory.size();
+                                    customizationString = "crate_unlock";
                                     inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
-                                } else {
-                                    const auto grotto = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSkin() && StaticData::paintKits()[item.dataIndex].id == 406; });
-                                    if (grotto != StaticData::gameItems().end())
-                                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), grotto), false);
                                 }
                             }
 
@@ -973,12 +969,13 @@ private:
             } else if (destItemValid) {
                 auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                 if (dest.isCase()) {
-                    recreatedItemID = BASE_ITEMID + inventory.size();
-                    customizationString = "crate_unlock";
-
                     const auto& caseData = StaticData::cases()[dest.get().dataIndex];
                     dest.markToDelete();
+                    assert(caseData.hasLoot());
                     if (caseData.hasLoot()) {
+                        recreatedItemID = BASE_ITEMID + inventory.size();
+                        customizationString = "crate_unlock";
+
                         inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
                         if (caseData.willProduceStatTrak && inventory.back().isMusic()) {
                             auto& dynamicData = dynamicMusicData[inventory.back().getDynamicDataIndex()];
@@ -987,10 +984,6 @@ private:
                             auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
                             dynamicData.isSouvenir = true;
                         }
-                    } else {
-                        const auto ibuypowerHolo = std::ranges::find_if(StaticData::gameItems(), [](const auto& item) { return item.isSticker() && StaticData::paintKits()[item.dataIndex].id == 60; });
-                        if (ibuypowerHolo != StaticData::gameItems().end())
-                            inventory.emplace_back(std::distance(StaticData::gameItems().begin(), ibuypowerHolo), false);
                     }
                 }
             }
