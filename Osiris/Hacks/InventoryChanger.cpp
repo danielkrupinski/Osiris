@@ -827,49 +827,54 @@ private:
         }
     }
 
+    void _wearSticker() noexcept
+    {
+        const auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
+        if (dest.isSkin()) {
+            constexpr auto wearStep = 0.12f;
+            const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
+            const auto shouldRemove = (newWear >= 1.0f + wearStep);
+
+            if (shouldRemove)
+                dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot] = {};
+
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+                if (const auto soc = memory->getSOCData(view)) {
+                    if (shouldRemove) {
+                        soc->setStickerID(stickerSlot, 0);
+                        soc->setStickerWear(stickerSlot, 0.0f);
+                    } else {
+                        soc->setStickerWear(stickerSlot, newWear);
+                    }
+                }
+            }
+
+            sendInventoryUpdatedEvent();
+
+            if (shouldRemove)
+                initItemCustomizationNotification("sticker_remove", std::to_string(destItemID).c_str());
+
+            destItemID = 0;
+        } else if (dest.isAgent()) {
+            dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot] = {};
+
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+                if (const auto soc = memory->getSOCData(view))
+                    soc->setStickerID(stickerSlot, 0);
+            }
+
+            sendInventoryUpdatedEvent();
+            initItemCustomizationNotification("patch_remove", std::to_string(destItemID).c_str());
+            destItemID = 0;
+        }
+    }
+
     void _preAddItems(CSPlayerInventory& localInventory) noexcept
     {
         const auto destItemValid = wasItemCreatedByOsiris(destItemID);
 
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
-            const auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-            if (dest.isSkin()) {
-                constexpr auto wearStep = 0.12f;
-                const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
-                const auto shouldRemove = (newWear >= 1.0f + wearStep);
-
-                if (shouldRemove)
-                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot] = {};
-
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                    if (const auto soc = memory->getSOCData(view)) {
-                        if (shouldRemove) {
-                            soc->setStickerID(stickerSlot, 0);
-                            soc->setStickerWear(stickerSlot, 0.0f);
-                        } else {
-                            soc->setStickerWear(stickerSlot, newWear);
-                        }
-                    }
-                }
-
-                sendInventoryUpdatedEvent();
-
-                if (shouldRemove)
-                    initItemCustomizationNotification("sticker_remove", std::to_string(destItemID).c_str());
-
-                destItemID = 0;
-            } else if (dest.isAgent()) {
-                dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot] = {};
-
-                if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                    if (const auto soc = memory->getSOCData(view))
-                        soc->setStickerID(stickerSlot, 0);
-                }
-
-                sendInventoryUpdatedEvent();
-                initItemCustomizationNotification("patch_remove", std::to_string(destItemID).c_str());
-                destItemID = 0;
-            }
+            _wearSticker();
         } else if (action == Action::RemoveNameTag && destItemValid) {
             if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                 auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
