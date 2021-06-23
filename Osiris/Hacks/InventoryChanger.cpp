@@ -386,6 +386,7 @@ struct StickerConfig {
 };
 
 struct DynamicSkinData {
+    bool isSouvenir = false;
     float wear = 0.0f;
     int seed = 1;
     std::array<StickerConfig, 5> stickers;
@@ -1712,6 +1713,8 @@ json InventoryChanger::toJson() noexcept
 
             const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
+            if (dynamicData.isSouvenir)
+                itemConfig["Is Souvenir"] = dynamicData.isSouvenir;
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
 
@@ -1878,6 +1881,11 @@ void InventoryChanger::fromJson(const json& j) noexcept
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
 
             auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
+
+            if (jsonItem.contains("Is Souvenir")) {
+                if (const auto& isSouvenir = jsonItem["Is Souvenir"]; isSouvenir.is_boolean())
+                    dynamicData.isSouvenir = isSouvenir;
+            }
 
             if (jsonItem.contains("Wear")) {
                 if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
