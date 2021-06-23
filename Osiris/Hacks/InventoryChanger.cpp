@@ -118,6 +118,7 @@ public:
 
     struct Case {
         bool willProduceStatTrak = false;
+        bool isSouvenirPackage = false;
         std::size_t lootBeginIdx = 0;
         std::size_t lootEndIdx = 0;
 
@@ -263,7 +264,9 @@ private:
                     continue;
 
                 lootListIndices.push_back(lootListIdx);
-                _cases.push_back({});
+                Case caseData;
+                caseData.isSouvenirPackage = item->hasTournamentEventID();
+                _cases.push_back(std::move(caseData));
                 _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
