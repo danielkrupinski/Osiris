@@ -869,6 +869,28 @@ private:
         }
     }
 
+    void _removeNameTag(CSPlayerInventory& localInventory) noexcept
+    {
+        if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+            auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
+            dynamicSkinData[dest.getDynamicDataIndex()].nameTag.clear();
+
+            if (const auto econItem = memory->getSOCData(view)) {
+                if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                    if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
+                        toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                    if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
+                        toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                }
+                removeItemFromInventory(&localInventory, localInventory.getItemBaseTypeCache(), econItem);
+            }
+
+            auto itemCopy = dest;
+            dest.markAsDeleted();
+            inventory.push_back(std::move(itemCopy));
+        }
+    }
+
     void _preAddItems(CSPlayerInventory& localInventory) noexcept
     {
         const auto destItemValid = wasItemCreatedByOsiris(destItemID);
@@ -876,24 +898,7 @@ private:
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
             _wearSticker();
         } else if (action == Action::RemoveNameTag && destItemValid) {
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-                dynamicSkinData[dest.getDynamicDataIndex()].nameTag.clear();
-
-                if (const auto econItem = memory->getSOCData(view)) {
-                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
-                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory.getItemInLoadout(Team::CT, slotCT) == view)
-                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
-                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory.getItemInLoadout(Team::TT, slotTT) == view)
-                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
-                    }
-                    removeItemFromInventory(&localInventory, localInventory.getItemBaseTypeCache(), econItem);
-                }
-
-                auto itemCopy = dest;
-                dest.markAsDeleted();
-                inventory.push_back(std::move(itemCopy));
-            }
+            _removeNameTag(localInventory);
         } else if (action == Action::Use) {
             if (wasItemCreatedByOsiris(toolItemID)) {
                 auto& tool = inventory[static_cast<std::size_t>(toolItemID - BASE_ITEMID)];
