@@ -6,9 +6,33 @@
 #include "Localize.h"
 #include "ModelInfo.h"
 
+bool Entity::isVisible(const Vector& position) noexcept
+{
+    if (!localPlayer)
+        return false;
+
+    Trace trace;
+    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
+    return trace.entity == this || trace.fraction > 0.97f;
+}
+
 bool Entity::isOtherEnemy(Entity* other) noexcept
 {
     return memory->isOtherEnemy(this, other);
+}
+
+int Entity::getUserId() noexcept
+{
+    if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+        return playerInfo.userId;
+    return -1;
+}
+
+std::uint64_t Entity::getSteamId() noexcept
+{
+    if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+        return playerInfo.xuid;
+    return 0;
 }
 
 void Entity::getPlayerName(char(&out)[128]) noexcept

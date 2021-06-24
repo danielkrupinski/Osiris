@@ -168,16 +168,7 @@ public:
             return Vector{ };
     }
 
-    bool isVisible(const Vector& position = { }) noexcept
-    {
-        if (!localPlayer)
-            return false;
-
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
-        return trace.entity == this || trace.fraction > 0.97f;
-    }
-    
+    bool isVisible(const Vector& position = { }) noexcept;
     bool isOtherEnemy(Entity* other) noexcept;
 
     VarMap* getVarMap() noexcept
@@ -218,20 +209,8 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    auto getUserId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.userId;
-
-        return -1;
-    }
-
-    std::uint64_t getSteamId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.xuid;
-        return 0;
-    }
+    int getUserId() noexcept;
+    std::uint64_t getSteamId() noexcept;
 
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
