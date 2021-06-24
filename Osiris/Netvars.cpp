@@ -3,7 +3,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "Config.h"
 #include "Hacks/InventoryChanger.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"

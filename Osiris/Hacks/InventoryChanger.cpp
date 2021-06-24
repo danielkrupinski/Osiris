@@ -22,7 +22,6 @@
 #include "../Interfaces.h"
 #include "../Netvars.h"
 #include "InventoryChanger.h"
-#include "../Config.h"
 #include "../Texture.h"
 #include "../fnv.h"
 

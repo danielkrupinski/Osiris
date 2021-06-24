@@ -16,7 +16,7 @@
 #include "../imgui/imgui_internal.h"
 #include "../imgui/imgui_stdlib.h"
 
-#include "../Config.h"
+#include "../ConfigStructs.h"
 #include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
