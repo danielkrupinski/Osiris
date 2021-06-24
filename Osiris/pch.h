@@ -14,3 +14,5 @@
 #include "imgui/imgui.h"
 #include "nlohmann/json.hpp"
 #endif
+
+#include "freetype/freetype/internal/ftobjs.h"
