@@ -1191,12 +1191,16 @@ void InventoryChanger::run(FrameStage stage) noexcept
             const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
             if (dynamicData.isSouvenir) {
                 econItem->quality = 12;
-            }  else if (dynamicData.statTrak > -1) {
-                econItem->setStatTrak(dynamicData.statTrak);
-                econItem->setStatTrakType(0);
-                econItem->quality = 9;
-            } else if (isKnife(econItem->weaponId))
-                econItem->quality = 3;
+            } else {
+                if (dynamicData.statTrak > -1) {
+                    econItem->setStatTrak(dynamicData.statTrak);
+                    econItem->setStatTrakType(0);
+                    econItem->quality = 9;
+                }
+                if (isKnife(econItem->weaponId))
+                    econItem->quality = 3;
+            }
+
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
             memory->setCustomName(econItem, dynamicData.nameTag.c_str());
