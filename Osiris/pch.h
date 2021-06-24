@@ -1,6 +1,9 @@
 #pragma once
 
 #ifdef _WIN32
+#ifdef __cplusplus
+#include <d3d9.h>
+#endif
 #include <Windows.h>
 #endif
 
