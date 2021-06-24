@@ -25,6 +25,8 @@
 #include "../Texture.h"
 #include "../fnv.h"
 
+#include "../nlohmann/json.hpp"
+
 #include "../SDK/ClassId.h"
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
