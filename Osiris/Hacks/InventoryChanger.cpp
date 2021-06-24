@@ -800,7 +800,8 @@ static std::vector<ToEquip> toEquip;
 
 static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
 {
-    inventory->removeItem(econItem->itemID);
+    inventory->soDestroyed(inventory->getSOID(), (SharedObject*)econItem, 4);
+    // inventory->removeItem(econItem->itemID);
     cache->removeObject(econItem);
 }
 
@@ -1151,13 +1152,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     ToolUser::preAddItems(*localInventory);
 
-    bool inventoryUpdated = false;
+   // bool inventoryUpdated = false;
     for (std::size_t i = 0; i < inventory.size(); ++i) {
         if (inventory[i].shouldDelete()) {
             if (const auto view = memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i)) {
                 if (const auto econItem = memory->getSOCData(view)) {
                     removeItemFromInventory(localInventory, baseTypeCache, econItem);
-                    inventoryUpdated = true;
+                    // inventoryUpdated = true;
                 }
             }
             inventory[i].markAsDeleted();
@@ -1249,8 +1250,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     toEquip.clear();
 
-    if (inventoryUpdated)
-        sendInventoryUpdatedEvent();
+ //   if (inventoryUpdated)
+ //       sendInventoryUpdatedEvent();
 
     ToolUser::postAddItems();
 }
@@ -2184,7 +2185,7 @@ void InventoryChanger::resetConfig() noexcept
     inventory.clear();
     dynamicSkinData.clear();
 
-    sendInventoryUpdatedEvent();
+    // sendInventoryUpdatedEvent();
 }
 
 void InventoryChanger::clearInventory() noexcept
