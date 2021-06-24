@@ -221,6 +221,9 @@
     <ClCompile Include="Hacks\InventoryChanger.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
