@@ -1189,9 +1189,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
-            if (dynamicData.isSouvenir)
+            if (dynamicData.isSouvenir) {
                 econItem->quality = 12;
-            else if (isKnife(econItem->weaponId))
+            }  else if (dynamicData.statTrak > -1) {
+                econItem->setStatTrak(dynamicData.statTrak);
+                econItem->setStatTrakType(0);
+                econItem->quality = 9;
+            } else if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
