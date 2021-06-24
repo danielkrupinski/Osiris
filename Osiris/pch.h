@@ -7,4 +7,6 @@
 #ifdef __cplusplus
 #include <algorithm>
 #include <filesystem>
+
+#include "nlohmann/json.hpp"
 #endif
