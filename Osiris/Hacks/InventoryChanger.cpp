@@ -1285,26 +1285,42 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
 
 void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
 {
-    constexpr auto implemented = false;
-    if constexpr (!implemented)
-        return;
-
     if (!localPlayer)
         return;
 
     if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
     const auto weapon = localPlayer->getActiveWeapon();
     if (!weapon)
         return;
 
-    /*
-    if (const auto conf = get_by_definition_index(isKnife(weapon->itemDefinitionIndex2()) ? WeaponId::Knife : weapon->itemDefinitionIndex2()); conf && conf->stat_trak > -1) {
-        weapon->fallbackStatTrak() = ++conf->stat_trak;
-        weapon->postDataUpdate(0);
+    const auto itemID = weapon->itemID();
+    if (!wasItemCreatedByOsiris(itemID))
+        return;
+
+    const auto itemView = memory->getInventoryItemByItemID(localInventory, itemID);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc)
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+    if (!item.isSkin())
+        return;
+
+    auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+    if (dynamicData.statTrak > -1) {
+        ++dynamicData.statTrak;
+        soc->setStatTrak(dynamicData.statTrak);
+        localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
     }
-    */
 }
 
 void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
