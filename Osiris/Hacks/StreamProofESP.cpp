@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <vector>
 
-#define NOMINMAX
 #include "StreamProofESP.h"
 
 #include "../imgui/imgui.h"
