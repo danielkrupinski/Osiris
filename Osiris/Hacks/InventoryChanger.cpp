@@ -635,10 +635,12 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
+        weapon->accountID() = localInventory.getAccountID();
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
+        /* Let the game fill this for us from SOC
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
         const auto attributeList = weapon->econItemView().getAttributeList();
@@ -648,6 +650,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
 
         if (dynamicData.nameTag.length() < 32)
             std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
+        */
 
         if (definitionIndex != item.get().weaponID) {
             definitionIndex = item.get().weaponID;
