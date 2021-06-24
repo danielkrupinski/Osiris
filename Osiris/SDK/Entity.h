@@ -349,6 +349,11 @@ public:
     {
         return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
     }
+
+    std::uint64_t itemID() noexcept
+    {
+        return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
+    }
 };
 
 class PlantedC4 : public Entity {
