@@ -8,5 +8,6 @@
 #include <algorithm>
 #include <filesystem>
 
+#include "imgui/imgui.h"
 #include "nlohmann/json.hpp"
 #endif
