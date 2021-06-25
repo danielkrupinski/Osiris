@@ -102,7 +102,7 @@ union AttributeDataUnion {
 
 struct StaticAttrib {
     std::uint16_t defIndex;
-    std::uint32_t value;
+    AttributeDataUnion value;
     bool forceGCToGenerate;
 };
 
@@ -138,7 +138,7 @@ public:
         const auto& staticAttributes = getStaticAttributes();
         for (int i = 0; i < staticAttributes.size; ++i)
             if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
-                return staticAttributes[i].value;
+                return staticAttributes[i].value.asUint32;
         return 0;
     }
 
@@ -152,7 +152,7 @@ public:
         const auto& staticAttributes = getStaticAttributes();
         for (int i = 0; i < staticAttributes.size; ++i)
             if (staticAttributes[i].defIndex == 137 /* "tournament event id" */)
-                return staticAttributes[i].value;
+                return staticAttributes[i].value.asUint32;
         return 0;
     }
 
