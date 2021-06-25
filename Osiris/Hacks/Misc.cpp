@@ -411,7 +411,7 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
-    if (miscConfig.prepareRevolver && localPlayer && (miscConfig.prepareRevolverKey == KeyBind::NONE || miscConfig.prepareRevolverKey.isDown())) {
+    if (miscConfig.prepareRevolver && localPlayer && (!miscConfig.prepareRevolverKey.isSet() || miscConfig.prepareRevolverKey.isDown())) {
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
@@ -756,7 +756,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
-    if (miscConfig.chokedPacketsKey == KeyBind::NONE || miscConfig.chokedPacketsKey.isDown())
+    if (!miscConfig.chokedPacketsKey.isSet() || miscConfig.chokedPacketsKey.isDown())
         sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= miscConfig.chokedPackets;
 }
 

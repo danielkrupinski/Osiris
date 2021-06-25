@@ -519,10 +519,10 @@ static void renderProjectileEsp(const ProjectileData& projectileData, const Proj
 
 void StreamProofESP::render() noexcept
 {
-    if (config->streamProofESP.toggleKey != KeyBind::NONE) {
+    if (config->streamProofESP.toggleKey.isSet()) {
         if (!config->streamProofESP.toggleKey.isToggled() && !config->streamProofESP.holdKey.isDown())
             return;
-    } else if (config->streamProofESP.holdKey != KeyBind::NONE && !config->streamProofESP.holdKey.isDown()) {
+    } else if (config->streamProofESP.holdKey.isSet() && !config->streamProofESP.holdKey.isDown()) {
         return;
     }
 

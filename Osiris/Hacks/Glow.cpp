@@ -55,10 +55,10 @@ void Glow::render() noexcept
 
     Glow::clearCustomObjects();
 
-    if (glowToggleKey != KeyBind::NONE) {
+    if (glowToggleKey.isSet()) {
         if (!glowToggleKey.isToggled() && !glowHoldKey.isDown())
             return;
-    } else if (glowHoldKey != KeyBind::NONE && !glowHoldKey.isDown()) {
+    } else if (glowHoldKey.isSet() && !glowHoldKey.isDown()) {
         return;
     }
 

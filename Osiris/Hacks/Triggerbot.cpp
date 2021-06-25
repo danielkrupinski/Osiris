@@ -103,5 +103,5 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
 void Triggerbot::updateInput() noexcept
 {
-    keyPressed = config->triggerbotHoldKey == KeyBind::NONE || config->triggerbotHoldKey.isDown();
+    keyPressed = !config->triggerbotHoldKey.isSet() || config->triggerbotHoldKey.isDown();
 }
