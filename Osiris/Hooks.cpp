@@ -74,7 +74,7 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     [[maybe_unused]] static const auto once = [](HWND window) noexcept {
-        netvars = std::make_unique<Netvars>();
+        Netvars::init();
         EventListener::init();
 
         ImGui::CreateContext();
@@ -710,7 +710,7 @@ void Hooks::uninstall() noexcept
     svCheats.restore();
     viewRender.restore();
 
-    netvars->restore();
+    Netvars::restore();
 
     Glow::clearCustomObjects();
     InventoryChanger::clearInventory();
@@ -743,7 +743,7 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
 static int pollEvent(SDL_Event* event) noexcept
 {
     [[maybe_unused]] static const auto once = []() noexcept {
-        netvars = std::make_unique<Netvars>();
+        Netvars::init();
         EventListener::init();
 
         ImGui::CreateContext();
