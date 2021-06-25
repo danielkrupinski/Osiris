@@ -5,10 +5,7 @@
 #include <string>
 
 #include "AnimState.h"
-#include "Engine.h"
-#include "EngineTrace.h"
 #include "Inconstructible.h"
-#include "LocalPlayer.h"
 #include "matrix3x4.h"
 #include "Platform.h"
 #include "Vector.h"
@@ -16,7 +13,6 @@
 #include "WeaponData.h"
 #include "WeaponId.h"
 
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Hacks/Misc.h"
 #include "../Netvars.h"

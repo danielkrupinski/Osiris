@@ -56,6 +56,7 @@
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/ItemSchema.h"
+#include "SDK/LocalPlayer.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Platform.h"

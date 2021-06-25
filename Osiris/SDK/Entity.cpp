@@ -6,6 +6,10 @@
 #include "Localize.h"
 #include "ModelInfo.h"
 
+#include "Engine.h"
+#include "EngineTrace.h"
+#include "LocalPlayer.h"
+
 bool Entity::isVisible(const Vector& position) noexcept
 {
     if (!localPlayer)
