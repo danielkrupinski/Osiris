@@ -45,10 +45,13 @@ struct ColorToggle : private Color4 {
     const Color4& asColor4() const noexcept { return static_cast<const Color4&>(*this); }
 };
 
-struct ColorToggleThickness : ColorToggle {
+struct ColorToggleThickness : private ColorToggle {
     ColorToggleThickness() = default;
     ColorToggleThickness(float thickness) : thickness{ thickness } { }
     float thickness = 1.0f;
+
+    ColorToggle& asColorToggle() noexcept { return static_cast<ColorToggle&>(*this); }
+    const ColorToggle& asColorToggle() const noexcept { return static_cast<const ColorToggle&>(*this); }
 };
 
 struct ColorToggleRounding : ColorToggle {
@@ -241,7 +244,7 @@ static void to_json(json& j, const ColorToggle3& o, const ColorToggle3& dummy = 
 
 static void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness& dummy = {})
 {
-    to_json(j, static_cast<const ColorToggle&>(o), dummy);
+    to_json(j, o.asColorToggle(), dummy.asColorToggle());
     WRITE("Thickness", thickness);
 }
 
@@ -408,4 +411,11 @@ static void from_json(const json& j, HealthBar& o)
 {
     from_json(j, static_cast<ColorToggle&>(o));
     read(j, "Type", o.type);
+}
+
+static void from_json(const json& j, ColorToggleThickness& ctt)
+{
+    from_json(j, ctt.asColorToggle());
+
+    read(j, "Thickness", ctt.thickness);
 }
