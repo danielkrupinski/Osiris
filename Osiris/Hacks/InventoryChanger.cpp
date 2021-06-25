@@ -1035,6 +1035,12 @@ void InventoryChanger::setStickerApplySlot(int slot) noexcept { ToolUser::setSti
 void InventoryChanger::setStickerSlotToWear(int slot) noexcept { ToolUser::setStickerSlot(slot); }
 void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::setNameTag(str); }
 
+void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
+{
+    if (wasItemCreatedByOsiris(itemID))
+        inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)].markToDelete();
+}
+
 static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 {
     if (!localPlayer)
