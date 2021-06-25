@@ -492,9 +492,11 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
             InventoryChanger::setNameTagString(result);
         } else if (ret == memory->clearCustomNameGetArgAsStringReturnAddress) {
             InventoryChanger::setItemToRemoveNameTag(stringToUint64(result));
+        } else if (ret == memory->deleteItemGetArgAsStringReturnAddress) {
+            InventoryChanger::deleteItem(stringToUint64(result));
         }
     }
-   
+
     return result;
 }
 
