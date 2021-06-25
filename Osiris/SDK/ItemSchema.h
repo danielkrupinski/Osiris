@@ -94,6 +94,12 @@ struct StickerKit {
 
 enum class Team;
 
+union AttributeDataUnion {
+    float asFloat;
+    std::uint32_t asUint32;
+    char* asBlobPointer;
+};
+
 struct StaticAttrib {
     std::uint16_t defIndex;
     std::uint32_t value;
