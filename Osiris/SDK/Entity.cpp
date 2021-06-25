@@ -10,6 +10,24 @@
 #include "EngineTrace.h"
 #include "LocalPlayer.h"
 
+bool Entity::setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
+{
+#ifdef _WIN32
+    if (Misc::shouldFixBoneMatrix()) {
+        int* render = reinterpret_cast<int*>(this + 0x274);
+        int backup = *render;
+        Vector absOrigin = getAbsOrigin();
+        *render = 0;
+        memory->setAbsOrigin(this, origin());
+        auto result = VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
+        memory->setAbsOrigin(this, absOrigin);
+        *render = backup;
+        return result;
+    }
+#endif
+    return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
+}
+
 bool Entity::isVisible(const Vector& position) noexcept
 {
     if (!localPlayer)
