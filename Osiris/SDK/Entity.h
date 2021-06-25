@@ -151,13 +151,9 @@ public:
     bool isVisible(const Vector& position = { }) noexcept;
     bool isOtherEnemy(Entity* other) noexcept;
 
-    VarMap* getVarMap() noexcept
+    VarMap& getVarMap() noexcept
     {
-#ifdef _WIN32
-        return reinterpret_cast<VarMap*>(this + 0x24);
-#else
-        return nullptr;
-#endif
+        return *reinterpret_cast<VarMap*>(std::uintptr_t(this) + WIN32_LINUX(0x24, 0x48));
     }
    
     AnimState* getAnimstate() noexcept
