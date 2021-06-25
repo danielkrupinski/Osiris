@@ -105,6 +105,7 @@ struct StaticAttrib {
     AttributeDataUnion value;
     bool forceGCToGenerate;
 };
+static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
 
 class EconItemDefinition {
 public:
