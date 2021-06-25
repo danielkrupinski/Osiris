@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ConfigStructs.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="freetype\src\autofit\autofit.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
