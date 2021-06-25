@@ -28,6 +28,14 @@ bool Entity::setupBones(matrix3x4* out, int maxBones, int boneMask, float curren
     return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
 }
 
+Vector Entity::getBonePosition(int bone) noexcept
+{
+    if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
+        return boneMatrices[bone].origin();
+    else
+        return Vector{ };
+}
+
 bool Entity::isVisible(const Vector& position) noexcept
 {
     if (!localPlayer)

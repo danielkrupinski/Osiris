@@ -139,14 +139,7 @@ public:
     }
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
-
-    Vector getBonePosition(int bone) noexcept
-    {
-        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
-            return boneMatrices[bone].origin();
-        else
-            return Vector{ };
-    }
+    Vector getBonePosition(int bone) noexcept;
 
     bool isVisible(const Vector& position = { }) noexcept;
     bool isOtherEnemy(Entity* other) noexcept;
