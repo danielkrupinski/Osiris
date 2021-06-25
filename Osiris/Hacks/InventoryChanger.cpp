@@ -1,12 +1,10 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
-#include <cstring>
 #include <fstream>
 #include <random>
 #include <string_view>
 #include <type_traits>
-#include <unordered_set>
 #include <utility>
 
 #define STBI_ONLY_PNG
@@ -18,13 +16,11 @@
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
-#include "../imguiCustom.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../Interfaces.h"
 #include "../Netvars.h"
 #include "InventoryChanger.h"
 #include "../Texture.h"
-#include "../fnv.h"
 
 #include "../nlohmann/json.hpp"
 
@@ -33,7 +29,6 @@
 #include "../SDK/ClientClass.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
-#include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FileSystem.h"

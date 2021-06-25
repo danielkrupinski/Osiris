@@ -5,6 +5,7 @@
 #include "GlobalVars.h"
 #include "Localize.h"
 #include "ModelInfo.h"
+#include "../Hacks/Misc.h"
 
 #include "Engine.h"
 #include "EngineTrace.h"

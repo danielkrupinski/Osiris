@@ -6,16 +6,15 @@
 
 #include "AnimState.h"
 #include "Inconstructible.h"
-#include "matrix3x4.h"
 #include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
 
-#include "../Memory.h"
-#include "../Hacks/Misc.h"
 #include "../Netvars.h"
+
+class matrix3x4;
 
 struct AnimState;
 struct ClientClass;

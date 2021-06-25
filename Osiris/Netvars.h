@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cassert>
-#include <memory>
+#include <cstdint>
 #include <type_traits>
-#include <utility>
 
 #include "fnv.h"
 

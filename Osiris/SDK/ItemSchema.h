@@ -7,6 +7,8 @@
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
+#include "../Memory.h"
+
 enum class WeaponId : short;
 
 template <typename T>

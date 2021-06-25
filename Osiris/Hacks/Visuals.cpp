@@ -13,6 +13,7 @@
 #include "../GameData.h"
 #include "../Helpers.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 #include "../imguiCustom.h"
 #include "Visuals.h"
 

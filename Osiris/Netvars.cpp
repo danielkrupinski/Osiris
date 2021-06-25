@@ -1,9 +1,14 @@
+#include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "Hacks/InventoryChanger.h"
+#include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Netvars.h"
