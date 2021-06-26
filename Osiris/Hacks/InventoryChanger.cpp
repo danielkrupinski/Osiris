@@ -953,7 +953,10 @@ private:
                                 if (caseData.hasLoot()) {
                                     recreatedItemID = BASE_ITEMID + inventory.size();
                                     customizationString = "crate_unlock";
-                                    inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
+                                    const auto& item = inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
+
+                                    if (item.isSkin() && randomInt(0, 9) == 0)
+                                        dynamicSkinData[item.getDynamicDataIndex()].statTrak = 0;
                                 }
                             }
 
