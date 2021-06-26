@@ -110,6 +110,7 @@ public:
         MAX
     };
 
+    KeyBind() = default;
     explicit KeyBind(KeyCode keyCode) noexcept;
     explicit KeyBind(const char* keyName) noexcept;
 
@@ -123,7 +124,7 @@ public:
 
     bool setToPressedKey() noexcept;
 private:
-    KeyCode keyCode;
+    KeyCode keyCode = KeyCode::NONE;
 };
 
 class KeyBindToggle : public KeyBind {

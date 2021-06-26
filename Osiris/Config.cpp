@@ -14,14 +14,15 @@
 #include "nlohmann/json.hpp"
 
 #include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 
 #include "Config.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/Misc.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -70,7 +71,6 @@ Config::Config() noexcept
 
     path /= "Osiris";
     listConfigs();
-    misc.clanTag[0] = '\0';
 
     load(u8"default.json", false);
 
@@ -86,24 +86,11 @@ Config::Config() noexcept
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
-static void from_json(const json& j, ColorToggle3& ct)
-{
-    from_json(j, static_cast<Color3&>(ct));
-    read(j, "Enabled", ct.enabled);
-}
-
 static void from_json(const json& j, ColorToggleRounding& ctr)
 {
     from_json(j, static_cast<ColorToggle&>(ctr));
 
     read(j, "Rounding", ctr.rounding);
-}
-
-static void from_json(const json& j, ColorToggleThickness& ctt)
-{
-    from_json(j, static_cast<ColorToggle&>(ctt));
-
-    read(j, "Thickness", ctt.thickness);
 }
 
 static void from_json(const json& j, ColorToggleThicknessRounding& cttr)
@@ -182,12 +169,6 @@ static void from_json(const json& j, Projectile& p)
     read<value_t::object>(j, "Trails", p.trails);
 }
 
-static void from_json(const json& j, HealthBar& o)
-{
-    from_json(j, static_cast<ColorToggle&>(o));
-    read(j, "Type", o.type);
-}
-
 static void from_json(const json& j, Player& p)
 {
     from_json(j, static_cast<Shared&>(p));
@@ -199,13 +180,6 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Health Bar", p.healthBar);
     read<value_t::object>(j, "Skeleton", p.skeleton);
     read<value_t::object>(j, "Head Box", p.headBox);
-}
-
-static void from_json(const json& j, OffscreenEnemies& o)
-{
-    from_json(j, static_cast<ColorToggle&>(o));
-
-    read<value_t::object>(j, "Health Bar", o.healthBar);
 }
 
 static void from_json(const json& j, ImVec2& v)
@@ -303,113 +277,9 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-static void from_json(const json& j, PurchaseList& pl)
-{
-    read(j, "Enabled", pl.enabled);
-    read(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
-    read(j, "Show Prices", pl.showPrices);
-    read(j, "No Title Bar", pl.noTitleBar);
-    read(j, "Mode", pl.mode);
-}
-
-static void from_json(const json& j, Config::Misc::SpectatorList& sl)
-{
-    read(j, "Enabled", sl.enabled);
-    read(j, "No Title Bar", sl.noTitleBar);
-    read<value_t::object>(j, "Pos", sl.pos);
-    read<value_t::object>(j, "Size", sl.size);
-}
-
-static void from_json(const json& j, Config::Misc::Watermark& o)
-{
-    read(j, "Enabled", o.enabled);
-}
-
-static void from_json(const json& j, PreserveKillfeed& o)
-{
-    read(j, "Enabled", o.enabled);
-    read(j, "Only Headshots", o.onlyHeadshots);
-}
-
-static void from_json(const json& j, Config::Misc& m)
-{
-    read(j, "Menu key", m.menuKey);
-    read(j, "Anti AFK kick", m.antiAfkKick);
-    read(j, "Auto strafe", m.autoStrafe);
-    read(j, "Bunny hop", m.bunnyHop);
-    read(j, "Custom clan tag", m.customClanTag);
-    read(j, "Clock tag", m.clocktag);
-    read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
-    read(j, "Animated clan tag", m.animatedClanTag);
-    read(j, "Fast duck", m.fastDuck);
-    read(j, "Moonwalk", m.moonwalk);
-    read(j, "Edge Jump", m.edgejump);
-    read(j, "Edge Jump Key", m.edgejumpkey);
-    read(j, "Slowwalk", m.slowwalk);
-    read(j, "Slowwalk key", m.slowwalkKey);
-    read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
-    read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
-    read(j, "Auto pistol", m.autoPistol);
-    read(j, "Auto reload", m.autoReload);
-    read(j, "Auto accept", m.autoAccept);
-    read(j, "Radar hack", m.radarHack);
-    read(j, "Reveal ranks", m.revealRanks);
-    read(j, "Reveal money", m.revealMoney);
-    read(j, "Reveal suspect", m.revealSuspect);
-    read(j, "Reveal votes", m.revealVotes);
-    read<value_t::object>(j, "Spectator list", m.spectatorList);
-    read<value_t::object>(j, "Watermark", m.watermark);
-    read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
-    read(j, "Fix animation LOD", m.fixAnimationLOD);
-    read(j, "Fix bone matrix", m.fixBoneMatrix);
-    read(j, "Fix movement", m.fixMovement);
-    read(j, "Disable model occlusion", m.disableModelOcclusion);
-    read(j, "Aspect Ratio", m.aspectratio);
-    read(j, "Kill message", m.killMessage);
-    read<value_t::string>(j, "Kill message string", m.killMessageString);
-    read(j, "Name stealer", m.nameStealer);
-    read(j, "Disable HUD blur", m.disablePanoramablur);
-    read(j, "Ban color", m.banColor);
-    read<value_t::string>(j, "Ban text", m.banText);
-    read(j, "Fast plant", m.fastPlant);
-    read(j, "Fast Stop", m.fastStop);
-    read<value_t::object>(j, "Bomb timer", m.bombTimer);
-    read(j, "Quick reload", m.quickReload);
-    read(j, "Prepare revolver", m.prepareRevolver);
-    read(j, "Prepare revolver key", m.prepareRevolverKey);
-    read(j, "Hit sound", m.hitSound);
-    read(j, "Choked packets", m.chokedPackets);
-    read(j, "Choked packets key", m.chokedPacketsKey);
-    read(j, "Quick healthshot key", m.quickHealthshotKey);
-    read(j, "Grenade predict", m.nadePredict);
-    read(j, "Fix tablet signal", m.fixTabletSignal);
-    read(j, "Max angle delta", m.maxAngleDelta);
-    read(j, "Fix tablet signal", m.fixTabletSignal);
-    read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
-    read(j, "Kill sound", m.killSound);
-    read<value_t::string>(j, "Custom Kill Sound", m.customKillSound);
-    read<value_t::object>(j, "Purchase List", m.purchaseList);
-    read<value_t::object>(j, "Reportbot", m.reportbot);
-    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
-    read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
-}
-
-static void from_json(const json& j, Config::Misc::Reportbot& r)
-{
-    read(j, "Enabled", r.enabled);
-    read(j, "Target", r.target);
-    read(j, "Delay", r.delay);
-    read(j, "Rounds", r.rounds);
-    read(j, "Abusive Communications", r.textAbuse);
-    read(j, "Griefing", r.griefing);
-    read(j, "Wall Hacking", r.wallhack);
-    read(j, "Aim Hacking", r.aimbot);
-    read(j, "Other Hacking", r.other);
-}
-
 void Config::load(size_t id, bool incremental) noexcept
 {
-    load((const char8_t*)configs[id].c_str(), incremental);
+    load(configs[id].c_str(), incremental);
 }
 
 void Config::load(const char8_t* name, bool incremental) noexcept
@@ -440,7 +310,6 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j["Chams"], "Hold Key", chamsHoldKey);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Style", style);
-    read<value_t::object>(j, "Misc", misc);
 
     AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
@@ -448,18 +317,13 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     Visuals::fromJson(j["Visuals"]);
     InventoryChanger::fromJson(j["Inventory Changer"]);
     Sound::fromJson(j["Sound"]);
+    Misc::fromJson(j["Misc"]);
 }
 
 static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
 {
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
     WRITE("Rounding", rounding);
-}
-
-static void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness& dummy = {})
-{
-    to_json(j, static_cast<const ColorToggle&>(o), dummy);
-    WRITE("Thickness", thickness);
 }
 
 static void to_json(json& j, const ColorToggleThicknessRounding& o, const ColorToggleThicknessRounding& dummy = {})
@@ -497,12 +361,6 @@ static void to_json(json& j, const Shared& o, const Shared& dummy = {})
     WRITE("Text Cull Distance", textCullDistance);
 }
 
-static void to_json(json& j, const HealthBar& o, const HealthBar& dummy = {})
-{
-    to_json(j, static_cast<const ColorToggle&>(o), dummy);
-    WRITE("Type", type);
-}
-
 static void to_json(json& j, const Player& o, const Player& dummy = {})
 {
     to_json(j, static_cast<const Shared&>(o), dummy);
@@ -534,13 +392,6 @@ static void to_json(json& j, const Trails& o, const Trails& dummy = {})
     WRITE("Local Player", localPlayer);
     WRITE("Allies", allies);
     WRITE("Enemies", enemies);
-}
-
-static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& dummy = {})
-{
-    to_json(j, static_cast<const ColorToggle&>(o), dummy);
-
-    WRITE("Health Bar", healthBar);
 }
 
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
@@ -623,118 +474,6 @@ static void to_json(json& j, const Config::StreamProofESP& o, const Config::Stre
     j["Other Entities"] = o.otherEntities;
 }
 
-static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Misc::Reportbot& dummy = {})
-{
-    WRITE("Enabled", enabled);
-    WRITE("Target", target);
-    WRITE("Delay", delay);
-    WRITE("Rounds", rounds);
-    WRITE("Abusive Communications", textAbuse);
-    WRITE("Griefing", griefing);
-    WRITE("Wall Hacking", wallhack);
-    WRITE("Aim Hacking", aimbot);
-    WRITE("Other Hacking", other);
-}
-
-static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
-{
-    WRITE("Enabled", enabled);
-    WRITE("Only During Freeze Time", onlyDuringFreezeTime);
-    WRITE("Show Prices", showPrices);
-    WRITE("No Title Bar", noTitleBar);
-    WRITE("Mode", mode);
-}
-
-static void to_json(json& j, const Config::Misc::SpectatorList& o, const Config::Misc::SpectatorList& dummy = {})
-{
-    WRITE("Enabled", enabled);
-    WRITE("No Title Bar", noTitleBar);
-
-    if (const auto window = ImGui::FindWindowByName("Spectator list")) {
-        j["Pos"] = window->Pos;
-        j["Size"] = window->SizeFull;
-    }
-}
-
-static void to_json(json& j, const Config::Misc::Watermark& o, const Config::Misc::Watermark& dummy = {})
-{
-    WRITE("Enabled", enabled);
-}
-
-static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
-{
-    WRITE("Enabled", enabled);
-    WRITE("Only Headshots", onlyHeadshots);
-}
-
-static void to_json(json& j, const Config::Misc& o)
-{
-    const Config::Misc dummy;
-
-    WRITE("Menu key", menuKey);
-    WRITE("Anti AFK kick", antiAfkKick);
-    WRITE("Auto strafe", autoStrafe);
-    WRITE("Bunny hop", bunnyHop);
-    WRITE("Custom clan tag", customClanTag);
-    WRITE("Clock tag", clocktag);
-
-    if (o.clanTag[0])
-        j["Clan tag"] = o.clanTag;
-
-    WRITE("Animated clan tag", animatedClanTag);
-    WRITE("Fast duck", fastDuck);
-    WRITE("Moonwalk", moonwalk);
-    WRITE("Edge Jump", edgejump);
-    WRITE("Edge Jump Key", edgejumpkey);
-    WRITE("Slowwalk", slowwalk);
-    WRITE("Slowwalk key", slowwalkKey);
-    WRITE("Noscope crosshair", noscopeCrosshair);
-    WRITE("Recoil crosshair", recoilCrosshair);
-    WRITE("Auto pistol", autoPistol);
-    WRITE("Auto reload", autoReload);
-    WRITE("Auto accept", autoAccept);
-    WRITE("Radar hack", radarHack);
-    WRITE("Reveal ranks", revealRanks);
-    WRITE("Reveal money", revealMoney);
-    WRITE("Reveal suspect", revealSuspect);
-    WRITE("Reveal votes", revealVotes);
-    WRITE("Spectator list", spectatorList);
-    WRITE("Watermark", watermark);
-    WRITE("Offscreen Enemies", offscreenEnemies);
-    WRITE("Fix animation LOD", fixAnimationLOD);
-    WRITE("Fix bone matrix", fixBoneMatrix);
-    WRITE("Fix movement", fixMovement);
-    WRITE("Disable model occlusion", disableModelOcclusion);
-    WRITE("Aspect Ratio", aspectratio);
-    WRITE("Kill message", killMessage);
-    WRITE("Kill message string", killMessageString);
-    WRITE("Name stealer", nameStealer);
-    WRITE("Disable HUD blur", disablePanoramablur);
-    WRITE("Ban color", banColor);
-    WRITE("Ban text", banText);
-    WRITE("Fast plant", fastPlant);
-    WRITE("Fast Stop", fastStop);
-    WRITE("Bomb timer", bombTimer);
-    WRITE("Quick reload", quickReload);
-    WRITE("Prepare revolver", prepareRevolver);
-    WRITE("Prepare revolver key", prepareRevolverKey);
-    WRITE("Hit sound", hitSound);
-    WRITE("Choked packets", chokedPackets);
-    WRITE("Choked packets key", chokedPacketsKey);
-    WRITE("Quick healthshot key", quickHealthshotKey);
-    WRITE("Grenade predict", nadePredict);
-    WRITE("Fix tablet signal", fixTabletSignal);
-    WRITE("Max angle delta", maxAngleDelta);
-    WRITE("Fix tablet signal", fixTabletSignal);
-    WRITE("Custom Hit Sound", customHitSound);
-    WRITE("Kill sound", killSound);
-    WRITE("Custom Kill Sound", customKillSound);
-    WRITE("Purchase List", purchaseList);
-    WRITE("Reportbot", reportbot);
-    WRITE("Opposite Hand Knife", oppositeHandKnife);
-    WRITE("Preserve Killfeed", preserveKillfeed);
-}
-
 static void to_json(json& j, const ImVec4& o)
 {
     j[0] = o.x;
@@ -776,35 +515,35 @@ void Config::save(size_t id) const noexcept
 
     j["Aimbot"] = aimbot;
     j["Aimbot On key"] = aimbotOnKey;
-    to_json(j["Aimbot Key"], aimbotKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Aimbot Key"], aimbotKey, {});
     j["Aimbot Key mode"] = aimbotKeyMode;
 
     j["Triggerbot"] = triggerbot;
-    to_json(j["Triggerbot Key"], triggerbotHoldKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
     j["Backtrack"] = Backtrack::toJson();
     j["Anti aim"] = AntiAim::toJson();
     j["Glow"] = Glow::toJson();
     j["Chams"] = chams;
-    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind{ KeyBind::NONE });
-    to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
+    to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
     j["Sound"] = Sound::toJson();
     j["Visuals"] = Visuals::toJson();
-    j["Misc"] = misc;
+    j["Misc"] = Misc::toJson();
     j["Style"] = style;
     j["Inventory Changer"] = InventoryChanger::toJson();
 
     removeEmptyObjects(j);
 
     createConfigDir();
-    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
+    if (std::ofstream out{ path / configs[id] }; out.good())
         out << std::setw(2) << j;
 }
 
-void Config::add(const char* name) noexcept
+void Config::add(const char8_t* name) noexcept
 {
-    if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
+    if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
         save(configs.size() - 1);
     }
@@ -813,14 +552,14 @@ void Config::add(const char* name) noexcept
 void Config::remove(size_t id) noexcept
 {
     std::error_code ec;
-    std::filesystem::remove(path / (const char8_t*)configs[id].c_str(), ec);
+    std::filesystem::remove(path / configs[id], ec);
     configs.erase(configs.cbegin() + id);
 }
 
-void Config::rename(size_t item, const char* newName) noexcept
+void Config::rename(size_t item, const char8_t* newName) noexcept
 {
     std::error_code ec;
-    std::filesystem::rename(path / (const char8_t*)configs[item].c_str(), path / (const char8_t*)newName, ec);
+    std::filesystem::rename(path / configs[item], path / newName, ec);
     configs[item] = newName;
 }
 
@@ -831,7 +570,6 @@ void Config::reset() noexcept
     chams = { };
     streamProofESP = { };
     style = { };
-    misc = { };
 
     AntiAim::resetConfig();
     Backtrack::resetConfig();
@@ -839,6 +577,7 @@ void Config::reset() noexcept
     Visuals::resetConfig();
     InventoryChanger::resetConfig();
     Sound::resetConfig();
+    Misc::resetConfig();
 }
 
 void Config::listConfigs() noexcept
@@ -847,9 +586,9 @@ void Config::listConfigs() noexcept
 
     std::error_code ec;
     std::transform(std::filesystem::directory_iterator{ path, ec },
-        std::filesystem::directory_iterator{ },
-        std::back_inserter(configs),
-        [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+                   std::filesystem::directory_iterator{ },
+                   std::back_inserter(configs),
+                   [](const auto& entry) { return entry.path().filename().u8string(); });
 }
 
 void Config::createConfigDir() const noexcept

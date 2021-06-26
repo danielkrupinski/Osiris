@@ -8,20 +8,25 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
 
+#include "../ConfigStructs.h"
 #include "../fnv.h"
 #include "../GameData.h"
 #include "../Helpers.h"
+#include "../Interfaces.h"
+#include "../Memory.h"
 #include "../imguiCustom.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
+#include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Input.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ModelInfo.h"
@@ -46,9 +51,9 @@ struct VisualsConfig {
     bool noShadows{ false };
     bool wireframeSmoke{ false };
     bool zoom{ false };
-    KeyBindToggle zoomKey{ KeyBind::NONE };
+    KeyBindToggle zoomKey;
     bool thirdperson{ false };
-    KeyBindToggle thirdpersonKey{ KeyBind::NONE };
+    KeyBindToggle thirdpersonKey;
     int thirdpersonDistance{ 0 };
     int viewmodelFov{ 0 };
     int fov{ 0 };
@@ -281,15 +286,15 @@ void Visuals::colorWorld() noexcept
         const std::string_view textureGroup = mat->getTextureGroupName();
 
         if (visualsConfig.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
-            if (visualsConfig.world.rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.world.rainbowSpeed));
+            if (visualsConfig.world.asColor3().rainbow)
+                mat->colorModulate(rainbowColor(visualsConfig.world.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.world.color);
+                mat->colorModulate(visualsConfig.world.asColor3().color);
         } else if (visualsConfig.sky.enabled && textureGroup.starts_with("SkyBox")) {
-            if (visualsConfig.sky.rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.sky.rainbowSpeed));
+            if (visualsConfig.sky.asColor3().rainbow)
+                mat->colorModulate(rainbowColor(visualsConfig.sky.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.sky.color);
+                mat->colorModulate(visualsConfig.sky.asColor3().color);
         }
     }
 }
@@ -613,10 +618,10 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     beamInfo.haloName = nullptr;
     beamInfo.haloIndex = -1;
 
-    beamInfo.red = 255.0f * visualsConfig.bulletTracers.color[0];
-    beamInfo.green = 255.0f * visualsConfig.bulletTracers.color[1];
-    beamInfo.blue = 255.0f * visualsConfig.bulletTracers.color[2];
-    beamInfo.brightness = 255.0f * visualsConfig.bulletTracers.color[3];
+    beamInfo.red = 255.0f * visualsConfig.bulletTracers.asColor4().color[0];
+    beamInfo.green = 255.0f * visualsConfig.bulletTracers.asColor4().color[1];
+    beamInfo.blue = 255.0f * visualsConfig.bulletTracers.asColor4().color[2];
+    beamInfo.brightness = 255.0f * visualsConfig.bulletTracers.asColor4().color[3];
 
     beamInfo.type = 0;
     beamInfo.life = 0.0f;
@@ -659,7 +664,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     if (!visualsConfig.molotovHull.enabled)
         return;
 
-    const auto color = Helpers::calculateColor(visualsConfig.molotovHull);
+    const auto color = Helpers::calculateColor(visualsConfig.molotovHull.asColor4());
 
     GameData::Lock lock;
 
@@ -809,7 +814,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit effect time", &visualsConfig.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Combo("Hit marker", &visualsConfig.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
-    ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.color.data(), &visualsConfig.bulletTracers.color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
+    ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);

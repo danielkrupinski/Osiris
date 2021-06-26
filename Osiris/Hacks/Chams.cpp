@@ -128,10 +128,10 @@ void Chams::updateInput() noexcept
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (config->chamsToggleKey != KeyBind::NONE) {
+    if (config->chamsToggleKey.isSet()) {
         if (!config->chamsToggleKey.isToggled() && !config->chamsHoldKey.isDown())
             return false;
-    } else if (config->chamsHoldKey != KeyBind::NONE && !config->chamsHoldKey.isDown()) {
+    } else if (config->chamsHoldKey.isSet() && !config->chamsHoldKey.isDown()) {
         return false;
     }
 

@@ -20,7 +20,6 @@ private:
     void renderChamsWindow(bool contentOnly = false) noexcept;
     void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
     void renderStyleWindow(bool contentOnly = false) noexcept;
-    void renderMiscWindow(bool contentOnly = false) noexcept;
     void renderConfigWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
@@ -31,7 +30,6 @@ private:
         bool streamProofESP = false;
         bool sound = false;
         bool style = false;
-        bool misc = false;
         bool config = false;
     } window;
 

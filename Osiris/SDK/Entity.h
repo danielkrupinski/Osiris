@@ -5,21 +5,16 @@
 #include <string>
 
 #include "AnimState.h"
-#include "Engine.h"
-#include "EngineTrace.h"
 #include "Inconstructible.h"
-#include "LocalPlayer.h"
-#include "matrix3x4.h"
 #include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
 
-#include "../Config.h"
-#include "../Interfaces.h"
-#include "../Memory.h"
 #include "../Netvars.h"
+
+class matrix3x4;
 
 struct AnimState;
 struct ClientClass;
@@ -142,51 +137,15 @@ public:
         return false;
     }
 
-    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
-    {
-#ifdef _WIN32
-        if (config->misc.fixBoneMatrix) {
-            int* render = reinterpret_cast<int*>(this + 0x274);
-            int backup = *render;
-            Vector absOrigin = getAbsOrigin();
-            *render = 0;
-            memory->setAbsOrigin(this, origin());
-            auto result = VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
-            memory->setAbsOrigin(this, absOrigin);
-            *render = backup;
-            return result;
-        }
-#endif
-        return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
-    }
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
+    Vector getBonePosition(int bone) noexcept;
 
-    Vector getBonePosition(int bone) noexcept
-    {
-        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
-            return boneMatrices[bone].origin();
-        else
-            return Vector{ };
-    }
-
-    bool isVisible(const Vector& position = { }) noexcept
-    {
-        if (!localPlayer)
-            return false;
-
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
-        return trace.entity == this || trace.fraction > 0.97f;
-    }
-    
+    bool isVisible(const Vector& position = { }) noexcept;
     bool isOtherEnemy(Entity* other) noexcept;
 
-    VarMap* getVarMap() noexcept
+    VarMap& getVarMap() noexcept
     {
-#ifdef _WIN32
-        return reinterpret_cast<VarMap*>(this + 0x24);
-#else
-        return nullptr;
-#endif
+        return *reinterpret_cast<VarMap*>(std::uintptr_t(this) + WIN32_LINUX(0x24, 0x48));
     }
    
     AnimState* getAnimstate() noexcept
@@ -218,20 +177,8 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    auto getUserId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.userId;
-
-        return -1;
-    }
-
-    std::uint64_t getSteamId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.xuid;
-        return 0;
-    }
+    int getUserId() noexcept;
+    std::uint64_t getSteamId() noexcept;
 
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
@@ -347,6 +294,11 @@ public:
     std::uint64_t originalOwnerXuid() noexcept
     {
         return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
+    }
+
+    std::uint64_t itemID() noexcept
+    {
+        return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
     }
 };
 

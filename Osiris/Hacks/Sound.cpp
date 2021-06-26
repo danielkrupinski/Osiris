@@ -5,6 +5,7 @@
 
 #include "../imgui/imgui.h"
 
+#include "../ConfigStructs.h"
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"

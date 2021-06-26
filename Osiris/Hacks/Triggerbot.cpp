@@ -1,8 +1,10 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
@@ -101,5 +103,5 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
 void Triggerbot::updateInput() noexcept
 {
-    keyPressed = config->triggerbotHoldKey == KeyBind::NONE || config->triggerbotHoldKey.isDown();
+    keyPressed = !config->triggerbotHoldKey.isSet() || config->triggerbotHoldKey.isDown();
 }
