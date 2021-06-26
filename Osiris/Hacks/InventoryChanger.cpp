@@ -358,6 +358,11 @@ private:
         buildLootLists(itemSchema, lootListIndices);
 
         _gameItems.shrink_to_fit();
+        _collectibles.shrink_to_fit();
+        _cases.shrink_to_fit();
+        _caseLoot.shrink_to_fit();
+        _stickersSorted.shrink_to_fit();
+        _paintKits.shrink_to_fit();
     }
 
     static StaticData& instance() noexcept
