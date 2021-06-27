@@ -52,6 +52,21 @@ bool Entity::isOtherEnemy(Entity* other) noexcept
     return memory->isOtherEnemy(this, other);
 }
 
+float Entity::getMaxDesyncAngle() noexcept
+{
+    const auto animState = getAnimstate();
+
+    if (!animState)
+        return 0.0f;
+
+    float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+
+    if (animState->duckAmount > 0.0f)
+        yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+
+    return animState->velocitySubtractY * yawModifier;
+}
+
 int Entity::getUserId() noexcept
 {
     if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
