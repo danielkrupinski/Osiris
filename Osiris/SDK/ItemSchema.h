@@ -179,6 +179,11 @@ public:
         return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2E0));
     }
 
+    EconTool* getEconTool() noexcept
+    {
+        return *reinterpret_cast<EconTool**>(std::uintptr_t(this) + WIN32_LINUX(0x140, 0x1E8));
+    }
+
     int getLoadoutSlot(Team team) noexcept
     {
         if (team >= Team::None && team <= Team::CT)
