@@ -109,6 +109,13 @@ struct StaticAttrib {
 };
 static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
 
+struct EconTool {
+    INCONSTRUCTIBLE(EconTool)
+
+    PAD(sizeof(std::uintptr_t))
+    const char* typeName;
+};
+
 class EconItemDefinition {
 public:
     INCONSTRUCTIBLE(EconItemDefinition)
