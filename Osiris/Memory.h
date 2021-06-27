@@ -121,6 +121,7 @@ public:
     EconItem*(__THISCALL* getSOCData)(void* itemView);
     void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
     SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
+    void** uiComponentInventory;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
