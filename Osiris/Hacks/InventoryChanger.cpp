@@ -932,6 +932,13 @@ private:
                         customizationString = "graffity_unseal";
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
                     }
+                } else if (toolItem.isOperationPass()) {
+                    tool.markToDelete();
+
+                    const auto coinID = static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1); // FIXME: This formula works for all operations but Hydra
+                    const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID);
+                    if (it != StaticData::gameItems().end())
+                        inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
                 } else if (destItemValid) {
                     auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                     if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool.isCaseKey())) {
