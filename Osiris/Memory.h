@@ -122,6 +122,7 @@ public:
     void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
     SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
     void** uiComponentInventory;
+    void(__THISCALL* setItemSessionPropertyValue)(void* _this, std::uint64_t itemID, const char* type, const char* value);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
