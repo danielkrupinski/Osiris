@@ -68,7 +68,8 @@ public:
         NameTag,
         Agent,
         Case,
-        CaseKey
+        CaseKey,
+        OperationPass
     };
 
     struct GameItem {
@@ -267,6 +268,9 @@ private:
                 _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
+            } else if (const auto tool = item->getEconTool()) {
+                if (std::strcmp(tool->typeName, "season_pass") == 0)
+                    _gameItems.emplace_back(Type::OperationPass, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
         }
     }
