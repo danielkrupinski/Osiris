@@ -935,7 +935,7 @@ private:
                 } else if (toolItem.isOperationPass()) {
                     tool.markToDelete();
 
-                    const auto coinID = static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1); // FIXME: This formula works for all operations but Hydra
+                    const auto coinID = toolItem.weaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
                     const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID);
                     if (it != StaticData::gameItems().end())
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
