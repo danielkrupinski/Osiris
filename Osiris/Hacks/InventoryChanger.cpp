@@ -570,14 +570,14 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isGlove())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isGlove())
         return;
 
-    const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
+    const auto& itemData = StaticData::paintKits()[item->get().dataIndex];
 
     const auto wearables = local->wearables();
     static int gloveHandle = 0;
@@ -603,15 +603,15 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     const auto attributeList = glove->econItemView().getAttributeList();
-    const auto& dynamicData = dynamicGloveData[item.getDynamicDataIndex()];
+    const auto& dynamicData = dynamicGloveData[item->getDynamicDataIndex()];
     memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
-    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item.get().weaponID) {
-        definitionIndex = item.get().weaponID;
+    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
+        definitionIndex = item->get().weaponID;
 
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID)) {
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
             glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
             glove->preDataUpdate(0);
         }
@@ -627,11 +627,11 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isSkin())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isSkin())
         return;
 
     auto& weapons = local->weapons();
@@ -656,10 +656,10 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
-        if (definitionIndex != item.get().weaponID) {
-            definitionIndex = item.get().weaponID;
+        if (definitionIndex != item->get().weaponID) {
+            definitionIndex = item->get().weaponID;
 
-            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID)) {
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
                 weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
@@ -718,7 +718,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto soc = memory->getSOCData(itemView);
-        if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        if (!soc || !getInventoryItem(soc->itemID))
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
@@ -875,23 +875,22 @@ private:
 
     void _preAddItems(CSPlayerInventory& localInventory) noexcept
     {
-        const auto destItemValid = wasItemCreatedByOsiris(destItemID);
+        const auto destItemValid = getInventoryItem(destItemID) != nullptr;
 
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
             _wearSticker();
         } else if (action == Action::RemoveNameTag && destItemValid) {
             _removeNameTag(localInventory);
         } else if (action == Action::Use) {
-            if (wasItemCreatedByOsiris(toolItemID)) {
-                auto& tool = inventory[static_cast<std::size_t>(toolItemID - BASE_ITEMID)];
-                const auto& toolItem = tool.get();
+            if (const auto tool = getInventoryItem(toolItemID)) {
+                const auto& toolItem = tool->get();
 
                 if (toolItem.isSealedGraffiti()) {
                     const auto baseTypeCache = localInventory.getItemBaseTypeCache();
                     if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
                         if (const auto econItem = memory->getSOCData(toolView))
                             removeItemFromInventory(&localInventory, baseTypeCache, econItem);
-                    tool.markAsDeleted();
+                    tool->markAsDeleted();
 
                     const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
                     if (it != StaticData::gameItems().end()) {
@@ -900,7 +899,7 @@ private:
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
                     }
                 } else if (toolItem.isOperationPass()) {
-                    tool.markToDelete();
+                    tool->markToDelete();
 
                     const auto coinID = toolItem.weaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
                     const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID);
@@ -908,7 +907,7 @@ private:
                         inventory.emplace_back(std::distance(StaticData::gameItems().begin(), it));
                 } else if (destItemValid) {
                     auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-                    if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool.isCaseKey())) {
+                    if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool->isCaseKey())) {
                         if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                             const auto isCase = dest.isCase();
                             if (dest.isSkin()) {
@@ -929,7 +928,7 @@ private:
                                 recreatedItemID = BASE_ITEMID + inventory.size();
                                 customizationString = "patch_apply";
                             } else if (isCase) {
-                                tool.markToDelete();
+                                tool->markToDelete();
 
                                 const auto& caseData = StaticData::cases()[dest.get().dataIndex];
                                 dest.markToDelete();
@@ -960,7 +959,7 @@ private:
                                     }
                                     removeItemFromInventory(&localInventory, baseTypeCache, econItem);
                                 }
-                                tool.markAsDeleted();
+                                tool->markAsDeleted();
                                 auto destCopy = dest;
                                 dest.markAsDeleted();
                                 inventory.push_back(std::move(destCopy));
@@ -1019,8 +1018,8 @@ void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::se
 
 void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
 {
-    if (wasItemCreatedByOsiris(itemID))
-        inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)].markToDelete();
+    if (const auto item = getInventoryItem(itemID))
+        item->markToDelete();
 }
 
 static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
@@ -1037,14 +1036,14 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isMusic())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isMusic())
         return;
 
-    const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
+    const auto& itemData = StaticData::paintKits()[item->get().dataIndex];
     pr->musicID()[localPlayer->index()] = itemData.id;
 }
 
@@ -1058,14 +1057,14 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isAgent())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isAgent())
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID);
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID);
     if (!def)
         return;
 
@@ -1073,7 +1072,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!model)
         return;
 
-    const auto& dynamicData = dynamicAgentData[item.getDynamicDataIndex()];
+    const auto& dynamicData = dynamicAgentData[item->getDynamicDataIndex()];
     for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
         if (const auto& patch = dynamicData.patches[i]; patch.patchID != 0)
             localPlayer->playerPatchIndices()[i] = patch.patchID;
@@ -1100,14 +1099,14 @@ static void applyMedal(CSPlayerInventory& localInventory) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isCollectible())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isCollectible())
         return;
 
-    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item.get().weaponID);
+    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().weaponID);
 }
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -1275,7 +1274,7 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc || getInventoryItem(soc->itemID) == nullptr)
         return;
 
     if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
@@ -1301,7 +1300,8 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     const auto itemID = weapon->itemID();
-    if (!wasItemCreatedByOsiris(itemID))
+    const auto item = getInventoryItem(itemID);
+    if (!item || !item->isSkin())
         return;
 
     const auto itemView = memory->getInventoryItemByItemID(localInventory, itemID);
@@ -1312,11 +1312,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
-    if (!item.isSkin())
-        return;
-
-    auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+    auto& dynamicData = dynamicSkinData[item->getDynamicDataIndex()];
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         soc->setStatTrak(dynamicData.statTrak);
@@ -1341,14 +1337,14 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (!soc)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
-    if (!item.isMusic())
+    const auto item = getInventoryItem(soc->itemID);
+    if (!item || !item->isMusic())
         return;
 
-    auto& dynamicData = dynamicMusicData[item.getDynamicDataIndex()];
+    auto& dynamicData = dynamicMusicData[item->getDynamicDataIndex()];
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         event.setInt("musickitmvps", dynamicData.statTrak);
@@ -1856,17 +1852,17 @@ json InventoryChanger::toJson() noexcept
             json slot;
 
             if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemCT); soc && wasItemCreatedByOsiris(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemCT); soc && getInventoryItem(soc->itemID))
                     slot["CT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
             if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemTT); soc && wasItemCreatedByOsiris(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemTT); soc && getInventoryItem(soc->itemID))
                     slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
             if (const auto itemNOTEAM = localInventory->getItemInLoadout(Team::None, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && wasItemCreatedByOsiris(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && getInventoryItem(soc->itemID))
                     slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
@@ -2203,22 +2199,22 @@ void InventoryChanger::clearInventory() noexcept
 static std::size_t lastEquippedCount = 0;
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
 {
-    if (!wasItemCreatedByOsiris(itemID))
-        return;
-
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    const auto& item = inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
-    if (item.isCollectible()) {
+    const auto item = getInventoryItem(itemID);
+    if (!item)
+        return;
+
+    if (item->isCollectible()) {
         if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
         }
-    } else if (item.isSkin()) {
+    } else if (item->isSkin()) {
         const auto view = localInventory->getItemInLoadout(team, slot);
-        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item.get().weaponID));
+        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().weaponID));
         if (view) {
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
@@ -2446,7 +2442,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!itemView)
         return;
 
-    if (const auto soc = memory->getSOCData(itemView); !soc || !wasItemCreatedByOsiris(soc->itemID))
+    if (const auto soc = memory->getSOCData(itemView); !soc || getInventoryItem(soc->itemID) == nullptr)
         return;
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
