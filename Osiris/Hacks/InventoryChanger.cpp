@@ -69,7 +69,8 @@ public:
         Agent,
         Case,
         CaseKey,
-        OperationPass
+        OperationPass,
+        StatTrakSwapTool
     };
 
     struct GameItem {
@@ -88,6 +89,7 @@ public:
         bool isCase() const noexcept { return type == Type::Case; }
         bool isCaseKey() const noexcept { return type == Type::CaseKey; }
         bool isOperationPass() const noexcept { return type == Type::OperationPass; }
+        bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
@@ -272,6 +274,8 @@ private:
             } else if (const auto tool = item->getEconTool()) {
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
                     _gameItems.emplace_back(Type::OperationPass, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
+                else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
+                    _gameItems.emplace_back(Type::StatTrakSwapTool, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
         }
     }
