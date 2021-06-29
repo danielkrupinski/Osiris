@@ -1222,12 +1222,10 @@ void InventoryChanger::run(FrameStage stage) noexcept
         baseTypeCache->addObject(econItem);
         memory->addEconItem(localInventory, econItem, false, false, false);
 
-#ifdef _WIN32
         if (const auto inventoryComponent = *memory->uiComponentInventory) {
             memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
             memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
         }
-#endif
 
         if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
             memory->clearInventoryImageRGBA(view);
