@@ -520,6 +520,13 @@ static bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
     return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
 }
 
+static InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
+{
+    if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
+        return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+    return nullptr;
+}
+
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
 {
     for (const auto [idx, count] : toAdd) {
