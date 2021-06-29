@@ -515,7 +515,7 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
-static bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
+static [[deprecated("Use below getInventoryItem() and check for null pointer")]] bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
 {
     return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
 }
