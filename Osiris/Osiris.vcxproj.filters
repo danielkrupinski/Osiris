@@ -233,6 +233,9 @@
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\StaticData.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
