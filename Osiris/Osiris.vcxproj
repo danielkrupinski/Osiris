@@ -205,7 +205,6 @@
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Glow.h" />
-    <ClInclude Include="Hacks\InventoryChanger.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Sound.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
@@ -219,6 +218,7 @@
     <ClInclude Include="imgui\imgui_freetype.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
+    <ClInclude Include="InventoryChanger\InventoryChanger.h" />
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="MinHook\buffer.h" />
     <ClInclude Include="MinHook\hde\hde32.h" />

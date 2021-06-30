@@ -5,7 +5,7 @@
 #include "fnv.h"
 #include "GameData.h"
 #include "Hacks/Misc.h"
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"

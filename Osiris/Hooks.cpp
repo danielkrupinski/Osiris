@@ -40,7 +40,7 @@
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"

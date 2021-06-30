@@ -36,6 +36,9 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{6f1f2a48-d1e6-4e87-b967-4b7e41157a5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger">
+      <UniqueIdentifier>{2d9b89c7-c323-4423-a60d-412e3bd1637f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -568,11 +571,11 @@
     <ClInclude Include="SDK\Inconstructible.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\InventoryChanger.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\InventoryChanger.h">
+      <Filter>InventoryChanger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

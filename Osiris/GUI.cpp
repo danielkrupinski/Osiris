@@ -22,7 +22,7 @@
 #include "Config.h"
 #include "ConfigStructs.h"
 #include "Hacks/Misc.h"
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Helpers.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
