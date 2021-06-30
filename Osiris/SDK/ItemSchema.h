@@ -4,6 +4,7 @@
 
 #include "Inconstructible.h"
 #include "Pad.h"
+#include "Entity.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
@@ -93,8 +94,6 @@ struct StickerKit {
     PAD(2 * sizeof(UtlString))
     UtlString inventoryImage;
 };
-
-enum class Team;
 
 union AttributeDataUnion {
     float asFloat;
