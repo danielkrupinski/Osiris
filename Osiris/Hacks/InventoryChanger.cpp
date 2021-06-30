@@ -1161,6 +1161,23 @@ void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
         item->markToDelete();
 }
 
+void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
+{
+    if (getInventoryItem(itemID) == nullptr)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
+        if (const auto soc = memory->getSOCData(view)) {
+            soc->inventory = localInventory->getHighestIDs().second;
+            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+        }
+    }
+}
+
 static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 {
     if (!localPlayer)

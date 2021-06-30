@@ -36,6 +36,7 @@ namespace InventoryChanger
     void setNameTagString(const char* str) noexcept;
     void setItemToRemoveNameTag(std::uint64_t itemID) noexcept;
     void deleteItem(std::uint64_t itemID) noexcept;
+    void acknowledgeItem(std::uint64_t itemID) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
