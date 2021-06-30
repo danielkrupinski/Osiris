@@ -577,6 +577,9 @@
     <ClInclude Include="InventoryChanger\InventoryChanger.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\StaticData.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
