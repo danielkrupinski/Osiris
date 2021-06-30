@@ -115,6 +115,7 @@ public:
     std::uintptr_t deleteItemGetArgAsStringReturnAddress;
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress1;
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress2;
+    std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
 
     std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
