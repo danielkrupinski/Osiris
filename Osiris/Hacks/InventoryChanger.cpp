@@ -944,14 +944,17 @@ private:
 
     void _wearSticker() noexcept
     {
-        const auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-        if (dest.isSkin()) {
+        const auto dest = getInventoryItem(destItemID);
+        if (!dest)
+            return;
+
+        if (dest->isSkin()) {
             constexpr auto wearStep = 0.12f;
-            const auto newWear = (dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
+            const auto newWear = (dynamicSkinData[dest->getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
             const auto shouldRemove = (newWear >= 1.0f + wearStep);
 
             if (shouldRemove)
-                dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot] = {};
+                dynamicSkinData[dest->getDynamicDataIndex()].stickers[stickerSlot] = {};
 
             if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                 if (const auto soc = memory->getSOCData(view)) {
@@ -970,8 +973,8 @@ private:
                 initItemCustomizationNotification("sticker_remove", std::to_string(destItemID).c_str());
 
             destItemID = 0;
-        } else if (dest.isAgent()) {
-            dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot] = {};
+        } else if (dest->isAgent()) {
+            dynamicAgentData[dest->getDynamicDataIndex()].patches[stickerSlot] = {};
 
             if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                 if (const auto soc = memory->getSOCData(view))
@@ -987,8 +990,11 @@ private:
     void _removeNameTag(CSPlayerInventory& localInventory) noexcept
     {
         if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-            auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-            dynamicSkinData[dest.getDynamicDataIndex()].nameTag.clear();
+            const auto dest = getInventoryItem(destItemID);
+            if (!dest)
+                return;
+
+            dynamicSkinData[dest->getDynamicDataIndex()].nameTag.clear();
 
             if (const auto econItem = memory->getSOCData(view)) {
                 if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
@@ -1000,8 +1006,8 @@ private:
                 removeItemFromInventory(&localInventory, localInventory.getItemBaseTypeCache(), econItem);
             }
 
-            auto itemCopy = dest;
-            dest.markAsDeleted();
+            auto itemCopy = *dest;
+            dest->markAsDeleted();
             inventory.push_back(std::move(itemCopy));
         }
     }
@@ -1101,10 +1107,10 @@ private:
                     }
                 }
             } else if (destItemValid) {
-                auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-                if (dest.isCase()) {
-                    const auto& caseData = StaticData::cases()[dest.get().dataIndex];
-                    dest.markToDelete();
+                const auto dest = getInventoryItem(destItemID);
+                if (dest && dest->isCase()) {
+                    const auto& caseData = StaticData::cases()[dest->get().dataIndex];
+                    dest->markToDelete();
                     assert(caseData.hasLoot());
                     if (caseData.hasLoot()) {
                         recreatedItemID = BASE_ITEMID + inventory.size();
