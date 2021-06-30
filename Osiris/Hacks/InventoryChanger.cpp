@@ -515,6 +515,139 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
+class Inventory {
+public:
+    static void addItem(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
+    {
+        instance().toAdd.push_back(gameItemIndex);
+    }
+
+    static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
+    {
+        instance()._addItem(gameItemIndex);
+    }
+
+    static void runFrame() noexcept
+    {
+        instance().runFrame();
+    }
+private:
+    void _addItem(std::size_t gameItemIndex) noexcept
+    {
+        const auto localInventory = memory->inventoryManager->getLocalInventory();
+        if (!localInventory)
+            return;
+
+        const auto baseTypeCache = localInventory->getItemBaseTypeCache();
+        if (!baseTypeCache)
+            return;
+
+        static const auto baseInvID = localInventory->getHighestIDs().second;
+        
+        const auto& inventoryItem = inventory.emplace_back(gameItemIndex);
+        const auto& item = inventoryItem.get();
+
+        const auto econItem = memory->createEconItemSharedObject();
+        econItem->itemID = BASE_ITEMID + inventory.size();
+        econItem->originalID = 0;
+        econItem->accountID = localInventory->getAccountID();
+        econItem->inventory = baseInvID + inventory.size() + 1;
+        econItem->rarity = item.rarity;
+        econItem->quality = 4;
+        econItem->weaponId = item.weaponID;
+
+        if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
+            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
+        } else if (item.isMusic()) {
+            econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
+            const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
+            if (dynamicData.statTrak > -1) {
+                econItem->setStatTrak(dynamicData.statTrak);
+                econItem->setStatTrakType(1);
+                econItem->quality = 9;
+            }
+        } else if (item.isSkin()) {
+            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
+
+            const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
+            if (dynamicData.isSouvenir) {
+                econItem->quality = 12;
+            } else {
+                if (dynamicData.statTrak > -1) {
+                    econItem->setStatTrak(dynamicData.statTrak);
+                    econItem->setStatTrakType(0);
+                    econItem->quality = 9;
+                }
+                if (isKnife(econItem->weaponId))
+                    econItem->quality = 3;
+            }
+
+            econItem->setWear(dynamicData.wear);
+            econItem->setSeed(static_cast<float>(dynamicData.seed));
+            memory->setCustomName(econItem, dynamicData.nameTag.c_str());
+
+            for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
+                const auto& sticker = dynamicData.stickers[j];
+                if (sticker.stickerID == 0)
+                    continue;
+
+                econItem->setStickerID(j, sticker.stickerID);
+                econItem->setStickerWear(j, sticker.wear);
+            }
+        } else if (item.isGlove()) {
+            econItem->quality = 3;
+            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
+
+            const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
+            econItem->setWear(dynamicData.wear);
+            econItem->setSeed(static_cast<float>(dynamicData.seed));
+        } else if (item.isCollectible()) {
+            if (StaticData::collectibles()[item.dataIndex].isOriginal)
+                econItem->quality = 1;
+        } else if (item.isAgent()) {
+            const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
+            for (std::size_t j = 0; j < dynamicData.patches.size(); ++j) {
+                const auto& patch = dynamicData.patches[j];
+                if (patch.patchID == 0)
+                    continue;
+
+                econItem->setStickerID(j, patch.patchID);
+            }
+        }
+
+        baseTypeCache->addObject(econItem);
+        memory->addEconItem(localInventory, econItem, false, false, false);
+
+        if (const auto inventoryComponent = *memory->uiComponentInventory) {
+            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
+            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
+        }
+
+        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
+            memory->clearInventoryImageRGBA(view);
+    }
+
+    void _addItems() noexcept
+    {
+        for (const auto index : toAdd)
+            _addItem(index);
+        toAdd.clear();
+    }
+
+    void _runFrame() noexcept
+    {
+        _addItems();
+    }
+
+    static Inventory& instance() noexcept
+    {
+        static Inventory inventory;
+        return inventory;
+    }
+
+    std::vector<std::size_t> toAdd;
+};
+
 static [[deprecated("Use below getInventoryItem() and check for null pointer")]] bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
 {
     return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
