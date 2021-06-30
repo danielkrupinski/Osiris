@@ -177,6 +177,18 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
+static [[deprecated("Use below getInventoryItem() and check for null pointer")]] bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
+{
+    return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
+}
+
+static InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
+{
+    if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
+        return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+    return nullptr;
+}
+
 class Inventory {
 public:
     static void addItem(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
@@ -187,6 +199,11 @@ public:
     static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
         instance()._addItem(gameItemIndex);
+    }
+
+    static void deleteItemNow(std::uint64_t itemID) noexcept
+    {
+        instance()._deleteItem(itemID);
     }
 
     static void runFrame() noexcept
@@ -289,6 +306,32 @@ private:
             memory->clearInventoryImageRGBA(view);
     }
 
+    void _deleteItem(std::uint64_t itemID) noexcept
+    {
+        const auto item = getInventoryItem(itemID);
+        if (!item)
+            return;
+
+        const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+        if (!view)
+            return;
+
+        const auto econItem = memory->getSOCData(view);
+        if (!econItem)
+            return;
+
+        const auto localInventory = memory->inventoryManager->getLocalInventory();
+        if (!localInventory)
+            return;
+
+        localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
+
+        if (const auto baseTypeCache = localInventory->getItemBaseTypeCache())
+            baseTypeCache->removeObject(econItem);
+
+        item->markAsDeleted();
+    }
+
     void _addItems() noexcept
     {
         for (const auto index : toAdd)
@@ -309,18 +352,6 @@ private:
 
     std::vector<std::size_t> toAdd;
 };
-
-static [[deprecated("Use below getInventoryItem() and check for null pointer")]] bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
-{
-    return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
-}
-
-static InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
-{
-    if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
-        return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
-    return nullptr;
-}
 
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
 {
