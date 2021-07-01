@@ -19,6 +19,12 @@ namespace
         void fireGameEvent(GameEvent* event) override
         {
             switch (fnv::hashRuntime(event->getName())) {
+            case fnv::hash("player_spawn"):
+                InventoryChanger::playerSpawn(*event);
+                break;
+            case fnv::hash("player_team"):
+                InventoryChanger::swapTeam(*event);
+                break;
             case fnv::hash("round_start"):
                 GameData::clearProjectileList();
                 Misc::preserveKillfeed(true);
@@ -68,6 +74,8 @@ void EventListener::init() noexcept
     gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
     gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_mvp");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_team");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_spawn");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
