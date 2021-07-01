@@ -129,6 +129,7 @@ private:
         return wear;
     }
 public:
+    explicit InventoryItem(std::size_t itemIndex, std::size_t dynamicDataIndex)  noexcept : itemIndex{ itemIndex }, dynamicDataIndex{ dynamicDataIndex } {}
     explicit InventoryItem(std::size_t itemIndex, bool factoryNewOnly = true)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
