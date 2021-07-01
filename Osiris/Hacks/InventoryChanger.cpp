@@ -2423,6 +2423,34 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     }
 }
 
+static bool needUpdate = false;
+
+void InventoryChanger::swapTeam(GameEvent& event) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    needUpdate = true;
+}
+
+void InventoryChanger::playerSpawn(GameEvent& event) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    if (needUpdate)
+    {
+        InventoryChanger::scheduleHudUpdate();
+        needUpdate = false;
+    }
+}
+
 void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
 {
     if (!localPlayer)
