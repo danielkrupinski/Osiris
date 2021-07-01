@@ -130,32 +130,6 @@ private:
     }
 public:
     explicit InventoryItem(std::size_t itemIndex, std::size_t dynamicDataIndex) noexcept : itemIndex{ itemIndex }, dynamicDataIndex{ dynamicDataIndex } {}
-    [[deprecated("Provide dynamicDataIndex to the above constructor")]] explicit InventoryItem(std::size_t itemIndex, bool factoryNewOnly = true) noexcept : itemIndex{ itemIndex }
-    {
-        if (isSkin()) {
-            const auto& staticData = StaticData::paintKits()[get().dataIndex];
-            DynamicSkinData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear(factoryNewOnly));
-            dynamicData.seed = randomInt(1, 1000);
-            dynamicSkinData.push_back(dynamicData);
-            dynamicDataIndex = dynamicSkinData.size() - 1;
-        } else if (isGlove()) {
-            const auto& staticData = StaticData::paintKits()[get().dataIndex];
-            DynamicGloveData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear(factoryNewOnly));
-            dynamicData.seed = randomInt(1, 1000);
-            dynamicGloveData.push_back(dynamicData);
-            dynamicDataIndex = dynamicGloveData.size() - 1;
-        } else if (isAgent()) {
-            DynamicAgentData dynamicData;
-            dynamicAgentData.push_back(dynamicData);
-            dynamicDataIndex = dynamicAgentData.size() - 1;
-        } else if (isMusic()) {
-            DynamicMusicData dynamicData;
-            dynamicMusicData.push_back(dynamicData);
-            dynamicDataIndex = dynamicMusicData.size() - 1;
-        }
-    }
 
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
