@@ -192,7 +192,7 @@ public:
         instance().toAdd.emplace_back(gameItemIndex, asUnacknowledged);
     }
 
-    static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
+    static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
     {
         instance()._addItem(gameItemIndex, asUnacknowledged);
     }
