@@ -339,9 +339,38 @@ private:
         item->markAsDeleted();
     }
 
+    static std::size_t createDefaultDynamicData(std::size_t gameItemIndex) noexcept
+    {
+        std::size_t index = static_cast<std::size_t>(-1);
+
+        if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
+            const auto& staticData = StaticData::paintKits()[item.dataIndex];
+            DynamicSkinData dynamicData;
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
+            dynamicData.seed = randomInt(1, 1000);
+            dynamicSkinData.push_back(dynamicData);
+            index = dynamicSkinData.size() - 1;
+        } else if (item.isGlove()) {
+            const auto& staticData = StaticData::paintKits()[item.dataIndex];
+            DynamicGloveData dynamicData;
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
+            dynamicData.seed = randomInt(1, 1000);
+            dynamicGloveData.push_back(dynamicData);
+            index = dynamicGloveData.size() - 1;
+        } else if (item.isAgent()) {
+            dynamicAgentData.push_back({});
+            index = dynamicAgentData.size() - 1;
+        } else if (item.isMusic()) {
+            dynamicMusicData.push_back({});
+            index = dynamicMusicData.size() - 1;
+        }
+
+        return index;
+    }
+
     void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
     {
-        _createSOCItem(inventory.emplace_back(gameItemIndex), asUnacknowledged);
+        _createSOCItem(inventory.emplace_back(gameItemIndex, createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     void _addItems() noexcept
