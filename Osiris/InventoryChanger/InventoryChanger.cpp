@@ -187,7 +187,7 @@ static [[deprecated("Use Inventory::getItem() instead")]] InventoryItem* getInve
 
 class Inventory {
 public:
-    static void addItem(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
+    static void addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
     {
         instance().toAdd.emplace_back(gameItemIndex, asUnacknowledged);
     }
