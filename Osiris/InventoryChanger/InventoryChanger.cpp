@@ -852,14 +852,20 @@ private:
                         recreatedItemID = BASE_ITEMID + inventory.size();
                         customizationString = "crate_unlock";
 
-                        inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
-                        if (caseData.willProduceStatTrak && inventory.back().isMusic()) {
-                            auto& dynamicData = dynamicMusicData[inventory.back().getDynamicDataIndex()];
+                        const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
+                        std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+                        if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
+                            DynamicMusicData dynamicData;
                             dynamicData.statTrak = 0;
-                        } else if (caseData.isSouvenirPackage && inventory.back().isSkin()) {
-                            auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
+                            dynamicMusicData.push_back(std::move(dynamicData));
+                            dynamicDataIdx = dynamicMusicData.size() - 1;
+                        } else if (caseData.isSouvenirPackage && item.isSkin()) {
+                            DynamicSkinData dynamicData;
                             dynamicData.isSouvenir = true;
+                            dynamicSkinData.push_back(std::move(dynamicData));
+                            dynamicDataIdx = dynamicSkinData.size() - 1;
                         }
+                        Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
                     }
                 }
             }
