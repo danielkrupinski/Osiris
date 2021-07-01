@@ -193,7 +193,7 @@ public:
 
     static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
-        instance()._createSOCItem(inventory.emplace_back(gameItemIndex), asUnacknowledged);
+        instance()._addItem(gameItemIndex, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -338,10 +338,15 @@ private:
         item->markAsDeleted();
     }
 
+    void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    {
+        _createSOCItem(inventory.emplace_back(gameItemIndex), asUnacknowledged);
+    }
+
     void _addItems() noexcept
     {
         for (const auto [index, asUnacknowledged] : toAdd)
-            _createSOCItem(inventory.emplace_back(index), asUnacknowledged);
+            _addItem(index, asUnacknowledged);
         toAdd.clear();
     }
 
