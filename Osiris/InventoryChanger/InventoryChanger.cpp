@@ -208,7 +208,7 @@ public:
 
     static void runFrame() noexcept
     {
-        instance().runFrame();
+        instance()._runFrame();
     }
 private:
     void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
@@ -222,15 +222,16 @@ private:
             return;
 
         static const auto baseInvID = localInventory->getHighestIDs().second;
-        
-        const auto& inventoryItem = inventory.emplace_back(gameItemIndex);
-        const auto& item = inventoryItem.get();
 
         const auto econItem = memory->createEconItemSharedObject();
         econItem->itemID = BASE_ITEMID + inventory.size();
         econItem->originalID = 0;
         econItem->accountID = localInventory->getAccountID();
         econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size() + 1;
+
+        const auto& inventoryItem = inventory.emplace_back(gameItemIndex);
+        const auto& item = inventoryItem.get();
+
         econItem->rarity = item.rarity;
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
@@ -357,7 +358,7 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
 {
     for (const auto [idx, count] : toAdd) {
         for (int i = 0; i < count; ++i)
-            inventory.emplace_back(idx);
+            Inventory::addItem(idx, true);
     }
 }
 
@@ -989,6 +990,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
     ToolUser::preAddItems(*localInventory);
+
+    Inventory::runFrame();
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
         if (inventory[i].shouldDelete()) {
