@@ -198,7 +198,7 @@ public:
 
     static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
-        instance()._addItem(gameItemIndex, asUnacknowledged);
+        instance()._createSOCItem(gameItemIndex, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -211,7 +211,7 @@ public:
         instance()._runFrame();
     }
 private:
-    void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    void _createSOCItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
         if (!localInventory)
@@ -336,7 +336,7 @@ private:
     void _addItems() noexcept
     {
         for (const auto [index, asUnacknowledged] : toAdd)
-            _addItem(index, asUnacknowledged);
+            _createSOCItem(index, asUnacknowledged);
         toAdd.clear();
     }
 
