@@ -177,7 +177,7 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
-static InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
+static [[deprecated("Use Inventory::getItem() instead")]] InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
 {
     if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
         return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
@@ -205,7 +205,19 @@ public:
     {
         instance()._runFrame();
     }
+
+    static InventoryItem* getItem(std::uint64_t itemID) noexcept
+    {
+        return instance()._getItem(itemID);
+    }
 private:
+    InventoryItem* _getItem(std::uint64_t itemID) noexcept
+    {
+        if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
+            return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
+        return nullptr;
+    }
+
     void _createSOCItem(const InventoryItem& inventoryItem, bool asUnacknowledged) noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
