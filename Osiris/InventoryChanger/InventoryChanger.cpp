@@ -314,7 +314,7 @@ private:
 
     void _deleteItem(std::uint64_t itemID) noexcept
     {
-        const auto item = getInventoryItem(itemID);
+        const auto item = _getItem(itemID);
         if (!item)
             return;
 
@@ -405,7 +405,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isGlove())
         return;
 
@@ -462,7 +462,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isSkin())
         return;
 
@@ -550,7 +550,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto soc = memory->getSOCData(itemView);
-        if (!soc || !getInventoryItem(soc->itemID))
+        if (!soc || !Inventory::getItem(soc->itemID))
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
@@ -643,7 +643,7 @@ private:
 
     void _wearSticker() noexcept
     {
-        const auto dest = getInventoryItem(destItemID);
+        const auto dest = Inventory::getItem(destItemID);
         if (!dest)
             return;
 
@@ -689,7 +689,7 @@ private:
     void _removeNameTag(CSPlayerInventory& localInventory) noexcept
     {
         if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-            const auto dest = getInventoryItem(destItemID);
+            const auto dest = Inventory::getItem(destItemID);
             if (!dest)
                 return;
 
@@ -713,14 +713,14 @@ private:
 
     void _preAddItems(CSPlayerInventory& localInventory) noexcept
     {
-        const auto destItemValid = getInventoryItem(destItemID) != nullptr;
+        const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
 
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
             _wearSticker();
         } else if (action == Action::RemoveNameTag && destItemValid) {
             _removeNameTag(localInventory);
         } else if (action == Action::Use) {
-            if (const auto tool = getInventoryItem(toolItemID)) {
+            if (const auto tool = Inventory::getItem(toolItemID)) {
                 const auto& toolItem = tool->get();
 
                 if (toolItem.isSealedGraffiti()) {
@@ -806,7 +806,7 @@ private:
                     }
                 }
             } else if (destItemValid) {
-                const auto dest = getInventoryItem(destItemID);
+                const auto dest = Inventory::getItem(destItemID);
                 if (dest && dest->isCase()) {
                     const auto& caseData = StaticData::cases()[dest->get().dataIndex];
                     dest->markToDelete();
@@ -856,13 +856,13 @@ void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::se
 
 void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
 {
-    if (const auto item = getInventoryItem(itemID))
+    if (const auto item = Inventory::getItem(itemID))
         item->markToDelete();
 }
 
 void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
 {
-    if (getInventoryItem(itemID) == nullptr)
+    if (Inventory::getItem(itemID) == nullptr)
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();
@@ -894,7 +894,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isMusic())
         return;
 
@@ -915,7 +915,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isAgent())
         return;
 
@@ -957,7 +957,7 @@ static void applyMedal(CSPlayerInventory& localInventory) noexcept
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isCollectible())
         return;
 
@@ -1131,7 +1131,7 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc || getInventoryItem(soc->itemID) == nullptr)
+    if (!soc || Inventory::getItem(soc->itemID) == nullptr)
         return;
 
     if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
@@ -1157,7 +1157,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     const auto itemID = weapon->itemID();
-    const auto item = getInventoryItem(itemID);
+    const auto item = Inventory::getItem(itemID);
     if (!item || !item->isSkin())
         return;
 
@@ -1197,7 +1197,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (!soc)
         return;
 
-    const auto item = getInventoryItem(soc->itemID);
+    const auto item = Inventory::getItem(soc->itemID);
     if (!item || !item->isMusic())
         return;
 
@@ -1709,17 +1709,17 @@ json InventoryChanger::toJson() noexcept
             json slot;
 
             if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemCT); soc && getInventoryItem(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemCT); soc && Inventory::getItem(soc->itemID))
                     slot["CT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
             if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemTT); soc && getInventoryItem(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemTT); soc && Inventory::getItem(soc->itemID))
                     slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
             if (const auto itemNOTEAM = localInventory->getItemInLoadout(Team::None, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && getInventoryItem(soc->itemID))
+                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && Inventory::getItem(soc->itemID))
                     slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
@@ -2060,7 +2060,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     if (!localInventory)
         return;
 
-    const auto item = getInventoryItem(itemID);
+    const auto item = Inventory::getItem(itemID);
     if (!item)
         return;
 
@@ -2299,7 +2299,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!itemView)
         return;
 
-    if (const auto soc = memory->getSOCData(itemView); !soc || getInventoryItem(soc->itemID) == nullptr)
+    if (const auto soc = memory->getSOCData(itemView); !soc || Inventory::getItem(soc->itemID) == nullptr)
         return;
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
