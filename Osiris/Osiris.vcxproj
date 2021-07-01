@@ -130,6 +130,7 @@
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="InputUtil.cpp" />
+    <ClCompile Include="InventoryChanger\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
     <ClCompile Include="InventoryChanger\StaticData.cpp" />
     <ClCompile Include="MinHook\buffer.c">
