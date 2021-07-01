@@ -193,12 +193,12 @@ class Inventory {
 public:
     static void addItem(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
-        instance().toAdd.push_back(gameItemIndex);
+        instance().toAdd.emplace_back(gameItemIndex, asUnacknowledged);
     }
 
     static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
-        instance()._addItem(gameItemIndex);
+        instance()._addItem(gameItemIndex, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -211,7 +211,7 @@ public:
         instance().runFrame();
     }
 private:
-    void _addItem(std::size_t gameItemIndex) noexcept
+    void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
         if (!localInventory)
@@ -230,7 +230,7 @@ private:
         econItem->itemID = BASE_ITEMID + inventory.size();
         econItem->originalID = 0;
         econItem->accountID = localInventory->getAccountID();
-        econItem->inventory = baseInvID + inventory.size() + 1;
+        econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size() + 1;
         econItem->rarity = item.rarity;
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
@@ -334,8 +334,8 @@ private:
 
     void _addItems() noexcept
     {
-        for (const auto index : toAdd)
-            _addItem(index);
+        for (const auto [index, asUnacknowledged] : toAdd)
+            _addItem(index, asUnacknowledged);
         toAdd.clear();
     }
 
@@ -350,7 +350,7 @@ private:
         return inventory;
     }
 
-    std::vector<std::size_t> toAdd;
+    std::vector<std::pair<std::size_t, bool>> toAdd;
 };
 
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
