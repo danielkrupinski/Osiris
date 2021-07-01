@@ -187,14 +187,16 @@ static [[deprecated("Use Inventory::getItem() instead")]] InventoryItem* getInve
 
 class Inventory {
 public:
-    static void addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    static constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
+
+    static void addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        instance().toAdd.emplace_back(gameItemIndex, asUnacknowledged);
+        instance().toAdd.emplace_back(gameItemIndex, dynamicDataIdx, asUnacknowledged);
     }
 
-    static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    static void addItemNow(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        instance()._addItem(gameItemIndex, asUnacknowledged);
+        instance()._addItem(gameItemIndex, dynamicDataIdx, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -368,15 +370,15 @@ private:
         return index;
     }
 
-    void _addItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    void _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        _createSOCItem(inventory.emplace_back(gameItemIndex, createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     void _addItems() noexcept
     {
-        for (const auto [index, asUnacknowledged] : toAdd)
-            _addItem(index, asUnacknowledged);
+        for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
+            _addItem(index, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }
 
@@ -391,14 +393,14 @@ private:
         return inventory;
     }
 
-    std::vector<std::pair<std::size_t, bool>> toAdd;
+    std::vector<std::tuple<std::size_t, std::size_t, bool>> toAdd;
 };
 
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
 {
     for (const auto [idx, count] : toAdd) {
         for (int i = 0; i < count; ++i)
-            Inventory::addItem(idx, true);
+            Inventory::addItem(idx, Inventory::INVALID_DYNAMIC_DATA_IDX, true);
     }
 }
 
