@@ -110,6 +110,7 @@ private:
     std::size_t itemIndex;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 
+    // TODO: This should be moved to where items are generated from cases
     static float generateWear(bool factoryNewOnly) noexcept
     {
         if (factoryNewOnly)
@@ -151,13 +152,6 @@ public:
 };
 
 static std::vector<InventoryItem> inventory;
-
-static [[deprecated("Use Inventory::getItem() instead")]] InventoryItem* getInventoryItem(std::uint64_t itemID) noexcept
-{
-    if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
-        return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
-    return nullptr;
-}
 
 class Inventory {
 public:
