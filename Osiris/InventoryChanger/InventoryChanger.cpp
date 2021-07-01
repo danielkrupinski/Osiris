@@ -729,11 +729,7 @@ private:
                 const auto& toolItem = tool->get();
 
                 if (toolItem.isSealedGraffiti()) {
-                    const auto baseTypeCache = localInventory.getItemBaseTypeCache();
-                    if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolItemID))
-                        if (const auto econItem = memory->getSOCData(toolView))
-                            removeItemFromInventory(&localInventory, baseTypeCache, econItem);
-                    tool->markAsDeleted();
+                    Inventory::deleteItemNow(toolItemID);
 
                     const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
                     if (it != StaticData::gameItems().end()) {
