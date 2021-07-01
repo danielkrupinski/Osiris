@@ -198,7 +198,7 @@ public:
 
     static void addItemNow(std::size_t gameItemIndex, bool asUnacknowledged = false) noexcept
     {
-        instance()._createSOCItem(gameItemIndex, asUnacknowledged);
+        instance()._createSOCItem(inventory.emplace_back(gameItemIndex), asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -211,7 +211,7 @@ public:
         instance()._runFrame();
     }
 private:
-    void _createSOCItem(std::size_t gameItemIndex, bool asUnacknowledged) noexcept
+    void _createSOCItem(const InventoryItem& inventoryItem, bool asUnacknowledged) noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
         if (!localInventory)
@@ -224,14 +224,12 @@ private:
         static const auto baseInvID = localInventory->getHighestIDs().second;
 
         const auto econItem = memory->createEconItemSharedObject();
-        econItem->itemID = BASE_ITEMID + inventory.size();
+        econItem->itemID = BASE_ITEMID + inventory.size() - 1;
         econItem->originalID = 0;
         econItem->accountID = localInventory->getAccountID();
-        econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size() + 1;
+        econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size();
 
-        const auto& inventoryItem = inventory.emplace_back(gameItemIndex);
         const auto& item = inventoryItem.get();
-
         econItem->rarity = item.rarity;
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
@@ -336,7 +334,7 @@ private:
     void _addItems() noexcept
     {
         for (const auto [index, asUnacknowledged] : toAdd)
-            _createSOCItem(index, asUnacknowledged);
+            _createSOCItem(inventory.emplace_back(index), asUnacknowledged);
         toAdd.clear();
     }
 
