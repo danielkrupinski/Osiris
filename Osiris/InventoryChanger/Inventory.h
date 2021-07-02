@@ -103,6 +103,11 @@ namespace Inventory
     std::vector<DynamicAgentData>& dynamicAgentData() noexcept;
     std::vector<DynamicMusicData>& dynamicMusicData() noexcept;
 
+    DynamicSkinData& dynamicSkinData(std::size_t index) noexcept;
+    DynamicGloveData& dynamicGloveData(std::size_t index) noexcept;
+    DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
+    DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
+
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
