@@ -362,14 +362,8 @@ private:
             destItemID = 0;
         } else if (dest->isAgent()) {
             Inventory::dynamicAgentData()[dest->getDynamicDataIndex()].patches[stickerSlot] = {};
-
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                if (const auto soc = memory->getSOCData(view))
-                    soc->setStickerID(stickerSlot, 0);
-            }
-
-            sendInventoryUpdatedEvent();
-            initItemCustomizationNotification("patch_remove", std::to_string(destItemID).c_str());
+            customizationString = "patch_remove";
+            recreatedItemID = Inventory::recreateItem(destItemID);
             destItemID = 0;
         }
     }
