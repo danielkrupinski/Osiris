@@ -654,12 +654,6 @@ static void initItemCustomizationNotification(const char* typeStr, const char* i
     }
 }
 
-static [[deprecated("Use Inventory::deleteItemNow()")]] void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
-{
-    inventory->soDestroyed(inventory->getSOID(), (SharedObject*)econItem, 4);
-    cache->removeObject(econItem);
-}
-
 class ToolUser {
 public:
     enum class Action {
