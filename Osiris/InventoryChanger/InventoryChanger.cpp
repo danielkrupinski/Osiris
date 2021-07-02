@@ -196,6 +196,11 @@ public:
     {
         return instance()._recreateItem(itemID);
     }
+
+    static void clear() noexcept
+    {
+        instance()._clear();
+    }
 private:
     InventoryItem* _getItem(std::uint64_t itemID) noexcept
     {
@@ -390,6 +395,13 @@ private:
         for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
             _addItem(index, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
+    }
+
+    void _clear() noexcept
+    {
+        for (std::size_t i = 0; i < inventory.size(); ++i)
+            _deleteItem(BASE_ITEMID + i);
+        inventory.clear();
     }
 
     void _runFrame() noexcept
