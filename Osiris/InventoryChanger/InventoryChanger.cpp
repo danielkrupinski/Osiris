@@ -340,9 +340,9 @@ private:
         return index;
     }
 
-    void _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    std::uint64_t _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     void _addItems() noexcept
