@@ -89,8 +89,6 @@ static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 
-constexpr auto BASE_ITEMID = 1152921504606746975;
-
 static float randomFloat(float min, float max) noexcept
 {
     std::mt19937 gen{ std::random_device{}() };
@@ -155,6 +153,7 @@ static std::vector<InventoryItem> inventory;
 
 class Inventory {
 public:
+    static constexpr auto BASE_ITEMID = 1152921504606746975;
     static constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
 
     struct ToEquip {
@@ -790,28 +789,28 @@ private:
                     if (it != StaticData::gameItems().end())
                         Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
                 } else if (destItemValid) {
-                    auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
-                    if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool->isCaseKey())) {
+                    const auto dest = Inventory::getItem(destItemID);
+                    if (dest && (dest->isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest->isAgent() && toolItem.isPatch()) || (dest->isCase() && tool->isCaseKey())) {
                         if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                            const auto isCase = dest.isCase();
-                            if (dest.isSkin()) {
+                            const auto isCase = dest->isCase();
+                            if (dest->isSkin()) {
                                 if (toolItem.isSticker()) {
                                     const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].stickerID = sticker.id;
-                                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[stickerSlot].wear = 0.0f;
+                                    dynamicSkinData[dest->getDynamicDataIndex()].stickers[stickerSlot].stickerID = sticker.id;
+                                    dynamicSkinData[dest->getDynamicDataIndex()].stickers[stickerSlot].wear = 0.0f;
                                     customizationString = "sticker_apply";
                                 } else if (toolItem.isNameTag()) {
-                                    dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTag;
+                                    dynamicSkinData[dest->getDynamicDataIndex()].nameTag = nameTag;
                                     customizationString = "nametag_add";
                                 }
-                            } else if (dest.isAgent()) {
+                            } else if (dest->isAgent()) {
                                 const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                                dynamicAgentData[dest.getDynamicDataIndex()].patches[stickerSlot].patchID = patch.id;
+                                dynamicAgentData[dest->getDynamicDataIndex()].patches[stickerSlot].patchID = patch.id;
                                 customizationString = "patch_apply";
                             } else if (isCase) {
                                 tool->markToDelete();
 
-                                const auto& caseData = StaticData::cases()[dest.get().dataIndex];
+                                const auto& caseData = StaticData::cases()[dest->get().dataIndex];
                                 assert(caseData.hasLoot());
                                 if (caseData.hasLoot()) {
                                     const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
