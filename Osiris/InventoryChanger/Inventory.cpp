@@ -358,6 +358,30 @@ std::vector<DynamicMusicData>& Inventory::dynamicMusicData() noexcept
     return ::dynamicMusicData;
 }
 
+std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept
+{
+    ::dynamicSkinData.push_back(std::move(data));
+    return ::dynamicSkinData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicGloveData&& data) noexcept
+{
+    ::dynamicGloveData.push_back(std::move(data));
+    return ::dynamicGloveData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicAgentData&& data) noexcept
+{
+    ::dynamicAgentData.push_back(std::move(data));
+    return ::dynamicAgentData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicMusicData&& data) noexcept
+{
+    ::dynamicMusicData.push_back(std::move(data));
+    return ::dynamicMusicData.size() - 1;
+}
+
 std::vector<InventoryItem>& Inventory::get() noexcept
 {
     return InventoryImpl::get();
