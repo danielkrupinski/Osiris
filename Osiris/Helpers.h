@@ -6,6 +6,8 @@
 
 #include "imgui/imgui.h"
 
+#include "SDK/WeaponId.h"
+
 struct Color3;
 struct Color4;
 
@@ -53,4 +55,9 @@ namespace Helpers
     constexpr auto rad2deg(float radians) noexcept { return radians * (180.0f / std::numbers::pi_v<float>); }
 
     [[nodiscard]] std::size_t calculateVmtLength(const std::uintptr_t* vmt) noexcept;
+
+    constexpr auto isKnife(WeaponId id) noexcept
+    {
+        return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
+    }
 }

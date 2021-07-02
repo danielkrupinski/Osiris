@@ -49,11 +49,6 @@
 #include "Inventory.h"
 #include "StaticData.h"
 
-constexpr auto isKnife(WeaponId id) noexcept
-{
-    return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
-}
-
 static float randomFloat(float min, float max) noexcept
 {
     std::mt19937 gen{ std::random_device{}() };
@@ -186,7 +181,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
             continue;
 
         auto& definitionIndex = weapon->itemDefinitionIndex2();
-        if (!isKnife(definitionIndex))
+        if (!Helpers::isKnife(definitionIndex))
             continue;
 
         if (weapon->originalOwnerXuid() != localXuid)
@@ -243,7 +238,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto& definitionIndex = weapon->itemDefinitionIndex2();
-        if (isKnife(definitionIndex))
+        if (Helpers::isKnife(definitionIndex))
             continue;
 
         if (weapon->originalOwnerXuid() != localXuid)
@@ -1816,7 +1811,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!localPlayer)
         return;
 
-    if (!isKnife(viewModelWeapon->itemDefinitionIndex2()))
+    if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex2()))
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();

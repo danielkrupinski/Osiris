@@ -1,5 +1,6 @@
 #include <random>
 
+#include "../Helpers.h"
 #include "Inventory.h"
 #include "../Memory.h"
 #include "../SDK/Entity.h"
@@ -13,10 +14,6 @@ static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 
 // FIXME: duplicated from InventoryChanger.cpp
-constexpr auto isKnife(WeaponId id) noexcept
-{
-    return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
-}
 
 static float randomFloat(float min, float max) noexcept
 {
@@ -153,7 +150,7 @@ private:
                     econItem->setStatTrakType(0);
                     econItem->quality = 9;
                 }
-                if (isKnife(econItem->weaponId))
+                if (Helpers::isKnife(econItem->weaponId))
                     econItem->quality = 3;
             }
 
