@@ -762,9 +762,8 @@ private:
 
                     const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
                     if (it != StaticData::gameItems().end()) {
-                        recreatedItemID = BASE_ITEMID + inventory.size();
                         customizationString = "graffity_unseal";
-                        Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                        recreatedItemID = Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
                     }
                 } else if (toolItem.isOperationPass()) {
                     tool->markToDelete();
@@ -1015,112 +1014,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
     ToolUser::preAddItems(*localInventory);
-
     Inventory::runFrame();
-
-    for (std::size_t i = 0; i < inventory.size(); ++i) {
-        if (inventory[i].shouldDelete()) {
-            if (const auto view = memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i)) {
-                if (const auto econItem = memory->getSOCData(view)) {
-                    removeItemFromInventory(localInventory, baseTypeCache, econItem);
-                }
-            }
-            inventory[i].markAsDeleted();
-            continue;
-        }
-
-        if (inventory[i].isDeleted() || memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i))
-            continue;
-
-        const auto& item = inventory[i].get();
-
-        const auto econItem = memory->createEconItemSharedObject();
-        econItem->itemID = BASE_ITEMID + i;
-        econItem->originalID = 0;
-        econItem->accountID = localInventory->getAccountID();
-        econItem->inventory = baseInvID + i + 1;
-        econItem->rarity = item.rarity;
-        econItem->quality = 4;
-        econItem->weaponId = item.weaponID;
-
-        if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
-        } else if (item.isMusic()) {
-            econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
-            const auto& dynamicData = dynamicMusicData[inventory[i].getDynamicDataIndex()];
-            if (dynamicData.statTrak > -1) {
-                econItem->setStatTrak(dynamicData.statTrak);
-                econItem->setStatTrakType(1);
-                econItem->quality = 9;
-            }
-        } else if (item.isSkin()) {
-            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
-
-            const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
-            if (dynamicData.isSouvenir) {
-                econItem->quality = 12;
-            } else {
-                if (dynamicData.statTrak > -1) {
-                    econItem->setStatTrak(dynamicData.statTrak);
-                    econItem->setStatTrakType(0);
-                    econItem->quality = 9;
-                }
-                if (isKnife(econItem->weaponId))
-                    econItem->quality = 3;
-            }
-
-            econItem->setWear(dynamicData.wear);
-            econItem->setSeed(static_cast<float>(dynamicData.seed));
-            memory->setCustomName(econItem, dynamicData.nameTag.c_str());
-
-            for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
-                const auto& sticker = dynamicData.stickers[j];
-                if (sticker.stickerID == 0)
-                    continue;
-
-                econItem->setStickerID(j, sticker.stickerID);
-                econItem->setStickerWear(j, sticker.wear);
-            }
-        } else if (item.isGlove()) {
-            econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
-
-            const auto& dynamicData = dynamicGloveData[inventory[i].getDynamicDataIndex()];
-            econItem->setWear(dynamicData.wear);
-            econItem->setSeed(static_cast<float>(dynamicData.seed));
-        } else if (item.isCollectible()) {
-            if (StaticData::collectibles()[item.dataIndex].isOriginal)
-                econItem->quality = 1;
-        } else if (item.isAgent()) {
-            const auto& dynamicData = dynamicAgentData[inventory[i].getDynamicDataIndex()];
-            for (std::size_t j = 0; j < dynamicData.patches.size(); ++j) {
-                const auto& patch = dynamicData.patches[j];
-                if (patch.patchID == 0)
-                    continue;
-
-                econItem->setStickerID(j, patch.patchID);
-            }
-        }
-
-        baseTypeCache->addObject(econItem);
-        memory->addEconItem(localInventory, econItem, false, false, false);
-
-        if (const auto inventoryComponent = *memory->uiComponentInventory) {
-            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
-            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
-        }
-
-        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
-            memory->clearInventoryImageRGBA(view);
-    }
 
     for (const auto& item : toEquip)
         memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
 
     toEquip.clear();
-
- //   if (inventoryUpdated)
- //       sendInventoryUpdatedEvent();
 
     ToolUser::postAddItems();
 }
