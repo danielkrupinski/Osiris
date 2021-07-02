@@ -153,6 +153,16 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
+struct ToEquip {
+    ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
+
+    Team team;
+    int slot;
+    std::size_t index;
+};
+
+static std::vector<ToEquip> toEquip;
+
 class Inventory {
 public:
     static constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
@@ -180,6 +190,11 @@ public:
     static InventoryItem* getItem(std::uint64_t itemID) noexcept
     {
         return instance()._getItem(itemID);
+    }
+
+    static std::uint64_t recreateItem(std::uint64_t itemID) noexcept
+    {
+        return instance()._recreateItem(itemID);
     }
 private:
     InventoryItem* _getItem(std::uint64_t itemID) noexcept
@@ -345,6 +360,31 @@ private:
         return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
+    std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
+    {
+        const auto item = _getItem(itemID);
+        if (!item)
+            return 0;
+
+        auto itemCopy = *item;
+
+        if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
+                if (const auto econItem = memory->getSOCData(view)) {
+                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory->getItemInLoadout(Team::CT, slotCT) == view)
+                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory->getItemInLoadout(Team::TT, slotTT) == view)
+                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                    }
+                }
+            }
+        }
+
+        _deleteItem(itemID);
+        _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
+    }
+    
     void _addItems() noexcept
     {
         for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
@@ -601,16 +641,6 @@ static void initItemCustomizationNotification(const char* typeStr, const char* i
             interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
     }
 }
-
-struct ToEquip {
-    ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
-
-    Team team;
-    int slot;
-    std::size_t index;
-};
-
-static std::vector<ToEquip> toEquip;
 
 static [[deprecated("Use Inventory::deleteItemNow()")]] void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
 {
