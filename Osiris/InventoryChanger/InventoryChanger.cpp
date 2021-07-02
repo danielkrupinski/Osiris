@@ -139,7 +139,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     const auto attributeList = glove->econItemView().getAttributeList();
-    const auto& dynamicData = Inventory::dynamicGloveData()[item->getDynamicDataIndex()];
+    const auto& dynamicData = Inventory::dynamicGloveData(item->getDynamicDataIndex());
     memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
@@ -337,10 +337,10 @@ private:
 
         if (dest->isSkin()) {
             constexpr auto wearStep = 0.12f;
-            const auto newWear = (Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
+            const auto newWear = (Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear += wearStep);
 
             if (const auto shouldRemove = (newWear >= 1.0f + wearStep); shouldRemove) {
-                Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot] = {};
+                Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot] = {};
                 customizationString = "sticker_remove";
                 recreatedItemID = Inventory::recreateItem(destItemID);
             } else {
@@ -354,7 +354,7 @@ private:
            
             destItemID = 0;
         } else if (dest->isAgent()) {
-            Inventory::dynamicAgentData()[dest->getDynamicDataIndex()].patches[stickerSlot] = {};
+            Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot] = {};
             customizationString = "patch_remove";
             recreatedItemID = Inventory::recreateItem(destItemID);
             destItemID = 0;
@@ -367,7 +367,7 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].nameTag.clear();
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag.clear();
         Inventory::recreateItem(destItemID);
     }
 
@@ -406,16 +406,16 @@ private:
                             if (dest->isSkin()) {
                                 if (toolItem.isSticker()) {
                                     const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                                    Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot].stickerID = sticker.id;
-                                    Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot].wear = 0.0f;
+                                    Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = sticker.id;
+                                    Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
                                     customizationString = "sticker_apply";
                                 } else if (toolItem.isNameTag()) {
-                                    Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].nameTag = nameTag;
+                                    Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag = nameTag;
                                     customizationString = "nametag_add";
                                 }
                             } else if (dest->isAgent()) {
                                 const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                                Inventory::dynamicAgentData()[dest->getDynamicDataIndex()].patches[stickerSlot].patchID = patch.id;
+                                Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = patch.id;
                                 customizationString = "patch_apply";
                             } else if (isCase) {
                                 tool->markToDelete();
@@ -569,7 +569,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!model)
         return;
 
-    const auto& dynamicData = Inventory::dynamicAgentData()[item->getDynamicDataIndex()];
+    const auto& dynamicData = Inventory::dynamicAgentData(item->getDynamicDataIndex());
     for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
         if (const auto& patch = dynamicData.patches[i]; patch.patchID != 0)
             localPlayer->playerPatchIndices()[i] = patch.patchID;
@@ -705,7 +705,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     if (!soc)
         return;
 
-    auto& dynamicData = Inventory::dynamicSkinData()[item->getDynamicDataIndex()];
+    auto& dynamicData = Inventory::dynamicSkinData(item->getDynamicDataIndex());
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         soc->setStatTrak(dynamicData.statTrak);
@@ -737,7 +737,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (!item || !item->isMusic())
         return;
 
-    auto& dynamicData = Inventory::dynamicMusicData()[item->getDynamicDataIndex()];
+    auto& dynamicData = Inventory::dynamicMusicData(item->getDynamicDataIndex());
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         event.setInt("musickitmvps", dynamicData.statTrak);
@@ -1126,7 +1126,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Weapon ID"] = gameItem.weaponID;
 
-            const auto& dynamicData = Inventory::dynamicGloveData()[item.getDynamicDataIndex()];
+            const auto& dynamicData = Inventory::dynamicGloveData(item.getDynamicDataIndex());
 
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
@@ -1138,7 +1138,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Weapon ID"] = gameItem.weaponID;
 
-            const auto& dynamicData = Inventory::dynamicSkinData()[item.getDynamicDataIndex()];
+            const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
             if (dynamicData.isSouvenir)
                 itemConfig["Is Souvenir"] = dynamicData.isSouvenir;
@@ -1168,7 +1168,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Music";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
-            const auto& dynamicData = Inventory::dynamicMusicData()[item.getDynamicDataIndex()];
+            const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex());
             if (dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
             break;
@@ -1206,7 +1206,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Agent";
             itemConfig["Weapon ID"] = gameItem.weaponID;
             
-            const auto& dynamicData = Inventory::dynamicAgentData()[item.getDynamicDataIndex()];
+            const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
             for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
                 const auto& patch = dynamicData.patches[i];
