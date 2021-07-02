@@ -329,7 +329,7 @@ private:
         }
     }
 
-    void _wearSticker() noexcept
+    void _wearSticker(CSPlayerInventory& localInventory) noexcept
     {
         const auto dest = Inventory::getItem(destItemID);
         if (!dest)
@@ -338,27 +338,20 @@ private:
         if (dest->isSkin()) {
             constexpr auto wearStep = 0.12f;
             const auto newWear = (Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot].wear += wearStep);
-            const auto shouldRemove = (newWear >= 1.0f + wearStep);
 
-            if (shouldRemove)
+            if (const auto shouldRemove = (newWear >= 1.0f + wearStep); shouldRemove) {
                 Inventory::dynamicSkinData()[dest->getDynamicDataIndex()].stickers[stickerSlot] = {};
-
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                if (const auto soc = memory->getSOCData(view)) {
-                    if (shouldRemove) {
-                        soc->setStickerID(stickerSlot, 0);
-                        soc->setStickerWear(stickerSlot, 0.0f);
-                    } else {
+                customizationString = "sticker_remove";
+                recreatedItemID = Inventory::recreateItem(destItemID);
+            } else {
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
+                    if (const auto soc = memory->getSOCData(view)) {
                         soc->setStickerWear(stickerSlot, newWear);
+                        localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
                     }
                 }
             }
-
-            sendInventoryUpdatedEvent();
-
-            if (shouldRemove)
-                initItemCustomizationNotification("sticker_remove", std::to_string(destItemID).c_str());
-
+           
             destItemID = 0;
         } else if (dest->isAgent()) {
             Inventory::dynamicAgentData()[dest->getDynamicDataIndex()].patches[stickerSlot] = {};
@@ -383,7 +376,7 @@ private:
         const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
 
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
-            _wearSticker();
+            _wearSticker(localInventory);
         } else if (action == Action::RemoveNameTag && destItemValid) {
             _removeNameTag(localInventory);
         } else if (action == Action::Use) {
