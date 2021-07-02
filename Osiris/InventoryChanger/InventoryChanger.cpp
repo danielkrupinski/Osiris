@@ -149,8 +149,6 @@ public:
     const StaticData::GameItem& get() const noexcept { assert(!isDeleted() && !shouldDelete()); return StaticData::gameItems()[itemIndex]; }
 };
 
-static std::vector<InventoryItem> inventory;
-
 class Inventory {
 public:
     static constexpr auto BASE_ITEMID = 1152921504606746975;
@@ -163,6 +161,11 @@ public:
         int slot;
         std::size_t index;
     };
+
+    static std::vector<InventoryItem>& get() noexcept
+    {
+        return instance().inventory;
+    }
 
     static void addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
@@ -438,6 +441,7 @@ private:
 
     std::vector<std::tuple<std::size_t, std::size_t, bool>> toAdd;
     std::vector<ToEquip> toEquip;
+    std::vector<InventoryItem> inventory;
 };
 
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
@@ -1472,6 +1476,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::EndChild();
     } else {
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
+            auto& inventory = Inventory::get();
             for (std::size_t i = inventory.size(); i-- > 0;) {
                 if (inventory[i].isDeleted() || inventory[i].shouldDelete())
                     continue;
@@ -1498,7 +1503,7 @@ json InventoryChanger::toJson() noexcept
     j["Version"] = 1;
 
     auto& items = j["Items"];
-    for (const auto& item : inventory) {
+    for (const auto& item : Inventory::get()) {
         if (item.isDeleted())
             continue;
 
