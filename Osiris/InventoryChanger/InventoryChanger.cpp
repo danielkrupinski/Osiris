@@ -205,12 +205,22 @@ public:
         instance().toEquip.emplace_back(team, slot, index);
     }
 
+    static std::size_t getItemIndex(std::uint64_t itemID) noexcept
+    {
+        return instance()._getItemIndex(itemID);
+    }
 private:
     InventoryItem* _getItem(std::uint64_t itemID) noexcept
     {
         if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
             return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
         return nullptr;
+    }
+
+    std::size_t _getItemIndex(std::uint64_t itemID) noexcept
+    {
+        assert(_getItem() != nullptr);
+        return static_cast<std::size_t>(itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
     }
 
     std::uint64_t _createSOCItem(const InventoryItem& inventoryItem, bool asUnacknowledged) noexcept
