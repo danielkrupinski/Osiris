@@ -1555,7 +1555,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
 void InventoryChanger::resetConfig() noexcept
 {
     Inventory::clear();
-    Inventory::dynamicSkinData().clear();
 }
 
 void InventoryChanger::clearInventory() noexcept

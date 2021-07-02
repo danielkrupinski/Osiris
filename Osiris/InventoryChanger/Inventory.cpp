@@ -340,26 +340,6 @@ private:
     std::vector<InventoryItem> inventory;
 };
 
-std::vector<DynamicSkinData>& Inventory::dynamicSkinData() noexcept
-{
-    return ::dynamicSkinData;
-}
-
-std::vector<DynamicGloveData>& Inventory::dynamicGloveData() noexcept
-{
-    return ::dynamicGloveData;
-}
-
-std::vector<DynamicAgentData>& Inventory::dynamicAgentData() noexcept
-{
-    return ::dynamicAgentData;
-}
-
-std::vector<DynamicMusicData>& Inventory::dynamicMusicData() noexcept
-{
-    return ::dynamicMusicData;
-}
-
 DynamicSkinData& Inventory::dynamicSkinData(std::size_t index) noexcept
 {
     return ::dynamicSkinData[index];
