@@ -2007,17 +2007,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         if (equipped.contains("CT")) {
-            if (const auto& ct = equipped["CT"]; ct.is_number_integer() && ct < inventory.size())
+            if (const auto& ct = equipped["CT"]; ct.is_number_integer())
                 toEquip.emplace_back(Team::CT, slot, ct);
         }
 
         if (equipped.contains("TT")) {
-            if (const auto& tt = equipped["TT"]; tt.is_number_integer() && tt < inventory.size())
+            if (const auto& tt = equipped["TT"]; tt.is_number_integer())
                 toEquip.emplace_back(Team::TT, slot, tt);
         }
 
         if (equipped.contains("NOTEAM")) {
-            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer() && noteam < inventory.size())
+            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer())
                 toEquip.emplace_back(Team::None, slot, noteam);
         }
     }
