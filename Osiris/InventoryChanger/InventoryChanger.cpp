@@ -447,8 +447,7 @@ private:
                                     if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; item.isSkin() && randomInt(0, 9) == 0) {
                                         DynamicSkinData dynamicData;
                                         dynamicData.statTrak = 0;
-                                        Inventory::dynamicSkinData().push_back(std::move(dynamicData));
-                                        dynamicDataIdx = Inventory::dynamicSkinData().size() - 1;
+                                        dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                                     }
 
                                     Inventory::deleteItemNow(destItemID);
@@ -475,13 +474,11 @@ private:
                         if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
                             DynamicMusicData dynamicData;
                             dynamicData.statTrak = 0;
-                            Inventory::dynamicMusicData().push_back(std::move(dynamicData));
-                            dynamicDataIdx = Inventory::dynamicMusicData().size() - 1;
+                            dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                         } else if (caseData.isSouvenirPackage && item.isSkin()) {
                             DynamicSkinData dynamicData;
                             dynamicData.isSouvenir = true;
-                            Inventory::dynamicSkinData().push_back(std::move(dynamicData));
-                            dynamicDataIdx = Inventory::dynamicSkinData().size() - 1;
+                            dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                         }
                         Inventory::deleteItemNow(destItemID);
                         recreatedItemID = Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
@@ -1384,8 +1381,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 }
             }
 
-            Inventory::dynamicSkinData().push_back(std::move(dynamicData));
-            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::dynamicSkinData().size() - 1, false);
+            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::emplaceDynamicData(std::move(dynamicData)), false);
         } else if (type == "Glove") {
             if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
                 continue;
@@ -1412,8 +1408,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     dynamicData.seed = seed;
             }
 
-            Inventory::dynamicGloveData().push_back(std::move(dynamicData));
-            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::dynamicGloveData().size() - 1, false);
+            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::emplaceDynamicData(std::move(dynamicData)), false);
         } else if (type == "Music") {
             if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
                 continue;
@@ -1431,8 +1426,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     dynamicData.statTrak = statTrak;
             }
 
-            Inventory::dynamicMusicData().push_back(dynamicData);
-            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::dynamicMusicData().size() - 1, false);
+            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::emplaceDynamicData(std::move(dynamicData)), false);
         } else if (type == "Collectible") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
@@ -1512,8 +1506,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 }
             }
 
-            Inventory::dynamicAgentData().push_back(std::move(dynamicData));
-            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::dynamicAgentData().size() - 1, false);
+            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::emplaceDynamicData(std::move(dynamicData)), false);
         } else if (type == "Case") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
