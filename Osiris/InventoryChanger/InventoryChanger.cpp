@@ -153,19 +153,17 @@ public:
 
 static std::vector<InventoryItem> inventory;
 
-struct ToEquip {
-    ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
-
-    Team team;
-    int slot;
-    std::size_t index;
-};
-
-static std::vector<ToEquip> toEquip;
-
 class Inventory {
 public:
     static constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
+
+    struct ToEquip {
+        ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
+
+        Team team;
+        int slot;
+        std::size_t index;
+    };
 
     static void addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
@@ -201,6 +199,12 @@ public:
     {
         instance()._clear();
     }
+
+    static void equipItem(Team team, int slot, std::size_t index) noexcept
+    {
+        instance().toEquip.emplace_back(team, slot, index);
+    }
+
 private:
     InventoryItem* _getItem(std::uint64_t itemID) noexcept
     {
@@ -404,9 +408,17 @@ private:
         inventory.clear();
     }
 
+    void _equipItems() noexcept
+    {
+        for (const auto& item : toEquip)
+            memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
+        toEquip.clear();
+    }
+
     void _runFrame() noexcept
     {
         _addItems();
+        _equipItems();
     }
 
     static Inventory& instance() noexcept
@@ -416,6 +428,7 @@ private:
     }
 
     std::vector<std::tuple<std::size_t, std::size_t, bool>> toAdd;
+    std::vector<ToEquip> toEquip;
 };
 
 static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
@@ -1009,12 +1022,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
-
-    for (const auto& item : toEquip)
-        memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
-
-    toEquip.clear();
-
     ToolUser::postAddItems();
 }
 
@@ -1917,17 +1924,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
         if (equipped.contains("CT")) {
             if (const auto& ct = equipped["CT"]; ct.is_number_integer())
-                toEquip.emplace_back(Team::CT, slot, ct);
+                Inventory::equipItem(Team::CT, slot, ct);
         }
 
         if (equipped.contains("TT")) {
             if (const auto& tt = equipped["TT"]; tt.is_number_integer())
-                toEquip.emplace_back(Team::TT, slot, tt);
+                Inventory::equipItem(Team::TT, slot, tt);
         }
-
+         
         if (equipped.contains("NOTEAM")) {
             if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer())
-                toEquip.emplace_back(Team::None, slot, noteam);
+                Inventory::equipItem(Team::None, slot, noteam);
         }
     }
 }
