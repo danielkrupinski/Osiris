@@ -296,6 +296,16 @@ private:
         toAdd.clear();
     }
 
+    void _deleteItems() noexcept
+    {
+        for (std::size_t i = 0; i < inventory.size(); ++i) {
+            if (inventory[i].shouldDelete()) {
+                _deleteItem(BASE_ITEMID + i);
+                inventory[i].markAsDeleted();
+            }
+        }
+    }
+
     void _clear() noexcept
     {
         for (std::size_t i = 0; i < inventory.size(); ++i)
@@ -312,6 +322,7 @@ private:
 
     void _runFrame() noexcept
     {
+        _deleteItems();
         _addItems();
         _equipItems();
     }
