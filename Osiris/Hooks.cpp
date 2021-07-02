@@ -40,10 +40,11 @@
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
-#include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+
+#include "InventoryChanger/InventoryChanger.h"
 
 #include "SDK/ClientClass.h"
 #include "SDK/Cvar.h"
@@ -494,6 +495,8 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
             InventoryChanger::setItemToRemoveNameTag(stringToUint64(result));
         } else if (ret == memory->deleteItemGetArgAsStringReturnAddress) {
             InventoryChanger::deleteItem(stringToUint64(result));
+        } else if (ret == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
+            InventoryChanger::acknowledgeItem(stringToUint64(result));
         }
     }
 
