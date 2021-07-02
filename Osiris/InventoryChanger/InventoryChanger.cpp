@@ -1640,17 +1640,17 @@ json InventoryChanger::toJson() noexcept
 
             if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemCT); soc && Inventory::getItem(soc->itemID))
-                    slot["CT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
+                    slot["CT"] = Inventory::getItemIndex(soc->itemID);
             }
 
             if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemTT); soc && Inventory::getItem(soc->itemID))
-                    slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
+                    slot["TT"] = Inventory::getItemIndex(soc->itemID);
             }
 
             if (const auto itemNOTEAM = localInventory->getItemInLoadout(Team::None, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemNOTEAM); soc && Inventory::getItem(soc->itemID))
-                    slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
+                    slot["NOTEAM"] = Inventory::getItemIndex(soc->itemID);
             }
 
             if (!slot.empty()) {
