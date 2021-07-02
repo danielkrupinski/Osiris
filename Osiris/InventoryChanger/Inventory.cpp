@@ -307,7 +307,12 @@ private:
     {
         for (std::size_t i = 0; i < inventory.size(); ++i)
             _deleteItem(BASE_ITEMID + i);
+
         inventory.clear();
+        dynamicSkinData.clear();
+        dynamicGloveData.clear();
+        dynamicAgentData.clear();
+        dynamicMusicData.clear();
     }
 
     void _equipItems() noexcept
