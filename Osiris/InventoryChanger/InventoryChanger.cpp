@@ -189,15 +189,15 @@ private:
         return nullptr;
     }
 
-    void _createSOCItem(const InventoryItem& inventoryItem, bool asUnacknowledged) noexcept
+    std::uint64_t _createSOCItem(const InventoryItem& inventoryItem, bool asUnacknowledged) noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
         if (!localInventory)
-            return;
+            return 0;
 
         const auto baseTypeCache = localInventory->getItemBaseTypeCache();
         if (!baseTypeCache)
-            return;
+            return 0;
 
         static const auto baseInvID = localInventory->getHighestIDs().second;
 
@@ -281,6 +281,8 @@ private:
 
         if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
             memory->clearInventoryImageRGBA(view);
+
+        return econItem->itemID;
     }
 
     void _deleteItem(std::uint64_t itemID) noexcept
