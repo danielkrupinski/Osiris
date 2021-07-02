@@ -772,7 +772,7 @@ private:
                     const auto coinID = toolItem.weaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
                     const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID);
                     if (it != StaticData::gameItems().end())
-                        Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                        Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
                 } else if (destItemValid) {
                     auto& dest = inventory[static_cast<std::size_t>(destItemID - BASE_ITEMID)];
                     if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch()) || (dest.isCase() && tool->isCaseKey())) {
