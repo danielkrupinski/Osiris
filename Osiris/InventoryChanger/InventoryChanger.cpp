@@ -784,15 +784,21 @@ private:
                                 tool->markToDelete();
 
                                 const auto& caseData = StaticData::cases()[dest.get().dataIndex];
-                                dest.markToDelete();
                                 assert(caseData.hasLoot());
                                 if (caseData.hasLoot()) {
-                                    recreatedItemID = BASE_ITEMID + inventory.size();
-                                    customizationString = "crate_unlock";
-                                    const auto& item = inventory.emplace_back(StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))], false);
+                                    const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
+                                    std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
-                                    if (item.isSkin() && randomInt(0, 9) == 0)
-                                        dynamicSkinData[item.getDynamicDataIndex()].statTrak = 0;
+                                    if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; item.isSkin() && randomInt(0, 9) == 0) {
+                                        DynamicSkinData dynamicData;
+                                        dynamicData.statTrak = 0;
+                                        dynamicSkinData.push_back(std::move(dynamicData));
+                                        dynamicDataIdx = dynamicSkinData.size() - 1;
+                                    }
+
+                                    Inventory::deleteItemNow(destItemID);
+                                    recreatedItemID = Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
+                                    customizationString = "crate_unlock";
                                 }
                             }
 
@@ -807,12 +813,8 @@ private:
                 const auto dest = Inventory::getItem(destItemID);
                 if (dest && dest->isCase()) {
                     const auto& caseData = StaticData::cases()[dest->get().dataIndex];
-                    dest->markToDelete();
                     assert(caseData.hasLoot());
                     if (caseData.hasLoot()) {
-                        recreatedItemID = BASE_ITEMID + inventory.size();
-                        customizationString = "crate_unlock";
-
                         const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
                         std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
                         if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
@@ -826,7 +828,9 @@ private:
                             dynamicSkinData.push_back(std::move(dynamicData));
                             dynamicDataIdx = dynamicSkinData.size() - 1;
                         }
-                        Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
+                        Inventory::deleteItemNow(destItemID);
+                        recreatedItemID = Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
+                        customizationString = "crate_unlock";
                     }
                 }
             }
