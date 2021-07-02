@@ -401,7 +401,7 @@ private:
         }
 
         _deleteItem(itemID);
-        _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
+        return _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
     }
     
     void _addItems() noexcept
