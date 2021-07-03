@@ -393,9 +393,48 @@ private:
         }
     }
 
+    void _openContainer(InventoryItem& container) noexcept
+    {
+        assert(container.isCase());
+        const auto& caseData = StaticData::cases()[container.get().dataIndex];
+        assert(caseData.hasLoot());
+        if (caseData.hasLoot()) {
+
+            // Move this to loot generator
+            const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
+            std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+
+            if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
+                DynamicMusicData dynamicData;
+                dynamicData.statTrak = 0;
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            } else if (caseData.isSouvenirPackage && item.isSkin()) {
+                DynamicSkinData dynamicData;
+                dynamicData.isSouvenir = true;
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            } else if (item.isSkin() && randomInt(0, 9) == 0) {
+                DynamicSkinData dynamicData;
+                dynamicData.statTrak = 0;
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            }
+            //
+
+            container.markToDelete();
+            if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
+                tool->markToDelete();
+            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false));
+        }
+    }
+
     void _useTool() noexcept
     {
-        const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
+        const auto destItem = Inventory::getItem(destItemID);
+        const auto destItemValid = destItem != nullptr;
+
+        if (destItemValid && destItem->isCase()) {
+            _openContainer(*destItem);
+            return;
+        }
 
         if (const auto tool = Inventory::getItem(toolItemID)) {
             const auto& toolItem = tool->get();
@@ -406,9 +445,8 @@ private:
                 _activateOperationPass(*tool);
             } else if (destItemValid) {
                 const auto dest = Inventory::getItem(destItemID);
-                if (dest && ((dest->isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest->isAgent() && toolItem.isPatch()) || (dest->isCase() && tool->isCaseKey()))) {
+                if (dest && ((dest->isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest->isAgent() && toolItem.isPatch()))) {
                     if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
-                        const auto isCase = dest->isCase();
                         if (dest->isSkin()) {
                             if (toolItem.isSticker()) {
                                 const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
@@ -423,54 +461,10 @@ private:
                             const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
                             Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = patch.id;
                             customizationString = "patch_apply";
-                        } else if (isCase) {
-                            tool->markToDelete();
-
-                            const auto& caseData = StaticData::cases()[dest->get().dataIndex];
-                            assert(caseData.hasLoot());
-                            if (caseData.hasLoot()) {
-                                const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
-                                std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
-
-                                if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; item.isSkin() && randomInt(0, 9) == 0) {
-                                    DynamicSkinData dynamicData;
-                                    dynamicData.statTrak = 0;
-                                    dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-                                }
-
-                                Inventory::deleteItemNow(destItemID);
-                                recreatedItemID = Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
-                                customizationString = "crate_unlock";
-                            }
                         }
-
-                        if (!isCase) {
-                            Inventory::deleteItemNow(toolItemID);
-                            recreatedItemID = Inventory::recreateItem(destItemID);
-                        }
+                        Inventory::deleteItemNow(toolItemID);
+                        recreatedItemID = Inventory::recreateItem(destItemID);
                     }
-                }
-            }
-        } else if (destItemValid) {
-            const auto dest = Inventory::getItem(destItemID);
-            if (dest && dest->isCase()) {
-                const auto& caseData = StaticData::cases()[dest->get().dataIndex];
-                assert(caseData.hasLoot());
-                if (caseData.hasLoot()) {
-                    const auto unlockedItemIdx = StaticData::caseLoot()[randomInt(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
-                    std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
-                    if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
-                        DynamicMusicData dynamicData;
-                        dynamicData.statTrak = 0;
-                        dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-                    } else if (caseData.isSouvenirPackage && item.isSkin()) {
-                        DynamicSkinData dynamicData;
-                        dynamicData.isSouvenir = true;
-                        dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-                    }
-                    Inventory::deleteItemNow(destItemID);
-                    recreatedItemID = Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false);
-                    customizationString = "crate_unlock";
                 }
             }
         }
