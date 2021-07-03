@@ -376,6 +376,15 @@ private:
         Inventory::recreateItem(destItemID);
     }
 
+    static void _activateOperationPass(InventoryItem& pass) noexcept
+    {
+        const auto passWeaponID = pass.get().weaponID;
+        pass.markToDelete();
+        const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
+        if (const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID); it != StaticData::gameItems().end())
+            Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
+    }
+
     void _useTool() noexcept
     {
         const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
@@ -392,12 +401,7 @@ private:
                     recreatedItemID = Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
                 }
             } else if (toolItem.isOperationPass()) {
-                tool->markToDelete();
-
-                const auto coinID = toolItem.weaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(toolItem.weaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-                const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID);
-                if (it != StaticData::gameItems().end())
-                    Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
+                _activateOperationPass(*tool);
             } else if (destItemValid) {
                 const auto dest = Inventory::getItem(destItemID);
                 if (dest && ((dest->isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest->isAgent() && toolItem.isPatch()) || (dest->isCase() && tool->isCaseKey()))) {
