@@ -491,11 +491,11 @@ private:
 
     std::uint64_t toolItemID = 0;
     std::uint64_t destItemID = 0;
-    std::uint64_t recreatedItemID = 0;
+    [[deprecated]] std::uint64_t recreatedItemID = 0;
     Action action;
     float useTime = 0.0f;
     int stickerSlot = 0;
-    const char* customizationString = nullptr;
+    [[deprecated]] const char* customizationString = nullptr;
     std::string nameTag;
 };
 
