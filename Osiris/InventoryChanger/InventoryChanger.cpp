@@ -424,7 +424,7 @@ private:
         }
     }
 
-    void _applySticker(InventoryItem& sticker) noexcept
+    void _applySticker(InventoryItem& sticker) const noexcept
     {
         assert(sticker.isSticker());
         const auto dest = Inventory::getItem(destItemID);
