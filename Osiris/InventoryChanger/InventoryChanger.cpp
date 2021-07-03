@@ -449,10 +449,21 @@ private:
         initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
     }
 
+    void _applyPatch(InventoryItem& patch) noexcept
+    {
+        assert(patch.isPatch());
+        const auto dest = Inventory::getItem(destItemID);
+        if (!dest || !dest->isAgent())
+            return;
+
+        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::paintKits()[patch.get().dataIndex].id;
+        patch.markToDelete();
+        initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
+    }
+
     void _useTool() noexcept
     {
-        const auto destItem = Inventory::getItem(destItemID);
-        if (destItem && destItem->isCase()) {
+        if (const auto destItem = Inventory::getItem(destItemID); destItem && destItem->isCase()) {
             _openContainer(*destItem);
             return;
         }
@@ -470,13 +481,7 @@ private:
         } else if (tool->isNameTag()) {
             _addNameTag(*tool);
         } else if (tool->isPatch()) {
-            if (destItem && destItem->isPatch()) {
-                const auto& patch = StaticData::paintKits()[tool->get().dataIndex];
-                Inventory::dynamicAgentData(destItem->getDynamicDataIndex()).patches[stickerSlot].patchID = patch.id;
-                customizationString = "patch_apply";
-                Inventory::deleteItemNow(toolItemID);
-                recreatedItemID = Inventory::recreateItem(destItemID);
-            }
+            _applyPatch(*tool);
         }
     }
 
