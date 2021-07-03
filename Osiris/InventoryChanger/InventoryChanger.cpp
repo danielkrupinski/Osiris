@@ -437,7 +437,7 @@ private:
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
     }
 
-    void _addNameTag(InventoryItem& nameTagItem) noexcept
+    void _addNameTag(InventoryItem& nameTagItem) const noexcept
     {
         assert(nameTagItem.isNameTag());
         const auto dest = Inventory::getItem(destItemID);
