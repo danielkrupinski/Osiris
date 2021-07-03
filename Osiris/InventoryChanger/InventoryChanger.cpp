@@ -427,41 +427,42 @@ private:
     void _useTool() noexcept
     {
         const auto destItem = Inventory::getItem(destItemID);
-        const auto destItemValid = destItem != nullptr;
-
-        if (destItemValid && destItem->isCase()) {
+        if (destItem && destItem->isCase()) {
             _openContainer(*destItem);
             return;
         }
 
-        if (const auto tool = Inventory::getItem(toolItemID)) {
-            const auto& toolItem = tool->get();
+        const auto tool = Inventory::getItem(toolItemID);
+        if (!tool)
+            return;
 
-            if (toolItem.isSealedGraffiti()) {
-                _unsealGraffiti(*tool);
-            } else if (toolItem.isOperationPass()) {
-                _activateOperationPass(*tool);
-            } else if (destItemValid) {
-                const auto dest = Inventory::getItem(destItemID);
-                if (dest && ((dest->isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest->isAgent() && toolItem.isPatch()))) {
-                    if (dest->isSkin()) {
-                        if (toolItem.isSticker()) {
-                            const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                            Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = sticker.id;
-                            Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
-                            customizationString = "sticker_apply";
-                        } else if (toolItem.isNameTag()) {
-                            Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag = nameTag;
-                            customizationString = "nametag_add";
-                        }
-                    } else if (dest->isAgent()) {
-                        const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = patch.id;
-                        customizationString = "patch_apply";
-                    }
-                    Inventory::deleteItemNow(toolItemID);
-                    recreatedItemID = Inventory::recreateItem(destItemID);
-                }
+        if (tool->isSealedGraffiti()) {
+            _unsealGraffiti(*tool);
+        } else if (tool->isOperationPass()) {
+            _activateOperationPass(*tool);
+        } else if (tool->isSticker()) {
+            if (destItem && destItem->isSkin()) {
+                const auto& sticker = StaticData::paintKits()[tool->get().dataIndex];
+                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).stickers[stickerSlot].stickerID = sticker.id;
+                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
+                customizationString = "sticker_apply";
+                Inventory::deleteItemNow(toolItemID);
+                recreatedItemID = Inventory::recreateItem(destItemID);
+            }
+        } else if (tool->isNameTag()) {
+            if (destItem && destItem->isSkin()) {
+                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).nameTag = nameTag;
+                customizationString = "nametag_add";
+                Inventory::deleteItemNow(toolItemID);
+                recreatedItemID = Inventory::recreateItem(destItemID);
+            }
+        } else if (tool->isPatch()) {
+            if (destItem && destItem->isPatch()) {
+                const auto& patch = StaticData::paintKits()[tool->get().dataIndex];
+                Inventory::dynamicAgentData(destItem->getDynamicDataIndex()).patches[stickerSlot].patchID = patch.id;
+                customizationString = "patch_apply";
+                Inventory::deleteItemNow(toolItemID);
+                recreatedItemID = Inventory::recreateItem(destItemID);
             }
         }
     }
