@@ -364,7 +364,7 @@ private:
         }
     }
 
-    void _removeNameTag() noexcept
+    void _removeNameTag() const noexcept
     {
         const auto dest = Inventory::getItem(destItemID);
         if (!dest || !dest->isSkin())
