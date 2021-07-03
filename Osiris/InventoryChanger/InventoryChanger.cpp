@@ -424,6 +424,19 @@ private:
         }
     }
 
+    void _applySticker(InventoryItem& sticker) noexcept
+    {
+        assert(sticker.isSticker());
+        const auto dest = Inventory::getItem(destItemID);
+        if (!dest || !dest->isSkin())
+            return;
+
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::paintKits()[sticker.get().dataIndex].id;
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
+        sticker.markToDelete();
+        initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
+    }
+
     void _useTool() noexcept
     {
         const auto destItem = Inventory::getItem(destItemID);
@@ -441,14 +454,7 @@ private:
         } else if (tool->isOperationPass()) {
             _activateOperationPass(*tool);
         } else if (tool->isSticker()) {
-            if (destItem && destItem->isSkin()) {
-                const auto& sticker = StaticData::paintKits()[tool->get().dataIndex];
-                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).stickers[stickerSlot].stickerID = sticker.id;
-                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
-                customizationString = "sticker_apply";
-                Inventory::deleteItemNow(toolItemID);
-                recreatedItemID = Inventory::recreateItem(destItemID);
-            }
+            _applySticker(*tool);
         } else if (tool->isNameTag()) {
             if (destItem && destItem->isSkin()) {
                 Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).nameTag = nameTag;
