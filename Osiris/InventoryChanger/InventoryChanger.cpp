@@ -385,6 +385,14 @@ private:
             Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
     }
 
+    static void _unsealGraffiti(InventoryItem& sealedGraffiti) noexcept
+    {
+        if (const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[sealedGraffiti.get().dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; }); it != StaticData::gameItems().end()) {
+            sealedGraffiti.markToDelete();
+            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false));
+        }
+    }
+
     void _useTool() noexcept
     {
         const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
@@ -393,13 +401,7 @@ private:
             const auto& toolItem = tool->get();
 
             if (toolItem.isSealedGraffiti()) {
-                Inventory::deleteItemNow(toolItemID);
-
-                const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[toolItem.dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; });
-                if (it != StaticData::gameItems().end()) {
-                    customizationString = "graffity_unseal";
-                    recreatedItemID = Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
-                }
+                _unsealGraffiti(*tool);
             } else if (toolItem.isOperationPass()) {
                 _activateOperationPass(*tool);
             } else if (destItemValid) {
