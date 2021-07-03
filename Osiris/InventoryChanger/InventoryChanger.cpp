@@ -437,6 +437,18 @@ private:
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
     }
 
+    void _addNameTag(InventoryItem& nameTagItem) noexcept
+    {
+        assert(nameTagItem.isNameTag());
+        const auto dest = Inventory::getItem(destItemID);
+        if (!dest || !dest->isSkin())
+            return;
+
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag = nameTag;
+        nameTagItem.markToDelete();
+        initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
+    }
+
     void _useTool() noexcept
     {
         const auto destItem = Inventory::getItem(destItemID);
@@ -456,12 +468,7 @@ private:
         } else if (tool->isSticker()) {
             _applySticker(*tool);
         } else if (tool->isNameTag()) {
-            if (destItem && destItem->isSkin()) {
-                Inventory::dynamicSkinData(destItem->getDynamicDataIndex()).nameTag = nameTag;
-                customizationString = "nametag_add";
-                Inventory::deleteItemNow(toolItemID);
-                recreatedItemID = Inventory::recreateItem(destItemID);
-            }
+            _addNameTag(*tool);
         } else if (tool->isPatch()) {
             if (destItem && destItem->isPatch()) {
                 const auto& patch = StaticData::paintKits()[tool->get().dataIndex];
