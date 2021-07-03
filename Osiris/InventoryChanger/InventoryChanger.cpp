@@ -449,7 +449,7 @@ private:
         initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
     }
 
-    void _applyPatch(InventoryItem& patch) noexcept
+    void _applyPatch(InventoryItem& patch) const noexcept
     {
         assert(patch.isPatch());
         const auto dest = Inventory::getItem(destItemID);
