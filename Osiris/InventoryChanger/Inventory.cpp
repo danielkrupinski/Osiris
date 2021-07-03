@@ -101,7 +101,7 @@ private:
 
     std::size_t _getItemIndex(std::uint64_t itemID) noexcept
     {
-        assert(_getItem() != nullptr);
+        assert(_getItem(itemID) != nullptr);
         return static_cast<std::size_t>(itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
     }
 
