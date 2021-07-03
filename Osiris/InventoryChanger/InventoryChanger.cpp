@@ -299,6 +299,11 @@ static void initItemCustomizationNotification(const char* typeStr, const char* i
     }
 }
 
+static void initItemCustomizationNotification(const char* typeStr, std::uint64_t itemID) noexcept
+{
+    initItemCustomizationNotification(typeStr, std::to_string(itemID).c_str());
+}
+
 class ToolUser {
 public:
     enum class Action {
