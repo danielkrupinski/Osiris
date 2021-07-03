@@ -77,6 +77,11 @@ public:
     bool isCollectible() const noexcept { return !isDeleted() && !shouldDelete() && get().isCollectible(); }
     bool isCase() const noexcept { return !isDeleted() && !shouldDelete() && get().isCase(); }
     bool isCaseKey() const noexcept { return !isDeleted() && !shouldDelete() && get().isCaseKey(); }
+    bool isSealedGraffiti() const noexcept { return !isDeleted() && !shouldDelete() && get().isSealedGraffiti(); }
+    bool isOperationPass() const noexcept { return !isDeleted() && !shouldDelete() && get().isOperationPass(); }
+    bool isNameTag() const noexcept { return !isDeleted() && !shouldDelete() && get().isNameTag(); }
+    bool isPatch() const noexcept { return !isDeleted() && !shouldDelete() && get().isPatch(); }
+    bool isStatTrakSwapTool() const noexcept { return !isDeleted() && !shouldDelete() && get().isStatTrakSwapTool(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
