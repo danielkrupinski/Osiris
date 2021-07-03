@@ -467,9 +467,12 @@ private:
 
     void _preAddItems(CSPlayerInventory& localInventory) noexcept
     {
+        if (useTime > memory->globalVars->realtime)
+            return;
+
         const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
 
-        if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
+        if (action == Action::WearSticker && destItemValid) {
             _wearSticker(localInventory);
         } else if (action == Action::RemoveNameTag && destItemValid) {
             _removeNameTag();
