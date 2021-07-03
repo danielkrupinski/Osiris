@@ -361,7 +361,7 @@ private:
         }
     }
 
-    void _removeNameTag(CSPlayerInventory& localInventory) noexcept
+    void _removeNameTag() noexcept
     {
         const auto dest = Inventory::getItem(destItemID);
         if (!dest || !dest->isSkin())
@@ -472,7 +472,7 @@ private:
         if (action == Action::WearSticker && destItemValid && useTime <= memory->globalVars->realtime) {
             _wearSticker(localInventory);
         } else if (action == Action::RemoveNameTag && destItemValid) {
-            _removeNameTag(localInventory);
+            _removeNameTag();
         } else if (action == Action::Use) {
             _useTool();
             toolItemID = destItemID = 0;
