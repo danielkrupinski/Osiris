@@ -391,7 +391,7 @@ private:
         }
     }
 
-    void _openContainer(InventoryItem& container) noexcept
+    void _openContainer(InventoryItem& container) const noexcept
     {
         assert(container.isCase());
         const auto& caseData = StaticData::cases()[container.get().dataIndex];
