@@ -324,16 +324,8 @@ public:
     static void setStickerSlot(int slot) noexcept { instance().stickerSlot = slot; }
 
     static void preAddItems(CSPlayerInventory& localInventory) noexcept { instance()._preAddItems(localInventory); }
-    static void postAddItems() noexcept { instance()._postAddItems(); }
+    static void postAddItems() noexcept { }
 private:
-    void _postAddItems() noexcept
-    {
-        if (recreatedItemID && customizationString && useTime <= memory->globalVars->realtime) {
-            initItemCustomizationNotification(customizationString, std::to_string(recreatedItemID).c_str());
-            recreatedItemID = 0;
-        }
-    }
-
     void _wearSticker(CSPlayerInventory& localInventory) noexcept
     {
         const auto dest = Inventory::getItem(destItemID);
