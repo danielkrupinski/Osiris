@@ -346,12 +346,9 @@ private:
                     }
                 }
             }
-           
-            destItemID = 0;
         } else if (dest->isAgent()) {
             Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot] = {};
             initItemCustomizationNotification("patch_remove", Inventory::recreateItem(destItemID));
-            destItemID = 0;
         }
     }
 
@@ -489,8 +486,9 @@ private:
             _removeNameTag();
         } else if (action == Action::Use) {
             _useTool();
-            toolItemID = destItemID = 0;
         }
+
+        toolItemID = destItemID = 0;
     }
 
     static ToolUser& instance() noexcept
