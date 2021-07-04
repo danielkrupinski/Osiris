@@ -374,7 +374,7 @@ private:
             Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
     }
 
-    void _unsealGraffiti(InventoryItem& sealedGraffiti) noexcept
+    void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
         if (const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[sealedGraffiti.get().dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; }); it != StaticData::gameItems().end()) {
             sealedGraffiti.markToDelete();
