@@ -324,7 +324,6 @@ public:
     static void setStickerSlot(int slot) noexcept { instance().stickerSlot = slot; }
 
     static void preAddItems(CSPlayerInventory& localInventory) noexcept { instance()._preAddItems(localInventory); }
-    static void postAddItems() noexcept { }
 private:
     void _wearSticker(CSPlayerInventory& localInventory) noexcept
     {
@@ -660,7 +659,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
-    ToolUser::postAddItems();
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
