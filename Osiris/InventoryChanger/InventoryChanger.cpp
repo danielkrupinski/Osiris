@@ -365,7 +365,7 @@ private:
         Inventory::recreateItem(destItemID);
     }
 
-    static void _activateOperationPass(InventoryItem& pass) noexcept
+    void _activateOperationPass(InventoryItem& pass) noexcept
     {
         const auto passWeaponID = pass.get().weaponID;
         pass.markToDelete();
