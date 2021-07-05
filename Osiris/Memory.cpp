@@ -307,6 +307,7 @@ Memory::Memory() noexcept
 
     setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 = findPattern(CLIENT_DLL, "\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0") - 86;
     setStatTrakSwapToolItemsGetArgAsStringReturnAddress2 = setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 + 55;
+    acknowledgeNewItemByItemIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B") - 5;
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
