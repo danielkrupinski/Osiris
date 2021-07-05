@@ -381,6 +381,24 @@ private:
         }
     }
 
+    // Move this to loot generator
+    static float generateWear() noexcept
+    {
+        float wear;
+        if (const auto condition = randomInt(1, 10000); condition <= 1471)
+            wear = randomFloat(0.0f, 0.07f);
+        else if (condition <= 3939)
+            wear = randomFloat(0.07f, 0.15f);
+        else if (condition <= 8257)
+            wear = randomFloat(0.15f, 0.38f);
+        else if (condition <= 9049)
+            wear = randomFloat(0.38f, 0.45f);
+        else
+            wear = randomFloat(0.45f, 1.0f);
+        return wear;
+    }
+    //
+
     void _openContainer(InventoryItem& container) const noexcept
     {
         assert(container.isCase());
@@ -396,13 +414,17 @@ private:
                 DynamicMusicData dynamicData;
                 dynamicData.statTrak = 0;
                 dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-            } else if (caseData.isSouvenirPackage && item.isSkin()) {
+            } else if (item.isSkin()) {
                 DynamicSkinData dynamicData;
-                dynamicData.isSouvenir = true;
-                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-            } else if (item.isSkin() && randomInt(0, 9) == 0) {
-                DynamicSkinData dynamicData;
-                dynamicData.statTrak = 0;
+                const auto& staticData = StaticData::paintKits()[item.dataIndex];
+                dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
+                dynamicData.seed = randomInt(1, 1000);
+
+                if (caseData.isSouvenirPackage)
+                    dynamicData.isSouvenir = true;
+                else if (randomInt(0, 9) == 0)
+                    dynamicData.statTrak = 0;
+
                 dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
             }
             //
