@@ -478,11 +478,9 @@ private:
         if (useTime > memory->globalVars->realtime)
             return;
 
-        const auto destItemValid = Inventory::getItem(destItemID) != nullptr;
-
-        if (action == Action::WearSticker && destItemValid) {
+        if (action == Action::WearSticker) {
             _wearSticker(localInventory);
-        } else if (action == Action::RemoveNameTag && destItemValid) {
+        } else if (action == Action::RemoveNameTag) {
             _removeNameTag();
         } else if (action == Action::Use) {
             _useTool();
