@@ -497,6 +497,8 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
             InventoryChanger::deleteItem(stringToUint64(result));
         } else if (ret == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
             InventoryChanger::acknowledgeItem(stringToUint64(result));
+        } else if (ret == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
+            InventoryChanger::setStatTrakSwapItem1(stringToUint64(result));
         }
     }
 

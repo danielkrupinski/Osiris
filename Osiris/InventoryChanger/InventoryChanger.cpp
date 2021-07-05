@@ -513,6 +513,7 @@ void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept { ToolUser::s
 void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::Use); }
 void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::WearSticker); }
 void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::RemoveNameTag);}
+void InventoryChanger::setStatTrakSwapItem1(std::uint64_t itemID) noexcept { ToolUser::setStatTrakSwapItem1(itemID); }
 void InventoryChanger::setStickerApplySlot(int slot) noexcept { ToolUser::setStickerSlot(slot); }
 void InventoryChanger::setStickerSlotToWear(int slot) noexcept { ToolUser::setStickerSlot(slot); }
 void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::setNameTag(str); }
