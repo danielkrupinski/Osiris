@@ -327,7 +327,7 @@ public:
 
     static void preAddItems(CSPlayerInventory& localInventory) noexcept { instance()._preAddItems(localInventory); }
 private:
-    void _wearSticker(CSPlayerInventory& localInventory) noexcept
+    void _wearSticker(CSPlayerInventory& localInventory) const noexcept
     {
         const auto dest = Inventory::getItem(destItemID);
         if (!dest)
