@@ -451,6 +451,28 @@ private:
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
 
+    void _swapStatTrak(InventoryItem& statTrakSwapTool) const noexcept
+    {
+        const auto item1 = Inventory::getItem(statTrakSwapItem1);
+        if (!item1 || !item1->isSkin())
+            return;
+
+        const auto item2 = Inventory::getItem(statTrakSwapItem2);
+        if (!item2 || !item2->isSkin())
+            return;
+
+        std::swap(Inventory::dynamicSkinData(item1->getDynamicDataIndex()).statTrak, Inventory::dynamicSkinData(item2->getDynamicDataIndex()).statTrak);
+        statTrakSwapTool.markToDelete();
+
+        const auto recreatedItemID1 = Inventory::recreateItem(statTrakSwapItem1);
+        const auto recreatedItemID2 = Inventory::recreateItem(statTrakSwapItem2);
+        if (const auto inventoryComponent = *memory->uiComponentInventory) {
+            memory->setItemSessionPropertyValue(inventoryComponent, recreatedItemID1, "updated", "1");
+            memory->setItemSessionPropertyValue(inventoryComponent, recreatedItemID2, "updated", "1");
+        }
+        initItemCustomizationNotification("stattrack_swap", recreatedItemID2);
+    }
+
     void _useTool() noexcept
     {
         if (const auto destItem = Inventory::getItem(destItemID); destItem && destItem->isCase()) {
@@ -472,6 +494,8 @@ private:
             _addNameTag(*tool);
         } else if (tool->isPatch()) {
             _applyPatch(*tool);
+        } else if (tool->isStatTrakSwapTool()) {
+            _swapStatTrak(*tool);
         }
     }
 
@@ -488,7 +512,7 @@ private:
             _useTool();
         }
 
-        toolItemID = destItemID = 0;
+        toolItemID = destItemID = statTrakSwapItem1 = statTrakSwapItem2 = 0;
     }
 
     static ToolUser& instance() noexcept
