@@ -323,6 +323,7 @@ public:
     static void setNameTag(const char* nameTag) noexcept { instance().nameTag = nameTag; }
     static void setStickerSlot(int slot) noexcept { instance().stickerSlot = slot; }
     static void setStatTrakSwapItem1(std::uint64_t itemID) noexcept { instance().statTrakSwapItem1 = itemID; }
+    static void setStatTrakSwapItem2(std::uint64_t itemID) noexcept { instance().statTrakSwapItem2 = itemID; }
 
     static void preAddItems(CSPlayerInventory& localInventory) noexcept { instance()._preAddItems(localInventory); }
 private:
@@ -499,6 +500,7 @@ private:
     std::uint64_t toolItemID = 0;
     std::uint64_t destItemID = 0;
     std::uint64_t statTrakSwapItem1 = 0;
+    std::uint64_t statTrakSwapItem2 = 0;
     [[deprecated]] std::uint64_t recreatedItemID = 0;
     Action action;
     float useTime = 0.0f;
