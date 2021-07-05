@@ -550,7 +550,6 @@ private:
     Action action;
     float useTime = 0.0f;
     int stickerSlot = 0;
-    [[deprecated]] const char* customizationString = nullptr;
     std::string nameTag;
 };
 
