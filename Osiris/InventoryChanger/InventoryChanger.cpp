@@ -495,7 +495,7 @@ private:
         initItemCustomizationNotification("stattrack_swap", recreatedItemID2);
     }
 
-    void _useTool() noexcept
+    void _useTool() const noexcept
     {
         if (const auto destItem = Inventory::getItem(destItemID); destItem && destItem->isCase()) {
             _openContainer(*destItem);
