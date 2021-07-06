@@ -180,6 +180,14 @@ private:
         return std::equal_range(_skinsSorted.cbegin(), _skinsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because it requires extra operators
     }
 
+    std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept
+    {
+        const auto [begin, end] = findItems(weaponID);
+        if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
+            return *it;
+        return static_cast<std::size_t>(-1);
+    }
+
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) noexcept
     {
         if (willProduceStatTrak)
