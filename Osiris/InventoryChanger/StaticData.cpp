@@ -224,12 +224,19 @@ private:
     void initSortedVectors() noexcept
     {
         for (std::size_t i = 0; i < _gameItems.size(); ++i) {
-            const auto& item = _gameItems[i];
-            if (item.isSticker() || item.isPatch() || item.isGraffiti())
+            if (const auto& item = _gameItems[i]; item.isSticker() || item.isPatch() || item.isGraffiti())
                 _stickersSorted.push_back(i);
+            _skinsSorted.push_back(i);
         }
 
         std::ranges::sort(_stickersSorted, [this](std::size_t a, std::size_t b) { return _paintKits[_gameItems[a].dataIndex].id < _paintKits[_gameItems[b].dataIndex].id; });
+        std::ranges::sort(_skinsSorted, [this](std::size_t a, std::size_t b) {
+            const auto& itemA = _gameItems[a];
+            const auto& itemB = _gameItems[b];
+            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
+                return _paintKits[itemA.dataIndex].id < _paintKits[itemB.dataIndex].id;
+            return itemA.weaponID < itemB.weaponID;
+        });
     }
 
     StaticDataImpl()
@@ -247,7 +254,7 @@ private:
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
             return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
-            });
+        });
 
         initSortedVectors();
         buildLootLists(itemSchema, lootListIndices);
@@ -271,6 +278,7 @@ private:
     std::vector<Case> _cases;
     std::vector<std::size_t> _caseLoot;
     std::vector<std::size_t> _stickersSorted;
+    std::vector<std::size_t> _skinsSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
