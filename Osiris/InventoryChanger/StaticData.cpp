@@ -166,6 +166,20 @@ private:
         }
     }
 
+    auto findItems(WeaponId weaponID) noexcept
+    {
+        struct Comp {
+            explicit Comp(const std::vector<GameItem>& gameItems) : gameItems{ gameItems } {}
+            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
+            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
+        private:
+            const std::vector<GameItem>& gameItems;
+        };
+
+        assert(!_skinsSorted.empty());
+        return std::equal_range(_skinsSorted.cbegin(), _skinsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because it requires extra operators
+    }
+
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) noexcept
     {
         if (willProduceStatTrak)
