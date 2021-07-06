@@ -4,6 +4,8 @@
 
 namespace StaticData
 {
+    constexpr auto InvalidItemIdx = static_cast<std::size_t>(-1);
+
     enum class Type : std::uint8_t {
         // has paint kit, must match GameItem::hasPaintKit() below
         Sticker,
