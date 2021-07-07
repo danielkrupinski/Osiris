@@ -29,7 +29,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
-#ifdef _WIN32
+#if defined(_WIN32) && false
     const auto traceToExitFn = memory->traceToExit;
     __asm {
         push exitTrace
