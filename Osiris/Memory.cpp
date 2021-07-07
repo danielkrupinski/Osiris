@@ -127,6 +127,8 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
             start += badCharTable[static_cast<std::uint8_t>(start[lastIdx])];
         }
     }
+
+    assert(false);
 #ifdef _WIN32
     if (reportNotFound)
         MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
