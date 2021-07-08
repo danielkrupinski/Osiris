@@ -195,7 +195,11 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                if (const auto idx = getItemIndex(WeaponId::Sticker, contents[j].stickerKit); idx != InvalidItemIdx)
+                if (auto idx = getItemIndex(WeaponId::Sticker, contents[j].stickerKit); idx != InvalidItemIdx)
+                    loot.push_back(idx);
+                else if ((idx = getItemIndex(WeaponId::Graffiti, contents[j].stickerKit)) != InvalidItemIdx)
+                    loot.push_back(idx);
+                else if ((idx = getItemIndex(WeaponId::Patch, contents[j].stickerKit)) != InvalidItemIdx)
                     loot.push_back(idx);
             } else if (contents[j].musicKit != 0) {
                 const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
