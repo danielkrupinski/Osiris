@@ -1168,11 +1168,13 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
+constexpr auto CONFIG_VERSION = 2;
+
 json InventoryChanger::toJson() noexcept
 {
     json j;
 
-    j["Version"] = 1;
+    j["Version"] = CONFIG_VERSION;
 
     auto& items = j["Items"];
     for (const auto& item : Inventory::get()) {
