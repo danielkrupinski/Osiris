@@ -131,6 +131,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
         return;
 
     wearables[0] = gloveHandle = glove->handle();
+    glove->accountID() = localInventory.getAccountID();
     glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
     glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
     glove->entityQuality() = 3;
@@ -138,11 +139,13 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     memory->equipWearable(glove, local);
     local->body() = 1;
 
+    /*
     const auto attributeList = glove->econItemView().getAttributeList();
     const auto& dynamicData = Inventory::dynamicGloveData(item->getDynamicDataIndex());
     memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
+    */
 
     if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
         definitionIndex = item->get().weaponID;
