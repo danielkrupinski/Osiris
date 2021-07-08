@@ -1187,6 +1187,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Sticker";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Sticker ID"] = staticData.id;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Glove: {
@@ -1235,6 +1236,7 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Music: {
             itemConfig["Type"] = "Music";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
             const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex());
@@ -1251,24 +1253,28 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::NameTag: {
             itemConfig["Type"] = "Name Tag";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Patch: {
             itemConfig["Type"] = "Patch";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Patch ID"] = staticData.id;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Graffiti: {
             itemConfig["Type"] = "Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::SealedGraffiti: {
             itemConfig["Type"] = "Sealed Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Agent: {
