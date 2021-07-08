@@ -12,6 +12,7 @@ template <typename T> class ClientSharedObjectCache;
 class CSPlayerInventory;
 class EconItem;
 class EconItemAttributeDefinition;
+class EconItemView;
 class Entity;
 class GameEventDescriptor;
 class GameEventManager;
@@ -117,7 +118,7 @@ public:
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress2;
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
 
-    std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    std::add_pointer_t<EconItemView* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
     std::uintptr_t useToolGetArgAsStringReturnAddress;
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
