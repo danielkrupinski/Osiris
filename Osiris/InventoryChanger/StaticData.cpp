@@ -185,7 +185,7 @@ private:
         const auto [begin, end] = findItems(weaponID);
         if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
             return *it;
-        return static_cast<std::size_t>(-1);
+        return InvalidItemIdx;
     }
 
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) noexcept
@@ -195,9 +195,8 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                const auto it = std::ranges::lower_bound(std::as_const(_stickersSorted), contents[j].stickerKit, [this](std::size_t index, int stickerKit) { return _paintKits[_gameItems[index].dataIndex].id < stickerKit; });
-                if (it != _stickersSorted.cend() && _paintKits[_gameItems[*it].dataIndex].id == contents[j].stickerKit)
-                    loot.push_back(*it);
+                if (const auto idx = getItemIndex(WeaponId::Sticker, contents[j].stickerKit); idx != InvalidItemIdx)
+                    loot.push_back(idx);
             } else if (contents[j].musicKit != 0) {
                 const auto it = std::ranges::find_if(std::as_const(_gameItems), [musicKit = contents[j].musicKit, this](const auto& item) { return item.isMusic() && _paintKits[item.dataIndex].id == musicKit; });
                 if (it != _gameItems.cend())
