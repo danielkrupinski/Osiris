@@ -13,23 +13,6 @@ static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 
-// FIXME: duplicated from InventoryChanger.cpp
-
-static float randomFloat(float min, float max) noexcept
-{
-    std::mt19937 gen{ std::random_device{}() };
-    std::uniform_real_distribution dis{ min, max };
-    return dis(gen);
-}
-
-static int randomInt(int min, int max) noexcept
-{
-    std::mt19937 gen{ std::random_device{}() };
-    std::uniform_int_distribution dis{ min, max };
-    return dis(gen);
-}
-//
-
 class InventoryImpl {
 public:
     static constexpr auto BASE_ITEMID = 1152921504606746975;
@@ -234,15 +217,15 @@ private:
         if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
             const auto& staticData = StaticData::paintKits()[item.dataIndex];
             DynamicSkinData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
-            dynamicData.seed = randomInt(1, 1000);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
+            dynamicData.seed = Helpers::random(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             index = dynamicSkinData.size() - 1;
         } else if (item.isGlove()) {
             const auto& staticData = StaticData::paintKits()[item.dataIndex];
             DynamicGloveData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
-            dynamicData.seed = randomInt(1, 1000);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
+            dynamicData.seed = Helpers::random(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             index = dynamicGloveData.size() - 1;
         } else if (item.isAgent()) {

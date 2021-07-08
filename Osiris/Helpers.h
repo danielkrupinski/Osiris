@@ -60,4 +60,7 @@ namespace Helpers
     {
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
+
+    float random(float min, float max) noexcept;
+    int random(int min, int max) noexcept;
 }

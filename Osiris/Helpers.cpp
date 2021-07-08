@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cwctype>
 #include <fstream>
+#include <random>
 #include <string_view>
 
 #ifdef _WIN32
@@ -186,4 +187,18 @@ std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
         ++length;
 #endif
     return length;
+}
+
+float Helpers::random(float min, float max) noexcept
+{
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_real_distribution dis{ min, max };
+    return dis(gen);
+}
+
+int Helpers::random(int min, int max) noexcept
+{
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_int_distribution dis{ min, max };
+    return dis(gen);
 }
