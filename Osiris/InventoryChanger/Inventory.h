@@ -60,6 +60,7 @@ public:
     bool isNameTag() const noexcept { return !isDeleted() && !shouldDelete() && get().isNameTag(); }
     bool isPatch() const noexcept { return !isDeleted() && !shouldDelete() && get().isPatch(); }
     bool isStatTrakSwapTool() const noexcept { return !isDeleted() && !shouldDelete() && get().isStatTrakSwapTool(); }
+    bool isViewerPass() const noexcept { return !isDeleted() && !shouldDelete() && get().isViewerPass(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 

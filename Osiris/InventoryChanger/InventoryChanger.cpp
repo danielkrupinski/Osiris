@@ -362,6 +362,14 @@ private:
             Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, true);
     }
 
+    void _activateViewerPass(InventoryItem& pass) const noexcept
+    {
+        const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
+        pass.markToDelete();
+        if (const auto it = std::ranges::find(StaticData::gameItems(), coinID, &StaticData::GameItem::weaponID); it != StaticData::gameItems().end())
+            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(std::distance(StaticData::gameItems().begin(), it), Inventory::INVALID_DYNAMIC_DATA_IDX, false));
+    }
+
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
         if (const auto it = std::ranges::find_if(StaticData::gameItems(), [graffitiID = StaticData::paintKits()[sealedGraffiti.get().dataIndex].id](const auto& item) { return item.isGraffiti() && StaticData::paintKits()[item.dataIndex].id == graffitiID; }); it != StaticData::gameItems().end()) {
@@ -507,6 +515,8 @@ private:
             _applyPatch(*tool);
         } else if (tool->isStatTrakSwapTool()) {
             _swapStatTrak(*tool);
+        } else if (tool->isViewerPass()) {
+            _activateViewerPass(*tool);
         }
     }
 
