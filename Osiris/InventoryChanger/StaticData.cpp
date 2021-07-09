@@ -166,7 +166,7 @@ private:
         }
     }
 
-    auto findItems(WeaponId weaponID) noexcept
+    auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
             explicit Comp(const std::vector<GameItem>& gameItems) : gameItems{ gameItems } {}
