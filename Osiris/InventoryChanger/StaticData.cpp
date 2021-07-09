@@ -220,9 +220,8 @@ private:
     void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<std::size_t>& loot) noexcept
     {
         if (lootListID == 292) { // crate_xray_p250_lootlist
-            const auto it = std::ranges::find_if(std::as_const(_gameItems), [this](const auto& item) { return item.weaponID == WeaponId::P250 && item.hasPaintKit() && _paintKits[item.dataIndex].id == 125 /* cu_xray_p250 */; });
-            if (it != _gameItems.cend())
-                loot.push_back(std::distance(_gameItems.cbegin(), it));
+            if (const auto idx = getItemIndex(WeaponId::P250, 125 /* cu_xray_p250 */); idx != InvalidItemIdx)
+                loot.push_back(idx);
         } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
             constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
             for (const auto collection : dreamHack2013Collections) {
