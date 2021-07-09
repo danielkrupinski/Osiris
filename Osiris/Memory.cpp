@@ -222,6 +222,9 @@ Memory::Memory() noexcept
     setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") + 1);
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
+
+    isBreakableFn = reinterpret_cast<bool(__thiscall*)(Entity*)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x51\x56\x8B\xF1\x85\xF6\x74\x68"));
+
 #else
     const auto tier0 = dlopen(TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
     debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));

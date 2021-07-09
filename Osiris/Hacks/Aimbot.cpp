@@ -20,43 +20,132 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/ClassId.h"
+#include "../SDK/ClientClass.h"
+#include "../SDK/BSPFlags.h"
+
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
-static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+bool IsBreakableEntity(Entity* entityPtr)
 {
-    bool result = false;
-#if defined(_WIN32) && false
-    const auto traceToExitFn = memory->traceToExit;
-    __asm {
-        push exitTrace
-        mov eax, direction
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov eax, start
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov edx, enterTrace
-        mov ecx, end
-        call traceToExitFn
-        add esp, 28
-        mov result, al
+    if (!entityPtr || !entityPtr->index())
+        return false;
+
+    const auto result = memory->isBreakableFn(entityPtr);
+
+    if (!result) {
+        return false;
     }
-#endif
+
+    const ClientClass* cclass = entityPtr->getClientClass();
+
+    if (!cclass) {
+        return false;
+    }
+
+    const ClassId currentClassId = cclass->classId;
+
+    if (!result &&
+        (currentClassId == ClassId::CBaseDoor ||
+            currentClassId == ClassId::CBreakableSurface ||
+            (currentClassId == ClassId::CBaseEntity && entityPtr->getCollideable()->get_solid() == 1)))
+        return true;
+
     return result;
 }
 
-static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+bool traceToExit(Trace* enter_trace, Vector start, Vector dir, Trace* exit_trace)
+{
+#if defined(_WIN32)
+    Vector end = { 0.f,0.f,0.f };
+    float distance = 0.f;
+    signed int distCheck = 25;
+    int firstContents = 0;
+
+    do
+    {
+        distance += 3.5f;
+        end = start + dir * distance;
+
+        if (!firstContents) firstContents = interfaces->engineTrace->getPointContents(end, mask_shot | contents_grate);
+
+        const int pointContents = interfaces->engineTrace->getPointContents(end, mask_shot | contents_grate);
+
+        if (!(pointContents & (mask_shot_hull | contents_hitbox)) || pointContents & contents_hitbox && pointContents != firstContents)
+        {
+            const Vector newEnd = end - (dir * 4.f);
+
+            const Ray ray(end, newEnd);
+
+            interfaces->engineTrace->traceRay(ray, mask_shot | contents_grate, nullptr, *exit_trace);
+
+            if (exit_trace->startSolid && exit_trace->surface.flags & surf_hitbox)
+            {
+                interfaces->engineTrace->traceRay({ end, start }, mask_shot_hull | contents_hitbox, exit_trace->entity, *exit_trace);
+
+                if (exit_trace->DidHit() && !exit_trace->startSolid) return true;
+
+                continue;
+            }
+
+            if (exit_trace->DidHit() && !exit_trace->startSolid)
+            {
+                if (enter_trace->surface.flags & surf_nodraw || !(exit_trace->surface.flags & surf_nodraw)) {
+                    if (exit_trace->plane.normal.dotProduct(dir) <= 1.f)
+                        return true;
+
+                    continue;
+                }
+
+                if (IsBreakableEntity(enter_trace->entity)
+                    && IsBreakableEntity(exit_trace->entity))
+                    return true;
+
+                continue;
+            }
+
+            if (exit_trace->surface.flags & surf_nodraw)
+            {
+                if (IsBreakableEntity(enter_trace->entity)
+                    && IsBreakableEntity(exit_trace->entity))
+                {
+                    return true;
+                }
+                else if (!(enter_trace->surface.flags & surf_nodraw))
+                {
+                    continue;
+                }
+            }
+
+            if ((!enter_trace->entity
+                || enter_trace->entity->index() == 0)
+                && (IsBreakableEntity(enter_trace->entity)))
+            {
+                exit_trace = enter_trace;
+                exit_trace->endpos = start + dir;
+                return true;
+            }
+            continue;
+        }
+        distCheck--;
+    } while (distCheck);
+
+    return false;
+#endif
+    //linux users, no tracetoexit for you :(
+    return false;
+}
+
+static float handleBulletPenetration(SurfaceData* enterSurfaceData, Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
 
-    if (!traceToExit(enterTrace, enterTrace.endpos, direction, end, exitTrace))
+    if (!traceToExit(&enterTrace, enterTrace.endpos, direction, &exitTrace))
         return -1.0f;
 
     SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);

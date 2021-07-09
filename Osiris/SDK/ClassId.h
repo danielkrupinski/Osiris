@@ -1,6 +1,9 @@
 #pragma once
 
 enum class ClassId {
+    CBaseDoor = 10,
+    CBaseEntity = 11,
+    CBreakableSurface = 31,
     BaseCSGrenadeProjectile = 9,
     BreachChargeProjectile = 29,
     BumpMineProjectile = 33,
