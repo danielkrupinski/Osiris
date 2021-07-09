@@ -162,6 +162,8 @@ private:
                     _gameItems.emplace_back(Type::OperationPass, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
                     _gameItems.emplace_back(Type::StatTrakSwapTool, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
+                else if (std::strcmp(tool->typeName, "fantoken") == 0)
+                    _gameItems.emplace_back(Type::ViewerPass, item->getRarity(), item->getWeaponId(), 0, inventoryImage);
             }
         }
     }

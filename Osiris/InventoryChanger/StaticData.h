@@ -23,7 +23,8 @@ namespace StaticData
         Case,
         CaseKey,
         OperationPass,
-        StatTrakSwapTool
+        StatTrakSwapTool,
+        ViewerPass
     };
 
     struct GameItem {
