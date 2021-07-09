@@ -248,9 +248,8 @@ private:
 
     void initSortedVectors() noexcept
     {
-        for (std::size_t i = 0; i < _gameItems.size(); ++i) {
-            _skinsSorted.push_back(i);
-        }
+        _skinsSorted.resize(_gameItems.size());
+        std::iota(_skinsSorted.begin(), _skinsSorted.end(), 0);
 
         std::ranges::sort(_skinsSorted, [this](std::size_t a, std::size_t b) {
             const auto& itemA = _gameItems[a];
