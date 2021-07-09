@@ -1890,9 +1890,3 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
 }
-
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, nameUpperCase{std::move(name)}
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(nameUpperCase);
-}
