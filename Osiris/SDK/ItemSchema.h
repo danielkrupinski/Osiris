@@ -329,6 +329,7 @@ public:
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
     void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
     void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
+    void setTournamentStage(int stage) noexcept { setAttributeValue(138, &stage); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
