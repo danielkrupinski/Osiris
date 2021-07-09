@@ -192,6 +192,7 @@ private:
     {
         if (willProduceStatTrak)
             *willProduceStatTrak = *willProduceStatTrak || lootList->willProduceStatTrak();
+
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
@@ -209,9 +210,8 @@ private:
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
                     fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
             } else if (contents[j].itemDef != 0) {
-                const auto it = std::ranges::find_if(std::as_const(_gameItems), [paintKit = contents[j].paintKit, weaponID = contents[j].weaponId(), this](const auto& item) { return item.weaponID == weaponID && (!item.hasPaintKit() || _paintKits[item.dataIndex].id == paintKit); });
-                if (it != _gameItems.cend())
-                    loot.push_back(std::distance(_gameItems.cbegin(), it));
+                if (const auto idx = getItemIndex(contents[j].weaponId(), contents[j].paintKit); idx != InvalidItemIdx)
+                    loot.push_back(idx);
             }
         }
     }
