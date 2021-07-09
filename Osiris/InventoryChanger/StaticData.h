@@ -88,4 +88,6 @@ namespace StaticData
     const std::vector<PaintKit>& paintKits() noexcept;
     const std::wstring& getWeaponNameUpper(WeaponId weaponID) noexcept;
     const std::string& getWeaponName(WeaponId weaponID) noexcept;
+
+    std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept;
 }
