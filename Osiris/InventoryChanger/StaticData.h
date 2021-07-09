@@ -44,6 +44,7 @@ namespace StaticData
         bool isCaseKey() const noexcept { return type == Type::CaseKey; }
         bool isOperationPass() const noexcept { return type == Type::OperationPass; }
         bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
+        bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
