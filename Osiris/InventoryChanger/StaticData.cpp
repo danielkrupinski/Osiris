@@ -337,3 +337,5 @@ const std::string& StaticData::getWeaponName(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::getWeaponName(weaponID);
 }
+
+StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
