@@ -129,7 +129,7 @@ private:
                     nameWide += L") ";
                 }
                 _weaponNames.emplace(item->getWeaponId(), interfaces->localize->convertUnicodeToAnsi(nameWide.c_str()));
-                _weaponNamesUpper.emplace(item->getWeaponId(), Helpers::toUpper(nameWide));
+                _weaponNamesUpper.emplace(item->getWeaponId(), Helpers::toUpper(std::move(nameWide)));
             }
 
             const auto inventoryImage = item->getInventoryImage();
