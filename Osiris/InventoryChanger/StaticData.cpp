@@ -249,12 +249,9 @@ private:
     void initSortedVectors() noexcept
     {
         for (std::size_t i = 0; i < _gameItems.size(); ++i) {
-            if (const auto& item = _gameItems[i]; item.isSticker() || item.isPatch() || item.isGraffiti())
-                _stickersSorted.push_back(i);
             _skinsSorted.push_back(i);
         }
 
-        std::ranges::sort(_stickersSorted, [this](std::size_t a, std::size_t b) { return _paintKits[_gameItems[a].dataIndex].id < _paintKits[_gameItems[b].dataIndex].id; });
         std::ranges::sort(_skinsSorted, [this](std::size_t a, std::size_t b) {
             const auto& itemA = _gameItems[a];
             const auto& itemB = _gameItems[b];
@@ -288,7 +285,7 @@ private:
         _collectibles.shrink_to_fit();
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
-        _stickersSorted.shrink_to_fit();
+        _skinsSorted.shrink_to_fit();
         _paintKits.shrink_to_fit();
     }
 
@@ -302,7 +299,6 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<Case> _cases;
     std::vector<std::size_t> _caseLoot;
-    std::vector<std::size_t> _stickersSorted;
     std::vector<std::size_t> _skinsSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
