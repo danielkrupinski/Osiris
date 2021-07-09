@@ -330,6 +330,7 @@ public:
     void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
     void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
     void setTournamentStage(int stage) noexcept { setAttributeValue(138, &stage); }
+    void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
