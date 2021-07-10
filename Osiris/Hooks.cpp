@@ -520,6 +520,9 @@ static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedOb
 
 static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) int messageType, int passthroughFlags, int size, const void* data) noexcept
 {
+    if (messageType == 7) // CS_UM_TextMsg
+        InventoryChanger::onUserTextMsg(data, size);
+
     return hooks->client.callOriginal<bool, 38>(messageType, passthroughFlags, size, data);
 }
 

@@ -20,6 +20,7 @@
 #include "../Interfaces.h"
 #include "../Netvars.h"
 #include "InventoryChanger.h"
+#include "ProtobufReader.h"
 #include "../Texture.h"
 
 #include "../nlohmann/json.hpp"
@@ -1696,6 +1697,67 @@ void InventoryChanger::onSoUpdated(SharedObject* object, int event) noexcept
         *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C)) = WeaponId::None;
         --lastEquippedCount;
     }
+}
+
+void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc)
+        return;
+
+    if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
+        return;
+
+    // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
+
+    const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
+    if (reader.readInt32(1) != 4 /* HUD_PRINTCENTER */)
+        return;
+
+    const auto strings = reader.readRepeatedString(3);
+    if (strings.size() < 2)
+        return;
+
+    if (strings[0] != "#SFUI_Notice_CannotDropWeapon")
+        return;
+
+    if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
+        return;
+
+    const auto itemSchema = memory->itemSystem()->getItemSchema();
+    if (!itemSchema)
+        return;
+
+    const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+    if (!def)
+        return;
+
+    const auto itemBaseName = std::string_view{ def->getItemBaseName() };
+
+    static std::vector<char> buffer;
+    buffer = std::vector<char>{ 0x8, 0x4 /* HUD_PRINTCENTER */, 0x1A, static_cast<char>(strings[0].length()) };
+    std::ranges::copy(strings[0], std::back_inserter(buffer));
+    buffer.push_back(0x1A);
+    buffer.push_back(static_cast<char>(itemBaseName.length()));
+    std::ranges::copy(itemBaseName, std::back_inserter(buffer));
+
+    // Add three empty strings, like UTIL_ClientPrintFilter() does
+    constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
+    std::ranges::copy(emptyStrings, std::back_inserter(buffer));
+
+    data = buffer.data();
+    size = static_cast<int>(buffer.size());
 }
 
 struct Icon {
