@@ -20,7 +20,7 @@
 #include "../Interfaces.h"
 #include "../Netvars.h"
 #include "InventoryChanger.h"
-#include "ProtobufReader.h"
+#include "../ProtobufReader.h"
 #include "../Texture.h"
 
 #include "../nlohmann/json.hpp"
