@@ -508,7 +508,7 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
 static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
-   InventoryChanger::onItemEquip(team, slot, itemID);
+    InventoryChanger::onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<bool, WIN32_LINUX(20, 21)>(team, slot, itemID, swap);
 }
 
@@ -516,6 +516,11 @@ static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedOb
 {
     InventoryChanger::onSoUpdated(object, event);
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
+}
+
+static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) int messageType, int passthroughFlags, int size, const void* data) noexcept
+{
+    return hooks->client.callOriginal<bool, 38>(messageType, passthroughFlags, size, data);
 }
 
 #ifdef _WIN32
@@ -607,6 +612,7 @@ void Hooks::install() noexcept
 
     client.init(interfaces->client);
     client.hookAt(37, &frameStageNotify);
+    client.hookAt(38, &dispatchUserMessage);
 
     clientMode.init(memory->clientMode);
     clientMode.hookAt(WIN32_LINUX(17, 18), &shouldDrawFog);
