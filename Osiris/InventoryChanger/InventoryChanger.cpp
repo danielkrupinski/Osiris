@@ -1729,7 +1729,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (strings.size() < 2)
         return;
 
-    if (strings[0] != "#SFUI_Notice_CannotDropWeapon")
+    if (strings[0] != "#SFUI_Notice_CannotDropWeapon" || strings[0] != "#SFUI_Notice_YouDroppedWeapon")
         return;
 
     if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
