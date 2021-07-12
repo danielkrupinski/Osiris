@@ -101,8 +101,6 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     if (!item || !item->isGlove())
         return;
 
-    const auto& itemData = StaticData::paintKits()[item->get().dataIndex];
-
     const auto wearables = local->wearables();
     static int gloveHandle = 0;
 
