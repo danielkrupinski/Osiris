@@ -216,24 +216,23 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
 {
     const auto localTeam = local->getTeamNumber();
     const auto localXuid = local->getSteamId();
+    const auto itemSchema = memory->itemSystem()->getItemSchema();
 
-    auto& weapons = local->weapons();
-    for (auto weaponHandle : weapons) {
-        if (weaponHandle == -1)
-            break;
+    const auto highestEntityIndex = interfaces->entityList->getHighestEntityIndex();
+    for (int i = memory->globalVars->maxClients + 1; i <= highestEntityIndex; ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+        if (!entity || !entity->isWeapon())
+            continue;
 
-        const auto weapon = interfaces->entityList->getEntityFromHandle(weaponHandle);
-        if (!weapon)
+        const auto weapon = entity;
+        if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
         const auto& definitionIndex = weapon->itemDefinitionIndex2();
         if (Helpers::isKnife(definitionIndex))
             continue;
 
-        if (weapon->originalOwnerXuid() != localXuid)
-            continue;
-
-        const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(definitionIndex);
+        const auto def = itemSchema->getItemDefinitionInterface(definitionIndex);
         if (!def)
             continue;
 
