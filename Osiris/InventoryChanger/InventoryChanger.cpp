@@ -422,8 +422,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
     applyPlayerAgent(*localInventory);
     applyMedal(*localInventory);
 
-    static const auto baseInvID = localInventory->getHighestIDs().second;
-
     ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
 }
