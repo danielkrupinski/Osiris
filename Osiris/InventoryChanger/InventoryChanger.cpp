@@ -1374,7 +1374,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     }
 }
 
-void InventoryChanger::onSoUpdated(SharedObject* object, int event) noexcept
+void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
 {
     if (lastEquippedCount > 0 && object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
         *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C)) = WeaponId::None;

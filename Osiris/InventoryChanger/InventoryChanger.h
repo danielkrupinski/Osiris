@@ -48,6 +48,6 @@ namespace InventoryChanger
     void clearInventory() noexcept;
 
     void onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept;
-    void onSoUpdated(SharedObject* object, int event) noexcept;
+    void onSoUpdated(SharedObject* object) noexcept;
     void onUserTextMsg(const void*& data, int& size) noexcept;
 }
