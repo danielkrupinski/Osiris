@@ -1572,39 +1572,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             }
 
             Inventory::addItem(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)), false);
-        } else if (type == "Case") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
-        } else if (type == "Case Key") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
-        } else if (type == "Operation Pass") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
-        } else if (type == "StatTrak Swap Tool") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
-        } else if (type == "Viewer Pass") {
+        } else if (type == "Case" || type == "Case Key" || type == "Operation Pass" || type == "StatTrak Swap Tool" || type == "Viewer Pass") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
 
