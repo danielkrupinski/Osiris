@@ -592,6 +592,9 @@
     <ClInclude Include="ProtobufReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\ToolUser.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
