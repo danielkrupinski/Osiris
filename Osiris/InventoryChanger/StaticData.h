@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "../SDK/WeaponId.h"
 
 namespace StaticData
