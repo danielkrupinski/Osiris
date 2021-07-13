@@ -7,6 +7,7 @@
 #include "AnimState.h"
 #include "Inconstructible.h"
 #include "Platform.h"
+#include "UtlVector.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
@@ -59,6 +60,13 @@ public:
     {
         return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
     }
+
+#ifdef _WIN32
+    UtlVector<void*>& customMaterials() noexcept
+    {
+        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x14, ));
+    }
+#endif
 };
 
 class Entity {
