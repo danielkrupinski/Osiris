@@ -56,7 +56,7 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
 {
     for (const auto [idx, count] : toAdd) {
         for (int i = 0; i < count; ++i)
-            Inventory::addItem(idx, Inventory::INVALID_DYNAMIC_DATA_IDX, true);
+            Inventory::addItemUnacknowledged(idx, Inventory::INVALID_DYNAMIC_DATA_IDX);
     }
 }
 
@@ -1141,7 +1141,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
             const int stickerID = jsonItem["Sticker ID"];
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Sticker, stickerID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Skin") {
             if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
                 continue;
@@ -1209,7 +1209,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 }
             }
 
-            Inventory::addItem(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)), false);
+            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
         } else if (type == "Glove") {
             if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
                 continue;
@@ -1236,7 +1236,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     dynamicData.seed = seed;
             }
 
-            Inventory::addItem(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)), false);
+            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
         } else if (type == "Music") {
             if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
                 continue;
@@ -1254,7 +1254,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     dynamicData.statTrak = statTrak;
             }
 
-            Inventory::addItem(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)), false);
+            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
         } else if (type == "Collectible") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
@@ -1270,10 +1270,10 @@ void InventoryChanger::fromJson(const json& j) noexcept
             if (staticData == StaticData::gameItems().end())
                 continue;
 
-            Inventory::addItem(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+            Inventory::addItemAcknowledged(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Name Tag") {
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::NameTag, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Patch") {
             if (!jsonItem.contains("Patch ID") || !jsonItem["Patch ID"].is_number_integer())
                 continue;
@@ -1281,7 +1281,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int patchID = jsonItem["Patch ID"];
 
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Patch, patchID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Graffiti") {
             if (!jsonItem.contains("Graffiti ID") || !jsonItem["Graffiti ID"].is_number_integer())
                 continue;
@@ -1289,7 +1289,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int graffitiID = jsonItem["Graffiti ID"];
 
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Graffiti, graffitiID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Sealed Graffiti") {
             if (!jsonItem.contains("Graffiti ID") || !jsonItem["Graffiti ID"].is_number_integer())
                 continue;
@@ -1297,7 +1297,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int graffitiID = jsonItem["Graffiti ID"];
 
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::SealedGraffiti, graffitiID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Agent") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
@@ -1334,7 +1334,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 }
             }
 
-            Inventory::addItem(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)), false);
+            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
         } else if (type == "Case" || type == "Case Key" || type == "Operation Pass" || type == "StatTrak Swap Tool" || type == "Viewer Pass") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
@@ -1342,7 +1342,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
             if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItem(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX, false);
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         }
     }
 

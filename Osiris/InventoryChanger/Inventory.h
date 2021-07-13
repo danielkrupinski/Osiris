@@ -74,7 +74,8 @@ namespace Inventory
     constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
 
     std::vector<InventoryItem>& get() noexcept;
-    void addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
+    void addItemUnacknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept;
+    void addItemAcknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept;
     std::uint64_t addItemNow(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
