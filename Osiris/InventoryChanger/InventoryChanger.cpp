@@ -107,6 +107,50 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     auto glove = interfaces->entityList->getEntityFromHandle(wearables[0]);
     if (!glove)
         glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
+
+#ifdef _WIN32 // testing new method
+    constexpr auto NUM_ENT_ENTRIES = 8192;
+    if (!glove)
+        glove = make_glove(NUM_ENT_ENTRIES - 1, -1);
+
+    if (!glove)
+        return;
+
+    wearables[0] = gloveHandle = glove->handle();
+    glove->accountID() = localInventory.getAccountID();
+    glove->entityQuality() = 3;
+    local->body() = 1;
+
+    bool dataUpdated = false;
+    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
+        definitionIndex = item->get().weaponID;
+
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID))
+            glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
+
+        dataUpdated = true;
+    }
+
+    if (glove->itemID() != soc->itemID) {
+        glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
+        glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+        dataUpdated = true;
+    }
+
+    glove->initialized() = true;
+    memory->equipWearable(glove, local);
+
+    if (dataUpdated) {
+        // FIXME: This leaks memory
+        glove->econItemView().visualDataProcessors().size = 0;
+        glove->econItemView().customMaterials().size = 0;
+        //
+
+        glove->postDataUpdate(0);
+        glove->onDataChanged(0);
+    }
+
+#else // on linux still old method
     if (!glove) {
         const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
         const auto serial = Helpers::random(0, 0x1000);
@@ -125,14 +169,6 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     memory->equipWearable(glove, local);
     local->body() = 1;
 
-    /*
-    const auto attributeList = glove->econItemView().getAttributeList();
-    const auto& dynamicData = Inventory::dynamicGloveData(item->getDynamicDataIndex());
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
-    */
-
     if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
         definitionIndex = item->get().weaponID;
 
@@ -141,6 +177,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
             glove->preDataUpdate(0);
         }
     }
+#endif
 }
 
 static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcept
@@ -261,7 +298,9 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!localInventory)
         return;
 
+#ifndef _WIN32
     applyGloves(*localInventory, local);
+#endif
     applyKnife(*localInventory, local);
     applyWeapons(*localInventory, local);
 }
@@ -416,6 +455,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
+
+#ifdef _WIN32
+    if (localPlayer)
+        applyGloves(*localInventory, localPlayer.get());
+#endif;
 
     applyMusicKit(*localInventory);
     applyPlayerAgent(*localInventory);
