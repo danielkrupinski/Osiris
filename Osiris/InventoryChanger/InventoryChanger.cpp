@@ -68,7 +68,7 @@ static void sendInventoryUpdatedEvent() noexcept
     }
 }
 
-static Entity* make_glove(int entry, int serial) noexcept
+static Entity* createGlove(int entry, int serial) noexcept
 {
     static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
 
@@ -112,7 +112,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
 #ifdef _WIN32 // testing new method
     constexpr auto NUM_ENT_ENTRIES = 8192;
     if (!glove)
-        glove = make_glove(NUM_ENT_ENTRIES - 1, -1);
+        glove = createGlove(NUM_ENT_ENTRIES - 1, -1);
 
     if (!glove)
         return;
@@ -155,7 +155,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     if (!glove) {
         const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
         const auto serial = Helpers::random(0, 0x1000);
-        glove = make_glove(entry, serial);
+        glove = createGlove(entry, serial);
     }
 
     if (!glove)
