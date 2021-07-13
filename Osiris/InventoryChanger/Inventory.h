@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include "StaticData.h"
 
 enum class Team;
