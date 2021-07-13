@@ -15,6 +15,8 @@
 
 #include "../Netvars.h"
 
+class EconItemView;
+
 class matrix3x4;
 
 struct AnimState;
@@ -50,28 +52,6 @@ public:
 
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
-};
-
-class EconItemView {
-public:
-    INCONSTRUCTIBLE(EconItemView)
-
-    std::uintptr_t getAttributeList() noexcept
-    {
-        return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
-    }
-
-#ifdef _WIN32
-    UtlVector<void*>& customMaterials() noexcept
-    {
-        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x14, ));
-    }
-
-    UtlVector<void*>& visualDataProcessors() noexcept
-    {
-        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, ));
-    }
-#endif
 };
 
 class Entity {

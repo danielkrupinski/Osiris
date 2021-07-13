@@ -30,6 +30,7 @@
 #include "../SDK/ClientClass.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
+#include "../SDK/EconItemView.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FileSystem.h"
