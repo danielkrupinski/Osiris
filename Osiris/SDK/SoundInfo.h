@@ -8,6 +8,8 @@ struct SoundInfo {
     float volume;
     PAD(12)
     int	entityIndex;
-    PAD(0xC)
+    int channel;
+    int pitch;
+    int flags;
     int soundIndex;
 };
