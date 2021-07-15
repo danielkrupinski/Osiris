@@ -105,7 +105,7 @@ public:
     InventoryManager* inventoryManager;
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
     bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
-    void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
+    void(__THISCALL* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
     std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
