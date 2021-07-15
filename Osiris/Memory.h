@@ -144,21 +144,6 @@ public:
 #endif
     }
 
-    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, float value) const noexcept
-    {
-#ifdef _WIN32
-        __asm movd xmm2, value
-#else
-        asm("movss %0, %%xmm0" : : "m"(value) : "xmm0");
-#endif
-        setOrAddAttributeValueByNameFunction(attributeList, attribute);
-    }
-
-    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, int value) const noexcept
-    {
-        setOrAddAttributeValueByName(attributeList, attribute, *reinterpret_cast<float*>(&value) /* hack, but CSGO does that */);
-    }
-
     void setDynamicAttributeValue(EconItem* _this, EconItemAttributeDefinition* attribute, void* value) const noexcept
     {
 #ifdef _WIN32
