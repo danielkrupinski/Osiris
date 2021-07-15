@@ -242,6 +242,9 @@
     <ClCompile Include="InventoryChanger\ToolUser.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="SDK\EconItemView.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
