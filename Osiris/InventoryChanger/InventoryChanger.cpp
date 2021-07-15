@@ -123,7 +123,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     bool dataUpdated = false;
-    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
+    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().weaponID) {
         definitionIndex = item->get().weaponID;
 
         if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID))
@@ -170,7 +170,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     memory->equipWearable(glove, local);
     local->body() = 1;
 
-    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item->get().weaponID) {
+    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().weaponID) {
         definitionIndex = item->get().weaponID;
 
         if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
@@ -207,7 +207,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         if (!weapon)
             continue;
 
-        auto& definitionIndex = weapon->itemDefinitionIndex2();
+        auto& definitionIndex = weapon->itemDefinitionIndex();
         if (!Helpers::isKnife(definitionIndex))
             continue;
 
@@ -237,7 +237,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
     if (!viewModelWeapon)
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex());
     if (!def)
         return;
 
@@ -266,7 +266,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
         if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
-        const auto& definitionIndex = weapon->itemDefinitionIndex2();
+        const auto& definitionIndex = weapon->itemDefinitionIndex();
         if (Helpers::isKnife(definitionIndex))
             continue;
 
@@ -1715,7 +1715,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!localPlayer)
         return;
 
-    if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex2()))
+    if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex()))
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();
@@ -1729,5 +1729,5 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (const auto soc = memory->getSOCData(itemView); !soc || Inventory::getItem(soc->itemID) == nullptr)
         return;
 
-    sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
+    sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
 }
