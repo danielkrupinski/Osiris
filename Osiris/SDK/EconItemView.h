@@ -21,10 +21,8 @@ public:
         return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x14, 0x28));
     }
 
-#ifdef _WIN32
     UtlVector<void*>& visualDataProcessors() noexcept
     {
-        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, ));
+        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, 0x2D8));
     }
-#endif
 };
