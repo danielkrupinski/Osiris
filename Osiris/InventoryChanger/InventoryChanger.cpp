@@ -1445,10 +1445,11 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
         return;
 
+    constexpr auto HUD_PRINTCENTER = 4;
     // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    if (reader.readInt32(1) != 4 /* HUD_PRINTCENTER */)
+    if (reader.readInt32(1) != HUD_PRINTCENTER)
         return;
 
     const auto strings = reader.readRepeatedString(3);
@@ -1472,7 +1473,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     const auto itemBaseName = std::string_view{ def->getItemBaseName() };
 
     static std::vector<char> buffer;
-    buffer = std::vector<char>{ 0x8, 0x4 /* HUD_PRINTCENTER */, 0x1A, static_cast<char>(strings[0].length()) };
+    buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
     std::ranges::copy(strings[0], std::back_inserter(buffer));
     buffer.push_back(0x1A);
     buffer.push_back(static_cast<char>(itemBaseName.length()));
