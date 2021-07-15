@@ -3,6 +3,7 @@
 #include "../Helpers.h"
 #include "Inventory.h"
 #include "../Memory.h"
+#include "../SDK/EconItemView.h"
 #include "../SDK/Entity.h"
 #include "../SDK/ItemSchema.h"
 
@@ -179,7 +180,7 @@ private:
         }
 
         if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
-            memory->clearInventoryImageRGBA(view);
+            view->clearInventoryImageRGBA();
 
         return econItem->itemID;
     }
