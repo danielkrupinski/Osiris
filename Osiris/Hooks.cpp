@@ -470,38 +470,12 @@ static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, 
     return result;
 }
 
-static std::uint64_t stringToUint64(const char* str) noexcept
-{
-    std::uint64_t result = 0;
-    std::from_chars(str, str + strlen(str), result);
-    return result;
-}
-
 static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
-    if (result) {
-        if (const auto ret = RETURN_ADDRESS(); ret == memory->useToolGetArgAsStringReturnAddress) {
-            InventoryChanger::setToolToUse(stringToUint64(result));
-        } else if (ret == memory->useToolGetArg2AsStringReturnAddress) {
-            InventoryChanger::setItemToApplyTool(stringToUint64(result));
-        } else if (ret == memory->wearItemStickerGetArgAsStringReturnAddress) {
-            InventoryChanger::setItemToWearSticker(stringToUint64(result));
-        } else if (ret == memory->setNameToolStringGetArgAsStringReturnAddress) {
-            InventoryChanger::setNameTagString(result);
-        } else if (ret == memory->clearCustomNameGetArgAsStringReturnAddress) {
-            InventoryChanger::setItemToRemoveNameTag(stringToUint64(result));
-        } else if (ret == memory->deleteItemGetArgAsStringReturnAddress) {
-            InventoryChanger::deleteItem(stringToUint64(result));
-        } else if (ret == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
-            InventoryChanger::acknowledgeItem(stringToUint64(result));
-        } else if (ret == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-            InventoryChanger::setStatTrakSwapItem1(stringToUint64(result));
-        } else if (ret == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-            InventoryChanger::setStatTrakSwapItem2(stringToUint64(result));
-        }
-    }
+    if (result)
+        InventoryChanger::getArgAsStringHook(result, RETURN_ADDRESS());
 
     return result;
 }
