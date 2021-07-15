@@ -1259,19 +1259,11 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (type == "Collectible") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
-            if (!jsonItem.contains("Is Original") || !jsonItem["Is Original"].is_boolean())
-                continue;
 
             const WeaponId weaponID = jsonItem["Weapon ID"];
-            const bool isOriginal = jsonItem["Is Original"];
 
-            // FIXME: not using StaticData::getItemIndex() because it doesn't support original collectibles
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID, isOriginal](const auto& gameItem) { return gameItem.isCollectible() && gameItem.weaponID == weaponID && StaticData::collectibles()[gameItem.dataIndex].isOriginal == isOriginal; });
-
-            if (staticData == StaticData::gameItems().end())
-                continue;
-
-            Inventory::addItemAcknowledged(std::ranges::distance(StaticData::gameItems().begin(), staticData), Inventory::INVALID_DYNAMIC_DATA_IDX);
+            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
+                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
         } else if (type == "Name Tag") {
             if (const auto itemIndex = StaticData::getItemIndex(WeaponId::NameTag, 0); itemIndex != StaticData::InvalidItemIdx)
                 Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
