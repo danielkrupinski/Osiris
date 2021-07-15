@@ -1589,7 +1589,7 @@ void InventoryChanger::clearUnusedItemIconTextures() noexcept
     constexpr auto maxIcons = 30;
     const auto frameCount = ImGui::GetFrameCount();
     while (iconTextures.size() > maxIcons) {
-        const auto oldestIcon = std::ranges::min_element(iconTextures, [](const auto& a, const auto& b) { return a.second.lastReferencedFrame < b.second.lastReferencedFrame; });
+        const auto oldestIcon = std::ranges::min_element(iconTextures, {}, [](const auto& icon) { return icon.second.lastReferencedFrame; });
         if (oldestIcon->second.lastReferencedFrame == frameCount)
             break;
 
