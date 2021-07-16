@@ -352,5 +352,5 @@ StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::si
 StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, nameUpperCase{ std::move(name) }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(nameUpperCase);
+    nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
 }
