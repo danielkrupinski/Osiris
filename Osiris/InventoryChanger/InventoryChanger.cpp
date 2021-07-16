@@ -1106,6 +1106,64 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
+[[nodiscard]] std::size_t loadDynamicSkinDataFromJson(const json& j) noexcept
+{
+    DynamicSkinData dynamicData;
+
+    if (j.contains("Is Souvenir")) {
+        if (const auto& isSouvenir = j["Is Souvenir"]; isSouvenir.is_boolean())
+            dynamicData.isSouvenir = isSouvenir;
+    }
+
+    if (j.contains("Wear")) {
+        if (const auto& wear = j["Wear"]; wear.is_number_float())
+            dynamicData.wear = wear;
+    }
+
+    if (j.contains("Seed")) {
+        if (const auto& seed = j["Seed"]; seed.is_number_integer())
+            dynamicData.seed = seed;
+    }
+
+    if (j.contains("StatTrak")) {
+        if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer())
+            dynamicData.statTrak = statTrak;
+    }
+
+    if (j.contains("Name Tag")) {
+        if (const auto& nameTag = j["Name Tag"]; nameTag.is_string())
+            dynamicData.nameTag = nameTag;
+    }
+
+    if (j.contains("Stickers")) {
+        if (const auto& stickers = j["Stickers"]; stickers.is_array()) {
+            for (std::size_t k = 0; k < stickers.size(); ++k) {
+                const auto& sticker = stickers[k];
+                if (!sticker.is_object())
+                    continue;
+
+                if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
+                    continue;
+
+                if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
+                    continue;
+
+                const int stickerID = sticker["Sticker ID"];
+                if (stickerID == 0)
+                    continue;
+                const std::size_t slot = sticker["Slot"];
+                if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
+                    continue;
+                dynamicData.stickers[slot].stickerID = stickerID;
+                if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
+                    dynamicData.stickers[slot].wear = sticker["Wear"];
+            }
+        }
+    }
+
+    return Inventory::emplaceDynamicData(std::move(dynamicData));
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -1151,60 +1209,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             auto dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
             if (item.isSkin()) {
-                DynamicSkinData dynamicData;
-
-                if (jsonItem.contains("Is Souvenir")) {
-                    if (const auto& isSouvenir = jsonItem["Is Souvenir"]; isSouvenir.is_boolean())
-                        dynamicData.isSouvenir = isSouvenir;
-                }
-
-                if (jsonItem.contains("Wear")) {
-                    if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
-                        dynamicData.wear = wear;
-                }
-
-                if (jsonItem.contains("Seed")) {
-                    if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
-                        dynamicData.seed = seed;
-                }
-
-                if (jsonItem.contains("StatTrak")) {
-                    if (const auto& statTrak = jsonItem["StatTrak"]; statTrak.is_number_integer())
-                        dynamicData.statTrak = statTrak;
-                }
-
-                if (jsonItem.contains("Name Tag")) {
-                    if (const auto& nameTag = jsonItem["Name Tag"]; nameTag.is_string())
-                        dynamicData.nameTag = nameTag;
-                }
-
-                if (jsonItem.contains("Stickers")) {
-                    if (const auto& stickers = jsonItem["Stickers"]; stickers.is_array()) {
-                        for (std::size_t k = 0; k < stickers.size(); ++k) {
-                            const auto& sticker = stickers[k];
-                            if (!sticker.is_object())
-                                continue;
-
-                            if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
-                                continue;
-
-                            if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
-                                continue;
-
-                            const int stickerID = sticker["Sticker ID"];
-                            if (stickerID == 0)
-                                continue;
-                            const std::size_t slot = sticker["Slot"];
-                            if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
-                                continue;
-                            dynamicData.stickers[slot].stickerID = stickerID;
-                            if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
-                                dynamicData.stickers[slot].wear = sticker["Wear"];
-                        }
-                    }
-                }
-
-                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+                dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);
             } else if (item.isGlove()) {
                 DynamicGloveData dynamicData;
 
@@ -1289,60 +1294,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             if (itemIndex == StaticData::InvalidItemIdx)
                 continue;
 
-            DynamicSkinData dynamicData;
-
-            if (jsonItem.contains("Is Souvenir")) {
-                if (const auto& isSouvenir = jsonItem["Is Souvenir"]; isSouvenir.is_boolean())
-                    dynamicData.isSouvenir = isSouvenir;
-            }
-
-            if (jsonItem.contains("Wear")) {
-                if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
-                    dynamicData.wear = wear;
-            }
-
-            if (jsonItem.contains("Seed")) {
-                if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
-                    dynamicData.seed = seed;
-            }
-
-            if (jsonItem.contains("StatTrak")) {
-                if (const auto& statTrak = jsonItem["StatTrak"]; statTrak.is_number_integer())
-                    dynamicData.statTrak = statTrak;
-            }
-
-            if (jsonItem.contains("Name Tag")) {
-                if (const auto& nameTag = jsonItem["Name Tag"]; nameTag.is_string())
-                    dynamicData.nameTag = nameTag;
-            }
-
-            if (jsonItem.contains("Stickers")) {
-                if (const auto& stickers = jsonItem["Stickers"]; stickers.is_array()) {
-                    for (std::size_t k = 0; k < stickers.size(); ++k) {
-                        const auto& sticker = stickers[k];
-                        if (!sticker.is_object())
-                            continue;
-
-                        if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
-                            continue;
-
-                        if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
-                            continue;
-
-                        const int stickerID = sticker["Sticker ID"];
-                        if (stickerID == 0)
-                            continue;
-                        const std::size_t slot = sticker["Slot"];
-                        if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
-                            continue;
-                        dynamicData.stickers[slot].stickerID = stickerID;
-                        if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
-                            dynamicData.stickers[slot].wear = sticker["Wear"];
-                    }
-                }
-            }
-
-            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
+            Inventory::addItemAcknowledged(itemIndex, loadDynamicSkinDataFromJson(jsonItem));
         } else if (type == "Glove") {
             if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
                 continue;
