@@ -1118,10 +1118,154 @@ void InventoryChanger::fromJson(const json& j) noexcept
     if (!items.is_array())
         return;
 
+    auto configFileVersion = CONFIG_VERSION;
+    if (j.contains("Version") && j["Version"].is_number_unsigned())
+        configFileVersion = j["Version"];
+
     for (std::size_t i = 0; i < items.size(); ++i) {
         const auto& jsonItem = items[i];
         if (jsonItem.empty() || !jsonItem.is_object())
             continue;
+
+        // new config - version 2 doesn't use "Type" string
+        if (configFileVersion >= 2) {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+            int paintKit = 0;
+
+            if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
+                paintKit = jsonItem["Paint Kit"];
+            else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
+                paintKit = jsonItem["Sticker ID"];
+            else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
+                paintKit = jsonItem["Music ID"];
+            else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
+                paintKit = jsonItem["Patch ID"];
+            else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer())
+                paintKit = jsonItem["Graffiti ID"];
+
+            const auto itemIndex = StaticData::getItemIndex(weaponID, paintKit);
+            if (itemIndex == StaticData::InvalidItemIdx)
+                continue;
+
+            const auto& item = StaticData::gameItems()[itemIndex];
+            auto dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+
+            if (item.isSkin()) {
+                DynamicSkinData dynamicData;
+
+                if (jsonItem.contains("Is Souvenir")) {
+                    if (const auto& isSouvenir = jsonItem["Is Souvenir"]; isSouvenir.is_boolean())
+                        dynamicData.isSouvenir = isSouvenir;
+                }
+
+                if (jsonItem.contains("Wear")) {
+                    if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
+                        dynamicData.wear = wear;
+                }
+
+                if (jsonItem.contains("Seed")) {
+                    if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
+                        dynamicData.seed = seed;
+                }
+
+                if (jsonItem.contains("StatTrak")) {
+                    if (const auto& statTrak = jsonItem["StatTrak"]; statTrak.is_number_integer())
+                        dynamicData.statTrak = statTrak;
+                }
+
+                if (jsonItem.contains("Name Tag")) {
+                    if (const auto& nameTag = jsonItem["Name Tag"]; nameTag.is_string())
+                        dynamicData.nameTag = nameTag;
+                }
+
+                if (jsonItem.contains("Stickers")) {
+                    if (const auto& stickers = jsonItem["Stickers"]; stickers.is_array()) {
+                        for (std::size_t k = 0; k < stickers.size(); ++k) {
+                            const auto& sticker = stickers[k];
+                            if (!sticker.is_object())
+                                continue;
+
+                            if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
+                                continue;
+
+                            if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
+                                continue;
+
+                            const int stickerID = sticker["Sticker ID"];
+                            if (stickerID == 0)
+                                continue;
+                            const std::size_t slot = sticker["Slot"];
+                            if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
+                                continue;
+                            dynamicData.stickers[slot].stickerID = stickerID;
+                            if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
+                                dynamicData.stickers[slot].wear = sticker["Wear"];
+                        }
+                    }
+                }
+
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            } else if (item.isGlove()) {
+                DynamicGloveData dynamicData;
+
+                if (jsonItem.contains("Wear")) {
+                    if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
+                        dynamicData.wear = wear;
+                }
+
+                if (jsonItem.contains("Seed")) {
+                    if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
+                        dynamicData.seed = seed;
+                }
+
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            } else if (item.isMusic()) {
+                DynamicMusicData dynamicData;
+
+                if (jsonItem.contains("StatTrak")) {
+                    if (const auto& statTrak = jsonItem["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)
+                        dynamicData.statTrak = statTrak;
+                }
+
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            } else if (item.isAgent()) {
+                DynamicAgentData dynamicData;
+
+                if (jsonItem.contains("Patches")) {
+                    if (const auto& patches = jsonItem["Patches"]; patches.is_array()) {
+                        for (std::size_t k = 0; k < patches.size(); ++k) {
+                            const auto& patch = patches[k];
+                            if (!patch.is_object())
+                                continue;
+
+                            if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
+                                continue;
+
+                            if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
+                                continue;
+
+                            const int patchID = patch["Patch ID"];
+                            if (patchID == 0)
+                                continue;
+                            const std::size_t slot = patch["Slot"];
+                            if (slot >= std::tuple_size_v<decltype(DynamicAgentData::patches)>)
+                                continue;
+                            dynamicData.patches[slot].patchID = patchID;
+                        }
+                    }
+                }
+
+                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+            }
+
+            Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
+            continue;
+        }
+
+        // old config - version 1 (TODO: remove before August 2021 release)
 
         if (!jsonItem.contains("Type") || !jsonItem["Type"].is_string())
             continue;
