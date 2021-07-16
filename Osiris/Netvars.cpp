@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"

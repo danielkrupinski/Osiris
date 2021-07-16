@@ -26,6 +26,18 @@ jobs:
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Release'
       
+  msvc-debug:
+    runs-on: windows-latest
+    
+    env:
+      MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      shell: cmd
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Debug'
       
   clang:
     # The type of runner that the job will run on

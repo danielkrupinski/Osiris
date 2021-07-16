@@ -117,7 +117,6 @@
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
-    <ClCompile Include="Hacks\InventoryChanger.cpp" />
     <ClCompile Include="Hacks\Sound.cpp" />
     <ClCompile Include="Hacks\StreamProofESP.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
@@ -131,6 +130,10 @@
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="InputUtil.cpp" />
+    <ClCompile Include="InventoryChanger\Inventory.cpp" />
+    <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
+    <ClCompile Include="InventoryChanger\StaticData.cpp" />
+    <ClCompile Include="InventoryChanger\ToolUser.cpp" />
     <ClCompile Include="MinHook\buffer.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -185,6 +188,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="SDK\EconItemView.cpp" />
     <ClCompile Include="SDK\Entity.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
@@ -205,7 +209,6 @@
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Glow.h" />
-    <ClInclude Include="Hacks\InventoryChanger.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Sound.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
@@ -219,6 +222,10 @@
     <ClInclude Include="imgui\imgui_freetype.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
+    <ClInclude Include="InventoryChanger\Inventory.h" />
+    <ClInclude Include="InventoryChanger\InventoryChanger.h" />
+    <ClInclude Include="InventoryChanger\StaticData.h" />
+    <ClInclude Include="InventoryChanger\ToolUser.h" />
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="MinHook\buffer.h" />
     <ClInclude Include="MinHook\hde\hde32.h" />
@@ -231,6 +238,7 @@
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nlohmann\json.hpp" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ProtobufReader.h" />
     <ClInclude Include="Resources\avatar_ct.h" />
     <ClInclude Include="Resources\avatar_tt.h" />
     <ClInclude Include="Resources\Resource.h" />
@@ -238,6 +246,7 @@
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\ConVar.h" />
+    <ClInclude Include="SDK\EconItemView.h" />
     <ClInclude Include="SDK\EngineTrace.h" />
     <ClInclude Include="SDK\Entity.h" />
     <ClInclude Include="SDK\ClientClass.h" />

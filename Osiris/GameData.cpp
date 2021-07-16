@@ -566,7 +566,7 @@ WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
                 default: return "All";
                 }
             }
-        }(weaponInfo->type, entity->itemDefinitionIndex2());
+        }(weaponInfo->type, entity->itemDefinitionIndex());
         name = [](WeaponId weaponId) {
             switch (weaponId) {
             default: return "All";
@@ -633,7 +633,7 @@ WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
             case WeaponId::ZoneRepulsor: return "Zone Repulsor";
             case WeaponId::Shield: return "Shield";
             }
-        }(entity->itemDefinitionIndex2());
+        }(entity->itemDefinitionIndex());
 
         displayName = interfaces->localize->findAsUTF8(weaponInfo->name);
     }

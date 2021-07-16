@@ -4,6 +4,7 @@
 
 #include "Inconstructible.h"
 #include "Pad.h"
+#include "Entity.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
@@ -94,8 +95,6 @@ struct StickerKit {
     UtlString inventoryImage;
 };
 
-enum class Team;
-
 union AttributeDataUnion {
     float asFloat;
     std::uint32_t asUint32;
@@ -108,6 +107,13 @@ struct StaticAttrib {
     bool forceGCToGenerate;
 };
 static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
+
+struct EconTool {
+    INCONSTRUCTIBLE(EconTool)
+
+    PAD(sizeof(std::uintptr_t))
+    const char* typeName;
+};
 
 class EconItemDefinition {
 public:
@@ -170,6 +176,11 @@ public:
     const char* getDefinitionName() noexcept
     {
         return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2E0));
+    }
+
+    EconTool* getEconTool() noexcept
+    {
+        return *reinterpret_cast<EconTool**>(std::uintptr_t(this) + WIN32_LINUX(0x140, 0x1E8));
     }
 
     int getLoadoutSlot(Team team) noexcept
@@ -318,6 +329,9 @@ public:
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
     void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
     void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
+    void setTournamentStage(int stage) noexcept { setAttributeValue(138, &stage); }
+    void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
+    void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
@@ -375,13 +389,15 @@ struct SOID {
     std::uint32_t padding;
 };
 
+class EconItemView;
+
 class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
-    VIRTUAL_METHOD_V(void*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
+    VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
     VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
 
     auto getSOC() noexcept

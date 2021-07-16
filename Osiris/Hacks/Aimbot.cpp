@@ -29,7 +29,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
-#ifdef _WIN32
+#if defined(_WIN32) && false
     const auto traceToExitFn = memory->traceToExit;
     __asm {
         push exitTrace
@@ -148,11 +148,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
     if (!weaponIndex)
         return;
 
-    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = weaponClass;
 

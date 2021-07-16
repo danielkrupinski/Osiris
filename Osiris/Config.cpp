@@ -19,7 +19,7 @@
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"

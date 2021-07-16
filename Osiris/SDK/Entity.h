@@ -7,12 +7,15 @@
 #include "AnimState.h"
 #include "Inconstructible.h"
 #include "Platform.h"
+#include "UtlVector.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
 
 #include "../Netvars.h"
+
+class EconItemView;
 
 class matrix3x4;
 
@@ -51,22 +54,13 @@ public:
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
-class EconItemView {
-public:
-    INCONSTRUCTIBLE(EconItemView)
-
-    std::uintptr_t getAttributeList() noexcept
-    {
-        return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
-    }
-};
-
 class Entity {
 public:
     INCONSTRUCTIBLE(Entity)
 
     VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
@@ -157,20 +151,7 @@ public:
 #endif
     }
 
-    float getMaxDesyncAngle() noexcept
-    {
-        const auto animState = getAnimstate();
-
-        if (!animState)
-            return 0.0f;
-
-        float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
-
-        if (animState->duckAmount > 0.0f)
-            yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
-
-        return animState->velocitySubtractY * yawModifier;
-    }
+    float getMaxDesyncAngle() noexcept;
 
     bool isInReload() noexcept
     {
@@ -243,16 +224,11 @@ public:
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
-    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
-    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
+    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
     NETVAR(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
-    NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
-    NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)
-    NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
-    NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
     NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
     NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
     NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
