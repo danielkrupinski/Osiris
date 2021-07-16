@@ -34,6 +34,11 @@
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
 
+auto operator<(const BaseData& a, const BaseData& b) noexcept
+{
+    return a.distanceToLocal > b.distanceToLocal;
+}
+
 static Matrix4x4 viewMatrix;
 static LocalPlayerData localPlayerData;
 static std::vector<PlayerData> playerData;

@@ -77,11 +77,6 @@ class Entity;
 struct BaseData {
     BaseData(Entity* entity) noexcept;
 
-    constexpr auto operator<(const BaseData& other) const
-    {
-        return distanceToLocal > other.distanceToLocal;
-    }
-
     float distanceToLocal;
     Vector obbMins, obbMaxs;
     matrix3x4 coordinateFrame;
