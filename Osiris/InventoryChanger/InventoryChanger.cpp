@@ -1193,6 +1193,37 @@ json InventoryChanger::toJson() noexcept
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
+[[nodiscard]] std::size_t loadDynamicAgentDataFromJson(const json& j) noexcept
+{
+    DynamicAgentData dynamicData;
+
+    if (j.contains("Patches")) {
+        if (const auto& patches = j["Patches"]; patches.is_array()) {
+            for (std::size_t k = 0; k < patches.size(); ++k) {
+                const auto& patch = patches[k];
+                if (!patch.is_object())
+                    continue;
+
+                if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
+                    continue;
+
+                if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
+                    continue;
+
+                const int patchID = patch["Patch ID"];
+                if (patchID == 0)
+                    continue;
+                const std::size_t slot = patch["Slot"];
+                if (slot >= std::tuple_size_v<decltype(DynamicAgentData::patches)>)
+                    continue;
+                dynamicData.patches[slot].patchID = patchID;
+            }
+        }
+    }
+
+    return Inventory::emplaceDynamicData(std::move(dynamicData));
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -1244,33 +1275,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             } else if (item.isMusic()) {
                 dynamicDataIdx = loadDynamicMusicDataFromJson(jsonItem);
             } else if (item.isAgent()) {
-                DynamicAgentData dynamicData;
-
-                if (jsonItem.contains("Patches")) {
-                    if (const auto& patches = jsonItem["Patches"]; patches.is_array()) {
-                        for (std::size_t k = 0; k < patches.size(); ++k) {
-                            const auto& patch = patches[k];
-                            if (!patch.is_object())
-                                continue;
-
-                            if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
-                                continue;
-
-                            if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
-                                continue;
-
-                            const int patchID = patch["Patch ID"];
-                            if (patchID == 0)
-                                continue;
-                            const std::size_t slot = patch["Slot"];
-                            if (slot >= std::tuple_size_v<decltype(DynamicAgentData::patches)>)
-                                continue;
-                            dynamicData.patches[slot].patchID = patchID;
-                        }
-                    }
-                }
-
-                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+                dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
             }
 
             Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
@@ -1376,33 +1381,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             if (itemIndex == StaticData::InvalidItemIdx)
                 continue;
 
-            DynamicAgentData dynamicData;
-
-            if (jsonItem.contains("Patches")) {
-                if (const auto& patches = jsonItem["Patches"]; patches.is_array()) {
-                    for (std::size_t k = 0; k < patches.size(); ++k) {
-                        const auto& patch = patches[k];
-                        if (!patch.is_object())
-                            continue;
-
-                        if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
-                            continue;
-
-                        if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
-                            continue;
-
-                        const int patchID = patch["Patch ID"];
-                        if (patchID == 0)
-                            continue;
-                        const std::size_t slot = patch["Slot"];
-                        if (slot >= std::tuple_size_v<decltype(DynamicAgentData::patches)>)
-                            continue;
-                        dynamicData.patches[slot].patchID = patchID;
-                    }
-                }
-            }
-
-            Inventory::addItemAcknowledged(itemIndex, Inventory::emplaceDynamicData(std::move(dynamicData)));
+            Inventory::addItemAcknowledged(itemIndex, loadDynamicAgentDataFromJson(jsonItem));
         } else if (type == "Case" || type == "Case Key" || type == "Operation Pass" || type == "StatTrak Swap Tool" || type == "Viewer Pass") {
             if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
                 continue;
