@@ -28,9 +28,6 @@ namespace InventoryChanger
     void updateStatTrak(GameEvent& event) noexcept;
     void onRoundMVP(GameEvent& event) noexcept;
 
-    void setStickerApplySlot(int slot) noexcept;
-    void setStickerSlotToWear(int slot) noexcept;
-
     void deleteItem(std::uint64_t itemID) noexcept;
     void acknowledgeItem(std::uint64_t itemID) noexcept;
 
