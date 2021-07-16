@@ -318,15 +318,8 @@ static void updateHud() noexcept
     hudUpdateRequired = false;
 }
 
-void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept { ToolUser::setTool(itemID); }
-void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::Use); }
-void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::WearSticker); }
-void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept { ToolUser::setDestItem(itemID, ToolUser::Action::RemoveNameTag);}
-void InventoryChanger::setStatTrakSwapItem1(std::uint64_t itemID) noexcept { ToolUser::setStatTrakSwapItem1(itemID); }
-void InventoryChanger::setStatTrakSwapItem2(std::uint64_t itemID) noexcept { ToolUser::setStatTrakSwapItem2(itemID); }
 void InventoryChanger::setStickerApplySlot(int slot) noexcept { ToolUser::setStickerSlot(slot); }
 void InventoryChanger::setStickerSlotToWear(int slot) noexcept { ToolUser::setStickerSlot(slot); }
-void InventoryChanger::setNameTagString(const char* str) noexcept { ToolUser::setNameTag(str); }
 
 void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
 {
@@ -1487,23 +1480,23 @@ static std::uint64_t stringToUint64(const char* str) noexcept
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        InventoryChanger::setToolToUse(stringToUint64(string));
+        ToolUser::setTool(stringToUint64(string));
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
-        InventoryChanger::setItemToApplyTool(stringToUint64(string));
+        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::Use);
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        InventoryChanger::setItemToWearSticker(stringToUint64(string));
+        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::WearSticker);
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        InventoryChanger::setNameTagString(string);
+        ToolUser::setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        InventoryChanger::setItemToRemoveNameTag(stringToUint64(string));
+        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::RemoveNameTag);
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         InventoryChanger::deleteItem(stringToUint64(string));
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         InventoryChanger::acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        InventoryChanger::setStatTrakSwapItem1(stringToUint64(string));
+        ToolUser::setStatTrakSwapItem1(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-        InventoryChanger::setStatTrakSwapItem2(stringToUint64(string));
+        ToolUser::setStatTrakSwapItem2(stringToUint64(string));
     }
 }
 
