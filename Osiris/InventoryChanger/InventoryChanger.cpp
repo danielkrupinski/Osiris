@@ -1009,9 +1009,7 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Collectible: {
             itemConfig["Type"] = "Collectible";
-            const auto& staticData = StaticData::collectibles()[gameItem.dataIndex];
             itemConfig["Weapon ID"] = gameItem.weaponID;
-            itemConfig["Is Original"] = staticData.isOriginal;
             break;
         }
         case StaticData::Type::NameTag: {
