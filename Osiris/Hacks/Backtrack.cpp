@@ -1,5 +1,9 @@
+#include <algorithm>
+#include <array>
+
 #include "Aimbot.h"
 #include "Backtrack.h"
+#include "../ConfigStructs.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Cvar.h"

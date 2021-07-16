@@ -1,10 +1,14 @@
+#include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
-#include "Config.h"
-#include "Hacks/InventoryChanger.h"
+#include "InventoryChanger/InventoryChanger.h"
+#include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Netvars.h"
@@ -22,7 +26,7 @@ static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxi
 
 static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (config->misc.radarHack)
+    if (Misc::isRadarHackOn())
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
@@ -45,25 +49,9 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void
     proxies[hash].first(data, outStruct, arg3);
 }
 
-Netvars::Netvars() noexcept
-{
-    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        walkTable(clientClass->networkName, clientClass->recvTable);
+static std::vector<std::pair<std::uint32_t, std::uint16_t>> offsets;
 
-    std::ranges::sort(offsets, {}, &std::pair<uint32_t, uint16_t>::first);
-    offsets.shrink_to_fit();
-}
-
-void Netvars::restore() noexcept
-{
-    for (const auto& [hash, proxyPair] : proxies)
-        *proxyPair.second = proxyPair.first;
-
-    proxies.clear();
-    offsets.clear();
-}
-
-void Netvars::walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
+static void walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset = 0) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -105,4 +93,30 @@ void Netvars::walkTable(const char* networkName, RecvTable* recvTable, const std
         if (auto hook{ getHook(hash) })
             hookProperty(hash, prop.proxy, hook);
     }
+}
+
+void Netvars::init() noexcept
+{
+    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
+        walkTable(clientClass->networkName, clientClass->recvTable);
+
+    std::ranges::sort(offsets, {}, &std::pair<std::uint32_t, std::uint16_t>::first);
+    offsets.shrink_to_fit();
+}
+
+void Netvars::restore() noexcept
+{
+    for (const auto& [hash, proxyPair] : proxies)
+        *proxyPair.second = proxyPair.first;
+
+    proxies.clear();
+    offsets.clear();
+}
+
+std::uint16_t Netvars::get(std::uint32_t hash) noexcept
+{
+    if (const auto it = std::ranges::lower_bound(offsets, hash, {}, &std::pair<uint32_t, uint16_t>::first); it != offsets.end() && it->first == hash)
+        return it->second;
+    assert(false);
+    return 0;
 }

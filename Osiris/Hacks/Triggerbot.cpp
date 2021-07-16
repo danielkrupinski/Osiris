@@ -1,8 +1,10 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
@@ -22,12 +24,12 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
     if (!weaponIndex)
         return;
 
     if (!config->triggerbot[weaponIndex].enabled)
-        weaponIndex = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+        weaponIndex = getWeaponClass(activeWeapon->itemDefinitionIndex());
 
     if (!config->triggerbot[weaponIndex].enabled)
         weaponIndex = 0;
@@ -87,9 +89,9 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (cfg.hitgroup && trace.hitgroup != cfg.hitgroup)
         return;
 
-    float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
+    float damage = (activeWeapon->itemDefinitionIndex() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
-    if (float armorRatio{ weaponData->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex2() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
+    if (float armorRatio{ weaponData->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
         damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
 
     if (damage >= (cfg.killshot ? trace.entity->health() : cfg.minDamage)) {
@@ -101,5 +103,5 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
 void Triggerbot::updateInput() noexcept
 {
-    keyPressed = config->triggerbotHoldKey == KeyBind::NONE || config->triggerbotHoldKey.isDown();
+    keyPressed = !config->triggerbotHoldKey.isSet() || config->triggerbotHoldKey.isDown();
 }

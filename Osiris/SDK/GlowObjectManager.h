@@ -6,6 +6,7 @@
 class Entity;
 
 struct GlowObjectDefinition {
+    int nextFreeSlot;
     Entity* entity;
 
     // TODO: try to declare those as std::array<float, 4> for easier color copying
@@ -23,7 +24,6 @@ struct GlowObjectDefinition {
     int fullBloomStencilTestValue;
     int glowStyle;
     int splitScreenSlot;
-    int nextFreeSlot;
 
     constexpr bool isUnused() const noexcept { return nextFreeSlot != ENTRY_IN_USE; }
 

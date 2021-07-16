@@ -5,21 +5,19 @@
 #include <string>
 
 #include "AnimState.h"
-#include "Engine.h"
-#include "EngineTrace.h"
 #include "Inconstructible.h"
-#include "LocalPlayer.h"
-#include "matrix3x4.h"
 #include "Platform.h"
+#include "UtlVector.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
 
-#include "../Config.h"
-#include "../Interfaces.h"
-#include "../Memory.h"
 #include "../Netvars.h"
+
+class EconItemView;
+
+class matrix3x4;
 
 struct AnimState;
 struct ClientClass;
@@ -56,22 +54,13 @@ public:
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
-class EconItemView {
-public:
-    INCONSTRUCTIBLE(EconItemView)
-
-    std::uintptr_t getAttributeList() noexcept
-    {
-        return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
-    }
-};
-
 class Entity {
 public:
     INCONSTRUCTIBLE(Entity)
 
     VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
@@ -142,51 +131,15 @@ public:
         return false;
     }
 
-    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
-    {
-#ifdef _WIN32
-        if (config->misc.fixBoneMatrix) {
-            int* render = reinterpret_cast<int*>(this + 0x274);
-            int backup = *render;
-            Vector absOrigin = getAbsOrigin();
-            *render = 0;
-            memory->setAbsOrigin(this, origin());
-            auto result = VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
-            memory->setAbsOrigin(this, absOrigin);
-            *render = backup;
-            return result;
-        }
-#endif
-        return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
-    }
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
+    Vector getBonePosition(int bone) noexcept;
 
-    Vector getBonePosition(int bone) noexcept
-    {
-        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
-            return boneMatrices[bone].origin();
-        else
-            return Vector{ };
-    }
-
-    bool isVisible(const Vector& position = { }) noexcept
-    {
-        if (!localPlayer)
-            return false;
-
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
-        return trace.entity == this || trace.fraction > 0.97f;
-    }
-    
+    bool isVisible(const Vector& position = { }) noexcept;
     bool isOtherEnemy(Entity* other) noexcept;
 
-    VarMap* getVarMap() noexcept
+    VarMap& getVarMap() noexcept
     {
-#ifdef _WIN32
-        return reinterpret_cast<VarMap*>(this + 0x24);
-#else
-        return nullptr;
-#endif
+        return *reinterpret_cast<VarMap*>(std::uintptr_t(this) + WIN32_LINUX(0x24, 0x48));
     }
    
     AnimState* getAnimstate() noexcept
@@ -198,40 +151,15 @@ public:
 #endif
     }
 
-    float getMaxDesyncAngle() noexcept
-    {
-        const auto animState = getAnimstate();
-
-        if (!animState)
-            return 0.0f;
-
-        float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
-
-        if (animState->duckAmount > 0.0f)
-            yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
-
-        return animState->velocitySubtractY * yawModifier;
-    }
+    float getMaxDesyncAngle() noexcept;
 
     bool isInReload() noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    auto getUserId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.userId;
-
-        return -1;
-    }
-
-    std::uint64_t getSteamId() noexcept
-    {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerInfo.xuid;
-        return 0;
-    }
+    int getUserId() noexcept;
+    std::uint64_t getSteamId() noexcept;
 
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
@@ -296,16 +224,11 @@ public:
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
-    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
-    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
+    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
     NETVAR(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
-    NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
-    NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)
-    NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
-    NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
     NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
     NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
     NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
@@ -347,6 +270,11 @@ public:
     std::uint64_t originalOwnerXuid() noexcept
     {
         return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
+    }
+
+    std::uint64_t itemID() noexcept
+    {
+        return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
     }
 };
 

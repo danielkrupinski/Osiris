@@ -8,10 +8,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "imgui/imgui.h"
-#include "Hacks/InventoryChanger.h"
 #include "ConfigStructs.h"
 #include "InputUtil.h"
+
+struct ImFont;
 
 class Config {
 public:
@@ -19,9 +19,9 @@ public:
     void load(std::size_t, bool incremental) noexcept;
     void load(const char8_t* name, bool incremental) noexcept;
     void save(std::size_t) const noexcept;
-    void add(const char*) noexcept;
+    void add(const char8_t*) noexcept;
     void remove(std::size_t) noexcept;
-    void rename(std::size_t, const char*) noexcept;
+    void rename(std::size_t, const char8_t*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;
@@ -54,7 +54,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
     bool aimbotOnKey{ false };
-    KeyBind aimbotKey{ KeyBind::NONE };
+    KeyBind aimbotKey;
     int aimbotKeyMode{ 0 };
 
     struct Triggerbot {
@@ -70,7 +70,7 @@ public:
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
-    KeyBind triggerbotHoldKey{ KeyBind::NONE };
+    KeyBind triggerbotHoldKey;
 
     struct Chams {
         struct Material : Color4 {
@@ -86,12 +86,12 @@ public:
     };
 
     std::unordered_map<std::string, Chams> chams;
-    KeyBindToggle chamsToggleKey{ KeyBind::NONE };
-    KeyBind chamsHoldKey{ KeyBind::NONE };
+    KeyBindToggle chamsToggleKey;
+    KeyBind chamsHoldKey;
 
     struct StreamProofESP {
-        KeyBindToggle toggleKey{ KeyBind::NONE };
-        KeyBind holdKey{ KeyBind::NONE };
+        KeyBindToggle toggleKey;
+        KeyBind holdKey;
 
         std::unordered_map<std::string, Player> allies;
         std::unordered_map<std::string, Player> enemies;
@@ -112,102 +112,16 @@ public:
         int menuColors{ 0 };
     } style;
 
-    struct Misc {
-        Misc() { clanTag[0] = '\0'; }
-
-        KeyBind menuKey{ KeyBind::INSERT };
-        bool antiAfkKick{ false };
-        bool autoStrafe{ false };
-        bool bunnyHop{ false };
-        bool customClanTag{ false };
-        bool clocktag{ false };
-        bool animatedClanTag{ false };
-        bool fastDuck{ false };
-        bool moonwalk{ false };
-        bool edgejump{ false };
-        bool slowwalk{ false };
-        bool autoPistol{ false };
-        bool autoReload{ false };
-        bool autoAccept{ false };
-        bool radarHack{ false };
-        bool revealRanks{ false };
-        bool revealMoney{ false };
-        bool revealSuspect{ false };
-        bool revealVotes{ false };
-        bool fixAnimationLOD{ false };
-        bool fixBoneMatrix{ false };
-        bool fixMovement{ false };
-        bool disableModelOcclusion{ false };
-        bool nameStealer{ false };
-        bool disablePanoramablur{ false };
-        bool killMessage{ false };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
-        bool fastPlant{ false };
-        bool fastStop{ false };
-        bool quickReload{ false };
-        bool prepareRevolver{ false };
-        bool oppositeHandKnife = false;
-        PreserveKillfeed preserveKillfeed;
-        char clanTag[16];
-        KeyBind edgejumpkey{ KeyBind::NONE };
-        KeyBind slowwalkKey{ KeyBind::NONE };
-        ColorToggleThickness noscopeCrosshair;
-        ColorToggleThickness recoilCrosshair;
-
-        struct SpectatorList {
-            bool enabled = false;
-            bool noTitleBar = false;
-            ImVec2 pos;
-            ImVec2 size{ 200.0f, 200.0f };
-        };
-
-        SpectatorList spectatorList;
-        struct Watermark {
-            bool enabled = false;
-        };
-        Watermark watermark;
-        float aspectratio{ 0 };
-        std::string killMessageString{ "Gotcha!" };
-        int banColor{ 6 };
-        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
-        ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
-        KeyBind prepareRevolverKey{ KeyBind::NONE };
-        int hitSound{ 0 };
-        int chokedPackets{ 0 };
-        KeyBind chokedPacketsKey{ KeyBind::NONE };
-        int quickHealthshotKey{ 0 };
-        float maxAngleDelta{ 255.0f };
-        int killSound{ 0 };
-        std::string customKillSound;
-        std::string customHitSound;
-        PurchaseList purchaseList;
-
-        struct Reportbot {
-            bool enabled = false;
-            bool textAbuse = false;
-            bool griefing = false;
-            bool wallhack = true;
-            bool aimbot = true;
-            bool other = true;
-            int target = 0;
-            int delay = 1;
-            int rounds = 1;
-        } reportbot;
-
-        OffscreenEnemies offscreenEnemies;
-    } misc;
-
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
-    const auto& getSystemFonts() noexcept { return systemFonts; }
-    const auto& getFonts() noexcept { return fonts; }
+    const auto& getSystemFonts() const noexcept { return systemFonts; }
+    const auto& getFonts() const noexcept { return fonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
     std::filesystem::path path;
-    std::vector<std::string> configs;
+    std::vector<std::u8string> configs;
 };
 
 inline std::unique_ptr<Config> config;

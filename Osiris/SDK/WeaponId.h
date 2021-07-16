@@ -84,6 +84,8 @@ enum class WeaponId : short {
     MusicKit = 1314,
     SealedGraffiti = 1348,
     Graffiti = 1349,
+    OperationHydraPass = 1352,
+    BronzeOperationHydraCoin = 4353,
     Patch = 4609,
     GloveStuddedBrokenfang = 4725,
     GloveStuddedBloodhound = 5027,
