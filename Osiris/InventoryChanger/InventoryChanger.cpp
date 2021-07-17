@@ -1106,6 +1106,44 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
+[[nodiscard]] auto loadSkinStickersFromJson(const json& j) noexcept
+{
+    std::array<StickerConfig, 5> skinStickers;
+
+    if (!j.contains("Stickers"))
+        return skinStickers;
+
+    const auto& stickers = j["Stickers"];
+    if (!stickers.is_array())
+        return skinStickers;
+
+    for (const auto& sticker : stickers) {
+        if (!sticker.is_object())
+            continue;
+
+        if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
+            continue;
+
+        if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
+            continue;
+
+        const int stickerID = sticker["Sticker ID"];
+        if (stickerID == 0)
+            continue;
+
+        const std::size_t slot = sticker["Slot"];
+        if (slot >= skinStickers.size())
+            continue;
+
+        skinStickers[slot].stickerID = stickerID;
+
+        if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
+            skinStickers[slot].wear = sticker["Wear"];
+    }
+
+    return skinStickers;
+}
+
 [[nodiscard]] std::size_t loadDynamicSkinDataFromJson(const json& j) noexcept
 {
     DynamicSkinData dynamicData;
@@ -1135,32 +1173,7 @@ json InventoryChanger::toJson() noexcept
             dynamicData.nameTag = nameTag;
     }
 
-    if (j.contains("Stickers")) {
-        if (const auto& stickers = j["Stickers"]; stickers.is_array()) {
-            for (std::size_t k = 0; k < stickers.size(); ++k) {
-                const auto& sticker = stickers[k];
-                if (!sticker.is_object())
-                    continue;
-
-                if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
-                    continue;
-
-                if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
-                    continue;
-
-                const int stickerID = sticker["Sticker ID"];
-                if (stickerID == 0)
-                    continue;
-                const std::size_t slot = sticker["Slot"];
-                if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
-                    continue;
-                dynamicData.stickers[slot].stickerID = stickerID;
-                if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
-                    dynamicData.stickers[slot].wear = sticker["Wear"];
-            }
-        }
-    }
-
+    dynamicData.stickers = loadSkinStickersFromJson(j);
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
