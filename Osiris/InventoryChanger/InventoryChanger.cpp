@@ -935,19 +935,19 @@ json InventoryChanger::toJson() noexcept
         json itemConfig;
 
         const auto& gameItem = item.get();
+        itemConfig["Weapon ID"] = gameItem.weaponID;
+
         switch (gameItem.type) {
         case StaticData::Type::Sticker: {
             itemConfig["Type"] = "Sticker";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Sticker ID"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Glove: {
             itemConfig["Type"] = "Glove";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = Inventory::dynamicGloveData(item.getDynamicDataIndex());
 
@@ -959,7 +959,6 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Skin";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
@@ -989,7 +988,6 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Music: {
             itemConfig["Type"] = "Music";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
             const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex());
@@ -999,38 +997,32 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Collectible: {
             itemConfig["Type"] = "Collectible";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::NameTag: {
             itemConfig["Type"] = "Name Tag";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Patch: {
             itemConfig["Type"] = "Patch";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Patch ID"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Graffiti: {
             itemConfig["Type"] = "Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::SealedGraffiti: {
             itemConfig["Type"] = "Sealed Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::Agent: {
             itemConfig["Type"] = "Agent";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
@@ -1048,27 +1040,22 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Case: {
             itemConfig["Type"] = "Case";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::CaseKey: {
             itemConfig["Type"] = "Case Key";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::OperationPass: {
             itemConfig["Type"] = "Operation Pass";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::StatTrakSwapTool: {
             itemConfig["Type"] = "StatTrak Swap Tool";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         case StaticData::Type::ViewerPass: {
             itemConfig["Type"] = "Viewer Pass";
-            itemConfig["Weapon ID"] = gameItem.weaponID;
             break;
         }
         }
