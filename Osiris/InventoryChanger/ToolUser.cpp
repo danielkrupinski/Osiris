@@ -282,12 +282,17 @@ void ToolUser::setTool(std::uint64_t itemID) noexcept
 
 void ToolUser::setItemToApplyTool(std::uint64_t itemID) noexcept
 {
-    ToolUserImpl::setDestItem(itemID, ToolUser::Action::Use);
+    ToolUserImpl::setDestItem(itemID, Action::Use);
 }
 
 void ToolUser::setItemToWearSticker(std::uint64_t itemID) noexcept
 {
-    ToolUserImpl::setDestItem(itemID, ToolUser::Action::WearSticker);
+    ToolUserImpl::setDestItem(itemID, Action::WearSticker);
+}
+
+void ToolUser::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
+{
+    ToolUserImpl::setDestItem(itemID, Action::RemoveNameTag);
 }
 
 void ToolUser::setDestItem(std::uint64_t itemID, Action action) noexcept
