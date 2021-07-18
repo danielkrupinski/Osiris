@@ -285,6 +285,11 @@ void ToolUser::setItemToApplyTool(std::uint64_t itemID) noexcept
     ToolUserImpl::setDestItem(itemID, ToolUser::Action::Use);
 }
 
+void ToolUser::setItemToWearSticker(std::uint64_t itemID) noexcept
+{
+    ToolUserImpl::setDestItem(itemID, ToolUser::Action::WearSticker);
+}
+
 void ToolUser::setDestItem(std::uint64_t itemID, Action action) noexcept
 {
     ToolUserImpl::setDestItem(itemID, action);
