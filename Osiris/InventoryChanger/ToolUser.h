@@ -13,6 +13,7 @@ namespace ToolUser
     };
 
     void setTool(std::uint64_t itemID) noexcept;
+    void setItemToApplyTool(std::uint64_t itemID) noexcept;
     void setDestItem(std::uint64_t itemID, Action action) noexcept;
     void setNameTag(const char* nameTag) noexcept;
     void setStickerSlot(int slot) noexcept;
