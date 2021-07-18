@@ -6,12 +6,6 @@ class CSPlayerInventory;
 
 namespace ToolUser
 {
-    enum class Action {
-        Use,
-        WearSticker,
-        RemoveNameTag
-    };
-
     void setTool(std::uint64_t itemID) noexcept;
     void setItemToApplyTool(std::uint64_t itemID) noexcept;
     void setItemToWearSticker(std::uint64_t itemID) noexcept;

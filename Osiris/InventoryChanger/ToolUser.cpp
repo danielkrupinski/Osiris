@@ -22,9 +22,15 @@ static void initItemCustomizationNotification(const char* typeStr, std::uint64_t
     initItemCustomizationNotification(typeStr, std::to_string(itemID).c_str());
 }
 
+enum class Action {
+    Use,
+    WearSticker,
+    RemoveNameTag
+};
+
 class ToolUserImpl {
 public:
-    static void setDestItem(std::uint64_t itemID, ToolUser::Action action) noexcept
+    static void setDestItem(std::uint64_t itemID, Action action) noexcept
     {
         instance().destItemID = itemID;
         instance().action = action;
@@ -248,11 +254,11 @@ private:
         if (useTime > memory->globalVars->realtime)
             return;
 
-        if (action == ToolUser::Action::WearSticker) {
+        if (action == Action::WearSticker) {
             _wearSticker(localInventory);
-        } else if (action == ToolUser::Action::RemoveNameTag) {
+        } else if (action == Action::RemoveNameTag) {
             _removeNameTag();
-        } else if (action == ToolUser::Action::Use) {
+        } else if (action == Action::Use) {
             _useTool();
         }
 
@@ -269,7 +275,7 @@ private:
     std::uint64_t destItemID = 0;
     std::uint64_t statTrakSwapItem1 = 0;
     std::uint64_t statTrakSwapItem2 = 0;
-    ToolUser::Action action;
+    Action action;
     float useTime = 0.0f;
     int stickerSlot = 0;
     std::string nameTag;
