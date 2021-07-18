@@ -1552,13 +1552,13 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
         ToolUser::setTool(stringToUint64(string));
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
-        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::Use);
+        ToolUser::setItemToApplyTool(stringToUint64(string));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::WearSticker);
+        ToolUser::setItemToWearSticker(stringToUint64(string));
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
         ToolUser::setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        ToolUser::setDestItem(stringToUint64(string), ToolUser::Action::RemoveNameTag);
+        ToolUser::setItemToRemoveNameTag(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         InventoryChanger::deleteItem(stringToUint64(string));
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {

@@ -295,11 +295,6 @@ void ToolUser::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
     ToolUserImpl::setDestItem(itemID, Action::RemoveNameTag);
 }
 
-void ToolUser::setDestItem(std::uint64_t itemID, Action action) noexcept
-{
-    ToolUserImpl::setDestItem(itemID, action);
-}
-
 void ToolUser::setNameTag(const char* nameTag) noexcept
 {
     ToolUserImpl::setNameTag(nameTag);
