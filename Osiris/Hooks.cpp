@@ -107,7 +107,6 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     StreamProofESP::render();
     Misc::purchaseList();
-    Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
     Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
     Misc::drawBombTimer();
@@ -189,6 +188,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Misc::noscopeCrosshair();
 
     EnginePrediction::run(cmd);
 
