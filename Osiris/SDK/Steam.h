@@ -9,6 +9,7 @@ class SteamFriends {
 public:
     INCONSTRUCTIBLE(SteamFriends)
 
+    VIRTUAL_METHOD(const char*, getPersonaName, 0, (), (this))
     VIRTUAL_METHOD(int, getSmallFriendAvatar, 34, (std::uint64_t steamID), (this, steamID))
 };
 
