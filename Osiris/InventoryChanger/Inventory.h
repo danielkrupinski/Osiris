@@ -51,6 +51,7 @@ public:
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
     void markToDelete() noexcept { itemIndex = static_cast<std::size_t>(-2); }
     bool shouldDelete() const noexcept { return itemIndex == static_cast<std::size_t>(-2); }
+    bool isValid() const noexcept { return !isDeleted() && !shouldDelete(); }
 
     bool isSticker() const noexcept { return !isDeleted() && !shouldDelete() && get().isSticker(); }
     bool isSkin() const noexcept { return !isDeleted() && !shouldDelete() && get().isSkin(); }
