@@ -44,6 +44,7 @@
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/WeaponSystem.h"
+#include "../SDK/Steam.h"
 
 #include "../GUI.h"
 #include "../Helpers.h"
