@@ -1089,7 +1089,41 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     const auto isLocal = localPlayer && entity == localPlayer.get();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+    memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris] %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+}
+
+void Misc::voteRevealerCall(const void*& data, int& size, int messageType) noexcept
+{
+    if (!miscConfig.revealVotes)
+        return;
+    
+    constexpr auto voteName = [](int index) {
+        switch (index)
+        {
+        case 0: return "Kick";
+        case 1: return "Change Level";
+        case 6: return "Surrender";
+        case 13: return "Start TimeOut";
+        default: return "ERROR";
+        }
+    };
+
+    if (messageType == 46) {
+        ProtobufReader msg{ static_cast<const std::uint8_t*>(data), size };
+        const auto ent_idx = msg.readInt32(2);
+        const auto vote_type = msg.readInt32(3);
+        
+        if (ent_idx && vote_type) {
+            const auto entity = interfaces->entityList->getEntity(ent_idx);
+            const auto isLocal = localPlayer && entity == localPlayer.get();
+
+            memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris] %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(vote_type));
+        }
+    }
+    else if (messageType == 47)
+        memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris]\x01 vote\x06 PASS");
+    else if (messageType == 48)
+        memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris]\x01 vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
