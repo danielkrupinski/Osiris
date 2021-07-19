@@ -29,9 +29,6 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
-#include "../SDK/ModelInfo.h"
-#include "../SDK/NetworkStringTable.h"
-#include "../SDK/Surface.h"
 #include "../SDK/ViewRenderBeams.h"
 
 struct VisualsConfig {
