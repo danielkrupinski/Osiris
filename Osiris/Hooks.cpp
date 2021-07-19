@@ -491,7 +491,9 @@ static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) int messag
 {
     if (messageType == 7) // CS_UM_TextMsg
         InventoryChanger::onUserTextMsg(data, size);
-
+    else if (messageType == 46 || messageType == 47 || messageType == 48)
+        Misc::voteRevealerCall(data, size, messageType);
+    
     return hooks->client.callOriginal<bool, 38>(messageType, passthroughFlags, size, data);
 }
 
