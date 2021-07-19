@@ -63,12 +63,12 @@ bool traceToExit(Trace* enter_trace, Vector start, Vector dir, Trace* exit_trace
 #if defined(_WIN32)
     Vector end = { 0.f,0.f,0.f };
     float distance = 0.f;
-    signed int distCheck = 25;
+    signed int distCheck = 23;
     int firstContents = 0;
 
     do
     {
-        distance += 3.5f;
+        distance += 4.f;
         end = start + dir * distance;
 
         if (!firstContents) firstContents = interfaces->engineTrace->getPointContents(end, mask_shot | contents_grate);
