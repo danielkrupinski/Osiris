@@ -1226,6 +1226,41 @@ json InventoryChanger::toJson() noexcept
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
+void loadEquipmentFromJson(const json& j) noexcept
+{
+    if (!j.contains("Equipment"))
+        return;
+
+    const auto& equipment = j["Equipment"];
+    if (!equipment.is_array())
+        return;
+
+    for (std::size_t i = 0; i < equipment.size(); ++i) {
+        const auto& equipped = equipment[i];
+        if (!equipped.contains("Slot"))
+            continue;
+
+        const auto& slot = equipped["Slot"];
+        if (!slot.is_number_integer())
+            continue;
+
+        if (equipped.contains("CT")) {
+            if (const auto& ct = equipped["CT"]; ct.is_number_integer())
+                Inventory::equipItem(Team::CT, slot, ct);
+        }
+
+        if (equipped.contains("TT")) {
+            if (const auto& tt = equipped["TT"]; tt.is_number_integer())
+                Inventory::equipItem(Team::TT, slot, tt);
+        }
+
+        if (equipped.contains("NOTEAM")) {
+            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer())
+                Inventory::equipItem(Team::None, slot, noteam);
+        }
+    }
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -1395,37 +1430,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         }
     }
 
-    if (!j.contains("Equipment"))
-        return;
-
-    const auto& equipment = j["Equipment"];
-    if (!equipment.is_array())
-        return;
-
-    for (std::size_t i = 0; i < equipment.size(); ++i) {
-        const auto& equipped = equipment[i];
-        if (!equipped.contains("Slot"))
-            continue;
-
-        const auto& slot = equipped["Slot"];
-        if (!slot.is_number_integer())
-            continue;
-
-        if (equipped.contains("CT")) {
-            if (const auto& ct = equipped["CT"]; ct.is_number_integer())
-                Inventory::equipItem(Team::CT, slot, ct);
-        }
-
-        if (equipped.contains("TT")) {
-            if (const auto& tt = equipped["TT"]; tt.is_number_integer())
-                Inventory::equipItem(Team::TT, slot, tt);
-        }
-         
-        if (equipped.contains("NOTEAM")) {
-            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer())
-                Inventory::equipItem(Team::None, slot, noteam);
-        }
-    }
+    loadEquipmentFromJson(j);
 }
 
 void InventoryChanger::resetConfig() noexcept
