@@ -15,6 +15,7 @@
 #include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "ProtobufReader.h"
 
 #include "EnginePrediction.h"
 #include "Misc.h"
