@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "AntiAim.h"
 
 #include "../imgui/imgui.h"
@@ -28,7 +30,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
             cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
-            if (fabsf(cmd->sidemove) < 5.0f) {
+            if (std::abs(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
                     cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
                 else

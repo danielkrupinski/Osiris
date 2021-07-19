@@ -6,11 +6,6 @@
 #include <sstream>
 #include <vector>
 
-#ifdef __linux__
-#include <sys/mman.h>
-#include <unistd.h>
-#endif
-
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
