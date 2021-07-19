@@ -300,9 +300,6 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!localInventory)
         return;
 
-#ifndef _WIN32
-    applyGloves(*localInventory, local);
-#endif
     applyKnife(*localInventory, local);
     applyWeapons(*localInventory, local);
 }
@@ -448,10 +445,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
     if (!localInventory)
         return;
 
-#ifdef _WIN32
     if (localPlayer)
         applyGloves(*localInventory, localPlayer.get());
-#endif;
 
     applyMusicKit(*localInventory);
     applyPlayerAgent(*localInventory);
