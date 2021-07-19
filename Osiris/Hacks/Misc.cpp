@@ -383,7 +383,7 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 
 void Misc::watermark() noexcept
 {
-    if (!config->misc.watermark.enabled)
+    if (!miscConfig.watermark.enabled)
         return;
 
     //NAME
