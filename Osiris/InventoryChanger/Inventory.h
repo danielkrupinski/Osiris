@@ -53,24 +53,24 @@ public:
     bool shouldDelete() const noexcept { return itemIndex == static_cast<std::size_t>(-2); }
     bool isValid() const noexcept { return !isDeleted() && !shouldDelete(); }
 
-    bool isSticker() const noexcept { return !isDeleted() && !shouldDelete() && get().isSticker(); }
-    bool isSkin() const noexcept { return !isDeleted() && !shouldDelete() && get().isSkin(); }
-    bool isGlove() const noexcept { return !isDeleted() && !shouldDelete() && get().isGlove(); }
-    bool isMusic() const noexcept { return !isDeleted() && !shouldDelete() && get().isMusic(); }
-    bool isAgent() const noexcept { return !isDeleted() && !shouldDelete() && get().isAgent(); }
-    bool isCollectible() const noexcept { return !isDeleted() && !shouldDelete() && get().isCollectible(); }
-    bool isCase() const noexcept { return !isDeleted() && !shouldDelete() && get().isCase(); }
-    bool isCaseKey() const noexcept { return !isDeleted() && !shouldDelete() && get().isCaseKey(); }
-    bool isSealedGraffiti() const noexcept { return !isDeleted() && !shouldDelete() && get().isSealedGraffiti(); }
-    bool isOperationPass() const noexcept { return !isDeleted() && !shouldDelete() && get().isOperationPass(); }
-    bool isNameTag() const noexcept { return !isDeleted() && !shouldDelete() && get().isNameTag(); }
-    bool isPatch() const noexcept { return !isDeleted() && !shouldDelete() && get().isPatch(); }
-    bool isStatTrakSwapTool() const noexcept { return !isDeleted() && !shouldDelete() && get().isStatTrakSwapTool(); }
-    bool isViewerPass() const noexcept { return !isDeleted() && !shouldDelete() && get().isViewerPass(); }
+    bool isSticker() const noexcept { return isValid() && get().isSticker(); }
+    bool isSkin() const noexcept { return isValid() && get().isSkin(); }
+    bool isGlove() const noexcept { return isValid() && get().isGlove(); }
+    bool isMusic() const noexcept { return isValid() && get().isMusic(); }
+    bool isAgent() const noexcept { return isValid() && get().isAgent(); }
+    bool isCollectible() const noexcept { return isValid() && get().isCollectible(); }
+    bool isCase() const noexcept { return isValid() && get().isCase(); }
+    bool isCaseKey() const noexcept { return isValid() && get().isCaseKey(); }
+    bool isSealedGraffiti() const noexcept { return isValid() && get().isSealedGraffiti(); }
+    bool isOperationPass() const noexcept { return isValid() && get().isOperationPass(); }
+    bool isNameTag() const noexcept { return isValid() && get().isNameTag(); }
+    bool isPatch() const noexcept { return isValid() && get().isPatch(); }
+    bool isStatTrakSwapTool() const noexcept { return isValid() && get().isStatTrakSwapTool(); }
+    bool isViewerPass() const noexcept { return isValid() && get().isViewerPass(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
-    const StaticData::GameItem& get() const noexcept { assert(!isDeleted() && !shouldDelete()); return StaticData::gameItems()[itemIndex]; }
+    const StaticData::GameItem& get() const noexcept { assert(isValid()); return StaticData::gameItems()[itemIndex]; }
 };
 
 namespace Inventory
