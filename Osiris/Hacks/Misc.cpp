@@ -1092,7 +1092,7 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris] %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::voteRevealerCall(const void*& data, int& size, int messageType) noexcept
+void Misc::voteRevealerCall(const void*& data, int& size, int& messageType) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
