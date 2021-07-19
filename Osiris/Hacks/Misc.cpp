@@ -97,7 +97,7 @@ struct MiscConfig {
     char clanTag[16];
     KeyBind edgejumpkey;
     KeyBind slowwalkKey;
-    ColorToggleThickness noscopeCrosshair;
+    bool noscopeCrosshair{ false };
     ColorToggleThickness recoilCrosshair;
 
     struct SpectatorList {
@@ -317,41 +317,20 @@ void Misc::spectatorList() noexcept
 
 static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
 {
-    // dot
-    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
-
-    // left
-    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
-
-    // right
-    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
-
-    // top (left with swapped x/y offsets)
-    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
-
-    // bottom (right with swapped x/y offsets)
-    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
+    drawList->AddCircleFilled(pos, miscConfig.recoilCrosshair.thickness, color, 360);
+    drawList->AddCircle(pos, miscConfig.recoilCrosshair.thickness, IM_COL32_BLACK, 360, 0.5);
 }
 
-void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
+void Misc::noscopeCrosshair() noexcept
 {
-    if (!miscConfig.noscopeCrosshair.asColorToggle().enabled)
-        return;
+    static auto nozoom_crosshair = interfaces->cvar->findVar("weapon_debug_spread_show");
 
-    {
-        GameData::Lock lock;
-        if (const auto& local = GameData::local(); !local.exists || !local.alive || !local.noScope)
-            return;
-    }
-
-    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
+    GameData::Lock lock;
+    if (const auto& local = GameData::local(); !miscConfig.noscopeCrosshair || !local.exists || !local.alive || !local.noScope)
+        nozoom_crosshair->setValue(0);
+    else
+        nozoom_crosshair->setValue(3);
 }
-
 
 static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 {
@@ -1291,7 +1270,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
     ImGui::PopID();
-    ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
+    ImGui::Checkbox("Noscope crosshair", &miscConfig.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
@@ -1530,7 +1509,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
     read(j, "Slowwalk key", m.slowwalkKey);
-    read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
+    read(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
     read(j, "Auto pistol", m.autoPistol);
     read(j, "Auto reload", m.autoReload);
