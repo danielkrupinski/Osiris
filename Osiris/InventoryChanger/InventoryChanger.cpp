@@ -3,7 +3,6 @@
 #include <chrono>
 #include <cstdint>
 #include <fstream>
-#include <random>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -19,7 +18,6 @@
 #include "../imgui/imgui_internal.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../Interfaces.h"
-#include "../Netvars.h"
 #include "InventoryChanger.h"
 #include "../ProtobufReader.h"
 #include "../Texture.h"
@@ -39,7 +37,6 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
-#include "../SDK/Localize.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Panorama.h"

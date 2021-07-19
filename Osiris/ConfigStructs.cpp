@@ -1,3 +1,7 @@
+#include <cstdlib>
+#include <cstring>
+#include <iomanip>
+
 #include "ConfigStructs.h"
 
 void to_json(json& j, const Color4& o, const Color4& dummy)
