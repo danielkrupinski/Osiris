@@ -110,7 +110,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     if (!glove)
         glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
 
-#ifdef _WIN32 // testing new method
+#if defined(_WIN32) || defined(__linux__) // testing new method
     constexpr auto NUM_ENT_ENTRIES = 8192;
     if (!glove)
         glove = createGlove(NUM_ENT_ENTRIES - 1, -1);
@@ -152,7 +152,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
         glove->onDataChanged(0);
     }
 
-#else // on linux still old method
+#else // old method
     if (!glove) {
         const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
         const auto serial = Helpers::random(0, 0x1000);
