@@ -7,7 +7,7 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
-static void initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
+static void initItemCustomizationNotification(std::string_view typeStr, const char* itemID) noexcept
 {
     if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
         std::string args; args += "0,'"; args += typeStr; args += "','"; args += itemID; args += '\'';
@@ -17,7 +17,7 @@ static void initItemCustomizationNotification(const char* typeStr, const char* i
     }
 }
 
-static void initItemCustomizationNotification(const char* typeStr, std::uint64_t itemID) noexcept
+static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
     initItemCustomizationNotification(typeStr, std::to_string(itemID).c_str());
 }
