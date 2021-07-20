@@ -7,19 +7,17 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
-static void initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
+static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
-        std::string args; args += "0,'"; args += typeStr; args += "','"; args += itemID; args += '\'';
-        const char* dummy;
-        if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-    }
-}
+    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
+    if (idx == -1)
+        return;
 
-static void initItemCustomizationNotification(const char* typeStr, std::uint64_t itemID) noexcept
-{
-    initItemCustomizationNotification(typeStr, std::to_string(itemID).c_str());
+    using namespace std::string_view_literals;
+    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(itemID); args += '\'';
+    const char* dummy;
+    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 }
 
 enum class Action {
