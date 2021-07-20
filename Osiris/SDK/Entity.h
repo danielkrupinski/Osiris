@@ -228,7 +228,6 @@ public:
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
     NETVAR(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
-    NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
     NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
     NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
     NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
@@ -276,17 +275,4 @@ public:
     {
         return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
     }
-};
-
-class PlantedC4 : public Entity {
-public:
-    INCONSTRUCTIBLE(PlantedC4)
-
-    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
-    NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
-    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
-    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
-    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
-    NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
-    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 };
