@@ -67,6 +67,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/UserMessages.h"
 
 #ifdef _WIN32
 
@@ -487,14 +488,18 @@ static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedOb
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
-static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) int messageType, int passthroughFlags, int size, const void* data) noexcept
+static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
-    if (messageType == 7) // CS_UM_TextMsg
+    if (type == UserMessageType::Text)
         InventoryChanger::onUserTextMsg(data, size);
-    else if (messageType == 46 || messageType == 47 || messageType == 48)
-        Misc::voteRevealerCall(data, size, messageType);
+    else if (type == UserMessageType::VoteStart)
+        Misc::VoteStart(data, size);
+    else if(type == UserMessageType::VotePass)
+        Misc::VotePass(data, size);
+    else if(type == UserMessageType::VoteFailed )
+        Misc::VoteFailed(data, size);
     
-    return hooks->client.callOriginal<bool, 38>(messageType, passthroughFlags, size, data);
+    return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
 #ifdef _WIN32
