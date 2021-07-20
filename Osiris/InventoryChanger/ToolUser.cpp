@@ -9,12 +9,15 @@
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::string_view itemID) noexcept
 {
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
-        std::string args; args += "0,'"; args += typeStr; args += "','"; args += itemID; args += '\'';
-        const char* dummy;
-        if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-    }
+    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
+    if (idx == -1)
+        return;
+
+    using namespace std::string_view_literals;
+    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += itemID; args += '\'';
+    const char* dummy;
+    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 }
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
