@@ -107,7 +107,6 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     if (!glove)
         glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
 
-#if defined(_WIN32) || defined(__linux__) // testing new method
     constexpr auto NUM_ENT_ENTRIES = 8192;
     if (!glove)
         glove = createGlove(NUM_ENT_ENTRIES - 1, -1);
@@ -148,35 +147,6 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
         glove->postDataUpdate(0);
         glove->onDataChanged(0);
     }
-
-#else // old method
-    if (!glove) {
-        const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
-        const auto serial = Helpers::random(0, 0x1000);
-        glove = createGlove(entry, serial);
-    }
-
-    if (!glove)
-        return;
-
-    wearables[0] = gloveHandle = glove->handle();
-    glove->accountID() = localInventory.getAccountID();
-    glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
-    glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
-    glove->entityQuality() = 3;
-    glove->initialized() = true;
-    memory->equipWearable(glove, local);
-    local->body() = 1;
-
-    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().weaponID) {
-        definitionIndex = item->get().weaponID;
-
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
-            glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
-            glove->preDataUpdate(0);
-        }
-    }
-#endif
 }
 
 static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcept
