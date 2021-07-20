@@ -101,13 +101,10 @@ struct MiscConfig {
         bool noTitleBar = false;
         ImVec2 pos;
         ImVec2 size{ 200.0f, 200.0f };
-    };
-
-    SpectatorList spectatorList;
+    } spectatorList;
     struct Watermark {
         bool enabled = false;
-    };
-    Watermark watermark;
+    } watermark;
     float aspectratio{ 0 };
     std::string killMessageString{ "Gotcha!" };
     int banColor{ 6 };
