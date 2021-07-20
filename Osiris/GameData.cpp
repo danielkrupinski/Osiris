@@ -172,6 +172,8 @@ void GameData::update() noexcept
                 case ClassId::Inferno:
                     infernoData.emplace_back(entity);
                     break;
+                default:
+                    break;
                 }
             }
         }

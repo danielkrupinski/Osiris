@@ -132,6 +132,7 @@
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
+    <ClCompile Include="InventoryChanger\ItemGenerator.cpp" />
     <ClCompile Include="InventoryChanger\StaticData.cpp" />
     <ClCompile Include="InventoryChanger\ToolUser.cpp" />
     <ClCompile Include="MinHook\buffer.c">
@@ -224,6 +225,7 @@
     <ClInclude Include="InputUtil.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
+    <ClInclude Include="InventoryChanger\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\StaticData.h" />
     <ClInclude Include="InventoryChanger\ToolUser.h" />
     <ClInclude Include="JsonForward.h" />
