@@ -878,7 +878,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-constexpr auto CONFIG_VERSION = 2;
+constexpr auto CONFIG_VERSION = 3;
 
 json InventoryChanger::toJson() noexcept
 {
