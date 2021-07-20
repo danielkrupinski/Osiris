@@ -165,9 +165,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
     if (!item || !item->isSkin())
         return;
 
-    auto& weapons = local->weapons();
-
-    for (auto weaponHandle : weapons) {
+    for (auto& weapons = local->weapons(); auto weaponHandle : weapons) {
         if (weaponHandle == -1)
             break;
 
@@ -847,9 +845,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 ImGui::PushID(i);
 
                 const auto selected = selectedToAdd.contains(i);
-                const auto toAddCount = selected ? &selectedToAdd[i] : nullptr;
 
-                if (ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[i] : nullptr; ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
                     if (selected)
                         selectedToAdd.erase(i);
                     else
@@ -881,7 +878,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-constexpr auto CONFIG_VERSION = 2;
+constexpr auto CONFIG_VERSION = 3;
 
 json InventoryChanger::toJson() noexcept
 {
@@ -901,13 +898,11 @@ json InventoryChanger::toJson() noexcept
 
         switch (gameItem.type) {
         case StaticData::Type::Sticker: {
-            itemConfig["Type"] = "Sticker";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Sticker ID"] = staticData.id;
             break;
         }
         case StaticData::Type::Glove: {
-            itemConfig["Type"] = "Glove";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.id;
 
@@ -918,7 +913,6 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Skin: {
-            itemConfig["Type"] = "Skin";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.id;
 
@@ -949,43 +943,28 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Music: {
-            itemConfig["Type"] = "Music";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
-            const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex());
-            if (dynamicData.statTrak > -1)
+            if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
             break;
         }
-        case StaticData::Type::Collectible: {
-            itemConfig["Type"] = "Collectible";
-            break;
-        }
-        case StaticData::Type::NameTag: {
-            itemConfig["Type"] = "Name Tag";
-            break;
-        }
         case StaticData::Type::Patch: {
-            itemConfig["Type"] = "Patch";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Patch ID"] = staticData.id;
             break;
         }
         case StaticData::Type::Graffiti: {
-            itemConfig["Type"] = "Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
             break;
         }
         case StaticData::Type::SealedGraffiti: {
-            itemConfig["Type"] = "Sealed Graffiti";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Graffiti ID"] = staticData.id;
             break;
         }
         case StaticData::Type::Agent: {
-            itemConfig["Type"] = "Agent";
-            
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
             for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
@@ -998,26 +977,6 @@ json InventoryChanger::toJson() noexcept
                 patchConfig["Slot"] = i;
                 stickers.push_back(std::move(patchConfig));
             }
-            break;
-        }
-        case StaticData::Type::Case: {
-            itemConfig["Type"] = "Case";
-            break;
-        }
-        case StaticData::Type::CaseKey: {
-            itemConfig["Type"] = "Case Key";
-            break;
-        }
-        case StaticData::Type::OperationPass: {
-            itemConfig["Type"] = "Operation Pass";
-            break;
-        }
-        case StaticData::Type::StatTrakSwapTool: {
-            itemConfig["Type"] = "StatTrak Swap Tool";
-            break;
-        }
-        case StaticData::Type::ViewerPass: {
-            itemConfig["Type"] = "Viewer Pass";
             break;
         }
         }
@@ -1202,8 +1161,7 @@ void loadEquipmentFromJson(const json& j) noexcept
     if (!equipment.is_array())
         return;
 
-    for (std::size_t i = 0; i < equipment.size(); ++i) {
-        const auto& equipped = equipment[i];
+    for (const auto& equipped : equipment) {
         if (!equipped.contains("Slot"))
             continue;
 
