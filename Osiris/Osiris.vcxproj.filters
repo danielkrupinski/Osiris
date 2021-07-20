@@ -616,6 +616,9 @@
     <ClInclude Include="SDK\UtlMemory.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\UtlString.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

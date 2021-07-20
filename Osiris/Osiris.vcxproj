@@ -308,6 +308,7 @@
     <ClInclude Include="SDK\UserMessages.h" />
     <ClInclude Include="SDK\UtlMap.h" />
     <ClInclude Include="SDK\UtlMemory.h" />
+    <ClInclude Include="SDK\UtlString.h" />
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\VarMapping.h" />
     <ClInclude Include="SDK\Vector.h" />
