@@ -68,6 +68,7 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
+    ColorToggle smokeTimer{ 0.0f, 00.0f, 1.0f, 1.0f };
 
     struct ColorCorrection {
         bool enabled = false;
@@ -138,6 +139,7 @@ static void from_json(const json& j, VisualsConfig& v)
     read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
+    read<value_t::object>(j, "Smoke timer", v.smokeTimer);
 }
 
 static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
@@ -198,6 +200,7 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Color correction", colorCorrection);
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
+    WRITE("Smoke timer", smokeTimer);
 }
 
 bool Visuals::isThirdpersonOn() noexcept
@@ -701,6 +704,69 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
+#define SMOKEGRENADE_LIFETIME 17.5f
+
+struct smokeData
+{
+    float destructionTime;
+    Vector pos;
+};
+
+static std::vector<smokeData> smokes;
+
+void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
+{
+    if (event) {
+        smokeData data{};
+        auto time = memory->globalVars->realtime + SMOKEGRENADE_LIFETIME;
+        auto pos = Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"));
+        data.destructionTime = time;
+        data.pos = pos;
+        smokes.push_back(data);
+    }
+}
+
+void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
+{
+    if (!visualsConfig.smokeTimer.enabled)
+        return;
+
+    if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
+        return;
+    
+    for (size_t i = 0; i < smokes.size(); i++) {
+        const auto& smoke = smokes[i];
+
+        auto time = smoke.destructionTime - memory->globalVars->realtime;
+        std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
+        auto textSize = ImGui::CalcTextSize(text.str().c_str());
+
+        ImVec2 pos;
+
+        if (time >= 0.0f) {
+            if (worldToScreen(smoke.pos, pos)) {
+                ImRect rect_out(
+                    pos.x + (textSize.x / 2) + 2.f,
+                    pos.y + (textSize.y / 2) + 10.f,
+                    pos.x - (textSize.x / 2) - 2.f,
+                    pos.y - (textSize.y / 2) - 2.f);
+
+                ImRect rect_in(
+                    (pos.x + (textSize.x / 2)) - (textSize.x * (1.0f - (time / SMOKEGRENADE_LIFETIME))),
+                    pos.y + (textSize.y / 2),
+                    pos.x - (textSize.x / 2),
+                    pos.y + (textSize.y));
+                
+                drawList->AddRectFilled(rect_out.Min, rect_out.Max, IM_COL32_WHITE);
+                drawList->AddRectFilled(rect_in.Min, rect_in.Max, Helpers::calculateColor(visualsConfig.smokeTimer.asColor4()));
+                drawList->AddText({ pos.x - (textSize.x / 2), pos.y - (textSize.y / 2) }, IM_COL32_BLACK, text.str().c_str());
+            }
+        }
+        else
+            smokes.erase(smokes.begin() + i);
+    }
+}
+
 void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
@@ -813,6 +879,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
+    ImGuiCustom::colorPicker("Smoke Timer", visualsConfig.smokeTimer);
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
     ImGui::SameLine();
