@@ -165,9 +165,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
     if (!item || !item->isSkin())
         return;
 
-    auto& weapons = local->weapons();
-
-    for (auto weaponHandle : weapons) {
+    for (auto& weapons = local->weapons(); auto weaponHandle : weapons) {
         if (weaponHandle == -1)
             break;
 
@@ -847,9 +845,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 ImGui::PushID(i);
 
                 const auto selected = selectedToAdd.contains(i);
-                const auto toAddCount = selected ? &selectedToAdd[i] : nullptr;
 
-                if (ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[i] : nullptr; ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
                     if (selected)
                         selectedToAdd.erase(i);
                     else
@@ -952,8 +949,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Music";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.id;
-            const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex());
-            if (dynamicData.statTrak > -1)
+            if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
             break;
         }
