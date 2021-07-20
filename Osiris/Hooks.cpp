@@ -259,8 +259,7 @@ static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, voi
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    static Chams chams;
-    if (!chams.render(ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);

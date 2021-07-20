@@ -79,7 +79,7 @@ public:
     BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept : BoundingBox{ data.obbMins, data.obbMaxs, scale, &data.coordinateFrame } {}
     BoundingBox(const Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
 
-    operator bool() const noexcept
+    explicit operator bool() const noexcept
     {
         return valid;
     }
@@ -96,7 +96,7 @@ static void addLineWithShadow(const ImVec2& p1, const ImVec2& p2, ImU32 col) noe
 // convex hull using Graham's scan
 static std::pair<std::array<ImVec2, 8>, std::size_t> convexHull(std::array<ImVec2, 8> points) noexcept
 {
-    std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto& a, const auto& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); }));
+    std::swap(points[0], *std::ranges::min_element(points, [](const auto& a, const auto& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); }));
 
     constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
         return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);

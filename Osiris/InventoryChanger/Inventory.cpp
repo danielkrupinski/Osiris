@@ -215,28 +215,24 @@ private:
 
     static std::size_t createDefaultDynamicData(std::size_t gameItemIndex) noexcept
     {
-        std::size_t index = static_cast<std::size_t>(-1);
+        std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
         if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
             const auto& staticData = StaticData::paintKits()[item.dataIndex];
             DynamicSkinData dynamicData;
             dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
             dynamicData.seed = Helpers::random(1, 1000);
-            dynamicSkinData.push_back(dynamicData);
-            index = dynamicSkinData.size() - 1;
+            index = Inventory::emplaceDynamicData(std::move(dynamicData));
         } else if (item.isGlove()) {
             const auto& staticData = StaticData::paintKits()[item.dataIndex];
             DynamicGloveData dynamicData;
             dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
             dynamicData.seed = Helpers::random(1, 1000);
-            dynamicGloveData.push_back(dynamicData);
-            index = dynamicGloveData.size() - 1;
+            index = Inventory::emplaceDynamicData(std::move(dynamicData));
         } else if (item.isAgent()) {
-            dynamicAgentData.push_back({});
-            index = dynamicAgentData.size() - 1;
+            index = Inventory::emplaceDynamicData(DynamicAgentData{});
         } else if (item.isMusic()) {
-            dynamicMusicData.push_back({});
-            index = dynamicMusicData.size() - 1;
+            index = Inventory::emplaceDynamicData(DynamicMusicData{});
         }
 
         return index;
