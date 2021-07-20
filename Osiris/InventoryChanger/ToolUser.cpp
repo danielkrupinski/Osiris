@@ -7,22 +7,17 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
-static void initItemCustomizationNotification(std::string_view typeStr, std::string_view itemID) noexcept
+static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
     if (idx == -1)
         return;
 
     using namespace std::string_view_literals;
-    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += itemID; args += '\'';
+    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(itemID); args += '\'';
     const char* dummy;
     if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-}
-
-static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
-{
-    initItemCustomizationNotification(typeStr, std::to_string(itemID));
 }
 
 enum class Action {
