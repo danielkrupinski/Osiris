@@ -28,6 +28,7 @@
 #include "SDK/ModelInfo.h"
 #include "SDK/ModelRender.h"
 #include "SDK/NetworkChannel.h"
+#include "SDK/PlantedC4.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/Steam.h"
