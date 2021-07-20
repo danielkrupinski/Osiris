@@ -619,6 +619,9 @@
     <ClInclude Include="SDK\UtlString.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
