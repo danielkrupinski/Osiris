@@ -79,7 +79,7 @@ public:
     BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept : BoundingBox{ data.obbMins, data.obbMaxs, scale, &data.coordinateFrame } {}
     BoundingBox(const Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
 
-    operator bool() const noexcept
+    explicit operator bool() const noexcept
     {
         return valid;
     }
