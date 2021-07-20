@@ -296,7 +296,11 @@ public:
 
 class EconItem {
 public:
-    VIRTUAL_METHOD(void, destructor, 0, (bool releaseMemory = true), (this, releaseMemory))
+#ifdef _WIN32
+    VIRTUAL_METHOD(void, destructor, 0, (), (this, true))
+#else
+    VIRTUAL_METHOD(void, destructor, 1, (), (this))
+#endif
 
     PAD(2 * sizeof(std::uintptr_t))
 

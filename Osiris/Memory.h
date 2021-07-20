@@ -154,7 +154,6 @@ public:
     }
 
 private:
-    void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
