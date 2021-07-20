@@ -6,6 +6,7 @@
 #include "Pad.h"
 #include "Entity.h"
 #include "UtlMemory.h"
+#include "UtlString.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
@@ -52,13 +53,6 @@ struct UtlMap {
     int firstFree;
     int lastAlloc;
     Node<Key, Value>* elements;
-};
-
-struct UtlString {
-    UtlMemory<char> buffer;
-    int length;
-
-    const char* data() const noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
