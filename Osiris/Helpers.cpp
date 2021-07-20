@@ -5,6 +5,7 @@
 #include <cwctype>
 #include <fstream>
 #include <random>
+#include <span>
 #include <string_view>
 #include <unordered_map>
 
@@ -109,10 +110,11 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
     return upperCase;
 }
 
-static void toUpper(wchar_t* str, std::size_t len) noexcept
+static void toUpper(std::span<wchar_t> str) noexcept
 {
     static std::unordered_map<wchar_t, wchar_t> upperCache;
-    for (std::size_t i = 0; i < len; ++i) {
+
+    for (std::size_t i = 0; i < str.size(); ++i) {
         if (str[i] >= 'a' && str[i] <= 'z') {
             str[i] -= ('a' - 'A');
         } else if (str[i] > 127) {
@@ -129,7 +131,7 @@ static void toUpper(wchar_t* str, std::size_t len) noexcept
 
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    ::toUpper(str.data(), str.length());
+    ::toUpper(str);
     return str;
 }
 
