@@ -604,6 +604,9 @@
     <ClInclude Include="SDK\EconItemView.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\PlantedC4.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -291,6 +291,7 @@
     <ClInclude Include="SDK\Pad.h" />
     <ClInclude Include="SDK\Panorama.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
+    <ClInclude Include="SDK\PlantedC4.h" />
     <ClInclude Include="SDK\Platform.h" />
     <ClInclude Include="SDK\PlayerResource.h" />
     <ClInclude Include="SDK\Prediction.h" />
