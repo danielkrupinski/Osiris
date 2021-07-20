@@ -1198,8 +1198,7 @@ void loadEquipmentFromJson(const json& j) noexcept
     if (!equipment.is_array())
         return;
 
-    for (std::size_t i = 0; i < equipment.size(); ++i) {
-        const auto& equipped = equipment[i];
+    for (const auto& equipped : equipment) {
         if (!equipped.contains("Slot"))
             continue;
 
