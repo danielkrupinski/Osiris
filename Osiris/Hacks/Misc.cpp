@@ -425,16 +425,13 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     if (!miscConfig.fastPlant)
         return;
 
-    static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
-
-    if (plantAnywhere->getInt())
+    if (static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere"); plantAnywhere->getInt())
         return;
 
     if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->flags() & 1))
         return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+    if (const auto activeWeapon = localPlayer->getActiveWeapon(); !activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
         return;
 
     cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -633,8 +630,7 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
         }
     }
 
-    static auto nextChangeTime{ 0.0f };
-    if (nextChangeTime <= memory->globalVars->realtime) {
+    if (static auto nextChangeTime = 0.0f; nextChangeTime <= memory->globalVars->realtime) {
         name->setValue(newName);
         nextChangeTime = memory->globalVars->realtime + delay;
         return true;
@@ -863,9 +859,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
-
-            if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
+            if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     auto& purchase = playerPurchases[player->handle()];
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
@@ -893,9 +887,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
         if (!miscConfig.purchaseList.enabled)
             return;
 
-        static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime");
-
-        if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
+        if (static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime"); (!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
             return;
 
         ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
