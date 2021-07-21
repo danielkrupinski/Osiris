@@ -17,6 +17,7 @@ namespace Misc
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
+    void settotalFOV(float fov) noexcept;
 
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
@@ -58,6 +59,7 @@ namespace Misc
     void voteRevealer(GameEvent& event) noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
+    void drawAimBotFOV(ImDrawList* drawList) noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
