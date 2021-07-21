@@ -265,6 +265,11 @@ private:
         });
     }
 
+    [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
+    {
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isSticker(); });
+    }
+
     StaticDataImpl()
     {
         assert(memory && interfaces);
