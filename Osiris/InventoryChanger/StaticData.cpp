@@ -154,7 +154,7 @@ private:
 
                 lootListIndices.push_back(lootListIdx);
                 Case caseData;
-                caseData.isSouvenirPackage = item->hasTournamentEventID();
+                caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
                 _gameItems.emplace_back(Type::Case, item->getRarity(), item->getWeaponId(), _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {

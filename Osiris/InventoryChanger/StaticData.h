@@ -78,11 +78,12 @@ namespace StaticData
 
     struct Case {
         bool willProduceStatTrak = false;
-        bool isSouvenirPackage = false;
+        std::uint32_t souvenirPackageTournamentID = 0;
         std::size_t lootBeginIdx = 0;
         std::size_t lootEndIdx = 0;
 
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
+        bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
     const std::vector<GameItem>& gameItems() noexcept;
