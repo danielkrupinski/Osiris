@@ -160,7 +160,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
+    if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->isFullAuto() && localPlayer->shotsFired() > 1)
         return;
 
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
@@ -177,7 +177,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer->getEyePosition();
-
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
