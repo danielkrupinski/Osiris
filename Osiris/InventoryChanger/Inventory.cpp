@@ -4,6 +4,7 @@
 
 #include "../Helpers.h"
 #include "Inventory.h"
+#include "ItemGenerator.h"
 #include "../Memory.h"
 #include "../SDK/EconItemView.h"
 #include "../SDK/Entity.h"
@@ -213,34 +214,9 @@ private:
         item->markAsDeleted();
     }
 
-    static std::size_t createDefaultDynamicData(std::size_t gameItemIndex) noexcept
-    {
-        std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
-
-        if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
-            const auto& staticData = StaticData::paintKits()[item.dataIndex];
-            DynamicSkinData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
-            dynamicData.seed = Helpers::random(1, 1000);
-            index = Inventory::emplaceDynamicData(std::move(dynamicData));
-        } else if (item.isGlove()) {
-            const auto& staticData = StaticData::paintKits()[item.dataIndex];
-            DynamicGloveData dynamicData;
-            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
-            dynamicData.seed = Helpers::random(1, 1000);
-            index = Inventory::emplaceDynamicData(std::move(dynamicData));
-        } else if (item.isAgent()) {
-            index = Inventory::emplaceDynamicData(DynamicAgentData{});
-        } else if (item.isMusic()) {
-            index = Inventory::emplaceDynamicData(DynamicMusicData{});
-        }
-
-        return index;
-    }
-
     std::uint64_t _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
