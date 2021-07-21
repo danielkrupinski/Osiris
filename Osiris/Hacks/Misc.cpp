@@ -52,6 +52,7 @@
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
+#include <Config.h>
 
 struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
@@ -123,6 +124,8 @@ struct MiscConfig {
     std::string customKillSound;
     std::string customHitSound;
     PurchaseList purchaseList;
+    ColorToggle drawAimFOV{ 0.0f, 0.0f, 1.0f, 1.0f };
+    float totalFov;
 
     struct Reportbot {
         bool enabled = false;
@@ -177,6 +180,11 @@ float Misc::maxAngleDelta() noexcept
 float Misc::aspectRatio() noexcept
 {
     return miscConfig.aspectratio;
+}
+
+void Misc::settotalFOV(float fov) noexcept
+{
+    miscConfig.totalFov = fov;
 }
 
 void Misc::edgejump(UserCmd* cmd) noexcept
@@ -1209,6 +1217,54 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
+void Misc::drawAimBotFOV(ImDrawList* drawList) noexcept
+{
+    if (!miscConfig.drawAimFOV.enabled)
+        return;
+
+    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || !activeWeapon->clip())
+        return;
+
+    if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
+        return;
+
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
+    if (!weaponIndex)
+        return;
+
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = weaponClass;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = 0;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        return;
+
+    if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->isFullAuto() && localPlayer->shotsFired() > 1)
+        return;
+
+    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
+        return;
+
+    if (config->aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+        return;
+
+    const auto& screensize = ImGui::GetIO().DisplaySize;
+    float radius = std::tan(Helpers::deg2rad(config->aimbot[weaponIndex].fov) / 2.f) / std::tan(Helpers::deg2rad(localPlayer->isScoped() ? localPlayer->fov() : miscConfig.totalFov) / 2.f) * screensize.x;
+    const ImVec2 screen_mid = { screensize.x / 2.0f, screensize.y / 2.0f };
+
+    const auto aimPunchAngle = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
+
+    if (ImVec2 pos; worldToScreen(aimPunchAngle, pos))
+        drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(miscConfig.drawAimFOV.asColor4()), 360);
+}
+
 void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
@@ -1410,6 +1466,8 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGuiCustom::colorPicker("Draw AimBot FOV", miscConfig.drawAimFOV);
+
     ImGui::Checkbox("Purchase List", &miscConfig.purchaseList.enabled);
     ImGui::SameLine();
 
@@ -1563,6 +1621,7 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read<value_t::object>(j, "Draw AimBot FOV", m.drawAimFOV);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1701,6 +1760,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Draw AimBot FOV", drawAimFOV);
 }
 
 json Misc::toJson() noexcept
