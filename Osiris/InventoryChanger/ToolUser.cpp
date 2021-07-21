@@ -1,5 +1,6 @@
 #include "../Interfaces.h"
 #include "Inventory.h"
+#include "ItemGenerator.h"
 #include "../Memory.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
@@ -105,54 +106,13 @@ private:
         }
     }
 
-    // Move this to loot generator
-    static float generateWear() noexcept
-    {
-        float wear;
-        if (const auto condition = Helpers::random(1, 10000); condition <= 1471)
-            wear = Helpers::random(0.0f, 0.07f);
-        else if (condition <= 3939)
-            wear = Helpers::random(0.07f, 0.15f);
-        else if (condition <= 8257)
-            wear = Helpers::random(0.15f, 0.38f);
-        else if (condition <= 9049)
-            wear = Helpers::random(0.38f, 0.45f);
-        else
-            wear = Helpers::random(0.45f, 1.0f);
-        return wear;
-    }
-    //
-
     void _openContainer(InventoryItem& container) const noexcept
     {
         assert(container.isCase());
         const auto& caseData = StaticData::cases()[container.get().dataIndex];
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
-
-            // Move this to loot generator
-            const auto unlockedItemIdx = StaticData::caseLoot()[Helpers::random(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
-            std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
-
-            if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
-                DynamicMusicData dynamicData;
-                dynamicData.statTrak = 0;
-                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-            } else if (item.isSkin()) {
-                DynamicSkinData dynamicData;
-                const auto& staticData = StaticData::paintKits()[item.dataIndex];
-                dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
-                dynamicData.seed = Helpers::random(1, 1000);
-
-                if (caseData.isSouvenirPackage)
-                    dynamicData.isSouvenir = true;
-                else if (Helpers::random(0, 9) == 0)
-                    dynamicData.statTrak = 0;
-
-                dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-            }
-            //
-
+            const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(caseData);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
