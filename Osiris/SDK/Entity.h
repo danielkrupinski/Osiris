@@ -276,3 +276,5 @@ public:
         return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
     }
 };
+
+static_assert(sizeof(Entity) == 1);
