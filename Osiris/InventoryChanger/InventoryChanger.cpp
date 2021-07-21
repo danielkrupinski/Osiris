@@ -68,22 +68,23 @@ static void sendInventoryUpdatedEvent() noexcept
 
 static Entity* createGlove(int entry, int serial) noexcept
 {
-    static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
-
-    if (!createWearable) {
-        createWearable = []() -> decltype(createWearable) {
-            for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-                if (clientClass->classId == ClassId::EconWearable)
-                    return clientClass->createFunction;
-            return nullptr;
-        }();
-    }
+    static const auto createWearable = []{
+        std::add_pointer_t<Entity* __CDECL(int, int)> createWearableFn = nullptr;
+        for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+            if (clientClass->classId == ClassId::EconWearable) {
+                createWearableFn = clientClass->createFunction;
+                break;
+            }
+        }
+        return createWearableFn;
+    }();
 
     if (!createWearable)
         return nullptr;
 
-    createWearable(entry, serial);
-    return interfaces->entityList->getEntity(entry);
+    if (const auto wearable = createWearable(entry, serial))
+        return reinterpret_cast<Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
+    return nullptr;
 }
 
 static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
