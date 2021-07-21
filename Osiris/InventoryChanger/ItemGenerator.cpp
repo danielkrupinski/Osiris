@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "../Helpers.h"
 #include "Inventory.h"
 #include "ItemGenerator.h"
