@@ -270,6 +270,14 @@ private:
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isSticker(); });
     }
 
+    void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
+    {
+        for (auto& crate : _cases) {
+            if (isStickerCapsule(crate))
+                crate.souvenirPackageTournamentID = 0;
+        }
+    }
+
     StaticDataImpl()
     {
         assert(memory && interfaces);
@@ -289,6 +297,7 @@ private:
 
         initSortedVectors();
         buildLootLists(itemSchema, lootListIndices);
+        excludeTournamentStickerCapsulesFromSouvenirPackages();
 
         _gameItems.shrink_to_fit();
         _collectibles.shrink_to_fit();
