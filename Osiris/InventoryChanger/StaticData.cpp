@@ -139,15 +139,17 @@ private:
             if (!inventoryImage)
                 continue;
 
-            if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
+            const auto rarity = item->getRarity();
+
+            if (itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
                 _collectibles.emplace_back(isOriginal);
-                _gameItems.emplace_back(Type::Collectible, item->getRarity(), weaponID, _collectibles.size() - 1, inventoryImage);
+                _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
-                _gameItems.emplace_back(Type::NameTag, item->getRarity(), weaponID, 0, inventoryImage);
+                _gameItems.emplace_back(Type::NameTag, rarity, weaponID, 0, inventoryImage);
             } else if (item->isPatchable()) {
-                _gameItems.emplace_back(Type::Agent, item->getRarity(), weaponID, 0, inventoryImage);
+                _gameItems.emplace_back(Type::Agent, rarity, weaponID, 0, inventoryImage);
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
                 const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
                 if (lootListIdx == -1)
@@ -157,16 +159,16 @@ private:
                 Case caseData;
                 caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
-                _gameItems.emplace_back(Type::Case, item->getRarity(), weaponID, _cases.size() - 1, inventoryImage);
+                _gameItems.emplace_back(Type::Case, rarity, weaponID, _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                _gameItems.emplace_back(Type::CaseKey, item->getRarity(), weaponID, 0, inventoryImage);
+                _gameItems.emplace_back(Type::CaseKey, rarity, weaponID, 0, inventoryImage);
             } else if (const auto tool = item->getEconTool()) {
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
-                    _gameItems.emplace_back(Type::OperationPass, item->getRarity(), weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Type::OperationPass, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
-                    _gameItems.emplace_back(Type::StatTrakSwapTool, item->getRarity(), weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
-                    _gameItems.emplace_back(Type::ViewerPass, item->getRarity(), weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
             }
         }
     }
