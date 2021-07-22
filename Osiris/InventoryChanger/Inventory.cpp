@@ -131,6 +131,7 @@ private:
             const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.isSouvenir()) {
                 econItem->quality = 12;
+                econItem->setTournamentID(dynamicData.tournamentID);
             } else {
                 if (dynamicData.statTrak > -1) {
                     econItem->setStatTrak(dynamicData.statTrak);
