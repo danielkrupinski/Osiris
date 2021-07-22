@@ -42,6 +42,15 @@ struct DynamicMusicData {
     int statTrak = -1;
 };
 
+enum class TournamentTeam : std::uint8_t;
+enum class TournamentStage : std::uint8_t;
+
+struct DynamicSouvenirPackageData {
+    TournamentStage tournamentStage{};
+    TournamentTeam tournamentTeam1{};
+    TournamentTeam tournamentTeam2{};
+};
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
@@ -95,9 +104,11 @@ namespace Inventory
     DynamicGloveData& dynamicGloveData(std::size_t index) noexcept;
     DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
     DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
+    DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
+    std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
 }
