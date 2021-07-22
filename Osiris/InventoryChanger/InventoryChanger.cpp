@@ -887,8 +887,7 @@ json InventoryChanger::toJson() noexcept
 
     j["Version"] = CONFIG_VERSION;
 
-    auto& items = j["Items"];
-    for (const auto& item : Inventory::get()) {
+    for (auto& items = j["Items"]; const auto& item : Inventory::get()) {
         if (item.isDeleted())
             continue;
 
