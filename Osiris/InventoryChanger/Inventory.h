@@ -21,6 +21,8 @@ struct DynamicSkinData {
     std::uint32_t tournamentID = 0;
     std::array<StickerConfig, 5> stickers;
     std::string nameTag;
+
+    [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
 
 struct PatchConfig {
