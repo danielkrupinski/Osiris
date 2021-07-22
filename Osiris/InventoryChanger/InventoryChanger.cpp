@@ -919,8 +919,8 @@ json InventoryChanger::toJson() noexcept
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
-            if (dynamicData.isSouvenir)
-                itemConfig["Is Souvenir"] = dynamicData.isSouvenir;
+            if (dynamicData.tournamentID != 0)
+                itemConfig["Tournament ID"] = dynamicData.tournamentID;
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
             if (dynamicData.statTrak > -1)
@@ -1057,9 +1057,9 @@ json InventoryChanger::toJson() noexcept
 {
     DynamicSkinData dynamicData;
 
-    if (j.contains("Is Souvenir")) {
-        if (const auto& isSouvenir = j["Is Souvenir"]; isSouvenir.is_boolean())
-            dynamicData.isSouvenir = isSouvenir;
+    if (j.contains("Tournament ID")) {
+        if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
+            dynamicData.tournamentID = tournamentID;
     }
 
     if (j.contains("Wear")) {

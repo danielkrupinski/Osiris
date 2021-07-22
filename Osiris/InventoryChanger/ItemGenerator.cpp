@@ -38,7 +38,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
         dynamicData.seed = Helpers::random(1, 1000);
 
         if (caseData.isSouvenirPackage())
-            dynamicData.isSouvenir = true;
+            dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
         else if (Helpers::random(0, 9) == 0)
             dynamicData.statTrak = 0;
 

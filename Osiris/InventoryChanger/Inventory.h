@@ -15,10 +15,10 @@ struct StickerConfig {
 };
 
 struct DynamicSkinData {
-    bool isSouvenir = false;
     float wear = 0.0f;
     int seed = 1;
     int statTrak = -1;
+    std::uint32_t tournamentID = 0;
     std::array<StickerConfig, 5> stickers;
     std::string nameTag;
 };
