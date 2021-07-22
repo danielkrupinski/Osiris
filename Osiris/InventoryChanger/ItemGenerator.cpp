@@ -74,6 +74,8 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 3, emsOneKatowice2014Matches }
 });
 
+static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));
+
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
 {
     std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
