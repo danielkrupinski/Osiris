@@ -85,6 +85,11 @@ static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID
     return nullptr;
 }
 
+static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
+{
+    return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
+}
+
 [[nodiscard]] static std::span<const Match> filterMatchesToMap(const std::vector<Match>& matches, TournamentMap map) noexcept
 {
     if (map == TournamentMap::None)
