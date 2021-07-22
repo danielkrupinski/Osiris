@@ -245,6 +245,13 @@ enum class TournamentTeam : std::uint8_t {
     Mousesports = 29
 };
 
+enum class TournamentStage : std::uint8_t {
+    GroupStage = 2,
+    Quarterfinal = 5,
+    Semifinal = 8,
+    GrandFinal = 11
+};
+
 class EconItem {
 public:
 #ifdef _WIN32
