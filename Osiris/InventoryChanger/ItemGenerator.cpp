@@ -98,6 +98,8 @@ static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID
     // not using std::ranges::equal_range() here because it requires extra operators
     if (const auto [begin, end] = std::equal_range(matches.begin(), matches.end(), map, Comp{}); begin != end)
         return { begin, end };
+
+    assert(false && "Couldn't find a match played on a map of a souvenir package!");
     return {};
 }
 
