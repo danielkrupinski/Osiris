@@ -237,17 +237,46 @@ private:
         }
     }
 
+    TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) const noexcept
+    {
+        if (lootListName.ends_with("de_dust2"))
+            return TournamentMap::Dust2;
+        else if (lootListName.ends_with("de_mirage"))
+            return TournamentMap::Mirage;
+        else if (lootListName.ends_with("de_inferno"))
+            return TournamentMap::Inferno;
+        else if (lootListName.ends_with("de_cbble"))
+            return TournamentMap::Cobblestone;
+        else if (lootListName.ends_with("de_overpass"))
+            return TournamentMap::Overpass;
+        else if (lootListName.ends_with("de_cache"))
+            return TournamentMap::Cache;
+        else if (lootListName.ends_with("de_train"))
+            return TournamentMap::Train;
+        else if (lootListName.ends_with("de_nuke"))
+            return TournamentMap::Nuke;
+        else if (lootListName.ends_with("de_vertigo"))
+            return TournamentMap::Vertigo;
+        else
+            return TournamentMap::None;
+    }
+
     void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
     {
         assert(lootListIndices.size() == _cases.size());
 
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
+            const auto lootListName = itemSchema->revolvingLootLists.memory[lootListIndices[i]].value;
+
             _cases[i].lootBeginIdx = _caseLoot.size();
-            if (const auto lootList = itemSchema->getLootList(itemSchema->revolvingLootLists.memory[lootListIndices[i]].value))
+            if (const auto lootList = itemSchema->getLootList(lootListName))
                 fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[i].willProduceStatTrak);
             else
                 rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
             _cases[i].lootEndIdx = _caseLoot.size();
+
+            if (_cases[i].isSouvenirPackage())
+                _cases[i].tournamentMap = getTournamentMapOfSouvenirPackage(lootListName);
         }
     }
 

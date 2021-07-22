@@ -76,8 +76,22 @@ namespace StaticData
         std::wstring nameUpperCase;
     };
 
+    enum class TournamentMap : std::uint8_t {
+        None = 0,
+        Dust2,
+        Mirage,
+        Inferno,
+        Cobblestone,
+        Overpass,
+        Cache,
+        Train,
+        Nuke,
+        Vertigo
+    };
+
     struct Case {
         bool willProduceStatTrak = false;
+        TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
         std::size_t lootBeginIdx = 0;
         std::size_t lootEndIdx = 0;
