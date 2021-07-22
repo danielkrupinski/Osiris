@@ -58,14 +58,6 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
     }
 }
 
-static void sendInventoryUpdatedEvent() noexcept
-{
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MyPersona_InventoryUpdated")); idx != -1) {
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
-    }
-}
-
 static Entity* createGlove(int entry, int serial) noexcept
 {
     static const auto createWearable = []{
