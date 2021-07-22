@@ -240,6 +240,11 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+enum class TournamentTeam : std::uint8_t {
+    Titan = 27,
+    Mousesports = 29
+};
+
 class EconItem {
 public:
 #ifdef _WIN32
