@@ -5,6 +5,8 @@
 #include "Inventory.h"
 #include "ItemGenerator.h"
 
+#include "../SDK/ItemSchema.h"
+
 static float generateWear() noexcept
 {
     float wear;
@@ -62,6 +64,10 @@ struct Match {
 struct Tournament {
     std::uint32_t tournamentID;
     const std::vector<Match>& matches;
+};
+
+static const std::vector<Match> emsOneKatowice2014Matches{
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::Mousesports, {} }
 };
 
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
