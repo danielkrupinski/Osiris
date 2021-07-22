@@ -70,6 +70,10 @@ static const std::vector<Match> emsOneKatowice2014Matches{
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::Mousesports, {} }
 };
 
+constexpr auto tournaments = std::to_array<Tournament>({
+    { 3, emsOneKatowice2014Matches }
+});
+
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
 {
     std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
