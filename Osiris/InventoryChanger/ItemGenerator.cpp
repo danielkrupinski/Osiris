@@ -48,6 +48,16 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
     return std::make_pair(unlockedItemIdx, dynamicDataIdx);
 }
 
+using StaticData::TournamentMap;
+
+struct Match {
+    TournamentMap map;
+    TournamentStage stage;
+    TournamentTeam team1;
+    TournamentTeam team2;
+    std::vector<int> mvpPlayersIDs;
+};
+
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
 {
     std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
