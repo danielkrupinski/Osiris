@@ -95,13 +95,7 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     if (map == TournamentMap::None)
         return matches;
 
-    struct Comp {
-        bool operator()(TournamentMap map, const Match& match) const noexcept { return map < match.map; }
-        bool operator()(const Match& match, TournamentMap map) const noexcept { return match.map < map; }
-    };
-
-    // not using std::ranges::equal_range() here because it requires extra operators
-    if (const auto [begin, end] = std::equal_range(matches.begin(), matches.end(), map, Comp{}); begin != end)
+    if (const auto [begin, end] = std::ranges::equal_range(matches, map, {}, &Match::map); begin != end)
         return { begin, end };
 
     assert(false && "Couldn't find a match played on a map of a souvenir package!");
