@@ -932,6 +932,12 @@ json InventoryChanger::toJson() noexcept
                 stickerConfig["Slot"] = i;
                 stickers.push_back(std::move(stickerConfig));
             }
+
+            if (dynamicData.tournamentStage != TournamentStage{}) {
+                itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
+                itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
+                itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
+            }
             break;
         }
         case StaticData::Type::Music: {
