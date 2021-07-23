@@ -403,3 +403,9 @@ StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, 
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
 }
+
+StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
+{
+    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
+    nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
+}

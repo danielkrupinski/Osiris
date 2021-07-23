@@ -67,11 +67,12 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name, float wearRemapMin = 0.0f, float wearRemapMax = 1.0f) noexcept;
+        PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, std::wstring&& name) noexcept;
 
         int id;
-        float wearRemapMin;
-        float wearRemapMax;
+        float wearRemapMin = 0.0f;
+        float wearRemapMax = 1.0f;
         std::string name;
         std::wstring nameUpperCase;
     };
