@@ -1079,6 +1079,21 @@ json InventoryChanger::toJson() noexcept
             dynamicData.nameTag = nameTag;
     }
 
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            dynamicData.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            dynamicData.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            dynamicData.tournamentTeam2 = tournamentTeam2;
+    }
+
     dynamicData.stickers = loadSkinStickersFromJson(j);
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
