@@ -241,8 +241,14 @@ public:
 };
 
 enum class TournamentTeam : std::uint8_t {
+    NinjasInPyjamas = 1,
+    HellRaisers = 25,
+    TeamLDLC = 26,
     Titan = 27,
-    Mousesports = 29
+    _3DMax = 28,
+    Mousesports = 29,
+    VirtusPro = 31,
+    VoxEminor = 32
 };
 
 enum class TournamentStage : std::uint8_t {
