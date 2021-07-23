@@ -11,6 +11,11 @@
 
 using namespace StaticData;
 
+constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
+{
+    return static_cast<std::underlying_type_t<WeaponId>>(a) <=> static_cast<std::underlying_type_t<WeaponId>>(b);
+}
+
 class StaticDataImpl {
 public:
     static const auto& gameItems() noexcept { return instance()._gameItems; }
