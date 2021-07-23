@@ -143,6 +143,12 @@ private:
                     econItem->quality = 3;
             }
 
+            if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
+                econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
+                econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
+                econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
+            }
+
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
             memory->setCustomName(econItem, dynamicData.nameTag.c_str());
