@@ -39,6 +39,9 @@ struct StickerKit {
     UtlString itemName;
     PAD(2 * sizeof(UtlString))
     UtlString inventoryImage;
+    int tournamentID;
+    int tournamentTeamID;
+    int torunamentPlayerID;
 };
 
 union AttributeDataUnion {
