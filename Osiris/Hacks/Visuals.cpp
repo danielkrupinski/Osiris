@@ -68,7 +68,10 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-    ColorToggle smokeTimer{ 0.0f, 00.0f, 1.0f, 1.0f };
+    bool smokeTimer{ false };
+    Color4 smokeTimer_BG{ 1.0f, 1.0f, 1.0f, 0.5f };
+    Color4 smokeTimer_TIMER{ 0.0f, 0.0f, 1.0f, 1.0f };
+    Color4 smokeTimer_TEXT{ 0.0f, 0.0f, 0.0f, 1.0f };
 
     struct ColorCorrection {
         bool enabled = false;
@@ -139,7 +142,10 @@ static void from_json(const json& j, VisualsConfig& v)
     read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
-    read<value_t::object>(j, "Smoke timer", v.smokeTimer);
+    read(j, "Smoke timer", v.smokeTimer);
+    read<value_t::object>(j, "Smoke timer BG", v.smokeTimer_BG);
+    read<value_t::object>(j, "Smoke timer TIMER", v.smokeTimer_TIMER);
+    read<value_t::object>(j, "Smoke timer TEXT", v.smokeTimer_TEXT);
 }
 
 static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
@@ -201,6 +207,9 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
     WRITE("Smoke timer", smokeTimer);
+    WRITE("Smoke timer BG", smokeTimer_BG);
+    WRITE("Smoke timer TIMER", smokeTimer_TIMER);
+    WRITE("Smoke timer TEXT", smokeTimer_TEXT);
 }
 
 bool Visuals::isThirdpersonOn() noexcept
@@ -728,7 +737,7 @@ void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
 
 void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
 {
-    if (!visualsConfig.smokeTimer.enabled)
+    if (!visualsConfig.smokeTimer)
         return;
 
     if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
@@ -757,9 +766,9 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
                     pos.x - (textSize.x / 2),
                     pos.y + (textSize.y));
                 
-                drawList->AddRectFilled(rect_out.Min, rect_out.Max, IM_COL32_WHITE);
-                drawList->AddRectFilled(rect_in.Min, rect_in.Max, Helpers::calculateColor(visualsConfig.smokeTimer.asColor4()));
-                drawList->AddText({ pos.x - (textSize.x / 2), pos.y - (textSize.y / 2) }, IM_COL32_BLACK, text.str().c_str());
+                drawList->AddRectFilled(rect_out.Min, rect_out.Max, Helpers::calculateColor(visualsConfig.smokeTimer_BG));
+                drawList->AddRectFilled(rect_in.Min, rect_in.Max, Helpers::calculateColor(visualsConfig.smokeTimer_TIMER));
+                drawList->AddText({ pos.x - (textSize.x / 2), pos.y - (textSize.y / 2) }, Helpers::calculateColor(visualsConfig.smokeTimer_TEXT), text.str().c_str());
             }
         }
         else
@@ -879,7 +888,19 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
-    ImGuiCustom::colorPicker("Smoke Timer", visualsConfig.smokeTimer);
+
+    ImGui::Checkbox("Smoke Timer", &visualsConfig.smokeTimer);
+    ImGui::SameLine();
+    if (ImGui::Button("...##smoke_timer"))
+        ImGui::OpenPopup("popup_smokeTimer");
+
+    if (ImGui::BeginPopup("popup_smokeTimer"))
+    {
+        ImGuiCustom::colorPicker("BackGround color", visualsConfig.smokeTimer_BG);
+        ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer_TEXT);
+        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer_TIMER);
+        ImGui::EndPopup();
+    }
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
     ImGui::SameLine();
