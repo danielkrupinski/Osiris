@@ -127,24 +127,13 @@ private:
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
             const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
             const auto isOriginal = (item->getQuality() == 1);
-            const auto weaponID = item->getWeaponId();
-
-            if (!_weaponNames.contains(weaponID)) {
-                std::wstring nameWide = interfaces->localize->findSafe(item->getItemBaseName());
-                if (isCollectible && isOriginal) {
-                    nameWide += L" (";
-                    nameWide += interfaces->localize->findSafe("genuine");
-                    nameWide += L") ";
-                }
-                _weaponNames.emplace(weaponID, interfaces->localize->convertUnicodeToAnsi(nameWide.c_str()));
-                _weaponNamesUpper.emplace(weaponID, Helpers::toUpper(std::move(nameWide)));
-            }
-
+ 
             const auto inventoryImage = item->getInventoryImage();
             if (!inventoryImage)
                 continue;
 
             const auto rarity = item->getRarity();
+            const auto weaponID = item->getWeaponId();
 
             if (itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
@@ -174,6 +163,23 @@ private:
                     _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
                     _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
+            }
+        }
+
+        for (const auto& item : _gameItems) {
+            if (!_weaponNames.contains(item.weaponID)) {
+                const auto def = itemSchema->getItemDefinitionInterface(item.weaponID);
+                if (!def)
+                    continue;
+
+                std::wstring nameWide = interfaces->localize->findSafe(def->getItemBaseName());
+                if (item.isCollectible() && _collectibles[item.dataIndex].isOriginal) {
+                    nameWide += L" (";
+                    nameWide += interfaces->localize->findSafe("genuine");
+                    nameWide += L") ";
+                }
+                _weaponNames.emplace(item.weaponID, interfaces->localize->convertUnicodeToAnsi(nameWide.c_str()));
+                _weaponNamesUpper.emplace(item.weaponID, Helpers::toUpper(std::move(nameWide)));
             }
         }
     }
@@ -314,7 +320,7 @@ private:
         initMusicData(itemSchema);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, lootListIndices);
-
+     
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
