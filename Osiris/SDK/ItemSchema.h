@@ -242,11 +242,19 @@ public:
 
 enum class TournamentTeam : std::uint8_t {
     NinjasInPyjamas = 1,
+    ComplexityGaming = 3,
+    IBUYPOWER = 5,
+    Fnatic = 6,
+    ClanMystik = 7,
+    LGBEsports = 9,
+    NatusVincere = 12,
+    TeamDignitas = 24,
     HellRaisers = 25,
     TeamLDLC = 26,
     Titan = 27,
     _3DMax = 28,
     Mousesports = 29,
+    ReasonGaming = 30,
     VirtusPro = 31,
     VoxEminor = 32
 };
