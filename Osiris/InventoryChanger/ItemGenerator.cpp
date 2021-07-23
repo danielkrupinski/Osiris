@@ -46,6 +46,10 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
 
         if (caseData.isSouvenirPackage()) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
+            const auto& souvenir = Inventory::dynamicSouvenirPackageData(caseItem.getDynamicDataIndex());
+            dynamicData.tournamentStage = souvenir.tournamentStage;
+            dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
+            dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
