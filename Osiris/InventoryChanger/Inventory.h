@@ -14,6 +14,9 @@ struct StickerConfig {
     float wear = 0.0f;
 };
 
+enum class TournamentTeam : std::uint8_t;
+enum class TournamentStage : std::uint8_t;
+
 struct DynamicSkinData {
     float wear = 0.0f;
     int seed = 1;
@@ -21,6 +24,9 @@ struct DynamicSkinData {
     std::uint32_t tournamentID = 0;
     std::array<StickerConfig, 5> stickers;
     std::string nameTag;
+    TournamentStage tournamentStage{};
+    TournamentTeam tournamentTeam1{};
+    TournamentTeam tournamentTeam2{};
 
     [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
@@ -41,9 +47,6 @@ struct DynamicGloveData {
 struct DynamicMusicData {
     int statTrak = -1;
 };
-
-enum class TournamentTeam : std::uint8_t;
-enum class TournamentStage : std::uint8_t;
 
 struct DynamicSouvenirPackageData {
     TournamentStage tournamentStage{};
