@@ -119,6 +119,13 @@ static const std::vector<Match> emsOneKatowice2014Matches{
     { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::LGBEsports, {} },
     { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::LGBEsports, {} },
 
+    // Semifinals
+    { TournamentMap::Inferno, TournamentStage::Semifinal, TournamentTeam::TeamDignitas, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Nuke, TournamentStage::Semifinal, TournamentTeam::TeamDignitas, TournamentTeam::NinjasInPyjamas, {} },
+
+    { TournamentMap::Inferno, TournamentStage::Semifinal, TournamentTeam::LGBEsports, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Mirage, TournamentStage::Semifinal, TournamentTeam::LGBEsports, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Train, TournamentStage::Semifinal, TournamentTeam::LGBEsports, TournamentTeam::VirtusPro, {} },
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
