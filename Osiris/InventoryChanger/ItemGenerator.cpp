@@ -79,7 +79,7 @@ static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID
 
 [[nodiscard]] static const std::vector<Match>* getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
-    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end())
+    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
         return &it->matches;
     assert(false && "Missing tournament match data!");
     return nullptr;
