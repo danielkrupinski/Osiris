@@ -24,8 +24,11 @@ static float generateWear() noexcept
     return wear;
 }
 
-std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const StaticData::Case& caseData) noexcept
+std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
+    assert(caseItem.isCase());
+
+    const auto& caseData = StaticData::cases()[caseItem.get().dataIndex];
     assert(caseData.hasLoot());
 
     const auto unlockedItemIdx = StaticData::caseLoot()[Helpers::random(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
@@ -41,10 +44,11 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (caseData.isSouvenirPackage())
+        if (caseData.isSouvenirPackage()) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
-        else if (Helpers::random(0, 9) == 0)
+        } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
+        }
 
         dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     }

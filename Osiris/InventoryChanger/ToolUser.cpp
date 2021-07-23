@@ -112,7 +112,7 @@ private:
         const auto& caseData = StaticData::cases()[container.get().dataIndex];
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
-            const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(caseData);
+            const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
