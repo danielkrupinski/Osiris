@@ -41,7 +41,7 @@ struct StickerKit {
     UtlString inventoryImage;
     int tournamentID;
     int tournamentTeamID;
-    int torunamentPlayerID;
+    int tournamentPlayerID;
 };
 
 union AttributeDataUnion {
