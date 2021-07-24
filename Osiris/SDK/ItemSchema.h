@@ -244,6 +244,7 @@ public:
 };
 
 enum class TournamentTeam : std::uint8_t {
+    None = 0,
     NinjasInPyjamas = 1,
     ComplexityGaming = 3,
     IBUYPOWER = 5,
