@@ -420,6 +420,15 @@ int StaticData::findTournamentGoldSticker(std::uint32_t tournamentID, Tournament
     return (it != items.end() ? StaticDataImpl::paintKits()[it->dataIndex].id : 0);
 }
 
+int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
+{
+    if (tournamentID == 3) // EMS One Katowice 2014
+        return Helpers::random(99, 100); // EMS Wolf / Skull
+    else if (tournamentID == 4) // ELS One Cologne 2014
+        return 172;
+    return StaticData::findTournamentGoldSticker(tournamentID, TournamentTeam{}, 0);
+}
+
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
 
 StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
