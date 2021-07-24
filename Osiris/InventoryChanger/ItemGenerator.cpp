@@ -80,6 +80,15 @@ struct Tournament {
     const std::vector<Match>& matches;
 };
 
+static const std::vector<Match> dreamHack2013Matches{
+    // Group A
+   { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+   { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::LGBEsports, {} },
+   { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::LGBEsports, TournamentTeam::NatusVincere, {} },
+   { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::Fnatic, {} },
+   { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik,TournamentTeam::LGBEsports, {} },
+};
+
 static const std::vector<Match> emsOneKatowice2014Matches{
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::Mousesports, {} },
@@ -138,6 +147,7 @@ static const std::vector<Match> emsOneKatowice2014Matches{
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
+    { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches }
 });
 
