@@ -24,6 +24,10 @@ static float generateWear() noexcept
     return wear;
 }
 
+using StaticData::TournamentMap;
+
+std::array<StickerConfig, 5> generateSouvenirStickers(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept;
+
 std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
@@ -50,6 +54,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
+            dynamicData.stickers = generateSouvenirStickers(caseData.souvenirPackageTournamentID, caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
@@ -59,8 +64,6 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
 
     return std::make_pair(unlockedItemIdx, dynamicDataIdx);
 }
-
-using StaticData::TournamentMap;
 
 struct Match {
     TournamentMap map;
@@ -206,4 +209,29 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     }
 
     return index;
+}
+
+[[nodiscard]] static const Match* findTournamentMatch(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
+{
+    const auto matches = getTournamentMatches(tournamentID);
+    if (!matches)
+        return nullptr;
+
+    const auto matchesOnMap = filterMatchesToMap(*matches, map);
+    if (matchesOnMap.empty())
+        return nullptr;
+
+    const auto match = std::ranges::find_if(matchesOnMap, [stage, team1, team2](const auto& match) { return match.stage == stage && match.team1 == team1 && match.team2 == team2; });
+    return (match != matchesOnMap.end() ? &*match : nullptr);
+}
+
+[[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
+{
+    std::array<StickerConfig, 5> stickers;
+
+    if (tournamentID == 1) { // DreamHack 2013
+        stickers[Helpers::random(0, 3)].stickerID = Helpers::random(1, 12);
+    }
+
+    return stickers;
 }
