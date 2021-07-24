@@ -231,6 +231,9 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
 
     if (tournamentID == 1) { // DreamHack 2013
         stickers[Helpers::random(0, 3)].stickerID = Helpers::random(1, 12);
+    } else if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2)) {
+        if (tournamentID == 3) // EMS One Katowice 2014
+            stickers[0].stickerID = Helpers::random(99, 100); // EMS Wolf / Skull
     }
 
     return stickers;
