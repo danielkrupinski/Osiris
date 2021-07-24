@@ -400,13 +400,23 @@ std::size_t StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 int StaticData::findTournamentGoldSticker(std::uint32_t tournamentID, TournamentTeam team, int tournamentPlayerID) noexcept
 {
     const auto& items = StaticDataImpl::gameItems();
-    const auto it = std::ranges::find_if(items, [tournamentID, team, tournamentPlayerID](const auto& item) {
+    auto it = std::ranges::find_if(items, [tournamentID, team, tournamentPlayerID](const auto& item) {
         if (!item.isSticker())
             return false;
 
         const auto& paintKit = StaticDataImpl::paintKits()[item.dataIndex];
-        return paintKit.tournamentID == tournamentID && paintKit.tournamentTeam == team && paintKit.tournamentPlayerID == tournamentPlayerID;
+        return paintKit.tournamentID == tournamentID && paintKit.isGoldenSticker && paintKit.tournamentTeam == team && paintKit.tournamentPlayerID == tournamentPlayerID;
     });
+
+    if (it == items.end()) {
+        it = std::ranges::find_if(items, [tournamentID, team, tournamentPlayerID](const auto& item) {
+            if (!item.isSticker() || item.rarity < 5)
+                return false;
+
+            const auto& paintKit = StaticDataImpl::paintKits()[item.dataIndex];
+            return paintKit.tournamentID == tournamentID && paintKit.tournamentTeam == team && paintKit.tournamentPlayerID == tournamentPlayerID;
+        });
+    }
     return (it != items.end() ? StaticDataImpl::paintKits()[it->dataIndex].id : 0);
 }
 
