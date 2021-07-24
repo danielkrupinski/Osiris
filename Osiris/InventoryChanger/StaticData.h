@@ -6,6 +6,8 @@
 
 #include "../SDK/WeaponId.h"
 
+enum class TournamentTeam : std::uint8_t;
+
 namespace StaticData
 {
     constexpr auto InvalidItemIdx = static_cast<std::size_t>(-1);
@@ -67,12 +69,16 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
         PaintKit(int id, std::wstring&& name) noexcept;
+        PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
         float wearRemapMax = 1.0f;
+        std::uint32_t tournamentID = 0;
+        TournamentTeam tournamentTeam{};
+        int tournamentPlayerID = 0;
         std::string name;
         std::wstring nameUpperCase;
     };
