@@ -95,6 +95,13 @@ static const std::vector<Match> dreamHack2013Matches{
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::UniversalSoldiers, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::RecursiveEsports, TournamentTeam::UniversalSoldiers, {} },
 
+    // Group C
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VeryGames, TournamentTeam::Xapso, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NFaculty, TournamentTeam::ComplexityGaming, {} },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::NFaculty, TournamentTeam::Xapso, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ComplexityGaming, TournamentTeam::VeryGames, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::NFaculty, TournamentTeam::VeryGames, {} },
+
 };
 
 static const std::vector<Match> emsOneKatowice2014Matches{
