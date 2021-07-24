@@ -133,6 +133,11 @@ static const std::vector<Match> dreamHack2013Matches{
 
     { TournamentMap::Train, TournamentStage::Semifinal, TournamentTeam::Fnatic, TournamentTeam::ComplexityGaming, {} },
     { TournamentMap::Mirage, TournamentStage::Semifinal, TournamentTeam::Fnatic, TournamentTeam::ComplexityGaming, {} },
+
+    // Grand Final
+    { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Train, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
 };
 
 static const std::vector<Match> emsOneKatowice2014Matches{
