@@ -91,9 +91,10 @@ private:
             const auto isPatch = name.starts_with("patch");
             const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
             const auto isSticker = !isPatch && !isGraffiti;
-
+            
             if (isSticker) {
-                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID);
+                const auto isGolden = name.ends_with("gold");
+                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
                 _gameItems.emplace_back(Type::Sticker, stickerKit->rarity, WeaponId::Sticker, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             } else if (isPatch) {
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
@@ -410,7 +411,7 @@ StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, 
     nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
 }
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID) noexcept : id{ id }, nameUpperCase{ std::move(name) }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, tournamentPlayerID{ tournamentPlayerID }
+StaticData::PaintKit::PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept : id{ id }, nameUpperCase{ std::move(name) }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, tournamentPlayerID{ tournamentPlayerID }, isGoldenSticker{ isGoldenSticker }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
