@@ -225,6 +225,7 @@ private:
         if (const auto baseTypeCache = localInventory->getItemBaseTypeCache())
             baseTypeCache->removeObject(econItem);
 
+        econItem->destructor();
         item->markAsDeleted();
     }
 
