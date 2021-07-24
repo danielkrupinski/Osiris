@@ -82,11 +82,19 @@ struct Tournament {
 
 static const std::vector<Match> dreamHack2013Matches{
     // Group A
-   { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
-   { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::LGBEsports, {} },
-   { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::LGBEsports, TournamentTeam::NatusVincere, {} },
-   { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::Fnatic, {} },
-   { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik,TournamentTeam::LGBEsports, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::LGBEsports, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::LGBEsports, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::ClanMystik,TournamentTeam::LGBEsports, {} },
+
+    // Group B
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::RecursiveEsports, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::UniversalSoldiers, TournamentTeam::IBUYPOWER, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::RecursiveEsports, TournamentTeam::IBUYPOWER, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::UniversalSoldiers, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::RecursiveEsports, TournamentTeam::UniversalSoldiers, {} },
+
 };
 
 static const std::vector<Match> emsOneKatowice2014Matches{
