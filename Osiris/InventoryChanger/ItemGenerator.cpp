@@ -108,6 +108,23 @@ static const std::vector<Match> dreamHack2013Matches{
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::SKGaming, TournamentTeam::_ReasonGaming, {} },
     { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::AstanaDragons, TournamentTeam::CopenhagenWolves, {} },
     { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::AstanaDragons, TournamentTeam::_ReasonGaming, {} },
+
+    // Quarterfinals
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::LGBEsports, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::LGBEsports, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::LGBEsports, TournamentTeam::NinjasInPyjamas, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::CopenhagenWolves, TournamentTeam::VeryGames, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::CopenhagenWolves, TournamentTeam::VeryGames, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::CopenhagenWolves, TournamentTeam::VeryGames, {} },
+
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::RecursiveEsports, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::RecursiveEsports, {} },
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::RecursiveEsports, {} },
+
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
 };
 
 static const std::vector<Match> emsOneKatowice2014Matches{
