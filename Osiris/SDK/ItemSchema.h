@@ -260,6 +260,7 @@ enum class TournamentTeam : std::uint8_t {
     NFaculty = 13,
     SKGaming = 14,
     Xapso = 15,
+    _ReasonGaming = 16,
     TeamDignitas = 24,
     HellRaisers = 25,
     TeamLDLC = 26,
