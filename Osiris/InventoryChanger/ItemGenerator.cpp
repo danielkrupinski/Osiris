@@ -233,9 +233,19 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
 
     if (tournamentID == 1) { // DreamHack 2013
         stickers[0].stickerID = Helpers::random(1, 12);
-    } else if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2)) {
+    } else {
         if (tournamentID == 3) // EMS One Katowice 2014
             stickers[0].stickerID = Helpers::random(99, 100); // EMS Wolf / Skull
+        else if (tournamentID == 4) // ELS One Cologne 2014
+            stickers[0].stickerID = 172;
+        else
+            stickers[0].stickerID = StaticData::findTournamentGoldSticker(tournamentID, TournamentTeam{}, 0);
+
+        if (team1 != TournamentTeam{})
+            stickers[1].stickerID = StaticData::findTournamentGoldSticker(tournamentID, team1, 0);
+
+        if (team2 != TournamentTeam{})
+            stickers[2].stickerID = StaticData::findTournamentGoldSticker(tournamentID, team2, 0); 
     }
 
     std::mt19937 gen{ std::random_device{}() };
