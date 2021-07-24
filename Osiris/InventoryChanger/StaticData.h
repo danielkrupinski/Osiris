@@ -117,4 +117,6 @@ namespace StaticData
     const std::string& getWeaponName(WeaponId weaponID) noexcept;
 
     std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept;
+
+    int findTournamentGoldSticker(std::uint32_t tournamentID, TournamentTeam team, int tournamentPlayerID) noexcept;
 }
