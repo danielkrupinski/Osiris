@@ -189,7 +189,7 @@ private:
         }
 
         baseTypeCache->addObject(econItem);
-        memory->addEconItem(localInventory, econItem, false, false, false);
+        localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
         if (const auto inventoryComponent = *memory->uiComponentInventory) {
             memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
