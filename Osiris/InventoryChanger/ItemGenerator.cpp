@@ -125,6 +125,14 @@ static const std::vector<Match> dreamHack2013Matches{
     { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
     { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
     { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::AstanaDragons, TournamentTeam::ComplexityGaming, {} },
+
+    // Semifinals
+    { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VeryGames, {} },
+    { TournamentMap::Inferno, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VeryGames, {} },
+    { TournamentMap::Nuke, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VeryGames, {} },
+
+    { TournamentMap::Train, TournamentStage::Semifinal, TournamentTeam::Fnatic, TournamentTeam::ComplexityGaming, {} },
+    { TournamentMap::Mirage, TournamentStage::Semifinal, TournamentTeam::Fnatic, TournamentTeam::ComplexityGaming, {} },
 };
 
 static const std::vector<Match> emsOneKatowice2014Matches{
