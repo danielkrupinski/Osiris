@@ -422,7 +422,9 @@ int StaticData::findTournamentGoldSticker(std::uint32_t tournamentID, Tournament
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
-    if (tournamentID == 3) // EMS One Katowice 2014
+    if (tournamentID == 1) // DreamHack 2013
+        return Helpers::random(1, 12);
+    else if (tournamentID == 3) // EMS One Katowice 2014
         return Helpers::random(99, 100); // EMS Wolf / Skull
     else if (tournamentID == 4) // ELS One Cologne 2014
         return 172;
