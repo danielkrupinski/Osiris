@@ -389,7 +389,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 7, elsOneCologne2015Matches }
 });
 
-static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));
+static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
 [[nodiscard]] static const std::vector<Match>* getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
@@ -408,6 +408,8 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 {
     if (map == TournamentMap::None)
         return matches;
+
+    assert(std::ranges::is_sorted(matches, {}, &Match::map));
 
     if (const auto [begin, end] = std::ranges::equal_range(matches, map, {}, &Match::map); begin != end)
         return { begin, end };
