@@ -326,6 +326,13 @@ static const std::vector<Match> elsOneKatowice2015Matches{
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::LGBEsports, {} },
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::Titan, {} },
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::LGBEsports, {} },
+
+    // Group C
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::KeydStars, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::HellRaisers, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::HellRaisers, TournamentTeam::KeydStars, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::KeydStars, {} },
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
