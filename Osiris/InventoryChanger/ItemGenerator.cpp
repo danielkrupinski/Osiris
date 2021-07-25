@@ -284,6 +284,19 @@ static const std::vector<Match> dreamHack2014Matches{
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::MyXMG, TournamentTeam::Flipsid3Tactics, {} },
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::NatusVincere, {} },
 
+    // Quarterfinals
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::HellRaisers, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::HellRaisers, TournamentTeam::NinjasInPyjamas, {} },
+
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::PENTASports, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::PENTASports, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamLDLC, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamLDLC, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::TeamLDLC, TournamentTeam::Fnatic, {} },
+
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::TeamDignitas, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::TeamDignitas, {} },
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
