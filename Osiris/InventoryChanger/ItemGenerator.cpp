@@ -312,11 +312,22 @@ static const std::vector<Match> dreamHack2014Matches{
     { TournamentMap::Overpass, TournamentStage::GrandFinal, TournamentTeam::TeamLDLC, TournamentTeam::NinjasInPyjamas, {} },
 };
 
+static const std::vector<Match> elsOneKatowice2015Matches{
+    // Group A
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VoxEminor, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::NatusVincere, {} },
+
+};
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
     { 4, elsOneCologne2014Matches },
-    { 5, dreamHack2014Matches }
+    { 5, dreamHack2014Matches },
+    { 6, elsOneKatowice2015Matches }
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));
