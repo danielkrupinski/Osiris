@@ -340,6 +340,23 @@ static const std::vector<Match> elsOneKatowice2015Matches{
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Cloud9G2A, {} },
     { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::_3DMax, {} },
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::Cloud9G2A, {} },
+
+    // Quarterfinals
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::PENTASports, {} },
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::PENTASports, {} },
+
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
+
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
+
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
