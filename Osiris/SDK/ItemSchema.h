@@ -275,6 +275,12 @@ enum class TournamentTeam : std::uint8_t {
     EpsilonEsports = 35,
     LondonConspiracy = 36,
     TeamWolf = 37,
+    MyXMG = 38,
+    PENTASports = 39,
+    BravadoGaming = 40,
+    PlanetkeyDynamics = 41,
+    ESCGaming = 42,
+    Flipsid3Tactics = 43,
 };
 
 enum class TournamentStage : std::uint8_t {
