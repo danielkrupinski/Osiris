@@ -269,7 +269,12 @@ enum class TournamentTeam : std::uint8_t {
     Mousesports = 29,
     ReasonGaming = 30,
     VirtusPro = 31,
-    VoxEminor = 32
+    VoxEminor = 32,
+    Cloud9 = 33,
+    DATTeam = 34,
+    EpsilonEsports = 35,
+    LondonConspiracy = 36,
+    TeamWolf = 37,
 };
 
 enum class TournamentStage : std::uint8_t {
