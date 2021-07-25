@@ -281,6 +281,11 @@ enum class TournamentTeam : std::uint8_t {
     PlanetkeyDynamics = 41,
     ESCGaming = 42,
     Flipsid3Tactics = 43,
+    TeamEnVyUs = 46,
+    CounterLogicGaming = 49,
+    KeydStars = 50,
+    TeamSoloMidKinguin = 51,
+    Cloud9G2A = 52,
 };
 
 enum class TournamentStage : std::uint8_t {
