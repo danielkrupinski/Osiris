@@ -286,6 +286,12 @@ enum class TournamentTeam : std::uint8_t {
     KeydStars = 50,
     TeamSoloMidKinguin = 51,
     Cloud9G2A = 52,
+    Renegades = 53,
+    TeamImmunity = 54,
+    TeamKinguin = 55,
+    TeamEBettle = 56,
+    LuminosityGaming = 57,
+    TeamSoloMid = 58
 };
 
 enum class TournamentStage : std::uint8_t {
