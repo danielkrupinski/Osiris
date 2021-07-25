@@ -218,6 +218,13 @@ static const std::vector<Match> elsOneCologne2014Matches{
     { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::IBUYPOWER, TournamentTeam::DATTeam, {} },
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Fnatic, {} },
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::IBUYPOWER, {} },
+
+    // Group D
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::VoxEminor, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Titan, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::VoxEminor, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::Cloud9, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::TeamDignitas, {} },
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
