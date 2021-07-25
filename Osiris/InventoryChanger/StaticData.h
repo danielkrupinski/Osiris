@@ -86,14 +86,14 @@ namespace StaticData
 
     enum class TournamentMap : std::uint8_t {
         None = 0,
-        Dust2,
-        Mirage,
-        Inferno,
-        Cobblestone,
-        Overpass,
         Cache,
-        Train,
+        Cobblestone,
+        Dust2,
+        Inferno,
+        Mirage,
         Nuke,
+        Overpass,
+        Train,
         Vertigo
     };
 
