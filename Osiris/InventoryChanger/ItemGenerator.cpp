@@ -225,6 +225,22 @@ static const std::vector<Match> elsOneCologne2014Matches{
     { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::VoxEminor, {} },
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::Cloud9, {} },
     { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::TeamDignitas, {} },
+
+    // Quarterfinals
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::EpsilonEsports, TournamentTeam::TeamDignitas, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::EpsilonEsports, TournamentTeam::TeamDignitas, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::TeamLDLC, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::TeamLDLC, {} },
+    
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::Cloud9, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::Cloud9, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::Cloud9, TournamentTeam::NinjasInPyjamas, {} },
+
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
