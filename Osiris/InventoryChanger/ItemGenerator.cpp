@@ -270,6 +270,13 @@ static const std::vector<Match> dreamHack2014Matches{
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::CopenhagenWolves, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::IBUYPOWER, TournamentTeam::PENTASports, {} },
 
+    // Group C
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamLDLC, TournamentTeam::ESCGaming, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::PlanetkeyDynamics, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamLDLC, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::ESCGaming, TournamentTeam::PlanetkeyDynamics, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::ESCGaming, {} },
+
 };
 
 constexpr auto tournaments = std::to_array<Tournament>({
