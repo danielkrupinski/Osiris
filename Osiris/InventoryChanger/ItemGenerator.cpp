@@ -80,7 +80,7 @@ struct Tournament {
     std::span<const Match> matches;
 };
 
-static const std::vector<Match> dreamHack2013Matches{
+constexpr auto dreamHack2013Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::ClanMystik, TournamentTeam::LGBEsports, {} },
@@ -138,9 +138,9 @@ static const std::vector<Match> dreamHack2013Matches{
     { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
     { TournamentMap::Train, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::Fnatic, {} },
-};
+});
 
-static const std::vector<Match> emsOneKatowice2014Matches{
+constexpr auto emsOneKatowice2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::Mousesports, {} },
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::HellRaisers, {} },
@@ -195,9 +195,9 @@ static const std::vector<Match> emsOneKatowice2014Matches{
     // Grand Final
     { TournamentMap::Mirage, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, {} },
-};
+});
 
-static const std::vector<Match> elsOneCologne2014Matches{
+constexpr auto elsOneCologne2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamWolf, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::EpsilonEsports, TournamentTeam::HellRaisers, {} },
@@ -253,9 +253,9 @@ static const std::vector<Match> elsOneCologne2014Matches{
     { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Cache, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
-};
+});
 
-static const std::vector<Match> dreamHack2014Matches{
+constexpr auto dreamHack2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::BravadoGaming, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::HellRaisers, {} },
@@ -310,9 +310,9 @@ static const std::vector<Match> dreamHack2014Matches{
     { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::TeamLDLC, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::TeamLDLC, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Overpass, TournamentStage::GrandFinal, TournamentTeam::TeamLDLC, TournamentTeam::NinjasInPyjamas, {} },
-};
+});
 
-static const std::vector<Match> elsOneKatowice2015Matches{
+constexpr auto elsOneKatowice2015Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VoxEminor, {} },
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Flipsid3Tactics, {} },
@@ -368,9 +368,9 @@ static const std::vector<Match> elsOneKatowice2015Matches{
     { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Cache, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
-};
+});
 
-static const std::vector<Match> elsOneCologne2015Matches{
+constexpr auto elsOneCologne2015Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::CounterLogicGaming, {} },
     { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::Renegades, {} },
@@ -378,9 +378,9 @@ static const std::vector<Match> elsOneCologne2015Matches{
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::Renegades, TournamentTeam::Titan, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::Renegades, {} },
 
-};
+});
 
-const auto tournaments = std::to_array<Tournament>({
+constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
     { 4, elsOneCologne2014Matches },
@@ -389,7 +389,7 @@ const auto tournaments = std::to_array<Tournament>({
     { 7, elsOneCologne2015Matches }
 });
 
-//static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
+static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
 [[nodiscard]] static std::span<const Match> getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
