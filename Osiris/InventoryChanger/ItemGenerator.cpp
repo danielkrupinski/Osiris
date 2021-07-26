@@ -283,62 +283,46 @@ constexpr auto dreamHack2014Matches = std::to_array<Match>({
 static_assert(std::ranges::is_sorted(dreamHack2014Matches, {}, &Match::map));
 
 constexpr auto eslOneKatowice2015Matches = std::to_array<Match>({
-    // Group A
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VoxEminor, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Flipsid3Tactics, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::Flipsid3Tactics, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::NatusVincere, {} },
-
-    // Group B
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Titan, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::LGBEsports, {} },
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::LGBEsports, {} },
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::Titan, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::LGBEsports, {} },
-
-    // Group C
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::KeydStars, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::HellRaisers, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::HellRaisers, TournamentTeam::KeydStars, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::KeydStars, {} },
-
-    // Group D
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::_3DMax, {} },
-    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Cloud9G2A, TournamentTeam::TeamSoloMidKinguin, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Cloud9G2A, {} },
-    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::_3DMax, {} },
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::Cloud9G2A, {} },
-
-    // Quarterfinals
-    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::PENTASports, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::Flipsid3Tactics, {} },
     { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::PENTASports, {} },
-
-    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
-    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
-    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
-
     { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
-    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
-    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
-
-    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
-
-    // Semifinals
-    { TournamentMap::Cobblestone, TournamentStage::Semifinal, TournamentTeam::VirtusPro, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Mirage, TournamentStage::Semifinal, TournamentTeam::VirtusPro, TournamentTeam::Fnatic, {} },
-
     { TournamentMap::Cache, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NinjasInPyjamas, {} },
-
-    // Grand Final
-    { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Cache, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Titan, {} },
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Cobblestone, TournamentStage::Semifinal, TournamentTeam::VirtusPro, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::LGBEsports, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::PENTASports, TournamentTeam::LGBEsports, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::KeydStars, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VoxEminor, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VoxEminor, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::KeydStars, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::HellRaisers, TournamentTeam::KeydStars, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Cloud9G2A, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::PENTASports, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Mirage, TournamentStage::Semifinal, TournamentTeam::VirtusPro, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::HellRaisers, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::Cloud9G2A, TournamentTeam::TeamSoloMidKinguin, {} },
+    { TournamentMap::Nuke, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::_3DMax, {} },
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Nuke, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::_3DMax, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::Cloud9G2A, {} },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
 });
+static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, & Match::map));
 
 constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     // Group A
