@@ -332,6 +332,13 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::Renegades, TournamentTeam::Titan, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::Renegades, {} },
 
+    // Group B
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::TeamKinguin, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::LuminosityGaming, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Flipsid3Tactics, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
