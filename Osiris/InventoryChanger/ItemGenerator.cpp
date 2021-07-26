@@ -353,6 +353,19 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamImmunity, TournamentTeam::TeamKinguin, {} },
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamKinguin, TournamentTeam::Cloud9G2A, {} },
 
+    // Quarterfinals
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::TeamEnVyUs, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::TeamEnVyUs, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMid, TournamentTeam::TeamKinguin, {} },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::TeamSoloMid, TournamentTeam::TeamKinguin, {} },
+
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, {} },
+    { TournamentMap::Inferno, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, {} },
+
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::LuminosityGaming, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::LuminosityGaming, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
