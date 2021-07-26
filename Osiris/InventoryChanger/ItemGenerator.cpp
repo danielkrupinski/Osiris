@@ -77,7 +77,7 @@ struct Match {
 
 struct Tournament {
     std::uint32_t tournamentID;
-    const std::vector<Match>& matches;
+    std::span<const Match> matches;
 };
 
 static const std::vector<Match> dreamHack2013Matches{
@@ -380,7 +380,7 @@ static const std::vector<Match> elsOneCologne2015Matches{
 
 };
 
-constexpr auto tournaments = std::to_array<Tournament>({
+const auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
     { 4, elsOneCologne2014Matches },
@@ -389,14 +389,14 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 7, elsOneCologne2015Matches }
 });
 
-static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
+//static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
-[[nodiscard]] static const std::vector<Match>* getTournamentMatches(std::uint32_t tournamentID) noexcept
+[[nodiscard]] static std::span<const Match> getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
     if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
-        return &it->matches;
+        return it->matches;
     assert(false && "Missing tournament match data!");
-    return nullptr;
+    return {};
 }
 
 static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
@@ -404,7 +404,7 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
 }
 
-[[nodiscard]] static std::span<const Match> filterMatchesToMap(const std::vector<Match>& matches, TournamentMap map) noexcept
+[[nodiscard]] static std::span<const Match> filterMatchesToMap(std::span<const Match> matches, TournamentMap map) noexcept
 {
     if (map == TournamentMap::None)
         return matches;
@@ -423,8 +423,8 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     assert(caseData.isSouvenirPackage());
     DynamicSouvenirPackageData dynamicData;
 
-    if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID)) {
-        if (const auto matchesOnMap = filterMatchesToMap(*matches, caseData.tournamentMap); !matchesOnMap.empty()) {
+    if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
+        if (const auto matchesOnMap = filterMatchesToMap(matches, caseData.tournamentMap); !matchesOnMap.empty()) {
             const auto& randomMatch = matchesOnMap[Helpers::random(0, matchesOnMap.size() - 1)];
             dynamicData.tournamentStage = randomMatch.stage;
             dynamicData.tournamentTeam1 = randomMatch.team1;
@@ -466,10 +466,10 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
 [[nodiscard]] static const Match* findTournamentMatch(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
 {
     const auto matches = getTournamentMatches(tournamentID);
-    if (!matches)
+    if (matches.empty())
         return nullptr;
 
-    const auto matchesOnMap = filterMatchesToMap(*matches, map);
+    const auto matchesOnMap = filterMatchesToMap(matches, map);
     if (matchesOnMap.empty())
         return nullptr;
 
