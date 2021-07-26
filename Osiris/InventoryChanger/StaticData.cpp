@@ -298,6 +298,26 @@ private:
         });
     }
 
+    void initTournamentSortedStickers() noexcept
+    {
+        assert(!_itemsSorted.empty());
+
+        std::ranges::copy(findItems(WeaponId::Sticker), std::back_inserter(_tournamentStickersSorted));
+        std::ranges::sort(_tournamentStickersSorted, [this](std::size_t a, std::size_t b) {
+            const auto& itemA = _gameItems[a];
+            const auto& itemB = _gameItems[b];
+            assert(itemA.isSticker() && itemB.isSticker());
+
+            const auto& paintKitA = _paintKits[itemA.dataIndex];
+            const auto& paintKitB = _paintKits[itemB.dataIndex];
+            if (paintKitA.tournamentID != paintKitB.tournamentID)
+                return paintKitA.tournamentID < paintKitB.tournamentID;
+            if (paintKitA.tournamentTeam != paintKitB.tournamentTeam)
+                return paintKitA.tournamentTeam < paintKitB.tournamentTeam;
+            return paintKitA.tournamentPlayerID < paintKitB.tournamentPlayerID;
+        });
+    }
+
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isSticker(); });
@@ -331,12 +351,14 @@ private:
         initSortedItemsVector();
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
+        initTournamentSortedStickers();
 
         _gameItems.shrink_to_fit();
         _collectibles.shrink_to_fit();
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
         _itemsSorted.shrink_to_fit();
+        _tournamentStickersSorted.shrink_to_fit();
         _paintKits.shrink_to_fit();
     }
 
@@ -351,6 +373,7 @@ private:
     std::vector<Case> _cases;
     std::vector<std::size_t> _caseLoot;
     std::vector<std::size_t> _itemsSorted;
+    std::vector<std::size_t> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
