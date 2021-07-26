@@ -197,6 +197,8 @@ constexpr auto emsOneKatowice2014Matches = std::to_array<Match>({
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, {} },
 });
 
+// Starting with ESL One Cologne 2014 souvenir packages are bound to a certain map. Matches of those tournaments must be sorted by map.
+
 constexpr auto elsOneCologne2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamWolf, TournamentTeam::NinjasInPyjamas, {} },
