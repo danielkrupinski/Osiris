@@ -199,7 +199,7 @@ constexpr auto emsOneKatowice2014Matches = std::to_array<Match>({
 
 // Starting with ESL One Cologne 2014 souvenir packages are bound to a certain map. Matches of those tournaments must be sorted by map.
 
-constexpr auto elsOneCologne2014Matches = std::to_array<Match>({
+constexpr auto eslOneCologne2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamWolf, TournamentTeam::NinjasInPyjamas, {} },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::EpsilonEsports, TournamentTeam::HellRaisers, {} },
@@ -314,7 +314,7 @@ constexpr auto dreamHack2014Matches = std::to_array<Match>({
     { TournamentMap::Overpass, TournamentStage::GrandFinal, TournamentTeam::TeamLDLC, TournamentTeam::NinjasInPyjamas, {} },
 });
 
-constexpr auto elsOneKatowice2015Matches = std::to_array<Match>({
+constexpr auto eslOneKatowice2015Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VoxEminor, {} },
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Flipsid3Tactics, {} },
@@ -372,7 +372,7 @@ constexpr auto elsOneKatowice2015Matches = std::to_array<Match>({
     { TournamentMap::Inferno, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::NinjasInPyjamas, {} },
 });
 
-constexpr auto elsOneCologne2015Matches = std::to_array<Match>({
+constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::CounterLogicGaming, {} },
     { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::Renegades, {} },
@@ -385,10 +385,10 @@ constexpr auto elsOneCologne2015Matches = std::to_array<Match>({
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
-    { 4, elsOneCologne2014Matches },
+    { 4, eslOneCologne2014Matches },
     { 5, dreamHack2014Matches },
-    { 6, elsOneKatowice2015Matches },
-    { 7, elsOneCologne2015Matches }
+    { 6, eslOneKatowice2015Matches },
+    { 7, eslOneCologne2015Matches }
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
