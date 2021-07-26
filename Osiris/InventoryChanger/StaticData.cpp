@@ -284,7 +284,7 @@ private:
         }
     }
 
-    void initSortedVectors() noexcept
+    void initSortedItemsVector() noexcept
     {
         _itemsSorted.resize(_gameItems.size());
         std::iota(_itemsSorted.begin(), _itemsSorted.end(), 0);
@@ -328,7 +328,7 @@ private:
             return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
         });
 
-        initSortedVectors();
+        initSortedItemsVector();
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
 
