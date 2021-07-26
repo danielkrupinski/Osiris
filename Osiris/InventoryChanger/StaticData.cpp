@@ -18,6 +18,12 @@ constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 
 class StaticDataImpl {
 public:
+    static StaticDataImpl& instance() noexcept
+    {
+        static StaticDataImpl staticData;
+        return staticData;
+    }
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
@@ -360,12 +366,6 @@ private:
         _itemsSorted.shrink_to_fit();
         _tournamentStickersSorted.shrink_to_fit();
         _paintKits.shrink_to_fit();
-    }
-
-    static StaticDataImpl& instance() noexcept
-    {
-        static StaticDataImpl staticData;
-        return staticData;
     }
 
     std::vector<GameItem> _gameItems;
