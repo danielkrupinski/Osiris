@@ -937,6 +937,7 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
                 itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
                 itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
+                itemConfig["Tournament Player"] = dynamicData.proPlayer;
             }
             break;
         }
@@ -1092,6 +1093,11 @@ json InventoryChanger::toJson() noexcept
     if (j.contains("Tournament Team 2")) {
         if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
             dynamicData.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            dynamicData.proPlayer = tournamentPlayer;
     }
 
     dynamicData.stickers = loadSkinStickersFromJson(j);
