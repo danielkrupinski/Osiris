@@ -46,6 +46,9 @@ public:
 
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
     {
+        if (tournamentID == 0 || team == TournamentTeam::None)
+            return 0;
+
         const auto range = std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
