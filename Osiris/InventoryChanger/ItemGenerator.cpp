@@ -383,13 +383,13 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, { ProPlayer::seangares, ProPlayer::n0thing, ProPlayer::Skadoodle, ProPlayer::shroud, ProPlayer::freakazoid, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister } },
 
     // Group B
-    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::TeamSoloMid, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::G2Esports, {} },
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::Mousesports, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::G2Esports, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
-    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::TeamSoloMid, { ProPlayer::WorldEdit, ProPlayer::B1ad3, ProPlayer::DavCost, ProPlayer::dupreeh, ProPlayer::Xyp9x, ProPlayer::karrigan, ProPlayer::device, ProPlayer::cajunb } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::G2Esports, { ProPlayer::gobb, ProPlayer::nex, ProPlayer::chrisJ, ProPlayer::denis, ProPlayer::NiKo, ProPlayer::fox, ProPlayer::dennis, ProPlayer::jkaem, ProPlayer::Maikelele, ProPlayer::rain } },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::Mousesports, { ProPlayer::WorldEdit, ProPlayer::markeloff, ProPlayer::bondik, ProPlayer::B1ad3, ProPlayer::NiKo, ProPlayer::nex, ProPlayer::gobb, ProPlayer::chrisJ, ProPlayer::denis } },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::G2Esports, { ProPlayer::cajunb, ProPlayer::dupreeh, ProPlayer::Xyp9x, ProPlayer::karrigan, ProPlayer::device, ProPlayer::dennis, ProPlayer::Maikelele, ProPlayer::fox, ProPlayer::rain, ProPlayer::jkaem } },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis, ProPlayer::gobb } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis, ProPlayer::gobb, ProPlayer::nex } },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis } },
 
 });
 
