@@ -72,7 +72,7 @@ struct Match {
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
-    std::array<ProPlayer, 10> mvpPlayersIDs;
+    std::array<ProPlayer, 10> mvpPlayers;
 };
 
 struct Tournament {
