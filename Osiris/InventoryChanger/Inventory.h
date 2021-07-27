@@ -28,6 +28,7 @@ struct DynamicSkinData {
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
     TournamentTeam tournamentTeam2{};
+    ProPlayer proPlayer{};
 
     [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
