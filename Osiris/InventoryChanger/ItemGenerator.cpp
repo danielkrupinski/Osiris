@@ -349,11 +349,11 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Flipsid3Tactics, { ProPlayer::FalleN, ProPlayer::coldzera, ProPlayer::boltz, ProPlayer::fer, ProPlayer::steel, ProPlayer::B1ad3, ProPlayer::markeloff, ProPlayer::DavCost, ProPlayer::bondik, ProPlayer::WorldEdit } },
 
     // Group C
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamEBettle, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Titan, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::NatusVincere, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::TeamEBettle, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamEBettle, TournamentTeam::Fnatic, { ProPlayer::Hyper, ProPlayer::GruBy, ProPlayer::olofmeister, ProPlayer::pronax, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::JW } },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::Titan, { ProPlayer::flamie, ProPlayer::seized, ProPlayer::Edward, ProPlayer::GuardiaN, ProPlayer::Zeus, ProPlayer::shox, ProPlayer::Maniac, ProPlayer::SmithZz, ProPlayer::Ex6TenZ, ProPlayer::RpK } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::NatusVincere, { ProPlayer::olofmeister, ProPlayer::flusha, ProPlayer::JW, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::flamie, ProPlayer::seized } },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::CounterLogicGaming, TournamentTeam::TeamEBettle, { ProPlayer::tarik, ProPlayer::hazed, ProPlayer::FNS, ProPlayer::jdm64, ProPlayer::reltuC, ProPlayer::peet, ProPlayer::GruBy, ProPlayer::rallen, ProPlayer::Hyper } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS, ProPlayer::reltuC, ProPlayer::hazed } },
 
     // Group D
     { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::TeamImmunity, {} },
