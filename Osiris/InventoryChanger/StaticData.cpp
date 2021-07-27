@@ -44,6 +44,24 @@ public:
         return _paintKits[_gameItems[*it].dataIndex].tournamentID == tournamentID ? _paintKits[_gameItems[*it].dataIndex].id : 0;
     }
 
+    int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
+    {
+        const auto range = std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
+            const auto& item = _gameItems[index];
+            assert(item.isSticker());
+            return _paintKits[item.dataIndex].tournamentID;
+        });
+        const auto it = std::ranges::lower_bound(range, team, {}, [this](std::size_t index) {
+            const auto& item = _gameItems[index];
+            assert(item.isSticker());
+            return _paintKits[item.dataIndex].tournamentTeam;
+        });
+        if (it == range.end())
+            return 0;
+        assert(_gameItems[*it].isSticker());
+        return _paintKits[_gameItems[*it].dataIndex].tournamentTeam == team ? _paintKits[_gameItems[*it].dataIndex].id : 0;
+    }
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
