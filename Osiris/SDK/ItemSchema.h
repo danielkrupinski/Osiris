@@ -391,7 +391,12 @@ enum class ProPlayer {
     FugLy = 108760082,
     Hiko = 2791,
     AdreN = 46200979,
-    nitr0 = 35624002
+    nitr0 = 35624002,
+    aizy = 90685224,
+    Kjaerbye = 59614824,
+    Pimp = 57742580,
+    tenzki = 37214922,
+    MSL = 24134891
 };
 
 class EconItem {
