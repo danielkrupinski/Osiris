@@ -385,8 +385,8 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, TournamentStage::Semifinal, TournamentTeam::Fnatic, TournamentTeam::VirtusPro, { ProPlayer::flusha, ProPlayer::pronax, ProPlayer::JW,  ProPlayer::KRIMZ, ProPlayer::olofmeister, ProPlayer::pashaBiceps, ProPlayer::TaZ, ProPlayer::byali, ProPlayer::NEO } },
 
     // Grand Final
-    { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::TeamEnVyUs, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::TeamEnVyUs, {} },
+    { TournamentMap::Dust2, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::TeamEnVyUs, { ProPlayer::KRIMZ, ProPlayer::flusha, ProPlayer::JW, ProPlayer::olofmeister, ProPlayer::pronax, ProPlayer::kioShiMa, ProPlayer::kennyS, ProPlayer::Happy, ProPlayer::NBK, ProPlayer::apEX } },
+    { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::Fnatic, TournamentTeam::TeamEnVyUs, { ProPlayer::KRIMZ, ProPlayer::flusha, ProPlayer::JW, ProPlayer::olofmeister, ProPlayer::pronax, ProPlayer::kioShiMa, ProPlayer::Happy, ProPlayer::apEX } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
