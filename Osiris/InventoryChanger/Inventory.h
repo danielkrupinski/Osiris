@@ -16,6 +16,7 @@ struct StickerConfig {
 
 enum class TournamentTeam : std::uint8_t;
 enum class TournamentStage : std::uint8_t;
+enum class ProPlayer;
 
 struct DynamicSkinData {
     float wear = 0.0f;
@@ -52,6 +53,7 @@ struct DynamicSouvenirPackageData {
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
     TournamentTeam tournamentTeam2{};
+    ProPlayer proPlayer{};
 };
 
 struct InventoryItem {
