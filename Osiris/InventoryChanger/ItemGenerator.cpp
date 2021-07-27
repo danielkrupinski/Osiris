@@ -409,18 +409,18 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS } },
 
     // Quarterfinals
-    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, { ProPlayer::apEX, ProPlayer::Happy, ProPlayer::kennyS, ProPlayer::NBK, ProPlayer::flusha, ProPlayer::olofmeister, ProPlayer::KRIMZ, ProPlayer::JW, ProPlayer::pronax } },
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, { ProPlayer::NBK, ProPlayer::kioShiMa, ProPlayer::kennyS, ProPlayer::apEX, ProPlayer::Happy, ProPlayer::olofmeister, ProPlayer::KRIMZ, ProPlayer::JW } },
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, { ProPlayer::NBK, ProPlayer::apEX, ProPlayer::Happy, ProPlayer::kioShiMa, ProPlayer::kennyS, ProPlayer::KRIMZ, ProPlayer::pronax } },
 
-    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, {} },
-    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, { ProPlayer::Snax, ProPlayer::pashaBiceps, ProPlayer::byali, ProPlayer::TaZ, ProPlayer::NEO, ProPlayer::jkaem, ProPlayer::rain, ProPlayer::dennis, ProPlayer::Maikelele, ProPlayer::fox } },
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, { ProPlayer::Snax, ProPlayer::pashaBiceps, ProPlayer::byali, ProPlayer::TaZ, ProPlayer::NEO, ProPlayer::jkaem, ProPlayer::rain, ProPlayer::dennis, ProPlayer::Maikelele, ProPlayer::fox } },
 
-    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, {} },
-    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, {} },
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, { ProPlayer::friberg, ProPlayer::Xizt, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::GeT_RiGhT, ProPlayer::karrigan, ProPlayer::Xyp9x, ProPlayer::dupreeh, ProPlayer::cajunb } },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, { ProPlayer::GeT_RiGhT, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::Xyp9x, ProPlayer::cajunb, ProPlayer::dupreeh, ProPlayer::device, ProPlayer::karrigan } },
 
-    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, {} },
-    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, { ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::seized, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::fer, ProPlayer::steel, ProPlayer::boltz, ProPlayer::coldzera } },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, { ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::seized, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::fer, ProPlayer::steel, ProPlayer::boltz, ProPlayer::coldzera, ProPlayer::FalleN } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
