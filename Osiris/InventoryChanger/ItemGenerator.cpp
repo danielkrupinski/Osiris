@@ -391,6 +391,14 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis, ProPlayer::gobb, ProPlayer::nex } },
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis } },
 
+    // Group C
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::TeamLiquid, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamLiquid, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Titan, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
