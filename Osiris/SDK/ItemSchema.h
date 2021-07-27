@@ -301,6 +301,29 @@ enum class TournamentStage : std::uint8_t {
     GrandFinal = 11
 };
 
+enum class ProPlayer {
+    f0rest = 93724,
+    allu = 1345246,
+    friberg = 24295201,
+    Xizt = 26224992,
+    GeT_RiGhT = 21771190,
+    tarik = 18216247,
+    reltuC = 518760,
+    FNS = 17564706,
+    jdm64 = 7223652,
+    hazed = 30305781,
+    AZR = 24832266,
+    SPUNJ = 34303888,
+    jks = 16839456,
+    Havoc = 10025211,
+    yam = 30659,
+    device = 27447936,
+    dupreeh = 44589228,
+    karrigan = 29164525,
+    Xyp9x = 30416534,
+    cajunb = 18062315
+};
+
 class EconItem {
 public:
 #ifdef _WIN32
