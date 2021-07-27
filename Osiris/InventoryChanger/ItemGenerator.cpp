@@ -392,12 +392,12 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, { ProPlayer::Maikelele, ProPlayer::jkaem, ProPlayer::fox, ProPlayer::dennis, ProPlayer::rain, ProPlayer::NiKo, ProPlayer::chrisJ, ProPlayer::denis } },
 
     // Group C
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::TeamLiquid, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamLiquid, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Titan, {} },
-    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::TeamLiquid, { ProPlayer::Snax, ProPlayer::TaZ, ProPlayer::byali, ProPlayer::pashaBiceps, ProPlayer::NEO, ProPlayer::EliGE, ProPlayer::FugLy, ProPlayer::Hiko, ProPlayer::AdreN } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::RpK, ProPlayer::SmithZz, ProPlayer::shox, ProPlayer::ScreaM, ProPlayer::Ex6TenZ, ProPlayer::Xizt, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::GeT_RiGhT, ProPlayer::friberg } },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamLiquid, TournamentTeam::NinjasInPyjamas, { ProPlayer::AdreN, ProPlayer::nitr0, ProPlayer::FugLy, ProPlayer::Hiko, ProPlayer::f0rest, ProPlayer::Xizt, ProPlayer::GeT_RiGhT, ProPlayer::friberg, ProPlayer::allu } },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::VirtusPro, TournamentTeam::Titan, { ProPlayer::Snax, ProPlayer::byali, ProPlayer::pashaBiceps, ProPlayer::TaZ, ProPlayer::NEO, ProPlayer::Ex6TenZ, ProPlayer::SmithZz, ProPlayer::RpK, ProPlayer::shox } },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::shox, ProPlayer::RpK, ProPlayer::ScreaM, ProPlayer::Ex6TenZ, ProPlayer::SmithZz, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::GeT_RiGhT } },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::shox, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::GeT_RiGhT } },
 
 });
 
