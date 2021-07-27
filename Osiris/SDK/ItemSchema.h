@@ -282,6 +282,8 @@ enum class TournamentTeam : std::uint8_t {
     ESCGaming = 42,
     Flipsid3Tactics = 43,
     TeamEnVyUs = 46,
+    VexedGaming = 47,
+    TeamLiquid = 48,
     CounterLogicGaming = 49,
     KeydStars = 50,
     TeamSoloMidKinguin = 51,
@@ -291,7 +293,8 @@ enum class TournamentTeam : std::uint8_t {
     TeamKinguin = 55,
     TeamEBettle = 56,
     LuminosityGaming = 57,
-    TeamSoloMid = 58
+    TeamSoloMid = 58,
+    G2Esports = 59
 };
 
 enum class TournamentStage : std::uint8_t {
