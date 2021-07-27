@@ -429,6 +429,10 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
 
     { TournamentMap::Train, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::NatusVincere, { ProPlayer::allu, ProPlayer::GeT_RiGhT, ProPlayer::flamie, ProPlayer::GuardiaN, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::seized } },
     { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::NatusVincere, { ProPlayer::allu, ProPlayer::GeT_RiGhT, ProPlayer::f0rest, ProPlayer::Xizt, ProPlayer::flamie, ProPlayer::GuardiaN, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::seized } },
+
+    // Grand Final
+    { TournamentMap::Train, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
