@@ -400,13 +400,13 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::shox, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::GeT_RiGhT } },
 
     // Group D
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::TeamDignitas, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::CounterLogicGaming, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::TeamEnVyUs, {} },
-    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::TeamDignitas, { ProPlayer::NBK, ProPlayer::kioShiMa, ProPlayer::Happy, ProPlayer::apEX, ProPlayer::kennyS, ProPlayer::aizy, ProPlayer::Kjaerbye } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::seized, ProPlayer::jdm64, ProPlayer::reltuC, ProPlayer::tarik, ProPlayer::FNS, ProPlayer::hazed } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::CounterLogicGaming, { ProPlayer::aizy, ProPlayer::Pimp, ProPlayer::Kjaerbye, ProPlayer::tenzki, ProPlayer::MSL, ProPlayer::FNS, ProPlayer::reltuC, ProPlayer::tarik, ProPlayer::jdm64 } },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::TeamEnVyUs, { ProPlayer::seized, ProPlayer::Zeus, ProPlayer::flamie, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::kennyS, ProPlayer::apEX, ProPlayer::NBK, ProPlayer::kioShiMa } },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS, ProPlayer::reltuC } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
