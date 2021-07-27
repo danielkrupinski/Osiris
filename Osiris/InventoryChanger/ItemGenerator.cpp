@@ -326,11 +326,11 @@ static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, & Match::map
 
 constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::CounterLogicGaming, {} },
-    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::Renegades, {} },
-    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, {} },
-    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::Renegades, TournamentTeam::Titan, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::Renegades, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::CounterLogicGaming, { ProPlayer::f0rest, ProPlayer::allu, ProPlayer::friberg, ProPlayer::Xizt, ProPlayer::GeT_RiGhT, ProPlayer::tarik, ProPlayer::reltuC, ProPlayer::FNS, ProPlayer::jdm64, ProPlayer::hazed } },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::Renegades, { ProPlayer::device, ProPlayer::dupreeh, ProPlayer::karrigan, ProPlayer::Xyp9x, ProPlayer::cajunb, ProPlayer::AZR, ProPlayer::SPUNJ, ProPlayer::jks, ProPlayer::Havoc, ProPlayer::yam } },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, { ProPlayer::f0rest, ProPlayer::GeT_RiGhT, ProPlayer::Xyp9x, ProPlayer::karrigan, ProPlayer::device, ProPlayer::dupreeh } },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::Renegades, TournamentTeam::Titan, { ProPlayer::SPUNJ, ProPlayer::AZR, ProPlayer::yam, ProPlayer::jks, ProPlayer::Maniac, ProPlayer::shox, ProPlayer::RpK, ProPlayer::SmithZz } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::Renegades, { ProPlayer::allu, ProPlayer::f0rest, ProPlayer::GeT_RiGhT, ProPlayer::Xizt, ProPlayer::jks, ProPlayer::SPUNJ } },
 
     // Group B
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Flipsid3Tactics, {} },
