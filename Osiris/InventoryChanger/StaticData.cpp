@@ -488,6 +488,11 @@ int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexce
     return StaticDataImpl::instance().getTournamentEventStickerID(tournamentID);
 }
 
+int StaticData::getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept
+{
+    return StaticDataImpl::instance().getTournamentTeamGoldStickerID(tournamentID, team);
+}
+
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
 
 StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }

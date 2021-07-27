@@ -120,4 +120,5 @@ namespace StaticData
 
     int findTournamentGoldSticker(std::uint32_t tournamentID, TournamentTeam team, int tournamentPlayerID) noexcept;
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
+    int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
 }
