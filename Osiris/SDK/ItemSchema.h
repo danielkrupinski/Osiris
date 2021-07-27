@@ -386,7 +386,12 @@ enum class ProPlayer {
     dennis = 108076825,
     Furlan = 177495873,
     NiKo = 81417650,
-    jkaem = 42442914
+    jkaem = 42442914,
+    EliGE = 106428011,
+    FugLy = 108760082,
+    Hiko = 2791,
+    AdreN = 46200979,
+    nitr0 = 35624002
 };
 
 class EconItem {
