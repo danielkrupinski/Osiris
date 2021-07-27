@@ -342,11 +342,11 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::Renegades, { ProPlayer::allu, ProPlayer::f0rest, ProPlayer::GeT_RiGhT, ProPlayer::Xizt, ProPlayer::jks, ProPlayer::SPUNJ } },
 
     // Group B
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Flipsid3Tactics, {} },
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::TeamKinguin, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::LuminosityGaming, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::Flipsid3Tactics, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Flipsid3Tactics, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::Flipsid3Tactics, { ProPlayer::apEX, ProPlayer::kennyS, ProPlayer::kioShiMa, ProPlayer::Happy, ProPlayer::NBK, ProPlayer::bondik, ProPlayer::DavCost, ProPlayer::WorldEdit }},
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::TeamKinguin, { ProPlayer::boltz, ProPlayer::fer, ProPlayer::coldzera, ProPlayer::FalleN, ProPlayer::fox, ProPlayer::ScreaM, ProPlayer::Maikelele, ProPlayer::rain } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::LuminosityGaming, { ProPlayer::kennyS, ProPlayer::Happy, ProPlayer::apEX, ProPlayer::NBK, ProPlayer::kioShiMa, ProPlayer::FalleN, ProPlayer::coldzera, ProPlayer::fer, ProPlayer::steel, ProPlayer::boltz } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::Flipsid3Tactics, { ProPlayer::nex, ProPlayer::denis, ProPlayer::chrisJ, ProPlayer::gobb, ProPlayer::Spiidi, ProPlayer::markeloff, ProPlayer::bondik, ProPlayer::B1ad3, ProPlayer::DavCost, ProPlayer::WorldEdit } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Flipsid3Tactics, { ProPlayer::FalleN, ProPlayer::coldzera, ProPlayer::boltz, ProPlayer::fer, ProPlayer::steel, ProPlayer::B1ad3, ProPlayer::markeloff, ProPlayer::DavCost, ProPlayer::bondik, ProPlayer::WorldEdit } },
 
     // Group C
     { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::TeamEBettle, TournamentTeam::Fnatic, {} },
