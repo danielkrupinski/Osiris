@@ -407,6 +407,20 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS } },
     { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS, ProPlayer::reltuC } },
     { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, { ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::Edward, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::hazed, ProPlayer::jdm64, ProPlayer::tarik, ProPlayer::FNS } },
+
+    // Quarterfinals
+    { TournamentMap::Mirage, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cobblestone, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::TeamEnVyUs, TournamentTeam::Fnatic, {} },
+
+    { TournamentMap::Cache, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::VirtusPro, TournamentTeam::G2Esports, {} },
+
+    { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, {} },
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, {} },
+
+    { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, {} },
+    { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
