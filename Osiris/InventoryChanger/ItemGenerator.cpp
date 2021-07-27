@@ -331,7 +331,7 @@ constexpr auto eslOneKatowice2015Matches = std::to_array<Match>({
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::TeamSoloMidKinguin, TournamentTeam::Cloud9G2A, {} },
     { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::KeydStars, TournamentTeam::VirtusPro, {} },
 });
-static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &Match::map));
 
 constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::NinjasInPyjamas, TournamentTeam::TeamSoloMid, { ProPlayer::f0rest, ProPlayer::GeT_RiGhT, ProPlayer::Xyp9x, ProPlayer::karrigan, ProPlayer::device, ProPlayer::dupreeh } },
@@ -371,16 +371,16 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::VirtusPro, { ProPlayer::allu, ProPlayer::f0rest, ProPlayer::GeT_RiGhT, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::TaZ, ProPlayer::Snax, ProPlayer::NEO, ProPlayer::byali, ProPlayer::pashaBiceps } },
     { TournamentMap::Train, TournamentStage::Quarterfinal, TournamentTeam::Fnatic, TournamentTeam::LuminosityGaming, { ProPlayer::flusha, ProPlayer::olofmeister, ProPlayer::JW, ProPlayer::pronax, ProPlayer::KRIMZ, ProPlayer::coldzera, ProPlayer::fer, ProPlayer::boltz, ProPlayer::steel } },
 });
-static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, &Match::map));
 
 constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VexedGaming, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Cloud9, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VexedGaming, TournamentTeam::Cloud9, {} },
-    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, {} },
-    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VexedGaming, { ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister, ProPlayer::Furlan, ProPlayer::GruBy, ProPlayer::Hyper, ProPlayer::peet, ProPlayer::rallen } },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Cloud9, { ProPlayer::coldzera, ProPlayer::steel, ProPlayer::fer, ProPlayer::boltz, ProPlayer::FalleN, ProPlayer::seangares, ProPlayer::n0thing, ProPlayer::Skadoodle, ProPlayer::shroud, ProPlayer::freakazoid } },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VexedGaming, TournamentTeam::Cloud9, { ProPlayer::Furlan, ProPlayer::GruBy, ProPlayer::Hyper, ProPlayer::peet, ProPlayer::rallen, ProPlayer::seangares, ProPlayer::Skadoodle, ProPlayer::shroud, ProPlayer::freakazoid } },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Fnatic, { ProPlayer::coldzera, ProPlayer::steel, ProPlayer::fer, ProPlayer::boltz, ProPlayer::FalleN, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW } },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, { ProPlayer::freakazoid, ProPlayer::Skadoodle, ProPlayer::n0thing, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister } },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, { ProPlayer::seangares, ProPlayer::n0thing, ProPlayer::Skadoodle, ProPlayer::shroud, ProPlayer::freakazoid, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister } },
 
 });
 

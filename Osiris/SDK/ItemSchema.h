@@ -384,6 +384,7 @@ enum class ProPlayer {
     n0thing = 755286,
     freakazoid = 16883071,
     dennis = 108076825,
+    Furlan = 177495873,
 };
 
 class EconItem {
