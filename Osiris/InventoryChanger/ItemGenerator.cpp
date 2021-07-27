@@ -421,6 +421,14 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
 
     { TournamentMap::Dust2, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, { ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::seized, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::fer, ProPlayer::steel, ProPlayer::boltz, ProPlayer::coldzera } },
     { TournamentMap::Overpass, TournamentStage::Quarterfinal, TournamentTeam::NatusVincere, TournamentTeam::LuminosityGaming, { ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::seized, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::fer, ProPlayer::steel, ProPlayer::boltz, ProPlayer::coldzera, ProPlayer::FalleN } },
+
+    // Semifinals
+    { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Inferno, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Cache, TournamentStage::Semifinal, TournamentTeam::TeamEnVyUs, TournamentTeam::G2Esports, {} },
+
+    { TournamentMap::Train, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::NatusVincere, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
