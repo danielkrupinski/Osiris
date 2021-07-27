@@ -365,6 +365,22 @@ enum class ProPlayer {
     Zeus = 59062744,
     peet = 104340617,
     rallen = 31166738,
+    pashaBiceps = 13580090,
+    TaZ = 234052,
+    byali = 18860354,
+    Snax = 21875845,
+    NEO = 460206,
+    USTILO = 18903255,
+    Rickeh = 3215921,
+    emagine = 19633654,
+    James = 35336006,
+    SnypeR = 7436549,
+    seangares = 164004,
+    Skadoodle = 21075725,
+    shroud = 4515926,
+    n0thing = 755286,
+    freakazoid = 16883071,
+
 };
 
 class EconItem {
