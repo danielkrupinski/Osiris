@@ -350,9 +350,21 @@ enum class ProPlayer {
     gobb = 1162165,
     Spiidi = 13465075,
     markeloff = 5667261,
-    bondik = 46918643,
     B1ad3 = 53258137,
-    DavCost = 20273529
+    Hyper = 10357481,
+    GruBy = 44752530,
+    olofmeister = 28361465,
+    pronax = 9419182,
+    flusha = 31082355,
+    KRIMZ = 71385856,
+    JW = 71288472,
+    flamie = 156257548,
+    seized = 3648428,
+    Edward = 23429534,
+    GuardiaN = 12065295,
+    Zeus = 59062744,
+    peet = 104340617,
+    rallen = 31166738,
 };
 
 class EconItem {
