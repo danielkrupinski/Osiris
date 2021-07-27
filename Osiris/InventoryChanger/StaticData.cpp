@@ -24,6 +24,26 @@ public:
         return staticData;
     }
 
+    int getTournamentEventStickerID(std::uint32_t tournamentID) const noexcept
+    {
+        if (tournamentID == 1) // DreamHack 2013
+            return Helpers::random(1, 12);
+        else if (tournamentID == 3) // EMS One Katowice 2014
+            return Helpers::random(99, 100); // EMS Wolf / Skull
+        else if (tournamentID == 4) // ELS One Cologne 2014
+            return 172;
+
+        const auto it = std::ranges::lower_bound(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
+            const auto& item = _gameItems[index];
+            assert(item.isSticker());
+            return _paintKits[item.dataIndex].tournamentID;
+        });
+        if (it == _tournamentStickersSorted.end())
+            return 0;
+        assert(_gameItems[*it].isSticker());
+        return _paintKits[_gameItems[*it].dataIndex].tournamentID == tournamentID ? _paintKits[_gameItems[*it].dataIndex].id : 0;
+    }
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
@@ -447,13 +467,7 @@ int StaticData::findTournamentGoldSticker(std::uint32_t tournamentID, Tournament
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
-    if (tournamentID == 1) // DreamHack 2013
-        return Helpers::random(1, 12);
-    else if (tournamentID == 3) // EMS One Katowice 2014
-        return Helpers::random(99, 100); // EMS Wolf / Skull
-    else if (tournamentID == 4) // ELS One Cologne 2014
-        return 172;
-    return StaticData::findTournamentGoldSticker(tournamentID, TournamentTeam{}, 0);
+    return StaticDataImpl::instance().getTournamentEventStickerID(tournamentID);
 }
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
