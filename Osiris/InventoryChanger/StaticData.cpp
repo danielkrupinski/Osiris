@@ -360,7 +360,9 @@ private:
                 return paintKitA.tournamentTeam < paintKitB.tournamentTeam;
             if (paintKitA.tournamentPlayerID != paintKitB.tournamentPlayerID)
                 return paintKitA.tournamentPlayerID < paintKitB.tournamentPlayerID;
-            return paintKitA.isGoldenSticker && !paintKitB.isGoldenSticker;
+            if (paintKitA.isGoldenSticker != paintKitB.isGoldenSticker)
+                return paintKitA.isGoldenSticker;
+            return itemA.rarity > itemB.rarity;
         });
     }
 
