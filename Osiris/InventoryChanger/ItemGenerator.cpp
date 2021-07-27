@@ -382,6 +382,15 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, { ProPlayer::freakazoid, ProPlayer::Skadoodle, ProPlayer::n0thing, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister } },
     { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, { ProPlayer::seangares, ProPlayer::n0thing, ProPlayer::Skadoodle, ProPlayer::shroud, ProPlayer::freakazoid, ProPlayer::flusha, ProPlayer::KRIMZ, ProPlayer::pronax, ProPlayer::JW, ProPlayer::olofmeister } },
 
+    // Group B
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::TeamSoloMid, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::Mousesports, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Flipsid3Tactics, TournamentTeam::Mousesports, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::TeamSoloMid, TournamentTeam::G2Esports, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
+    { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::G2Esports, TournamentTeam::Mousesports, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
