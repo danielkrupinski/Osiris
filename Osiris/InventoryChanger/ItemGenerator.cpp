@@ -75,6 +75,12 @@ struct Match {
     std::array<ProPlayer, 10> mvpPlayers;
 
     [[nodiscard]] bool hasMVPs() const noexcept { return std::ranges::find(mvpPlayers, ProPlayer{}) != mvpPlayers.begin(); }
+    [[nodiscard]] ProPlayer getRandomMVP() const noexcept
+    {
+        if (!hasMVPs())
+            return ProPlayer{};
+        return mvpPlayers[Helpers::random(0, std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{})) - 1)];
+    }
 };
 
 struct Tournament {
