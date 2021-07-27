@@ -484,11 +484,8 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     stickers[0].stickerID = StaticData::findSouvenirTournamentSticker(tournamentID);
 
     if (tournamentID != 1) {
-        if (team1 != TournamentTeam{})
-            stickers[1].stickerID = StaticData::findTournamentGoldSticker(tournamentID, team1, 0);
-
-        if (team2 != TournamentTeam{})
-            stickers[2].stickerID = StaticData::findTournamentGoldSticker(tournamentID, team2, 0); 
+        stickers[1].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team1);
+        stickers[2].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team2);
     }
 
     std::mt19937 gen{ std::random_device{}() };
