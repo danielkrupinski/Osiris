@@ -399,6 +399,14 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Cache, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::shox, ProPlayer::RpK, ProPlayer::ScreaM, ProPlayer::Ex6TenZ, ProPlayer::SmithZz, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::GeT_RiGhT } },
     { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Titan, TournamentTeam::NinjasInPyjamas, { ProPlayer::shox, ProPlayer::f0rest, ProPlayer::allu, ProPlayer::Xizt, ProPlayer::friberg, ProPlayer::GeT_RiGhT } },
 
+    // Group D
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamEnVyUs, TournamentTeam::TeamDignitas, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::TeamDignitas, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Mirage, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::TeamEnVyUs, {} },
+    { TournamentMap::Train, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::NatusVincere, TournamentTeam::CounterLogicGaming, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
