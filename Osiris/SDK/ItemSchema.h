@@ -321,7 +321,12 @@ enum class ProPlayer {
     dupreeh = 44589228,
     karrigan = 29164525,
     Xyp9x = 30416534,
-    cajunb = 18062315
+    cajunb = 18062315,
+    Maniac = 35761,
+    shox = 46654567,
+    RpK = 53985773,
+    Ex6TenZ = 11737333,
+    SmithZz = 14321919
 };
 
 class EconItem {
