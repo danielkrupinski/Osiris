@@ -437,6 +437,7 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
             dynamicData.tournamentStage = randomMatch.stage;
             dynamicData.tournamentTeam1 = randomMatch.team1;
             dynamicData.tournamentTeam2 = randomMatch.team2;
+            dynamicData.proPlayer = randomMatch.getRandomMVP();
         }
     }
 
