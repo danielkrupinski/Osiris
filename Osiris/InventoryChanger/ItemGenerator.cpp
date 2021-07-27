@@ -373,13 +373,25 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & Match::map));
 
+constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
+    // Group A
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::Fnatic, TournamentTeam::VexedGaming, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Cloud9, {} },
+    { TournamentMap::Cobblestone, TournamentStage::GroupStage, TournamentTeam::VexedGaming, TournamentTeam::Cloud9, {} },
+    { TournamentMap::Inferno, TournamentStage::GroupStage, TournamentTeam::LuminosityGaming, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Dust2, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, {} },
+    { TournamentMap::Overpass, TournamentStage::GroupStage, TournamentTeam::Cloud9, TournamentTeam::Fnatic, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
     { 4, eslOneCologne2014Matches },
     { 5, dreamHack2014Matches },
     { 6, eslOneKatowice2015Matches },
-    { 7, eslOneCologne2015Matches }
+    { 7, eslOneCologne2015Matches },
+    { 8, dreamHackClujNapoka2015Matches },
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
