@@ -56,6 +56,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
+            dynamicData.proPlayer = souvenir.proPlayer;
             dynamicData.stickers = generateSouvenirStickers(caseData.souvenirPackageTournamentID, caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
