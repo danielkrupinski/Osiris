@@ -431,8 +431,8 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Dust2, TournamentStage::Semifinal, TournamentTeam::NinjasInPyjamas, TournamentTeam::NatusVincere, { ProPlayer::allu, ProPlayer::GeT_RiGhT, ProPlayer::f0rest, ProPlayer::Xizt, ProPlayer::flamie, ProPlayer::GuardiaN, ProPlayer::Zeus, ProPlayer::Edward, ProPlayer::seized } },
 
     // Grand Final
-    { TournamentMap::Train, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
-    { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, {} },
+    { TournamentMap::Train, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, { ProPlayer::kennyS, ProPlayer::Happy, ProPlayer::apEX, ProPlayer::kioShiMa, ProPlayer::NBK, ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::Zeus, ProPlayer::Edward } },
+    { TournamentMap::Cobblestone, TournamentStage::GrandFinal, TournamentTeam::TeamEnVyUs, TournamentTeam::NatusVincere, { ProPlayer::kennyS, ProPlayer::apEX, ProPlayer::kioShiMa, ProPlayer::NBK, ProPlayer::seized, ProPlayer::GuardiaN, ProPlayer::flamie, ProPlayer::Edward } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
