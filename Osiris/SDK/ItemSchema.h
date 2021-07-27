@@ -380,7 +380,7 @@ enum class ProPlayer {
     shroud = 4515926,
     n0thing = 755286,
     freakazoid = 16883071,
-
+    dennis = 108076825,
 };
 
 class EconItem {
