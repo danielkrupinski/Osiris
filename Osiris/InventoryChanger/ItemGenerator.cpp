@@ -73,6 +73,8 @@ struct Match {
     TournamentTeam team1;
     TournamentTeam team2;
     std::array<ProPlayer, 10> mvpPlayers;
+
+    [[nodiscard]] bool hasMVPs() const noexcept { return std::ranges::any_of(mvpPlayers, [](const auto player) { return player != ProPlayer{}; }); }
 };
 
 struct Tournament {
