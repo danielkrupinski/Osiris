@@ -468,6 +468,13 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, TaZ, pashaBiceps, NEO } },
     { TournamentMap::Cobblestone, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, pashaBiceps, NEO } },
     { TournamentMap::Overpass, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, TaZ, pashaBiceps, NEO } },
+
+    // Semifinals
+    { TournamentMap::Inferno, Semifinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Dust2, Semifinal, NatusVincere, Astralis, {} },
+
+    { TournamentMap::Mirage, Semifinal, TeamLiquid, LuminosityGaming, {} },
+    { TournamentMap::Cache, Semifinal, TeamLiquid, LuminosityGaming, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
