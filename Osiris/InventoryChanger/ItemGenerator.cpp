@@ -430,12 +430,12 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Overpass, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
 
     // Group B
-    { TournamentMap::Cache, GroupStage, FaZeClan, TeamLiquid, {} },
-    { TournamentMap::Train, GroupStage, Splyce, Fnatic, {} },
-    { TournamentMap::Inferno, GroupStage, Splyce, FaZeClan, {} },
-    { TournamentMap::Dust2, GroupStage, Fnatic, TeamLiquid, {} },
-    { TournamentMap::Mirage, GroupStage, Fnatic, FaZeClan, {} },
-    { TournamentMap::Cobblestone, GroupStage, Fnatic, FaZeClan, {} },
+    { TournamentMap::Cache, GroupStage, FaZeClan, TeamLiquid, { rain, aizy, Maikelele, fox, jkaem, nitr0, adreN, EliGE, Hiko, s1mple } },
+    { TournamentMap::Train, GroupStage, Splyce, Fnatic, { DAVEY, Professor_Chaos, jasonR, dennis, KRIMZ, flusha, olofmeister, JW } },
+    { TournamentMap::Inferno, GroupStage, Splyce, FaZeClan, { arya, Professor_Chaos, jasonR, rain, aizy, jkaem, fox, Maikelele } },
+    { TournamentMap::Dust2, GroupStage, Fnatic, TeamLiquid, { KRIMZ, JW, dennis, flusha, olofmeister, Hiko, s1mple, adreN, EliGE, nitr0 } },
+    { TournamentMap::Mirage, GroupStage, Fnatic, FaZeClan, { KRIMZ, JW, dennis, flusha, rain, aizy, jkaem, fox, Maikelele } },
+    { TournamentMap::Cobblestone, GroupStage, Fnatic, FaZeClan, { KRIMZ, JW, dennis, flusha, olofmeister, rain, aizy, jkaem } },
 
 });
 
