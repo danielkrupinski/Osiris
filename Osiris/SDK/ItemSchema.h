@@ -396,7 +396,11 @@ enum ProPlayer {
     Kjaerbye = 59614824,
     Pimp = 57742580,
     tenzki = 37214922,
-    MSL = 24134891
+    MSL = 24134891,
+    Shara = 53330928,
+    THREAT = 158900,
+    fnx = 170178574,
+    TACO = 52876568
 };
 
 class EconItem {
