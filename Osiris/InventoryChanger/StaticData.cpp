@@ -49,6 +49,11 @@ public:
         if (tournamentID == 0 || team == TournamentTeam::None)
             return 0;
 
+        if (team == TournamentTeam::AllStarTeamAmerica)
+            return 1315;
+        if (team == TournamentTeam::AllStarTeamEurope)
+            return 1316;
+
         const auto range = std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
