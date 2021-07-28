@@ -485,6 +485,14 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
     { TournamentMap::Mirage, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
 
+    // Group C
+    { TournamentMap::Train, GroupStage, TeamEnVyUs, TeamLiquid, {} },
+    { TournamentMap::Train, GroupStage, VirtusPro, Mousesports, {} },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, TeamLiquid, {} },
+    { TournamentMap::Train, GroupStage, Mousesports, TeamEnVyUs, {} },
+    { TournamentMap::Cobblestone, GroupStage, TeamLiquid, Mousesports, {} },
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, Mousesports, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
