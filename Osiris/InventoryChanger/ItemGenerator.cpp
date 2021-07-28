@@ -452,6 +452,7 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, Quarterfinal, TeamLiquid, CounterLogicGaming, { nitr0, s1mple, adreN, EliGE, Hiko, tarik, hazed, reltuC } },
     { TournamentMap::Mirage, Semifinal, TeamLiquid, LuminosityGaming, { EliGE, s1mple, Hiko, nitr0, adreN, FalleN, coldzera, fer, fnx, TACO } },
     { TournamentMap::Mirage, GrandFinal, NatusVincere, LuminosityGaming, { Zeus, Edward, flamie, seized, GuardiaN, coldzera, FalleN, fer, fnx, TACO } },
+    { TournamentMap::Nuke, AllStar, AllStarTeamAmerica, AllStarTeamEurope, { s1mple, shroud, tarik, Hiko, Skadoodle, GeT_RiGhT, NiKo, kennyS, rain, Maikelele } },
     { TournamentMap::Overpass, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
     { TournamentMap::Overpass, GroupStage, Astralis, CounterLogicGaming, { Xyp9x, device, dupreeh, karrigan, cajunb, hazed, jdm64, tarik, reltuC } },
     { TournamentMap::Overpass, Quarterfinal, Fnatic, Astralis, { JW, flusha, dennis, olofmeister, dupreeh, device, karrigan, Xyp9x, cajunb } },
