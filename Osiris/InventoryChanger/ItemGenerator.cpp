@@ -446,6 +446,15 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, reltuC, AdreN, hooch, Dosia, wayLander } },
     { TournamentMap::Mirage, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, reltuC, AdreN, hooch, Dosia, wayLander, mou } },
 
+    // Group D
+    { TournamentMap::Train, GroupStage, Cloud9, NatusVincere, {} },
+    { TournamentMap::Train, GroupStage, G2Esports, VirtusPro, {} },
+    { TournamentMap::Dust2, GroupStage, G2Esports, Cloud9, {} },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, NatusVincere, {} },
+    { TournamentMap::Train, GroupStage, VirtusPro, G2Esports, {} },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, G2Esports, {} },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, G2Esports, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
