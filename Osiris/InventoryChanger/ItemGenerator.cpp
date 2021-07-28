@@ -456,18 +456,18 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, ScreaM, RpK } },
 
     // Quarterfinals
-    { TournamentMap::Inferno, Quarterfinal, NatusVincere, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, Quarterfinal, NatusVincere, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, Quarterfinal, NatusVincere, NinjasInPyjamas, { Edward, flamie, seized, GuardiaN, Zeus, friberg, f0rest, Xizt, GeT_RiGhT, THREAT } },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, NinjasInPyjamas, { Edward, flamie, seized, GuardiaN, Zeus, friberg, f0rest, Xizt, GeT_RiGhT } },
 
-    { TournamentMap::Overpass, Quarterfinal, Fnatic, Astralis, {} },
-    { TournamentMap::Cache, Quarterfinal, Fnatic, Astralis, {} },
+    { TournamentMap::Overpass, Quarterfinal, Fnatic, Astralis, { JW, flusha, dennis, olofmeister, dupreeh, device, karrigan, Xyp9x, cajunb } },
+    { TournamentMap::Cache, Quarterfinal, Fnatic, Astralis, { flusha, olofmeister, dupreeh, device, karrigan, Xyp9x, cajunb } },
 
-    { TournamentMap::Cache, Quarterfinal, TeamLiquid, CounterLogicGaming, {} },
-    { TournamentMap::Mirage, Quarterfinal, TeamLiquid, CounterLogicGaming, {} },
+    { TournamentMap::Cache, Quarterfinal, TeamLiquid, CounterLogicGaming, { nitr0, s1mple, adreN, EliGE, Hiko, tarik, jdm64, hazed, reltuC, FugLy } },
+    { TournamentMap::Mirage, Quarterfinal, TeamLiquid, CounterLogicGaming, { nitr0, s1mple, adreN, EliGE, Hiko, tarik, hazed, reltuC } },
 
-    { TournamentMap::Cache, Quarterfinal, LuminosityGaming, VirtusPro, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, LuminosityGaming, VirtusPro, {} },
-    { TournamentMap::Overpass, Quarterfinal, LuminosityGaming, VirtusPro, {} },
+    { TournamentMap::Cache, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, TaZ, pashaBiceps, NEO } },
+    { TournamentMap::Cobblestone, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, pashaBiceps, NEO } },
+    { TournamentMap::Overpass, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, TaZ, pashaBiceps, NEO } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
