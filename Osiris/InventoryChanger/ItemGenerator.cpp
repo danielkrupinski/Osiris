@@ -477,8 +477,8 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, Semifinal, TeamLiquid, LuminosityGaming, { s1mple, Hiko, nitr0, adreN, FalleN, coldzera, fer, fnx, TACO } },
 
     // Grand Final
-    { TournamentMap::Mirage, GrandFinal, NatusVincere, LuminosityGaming, {} },
-    { TournamentMap::Overpass, GrandFinal, NatusVincere, LuminosityGaming, {} },
+    { TournamentMap::Mirage, GrandFinal, NatusVincere, LuminosityGaming, { Zeus, Edward, flamie, seized, GuardiaN, coldzera, FalleN, fer, fnx, TACO } },
+    { TournamentMap::Overpass, GrandFinal, NatusVincere, LuminosityGaming, { GuardiaN, coldzera, FalleN, fer, fnx, TACO } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
