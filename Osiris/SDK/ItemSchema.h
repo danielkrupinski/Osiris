@@ -404,7 +404,9 @@ enum ProPlayer {
     Shara = 53330928,
     THREAT = 158900,
     fnx = 170178574,
-    TACO = 52876568
+    TACO = 52876568,
+    adreN = 1366033,
+    s1mple = 73936547
 };
 
 class EconItem {
