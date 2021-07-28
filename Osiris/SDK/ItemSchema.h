@@ -411,7 +411,12 @@ enum ProPlayer {
     Professor_Chaos = 2029235,
     arya = 411777,
     abE = 25060851,
-    jasonR = 24868593
+    jasonR = 24868593,
+    DEVIL = 44238623,
+    mou = 52678767,
+    Dosia = 146641530,
+    hooch = 5809933,
+    wayLander = 38340970
 };
 
 class EconItem {
