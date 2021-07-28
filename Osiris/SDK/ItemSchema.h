@@ -406,7 +406,12 @@ enum ProPlayer {
     fnx = 170178574,
     TACO = 52876568,
     adreN = 1366033,
-    s1mple = 73936547
+    s1mple = 73936547,
+    DAVEY = 100534297,
+    Professor_Chaos = 2029235,
+    arya = 411777,
+    abE = 25060851,
+    jasonR = 24868593
 };
 
 class EconItem {
