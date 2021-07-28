@@ -421,13 +421,13 @@ static_assert(std::ranges::is_sorted(dreamHackClujNapoka2015Matches, {}, &Match:
 
 constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, GroupStage, LuminosityGaming, Mousesports, {} },
-    { TournamentMap::Cobblestone, GroupStage, Flipsid3Tactics, Mousesports, {} },
-    { TournamentMap::Mirage, GroupStage, LuminosityGaming, NinjasInPyjamas, {} },
-    { TournamentMap::Cobblestone, GroupStage, Mousesports, NinjasInPyjamas, {} },
-    { TournamentMap::Cache, GroupStage, Mousesports, NinjasInPyjamas, {} },
-    { TournamentMap::Overpass, GroupStage, Mousesports, NinjasInPyjamas, {} },
+    { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { bondik, Shara, B1ad3, WorldEdit, markeloff, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
+    { TournamentMap::Mirage, GroupStage, LuminosityGaming, Mousesports, { coldzera, fnx, fer, FalleN, TACO, chrisJ, NiKo, Spiidi, denis, nex } },
+    { TournamentMap::Cobblestone, GroupStage, Flipsid3Tactics, Mousesports, { bondik, Shara, B1ad3, WorldEdit, markeloff, chrisJ, NiKo, Spiidi, denis, nex } },
+    { TournamentMap::Mirage, GroupStage, LuminosityGaming, NinjasInPyjamas, { coldzera, fnx, fer, FalleN, TACO, f0rest, friberg, Xizt, THREAT } },
+    { TournamentMap::Cobblestone, GroupStage, Mousesports, NinjasInPyjamas, { NiKo, Spiidi, denis, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
+    { TournamentMap::Cache, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
+    { TournamentMap::Overpass, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
