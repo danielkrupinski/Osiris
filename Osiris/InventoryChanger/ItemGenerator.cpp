@@ -438,13 +438,13 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, GroupStage, Fnatic, FaZeClan, { KRIMZ, JW, dennis, flusha, olofmeister, rain, aizy, jkaem } },
 
     // Group C
-    { TournamentMap::Cobblestone, GroupStage, CounterLogicGaming, TeamEnVyUs, {} },
-    { TournamentMap::Train, GroupStage, GambitEsports, Astralis, {} },
-    { TournamentMap::Cache, GroupStage, GambitEsports, TeamEnVyUs, {} },
-    { TournamentMap::Overpass, GroupStage, Astralis, CounterLogicGaming, {} },
-    { TournamentMap::Cache, GroupStage, CounterLogicGaming, GambitEsports, {} },
-    { TournamentMap::Cobblestone, GroupStage, CounterLogicGaming, GambitEsports, {} },
-    { TournamentMap::Mirage, GroupStage, CounterLogicGaming, GambitEsports, {} },
+    { TournamentMap::Cobblestone, GroupStage, CounterLogicGaming, TeamEnVyUs, { reltuC, tarik, jdm64, hazed, FugLy, DEVIL, Happy, apEX, NBK } },
+    { TournamentMap::Train, GroupStage, GambitEsports, Astralis, { mou, AdreN, device, cajunb, Xyp9x, karrigan, dupreeh } },
+    { TournamentMap::Cache, GroupStage, GambitEsports, TeamEnVyUs, { wayLander, AdreN, mou, Dosia, apEX, Happy, NBK, DEVIL } },
+    { TournamentMap::Overpass, GroupStage, Astralis, CounterLogicGaming, { Xyp9x, device, dupreeh, karrigan, cajunb, hazed, jdm64, tarik, reltuC } },
+    { TournamentMap::Cache, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, mou, AdreN, hooch, Dosia, wayLander } },
+    { TournamentMap::Cobblestone, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, reltuC, AdreN, hooch, Dosia, wayLander } },
+    { TournamentMap::Mirage, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, reltuC, AdreN, hooch, Dosia, wayLander, mou } },
 
 });
 
