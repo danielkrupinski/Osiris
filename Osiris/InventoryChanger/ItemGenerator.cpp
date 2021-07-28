@@ -470,11 +470,11 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Overpass, Quarterfinal, LuminosityGaming, VirtusPro, { coldzera, FalleN, TACO, fer, fnx, byali, Snax, TaZ, pashaBiceps, NEO } },
 
     // Semifinals
-    { TournamentMap::Inferno, Semifinal, NatusVincere, Astralis, {} },
-    { TournamentMap::Dust2, Semifinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Inferno, Semifinal, NatusVincere, Astralis, { Edward, flamie, Zeus, GuardiaN, seized, device, cajunb, dupreeh, Xyp9x, karrigan } },
+    { TournamentMap::Dust2, Semifinal, NatusVincere, Astralis, { Edward, flamie, Zeus, seized, cajunb, dupreeh, Xyp9x } },
 
-    { TournamentMap::Mirage, Semifinal, TeamLiquid, LuminosityGaming, {} },
-    { TournamentMap::Cache, Semifinal, TeamLiquid, LuminosityGaming, {} },
+    { TournamentMap::Mirage, Semifinal, TeamLiquid, LuminosityGaming, { EliGE, s1mple, Hiko, nitr0, adreN, FalleN, coldzera, fer, fnx, TACO } },
+    { TournamentMap::Cache, Semifinal, TeamLiquid, LuminosityGaming, { s1mple, Hiko, nitr0, adreN, FalleN, coldzera, fer, fnx, TACO } },
 
     // Grand Final
     { TournamentMap::Mirage, GrandFinal, NatusVincere, LuminosityGaming, {} },
