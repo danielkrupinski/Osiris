@@ -447,13 +447,13 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, CounterLogicGaming, GambitEsports, { hazed, FugLy, jdm64, tarik, reltuC, AdreN, hooch, Dosia, wayLander, mou } },
 
     // Group D
-    { TournamentMap::Train, GroupStage, Cloud9, NatusVincere, {} },
-    { TournamentMap::Train, GroupStage, G2Esports, VirtusPro, {} },
-    { TournamentMap::Dust2, GroupStage, G2Esports, Cloud9, {} },
-    { TournamentMap::Cobblestone, GroupStage, VirtusPro, NatusVincere, {} },
-    { TournamentMap::Train, GroupStage, VirtusPro, G2Esports, {} },
-    { TournamentMap::Inferno, GroupStage, VirtusPro, G2Esports, {} },
-    { TournamentMap::Cobblestone, GroupStage, VirtusPro, G2Esports, {} },
+    { TournamentMap::Train, GroupStage, Cloud9, NatusVincere, { Skadoodle, freakazoid, n0thing, flamie, seized, Edward, Zeus, GuardiaN } },
+    { TournamentMap::Train, GroupStage, G2Esports, VirtusPro, { RpK, byali, Snax, NEO, TaZ, pashaBiceps } },
+    { TournamentMap::Dust2, GroupStage, G2Esports, Cloud9, { SmithZz, Ex6TenZ, shox, ScreaM, RpK, Skadoodle, n0thing, shroud } },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, NatusVincere, { TaZ, byali, Snax, NEO, GuardiaN, Edward, seized, flamie, Zeus } },
+    { TournamentMap::Train, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, shox, ScreaM, RpK } },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, shox, ScreaM, RpK } },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, ScreaM, RpK } },
 
 });
 
