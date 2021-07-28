@@ -243,7 +243,7 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
-enum class TournamentTeam : std::uint8_t {
+enum TournamentTeam : std::uint8_t {
     None = 0,
     NinjasInPyjamas = 1,
     AstanaDragons = 2,
@@ -297,14 +297,14 @@ enum class TournamentTeam : std::uint8_t {
     G2Esports = 59
 };
 
-enum class TournamentStage : std::uint8_t {
+enum TournamentStage : std::uint8_t {
     GroupStage = 2,
     Quarterfinal = 5,
     Semifinal = 8,
     GrandFinal = 11
 };
 
-enum class ProPlayer {
+enum ProPlayer {
     f0rest = 93724,
     allu = 1345246,
     friberg = 24295201,

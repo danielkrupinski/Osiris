@@ -147,7 +147,7 @@ private:
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
                 econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
                 econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
-                if (dynamicData.proPlayer != ProPlayer{ 0 })
+                if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
                     econItem->setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
             }
 
@@ -187,7 +187,7 @@ private:
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
                 econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
                 econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
-                if (dynamicData.proPlayer != ProPlayer{ 0 })
+                if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
                     econItem->setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
             }
         }

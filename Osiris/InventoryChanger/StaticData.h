@@ -6,7 +6,7 @@
 
 #include "../SDK/WeaponId.h"
 
-enum class TournamentTeam : std::uint8_t;
+enum TournamentTeam : std::uint8_t;
 
 namespace StaticData
 {
