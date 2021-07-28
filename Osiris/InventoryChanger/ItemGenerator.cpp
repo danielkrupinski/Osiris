@@ -475,6 +475,10 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
 
     { TournamentMap::Mirage, Semifinal, TeamLiquid, LuminosityGaming, {} },
     { TournamentMap::Cache, Semifinal, TeamLiquid, LuminosityGaming, {} },
+
+    // Grand Final
+    { TournamentMap::Mirage, GrandFinal, NatusVincere, LuminosityGaming, {} },
+    { TournamentMap::Overpass, GrandFinal, NatusVincere, LuminosityGaming, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
