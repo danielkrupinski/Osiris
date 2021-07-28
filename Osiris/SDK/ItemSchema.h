@@ -298,7 +298,9 @@ enum TournamentTeam : std::uint8_t {
     Astralis = 60,
     FaZeClan = 61,
     Splyce = 62,
-    GambitEsports = 63
+    GambitEsports = 63,
+    AllStarTeamAmerica = 64,
+    AllStarTeamEurope = 65,
 };
 
 enum TournamentStage : std::uint8_t {
