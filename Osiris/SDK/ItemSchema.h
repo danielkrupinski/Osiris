@@ -419,7 +419,13 @@ enum ProPlayer {
     mou = 52678767,
     Dosia = 146641530,
     hooch = 5809933,
-    wayLander = 38340970
+    wayLander = 38340970,
+    k0nfig = 19403447,
+    RUBINO = 35103983,
+    gla1ve = 50245293,
+    pita = 26459,
+    koosta = 161590,
+    spaze = 109497526
 };
 
 class EconItem {
