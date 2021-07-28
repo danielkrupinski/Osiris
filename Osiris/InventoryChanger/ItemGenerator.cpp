@@ -466,6 +466,18 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, &Match::map));
 
+constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
+    // Group A
+    { TournamentMap::Overpass, GroupStage, TeamDignitas, Astralis, {} },
+    { TournamentMap::Dust2, GroupStage, CounterLogicGaming, GambitEsports, {} },
+    { TournamentMap::Dust2, GroupStage, GambitEsports, Astralis, {} },
+    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, CounterLogicGaming, {} },
+    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, Astralis, {} },
+    { TournamentMap::Mirage, GroupStage, TeamDignitas, Astralis, {} },
+    { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
@@ -475,6 +487,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 7, eslOneCologne2015Matches },
     { 8, dreamHackClujNapoka2015Matches },
     { 9, mlgColumbus2016Matches },
+    { 10, eslOneCologne2016Matches },
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
