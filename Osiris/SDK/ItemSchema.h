@@ -301,6 +301,7 @@ enum TournamentTeam : std::uint8_t {
     GambitEsports = 63,
     AllStarTeamAmerica = 64,
     AllStarTeamEurope = 65,
+    OpTicGaming = 66
 };
 
 enum TournamentStage : std::uint8_t {

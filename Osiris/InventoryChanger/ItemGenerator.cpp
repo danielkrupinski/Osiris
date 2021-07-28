@@ -476,6 +476,15 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
     { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
 
+    // Group B
+    { TournamentMap::Train, GroupStage, NatusVincere, Flipsid3Tactics, {} },
+    { TournamentMap::Dust2, GroupStage, OpTicGaming, NinjasInPyjamas, {} },
+    { TournamentMap::Cobblestone, GroupStage, NatusVincere, NinjasInPyjamas, {} },
+    { TournamentMap::Train, GroupStage, Flipsid3Tactics, OpTicGaming, {} },
+    { TournamentMap::Overpass, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
+    { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, GroupStage, Flipsid3Tactics, NinjasInPyjamas, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
