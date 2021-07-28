@@ -468,13 +468,13 @@ static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, &Match::map));
 
 constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Overpass, GroupStage, TeamDignitas, Astralis, {} },
-    { TournamentMap::Dust2, GroupStage, CounterLogicGaming, GambitEsports, {} },
-    { TournamentMap::Dust2, GroupStage, GambitEsports, Astralis, {} },
-    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, CounterLogicGaming, {} },
-    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, Astralis, {} },
-    { TournamentMap::Mirage, GroupStage, TeamDignitas, Astralis, {} },
-    { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, {} },
+    { TournamentMap::Overpass, GroupStage, TeamDignitas, Astralis, { k0nfig, MSL, cajunb, tenzki, RUBINO, device, gla1ve, dupreeh, Xyp9x, karrigan } },
+    { TournamentMap::Dust2, GroupStage, CounterLogicGaming, GambitEsports, { hazed, pita, koosta, AdreN, spaze, mou, hooch, Dosia } },
+    { TournamentMap::Dust2, GroupStage, GambitEsports, Astralis, { mou, AdreN, Dosia, spaze, device, gla1ve, karrigan } },
+    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, CounterLogicGaming, { RUBINO, tenzki, MSL, k0nfig, cajunb, tarik } },
+    { TournamentMap::Cobblestone, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
+    { TournamentMap::Mirage, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
+    { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
 
 });
 
