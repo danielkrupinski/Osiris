@@ -294,7 +294,11 @@ enum TournamentTeam : std::uint8_t {
     TeamEBettle = 56,
     LuminosityGaming = 57,
     TeamSoloMid = 58,
-    G2Esports = 59
+    G2Esports = 59,
+    Astralis = 60,
+    FaZeClan = 61,
+    Splyce = 62,
+    GambitEsports = 63
 };
 
 enum TournamentStage : std::uint8_t {
