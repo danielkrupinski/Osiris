@@ -502,18 +502,18 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, FaZeClan, Fnatic, { kioShiMa, fox, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
 
     // Quarterfinals
-    { TournamentMap::Overpass, Quarterfinal, Astralis, VirtusPro, {} },
-    { TournamentMap::Train, Quarterfinal, Astralis, VirtusPro, {} },
+    { TournamentMap::Overpass, Quarterfinal, Astralis, VirtusPro, { device, Xyp9x, gla1ve, karrigan, pashaBiceps, TaZ, byali, Snax } },
+    { TournamentMap::Train, Quarterfinal, Astralis, VirtusPro, { device, gla1ve, karrigan, pashaBiceps, TaZ, byali, Snax, NEO } },
 
-    { TournamentMap::Mirage, Quarterfinal, Flipsid3Tactics, SKGaming, {} },
-    { TournamentMap::Nuke, Quarterfinal, Flipsid3Tactics, SKGaming, {} },
+    { TournamentMap::Mirage, Quarterfinal, Flipsid3Tactics, SKGaming, { WorldEdit, B1ad3, markeloff, fnx, coldzera, fer, FalleN, TACO } },
+    { TournamentMap::Nuke, Quarterfinal, Flipsid3Tactics, SKGaming, { WorldEdit, B1ad3, wayLander, markeloff, Shara, fnx, coldzera, fer, FalleN, TACO } },
 
-    { TournamentMap::Train, Quarterfinal, TeamLiquid, NatusVincere, {} },
-    { TournamentMap::Nuke, Quarterfinal, TeamLiquid, NatusVincere, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, TeamLiquid, NatusVincere, {} },
+    { TournamentMap::Train, Quarterfinal, TeamLiquid, NatusVincere, { s1mple, jdm64, EliGE, nitr0, Edward, GuardiaN, Zeus, seized, flamie } },
+    { TournamentMap::Nuke, Quarterfinal, TeamLiquid, NatusVincere, { Hiko, s1mple, jdm64, EliGE, nitr0, Edward, GuardiaN, Zeus, seized, flamie } },
+    { TournamentMap::Cobblestone, Quarterfinal, TeamLiquid, NatusVincere, { Hiko, s1mple, jdm64, EliGE, nitr0, Edward, GuardiaN, seized } },
 
-    { TournamentMap::Train, Quarterfinal, GambitEsports, Fnatic, {} },
-    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, {} },
+    { TournamentMap::Train, Quarterfinal, GambitEsports, Fnatic, { spaze, mou, hooch, AdreN, KRIMZ, flusha, olofmeister, dennis, JW } },
+    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, { spaze, AdreN, KRIMZ, flusha, olofmeister, dennis, JW } },
 
     // Semifinals
     { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, {} },
