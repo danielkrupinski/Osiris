@@ -493,6 +493,14 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, GroupStage, TeamLiquid, Mousesports, { Hiko, EliGE, s1mple, jdm64, nitr0, denis, chrisJ, Spiidi, NiKo, nex } },
     { TournamentMap::Mirage, GroupStage, TeamLiquid, Mousesports, { Hiko, EliGE, s1mple, jdm64, nitr0, denis, chrisJ, Spiidi, nex } },
 
+    // Group D
+    { TournamentMap::Cobblestone, GroupStage, SKGaming, G2Esports, {} },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, Fnatic, {} },
+    { TournamentMap::Cobblestone, GroupStage, SKGaming, FaZeClan, {} },
+    { TournamentMap::Train, GroupStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Fnatic, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
