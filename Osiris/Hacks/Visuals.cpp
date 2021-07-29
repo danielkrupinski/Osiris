@@ -68,10 +68,13 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-    bool smokeTimer{ false };
-    Color4 smokeTimer_BG{ 1.0f, 1.0f, 1.0f, 0.5f };
-    Color4 smokeTimer_TIMER{ 0.0f, 0.0f, 1.0f, 1.0f };
-    Color4 smokeTimer_TEXT{ 0.0f, 0.0f, 0.0f, 1.0f };
+
+    struct SmokeTimer {
+        bool enabled = false;
+        Color4 BG{ 1.0f, 1.0f, 1.0f, 0.5f };
+        Color4 TIMER{ 0.0f, 0.0f, 1.0f, 1.0f };
+        Color4 TEXT{ 0.0f, 0.0f, 0.0f, 1.0f };
+    } smokeTimer;
 
     struct ColorCorrection {
         bool enabled = false;
@@ -96,6 +99,14 @@ static void from_json(const json& j, VisualsConfig::ColorCorrection& c)
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
+}
+
+static void from_json(const json& j, VisualsConfig::SmokeTimer& s)
+{
+    read(j, "Enabled", s.enabled);
+    read<value_t::object>(j, "Color BG", s.BG);
+    read<value_t::object>(j, "Color TIMER", s.TIMER);
+    read<value_t::object>(j, "Color TEXT", s.TEXT);
 }
 
 static void from_json(const json& j, BulletTracers& o)
@@ -142,10 +153,7 @@ static void from_json(const json& j, VisualsConfig& v)
     read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
-    read(j, "Smoke timer", v.smokeTimer);
-    read<value_t::object>(j, "Smoke timer BG", v.smokeTimer_BG);
-    read<value_t::object>(j, "Smoke timer TIMER", v.smokeTimer_TIMER);
-    read<value_t::object>(j, "Smoke timer TEXT", v.smokeTimer_TEXT);
+    read<value_t::object>(j, "Smoke timer", v.smokeTimer);
 }
 
 static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
@@ -158,6 +166,14 @@ static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const Visu
     WRITE("Ghost", ghost);
     WRITE("Green", green);
     WRITE("Yellow", yellow);
+}
+
+static void to_json(json& j, const VisualsConfig::SmokeTimer& o, const VisualsConfig::SmokeTimer& dummy)
+{
+    WRITE("Enabled", enabled);
+    WRITE("Color BG", BG);
+    WRITE("Color TIMER", TIMER);
+    WRITE("Color TEXT", TEXT);
 }
 
 static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
@@ -207,9 +223,6 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
     WRITE("Smoke timer", smokeTimer);
-    WRITE("Smoke timer BG", smokeTimer_BG);
-    WRITE("Smoke timer TIMER", smokeTimer_TIMER);
-    WRITE("Smoke timer TEXT", smokeTimer_TEXT);
 }
 
 bool Visuals::isThirdpersonOn() noexcept
@@ -715,29 +728,27 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
 
 #define SMOKEGRENADE_LIFETIME 17.5f
 
-struct smokeData
+struct SmokeData
 {
+    SmokeData(float destructionTime, Vector pos) : destructionTime{ destructionTime }, pos{ pos } {}
+    
     float destructionTime;
     Vector pos;
 };
 
-static std::vector<smokeData> smokes;
+static std::vector<SmokeData> smokes;
 
 void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
 {
-    if (event) {
-        smokeData data{};
-        auto time = memory->globalVars->realtime + SMOKEGRENADE_LIFETIME;
-        auto pos = Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"));
-        data.destructionTime = time;
-        data.pos = pos;
-        smokes.push_back(data);
-    }
+    smokes.emplace_back(SmokeData(
+        memory->globalVars->realtime + SMOKEGRENADE_LIFETIME, 
+        Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"))
+    ));
 }
 
 void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
 {
-    if (!visualsConfig.smokeTimer)
+    if (!visualsConfig.smokeTimer.enabled)
         return;
 
     if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
@@ -748,27 +759,42 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
 
         auto time = smoke.destructionTime - memory->globalVars->realtime;
         std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
+        
         auto textSize = ImGui::CalcTextSize(text.str().c_str());
+        const auto box_size = ImVec2(50.f, 15.f);
 
         ImVec2 pos;
 
+        bool drawText = visualsConfig.smokeTimer.TEXT.color[3] != 0.f;
+        bool drawTimer = visualsConfig.smokeTimer.TIMER.color[3] != 0.f;
+
+        if (!drawText && !drawTimer)
+            return;
+
         if (time >= 0.0f) {
             if (worldToScreen(smoke.pos, pos)) {
-                ImRect rect_out(
-                    pos.x + (textSize.x / 2) + 2.f,
-                    pos.y + (textSize.y / 2) + 10.f,
-                    pos.x - (textSize.x / 2) - 2.f,
-                    pos.y - (textSize.y / 2) - 2.f);
+                ImRect main_box(
+                    pos.x - (box_size.x / 2) - 2.f,
+                    pos.y - (box_size.y / 2) - 2.f - (!drawTimer || !drawText ? 0.f : box_size.y / 2.f),
+                    pos.x + (box_size.x / 2) + 2.f,
+                    pos.y + (box_size.y / 2) + 2.f + (!drawTimer || !drawText ? 0.f : box_size.y / 2.f)
+                );
 
-                ImRect rect_in(
-                    (pos.x + (textSize.x / 2)) - (textSize.x * (1.0f - (time / SMOKEGRENADE_LIFETIME))),
-                    pos.y + (textSize.y / 2),
-                    pos.x - (textSize.x / 2),
-                    pos.y + (textSize.y));
+                ImVec2 text_pos(
+                    main_box.GetCenter().x - (textSize.x / 2),
+                    main_box.GetCenter().y - (textSize.y / 2) - (drawTimer ? box_size.y / 2.f : 0.f)
+                );
+
+                ImRect timer_box(
+                    main_box.Min.x + 2.f,
+                    main_box.Min.y + 2.f + (drawText ? box_size.y : 0.f),
+                    main_box.Max.x - 2.f - (box_size.x * (1.0f - (time / SMOKEGRENADE_LIFETIME))),
+                    main_box.Max.y - 2.f
+                );
                 
-                drawList->AddRectFilled(rect_out.Min, rect_out.Max, Helpers::calculateColor(visualsConfig.smokeTimer_BG));
-                drawList->AddRectFilled(rect_in.Min, rect_in.Max, Helpers::calculateColor(visualsConfig.smokeTimer_TIMER));
-                drawList->AddText({ pos.x - (textSize.x / 2), pos.y - (textSize.y / 2) }, Helpers::calculateColor(visualsConfig.smokeTimer_TEXT), text.str().c_str());
+                drawList->AddRectFilled(main_box.Min, main_box.Max, Helpers::calculateColor(visualsConfig.smokeTimer.BG));
+                drawList->AddRectFilled(timer_box.Min, timer_box.Max, Helpers::calculateColor(visualsConfig.smokeTimer.TIMER));
+                drawList->AddText(text_pos, Helpers::calculateColor(visualsConfig.smokeTimer.TEXT), text.str().c_str());
             }
         }
         else
@@ -889,16 +915,16 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
 
-    ImGui::Checkbox("Smoke Timer", &visualsConfig.smokeTimer);
+    ImGui::Checkbox("Smoke Timer", &visualsConfig.smokeTimer.enabled);
     ImGui::SameLine();
     if (ImGui::Button("...##smoke_timer"))
         ImGui::OpenPopup("popup_smokeTimer");
 
     if (ImGui::BeginPopup("popup_smokeTimer"))
     {
-        ImGuiCustom::colorPicker("BackGround color", visualsConfig.smokeTimer_BG);
-        ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer_TEXT);
-        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer_TIMER);
+        ImGuiCustom::colorPicker("BackGround color", visualsConfig.smokeTimer.BG);
+        ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer.TEXT);
+        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer.TIMER);
         ImGui::EndPopup();
     }
 
