@@ -581,9 +581,9 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, { NEO, pashaBiceps, TaZ, byali, fox, FalleN, coldzera, TACO } },
 
     // Grand Final
-    { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, {} },
-    { TournamentMap::Overpass, GrandFinal, Astralis, VirtusPro, {} },
-    { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, {} },
+    { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, { dupreeh, device, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Overpass, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, device, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
