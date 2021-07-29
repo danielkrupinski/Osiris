@@ -514,14 +514,14 @@ static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, &Match::map))
 
 constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     // Round 1
-    { TournamentMap::Cobblestone, GroupStage, North, GambitEsports, {} },
-    { TournamentMap::Cache, GroupStage, G2Esports, Fnatic, {} },
-    { TournamentMap::Mirage, GroupStage, HellRaisers, SKGaming, {} },
-    { TournamentMap::Cobblestone, GroupStage, VirtusPro, OpTicGaming, {} },
-    { TournamentMap::Cobblestone, GroupStage, NatusVincere, Mousesports, {} },
-    { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, {} },
-    { TournamentMap::Train, GroupStage, GODSENT, Astralis, {} },
-    { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, {} },
+    { TournamentMap::Cobblestone, GroupStage, North, GambitEsports, { k0nfig, cajunb, MSL, Magisk, RUBINO, Zeus, AdreN, Dosia, mou, Hobbit } },
+    { TournamentMap::Cache, GroupStage, G2Esports, Fnatic, { RpK, bodyy, shox, ScreaM, SmithZz, KRIMZ, olofmeister, dennis, discodoplan } },
+    { TournamentMap::Mirage, GroupStage, HellRaisers, SKGaming, { DeadFox, ANGE1, bondik, STYKO, coldzera, fer, TACO, fox, FalleN } },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, OpTicGaming, { Snax, TaZ, byali, pashaBiceps, NEO, RUSH, NAF, stanislaw, mixwell } },
+    { TournamentMap::Cobblestone, GroupStage, NatusVincere, Mousesports, { Edward, s1mple, seized, flamie, GuardiaN, chrisJ, denis, loWel } },
+    { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, { EliGE, Pimp, Hiko, jdm64, nitr0, NBK, apEX, kennyS, SIXER, Happy } },
+    { TournamentMap::Train, GroupStage, GODSENT, Astralis, { JW, Lekr0, znajder, flusha, pronax, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, { rain, allu, kioShiMa, karrigan, aizy, electronic, B1ad3, WorldEdit } },
 
     // Round 2
     { TournamentMap::Cobblestone, GroupStage, NatusVincere, TeamEnVyUs, {} },
