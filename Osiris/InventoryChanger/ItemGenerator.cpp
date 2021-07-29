@@ -574,11 +574,11 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Overpass, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, allu, karrigan } },
 
     // Semifinals
-    { TournamentMap::Cache, Semifinal, Astralis, Fnatic, {} },
-    { TournamentMap::Nuke, Semifinal, Astralis, Fnatic, {} },
+    { TournamentMap::Cache, Semifinal, Astralis, Fnatic, { dupreeh, device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, twist, discodoplan, dennis, olofmeister } },
+    { TournamentMap::Nuke, Semifinal, Astralis, Fnatic, { device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, discodoplan, dennis } },
 
-    { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, {} },
-    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, {} },
+    { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, { NEO, Snax, pashaBiceps, TaZ, byali, fox, fer, FalleN, coldzera, TACO } },
+    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, { NEO, pashaBiceps, TaZ, byali, fox, FalleN, coldzera, TACO } },
 
     // Grand Final
     { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, {} },
