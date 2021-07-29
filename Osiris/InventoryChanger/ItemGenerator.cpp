@@ -544,12 +544,12 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, OpTicGaming, Flipsid3Tactics, { RUSH, NAF, stanislaw, mixwell, tarik, electronic, WorldEdit, markeloff, wayLander } },
 
     // Round 4
-    { TournamentMap::Cobblestone, GroupStage, Fnatic, TeamEnVyUs, {} },
-    { TournamentMap::Dust2, GroupStage, Astralis, SKGaming, {} },
-    { TournamentMap::Overpass, GroupStage, FaZeClan, GambitEsports, {} },
-    { TournamentMap::Overpass, GroupStage, G2Esports, North, {} },
-    { TournamentMap::Nuke, GroupStage, TeamLiquid, Mousesports, {} },
-    { TournamentMap::Cache, GroupStage, OpTicGaming, GODSENT, {} },
+    { TournamentMap::Cobblestone, GroupStage, Fnatic, TeamEnVyUs, { twist, olofmeister, KRIMZ, discodoplan, dennis, apEX, NBK, kennyS, SIXER, Happy } },
+    { TournamentMap::Dust2, GroupStage, Astralis, SKGaming, { device, gla1ve, Xyp9x, Kjaerbye, dupreeh, coldzera, fox, fer, FalleN, TACO } },
+    { TournamentMap::Overpass, GroupStage, FaZeClan, GambitEsports, { rain, allu, kioShiMa, karrigan, aizy, Zeus, AdreN, Dosia, mou, Hobbit } },
+    { TournamentMap::Overpass, GroupStage, G2Esports, North, { RpK, bodyy, shox, ScreaM, SmithZz, k0nfig, cajunb, MSL, Magisk, RUBINO } },
+    { TournamentMap::Nuke, GroupStage, TeamLiquid, Mousesports, { EliGE, Pimp, Hiko, jdm64, nitr0, loWel, NiKo, chrisJ } },
+    { TournamentMap::Cache, GroupStage, OpTicGaming, GODSENT, { RUSH, NAF, mixwell, tarik, Lekr0, flusha, pronax, JW, znajder } },
 
     // Round 5
     { TournamentMap::Overpass, GroupStage, GODSENT, North, {} },
