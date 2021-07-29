@@ -523,6 +523,9 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, Semifinal, TeamLiquid, Fnatic, {} },
     { TournamentMap::Cache, Semifinal, TeamLiquid, Fnatic, {} },
 
+    // Grand Final
+    { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, {} },
+    { TournamentMap::Cobblestone, GrandFinal, TeamLiquid, SKGaming, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
