@@ -556,6 +556,23 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Nuke, GroupStage, TeamEnVyUs, FaZeClan, { kennyS, Happy, SIXER, rain, allu, kioShiMa, karrigan, aizy } },
     { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, { device, gla1ve, Kjaerbye, dupreeh, Hiko, nitr0 } },
 
+    // Quarterfinals
+    { TournamentMap::Overpass, Quarterfinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Astralis, {} },
+
+    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, {} },
+    { TournamentMap::Overpass, Quarterfinal, GambitEsports, Fnatic, {} },
+    { TournamentMap::Dust2, Quarterfinal, GambitEsports, Fnatic, {} },
+
+    { TournamentMap::Overpass, Quarterfinal, North, VirtusPro, {} },
+    { TournamentMap::Cache, Quarterfinal, North, VirtusPro, {} },
+    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, {} },
+
+    { TournamentMap::Mirage, Quarterfinal, SKGaming, FaZeClan, {} },
+    { TournamentMap::Train, Quarterfinal, SKGaming, FaZeClan, {} },
+    { TournamentMap::Overpass, Quarterfinal, SKGaming, FaZeClan, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
