@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "../SDK/ItemSchema.h"
 #include "StaticData.h"
 
 enum class Team;
