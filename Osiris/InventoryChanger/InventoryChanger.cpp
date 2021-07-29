@@ -58,32 +58,25 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
     }
 }
 
-static void sendInventoryUpdatedEvent() noexcept
-{
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MyPersona_InventoryUpdated")); idx != -1) {
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
-    }
-}
-
 static Entity* createGlove(int entry, int serial) noexcept
 {
-    static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
-
-    if (!createWearable) {
-        createWearable = []() -> decltype(createWearable) {
-            for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-                if (clientClass->classId == ClassId::EconWearable)
-                    return clientClass->createFunction;
-            return nullptr;
-        }();
-    }
+    static const auto createWearable = []{
+        std::add_pointer_t<Entity* __CDECL(int, int)> createWearableFn = nullptr;
+        for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+            if (clientClass->classId == ClassId::EconWearable) {
+                createWearableFn = clientClass->createFunction;
+                break;
+            }
+        }
+        return createWearableFn;
+    }();
 
     if (!createWearable)
         return nullptr;
 
-    createWearable(entry, serial);
-    return interfaces->entityList->getEntity(entry);
+    if (const auto wearable = createWearable(entry, serial))
+        return reinterpret_cast<Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
+    return nullptr;
 }
 
 static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
@@ -886,8 +879,7 @@ json InventoryChanger::toJson() noexcept
 
     j["Version"] = CONFIG_VERSION;
 
-    auto& items = j["Items"];
-    for (const auto& item : Inventory::get()) {
+    for (auto& items = j["Items"]; const auto& item : Inventory::get()) {
         if (item.isDeleted())
             continue;
 
@@ -918,8 +910,8 @@ json InventoryChanger::toJson() noexcept
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
-            if (dynamicData.isSouvenir)
-                itemConfig["Is Souvenir"] = dynamicData.isSouvenir;
+            if (dynamicData.tournamentID != 0)
+                itemConfig["Tournament ID"] = dynamicData.tournamentID;
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
             if (dynamicData.statTrak > -1)
@@ -939,6 +931,13 @@ json InventoryChanger::toJson() noexcept
                 stickerConfig["Wear"] = sticker.wear;
                 stickerConfig["Slot"] = i;
                 stickers.push_back(std::move(stickerConfig));
+            }
+
+            if (dynamicData.tournamentStage != TournamentStage{}) {
+                itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
+                itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
+                itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
+                itemConfig["Tournament Player"] = dynamicData.proPlayer;
             }
             break;
         }
@@ -1056,9 +1055,9 @@ json InventoryChanger::toJson() noexcept
 {
     DynamicSkinData dynamicData;
 
-    if (j.contains("Is Souvenir")) {
-        if (const auto& isSouvenir = j["Is Souvenir"]; isSouvenir.is_boolean())
-            dynamicData.isSouvenir = isSouvenir;
+    if (j.contains("Tournament ID")) {
+        if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
+            dynamicData.tournamentID = tournamentID;
     }
 
     if (j.contains("Wear")) {
@@ -1079,6 +1078,26 @@ json InventoryChanger::toJson() noexcept
     if (j.contains("Name Tag")) {
         if (const auto& nameTag = j["Name Tag"]; nameTag.is_string())
             dynamicData.nameTag = nameTag;
+    }
+
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            dynamicData.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            dynamicData.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            dynamicData.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            dynamicData.proPlayer = tournamentPlayer;
     }
 
     dynamicData.stickers = loadSkinStickersFromJson(j);
