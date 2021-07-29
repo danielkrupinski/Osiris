@@ -522,6 +522,17 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, {} },
     { TournamentMap::Train, GroupStage, GODSENT, Astralis, {} },
     { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, {} },
+
+    // Round 2
+    { TournamentMap::Cobblestone, GroupStage, NatusVincere, TeamEnVyUs, {} },
+    { TournamentMap::Mirage, GroupStage, SKGaming, FaZeClan, {} },
+    { TournamentMap::Overpass, GroupStage, GambitEsports, GODSENT, {} },
+    { TournamentMap::Nuke, GroupStage, G2Esports, VirtusPro, {} },
+    { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, {} },
+    { TournamentMap::Overpass, GroupStage, TeamLiquid, Flipsid3Tactics, {} },
+    { TournamentMap::Cobblestone, GroupStage, Fnatic, North, {} },
+    { TournamentMap::Train, GroupStage, Astralis, OpTicGaming, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
