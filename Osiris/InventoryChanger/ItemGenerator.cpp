@@ -501,6 +501,20 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, { kioShiMa, rain, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
     { TournamentMap::Mirage, GroupStage, FaZeClan, Fnatic, { kioShiMa, fox, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
 
+    // Quarterfinals
+    { TournamentMap::Overpass, Quarterfinal, Astralis, VirtusPro, {} },
+    { TournamentMap::Train, Quarterfinal, Astralis, VirtusPro, {} },
+
+    { TournamentMap::Mirage, Quarterfinal, Flipsid3Tactics, SKGaming, {} },
+    { TournamentMap::Nuke, Quarterfinal, Flipsid3Tactics, SKGaming, {} },
+
+    { TournamentMap::Train, Quarterfinal, TeamLiquid, NatusVincere, {} },
+    { TournamentMap::Nuke, Quarterfinal, TeamLiquid, NatusVincere, {} },
+    { TournamentMap::Cobblestone, Quarterfinal, TeamLiquid, NatusVincere, {} },
+
+    { TournamentMap::Train, Quarterfinal, GambitEsports, Fnatic, {} },
+    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
