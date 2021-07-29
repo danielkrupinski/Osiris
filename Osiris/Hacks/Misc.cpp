@@ -1081,7 +1081,7 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const void*& data, int& size) noexcept
+void Misc::onVoteStart(const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1093,15 +1093,15 @@ void Misc::onVoteStart(const void*& data, int& size) noexcept
         case 1: return "Change Level";
         case 6: return "Surrender";
         case 13: return "Start TimeOut";
-        default: return "ERROR";
+        default: return "";
         }
     };
 
-    ProtobufReader msg{ static_cast<const std::uint8_t*>(data), size };
-    const auto ent_idx = msg.readInt32(2);
-    const auto vote_type = msg.readInt32(3);
+    const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
+    const auto ent_idx = reader.readInt32(2);
 
-    if (ent_idx && vote_type) {
+    if (ent_idx) {
+        const auto vote_type = reader.readInt32(3);
         const auto entity = interfaces->entityList->getEntity(ent_idx);
         const auto isLocal = localPlayer && entity == localPlayer.get();
 
