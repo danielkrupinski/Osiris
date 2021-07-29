@@ -426,7 +426,13 @@ enum ProPlayer {
     gla1ve = 50245293,
     pita = 26459,
     koosta = 161590,
-    spaze = 109497526
+    spaze = 109497526,
+    RUSH = 63326592,
+    mixwell = 27224124,
+    daps = 19892353,
+    NAF = 40885967,
+    stanislaw = 21583315,
+    pyth = 57312567
 };
 
 class EconItem {
