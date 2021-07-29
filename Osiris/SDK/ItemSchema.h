@@ -432,7 +432,8 @@ enum ProPlayer {
     daps = 19892353,
     NAF = 40885967,
     stanislaw = 21583315,
-    pyth = 57312567
+    pyth = 57312567,
+    bodyy = 53029647
 };
 
 class EconItem {

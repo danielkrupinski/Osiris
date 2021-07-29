@@ -494,12 +494,12 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, TeamLiquid, Mousesports, { Hiko, EliGE, s1mple, jdm64, nitr0, denis, chrisJ, Spiidi, nex } },
 
     // Group D
-    { TournamentMap::Cobblestone, GroupStage, SKGaming, G2Esports, {} },
-    { TournamentMap::Dust2, GroupStage, FaZeClan, Fnatic, {} },
-    { TournamentMap::Cobblestone, GroupStage, SKGaming, FaZeClan, {} },
-    { TournamentMap::Train, GroupStage, G2Esports, Fnatic, {} },
-    { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, {} },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, Fnatic, {} },
+    { TournamentMap::Cobblestone, GroupStage, SKGaming, G2Esports, { coldzera, FalleN, TACO, fer, fnx, RpK, SmithZz, ScreaM, shox, bodyy } },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, Fnatic, { aizy, kioShiMa, jkaem, rain, fox, KRIMZ, dennis, flusha, olofmeister, JW } },
+    { TournamentMap::Cobblestone, GroupStage, SKGaming, FaZeClan, { coldzera, TACO, FalleN, fer, fnx, aizy, rain, jkaem, kioShiMa } },
+    { TournamentMap::Train, GroupStage, G2Esports, Fnatic, { ScreaM, RpK, SmithZz, shox, bodyy, KRIMZ, dennis, flusha, olofmeister, JW } },
+    { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, { kioShiMa, rain, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Fnatic, { kioShiMa, fox, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
 
 });
 
