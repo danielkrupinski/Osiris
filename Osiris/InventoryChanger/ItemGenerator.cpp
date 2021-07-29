@@ -524,14 +524,14 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, { rain, allu, kioShiMa, karrigan, aizy, electronic, B1ad3, WorldEdit } },
 
     // Round 2
-    { TournamentMap::Cobblestone, GroupStage, NatusVincere, TeamEnVyUs, {} },
-    { TournamentMap::Mirage, GroupStage, SKGaming, FaZeClan, {} },
-    { TournamentMap::Overpass, GroupStage, GambitEsports, GODSENT, {} },
-    { TournamentMap::Nuke, GroupStage, G2Esports, VirtusPro, {} },
-    { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, {} },
-    { TournamentMap::Overpass, GroupStage, TeamLiquid, Flipsid3Tactics, {} },
-    { TournamentMap::Cobblestone, GroupStage, Fnatic, North, {} },
-    { TournamentMap::Train, GroupStage, Astralis, OpTicGaming, {} },
+    { TournamentMap::Cobblestone, GroupStage, NatusVincere, TeamEnVyUs, { Edward, s1mple, seized, flamie, GuardiaN, NBK, apEX, kennyS, SIXER } },
+    { TournamentMap::Mirage, GroupStage, SKGaming, FaZeClan, { coldzera, fer, TACO, fox, FalleN, rain, allu, kioShiMa, karrigan, aizy } },
+    { TournamentMap::Overpass, GroupStage, GambitEsports, GODSENT, { Zeus, AdreN, Dosia, mou, Hobbit, JW, Lekr0, znajder, flusha, pronax } },
+    { TournamentMap::Nuke, GroupStage, G2Esports, VirtusPro, { RpK, bodyy, shox, ScreaM, SmithZz, Snax, TaZ, byali, NEO } },
+    { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, { chrisJ, denis, loWel, NiKo, Spiidi, DeadFox, ANGE1, bondik, STYKO, Zero } },
+    { TournamentMap::Overpass, GroupStage, TeamLiquid, Flipsid3Tactics, { EliGE, Pimp, Hiko, jdm64, electronic, B1ad3, WorldEdit, markeloff, wayLander } },
+    { TournamentMap::Cobblestone, GroupStage, Fnatic, North, { twist, KRIMZ, olofmeister, dennis, discodoplan, k0nfig, cajunb, MSL, Magisk, RUBINO } },
+    { TournamentMap::Train, GroupStage, Astralis, OpTicGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, RUSH, NAF, stanislaw, mixwell, tarik } },
 
     // Round 3
     { TournamentMap::Train, GroupStage, VirtusPro, GambitEsports, {} },
