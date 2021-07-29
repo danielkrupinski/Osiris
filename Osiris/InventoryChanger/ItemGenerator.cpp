@@ -486,12 +486,12 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { wayLander, markeloff, WorldEdit, Shara, GeT_RiGhT, pyth, Xizt, friberg, f0rest } },
 
     // Group C
-    { TournamentMap::Train, GroupStage, TeamEnVyUs, TeamLiquid, {} },
-    { TournamentMap::Train, GroupStage, VirtusPro, Mousesports, {} },
-    { TournamentMap::Cobblestone, GroupStage, VirtusPro, TeamLiquid, {} },
-    { TournamentMap::Train, GroupStage, Mousesports, TeamEnVyUs, {} },
-    { TournamentMap::Cobblestone, GroupStage, TeamLiquid, Mousesports, {} },
-    { TournamentMap::Mirage, GroupStage, TeamLiquid, Mousesports, {} },
+    { TournamentMap::Train, GroupStage, TeamEnVyUs, TeamLiquid, { kennyS, apEX, Happy, NBK, Hiko, EliGE, s1mple, jdm64, nitr0 } },
+    { TournamentMap::Train, GroupStage, VirtusPro, Mousesports, { Snax, TaZ, NEO, byali, pashaBiceps, chrisJ, NiKo, Spiidi, denis } },
+    { TournamentMap::Cobblestone, GroupStage, VirtusPro, TeamLiquid, { Snax, TaZ, NEO, byali, pashaBiceps, s1mple, nitr0, jdm64, EliGE } },
+    { TournamentMap::Train, GroupStage, Mousesports, TeamEnVyUs, { denis, chrisJ, Spiidi, NiKo, nex, NBK, kennyS, apEX, DEVIL, Happy } },
+    { TournamentMap::Cobblestone, GroupStage, TeamLiquid, Mousesports, { Hiko, EliGE, s1mple, jdm64, nitr0, denis, chrisJ, Spiidi, NiKo, nex } },
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, Mousesports, { Hiko, EliGE, s1mple, jdm64, nitr0, denis, chrisJ, Spiidi, nex } },
 
 });
 
