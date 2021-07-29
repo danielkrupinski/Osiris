@@ -557,21 +557,21 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, { device, gla1ve, Kjaerbye, dupreeh, Hiko, nitr0 } },
 
     // Quarterfinals
-    { TournamentMap::Overpass, Quarterfinal, NatusVincere, Astralis, {} },
-    { TournamentMap::Mirage, Quarterfinal, NatusVincere, Astralis, {} },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Overpass, Quarterfinal, NatusVincere, Astralis, { flamie, s1mple, seized, Edward, device, Kjaerbye, dupreeh, Xyp9x } },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, Xyp9x } },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, dupreeh, Xyp9x } },
 
-    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, {} },
-    { TournamentMap::Overpass, Quarterfinal, GambitEsports, Fnatic, {} },
-    { TournamentMap::Dust2, Quarterfinal, GambitEsports, Fnatic, {} },
+    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, { AdreN, Hobbit, Zeus, mou, twist, dennis, discodoplan, olofmeister, KRIMZ } },
+    { TournamentMap::Overpass, Quarterfinal, GambitEsports, Fnatic, { AdreN, Hobbit, Zeus, mou, Dosia, KRIMZ, olofmeister } },
+    { TournamentMap::Dust2, Quarterfinal, GambitEsports, Fnatic, { mou, Hobbit, twist, dennis, discodoplan, olofmeister, KRIMZ } },
 
-    { TournamentMap::Overpass, Quarterfinal, North, VirtusPro, {} },
-    { TournamentMap::Cache, Quarterfinal, North, VirtusPro, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, {} },
+    { TournamentMap::Overpass, Quarterfinal, North, VirtusPro, { Magisk, MSL, Snax, NEO, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Cache, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
 
-    { TournamentMap::Mirage, Quarterfinal, SKGaming, FaZeClan, {} },
-    { TournamentMap::Train, Quarterfinal, SKGaming, FaZeClan, {} },
-    { TournamentMap::Overpass, Quarterfinal, SKGaming, FaZeClan, {} },
+    { TournamentMap::Mirage, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, rain, karrigan, aizy, allu } },
+    { TournamentMap::Train, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, allu, kioShiMa } },
+    { TournamentMap::Overpass, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, allu, karrigan } },
 
     // Semifinals
     { TournamentMap::Cache, Semifinal, Astralis, Fnatic, {} },
