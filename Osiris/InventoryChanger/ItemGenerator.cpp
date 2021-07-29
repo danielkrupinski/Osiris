@@ -552,9 +552,9 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, OpTicGaming, GODSENT, { RUSH, NAF, mixwell, tarik, Lekr0, flusha, pronax, JW, znajder } },
 
     // Round 5
-    { TournamentMap::Overpass, GroupStage, GODSENT, North, {} },
-    { TournamentMap::Nuke, GroupStage, TeamEnVyUs, FaZeClan, {} },
-    { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, {} },
+    { TournamentMap::Overpass, GroupStage, GODSENT, North, { Lekr0, flusha, pronax, JW, znajder, k0nfig, cajunb, MSL, Magisk, RUBINO } },
+    { TournamentMap::Nuke, GroupStage, TeamEnVyUs, FaZeClan, { kennyS, Happy, SIXER, rain, allu, kioShiMa, karrigan, aizy } },
+    { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, { device, gla1ve, Kjaerbye, dupreeh, Hiko, nitr0 } },
 
 });
 
