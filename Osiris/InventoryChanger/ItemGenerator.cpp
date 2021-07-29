@@ -524,8 +524,8 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, Semifinal, TeamLiquid, Fnatic, { s1mple, EliGE, nitr0, jdm64, Hiko, KRIMZ, JW, olofmeister, dennis, flusha } },
 
     // Grand Final
-    { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, {} },
-    { TournamentMap::Cobblestone, GrandFinal, TeamLiquid, SKGaming, {} },
+    { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, { jdm64, Hiko, nitr0, s1mple, coldzera, TACO, fnx, FalleN, fer } },
+    { TournamentMap::Cobblestone, GrandFinal, TeamLiquid, SKGaming, { jdm64, Hiko, EliGE, coldzera, FalleN, TACO, fer, fnx } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
