@@ -39,6 +39,9 @@ struct StickerKit {
     UtlString itemName;
     PAD(2 * sizeof(UtlString))
     UtlString inventoryImage;
+    int tournamentID;
+    int tournamentTeamID;
+    int tournamentPlayerID;
 };
 
 union AttributeDataUnion {
@@ -240,6 +243,199 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+enum TournamentTeam : std::uint8_t {
+    None = 0,
+    NinjasInPyjamas = 1,
+    AstanaDragons = 2,
+    ComplexityGaming = 3,
+    VeryGames = 4,
+    IBUYPOWER = 5,
+    Fnatic = 6,
+    ClanMystik = 7,
+    RecursiveEsports = 8,
+    LGBEsports = 9,
+    CopenhagenWolves = 10,
+    UniversalSoldiers = 11,
+    NatusVincere = 12,
+    NFaculty = 13,
+    SKGaming = 14,
+    Xapso = 15,
+    _ReasonGaming = 16,
+    TeamDignitas = 24,
+    HellRaisers = 25,
+    TeamLDLC = 26,
+    Titan = 27,
+    _3DMax = 28,
+    Mousesports = 29,
+    ReasonGaming = 30,
+    VirtusPro = 31,
+    VoxEminor = 32,
+    Cloud9 = 33,
+    DATTeam = 34,
+    EpsilonEsports = 35,
+    LondonConspiracy = 36,
+    TeamWolf = 37,
+    MyXMG = 38,
+    PENTASports = 39,
+    BravadoGaming = 40,
+    PlanetkeyDynamics = 41,
+    ESCGaming = 42,
+    Flipsid3Tactics = 43,
+    TeamEnVyUs = 46,
+    VexedGaming = 47,
+    TeamLiquid = 48,
+    CounterLogicGaming = 49,
+    KeydStars = 50,
+    TeamSoloMidKinguin = 51,
+    Cloud9G2A = 52,
+    Renegades = 53,
+    TeamImmunity = 54,
+    TeamKinguin = 55,
+    TeamEBettle = 56,
+    LuminosityGaming = 57,
+    TeamSoloMid = 58,
+    G2Esports = 59,
+    Astralis = 60,
+    FaZeClan = 61,
+    Splyce = 62,
+    GambitEsports = 63,
+    AllStarTeamAmerica = 64,
+    AllStarTeamEurope = 65,
+    OpTicGaming = 66
+};
+
+enum TournamentStage : std::uint8_t {
+    GroupStage = 2,
+    Quarterfinal = 5,
+    Semifinal = 8,
+    GrandFinal = 11,
+    AllStar = 14
+};
+
+enum ProPlayer {
+    f0rest = 93724,
+    allu = 1345246,
+    friberg = 24295201,
+    Xizt = 26224992,
+    GeT_RiGhT = 21771190,
+    tarik = 18216247,
+    reltuC = 518760,
+    FNS = 17564706,
+    jdm64 = 7223652,
+    hazed = 30305781,
+    AZR = 24832266,
+    SPUNJ = 34303888,
+    jks = 16839456,
+    Havoc = 10025211,
+    yam = 30659,
+    device = 27447936,
+    dupreeh = 44589228,
+    karrigan = 29164525,
+    Xyp9x = 30416534,
+    cajunb = 18062315,
+    Maniac = 35761,
+    shox = 46654567,
+    RpK = 53985773,
+    Ex6TenZ = 11737333,
+    SmithZz = 14321919,
+    bondik = 46918643,
+    DavCost = 20273529,
+    WorldEdit = 36732188,
+    apEX = 29478439,
+    kennyS = 64640068,
+    kioShiMa = 40517167,
+    Happy = 17975624,
+    NBK = 444845,
+    fox = 1939536,
+    ScreaM = 28502520,
+    Maikelele = 925972,
+    rain = 37085479,
+    boltz = 58113672,
+    fer = 38921219,
+    coldzera = 79720871,
+    FalleN = 424467,
+    steel = 54512474,
+    nex = 90378773,
+    denis = 31185376,
+    chrisJ = 28273376,
+    gobb = 1162165,
+    Spiidi = 13465075,
+    markeloff = 5667261,
+    B1ad3 = 53258137,
+    Hyper = 10357481,
+    GruBy = 44752530,
+    olofmeister = 28361465,
+    pronax = 9419182,
+    flusha = 31082355,
+    KRIMZ = 71385856,
+    JW = 71288472,
+    flamie = 156257548,
+    seized = 3648428,
+    Edward = 23429534,
+    GuardiaN = 12065295,
+    Zeus = 59062744,
+    peet = 104340617,
+    rallen = 31166738,
+    pashaBiceps = 13580090,
+    TaZ = 234052,
+    byali = 18860354,
+    Snax = 21875845,
+    NEO = 460206,
+    USTILO = 18903255,
+    Rickeh = 3215921,
+    emagine = 19633654,
+    James = 35336006,
+    SnypeR = 7436549,
+    seangares = 164004,
+    Skadoodle = 21075725,
+    shroud = 4515926,
+    n0thing = 755286,
+    freakazoid = 16883071,
+    dennis = 108076825,
+    Furlan = 177495873,
+    NiKo = 81417650,
+    jkaem = 42442914,
+    EliGE = 106428011,
+    FugLy = 108760082,
+    Hiko = 2791,
+    AdreN = 46200979,
+    nitr0 = 35624002,
+    aizy = 90685224,
+    Kjaerbye = 59614824,
+    Pimp = 57742580,
+    tenzki = 37214922,
+    MSL = 24134891,
+    Shara = 53330928,
+    THREAT = 158900,
+    fnx = 170178574,
+    TACO = 52876568,
+    adreN = 1366033,
+    s1mple = 73936547,
+    DAVEY = 100534297,
+    Professor_Chaos = 2029235,
+    arya = 411777,
+    abE = 25060851,
+    jasonR = 24868593,
+    DEVIL = 44238623,
+    mou = 52678767,
+    Dosia = 146641530,
+    hooch = 5809933,
+    wayLander = 38340970,
+    k0nfig = 19403447,
+    RUBINO = 35103983,
+    gla1ve = 50245293,
+    pita = 26459,
+    koosta = 161590,
+    spaze = 109497526,
+    RUSH = 63326592,
+    mixwell = 27224124,
+    daps = 19892353,
+    NAF = 40885967,
+    stanislaw = 21583315,
+    pyth = 57312567,
+    bodyy = 53029647
+};
+
 class EconItem {
 public:
 #ifdef _WIN32
@@ -279,9 +475,11 @@ public:
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
     void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
     void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
+    void setTournamentID(int id) noexcept { setAttributeValue(137, &id); }
     void setTournamentStage(int stage) noexcept { setAttributeValue(138, &stage); }
     void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
+    void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
@@ -345,6 +543,7 @@ class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
+    VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))

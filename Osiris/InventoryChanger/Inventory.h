@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "../SDK/ItemSchema.h"
 #include "StaticData.h"
 
 enum class Team;
@@ -14,13 +15,23 @@ struct StickerConfig {
     float wear = 0.0f;
 };
 
+enum TournamentTeam : std::uint8_t;
+enum TournamentStage : std::uint8_t;
+enum ProPlayer;
+
 struct DynamicSkinData {
-    bool isSouvenir = false;
     float wear = 0.0f;
     int seed = 1;
     int statTrak = -1;
+    std::uint32_t tournamentID = 0;
     std::array<StickerConfig, 5> stickers;
     std::string nameTag;
+    TournamentStage tournamentStage{};
+    TournamentTeam tournamentTeam1{};
+    TournamentTeam tournamentTeam2{};
+    ProPlayer proPlayer{};
+
+    [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
 
 struct PatchConfig {
@@ -38,6 +49,13 @@ struct DynamicGloveData {
 
 struct DynamicMusicData {
     int statTrak = -1;
+};
+
+struct DynamicSouvenirPackageData {
+    TournamentStage tournamentStage{};
+    TournamentTeam tournamentTeam1{};
+    TournamentTeam tournamentTeam2{};
+    ProPlayer proPlayer{};
 };
 
 struct InventoryItem {
@@ -93,9 +111,11 @@ namespace Inventory
     DynamicGloveData& dynamicGloveData(std::size_t index) noexcept;
     DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
     DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
+    DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
+    std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
 }
