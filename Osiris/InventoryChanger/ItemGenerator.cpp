@@ -580,6 +580,10 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, {} },
     { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, {} },
 
+    // Grand Final
+    { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, {} },
+    { TournamentMap::Overpass, GrandFinal, Astralis, VirtusPro, {} },
+    { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
