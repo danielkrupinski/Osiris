@@ -513,78 +513,60 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
 static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, &Match::map));
 
 constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
-    // Round 1
-    { TournamentMap::Cobblestone, GroupStage, North, GambitEsports, { k0nfig, cajunb, MSL, Magisk, RUBINO, Zeus, AdreN, Dosia, mou, Hobbit } },
     { TournamentMap::Cache, GroupStage, G2Esports, Fnatic, { RpK, bodyy, shox, ScreaM, SmithZz, KRIMZ, olofmeister, dennis, discodoplan } },
-    { TournamentMap::Mirage, GroupStage, HellRaisers, SKGaming, { DeadFox, ANGE1, bondik, STYKO, coldzera, fer, TACO, fox, FalleN } },
+    { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, { EliGE, Pimp, Hiko, jdm64, nitr0, NBK, apEX, kennyS, SIXER, Happy } },
+    { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, { chrisJ, denis, loWel, NiKo, Spiidi, DeadFox, ANGE1, bondik, STYKO, Zero } },
+    { TournamentMap::Cache, GroupStage, GODSENT, TeamEnVyUs, { Lekr0, flusha, pronax, NBK, apEX, kennyS, SIXER, Happy } },
+    { TournamentMap::Cache, GroupStage, OpTicGaming, GODSENT, { RUSH, NAF, mixwell, tarik, Lekr0, flusha, pronax, JW, znajder } },
+    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, { AdreN, Hobbit, Zeus, mou, twist, dennis, discodoplan, olofmeister, KRIMZ } },
+    { TournamentMap::Cache, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Cache, Semifinal, Astralis, Fnatic, { dupreeh, device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, twist, discodoplan, dennis, olofmeister } },
+    { TournamentMap::Cobblestone, GroupStage, North, GambitEsports, { k0nfig, cajunb, MSL, Magisk, RUBINO, Zeus, AdreN, Dosia, mou, Hobbit } },
     { TournamentMap::Cobblestone, GroupStage, VirtusPro, OpTicGaming, { Snax, TaZ, byali, pashaBiceps, NEO, RUSH, NAF, stanislaw, mixwell } },
     { TournamentMap::Cobblestone, GroupStage, NatusVincere, Mousesports, { Edward, s1mple, seized, flamie, GuardiaN, chrisJ, denis, loWel } },
-    { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, { EliGE, Pimp, Hiko, jdm64, nitr0, NBK, apEX, kennyS, SIXER, Happy } },
-    { TournamentMap::Train, GroupStage, GODSENT, Astralis, { JW, Lekr0, znajder, flusha, pronax, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
-    { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, { rain, allu, kioShiMa, karrigan, aizy, electronic, B1ad3, WorldEdit } },
-
-    // Round 2
     { TournamentMap::Cobblestone, GroupStage, NatusVincere, TeamEnVyUs, { Edward, s1mple, seized, flamie, GuardiaN, NBK, apEX, kennyS, SIXER } },
-    { TournamentMap::Mirage, GroupStage, SKGaming, FaZeClan, { coldzera, fer, TACO, fox, FalleN, rain, allu, kioShiMa, karrigan, aizy } },
-    { TournamentMap::Overpass, GroupStage, GambitEsports, GODSENT, { Zeus, AdreN, Dosia, mou, Hobbit, JW, Lekr0, znajder, flusha, pronax } },
-    { TournamentMap::Nuke, GroupStage, G2Esports, VirtusPro, { RpK, bodyy, shox, ScreaM, SmithZz, Snax, TaZ, byali, NEO } },
-    { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, { chrisJ, denis, loWel, NiKo, Spiidi, DeadFox, ANGE1, bondik, STYKO, Zero } },
-    { TournamentMap::Overpass, GroupStage, TeamLiquid, Flipsid3Tactics, { EliGE, Pimp, Hiko, jdm64, electronic, B1ad3, WorldEdit, markeloff, wayLander } },
     { TournamentMap::Cobblestone, GroupStage, Fnatic, North, { twist, KRIMZ, olofmeister, dennis, discodoplan, k0nfig, cajunb, MSL, Magisk, RUBINO } },
-    { TournamentMap::Train, GroupStage, Astralis, OpTicGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, RUSH, NAF, stanislaw, mixwell, tarik } },
-
-    // Round 3
-    { TournamentMap::Train, GroupStage, VirtusPro, GambitEsports, { Snax, TaZ, byali, pashaBiceps, NEO, Zeus, AdreN, Dosia, mou, Hobbit } },
+    { TournamentMap::Cobblestone, GroupStage, Fnatic, TeamEnVyUs, { twist, olofmeister, KRIMZ, discodoplan, dennis, apEX, NBK, kennyS, SIXER, Happy } },
+    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, { NEO, pashaBiceps, TaZ, byali, fox, FalleN, coldzera, TACO } },
     { TournamentMap::Dust2, GroupStage, NatusVincere, SKGaming, { Edward, s1mple, seized, flamie, GuardiaN, coldzera, fer } },
     { TournamentMap::Dust2, GroupStage, Mousesports, Fnatic, { chrisJ, denis, loWel, NiKo, Spiidi, twist, KRIMZ, olofmeister, dennis, discodoplan } },
-    { TournamentMap::Cache, GroupStage, GODSENT, TeamEnVyUs, { Lekr0, flusha, pronax, NBK, apEX, kennyS, SIXER, Happy } },
-    { TournamentMap::Train, GroupStage, G2Esports, Astralis, { RpK, bodyy, shox, ScreaM, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
-    { TournamentMap::Nuke, GroupStage, FaZeClan, TeamLiquid, { rain, allu, kioShiMa, karrigan, aizy, EliGE, Pimp, Hiko, jdm64, nitr0 } },
-    { TournamentMap::Mirage, GroupStage, HellRaisers, North, { DeadFox, ANGE1, bondik, STYKO, Zero, k0nfig, cajunb, MSL, Magisk, RUBINO } },
-    { TournamentMap::Train, GroupStage, OpTicGaming, Flipsid3Tactics, { RUSH, NAF, stanislaw, mixwell, tarik, electronic, WorldEdit, markeloff, wayLander } },
-
-    // Round 4
-    { TournamentMap::Cobblestone, GroupStage, Fnatic, TeamEnVyUs, { twist, olofmeister, KRIMZ, discodoplan, dennis, apEX, NBK, kennyS, SIXER, Happy } },
     { TournamentMap::Dust2, GroupStage, Astralis, SKGaming, { device, gla1ve, Xyp9x, Kjaerbye, dupreeh, coldzera, fox, fer, FalleN, TACO } },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, dupreeh, Xyp9x } },
+    { TournamentMap::Dust2, Quarterfinal, GambitEsports, Fnatic, { mou, Hobbit, twist, dennis, discodoplan, olofmeister, KRIMZ } },
+    { TournamentMap::Mirage, GroupStage, HellRaisers, SKGaming, { DeadFox, ANGE1, bondik, STYKO, coldzera, fer, TACO, fox, FalleN } },
+    { TournamentMap::Mirage, GroupStage, SKGaming, FaZeClan, { coldzera, fer, TACO, fox, FalleN, rain, allu, kioShiMa, karrigan, aizy } },
+    { TournamentMap::Mirage, GroupStage, HellRaisers, North, { DeadFox, ANGE1, bondik, STYKO, Zero, k0nfig, cajunb, MSL, Magisk, RUBINO } },
+    { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, { device, gla1ve, Kjaerbye, dupreeh, Hiko, nitr0 } },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, Xyp9x } },
+    { TournamentMap::Mirage, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, rain, karrigan, aizy, allu } },
+    { TournamentMap::Nuke, GroupStage, FaZeClan, Flipsid3Tactics, { rain, allu, kioShiMa, karrigan, aizy, electronic, B1ad3, WorldEdit } },
+    { TournamentMap::Nuke, GroupStage, G2Esports, VirtusPro, { RpK, bodyy, shox, ScreaM, SmithZz, Snax, TaZ, byali, NEO } },
+    { TournamentMap::Nuke, GroupStage, FaZeClan, TeamLiquid, { rain, allu, kioShiMa, karrigan, aizy, EliGE, Pimp, Hiko, jdm64, nitr0 } },
+    { TournamentMap::Nuke, GroupStage, TeamLiquid, Mousesports, { EliGE, Pimp, Hiko, jdm64, nitr0, loWel, NiKo, chrisJ } },
+    { TournamentMap::Nuke, GroupStage, TeamEnVyUs, FaZeClan, { kennyS, Happy, SIXER, rain, allu, kioShiMa, karrigan, aizy } },
+    { TournamentMap::Nuke, Semifinal, Astralis, Fnatic, { device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, discodoplan, dennis } },
+    { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, { dupreeh, device, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Overpass, GroupStage, GambitEsports, GODSENT, { Zeus, AdreN, Dosia, mou, Hobbit, JW, Lekr0, znajder, flusha, pronax } },
+    { TournamentMap::Overpass, GroupStage, TeamLiquid, Flipsid3Tactics, { EliGE, Pimp, Hiko, jdm64, electronic, B1ad3, WorldEdit, markeloff, wayLander } },
     { TournamentMap::Overpass, GroupStage, FaZeClan, GambitEsports, { rain, allu, kioShiMa, karrigan, aizy, Zeus, AdreN, Dosia, mou, Hobbit } },
     { TournamentMap::Overpass, GroupStage, G2Esports, North, { RpK, bodyy, shox, ScreaM, SmithZz, k0nfig, cajunb, MSL, Magisk, RUBINO } },
-    { TournamentMap::Nuke, GroupStage, TeamLiquid, Mousesports, { EliGE, Pimp, Hiko, jdm64, nitr0, loWel, NiKo, chrisJ } },
-    { TournamentMap::Cache, GroupStage, OpTicGaming, GODSENT, { RUSH, NAF, mixwell, tarik, Lekr0, flusha, pronax, JW, znajder } },
-
-    // Round 5
     { TournamentMap::Overpass, GroupStage, GODSENT, North, { Lekr0, flusha, pronax, JW, znajder, k0nfig, cajunb, MSL, Magisk, RUBINO } },
-    { TournamentMap::Nuke, GroupStage, TeamEnVyUs, FaZeClan, { kennyS, Happy, SIXER, rain, allu, kioShiMa, karrigan, aizy } },
-    { TournamentMap::Mirage, GroupStage, Astralis, TeamLiquid, { device, gla1ve, Kjaerbye, dupreeh, Hiko, nitr0 } },
-
-    // Quarterfinals
     { TournamentMap::Overpass, Quarterfinal, NatusVincere, Astralis, { flamie, s1mple, seized, Edward, device, Kjaerbye, dupreeh, Xyp9x } },
-    { TournamentMap::Mirage, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, Xyp9x } },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Astralis, { flamie, GuardiaN, s1mple, seized, Edward, device, gla1ve, Kjaerbye, dupreeh, Xyp9x } },
-
-    { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, { AdreN, Hobbit, Zeus, mou, twist, dennis, discodoplan, olofmeister, KRIMZ } },
     { TournamentMap::Overpass, Quarterfinal, GambitEsports, Fnatic, { AdreN, Hobbit, Zeus, mou, Dosia, KRIMZ, olofmeister } },
-    { TournamentMap::Dust2, Quarterfinal, GambitEsports, Fnatic, { mou, Hobbit, twist, dennis, discodoplan, olofmeister, KRIMZ } },
-
     { TournamentMap::Overpass, Quarterfinal, North, VirtusPro, { Magisk, MSL, Snax, NEO, pashaBiceps, TaZ, byali } },
-    { TournamentMap::Cache, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
-    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, { Magisk, MSL, k0nfig, cajunb, RUBINO, Snax, NEO, pashaBiceps, TaZ, byali } },
-
-    { TournamentMap::Mirage, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, rain, karrigan, aizy, allu } },
-    { TournamentMap::Train, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, allu, kioShiMa } },
     { TournamentMap::Overpass, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, kioShiMa, allu, karrigan } },
-
-    // Semifinals
-    { TournamentMap::Cache, Semifinal, Astralis, Fnatic, { dupreeh, device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, twist, discodoplan, dennis, olofmeister } },
-    { TournamentMap::Nuke, Semifinal, Astralis, Fnatic, { device, Xyp9x, Kjaerbye, gla1ve, KRIMZ, discodoplan, dennis } },
-
-    { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, { NEO, Snax, pashaBiceps, TaZ, byali, fox, fer, FalleN, coldzera, TACO } },
-    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, { NEO, pashaBiceps, TaZ, byali, fox, FalleN, coldzera, TACO } },
-
-    // Grand Final
-    { TournamentMap::Nuke, GrandFinal, Astralis, VirtusPro, { dupreeh, device, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
     { TournamentMap::Overpass, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, device, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
+    { TournamentMap::Train, GroupStage, GODSENT, Astralis, { JW, Lekr0, znajder, flusha, pronax, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Train, GroupStage, Astralis, OpTicGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, RUSH, NAF, stanislaw, mixwell, tarik } },
+    { TournamentMap::Train, GroupStage, VirtusPro, GambitEsports, { Snax, TaZ, byali, pashaBiceps, NEO, Zeus, AdreN, Dosia, mou, Hobbit } },
+    { TournamentMap::Train, GroupStage, G2Esports, Astralis, { RpK, bodyy, shox, ScreaM, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Train, GroupStage, OpTicGaming, Flipsid3Tactics, { RUSH, NAF, stanislaw, mixwell, tarik, electronic, WorldEdit, markeloff, wayLander } },
+    { TournamentMap::Train, Quarterfinal, SKGaming, FaZeClan, { fer, fox, FalleN, coldzera, TACO, allu, kioShiMa } },
+    { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, { NEO, Snax, pashaBiceps, TaZ, byali, fox, fer, FalleN, coldzera, TACO } },
     { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
 });
+static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, &Match::map));
 
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
