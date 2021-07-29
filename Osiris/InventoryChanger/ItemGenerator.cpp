@@ -516,12 +516,12 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Cache, Quarterfinal, GambitEsports, Fnatic, { spaze, AdreN, KRIMZ, flusha, olofmeister, dennis, JW } },
 
     // Semifinals
-    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, {} },
-    { TournamentMap::Nuke, Semifinal, VirtusPro, SKGaming, {} },
-    { TournamentMap::Mirage, Semifinal, VirtusPro, SKGaming, {} },
+    { TournamentMap::Cobblestone, Semifinal, VirtusPro, SKGaming, { TaZ, NEO, Snax, pashaBiceps, byali, coldzera, FalleN, fer, TACO, fnx } },
+    { TournamentMap::Nuke, Semifinal, VirtusPro, SKGaming, { TaZ, NEO, Snax, pashaBiceps, coldzera, FalleN, fer, TACO, fnx } },
+    { TournamentMap::Mirage, Semifinal, VirtusPro, SKGaming, { TaZ, NEO, Snax, pashaBiceps, byali, coldzera, FalleN, fer, TACO, fnx } },
     
-    { TournamentMap::Cobblestone, Semifinal, TeamLiquid, Fnatic, {} },
-    { TournamentMap::Cache, Semifinal, TeamLiquid, Fnatic, {} },
+    { TournamentMap::Cobblestone, Semifinal, TeamLiquid, Fnatic, { s1mple, EliGE, nitr0, jdm64, Hiko, KRIMZ, olofmeister, dennis, flusha } },
+    { TournamentMap::Cache, Semifinal, TeamLiquid, Fnatic, { s1mple, EliGE, nitr0, jdm64, Hiko, KRIMZ, JW, olofmeister, dennis, flusha } },
 
     // Grand Final
     { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, {} },
