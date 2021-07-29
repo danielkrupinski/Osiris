@@ -435,7 +435,20 @@ enum ProPlayer {
     NAF = 40885967,
     stanislaw = 21583315,
     pyth = 57312567,
-    bodyy = 53029647
+    bodyy = 53029647,
+    Magisk = 23690923,
+    Hobbit = 68027030,
+    discodoplan = 161262907,
+    twist = 19979131,
+    DeadFox = 29338592,
+    ANGE1 = 58930363,
+    STYKO = 55928431,
+    Zero = 34322135,
+    loWel = 34456844,
+    SIXER = 3429256,
+    Lekr0 = 1093135,
+    znajder = 97816050,
+    electronic = 83779379
 };
 
 class EconItem {
