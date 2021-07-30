@@ -624,11 +624,11 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Nuke, Quarterfinal, North, VirtusPro, { Magisk, cajunb, k0nfig, MSL, aizy, NEO, pashaBiceps, byali, Snax } },
 
     // Semifinals
-    { TournamentMap::Overpass, Semifinal, GambitEsports, Astralis, {} },
-    { TournamentMap::Inferno, Semifinal, GambitEsports, Astralis, {} },
-    { TournamentMap::Train, Semifinal, GambitEsports, Astralis, {} },
-    { TournamentMap::Inferno, Semifinal, VirtusPro, Immortals, {} },
-    { TournamentMap::Mirage, Semifinal, VirtusPro, Immortals, {} },
+    { TournamentMap::Overpass, Semifinal, GambitEsports, Astralis, { Zeus, mou, Hobbit, AdreN, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Inferno, Semifinal, GambitEsports, Astralis, { mou, Hobbit, Dosia, AdreN, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Train, Semifinal, GambitEsports, Astralis, { Zeus, mou, Hobbit, Dosia, AdreN, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
+    { TournamentMap::Inferno, Semifinal, VirtusPro, Immortals, { NEO, pashaBiceps, byali, Snax, steel, kNgV, LUCAS1, boltz, HEN1 } },
+    { TournamentMap::Mirage, Semifinal, VirtusPro, Immortals, { TaZ, pashaBiceps, byali, Snax, steel, kNgV, LUCAS1, boltz, HEN1 } },
 
     // Grand Final
     { TournamentMap::Cobblestone, GrandFinal, GambitEsports, Immortals, {} },
