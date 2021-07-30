@@ -451,7 +451,28 @@ enum ProPlayer {
     SIXER = 3429256,
     Lekr0 = 1093135,
     znajder = 97816050,
-    electronic = 83779379
+    electronic = 83779379,
+    oskar = 171425088,
+    ropz = 31006590,
+    mir = 40562076,
+    hutji = 61587630,
+    jR = 43490511,
+    keshandr = 65572922,
+    chopper = 85633136,
+    felps = 22765766,
+    kRYSTAL = 17526007,
+    suNny = 57405333,
+    zehN = 16308501,
+    innocent = 26563533,
+    HS = 3417033,
+    tabseN = 1225952,
+    keev = 51271036,
+    LEGIJA = 21242287,
+    Stewie2K = 38738282,
+    autimatic = 94605121,
+    LUCAS1 = 4780624,
+    kNgV = 6732863,
+    HEN1 = 57761535
 };
 
 class EconItem {
