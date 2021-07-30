@@ -579,6 +579,16 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Overpass, GroupStage, NatusVincere, G2Esports, {} },
     { TournamentMap::Overpass, GroupStage, Astralis, Immortals, {} },
 
+    // Round 2
+    { TournamentMap::Inferno, GroupStage, Cloud9, BIG, {} },
+    { TournamentMap::Cache, GroupStage, G2Esports, GambitEsports, {} },
+    { TournamentMap::Inferno, GroupStage, Astralis, SKGaming, {} },
+    { TournamentMap::Cache, GroupStage, VirtusPro, Fnatic, {} },
+    { TournamentMap::Mirage, GroupStage, North, PENTASports, {} },
+    { TournamentMap::Train, GroupStage, FaZeClan, Mousesports, {} },
+    { TournamentMap::Train, GroupStage, NatusVincere, Flipsid3Tactics, {} },
+    { TournamentMap::Train, GroupStage, VegaSquadron, Immortals, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
