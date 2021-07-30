@@ -303,7 +303,10 @@ enum TournamentTeam : std::uint8_t {
     AllStarTeamEurope = 65,
     OpTicGaming = 66,
     GODSENT = 67,
-    North = 68
+    North = 68,
+    BIG = 69,
+    VegaSquadron = 70,
+    Immortals = 71,
 };
 
 enum TournamentStage : std::uint8_t {
