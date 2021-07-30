@@ -608,9 +608,9 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, { s1mple, seized, flamie, GuardiaN, olofmeister, flusha, KRIMZ, dennis } },
 
     // Round 5
-    { TournamentMap::Overpass, GroupStage, G2Esports, Fnatic, {} },
-    { TournamentMap::Train, GroupStage, Cloud9, VirtusPro, {} },
-    { TournamentMap::Train, GroupStage, Immortals, Flipsid3Tactics, {} },
+    { TournamentMap::Overpass, GroupStage, G2Esports, Fnatic, { NBK, kennyS, apEX, bodyy, JW, olofmeister, flusha, KRIMZ, dennis } },
+    { TournamentMap::Train, GroupStage, Cloud9, VirtusPro, { n0thing, Skadoodle, autimatic, shroud, TaZ, Snax, pashaBiceps, byali, NEO } },
+    { TournamentMap::Train, GroupStage, Immortals, Flipsid3Tactics, { LUCAS1, boltz, kNgV, steel, HEN1, B1ad3, wayLander, markeloff, WorldEdit } },
 
     // Quarterfinals
     { TournamentMap::Train, Quarterfinal, Fnatic, GambitEsports, {} },
