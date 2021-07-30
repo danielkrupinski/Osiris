@@ -607,6 +607,11 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, PENTASports, Flipsid3Tactics, {} },
     { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, {} },
 
+    // Round 5
+    { TournamentMap::Overpass, GroupStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Train, GroupStage, Cloud9, VirtusPro, {} },
+    { TournamentMap::Train, GroupStage, Immortals, Flipsid3Tactics, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
