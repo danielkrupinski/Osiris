@@ -224,19 +224,22 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
-{
-    static std::string clanTag;
-
-    if (tagChanged) {
-        clanTag = miscConfig.clanTag;
-        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
-            clanTag.push_back(' ');
-        return;
-    }
-    
-    static auto lastTime = 0.0f;
-
-    if (miscConfig.clocktag) {
+{    
+    static auto lastTime = 0.0f; /*Used in clocktag*/
+	
+	const float svtickrate = 64.0f; //TODO: Get server tickrate dynamically
+	
+	int lagCompensation = GameData::getNetOutgoingLatency() / (1000.0f / svtickrate);
+	
+	int ticksPerChange = 1 * svtickrate; // Sec * TickRate
+										 // TODO: Add custom speed in menu
+	
+	int OffsetCount = static_cast<int>((memory->globalVars->tickCount + lagCompensation) / ticksPerChange);
+	
+	static int lastOffset = 0;
+	
+    if (miscConfig.clocktag) //Still the same
+	{
         if (memory->globalVars->realtime - lastTime < 1.0f)
             return;
 
@@ -247,17 +250,19 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
-    } else if (miscConfig.customClanTag) {
-        if (memory->globalVars->realtime - lastTime < 0.6f)
-            return;
-
-        if (miscConfig.animatedClanTag && !clanTag.empty()) {
-            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
-            if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
-                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+    } 
+	else if (miscConfig.customClanTag) 
+	{
+		if(lastOffset == OffsetCount) //Prevent from changing clantag every tick
+			return; 
+		std::string setTag = std::string(miscConfig.clanTag);
+        if (miscConfig.animatedClanTag) 
+		{
+            const auto offset = OffsetCount % setTag.size();
+			std::rotate(setTag.begin(), setTag.begin() + offset, setTag.end());
         }
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+		lastOffset = OffsetCount;
+        memory->setClanTag(setTag.c_str(), setTag.c_str());
     }
 }
 
