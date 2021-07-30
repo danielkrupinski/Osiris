@@ -613,15 +613,15 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, Immortals, Flipsid3Tactics, { LUCAS1, boltz, kNgV, steel, HEN1, B1ad3, wayLander, markeloff, WorldEdit } },
 
     // Quarterfinals
-    { TournamentMap::Train, Quarterfinal, Fnatic, GambitEsports, {} },
-    { TournamentMap::Inferno, Quarterfinal, Fnatic, GambitEsports, {} },
-    { TournamentMap::Cache, Quarterfinal, Astralis, SKGaming, {} },
-    { TournamentMap::Overpass, Quarterfinal, Astralis, SKGaming, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, Immortals, BIG, {} },
-    { TournamentMap::Inferno, Quarterfinal, Immortals, BIG, {} },
-    { TournamentMap::Train, Quarterfinal, Immortals, BIG, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, {} },
-    { TournamentMap::Nuke, Quarterfinal, North, VirtusPro, {} },
+    { TournamentMap::Train, Quarterfinal, Fnatic, GambitEsports, { JW, KRIMZ, olofmeister, flusha, dennis, Zeus, mou, Hobbit, Dosia, AdreN } },
+    { TournamentMap::Inferno, Quarterfinal, Fnatic, GambitEsports, { JW, olofmeister, flusha, dennis, Zeus, mou, Hobbit, Dosia, AdreN } },
+    { TournamentMap::Cache, Quarterfinal, Astralis, SKGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, fer, coldzera, felps, FalleN, TACO } },
+    { TournamentMap::Overpass, Quarterfinal, Astralis, SKGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, coldzera, fer, felps } },
+    { TournamentMap::Cobblestone, Quarterfinal, Immortals, BIG, { steel, kNgV, LUCAS1, boltz, HEN1, LEGIJA, tabseN, nex, gobb, keev } },
+    { TournamentMap::Inferno, Quarterfinal, Immortals, BIG, { steel, kNgV, LUCAS1, boltz, HEN1, LEGIJA, tabseN, gobb, keev } },
+    { TournamentMap::Train, Quarterfinal, Immortals, BIG, { steel, kNgV, LUCAS1, boltz, HEN1, LEGIJA, tabseN, nex, gobb, keev } },
+    { TournamentMap::Cobblestone, Quarterfinal, North, VirtusPro, { Magisk, cajunb, k0nfig, MSL, TaZ, NEO, pashaBiceps, byali, Snax } },
+    { TournamentMap::Nuke, Quarterfinal, North, VirtusPro, { Magisk, cajunb, k0nfig, MSL, aizy, NEO, pashaBiceps, byali, Snax } },
 
     // Semifinals
     { TournamentMap::Overpass, Semifinal, GambitEsports, Astralis, {} },
