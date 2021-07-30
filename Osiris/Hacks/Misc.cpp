@@ -225,45 +225,51 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {    
-    static auto lastTime = 0.0f; /*Used in clocktag*/
-	
+	static auto lastTime = 0.0f; /*Used in clocktag*/
+
 	const float svtickrate = 64.0f; //TODO: Get server tickrate dynamically
 	
 	int lagCompensation = GameData::getNetOutgoingLatency() / (1000.0f / svtickrate);
 	
 	int ticksPerChange = 1 * svtickrate; // Sec * TickRate
-										 // TODO: Add custom speed in menu
+					     //TODO: Add custom speed in menu
 	
 	int OffsetCount = static_cast<int>((memory->globalVars->tickCount + lagCompensation) / ticksPerChange);
 	
 	static int lastOffset = 0;
 	
-    if (miscConfig.clocktag) //Still the same
+   	if (miscConfig.clocktag) //Still the same
 	{
-        if (memory->globalVars->realtime - lastTime < 1.0f)
-            return;
+        	if (memory->globalVars->realtime - lastTime < 1.0f)
+        	    return;
 
-        const auto time = std::time(nullptr);
-        const auto localTime = std::localtime(&time);
-        char s[11];
-        s[0] = '\0';
-        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(s, s);
-    } 
+        	const auto time = std::time(nullptr);
+        	const auto localTime = std::localtime(&time);
+        	char s[11];
+        	s[0] = '\0';
+        	snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+        	lastTime = memory->globalVars->realtime;
+        	memory->setClanTag(s, s);
+  	} 
 	else if (miscConfig.customClanTag) 
 	{
 		if(lastOffset == OffsetCount) //Prevent from changing clantag every tick
 			return; 
+		
 		std::string setTag = std::string(miscConfig.clanTag);
-        if (miscConfig.animatedClanTag) 
+		
+		if(setTag.size() < 2)
+			setTag = "Osiris ";
+		
+        	if (miscConfig.animatedClanTag) 
 		{
-            const auto offset = OffsetCount % setTag.size();
+          		const auto offset = OffsetCount % setTag.size();
 			std::rotate(setTag.begin(), setTag.begin() + offset, setTag.end());
-        }
+        	}
+		
 		lastOffset = OffsetCount;
-        memory->setClanTag(setTag.c_str(), setTag.c_str());
-    }
+        	memory->setClanTag(setTag.c_str(), setTag.c_str());
+    	}
 }
 
 void Misc::spectatorList() noexcept
