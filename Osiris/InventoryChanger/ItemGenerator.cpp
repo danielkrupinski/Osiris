@@ -630,6 +630,11 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Inferno, Semifinal, VirtusPro, Immortals, {} },
     { TournamentMap::Mirage, Semifinal, VirtusPro, Immortals, {} },
 
+    // Grand Final
+    { TournamentMap::Cobblestone, GrandFinal, GambitEsports, Immortals, {} },
+    { TournamentMap::Train, GrandFinal, GambitEsports, Immortals, {} },
+    { TournamentMap::Inferno, GrandFinal, GambitEsports, Immortals, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
