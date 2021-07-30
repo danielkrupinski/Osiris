@@ -631,9 +631,9 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Mirage, Semifinal, VirtusPro, Immortals, { TaZ, pashaBiceps, byali, Snax, steel, kNgV, LUCAS1, boltz, HEN1 } },
 
     // Grand Final
-    { TournamentMap::Cobblestone, GrandFinal, GambitEsports, Immortals, {} },
-    { TournamentMap::Train, GrandFinal, GambitEsports, Immortals, {} },
-    { TournamentMap::Inferno, GrandFinal, GambitEsports, Immortals, {} },
+    { TournamentMap::Cobblestone, GrandFinal, GambitEsports, Immortals, { Zeus, mou, Dosia, steel, kNgV, LUCAS1, boltz, HEN1 } },
+    { TournamentMap::Train, GrandFinal, GambitEsports, Immortals, { Zeus, mou, Hobbit, Dosia, AdreN, steel, kNgV, LUCAS1, boltz, HEN1 } },
+    { TournamentMap::Inferno, GrandFinal, GambitEsports, Immortals, { Zeus, mou, Hobbit, Dosia, AdreN, steel, kNgV, LUCAS1, boltz, HEN1 } },
 
 });
 
