@@ -314,7 +314,8 @@ enum TournamentStage : std::uint8_t {
     Quarterfinal = 5,
     Semifinal = 8,
     GrandFinal = 11,
-    AllStar = 14
+    AllStar = 14,
+    ChallengersStage = 27
 };
 
 enum ProPlayer {
