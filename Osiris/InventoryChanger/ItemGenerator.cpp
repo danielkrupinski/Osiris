@@ -568,6 +568,19 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, &Match::map));
 
+constexpr auto pglKrakow2017Matches = std::to_array<Match>({
+    // Round 1
+    { TournamentMap::Inferno, GroupStage, Mousesports, GambitEsports, {} },
+    { TournamentMap::Mirage, GroupStage, Fnatic, Flipsid3Tactics, {} },
+    { TournamentMap::Nuke, GroupStage, VegaSquadron, VirtusPro, {} },
+    { TournamentMap::Inferno, GroupStage, SKGaming, PENTASports, {} },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, BIG, {} },
+    { TournamentMap::Mirage, GroupStage, Cloud9, North, {} },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, G2Esports, {} },
+    { TournamentMap::Overpass, GroupStage, Astralis, Immortals, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
