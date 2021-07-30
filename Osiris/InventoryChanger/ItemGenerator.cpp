@@ -570,14 +570,14 @@ static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, &Match::map)
 
 constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     // Round 1
-    { TournamentMap::Inferno, GroupStage, Mousesports, GambitEsports, {} },
-    { TournamentMap::Mirage, GroupStage, Fnatic, Flipsid3Tactics, {} },
-    { TournamentMap::Nuke, GroupStage, VegaSquadron, VirtusPro, {} },
-    { TournamentMap::Inferno, GroupStage, SKGaming, PENTASports, {} },
-    { TournamentMap::Inferno, GroupStage, FaZeClan, BIG, {} },
-    { TournamentMap::Mirage, GroupStage, Cloud9, North, {} },
-    { TournamentMap::Overpass, GroupStage, NatusVincere, G2Esports, {} },
-    { TournamentMap::Overpass, GroupStage, Astralis, Immortals, {} },
+    { TournamentMap::Inferno, GroupStage, Mousesports, GambitEsports, { oskar, chrisJ, ropz, denis, loWel, AdreN, Zeus, mou, Hobbit, Dosia } },
+    { TournamentMap::Mirage, GroupStage, Fnatic, Flipsid3Tactics, { JW, olofmeister, flusha, KRIMZ, dennis, electronic, B1ad3, wayLander, markeloff } },
+    { TournamentMap::Nuke, GroupStage, VegaSquadron, VirtusPro, { mir, hutji, TaZ, Snax, pashaBiceps, byali, NEO } },
+    { TournamentMap::Inferno, GroupStage, SKGaming, PENTASports, { coldzera, FalleN, fer, TACO, felps, kRYSTAL, suNny, zehN, innocent, HS } },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, BIG, { allu, rain, NiKo, kioShiMa, nex, tabseN, keev, gobb, LEGIJA } },
+    { TournamentMap::Mirage, GroupStage, Cloud9, North, { n0thing, Skadoodle, Stewie2K, autimatic, shroud, k0nfig, Magisk, cajunb, aizy } },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, G2Esports, { s1mple, Edward, flamie, GuardiaN, NBK, kennyS, shox, apEX, bodyy } },
+    { TournamentMap::Overpass, GroupStage, Astralis, Immortals, { gla1ve, dupreeh, Kjaerbye, Xyp9x, device, LUCAS1, boltz, kNgV, steel, HEN1 } },
 
     // Round 2
     { TournamentMap::Inferno, GroupStage, Cloud9, BIG, {} },
