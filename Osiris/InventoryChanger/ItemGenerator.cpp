@@ -600,12 +600,12 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, FaZeClan, Flipsid3Tactics, { allu, rain, NiKo, kioShiMa, karrigan, electronic, B1ad3, wayLander, markeloff, WorldEdit } },
 
     // Round 4
-    { TournamentMap::Inferno, GroupStage, G2Esports, Astralis, {} },
-    { TournamentMap::Mirage, GroupStage, VirtusPro, North, {} },
-    { TournamentMap::Overpass, GroupStage, SKGaming, Immortals, {} },
-    { TournamentMap::Train, GroupStage, Mousesports, Cloud9, {} },
-    { TournamentMap::Train, GroupStage, PENTASports, Flipsid3Tactics, {} },
-    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, {} },
+    { TournamentMap::Inferno, GroupStage, G2Esports, Astralis, { shox, apEX, kennyS, gla1ve, dupreeh, Kjaerbye, Xyp9x, device } },
+    { TournamentMap::Mirage, GroupStage, VirtusPro, North, { TaZ, Snax, pashaBiceps, byali, NEO, k0nfig, Magisk, cajunb, aizy, MSL } },
+    { TournamentMap::Overpass, GroupStage, SKGaming, Immortals, { coldzera, FalleN, fer, TACO, felps, LUCAS1, boltz, kNgV, HEN1 } },
+    { TournamentMap::Train, GroupStage, Mousesports, Cloud9, { oskar, chrisJ, ropz, denis, loWel, n0thing, Skadoodle, Stewie2K, autimatic, shroud } },
+    { TournamentMap::Train, GroupStage, PENTASports, Flipsid3Tactics, { kRYSTAL, suNny, zehN, innocent, HS, electronic, B1ad3, wayLander, markeloff, WorldEdit } },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, { s1mple, seized, flamie, GuardiaN, olofmeister, flusha, KRIMZ, dennis } },
 
     // Round 5
     { TournamentMap::Overpass, GroupStage, G2Esports, Fnatic, {} },
