@@ -590,14 +590,14 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, VegaSquadron, Immortals, { mir, hutji, jR, keshandr, LUCAS1, boltz, kNgV, steel, HEN1 } },
 
     // Round 3
-    { TournamentMap::Train, GroupStage, VirtusPro, GambitEsports, {} },
-    { TournamentMap::Inferno, GroupStage, SKGaming, BIG, {} },
-    { TournamentMap::Cobblestone, GroupStage, North, Mousesports, {} },
-    { TournamentMap::Overpass, GroupStage, NatusVincere, Immortals, {} },
-    { TournamentMap::Cobblestone, GroupStage, G2Esports, Cloud9, {} },
-    { TournamentMap::Nuke, GroupStage, Fnatic, Astralis, {} },
-    { TournamentMap::Mirage, GroupStage, VegaSquadron, PENTASports, {} },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, Flipsid3Tactics, {} },
+    { TournamentMap::Train, GroupStage, VirtusPro, GambitEsports, { TaZ, Snax, pashaBiceps, byali, NEO,  AdreN, Zeus, mou, Hobbit, Dosia } },
+    { TournamentMap::Inferno, GroupStage, SKGaming, BIG, { coldzera, FalleN, fer, TACO, felps, nex, tabseN, keev, gobb, LEGIJA } },
+    { TournamentMap::Cobblestone, GroupStage, North, Mousesports, { k0nfig, Magisk, cajunb, aizy, MSL, oskar, chrisJ, ropz, denis, loWel } },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, Immortals, { s1mple, Edward, flamie, GuardiaN, seized, LUCAS1, boltz, kNgV, steel, HEN1 } },
+    { TournamentMap::Cobblestone, GroupStage, G2Esports, Cloud9, { NBK, kennyS, shox, apEX, bodyy, n0thing, Skadoodle, Stewie2K, autimatic, shroud } },
+    { TournamentMap::Nuke, GroupStage, Fnatic, Astralis, { JW, flusha, KRIMZ, dennis, gla1ve, dupreeh, Kjaerbye, Xyp9x, device } },
+    { TournamentMap::Mirage, GroupStage, VegaSquadron, PENTASports, { mir, hutji, jR, keshandr, chopper, kRYSTAL, suNny, zehN, innocent, HS } },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Flipsid3Tactics, { allu, rain, NiKo, kioShiMa, karrigan, electronic, B1ad3, wayLander, markeloff, WorldEdit } },
 
     // Round 4
     { TournamentMap::Inferno, GroupStage, G2Esports, Astralis, {} },
