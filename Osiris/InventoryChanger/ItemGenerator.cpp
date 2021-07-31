@@ -663,6 +663,11 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, ChallengersStage, SproutEsports, Renegades, {} },
     { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, TeamEnVyUs, {} },
 
+    // Round 5
+    { TournamentMap::Mirage, ChallengersStage, Renegades, Mousesports, {} },
+    { TournamentMap::Train, ChallengersStage, QuantumBellatorFire, Avangar, {} },
+    { TournamentMap::Inferno, ChallengersStage, NatusVincere, TeamLiquid, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
