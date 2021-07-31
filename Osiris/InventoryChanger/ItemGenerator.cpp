@@ -645,6 +645,16 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Cache, ChallengersStage, TeamEnVyUs, Renegades, {} },
     { TournamentMap::Inferno, ChallengersStage, FlashGaming, QuantumBellatorFire, {} },
 
+    // Round 3
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, VegaSquadron, {} },
+    { TournamentMap::Train, ChallengersStage, Cloud9, Mousesports, {} },
+    { TournamentMap::Mirage, ChallengersStage, FaZeClan, QuantumBellatorFire, {} },
+    { TournamentMap::Train, ChallengersStage, SpaceSoldiers, MisfitsGaming, {} },
+    { TournamentMap::Mirage, ChallengersStage, NatusVincere, SproutEsports, {} },
+    { TournamentMap::Cobblestone, ChallengersStage, TeamLiquid, Renegades, {} },
+    { TournamentMap::Inferno, ChallengersStage, FlashGaming, TeamEnVyUs, {} },
+    { TournamentMap::Train, ChallengersStage, Avangar, Flipsid3Tactics, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
