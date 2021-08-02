@@ -656,12 +656,12 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Train, ChallengersStage, Avangar, Flipsid3Tactics, { qikert, buster, Jame, KrizzeN, seized, WorldEdit, markeloff, B1ad3 } },
 
     // Round 4
-    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, VegaSquadron, {} },
-    { TournamentMap::Train, ChallengersStage, NatusVincere, FaZeClan, {} },
-    { TournamentMap::Mirage, ChallengersStage, Mousesports, SpaceSoldiers, {} },
-    { TournamentMap::Cache, ChallengersStage, MisfitsGaming, Avangar, {} },
-    { TournamentMap::Cobblestone, ChallengersStage, SproutEsports, Renegades, {} },
-    { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, TeamEnVyUs, {} },
+    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, VegaSquadron, { nitr0, Twistzz, EliGE, jdm64, mir, keshandr, hutji, chopper } },
+    { TournamentMap::Train, ChallengersStage, NatusVincere, FaZeClan, { flamie, Zeus, Edward, rain, olofmeister, GuardiaN, karrigan, NiKo } },
+    { TournamentMap::Mirage, ChallengersStage, Mousesports, SpaceSoldiers, { chrisJ, oskar, ropz, STYKO, suNny, XANTARES, paz, ngiN, Calyx, MAJ3R } },
+    { TournamentMap::Cache, ChallengersStage, MisfitsGaming, Avangar, { devoduvek, AmaNEk, ShahZaM, SicK, seangares, qikert, buster, Jame, dimasick, KrizzeN } },
+    { TournamentMap::Cobblestone, ChallengersStage, SproutEsports, Renegades, { innocent, denis, zehN, Spiidi, kRYSTAL, AZR, Nifty, NAF, USTILO, jks } },
+    { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, TeamEnVyUs, { Boombl4, waterfaLLZ, jmqa, Kvik, balblna, xms, Happy, SIXER, ScreaM } },
 
     // Round 5
     { TournamentMap::Mirage, ChallengersStage, Renegades, Mousesports, {} },
