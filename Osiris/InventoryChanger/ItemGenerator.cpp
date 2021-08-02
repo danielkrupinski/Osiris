@@ -704,6 +704,14 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, GroupStage, BIG, North, {} },
     { TournamentMap::Mirage, GroupStage, Cloud9, VirtusPro, {} },
 
+    // Round 4
+    { TournamentMap::Train, GroupStage, Mousesports, QuantumBellatorFire, {} },
+    { TournamentMap::Overpass, GroupStage, SKGaming, GambitEsports, {} },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, Fnatic, {} },
+    { TournamentMap::Cobblestone, GroupStage, BIG, SpaceSoldiers, {} },
+    { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
+    { TournamentMap::Inferno, GroupStage, TeamLiquid, VegaSquadron, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
