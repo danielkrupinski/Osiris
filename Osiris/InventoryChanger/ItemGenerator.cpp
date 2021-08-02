@@ -626,14 +626,14 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     // Challengers Stage
 
     // Round 1
-    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, Renegades, {} },
-    { TournamentMap::Mirage, ChallengersStage, Avangar, Mousesports, {} },
-    { TournamentMap::Overpass, ChallengersStage, TeamLiquid, FaZeClan, {} },
-    { TournamentMap::Overpass, ChallengersStage, Flipsid3Tactics, MisfitsGaming, {} },
-    { TournamentMap::Cobblestone, ChallengersStage, SproutEsports, SpaceSoldiers, {} },
-    { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, NatusVincere, {} },
-    { TournamentMap::Inferno, ChallengersStage, G2Esports, FlashGaming, {} },
-    { TournamentMap::Cache, ChallengersStage, Cloud9, TeamEnVyUs, {} },
+    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, Renegades, { mir, jR, keshandr, hutji, chopper, AZR, Nifty, NAF, USTILO, jks } },
+    { TournamentMap::Mirage, ChallengersStage, Avangar, Mousesports, { qikert, buster, Jame, dimasick, KrizzeN, chrisJ, oskar, ropz, STYKO, suNny } },
+    { TournamentMap::Overpass, ChallengersStage, TeamLiquid, FaZeClan, { nitr0, Twistzz, EliGE, jdm64, rain, olofmeister, GuardiaN, karrigan, NiKo } },
+    { TournamentMap::Overpass, ChallengersStage, Flipsid3Tactics, MisfitsGaming, { wayLander, WorldEdit, markeloff, B1ad3, devoduvek, AmaNEk, ShahZaM, SicK, seangares } },
+    { TournamentMap::Cobblestone, ChallengersStage, SproutEsports, SpaceSoldiers, { innocent, denis, zehN, Spiidi, kRYSTAL, XANTARES, paz, ngiN, Calyx } },
+    { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, NatusVincere, { Boombl4, waterfaLLZ, jmqa, Kvik, s1mple, electronic, flamie, Zeus, Edward } },
+    { TournamentMap::Inferno, ChallengersStage, G2Esports, FlashGaming, { NBK, shox, bodyy, apEX, Kaze, Attacker, Karsa, LoveYY, Summer } },
+    { TournamentMap::Cache, ChallengersStage, Cloud9, TeamEnVyUs, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, ScreaM, RpK, Happy, SIXER } },
 
     // Round 2
     { TournamentMap::Mirage, ChallengersStage, Mousesports, NatusVincere, {} },
