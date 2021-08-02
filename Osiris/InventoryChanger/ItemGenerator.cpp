@@ -713,9 +713,9 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, TeamLiquid, VegaSquadron, { nitr0, Twistzz, EliGE, jdm64, mir, jR, keshandr, hutji, chopper } },
 
     // Round 5
-    { TournamentMap::Mirage, GroupStage, GambitEsports, Fnatic, {} },
-    { TournamentMap::Mirage, GroupStage, Cloud9, VegaSquadron, {} },
-    { TournamentMap::Mirage, GroupStage, Mousesports, SpaceSoldiers, {} },
+    { TournamentMap::Mirage, GroupStage, GambitEsports, Fnatic, { Hobbit, AdreN, JW, KRIMZ, flusha, Lekr0 } },
+    { TournamentMap::Mirage, GroupStage, Cloud9, VegaSquadron, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, jR, hutji } },
+    { TournamentMap::Mirage, GroupStage, Mousesports, SpaceSoldiers, { chrisJ, oskar, ropz, STYKO, XANTARES, paz, ngiN, Calyx, MAJ3R } },
 
     // Quarterfinals
     { TournamentMap::Nuke, Quarterfinal, FaZeClan, Mousesports, {} },
