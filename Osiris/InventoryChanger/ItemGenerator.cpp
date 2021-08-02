@@ -646,14 +646,14 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, FlashGaming, QuantumBellatorFire, { Kaze, Attacker, Karsa, LoveYY, Summer, Boombl4, waterfaLLZ, jmqa, Kvik, balblna } },
 
     // Round 3
-    { TournamentMap::Overpass, ChallengersStage, G2Esports, VegaSquadron, {} },
-    { TournamentMap::Train, ChallengersStage, Cloud9, Mousesports, {} },
-    { TournamentMap::Mirage, ChallengersStage, FaZeClan, QuantumBellatorFire, {} },
-    { TournamentMap::Train, ChallengersStage, SpaceSoldiers, MisfitsGaming, {} },
-    { TournamentMap::Mirage, ChallengersStage, NatusVincere, SproutEsports, {} },
-    { TournamentMap::Cobblestone, ChallengersStage, TeamLiquid, Renegades, {} },
-    { TournamentMap::Inferno, ChallengersStage, FlashGaming, TeamEnVyUs, {} },
-    { TournamentMap::Train, ChallengersStage, Avangar, Flipsid3Tactics, {} },
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, VegaSquadron, { NBK, shox, bodyy, apEX, kennyS, mir, jR, keshandr, hutji, chopper } },
+    { TournamentMap::Train, ChallengersStage, Cloud9, Mousesports, { Skadoodle, tarik, autimatic, RUSH, chrisJ, oskar } },
+    { TournamentMap::Mirage, ChallengersStage, FaZeClan, QuantumBellatorFire, { rain, GuardiaN, karrigan, NiKo, Boombl4, waterfaLLZ, Kvik } },
+    { TournamentMap::Train, ChallengersStage, SpaceSoldiers, MisfitsGaming, { XANTARES, paz, ngiN, Calyx, MAJ3R, devoduvek, AmaNEk, ShahZaM, SicK, seangares } },
+    { TournamentMap::Mirage, ChallengersStage, NatusVincere, SproutEsports, { s1mple, electronic, flamie, Zeus, Edward, Spiidi } },
+    { TournamentMap::Cobblestone, ChallengersStage, TeamLiquid, Renegades, { nitr0, Twistzz, EliGE, jdm64, AZR, Nifty, NAF, USTILO, jks } },
+    { TournamentMap::Inferno, ChallengersStage, FlashGaming, TeamEnVyUs, { Kaze, Attacker, Karsa, LoveYY, Summer, xms, RpK, Happy, SIXER, ScreaM } },
+    { TournamentMap::Train, ChallengersStage, Avangar, Flipsid3Tactics, { qikert, buster, Jame, KrizzeN, seized, WorldEdit, markeloff, B1ad3 } },
 
     // Round 4
     { TournamentMap::Mirage, ChallengersStage, TeamLiquid, VegaSquadron, {} },
