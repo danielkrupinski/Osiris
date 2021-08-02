@@ -664,9 +664,9 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, QuantumBellatorFire, TeamEnVyUs, { Boombl4, waterfaLLZ, jmqa, Kvik, balblna, xms, Happy, SIXER, ScreaM } },
 
     // Round 5
-    { TournamentMap::Mirage, ChallengersStage, Renegades, Mousesports, {} },
-    { TournamentMap::Train, ChallengersStage, QuantumBellatorFire, Avangar, {} },
-    { TournamentMap::Inferno, ChallengersStage, NatusVincere, TeamLiquid, {} },
+    { TournamentMap::Mirage, ChallengersStage, Renegades, Mousesports, { AZR, Nifty, USTILO, chrisJ, oskar, ropz, STYKO, suNny } },
+    { TournamentMap::Train, ChallengersStage, QuantumBellatorFire, Avangar, { Boombl4, waterfaLLZ, jmqa, Kvik, balblna, buster, KrizzeN } },
+    { TournamentMap::Inferno, ChallengersStage, NatusVincere, TeamLiquid, { s1mple, electronic, flamie, Zeus, Edward, nitr0, Twistzz, EliGE, jdm64 } },
 
     // 100 Thieves replacement
     { TournamentMap::Mirage, ChallengersStage, Avangar, Renegades, {} },
