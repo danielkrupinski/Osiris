@@ -729,11 +729,11 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, Quarterfinal, SKGaming, Fnatic, { FalleN, felps, fer, TACO, coldzera, JW, KRIMZ, flusha, Lekr0, Golden } },
 
     // Semifinals
-    { TournamentMap::Inferno, Semifinal, NatusVincere, FaZeClan, {} },
-    { TournamentMap::Mirage, Semifinal, NatusVincere, FaZeClan, {} },
-    { TournamentMap::Mirage, Semifinal, SKGaming, Cloud9, {} },
-    { TournamentMap::Cobblestone, Semifinal, Cloud9, SKGaming, {} },
-    { TournamentMap::Inferno, Semifinal, Cloud9, SKGaming, {} },
+    { TournamentMap::Inferno, Semifinal, NatusVincere, FaZeClan, { s1mple, electronic, flamie, Zeus, rain, olofmeister, GuardiaN, karrigan, NiKo } },
+    { TournamentMap::Mirage, Semifinal, NatusVincere, FaZeClan, { s1mple, electronic, Zeus, rain, olofmeister, GuardiaN, karrigan, NiKo } },
+    { TournamentMap::Mirage, Semifinal, SKGaming, Cloud9, { coldzera, TACO, fer, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Cobblestone, Semifinal, Cloud9, SKGaming, { tarik, autimatic, Stewie2K, RUSH, FalleN, felps, fer, TACO, coldzera } },
+    { TournamentMap::Inferno, Semifinal, Cloud9, SKGaming, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, FalleN, felps, fer, TACO, coldzera } },
 
     // Grand Final
     { TournamentMap::Mirage, GrandFinal, FaZeClan, Cloud9, {} },
