@@ -497,7 +497,17 @@ enum ProPlayer {
     paz = 68524615,
     ngiN = 17887362,
     Calyx = 92280537,
-    MAJ3R = 7167161
+    MAJ3R = 7167161,
+    Boombl4 = 185941338,
+    waterfaLLZ = 12720124,
+    jmqa = 115223433,
+    Kvik = 40982505,
+    balblna = 50204800,
+    Kaze = 16127541,
+    Attacker = 88001036,
+    Karsa = 85358333,
+    LoveYY = 48886373,
+    Summer = 52964519
 };
 
 class EconItem {
