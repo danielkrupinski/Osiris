@@ -705,12 +705,12 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, Cloud9, VirtusPro, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, Snax, TaZ, pashaBiceps } },
 
     // Round 4
-    { TournamentMap::Train, GroupStage, Mousesports, QuantumBellatorFire, {} },
-    { TournamentMap::Overpass, GroupStage, SKGaming, GambitEsports, {} },
-    { TournamentMap::Inferno, GroupStage, NatusVincere, Fnatic, {} },
-    { TournamentMap::Cobblestone, GroupStage, BIG, SpaceSoldiers, {} },
-    { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
-    { TournamentMap::Inferno, GroupStage, TeamLiquid, VegaSquadron, {} },
+    { TournamentMap::Train, GroupStage, Mousesports, QuantumBellatorFire, { chrisJ, oskar, ropz, STYKO, Boombl4, waterfaLLZ, jmqa, Kvik, balblna } },
+    { TournamentMap::Overpass, GroupStage, SKGaming, GambitEsports, { FalleN, felps, fer, TACO, coldzera, AdreN, Dosia, Hobbit, mou, fitch } },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, Fnatic, { s1mple, electronic, flamie, Zeus, Edward, JW, KRIMZ, flusha } },
+    { TournamentMap::Cobblestone, GroupStage, BIG, SpaceSoldiers, { tabseN, LEGIJA, nex, keev, gobb, XANTARES, paz, ngiN, Calyx, MAJ3R } },
+    { TournamentMap::Train, GroupStage, Astralis, Cloud9, { device, Xyp9x, dupreeh, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Inferno, GroupStage, TeamLiquid, VegaSquadron, { nitr0, Twistzz, EliGE, jdm64, mir, jR, keshandr, hutji, chopper } },
 
     // Round 5
     { TournamentMap::Mirage, GroupStage, GambitEsports, Fnatic, {} },
