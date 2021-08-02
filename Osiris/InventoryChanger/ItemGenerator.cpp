@@ -718,15 +718,15 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, Mousesports, SpaceSoldiers, { chrisJ, oskar, ropz, STYKO, XANTARES, paz, ngiN, Calyx, MAJ3R } },
 
     // Quarterfinals
-    { TournamentMap::Nuke, Quarterfinal, FaZeClan, Mousesports, {} },
-    { TournamentMap::Cache, Quarterfinal, FaZeClan, Mousesports, {} },
-    { TournamentMap::Mirage, Quarterfinal, NatusVincere, QuantumBellatorFire, {} },
-    { TournamentMap::Inferno, Quarterfinal, NatusVincere, QuantumBellatorFire, {} },
-    { TournamentMap::Mirage, Quarterfinal, G2Esports, Cloud9, {} },
-    { TournamentMap::Overpass, Quarterfinal, G2Esports, Cloud9, {} },
-    { TournamentMap::Inferno, Quarterfinal, SKGaming, Fnatic, {} },
-    { TournamentMap::Overpass, Quarterfinal, SKGaming, Fnatic, {} },
-    { TournamentMap::Mirage, Quarterfinal, SKGaming, Fnatic, {} },
+    { TournamentMap::Nuke, Quarterfinal, FaZeClan, Mousesports, { rain, olofmeister, GuardiaN, NiKo, chrisJ, oskar, ropz, STYKO, suNny } },
+    { TournamentMap::Cache, Quarterfinal, FaZeClan, Mousesports, { rain, olofmeister, GuardiaN, karrigan, NiKo, oskar, ropz, STYKO, suNny } },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, QuantumBellatorFire, { s1mple, electronic, flamie, Edward, Boombl4, Kvik } },
+    { TournamentMap::Inferno, Quarterfinal, NatusVincere, QuantumBellatorFire, { electronic, flamie, Zeus, Edward, Boombl4, waterfaLLZ, Kvik, balblna } },
+    { TournamentMap::Mirage, Quarterfinal, G2Esports, Cloud9, { NBK, shox, bodyy, apEX, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Overpass, Quarterfinal, G2Esports, Cloud9, { NBK, bodyy, kennyS, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Inferno, Quarterfinal, SKGaming, Fnatic, { FalleN, felps, fer, TACO, coldzera, JW, KRIMZ, flusha, Lekr0, Golden } },
+    { TournamentMap::Overpass, Quarterfinal, SKGaming, Fnatic, { FalleN, felps, TACO, coldzera, JW, KRIMZ, flusha, Lekr0, Golden } },
+    { TournamentMap::Mirage, Quarterfinal, SKGaming, Fnatic, { FalleN, felps, fer, TACO, coldzera, JW, KRIMZ, flusha, Lekr0, Golden } },
 
     // Semifinals
     { TournamentMap::Inferno, Semifinal, NatusVincere, FaZeClan, {} },
