@@ -736,9 +736,9 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, Semifinal, Cloud9, SKGaming, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, FalleN, felps, fer, TACO, coldzera } },
 
     // Grand Final
-    { TournamentMap::Mirage, GrandFinal, FaZeClan, Cloud9, {} },
-    { TournamentMap::Overpass, GrandFinal, FaZeClan, Cloud9, {} },
-    { TournamentMap::Inferno, GrandFinal, FaZeClan, Cloud9, {} },
+    { TournamentMap::Mirage, GrandFinal, FaZeClan, Cloud9, { rain, olofmeister, GuardiaN, karrigan, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Overpass, GrandFinal, FaZeClan, Cloud9, { rain, olofmeister, GuardiaN, karrigan, NiKo, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
+    { TournamentMap::Inferno, GrandFinal, FaZeClan, Cloud9, { rain, olofmeister, GuardiaN, karrigan, NiKo, Skadoodle, tarik, autimatic, Stewie2K } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
