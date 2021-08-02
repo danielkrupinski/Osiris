@@ -507,7 +507,11 @@ enum ProPlayer {
     Attacker = 88001036,
     Karsa = 85358333,
     LoveYY = 48886373,
-    Summer = 52964519
+    Summer = 52964519,
+    xms = 38509481,
+    v4lde = 154664140,
+    Golden = 116509497,
+    fitch = 33208850
 };
 
 class EconItem {
