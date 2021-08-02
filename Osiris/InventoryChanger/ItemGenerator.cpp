@@ -735,6 +735,10 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Cobblestone, Semifinal, Cloud9, SKGaming, {} },
     { TournamentMap::Inferno, Semifinal, Cloud9, SKGaming, {} },
 
+    // Grand Final
+    { TournamentMap::Mirage, GrandFinal, FaZeClan, Cloud9, {} },
+    { TournamentMap::Overpass, GrandFinal, FaZeClan, Cloud9, {} },
+    { TournamentMap::Inferno, GrandFinal, FaZeClan, Cloud9, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
