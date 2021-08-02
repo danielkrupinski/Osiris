@@ -303,7 +303,18 @@ enum TournamentTeam : std::uint8_t {
     AllStarTeamEurope = 65,
     OpTicGaming = 66,
     GODSENT = 67,
-    North = 68
+    North = 68,
+    BIG = 69,
+    VegaSquadron = 70,
+    Immortals = 71,
+    SproutEsports = 72,
+    SpaceSoldiers = 73,
+    Tyloo = 74,
+    Avangar = 75,
+    QuantumBellatorFire = 76,
+    MisfitsGaming = 77,
+    _100Thieves = 78,
+    FlashGaming = 79
 };
 
 enum TournamentStage : std::uint8_t {
@@ -311,7 +322,8 @@ enum TournamentStage : std::uint8_t {
     Quarterfinal = 5,
     Semifinal = 8,
     GrandFinal = 11,
-    AllStar = 14
+    AllStar = 14,
+    ChallengersStage = 27
 };
 
 enum ProPlayer {
@@ -448,7 +460,28 @@ enum ProPlayer {
     SIXER = 3429256,
     Lekr0 = 1093135,
     znajder = 97816050,
-    electronic = 83779379
+    electronic = 83779379,
+    oskar = 171425088,
+    ropz = 31006590,
+    mir = 40562076,
+    hutji = 61587630,
+    jR = 43490511,
+    keshandr = 65572922,
+    chopper = 85633136,
+    felps = 22765766,
+    kRYSTAL = 17526007,
+    suNny = 57405333,
+    zehN = 16308501,
+    innocent = 26563533,
+    HS = 3417033,
+    tabseN = 1225952,
+    keev = 51271036,
+    LEGIJA = 21242287,
+    Stewie2K = 38738282,
+    autimatic = 94605121,
+    LUCAS1 = 4780624,
+    kNgV = 6732863,
+    HEN1 = 57761535
 };
 
 class EconItem {
