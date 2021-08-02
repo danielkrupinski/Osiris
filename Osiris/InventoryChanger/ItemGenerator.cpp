@@ -669,8 +669,8 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, NatusVincere, TeamLiquid, { s1mple, electronic, flamie, Zeus, Edward, nitr0, Twistzz, EliGE, jdm64 } },
 
     // 100 Thieves replacement
-    { TournamentMap::Mirage, ChallengersStage, Avangar, Renegades, {} },
-    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, Avangar, {} },
+    { TournamentMap::Mirage, ChallengersStage, Avangar, Renegades, { qikert, buster, Jame, dimasick, KrizzeN, AZR, NAF, jks } },
+    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, Avangar, { nitr0, Twistzz, EliGE, jdm64, qikert, buster, Jame, dimasick, KrizzeN } },
 
     // Group Stage
 
