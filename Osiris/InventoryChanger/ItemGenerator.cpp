@@ -636,14 +636,14 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Cache, ChallengersStage, Cloud9, TeamEnVyUs, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, ScreaM, RpK, Happy, SIXER } },
 
     // Round 2
-    { TournamentMap::Mirage, ChallengersStage, Mousesports, NatusVincere, {} },
-    { TournamentMap::Inferno, ChallengersStage, Cloud9, SproutEsports, {} },
-    { TournamentMap::Inferno, ChallengersStage, VegaSquadron, FaZeClan, {} },
-    { TournamentMap::Cobblestone, ChallengersStage, G2Esports, MisfitsGaming, {} },
-    { TournamentMap::Cobblestone, ChallengersStage, TeamLiquid, Flipsid3Tactics, {} },
-    { TournamentMap::Mirage, ChallengersStage, Avangar, SpaceSoldiers, {} },
-    { TournamentMap::Cache, ChallengersStage, TeamEnVyUs, Renegades, {} },
-    { TournamentMap::Inferno, ChallengersStage, FlashGaming, QuantumBellatorFire, {} },
+    { TournamentMap::Mirage, ChallengersStage, Mousesports, NatusVincere, { chrisJ, oskar, ropz, STYKO, suNny, electronic, Edward } },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, SproutEsports, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, innocent, zehN, Spiidi, kRYSTAL } },
+    { TournamentMap::Inferno, ChallengersStage, VegaSquadron, FaZeClan, { mir, jR, keshandr, hutji, chopper, rain, olofmeister, GuardiaN, karrigan, NiKo } },
+    { TournamentMap::Cobblestone, ChallengersStage, G2Esports, MisfitsGaming, { NBK, shox, bodyy, apEX, kennyS, devoduvek, ShahZaM, SicK, seangares } },
+    { TournamentMap::Cobblestone, ChallengersStage, TeamLiquid, Flipsid3Tactics, { nitr0, Twistzz, EliGE, jdm64, wayLander, seized, markeloff, B1ad3 } },
+    { TournamentMap::Mirage, ChallengersStage, Avangar, SpaceSoldiers, { buster, Jame, KrizzeN, XANTARES, paz, ngiN, Calyx, MAJ3R } },
+    { TournamentMap::Cache, ChallengersStage, TeamEnVyUs, Renegades, { xms, RpK, Happy, SIXER, AZR, Nifty, NAF, USTILO, jks } },
+    { TournamentMap::Inferno, ChallengersStage, FlashGaming, QuantumBellatorFire, { Kaze, Attacker, Karsa, LoveYY, Summer, Boombl4, waterfaLLZ, jmqa, Kvik, balblna } },
 
     // Round 3
     { TournamentMap::Overpass, ChallengersStage, G2Esports, VegaSquadron, {} },
