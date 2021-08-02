@@ -481,7 +481,23 @@ enum ProPlayer {
     autimatic = 94605121,
     LUCAS1 = 4780624,
     kNgV = 6732863,
-    HEN1 = 57761535
+    HEN1 = 57761535,
+    Nifty = 163358521,
+    qikert = 166970562,
+    buster = 212936195,
+    Jame = 75859856,
+    dimasick = 825268,
+    KrizzeN = 107672171,
+    Twistzz = 55989477,
+    devoduvek = 116664993,
+    AmaNEk = 108679223,
+    ShahZaM = 86003016,
+    SicK = 23556959,
+    XANTARES = 83853068,
+    paz = 68524615,
+    ngiN = 17887362,
+    Calyx = 92280537,
+    MAJ3R = 7167161
 };
 
 class EconItem {
