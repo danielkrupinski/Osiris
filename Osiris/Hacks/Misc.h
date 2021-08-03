@@ -60,7 +60,7 @@ namespace Misc
     void autoAccept(const char* soundEntry) noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
-    void updateInput() noexcept;
+    void updateInput(ImDrawList* drawList) noexcept;
 
     // GUI
     void menuBarItem() noexcept;
