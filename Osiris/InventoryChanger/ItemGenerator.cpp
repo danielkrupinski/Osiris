@@ -827,6 +827,9 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Nuke, Semifinal, TeamLiquid, Astralis, {} },
     { TournamentMap::Mirage, Semifinal, TeamLiquid, Astralis, {} },
 
+    // Grand Final
+    { TournamentMap::Nuke, GrandFinal, NatusVincere, Astralis, {} },
+    { TournamentMap::Overpass, GrandFinal, Astralis, NatusVincere, {} },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
