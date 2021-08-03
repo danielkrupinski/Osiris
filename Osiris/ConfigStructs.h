@@ -161,10 +161,6 @@ struct OffscreenEnemies : ColorToggle {
     HealthBar healthBar;
 };
 
-struct BulletTracers : ColorToggle {
-    BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
-};
-
 using value_t = json::value_t;
 
 // WRITE macro requires:

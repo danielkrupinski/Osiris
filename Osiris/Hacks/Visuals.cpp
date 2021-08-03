@@ -31,6 +31,10 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ViewRenderBeams.h"
 
+struct BulletTracers : ColorToggle {
+    BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
+};
+
 struct VisualsConfig {
     bool disablePostProcessing{ false };
     bool inverseRagdollGravity{ false };
