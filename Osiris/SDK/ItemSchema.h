@@ -515,7 +515,9 @@ enum ProPlayer {
     xms = 38509481,
     v4lde = 154664140,
     Golden = 116509497,
-    fitch = 33208850
+    fitch = 33208850,
+    cadiaN = 43849788,
+    vice = 135979468
 };
 
 class EconItem {
