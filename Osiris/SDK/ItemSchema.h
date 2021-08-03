@@ -517,7 +517,9 @@ enum ProPlayer {
     Golden = 116509497,
     fitch = 33208850,
     cadiaN = 43849788,
-    vice = 135979468
+    vice = 135979468,
+    MICHU = 60359075,
+    snatchie = 111436809
 };
 
 class EconItem {
