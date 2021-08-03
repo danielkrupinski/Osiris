@@ -752,6 +752,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, {} },
     { TournamentMap::Inferno, ChallengersStage, North, Rogue, {} },
 
+    // Round 5
+    { TournamentMap::Overpass, ChallengersStage, Tyloo, TeamSpirit, {} },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, TeamSpirit, {} },
+    { TournamentMap::Dust2, ChallengersStage, OpTicGaming, BIG, {} },
+    { TournamentMap::Train, ChallengersStage, OpTicGaming, BIG, {} },
+    { TournamentMap::Inferno, ChallengersStage, North, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, North, VegaSquadron, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
