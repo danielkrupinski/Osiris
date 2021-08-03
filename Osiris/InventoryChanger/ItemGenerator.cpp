@@ -810,6 +810,17 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, MIBR, NinjasInPyjamas, {} },
     { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, {} },
 
+    // Quarterfinals
+    { TournamentMap::Train, Quarterfinal, ComplexityGaming, MIBR, {} },
+    { TournamentMap::Inferno, Quarterfinal, ComplexityGaming, MIBR, {} },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, {} },
+    { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, {} },
+    { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, {} },
+    { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, {} },
+    { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, {} },
+    { TournamentMap::Mirage, Quarterfinal, Astralis, FaZeClan, {} },
+    { TournamentMap::Inferno, Quarterfinal, Astralis, FaZeClan, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
