@@ -156,11 +156,6 @@ struct Projectile : Shared {
     using Shared::operator=;
 };
 
-struct OffscreenEnemies : ColorToggle {
-    OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
-    HealthBar healthBar;
-};
-
 using value_t = json::value_t;
 
 // WRITE macro requires:
