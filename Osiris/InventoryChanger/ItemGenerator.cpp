@@ -715,7 +715,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Challengers Stage
 
     // Round 1
-    { TournamentMap::Inferno, ChallengersStage, Rogue, SpaceSoldiers, {} },
+    { TournamentMap::Inferno, ChallengersStage, Rogue, SpaceSoldiers, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Mirage, ChallengersStage, VirtusPro, NinjasInPyjamas, {} },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, GambitEsports, {} },
     { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, {} },
@@ -728,7 +728,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Train, ChallengersStage, Tyloo, NinjasInPyjamas, {} },
     { TournamentMap::Train, ChallengersStage, BIG, VegaSquadron, {} },
     { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, {} },
-    { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, {} },
+    { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Train, ChallengersStage, Renegades, GambitEsports, {} },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, North, {} },
     { TournamentMap::Mirage, ChallengersStage, OpTicGaming, VirtusPro, {} },
@@ -738,7 +738,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, Astralis, {} },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, {} },
-    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, {} },
+    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, { vice, cadiaN } },
     { TournamentMap::Overpass, ChallengersStage, GambitEsports, HellRaisers, {} },
     { TournamentMap::Inferno, ChallengersStage, OpTicGaming, Tyloo, {} },
     { TournamentMap::Inferno, ChallengersStage, SpaceSoldiers, Renegades, {} },
@@ -750,7 +750,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, VegaSquadron, {} },
     { TournamentMap::Inferno, ChallengersStage, Renegades, Tyloo, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, {} },
-    { TournamentMap::Inferno, ChallengersStage, North, Rogue, {} },
+    { TournamentMap::Inferno, ChallengersStage, North, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
 
     // Round 5
     { TournamentMap::Overpass, ChallengersStage, Tyloo, TeamSpirit, {} },
