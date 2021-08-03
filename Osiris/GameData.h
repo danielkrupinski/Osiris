@@ -116,7 +116,7 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
-    ImTextureID getAvatarTexture() const noexcept;
+    [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
     float fadingAlpha() const noexcept;
 
     bool dormant;
