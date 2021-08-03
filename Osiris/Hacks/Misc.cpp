@@ -227,9 +227,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 {    
 	static auto lastTime = 0.0f; /*Used in clocktag*/
 
-	const float svtickrate = 64.0f; //TODO: Get server tickrate dynamically
+	const float svtickrate = 1.f / memory->globalVars->intervalPerTick;
 	
-	int lagCompensation = GameData::getNetOutgoingLatency() / (1000.0f / svtickrate);
+	int lagCompensation = GameData::getNetOutgoingLatency() / memory->globalVars->intervalPerTick;
 	
 	int ticksPerChange = 1 * svtickrate; // Sec * TickRate
 					     //TODO: Add custom speed in menu
