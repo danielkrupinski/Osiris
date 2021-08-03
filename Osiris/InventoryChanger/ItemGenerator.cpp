@@ -711,6 +711,21 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(eleagueBoston2018Matches, {}, &Match::map));
 
+constexpr auto faceitLondon2018Matches = std::to_array<Match>({
+    // Challengers Stage
+
+    // Round 1
+    { TournamentMap::Inferno, ChallengersStage, Rogue, SpaceSoldiers, {} },
+    { TournamentMap::Mirage, ChallengersStage, VirtusPro, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, GambitEsports, {} },
+    { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, {} },
+    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
+    { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, {} },
+    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, Astralis, ComplexityGaming, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
