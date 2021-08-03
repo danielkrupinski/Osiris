@@ -520,7 +520,12 @@ enum ProPlayer {
     vice = 135979468,
     MICHU = 60359075,
     snatchie = 111436809,
-    REZ = 73906687
+    REZ = 73906687,
+    BnTet = 111817512,
+    xccurate = 177428807,
+    somebody = 85131873,
+    DD = 169982617,
+    captainMo = 109036162
 };
 
 class EconItem {
