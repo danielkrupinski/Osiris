@@ -91,8 +91,12 @@ struct MiscConfig {
     bool oppositeHandKnife = false;
     PreserveKillfeed preserveKillfeed;
     char clanTag[16];
-    KeyBind edgejumpkey;
+    KeyBind edgejumpKey;
+    int edgejumpKeyMode{ 0 }; 
+    bool edgejumpKeyPressed{ false };
     KeyBind slowwalkKey;
+    int slowwalkKeyMode{ 0 };
+    bool slowwalkKeyPressed{ false };
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
 
@@ -181,7 +185,7 @@ float Misc::aspectRatio() noexcept
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
-    if (!miscConfig.edgejump || !miscConfig.edgejumpkey.isDown())
+    if (!miscConfig.edgejump || !miscConfig.edgejumpKeyPressed)
         return;
 
     if (!localPlayer || !localPlayer->isAlive())
@@ -196,7 +200,7 @@ void Misc::edgejump(UserCmd* cmd) noexcept
 
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-    if (!miscConfig.slowwalk || !miscConfig.slowwalkKey.isDown())
+    if (!miscConfig.slowwalk || !miscConfig.slowwalkKeyPressed)
         return;
 
     if (!localPlayer || !localPlayer->isAlive())
@@ -1228,9 +1232,41 @@ void Misc::updateEventListeners(bool forceRemove) noexcept
     }
 }
 
-void Misc::updateInput() noexcept
+void Misc::updateInput(ImDrawList* drawList) noexcept
 {
+    //EdgeJump
+    {
+        const char* text = "Edge Jump";
+        const auto textSize = ImGui::CalcTextSize(text);
+        const auto spacer = textSize.y / 2;
 
+        if (miscConfig.edgejumpKeyMode == 0)
+            miscConfig.edgejumpKeyPressed = miscConfig.edgejumpKey.isDown();
+        else if (miscConfig.edgejumpKeyMode == 1 && miscConfig.edgejumpKey.isPressed())
+            miscConfig.edgejumpKeyPressed = !miscConfig.edgejumpKeyPressed;
+
+        const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
+        if (localPlayer && localPlayer->isAlive() && miscConfig.edgejumpKeyPressed)
+            drawList->AddText(pos, IM_COL32(0, 255, 0, 255), text);
+    }
+
+    drawList->AddText(ImGui::GetIO().DisplaySize / 2, IM_COL32(0, 255, 0, 255), std::to_string(1.f / memory->globalVars->intervalPerTick).c_str());
+
+    //SlowWalk
+    {
+        const char* text = "Slow Walk";
+        const auto textSize = ImGui::CalcTextSize(text);
+        const auto spacer = textSize.y / 2;
+
+        if (miscConfig.slowwalkKeyMode == 0)
+            miscConfig.slowwalkKeyPressed = miscConfig.slowwalkKey.isDown();
+        else if (miscConfig.slowwalkKeyMode == 1 && miscConfig.slowwalkKey.isPressed())
+            miscConfig.slowwalkKeyPressed = !miscConfig.slowwalkKeyPressed;
+
+        const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) + spacer };
+        if (localPlayer && localPlayer->isAlive() && miscConfig.slowwalkKeyPressed)
+            drawList->AddText(pos, IM_COL32(0, 255, 0, 255), text);
+    }
 }
 
 static bool windowOpen = false;
@@ -1257,12 +1293,12 @@ void Misc::drawGUI(bool contentOnly) noexcept
     if (!contentOnly) {
         if (!windowOpen)
             return;
-        ImGui::SetNextWindowSize({ 580.0f, 0.0f });
+        ImGui::SetNextWindowSize({ 650.0f, 0.0f });
         ImGui::Begin("Misc", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
             | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 230.0f);
+    ImGui::SetColumnOffset(1, 300.0f);
     ImGui::hotkey("Menu Key", miscConfig.menuKey);
     ImGui::Checkbox("Anti AFK kick", &miscConfig.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &miscConfig.autoStrafe);
@@ -1272,12 +1308,24 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Edge Jump", &miscConfig.edgejump);
     ImGui::SameLine();
     ImGui::PushID("Edge Jump Key");
-    ImGui::hotkey("", miscConfig.edgejumpkey);
+    ImGui::hotkey("", miscConfig.edgejumpKey);
+    ImGui::PopID();
+    ImGui::SameLine();
+    ImGui::PushID("Edge Jump Key Mode");
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &miscConfig.edgejumpKeyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Checkbox("Slowwalk", &miscConfig.slowwalk);
     ImGui::SameLine();
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
+    ImGui::PopID();
+    ImGui::SameLine();
+    ImGui::PushID("Slowwalk Key Mode");
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &miscConfig.slowwalkKeyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
@@ -1515,9 +1563,11 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
-    read(j, "Edge Jump Key", m.edgejumpkey);
+    read(j, "Edge Jump Key", m.edgejumpKey);
+    read(j, "Edge Jump Mode", m.edgejumpKeyMode);
     read(j, "Slowwalk", m.slowwalk);
-    read(j, "Slowwalk key", m.slowwalkKey);
+    read(j, "Slowwalk Key", m.slowwalkKey);
+    read(j, "Slowwalk Mode", m.slowwalkKeyMode);
     read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
     read(j, "Auto pistol", m.autoPistol);
@@ -1653,9 +1703,11 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);
-    WRITE("Edge Jump Key", edgejumpkey);
+    WRITE("Edge Jump Key", edgejumpKey);
+    WRITE("Edge Jump Mode", edgejumpKeyMode);
     WRITE("Slowwalk", slowwalk);
-    WRITE("Slowwalk key", slowwalkKey);
+    WRITE("Slowwalk Key", slowwalkKey);
+    WRITE("Slowwalk Mode", slowwalkKeyMode);
     WRITE("Noscope crosshair", noscopeCrosshair);
     WRITE("Recoil crosshair", recoilCrosshair);
     WRITE("Auto pistol", autoPistol);
