@@ -314,7 +314,11 @@ enum TournamentTeam : std::uint8_t {
     QuantumBellatorFire = 76,
     MisfitsGaming = 77,
     _100Thieves = 78,
-    FlashGaming = 79
+    FlashGaming = 79,
+    MIBR = 80,
+    TeamSpirit = 81,
+    Rogue = 82,
+    WinstrikeTeam = 83
 };
 
 enum TournamentStage : std::uint8_t {
