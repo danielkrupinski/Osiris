@@ -58,6 +58,19 @@ struct PreserveKillfeed {
     bool onlyHeadshots = false;
 };
 
+struct PurchaseList {
+    bool enabled = false;
+    bool onlyDuringFreezeTime = false;
+    bool showPrices = false;
+    bool noTitleBar = false;
+
+    enum Mode {
+        Details = 0,
+        Summary
+    };
+    int mode = Details;
+};
+
 struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
 

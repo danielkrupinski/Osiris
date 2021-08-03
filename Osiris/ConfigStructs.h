@@ -156,19 +156,6 @@ struct Projectile : Shared {
     using Shared::operator=;
 };
 
-struct PurchaseList {
-    bool enabled = false;
-    bool onlyDuringFreezeTime = false;
-    bool showPrices = false;
-    bool noTitleBar = false;
-
-    enum Mode {
-        Details = 0,
-        Summary
-    };
-    int mode = Details;
-};
-
 struct OffscreenEnemies : ColorToggle {
     OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
     HealthBar healthBar;
