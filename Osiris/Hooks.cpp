@@ -120,7 +120,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Aimbot::updateInput();
     Visuals::updateInput();
     StreamProofESP::updateInput();
-    Misc::updateInput();
+    Misc::updateInput(ImGui::GetBackgroundDrawList());
     Triggerbot::updateInput();
     Chams::updateInput();
     Glow::updateInput();
