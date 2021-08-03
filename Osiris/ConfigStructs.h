@@ -169,11 +169,6 @@ struct PurchaseList {
     int mode = Details;
 };
 
-struct PreserveKillfeed {
-    bool enabled = false;
-    bool onlyHeadshots = false;
-};
-
 struct OffscreenEnemies : ColorToggle {
     OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
     HealthBar healthBar;

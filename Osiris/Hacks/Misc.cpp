@@ -53,6 +53,11 @@
 
 #include "../imguiCustom.h"
 
+struct PreserveKillfeed {
+    bool enabled = false;
+    bool onlyHeadshots = false;
+};
+
 struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
 
