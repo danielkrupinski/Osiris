@@ -782,6 +782,16 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, {} },
     { TournamentMap::Dust2, GroupStage, Mousesports, MIBR, {} },
 
+    // Round 3
+    { TournamentMap::Nuke, GroupStage, BIG, ComplexityGaming, {} },
+    { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, {} },
+    { TournamentMap::Inferno, GroupStage, Fnatic, VegaSquadron, {} },
+    { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, {} },
+    { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, {} },
+    { TournamentMap::Inferno, GroupStage, Cloud9, WinstrikeTeam, {} },
+    { TournamentMap::Mirage, GroupStage, Mousesports, FaZeClan, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
