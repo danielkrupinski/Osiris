@@ -527,7 +527,9 @@ enum ProPlayer {
     DD = 169982617,
     captainMo = 109036162,
     smooya = 211423593,
-    tiziaN = 37291208
+    tiziaN = 37291208,
+    crush = 36981424,
+    tonyblack = 15738602
 };
 
 class EconItem {
