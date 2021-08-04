@@ -721,7 +721,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, { gobb, tabseN, nex, smooya, tiziaN, jks, AZR, Nifty, jkaem } },
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { jR, hutji, crush, chopper, tonyblack, sdy, Dima, DavCost, S0tF1k } },
     { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, { aizy, Kjaerbye, niko, MSL, v4lde, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, { EliGE, nitr0, Twistzz, NAF, TACO } },
+    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, { EliGE, nitr0, Twistzz, NAF, TACO, gade, cajunb, JUGi } },
     { TournamentMap::Inferno, ChallengersStage, Astralis, ComplexityGaming, {} },
 
     // Round 2
@@ -731,7 +731,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Train, ChallengersStage, Renegades, GambitEsports, { jks, AZR, USTILO, jkaem, mou, Hobbit, Dosia, AdreN, mir } },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, North, { Dima, DavCost, S0tF1k, COLDYY1, aizy, Kjaerbye, niko, MSL, v4lde } },
-    { TournamentMap::Mirage, ChallengersStage, OpTicGaming, VirtusPro, { MICHU, byali, snatchie, pashaBiceps, NEO } },
+    { TournamentMap::Mirage, ChallengersStage, OpTicGaming, VirtusPro, { gade, cajunb, JUGi, k0nfig, Snappi, MICHU, byali, snatchie, pashaBiceps, NEO } },
     { TournamentMap::Inferno, ChallengersStage, SpaceSoldiers, ComplexityGaming, { Calyx, XANTARES } },
 
     // Round 3
@@ -740,13 +740,13 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, { sdy, Dima, DavCost, S0tF1k, COLDYY1, vice, cadiaN } },
     { TournamentMap::Overpass, ChallengersStage, GambitEsports, HellRaisers, { mou, Hobbit, AdreN, mir, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Inferno, ChallengersStage, OpTicGaming, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
+    { TournamentMap::Inferno, ChallengersStage, OpTicGaming, Tyloo, { gade, cajunb, JUGi, k0nfig, Snappi, BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Inferno, ChallengersStage, SpaceSoldiers, Renegades, { Calyx, paz, XANTARES, MAJ3R, jks, AZR, Nifty, jkaem, USTILO } },
     { TournamentMap::Mirage, ChallengersStage, VirtusPro, North, { snatchie, NEO, aizy, Kjaerbye, niko, MSL, v4lde } },
 
     // Round 4
     { TournamentMap::Dust2, ChallengersStage, Astralis, TeamSpirit, { sdy, Dima, S0tF1k } },
-    { TournamentMap::Train, ChallengersStage, HellRaisers, OpTicGaming, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
+    { TournamentMap::Train, ChallengersStage, HellRaisers, OpTicGaming, { ISSAA, woxic, DeadFox, bondik, ANGE1, gade, cajunb, JUGi, k0nfig, Snappi } },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, VegaSquadron, { jR, hutji, crush, chopper } },
     { TournamentMap::Inferno, ChallengersStage, Renegades, Tyloo, { jks, AZR, Nifty, jkaem, USTILO, BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, { gobb, tabseN, nex, smooya, tiziaN, mou, Hobbit, Dosia, AdreN, mir } },
@@ -755,8 +755,8 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Round 5
     { TournamentMap::Overpass, ChallengersStage, Tyloo, TeamSpirit, { BnTet, xccurate, somebody, DD, captainMo, sdy, Dima, DavCost, S0tF1k, COLDYY1 } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, TeamSpirit, { BnTet, xccurate, somebody, DD, captainMo, sdy, Dima, DavCost, S0tF1k, COLDYY1 } },
-    { TournamentMap::Dust2, ChallengersStage, OpTicGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
-    { TournamentMap::Train, ChallengersStage, OpTicGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
+    { TournamentMap::Dust2, ChallengersStage, OpTicGaming, BIG, { gade, JUGi, k0nfig, Snappi, gobb, tabseN, nex, smooya, tiziaN } },
+    { TournamentMap::Train, ChallengersStage, OpTicGaming, BIG, { gade, cajunb, JUGi, k0nfig, Snappi, gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, ChallengersStage, North, VegaSquadron, { aizy, Kjaerbye, niko, v4lde, jR, crush, chopper, tonyblack } },
     { TournamentMap::Mirage, ChallengersStage, North, VegaSquadron, { aizy, Kjaerbye, niko, MSL, v4lde, jR, hutji, crush, chopper } },
 
