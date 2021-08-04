@@ -72,7 +72,8 @@ struct VisualsConfig {
     struct SmokeTimer {
         bool enabled = false;
         Color4 BG{ 1.0f, 1.0f, 1.0f, 0.5f };
-        Color4 TIMER{ 0.0f, 0.0f, 1.0f, 1.0f };
+        Color4 TIMER{ 0.0f, 0.0f, 1.0f, 1.0f};
+        float TIMER_thickness = 1.f;
         Color4 TEXT{ 0.0f, 0.0f, 0.0f, 1.0f };
     } smokeTimer;
 
@@ -106,6 +107,7 @@ static void from_json(const json& j, VisualsConfig::SmokeTimer& s)
     read(j, "Enabled", s.enabled);
     read<value_t::object>(j, "Color BG", s.BG);
     read<value_t::object>(j, "Color TIMER", s.TIMER);
+    read(j, "Color TIMER Thickness", s.TIMER_thickness);
     read<value_t::object>(j, "Color TEXT", s.TEXT);
 }
 
@@ -173,6 +175,7 @@ static void to_json(json& j, const VisualsConfig::SmokeTimer& o, const VisualsCo
     WRITE("Enabled", enabled);
     WRITE("Color BG", BG);
     WRITE("Color TIMER", TIMER);
+    WRITE("Color TIMER Thickness", TIMER_thickness);
     WRITE("Color TEXT", TEXT);
 }
 
@@ -734,6 +737,7 @@ struct SmokeData
     
     float destructionTime;
     Vector pos;
+    float anim = 1.f;
 };
 
 static std::vector<SmokeData> smokes;
@@ -755,13 +759,13 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
         return;
     
     for (size_t i = 0; i < smokes.size(); i++) {
-        const auto& smoke = smokes[i];
+        auto& smoke = smokes[i];
 
-        auto time = smoke.destructionTime - memory->globalVars->realtime;
+        auto time = ImClamp(smoke.destructionTime - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
         std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
         
-        auto textSize = ImGui::CalcTextSize(text.str().c_str());
-        const auto box_size = ImVec2(50.f, 15.f);
+        auto text_size = ImGui::CalcTextSize(text.str().c_str());
+        const auto timer_box_size = ImVec2(50.f, (text_size.y / 2) * visualsConfig.smokeTimer.TIMER_thickness);
 
         ImVec2 pos;
 
@@ -771,27 +775,35 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
         if (!drawText && !drawTimer)
             return;
 
-        if (time >= 0.0f) {
+        ImRect main_box;
+        ImVec2 text_pos;
+        ImRect timer_box;
+
+        if (time >= 0.f && smoke.anim >= 0.f) {
             if (worldToScreen(smoke.pos, pos)) {
-                ImRect main_box(
-                    pos.x - (box_size.x / 2) - 2.f,
-                    pos.y - (box_size.y / 2) - 2.f - (!drawTimer || !drawText ? 0.f : box_size.y / 2.f),
-                    pos.x + (box_size.x / 2) + 2.f,
-                    pos.y + (box_size.y / 2) + 2.f + (!drawTimer || !drawText ? 0.f : box_size.y / 2.f)
-                );
-
-                ImVec2 text_pos(
-                    main_box.GetCenter().x - (textSize.x / 2),
-                    main_box.GetCenter().y - (textSize.y / 2) - (drawTimer ? box_size.y / 2.f : 0.f)
-                );
-
-                ImRect timer_box(
-                    main_box.Min.x + 2.f,
-                    main_box.Min.y + 2.f + (drawText ? box_size.y : 0.f),
-                    main_box.Max.x - 2.f - (box_size.x * (1.0f - (time / SMOKEGRENADE_LIFETIME))),
-                    main_box.Max.y - 2.f
-                );
+                main_box = {
+                    pos.x - 2.f - (timer_box_size.x / 2),
+                    pos.y - 2.f - (!drawTimer ? (text_size.y / 2) : (!drawText ? timer_box_size.y / 2 : text_size.y)),
+                    pos.x + 2.f + (timer_box_size.x / 2),
+                    pos.y + 2.f + (!drawTimer ? (text_size.y / 2) : (!drawText ? timer_box_size.y / 2 : timer_box_size.y))
+                };
                 
+                text_pos = {
+                    main_box.GetCenter().x - (text_size.x / 2),
+                    main_box.GetCenter().y - (text_size.y / 2) - (drawTimer ? timer_box_size.y / 2 : 0.f)
+                };
+
+                timer_box = {
+                    main_box.Min.x + 2.f,
+                    main_box.Min.y + 2.f + (drawText ? text_size.y : 0.f),
+                    main_box.Max.x - 2.f - (timer_box_size.x * (1.0f - (time / SMOKEGRENADE_LIFETIME))),
+                    main_box.Max.y - 2.f
+                };
+                
+                if (time == 0.f)
+                    smoke.anim -= 1.f * ImGui::GetIO().DeltaTime;
+
+                Helpers::setAlphaFactor(smoke.anim);
                 drawList->AddRectFilled(main_box.Min, main_box.Max, Helpers::calculateColor(visualsConfig.smokeTimer.BG));
                 drawList->AddRectFilled(timer_box.Min, timer_box.Max, Helpers::calculateColor(visualsConfig.smokeTimer.TIMER));
                 drawList->AddText(text_pos, Helpers::calculateColor(visualsConfig.smokeTimer.TEXT), text.str().c_str());
@@ -924,7 +936,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     {
         ImGuiCustom::colorPicker("BackGround color", visualsConfig.smokeTimer.BG);
         ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer.TEXT);
-        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer.TIMER);
+        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer.TIMER, nullptr, &visualsConfig.smokeTimer.TIMER_thickness);
         ImGui::EndPopup();
     }
 
