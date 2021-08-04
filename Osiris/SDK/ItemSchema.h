@@ -534,7 +534,9 @@ enum ProPlayer {
     Dima = 51718767,
     S0tF1k = 174857712,
     COLDYY1 = 34364443,
-    niko = 29470855
+    niko = 29470855,
+    ISSAA = 77546728,
+    woxic = 123219778
 };
 
 class EconItem {
