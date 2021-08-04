@@ -539,7 +539,10 @@ enum ProPlayer {
     woxic = 123219778,
     gade = 21355604,
     JUGi = 83626376,
-    Snappi = 29157337
+    Snappi = 29157337,
+    ANDROID = 1936433,
+    yay = 57496765,
+    dephh = 26995179
 };
 
 class EconItem {
