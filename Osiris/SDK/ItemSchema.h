@@ -542,7 +542,8 @@ enum ProPlayer {
     Snappi = 29157337,
     ANDROID = 1936433,
     yay = 57496765,
-    dephh = 26995179
+    dephh = 26995179,
+    draken = 159123007
 };
 
 class EconItem {
