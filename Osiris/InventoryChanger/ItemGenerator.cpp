@@ -721,13 +721,13 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, { gobb, tabseN, nex, smooya, tiziaN, jks, AZR, Nifty, jkaem } },
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { jR, hutji, crush, chopper, tonyblack, sdy, Dima, DavCost, S0tF1k } },
     { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, { aizy, Kjaerbye, niko, MSL, v4lde, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, {} },
+    { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, { EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Inferno, ChallengersStage, Astralis, ComplexityGaming, {} },
 
     // Round 2
     { TournamentMap::Train, ChallengersStage, Tyloo, NinjasInPyjamas, { BnTet, xccurate, somebody, DD, captainMo, f0rest, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Train, ChallengersStage, BIG, VegaSquadron, { gobb, tabseN, nex, smooya, tiziaN, jR, hutji, crush, chopper, tonyblack } },
-    { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, { ISSAA, woxic, ANGE1 } },
+    { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, { EliGE, nitr0, Twistzz, NAF, TACO, ISSAA, woxic, ANGE1 } },
     { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Train, ChallengersStage, Renegades, GambitEsports, { jks, AZR, USTILO, jkaem, mou, Hobbit, Dosia, AdreN, mir } },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, North, { Dima, DavCost, S0tF1k, COLDYY1, aizy, Kjaerbye, niko, MSL, v4lde } },
@@ -735,7 +735,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, SpaceSoldiers, ComplexityGaming, { Calyx, XANTARES } },
 
     // Round 3
-    { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, { jR, hutji, crush, chopper, tonyblack } },
+    { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, { EliGE, nitr0, Twistzz, NAF, TACO, jR, hutji, crush, chopper, tonyblack } },
     { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, Astralis, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, { sdy, Dima, DavCost, S0tF1k, COLDYY1, vice, cadiaN } },
@@ -764,7 +764,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 
     // Round 1
     { TournamentMap::Dust2, GroupStage, G2Esports, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, {} },
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, { EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Dust2, GroupStage, BIG, FaZeClan, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, GroupStage, ComplexityGaming, Fnatic, {} },
     { TournamentMap::Inferno, GroupStage, MIBR, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
@@ -776,7 +776,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, BIG, Tyloo, { gobb, tabseN, nex, smooya, tiziaN, xccurate, somebody, BnTet } },
     { TournamentMap::Inferno, GroupStage, Astralis, VegaSquadron, { tonyblack, jR } },
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, {} },
-    { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
+    { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ, EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Inferno, GroupStage, Fnatic, WinstrikeTeam, {} },
     { TournamentMap::Overpass, GroupStage, Cloud9, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, {} },
@@ -784,7 +784,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 
     // Round 3
     { TournamentMap::Nuke, GroupStage, BIG, ComplexityGaming, { gobb, tabseN, nex, smooya } },
-    { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, {} },
+    { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, { EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Inferno, GroupStage, Fnatic, VegaSquadron, { jR, hutji, crush, chopper, tonyblack } },
     { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, { dennis, GeT_RiGhT, REZ } },
@@ -815,17 +815,17 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, Quarterfinal, ComplexityGaming, MIBR, {} },
     { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, { tiziaN, gobb } },
     { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, { tiziaN, tabseN, gobb } },
-    { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, { woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, ANGE1 } },
+    { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, { woxic, DeadFox, bondik, ANGE1, EliGE, Twistzz, NAF, TACO } },
+    { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, bondik, ANGE1, nitr0, Twistzz, NAF, TACO } },
+    { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, ANGE1, EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Mirage, Quarterfinal, Astralis, FaZeClan, {} },
     { TournamentMap::Inferno, Quarterfinal, Astralis, FaZeClan, {} },
 
     // Semifinals
     { TournamentMap::Overpass, Semifinal, MIBR, NatusVincere, {} },
     { TournamentMap::Dust2, Semifinal, MIBR, NatusVincere, {} },
-    { TournamentMap::Nuke, Semifinal, TeamLiquid, Astralis, {} },
-    { TournamentMap::Mirage, Semifinal, TeamLiquid, Astralis, {} },
+    { TournamentMap::Nuke, Semifinal, TeamLiquid, Astralis, { EliGE, nitr0, Twistzz, NAF } },
+    { TournamentMap::Mirage, Semifinal, TeamLiquid, Astralis, { EliGE, Twistzz, NAF, TACO } },
 
     // Grand Final
     { TournamentMap::Nuke, GrandFinal, NatusVincere, Astralis, {} },
