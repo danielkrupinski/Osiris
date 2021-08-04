@@ -93,10 +93,8 @@ struct MiscConfig {
     char clanTag[16];
     KeyBind edgejumpKey;
     int edgejumpKeyMode{ 0 }; 
-    bool edgejumpKeyPressed{ false };
     KeyBind slowwalkKey;
     int slowwalkKeyMode{ 0 };
-    bool slowwalkKeyPressed{ false };
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
 
@@ -183,9 +181,11 @@ float Misc::aspectRatio() noexcept
     return miscConfig.aspectratio;
 }
 
+static bool edgejumpKeyPressed = false;
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
-    if (!miscConfig.edgejump || !miscConfig.edgejumpKeyPressed)
+    if (!miscConfig.edgejump || !edgejumpKeyPressed)
         return;
 
     if (!localPlayer || !localPlayer->isAlive())
@@ -198,9 +198,11 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
+static bool slowwalkKeyPressed = false;
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-    if (!miscConfig.slowwalk || !miscConfig.slowwalkKeyPressed)
+    if (!miscConfig.slowwalk || !slowwalkKeyPressed)
         return;
 
     if (!localPlayer || !localPlayer->isAlive())
@@ -1241,16 +1243,14 @@ void Misc::updateInput(ImDrawList* drawList) noexcept
         const auto spacer = textSize.y / 2;
 
         if (miscConfig.edgejumpKeyMode == 0)
-            miscConfig.edgejumpKeyPressed = miscConfig.edgejumpKey.isDown();
+            edgejumpKeyPressed = miscConfig.edgejumpKey.isDown();
         else if (miscConfig.edgejumpKeyMode == 1 && miscConfig.edgejumpKey.isPressed())
-            miscConfig.edgejumpKeyPressed = !miscConfig.edgejumpKeyPressed;
+            edgejumpKeyPressed = !edgejumpKeyPressed;
 
         const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
-        if (localPlayer && localPlayer->isAlive() && miscConfig.edgejumpKeyPressed)
+        if (localPlayer && localPlayer->isAlive() && edgejumpKeyPressed)
             drawList->AddText(pos, IM_COL32(0, 255, 0, 255), text);
     }
-
-    drawList->AddText(ImGui::GetIO().DisplaySize / 2, IM_COL32(0, 255, 0, 255), std::to_string(1.f / memory->globalVars->intervalPerTick).c_str());
 
     //SlowWalk
     {
@@ -1259,12 +1259,12 @@ void Misc::updateInput(ImDrawList* drawList) noexcept
         const auto spacer = textSize.y / 2;
 
         if (miscConfig.slowwalkKeyMode == 0)
-            miscConfig.slowwalkKeyPressed = miscConfig.slowwalkKey.isDown();
+            slowwalkKeyPressed = miscConfig.slowwalkKey.isDown();
         else if (miscConfig.slowwalkKeyMode == 1 && miscConfig.slowwalkKey.isPressed())
-            miscConfig.slowwalkKeyPressed = !miscConfig.slowwalkKeyPressed;
+            slowwalkKeyPressed = !slowwalkKeyPressed;
 
         const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) + spacer };
-        if (localPlayer && localPlayer->isAlive() && miscConfig.slowwalkKeyPressed)
+        if (localPlayer && localPlayer->isAlive() && slowwalkKeyPressed)
             drawList->AddText(pos, IM_COL32(0, 255, 0, 255), text);
     }
 }
