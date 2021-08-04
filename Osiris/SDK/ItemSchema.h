@@ -529,7 +529,11 @@ enum ProPlayer {
     smooya = 211423593,
     tiziaN = 37291208,
     crush = 36981424,
-    tonyblack = 15738602
+    tonyblack = 15738602,
+    sdy = 80311472,
+    Dima = 51718767,
+    S0tF1k = 174857712,
+    COLDYY1 = 34364443
 };
 
 class EconItem {
