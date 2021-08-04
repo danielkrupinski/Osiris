@@ -764,7 +764,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 
     // Round 1
     { TournamentMap::Dust2, GroupStage, G2Esports, HellRaisers, { shox, kennyS, bodyy, Ex6TenZ, SmithZz, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, { EliGE, nitr0, Twistzz, NAF, TACO } },
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, { EliGE, nitr0, Twistzz, NAF, TACO, Boombl4, jmqa, waterfaLLZ, Kvik } },
     { TournamentMap::Dust2, GroupStage, BIG, FaZeClan, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, GroupStage, ComplexityGaming, Fnatic, { ANDROID, yay, dephh, ShahZaM, stanislaw } },
     { TournamentMap::Inferno, GroupStage, MIBR, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
@@ -777,7 +777,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, Astralis, VegaSquadron, { device, dupreeh, gla1ve, Magisk, Xyp9x, tonyblack, jR } },
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, { shox, kennyS, bodyy, Ex6TenZ, SmithZz, ANDROID, yay, dephh, ShahZaM, stanislaw } },
     { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ, EliGE, nitr0, Twistzz, NAF, TACO } },
-    { TournamentMap::Inferno, GroupStage, Fnatic, WinstrikeTeam, {} },
+    { TournamentMap::Inferno, GroupStage, Fnatic, WinstrikeTeam, { Boombl4, balblna, waterfaLLZ, Kvik } },
     { TournamentMap::Overpass, GroupStage, Cloud9, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, {} },
     { TournamentMap::Dust2, GroupStage, Mousesports, MIBR, {} },
@@ -789,7 +789,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, { dennis, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, { shox, kennyS, bodyy, SmithZz } },
-    { TournamentMap::Inferno, GroupStage, Cloud9, WinstrikeTeam, {} },
+    { TournamentMap::Inferno, GroupStage, Cloud9, WinstrikeTeam, { Boombl4, jmqa, waterfaLLZ, Kvik, balblna } },
     { TournamentMap::Mirage, GroupStage, Mousesports, FaZeClan, {} },
 
     // Round 4
