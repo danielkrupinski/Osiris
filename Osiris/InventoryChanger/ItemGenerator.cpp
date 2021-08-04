@@ -720,14 +720,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Tyloo, GambitEsports, { BnTet, xccurate, somebody, DD, captainMo, mou, Hobbit, Dosia, AdreN } },
     { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, { gobb, tabseN, nex, smooya, tiziaN, jks, AZR, Nifty, jkaem } },
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { jR, hutji, crush, chopper, tonyblack, sdy, Dima, DavCost, S0tF1k } },
-    { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, { aizy, Kjaerbye, niko, MSL, v4lde } },
+    { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, { aizy, Kjaerbye, niko, MSL, v4lde, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, {} },
     { TournamentMap::Inferno, ChallengersStage, Astralis, ComplexityGaming, {} },
 
     // Round 2
     { TournamentMap::Train, ChallengersStage, Tyloo, NinjasInPyjamas, { BnTet, xccurate, somebody, DD, captainMo, f0rest, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Train, ChallengersStage, BIG, VegaSquadron, { gobb, tabseN, nex, smooya, tiziaN, jR, hutji, crush, chopper, tonyblack } },
-    { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, {} },
+    { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, { ISSAA, woxic, ANGE1 } },
     { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Train, ChallengersStage, Renegades, GambitEsports, { jks, AZR, USTILO, jkaem, mou, Hobbit, Dosia, AdreN, mir } },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, North, { Dima, DavCost, S0tF1k, COLDYY1, aizy, Kjaerbye, niko, MSL, v4lde } },
@@ -739,14 +739,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, Astralis, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, { sdy, Dima, DavCost, S0tF1k, COLDYY1, vice, cadiaN } },
-    { TournamentMap::Overpass, ChallengersStage, GambitEsports, HellRaisers, { mou, Hobbit, AdreN, mir } },
+    { TournamentMap::Overpass, ChallengersStage, GambitEsports, HellRaisers, { mou, Hobbit, AdreN, mir, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Inferno, ChallengersStage, OpTicGaming, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Inferno, ChallengersStage, SpaceSoldiers, Renegades, { Calyx, paz, XANTARES, MAJ3R, jks, AZR, Nifty, jkaem, USTILO } },
     { TournamentMap::Mirage, ChallengersStage, VirtusPro, North, { snatchie, NEO, aizy, Kjaerbye, niko, MSL, v4lde } },
 
     // Round 4
     { TournamentMap::Dust2, ChallengersStage, Astralis, TeamSpirit, { sdy, Dima, S0tF1k } },
-    { TournamentMap::Train, ChallengersStage, HellRaisers, OpTicGaming, {} },
+    { TournamentMap::Train, ChallengersStage, HellRaisers, OpTicGaming, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, VegaSquadron, { jR, hutji, crush, chopper } },
     { TournamentMap::Inferno, ChallengersStage, Renegades, Tyloo, { jks, AZR, Nifty, jkaem, USTILO, BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, { gobb, tabseN, nex, smooya, tiziaN, mou, Hobbit, Dosia, AdreN, mir } },
@@ -763,7 +763,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Group Stage
 
     // Round 1
-    { TournamentMap::Dust2, GroupStage, G2Esports, HellRaisers, {} },
+    { TournamentMap::Dust2, GroupStage, G2Esports, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, {} },
     { TournamentMap::Dust2, GroupStage, BIG, FaZeClan, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, GroupStage, ComplexityGaming, Fnatic, {} },
@@ -778,7 +778,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, {} },
     { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, GroupStage, Fnatic, WinstrikeTeam, {} },
-    { TournamentMap::Overpass, GroupStage, Cloud9, HellRaisers, {} },
+    { TournamentMap::Overpass, GroupStage, Cloud9, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, {} },
     { TournamentMap::Dust2, GroupStage, Mousesports, MIBR, {} },
 
@@ -786,14 +786,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Nuke, GroupStage, BIG, ComplexityGaming, { gobb, tabseN, nex, smooya } },
     { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, {} },
     { TournamentMap::Inferno, GroupStage, Fnatic, VegaSquadron, { jR, hutji, crush, chopper, tonyblack } },
-    { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD } },
+    { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, { dennis, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, {} },
     { TournamentMap::Inferno, GroupStage, Cloud9, WinstrikeTeam, {} },
     { TournamentMap::Mirage, GroupStage, Mousesports, FaZeClan, {} },
 
     // Round 4
-    { TournamentMap::Train, GroupStage, HellRaisers, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
+    { TournamentMap::Train, GroupStage, HellRaisers, BIG, { ISSAA, woxic, DeadFox, bondik, ANGE1, gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, {} },
     { TournamentMap::Dust2, GroupStage, Astralis, MIBR, {} },
     { TournamentMap::Train, GroupStage, NinjasInPyjamas, VegaSquadron, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ, jR, hutji, crush, chopper } },
@@ -801,9 +801,9 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, G2Esports, Cloud9, {} },
 
     // Round 5
-    { TournamentMap::Mirage, GroupStage, Fnatic, HellRaisers, {} },
-    { TournamentMap::Dust2, GroupStage, Fnatic, HellRaisers, {} },
-    { TournamentMap::Cache, GroupStage, Fnatic, HellRaisers, {} },
+    { TournamentMap::Mirage, GroupStage, Fnatic, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
+    { TournamentMap::Dust2, GroupStage, Fnatic, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
+    { TournamentMap::Cache, GroupStage, Fnatic, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
     { TournamentMap::Mirage, GroupStage, G2Esports, FaZeClan, {} },
     { TournamentMap::Dust2, GroupStage, G2Esports, FaZeClan, {} },
     { TournamentMap::Cache, GroupStage, MIBR, NinjasInPyjamas, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
@@ -815,9 +815,9 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, Quarterfinal, ComplexityGaming, MIBR, {} },
     { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, { tiziaN, gobb } },
     { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, { tiziaN, tabseN, gobb } },
-    { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, {} },
-    { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, {} },
-    { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, {} },
+    { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, { woxic, DeadFox, bondik, ANGE1 } },
+    { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
+    { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, ANGE1 } },
     { TournamentMap::Mirage, Quarterfinal, Astralis, FaZeClan, {} },
     { TournamentMap::Inferno, Quarterfinal, Astralis, FaZeClan, {} },
 
