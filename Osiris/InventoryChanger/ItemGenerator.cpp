@@ -718,7 +718,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Rogue, SpaceSoldiers, { SicK, cadiaN, vice, Hiko, Rickeh, Calyx, paz, XANTARES, MAJ3R } },
     { TournamentMap::Mirage, ChallengersStage, VirtusPro, NinjasInPyjamas, { MICHU, byali, snatchie, f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, GambitEsports, { BnTet, xccurate, somebody, DD, captainMo, mou, Hobbit, Dosia, AdreN } },
-    { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, {} },
+    { TournamentMap::Overpass, ChallengersStage, BIG, Renegades, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
     { TournamentMap::Overpass, ChallengersStage, North, HellRaisers, {} },
     { TournamentMap::Mirage, ChallengersStage, TeamLiquid, OpTicGaming, {} },
@@ -726,7 +726,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 
     // Round 2
     { TournamentMap::Train, ChallengersStage, Tyloo, NinjasInPyjamas, { BnTet, xccurate, somebody, DD, captainMo, f0rest, Lekr0, GeT_RiGhT, REZ } },
-    { TournamentMap::Train, ChallengersStage, BIG, VegaSquadron, {} },
+    { TournamentMap::Train, ChallengersStage, BIG, VegaSquadron, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, ChallengersStage, TeamLiquid, HellRaisers, {} },
     { TournamentMap::Inferno, ChallengersStage, Astralis, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
     { TournamentMap::Train, ChallengersStage, Renegades, GambitEsports, { mou, Hobbit, Dosia, AdreN, mir } },
@@ -737,7 +737,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Round 3
     { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, Astralis, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
-    { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, {} },
+    { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Rogue, { vice, cadiaN } },
     { TournamentMap::Overpass, ChallengersStage, GambitEsports, HellRaisers, { mou, Hobbit, AdreN, mir } },
     { TournamentMap::Inferno, ChallengersStage, OpTicGaming, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
@@ -749,14 +749,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Train, ChallengersStage, HellRaisers, OpTicGaming, {} },
     { TournamentMap::Inferno, ChallengersStage, ComplexityGaming, VegaSquadron, {} },
     { TournamentMap::Inferno, ChallengersStage, Renegades, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
-    { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, { mou, Hobbit, Dosia, AdreN, mir } },
+    { TournamentMap::Nuke, ChallengersStage, BIG, GambitEsports, { gobb, tabseN, nex, smooya, tiziaN, mou, Hobbit, Dosia, AdreN, mir } },
     { TournamentMap::Inferno, ChallengersStage, North, Rogue, { SicK, cadiaN, vice, Hiko, Rickeh } },
 
     // Round 5
     { TournamentMap::Overpass, ChallengersStage, Tyloo, TeamSpirit, { BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, TeamSpirit, { BnTet, xccurate, somebody, DD, captainMo } },
-    { TournamentMap::Dust2, ChallengersStage, OpTicGaming, BIG, {} },
-    { TournamentMap::Train, ChallengersStage, OpTicGaming, BIG, {} },
+    { TournamentMap::Dust2, ChallengersStage, OpTicGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
+    { TournamentMap::Train, ChallengersStage, OpTicGaming, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, ChallengersStage, North, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, North, VegaSquadron, {} },
 
@@ -765,7 +765,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Round 1
     { TournamentMap::Dust2, GroupStage, G2Esports, HellRaisers, {} },
     { TournamentMap::Mirage, GroupStage, TeamLiquid, WinstrikeTeam, {} },
-    { TournamentMap::Dust2, GroupStage, BIG, FaZeClan, {} },
+    { TournamentMap::Dust2, GroupStage, BIG, FaZeClan, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Inferno, GroupStage, ComplexityGaming, Fnatic, {} },
     { TournamentMap::Inferno, GroupStage, MIBR, Tyloo, { BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Mirage, GroupStage, Mousesports, NinjasInPyjamas, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
@@ -773,7 +773,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, VegaSquadron, Cloud9, {} },
 
     // Round 2
-    { TournamentMap::Train, GroupStage, BIG, Tyloo, { xccurate, somebody, BnTet } },
+    { TournamentMap::Train, GroupStage, BIG, Tyloo, { gobb, tabseN, nex, smooya, tiziaN, xccurate, somebody, BnTet } },
     { TournamentMap::Inferno, GroupStage, Astralis, VegaSquadron, {} },
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, {} },
     { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
@@ -783,7 +783,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Dust2, GroupStage, Mousesports, MIBR, {} },
 
     // Round 3
-    { TournamentMap::Nuke, GroupStage, BIG, ComplexityGaming, {} },
+    { TournamentMap::Nuke, GroupStage, BIG, ComplexityGaming, { gobb, tabseN, nex, smooya } },
     { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, {} },
     { TournamentMap::Inferno, GroupStage, Fnatic, VegaSquadron, {} },
     { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD } },
@@ -793,7 +793,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, Mousesports, FaZeClan, {} },
 
     // Round 4
-    { TournamentMap::Train, GroupStage, HellRaisers, BIG, {} },
+    { TournamentMap::Train, GroupStage, HellRaisers, BIG, { gobb, tabseN, nex, smooya, tiziaN } },
     { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, {} },
     { TournamentMap::Dust2, GroupStage, Astralis, MIBR, {} },
     { TournamentMap::Train, GroupStage, NinjasInPyjamas, VegaSquadron, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
@@ -813,8 +813,8 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Quarterfinals
     { TournamentMap::Train, Quarterfinal, ComplexityGaming, MIBR, {} },
     { TournamentMap::Inferno, Quarterfinal, ComplexityGaming, MIBR, {} },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, {} },
-    { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, {} },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, { tiziaN, gobb } },
+    { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, { tiziaN, tabseN, gobb } },
     { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, {} },
     { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, {} },
     { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, {} },
