@@ -1427,6 +1427,26 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     return string == "#SFUI_WPNHUD_Knife" || string == "#SFUI_WPNHUD_Knife_T";
 }
 
+static void appendProtobufString(std::string_view string, std::vector<char>& buffer) noexcept
+{
+    assert(string.length() < 128);
+    buffer.push_back(0x1A);
+    buffer.push_back(static_cast<char>(string.length()));
+    std::ranges::copy(string, std::back_inserter(buffer));
+}
+
+[[nodiscard]] static std::vector<char> buildTextUserMessage(int destination, std::string_view string1, std::string_view string2, std::string_view string3 = {}) noexcept
+{
+    std::vector<char> buffer{ 0x8, static_cast<char>(destination) };
+    appendProtobufString(string1, buffer);
+    appendProtobufString(string2, buffer);
+    appendProtobufString(string3, buffer);
+    // game client expects text protobuf to contain 5 strings
+    appendProtobufString("", buffer);
+    appendProtobufString("", buffer);
+    return buffer;
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 {
     if (!localPlayer)
@@ -1453,8 +1473,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
     
-    if (reader.readInt32(1) == HUD_PRINTCENTER)
-    {
+    if (reader.readInt32(1) == HUD_PRINTCENTER) {
         const auto strings = reader.readRepeatedString(3);
         if (strings.size() < 2)
             return;
@@ -1474,19 +1493,8 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
         if (!def)
             return;
 
-        const auto itemBaseName = std::string_view{ def->getItemBaseName() };
-
         static std::vector<char> buffer;
-        buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
-        std::ranges::copy(strings[0], std::back_inserter(buffer));
-        buffer.push_back(0x1A);
-        buffer.push_back(static_cast<char>(itemBaseName.length()));
-        std::ranges::copy(itemBaseName, std::back_inserter(buffer));
-
-        // Add three empty strings, like UTIL_ClientPrintFilter() does
-        constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
-        std::ranges::copy(emptyStrings, std::back_inserter(buffer));
-
+        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
         data = buffer.data();
         size = static_cast<int>(buffer.size());
     } else if (reader.readInt32(1) == HUD_PRINTTALK) {
@@ -1510,24 +1518,8 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
         if (!def)
             return;
 
-        const auto itemBaseName = std::string_view{ def->getItemBaseName() };
-
         static std::vector<char> buffer;
-        buffer = std::vector<char>{ 0x8, HUD_PRINTTALK, 0x1A, static_cast<char>(strings[0].length()) };
-        std::ranges::copy(strings[0], std::back_inserter(buffer));
-
-        buffer.push_back(0x1A);
-        buffer.push_back(static_cast<char>(strings[1].length()));
-        std::ranges::copy(strings[1], std::back_inserter(buffer));
-
-        buffer.push_back(0x1A);
-        buffer.push_back(static_cast<char>(itemBaseName.length()));
-        std::ranges::copy(itemBaseName, std::back_inserter(buffer));
-
-        // Add three empty strings, like UTIL_ClientPrintFilter() does
-        constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
-        std::ranges::copy(emptyStrings, std::back_inserter(buffer));
-
+        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
         data = buffer.data();
         size = static_cast<int>(buffer.size());
     }
