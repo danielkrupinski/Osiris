@@ -1442,46 +1442,92 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
         return;
 
+    constexpr auto HUD_PRINTTALK = 3;
     constexpr auto HUD_PRINTCENTER = 4;
     // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    if (reader.readInt32(1) != HUD_PRINTCENTER)
-        return;
+    
+    if (reader.readInt32(1) == HUD_PRINTCENTER)
+    {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 2)
+            return;
 
-    const auto strings = reader.readRepeatedString(3);
-    if (strings.size() < 2)
-        return;
+        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
+            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
+            return;
 
-    if (strings[0] != "#SFUI_Notice_CannotDropWeapon" && strings[0] != "#SFUI_Notice_YouDroppedWeapon")
-        return;
+        if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
+            return;
 
-    if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
-        return;
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
 
-    const auto itemSchema = memory->itemSystem()->getItemSchema();
-    if (!itemSchema)
-        return;
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
 
-    const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
-    if (!def)
-        return;
+        const auto itemBaseName = std::string_view{ def->getItemBaseName() };
 
-    const auto itemBaseName = std::string_view{ def->getItemBaseName() };
+        static std::vector<char> buffer;
+        buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
+        std::ranges::copy(strings[0], std::back_inserter(buffer));
+        buffer.push_back(0x1A);
+        buffer.push_back(static_cast<char>(itemBaseName.length()));
+        std::ranges::copy(itemBaseName, std::back_inserter(buffer));
 
-    static std::vector<char> buffer;
-    buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
-    std::ranges::copy(strings[0], std::back_inserter(buffer));
-    buffer.push_back(0x1A);
-    buffer.push_back(static_cast<char>(itemBaseName.length()));
-    std::ranges::copy(itemBaseName, std::back_inserter(buffer));
+        // Add three empty strings, like UTIL_ClientPrintFilter() does
+        constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
+        std::ranges::copy(emptyStrings, std::back_inserter(buffer));
 
-    // Add three empty strings, like UTIL_ClientPrintFilter() does
-    constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
-    std::ranges::copy(emptyStrings, std::back_inserter(buffer));
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    }
+    else if (reader.readInt32(1) == HUD_PRINTTALK)
+    {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 3)
+            return;
 
-    data = buffer.data();
-    size = static_cast<int>(buffer.size());
+        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
+            return;
+
+        if (strings[2] != "#SFUI_WPNHUD_Knife" && strings[2] != "#SFUI_WPNHUD_Knife_T")
+            return;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
+
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
+
+        const auto itemBaseName = std::string_view{ def->getItemBaseName() };
+
+        static std::vector<char> buffer;
+        buffer = std::vector<char>{ 0x8, HUD_PRINTTALK, 0x1A, static_cast<char>(strings[0].length()) };
+        std::ranges::copy(strings[0], std::back_inserter(buffer));
+
+        buffer.push_back(0x1A);
+        buffer.push_back(static_cast<char>(strings[1].length()));
+        std::ranges::copy(strings[1], std::back_inserter(buffer));
+
+        buffer.push_back(0x1A);
+        buffer.push_back(static_cast<char>(itemBaseName.length()));
+        std::ranges::copy(itemBaseName, std::back_inserter(buffer));
+
+        // Add three empty strings, like UTIL_ClientPrintFilter() does
+        constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
+        std::ranges::copy(emptyStrings, std::back_inserter(buffer));
+
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    }
 }
 
 static std::uint64_t stringToUint64(const char* str) noexcept
