@@ -91,7 +91,7 @@ public:
     void(__THISCALL* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
     std::add_pointer_t<const char** __FASTCALL(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
-    GameEventDescriptor* (__THISCALL* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    GameEventDescriptor* (__THISCALL* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;
@@ -104,7 +104,7 @@ public:
     Entity** gameRules;
     InventoryManager* inventoryManager;
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
-    bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    bool(__THISCALL* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(__THISCALL* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
@@ -119,14 +119,14 @@ public:
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
 
     std::add_pointer_t<EconItemView* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
-    void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
+    void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
     std::uintptr_t useToolGetArgAsStringReturnAddress;
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
-    void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
+    void(__THISCALL* setCustomName)(EconItem* thisptr, const char* name);
     SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
     void** uiComponentInventory;
-    void(__THISCALL* setItemSessionPropertyValue)(void* _this, std::uint64_t itemID, const char* type, const char* value);
+    void(__THISCALL* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -144,12 +144,12 @@ public:
 #endif
     }
 
-    void setDynamicAttributeValue(EconItem* _this, EconItemAttributeDefinition* attribute, void* value) const noexcept
+    void setDynamicAttributeValue(EconItem* thisptr, EconItemAttributeDefinition* attribute, void* value) const noexcept
     {
 #ifdef _WIN32
-        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(_this, attribute, value);
+        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(thisptr, attribute, value);
 #else
-        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, _this, attribute, value);
+        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, thisptr, attribute, value);
 #endif
     }
 
