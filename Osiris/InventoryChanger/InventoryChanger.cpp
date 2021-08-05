@@ -978,6 +978,8 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        default:
+            break;
         }
 
         items.push_back(std::move(itemConfig));
