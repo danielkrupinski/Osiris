@@ -368,7 +368,9 @@ private:
     {
         assert(!_itemsSorted.empty());
 
-        std::ranges::copy(findItems(WeaponId::Sticker), std::back_inserter(_tournamentStickersSorted));
+        const auto stickers = findItems(WeaponId::Sticker);
+        _tournamentStickersSorted = { stickers.begin(), stickers.end() };
+
         std::ranges::sort(_tournamentStickersSorted, [this](std::size_t a, std::size_t b) {
             const auto& itemA = _gameItems[a];
             const auto& itemB = _gameItems[b];
