@@ -1422,6 +1422,11 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     }
 }
 
+[[nodiscard]] static bool isDefaultKnifeNameLocalizationString(std::string_view string) noexcept
+{
+    return string == "#SFUI_WPNHUD_Knife" || string == "#SFUI_WPNHUD_Knife_T";
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 {
     if (!localPlayer)
@@ -1458,7 +1463,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
             strings[0] != "#SFUI_Notice_YouDroppedWeapon")
             return;
 
-        if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
+        if (!isDefaultKnifeNameLocalizationString(strings[1]))
             return;
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
@@ -1484,9 +1489,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 
         data = buffer.data();
         size = static_cast<int>(buffer.size());
-    }
-    else if (reader.readInt32(1) == HUD_PRINTTALK)
-    {
+    } else if (reader.readInt32(1) == HUD_PRINTTALK) {
         const auto strings = reader.readRepeatedString(3);
         if (strings.size() < 3)
             return;
@@ -1496,7 +1499,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
             strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
             return;
 
-        if (strings[2] != "#SFUI_WPNHUD_Knife" && strings[2] != "#SFUI_WPNHUD_Knife_T")
+        if (!isDefaultKnifeNameLocalizationString(strings[2]))
             return;
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
