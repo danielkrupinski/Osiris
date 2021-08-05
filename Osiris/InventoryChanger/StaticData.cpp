@@ -229,7 +229,10 @@ private:
                     _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
             }
         }
+    }
 
+    void initWeaponNames(ItemSchema* itemSchema) noexcept
+    {
         for (const auto& item : _gameItems) {
             if (!_weaponNames.contains(item.weaponID)) {
                 const auto def = itemSchema->getItemDefinitionInterface(item.weaponID);
@@ -408,7 +411,8 @@ private:
         initMusicData(itemSchema);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, lootListIndices);
-     
+        initWeaponNames(itemSchema);
+
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
