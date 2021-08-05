@@ -493,9 +493,9 @@ static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessag
         InventoryChanger::onUserTextMsg(data, size);
     else if (type == UserMessageType::VoteStart)
         Misc::onVoteStart(data, size);
-    else if(type == UserMessageType::VotePass)
+    else if (type == UserMessageType::VotePass)
         Misc::onVotePass();
-    else if(type == UserMessageType::VoteFailed )
+    else if (type == UserMessageType::VoteFailed)
         Misc::onVoteFailed();
     
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
