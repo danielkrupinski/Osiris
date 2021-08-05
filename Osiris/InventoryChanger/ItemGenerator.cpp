@@ -769,7 +769,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, ComplexityGaming, Fnatic, { ANDROID, yay, dephh, ShahZaM, stanislaw, draken, KRIMZ, JW } },
     { TournamentMap::Inferno, GroupStage, MIBR, Tyloo, { FalleN, coldzera, fer, Stewie2K, tarik, BnTet, xccurate, somebody, DD, captainMo } },
     { TournamentMap::Mirage, GroupStage, Mousesports, NinjasInPyjamas, { ropz, oskar, suNny, Snax, chrisJ, f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
-    { TournamentMap::Inferno, GroupStage, Astralis, NatusVincere, { device, dupreeh, gla1ve, Magisk, Xyp9x } },
+    { TournamentMap::Inferno, GroupStage, Astralis, NatusVincere, { device, dupreeh, gla1ve, Magisk, Xyp9x, s1mple, electronic, flamie, Zeus } },
     { TournamentMap::Mirage, GroupStage, VegaSquadron, Cloud9, { jR, hutji, chopper, tonyblack } },
 
     // Round 2
@@ -779,7 +779,7 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Mirage, GroupStage, NinjasInPyjamas, TeamLiquid, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ, EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Inferno, GroupStage, Fnatic, WinstrikeTeam, { draken, KRIMZ, JW, flusha, Xizt, Boombl4, balblna, waterfaLLZ, Kvik } },
     { TournamentMap::Overpass, GroupStage, Cloud9, HellRaisers, { ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, { karrigan, GuardiaN, rain, NiKo } },
+    { TournamentMap::Overpass, GroupStage, FaZeClan, NatusVincere, { karrigan, GuardiaN, rain, NiKo, s1mple, electronic, flamie, Zeus, Edward } },
     { TournamentMap::Dust2, GroupStage, Mousesports, MIBR, { oskar, suNny, chrisJ, FalleN, coldzera, fer, Stewie2K, tarik } },
 
     // Round 3
@@ -787,14 +787,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, Astralis, TeamLiquid, { device, dupreeh, gla1ve, Magisk, Xyp9x, EliGE, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Inferno, GroupStage, Fnatic, VegaSquadron, { draken, KRIMZ, JW, flusha, Xizt, jR, hutji, crush, chopper, tonyblack } },
     { TournamentMap::Overpass, GroupStage, Tyloo, HellRaisers, { BnTet, xccurate, DD, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
-    { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, { dennis, GeT_RiGhT, REZ } },
+    { TournamentMap::Train, GroupStage, NatusVincere, NinjasInPyjamas, { s1mple, electronic, flamie, Zeus, Edward, dennis, GeT_RiGhT, REZ } },
     { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, { FalleN, coldzera, fer, Stewie2K, tarik, shox, kennyS, bodyy, SmithZz } },
     { TournamentMap::Inferno, GroupStage, Cloud9, WinstrikeTeam, { Boombl4, jmqa, waterfaLLZ, Kvik, balblna } },
     { TournamentMap::Mirage, GroupStage, Mousesports, FaZeClan, { ropz, oskar, suNny, Snax, chrisJ, karrigan, GuardiaN, rain, NiKo, olofmeister } },
 
     // Round 4
     { TournamentMap::Train, GroupStage, HellRaisers, BIG, { ISSAA, woxic, DeadFox, bondik, ANGE1, gobb, tabseN, nex, smooya, tiziaN } },
-    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, { draken, KRIMZ, JW, flusha, Xizt } },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, { s1mple, electronic, flamie, Zeus, Edward, draken, KRIMZ, JW, flusha, Xizt } },
     { TournamentMap::Dust2, GroupStage, Astralis, MIBR, { device, dupreeh, gla1ve, Magisk, Xyp9x } },
     { TournamentMap::Train, GroupStage, NinjasInPyjamas, VegaSquadron, { f0rest, dennis, Lekr0, GeT_RiGhT, REZ, jR, hutji, crush, chopper } },
     { TournamentMap::Mirage, GroupStage, Tyloo, FaZeClan, { DD, captainMo, xccurate, karrigan, GuardiaN, rain, NiKo, olofmeister } },
@@ -813,8 +813,8 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     // Quarterfinals
     { TournamentMap::Train, Quarterfinal, ComplexityGaming, MIBR, { ANDROID, yay, dephh, stanislaw, FalleN, coldzera, fer, Stewie2K, tarik } },
     { TournamentMap::Inferno, Quarterfinal, ComplexityGaming, MIBR, { ANDROID, yay, dephh, ShahZaM, stanislaw, FalleN, coldzera, fer, Stewie2K, tarik } },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, { tiziaN, gobb } },
-    { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, { tiziaN, tabseN, gobb } },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, BIG, { s1mple, electronic, flamie, Zeus, Edward, tiziaN, gobb } },
+    { TournamentMap::Nuke, Quarterfinal, NatusVincere, BIG, { s1mple, electronic, flamie, Zeus, Edward, tiziaN, tabseN, gobb } },
     { TournamentMap::Mirage, Quarterfinal, HellRaisers, TeamLiquid, { woxic, DeadFox, bondik, ANGE1, EliGE, Twistzz, NAF, TACO } },
     { TournamentMap::Dust2, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, bondik, ANGE1, nitr0, Twistzz, NAF, TACO } },
     { TournamentMap::Cache, Quarterfinal, HellRaisers, TeamLiquid, { ISSAA, woxic, DeadFox, ANGE1, EliGE, nitr0, Twistzz, NAF, TACO } },
@@ -822,14 +822,14 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Inferno, Quarterfinal, Astralis, FaZeClan, { device, dupreeh, gla1ve, Magisk, Xyp9x, karrigan, GuardiaN, rain, NiKo, olofmeister } },
 
     // Semifinals
-    { TournamentMap::Overpass, Semifinal, MIBR, NatusVincere, { FalleN, coldzera, fer, Stewie2K, tarik } },
-    { TournamentMap::Dust2, Semifinal, MIBR, NatusVincere, { FalleN, coldzera, tarik } },
+    { TournamentMap::Overpass, Semifinal, MIBR, NatusVincere, { FalleN, coldzera, fer, Stewie2K, tarik,  s1mple, electronic, flamie, Zeus, Edward } },
+    { TournamentMap::Dust2, Semifinal, MIBR, NatusVincere, { FalleN, coldzera, tarik,  s1mple, electronic, flamie, Zeus } },
     { TournamentMap::Nuke, Semifinal, TeamLiquid, Astralis, { EliGE, nitr0, Twistzz, NAF, device, dupreeh, gla1ve, Magisk, Xyp9x } },
     { TournamentMap::Mirage, Semifinal, TeamLiquid, Astralis, { EliGE, Twistzz, NAF, TACO, device, dupreeh, gla1ve, Magisk, Xyp9x } },
 
     // Grand Final
-    { TournamentMap::Nuke, GrandFinal, NatusVincere, Astralis, { device, dupreeh, gla1ve, Magisk, Xyp9x } },
-    { TournamentMap::Overpass, GrandFinal, Astralis, NatusVincere, { device, dupreeh, gla1ve, Magisk, Xyp9x } },
+    { TournamentMap::Nuke, GrandFinal, NatusVincere, Astralis, { s1mple, electronic, flamie, Zeus, Edward, device, dupreeh, gla1ve, Magisk, Xyp9x } },
+    { TournamentMap::Overpass, GrandFinal, Astralis, NatusVincere, { device, dupreeh, gla1ve, Magisk, Xyp9x, s1mple, flamie, Zeus, Edward } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
