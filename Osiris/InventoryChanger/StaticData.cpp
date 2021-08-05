@@ -20,11 +20,20 @@ class StaticDataImpl {
 private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
-        return std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
+        // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+        const auto begin = std::lower_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::size_t index, std::uint32_t tournamentID) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
-            return _paintKits[item.dataIndex].tournamentID;
+            return _paintKits[item.dataIndex].tournamentID < tournamentID;
         });
+
+        const auto end = std::upper_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::size_t index, std::uint32_t tournamentID) {
+            const auto& item = _gameItems[index];
+            assert(item.isSticker());
+            return _paintKits[item.dataIndex].tournamentID > tournamentID;
+        });
+  
+        return std::make_pair(begin, end);
     }
 
 public:
@@ -43,7 +52,7 @@ public:
         else if (tournamentID == 4) // ELS One Cologne 2014
             return 172;
 
-        const auto it = getTournamentStickers(tournamentID).begin();
+        const auto it = getTournamentStickers(tournamentID).first;
         if (it == _tournamentStickersSorted.end())
             return 0;
         assert(_gameItems[*it].isSticker());
@@ -62,12 +71,12 @@ public:
 
         const auto range = getTournamentStickers(tournamentID);
 
-        const auto it = std::ranges::lower_bound(range, team, {}, [this](std::size_t index) {
+        const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](std::size_t index) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
             return _paintKits[item.dataIndex].tournamentTeam;
         });
-        if (it == range.end())
+        if (it == range.second)
             return 0;
         assert(_gameItems[*it].isSticker());
         return _paintKits[_gameItems[*it].dataIndex].tournamentTeam == team ? _paintKits[_gameItems[*it].dataIndex].id : 0;
@@ -76,8 +85,8 @@ public:
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
     {
         const auto range = getTournamentStickers(tournamentID);
-        const auto it = std::ranges::find(range, tournamentPlayerID, [this](std::size_t index) { return _paintKits[_gameItems[index].dataIndex].tournamentPlayerID; });
-        return (it != range.end() ? _paintKits[_gameItems[*it].dataIndex].id : 0);
+        const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](std::size_t index) { return _paintKits[_gameItems[index].dataIndex].tournamentPlayerID; });
+        return (it != range.second ? _paintKits[_gameItems[*it].dataIndex].id : 0);
     }
 
     static const auto& gameItems() noexcept { return instance()._gameItems; }
