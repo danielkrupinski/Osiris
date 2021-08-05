@@ -17,6 +17,16 @@ constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 }
 
 class StaticDataImpl {
+private:
+    auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
+    {
+        return std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
+            const auto& item = _gameItems[index];
+            assert(item.isSticker());
+            return _paintKits[item.dataIndex].tournamentID;
+        });
+    }
+
 public:
     static StaticDataImpl& instance() noexcept
     {
@@ -33,11 +43,7 @@ public:
         else if (tournamentID == 4) // ELS One Cologne 2014
             return 172;
 
-        const auto it = std::ranges::lower_bound(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
-            const auto& item = _gameItems[index];
-            assert(item.isSticker());
-            return _paintKits[item.dataIndex].tournamentID;
-        });
+        const auto it = getTournamentStickers(tournamentID).begin();
         if (it == _tournamentStickersSorted.end())
             return 0;
         assert(_gameItems[*it].isSticker());
@@ -54,11 +60,8 @@ public:
         if (team == TournamentTeam::AllStarTeamEurope)
             return 1316;
 
-        const auto range = std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
-            const auto& item = _gameItems[index];
-            assert(item.isSticker());
-            return _paintKits[item.dataIndex].tournamentID;
-        });
+        const auto range = getTournamentStickers(tournamentID);
+
         const auto it = std::ranges::lower_bound(range, team, {}, [this](std::size_t index) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
@@ -72,11 +75,7 @@ public:
 
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
     {
-        const auto range = std::ranges::equal_range(_tournamentStickersSorted, tournamentID, {}, [this](std::size_t index) {
-            const auto& item = _gameItems[index];
-            assert(item.isSticker());
-            return _paintKits[item.dataIndex].tournamentID;
-        });
+        const auto range = getTournamentStickers(tournamentID);
         const auto it = std::ranges::find(range, tournamentPlayerID, [this](std::size_t index) { return _paintKits[_gameItems[index].dataIndex].tournamentPlayerID; });
         return (it != range.end() ? _paintKits[_gameItems[*it].dataIndex].id : 0);
     }
