@@ -842,7 +842,13 @@ static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
     assert(std::ranges::is_sorted(matches, {}, &Match::map));
 
-    if (const auto [begin, end] = std::ranges::equal_range(matches, map, {}, &Match::map); begin != end)
+    struct Comp {
+        bool operator()(TournamentMap map, const Match& match) const noexcept { return map < match.map; }
+        bool operator()(const Match& match, TournamentMap map) const noexcept { return match.map < map; }
+    };
+
+    // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+    if (const auto [begin, end] = std::equal_range(matches.begin(), matches.end(), map, Comp{}); begin != end)
         return { begin, end };
 
     assert(false && "Couldn't find a match played on a map of a souvenir package!");

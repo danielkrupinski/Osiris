@@ -253,8 +253,16 @@ private:
 
     auto findItems(WeaponId weaponID) const noexcept
     {
+        struct Comp {
+            explicit Comp(const std::vector<GameItem>& gameItems) : gameItems{ gameItems } {}
+            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
+            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
+        private:
+            const std::vector<GameItem>& gameItems;
+        };
+
         assert(!_itemsSorted.empty());
-        return std::ranges::equal_range(_itemsSorted, weaponID, {}, [this](std::size_t index) { return _gameItems[index].weaponID; });
+        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
     }
 
     std::size_t getItemIndex(WeaponId weaponID, int paintKit) const noexcept
@@ -369,7 +377,7 @@ private:
         assert(!_itemsSorted.empty());
 
         const auto stickers = findItems(WeaponId::Sticker);
-        _tournamentStickersSorted = { stickers.begin(), stickers.end() };
+        _tournamentStickersSorted = { stickers.first, stickers.second };
 
         std::ranges::sort(_tournamentStickersSorted, [this](std::size_t a, std::size_t b) {
             const auto& itemA = _gameItems[a];
