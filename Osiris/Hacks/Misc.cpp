@@ -1134,18 +1134,14 @@ void Misc::onVoteStart(const void* data, int size) noexcept
 
 void Misc::onVotePass() noexcept
 {
-    if (!miscConfig.revealVotes)
-        return;
-    
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 vote\x06 PASS");
+    if (miscConfig.revealVotes)
+        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
 }
 
 void Misc::onVoteFailed() noexcept
 {
-    if (!miscConfig.revealVotes)
-        return;
-    
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 vote\x07 FAILED");
+    if (miscConfig.revealVotes)
+        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
