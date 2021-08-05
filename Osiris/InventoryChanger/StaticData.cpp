@@ -27,12 +27,12 @@ private:
             return _paintKits[item.dataIndex].tournamentID < tournamentID;
         });
 
-        const auto end = std::upper_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::size_t index, std::uint32_t tournamentID) {
+        const auto end = std::upper_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::uint32_t tournamentID, std::size_t index) {
             const auto& item = _gameItems[index];
             assert(item.isSticker());
             return _paintKits[item.dataIndex].tournamentID > tournamentID;
         });
-  
+
         return std::make_pair(begin, end);
     }
 
