@@ -301,6 +301,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Aimbot On key", aimbotOnKey);
     read(j, "Aimbot Key", aimbotKey);
     read(j, "Aimbot Key mode", aimbotKeyMode);
+    read(j, "Draw Aimbot FOV", drawaimbotFov);
 
     read(j, "Triggerbot", triggerbot);
     read(j, "Triggerbot Key", triggerbotHoldKey);
@@ -517,6 +518,7 @@ void Config::save(size_t id) const noexcept
     j["Aimbot On key"] = aimbotOnKey;
     to_json(j["Aimbot Key"], aimbotKey, {});
     j["Aimbot Key mode"] = aimbotKeyMode;
+    j["Draw Aimbot FOV"] = drawaimbotFov;
 
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
