@@ -10,6 +10,7 @@
 
 struct Color3;
 struct Color4;
+struct Vector;
 
 namespace Helpers
 {
