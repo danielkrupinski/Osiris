@@ -21,6 +21,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../GameData.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
