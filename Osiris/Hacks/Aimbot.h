@@ -2,6 +2,7 @@
 
 struct UserCmd;
 struct Vector;
+struct ImDrawList;
 
 namespace Aimbot
 {
