@@ -56,4 +56,6 @@ namespace Helpers
 
     float random(float min, float max) noexcept;
     int random(int min, int max) noexcept;
+
+    bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept;
 }
