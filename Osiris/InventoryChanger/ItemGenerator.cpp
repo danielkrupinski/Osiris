@@ -903,11 +903,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
 
 [[nodiscard]] static const Match* findTournamentMatch(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
 {
-    const auto matches = getTournamentMatches(tournamentID);
-    if (matches.empty())
-        return nullptr;
-
-    const auto matchesOnMap = filterMatchesToMap(matches, map);
+    const auto matchesOnMap = filterMatchesToMap(getTournamentMatches(tournamentID), map);
     if (matchesOnMap.empty())
         return nullptr;
 
