@@ -247,6 +247,21 @@ void Aimbot::run(UserCmd* cmd) noexcept
     }
 }
 
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
+    return true;
+}
+
 void Aimbot::drawFov(ImDrawList* drawList) noexcept
 {
     if (!config->drawaimbotFov.enabled)
@@ -291,6 +306,6 @@ void Aimbot::drawFov(ImDrawList* drawList) noexcept
 
     const auto aimPunchAngle = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
 
-    if (ImVec2 pos; Helpers::worldToScreen(aimPunchAngle, pos))
+    if (ImVec2 pos; worldToScreen(aimPunchAngle, pos))
         drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(config->drawaimbotFov.asColor4()), 360);
 }
