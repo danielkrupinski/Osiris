@@ -249,7 +249,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
 void Aimbot::drawFov(ImDrawList* drawList) noexcept
 {
-    if (!config->drawFov.enabled)
+    if (!config->drawaimbotFov.enabled)
         return;
 
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -292,5 +292,5 @@ void Aimbot::drawFov(ImDrawList* drawList) noexcept
     const auto aimPunchAngle = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
 
     if (ImVec2 pos; Helpers::worldToScreen(aimPunchAngle, pos))
-        drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(config->drawFov.asColor4()), 360);
+        drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(config->drawaimbotFov.asColor4()), 360);
 }
