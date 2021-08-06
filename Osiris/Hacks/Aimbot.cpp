@@ -246,3 +246,51 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
     }
 }
+
+void Aimbot::drawFov(ImDrawList* drawList) noexcept
+{
+    if (!config->drawFov.enabled)
+        return;
+
+    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || !activeWeapon->clip())
+        return;
+
+    if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
+        return;
+
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
+    if (!weaponIndex)
+        return;
+
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = weaponClass;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = 0;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        return;
+
+    if (!config->aimbot[weaponIndex].betweenShots && (activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime() || (activeWeapon->isFullAuto() && localPlayer->shotsFired() > 1)))
+        return;
+
+    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
+        return;
+
+    if (config->aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+        return;
+
+    const auto& screensize = ImGui::GetIO().DisplaySize;
+    float radius = std::tan(Helpers::deg2rad(config->aimbot[weaponIndex].fov) / 2.f) / std::tan(Helpers::deg2rad(localPlayer->isScoped() ? localPlayer->fov() : config->totalFov) / 2.f) * screensize.x;
+    const ImVec2 screen_mid = { screensize.x / 2.0f, screensize.y / 2.0f };
+
+    const auto aimPunchAngle = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
+
+    if (ImVec2 pos; Helpers::worldToScreen(aimPunchAngle, pos))
+        drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(config->drawFov.asColor4()), 360);
+}
