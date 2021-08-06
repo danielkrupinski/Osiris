@@ -596,6 +596,7 @@ public:
     void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
+    void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
