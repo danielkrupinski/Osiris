@@ -226,7 +226,7 @@ public:
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
 
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
@@ -235,6 +235,11 @@ public:
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+
+    auto getItemDefinitionInterface(WeaponId id) noexcept
+    {
+        return getItemDefinitionInterface(static_cast<int>(id));
+    }
 };
 
 class ItemSystem {
