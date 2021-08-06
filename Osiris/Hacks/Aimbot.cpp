@@ -30,7 +30,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
-#if defined(_WIN32) && false
+#if defined(_WIN32)
     const auto traceToExitFn = memory->traceToExit;
     __asm {
         push exitTrace
@@ -177,7 +177,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer->getEyePosition();
-        
+
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
