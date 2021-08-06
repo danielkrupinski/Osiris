@@ -116,7 +116,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
     Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
     Misc::watermark();
-    Misc::drawAimBotFOV(ImGui::GetBackgroundDrawList());
+    Aimbot::drawFov(ImGui::GetBackgroundDrawList());
 
     Aimbot::updateInput();
     Visuals::updateInput();
@@ -372,7 +372,7 @@ static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) 
         if (!localPlayer->isScoped())
             setup->fov += Visuals::fov();
 
-        Misc::settotalFOV(setup->fov);
+        config->totalFov = setup->fov;
     }
         
     setup->farZ += Visuals::farZ() * 10;
