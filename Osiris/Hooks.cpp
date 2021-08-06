@@ -545,7 +545,7 @@ static void swapWindow(SDL_Window* window) noexcept
         Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
         Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark();
-        Misc::drawAimBotFOV(ImGui::GetBackgroundDrawList());
+        Aimbot::drawFov(ImGui::GetBackgroundDrawList());
 
         Aimbot::updateInput();
         Visuals::updateInput();
