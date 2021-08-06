@@ -53,7 +53,7 @@
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
-#include <Config.h>
+#include "../Config.h"
 
 struct PreserveKillfeed {
     bool enabled = false;
