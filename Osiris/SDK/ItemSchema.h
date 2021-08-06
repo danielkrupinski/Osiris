@@ -75,6 +75,7 @@ public:
     VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), (this))
     VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
+    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), (this))
 
     std::uint8_t getQuality() noexcept
     {
