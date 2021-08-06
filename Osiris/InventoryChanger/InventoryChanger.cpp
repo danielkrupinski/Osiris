@@ -978,6 +978,8 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        default:
+            break;
         }
 
         items.push_back(std::move(itemConfig));
@@ -1422,6 +1424,31 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     }
 }
 
+[[nodiscard]] static bool isDefaultKnifeNameLocalizationString(std::string_view string) noexcept
+{
+    return string == "#SFUI_WPNHUD_Knife" || string == "#SFUI_WPNHUD_Knife_T";
+}
+
+static void appendProtobufString(std::string_view string, std::vector<char>& buffer) noexcept
+{
+    assert(string.length() < 128);
+    buffer.push_back(0x1A);
+    buffer.push_back(static_cast<char>(string.length()));
+    std::ranges::copy(string, std::back_inserter(buffer));
+}
+
+[[nodiscard]] static std::vector<char> buildTextUserMessage(int destination, std::string_view string1, std::string_view string2, std::string_view string3 = {}) noexcept
+{
+    std::vector<char> buffer{ 0x8, static_cast<char>(destination) };
+    appendProtobufString(string1, buffer);
+    appendProtobufString(string2, buffer);
+    appendProtobufString(string3, buffer);
+    // game client expects text protobuf to contain 5 strings
+    appendProtobufString("", buffer);
+    appendProtobufString("", buffer);
+    return buffer;
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 {
     if (!localPlayer)
@@ -1442,46 +1469,62 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
         return;
 
+    constexpr auto HUD_PRINTTALK = 3;
     constexpr auto HUD_PRINTCENTER = 4;
     // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    if (reader.readInt32(1) != HUD_PRINTCENTER)
-        return;
+    
+    if (reader.readInt32(1) == HUD_PRINTCENTER) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 2)
+            return;
 
-    const auto strings = reader.readRepeatedString(3);
-    if (strings.size() < 2)
-        return;
+        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
+            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
+            return;
 
-    if (strings[0] != "#SFUI_Notice_CannotDropWeapon" && strings[0] != "#SFUI_Notice_YouDroppedWeapon")
-        return;
+        if (!isDefaultKnifeNameLocalizationString(strings[1]))
+            return;
 
-    if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
-        return;
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
 
-    const auto itemSchema = memory->itemSystem()->getItemSchema();
-    if (!itemSchema)
-        return;
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
 
-    const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
-    if (!def)
-        return;
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    } else if (reader.readInt32(1) == HUD_PRINTTALK) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 3)
+            return;
 
-    const auto itemBaseName = std::string_view{ def->getItemBaseName() };
+        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
+            return;
 
-    static std::vector<char> buffer;
-    buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
-    std::ranges::copy(strings[0], std::back_inserter(buffer));
-    buffer.push_back(0x1A);
-    buffer.push_back(static_cast<char>(itemBaseName.length()));
-    std::ranges::copy(itemBaseName, std::back_inserter(buffer));
+        if (!isDefaultKnifeNameLocalizationString(strings[2]))
+            return;
 
-    // Add three empty strings, like UTIL_ClientPrintFilter() does
-    constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
-    std::ranges::copy(emptyStrings, std::back_inserter(buffer));
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
 
-    data = buffer.data();
-    size = static_cast<int>(buffer.size());
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
+
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    }
 }
 
 static std::uint64_t stringToUint64(const char* str) noexcept
