@@ -130,9 +130,9 @@ private:
             econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
-            if (dynamicData.isSouvenir()) {
+            const auto isMP5LabRats = (item.weaponID == WeaponId::Mp5sd && StaticData::paintKits()[item.dataIndex].id == 800);
+            if (dynamicData.isSouvenir() || isMP5LabRats) {
                 econItem->quality = 12;
-                econItem->setTournamentID(dynamicData.tournamentID);
             } else {
                 if (dynamicData.statTrak > -1) {
                     econItem->setStatTrak(dynamicData.statTrak);
@@ -143,12 +143,19 @@ private:
                     econItem->quality = 3;
             }
 
-            if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
-                econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
-                econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
-                econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
-                if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
-                    econItem->setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
+            if (isMP5LabRats) {
+                econItem->setSpecialEventID(1);
+            } else {
+                if (dynamicData.tournamentID != 0)
+                    econItem->setTournamentID(dynamicData.tournamentID);
+
+                if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
+                    econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
+                    econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
+                    econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
+                    if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
+                        econItem->setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
+                }
             }
 
             econItem->setWear(dynamicData.wear);
