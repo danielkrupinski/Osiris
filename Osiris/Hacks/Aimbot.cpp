@@ -177,6 +177,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer->getEyePosition();
+        
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
