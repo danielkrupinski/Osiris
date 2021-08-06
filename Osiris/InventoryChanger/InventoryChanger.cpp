@@ -58,32 +58,25 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
     }
 }
 
-static void sendInventoryUpdatedEvent() noexcept
-{
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MyPersona_InventoryUpdated")); idx != -1) {
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
-    }
-}
-
 static Entity* createGlove(int entry, int serial) noexcept
 {
-    static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
-
-    if (!createWearable) {
-        createWearable = []() -> decltype(createWearable) {
-            for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-                if (clientClass->classId == ClassId::EconWearable)
-                    return clientClass->createFunction;
-            return nullptr;
-        }();
-    }
+    static const auto createWearable = []{
+        std::add_pointer_t<Entity* __CDECL(int, int)> createWearableFn = nullptr;
+        for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+            if (clientClass->classId == ClassId::EconWearable) {
+                createWearableFn = clientClass->createFunction;
+                break;
+            }
+        }
+        return createWearableFn;
+    }();
 
     if (!createWearable)
         return nullptr;
 
-    createWearable(entry, serial);
-    return interfaces->entityList->getEntity(entry);
+    if (const auto wearable = createWearable(entry, serial))
+        return reinterpret_cast<Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
+    return nullptr;
 }
 
 static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
@@ -886,8 +879,7 @@ json InventoryChanger::toJson() noexcept
 
     j["Version"] = CONFIG_VERSION;
 
-    auto& items = j["Items"];
-    for (const auto& item : Inventory::get()) {
+    for (auto& items = j["Items"]; const auto& item : Inventory::get()) {
         if (item.isDeleted())
             continue;
 
@@ -918,8 +910,8 @@ json InventoryChanger::toJson() noexcept
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
-            if (dynamicData.isSouvenir)
-                itemConfig["Is Souvenir"] = dynamicData.isSouvenir;
+            if (dynamicData.tournamentID != 0)
+                itemConfig["Tournament ID"] = dynamicData.tournamentID;
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
             if (dynamicData.statTrak > -1)
@@ -939,6 +931,13 @@ json InventoryChanger::toJson() noexcept
                 stickerConfig["Wear"] = sticker.wear;
                 stickerConfig["Slot"] = i;
                 stickers.push_back(std::move(stickerConfig));
+            }
+
+            if (dynamicData.tournamentStage != TournamentStage{}) {
+                itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
+                itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
+                itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
+                itemConfig["Tournament Player"] = dynamicData.proPlayer;
             }
             break;
         }
@@ -979,6 +978,8 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        default:
+            break;
         }
 
         items.push_back(std::move(itemConfig));
@@ -1056,9 +1057,9 @@ json InventoryChanger::toJson() noexcept
 {
     DynamicSkinData dynamicData;
 
-    if (j.contains("Is Souvenir")) {
-        if (const auto& isSouvenir = j["Is Souvenir"]; isSouvenir.is_boolean())
-            dynamicData.isSouvenir = isSouvenir;
+    if (j.contains("Tournament ID")) {
+        if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
+            dynamicData.tournamentID = tournamentID;
     }
 
     if (j.contains("Wear")) {
@@ -1079,6 +1080,26 @@ json InventoryChanger::toJson() noexcept
     if (j.contains("Name Tag")) {
         if (const auto& nameTag = j["Name Tag"]; nameTag.is_string())
             dynamicData.nameTag = nameTag;
+    }
+
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            dynamicData.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            dynamicData.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            dynamicData.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            dynamicData.proPlayer = tournamentPlayer;
     }
 
     dynamicData.stickers = loadSkinStickersFromJson(j);
@@ -1403,6 +1424,31 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     }
 }
 
+[[nodiscard]] static bool isDefaultKnifeNameLocalizationString(std::string_view string) noexcept
+{
+    return string == "#SFUI_WPNHUD_Knife" || string == "#SFUI_WPNHUD_Knife_T";
+}
+
+static void appendProtobufString(std::string_view string, std::vector<char>& buffer) noexcept
+{
+    assert(string.length() < 128);
+    buffer.push_back(0x1A);
+    buffer.push_back(static_cast<char>(string.length()));
+    std::ranges::copy(string, std::back_inserter(buffer));
+}
+
+[[nodiscard]] static std::vector<char> buildTextUserMessage(int destination, std::string_view string1, std::string_view string2, std::string_view string3 = {}) noexcept
+{
+    std::vector<char> buffer{ 0x8, static_cast<char>(destination) };
+    appendProtobufString(string1, buffer);
+    appendProtobufString(string2, buffer);
+    appendProtobufString(string3, buffer);
+    // game client expects text protobuf to contain 5 strings
+    appendProtobufString("", buffer);
+    appendProtobufString("", buffer);
+    return buffer;
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
 {
     if (!localPlayer)
@@ -1423,46 +1469,62 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
         return;
 
+    constexpr auto HUD_PRINTTALK = 3;
     constexpr auto HUD_PRINTCENTER = 4;
     // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    if (reader.readInt32(1) != HUD_PRINTCENTER)
-        return;
+    
+    if (reader.readInt32(1) == HUD_PRINTCENTER) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 2)
+            return;
 
-    const auto strings = reader.readRepeatedString(3);
-    if (strings.size() < 2)
-        return;
+        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
+            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
+            return;
 
-    if (strings[0] != "#SFUI_Notice_CannotDropWeapon" && strings[0] != "#SFUI_Notice_YouDroppedWeapon")
-        return;
+        if (!isDefaultKnifeNameLocalizationString(strings[1]))
+            return;
 
-    if (strings[1] != "#SFUI_WPNHUD_Knife" && strings[1] != "#SFUI_WPNHUD_Knife_T")
-        return;
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
 
-    const auto itemSchema = memory->itemSystem()->getItemSchema();
-    if (!itemSchema)
-        return;
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
 
-    const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
-    if (!def)
-        return;
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    } else if (reader.readInt32(1) == HUD_PRINTTALK) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 3)
+            return;
 
-    const auto itemBaseName = std::string_view{ def->getItemBaseName() };
+        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
+            return;
 
-    static std::vector<char> buffer;
-    buffer = std::vector<char>{ 0x8, HUD_PRINTCENTER, 0x1A, static_cast<char>(strings[0].length()) };
-    std::ranges::copy(strings[0], std::back_inserter(buffer));
-    buffer.push_back(0x1A);
-    buffer.push_back(static_cast<char>(itemBaseName.length()));
-    std::ranges::copy(itemBaseName, std::back_inserter(buffer));
+        if (!isDefaultKnifeNameLocalizationString(strings[2]))
+            return;
 
-    // Add three empty strings, like UTIL_ClientPrintFilter() does
-    constexpr auto emptyStrings = std::to_array<char>({ 0x1A, 0, 0x1A, 0, 0x1A, 0 });
-    std::ranges::copy(emptyStrings, std::back_inserter(buffer));
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
 
-    data = buffer.data();
-    size = static_cast<int>(buffer.size());
+        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        if (!def)
+            return;
+
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    }
 }
 
 static std::uint64_t stringToUint64(const char* str) noexcept
