@@ -56,7 +56,7 @@ public:
     bool aimbotOnKey{ false };
     KeyBind aimbotKey;
     int aimbotKeyMode{ 0 };
-    ColorToggle drawFov{ 0.0f, 0.0f, 1.0f, 1.0f };
+    ColorToggle drawaimbotFov{ 0.0f, 0.0f, 1.0f, 1.0f };
     float totalFov;
 
     struct Triggerbot {
