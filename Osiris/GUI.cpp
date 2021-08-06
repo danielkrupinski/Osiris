@@ -184,7 +184,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::SameLine();
-    ImGuiCustom::colorPicker("Draw AimBot FOV", config->drawFov);
+    ImGuiCustom::colorPicker("Draw AimBot FOV", config->drawaimbotFov);
     ImGui::Separator();
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
