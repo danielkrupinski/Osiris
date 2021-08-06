@@ -915,6 +915,13 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     return (match != matchesOnMap.end() ? &*match : nullptr);
 }
 
+[[nodiscard]] static std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
+{
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
+        return static_cast<std::uint8_t>(std::clamp(def->getNumberOfSupportedStickerSlots(), 0, 5));
+    return 0;
+}
+
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<StickerConfig, 5> stickers;
