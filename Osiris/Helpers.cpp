@@ -20,6 +20,7 @@
 #include "Helpers.h"
 #include "Memory.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/Engine.h"
 
 static auto rainbowColor(float time, float speed, float alpha) noexcept
 {
@@ -203,4 +204,20 @@ int Helpers::random(int min, int max) noexcept
     std::mt19937 gen{ std::random_device{}() };
     std::uniform_int_distribution dis{ min, max };
     return dis(gen);
+}
+
+bool Helpers::worldToScreen(const Vector& in, ImVec2& out, bool floor) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    if(floor)
+        out = ImFloor(out);
+    return true;
 }
