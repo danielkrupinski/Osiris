@@ -476,6 +476,10 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     const auto soc = memory->getSOCData(itemView);
     if (!soc)
         return;
+    
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(std::string("weapon_" + std::string(event.getString("weapon"))).c_str());
+    if (def && def->getWeaponId() != soc->weaponId)
+        return;
 
     auto& dynamicData = Inventory::dynamicSkinData(item->getDynamicDataIndex());
     if (dynamicData.statTrak > -1) {
