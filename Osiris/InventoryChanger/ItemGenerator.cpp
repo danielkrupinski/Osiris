@@ -845,7 +845,7 @@ static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID)
     return {};
 }
 
-static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
+constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 {
     return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
 }
