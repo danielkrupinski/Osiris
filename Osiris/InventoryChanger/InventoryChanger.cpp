@@ -550,7 +550,7 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).c_str();
+        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
@@ -666,7 +666,7 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).c_str();
+        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";

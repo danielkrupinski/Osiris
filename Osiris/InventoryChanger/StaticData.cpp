@@ -493,7 +493,7 @@ const std::wstring& StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
     return StaticDataImpl::getWeaponNameUpper(weaponID);
 }
 
-const std::string& StaticData::getWeaponName(WeaponId weaponID) noexcept
+std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::getWeaponName(weaponID);
 }
