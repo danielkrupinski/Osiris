@@ -324,7 +324,13 @@ enum TournamentTeam : std::uint8_t {
     MIBR = 80,
     TeamSpirit = 81,
     Rogue = 82,
-    WinstrikeTeam = 83
+    WinstrikeTeam = 83,
+    ENCE = 84,
+    FURIA = 85,
+    GrayhoundGaming = 86,
+    NRG = 87,
+    ViCiGaming = 88,
+    Vitality = 89,
 };
 
 enum TournamentStage : std::uint8_t {
