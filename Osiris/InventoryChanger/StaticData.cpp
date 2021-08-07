@@ -488,7 +488,7 @@ const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
     return StaticDataImpl::paintKits();
 }
 
-const std::wstring& StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
+std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::getWeaponNameUpper(weaponID);
 }
