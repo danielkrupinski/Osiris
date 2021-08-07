@@ -39,7 +39,6 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
-#include "../SDK/Panorama.h"
 #include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
@@ -239,7 +238,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto soc = memory->getSOCData(itemView);
-        if (!soc || !Inventory::getItem(soc->itemID))
+        if (!soc || soc->weaponId != definitionIndex || !Inventory::getItem(soc->itemID))
             continue;
 
         weapon->accountID() = localInventory.getAccountID();

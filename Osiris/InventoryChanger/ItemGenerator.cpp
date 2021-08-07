@@ -804,6 +804,21 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, &Match::map));
 
+constexpr auto iemKatowice2019Matches = std::to_array<Match>({
+    // Challengers Stage
+
+    // Round 1
+    { TournamentMap::Train, ChallengersStage, Renegades, Avangar, {} },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
+    { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, {} },
+    { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
@@ -830,7 +845,7 @@ static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID)
     return {};
 }
 
-static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
+constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 {
     return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
 }
