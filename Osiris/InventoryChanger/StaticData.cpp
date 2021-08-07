@@ -95,7 +95,7 @@ public:
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
     static const auto& getWeaponNameUpper(WeaponId weaponID) noexcept { return instance()._weaponNamesUpper[weaponID]; }
-    static const auto& getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
+    static std::string_view getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
     static auto getItemIndex_(WeaponId weaponID, int paintKit) noexcept { return instance().getItemIndex(weaponID, paintKit); }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
