@@ -327,7 +327,12 @@ void Misc::spectatorList() noexcept
         if (!observer.targetIsLocalPlayer)
             continue;
 
+        const auto& playerdata = PlayerData(interfaces->entityList->getEntityFromHandle(observer.playerHandle));
+
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
+            const auto text_size = ImGui::CalcTextSize(it->name.c_str());
+            ImGui::Image(playerdata.getAvatarTexture(), ImVec2(text_size.y, text_size.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+            ImGui::SameLine();
             ImGui::TextWrapped("%s", it->name.c_str());
         }
     }
