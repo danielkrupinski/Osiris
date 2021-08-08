@@ -126,6 +126,7 @@ struct MiscConfig {
         ImVec2 pos;
         ImVec2 size{ 200.0f, 200.0f };
     };
+    
     SpectatorList spectatorList;
 
     struct DamageList {
@@ -360,9 +361,9 @@ void Misc::damageList() noexcept
     if (!miscConfig.damageList.enabled)
         return;
 
-    if (damageCount.size() == 0 && !gui->isOpen())
+    if (damageCount.size() == 0 && (!gui->isOpen() || (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())))
         return;
-
+    
     if (miscConfig.damageList.pos != ImVec2{}) {
         ImGui::SetNextWindowPos(miscConfig.damageList.pos);
         miscConfig.damageList.pos = {};
