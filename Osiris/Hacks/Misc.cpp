@@ -126,7 +126,7 @@ struct MiscConfig {
         ImVec2 pos;
         ImVec2 size{ 200.0f, 200.0f };
     };
-    
+
     SpectatorList spectatorList;
 
     struct DamageList {
