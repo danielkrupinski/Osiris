@@ -75,6 +75,7 @@ public:
     VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), (this))
     VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
+    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), (this))
 
     std::uint8_t getQuality() noexcept
     {
@@ -225,7 +226,7 @@ public:
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
 
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
@@ -234,6 +235,11 @@ public:
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+
+    auto getItemDefinitionInterface(WeaponId id) noexcept
+    {
+        return getItemDefinitionInterface(static_cast<int>(id));
+    }
 };
 
 class ItemSystem {
@@ -314,7 +320,17 @@ enum TournamentTeam : std::uint8_t {
     QuantumBellatorFire = 76,
     MisfitsGaming = 77,
     _100Thieves = 78,
-    FlashGaming = 79
+    FlashGaming = 79,
+    MIBR = 80,
+    TeamSpirit = 81,
+    Rogue = 82,
+    WinstrikeTeam = 83,
+    ENCE = 84,
+    FURIA = 85,
+    GrayhoundGaming = 86,
+    NRG = 87,
+    ViCiGaming = 88,
+    Vitality = 89,
 };
 
 enum TournamentStage : std::uint8_t {
@@ -511,7 +527,35 @@ enum ProPlayer {
     xms = 38509481,
     v4lde = 154664140,
     Golden = 116509497,
-    fitch = 33208850
+    fitch = 33208850,
+    cadiaN = 43849788,
+    vice = 135979468,
+    MICHU = 60359075,
+    snatchie = 111436809,
+    REZ = 73906687,
+    BnTet = 111817512,
+    xccurate = 177428807,
+    somebody = 85131873,
+    DD = 169982617,
+    captainMo = 109036162,
+    smooya = 211423593,
+    tiziaN = 37291208,
+    crush = 36981424,
+    tonyblack = 15738602,
+    sdy = 80311472,
+    Dima = 51718767,
+    S0tF1k = 174857712,
+    COLDYY1 = 34364443,
+    niko = 29470855,
+    ISSAA = 77546728,
+    woxic = 123219778,
+    gade = 21355604,
+    JUGi = 83626376,
+    Snappi = 29157337,
+    ANDROID = 1936433,
+    yay = 57496765,
+    dephh = 26995179,
+    draken = 159123007
 };
 
 class EconItem {
@@ -558,6 +602,7 @@ public:
     void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
+    void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
