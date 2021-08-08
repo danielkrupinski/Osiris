@@ -33,7 +33,7 @@ namespace GameData
 
     class Lock {
     public:
-        Lock() noexcept : lock{ mutex } {};
+        Lock() noexcept : lock{ mutex } {}
     private:
         std::scoped_lock<std::mutex> lock;
         static inline std::mutex mutex;
@@ -116,8 +116,8 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
-    ImTextureID getAvatarTexture() const noexcept;
-    float fadingAlpha() const noexcept;
+    [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
+    [[nodiscard]] float fadingAlpha() const noexcept;
 
     bool dormant;
     bool enemy = false;

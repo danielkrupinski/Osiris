@@ -83,6 +83,9 @@ void Glow::render() noexcept
                 if (auto index{ memory->glowObjectManager->registerGlowObject(entity) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
+            break;
+        default:
+            break;
         }
     }
 

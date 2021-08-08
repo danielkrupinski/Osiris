@@ -75,6 +75,7 @@ public:
     VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), (this))
     VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
+    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), (this))
 
     std::uint8_t getQuality() noexcept
     {
@@ -225,7 +226,7 @@ public:
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
 
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
@@ -234,6 +235,11 @@ public:
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+
+    auto getItemDefinitionInterface(WeaponId id) noexcept
+    {
+        return getItemDefinitionInterface(static_cast<int>(id));
+    }
 };
 
 class ItemSystem {
@@ -303,7 +309,28 @@ enum TournamentTeam : std::uint8_t {
     AllStarTeamEurope = 65,
     OpTicGaming = 66,
     GODSENT = 67,
-    North = 68
+    North = 68,
+    BIG = 69,
+    VegaSquadron = 70,
+    Immortals = 71,
+    SproutEsports = 72,
+    SpaceSoldiers = 73,
+    Tyloo = 74,
+    Avangar = 75,
+    QuantumBellatorFire = 76,
+    MisfitsGaming = 77,
+    _100Thieves = 78,
+    FlashGaming = 79,
+    MIBR = 80,
+    TeamSpirit = 81,
+    Rogue = 82,
+    WinstrikeTeam = 83,
+    ENCE = 84,
+    FURIA = 85,
+    GrayhoundGaming = 86,
+    NRG = 87,
+    ViCiGaming = 88,
+    Vitality = 89,
 };
 
 enum TournamentStage : std::uint8_t {
@@ -311,7 +338,8 @@ enum TournamentStage : std::uint8_t {
     Quarterfinal = 5,
     Semifinal = 8,
     GrandFinal = 11,
-    AllStar = 14
+    AllStar = 14,
+    ChallengersStage = 27
 };
 
 enum ProPlayer {
@@ -448,7 +476,86 @@ enum ProPlayer {
     SIXER = 3429256,
     Lekr0 = 1093135,
     znajder = 97816050,
-    electronic = 83779379
+    electronic = 83779379,
+    oskar = 171425088,
+    ropz = 31006590,
+    mir = 40562076,
+    hutji = 61587630,
+    jR = 43490511,
+    keshandr = 65572922,
+    chopper = 85633136,
+    felps = 22765766,
+    kRYSTAL = 17526007,
+    suNny = 57405333,
+    zehN = 16308501,
+    innocent = 26563533,
+    HS = 3417033,
+    tabseN = 1225952,
+    keev = 51271036,
+    LEGIJA = 21242287,
+    Stewie2K = 38738282,
+    autimatic = 94605121,
+    LUCAS1 = 4780624,
+    kNgV = 6732863,
+    HEN1 = 57761535,
+    Nifty = 163358521,
+    qikert = 166970562,
+    buster = 212936195,
+    Jame = 75859856,
+    dimasick = 825268,
+    KrizzeN = 107672171,
+    Twistzz = 55989477,
+    devoduvek = 116664993,
+    AmaNEk = 108679223,
+    ShahZaM = 86003016,
+    SicK = 23556959,
+    XANTARES = 83853068,
+    paz = 68524615,
+    ngiN = 17887362,
+    Calyx = 92280537,
+    MAJ3R = 7167161,
+    Boombl4 = 185941338,
+    waterfaLLZ = 12720124,
+    jmqa = 115223433,
+    Kvik = 40982505,
+    balblna = 50204800,
+    Kaze = 16127541,
+    Attacker = 88001036,
+    Karsa = 85358333,
+    LoveYY = 48886373,
+    Summer = 52964519,
+    xms = 38509481,
+    v4lde = 154664140,
+    Golden = 116509497,
+    fitch = 33208850,
+    cadiaN = 43849788,
+    vice = 135979468,
+    MICHU = 60359075,
+    snatchie = 111436809,
+    REZ = 73906687,
+    BnTet = 111817512,
+    xccurate = 177428807,
+    somebody = 85131873,
+    DD = 169982617,
+    captainMo = 109036162,
+    smooya = 211423593,
+    tiziaN = 37291208,
+    crush = 36981424,
+    tonyblack = 15738602,
+    sdy = 80311472,
+    Dima = 51718767,
+    S0tF1k = 174857712,
+    COLDYY1 = 34364443,
+    niko = 29470855,
+    ISSAA = 77546728,
+    woxic = 123219778,
+    gade = 21355604,
+    JUGi = 83626376,
+    Snappi = 29157337,
+    ANDROID = 1936433,
+    yay = 57496765,
+    dephh = 26995179,
+    draken = 159123007
 };
 
 class EconItem {
@@ -495,6 +602,7 @@ public:
     void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
+    void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {

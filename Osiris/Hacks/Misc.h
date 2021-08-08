@@ -56,6 +56,9 @@ namespace Misc
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void voteRevealer(GameEvent& event) noexcept;
+    void onVoteStart(const void* data, int size) noexcept;
+    void onVotePass() noexcept;
+    void onVoteFailed() noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
 
