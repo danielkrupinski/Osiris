@@ -110,7 +110,8 @@ void GameData::update() noexcept
             continue;
 
         if (entity->isPlayer()) {
-            if (entity == localPlayer.get() || entity == observerTarget)
+            //if (entity == localPlayer.get() || entity == observerTarget)
+            if (entity == observerTarget)
                 continue;
 
             if (const auto player = playerByHandleWritable(entity->handle())) {
