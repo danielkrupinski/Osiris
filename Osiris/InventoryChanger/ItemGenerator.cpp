@@ -28,7 +28,7 @@ static float generateWear() noexcept
 
 using StaticData::TournamentMap;
 
-[[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
+[[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
 std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
@@ -57,7 +57,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
             dynamicData.proPlayer = souvenir.proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(caseData.souvenirPackageTournamentID, caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(item.weaponID, caseData.souvenirPackageTournamentID, caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
@@ -804,6 +804,21 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, &Match::map));
 
+constexpr auto iemKatowice2019Matches = std::to_array<Match>({
+    // Challengers Stage
+
+    // Round 1
+    { TournamentMap::Train, ChallengersStage, Renegades, Avangar, {} },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
+    { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, {} },
+    { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
+
+});
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
@@ -830,7 +845,7 @@ static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID)
     return {};
 }
 
-static auto operator<=>(TournamentMap a, TournamentMap b) noexcept
+constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 {
     return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
 }
@@ -882,6 +897,10 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
         DynamicSkinData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
+
+        if (const auto isMP5LabRats = (item.weaponID == WeaponId::Mp5sd && StaticData::paintKits()[item.dataIndex].id == 800))
+            dynamicData.stickers[3].stickerID = 28;
+
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isGlove()) {
         const auto& staticData = StaticData::paintKits()[item.dataIndex];
@@ -903,11 +922,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
 
 [[nodiscard]] static const Match* findTournamentMatch(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
 {
-    const auto matches = getTournamentMatches(tournamentID);
-    if (matches.empty())
-        return nullptr;
-
-    const auto matchesOnMap = filterMatchesToMap(matches, map);
+    const auto matchesOnMap = filterMatchesToMap(getTournamentMatches(tournamentID), map);
     if (matchesOnMap.empty())
         return nullptr;
 
@@ -915,7 +930,14 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     return (match != matchesOnMap.end() ? &*match : nullptr);
 }
 
-[[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
+[[nodiscard]] static std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
+{
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
+        return static_cast<std::uint8_t>(std::clamp(def->getNumberOfSupportedStickerSlots(), 0, 5));
+    return 0;
+}
+
+[[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<StickerConfig, 5> stickers;
 
@@ -929,7 +951,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     }
 
     std::mt19937 gen{ std::random_device{}() };
-    std::shuffle(stickers.begin(), stickers.begin() + 4, gen);
+    std::shuffle(stickers.begin(), stickers.begin() + getNumberOfSupportedStickerSlots(weaponID), gen);
 
     return stickers;
 }

@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -21,7 +22,7 @@ public:
     void save(std::size_t) const noexcept;
     void add(const char8_t*) noexcept;
     void remove(std::size_t) noexcept;
-    void rename(std::size_t, const char8_t*) noexcept;
+    void rename(std::size_t, std::u8string_view newName) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;

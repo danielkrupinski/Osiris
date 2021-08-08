@@ -104,10 +104,10 @@ ImWchar* Helpers::getFontGlyphRanges() noexcept
 
 std::wstring Helpers::toWideString(const std::string& str) noexcept
 {
-    std::wstring upperCase(str.length(), L'\0');
-    if (const auto newLen = std::mbstowcs(upperCase.data(), str.c_str(), upperCase.length()); newLen != static_cast<std::size_t>(-1))
-        upperCase.resize(newLen);
-    return upperCase;
+    std::wstring wide(str.length(), L'\0');
+    if (const auto newLen = std::mbstowcs(wide.data(), str.c_str(), wide.length()); newLen != static_cast<std::size_t>(-1))
+        wide.resize(newLen);
+    return wide;
 }
 
 static void toUpper(std::span<wchar_t> str) noexcept

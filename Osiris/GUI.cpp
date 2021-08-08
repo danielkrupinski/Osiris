@@ -561,7 +561,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         ImGui::PushID(0);
         if (ImGui::InputTextWithHint("", "config name", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
             if (currentConfig != -1)
-                config->rename(currentConfig, buffer.c_str());
+                config->rename(currentConfig, buffer);
         }
         ImGui::PopID();
         ImGui::NextColumn();
