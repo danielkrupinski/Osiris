@@ -4,9 +4,7 @@ on: [push, pull_request]
 
 jobs:
   gcc:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: install
@@ -17,9 +15,7 @@ jobs:
       run: cd Release && make -j $(nproc --all)
 
   gcc-debug:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: install
@@ -30,9 +26,7 @@ jobs:
       run: cd Debug && make -j $(nproc --all)
 
   clang:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: install
@@ -41,3 +35,14 @@ jobs:
       run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-12 -D CMAKE_CXX_COMPILER=clang++-12 ..
     - name: build
       run: cd Release && make -j $(nproc --all)
+
+  clang-debug:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev clang-12
+    - name: configure
+      run: mkdir Debug && cd Debug && cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=clang-12 -D CMAKE_CXX_COMPILER=clang++-12 ..
+    - name: build
+      run: cd Debug && make -j $(nproc --all)

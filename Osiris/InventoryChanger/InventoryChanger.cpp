@@ -39,7 +39,6 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
-#include "../SDK/Panorama.h"
 #include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
@@ -239,7 +238,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto soc = memory->getSOCData(itemView);
-        if (!soc || !Inventory::getItem(soc->itemID))
+        if (!soc || soc->weaponId != definitionIndex || !Inventory::getItem(soc->itemID))
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
@@ -551,7 +550,7 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).c_str();
+        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
@@ -667,7 +666,7 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).c_str();
+        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
@@ -833,7 +832,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const auto& gameItems = StaticData::gameItems();
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < gameItems.size(); ++i) {
-                if (!filter.empty() && !passesFilter(StaticData::getWeaponNameUpper(gameItems[i].weaponID), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::paintKits()[gameItems[i].dataIndex].nameUpperCase, filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItems[i].weaponID)), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::paintKits()[gameItems[i].dataIndex].nameUpperCase, filterWide)))
                     continue;
                 ImGui::PushID(i);
 
