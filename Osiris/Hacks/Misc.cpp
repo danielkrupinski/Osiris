@@ -126,8 +126,17 @@ struct MiscConfig {
         ImVec2 pos;
         ImVec2 size{ 200.0f, 200.0f };
     };
-
     SpectatorList spectatorList;
+
+    struct DamageList {
+        bool enabled = false;
+        bool noTitleBar = false;
+        int maxRows = 3;
+        ImVec2 pos;
+        ImVec2 size{ 200.0f, 200.0f };
+    };
+    DamageList damageList;
+
     struct Watermark {
         bool enabled = false;
     };
@@ -333,6 +342,111 @@ void Misc::spectatorList() noexcept
     }
 
     ImGui::End();
+}
+
+struct DamageData {
+    DamageData(int damage, int playerHandle) : damage{ damage }, playerHandle{ playerHandle } {}
+    
+    int damage;
+    int playerHandle;
+};
+
+static std::vector<DamageData> damageCount;
+
+void Misc::damageList() noexcept
+{
+    static int rows_count;
+
+    if (!miscConfig.damageList.enabled)
+        return;
+
+    if (damageCount.size() == 0 && !gui->isOpen())
+        return;
+
+    if (miscConfig.damageList.pos != ImVec2{}) {
+        ImGui::SetNextWindowPos(miscConfig.damageList.pos);
+        miscConfig.damageList.pos = {};
+    }
+
+    if (miscConfig.damageList.size != ImVec2{}) {
+        ImGui::SetNextWindowSize(ImClamp(miscConfig.damageList.size, {}, ImGui::GetIO().DisplaySize));
+        miscConfig.damageList.size = {};
+    }
+
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+    if (!gui->isOpen())
+        windowFlags |= ImGuiWindowFlags_NoInputs;
+    if (miscConfig.damageList.noTitleBar)
+        windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+    if (!gui->isOpen())
+        ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+    ImGui::Begin("Damage list", nullptr, windowFlags);
+    ImGui::PopStyleVar();
+
+    if (!gui->isOpen())
+        ImGui::PopStyleColor();
+
+    rows_count = 0;
+
+    for (size_t i = 0; i < damageCount.size(); i++) {
+
+        if (rows_count >= miscConfig.damageList.maxRows)
+            break;
+
+        if (damageCount[i].damage == 0)
+            continue;
+
+        if (const auto playerdata = GameData::playerByHandle(damageCount[i].playerHandle)) {
+            if (const auto texture = playerdata->getAvatarTexture()) {
+                const auto text_size = ImGui::CalcTextSize(playerdata->name.c_str());
+                ImGui::Image(texture, ImVec2(text_size.y, text_size.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                ImGui::SameLine();
+                ImGui::TextWrapped("%s: ", playerdata->name.c_str());
+                ImGui::SameLine(0.f, 1.f);
+                if(i == 0)
+                    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+                ImGui::TextWrapped("%i", damageCount[i].damage);
+                if (i == 0)
+                    ImGui::PopStyleColor();
+                rows_count++;
+            }
+        }
+    }
+
+    ImGui::End();
+}
+
+void Misc::addDamageToDamageList(GameEvent& event) noexcept
+{
+    const auto attacker = event.getInt("attacker");
+    const auto dmg_health = event.getInt("dmg_health");
+    const auto handle = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(attacker))->handle();
+
+    static bool found;
+    found = false;
+
+    for (auto& target : damageCount) {
+        if (target.playerHandle == handle) {
+            target.damage += dmg_health;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        damageCount.push_back(DamageData(dmg_health, handle));
+
+    std::sort(damageCount.begin(), damageCount.end(), [](DamageData data1, DamageData data2) {
+        return data1.damage > data2.damage;
+        });
+}
+
+void Misc::clearDamageList() noexcept
+{
+    damageCount.clear();
 }
 
 static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
@@ -1367,6 +1481,21 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Damage list", &miscConfig.damageList.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Damage list");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("No Title Bar", &miscConfig.damageList.noTitleBar);
+        miscConfig.damageList.maxRows = std::clamp(miscConfig.damageList.maxRows, 1, 64);
+        ImGui::InputInt("Maximum rows", &miscConfig.damageList.maxRows);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     ImGui::Checkbox("Watermark", &miscConfig.watermark.enabled);
     ImGuiCustom::colorPicker("Offscreen Enemies", miscConfig.offscreenEnemies.asColor4(), &miscConfig.offscreenEnemies.enabled);
     ImGui::SameLine();
@@ -1555,6 +1684,15 @@ static void from_json(const json& j, MiscConfig::SpectatorList& sl)
     read<value_t::object>(j, "Size", sl.size);
 }
 
+static void from_json(const json& j, MiscConfig::DamageList& dl)
+{
+    read(j, "Enabled", dl.enabled);
+    read(j, "No Title Bar", dl.noTitleBar);
+    read<value_t::object>(j, "Pos", dl.pos);
+    read<value_t::object>(j, "Size", dl.size);
+    read(j, "Max rows", dl.maxRows);
+}
+
 static void from_json(const json& j, MiscConfig::Watermark& o)
 {
     read(j, "Enabled", o.enabled);
@@ -1593,6 +1731,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Reveal suspect", m.revealSuspect);
     read(j, "Reveal votes", m.revealVotes);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
+    read<value_t::object>(j, "Damage list", m.damageList);
     read<value_t::object>(j, "Watermark", m.watermark);
     read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
     read(j, "Fix animation LOD", m.fixAnimationLOD);
@@ -1688,6 +1827,18 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
     }
 }
 
+static void to_json(json& j, const MiscConfig::DamageList& o, const MiscConfig::DamageList& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("No Title Bar", noTitleBar);
+    WRITE("Max rows", maxRows);
+
+    if (const auto window = ImGui::FindWindowByName("Damage list")) {
+        j["Pos"] = window->Pos;
+        j["Size"] = window->SizeFull;
+    }
+}
+
 static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::Watermark& dummy = {})
 {
     WRITE("Enabled", enabled);
@@ -1731,6 +1882,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reveal suspect", revealSuspect);
     WRITE("Reveal votes", revealVotes);
     WRITE("Spectator list", spectatorList);
+    WRITE("Damage list", damageList);
     WRITE("Watermark", watermark);
     WRITE("Offscreen Enemies", offscreenEnemies);
     WRITE("Fix animation LOD", fixAnimationLOD);
