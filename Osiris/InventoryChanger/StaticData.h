@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "../SDK/WeaponId.h"
@@ -113,8 +114,8 @@ namespace StaticData
     const std::vector<Case>& cases() noexcept;
     const std::vector<std::size_t>& caseLoot() noexcept;
     const std::vector<PaintKit>& paintKits() noexcept;
-    const std::wstring& getWeaponNameUpper(WeaponId weaponID) noexcept;
-    const std::string& getWeaponName(WeaponId weaponID) noexcept;
+    std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
+    std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
     std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept;
 

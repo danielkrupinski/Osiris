@@ -556,7 +556,7 @@ void Config::remove(size_t id) noexcept
     configs.erase(configs.cbegin() + id);
 }
 
-void Config::rename(size_t item, const char8_t* newName) noexcept
+void Config::rename(size_t item, std::u8string_view newName) noexcept
 {
     std::error_code ec;
     std::filesystem::rename(path / configs[item], path / newName, ec);
