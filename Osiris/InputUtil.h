@@ -117,8 +117,8 @@ public:
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
     friend bool operator==(const KeyBind& a, const KeyBind& b) noexcept { return a.keyCode == b.keyCode; }
 
-    const char* toString() const noexcept;
-    bool isPressed() const noexcept;
+    [[nodiscard]] const char* toString() const noexcept;
+    [[nodiscard]] bool isPressed() const noexcept;
     bool isDown() const noexcept;
     bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 

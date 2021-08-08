@@ -1,13 +1,11 @@
 #pragma once
 
-#include <algorithm>
 #include <functional>
 #include <string>
 
 #include "AnimState.h"
 #include "Inconstructible.h"
 #include "Platform.h"
-#include "UtlVector.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
