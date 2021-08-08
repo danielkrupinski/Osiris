@@ -327,7 +327,7 @@ void Misc::spectatorList() noexcept
         if (!observer.targetIsLocalPlayer)
             continue;
 
-        const auto& playerdata = PlayerData(interfaces->entityList->getEntityFromHandle(observer.playerHandle));
+        const auto& playerdata = GameData::playerByHandle(observer.playerHandle);
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
             const auto text_size = ImGui::CalcTextSize(it->name.c_str());
