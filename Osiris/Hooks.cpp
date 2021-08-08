@@ -542,7 +542,7 @@ static void swapWindow(SDL_Window* window) noexcept
         Aimbot::updateInput();
         Visuals::updateInput();
         StreamProofESP::updateInput();
-        Misc::updateInput();
+        Misc::updateInput(ImGui::GetBackgroundDrawList());
         Triggerbot::updateInput();
         Chams::updateInput();
         Glow::updateInput();
