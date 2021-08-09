@@ -613,6 +613,7 @@ public:
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
     void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
+    void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {
