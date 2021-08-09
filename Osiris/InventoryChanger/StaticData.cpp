@@ -182,8 +182,7 @@ private:
 
     void initMusicData(ItemSchema* itemSchema) noexcept
     {
-        const auto& musicMap = itemSchema->musicKits;
-        for (const auto& node : musicMap) {
+        for (const auto& node : itemSchema->musicKits) {
             const auto musicKit = node.value;
             if (musicKit->id == 1 || musicKit->id == 2)
                 continue;
@@ -207,9 +206,8 @@ private:
                 continue;
 
             const auto rarity = item->getRarity();
-            const auto weaponID = item->getWeaponId();
 
-            if (itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
+            if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
