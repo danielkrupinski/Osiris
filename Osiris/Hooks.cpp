@@ -19,7 +19,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "imgui/GL/gl3w.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 #endif
@@ -577,7 +576,6 @@ void Hooks::install() noexcept
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
 #else
-    gl3wInit();
     ImGui_ImplOpenGL3_Init();
 
     swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
