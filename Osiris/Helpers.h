@@ -54,6 +54,11 @@ namespace Helpers
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
 
+    [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
+    {
+        return weaponID == WeaponId::Mp5sd && paintKit == 800;
+    }
+
     float random(float min, float max) noexcept;
     int random(int min, int max) noexcept;
 }
