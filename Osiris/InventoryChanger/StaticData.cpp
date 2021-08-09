@@ -327,7 +327,7 @@ private:
         }
     }
 
-    TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) const noexcept
+    static TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {
         if (lootListName.ends_with("de_dust2"))
             return TournamentMap::Dust2;
