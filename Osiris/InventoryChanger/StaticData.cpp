@@ -285,7 +285,7 @@ private:
         return InvalidItemIdx;
     }
 
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) noexcept
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) const noexcept
     {
         if (willProduceStatTrak)
             *willProduceStatTrak = *willProduceStatTrak || lootList->willProduceStatTrak();
