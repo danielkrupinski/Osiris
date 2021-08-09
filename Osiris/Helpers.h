@@ -6,6 +6,8 @@
 
 #include "imgui/imgui.h"
 
+#include "SDK/WeaponId.h"
+
 struct Color3;
 struct Color4;
 
@@ -36,13 +38,6 @@ namespace Helpers
                -1;
     }
 
-    constexpr auto utf8Substr(char* start, char* end, int n) noexcept
-    {
-        while (start < end && --n)
-            start += utf8SeqLen(*start);
-        return start;
-    }
-
     std::wstring toWideString(const std::string& str) noexcept;
     std::wstring toUpper(std::wstring str) noexcept;
 
@@ -51,4 +46,14 @@ namespace Helpers
 
     constexpr auto deg2rad(float degrees) noexcept { return degrees * (std::numbers::pi_v<float> / 180.0f); }
     constexpr auto rad2deg(float radians) noexcept { return radians * (180.0f / std::numbers::pi_v<float>); }
+
+    [[nodiscard]] std::size_t calculateVmtLength(const std::uintptr_t* vmt) noexcept;
+
+    constexpr auto isKnife(WeaponId id) noexcept
+    {
+        return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
+    }
+
+    float random(float min, float max) noexcept;
+    int random(int min, int max) noexcept;
 }

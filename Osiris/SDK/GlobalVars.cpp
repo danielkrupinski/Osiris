@@ -3,7 +3,7 @@
 #include "LocalPlayer.h"
 #include "UserCmd.h"
 
-float GlobalVars::serverTime(UserCmd* cmd) noexcept
+float GlobalVars::serverTime(UserCmd* cmd) const noexcept
 {
     static int tick;
     static UserCmd* lastCmd;

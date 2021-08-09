@@ -33,6 +33,12 @@
     <Filter Include="freetype">
       <UniqueIdentifier>{15481d2e-5516-4ece-9b00-79e32710804c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{6f1f2a48-d1e6-4e87-b967-4b7e41157a5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InventoryChanger">
+      <UniqueIdentifier>{2d9b89c7-c323-4423-a60d-412e3bd1637f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -87,9 +93,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Visuals.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\SkinChanger.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Backtrack.cpp">
@@ -217,6 +220,33 @@
     </ClCompile>
     <ClCompile Include="Hacks\Sound.cpp">
       <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch-c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigStructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\InventoryChanger.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\StaticData.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\Inventory.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\ToolUser.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\EconItemView.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\ItemGenerator.cpp">
+      <Filter>InventoryChanger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -357,9 +387,6 @@
     </ClInclude>
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\SkinChanger.h">
-      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\FrameStage.h">
       <Filter>SDK</Filter>
@@ -559,5 +586,49 @@
     <ClInclude Include="SDK\Inconstructible.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\InventoryChanger.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\StaticData.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Inventory.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtobufReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ToolUser.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\EconItemView.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PlantedC4.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UserMessages.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UtlMap.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UtlMemory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UtlString.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

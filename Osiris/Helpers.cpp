@@ -1,11 +1,17 @@
-#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <cwctype>
 #include <fstream>
+#include <random>
+#include <span>
 #include <string_view>
+#include <unordered_map>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 #include "imgui/imgui.h"
 
@@ -98,23 +104,34 @@ ImWchar* Helpers::getFontGlyphRanges() noexcept
 
 std::wstring Helpers::toWideString(const std::string& str) noexcept
 {
-    std::wstring upperCase(str.length(), L'\0');
-    if (const auto newLen = std::mbstowcs(upperCase.data(), str.c_str(), upperCase.length()); newLen != static_cast<std::size_t>(-1))
-        upperCase.resize(newLen);
-    return upperCase;
+    std::wstring wide(str.length(), L'\0');
+    if (const auto newLen = std::mbstowcs(wide.data(), str.c_str(), wide.length()); newLen != static_cast<std::size_t>(-1))
+        wide.resize(newLen);
+    return wide;
+}
+
+static void toUpper(std::span<wchar_t> str) noexcept
+{
+    static std::unordered_map<wchar_t, wchar_t> upperCache;
+
+    for (std::size_t i = 0; i < str.size(); ++i) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] -= ('a' - 'A');
+        } else if (str[i] > 127) {
+            if (const auto it = upperCache.find(str[i]); it != upperCache.end()) {
+                str[i] = it->second;
+            } else {
+                const auto upper = std::towupper(str[i]);
+                upperCache.emplace(str[i], upper);
+                str[i] = upper;
+            }
+        }
+    }
 }
 
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    std::ranges::transform(str, str.begin(), [](wchar_t w) -> wchar_t {
-        if (w >= 0 && w <= 127) {
-            if (w >= 'a' && w <= 'z')
-                return w - ('a' - 'A');
-            return w;
-        }
-
-        return std::towupper(w);
-    });
+    ::toUpper(str);
     return str;
 }
 
@@ -158,4 +175,32 @@ std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
     in.seekg(0, std::ios_base::beg);
     in.read(result.data(), result.size());
     return result;
+}
+
+std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
+{
+    std::size_t length = 0;
+#ifdef _WIN32
+    MEMORY_BASIC_INFORMATION memoryInfo;
+    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
+        ++length;
+#else
+    while (vmt[length])
+        ++length;
+#endif
+    return length;
+}
+
+float Helpers::random(float min, float max) noexcept
+{
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_real_distribution dis{ min, max };
+    return dis(gen);
+}
+
+int Helpers::random(int min, int max) noexcept
+{
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_int_distribution dis{ min, max };
+    return dis(gen);
 }

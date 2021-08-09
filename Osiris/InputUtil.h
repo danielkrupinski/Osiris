@@ -2,7 +2,7 @@
 
 class KeyBind {
 public:
-    enum KeyCode {
+    enum KeyCode : unsigned char {
         APOSTROPHE = 0,
         COMMA,
         MINUS,
@@ -25,6 +25,7 @@ public:
         B,
         BACKSPACE,
         C,
+        CAPSLOCK,
         D,
         DECIMAL,
         DEL,
@@ -109,20 +110,21 @@ public:
         MAX
     };
 
-    KeyBind(KeyCode keyCode) noexcept;
-    KeyBind(const char* keyName) noexcept;
+    KeyBind() = default;
+    explicit KeyBind(KeyCode keyCode) noexcept;
+    explicit KeyBind(const char* keyName) noexcept;
 
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
-    bool operator==(const KeyBind& other) const noexcept { return this->keyCode == other.keyCode; }
+    friend bool operator==(const KeyBind& a, const KeyBind& b) noexcept { return a.keyCode == b.keyCode; }
 
-    const char* toString() const noexcept;
-    bool isPressed() const noexcept;
+    [[nodiscard]] const char* toString() const noexcept;
+    [[nodiscard]] bool isPressed() const noexcept;
     bool isDown() const noexcept;
     bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
 private:
-    KeyCode keyCode;
+    KeyCode keyCode = KeyCode::NONE;
 };
 
 class KeyBindToggle : public KeyBind {

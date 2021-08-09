@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <atomic>
+#include <cassert>
 #include <cstdint>
 #include <cstring>
 #include <memory>
@@ -27,12 +28,18 @@
 #include "SDK/ModelInfo.h"
 #include "SDK/ModelRender.h"
 #include "SDK/NetworkChannel.h"
+#include "SDK/PlantedC4.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/Steam.h"
 #include "SDK/UtlVector.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
+
+auto operator<(const BaseData& a, const BaseData& b) noexcept
+{
+    return a.distanceToLocal > b.distanceToLocal;
+}
 
 static Matrix4x4 viewMatrix;
 static LocalPlayerData localPlayerData;
@@ -48,7 +55,7 @@ static std::atomic_int netOutgoingLatency;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
-    const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
+    const auto it = std::ranges::find(playerData, handle, &PlayerData::handle);
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
@@ -58,6 +65,14 @@ static void updateNetLatency() noexcept
         netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
     else
         netOutgoingLatency = 0;
+}
+
+constexpr auto playerVisibilityUpdateDelay = 0.1f;
+static float nextPlayerVisibilityUpdateTime = 0.0f;
+
+static bool shouldUpdatePlayerVisibility() noexcept
+{
+    return nextPlayerVisibilityUpdateTime <= memory->globalVars->realtime;
 }
 
 void GameData::update() noexcept
@@ -119,7 +134,7 @@ void GameData::update() noexcept
                 switch (entity->getClientClass()->classId) {
                 case ClassId::BaseCSGrenadeProjectile:
                     if (entity->grenadeExploded()) {
-                        if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
+                        if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                             it->exploded = true;
                         break;
                     }
@@ -131,7 +146,7 @@ void GameData::update() noexcept
                 case ClassId::SensorGrenadeProjectile:
                 case ClassId::SmokeGrenadeProjectile:
                 case ClassId::SnowballProjectile:
-                    if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
+                    if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                         it->update(entity);
                     else
                         projectileData.emplace_front(entity);
@@ -157,6 +172,8 @@ void GameData::update() noexcept
                 case ClassId::Inferno:
                     infernoData.emplace_back(entity);
                     break;
+                default:
+                    break;
                 }
             }
         }
@@ -167,7 +184,7 @@ void GameData::update() noexcept
     std::sort(entityData.begin(), entityData.end());
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
-    std::for_each(projectileData.begin(), projectileData.end(), [](auto& projectile) {
+    std::ranges::for_each(projectileData, [](auto& projectile) {
         if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
             projectile.exploded = true;
     });
@@ -176,6 +193,9 @@ void GameData::update() noexcept
         && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory->globalVars->realtime); });
 
     std::erase_if(playerData, [](const auto& player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
+
+    if (shouldUpdatePlayerVisibility())
+        nextPlayerVisibilityUpdateTime = memory->globalVars->realtime + playerVisibilityUpdateDelay;
 }
 
 void GameData::clearProjectileList() noexcept
@@ -356,7 +376,7 @@ ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData { project
         if (thrower == localPlayer.get())
             thrownByLocalPlayer = true;
         else
-            thrownByEnemy = memory->isOtherEnemy(localPlayer.get(), thrower);
+            thrownByEnemy = localPlayer->isOtherEnemy(thrower);
     }
 
     handle = projectile->handle();
@@ -402,8 +422,12 @@ void PlayerData::update(Entity* entity) noexcept
     lastContactTime = alive ? memory->globalVars->realtime : 0.0f;
 
     if (localPlayer) {
-        enemy = memory->isOtherEnemy(entity, localPlayer.get());
-        visible = inViewFrustum && alive && entity->visibleTo(localPlayer.get());
+        enemy = localPlayer->isOtherEnemy(entity);
+
+        if (!inViewFrustum || !alive)
+            visible = false;
+        else if (shouldUpdatePlayerVisibility())
+            visible = entity->visibleTo(localPlayer.get());
     }
 
     constexpr auto isEntityAudible = [](int entityIndex) noexcept {
@@ -424,6 +448,9 @@ void PlayerData::update(Entity* entity) noexcept
         if (const auto weaponInfo = weapon->getWeaponData())
             activeWeapon = interfaces->localize->findAsUTF8(weaponInfo->name);
     }
+
+    if (!alive || !inViewFrustum)
+        return;
 
     const auto model = entity->getModel();
     if (!model)
@@ -548,7 +575,7 @@ WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
                 default: return "All";
                 }
             }
-        }(weaponInfo->type, entity->itemDefinitionIndex2());
+        }(weaponInfo->type, entity->itemDefinitionIndex());
         name = [](WeaponId weaponId) {
             switch (weaponId) {
             default: return "All";
@@ -615,7 +642,7 @@ WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
             case WeaponId::ZoneRepulsor: return "Zone Repulsor";
             case WeaponId::Shield: return "Shield";
             }
-        }(entity->itemDefinitionIndex2());
+        }(entity->itemDefinitionIndex());
 
         displayName = interfaces->localize->findAsUTF8(weaponInfo->name);
     }

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <initializer_list>
 #include <memory>
 
@@ -8,6 +9,7 @@
 #include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "Misc.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
@@ -28,7 +30,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
-#ifdef _WIN32
+#if defined(_WIN32)
     const auto traceToExitFn = memory->traceToExit;
     __asm {
         push exitTrace
@@ -107,7 +109,7 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
             break;
 
         if (trace.entity == entity && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
-            damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * powf(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
+            damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
             if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
                 damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
@@ -147,11 +149,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
     if (!weaponIndex)
         return;
 
-    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = weaponClass;
 
@@ -217,9 +219,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
             auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (std::abs(angle.x) > config->misc.maxAngleDelta || std::abs(angle.y) > config->misc.maxAngleDelta) {
-                    angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+            if (std::abs(angle.x) > Misc::maxAngleDelta() || std::abs(angle.y) > Misc::maxAngleDelta()) {
+                    angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+                    angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
                     clamped = true;
             }
             

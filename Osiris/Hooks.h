@@ -17,6 +17,8 @@ union SDL_Event;
 
 #include "SDK/Platform.h"
 
+class matrix3x4;
+struct ModelRenderInfo;
 struct SoundInfo;
 
 #ifdef _WIN32
@@ -43,6 +45,7 @@ public:
 
     void install() noexcept;
     void uninstall() noexcept;
+    void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int __FASTCALL(SoundInfo&)> originalDispatchSound;
 
@@ -50,7 +53,10 @@ public:
     HookType client;
     HookType clientMode;
     HookType engine;
+    HookType inventory;
+    HookType inventoryManager;
     HookType modelRender;
+    HookType panoramaMarshallHelper;
     HookType sound;
     HookType surface;
     HookType viewRender;
