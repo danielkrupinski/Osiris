@@ -361,7 +361,7 @@ void Misc::damageList() noexcept
     if (!miscConfig.damageList.enabled)
         return;
 
-    if (damageCount.size() == 0 && (!gui->isOpen() || (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())))
+    if ((damageCount.size() == 0 || !interfaces->engine->isInGame() || !interfaces->engine->isConnected()) && !gui->isOpen())
         return;
     
     if (miscConfig.damageList.pos != ImVec2{}) {
