@@ -87,6 +87,16 @@ public:
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
     }
 
+    int getItemType() noexcept
+    {
+        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x130, 0x1C8));
+    }
+
+    bool isServiceMedal() noexcept
+    {
+        return getItemType() == 5; /* prestige_coin */
+    }
+
     const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
     {
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
@@ -603,6 +613,7 @@ public:
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
     void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
+    void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {

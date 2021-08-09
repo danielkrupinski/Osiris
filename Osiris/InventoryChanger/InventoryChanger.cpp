@@ -1399,7 +1399,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     if (!item)
         return;
 
-    if (item->isCollectible()) {
+    if (item->isCollectible() || item->isServiceMedal()) {
         if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
