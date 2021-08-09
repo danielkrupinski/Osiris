@@ -102,13 +102,19 @@ public:
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
     }
 
-    std::uint32_t getCrateSeriesNumber() noexcept
+    std::uint32_t getAttributeValue(std::uint16_t attributeDefinitionIndex) noexcept
     {
         const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
+        for (int i = 0; i < staticAttributes.size; ++i) {
+            if (staticAttributes[i].defIndex == attributeDefinitionIndex)
                 return staticAttributes[i].value.asUint32;
+        }
         return 0;
+    }
+
+    std::uint32_t getCrateSeriesNumber() noexcept
+    {
+        return getAttributeValue(68 /* "set supply crate series" */);
     }
 
     bool hasCrateSeries() noexcept
@@ -118,11 +124,7 @@ public:
 
     std::uint32_t getTournamentEventID() noexcept
     {
-        const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 137 /* "tournament event id" */)
-                return staticAttributes[i].value.asUint32;
-        return 0;
+        return getAttributeValue(137 /* "tournament event id" */);
     }
 
     bool hasTournamentEventID() noexcept
