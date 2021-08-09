@@ -92,6 +92,11 @@ public:
         return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x130, 0x1C8));
     }
 
+    bool isServiceMedal() noexcept
+    {
+        return getItemType() == 5; /* prestige_coin */
+    }
+
     const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
     {
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
