@@ -851,6 +851,28 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, {} },
     { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, {} },
 
+    // Round 4
+    { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, {} },
+    { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, {} },
+
+    { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, {} },
+    { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, {} },
+
+    { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, {} },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, {} },
+    { TournamentMap::Train, ChallengersStage, ENCE, WinstrikeTeam, {} },
+
+    { TournamentMap::Overpass, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Fnatic, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, Cloud9, FURIA, {} },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, {} },
+    { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, {} },
 
 });
 
