@@ -9,7 +9,9 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
 
-using namespace StaticData;
+using StaticData::TournamentMap;
+using StaticData::InvalidItemIdx;
+using StaticData::Type;
 
 constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 {
@@ -226,7 +228,7 @@ private:
                     continue;
 
                 lootListIndices.push_back(lootListIdx);
-                Case caseData;
+                StaticData::Case caseData;
                 caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
                 _gameItems.emplace_back(Type::Case, rarity, weaponID, _cases.size() - 1, inventoryImage);
@@ -266,11 +268,11 @@ private:
     auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
-            explicit Comp(const std::vector<GameItem>& gameItems) : gameItems{ gameItems } {}
+            explicit Comp(const std::vector<StaticData::GameItem>& gameItems) : gameItems{ gameItems } {}
             bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
             bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
         private:
-            const std::vector<GameItem>& gameItems;
+            const std::vector<StaticData::GameItem>& gameItems;
         };
 
         assert(!_itemsSorted.empty());
@@ -455,9 +457,9 @@ private:
         _paintKits.shrink_to_fit();
     }
 
-    std::vector<GameItem> _gameItems;
-    std::vector<Collectible> _collectibles;
-    std::vector<Case> _cases;
+    std::vector<StaticData::GameItem> _gameItems;
+    std::vector<StaticData::Collectible> _collectibles;
+    std::vector<StaticData::Case> _cases;
     std::vector<std::size_t> _caseLoot;
     std::vector<std::size_t> _itemsSorted;
     std::vector<std::size_t> _tournamentStickersSorted;
@@ -467,17 +469,17 @@ private:
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
 };
 
-const std::vector<GameItem>& StaticData::gameItems() noexcept
+const std::vector<StaticData::GameItem>& StaticData::gameItems() noexcept
 {
     return StaticDataImpl::gameItems();
 }
 
-const std::vector<Collectible>& StaticData::collectibles() noexcept
+const std::vector<StaticData::Collectible>& StaticData::collectibles() noexcept
 {
     return StaticDataImpl::collectibles();
 }
 
-const std::vector<Case>& StaticData::cases() noexcept
+const std::vector<StaticData::Case>& StaticData::cases() noexcept
 {
     return StaticDataImpl::cases();
 }
