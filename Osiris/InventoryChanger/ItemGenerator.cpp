@@ -30,6 +30,12 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
+[[nodiscard]] std::size_t getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+{
+    assert(container.hasLoot());
+    return StaticData::caseLoot()[Helpers::random(static_cast<int>(container.lootBeginIdx), static_cast<int>(container.lootEndIdx - 1))];
+}
+
 std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
@@ -37,7 +43,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
     const auto& caseData = StaticData::cases()[caseItem.get().dataIndex];
     assert(caseData.hasLoot());
 
-    const auto unlockedItemIdx = StaticData::caseLoot()[Helpers::random(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
+    const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
     std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
     if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
