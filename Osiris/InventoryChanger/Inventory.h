@@ -85,6 +85,7 @@ public:
     bool isPatch() const noexcept { return isValid() && get().isPatch(); }
     bool isStatTrakSwapTool() const noexcept { return isValid() && get().isStatTrakSwapTool(); }
     bool isViewerPass() const noexcept { return isValid() && get().isViewerPass(); }
+    bool isServiceMedal() const noexcept { return isValid() && get().isServiceMedal(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 

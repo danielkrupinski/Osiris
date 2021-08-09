@@ -31,7 +31,8 @@ namespace StaticData
         CaseKey,
         OperationPass,
         StatTrakSwapTool,
-        ViewerPass
+        ViewerPass,
+        ServiceMedal
     };
 
     struct GameItem {
@@ -52,6 +53,7 @@ namespace StaticData
         bool isOperationPass() const noexcept { return type == Type::OperationPass; }
         bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
         bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
+        bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 

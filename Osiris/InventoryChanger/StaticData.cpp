@@ -210,8 +210,12 @@ private:
             if (itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
-                _collectibles.emplace_back(isOriginal);
-                _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
+                if (item->isServiceMedal()) {
+                    _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, 0, inventoryImage);
+                } else {
+                    _collectibles.emplace_back(isOriginal);
+                    _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
+                }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 _gameItems.emplace_back(Type::NameTag, rarity, weaponID, 0, inventoryImage);
             } else if (item->isPatchable()) {
