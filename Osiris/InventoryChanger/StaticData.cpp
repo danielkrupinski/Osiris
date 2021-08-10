@@ -129,7 +129,7 @@ public:
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
 
-    std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
+    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
     {
         if (const auto it = _weaponNamesUpper.find(weaponID); it != _weaponNamesUpper.end())
             return it->second;
