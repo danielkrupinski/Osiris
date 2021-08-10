@@ -102,7 +102,13 @@ public:
             return it->second;
         return L"";
     }
-    static std::string_view getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
+
+    static std::string_view getWeaponName(WeaponId weaponID) noexcept
+    {
+        if (const auto it = instance()._weaponNames.find(weaponID); it != instance()._weaponNames.end())
+            return it->second;
+        return "";
+    }
     static auto getItemIndex_(WeaponId weaponID, int paintKit) noexcept { return instance().getItemIndex(weaponID, paintKit); }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
