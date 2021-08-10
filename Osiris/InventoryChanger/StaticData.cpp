@@ -466,7 +466,11 @@ private:
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
-            return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
+
+            const auto comp = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
+            if (comp == 0)
+                return a.weaponID < b.weaponID;
+            return comp < 0;
         });
 
         initSortedItemsVector();
