@@ -17,6 +17,7 @@ static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 static std::vector<DynamicSouvenirPackageData> dynamicSouvenirPackageData;
+static std::vector<DynamicServiceMedalData> dynamicServiceMedalData;
 
 class InventoryImpl {
 public:
@@ -385,6 +386,12 @@ std::size_t Inventory::emplaceDynamicData(DynamicSouvenirPackageData&& data) noe
 {
     ::dynamicSouvenirPackageData.push_back(std::move(data));
     return ::dynamicSouvenirPackageData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicServiceMedalData&& data) noexcept
+{
+    ::dynamicServiceMedalData.push_back(std::move(data));
+    return ::dynamicServiceMedalData.size() - 1;
 }
 
 std::vector<InventoryItem>& Inventory::get() noexcept

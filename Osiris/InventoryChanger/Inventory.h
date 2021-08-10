@@ -123,4 +123,5 @@ namespace Inventory
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
+    std::size_t emplaceDynamicData(DynamicServiceMedalData&& data) noexcept;
 }
