@@ -87,18 +87,34 @@ public:
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
     }
 
+    int getItemType() noexcept
+    {
+        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x130, 0x1C8));
+    }
+
+    bool isServiceMedal() noexcept
+    {
+        return getItemType() == 5; /* prestige_coin */
+    }
+
     const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
     {
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
     }
 
-    std::uint32_t getCrateSeriesNumber() noexcept
+    std::uint32_t getAttributeValue(std::uint16_t attributeDefinitionIndex) noexcept
     {
         const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
+        for (int i = 0; i < staticAttributes.size; ++i) {
+            if (staticAttributes[i].defIndex == attributeDefinitionIndex)
                 return staticAttributes[i].value.asUint32;
+        }
         return 0;
+    }
+
+    std::uint32_t getCrateSeriesNumber() noexcept
+    {
+        return getAttributeValue(68 /* "set supply crate series" */);
     }
 
     bool hasCrateSeries() noexcept
@@ -108,16 +124,17 @@ public:
 
     std::uint32_t getTournamentEventID() noexcept
     {
-        const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 137 /* "tournament event id" */)
-                return staticAttributes[i].value.asUint32;
-        return 0;
+        return getAttributeValue(137 /* "tournament event id" */);
     }
 
     bool hasTournamentEventID() noexcept
     {
         return getTournamentEventID() != 0;
+    }
+
+    std::uint32_t getServiceMedalYear() noexcept
+    {
+        return getAttributeValue(221 /* "prestige year" */);
     }
 
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
@@ -560,6 +577,8 @@ enum ProPlayer {
 
 class EconItem {
 public:
+    INCONSTRUCTIBLE(EconItem)
+
 #ifdef _WIN32
     VIRTUAL_METHOD(void, destructor, 0, (), (this, true))
 #else
@@ -603,6 +622,7 @@ public:
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
     void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
+    void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {

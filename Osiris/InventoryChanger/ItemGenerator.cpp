@@ -30,6 +30,12 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
+[[nodiscard]] std::size_t getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+{
+    assert(container.hasLoot());
+    return StaticData::caseLoot()[Helpers::random(static_cast<int>(container.lootBeginIdx), static_cast<int>(container.lootEndIdx - 1))];
+}
+
 std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
@@ -37,7 +43,7 @@ std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(con
     const auto& caseData = StaticData::cases()[caseItem.get().dataIndex];
     assert(caseData.hasLoot());
 
-    const auto unlockedItemIdx = StaticData::caseLoot()[Helpers::random(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
+    const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
     std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
     if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
@@ -817,6 +823,57 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, {} },
     { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
 
+    // Round 2
+    { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, {} },
+    { TournamentMap::Overpass, ChallengersStage, ENCE, G2Esports, {} },
+    { TournamentMap::Mirage, ChallengersStage, Renegades, NinjasInPyjamas, {} },
+    { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, {} },
+    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
+    { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, {} },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, {} },
+    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, {} },
+
+    // Round 3
+    { TournamentMap::Nuke, ChallengersStage, Renegades, ENCE, {} },
+    { TournamentMap::Mirage, ChallengersStage, Renegades, ENCE, {} },
+
+    { TournamentMap::Inferno, ChallengersStage, NRG, Tyloo, {} },
+    { TournamentMap::Mirage, ChallengersStage, NRG, Tyloo, {} },
+
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Avangar, {} },
+    { TournamentMap::Overpass, ChallengersStage, Vitality, VegaSquadron, {} },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, {} },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, {} },
+
+    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, {} },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, {} },
+    { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, {} },
+
+    // Round 4
+    { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, {} },
+    { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, {} },
+
+    { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, {} },
+    { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, {} },
+
+    { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, {} },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, {} },
+    { TournamentMap::Train, ChallengersStage, ENCE, WinstrikeTeam, {} },
+
+    { TournamentMap::Overpass, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Fnatic, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, Cloud9, FURIA, {} },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, {} },
+    { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
@@ -898,7 +955,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (const auto isMP5LabRats = (item.weaponID == WeaponId::Mp5sd && StaticData::paintKits()[item.dataIndex].id == 800))
+        if (Helpers::isMP5LabRats(item.weaponID, StaticData::paintKits()[item.dataIndex].id))
             dynamicData.stickers[3].stickerID = 28;
 
         index = Inventory::emplaceDynamicData(std::move(dynamicData));

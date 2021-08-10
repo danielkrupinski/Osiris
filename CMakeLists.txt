@@ -8,6 +8,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-rtti")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -15,35 +16,16 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/Osiris/*.cpp")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/GL/gl3w.c")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
-# FreeType sources
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/autofit/autofit.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/cff/cff.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftbase.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftbitmap.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftdebug.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftglyph.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftinit.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftsynth.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftsystem.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/psaux/psaux.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/pshinter/pshinter.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/psnames/psnames.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/raster/raster.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/sfnt/sfnt.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/smooth/smooth.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/truetype/truetype.c")
-
-add_compile_definitions(FT2_BUILD_LIBRARY)
-
-include_directories(/usr/local/include /usr/include/SDL2/ "${CMAKE_SOURCE_DIR}/Osiris/freetype/")
-link_directories(/usr/local/lib)
+find_package(Freetype REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_library(Osiris SHARED ${SOURCES})
 
-target_link_libraries(Osiris SDL2 GL dl)
+target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(Osiris PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
