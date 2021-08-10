@@ -187,7 +187,7 @@ private:
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            if (StaticData::collectibles()[item.dataIndex].isOriginal)
+            if (StaticData::isCollectibleGenuine(item))
                 econItem->quality = 1;
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
