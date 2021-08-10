@@ -148,6 +148,12 @@ public:
         assert(serviceMedal.isServiceMedal());
         return _serviceMedals[serviceMedal.dataIndex].getServiceYear();
     }
+
+    [[nodiscard]] bool isCollectibleGenuine(const StaticData::GameItem& collectible) const noexcept
+    {
+        assert(collectible.isCollectible());
+        return _collectibles[collectible.dataIndex].isOriginal;
+    }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
@@ -557,8 +563,7 @@ int StaticData::getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int
 
 bool StaticData::isCollectibleGenuine(const GameItem& collectible) noexcept
 {
-    assert(collectible.isCollectible());
-    return StaticDataImpl::collectibles()[collectible.dataIndex].isOriginal;
+    return StaticDataImpl::instance().isCollectibleGenuine(collectible);
 }
 
 std::uint16_t StaticData::getServiceMedalYear(const GameItem& serviceMedal) noexcept
