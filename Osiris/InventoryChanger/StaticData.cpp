@@ -20,6 +20,10 @@ constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 
 struct ServiceMedal {
     explicit ServiceMedal(std::uint32_t year) : yearsSince2015{ static_cast<std::uint8_t>(std::max(year, 2015u) - 2015) } {}
+    std::uint16_t getServiceYear() const noexcept
+    {
+        return yearsSince2015 + 2015;
+    }
 private:
     std::uint8_t yearsSince2015;
 };
