@@ -96,7 +96,12 @@ public:
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
-    static std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept { return instance()._weaponNamesUpper[weaponID]; }
+    static std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept
+    {
+        if (const auto it = instance()._weaponNamesUpper.find(weaponID); it != instance()._weaponNamesUpper.end())
+            return it->second;
+        return L"";
+    }
     static std::string_view getWeaponName(WeaponId weaponID) noexcept { return instance()._weaponNames[weaponID]; }
     static auto getItemIndex_(WeaponId weaponID, int paintKit) noexcept { return instance().getItemIndex(weaponID, paintKit); }
 private:
