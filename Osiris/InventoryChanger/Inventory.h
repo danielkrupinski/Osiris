@@ -58,6 +58,10 @@ struct DynamicSouvenirPackageData {
     ProPlayer proPlayer{};
 };
 
+struct DynamicServiceMedalData {
+    std::uint32_t issueDateTimestamp = 0;
+};
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
