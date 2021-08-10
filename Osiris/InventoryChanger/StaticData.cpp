@@ -104,9 +104,9 @@ public:
         return L"";
     }
 
-    static std::string_view getWeaponName(WeaponId weaponID) noexcept
+    std::string_view getWeaponName(WeaponId weaponID) const noexcept
     {
-        if (const auto it = instance()._weaponNames.find(weaponID); it != instance()._weaponNames.end())
+        if (const auto it = _weaponNames.find(weaponID); it != _weaponNames.end())
             return it->second;
         return "";
     }
@@ -512,7 +512,7 @@ std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 
 std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 {
-    return StaticDataImpl::getWeaponName(weaponID);
+    return StaticDataImpl::instance().getWeaponName(weaponID);
 }
 
 std::size_t StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
