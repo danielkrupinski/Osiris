@@ -132,6 +132,11 @@ public:
         return getTournamentEventID() != 0;
     }
 
+    std::uint32_t getServiceMedalYear() noexcept
+    {
+        return getAttributeValue(221 /* "prestige year" */);
+    }
+
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
     bool isPatchable() noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
 
