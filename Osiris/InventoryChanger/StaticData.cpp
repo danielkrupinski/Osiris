@@ -142,6 +142,12 @@ public:
             return it->second;
         return "";
     }
+
+    [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
+    {
+        assert(serviceMedal.isServiceMedal());
+        return _serviceMedals[serviceMedal.dataIndex].getServiceYear();
+    }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
