@@ -117,6 +117,7 @@ namespace Inventory
     DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
     DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
     DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
+    DynamicServiceMedalData& dynamicServiceMedalData(std::size_t index) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;

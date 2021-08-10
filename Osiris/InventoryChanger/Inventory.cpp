@@ -361,6 +361,11 @@ DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(std::size_t in
     return ::dynamicSouvenirPackageData[index];
 }
 
+DynamicServiceMedalData& Inventory::dynamicServiceMedalData(std::size_t index) noexcept
+{
+    return ::dynamicServiceMedalData[index];
+}
+
 std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept
 {
     ::dynamicSkinData.push_back(std::move(data));
