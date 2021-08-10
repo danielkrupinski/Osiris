@@ -38,6 +38,20 @@ private:
         return std::make_pair(begin, end);
     }
 
+    auto findItems(WeaponId weaponID) const noexcept
+    {
+        struct Comp {
+            explicit Comp(const std::vector<StaticData::GameItem>& gameItems) : gameItems{ gameItems } {}
+            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
+            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
+        private:
+            const std::vector<StaticData::GameItem>& gameItems;
+        };
+
+        assert(!_itemsSorted.empty());
+        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+    }
+
 public:
     static const StaticDataImpl& instance() noexcept
     {
@@ -89,6 +103,14 @@ public:
         const auto range = getTournamentStickers(tournamentID);
         const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](std::size_t index) { return _paintKits[_gameItems[index].dataIndex].tournamentPlayerID; });
         return (it != range.second ? _paintKits[_gameItems[*it].dataIndex].id : 0);
+    }
+
+    [[nodiscard]] std::size_t getItemIndex(WeaponId weaponID, int paintKit) const noexcept
+    {
+        const auto [begin, end] = findItems(weaponID);
+        if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
+            return *it;
+        return InvalidItemIdx;
     }
 
     static const auto& gameItems() noexcept { return instance()._gameItems; }
@@ -274,28 +296,6 @@ private:
                 _weaponNamesUpper.emplace(item.weaponID, Helpers::toUpper(std::move(nameWide)));
             }
         }
-    }
-
-    auto findItems(WeaponId weaponID) const noexcept
-    {
-        struct Comp {
-            explicit Comp(const std::vector<StaticData::GameItem>& gameItems) : gameItems{ gameItems } {}
-            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
-            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
-        private:
-            const std::vector<StaticData::GameItem>& gameItems;
-        };
-
-        assert(!_itemsSorted.empty());
-        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
-    }
-
-    [[nodiscard]] std::size_t getItemIndex(WeaponId weaponID, int paintKit) const noexcept
-    {
-        const auto [begin, end] = findItems(weaponID);
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
-            return *it;
-        return InvalidItemIdx;
     }
 
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::size_t>& loot, bool* willProduceStatTrak = nullptr) const noexcept
