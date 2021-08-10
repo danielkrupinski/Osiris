@@ -977,6 +977,11 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        case StaticData::Type::ServiceMedal: {
+            if (const auto& dynamicData = Inventory::dynamicServiceMedalData(item.getDynamicDataIndex()); dynamicData.issueDateTimestamp != 0)
+                itemConfig["Issue Date Timestamp"] = dynamicData.issueDateTimestamp;
+            break;
+        }
         default:
             break;
         }
@@ -1172,6 +1177,18 @@ json InventoryChanger::toJson() noexcept
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
+[[nodiscard]] std::size_t loadDynamicServiceMedalDataFromJson(const json& j) noexcept
+{
+    DynamicServiceMedalData dynamicData;
+
+    if (j.contains("Issue Date Timestamp")) {
+        if (const auto& issueDateTimestamp = j["Issue Date Timestamp"]; issueDateTimestamp.is_number_unsigned())
+            dynamicData.issueDateTimestamp = issueDateTimestamp;
+    }
+
+    return Inventory::emplaceDynamicData(std::move(dynamicData));
+}
+
 void loadEquipmentFromJson(const json& j) noexcept
 {
     if (!j.contains("Equipment"))
@@ -1258,6 +1275,8 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 dynamicDataIdx = loadDynamicMusicDataFromJson(jsonItem);
             } else if (item.isAgent()) {
                 dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
+            } else if (item.isServiceMedal()) {
+                dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
             }
 
             Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
