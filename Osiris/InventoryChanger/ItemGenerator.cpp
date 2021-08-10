@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <ctime>
 #include <random>
 #include <span>
 #include <vector>
@@ -943,6 +944,15 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     }
 
     return dynamicData;
+}
+
+[[nodiscard]] static std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
+{
+#ifdef _WIN32
+    return _mkgmtime(&tm);
+#else
+    return timegm(&tm);
+#endif
 }
 
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
