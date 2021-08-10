@@ -198,6 +198,9 @@ private:
 
                 econItem->setStickerID(j, patch.patchID);
             }
+        } else if (item.isServiceMedal()) {
+            if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
+                econItem->setIssueDate(dynamicData.issueDateTimestamp);
         } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
