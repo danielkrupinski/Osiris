@@ -18,6 +18,12 @@ constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
     return static_cast<std::underlying_type_t<WeaponId>>(a) <=> static_cast<std::underlying_type_t<WeaponId>>(b);
 }
 
+struct ServiceMedal {
+    explicit ServiceMedal(std::uint32_t year) : yearsSince2015{ static_cast<std::uint8_t>(std::max(year, 2015u) - 2015) } {}
+private:
+    std::uint8_t yearsSince2015;
+};
+
 class StaticDataImpl {
 private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
@@ -244,7 +250,8 @@ private:
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
-                    _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, 0, inventoryImage);
+                    _serviceMedals.emplace_back(item->getServiceMedalYear());
+                    _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
@@ -468,6 +475,7 @@ private:
 
     std::vector<StaticData::GameItem> _gameItems;
     std::vector<StaticData::Collectible> _collectibles;
+    std::vector<ServiceMedal> _serviceMedals;
     std::vector<StaticData::Case> _cases;
     std::vector<std::size_t> _caseLoot;
     std::vector<std::size_t> _itemsSorted;
