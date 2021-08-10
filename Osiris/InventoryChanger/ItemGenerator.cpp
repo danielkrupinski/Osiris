@@ -1009,6 +1009,10 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     } else if (item.isCase()) {
         if (const auto& staticData = StaticData::cases()[item.dataIndex]; staticData.isSouvenirPackage())
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
+    } else if (item.isServiceMedal()) {
+        DynamicServiceMedalData dynamicData;
+        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
+        index = Inventory::emplaceDynamicData(std::move(dynamicData));
     }
 
     return index;
