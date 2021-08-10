@@ -132,8 +132,6 @@ public:
             return it->second;
         return "";
     }
-    
-    static auto getItemIndex_(WeaponId weaponID, int paintKit) noexcept { return instance().getItemIndex(weaponID, paintKit); }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
@@ -517,7 +515,7 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 
 std::size_t StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 {
-    return StaticDataImpl::getItemIndex_(weaponID, paintKit);
+    return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
 }
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
