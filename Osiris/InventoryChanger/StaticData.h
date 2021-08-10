@@ -125,4 +125,5 @@ namespace StaticData
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
     bool isCollectibleGenuine(const GameItem& collectible) noexcept;
+    std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
 }
