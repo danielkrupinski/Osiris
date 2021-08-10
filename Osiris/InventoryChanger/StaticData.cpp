@@ -136,7 +136,7 @@ public:
         return L"";
     }
 
-    std::string_view getWeaponName(WeaponId weaponID) const noexcept
+    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const noexcept
     {
         if (const auto it = _weaponNames.find(weaponID); it != _weaponNames.end())
             return it->second;
