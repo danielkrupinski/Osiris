@@ -964,6 +964,19 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return tmToUTCTimestamp(tm);
 }
 
+[[nodiscard]] static std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
+{
+    assert(year >= 1900);
+    std::tm tm{};
+    tm.tm_sec = 59;
+    tm.tm_min = 59;
+    tm.tm_hour = 23;
+    tm.tm_mday = 31;
+    tm.tm_mon = 12 - 1;
+    tm.tm_year = year - 1900;
+    return tmToUTCTimestamp(tm);
+}
+
 std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
 {
     std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
