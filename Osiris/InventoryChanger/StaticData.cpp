@@ -39,9 +39,9 @@ private:
     }
 
 public:
-    static StaticDataImpl& instance() noexcept
+    static const StaticDataImpl& instance() noexcept
     {
-        static StaticDataImpl staticData;
+        static const StaticDataImpl staticData;
         return staticData;
     }
 
