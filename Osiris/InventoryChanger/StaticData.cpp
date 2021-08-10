@@ -96,9 +96,10 @@ public:
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
-    static std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept
+
+    std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
     {
-        if (const auto it = instance()._weaponNamesUpper.find(weaponID); it != instance()._weaponNamesUpper.end())
+        if (const auto it = _weaponNamesUpper.find(weaponID); it != _weaponNamesUpper.end())
             return it->second;
         return L"";
     }
@@ -109,6 +110,7 @@ public:
             return it->second;
         return "";
     }
+    
     static auto getItemIndex_(WeaponId weaponID, int paintKit) noexcept { return instance().getItemIndex(weaponID, paintKit); }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
@@ -505,7 +507,7 @@ const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
 
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
-    return StaticDataImpl::getWeaponNameUpper(weaponID);
+    return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
 }
 
 std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
