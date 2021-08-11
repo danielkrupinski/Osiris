@@ -175,12 +175,6 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Head Box", p.headBox);
 }
 
-static void from_json(const json& j, ImVec2& v)
-{
-    read(j, "X", v.x);
-    read(j, "Y", v.y);
-}
-
 static void from_json(const json& j, Config::Aimbot& a)
 {
     read(j, "Enabled", a.enabled);
