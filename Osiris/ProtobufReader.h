@@ -41,7 +41,7 @@ private:
         return data[offset] & 0x7F;
     }
 
-    std::string readString(int offset) const noexcept
+    [[nodiscard]] std::string readString(int offset) const noexcept
     {
         assert(offset >= 0 && offset < size);
         const auto length = readVarint(offset);
