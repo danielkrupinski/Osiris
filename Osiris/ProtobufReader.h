@@ -9,7 +9,7 @@ class ProtobufReader {
 public:
     ProtobufReader(const std::uint8_t* data, int size) : data{ data }, size{ size } {}
 
-    std::int32_t readInt32(std::uint8_t index) const noexcept
+    [[nodiscard]] std::int32_t readInt32(std::uint8_t index) const noexcept
     {
         int offset = 0;
         while (offset + 1 < size) {
