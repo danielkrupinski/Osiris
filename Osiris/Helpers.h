@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <mutex>
 #include <numbers>
 #include <random>
@@ -63,24 +64,24 @@ namespace Helpers
 
     class RandomGenerator {
     public:
-        template <typename T>
-        [[nodiscard]] static std::enable_if_t<std::is_integral_v<T>, T> random(T min, T max) noexcept
+        template <std::integral T>
+        [[nodiscard]] static T random(T min, T max) noexcept
         {
             std::scoped_lock lock{ mutex };
             return std::uniform_int_distribution{ min, max }(gen);
+        }
+
+        template <std::floating_point T>
+        [[nodiscard]] static T random(T min, T max) noexcept
+        {
+            std::scoped_lock lock{ mutex };
+            return std::uniform_real_distribution{ min, max }(gen);
         }
 
         template <typename T>
         [[nodiscard]] static std::enable_if_t<std::is_enum_v<T>, T> random(T min, T max) noexcept
         {
             return static_cast<T>(random(static_cast<std::underlying_type_t<T>>(min), static_cast<std::underlying_type_t<T>>(max)));
-        }
-
-        template <typename T>
-        [[nodiscard]] static std::enable_if_t<std::is_floating_point_v<T>, T> random(T min, T max) noexcept
-        {
-            std::scoped_lock lock{ mutex };
-            return std::uniform_real_distribution{ min, max }(gen);
         }
     private:
         inline static std::mt19937 gen{ std::random_device{}() };
