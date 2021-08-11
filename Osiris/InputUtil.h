@@ -120,7 +120,7 @@ public:
     [[nodiscard]] const char* toString() const noexcept;
     [[nodiscard]] bool isPressed() const noexcept;
     [[nodiscard]] bool isDown() const noexcept;
-    bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
+    [[nodiscard]] bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
 private:
