@@ -20,7 +20,7 @@ public:
         return -1;
     }
 
-    std::vector<std::string> readRepeatedString(std::uint8_t index) const noexcept
+    [[nodiscard]] std::vector<std::string> readRepeatedString(std::uint8_t index) const noexcept
     {
         std::vector<std::string> strings;
         int offset = 0;
