@@ -1757,7 +1757,7 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
         case SEQUENCE_DEFAULT_DRAW:
             return Helpers::random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(SEQUENCE_BUTTERFLY_LOOKAT01, 14);
+            return Helpers::random(SEQUENCE_BUTTERFLY_LOOKAT01, Sequence(14));
         default:
             return sequence + 1;
         }

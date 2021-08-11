@@ -87,6 +87,9 @@ namespace Helpers
         inline static std::mutex mutex;
     };
 
-    float random(float min, float max) noexcept;
-    int random(int min, int max) noexcept;
+    template <typename T>
+    [[nodiscard]] T random(T min, T max) noexcept
+    {
+        return RandomGenerator::random(min, max);
+    }
 }
