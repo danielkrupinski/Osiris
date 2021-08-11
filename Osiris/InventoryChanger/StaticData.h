@@ -65,12 +65,6 @@ namespace StaticData
         std::string iconPath;
     };
 
-    struct Collectible {
-        explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
-
-        bool isOriginal;
-    };
-
     struct PaintKit {
         PaintKit(int id, std::wstring&& name) noexcept;
         PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;

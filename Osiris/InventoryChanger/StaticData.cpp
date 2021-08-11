@@ -28,6 +28,12 @@ private:
     std::uint8_t yearsSince2015;
 };
 
+struct Collectible {
+    explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
+
+    bool isOriginal;
+};
+
 class StaticDataImpl {
 private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
@@ -494,7 +500,7 @@ private:
     }
 
     std::vector<StaticData::GameItem> _gameItems;
-    std::vector<StaticData::Collectible> _collectibles;
+    std::vector<Collectible> _collectibles;
     std::vector<ServiceMedal> _serviceMedals;
     std::vector<StaticData::Case> _cases;
     std::vector<std::size_t> _caseLoot;
