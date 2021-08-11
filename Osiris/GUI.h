@@ -9,7 +9,7 @@ public:
     GUI() noexcept;
     void render() noexcept;
     void handleToggle() noexcept;
-    bool isOpen() const noexcept { return open; }
+    [[nodiscard]] bool isOpen() const noexcept { return open; }
 private:
     bool open = true;
 
