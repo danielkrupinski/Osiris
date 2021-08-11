@@ -511,11 +511,6 @@ const std::vector<StaticData::GameItem>& StaticData::gameItems() noexcept
     return StaticDataImpl::gameItems();
 }
 
-const std::vector<StaticData::Collectible>& StaticData::collectibles() noexcept
-{
-    return StaticDataImpl::collectibles();
-}
-
 const std::vector<StaticData::Case>& StaticData::cases() noexcept
 {
     return StaticDataImpl::cases();
