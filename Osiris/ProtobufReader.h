@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    std::int8_t readVarint(int offset) const noexcept
+    [[nodiscard]] std::int8_t readVarint(int offset) const noexcept
     {
         assert(offset >= 0 && offset < size);
         assert((data[offset] & 0x80) == 0 && "Only one-byte varints are supported!");
