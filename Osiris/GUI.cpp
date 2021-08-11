@@ -554,7 +554,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         *out_text = (const char*)vector[idx].c_str();
         return true;
         }, &configItems, configItems.size(), 5) && currentConfig != -1)
-            buffer = configItems[currentConfig].c_str();
+            buffer = configItems[currentConfig];
 
         ImGui::PushID(0);
         if (ImGui::InputTextWithHint("", "config name", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
@@ -613,7 +613,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                 config->remove(currentConfig);
 
                 if (static_cast<std::size_t>(currentConfig) < configItems.size())
-                    buffer = configItems[currentConfig].c_str();
+                    buffer = configItems[currentConfig];
                 else
                     buffer.clear();
             }
