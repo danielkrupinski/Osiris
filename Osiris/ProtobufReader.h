@@ -53,7 +53,7 @@ private:
         LengthDelimited = 2
     };
 
-    constexpr WireType wireType(std::int8_t key) const noexcept
+    [[nodiscard]] constexpr WireType wireType(std::int8_t key) const noexcept
     {
         return static_cast<WireType>(key & 3);
     }
