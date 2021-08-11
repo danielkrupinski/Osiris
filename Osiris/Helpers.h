@@ -71,6 +71,12 @@ namespace Helpers
         }
 
         template <typename T>
+        [[nodiscard]] static std::enable_if_t<std::is_enum_v<T>, T> random(T min, T max) noexcept
+        {
+            return static_cast<T>(random(static_cast<std::underlying_type_t<T>>(min), static_cast<std::underlying_type_t<T>>(max)));
+        }
+
+        template <typename T>
         [[nodiscard]] static std::enable_if_t<std::is_floating_point_v<T>, T> random(T min, T max) noexcept
         {
             std::scoped_lock lock{ mutex };
