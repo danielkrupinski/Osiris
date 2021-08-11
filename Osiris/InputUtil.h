@@ -132,7 +132,7 @@ public:
     using KeyBind::KeyBind;
 
     void handleToggle() noexcept;
-    bool isToggled() const noexcept { return toggledOn; }
+    [[nodiscard]] bool isToggled() const noexcept { return toggledOn; }
 private:
     bool toggledOn = true;
 };
