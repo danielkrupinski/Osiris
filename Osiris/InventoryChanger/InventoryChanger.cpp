@@ -1269,8 +1269,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
     if (!items.is_array())
         return;
 
-    for (std::size_t i = 0; i < items.size(); ++i) {
-        const auto& jsonItem = items[i];
+    for (const auto& jsonItem : items) {
         if (jsonItem.empty() || !jsonItem.is_object())
             continue;
 
