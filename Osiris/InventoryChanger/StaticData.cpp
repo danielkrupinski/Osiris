@@ -371,24 +371,23 @@ private:
     {
         if (lootListName.ends_with("de_dust2"))
             return TournamentMap::Dust2;
-        else if (lootListName.ends_with("de_mirage"))
+        if (lootListName.ends_with("de_mirage"))
             return TournamentMap::Mirage;
-        else if (lootListName.ends_with("de_inferno"))
+        if (lootListName.ends_with("de_inferno"))
             return TournamentMap::Inferno;
-        else if (lootListName.ends_with("de_cbble"))
+        if (lootListName.ends_with("de_cbble"))
             return TournamentMap::Cobblestone;
-        else if (lootListName.ends_with("de_overpass"))
+        if (lootListName.ends_with("de_overpass"))
             return TournamentMap::Overpass;
-        else if (lootListName.ends_with("de_cache"))
+        if (lootListName.ends_with("de_cache"))
             return TournamentMap::Cache;
-        else if (lootListName.ends_with("de_train"))
+        if (lootListName.ends_with("de_train"))
             return TournamentMap::Train;
-        else if (lootListName.ends_with("de_nuke"))
+        if (lootListName.ends_with("de_nuke"))
             return TournamentMap::Nuke;
-        else if (lootListName.ends_with("de_vertigo"))
+        if (lootListName.ends_with("de_vertigo"))
             return TournamentMap::Vertigo;
-        else
-            return TournamentMap::None;
+        return TournamentMap::None;
     }
 
     void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
