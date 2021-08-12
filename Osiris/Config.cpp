@@ -57,8 +57,9 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 }
 #endif
 
-Config::Config() noexcept
+[[nodiscard]] static std::filesystem::path buildConfigsFolderPath() noexcept
 {
+    std::filesystem::path path;
 #ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
@@ -70,6 +71,11 @@ Config::Config() noexcept
 #endif
 
     path /= "Osiris";
+    return path;
+}
+
+Config::Config() noexcept : path{ buildConfigsFolderPath() }
+{
     listConfigs();
 
     load(u8"default.json", false);
