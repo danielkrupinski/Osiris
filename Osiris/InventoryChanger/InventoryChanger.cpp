@@ -982,6 +982,16 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["Issue Date Timestamp"] = dynamicData.issueDateTimestamp;
             break;
         }
+        case StaticData::Type::Case: {
+            if (StaticData::cases()[gameItem.dataIndex].isSouvenirPackage()) {
+                if (const auto& dynamicData = Inventory::dynamicSouvenirPackageData(item.getDynamicDataIndex()); dynamicData.tournamentStage != TournamentStage{}) {
+                    itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
+                    itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
+                    itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
+                    itemConfig["Tournament Player"] = dynamicData.proPlayer;
+                }
+            }
+        }
         default:
             break;
         }
@@ -1189,6 +1199,33 @@ json InventoryChanger::toJson() noexcept
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
+[[nodiscard]] std::size_t loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
+{
+    DynamicSouvenirPackageData dynamicData;
+
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            dynamicData.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            dynamicData.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            dynamicData.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            dynamicData.proPlayer = tournamentPlayer;
+    }
+
+    return Inventory::emplaceDynamicData(std::move(dynamicData));
+}
+
 void loadEquipmentFromJson(const json& j) noexcept
 {
     if (!j.contains("Equipment"))
@@ -1271,6 +1308,8 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
         } else if (item.isServiceMedal()) {
             dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
+        } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
+            dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
         }
 
         Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
