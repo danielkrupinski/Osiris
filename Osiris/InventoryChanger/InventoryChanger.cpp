@@ -1232,166 +1232,48 @@ void InventoryChanger::fromJson(const json& j) noexcept
     if (!items.is_array())
         return;
 
-    auto configFileVersion = CONFIG_VERSION;
-    if (j.contains("Version") && j["Version"].is_number_unsigned())
-        configFileVersion = j["Version"];
-
     for (std::size_t i = 0; i < items.size(); ++i) {
         const auto& jsonItem = items[i];
         if (jsonItem.empty() || !jsonItem.is_object())
             continue;
 
-        // new config - version 2 doesn't use "Type" string
-        if (configFileVersion >= 2) {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-            int paintKit = 0;
-
-            if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
-                paintKit = jsonItem["Paint Kit"];
-            else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
-                paintKit = jsonItem["Sticker ID"];
-            else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
-                paintKit = jsonItem["Music ID"];
-            else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
-                paintKit = jsonItem["Patch ID"];
-            else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer())
-                paintKit = jsonItem["Graffiti ID"];
-
-            const auto itemIndex = StaticData::getItemIndex(weaponID, paintKit);
-            if (itemIndex == StaticData::InvalidItemIdx)
-                continue;
-
-            const auto& item = StaticData::gameItems()[itemIndex];
-            auto dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
-
-            if (item.isSkin()) {
-                dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);
-            } else if (item.isGlove()) {
-                dynamicDataIdx = loadDynamicGloveDataFromJson(jsonItem);
-            } else if (item.isMusic()) {
-                dynamicDataIdx = loadDynamicMusicDataFromJson(jsonItem);
-            } else if (item.isAgent()) {
-                dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
-            } else if (item.isServiceMedal()) {
-                dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
-            }
-
-            Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
-            continue;
-        }
-
-        // old config - version 1 (TODO: remove before August 2021 release)
-
-        if (!jsonItem.contains("Type") || !jsonItem["Type"].is_string())
+        if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
             continue;
 
-        const std::string type = jsonItem["Type"];
-        if (type == "Sticker") {
-            if (!jsonItem.contains("Sticker ID") || !jsonItem["Sticker ID"].is_number_integer())
-                continue;
+        const WeaponId weaponID = jsonItem["Weapon ID"];
+        int paintKit = 0;
 
-            const int stickerID = jsonItem["Sticker ID"];
-            if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Sticker, stickerID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Skin") {
-            if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
-                continue;
+        if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
+            paintKit = jsonItem["Paint Kit"];
+        else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
+            paintKit = jsonItem["Sticker ID"];
+        else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
+            paintKit = jsonItem["Music ID"];
+        else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
+            paintKit = jsonItem["Patch ID"];
+        else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer())
+            paintKit = jsonItem["Graffiti ID"];
 
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
+        const auto itemIndex = StaticData::getItemIndex(weaponID, paintKit);
+        if (itemIndex == StaticData::InvalidItemIdx)
+            continue;
 
-            const int paintKit = jsonItem["Paint Kit"];
-            const WeaponId weaponID = jsonItem["Weapon ID"];
+        const auto& item = StaticData::gameItems()[itemIndex];
+        auto dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
-            const auto itemIndex = StaticData::getItemIndex(weaponID, paintKit);
-            if (itemIndex == StaticData::InvalidItemIdx)
-                continue;
-
-            Inventory::addItemAcknowledged(itemIndex, loadDynamicSkinDataFromJson(jsonItem));
-        } else if (type == "Glove") {
-            if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
-                continue;
-
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const int paintKit = jsonItem["Paint Kit"];
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            const auto itemIndex = StaticData::getItemIndex(weaponID, paintKit);
-            if (itemIndex == StaticData::InvalidItemIdx)
-                continue;
-
-            Inventory::addItemAcknowledged(itemIndex, loadDynamicGloveDataFromJson(jsonItem));
-        } else if (type == "Music") {
-            if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
-                continue;
-
-            const int musicID = jsonItem["Music ID"];
-
-            const auto itemIndex = StaticData::getItemIndex(WeaponId::MusicKit, musicID);
-            if (itemIndex == StaticData::InvalidItemIdx)
-                continue;
-
-            Inventory::addItemAcknowledged(itemIndex, loadDynamicMusicDataFromJson(jsonItem));
-        } else if (type == "Collectible") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Name Tag") {
-            if (const auto itemIndex = StaticData::getItemIndex(WeaponId::NameTag, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Patch") {
-            if (!jsonItem.contains("Patch ID") || !jsonItem["Patch ID"].is_number_integer())
-                continue;
-
-            const int patchID = jsonItem["Patch ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Patch, patchID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Graffiti") {
-            if (!jsonItem.contains("Graffiti ID") || !jsonItem["Graffiti ID"].is_number_integer())
-                continue;
-
-            const int graffitiID = jsonItem["Graffiti ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(WeaponId::Graffiti, graffitiID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Sealed Graffiti") {
-            if (!jsonItem.contains("Graffiti ID") || !jsonItem["Graffiti ID"].is_number_integer())
-                continue;
-
-            const int graffitiID = jsonItem["Graffiti ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(WeaponId::SealedGraffiti, graffitiID); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
-        } else if (type == "Agent") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-            
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            const auto itemIndex = StaticData::getItemIndex(weaponID, 0);
-            if (itemIndex == StaticData::InvalidItemIdx)
-                continue;
-
-            Inventory::addItemAcknowledged(itemIndex, loadDynamicAgentDataFromJson(jsonItem));
-        } else if (type == "Case" || type == "Case Key" || type == "Operation Pass" || type == "StatTrak Swap Tool" || type == "Viewer Pass") {
-            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-                continue;
-
-            const WeaponId weaponID = jsonItem["Weapon ID"];
-
-            if (const auto itemIndex = StaticData::getItemIndex(weaponID, 0); itemIndex != StaticData::InvalidItemIdx)
-                Inventory::addItemAcknowledged(itemIndex, Inventory::INVALID_DYNAMIC_DATA_IDX);
+        if (item.isSkin()) {
+            dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);
+        } else if (item.isGlove()) {
+            dynamicDataIdx = loadDynamicGloveDataFromJson(jsonItem);
+        } else if (item.isMusic()) {
+            dynamicDataIdx = loadDynamicMusicDataFromJson(jsonItem);
+        } else if (item.isAgent()) {
+            dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
+        } else if (item.isServiceMedal()) {
+            dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
         }
+
+        Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
     }
 
     loadEquipmentFromJson(j);
