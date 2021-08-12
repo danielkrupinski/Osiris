@@ -11,7 +11,8 @@ enum TournamentTeam : std::uint8_t;
 
 namespace StaticData
 {
-    constexpr auto InvalidItemIdx = static_cast<std::size_t>(-1);
+    using ItemIndex = std::size_t;
+    constexpr auto InvalidItemIdx = static_cast<ItemIndex>(-1);
 
     enum class Type : std::uint8_t {
         // has paint kit, must match GameItem::hasPaintKit() below
@@ -98,8 +99,8 @@ namespace StaticData
         bool willProduceStatTrak = false;
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
-        std::size_t lootBeginIdx = 0;
-        std::size_t lootEndIdx = 0;
+        ItemIndex lootBeginIdx = 0;
+        ItemIndex lootEndIdx = 0;
 
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
@@ -107,12 +108,12 @@ namespace StaticData
 
     const std::vector<GameItem>& gameItems() noexcept;
     const std::vector<Case>& cases() noexcept;
-    const std::vector<std::size_t>& caseLoot() noexcept;
+    const std::vector<ItemIndex>& caseLoot() noexcept;
     const std::vector<PaintKit>& paintKits() noexcept;
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept;
+    ItemIndex getItemIndex(WeaponId weaponID, int paintKit) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;

@@ -121,7 +121,7 @@ public:
         return (it != range.second ? _paintKits[_gameItems[*it].dataIndex].id : 0);
     }
 
-    [[nodiscard]] std::size_t getItemIndex(WeaponId weaponID, int paintKit) const noexcept
+    [[nodiscard]] StaticData::ItemIndex getItemIndex(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
         if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
@@ -502,9 +502,9 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<ServiceMedal> _serviceMedals;
     std::vector<StaticData::Case> _cases;
-    std::vector<std::size_t> _caseLoot;
-    std::vector<std::size_t> _itemsSorted;
-    std::vector<std::size_t> _tournamentStickersSorted;
+    std::vector<StaticData::ItemIndex> _caseLoot;
+    std::vector<StaticData::ItemIndex> _itemsSorted;
+    std::vector<StaticData::ItemIndex> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
@@ -521,7 +521,7 @@ const std::vector<StaticData::Case>& StaticData::cases() noexcept
     return StaticDataImpl::cases();
 }
 
-const std::vector<std::size_t>& StaticData::caseLoot() noexcept
+const std::vector<StaticData::ItemIndex>& StaticData::caseLoot() noexcept
 {
     return StaticDataImpl::caseLoot();
 }
@@ -541,7 +541,7 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return StaticDataImpl::instance().getWeaponName(weaponID);
 }
 
-std::size_t StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
+StaticData::ItemIndex StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 {
     return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
 }
