@@ -875,6 +875,18 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, {} },
     { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, {} },
 
+    // Round 5
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
+    { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, {} },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, {} },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, {} },
+
+    { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, {} },
+    { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
