@@ -574,7 +574,8 @@ enum ProPlayer {
     dephh = 26995179,
     draken = 159123007,
     Gratisfaction = 5543683,
-    Liazz = 112055988
+    Liazz = 112055988,
+    Brollan = 178562747
 };
 
 class EconItem {
