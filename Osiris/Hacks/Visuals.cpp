@@ -57,6 +57,10 @@ struct VisualsConfig {
     KeyBindToggle thirdpersonKey;
     int thirdpersonDistance{ 0 };
     int viewmodelFov{ 0 };
+    bool customPos{ false };
+    float x{ 0.0 };
+    float y{ 0.0 };
+    float z{ 0.0 };
     int fov{ 0 };
     int farZ{ 0 };
     int flashReduction{ 0 };
@@ -126,6 +130,10 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Thirdperson key", v.thirdpersonKey);
     read(j, "Thirdperson distance", v.thirdpersonDistance);
     read(j, "Viewmodel FOV", v.viewmodelFov);
+    read(j, "Custom Position", v.customPos);
+    read(j, "Viewmodel X", v.x);
+    read(j, "Viewmodel Y", v.y);
+    read(j, "Viewmodel Z", v.z);
     read(j, "FOV", v.fov);
     read(j, "Far Z", v.farZ);
     read(j, "Flash reduction", v.flashReduction);
@@ -186,6 +194,10 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Thirdperson key", thirdpersonKey);
     WRITE("Thirdperson distance", thirdpersonDistance);
     WRITE("Viewmodel FOV", viewmodelFov);
+    WRITE("Custom Position", customPos);
+    WRITE("Viewmodel X", x);
+    WRITE("Viewmodel Y", y);
+    WRITE("Viewmodel Z", z);
     WRITE("FOV", fov);
     WRITE("Far Z", farZ);
     WRITE("Flash reduction", flashReduction);
@@ -705,6 +717,64 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
+void Visuals::viewModel() noexcept
+{
+    static auto view_x{ interfaces->cvar->findVar("viewmodel_offset_x") };
+    static auto view_y{ interfaces->cvar->findVar("viewmodel_offset_y") };
+    static auto view_z{ interfaces->cvar->findVar("viewmodel_offset_z") };
+    static auto minspec{ interfaces->cvar->findVar("sv_competitive_minspec") };
+
+    //X Original
+    static float original_x;
+    static bool original_x_get = false;
+    if (!original_x_get)
+    {
+        original_x = view_x->getFloat();
+        original_x_get = true;
+    }
+
+    //Y Original
+    static float original_y;
+    static bool original_y_get = false;
+    if (!original_y_get)
+    {
+        original_y = view_y->getFloat();
+        original_y_get = true;
+    }
+
+    //Z Original
+    static float original_z;
+    static bool original_z_get = false;
+    if (!original_z_get)
+    {
+        original_z = view_z->getFloat();
+        original_z_get = true;
+    }
+
+    static bool originalPos = false;;
+
+    if (visualsConfig.customPos)
+    {
+        minspec->onChangeCallbacks.size = 0;
+        minspec->setValue(0);
+        view_x->setValue(visualsConfig.x);
+        view_y->setValue(visualsConfig.y);
+        view_z->setValue(visualsConfig.z);
+
+        originalPos = false;
+    }
+    else if (!visualsConfig.customPos && !originalPos)
+    {
+        view_x->setValue(original_x);
+        view_y->setValue(original_y);
+        view_z->setValue(original_z);
+        minspec->onChangeCallbacks.size = 0;
+        minspec->setValue(1);
+
+        originalPos = true;
+    }
+}
+
 void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
@@ -792,6 +862,18 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::PushID(1);
     ImGui::SliderInt("", &visualsConfig.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
+    ImGui::SameLine();
+    if (ImGui::Button("...##visuals_5"))
+        ImGui::OpenPopup("popup_viewModel");
+
+    if (ImGui::BeginPopup("popup_viewModel"))
+    {
+        ImGui::Checkbox("Enabled", &visualsConfig.customPos);
+        ImGui::SliderFloat("##visuals_7", &visualsConfig.x, -20.00f, 20.00f, "X: %.2f");
+        ImGui::SliderFloat("##visuals_8", &visualsConfig.y, -20.00f, 20.00f, "Y: %.2f");
+        ImGui::SliderFloat("##visuals_9", &visualsConfig.z, -20.00f, 20.00f, "Z: %.2f");
+        ImGui::EndPopup();
+    }
     ImGui::PopID();
     ImGui::PushID(2);
     ImGui::SliderInt("", &visualsConfig.fov, -60, 60, "FOV: %d");
