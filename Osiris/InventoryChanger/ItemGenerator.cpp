@@ -816,7 +816,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 
     // Round 1
     { TournamentMap::Train, ChallengersStage, Renegades, Avangar, { AZR, Gratisfaction, jkaem, jks, Liazz, Jame, KrizzeN, buster, fitch } },
-    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, {} },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
     { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
@@ -832,7 +832,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
     { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, {} },
     { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
-    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, {} },
+    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, { KRIMZ, Xizt, JW, Brollan } },
 
     // Round 3
     { TournamentMap::Nuke, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz } },
@@ -846,8 +846,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, {} },
     { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, {} },
 
-    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, {} },
-    { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, { KRIMZ, twist, Xizt, Brollan } },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, { KRIMZ, twist, Xizt, JW, Brollan } },
 
     { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, {} },
     { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, {} },
@@ -867,9 +867,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
 
-    { TournamentMap::Mirage, ChallengersStage, G2Esports, Fnatic, {} },
-    { TournamentMap::Dust2, ChallengersStage, G2Esports, Fnatic, {} },
-    { TournamentMap::Overpass, ChallengersStage, G2Esports, Fnatic, {} },
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW } },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW, Brollan } },
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW, Brollan } },
 
     { TournamentMap::Mirage, ChallengersStage, Cloud9, FURIA, {} },
     { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, {} },
