@@ -819,7 +819,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan, advent, zhokiNg, Kaze, Freeman } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, { Summer, BnTeT, Attacker, somebody, xccurate, NBK, RpK, apEX } },
     { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, { dexter, malta, erkaSt, sterling, kioShiMa, flusha, autimatic, RUSH } },
-    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, { S0tF1k, COLDYY1, DavCost, sdy, Dima } },
     { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, {} },
     { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
@@ -829,7 +829,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, ENCE, G2Esports, {} },
     { TournamentMap::Mirage, ChallengersStage, Renegades, NinjasInPyjamas, { AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, { advent, zhokiNg, aumaN, Freeman } },
-    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
+    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { S0tF1k, COLDYY1, DavCost, sdy } },
     { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, { dexter, malta, erkaSt, sterling, DickStacy, NBK, RpK, apEX, ZywOo, ALEX } },
     { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, { KRIMZ, Xizt, JW, Brollan } },
@@ -849,8 +849,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, { dexter, malta, erkaSt, sterling, DickStacy, KRIMZ, twist, Xizt, Brollan } },
     { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, { KRIMZ, twist, Xizt, JW, Brollan, dexter, malta, erkaSt, sterling, DickStacy } },
 
-    { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, {} },
-    { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, {} },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, { S0tF1k, COLDYY1, DavCost, sdy, Dima } },
+    { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, { S0tF1k, COLDYY1, sdy, Dima } },
 
     // Round 4
     { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN, NBK, RpK, apEX, ZywOo, ALEX } },
