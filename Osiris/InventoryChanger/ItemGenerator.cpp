@@ -929,6 +929,27 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, {} },
     { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, {} },
 
+    // Round 4
+    { TournamentMap::Dust2, GroupStage, Vitality, Renegades, {} },
+    { TournamentMap::Cache, GroupStage, Vitality, Renegades, {} },
+    { TournamentMap::Inferno, GroupStage, Vitality, Renegades, {} },
+
+    { TournamentMap::Dust2, GroupStage, Avangar, NatusVincere, {} },
+    { TournamentMap::Train, GroupStage, Avangar, NatusVincere, {} },
+
+    { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MIBR, {} },
+
+    { TournamentMap::Dust2, GroupStage, ENCE, G2Esports, {} },
+    { TournamentMap::Mirage, GroupStage, G2Esports, ENCE, {} },
+
+    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, {} },
+
+    { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, {} },
+    { TournamentMap::Cache, GroupStage, HellRaisers, Cloud9, {} },
+    
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
