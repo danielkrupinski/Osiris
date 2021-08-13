@@ -582,7 +582,12 @@ enum ProPlayer {
     aumaN = 46223698,
     BnTeT = 111817512,
     ZywOo = 153400465,
-    ALEX = 44605706
+    ALEX = 44605706,
+    dexter = 101535513,
+    malta = 181905573,
+    erkaSt = 131305548,
+    sterling = 100224621,
+    DickStacy = 192019632
 };
 
 class EconItem {
