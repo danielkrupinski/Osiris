@@ -53,7 +53,7 @@ static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) no
 {
     for (const auto [idx, count] : toAdd) {
         for (int i = 0; i < count; ++i)
-            Inventory::addItemUnacknowledged(idx, Inventory::INVALID_DYNAMIC_DATA_IDX);
+            Inventory::addItemUnacknowledged(idx, Inventory::InvalidDynamicDataIdx);
     }
 }
 
@@ -1295,7 +1295,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const auto& item = StaticData::gameItems()[itemIndex];
-        auto dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+        auto dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
         if (item.isSkin()) {
             dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);

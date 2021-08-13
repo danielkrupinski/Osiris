@@ -45,7 +45,7 @@ std::pair<StaticData::ItemIndex, std::size_t> ItemGenerator::generateItemFromCon
     assert(caseData.hasLoot());
 
     const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
-    std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+    std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
     if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
         DynamicMusicData dynamicData;
@@ -1095,7 +1095,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
 std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameItemIndex) noexcept
 {
-    std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
+    std::size_t index = Inventory::InvalidDynamicDataIdx;
 
     if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
         const auto& staticData = StaticData::paintKits()[item.dataIndex];

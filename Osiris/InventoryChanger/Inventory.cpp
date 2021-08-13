@@ -10,7 +10,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/ItemSchema.h"
 
-using Inventory::INVALID_DYNAMIC_DATA_IDX;
+using Inventory::InvalidDynamicDataIdx;
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
@@ -254,7 +254,7 @@ private:
 
     std::uint64_t _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
