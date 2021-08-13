@@ -579,7 +579,8 @@ enum ProPlayer {
     advent = 41786057,
     zhokiNg = 99494192,
     Freeman = 208355715,
-    aumaN = 46223698
+    aumaN = 46223698,
+    BnTeT = 111817512
 };
 
 class EconItem {
