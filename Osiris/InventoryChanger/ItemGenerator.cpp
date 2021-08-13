@@ -1066,7 +1066,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 [[nodiscard]] static std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) noexcept
 {
     const auto now = std::time(nullptr);
-    return Helpers::random(static_cast<int>(std::min(getStartOfYearTimestamp(year), now)), static_cast<int>(std::min(getEndOfYearTimestamp(year), now)));
+    return static_cast<std::uint32_t>(Helpers::random(std::min(getStartOfYearTimestamp(year), now), std::min(getEndOfYearTimestamp(year), now)));
 }
 
 std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameItemIndex) noexcept
