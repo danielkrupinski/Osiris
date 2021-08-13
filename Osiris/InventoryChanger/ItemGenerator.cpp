@@ -817,7 +817,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     // Round 1
     { TournamentMap::Train, ChallengersStage, Renegades, Avangar, { AZR, Gratisfaction, jkaem, jks, Liazz, Jame, KrizzeN, buster, fitch } },
     { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan, advent, zhokiNg, Kaze, Freeman } },
-    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, { Summer, BnTeT, Attacker, somebody, xccurate } },
     { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
     { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, {} },
@@ -825,7 +825,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
 
     // Round 2
-    { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, {} },
+    { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, { Summer, BnTeT, Attacker, somebody, xccurate } },
     { TournamentMap::Overpass, ChallengersStage, ENCE, G2Esports, {} },
     { TournamentMap::Mirage, ChallengersStage, Renegades, NinjasInPyjamas, { AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, { advent, zhokiNg, aumaN, Freeman } },
@@ -838,8 +838,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Mirage, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz } },
 
-    { TournamentMap::Inferno, ChallengersStage, NRG, Tyloo, {} },
-    { TournamentMap::Mirage, ChallengersStage, NRG, Tyloo, {} },
+    { TournamentMap::Inferno, ChallengersStage, NRG, Tyloo, { Summer, BnTeT, Attacker, somebody, xccurate } },
+    { TournamentMap::Mirage, ChallengersStage, NRG, Tyloo, { Summer, BnTeT, Attacker, somebody, xccurate } },
 
     { TournamentMap::Overpass, ChallengersStage, G2Esports, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Overpass, ChallengersStage, Vitality, VegaSquadron, {} },
@@ -856,8 +856,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN } },
     { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN } },
 
-    { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert } },
-    { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
+    { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
 
     { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, {} },
     { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, {} },
@@ -880,9 +880,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, { advent, zhokiNg, Kaze, aumaN } },
     { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, { Kaze, Freeman, aumaN } },
 
-    { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, {} },
-    { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, {} },
-    { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, {} },
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, { Summer, BnTeT, Attacker, xccurate } },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, { somebody, xccurate } },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, { Summer, BnTeT, Attacker, somebody } },
 
     { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, {} },
     { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, {} },
