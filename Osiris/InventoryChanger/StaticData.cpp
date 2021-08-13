@@ -18,6 +18,22 @@ constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
     return static_cast<std::underlying_type_t<WeaponId>>(a) <=> static_cast<std::underlying_type_t<WeaponId>>(b);
 }
 
+struct ServiceMedal {
+    explicit ServiceMedal(std::uint32_t year) : yearsSince2015{ static_cast<std::uint8_t>(std::max(year, 2015u) - 2015) } {}
+    std::uint16_t getServiceYear() const noexcept
+    {
+        return yearsSince2015 + 2015;
+    }
+private:
+    std::uint8_t yearsSince2015;
+};
+
+struct Collectible {
+    explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
+
+    bool isOriginal;
+};
+
 class StaticDataImpl {
 private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
@@ -105,7 +121,7 @@ public:
         return (it != range.second ? _paintKits[_gameItems[*it].dataIndex].id : 0);
     }
 
-    [[nodiscard]] std::size_t getItemIndex(WeaponId weaponID, int paintKit) const noexcept
+    [[nodiscard]] StaticData::ItemIndex getItemIndex(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
         if (const auto it = std::lower_bound(begin, end, paintKit, [this](std::size_t index, int paintKit) { return _gameItems[index].hasPaintKit() && _paintKits[_gameItems[index].dataIndex].id < paintKit; }); it != end && _gameItems[*it].weaponID == weaponID && (!_gameItems[*it].hasPaintKit() || _paintKits[_gameItems[*it].dataIndex].id == paintKit))
@@ -119,18 +135,30 @@ public:
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
 
-    std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
+    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
     {
         if (const auto it = _weaponNamesUpper.find(weaponID); it != _weaponNamesUpper.end())
             return it->second;
         return L"";
     }
 
-    std::string_view getWeaponName(WeaponId weaponID) const noexcept
+    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const noexcept
     {
         if (const auto it = _weaponNames.find(weaponID); it != _weaponNames.end())
             return it->second;
         return "";
+    }
+
+    [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
+    {
+        assert(serviceMedal.isServiceMedal());
+        return _serviceMedals[serviceMedal.dataIndex].getServiceYear();
+    }
+
+    [[nodiscard]] bool isCollectibleGenuine(const StaticData::GameItem& collectible) const noexcept
+    {
+        assert(collectible.isCollectible());
+        return _collectibles[collectible.dataIndex].isOriginal;
     }
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
@@ -244,7 +272,8 @@ private:
                 _gameItems.emplace_back(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
-                    _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, 0, inventoryImage);
+                    _serviceMedals.emplace_back(item->getServiceMedalYear());
+                    _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
@@ -342,24 +371,23 @@ private:
     {
         if (lootListName.ends_with("de_dust2"))
             return TournamentMap::Dust2;
-        else if (lootListName.ends_with("de_mirage"))
+        if (lootListName.ends_with("de_mirage"))
             return TournamentMap::Mirage;
-        else if (lootListName.ends_with("de_inferno"))
+        if (lootListName.ends_with("de_inferno"))
             return TournamentMap::Inferno;
-        else if (lootListName.ends_with("de_cbble"))
+        if (lootListName.ends_with("de_cbble"))
             return TournamentMap::Cobblestone;
-        else if (lootListName.ends_with("de_overpass"))
+        if (lootListName.ends_with("de_overpass"))
             return TournamentMap::Overpass;
-        else if (lootListName.ends_with("de_cache"))
+        if (lootListName.ends_with("de_cache"))
             return TournamentMap::Cache;
-        else if (lootListName.ends_with("de_train"))
+        if (lootListName.ends_with("de_train"))
             return TournamentMap::Train;
-        else if (lootListName.ends_with("de_nuke"))
+        if (lootListName.ends_with("de_nuke"))
             return TournamentMap::Nuke;
-        else if (lootListName.ends_with("de_vertigo"))
+        if (lootListName.ends_with("de_vertigo"))
             return TournamentMap::Vertigo;
-        else
-            return TournamentMap::None;
+        return TournamentMap::None;
     }
 
     void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
@@ -449,7 +477,11 @@ private:
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
-            return _weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID];
+
+            const auto comp = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
+            if (comp == 0)
+                return a.weaponID < b.weaponID;
+            return comp < 0;
         });
 
         initSortedItemsVector();
@@ -467,11 +499,12 @@ private:
     }
 
     std::vector<StaticData::GameItem> _gameItems;
-    std::vector<StaticData::Collectible> _collectibles;
+    std::vector<Collectible> _collectibles;
+    std::vector<ServiceMedal> _serviceMedals;
     std::vector<StaticData::Case> _cases;
-    std::vector<std::size_t> _caseLoot;
-    std::vector<std::size_t> _itemsSorted;
-    std::vector<std::size_t> _tournamentStickersSorted;
+    std::vector<StaticData::ItemIndex> _caseLoot;
+    std::vector<StaticData::ItemIndex> _itemsSorted;
+    std::vector<StaticData::ItemIndex> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
@@ -483,17 +516,12 @@ const std::vector<StaticData::GameItem>& StaticData::gameItems() noexcept
     return StaticDataImpl::gameItems();
 }
 
-const std::vector<StaticData::Collectible>& StaticData::collectibles() noexcept
-{
-    return StaticDataImpl::collectibles();
-}
-
 const std::vector<StaticData::Case>& StaticData::cases() noexcept
 {
     return StaticDataImpl::cases();
 }
 
-const std::vector<std::size_t>& StaticData::caseLoot() noexcept
+const std::vector<StaticData::ItemIndex>& StaticData::caseLoot() noexcept
 {
     return StaticDataImpl::caseLoot();
 }
@@ -513,7 +541,7 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return StaticDataImpl::instance().getWeaponName(weaponID);
 }
 
-std::size_t StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
+StaticData::ItemIndex StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 {
     return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
 }
@@ -535,8 +563,12 @@ int StaticData::getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int
 
 bool StaticData::isCollectibleGenuine(const GameItem& collectible) noexcept
 {
-    assert(collectible.isCollectible());
-    return StaticDataImpl::collectibles()[collectible.dataIndex].isOriginal;
+    return StaticDataImpl::instance().isCollectibleGenuine(collectible);
+}
+
+std::uint16_t StaticData::getServiceMedalYear(const GameItem& serviceMedal) noexcept
+{
+    return StaticDataImpl::instance().getServiceMedalYear(serviceMedal);
 }
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}

@@ -57,8 +57,9 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 }
 #endif
 
-Config::Config() noexcept
+[[nodiscard]] static std::filesystem::path buildConfigsFolderPath() noexcept
 {
+    std::filesystem::path path;
 #ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
@@ -70,6 +71,11 @@ Config::Config() noexcept
 #endif
 
     path /= "Osiris";
+    return path;
+}
+
+Config::Config() noexcept : path{ buildConfigsFolderPath() }
+{
     listConfigs();
 
     load(u8"default.json", false);
@@ -91,13 +97,6 @@ static void from_json(const json& j, ColorToggleRounding& ctr)
     from_json(j, static_cast<ColorToggle&>(ctr));
 
     read(j, "Rounding", ctr.rounding);
-}
-
-static void from_json(const json& j, ColorToggleThicknessRounding& cttr)
-{
-    from_json(j, static_cast<ColorToggleRounding&>(cttr));
-
-    read(j, "Thickness", cttr.thickness);
 }
 
 static void from_json(const json& j, Font& f)
@@ -180,12 +179,6 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Health Bar", p.healthBar);
     read<value_t::object>(j, "Skeleton", p.skeleton);
     read<value_t::object>(j, "Head Box", p.headBox);
-}
-
-static void from_json(const json& j, ImVec2& v)
-{
-    read(j, "X", v.x);
-    read(j, "Y", v.y);
 }
 
 static void from_json(const json& j, Config::Aimbot& a)

@@ -17,6 +17,7 @@ static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 static std::vector<DynamicSouvenirPackageData> dynamicSouvenirPackageData;
+static std::vector<DynamicServiceMedalData> dynamicServiceMedalData;
 
 class InventoryImpl {
 public:
@@ -186,7 +187,7 @@ private:
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            if (StaticData::collectibles()[item.dataIndex].isOriginal)
+            if (StaticData::isCollectibleGenuine(item))
                 econItem->quality = 1;
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
@@ -197,6 +198,9 @@ private:
 
                 econItem->setStickerID(j, patch.patchID);
             }
+        } else if (item.isServiceMedal()) {
+            if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
+                econItem->setIssueDate(dynamicData.issueDateTimestamp);
         } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
@@ -357,6 +361,11 @@ DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(std::size_t in
     return ::dynamicSouvenirPackageData[index];
 }
 
+DynamicServiceMedalData& Inventory::dynamicServiceMedalData(std::size_t index) noexcept
+{
+    return ::dynamicServiceMedalData[index];
+}
+
 std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept
 {
     ::dynamicSkinData.push_back(std::move(data));
@@ -385,6 +394,12 @@ std::size_t Inventory::emplaceDynamicData(DynamicSouvenirPackageData&& data) noe
 {
     ::dynamicSouvenirPackageData.push_back(std::move(data));
     return ::dynamicSouvenirPackageData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicServiceMedalData&& data) noexcept
+{
+    ::dynamicServiceMedalData.push_back(std::move(data));
+    return ::dynamicServiceMedalData.size() - 1;
 }
 
 std::vector<InventoryItem>& Inventory::get() noexcept

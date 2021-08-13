@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <ctime>
 #include <random>
 #include <span>
 #include <vector>
@@ -30,13 +31,13 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
-[[nodiscard]] std::size_t getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+[[nodiscard]] StaticData::ItemIndex getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
 {
     assert(container.hasLoot());
     return StaticData::caseLoot()[Helpers::random(static_cast<int>(container.lootBeginIdx), static_cast<int>(container.lootEndIdx - 1))];
 }
 
-std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
+std::pair<StaticData::ItemIndex, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
 
@@ -86,7 +87,7 @@ struct Match {
     {
         if (!hasMVPs())
             return ProPlayer{};
-        return mvpPlayers[Helpers::random(0, std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{})) - 1)];
+        return mvpPlayers[Helpers::random(static_cast<std::size_t>(0), static_cast<std::size_t>(std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{}))) - 1)];
     }
 };
 
@@ -874,6 +875,92 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, {} },
     { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, {} },
 
+    // Round 5
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
+    { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, {} },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, {} },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, {} },
+
+    { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, {} },
+    { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, {} },
+
+    // Group Stage
+
+    // Round 1
+    { TournamentMap::Inferno, GroupStage, ENCE, Renegades, {} },
+    { TournamentMap::Mirage, GroupStage, BIG, Vitality, {} },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, G2Esports, {} },
+    { TournamentMap::Train, GroupStage, FaZeClan, HellRaisers, {} },
+    { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, {} },
+    { TournamentMap::Overpass, GroupStage, Avangar, TeamLiquid, {} },
+    { TournamentMap::Inferno, GroupStage, MIBR, Cloud9, {} },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, {} },
+
+    // Round 2
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Vitality, {} },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, Renegades, {} },
+    { TournamentMap::Overpass, GroupStage, TeamLiquid, NinjasInPyjamas, {} },
+    { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
+    { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, {} },
+    { TournamentMap::Mirage, GroupStage, BIG, G2Esports, {} },
+    { TournamentMap::Overpass, GroupStage, NRG, Avangar, {} },
+    { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, {} },
+
+    // Round 3
+    { TournamentMap::Mirage, GroupStage, Renegades, Astralis, {} },
+    { TournamentMap::Nuke, GroupStage, Renegades, Astralis, {} },
+    { TournamentMap::Inferno, GroupStage, Astralis, Renegades, {} },
+
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, NatusVincere, {} },
+    { TournamentMap::Dust2, GroupStage, TeamLiquid, NatusVincere, {} },
+
+    { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Avangar, {} },
+    { TournamentMap::Mirage, GroupStage, Vitality, Cloud9, {} },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers, {} },
+
+    { TournamentMap::Dust2, GroupStage, ENCE, BIG, {} },
+    { TournamentMap::Train, GroupStage, ENCE, BIG, {} },
+    { TournamentMap::Overpass, GroupStage, ENCE, BIG, {} },
+
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, {} },
+    { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, {} },
+
+    // Round 4
+    { TournamentMap::Dust2, GroupStage, Vitality, Renegades, {} },
+    { TournamentMap::Cache, GroupStage, Vitality, Renegades, {} },
+    { TournamentMap::Inferno, GroupStage, Vitality, Renegades, {} },
+
+    { TournamentMap::Dust2, GroupStage, Avangar, NatusVincere, {} },
+    { TournamentMap::Train, GroupStage, Avangar, NatusVincere, {} },
+
+    { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MIBR, {} },
+
+    { TournamentMap::Dust2, GroupStage, ENCE, G2Esports, {} },
+    { TournamentMap::Mirage, GroupStage, G2Esports, ENCE, {} },
+
+    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, {} },
+
+    { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, {} },
+    { TournamentMap::Cache, GroupStage, HellRaisers, Cloud9, {} },
+    
+    // Round 5
+    { TournamentMap::Mirage, GroupStage, ENCE, Avangar, {} },
+    { TournamentMap::Train, GroupStage, ENCE, Avangar, {} },
+
+    { TournamentMap::Cache, GroupStage, NinjasInPyjamas, Vitality, {} },
+    { TournamentMap::Overpass, GroupStage, Vitality, NinjasInPyjamas, {} },
+    { TournamentMap::Mirage, GroupStage, Vitality, NinjasInPyjamas, {} },
+
+    { TournamentMap::Cache, GroupStage, FaZeClan, Cloud9, {} },
+    { TournamentMap::Dust2, GroupStage, Cloud9, FaZeClan, {} },
+
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
@@ -934,7 +1021,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
     if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
         if (const auto matchesOnMap = filterMatchesToMap(matches, caseData.tournamentMap); !matchesOnMap.empty()) {
-            const auto& randomMatch = matchesOnMap[Helpers::random(0, matchesOnMap.size() - 1)];
+            const auto& randomMatch = matchesOnMap[Helpers::random(static_cast<std::size_t>(0), matchesOnMap.size() - 1)];
             dynamicData.tournamentStage = randomMatch.stage;
             dynamicData.tournamentTeam1 = randomMatch.team1;
             dynamicData.tournamentTeam2 = randomMatch.team2;
@@ -945,7 +1032,44 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return dynamicData;
 }
 
-std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
+[[nodiscard]] static std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
+{
+#ifdef _WIN32
+    return _mkgmtime(&tm);
+#else
+    return timegm(&tm);
+#endif
+}
+
+[[nodiscard]] static std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
+{
+    assert(year >= 1900);
+    std::tm tm{};
+    tm.tm_mday = 1;
+    tm.tm_year = year - 1900;
+    return tmToUTCTimestamp(tm);
+}
+
+[[nodiscard]] static std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
+{
+    assert(year >= 1900);
+    std::tm tm{};
+    tm.tm_sec = 59;
+    tm.tm_min = 59;
+    tm.tm_hour = 23;
+    tm.tm_mday = 31;
+    tm.tm_mon = 12 - 1;
+    tm.tm_year = year - 1900;
+    return tmToUTCTimestamp(tm);
+}
+
+[[nodiscard]] static std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) noexcept
+{
+    const auto now = std::time(nullptr);
+    return static_cast<std::uint32_t>(Helpers::random(std::min(getStartOfYearTimestamp(year), now), std::min(getEndOfYearTimestamp(year), now)));
+}
+
+std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameItemIndex) noexcept
 {
     std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
 
@@ -972,6 +1096,10 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     } else if (item.isCase()) {
         if (const auto& staticData = StaticData::cases()[item.dataIndex]; staticData.isSouvenirPackage())
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
+    } else if (item.isServiceMedal()) {
+        DynamicServiceMedalData dynamicData;
+        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
+        index = Inventory::emplaceDynamicData(std::move(dynamicData));
     }
 
     return index;

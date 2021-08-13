@@ -9,7 +9,7 @@ class ProtobufReader {
 public:
     ProtobufReader(const std::uint8_t* data, int size) : data{ data }, size{ size } {}
 
-    std::int32_t readInt32(std::uint8_t index) const noexcept
+    [[nodiscard]] std::int32_t readInt32(std::uint8_t index) const noexcept
     {
         int offset = 0;
         while (offset + 1 < size) {
@@ -20,7 +20,7 @@ public:
         return -1;
     }
 
-    std::vector<std::string> readRepeatedString(std::uint8_t index) const noexcept
+    [[nodiscard]] std::vector<std::string> readRepeatedString(std::uint8_t index) const noexcept
     {
         std::vector<std::string> strings;
         int offset = 0;
@@ -34,14 +34,14 @@ public:
     }
 
 private:
-    std::int8_t readVarint(int offset) const noexcept
+    [[nodiscard]] std::int8_t readVarint(int offset) const noexcept
     {
         assert(offset >= 0 && offset < size);
         assert((data[offset] & 0x80) == 0 && "Only one-byte varints are supported!");
         return data[offset] & 0x7F;
     }
 
-    std::string readString(int offset) const noexcept
+    [[nodiscard]] std::string readString(int offset) const noexcept
     {
         assert(offset >= 0 && offset < size);
         const auto length = readVarint(offset);
@@ -53,7 +53,7 @@ private:
         LengthDelimited = 2
     };
 
-    constexpr WireType wireType(std::int8_t key) const noexcept
+    [[nodiscard]] constexpr WireType wireType(std::int8_t key) const noexcept
     {
         return static_cast<WireType>(key & 3);
     }

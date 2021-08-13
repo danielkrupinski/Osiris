@@ -58,6 +58,10 @@ struct DynamicSouvenirPackageData {
     ProPlayer proPlayer{};
 };
 
+struct DynamicServiceMedalData {
+    std::uint32_t issueDateTimestamp = 0;
+};
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
@@ -113,10 +117,12 @@ namespace Inventory
     DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
     DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
     DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
+    DynamicServiceMedalData& dynamicServiceMedalData(std::size_t index) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
+    std::size_t emplaceDynamicData(DynamicServiceMedalData&& data) noexcept;
 }
