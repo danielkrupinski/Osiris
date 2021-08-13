@@ -973,6 +973,15 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 
     { TournamentMap::Mirage, Quarterfinal, Astralis, NinjasInPyjamas, {} },
     { TournamentMap::Dust2, Quarterfinal, NinjasInPyjamas, Astralis, {} },
+
+    // Semifinals
+    { TournamentMap::Train, Semifinal, NatusVincere, ENCE, {} },
+    { TournamentMap::Dust2, Semifinal, NatusVincere, ENCE, {} },
+    { TournamentMap::Mirage, Semifinal, NatusVincere, ENCE, {} },
+
+    { TournamentMap::Overpass, Semifinal, Astralis, MIBR, {} },
+    { TournamentMap::Inferno, Semifinal, MIBR, Astralis, {} },
+    
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
