@@ -347,7 +347,7 @@ void Misc::spectatorList() noexcept
 
 struct DamageData {
     DamageData(int damage, int playerHandle) : damage{ damage }, playerHandle{ playerHandle } {}
-    
+
     int damage;
     int playerHandle;
 };
@@ -361,7 +361,7 @@ void Misc::damageList() noexcept
     if (!miscConfig.damageList.enabled)
         return;
 
-    if ((damageCount.size() == 0 || !interfaces->engine->isInGame() || !interfaces->engine->isConnected()) && !gui->isOpen())
+    if ((damageCount.size() == 0 || !interfaces->engine->isInGame()) && !gui->isOpen())
         return;
     
     if (miscConfig.damageList.pos != ImVec2{}) {
@@ -392,25 +392,26 @@ void Misc::damageList() noexcept
 
     rows_count = 0;
 
-    for (size_t i = 0; i < damageCount.size(); i++) {
+    GameData::Lock lock;
 
+    for (const auto& target : damageCount) {
         if (rows_count >= miscConfig.damageList.maxRows)
             break;
 
-        if (damageCount[i].damage == 0)
+        if (target.damage == 0)
             continue;
 
-        if (const auto playerdata = GameData::playerByHandle(damageCount[i].playerHandle)) {
+        if (const auto playerdata = GameData::playerByHandle(target.playerHandle)) {
             if (const auto texture = playerdata->getAvatarTexture()) {
                 const auto text_size = ImGui::CalcTextSize(playerdata->name.c_str());
                 ImGui::Image(texture, ImVec2(text_size.y, text_size.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
                 ImGui::SameLine();
                 ImGui::TextWrapped("%s: ", playerdata->name.c_str());
                 ImGui::SameLine(0.f, 1.f);
-                if(i == 0)
+                if(damageCount.begin()->playerHandle == target.playerHandle)
                     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-                ImGui::TextWrapped("%i", damageCount[i].damage);
-                if (i == 0)
+                ImGui::TextWrapped("%i", target.damage);
+                if (damageCount.begin()->playerHandle == target.playerHandle)
                     ImGui::PopStyleColor();
                 rows_count++;
             }
