@@ -816,7 +816,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 
     // Round 1
     { TournamentMap::Train, ChallengersStage, Renegades, Avangar, { AZR, Gratisfaction, jkaem, jks, Liazz, Jame, KrizzeN, buster, fitch } },
-    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan } },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan, advent, zhokiNg, Kaze, Freeman } },
     { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
     { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
@@ -828,7 +828,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, {} },
     { TournamentMap::Overpass, ChallengersStage, ENCE, G2Esports, {} },
     { TournamentMap::Mirage, ChallengersStage, Renegades, NinjasInPyjamas, { AZR, Gratisfaction, jkaem, jks, Liazz } },
-    { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, {} },
+    { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, { advent, zhokiNg, aumaN, Freeman } },
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, {} },
     { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, {} },
     { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
@@ -843,7 +843,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 
     { TournamentMap::Overpass, ChallengersStage, G2Esports, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Overpass, ChallengersStage, Vitality, VegaSquadron, {} },
-    { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, {} },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, { advent, aumaN, Kaze, Freeman } },
     { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, {} },
 
     { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, { KRIMZ, twist, Xizt, Brollan } },
@@ -853,8 +853,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, {} },
 
     // Round 4
-    { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, {} },
-    { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, {} },
+    { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN } },
+    { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN } },
 
     { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert } },
@@ -876,9 +876,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, {} },
 
     // Round 5
-    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
-    { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, {} },
-    { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, {} },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, ViCiGaming, { zhokiNg, Kaze, aumaN } },
+    { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, { advent, zhokiNg, Kaze, aumaN } },
+    { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, { Kaze, Freeman, aumaN } },
 
     { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, {} },
     { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, {} },
