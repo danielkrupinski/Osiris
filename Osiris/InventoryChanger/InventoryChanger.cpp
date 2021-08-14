@@ -779,10 +779,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
     constexpr auto rarityColor = [](int rarity) noexcept {
         constexpr auto rarityColors = std::to_array<ImU32>({
-            IM_COL32(0,   0,   0,   0),
+            IM_COL32(106,  97,  85, 255),
             IM_COL32(176, 195, 217, 255),
-            IM_COL32(94, 152, 217, 255),
-            IM_COL32(75, 105, 255, 255),
+            IM_COL32( 94, 152, 217, 255),
+            IM_COL32( 75, 105, 255, 255),
             IM_COL32(136,  71, 255, 255),
             IM_COL32(211,  44, 230, 255),
             IM_COL32(235,  75,  75, 255),
