@@ -49,11 +49,13 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
-static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
+static void addToInventory(const std::unordered_map<StaticData::ItemIndex, int>& toAdd, const std::vector<StaticData::ItemIndex>& order) noexcept
 {
-    for (const auto [idx, count] : toAdd) {
-        for (int i = 0; i < count; ++i)
-            Inventory::addItemUnacknowledged(idx, Inventory::InvalidDynamicDataIdx);
+    for (const auto item : order) {
+        if (const auto count = toAdd.find(item); count != toAdd.end()) {
+            for (int i = 0; i < count->second; ++i)
+                Inventory::addItemUnacknowledged(item, Inventory::InvalidDynamicDataIdx);
+        }
     }
 }
 
@@ -792,10 +794,13 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
     };
 
     if (isInAddMode) {
-        static std::unordered_map<std::size_t, int> selectedToAdd;
+        static std::unordered_map<StaticData::ItemIndex, int> selectedToAdd;
+        static std::vector<StaticData::ItemIndex> toAddOrder;
+
         if (ImGui::Button("Back")) {
             isInAddMode = false;
             selectedToAdd.clear();
+            toAddOrder.clear();
         }
         ImGui::SameLine();
         const auto canAdd = !selectedToAdd.empty();
@@ -805,8 +810,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
             isInAddMode = false;
-            addToInventory(selectedToAdd);
+            addToInventory(selectedToAdd, toAddOrder);
             selectedToAdd.clear();
+            toAddOrder.clear();
         }
         if (!canAdd) {
             ImGui::PopItemFlag();
@@ -839,10 +845,13 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 const auto selected = selectedToAdd.contains(i);
 
                 if (const auto toAddCount = selected ? &selectedToAdd[i] : nullptr; ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
-                    if (selected)
+                    if (selected) {
                         selectedToAdd.erase(i);
-                    else
+                        std::erase(toAddOrder, i);
+                    } else {
                         selectedToAdd.emplace(i, 1);
+                        toAddOrder.push_back(i);
+                    }
                 }
                 ImGui::PopID();
             }
