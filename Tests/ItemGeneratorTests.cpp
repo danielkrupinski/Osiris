@@ -15,3 +15,17 @@ TEST_CASE("getStartOfYearTimestamp()") {
     REQUIRE(getStartOfYearTimestamp(2024) == 1704067200);
     REQUIRE(getStartOfYearTimestamp(2025) == 1735689600);
 }
+
+TEST_CASE("getEndOfYearTimestamp()") {
+    REQUIRE(getEndOfYearTimestamp(2015) == 1451606399);
+    REQUIRE(getEndOfYearTimestamp(2016) == 1483228799);
+    REQUIRE(getEndOfYearTimestamp(2017) == 1514764799);
+    REQUIRE(getEndOfYearTimestamp(2018) == 1546300799);
+    REQUIRE(getEndOfYearTimestamp(2019) == 1577836799);
+    REQUIRE(getEndOfYearTimestamp(2020) == 1609459199);
+    REQUIRE(getEndOfYearTimestamp(2021) == 1640995199);
+    REQUIRE(getEndOfYearTimestamp(2022) == 1672531199);
+    REQUIRE(getEndOfYearTimestamp(2023) == 1704067199);
+    REQUIRE(getEndOfYearTimestamp(2024) == 1735689599);
+    REQUIRE(getEndOfYearTimestamp(2025) == 1767225599);
+}
