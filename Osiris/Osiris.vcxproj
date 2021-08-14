@@ -225,6 +225,7 @@
     <ClInclude Include="InputUtil.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
+    <ClInclude Include="InventoryChanger\InventoryConfig.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\StaticData.h" />
     <ClInclude Include="InventoryChanger\ToolUser.h" />
