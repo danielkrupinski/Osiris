@@ -144,3 +144,19 @@ bool Entity::visibleTo(Entity* other) noexcept
 
     return false;
 }
+
+bool Entity::throwing(UserCmd* cmd) noexcept
+{
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+
+    if (activeWeapon && activeWeapon->isGrenade())
+    {
+        if (!activeWeapon->pinPulled() && activeWeapon->throwTime() > 0.f)
+            return true;
+
+        if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2) && activeWeapon->throwTime() > 0.f)
+            return true;
+    }
+
+    return false;
+}
