@@ -132,6 +132,19 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
 
 static bool keyPressed = false;
 
+static void setRandomSeed(int seed) noexcept
+{
+    using randomSeedFn = void(*)(int);
+    static auto randomSeed{ reinterpret_cast<randomSeedFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomSeed")) };
+    randomSeed(seed);
+}
+float getRandom(float bottom, float top) noexcept
+{
+    std::random_device rd{};
+    std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> dis(bottom, top);
+    return dis(generator);
+}
 void Aimbot::updateInput() noexcept
 {
     if (config->aimbotKeyMode == 0)
@@ -181,7 +194,25 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
+        auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
+        if (config->aimbot[weaponIndex].standaloneRCS && !config->aimbot[weaponIndex].silent) {
+            static Vector lastAimPunch{ };
+            if (localPlayer->getShotsFired() > config->aimbot[weaponIndex].shotsFired) {
+                setRandomSeed(*memory->predictionRandomSeed);
+                Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
+                if (config->aimbot[weaponIndex].randomRCS) {
+                    currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                    currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
+                }
+                else {
+                    currentPunch.x *= config->aimbot[weaponIndex].recoilControlX;
+                    currentPunch.y *= config->aimbot[weaponIndex].recoilControlY;
+                }
+                cmd->viewangles += currentPunch;
+            }
+            interfaces->engine->setViewAngles(cmd->viewangles);
+            lastAimPunch = aimPunch;
+        }
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);

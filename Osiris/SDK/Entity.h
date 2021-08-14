@@ -239,7 +239,7 @@ public:
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
-
+    NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int);
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
         
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)

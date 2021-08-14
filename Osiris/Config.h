@@ -47,6 +47,11 @@ public:
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
+        float recoilControlX{ 0.0f };
+        float recoilControlY{ 0.0f };
+        int shotsFired{ 0 };
+        bool standaloneRCS{ false };
+        bool randomRCS{ true };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };

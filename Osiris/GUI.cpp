@@ -294,7 +294,26 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+    // rcs turns off with silent on, and comboboxes don't fit here
+    // (you can't control recoil you can't see)
+    if (!config->aimbot[currentWeapon].silent) {
+        ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
+        if (config->aimbot[currentWeapon].standaloneRCS) {
+            ImGui::SameLine();
+            ImGui::Checkbox("Random RCS factor", &config->aimbot[currentWeapon].randomRCS);
+            ImGui::InputInt("Ignore Shots", &config->aimbot[currentWeapon].shotsFired);
+            if (config->aimbot[currentWeapon].randomRCS) {
+                ImGui::SliderFloat("Recoil control X odds", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
+                ImGui::SliderFloat("Recoil control Y odds", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
+            }
+            else {
+                ImGui::SliderFloat("Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
+                ImGui::SliderFloat("Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
+            }
+        }
+    }
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
+    config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 150);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
