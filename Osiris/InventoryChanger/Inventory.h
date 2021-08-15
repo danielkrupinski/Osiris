@@ -98,7 +98,7 @@ public:
 
 namespace Inventory
 {
-    constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
+    constexpr auto InvalidDynamicDataIdx = static_cast<std::size_t>(-1);
 
     std::vector<InventoryItem>& get() noexcept;
     void addItemUnacknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept;

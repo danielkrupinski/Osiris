@@ -572,7 +572,26 @@ enum ProPlayer {
     ANDROID = 1936433,
     yay = 57496765,
     dephh = 26995179,
-    draken = 159123007
+    draken = 159123007,
+    Gratisfaction = 5543683,
+    Liazz = 112055988,
+    Brollan = 178562747,
+    advent = 41786057,
+    zhokiNg = 99494192,
+    Freeman = 208355715,
+    aumaN = 46223698,
+    BnTeT = 111817512,
+    ZywOo = 153400465,
+    ALEX = 44605706,
+    dexter = 101535513,
+    malta = 181905573,
+    erkaSt = 131305548,
+    sterling = 100224621,
+    DickStacy = 192019632,
+    xseveN = 52906775,
+    Aleksib = 52977598,
+    sergej = 67574097,
+    Aerial = 2445180
 };
 
 class EconItem {

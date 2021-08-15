@@ -301,6 +301,8 @@ private:
                     _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
                     _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
+            } else if (item->isPaintable()) {
+                _gameItems.emplace_back(Type::Skin, 0, weaponID, vanillaPaintIndex, inventoryImage);
             }
         }
     }
