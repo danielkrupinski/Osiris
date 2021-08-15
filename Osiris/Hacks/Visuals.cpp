@@ -749,7 +749,7 @@ static std::vector<SmokeData> smokes;
 
 void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
 {
-    smokes.emplace_back(SmokeData(
+    smokes.push_back(SmokeData(
         memory->globalVars->realtime + SMOKEGRENADE_LIFETIME, 
         Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"))
     ));
