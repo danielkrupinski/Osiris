@@ -124,7 +124,7 @@ static void swapWindow(SDL_Window * window) noexcept
 #endif
     ImGui::NewFrame();
 
-if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render();
         Misc::purchaseList();
         Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
