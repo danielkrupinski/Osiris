@@ -181,7 +181,7 @@ void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness&
 void to_json(json& j, const HealthBar& o, const HealthBar& dummy = {});
 
 template <value_t Type, typename T>
-typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
+std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
 {
     if (!j.contains(key))
         return;
@@ -201,8 +201,7 @@ template <typename T, size_t Size>
 void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
     if (j.contains(key) && j[key].type() == value_t::array) {
-        std::size_t i = 0;
-        for (const auto& e : j[key]) {
+        for (std::size_t i = 0; const auto& e : j[key]) {
             if (i >= o.size())
                 break;
 

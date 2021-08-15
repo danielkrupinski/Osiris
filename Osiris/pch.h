@@ -19,4 +19,6 @@
 #include "nlohmann/json.hpp"
 #endif
 
+#ifdef _WIN32
 #include "freetype/freetype/internal/ftobjs.h"
+#endif

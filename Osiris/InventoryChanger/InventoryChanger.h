@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "../JsonForward.h"
+#include "InventoryConfig.h"
 
 enum class FrameStage;
 enum class Team;
@@ -16,11 +16,6 @@ namespace InventoryChanger
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
-
-    // Config
-    json toJson() noexcept;
-    void fromJson(const json& j) noexcept;
-    void resetConfig() noexcept;
 
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <ctime>
 #include <random>
 #include <span>
 #include <vector>
@@ -30,15 +31,21 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
-std::pair<std::size_t, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
+[[nodiscard]] StaticData::ItemIndex getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+{
+    assert(container.hasLoot());
+    return StaticData::caseLoot()[Helpers::random(container.lootBeginIdx, container.lootEndIdx - 1)];
+}
+
+std::pair<StaticData::ItemIndex, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
 
     const auto& caseData = StaticData::cases()[caseItem.get().dataIndex];
     assert(caseData.hasLoot());
 
-    const auto unlockedItemIdx = StaticData::caseLoot()[Helpers::random(static_cast<int>(caseData.lootBeginIdx), static_cast<int>(caseData.lootEndIdx - 1))];
-    std::size_t dynamicDataIdx = Inventory::INVALID_DYNAMIC_DATA_IDX;
+    const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
+    std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
     if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
         DynamicMusicData dynamicData;
@@ -80,7 +87,7 @@ struct Match {
     {
         if (!hasMVPs())
             return ProPlayer{};
-        return mvpPlayers[Helpers::random(0, std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{})) - 1)];
+        return mvpPlayers[Helpers::random(static_cast<std::size_t>(0), static_cast<std::size_t>(std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{}))) - 1)];
     }
 };
 
@@ -808,15 +815,176 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     // Challengers Stage
 
     // Round 1
-    { TournamentMap::Train, ChallengersStage, Renegades, Avangar, {} },
-    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, {} },
-    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, {} },
-    { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, {} },
-    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, {} },
+    { TournamentMap::Train, ChallengersStage, Renegades, Avangar, { AZR, Gratisfaction, jkaem, jks, Liazz, Jame, KrizzeN, buster, fitch } },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, ViCiGaming, { KRIMZ, twist, Xizt, JW, Brollan, advent, zhokiNg, Kaze, Freeman } },
+    { TournamentMap::Inferno, ChallengersStage, Tyloo, Vitality, { Summer, BnTeT, Attacker, somebody, xccurate, NBK, RpK, apEX } },
+    { TournamentMap::Mirage, ChallengersStage, GrayhoundGaming, Cloud9, { dexter, malta, erkaSt, sterling, kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, { S0tF1k, COLDYY1, DavCost, sdy, Dima, xseveN, Aleksib, sergej, allu, Aerial } },
     { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, {} },
     { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, {} },
     { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
 
+    // Round 2
+    { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, { Summer, BnTeT, Attacker, somebody, xccurate, flusha, RUSH } },
+    { TournamentMap::Overpass, ChallengersStage, ENCE, G2Esports, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Mirage, ChallengersStage, Renegades, NinjasInPyjamas, { AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Overpass, ChallengersStage, ViCiGaming, NRG, { advent, zhokiNg, aumaN, Freeman } },
+    { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { S0tF1k, COLDYY1, DavCost, sdy } },
+    { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, { dexter, malta, erkaSt, sterling, DickStacy, NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, { KRIMZ, Xizt, JW, Brollan } },
+
+    // Round 3
+    { TournamentMap::Nuke, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz, xseveN, Aleksib, sergej, allu } },
+    { TournamentMap::Mirage, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz, xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Inferno, ChallengersStage, NRG, Tyloo, { Summer, BnTeT, Attacker, somebody, xccurate } },
+    { TournamentMap::Mirage, ChallengersStage, NRG, Tyloo, { Summer, BnTeT, Attacker, somebody, xccurate } },
+
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Overpass, ChallengersStage, Vitality, VegaSquadron, { NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, { kioShiMa, flusha, RUSH, advent, aumaN, Kaze, Freeman } },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, {} },
+
+    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, { dexter, malta, erkaSt, sterling, DickStacy, KRIMZ, twist, Xizt, Brollan } },
+    { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, { KRIMZ, twist, Xizt, JW, Brollan, dexter, malta, erkaSt, sterling, DickStacy } },
+
+    { TournamentMap::Mirage, ChallengersStage, FURIA, TeamSpirit, { S0tF1k, COLDYY1, DavCost, sdy, Dima } },
+    { TournamentMap::Nuke, ChallengersStage, FURIA, TeamSpirit, { S0tF1k, COLDYY1, sdy, Dima } },
+
+    // Round 4
+    { TournamentMap::Inferno, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN, NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Nuke, ChallengersStage, ViCiGaming, Vitality, { advent, zhokiNg, Kaze, Freeman, aumaN, NBK, RpK, apEX, ZywOo, ALEX } },
+
+    { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
+    { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
+
+    { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, allu, Aerial } },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, { Aleksib, sergej } },
+    { TournamentMap::Train, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Overpass, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+    { TournamentMap::Mirage, ChallengersStage, NinjasInPyjamas, VegaSquadron, {} },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW } },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW, Brollan } },
+    { TournamentMap::Overpass, ChallengersStage, G2Esports, Fnatic, { KRIMZ, twist, Xizt, JW, Brollan } },
+
+    { TournamentMap::Mirage, ChallengersStage, Cloud9, FURIA, { autimatic } },
+    { TournamentMap::Inferno, ChallengersStage, Cloud9, FURIA, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Cache, ChallengersStage, Cloud9, FURIA, { kioShiMa, flusha, autimatic, RUSH } },
+
+    // Round 5
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, ViCiGaming, { zhokiNg, Kaze, aumaN } },
+    { TournamentMap::Inferno, ChallengersStage, NinjasInPyjamas, ViCiGaming, { advent, zhokiNg, Kaze, aumaN } },
+    { TournamentMap::Mirage, ChallengersStage, ViCiGaming, NinjasInPyjamas, { Kaze, Freeman, aumaN } },
+
+    { TournamentMap::Mirage, ChallengersStage, G2Esports, Tyloo, { Summer, BnTeT, Attacker, xccurate } },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, { somebody, xccurate } },
+    { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, { Summer, BnTeT, Attacker, somebody } },
+
+    { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
+
+    // Group Stage
+
+    // Round 1
+    { TournamentMap::Inferno, GroupStage, ENCE, Renegades, { xseveN, Aleksib, sergej, allu, Aerial, AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Mirage, GroupStage, BIG, Vitality, { NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, G2Esports, {} },
+    { TournamentMap::Train, GroupStage, FaZeClan, HellRaisers, {} },
+    { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, {} },
+    { TournamentMap::Overpass, GroupStage, Avangar, TeamLiquid, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Inferno, GroupStage, MIBR, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, {} },
+
+    // Round 2
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Vitality, { NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, Renegades, { AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Overpass, GroupStage, TeamLiquid, NinjasInPyjamas, {} },
+    { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
+    { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, { xseveN, Aleksib, sergej, allu } },
+    { TournamentMap::Mirage, GroupStage, BIG, G2Esports, {} },
+    { TournamentMap::Overpass, GroupStage, NRG, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, {} },
+
+    // Round 3
+    { TournamentMap::Mirage, GroupStage, Renegades, Astralis, { AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Nuke, GroupStage, Renegades, Astralis, { Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Inferno, GroupStage, Astralis, Renegades, { jkaem, Liazz } },
+
+    { TournamentMap::Mirage, GroupStage, TeamLiquid, NatusVincere, {} },
+    { TournamentMap::Dust2, GroupStage, TeamLiquid, NatusVincere, {} },
+
+    { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Mirage, GroupStage, Vitality, Cloud9, { RpK, apEX, ZywOo, ALEX, kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers, {} },
+
+    { TournamentMap::Dust2, GroupStage, ENCE, BIG, { xseveN, sergej, Aerial } },
+    { TournamentMap::Train, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Overpass, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, {} },
+    { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, {} },
+
+    // Round 4
+    { TournamentMap::Dust2, GroupStage, Vitality, Renegades, { NBK, RpK, ZywOo, AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Cache, GroupStage, Vitality, Renegades, { NBK, RpK, apEX, ZywOo, AZR, Gratisfaction, jks, Liazz } },
+    { TournamentMap::Inferno, GroupStage, Vitality, Renegades, { NBK, RpK, apEX, ZywOo, ALEX, AZR, Gratisfaction, jkaem, jks, Liazz } },
+
+    { TournamentMap::Dust2, GroupStage, Avangar, NatusVincere, { Jame, KrizzeN, buster, fitch } },
+    { TournamentMap::Train, GroupStage, Avangar, NatusVincere, { Jame, KrizzeN, buster, fitch, qikert } },
+
+    { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MIBR, {} },
+
+    { TournamentMap::Dust2, GroupStage, ENCE, G2Esports, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Mirage, GroupStage, G2Esports, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, {} },
+
+    { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Cache, GroupStage, HellRaisers, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
+    
+    // Round 5
+    { TournamentMap::Mirage, GroupStage, ENCE, Avangar, { xseveN, Aleksib, sergej, allu, Aerial, Jame, KrizzeN, buster, fitch } },
+    { TournamentMap::Train, GroupStage, ENCE, Avangar, { xseveN, Aleksib, sergej, allu, Aerial, Jame, fitch, qikert } },
+
+    { TournamentMap::Cache, GroupStage, NinjasInPyjamas, Vitality, { NBK, RpK, apEX, ZywOo } },
+    { TournamentMap::Overpass, GroupStage, Vitality, NinjasInPyjamas, { NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Mirage, GroupStage, Vitality, NinjasInPyjamas, { NBK, RpK, apEX, ZywOo, ALEX } },
+
+    { TournamentMap::Cache, GroupStage, FaZeClan, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Dust2, GroupStage, Cloud9, FaZeClan, { kioShiMa, flusha, autimatic, RUSH } },
+
+    // Quarterfinals
+    { TournamentMap::Inferno, Quarterfinal, NatusVincere, FaZeClan, {} },
+    { TournamentMap::Mirage, Quarterfinal, FaZeClan, NatusVincere, {} },
+
+    { TournamentMap::Mirage, Quarterfinal, TeamLiquid, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Inferno, Quarterfinal, ENCE, TeamLiquid, { xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Dust2, Quarterfinal, MIBR, Renegades, { jks, Gratisfaction } },
+    { TournamentMap::Train, Quarterfinal, Renegades, MIBR, { AZR, Gratisfaction, jkaem, Liazz } },
+
+    { TournamentMap::Mirage, Quarterfinal, Astralis, NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, Quarterfinal, NinjasInPyjamas, Astralis, {} },
+
+    // Semifinals
+    { TournamentMap::Train, Semifinal, NatusVincere, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Dust2, Semifinal, NatusVincere, ENCE, { xseveN, sergej, Aerial } },
+    { TournamentMap::Mirage, Semifinal, NatusVincere, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
+
+    { TournamentMap::Overpass, Semifinal, Astralis, MIBR, {} },
+    { TournamentMap::Inferno, Semifinal, MIBR, Astralis, {} },
+    
+    // Grand Final
+    { TournamentMap::Train, GrandFinal, Astralis, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Inferno, GrandFinal, ENCE, Astralis, { xseveN, sergej, Aerial } },
 });
 
 constexpr auto tournaments = std::to_array<Tournament>({
@@ -877,7 +1045,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
     if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
         if (const auto matchesOnMap = filterMatchesToMap(matches, caseData.tournamentMap); !matchesOnMap.empty()) {
-            const auto& randomMatch = matchesOnMap[Helpers::random(0, matchesOnMap.size() - 1)];
+            const auto& randomMatch = matchesOnMap[Helpers::random(static_cast<std::size_t>(0), matchesOnMap.size() - 1)];
             dynamicData.tournamentStage = randomMatch.stage;
             dynamicData.tournamentTeam1 = randomMatch.team1;
             dynamicData.tournamentTeam2 = randomMatch.team2;
@@ -888,9 +1056,46 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return dynamicData;
 }
 
-std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) noexcept
+[[nodiscard]] static std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
 {
-    std::size_t index = Inventory::INVALID_DYNAMIC_DATA_IDX;
+#ifdef _WIN32
+    return _mkgmtime(&tm);
+#else
+    return timegm(&tm);
+#endif
+}
+
+[[nodiscard]] static std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
+{
+    assert(year >= 1900);
+    std::tm tm{};
+    tm.tm_mday = 1;
+    tm.tm_year = year - 1900;
+    return tmToUTCTimestamp(tm);
+}
+
+[[nodiscard]] static std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
+{
+    assert(year >= 1900);
+    std::tm tm{};
+    tm.tm_sec = 59;
+    tm.tm_min = 59;
+    tm.tm_hour = 23;
+    tm.tm_mday = 31;
+    tm.tm_mon = 12 - 1;
+    tm.tm_year = year - 1900;
+    return tmToUTCTimestamp(tm);
+}
+
+[[nodiscard]] static std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) noexcept
+{
+    const auto now = std::time(nullptr);
+    return static_cast<std::uint32_t>(Helpers::random(std::min(getStartOfYearTimestamp(year), now), std::min(getEndOfYearTimestamp(year), now)));
+}
+
+std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameItemIndex) noexcept
+{
+    std::size_t index = Inventory::InvalidDynamicDataIdx;
 
     if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
         const auto& staticData = StaticData::paintKits()[item.dataIndex];
@@ -898,7 +1103,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (const auto isMP5LabRats = (item.weaponID == WeaponId::Mp5sd && StaticData::paintKits()[item.dataIndex].id == 800))
+        if (Helpers::isMP5LabRats(item.weaponID, StaticData::paintKits()[item.dataIndex].id))
             dynamicData.stickers[3].stickerID = 28;
 
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
@@ -915,6 +1120,10 @@ std::size_t ItemGenerator::createDefaultDynamicData(std::size_t gameItemIndex) n
     } else if (item.isCase()) {
         if (const auto& staticData = StaticData::cases()[item.dataIndex]; staticData.isSouvenirPackage())
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
+    } else if (item.isServiceMedal()) {
+        DynamicServiceMedalData dynamicData;
+        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
+        index = Inventory::emplaceDynamicData(std::move(dynamicData));
     }
 
     return index;

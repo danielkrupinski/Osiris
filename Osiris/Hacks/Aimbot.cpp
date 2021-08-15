@@ -33,6 +33,9 @@ static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vect
 #if defined(_WIN32)
     const auto traceToExitFn = memory->traceToExit;
     __asm {
+        push 0
+        push 0
+        push 0
         push exitTrace
         mov eax, direction
         push [eax]Vector.z
@@ -45,7 +48,7 @@ static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vect
         mov edx, enterTrace
         mov ecx, end
         call traceToExitFn
-        add esp, 28
+        add esp, 40
         mov result, al
     }
 #endif

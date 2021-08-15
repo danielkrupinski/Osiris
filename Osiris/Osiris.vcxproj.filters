@@ -248,6 +248,9 @@
     <ClCompile Include="InventoryChanger\ItemGenerator.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -623,6 +626,9 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\ItemGenerator.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\InventoryConfig.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
   </ItemGroup>

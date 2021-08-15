@@ -43,4 +43,5 @@ IMGUI_IMPL_API void           ImGui_DestroyTexture(ImTextureID texture);
 //#define IMGUI_IMPL_OPENGL_ES2     // Auto-detected on Emscripten
 //#define IMGUI_IMPL_OPENGL_ES3     // Auto-detected on iOS/Android
 
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#define GL_GLEXT_PROTOTYPES

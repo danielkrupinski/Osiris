@@ -10,13 +10,14 @@
 #include "../SDK/Entity.h"
 #include "../SDK/ItemSchema.h"
 
-using Inventory::INVALID_DYNAMIC_DATA_IDX;
+using Inventory::InvalidDynamicDataIdx;
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
 static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 static std::vector<DynamicSouvenirPackageData> dynamicSouvenirPackageData;
+static std::vector<DynamicServiceMedalData> dynamicServiceMedalData;
 
 class InventoryImpl {
 public:
@@ -101,7 +102,7 @@ private:
         econItem.setPaintKit(static_cast<float>(paintKit));
 
         const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
-        const auto isMP5LabRats = (inventoryItem.get().weaponID == WeaponId::Mp5sd && paintKit == 800);
+        const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.get().weaponID, paintKit);
         if (dynamicData.isSouvenir() || isMP5LabRats) {
             econItem.quality = 12;
         } else {
@@ -186,7 +187,7 @@ private:
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            if (StaticData::collectibles()[item.dataIndex].isOriginal)
+            if (StaticData::isCollectibleGenuine(item))
                 econItem->quality = 1;
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
@@ -197,6 +198,9 @@ private:
 
                 econItem->setStickerID(j, patch.patchID);
             }
+        } else if (item.isServiceMedal()) {
+            if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
+                econItem->setIssueDate(dynamicData.issueDateTimestamp);
         } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
@@ -250,7 +254,7 @@ private:
 
     std::uint64_t _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != INVALID_DYNAMIC_DATA_IDX ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
@@ -357,6 +361,11 @@ DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(std::size_t in
     return ::dynamicSouvenirPackageData[index];
 }
 
+DynamicServiceMedalData& Inventory::dynamicServiceMedalData(std::size_t index) noexcept
+{
+    return ::dynamicServiceMedalData[index];
+}
+
 std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept
 {
     ::dynamicSkinData.push_back(std::move(data));
@@ -385,6 +394,12 @@ std::size_t Inventory::emplaceDynamicData(DynamicSouvenirPackageData&& data) noe
 {
     ::dynamicSouvenirPackageData.push_back(std::move(data));
     return ::dynamicSouvenirPackageData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicServiceMedalData&& data) noexcept
+{
+    ::dynamicServiceMedalData.push_back(std::move(data));
+    return ::dynamicServiceMedalData.size() - 1;
 }
 
 std::vector<InventoryItem>& Inventory::get() noexcept

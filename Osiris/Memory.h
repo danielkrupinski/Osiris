@@ -124,7 +124,7 @@ public:
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
     void(__THISCALL* setCustomName)(EconItem* thisptr, const char* name);
-    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
+    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
     void** uiComponentInventory;
     void(__THISCALL* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
 

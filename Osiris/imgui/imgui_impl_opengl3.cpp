@@ -84,7 +84,7 @@
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
 //  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
 //  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-#include "GL/gl3w.h"            // Needs to be initialized with gl3wInit() in user's code
+#include <SDL2/SDL_opengl.h>			 // Prototypes provided by SDL library
 
 // Desktop GL 3.2+ has glDrawElementsBaseVertex() which GL ES and WebGL don't have.
 #if defined(IMGUI_IMPL_OPENGL_ES2) || defined(IMGUI_IMPL_OPENGL_ES3) || !defined(GL_VERSION_3_2)
