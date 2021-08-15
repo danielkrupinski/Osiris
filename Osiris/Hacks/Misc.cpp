@@ -328,7 +328,12 @@ void Misc::spectatorList() noexcept
             continue;
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
-            ImGui::TextWrapped("%s", it->name.c_str());
+            if (const auto texture = it->getAvatarTexture()) {
+                const auto textSize = ImGui::CalcTextSize(it->name.c_str());
+                ImGui::Image(texture, ImVec2(textSize.y, textSize.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                ImGui::SameLine();
+                ImGui::TextWrapped("%s", it->name.c_str());
+            }
         }
     }
 
