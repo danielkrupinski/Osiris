@@ -61,6 +61,7 @@ namespace Helpers
     }
 
     bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition, bool floor = true) noexcept;
+    bool worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
 
     [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
     {

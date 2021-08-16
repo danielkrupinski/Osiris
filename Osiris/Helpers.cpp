@@ -211,3 +211,10 @@ bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition,
         screenPosition = ImFloor(screenPosition);
     return onScreen;
 }
+
+bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept
+{
+    const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+    screenPosition = ImFloor(screenPosition);
+    return onScreen;
+}

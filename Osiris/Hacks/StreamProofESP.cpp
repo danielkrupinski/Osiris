@@ -47,7 +47,7 @@ public:
                                 i & 2 ? scaledMaxs.y : scaledMins.y,
                                 i & 4 ? scaledMaxs.z : scaledMins.z };
 
-            if (!Helpers::worldToScreen(matrix ? point.transform(*matrix) : point, vertices[i])) {
+            if (!Helpers::worldToScreenPixelAligned(matrix ? point.transform(*matrix) : point, vertices[i])) {
                 valid = false;
                 return;
             }
@@ -424,11 +424,11 @@ static void drawPlayerSkeleton(const ColorToggleThickness& config, const std::ve
 
     for (const auto& [bone, parent] : bones) {
         ImVec2 bonePoint;
-        if (!Helpers::worldToScreen(bone, bonePoint))
+        if (!Helpers::worldToScreenPixelAligned(bone, bonePoint))
             continue;
 
         ImVec2 parentPoint;
-        if (!Helpers::worldToScreen(parent, parentPoint))
+        if (!Helpers::worldToScreenPixelAligned(parent, parentPoint))
             continue;
 
         points.emplace_back(bonePoint, parentPoint);
