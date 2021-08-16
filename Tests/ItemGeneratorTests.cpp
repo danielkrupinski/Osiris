@@ -2,6 +2,11 @@
 
 #include "../Osiris/InventoryChanger/ItemGenerator.cpp"
 
+TEST_CASE("getTournamentMatches() invalid tournament ID") {
+    REQUIRE(getTournamentMatches(0).empty());
+    REQUIRE(getTournamentMatches(999).empty());
+}
+
 TEST_CASE("tmToUTCTimestamp()") {
     const auto min = getStartOfYearTimestamp(2015);
     const auto max = getEndOfYearTimestamp(2050);
