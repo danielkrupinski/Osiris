@@ -8,11 +8,14 @@
 #include <vector>
 
 #include "imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui/imgui_internal.h"
 
 #include "SDK/WeaponId.h"
 
 struct Color3;
 struct Color4;
+struct Vector;
 
 namespace Helpers
 {
@@ -56,6 +59,8 @@ namespace Helpers
     {
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
+
+    bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept;
 
     [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
     {
