@@ -1098,8 +1098,7 @@ void Misc::onVoteStart(const void* data, int size) noexcept
         return;
 
     constexpr auto voteName = [](int index) {
-        switch (index)
-        {
+        switch (index) {
         case 0: return "Kick";
         case 1: return "Change Level";
         case 6: return "Surrender";
@@ -1109,15 +1108,16 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     };
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    const auto ent_idx = reader.readInt32(2);
+    const auto entityIndex = reader.readInt32(2);
 
-    if (ent_idx) {
-        const auto vote_type = reader.readInt32(3);
-        const auto entity = interfaces->entityList->getEntity(ent_idx);
-        const auto isLocal = localPlayer && entity == localPlayer.get();
+    const auto entity = interfaces->entityList->getEntity(entityIndex);
+    if (!entity)
+        return;
 
-        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(vote_type));
-    }
+    const auto isLocal = localPlayer && entity == localPlayer.get();
+
+    const auto voteType = reader.readInt32(3);
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass() noexcept
