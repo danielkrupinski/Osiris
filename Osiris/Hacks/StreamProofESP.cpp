@@ -395,7 +395,7 @@ static void drawProjectileTrajectory(const Trail& config, const std::vector<std:
     const auto color = Helpers::calculateColor(config.asColorToggle().asColor4());
 
     for (const auto& [time, point] : trajectory) {
-        if (ImVec2 pos; time + config.time >= memory->globalVars->realtime && Helpers::worldToScreen(point, pos, false)) {
+        if (ImVec2 pos; time + config.time >= memory->globalVars->realtime && Helpers::worldToScreen(point, pos)) {
             if (config.type == Trail::Line) {
                 points.push_back(pos);
                 shadowPoints.push_back(pos + ImVec2{ 1.0f, 1.0f });

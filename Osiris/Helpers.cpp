@@ -204,12 +204,9 @@ static bool transformWorldPositionToScreenPosition(const Matrix4x4& matrix, cons
     return true;
 }
 
-bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition, bool floor) noexcept
+bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept
 {
-    const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
-    if (floor)
-        screenPosition = ImFloor(screenPosition);
-    return onScreen;
+    return transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
 }
 
 bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept

@@ -670,7 +670,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
             std::size_t count = 0;
 
             for (const auto& point : flameCircumference) {
-                if (Helpers::worldToScreen(pos + point, screenPoints[count], false))
+                if (Helpers::worldToScreen(pos + point, screenPoints[count]))
                     ++count;
             }
 
