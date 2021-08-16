@@ -35,7 +35,7 @@ namespace Helpers
 
     ImWchar* getFontGlyphRanges() noexcept;
 
-    constexpr int utf8SeqLen(char firstByte) noexcept
+    constexpr std::uint8_t utf8SeqLen(char firstByte) noexcept
     {
         return (firstByte & 0x80) == 0x00 ? 1 :
                (firstByte & 0xE0) == 0xC0 ? 2 :

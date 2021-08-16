@@ -276,8 +276,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             return;
 
         if (miscConfig.animatedClanTag && !clanTag.empty()) {
-            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
-            if (offset != 0 && static_cast<std::size_t>(offset) <= clanTag.length())
+            if (const auto offset = Helpers::utf8SeqLen(clanTag[0]); offset <= clanTag.length())
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
         lastTime = memory->globalVars->realtime;
