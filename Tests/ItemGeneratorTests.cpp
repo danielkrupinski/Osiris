@@ -32,9 +32,12 @@ TEST_CASE("getEndOfYearTimestamp()") {
 
 TEST_CASE("getRandomDateTimestampOfYear() for past years") {
     for (std::uint16_t year = 2015; year <= 2020; ++year) {
+        const auto startOfYearTimestamp = getStartOfYearTimestamp(year);
+        const auto endOfYearTimestamp = getEndOfYearTimestamp(year);
+
         for (std::size_t i = 0; i < 1000; ++i) {
             const auto timestamp = getRandomDateTimestampOfYear(year);
-            REQUIRE((timestamp >= getStartOfYearTimestamp(year) && timestamp <= getEndOfYearTimestamp(year)));
+            REQUIRE((timestamp >= startOfYearTimestamp && timestamp <= endOfYearTimestamp));
         }
     }
 }
