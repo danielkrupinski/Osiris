@@ -60,7 +60,7 @@ namespace Helpers
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
 
-    bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept;
+    bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition, bool floor = true) noexcept;
 
     [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
     {
