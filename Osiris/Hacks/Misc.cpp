@@ -1111,7 +1111,7 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     const auto entityIndex = reader.readInt32(2);
 
     const auto entity = interfaces->entityList->getEntity(entityIndex);
-    if (!entity)
+    if (!entity || !entity->isPlayer())
         return;
 
     const auto isLocal = localPlayer && entity == localPlayer.get();
