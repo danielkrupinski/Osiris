@@ -41,7 +41,7 @@ namespace Helpers
                (firstByte & 0xE0) == 0xC0 ? 2 :
                (firstByte & 0xF0) == 0xE0 ? 3 :
                (firstByte & 0xF8) == 0xF0 ? 4 :
-               -1;
+               0;
     }
 
     std::wstring toWideString(const std::string& str) noexcept;
