@@ -7,6 +7,13 @@ TEST_CASE("getTournamentMatches() invalid tournament ID") {
     REQUIRE(getTournamentMatches(999).empty());
 }
 
+TEST_CASE("getTournamentMatches() valid tournament ID") {
+    REQUIRE_FALSE(getTournamentMatches(1).empty());
+
+    for (std::size_t i = 3; i <= 14; ++i)
+        REQUIRE_FALSE(getTournamentMatches(i).empty());
+}
+
 TEST_CASE("tmToUTCTimestamp()") {
     const auto min = getStartOfYearTimestamp(2015);
     const auto max = getEndOfYearTimestamp(2050);
