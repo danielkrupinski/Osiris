@@ -192,10 +192,8 @@ std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
     return length;
 }
 
-bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition, bool floor) noexcept
+static bool transformWorldPositionToScreenPosition(const Matrix4x4& matrix, const Vector& worldPosition, ImVec2& screenPosition) noexcept
 {
-    const auto& matrix = GameData::toScreenMatrix();
-
     const auto w = matrix._41 * worldPosition.x + matrix._42 * worldPosition.y + matrix._43 * worldPosition.z + matrix._44;
     if (w < 0.001f)
         return false;
@@ -203,7 +201,13 @@ bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition,
     screenPosition = ImGui::GetIO().DisplaySize / 2.0f;
     screenPosition.x *= 1.0f + (matrix._11 * worldPosition.x + matrix._12 * worldPosition.y + matrix._13 * worldPosition.z + matrix._14) / w;
     screenPosition.y *= 1.0f - (matrix._21 * worldPosition.x + matrix._22 * worldPosition.y + matrix._23 * worldPosition.z + matrix._24) / w;
-    if(floor)
-        screenPosition = ImFloor(screenPosition);
     return true;
+}
+
+bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition, bool floor) noexcept
+{
+    const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+    if (floor)
+        screenPosition = ImFloor(screenPosition);
+    return onScreen;
 }
