@@ -29,3 +29,12 @@ TEST_CASE("getEndOfYearTimestamp()") {
     REQUIRE(getEndOfYearTimestamp(2024) == 1735689599);
     REQUIRE(getEndOfYearTimestamp(2025) == 1767225599);
 }
+
+TEST_CASE("getRandomDateTimestampOfYear() for past years") {
+    for (std::uint16_t year = 2015; year <= 2020; ++year) {
+        for (std::size_t i = 0; i < 1000; ++i) {
+            const auto timestamp = getRandomDateTimestampOfYear(year);
+            REQUIRE((timestamp >= getStartOfYearTimestamp(year) && timestamp <= getEndOfYearTimestamp(year)));
+        }
+    }
+}
