@@ -11,7 +11,8 @@ enum TournamentTeam : std::uint8_t;
 
 namespace StaticData
 {
-    constexpr auto InvalidItemIdx = static_cast<std::size_t>(-1);
+    using ItemIndex = std::size_t;
+    constexpr auto InvalidItemIdx = static_cast<ItemIndex>(-1);
 
     enum class Type : std::uint8_t {
         // has paint kit, must match GameItem::hasPaintKit() below
@@ -31,7 +32,8 @@ namespace StaticData
         CaseKey,
         OperationPass,
         StatTrakSwapTool,
-        ViewerPass
+        ViewerPass,
+        ServiceMedal
     };
 
     struct GameItem {
@@ -52,6 +54,7 @@ namespace StaticData
         bool isOperationPass() const noexcept { return type == Type::OperationPass; }
         bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
         bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
+        bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
@@ -61,12 +64,6 @@ namespace StaticData
         std::size_t dataIndex;
 
         std::string iconPath;
-    };
-
-    struct Collectible {
-        explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
-
-        bool isOriginal;
     };
 
     struct PaintKit {
@@ -102,24 +99,25 @@ namespace StaticData
         bool willProduceStatTrak = false;
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
-        std::size_t lootBeginIdx = 0;
-        std::size_t lootEndIdx = 0;
+        ItemIndex lootBeginIdx = 0;
+        ItemIndex lootEndIdx = 0;
 
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
     const std::vector<GameItem>& gameItems() noexcept;
-    const std::vector<Collectible>& collectibles() noexcept;
     const std::vector<Case>& cases() noexcept;
-    const std::vector<std::size_t>& caseLoot() noexcept;
+    const std::vector<ItemIndex>& caseLoot() noexcept;
     const std::vector<PaintKit>& paintKits() noexcept;
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    std::size_t getItemIndex(WeaponId weaponID, int paintKit) noexcept;
+    ItemIndex getItemIndex(WeaponId weaponID, int paintKit) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
+    bool isCollectibleGenuine(const GameItem& collectible) noexcept;
+    std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
 }

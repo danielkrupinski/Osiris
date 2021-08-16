@@ -119,8 +119,8 @@ public:
 
     [[nodiscard]] const char* toString() const noexcept;
     [[nodiscard]] bool isPressed() const noexcept;
-    bool isDown() const noexcept;
-    bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
+    [[nodiscard]] bool isDown() const noexcept;
+    [[nodiscard]] bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
 private:
@@ -132,7 +132,7 @@ public:
     using KeyBind::KeyBind;
 
     void handleToggle() noexcept;
-    bool isToggled() const noexcept { return toggledOn; }
+    [[nodiscard]] bool isToggled() const noexcept { return toggledOn; }
 private:
     bool toggledOn = true;
 };

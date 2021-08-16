@@ -132,6 +132,7 @@
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
+    <ClCompile Include="InventoryChanger\InventoryConfig.cpp" />
     <ClCompile Include="InventoryChanger\ItemGenerator.cpp" />
     <ClCompile Include="InventoryChanger\StaticData.cpp" />
     <ClCompile Include="InventoryChanger\ToolUser.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="InputUtil.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
+    <ClInclude Include="InventoryChanger\InventoryConfig.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\StaticData.h" />
     <ClInclude Include="InventoryChanger\ToolUser.h" />
@@ -402,6 +404,9 @@
       <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -442,6 +447,9 @@
       <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
