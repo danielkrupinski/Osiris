@@ -91,6 +91,11 @@ std::uint64_t Entity::getSteamId() noexcept
     return std::remove_if(begin, end, [](wchar_t c) { return c > 0 && c < 17; });
 }
 
+[[nodiscard]] static wchar_t* removeConsecutiveSpaces(wchar_t* begin, wchar_t* end) noexcept
+{
+    return std::unique(begin, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
+}
+
 void Entity::getPlayerName(char(&out)[128]) noexcept
 {
     if (!*memory->playerResource) {
@@ -103,7 +108,7 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
 
     auto end = removeNewlineChars(wide, wide + wcslen(wide));
     end = removeColorMarkup(wide, end);
-    end = std::unique(wide, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
+    end = removeConsecutiveSpaces(wide, end);
     *end = L'\0';
 
     interfaces->localize->convertUnicodeToAnsi(wide, out, 128);
