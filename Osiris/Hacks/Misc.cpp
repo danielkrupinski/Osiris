@@ -687,8 +687,11 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && localPlayer->isAlive())
+    {
+        interfaces->engine->clientCmdUnrestricted(("playerchatwheel . \"Cheer! \xe2\x80\xa8" + std::string{ static_cast<char>(miscConfig.banColor + 1) } + miscConfig.banText + "\"").c_str());
         shouldSet = false;
+    }
 }
 
 void Misc::nadePredict() noexcept
