@@ -2,6 +2,17 @@
 
 #include "../Osiris/InventoryChanger/ItemGenerator.cpp"
 
+TEST_CASE("tmToUTCTimestamp()") {
+    const auto min = getStartOfYearTimestamp(2015);
+    const auto max = getEndOfYearTimestamp(2050);
+
+    for (std::size_t i = 0; i < 1000; ++i) {
+        const auto timestamp = Helpers::random(min, max);
+        auto tm = *std::gmtime(&timestamp);
+        REQUIRE(tmToUTCTimestamp(tm) == timestamp);
+    }
+}
+
 TEST_CASE("getStartOfYearTimestamp()") {
     REQUIRE(getStartOfYearTimestamp(2015) == 1420070400);
     REQUIRE(getStartOfYearTimestamp(2016) == 1451606400);
