@@ -15,6 +15,7 @@ namespace Misc
     bool shouldFixBoneMatrix() noexcept;
     bool isRadarHackOn() noexcept;
     bool isMenuKeyPressed() noexcept;
+    bool isAntiAimKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
 

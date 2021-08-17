@@ -81,6 +81,7 @@ struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
 
     KeyBind menuKey{ KeyBind::INSERT };
+    KeyBind antiaimKey{ KeyBind::LALT };
     bool antiAfkKick{ false };
     bool autoStrafe{ false };
     bool bunnyHop{ false };
@@ -191,6 +192,11 @@ bool Misc::isRadarHackOn() noexcept
 bool Misc::isMenuKeyPressed() noexcept
 {
     return miscConfig.menuKey.isPressed();
+}
+
+bool Misc::isAntiAimKeyPressed() noexcept
+{
+    return miscConfig.antiaimKey.isPressed();
 }
 
 float Misc::maxAngleDelta() noexcept
@@ -1448,6 +1454,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     hotkey(miscConfig.quickHealthshotKey);
     */
     ImGui::Checkbox("Grenade Prediction", &miscConfig.nadePredict);
+    ImGui::hotkey("", miscConfig.antiaimKey);
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
@@ -1560,6 +1567,7 @@ static void from_json(const json& j, PreserveKillfeed& o)
 static void from_json(const json& j, MiscConfig& m)
 {
     read(j, "Menu key", m.menuKey);
+    read(j, "Antikey", m.antiaimKey);
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
     read(j, "Bunny hop", m.bunnyHop);
@@ -1695,6 +1703,7 @@ static void to_json(json& j, const MiscConfig& o)
     const MiscConfig dummy;
 
     WRITE("Menu key", menuKey);
+    WRITE("Antikey", antiaimKey);
     WRITE("Anti AFK kick", antiAfkKick);
     WRITE("Auto strafe", autoStrafe);
     WRITE("Bunny hop", bunnyHop);
