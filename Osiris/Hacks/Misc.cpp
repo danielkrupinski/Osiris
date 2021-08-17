@@ -672,7 +672,7 @@ void Misc::fakeBan(bool set) noexcept
 
     if (shouldSet && interfaces->engine->isInGame() && localPlayer->isAlive())
     {
-        interfaces->engine->clientCmdUnrestricted(("playerchatwheel . \"Cheer! \xe2\x80\xa8" + std::string{ static_cast<char>(miscConfig.banColor + 1) } + miscConfig.banText + "\"").c_str());
+        interfaces->engine->clientCmdUnrestricted((std::string{ static_cast<char>(miscConfig.banColor + 1) } + miscConfig.banText + "\"").c_str());
         shouldSet = false;
     }
 }
