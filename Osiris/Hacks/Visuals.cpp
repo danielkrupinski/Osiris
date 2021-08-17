@@ -3,7 +3,6 @@
 #include <string_view>
 #include <utility>
 #include <vector>
-#include <iomanip>
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -77,13 +76,6 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-    struct SmokeTimer {
-        bool enabled = false;
-        Color4 backgroundColor{ 1.0f, 1.0f, 1.0f, 0.5f };
-        Color4 timerColor{ 0.0f, 0.0f, 1.0f, 1.0f };
-        float timerThickness{ 1.f };
-        Color4 textColor{ 0.0f, 0.0f, 0.0f, 1.0f };
-    } smokeTimer;
 
     struct ColorCorrection {
         bool enabled = false;
@@ -109,15 +101,6 @@ static void from_json(const json& j, VisualsConfig::ColorCorrection& c)
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
 }
-static void from_json(const json& j, VisualsConfig::SmokeTimer& s)
-{
-    read(j, "Enabled", s.enabled);
-    read<value_t::object>(j, "Background color", s.backgroundColor);
-    read<value_t::object>(j, "Timer color", s.timerColor);
-    read(j, "Timer thickness", s.timerThickness);
-    read<value_t::object>(j, "Text color", s.textColor);
-}
-
 
 static void from_json(const json& j, BulletTracers& o)
 {
@@ -167,7 +150,6 @@ static void from_json(const json& j, VisualsConfig& v)
     read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
-    read<value_t::object>(j, "Smoke timer", v.smokeTimer);
 }
 
 static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
@@ -181,15 +163,6 @@ static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const Visu
     WRITE("Green", green);
     WRITE("Yellow", yellow);
 }
-static void to_json(json& j, const VisualsConfig::SmokeTimer& o, const VisualsConfig::SmokeTimer& dummy)
-{
-    WRITE("Enabled", enabled);
-    WRITE("Background color", backgroundColor);
-    WRITE("Timer color", timerColor);
-    WRITE("Timer thickness", timerThickness);
-    WRITE("Text color", textColor);
-}
-
 
 static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
 {
@@ -241,7 +214,6 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Color correction", colorCorrection);
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
-    WRITE("Smoke timer", smokeTimer);
 }
 
 bool Visuals::isThirdpersonOn() noexcept
@@ -729,74 +701,6 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
-#define SMOKEGRENADE_LIFETIME 17.5f
-
-struct SmokeData
-{
-    SmokeData(float destructionTime, Vector pos) : destructionTime{ destructionTime }, pos{ pos } {}
-
-    float destructionTime;
-    Vector pos;
-    float anim = 1.f;
-};
-
-static std::vector<SmokeData> smokes;
-
-void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
-{
-    smokes.emplace_back(SmokeData(
-        memory->globalVars->realtime + SMOKEGRENADE_LIFETIME,
-        Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"))
-    ));
-}
-
-void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
-{
-    if (!visualsConfig.smokeTimer.enabled)
-        return;
-
-    if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
-        return;
-
-    for (size_t i = 0; i < smokes.size(); i++) {
-        auto& smoke = smokes[i];
-
-        const auto time = std::clamp(smoke.destructionTime - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
-        std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
-
-        const auto text_size = ImGui::CalcTextSize(text.str().c_str());
-        ImVec2 pos;
-
-        if (time >= 0.f && smoke.anim >= 0.f) {
-            if (worldToScreen(smoke.pos, pos)) {
-
-                const auto radius = 10.f + visualsConfig.smokeTimer.timerThickness;
-                const auto fraction = std::clamp(time / SMOKEGRENADE_LIFETIME, 0.0f, 1.0f);
-
-                if (time == 0.f)
-                    smoke.anim -= 1.f * ImGui::GetIO().DeltaTime;
-
-                Helpers::setAlphaFactor(smoke.anim);
-                drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.backgroundColor), 40, 3.0f + visualsConfig.smokeTimer.timerThickness);
-                if (fraction == 1.0f) {
-                    drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), 40, 2.0f + visualsConfig.smokeTimer.timerThickness);
-                }
-                else {
-                    constexpr float pi = std::numbers::pi_v<float>;
-                    const auto arc270 = (3 * pi) / 2;
-                    drawList->PathArcTo(pos, radius - 0.5f, arc270 - (2 * pi * fraction), arc270, 40);
-                    drawList->PathStroke(Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), false, 2.0f + visualsConfig.smokeTimer.timerThickness);
-                }
-                drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y + (visualsConfig.smokeTimer.timerThickness * 2.f) + (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), text.str().c_str());
-                Helpers::setAlphaFactor(1.f);
-            }
-        }
-        else
-            smokes.erase(smokes.begin() + i);
-    }
-}
-
-
 void Visuals::viewModel() noexcept
 {
     static auto view_x{ interfaces->cvar->findVar("viewmodel_offset_x") };
@@ -979,18 +883,6 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
-    ImGui::Checkbox("Smoke Timer", &visualsConfig.smokeTimer.enabled);
-    ImGui::SameLine();
-    if (ImGui::Button("...##smoke_timer"))
-        ImGui::OpenPopup("##popup_smokeTimer");
-
-    if (ImGui::BeginPopup("##popup_smokeTimer"))
-    {
-        ImGuiCustom::colorPicker("Background color", visualsConfig.smokeTimer.backgroundColor);
-        ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer.textColor);
-        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer.timerColor, nullptr, &visualsConfig.smokeTimer.timerThickness);
-        ImGui::EndPopup();
-    }
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
     ImGui::SameLine();
