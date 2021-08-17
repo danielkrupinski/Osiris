@@ -277,8 +277,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             return;
 
         if (miscConfig.animatedClanTag && !clanTag.empty()) {
-            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
-            if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
+            if (const auto offset = Helpers::utf8SeqLen(clanTag[0]); offset <= clanTag.length())
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
         lastTime = memory->globalVars->realtime;
@@ -329,7 +328,12 @@ void Misc::spectatorList() noexcept
             continue;
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
-            ImGui::TextWrapped("%s", it->name.c_str());
+            if (const auto texture = it->getAvatarTexture()) {
+                const auto textSize = ImGui::CalcTextSize(it->name.c_str());
+                ImGui::Image(texture, ImVec2(textSize.y, textSize.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                ImGui::SameLine();
+                ImGui::TextWrapped("%s", it->name.c_str());
+            }
         }
     }
 
@@ -373,22 +377,6 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
 }
 
-
-static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
-{
-    const auto& matrix = GameData::toScreenMatrix();
-
-    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
-    if (w < 0.001f)
-        return false;
-
-    out = ImGui::GetIO().DisplaySize / 2.0f;
-    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
-    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-    out = ImFloor(out);
-    return true;
-}
-
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!miscConfig.recoilCrosshair.asColorToggle().enabled)
@@ -403,7 +391,7 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
-    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+    if (ImVec2 pos; Helpers::worldToScreenPixelAligned(localPlayerData.aimPunch, pos))
         drawCrosshair(drawList, pos, Helpers::calculateColor(miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
@@ -1133,8 +1121,7 @@ void Misc::onVoteStart(const void* data, int size) noexcept
         return;
 
     constexpr auto voteName = [](int index) {
-        switch (index)
-        {
+        switch (index) {
         case 0: return "Kick";
         case 1: return "Change Level";
         case 6: return "Surrender";
@@ -1144,15 +1131,16 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     };
 
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    const auto ent_idx = reader.readInt32(2);
+    const auto entityIndex = reader.readInt32(2);
 
-    if (ent_idx) {
-        const auto vote_type = reader.readInt32(3);
-        const auto entity = interfaces->entityList->getEntity(ent_idx);
-        const auto isLocal = localPlayer && entity == localPlayer.get();
+    const auto entity = interfaces->entityList->getEntity(entityIndex);
+    if (!entity || !entity->isPlayer())
+        return;
 
-        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(vote_type));
-    }
+    const auto isLocal = localPlayer && entity == localPlayer.get();
+
+    const auto voteType = reader.readInt32(3);
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass() noexcept

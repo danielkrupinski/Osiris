@@ -7,5 +7,5 @@
 
 #define PAD(size) \
 private: \
-    std::byte PAD_NAME(__COUNTER__) [size]; \
+    std::byte PAD_NAME(__LINE__) [size]; \
 public:

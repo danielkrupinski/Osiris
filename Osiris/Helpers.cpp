@@ -20,6 +20,7 @@
 #include "Helpers.h"
 #include "Memory.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/Engine.h"
 
 static auto rainbowColor(float time, float speed, float alpha) noexcept
 {
@@ -114,16 +115,16 @@ static void toUpper(std::span<wchar_t> str) noexcept
 {
     static std::unordered_map<wchar_t, wchar_t> upperCache;
 
-    for (std::size_t i = 0; i < str.size(); ++i) {
-        if (str[i] >= 'a' && str[i] <= 'z') {
-            str[i] -= ('a' - 'A');
-        } else if (str[i] > 127) {
-            if (const auto it = upperCache.find(str[i]); it != upperCache.end()) {
-                str[i] = it->second;
+    for (auto& c : str) {
+        if (c >= 'a' && c <= 'z') {
+            c -= ('a' - 'A');
+        } else if (c > 127) {
+            if (const auto it = upperCache.find(c); it != upperCache.end()) {
+                c = it->second;
             } else {
-                const auto upper = std::towupper(str[i]);
-                upperCache.emplace(str[i], upper);
-                str[i] = upper;
+                const auto upper = std::towupper(c);
+                upperCache.emplace(c, upper);
+                c = upper;
             }
         }
     }
@@ -191,16 +192,26 @@ std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
     return length;
 }
 
-float Helpers::random(float min, float max) noexcept
+static bool transformWorldPositionToScreenPosition(const Matrix4x4& matrix, const Vector& worldPosition, ImVec2& screenPosition) noexcept
 {
-    std::mt19937 gen{ std::random_device{}() };
-    std::uniform_real_distribution dis{ min, max };
-    return dis(gen);
+    const auto w = matrix._41 * worldPosition.x + matrix._42 * worldPosition.y + matrix._43 * worldPosition.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    screenPosition = ImGui::GetIO().DisplaySize / 2.0f;
+    screenPosition.x *= 1.0f + (matrix._11 * worldPosition.x + matrix._12 * worldPosition.y + matrix._13 * worldPosition.z + matrix._14) / w;
+    screenPosition.y *= 1.0f - (matrix._21 * worldPosition.x + matrix._22 * worldPosition.y + matrix._23 * worldPosition.z + matrix._24) / w;
+    return true;
 }
 
-int Helpers::random(int min, int max) noexcept
+bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept
 {
-    std::mt19937 gen{ std::random_device{}() };
-    std::uniform_int_distribution dis{ min, max };
-    return dis(gen);
+    return transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+}
+
+bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept
+{
+    const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+    screenPosition = ImFloor(screenPosition);
+    return onScreen;
 }
