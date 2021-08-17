@@ -22,4 +22,14 @@ TEST_CASE("degrees to radians", "[Helpers]") {
     SECTION("zero angle") {
         CHECK(Helpers::deg2rad(0.0f) == Approx(0.0f).epsilon(floatEpsilon));
     }
+
+    SECTION("positive angle") {
+        CHECK(Helpers::deg2rad(720.0f) == Approx(4*pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(540.0f) == Approx(3*pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(360.0f) == Approx(2*pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(180.0f) == Approx(1*pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(90.0f) == Approx(0.5f * pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(45.0f) == Approx(0.25f * pi).epsilon(floatEpsilon));
+        CHECK(Helpers::deg2rad(9.0f) == Approx(0.05f * pi).epsilon(floatEpsilon));
+    }
 }
