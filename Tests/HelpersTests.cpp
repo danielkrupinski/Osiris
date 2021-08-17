@@ -18,4 +18,8 @@ TEST_CASE("degrees to radians", "[Helpers]") {
         CHECK(Helpers::deg2rad(-9.0f) == Approx(-0.05f * pi).epsilon(floatEpsilon));
         CHECK(Helpers::deg2rad(-0.0f) == Approx(-0.0f * pi).epsilon(floatEpsilon));
     }
+
+    SECTION("zero angle") {
+        CHECK(Helpers::deg2rad(0.0f) == Approx(0.0f).epsilon(floatEpsilon));
+    }
 }
