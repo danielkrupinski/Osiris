@@ -81,6 +81,21 @@ std::uint64_t Entity::getSteamId() noexcept
     return 0;
 }
 
+[[nodiscard]] static wchar_t* removeNewlineChars(wchar_t* begin, wchar_t* end) noexcept
+{
+    return std::remove(begin, end, L'\n');
+}
+
+[[nodiscard]] static wchar_t* removeColorMarkup(wchar_t* begin, wchar_t* end) noexcept
+{
+    return std::remove_if(begin, end, [](wchar_t c) { return c > 0 && c < 17; });
+}
+
+[[nodiscard]] static wchar_t* removeConsecutiveSpaces(wchar_t* begin, wchar_t* end) noexcept
+{
+    return std::unique(begin, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
+}
+
 void Entity::getPlayerName(char(&out)[128]) noexcept
 {
     if (!*memory->playerResource) {
@@ -91,9 +106,9 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
     wchar_t wide[128];
     memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 4);
 
-    auto end = std::remove(wide, wide + wcslen(wide), L'\n');
-    end = std::remove_if(wide, end, [](wchar_t c) { return c > 0 && c < 17; }); // remove color markup
-    end = std::unique(wide, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
+    auto end = removeNewlineChars(wide, wide + wcslen(wide));
+    end = removeColorMarkup(wide, end);
+    end = removeConsecutiveSpaces(wide, end);
     *end = L'\0';
 
     interfaces->localize->convertUnicodeToAnsi(wide, out, 128);

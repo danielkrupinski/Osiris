@@ -20,6 +20,7 @@
 #include "Helpers.h"
 #include "Memory.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/Engine.h"
 
 static auto rainbowColor(float time, float speed, float alpha) noexcept
 {
@@ -189,4 +190,28 @@ std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
         ++length;
 #endif
     return length;
+}
+
+static bool transformWorldPositionToScreenPosition(const Matrix4x4& matrix, const Vector& worldPosition, ImVec2& screenPosition) noexcept
+{
+    const auto w = matrix._41 * worldPosition.x + matrix._42 * worldPosition.y + matrix._43 * worldPosition.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    screenPosition = ImGui::GetIO().DisplaySize / 2.0f;
+    screenPosition.x *= 1.0f + (matrix._11 * worldPosition.x + matrix._12 * worldPosition.y + matrix._13 * worldPosition.z + matrix._14) / w;
+    screenPosition.y *= 1.0f - (matrix._21 * worldPosition.x + matrix._22 * worldPosition.y + matrix._23 * worldPosition.z + matrix._24) / w;
+    return true;
+}
+
+bool Helpers::worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept
+{
+    return transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+}
+
+bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept
+{
+    const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
+    screenPosition = ImFloor(screenPosition);
+    return onScreen;
 }
