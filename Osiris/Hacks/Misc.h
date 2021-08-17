@@ -17,6 +17,7 @@ namespace Misc
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
+    bool flSide = true;
 
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
