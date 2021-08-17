@@ -37,7 +37,6 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         if (localPlayer->throwing(cmd))
             return;
-
         if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
             cmd->viewangles.x = antiAimConfig.pitchAngle;
         int randNum = rand() % (10 - 2 + 1) + 2;
