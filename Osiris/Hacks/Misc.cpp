@@ -858,7 +858,6 @@ void Misc::killSound(GameEvent& event) noexcept
 
 void Misc::purchaseList(GameEvent* event) noexcept
 {
- 
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
 
@@ -890,20 +889,14 @@ void Misc::purchaseList(GameEvent* event) noexcept
             }
             break;
         }
-        case fnv::hash("round_prestart"):  //true
-            frozentimemachine = true;
-
-            break;
-     
         case fnv::hash("round_start"):
             freezeEnd = 0.0f;
             playerPurchases.clear();
             purchaseTotal.clear();
             totalCost = 0;
             break;
-        case fnv::hash("round_freeze_end"): //false
+        case fnv::hash("round_freeze_end"):
             freezeEnd = memory->globalVars->realtime;
-            frozentimemachine = false;
             break;
         }
     } else {
