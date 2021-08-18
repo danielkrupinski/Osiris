@@ -31,6 +31,7 @@ using HookType = VmtSwap;
 class Hooks {
 public:
 #ifdef _WIN32
+    
     Hooks(HMODULE moduleHandle) noexcept;
 
     WNDPROC originalWndProc;

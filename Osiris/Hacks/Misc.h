@@ -18,7 +18,7 @@ namespace Misc
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
     bool flSide = true;
-
+    bool frozentimemachine = false;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;

@@ -11,6 +11,7 @@
 #include "../SDK/Vector.h"
 #include <Hacks/Misc.h>
 #include <imguiCustom.h>
+#include "../SDK/GameEvent.h"
 
 
 #if OSIRIS_ANTIAIM()
@@ -23,8 +24,10 @@ struct AntiAimConfig {
     KeyBind aaKey;
 } antiAimConfig;
 
+
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
+
     if (antiAimConfig.enabled) {
         if (!localPlayer)
             return;
@@ -35,7 +38,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         if (!activeWeapon)
             return;
-
+        if (Misc::frozentimemachine)
+            return;
         if (!activeWeapon->isGrenade() && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
             return;
 
