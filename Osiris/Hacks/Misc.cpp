@@ -395,45 +395,106 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
         drawCrosshair(drawList, pos, Helpers::calculateColor(miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::watermark() noexcept
+// ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
+static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
+{
+    ImVec2 gradient_extent = gradient_p1 - gradient_p0;
+    float gradient_inv_length2 = 1.0f / ImLengthSqr(gradient_extent);
+    ImDrawVert* vert_start = draw_list->VtxBuffer.Data + vert_start_idx;
+    ImDrawVert* vert_end = draw_list->VtxBuffer.Data + vert_end_idx;
+
+    ImVec4 col0HSV = ImGui::ColorConvertU32ToFloat4(col0);
+    ImVec4 col1HSV = ImGui::ColorConvertU32ToFloat4(col1);
+    ImGui::ColorConvertRGBtoHSV(col0HSV.x, col0HSV.y, col0HSV.z, col0HSV.x, col0HSV.y, col0HSV.z);
+    ImGui::ColorConvertRGBtoHSV(col1HSV.x, col1HSV.y, col1HSV.z, col1HSV.x, col1HSV.y, col1HSV.z);
+    ImVec4 colDelta = col1HSV - col0HSV;
+
+    for (ImDrawVert* vert = vert_start; vert < vert_end; vert++)
+    {
+        float d = ImDot(vert->pos - gradient_p0, gradient_extent);
+        float t = ImClamp(d * gradient_inv_length2, 0.0f, 1.0f);
+
+        float h = col0HSV.x + colDelta.x * t;
+        float s = col0HSV.y + colDelta.y * t;
+        float v = col0HSV.z + colDelta.z * t;
+
+        ImVec4 rgb;
+        ImGui::ColorConvertHSVtoRGB(h, s, v, rgb.x, rgb.y, rgb.z);
+        vert->col = (ImGui::ColorConvertFloat4ToU32(rgb) & ~IM_COL32_A_MASK) | (vert->col & IM_COL32_A_MASK);
+    }
+}
+
+void Misc::watermark(ImDrawList* drawList) noexcept
 {
     if (!miscConfig.watermark.enabled)
         return;
 
     //NAME
-    std::string name = interfaces->engine->getSteamAPIContext()->steamFriends->getPersonaName();
+    const char* name = interfaces->engine->getSteamAPIContext()->steamFriends->getPersonaName();
 
     //FPS
     static auto fps = 1.0f;
     fps = 0.9f * fps + 0.1f * memory->globalVars->absoluteFrameTime;
 
     //PING
-    auto ping = GameData::getNetOutgoingLatency();
+    const auto ping = GameData::getNetOutgoingLatency();
+
+    //TICKRATE
+    const auto tick = 1.f / memory->globalVars->intervalPerTick;
 
     //TIME
-    time_t t = std::time(nullptr);
+    std::time_t t = std::time(nullptr);
     std::ostringstream time;
     time << std::put_time(std::localtime(&t), ("%H:%M:%S"));
 
     std::ostringstream format;
     format << "Osiris"
-        << " | " << (name.c_str())
-        << " | " << (fps != 0.0f ? static_cast<int>(1 / fps) : 0) << " fps"
-        << " | " << (ping) << " ms"
-        << " | " << (time.str().data());
+        << " | " << name
+        << " | " << (fps != 0.0f ? static_cast<int>(1 / fps) : 0) << " fps";
 
-    if (!gui->isOpen())
-        ImGui::SetNextWindowBgAlpha(0.4f);
-
-    float windowWidth = ImGui::CalcTextSize(format.str().c_str()).x + 16.f;
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - windowWidth, 0), ImGuiCond_Always);
-    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 1.0f);
-    if (ImGui::Begin("Watermark", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoInputs))
-    {
-        ImGui::Text("%s", format.str().c_str());
-        ImGui::End();
+    if (interfaces->engine->isClientLocalToActiveServer()) {
+        format << " | local " << tick << " tick";
     }
-    ImGui::PopStyleVar();
+    else if (interfaces->engine->isInGame()) {
+        auto* pInfo = interfaces->engine->getNetworkChannel();
+        if (pInfo) {
+            if ((*memory->gameRules)->isValveDS())
+                format << " | official DS " << pInfo->getAddress();
+            else
+                format << " | online " << pInfo->getAddress();
+
+            format << " | " << ping << " ms " << tick << " tick";
+        }
+    }
+    else if (interfaces->engine->isConnected())
+        format << " | loading";
+
+    format << " | " << time.str().c_str();
+
+    const auto textSize = ImGui::CalcTextSize(format.str().c_str());
+    const auto displaySize = ImGui::GetIO().DisplaySize;
+    
+    ImRect window{
+        displaySize.x - textSize.x - 9.f,
+        1.f,
+        displaySize.x - 1.f,
+        textSize.y + 9.f
+    };
+    
+    drawList->AddRectFilled(window.Min, window.Max, ImGui::GetColorU32(ImGuiCol_WindowBg), 4);
+    const int vertStartIdx = drawList->VtxBuffer.Size;
+    drawList->AddRect(window.Min, window.Max, ImGui::GetColorU32(ImGuiCol_TitleBgActive), 4);
+    const int vertEndIdx = drawList->VtxBuffer.Size;
+
+    float r, g, b;
+    std::tie(r, g, b) = rainbowColor(3.f);
+    shadeVertsHSVColorGradientKeepAlpha(drawList, vertStartIdx, vertEndIdx, window.GetTL(), window.GetBR(), ImColor(r, g, b, 1.f), ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+    ImVec2 textPos{
+        window.GetCenter().x - (textSize.x / 2),
+        window.GetCenter().y - (textSize.y / 2)
+    };
+    drawList->AddText(textPos, ImGui::GetColorU32(ImGuiCol_Text), format.str().c_str());
 }
 
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
@@ -1153,35 +1214,6 @@ void Misc::onVoteFailed() noexcept
 {
     if (miscConfig.revealVotes)
         memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
-}
-
-// ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
-static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
-{
-    ImVec2 gradient_extent = gradient_p1 - gradient_p0;
-    float gradient_inv_length2 = 1.0f / ImLengthSqr(gradient_extent);
-    ImDrawVert* vert_start = draw_list->VtxBuffer.Data + vert_start_idx;
-    ImDrawVert* vert_end = draw_list->VtxBuffer.Data + vert_end_idx;
-
-    ImVec4 col0HSV = ImGui::ColorConvertU32ToFloat4(col0);
-    ImVec4 col1HSV = ImGui::ColorConvertU32ToFloat4(col1);
-    ImGui::ColorConvertRGBtoHSV(col0HSV.x, col0HSV.y, col0HSV.z, col0HSV.x, col0HSV.y, col0HSV.z);
-    ImGui::ColorConvertRGBtoHSV(col1HSV.x, col1HSV.y, col1HSV.z, col1HSV.x, col1HSV.y, col1HSV.z);
-    ImVec4 colDelta = col1HSV - col0HSV;
-
-    for (ImDrawVert* vert = vert_start; vert < vert_end; vert++)
-    {
-        float d = ImDot(vert->pos - gradient_p0, gradient_extent);
-        float t = ImClamp(d * gradient_inv_length2, 0.0f, 1.0f);
-
-        float h = col0HSV.x + colDelta.x * t;
-        float s = col0HSV.y + colDelta.y * t;
-        float v = col0HSV.z + colDelta.z * t;
-
-        ImVec4 rgb;
-        ImGui::ColorConvertHSVtoRGB(h, s, v, rgb.x, rgb.y, rgb.z);
-        vert->col = (ImGui::ColorConvertFloat4ToU32(rgb) & ~IM_COL32_A_MASK) | (vert->col & IM_COL32_A_MASK);
-    }
 }
 
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
