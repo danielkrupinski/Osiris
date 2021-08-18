@@ -24,6 +24,7 @@ namespace
                 Misc::preserveKillfeed(true);
                 [[fallthrough]];
             case fnv::hash("round_freeze_end"):
+                Misc::frozenaa(event);
                 Misc::purchaseList(event);
                 break;
             case fnv::hash("player_death"):
@@ -39,6 +40,12 @@ namespace
                 break;
             case fnv::hash("vote_cast"):
                 Misc::voteRevealer(*event);
+                break;
+            case fnv::hash("round_prestart"):
+                Misc::frozenaa(event);
+                break;
+            case fnv::hash("round_end"):
+                Misc::frozenaa(event);
                 break;
             case fnv::hash("round_mvp"):
                 InventoryChanger::onRoundMVP(*event);
@@ -68,6 +75,9 @@ void EventListener::init() noexcept
     gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
     gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_mvp");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "round_freeze_end");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "round_prestart");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "round_end");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))

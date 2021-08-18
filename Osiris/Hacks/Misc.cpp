@@ -694,6 +694,7 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
+
 void Misc::killMessage(GameEvent& event) noexcept
 {
     if (!miscConfig.killMessage)
@@ -951,6 +952,41 @@ void Misc::purchaseList(GameEvent* event) noexcept
         }
         ImGui::End();
     }
+}
+
+
+void Misc::frozenaa(GameEvent* event) noexcept
+{
+    static std::mutex mtx;
+    std::scoped_lock _{ mtx };
+
+    struct PlayerPurchases {
+        int totalCost;
+        std::unordered_map<std::string, int> items;
+    };
+
+    static std::unordered_map<int, PlayerPurchases> playerPurchases;
+    static std::unordered_map<std::string, int> purchaseTotal;
+    static int totalCost;
+
+    static auto freezeEnd = 0.0f;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("round_freeze_end"): {
+            frozen = false;
+            break;
+        }
+        case fnv::hash("round_prestart"):
+            frozen = true;
+            break;
+        case fnv::hash("round_end"):
+            frozen = true;
+            break;
+        }
+    }
+    
+    
 }
 
 void Misc::oppositeHandKnife(FrameStage stage) noexcept
@@ -1277,6 +1313,7 @@ void Misc::updateEventListeners(bool forceRemove) noexcept
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {
         interfaces->gameEventManager->addListener(&listener, "item_purchase");
+
         listenerRegistered = true;
     } else if ((!miscConfig.purchaseList.enabled || forceRemove) && listenerRegistered) {
         interfaces->gameEventManager->removeListener(&listener);

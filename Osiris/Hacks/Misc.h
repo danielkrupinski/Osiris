@@ -18,7 +18,7 @@ namespace Misc
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
     bool flSide = true;
-
+    bool frozen = false;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;
@@ -52,6 +52,7 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
+    void frozenaa(GameEvent* event) noexcept;
     void oppositeHandKnife(FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;

@@ -41,6 +41,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         if (localPlayer->throwing(cmd))
             return;
+        if (Misc::frozen)
+            return;
         if (antiAimConfig.aaKey.isPressed())
         {
             if (Misc::flSide)
