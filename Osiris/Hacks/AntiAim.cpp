@@ -108,7 +108,7 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
         ImGui::Begin("Anti aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
-    ImGui::Checkbox("##pitch", &antiAimConfig.pitch);
+    ImGui::Checkbox("Pitch", &antiAimConfig.pitch);
     ImGui::Checkbox("Yaw", &antiAimConfig.yaw);
     ImGui::hotkey("", antiAimConfig.aaKey);
     if (!contentOnly)
