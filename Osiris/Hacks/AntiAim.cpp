@@ -12,14 +12,16 @@
 #include <Hacks/Misc.h>
 #include <imguiCustom.h>
 
-
+float RandomFloat(float min, float max) noexcept
+{
+    return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
+}
 #if OSIRIS_ANTIAIM()
 
 struct AntiAimConfig {
     bool enabled = false;
     bool pitch = false;
     bool yaw = false;
-    float pitchAngle = 0.0f;
     KeyBind aaKey;
 } antiAimConfig;
 
@@ -55,16 +57,16 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             }
             
         }
-        if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
-            cmd->viewangles.x = antiAimConfig.pitchAngle;
+        if (antiAimConfig.pitch && !sendPacket && cmd->viewangles.x == currentViewAngles.x)
+            cmd->viewangles.x = 90.f-RandomFloat(1.f, 3.f);
         if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
             if (Misc::flSide)
             {
-                cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
+                cmd->viewangles.y += localPlayer->getMaxDesyncAngle()-RandomFloat(1.f,3.f); //right
             }
             else
             {
-                cmd->viewangles.y -= localPlayer->getMaxDesyncAngle();
+                cmd->viewangles.y -= localPlayer->getMaxDesyncAngle()-RandomFloat(1.f, 3.f); //left
             }
             
             cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
@@ -107,8 +109,6 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     }
     ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
     ImGui::Checkbox("##pitch", &antiAimConfig.pitch);
-    ImGui::SameLine();
-    ImGui::SliderFloat("Pitch", &antiAimConfig.pitchAngle, -89.0f, 89.0f, "%.2f");
     ImGui::Checkbox("Yaw", &antiAimConfig.yaw);
     ImGui::hotkey("", antiAimConfig.aaKey);
     if (!contentOnly)
@@ -119,7 +119,6 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
 {
     WRITE("Enabled", enabled);
     WRITE("Pitch", pitch);
-    WRITE("Pitch angle", pitchAngle);
     WRITE("Yaw", yaw);
     WRITE("aaKey", aaKey);
     
@@ -137,7 +136,6 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
     read(j, "Yaw", a.yaw);
-    read(j, "Pitch angle", a.pitchAngle);
     read(j, "aaKey", a.aaKey);
 }
 
