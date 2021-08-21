@@ -20,7 +20,6 @@ namespace
         {
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("round_start"):
-                Misc::clearDamageList();
                 GameData::clearProjectileList();
                 Misc::preserveKillfeed(true);
                 [[fallthrough]];
@@ -38,7 +37,6 @@ namespace
                 Misc::playHitSound(*event);
                 Visuals::hitEffect(event);
                 Visuals::hitMarker(event);
-                Misc::addDamageToDamageList(*event);
                 break;
             case fnv::hash("vote_cast"):
                 Misc::voteRevealer(*event);
