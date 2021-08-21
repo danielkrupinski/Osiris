@@ -132,6 +132,7 @@ static void swapWindow(SDL_Window * window) noexcept
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer();
         Misc::spectatorList();
+        Misc::damageList();
         Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
         Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark();
