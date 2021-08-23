@@ -17,6 +17,7 @@ json InventoryChanger::toJson() noexcept
 
         const auto& gameItem = item.get();
         itemConfig["Weapon ID"] = gameItem.weaponID;
+        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.weaponID);
 
         switch (gameItem.type) {
         case StaticData::Type::Sticker: {
