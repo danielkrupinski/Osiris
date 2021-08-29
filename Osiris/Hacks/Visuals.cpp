@@ -718,70 +718,42 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
-#define SMOKEGRENADE_LIFETIME 17.5f
-
-struct SmokeData
-{
-    SmokeData(float destructionTime, Vector pos) : destructionTime{ destructionTime }, pos{ pos } {}
-    
-    float destructionTime;
-    Vector pos;
-    float anim = 1.f;
-};
-
-static std::vector<SmokeData> smokes;
-
-void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
-{
-    smokes.push_back(SmokeData(
-        memory->globalVars->realtime + SMOKEGRENADE_LIFETIME, 
-        Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"))
-    ));
-}
-
 void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
 {
     if (!visualsConfig.smokeTimer.enabled)
         return;
 
-    if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
+    if (!interfaces->engine->isInGame())
         return;
     
-    for (size_t i = 0; i < smokes.size(); i++) {
-        auto& smoke = smokes[i];
+    GameData::Lock lock;
+    for (size_t i = 0; i < GameData::smokes().size(); i++) {
+        auto& smoke = GameData::smokes()[i];
 
-        const auto time = std::clamp(smoke.destructionTime - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
+        const auto time = std::clamp(smoke.explosionTime + SMOKEGRENADE_LIFETIME - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
         std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
 
         const auto text_size = ImGui::CalcTextSize(text.str().c_str());
         ImVec2 pos;
 
-        if (time >= 0.f && smoke.anim >= 0.f) {
-            if (worldToScreen(smoke.pos, pos)) {
-                
-                const auto radius = 10.f + visualsConfig.smokeTimer.timerThickness;
-                const auto fraction = std::clamp(time / SMOKEGRENADE_LIFETIME, 0.0f, 1.0f);
+        if (Helpers::worldToScreen(smoke.origin, pos)) {
+            const auto radius = 10.f + visualsConfig.smokeTimer.timerThickness;
+            const auto fraction = std::clamp(time / SMOKEGRENADE_LIFETIME, 0.0f, 1.0f);
 
-                if (time == 0.f)
-                    smoke.anim -= 1.f * ImGui::GetIO().DeltaTime;
-
-                Helpers::setAlphaFactor(smoke.anim);
-                drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.backgroundColor), 40, 3.0f + visualsConfig.smokeTimer.timerThickness);
-                if (fraction == 1.0f) {
-                    drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), 40, 2.0f + visualsConfig.smokeTimer.timerThickness);
-                }
-                else {
-                    constexpr float pi = std::numbers::pi_v<float>;
-                    const auto arc270 = (3 * pi) / 2;
-                    drawList->PathArcTo(pos, radius - 0.5f, arc270 - (2 * pi * fraction), arc270, 40);
-                    drawList->PathStroke(Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), false, 2.0f + visualsConfig.smokeTimer.timerThickness);
-                }
-                drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y + (visualsConfig.smokeTimer.timerThickness * 2.f) + (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), text.str().c_str());
-                Helpers::setAlphaFactor(1.f);
+            Helpers::setAlphaFactor(smoke.fadingAlpha());
+            drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.backgroundColor), 40, 3.0f + visualsConfig.smokeTimer.timerThickness);
+            if (fraction == 1.0f) {
+                drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), 40, 2.0f + visualsConfig.smokeTimer.timerThickness);
             }
+            else {
+                constexpr float pi = std::numbers::pi_v<float>;
+                const auto arc270 = (3 * pi) / 2;
+                drawList->PathArcTo(pos, radius - 0.5f, arc270 - (2 * pi * fraction), arc270, 40);
+                drawList->PathStroke(Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), false, 2.0f + visualsConfig.smokeTimer.timerThickness);
+            }
+            drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y + (visualsConfig.smokeTimer.timerThickness * 2.f) + (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), text.str().c_str());
+            Helpers::setAlphaFactor(1.f);
         }
-        else
-            smokes.erase(smokes.begin() + i);
     }
 }
 
