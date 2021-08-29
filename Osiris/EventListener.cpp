@@ -43,9 +43,6 @@ namespace
             case fnv::hash("round_mvp"):
                 InventoryChanger::onRoundMVP(*event);
                 break;
-            case fnv::hash("smokegrenade_detonate"):
-                Visuals::drawSmokeTimerEvent(event);
-                break;
             }
         }
 
