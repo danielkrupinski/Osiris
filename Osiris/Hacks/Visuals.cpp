@@ -673,22 +673,6 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     }
 }
 
-static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = false) noexcept
-{
-    const auto& matrix = GameData::toScreenMatrix();
-
-    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
-    if (w < 0.001f)
-        return false;
-
-    out = ImGui::GetIO().DisplaySize / 2.0f;
-    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
-    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-    if (floor)
-        out = ImFloor(out);
-    return true;
-}
-
 void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
 {
     if (!visualsConfig.molotovHull.enabled)
@@ -715,7 +699,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
             std::size_t count = 0;
 
             for (const auto& point : flameCircumference) {
-                if (worldToScreen(pos + point, screenPoints[count]))
+                if (Helpers::worldToScreen(pos + point, screenPoints[count]))
                     ++count;
             }
 

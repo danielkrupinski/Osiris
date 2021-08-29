@@ -8,11 +8,14 @@
 #include <vector>
 
 #include "imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui/imgui_internal.h"
 
 #include "SDK/WeaponId.h"
 
 struct Color3;
 struct Color4;
+struct Vector;
 
 namespace Helpers
 {
@@ -32,13 +35,13 @@ namespace Helpers
 
     ImWchar* getFontGlyphRanges() noexcept;
 
-    constexpr int utf8SeqLen(char firstByte) noexcept
+    constexpr std::uint8_t utf8SeqLen(char firstByte) noexcept
     {
         return (firstByte & 0x80) == 0x00 ? 1 :
                (firstByte & 0xE0) == 0xC0 ? 2 :
                (firstByte & 0xF0) == 0xE0 ? 3 :
                (firstByte & 0xF8) == 0xF0 ? 4 :
-               -1;
+               0;
     }
 
     std::wstring toWideString(const std::string& str) noexcept;
@@ -56,6 +59,9 @@ namespace Helpers
     {
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
+
+    bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
+    bool worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
 
     [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
     {
