@@ -58,6 +58,7 @@ public:
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
     UtlVector<PlantedC4*>* plantedC4s;
+    UtlVector<int>* smokeHandles;
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
     bool* disablePostProcessing;
