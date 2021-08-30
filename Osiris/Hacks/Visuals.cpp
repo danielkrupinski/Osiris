@@ -79,7 +79,7 @@ struct VisualsConfig {
         Color4 backgroundColor{ 1.0f, 1.0f, 1.0f, 0.5f };
         Color4 timerColor{ 0.0f, 0.0f, 1.0f, 1.0f};
         float timerThickness{ 1.f };
-        Color4 textColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+        Color4 textColor{ 1.0f, 1.0f, 1.0f, 1.0f };
     } smokeTimer;
 
     struct ColorCorrection {
@@ -727,13 +727,11 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
         return;
     
     GameData::Lock lock;
-    for (size_t i = 0; i < GameData::smokes().size(); i++) {
-        auto& smoke = GameData::smokes()[i];
-
+    for (const auto& smoke : GameData::smokes()) {
         const auto time = std::clamp(smoke.explosionTime + SMOKEGRENADE_LIFETIME - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
         std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
 
-        const auto text_size = ImGui::CalcTextSize(text.str().c_str());
+        auto text_size = ImGui::CalcTextSize(text.str().c_str());
         ImVec2 pos;
 
         if (Helpers::worldToScreen(smoke.origin, pos)) {
@@ -752,6 +750,9 @@ void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
                 drawList->PathStroke(Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), false, 2.0f + visualsConfig.smokeTimer.timerThickness);
             }
             drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y + (visualsConfig.smokeTimer.timerThickness * 2.f) + (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), text.str().c_str());
+            constexpr auto s = "S";
+            text_size = ImGui::CalcTextSize(s);
+            drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y - (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), s);
             Helpers::setAlphaFactor(1.f);
         }
     }
