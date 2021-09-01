@@ -11,7 +11,6 @@
 #include "../SDK/Vector.h"
 #include <Hacks/Misc.h>
 #include <imguiCustom.h>
-#include <Memory.h>
 
 float RandomFloat(float min, float max) noexcept
 {
@@ -25,7 +24,6 @@ struct AntiAimConfig {
     bool yaw = false;
     KeyBind aaKey;
 } antiAimConfig;
-
 
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {

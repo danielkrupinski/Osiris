@@ -157,7 +157,6 @@ static void from_json(const json& j, Trails& t)
 {
     read(j, "Enabled", t.enabled);
     read<value_t::object>(j, "Local Player", t.localPlayer);
-    read<value_t::object>(j, "desync", t.desync);
     read<value_t::object>(j, "Allies", t.allies);
     read<value_t::object>(j, "Enemies", t.enemies);
 }
@@ -390,7 +389,6 @@ static void to_json(json& j, const Trails& o, const Trails& dummy = {})
 {
     WRITE("Enabled", enabled);
     WRITE("Local Player", localPlayer);
-    WRITE("desync", desync);
     WRITE("Allies", allies);
     WRITE("Enemies", enemies);
 }

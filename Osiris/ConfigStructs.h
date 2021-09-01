@@ -146,7 +146,6 @@ struct Trails {
     bool enabled = false;
 
     Trail localPlayer;
-    Trail desync;
     Trail allies;
     Trail enemies;
 };

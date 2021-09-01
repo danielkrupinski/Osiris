@@ -27,7 +27,6 @@
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
 #include "../SDK/Utils.h"
-#include "Animations.h"
 
 static Material* normal;
 static Material* flat;
@@ -180,28 +179,7 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Defusing"].materials, health);
     } else if (player == localPlayer.get()) {
         applyChams(config->chams["Local player"].materials, health);
-    } 
-    else if (config->chams[DESYNC].materials[i].enabled && Animations::data.gotMatrix) {
-        for (auto& i : Animations::data.fakematrix)
-        {
-            i[0][3] += info.origin.x;
-            i[1][3] += info.origin.y;
-            i[2][3] += info.origin.z;
-        }
-        if (applied)
-            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        applyChams(config->chams[DESYNC].materials[i], false, entity->health());
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), Animations::data.fakematrix);
-        interfaces->studioRender->forcedMaterialOverride(nullptr);
-        applied = true;
-        for (auto& i : Animations::data.fakematrix)
-        {
-            i[0][3] -= info.origin.x;
-            i[1][3] -= info.origin.y;
-            i[2][3] -= info.origin.z;
-        }
-    }
-    else if (localPlayer->isOtherEnemy(player)) {
+    } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams["Enemies"].materials, health);
 
         const auto records = Backtrack::getRecords(player->index());

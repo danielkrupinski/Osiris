@@ -60,8 +60,6 @@
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Platform.h"
-#include "extraHooks.h"
-#include "Hacks/Animations.h"
 #include "SDK/RenderContext.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
@@ -211,7 +209,6 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
-    extraHook.init();
    Visuals::viewModel();
 
     EnginePrediction::run(cmd);
@@ -245,8 +242,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
-    Animations::update(cmd, sendPacket);
-    Animations::fake();
+
     return false;
 }
 
@@ -310,7 +306,6 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
-        Animations::real();
         Misc::updateEventListeners();
         Visuals::updateEventListeners();
     }
@@ -730,7 +725,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
-    extraHook.restore();
+
     Netvars::restore();
 
     Glow::clearCustomObjects();
