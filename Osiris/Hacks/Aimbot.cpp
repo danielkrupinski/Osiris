@@ -3,6 +3,9 @@
 #include <cmath>
 #include <initializer_list>
 #include <memory>
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 
 #include "Aimbot.h"
 #include "../Config.h"
@@ -21,6 +24,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../GameData.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -279,4 +283,66 @@ void Aimbot::run(UserCmd* cmd) noexcept
             lastCommand = cmd->commandNumber;
         }
     }
+}
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
+    return true;
+}
+
+void Aimbot::drawFov(ImDrawList* drawList) noexcept
+{
+    if (!config->drawaimbotFov.enabled)
+        return;
+
+    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || !activeWeapon->clip())
+        return;
+
+    if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
+        return;
+
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
+    if (!weaponIndex)
+        return;
+
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = weaponClass;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        weaponIndex = 0;
+
+    if (!config->aimbot[weaponIndex].enabled)
+        return;
+
+    if (!config->aimbot[weaponIndex].betweenShots && (activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime() || (activeWeapon->isFullAuto() && localPlayer->shotsFired() > 1)))
+        return;
+
+    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
+        return;
+
+    if (config->aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+        return;
+
+    const auto& screensize = ImGui::GetIO().DisplaySize;
+    float radius = std::tan(Helpers::deg2rad(config->aimbot[weaponIndex].fov) / 2.f) / std::tan(Helpers::deg2rad(localPlayer->isScoped() ? localPlayer->fov() : config->totalFov) / 2.f) * screensize.x;
+    const ImVec2 screen_mid = { screensize.x / 2.0f, screensize.y / 2.0f };
+
+    const auto aimPunchAngle = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
+
+    if (ImVec2 pos; worldToScreen(aimPunchAngle, pos))
+        drawList->AddCircle(localPlayer->shotsFired() > 1 ? pos : screen_mid, radius, Helpers::calculateColor(config->drawaimbotFov.asColor4()), 360);
 }
