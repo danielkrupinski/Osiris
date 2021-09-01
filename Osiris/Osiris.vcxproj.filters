@@ -251,6 +251,12 @@
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="extraHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -630,6 +636,15 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\InventoryConfig.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="MemAlloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="extraHooks.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigStructs.cpp" />
     <ClCompile Include="EventListener.cpp" />
+    <ClCompile Include="extraHooks.cpp" />
     <ClCompile Include="freetype\src\autofit\autofit.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -198,9 +200,11 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animations.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />
+    <ClInclude Include="extraHooks.h" />
     <ClInclude Include="fnv.h" />
     <ClInclude Include="freetype\freetype\config\ftmodule.h" />
     <ClInclude Include="freetype\freetype\config\ftoption.h" />
@@ -231,6 +235,7 @@
     <ClInclude Include="InventoryChanger\StaticData.h" />
     <ClInclude Include="InventoryChanger\ToolUser.h" />
     <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="MemAlloc.h" />
     <ClInclude Include="MinHook\buffer.h" />
     <ClInclude Include="MinHook\hde\hde32.h" />
     <ClInclude Include="MinHook\hde\hde64.h" />

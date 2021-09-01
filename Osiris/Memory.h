@@ -20,6 +20,7 @@ class Input;
 class ItemSystem;
 class InventoryManager;
 class KeyValues;
+class MemAlloc;
 class MoveHelper;
 class MoveData;
 class PanoramaMarshallHelper;
@@ -92,6 +93,10 @@ public:
     WeaponSystem* weaponSystem;
     std::add_pointer_t<const char** __FASTCALL(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
     GameEventDescriptor* (__THISCALL* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
+    uintptr_t UpdateState;
+    uintptr_t CreateState;
+    uintptr_t InvalidateBoneCache;
+    MemAlloc* memalloc;
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;
