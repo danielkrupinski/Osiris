@@ -235,6 +235,17 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    static void* oldPointer = nullptr;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (oldPointer != network && network && localPlayer)
+    {
+        oldPointer = network;
+        Backtrack::UpdateIncomingSequences(true);
+        hooks->networkChannel.init(network);
+        hooks->networkChannel.hookAt(46, SendDatagram);
+    }
+    Backtrack::UpdateIncomingSequences();
    Visuals::viewModel();
 
     EnginePrediction::run(cmd);
