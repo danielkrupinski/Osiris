@@ -102,6 +102,32 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return hooks->originalReset(device, params);
 }
 
+
+static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
+{
+    auto original = hooks->networkChannel.getOriginal<int, 46, void*>(datagram);
+    if (!Backtrack::backtrackConfig.fakeLatency || datagram || !interfaces->engine->isInGame() || !Backtrack::backtrackConfig.enabled)
+    {
+        return original(network, datagram);
+    }
+    int instate = network->InReliableState;
+    int insequencenr = network->InSequenceNr;
+    int faketimeLimit = Backtrack::backtrackConfig.timeLimit; if (faketimeLimit <= 200) { faketimeLimit = 0; }
+    else { faketimeLimit -= 200; }
+    float delta = (std::max)(0.f, std::clamp(faketimeLimit / 1000.f, 0.f, 0.2f) - network->getLatency(0));
+    Backtrack::AddLatencyToNetwork(network, delta + (delta / 20.0f));
+
+    int result = original(network, datagram);
+
+    network->InReliableState = instate;
+    network->InSequenceNr = insequencenr;
+
+    return result;
+}
+
+
+
+
 #endif
 
 #ifdef _WIN32
@@ -725,6 +751,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+    networkChannel.restore();
 
     Netvars::restore();
 

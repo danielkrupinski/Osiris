@@ -59,6 +59,7 @@ public:
     HookType panoramaMarshallHelper;
     HookType sound;
     HookType surface;
+    HookType networkChannel;
     HookType viewRender;
     HookType svCheats;
 private:

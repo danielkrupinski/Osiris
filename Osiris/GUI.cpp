@@ -160,7 +160,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Style", window.style);
         Misc::menuBarItem();
         menuBarItem("Config", window.config);
-        ImGui::EndMainMenuBar();   
+        ImGui::EndMainMenuBar();
     }
 }
 
