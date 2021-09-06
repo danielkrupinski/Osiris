@@ -57,7 +57,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             }
             
         }
-        if (antiAimConfig.pitch && !sendPacket && cmd->viewangles.x == currentViewAngles.x)
+        if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
             cmd->viewangles.x = 90.f-RandomFloat(1.f, 3.f);
         if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
             if (Misc::flSide)
