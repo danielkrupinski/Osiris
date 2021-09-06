@@ -9,7 +9,7 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
-#include <Hacks/Misc.h>
+#include "../SDK/GameEvent.h"
 #include <imguiCustom.h>
 
 float RandomFloat(float min, float max) noexcept
@@ -22,9 +22,40 @@ struct AntiAimConfig {
     bool enabled = false;
     bool pitch = false;
     bool yaw = false;
-    KeyBind aaKey;
 } antiAimConfig;
+void AntiAim::frozenaa(GameEvent* event) noexcept
+{
+    static std::mutex mtx;
+    std::scoped_lock _{ mtx };
 
+    struct PlayerPurchases {
+        int totalCost;
+        std::unordered_map<std::string, int> items;
+    };
+
+    static std::unordered_map<int, PlayerPurchases> playerPurchases;
+    static std::unordered_map<std::string, int> purchaseTotal;
+    static int totalCost;
+
+    static auto freezeEnd = 0.0f;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("round_freeze_end"): {
+            frozen = false;
+            break;
+        }
+        case fnv::hash("round_prestart"):
+            frozen = true;
+            break;
+        case fnv::hash("round_end"):
+            frozen = true;
+            break;
+        }
+    }
+
+
+}
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
     if (antiAimConfig.enabled) {
@@ -43,33 +74,15 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         if (localPlayer->throwing(cmd))
             return;
-        if (Misc::frozen)
+        if (frozen)
             return;
-        if (antiAimConfig.aaKey.isPressed())
-        {
-            if (Misc::flSide)
-            {
-                Misc::flSide = false;
-            }
-            else
-            {
-                Misc::flSide = true;
-            }
-            
-        }
+   
         if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
-            cmd->viewangles.x = 90.f-RandomFloat(1.f, 3.f);
+            cmd->viewangles.x = 90.f-RandomFloat(-10.f, 10.f);
         if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
-            if (Misc::flSide)
-            {
-                cmd->viewangles.y += localPlayer->getMaxDesyncAngle()-RandomFloat(1.f,3.f); //right
-            }
-            else
-            {
-                cmd->viewangles.y -= localPlayer->getMaxDesyncAngle()-RandomFloat(1.f, 3.f); //left
-            }
-            
-            cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
+            cmd->viewangles.y = 180.f-RandomFloat(-10.f,10.f);
+            //no skating
+//            cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
             if (std::abs(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
                     cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
@@ -110,7 +123,7 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
     ImGui::Checkbox("Pitch", &antiAimConfig.pitch);
     ImGui::Checkbox("Yaw", &antiAimConfig.yaw);
-    ImGui::hotkey("", antiAimConfig.aaKey);
+
     if (!contentOnly)
         ImGui::End();
 }
@@ -120,7 +133,7 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
     WRITE("Enabled", enabled);
     WRITE("Pitch", pitch);
     WRITE("Yaw", yaw);
-    WRITE("aaKey", aaKey);
+
     
 }
 
@@ -136,7 +149,7 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
     read(j, "Yaw", a.yaw);
-    read(j, "aaKey", a.aaKey);
+
 }
 
 void AntiAim::fromJson(const json& j) noexcept

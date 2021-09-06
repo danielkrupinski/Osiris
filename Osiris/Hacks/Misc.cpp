@@ -422,7 +422,7 @@ void Misc::watermark() noexcept
     static auto frameRate = 1.0f;
     frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
 
-    ImGui::Text("BagCox | %d fps | %d ms | AA: %d", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency(), flSide);
+    ImGui::Text("BagCox | %d fps | %d ms | AA: %d", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
     ImGui::End();
 }
 
@@ -967,39 +967,6 @@ void Misc::purchaseList(GameEvent* event) noexcept
 }
 
 
-void Misc::frozenaa(GameEvent* event) noexcept
-{
-    static std::mutex mtx;
-    std::scoped_lock _{ mtx };
-
-    struct PlayerPurchases {
-        int totalCost;
-        std::unordered_map<std::string, int> items;
-    };
-
-    static std::unordered_map<int, PlayerPurchases> playerPurchases;
-    static std::unordered_map<std::string, int> purchaseTotal;
-    static int totalCost;
-
-    static auto freezeEnd = 0.0f;
-
-    if (event) {
-        switch (fnv::hashRuntime(event->getName())) {
-        case fnv::hash("round_freeze_end"): {
-            frozen = false;
-            break;
-        }
-        case fnv::hash("round_prestart"):
-            frozen = true;
-            break;
-        case fnv::hash("round_end"):
-            frozen = true;
-            break;
-        }
-    }
-    
-    
-}
 
 void Misc::oppositeHandKnife(FrameStage stage) noexcept
 {

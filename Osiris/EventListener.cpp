@@ -11,6 +11,7 @@
 #include "Memory.h"
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
+#include <Hacks/AntiAim.h>
 
 namespace
 {
@@ -24,7 +25,7 @@ namespace
                 Misc::preserveKillfeed(true);
                 [[fallthrough]];
             case fnv::hash("round_freeze_end"):
-                Misc::frozenaa(event);
+                AntiAim::frozenaa(event);
                 Misc::purchaseList(event);
                 break;
             case fnv::hash("player_death"):
@@ -42,10 +43,10 @@ namespace
                 Misc::voteRevealer(*event);
                 break;
             case fnv::hash("round_prestart"):
-                Misc::frozenaa(event);
+                AntiAim::frozenaa(event);
                 break;
             case fnv::hash("round_end"):
-                Misc::frozenaa(event);
+                AntiAim::frozenaa(event);
                 break;
             case fnv::hash("round_mvp"):
                 InventoryChanger::onRoundMVP(*event);
