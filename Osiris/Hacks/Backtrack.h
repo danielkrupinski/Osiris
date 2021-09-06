@@ -35,6 +35,7 @@ namespace Backtrack
         int timeLimit = 0;
         bool fakeLatency = false;
         bool drawAllChams = false;
+        bool troll = false;
     } backtrackConfig;
 
     struct Record {

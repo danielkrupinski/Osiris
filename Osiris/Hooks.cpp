@@ -105,6 +105,14 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
 {
+    float lmao = 1;
+    if (Backtrack::backtrackConfig.troll)
+    {
+        lmao = 5;
+    }
+    else {
+        lmao = 1;
+    }
     auto original = hooks->networkChannel.getOriginal<int, 46, void*>(datagram);
     if (!Backtrack::backtrackConfig.fakeLatency || datagram || !interfaces->engine->isInGame() || !Backtrack::backtrackConfig.enabled)
     {
@@ -115,7 +123,7 @@ static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* dat
     int faketimeLimit = Backtrack::backtrackConfig.timeLimit; if (faketimeLimit <= 200) { faketimeLimit = 0; }
     else { faketimeLimit -= 200; }
     float delta = (std::max)(0.f, std::clamp(faketimeLimit / 1000.f, 0.f, 0.2f) - network->getLatency(0));
-    Backtrack::AddLatencyToNetwork(network, delta + (delta / 20.0f));
+    Backtrack::AddLatencyToNetwork(network, (delta + (delta / 20.0f))* lmao);
 
     int result = original(network, datagram);
 

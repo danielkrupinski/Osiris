@@ -271,6 +271,7 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
 	ImGui::SameLine();
 	ImGui::Checkbox("Recoil based fov", &backtrackConfig.recoilBasedFov);
 	ImGui::Checkbox("Chams Last/All Tick", &backtrackConfig.drawAllChams);
+    ImGui::Checkbox("TROLL", &backtrackConfig.troll);
     if (!contentOnly)
         ImGui::End();
 }
@@ -283,6 +284,7 @@ static void to_json(json& j, const BacktrackConfig& o, const BacktrackConfig& du
     WRITE("Time limit", timeLimit);
     WRITE("Fake Latency", fakeLatency);
     WRITE("Draw All Chams", drawAllChams);
+    WRITE("TROLL", troll);
 }
 
 json Backtrack::toJson() noexcept
@@ -300,6 +302,7 @@ static void from_json(const json& j, BacktrackConfig& b)
     read(j, "Time limit", b.timeLimit);
     read(j, "Fake Latency", b.fakeLatency);
     read(j, "Draw All Chams", b.drawAllChams);
+    read(j, "TROLL", b.troll);
 }
 
 void Backtrack::fromJson(const json& j) noexcept
