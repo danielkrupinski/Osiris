@@ -109,6 +109,7 @@ struct MiscConfig {
     bool killMessage{ false };
     bool nadePredict{ false };
     bool fixTabletSignal{ false };
+    bool fakePrime{ false };
     bool fastPlant{ false };
     bool fastStop{ false };
     bool quickReload{ false };
@@ -706,6 +707,22 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
+void Misc::fakePrime() noexcept
+{
+    static bool lastState = false;
+
+    if (miscConfig.fakePrime != lastState) {
+        lastState = miscConfig.fakePrime;
+
+#ifdef _WIN32
+        if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 4, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            constexpr uint8_t patch[]{ 0x31, 0xC0, 0x40, 0xC3 };
+            memcpy(memory->fakePrime, patch, 4);
+            VirtualProtect(memory->fakePrime, 4, oldProtect, nullptr);
+        }
+#endif
+    }
+}
 
 void Misc::killMessage(GameEvent& event) noexcept
 {
@@ -1468,6 +1485,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+    ImGui::Checkbox("Fake Prime", &miscConfig.fakePrime);
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
@@ -1627,6 +1645,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
+    read(j, "Fake prime", m.fakePrime);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
@@ -1765,6 +1784,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Grenade predict", nadePredict);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
+    WRITE("Fake prime", fakePrime);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);

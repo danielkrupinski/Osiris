@@ -79,6 +79,7 @@ public:
     ViewRender* viewRender;
     ViewRenderBeams* viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
+    std::uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
