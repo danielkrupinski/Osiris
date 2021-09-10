@@ -284,7 +284,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         std::string setTag = std::string(miscConfig.clanTag);
 
         if (setTag.size() < 2)
-            setTag = " ";
+            setTag = "";
 
         if (miscConfig.animatedClanTag)
         {
