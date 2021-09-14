@@ -23,7 +23,7 @@ namespace AntiAim
 
     // Config
     json toJson() noexcept;
-    static bool invertw = true;
+    bool invertw = true;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 }

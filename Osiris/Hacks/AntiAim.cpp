@@ -116,24 +116,40 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
         if (antiAimConfig.yaw && cmd->viewangles.y == currentViewAngles.y) {
             //float delta = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
-            float delta = cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
-            
-            static float lastTime{ 0.0f };
-            if (antiAimConfig.invert.isPressed() && memory->globalVars->realtime - lastTime > 0.5f) {
+            float delta = localPlayer->getMaxDesyncAngle();
+
+            if (antiAimConfig.invert.isPressed()) {
                 invertw = !invertw;
-                lastTime = memory->globalVars->realtime;
+               
             }
-            if (antiAimConfig.lby)
+            if (antiAimConfig.lby) //todo: add jitter using randomfloat from above
             {
+                float delta = localPlayer->getMaxDesyncAngle();
                 if (LbyUpdate() == true)
                 {
                     sendPacket = false;
-                    invertw ? cmd->viewangles.y -= delta : cmd->viewangles.y += delta;
+                    if (invertw)
+                    {
+                        cmd->viewangles.y += delta; //right
+                    }
+                    else
+                    {
+                        cmd->viewangles.y -= delta; //left
+                    }
+                    
                     return;
                 }
             }
             if (!sendPacket) {
-                invertw ? cmd->viewangles.y += delta : cmd->viewangles.y -= delta;
+                if (invertw)
+                {
+                    cmd->viewangles.y += delta; //right
+                }
+                else
+                {
+                    cmd->viewangles.y -= delta; //left
+                }
+                
             }
             if (!antiAimConfig.lby)
             {
