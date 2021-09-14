@@ -10,7 +10,13 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 #include "../SDK/GameEvent.h"
+#include "../Memory.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/Surface.h"
 #include <imguiCustom.h>
+#include <Interfaces.h>
+
+
 
 float RandomFloat(float min, float max) noexcept
 {
@@ -22,6 +28,11 @@ struct AntiAimConfig {
     bool enabled = false;
     bool pitch = false;
     bool yaw = false;
+    bool lby = false;
+    bool indicators = false;
+    
+    KeyBind invert;
+    float pitchAngle = 0.0f;
 } antiAimConfig;
 void AntiAim::frozenaa(GameEvent* event) noexcept
 {
@@ -56,10 +67,32 @@ void AntiAim::frozenaa(GameEvent* event) noexcept
 
 
 }
+bool LbyUpdate()
+{
+    const auto velocity = localPlayer->velocity();
+    const auto speed = velocity.length2D();
+    static float Update = 0.f;
+    if (!(localPlayer->flags() & 1))
+    {
+        return false;
+    }
+    if (speed > 0.f)
+    {
+        Update = memory->globalVars->serverTime() + 0.22f;
+    }
+    if (Update <= memory->globalVars->serverTime())
+    {
+        Update = memory->globalVars->serverTime() + 1.1f;
+        return true;
+    }
+    return false;
+}
+
+static bool inver;
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
     if (antiAimConfig.enabled) {
-        if (!localPlayer)
+        if (!localPlayer || !localPlayer->isAlive())
             return;
         // is not on a ladder or use noclip (to skip that needs more proper movefix)
         if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
@@ -76,18 +109,40 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             return;
         if (frozen)
             return;
-   
-        if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
-            cmd->viewangles.x = 90.f-RandomFloat(-10.f, 10.f);
-        if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
-            cmd->viewangles.y = 180.f-RandomFloat(-10.f,10.f);
-            //no skating
-//            cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
-            if (std::abs(cmd->sidemove) < 5.0f) {
-                if (cmd->buttons & UserCmd::IN_DUCK)
-                    cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-                else
-                    cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+        indicatorsa = antiAimConfig.indicators;
+        if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x) {
+            cmd->viewangles.x = antiAimConfig.pitchAngle;
+        }
+        cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
+        if (antiAimConfig.yaw && cmd->viewangles.y == currentViewAngles.y) {
+            //float delta = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+            float delta = cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
+            
+            static float lastTime{ 0.0f };
+            if (antiAimConfig.invert.isPressed() && memory->globalVars->realtime - lastTime > 0.5f) {
+                invertw = !invertw;
+                lastTime = memory->globalVars->realtime;
+            }
+            if (antiAimConfig.lby)
+            {
+                if (LbyUpdate() == true)
+                {
+                    sendPacket = false;
+                    invertw ? cmd->viewangles.y -= delta : cmd->viewangles.y += delta;
+                    return;
+                }
+            }
+            if (!sendPacket) {
+                invertw ? cmd->viewangles.y += delta : cmd->viewangles.y -= delta;
+            }
+            if (!antiAimConfig.lby)
+            {
+                if (fabsf(cmd->sidemove) < 5.0f) {
+                    if (cmd->buttons & UserCmd::IN_DUCK)
+                        cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+                    else
+                        cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+                }
             }
         }
     }
@@ -121,9 +176,17 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
         ImGui::Begin("Anti aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
-    ImGui::Checkbox("Pitch", &antiAimConfig.pitch);
+    ImGui::Checkbox("##pitch", &antiAimConfig.pitch);
+    ImGui::SameLine();
+    ImGui::SliderFloat("Pitch", &antiAimConfig.pitchAngle, -89.0f, 89.0f, "%.2f");
     ImGui::Checkbox("Yaw", &antiAimConfig.yaw);
-
+    if (antiAimConfig.yaw) {
+        ImGui::Checkbox("Lby Breaker", &antiAimConfig.lby);
+    }
+    ImGui::Checkbox("Indicators", &antiAimConfig.indicators);
+    ImGui::Text("Invert AA");
+    ImGui::SameLine();
+    ImGui::hotkey("key", antiAimConfig.invert);
     if (!contentOnly)
         ImGui::End();
 }
@@ -132,7 +195,11 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
 {
     WRITE("Enabled", enabled);
     WRITE("Pitch", pitch);
+    WRITE("Pitch angle", pitchAngle);
     WRITE("Yaw", yaw);
+    WRITE("Lby", lby);
+    WRITE("Indicators", indicators);
+    WRITE("Invert", invert);
 
     
 }
@@ -149,6 +216,10 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
     read(j, "Yaw", a.yaw);
+    read(j, "Pitch angle", a.pitchAngle);
+    read(j, "Lby", a.lby);
+    read(j, "Indicators", a.indicators);
+    read(j, "Invert", a.invert);
 
 }
 

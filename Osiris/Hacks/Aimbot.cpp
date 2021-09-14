@@ -173,8 +173,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
     if (!weaponIndex)
         return;
-
     auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex());
+    if (!weaponClass || weaponClass == 63 || weaponClass == 40)
+        return;
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = weaponClass;
 
