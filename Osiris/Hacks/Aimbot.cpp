@@ -25,6 +25,7 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 #include "../GameData.h"
+#include "../Helpers.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -244,7 +245,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                     break;
             }
         }
-
+        if (config->aimbot[weaponIndex].maxDistance == 0 || Helpers::units2meters(bestTarget.distTo(localPlayerEyePosition)) < config->aimbot[weaponIndex].maxDistance) {
         if (bestTarget.notNull()) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
@@ -256,11 +257,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
             bool clamped{ false };
 
             if (std::abs(angle.x) > Misc::maxAngleDelta() || std::abs(angle.y) > Misc::maxAngleDelta()) {
-                    angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-                    angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-                    clamped = true;
+                angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+                angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+                clamped = true;
             }
-            
+
             angle /= config->aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config->aimbot[weaponIndex].silent)
@@ -281,6 +282,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             else lastAngles = Vector{ };
 
             lastCommand = cmd->commandNumber;
+          }
         }
     }
 }
