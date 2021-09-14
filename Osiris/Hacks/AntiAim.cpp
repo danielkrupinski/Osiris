@@ -18,10 +18,7 @@
 
 
 
-float RandomFloat(float min, float max) noexcept
-{
-    return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
-}
+
 #if OSIRIS_ANTIAIM()
 
 struct AntiAimConfig {
