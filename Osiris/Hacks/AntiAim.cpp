@@ -129,26 +129,17 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 {
                     sendPacket = false;
                     if (invertw)
-                    {
-                        cmd->viewangles.y += delta; //right
-                    }
+                    {cmd->viewangles.y += delta;}
                     else
-                    {
-                        cmd->viewangles.y -= delta; //left
-                    }
-                    
+                    {cmd->viewangles.y -= delta;}
                     return;
                 }
             }
             if (!sendPacket) {
                 if (invertw)
-                {
-                    cmd->viewangles.y += delta; //right
-                }
+                {cmd->viewangles.y += delta;}
                 else
-                {
-                    cmd->viewangles.y -= delta; //left
-                }
+                {cmd->viewangles.y -= delta;}
                 
             }
             if (!antiAimConfig.lby)
