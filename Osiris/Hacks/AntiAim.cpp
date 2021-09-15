@@ -31,6 +31,8 @@ struct AntiAimConfig {
     KeyBind invert;
     float pitchAngle = 0.0f;
 } antiAimConfig;
+
+static float desyncDelta{ 0 };
 void AntiAim::frozenaa(GameEvent* event) noexcept
 {
     static std::mutex mtx;
@@ -111,7 +113,13 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             cmd->viewangles.x = antiAimConfig.pitchAngle;
         }
         cmd->buttons &= ~(UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVERIGHT | UserCmd::IN_MOVELEFT);
+        static float deltaMultiplier{ localPlayer->getMaxDesyncAngle() / 58.f };
         if (antiAimConfig.yaw && cmd->viewangles.y == currentViewAngles.y) {
+            static float sent = 0.f;
+            if (sendPacket) {
+                cmd->viewangles.y += 0.f;
+                sent = cmd->viewangles.y;
+            }
             //float delta = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
             float delta = localPlayer->getMaxDesyncAngle();
 
@@ -121,22 +129,28 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             }
             if (antiAimConfig.lby) //todo: add jitter using randomfloat from above
             {
-                float delta = localPlayer->getMaxDesyncAngle();
+                //float delta = localPlayer->getMaxDesyncAngle();
+                float delta = 119.95f;
                 if (LbyUpdate() == true)
                 {
                     sendPacket = false;
-                    if (invertw)
-                    {cmd->viewangles.y += delta;}
+                    if (!invertw)
+                    {cmd->viewangles.y = sent + delta;}
                     else
-                    {cmd->viewangles.y -= delta;}
+                    {cmd->viewangles.y = sent - delta;}
                     return;
                 }
             }
+            desyncDelta = (58.f * 2) * deltaMultiplier;
             if (!sendPacket) {
-                if (invertw)
-                {cmd->viewangles.y += delta;}
+                if (!invertw)
+                {
+                    cmd->viewangles.y = sent + desyncDelta;
+                }
                 else
-                {cmd->viewangles.y -= delta;}
+                {
+                    cmd->viewangles.y = sent - desyncDelta;
+                }
                 
             }
             if (!antiAimConfig.lby)
