@@ -27,12 +27,13 @@ struct AntiAimConfig {
     bool yaw = false;
     bool lby = false;
     bool indicators = false;
-    
+    bool swayy = false;
     KeyBind invert;
     float pitchAngle = 0.0f;
 } antiAimConfig;
 
 static float desyncDelta{ 0 };
+static bool flipLby{ false };
 void AntiAim::frozenaa(GameEvent* event) noexcept
 {
     static std::mutex mtx;
@@ -87,7 +88,7 @@ bool LbyUpdate()
     return false;
 }
 
-static bool inver;
+
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
     if (antiAimConfig.enabled) {
@@ -131,15 +132,36 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             {
                 //float delta = localPlayer->getMaxDesyncAngle();
                 float delta = 119.95f;
-                if (LbyUpdate() == true)
-                {
-                    sendPacket = false;
+                
+                
+                 if (LbyUpdate() == true)
+                 {
+                     sendPacket = false;
+                  if (!antiAimConfig.swayy)
+                  {
                     if (!invertw)
                     {cmd->viewangles.y = sent + delta;}
                     else
                     {cmd->viewangles.y = sent - delta;}
                     return;
-                }
+                  }
+                 
+                    else {
+                        
+                      if (!invertw)
+                      {
+                          cmd->viewangles.y = sent + delta;
+                          invertw = true;
+                      }
+                      else
+                      {
+                          cmd->viewangles.y = sent - delta;
+                          invertw = false;
+                      }
+                      return;
+                        
+                    }
+                 }
             }
             desyncDelta = (58.f * 2) * deltaMultiplier;
             if (!sendPacket) {
@@ -205,6 +227,9 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::Text("Invert AA");
     ImGui::SameLine();
     ImGui::hotkey("key", antiAimConfig.invert);
+    ImGui::Text("Sway");
+    ImGui::SameLine();
+    ImGui::Checkbox(" ", &antiAimConfig.swayy);
     if (!contentOnly)
         ImGui::End();
 }
@@ -218,6 +243,8 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
     WRITE("Lby", lby);
     WRITE("Indicators", indicators);
     WRITE("Invert", invert);
+    WRITE("Swayy", swayy);
+
 
     
 }
@@ -238,6 +265,7 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Lby", a.lby);
     read(j, "Indicators", a.indicators);
     read(j, "Invert", a.invert);
+    read(j, "Swayy", a.swayy);
 
 }
 
