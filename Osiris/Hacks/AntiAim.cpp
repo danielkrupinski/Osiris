@@ -67,6 +67,7 @@ void AntiAim::frozenaa(GameEvent* event) noexcept
 
 
 }
+
 bool LbyUpdate()
 {
     const auto velocity = localPlayer->velocity();
@@ -76,7 +77,7 @@ bool LbyUpdate()
     {
         return false;
     }
-    if (speed > 0.f)
+    if (speed > 0.1f || fabsf(localPlayer->getAnimstate()->UpVelocity) > 100.f)
     {
         Update = memory->globalVars->serverTime() + 0.22f;
     }
