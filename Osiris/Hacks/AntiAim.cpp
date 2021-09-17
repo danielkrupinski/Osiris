@@ -83,7 +83,7 @@ void AntiAim::indicators(ImDrawList* drawList)
             return;
         if (antiAimConfig.swayy)
         {
-            drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text3);
+            drawList->AddText(pos, IM_COL32(173, 66, 245, 255), text3);
         }
           else {
         
