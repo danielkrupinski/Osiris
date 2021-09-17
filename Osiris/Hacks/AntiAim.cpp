@@ -34,7 +34,7 @@ static float desyncDelta{ 0 };
 static bool flipLby{ false };
 void AntiAim::frozenaa(GameEvent* event) noexcept
 { if (!antiAimConfig.enabled){frozen = true;}
-if (!localPlayer || !localPlayer->isAlive()){frozen = true;}
+
 
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -72,14 +72,14 @@ void AntiAim::indicators(ImDrawList* drawList)
 
     const char* text = "FAKE: RIGHT";
     const char* text2 = "FAKE: LEFT";
-    const char* text3 = " ";
     const auto textSize = ImGui::CalcTextSize(text);
     const auto spacer = textSize.y / 2;
     const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
    
     if (AntiAim::indicatorsa && !AntiAim::frozen) {
         
-          
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
         if (AntiAim::invertw)
         {
             drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
@@ -91,9 +91,7 @@ void AntiAim::indicators(ImDrawList* drawList)
 
         
     }
-    else {
-        drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text3);
-    }
+   
 
 }
 bool LbyUpdate()
