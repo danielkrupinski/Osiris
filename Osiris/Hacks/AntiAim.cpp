@@ -68,8 +68,8 @@ void AntiAim::frozenaa(GameEvent* event) noexcept
 void AntiAim::indicators(ImDrawList* drawList)
 {
 
-    const char* text = "AA: Right";
-    const char* text2 = "AA: Left";
+    const char* text = "FAKE: RIGHT";
+    const char* text2 = "FAKE: LEFT";
     const auto textSize = ImGui::CalcTextSize(text);
     const auto spacer = textSize.y / 2;
     const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
