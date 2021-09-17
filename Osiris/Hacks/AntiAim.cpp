@@ -34,6 +34,8 @@ static float desyncDelta{ 0 };
 static bool flipLby{ false };
 void AntiAim::frozenaa(GameEvent* event) noexcept
 { if (!antiAimConfig.enabled){frozen = true;}
+if (!localPlayer || !localPlayer->isAlive()){frozen = true;}
+
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
 
