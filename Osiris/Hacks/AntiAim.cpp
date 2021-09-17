@@ -76,30 +76,35 @@ void AntiAim::indicators(ImDrawList* drawList)
     const auto textSize = ImGui::CalcTextSize(text);
     const auto spacer = textSize.y / 2;
     const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
-   
-    if (AntiAim::indicatorsa && !AntiAim::frozen) {
-
-        if (!localPlayer || !localPlayer->isAlive())
+    if (antiAimConfig.enabled) {
+       if (AntiAim::indicatorsa && !AntiAim::frozen) {
+       
+            
+          if (!localPlayer || !localPlayer->isAlive())
+          {
             return;
-        if (antiAimConfig.swayy)
-        {
-            drawList->AddText(pos, IM_COL32(173, 66, 245, 255), text3);
-        }
+          }
+            
+          if (!antiAimConfig.swayy)
+          {
+              if (AntiAim::invertw)
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
+              }
+              else
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
+              }
+
+          }
           else {
-        
-             if (AntiAim::invertw)
-             {
-                 drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
-             }
-             else
-             {
-                 drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
-             }
+              drawList->AddText(pos, IM_COL32(173, 66, 245, 255), text3);
+             
         
           }
 
+       }
     }
-
 }
 bool LbyUpdate()
 {
