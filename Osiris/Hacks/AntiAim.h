@@ -16,6 +16,7 @@ namespace AntiAim
     bool indicatorsa = false;
     void run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept;
     void frozenaa(GameEvent* event) noexcept;
+    void indicators(ImDrawList* drawList);
     // GUI
     void menuBarItem() noexcept;
     void tabItem() noexcept;
@@ -27,5 +28,3 @@ namespace AntiAim
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 }
-
-

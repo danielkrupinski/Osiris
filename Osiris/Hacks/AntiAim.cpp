@@ -15,9 +15,7 @@
 #include "../SDK/Surface.h"
 #include <imguiCustom.h>
 #include <Interfaces.h>
-
-
-
+#include "GameData.h"
 
 #if OSIRIS_ANTIAIM()
 
@@ -35,7 +33,7 @@ struct AntiAimConfig {
 static float desyncDelta{ 0 };
 static bool flipLby{ false };
 void AntiAim::frozenaa(GameEvent* event) noexcept
-{
+{ if (!antiAimConfig.enabled){frozen = true;}
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
 
@@ -65,6 +63,31 @@ void AntiAim::frozenaa(GameEvent* event) noexcept
         }
     }
 
+
+}
+void AntiAim::indicators(ImDrawList* drawList)
+{
+
+    const char* text = "AA: Right";
+    const char* text2 = "AA: Left";
+    const auto textSize = ImGui::CalcTextSize(text);
+    const auto spacer = textSize.y / 2;
+    const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
+   
+    if (AntiAim::indicatorsa && !AntiAim::frozen) {
+        
+          
+        if (AntiAim::invertw)
+        {
+            drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
+        }
+        else 
+        {
+            drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
+        }
+
+        
+    }
 
 }
 bool LbyUpdate()
