@@ -27,6 +27,7 @@ struct AntiAimConfig {
     bool indicators = false;
     bool swayy = false;
     KeyBind invert;
+    bool jitter = false;
     float pitchAngle = 0.0f;
 } antiAimConfig;
 
@@ -97,6 +98,13 @@ void AntiAim::indicators(ImDrawList* drawList)
        }
     }
 }
+float RandomFloat(float min, float max)
+{
+    assert(max > min);
+    float random = ((float)rand()) / (float)RAND_MAX;
+    float range = max - min;
+    return (random * range) + min;
+}
 bool LbyUpdate()
 {
     const auto velocity = localPlayer->velocity();
@@ -160,8 +168,18 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             }
             if (antiAimConfig.lby) //todo: add jitter using randomfloat from above
             {
+                float delta;
                 //float delta = localPlayer->getMaxDesyncAngle();
-                float delta = 119.95f;
+                if (!antiAimConfig.jitter)
+                {
+                    delta = 119.95f;
+                }
+                else {
+                
+                    delta = RandomFloat(90, 119.95);
+                
+                }
+                
                 
                 
                  if (LbyUpdate() == true)
@@ -260,6 +278,9 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::Text("Sway");
     ImGui::SameLine();
     ImGui::Checkbox(" ", &antiAimConfig.swayy);
+    ImGui::Text("Jitter");
+    ImGui::SameLine();
+    ImGui::Checkbox(" ", &antiAimConfig.jitter);
     if (!contentOnly)
         ImGui::End();
 }
@@ -274,6 +295,7 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
     WRITE("Indicators", indicators);
     WRITE("Invert", invert);
     WRITE("Swayy", swayy);
+    WRITE("Jitter", jitter);
 
 
     
@@ -296,6 +318,7 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Indicators", a.indicators);
     read(j, "Invert", a.invert);
     read(j, "Swayy", a.swayy);
+    read(j, "Jitter", a.jitter);
 
 }
 
