@@ -427,6 +427,7 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Max aim inaccuracy", maxAimInaccuracy);
     WRITE("Max shot inaccuracy", maxShotInaccuracy);
     WRITE("Min damage", minDamage);
+    WRITE("Max Distance", maxDistance);
     WRITE("Killshot", killshot);
     WRITE("Between shots", betweenShots);
     WRITE("Standalone RCS", standaloneRCS);
