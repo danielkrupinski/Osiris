@@ -72,7 +72,6 @@ void AntiAim::indicators(ImDrawList* drawList)
 
     const char* text = "FAKE: RIGHT";
     const char* text2 = "FAKE: LEFT";
-    const char* text3 = "FAKE: SWAY";
     const auto textSize = ImGui::CalcTextSize(text);
     const auto spacer = textSize.y / 2;
     const ImVec2 pos = { 10.f, (ImGui::GetIO().DisplaySize.y / 2) - spacer };
@@ -85,8 +84,7 @@ void AntiAim::indicators(ImDrawList* drawList)
             return;
           }
             
-          if (!antiAimConfig.swayy)
-          {
+          
               if (AntiAim::invertw)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
@@ -95,13 +93,6 @@ void AntiAim::indicators(ImDrawList* drawList)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
               }
-
-          }
-          else {
-              drawList->AddText(pos, IM_COL32(173, 66, 245, 255), text3);
-             
-        
-          }
 
        }
     }
