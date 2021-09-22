@@ -350,6 +350,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
 
     if (stage == FrameStage::RENDER_START) {
         Misc::preserveKillfeed();
+        Misc::forceRelayCluster();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
