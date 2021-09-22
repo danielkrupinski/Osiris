@@ -75,7 +75,7 @@ public:
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
     VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(83, 121), (int index, Vector& origin), (this, index, std::ref(origin)))
-    VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(87, 127), (), (this))
+    VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(88, 128), (), (this))
     VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), (this))
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), (this))
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), (this))
