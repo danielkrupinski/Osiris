@@ -49,7 +49,7 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void
     proxies[hash].first(data, outStruct, arg3);
 }
 
-static std::vector<std::pair<std::uint32_t, std::uint16_t>> offsets;
+static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
 
 static void walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset = 0) noexcept
 {
@@ -80,7 +80,7 @@ static void walkTable(const char* networkName, RecvTable* recvTable, const std::
              }
         } };
 
-        offsets.emplace_back(hash, std::uint16_t(offset + prop.offset));
+        offsets.emplace_back(hash, offset + prop.offset);
 
         constexpr auto hookProperty{ [](std::uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
             if (originalProxy != proxy) {
@@ -100,7 +100,7 @@ void Netvars::init() noexcept
     for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(clientClass->networkName, clientClass->recvTable);
 
-    std::ranges::sort(offsets, {}, &std::pair<std::uint32_t, std::uint16_t>::first);
+    std::ranges::sort(offsets, {}, &std::pair<std::uint32_t, std::uint32_t>::first);
     offsets.shrink_to_fit();
 }
 
@@ -113,9 +113,9 @@ void Netvars::restore() noexcept
     offsets.clear();
 }
 
-std::uint16_t Netvars::get(std::uint32_t hash) noexcept
+std::uint32_t Netvars::get(std::uint32_t hash) noexcept
 {
-    if (const auto it = std::ranges::lower_bound(offsets, hash, {}, &std::pair<uint32_t, uint16_t>::first); it != offsets.end() && it->first == hash)
+    if (const auto it = std::ranges::lower_bound(offsets, hash, {}, &std::pair<std::uint32_t, std::uint32_t>::first); it != offsets.end() && it->first == hash)
         return it->second;
     assert(false);
     return 0;
