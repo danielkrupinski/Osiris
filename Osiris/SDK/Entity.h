@@ -76,37 +76,37 @@ public:
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
     VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(83, 121), (int index, Vector& origin), (this, index, std::ref(origin)))
     VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(87, 127), (), (this))
-    VIRTUAL_METHOD(int, health, WIN32_LINUX(121, 166), (), (this))
-    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
-    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
-    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(165, 217), (), (this))
+    VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), (this))
+    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), (this))
-    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(281, 349), (), (this))
-    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(293, 356), (), (this))
-    VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(294, 357), (), (this))
-    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(454, 522), (), (this))
-    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(460, 528), (), (this))
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(467, 535), (Entity* viewModel), (this, viewModel))
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(468, 536), (), (this))
-    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(482, 550), (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), (this))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (Entity* viewModel), (this, viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), (this))
 
 #if IS_WIN32()
     auto getEyePosition() noexcept
     {
         Vector v;
-        VirtualMethod::call<void, 284>(this, std::ref(v));
+        VirtualMethod::call<void, 285>(this, std::ref(v));
         return v;
     }
 
     auto getAimPunch() noexcept
     {
         Vector v;
-        VirtualMethod::call<void, 345>(this, std::ref(v));
+        VirtualMethod::call<void, 346>(this, std::ref(v));
         return v;
     }
 #else
-    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 348, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 409, (), (this))
 #endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
