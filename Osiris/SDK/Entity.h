@@ -80,7 +80,7 @@ public:
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(165, 217), (), (this))
-    VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(267, 330), (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(281, 349), (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(293, 356), (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(294, 357), (), (this))
