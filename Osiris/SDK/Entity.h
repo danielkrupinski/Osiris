@@ -151,11 +151,6 @@ public:
 
     float getMaxDesyncAngle() noexcept;
 
-    bool isInReload() noexcept
-    {
-        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
-
     int getUserId() noexcept;
     std::uint64_t getSteamId() noexcept;
 
@@ -216,6 +211,7 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR_OFFSET(isInReload, "CBaseCombatWeapon", "m_iClip1", 65, bool)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
