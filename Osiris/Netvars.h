@@ -9,7 +9,7 @@ namespace Netvars
 {
     void init() noexcept;
     void restore() noexcept;
-    std::uint16_t get(std::uint32_t hash) noexcept;
+    std::uint32_t get(std::uint32_t hash) noexcept;
 }
 
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
