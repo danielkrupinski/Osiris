@@ -22,6 +22,7 @@ namespace Misc
     void slowwalk(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
+    void damageList(GameEvent* event = nullptr) noexcept;
     void noscopeCrosshair(ImDrawList* drawlist) noexcept;
     void recoilCrosshair(ImDrawList* drawList) noexcept;
     void watermark() noexcept;
