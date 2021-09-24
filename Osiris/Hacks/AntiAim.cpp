@@ -33,6 +33,7 @@ struct AntiAimConfig {
 
 static float desyncDelta{ 0 };
 static bool flipLby{ false };
+float jitterness = 1.f;
 void AntiAim::frozenaa(GameEvent* event) noexcept
 { if (!antiAimConfig.enabled){frozen = true;}
 
@@ -48,7 +49,6 @@ void AntiAim::frozenaa(GameEvent* event) noexcept
     static std::unordered_map<int, PlayerPurchases> playerPurchases;
     static std::unordered_map<std::string, int> purchaseTotal;
     static int totalCost;
-
     static auto freezeEnd = 0.0f;
 
     if (event) {
@@ -168,17 +168,15 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             }
             if (antiAimConfig.lby) //todo: add jitter using randomfloat from above
             {
-                float delta;
+                float delta = 119.95f;
+                
                 //float delta = localPlayer->getMaxDesyncAngle();
-                if (!antiAimConfig.jitter)
+                if (antiAimConfig.jitter)
                 {
-                    delta = 119.95f;
+
+                    jitterness = RandomFloat(1.f, 1.8f);
                 }
-                else {
-                
-                    delta = RandomFloat(90, 119.95);
-                
-                }
+              
                 
                 
                 
@@ -188,9 +186,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                   if (!antiAimConfig.swayy)
                   {
                     if (!invertw)
-                    {cmd->viewangles.y = sent + delta;}
+                    {cmd->viewangles.y = (sent + delta) / jitterness;}
                     else
-                    {cmd->viewangles.y = sent - delta;}
+                    {cmd->viewangles.y = (sent - delta) / jitterness;}
                     return;
                   }
                  
@@ -198,12 +196,12 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                         
                       if (!invertw)
                       {
-                          cmd->viewangles.y = sent + delta;
+                          cmd->viewangles.y = (sent + delta) / jitterness;
                           invertw = true;
                       }
                       else
                       {
-                          cmd->viewangles.y = sent - delta;
+                          cmd->viewangles.y = (sent - delta) / jitterness;
                           invertw = false;
                       }
                       return;
@@ -215,11 +213,11 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             if (!sendPacket) {
                 if (!invertw)
                 {
-                    cmd->viewangles.y = sent + desyncDelta;
+                    cmd->viewangles.y = (sent + desyncDelta) / jitterness;
                 }
                 else
                 {
-                    cmd->viewangles.y = sent - desyncDelta;
+                    cmd->viewangles.y = (sent - desyncDelta) / jitterness;
                 }
                 
             }
@@ -275,12 +273,8 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::Text("Invert AA");
     ImGui::SameLine();
     ImGui::hotkey("key", antiAimConfig.invert);
-    ImGui::Text("Sway");
-    ImGui::SameLine();
-    ImGui::Checkbox(" ", &antiAimConfig.swayy);
-    ImGui::Text("Jitter");
-    ImGui::SameLine();
-    ImGui::Checkbox(" ", &antiAimConfig.jitter);
+    ImGui::Checkbox("Sway", &antiAimConfig.swayy);
+    ImGui::Checkbox("Jitter", &antiAimConfig.jitter);
     if (!contentOnly)
         ImGui::End();
 }

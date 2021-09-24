@@ -40,7 +40,7 @@ struct WeaponInfo {
     float armorRatio;
     int bullets;
     float penetration;
-    PAD(8)
+    PAD(12)
     float range;
     float rangeModifier;
     PAD(16)
