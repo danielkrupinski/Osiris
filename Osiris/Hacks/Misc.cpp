@@ -110,6 +110,7 @@ struct MiscConfig {
     bool nadePredict{ false };
     bool fixTabletSignal{ false };
     bool fakePrime{ false };
+    bool quickbool{ false };
     bool fastPlant{ false };
     bool fastStop{ false };
     bool quickReload{ false };
@@ -118,6 +119,7 @@ struct MiscConfig {
     PreserveKillfeed preserveKillfeed;
     char clanTag[16];
     KeyBind edgejumpkey;
+    KeyBind quickkey;
     KeyBind slowwalkKey;
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
@@ -165,6 +167,7 @@ struct MiscConfig {
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
 
+Vector quickpeekstartpos = Vector{ 0, 0, 0 };
 bool Misc::shouldRevealMoney() noexcept
 {
     return miscConfig.revealMoney;
@@ -793,6 +796,45 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
+void gotoStart(UserCmd* cmd) {
+
+    if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
+    Vector playerLoc = localPlayer->getAbsOrigin();
+
+    float yaw = cmd->viewangles.y;
+    Vector VecForward = playerLoc - quickpeekstartpos;
+
+    Vector translatedVelocity = Vector{
+        (float)(VecForward.x * cos(yaw / 180 * (float)M_PI) + VecForward.y * sin(yaw / 180 * (float)M_PI)),
+        (float)(VecForward.y * cos(yaw / 180 * (float)M_PI) - VecForward.x * sin(yaw / 180 * (float)M_PI)),
+        VecForward.z
+    };
+    cmd->forwardmove = -translatedVelocity.x * 20.f;
+    cmd->sidemove = translatedVelocity.y * 20.f;
+}
+
+    void Misc::quickpeek(UserCmd * cmd) {
+      if (miscConfig.quickbool && miscConfig.quickkey.isSet()){
+        
+        bool hasShot = false;
+        if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
+        if (miscConfig.quickkey.isDown()) {
+            if (quickpeekstartpos == Vector{ 0, 0, 0 }) {
+                quickpeekstartpos = localPlayer->getAbsOrigin();
+            }
+            else {
+                if (cmd->buttons & UserCmd::IN_ATTACK) hasShot = true;
+                if (hasShot) {
+                    gotoStart(cmd);
+                }
+            }
+        }
+        else {
+            hasShot = false;
+            quickpeekstartpos = Vector{ 0, 0, 0 };
+        }
+      }
+    }
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
     if (!miscConfig.chokedPacketsKey.isSet() || miscConfig.chokedPacketsKey.isDown())
@@ -1487,6 +1529,9 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake Prime", &miscConfig.fakePrime);
+    ImGui::Checkbox("Quick Peek", &miscConfig.quickbool);
+    ImGui::SameLine();
+    ImGui::hotkey("", miscConfig.quickkey);
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
@@ -1647,6 +1692,8 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
+    read(j, "Quick peek", m.quickbool);
+    read(j, "Quick key", m.quickkey);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
@@ -1786,6 +1833,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
     WRITE("Fake prime", fakePrime);
+    WRITE("Quick peek", quickbool);
+    WRITE("Quick key", quickkey);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);

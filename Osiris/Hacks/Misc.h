@@ -42,6 +42,7 @@ namespace Misc
     void antiAfkKick(UserCmd* cmd) noexcept;
     void fixAnimationLOD(FrameStage stage) noexcept;
     void autoPistol(UserCmd* cmd) noexcept;
+    void quickpeek(UserCmd* cmd);
     void chokePackets(bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(UserCmd* cmd) noexcept;
