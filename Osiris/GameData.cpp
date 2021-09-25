@@ -133,7 +133,7 @@ void GameData::update() noexcept
             } else {
                 switch (entity->getClientClass()->classId) {
                 case ClassId::BaseCSGrenadeProjectile:
-                    if (entity->grenadeExploded()) {
+                    if (!entity->shouldDraw()) {
                         if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                             it->exploded = true;
                         break;
