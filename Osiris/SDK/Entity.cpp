@@ -54,7 +54,7 @@ bool Entity::isOtherEnemy(Entity* other) noexcept
 
 float Entity::getMaxDesyncAngle() noexcept
 {
-    const auto animState = getAnimstate();
+    const auto animState = getAnimState();
 
     if (!animState)
         return 0.0f;
