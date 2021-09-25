@@ -795,18 +795,31 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
         }
     }
 }
-
+struct customCmd
+{
+    float forwardmove;
+    float sidemove;
+    float upmove;
+};
+int qpCount;
+std::vector<customCmd>usercmdQuickpeek;
 void Misc::gotoStart(UserCmd* cmd) {
 
-    if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
-    Vector playerLoc = localPlayer->getAbsOrigin();
-
-    float yaw = cmd->viewangles.y;
-    Vector difference = playerLoc - quickpeekstartpos;
-    auto velocity = Vector(difference.x * cos(cmd->viewangles.y / 180.0f * M_PI) + difference.y * sin(cmd->viewangles.y / 180.0f * M_PI), difference.y * cos(cmd->viewangles.y / 180.0f * M_PI) - difference.x * sin(cmd->viewangles.y / 180.0f * M_PI), difference.z);
-
-    cmd->forwardmove = -velocity.x * 20.0f;
-    cmd->sidemove = velocity.y * 20.0f;
+    if (usercmdQuickpeek.empty()) return;
+    if (hasShot)
+    {
+        if (qpCount > 0)
+        {
+            cmd->upmove = -usercmdQuickpeek.at(qpCount).upmove;
+            cmd->sidemove = -usercmdQuickpeek.at(qpCount).sidemove;
+            cmd->forwardmove = -usercmdQuickpeek.at(qpCount).forwardmove;
+            qpCount--;
+        }
+    }
+    else
+    {
+        qpCount = usercmdQuickpeek.size();
+    }
 }
 
     void Misc::quickpeek(UserCmd * cmd) {
@@ -819,18 +832,22 @@ void Misc::gotoStart(UserCmd* cmd) {
                 quickpeekstartpos = localPlayer->getAbsOrigin();
             }
             else {
-                if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
-                {
-                    hasShot = true;
-                }
-                if (hasShot) {
-                    Misc::gotoStart(cmd);
-                }
+                customCmd tempCmd = {};
+                tempCmd.forwardmove = cmd->forwardmove;
+                tempCmd.sidemove = cmd->sidemove;
+                tempCmd.upmove = cmd->upmove;
+
+                if (cmd->buttons & UserCmd::IN_ATTACK) hasShot = true;
+                gotoStart(cmd);
+
+                if (!hasShot)
+                    usercmdQuickpeek.push_back(tempCmd);
             }
         }
         else {
             hasShot = false;
             quickpeekstartpos = Vector{ 0, 0, 0 };
+            usercmdQuickpeek.clear();
         }
       }
     }

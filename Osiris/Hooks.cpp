@@ -260,6 +260,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     EnginePrediction::run(cmd);
 
     Aimbot::run(cmd);
+    Misc::quickpeek(cmd);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
