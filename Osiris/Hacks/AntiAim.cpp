@@ -84,8 +84,7 @@ void AntiAim::indicators(ImDrawList* drawList)
           {
             return;
           }
-            
-          
+          if (!jitterness) {
               if (AntiAim::invertw)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
@@ -94,6 +93,18 @@ void AntiAim::indicators(ImDrawList* drawList)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
               }
+            }
+          else {
+              if (AntiAim::invertw)
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
+              }
+              else
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
+              }
+          }
+              
 
        }
     }
@@ -289,7 +300,7 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::hotkey("key", antiAimConfig.invert);
     ImGui::Checkbox("Sway", &antiAimConfig.swayy);
-    ImGui::Checkbox("Jitter", &antiAimConfig.jitter);
+    ImGui::Checkbox("HVH", &antiAimConfig.jitter);
     if (!contentOnly)
         ImGui::End();
 }
