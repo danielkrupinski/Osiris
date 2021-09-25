@@ -107,16 +107,16 @@ float RandomFloat(float min, float max)
 }
 bool LbyUpdate()
 {
-    const auto velocity = localPlayer->velocity();
-    const auto speed = velocity.length2D();
+   
     static float Update = 0.f;
     if (!(localPlayer->flags() & 1))
     {
         return false;
     }
-    if (speed > 0.f)
+    if (localPlayer->velocity().x > 0.f || localPlayer->velocity().y > 0.f || localPlayer->velocity().z > 0.f)
     {
         Update = memory->globalVars->serverTime() + 0.22f;
+        return false;
     }
     if (Update <= memory->globalVars->serverTime())
     {
@@ -174,7 +174,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 if (antiAimConfig.jitter)
                 {
 
-                    jitterness = RandomFloat(1.f, 1.8f);
+                    jitterness = RandomFloat(1.f, 2.0099f);
                 }
               
                 
