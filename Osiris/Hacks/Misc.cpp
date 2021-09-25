@@ -59,7 +59,7 @@ struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
 };
-
+bool hasShot;
 struct OffscreenEnemies : ColorToggle {
     OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
     HealthBar healthBar;
@@ -796,36 +796,35 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
-void gotoStart(UserCmd* cmd) {
+void Misc::gotoStart(UserCmd* cmd) {
 
     if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
     Vector playerLoc = localPlayer->getAbsOrigin();
 
     float yaw = cmd->viewangles.y;
-    Vector VecForward = playerLoc - quickpeekstartpos;
+    Vector difference = playerLoc - quickpeekstartpos;
+    auto velocity = Vector(difference.x * cos(cmd->viewangles.y / 180.0f * M_PI) + difference.y * sin(cmd->viewangles.y / 180.0f * M_PI), difference.y * cos(cmd->viewangles.y / 180.0f * M_PI) - difference.x * sin(cmd->viewangles.y / 180.0f * M_PI), difference.z);
 
-    Vector translatedVelocity = Vector{
-        (float)(VecForward.x * cos(yaw / 180 * (float)M_PI) + VecForward.y * sin(yaw / 180 * (float)M_PI)),
-        (float)(VecForward.y * cos(yaw / 180 * (float)M_PI) - VecForward.x * sin(yaw / 180 * (float)M_PI)),
-        VecForward.z
-    };
-    cmd->forwardmove = -translatedVelocity.x * 20.f;
-    cmd->sidemove = translatedVelocity.y * 20.f;
+    cmd->forwardmove = -velocity.x * 20.0f;
+    cmd->sidemove = velocity.y * 20.0f;
 }
 
     void Misc::quickpeek(UserCmd * cmd) {
       if (miscConfig.quickbool && miscConfig.quickkey.isSet()){
         
-        bool hasShot = false;
+        
         if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
         if (miscConfig.quickkey.isDown()) {
             if (quickpeekstartpos == Vector{ 0, 0, 0 }) {
                 quickpeekstartpos = localPlayer->getAbsOrigin();
             }
             else {
-                if (cmd->buttons & UserCmd::IN_ATTACK) hasShot = true;
+                if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+                {
+                    hasShot = true;
+                }
                 if (hasShot) {
-                    gotoStart(cmd);
+                    Misc::gotoStart(cmd);
                 }
             }
         }
