@@ -140,22 +140,8 @@ public:
     {
         return *reinterpret_cast<VarMap*>(std::uintptr_t(this) + WIN32_LINUX(0x24, 0x48));
     }
-   
-    AnimState* getAnimstate() noexcept
-    {
-#ifdef _WIN32
-        return *reinterpret_cast<AnimState**>(this + 0x3914);
-#else
-        return nullptr;
-#endif
-    }
 
     float getMaxDesyncAngle() noexcept;
-
-    bool isInReload() noexcept
-    {
-        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
 
     int getUserId() noexcept;
     std::uint64_t getSteamId() noexcept;
@@ -199,6 +185,7 @@ public:
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
+    NETVAR_OFFSET(getAnimState, "CCSPlayer", "m_bIsScoped", -20, AnimState*)
     NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
     NETVAR_OFFSET(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
     NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
@@ -218,6 +205,7 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR_OFFSET(isInReload, "CBaseCombatWeapon", "m_iClip1", 65, bool)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
