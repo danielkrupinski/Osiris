@@ -398,7 +398,7 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ en
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
         PlayerAvatar playerAvatar;
-        playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
+        playerAvatar.rgba = std::make_unique_for_overwrite<std::uint8_t[]>(rgbaDataSize);
         if (ctx->steamUtils->getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
             playerAvatars[handle] = std::move(playerAvatar);
     }

@@ -624,7 +624,7 @@ static auto getFontData(const std::string& fontName) noexcept
             dataSize = GetFontData(hdc, 0, 0, nullptr, 0);
 
             if (dataSize != GDI_ERROR) {
-                data = std::make_unique<std::byte[]>(dataSize);
+                data = std::make_unique_for_overwrite<std::byte[]>(dataSize);
                 dataSize = GetFontData(hdc, 0, 0, data.get(), dataSize);
 
                 if (dataSize == GDI_ERROR)

@@ -12,7 +12,7 @@ void VmtHook::init(void* base) noexcept
     this->base = base;
     auto vmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = Helpers::calculateVmtLength(vmt);
-    oldVmt = std::make_unique<std::uintptr_t[]>(length);
+    oldVmt = std::make_unique_for_overwrite<std::uintptr_t[]>(length);
     std::copy(vmt, vmt + length, oldVmt.get());
 }
 
