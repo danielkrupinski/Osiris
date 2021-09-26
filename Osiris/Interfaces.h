@@ -8,6 +8,8 @@
 #include <Windows.h>
 #else
 #include <dlfcn.h>
+
+#include <SDL2/SDL_messagebox.h>
 #endif
 
 #include "SDK/Platform.h"
@@ -82,6 +84,8 @@ private:
 
 #ifdef _WIN32
         MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
+#else
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Osiris", ("Failed to find " + std::string{ name } + " interface!").c_str(), NULL);
 #endif
         std::exit(EXIT_FAILURE);
     }

@@ -15,6 +15,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#include <SDL2/SDL_messagebox.h>
 #endif
 
 #include "Interfaces.h"
@@ -129,9 +131,11 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
     }
 
     assert(false);
-#ifdef _WIN32
     if (reportNotFound)
-        MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+#ifdef _WIN32
+    MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+#else
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Osiris", ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), NULL);
 #endif
     return 0;
 }
