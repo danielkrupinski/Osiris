@@ -118,16 +118,15 @@ float RandomFloat(float min, float max)
 }
 bool LbyUpdate()
 {
-   
+    const auto velocity = localPlayer->velocity();
+    const auto speed = velocity.length2D();
     static float Update = 0.f;
     if (!(localPlayer->flags() & 1))
     {
         return false;
     }
-    if (localPlayer->velocity().x > 0.f || localPlayer->velocity().y > 0.f || localPlayer->velocity().z > 0.f)
-    {
+    if (speed > 0.f) {
         Update = memory->globalVars->serverTime() + 0.22f;
-        return false;
     }
     if (Update <= memory->globalVars->serverTime())
     {
