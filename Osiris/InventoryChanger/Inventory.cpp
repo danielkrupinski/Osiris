@@ -284,7 +284,7 @@ private:
 
     void _addItems() noexcept
     {
-        for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
+        for (const auto& [index, dynamicDataIndex, asUnacknowledged] : toAdd)
             _addItem(index, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }
