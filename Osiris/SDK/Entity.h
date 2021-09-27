@@ -255,15 +255,6 @@ public:
         return flashDuration() > 75.0f;
     }
 
-    bool grenadeExploded() noexcept
-    {
-#ifdef _WIN32
-        return *reinterpret_cast<bool*>(this + 0x29E8);
-#else
-        return false;
-#endif
-    }
-
     std::uint64_t originalOwnerXuid() noexcept
     {
         return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
