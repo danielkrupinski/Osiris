@@ -84,8 +84,7 @@ void AntiAim::indicators(ImDrawList* drawList)
           {
             return;
           }
-            
-          
+          if (!jitterness) {
               if (AntiAim::invertw)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
@@ -94,6 +93,18 @@ void AntiAim::indicators(ImDrawList* drawList)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
               }
+            }
+          else {
+              if (AntiAim::invertw)
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text2);
+              }
+              else
+              {
+                  drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
+              }
+          }
+              
 
        }
     }
@@ -114,8 +125,7 @@ bool LbyUpdate()
     {
         return false;
     }
-    if (speed > 0.f)
-    {
+    if (speed > 0.f) {
         Update = memory->globalVars->serverTime() + 0.22f;
     }
     if (Update <= memory->globalVars->serverTime())
@@ -156,8 +166,23 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (antiAimConfig.yaw && cmd->viewangles.y == currentViewAngles.y) {
             static float sent = 0.f;
             if (sendPacket) {
-                cmd->viewangles.y += 0.f;
-                sent = cmd->viewangles.y;
+                if (!jitterness)
+                {
+                    cmd->viewangles.y += 0.f;
+                    sent = cmd->viewangles.y;
+                }
+                else {
+                    if (!invertw) {
+                        cmd->viewangles.y = -180.f;
+                        sent = cmd->viewangles.y;
+                    }
+                    else {
+                        cmd->viewangles.y = +180.f;
+                        sent = cmd->viewangles.y;
+                    }
+                
+                }
+                
             }
             //float delta = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
             float delta = localPlayer->getMaxDesyncAngle();
@@ -173,8 +198,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 //float delta = localPlayer->getMaxDesyncAngle();
                 if (antiAimConfig.jitter)
                 {
-
-                    jitterness = RandomFloat(1.f, 1.8f);
+                    
+                    jitterness = RandomFloat(1.f, 2.0099f);
                 }
               
                 
@@ -274,7 +299,7 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::hotkey("key", antiAimConfig.invert);
     ImGui::Checkbox("Sway", &antiAimConfig.swayy);
-    ImGui::Checkbox("Jitter", &antiAimConfig.jitter);
+    ImGui::Checkbox("HVH", &antiAimConfig.jitter);
     if (!contentOnly)
         ImGui::End();
 }

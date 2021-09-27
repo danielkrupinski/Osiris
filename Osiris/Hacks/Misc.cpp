@@ -59,7 +59,7 @@ struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
 };
-
+bool hasShot;
 struct OffscreenEnemies : ColorToggle {
     OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
     HealthBar healthBar;
@@ -110,6 +110,7 @@ struct MiscConfig {
     bool nadePredict{ false };
     bool fixTabletSignal{ false };
     bool fakePrime{ false };
+    bool quickbool{ false };
     bool fastPlant{ false };
     bool fastStop{ false };
     bool quickReload{ false };
@@ -119,6 +120,7 @@ struct MiscConfig {
     int forceRelayCluster = 0;
     char clanTag[16];
     KeyBind edgejumpkey;
+    KeyBind quickkey;
     KeyBind slowwalkKey;
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
@@ -166,6 +168,7 @@ struct MiscConfig {
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
 
+Vector quickpeekstartpos = Vector{ 0, 0, 0 };
 bool Misc::shouldRevealMoney() noexcept
 {
     return miscConfig.revealMoney;
@@ -793,7 +796,62 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
         }
     }
 }
+struct customCmd
+{
+    float forwardmove;
+    float sidemove;
+    float upmove;
+};
+int qpCount;
+std::vector<customCmd>usercmdQuickpeek;
+void Misc::gotoStart(UserCmd* cmd) {
 
+    if (usercmdQuickpeek.empty()) return;
+    if (hasShot)
+    {
+        if (qpCount > 0)
+        {
+            cmd->upmove = -usercmdQuickpeek.at(qpCount).upmove;
+            cmd->sidemove = -usercmdQuickpeek.at(qpCount).sidemove;
+            cmd->forwardmove = -usercmdQuickpeek.at(qpCount).forwardmove;
+            qpCount--;
+        }
+    }
+    else
+    {
+        qpCount = usercmdQuickpeek.size();
+    }
+}
+
+    void Misc::quickpeek(UserCmd * cmd) {
+      if (miscConfig.quickbool && miscConfig.quickkey.isSet()){
+        
+        
+        if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
+        if (miscConfig.quickkey.isDown()) {
+            if (quickpeekstartpos == Vector{ 0, 0, 0 }) {
+                quickpeekstartpos = localPlayer->getAbsOrigin();
+            }
+            else {
+                customCmd tempCmd = {};
+                tempCmd.forwardmove = cmd->forwardmove;
+                tempCmd.sidemove = cmd->sidemove;
+                tempCmd.upmove = cmd->upmove;
+
+                if (cmd->buttons & UserCmd::IN_ATTACK) hasShot = true;
+                gotoStart(cmd);
+
+                if (!hasShot)
+                    usercmdQuickpeek.push_back(tempCmd);
+            }
+        }
+        else {
+            hasShot = false;
+            quickpeekstartpos = Vector{ 0, 0, 0 };
+            usercmdQuickpeek.clear();
+        }
+      }
+    }
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
     if (!miscConfig.chokedPacketsKey.isSet() || miscConfig.chokedPacketsKey.isDown())
@@ -1500,6 +1558,9 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake Prime", &miscConfig.fakePrime);
+    ImGui::Checkbox("Quick Peek", &miscConfig.quickbool);
+    ImGui::SameLine();
+    ImGui::hotkey("", miscConfig.quickkey);
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
@@ -1660,6 +1721,8 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
+    read(j, "Quick peek", m.quickbool);
+    read(j, "Quick key", m.quickkey);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
@@ -1800,6 +1863,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
     WRITE("Fake prime", fakePrime);
+    WRITE("Quick peek", quickbool);
+    WRITE("Quick key", quickkey);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
