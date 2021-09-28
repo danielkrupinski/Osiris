@@ -84,7 +84,7 @@ void AntiAim::indicators(ImDrawList* drawList)
           {
             return;
           }
-          if (!jitterness) {
+          if (!antiAimConfig.jitter) {
               if (AntiAim::invertw)
               {
                   drawList->AddText(pos, IM_COL32(255, 0, 0, 255), text);
@@ -166,7 +166,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (antiAimConfig.yaw && cmd->viewangles.y == currentViewAngles.y) {
             static float sent = 0.f;
             if (sendPacket) {
-                if (!jitterness)
+                if (!antiAimConfig.jitter)
                 {
                     cmd->viewangles.y += 0.f;
                     sent = cmd->viewangles.y;
