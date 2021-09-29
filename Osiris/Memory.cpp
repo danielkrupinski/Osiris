@@ -27,16 +27,21 @@ static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
     return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
 }
 
-static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
+struct ModuleInfo {
+    void* base;
+    std::size_t size;
+};
+
+static ModuleInfo getModuleInformation(const char* name) noexcept
 {
 #ifdef _WIN32
     if (HMODULE handle = GetModuleHandleA(name)) {
         if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
-            return std::make_pair(moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage);
+            return ModuleInfo{ moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage };
     }
     return {};
 #elif __linux__
-    struct ModuleInfo {
+    struct ModuleInfo_ {
         const char* name;
         void* base = nullptr;
         std::size_t size = 0;
@@ -45,7 +50,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
     moduleInfo.name = name;
 
     dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
-        const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
+        const auto moduleInfo = reinterpret_cast<ModuleInfo_*>(data);
         if (!std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name))
             return 0;
 
@@ -79,7 +84,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
         return 1;
     }, &moduleInfo);
 
-    return std::make_pair(moduleInfo.base, moduleInfo.size);
+    return ModuleInfo{ moduleInfo.base, moduleInfo.size };
 #endif
 }
 
