@@ -108,19 +108,17 @@ static ModuleInfo getModuleInformation(const char* name) noexcept
 }
 
 template <bool ReportNotFound = true>
-static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
+static std::uintptr_t findPattern(ModuleInfo moduleInfo, std::string_view pattern) noexcept
 {
     static auto id = 0;
     ++id;
 
-    const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
-
-    if (moduleBase && moduleSize) {
+    if (moduleInfo.base && moduleInfo.size) {
         const auto lastIdx = pattern.length() - 1;
         const auto badCharTable = generateBadCharTable(pattern);
 
-        auto start = static_cast<const char*>(moduleBase);
-        const auto end = start + moduleSize - pattern.length();
+        auto start = static_cast<const char*>(moduleInfo.base);
+        const auto end = start + moduleInfo.size - pattern.length();
 
         while (start <= end) {
             int i = lastIdx;
@@ -140,6 +138,12 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
         MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return 0;
+}
+
+template <bool ReportNotFound = true>
+static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
+{
+    return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
 
 Memory::Memory() noexcept
