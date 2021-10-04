@@ -1146,71 +1146,61 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
     if (!interfaces->engine->isConnected())
         return;
 
-    std::cout << "isConnected()" << std::endl;
-
     const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
 
     std::string cmd = "playerradio Radio.WePlanted \"";
     // cmd += miscConfig.fakeCaseOpenRadioText; // Creates problems with message length in CSGO chat
-    cmd += " \u2028\x03\x03";
+    cmd += " \u2028\u0003"; // " \u2028\x03\x03"
     cmd += localPlayer->getPlayerName();
-    cmd += " \x01has opened a container and found: ";
+    cmd += " \u0001has opened a container and found: ";
 
-    std::cout << (int)gameItem.rarity << std::endl;
-
-    const char* rarity[] = { "\x0C", "\x0D", "\x0E", "\x0F", "\x0F" };
+    const char* rarity[] = { "\u000C", "\u000B", "\u000E", "\u000F", "\u000F" };
 
     cmd += rarity[gameItem.rarity - 3];
 
     std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
 
     switch (gameItem.type) {
-    case StaticData::Type::Glove: {
-        std::cout << "Type = Glove" << std::endl;
-        cmd += "\u2605";
+    case StaticData::Type::Glove:
+    case StaticData::Type::Skin: {
+        if (gameItem.weaponID == WeaponId::Bayonet ||
+            gameItem.weaponID == WeaponId::ClassicKnife ||
+            gameItem.weaponID == WeaponId::Flip ||
+            gameItem.weaponID == WeaponId::Gut ||
+            gameItem.weaponID == WeaponId::Karambit ||
+            gameItem.weaponID == WeaponId::M9Bayonet ||
+            gameItem.weaponID == WeaponId::Huntsman ||
+            gameItem.weaponID == WeaponId::Falchion ||
+            gameItem.weaponID == WeaponId::Bowie ||
+            gameItem.weaponID == WeaponId::Butterfly ||
+            gameItem.weaponID == WeaponId::Daggers ||
+            gameItem.weaponID == WeaponId::Paracord ||
+            gameItem.weaponID == WeaponId::SurvivalKnife ||
+            gameItem.weaponID == WeaponId::Ursus ||
+            gameItem.weaponID == WeaponId::Navaja ||
+            gameItem.weaponID == WeaponId::NomadKnife ||
+            gameItem.weaponID == WeaponId::Stiletto ||
+            gameItem.weaponID == WeaponId::Talon ||
+            gameItem.weaponID == WeaponId::SkeletonKnife ||
+            gameItem.type == StaticData::Type::Glove) // Would like to clean up this mess by just saying "if weaponId is in the range of 500 to 525 (knife range)" but since I can't do that and there is no StaticData::Type::Glove, it's annoying..
+        {
+            cmd += "\u2605";
+        }
         const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+        const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
+        if (dynamicData.statTrak > -1)
+        {
+            cmd += "StatTrak\u2122 ";
+        }
         cmd += name + " | " + staticData.name;
         break;
     }
-    case StaticData::Type::Skin: {
-        if (gameItem.weaponID == WeaponId::Butterfly ||
-            gameItem.weaponID == WeaponId::Falchion ||
-            gameItem.weaponID == WeaponId::Daggers ||
-            gameItem.weaponID == WeaponId::Bowie ||
-            gameItem.weaponID == WeaponId::Ursus ||
-            gameItem.weaponID == WeaponId::SkeletonKnife ||
-            gameItem.weaponID == WeaponId::NomadKnife ||
-            gameItem.weaponID == WeaponId::Paracord ||
-            gameItem.weaponID == WeaponId::SurvivalKnife ||
-            gameItem.weaponID == WeaponId::Stiletto ||
-            gameItem.weaponID == WeaponId::Talon)
-        {
-            std::cout << "Type = Knife (skin)" << std::endl;
-            cmd += "\u2605";
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
-            std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
-            if (dynamicData.statTrak > -1) //buggy (-1)
-            {
-                std::cout << dynamicData.statTrak << std::endl;
-                cmd += "StatTrak\u2122 ";
-            }
-            cmd += name + " | " + staticData.name;
-        }
-        else
-        {
-            std::cout << "Type = Skin" << std::endl;
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
-            std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
-            if (dynamicData.statTrak > -1)
-            {
-                std::cout << dynamicData.statTrak << std::endl;
-                cmd += "StatTrak\u2122 ";
-            }
-            cmd += name + " | " + staticData.name;
-        }
-        break;
+    case StaticData::Type::Collectible:
+    case StaticData::Type::Graffiti:
+    case StaticData::Type::Music:
+    case StaticData::Type::Patch:
+    case StaticData::Type::Sticker: {
+        cmd += name;
     }
     default:
         return;
