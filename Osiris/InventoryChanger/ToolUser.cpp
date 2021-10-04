@@ -7,7 +7,12 @@
 #include "../SDK/Panorama.h"
 #include "StaticData.h"
 #include "ToolUser.h"
+#include <iostream>
+#include <SDK/LocalPlayer.h>
+#include <SDK/Engine.h>
+#include <future>
 
+std::promise<void> promise; // XXXCEPT
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
@@ -19,6 +24,7 @@ static void initItemCustomizationNotification(std::string_view typeStr, std::uin
     const char* dummy;
     if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+    promise.set_value(); // XXXCEPT
 }
 
 enum class Action {
@@ -116,7 +122,100 @@ private:
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
+
+            std::future<void> future = promise.get_future(); // XXXCEPT
+            // THERE IS A CRASH HERE
+            // WHEN YOU OPEN A CASE AND INTANTLY CLOSE OUT OF IT
             initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false));
+            std::cout << "function awaited and completed successfully" << std::endl; // XXXCEPT
+            future.wait(); // XXXCEPT
+
+            // XXXCEPT CODE DOWN HERE
+            // TODO LIST
+            // 
+            // MIL SPEC WRONG BLUE (ONE BELOW)
+            // PINK SKINS ARE RED IN CHAT
+            //
+
+            if (!interfaces->engine->isConnected())
+                return;
+
+            std::cout << "isConnected()" << std::endl;
+
+            const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
+
+            std::string cmd = "playerradio Radio.WePlanted \" \u2028\x03\x03";
+            cmd += localPlayer->getPlayerName();
+            cmd += " \x01has opened a container and found: ";
+
+            std::cout << (char *)((uint8_t *)gameItem.rarity) << std::endl;
+
+            if (gameItem.rarity == 3) // Blue (Mil-Spec)
+                cmd += "\u3043"; // "\x0C"
+            else if (gameItem.rarity == 4) // Purple (Restricted)
+                cmd += "\u3044"; // "\x0D"
+            else if (gameItem.rarity == 5) // Pink (Classified)
+                cmd += "\u3045"; // "\x0E"
+            else if (gameItem.rarity == 6 || gameItem.rarity == 7) // Red (Covert) or Special
+                cmd += "\u3046"; // "\x0F"
+
+            std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
+
+            switch (gameItem.type) {
+            case StaticData::Type::Glove: {
+                std::cout << "Type = Glove" << std::endl;
+                cmd += "\u2605";
+                const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+                cmd += name + " | " + staticData.name;
+                break;
+            }
+            case StaticData::Type::Skin: {
+                if (gameItem.weaponID == WeaponId::Butterfly ||
+                    gameItem.weaponID == WeaponId::Falchion ||
+                    gameItem.weaponID == WeaponId::Daggers ||
+                    gameItem.weaponID == WeaponId::Bowie ||
+                    gameItem.weaponID == WeaponId::Ursus ||
+                    gameItem.weaponID == WeaponId::SkeletonKnife ||
+                    gameItem.weaponID == WeaponId::NomadKnife ||
+                    gameItem.weaponID == WeaponId::Paracord ||
+                    gameItem.weaponID == WeaponId::SurvivalKnife ||
+                    gameItem.weaponID == WeaponId::Stiletto ||
+                    gameItem.weaponID == WeaponId::Talon)
+                {
+                    std::cout << "Type = Knife (skin)" << std::endl;
+                    cmd += "\u2605";
+                    const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+                    const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
+                    std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
+                    if (dynamicData.statTrak > -1) //buggy (-1)
+                    {
+                        std::cout << dynamicData.statTrak << std::endl;
+                        cmd += "StatTrak\u2122 ";
+                    }
+                    cmd += name + " | " + staticData.name;
+                }
+                else
+                {
+                    std::cout << "Type = Skin" << std::endl;
+                    const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+                    const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
+                    std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
+                    if (dynamicData.statTrak > -1)
+                    { 
+                        std::cout << dynamicData.statTrak << std::endl;
+                        cmd += "StatTrak\u2122 ";
+                    }
+                    cmd += name + " | " + staticData.name;
+                }
+                break;
+            }
+            default:
+                return;
+            }
+
+            //`playerradio Radio.WePlanted "\u2028\x03\x03${name} \x01has opened a container and found: ${rarity}${starred}${stattrak} ${item} | ${paintkit}"`;
+
+            interfaces->engine->clientCmdUnrestricted(cmd.c_str());
         }
     }
 
