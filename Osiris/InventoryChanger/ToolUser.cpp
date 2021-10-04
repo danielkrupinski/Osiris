@@ -138,13 +138,13 @@ private:
             std::cout << (int)gameItem.rarity << std::endl;
 
             if (gameItem.rarity == 3) // Blue (Mil-Spec)
-                cmd += "\u3043"; // "\x0C"
+                cmd += "\x0C";
             else if (gameItem.rarity == 4) // Purple (Restricted)
-                cmd += "\u3044"; // "\x0D"
+                cmd += "\x0D";
             else if (gameItem.rarity == 5) // Pink (Classified)
-                cmd += "\u3045"; // "\x0E"
+                cmd += "\x0E";
             else if (gameItem.rarity == 6 || gameItem.rarity == 7) // Red (Covert) or Special
-                cmd += "\u3046"; // "\x0F"
+                cmd += "\x0F";
 
             std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
 

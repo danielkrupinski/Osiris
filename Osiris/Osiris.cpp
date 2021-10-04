@@ -17,6 +17,11 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
         return FALSE;
 
     if (reason == DLL_PROCESS_ATTACH) {
+        AllocConsole();
+        FILE* pCout;
+        freopen_s(&pCout, "CONOUT$", "w", stdout);
+        freopen_s(&pCout, "CONOUT$", "w", stderr);
+        // DEBUG
         std::setlocale(LC_CTYPE, ".utf8");
         hooks = std::make_unique<Hooks>(moduleHandle);
     }

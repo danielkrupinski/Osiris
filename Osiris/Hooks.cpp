@@ -685,7 +685,13 @@ void Hooks::uninstall() noexcept
     }
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
+    {
         CloseHandle(thread);
+        fclose(stdout);
+        fclose(stderr);
+        FreeConsole();
+        // DEBUG
+    }
 #else
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
