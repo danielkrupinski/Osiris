@@ -1593,11 +1593,13 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
 
     ImGui::Checkbox("Fake Case Open", &miscConfig.fakeCaseOpenEnabled);
+    /* Creates problems with message length in CSGO chat
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID("Fake Case Open Radio Text");
-    // ImGui::InputText("", &miscConfig.fakeCaseOpenRadioText); // Creates problems with message length in CSGO chat
+    ImGui::InputText("", &miscConfig.fakeCaseOpenRadioText);
     ImGui::PopID();
+    */
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
