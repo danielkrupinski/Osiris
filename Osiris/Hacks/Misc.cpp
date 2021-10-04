@@ -164,7 +164,6 @@ struct MiscConfig {
     } reportbot;
 
     bool fakeCaseOpenEnabled{ false };
-    // std::string fakeCaseOpenRadioText{ "" }; // Creates problems with message length in CSGO chat
 
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
@@ -1149,7 +1148,6 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
     const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
 
     std::string cmd = "playerradio Radio.WePlanted \"";
-    // cmd += miscConfig.fakeCaseOpenRadioText; // Creates problems with message length in CSGO chat
     cmd += " \u2028\u0003"; // " \u2028\x03\x03"
     cmd += localPlayer->getPlayerName();
     cmd += " \u0001has opened a container and found: ";
@@ -1160,9 +1158,8 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
 
     std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
 
-    switch (gameItem.type) {
-    case StaticData::Type::Glove:
-    case StaticData::Type::Skin: {
+    if (gameItem.type == StaticData::Type::Glove || gameItem.type == StaticData::Type::Skin)
+    {
         if (gameItem.weaponID == WeaponId::Bayonet ||
             gameItem.weaponID == WeaponId::ClassicKnife ||
             gameItem.weaponID == WeaponId::Flip ||
@@ -1186,26 +1183,13 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
         {
             cmd += "\u2605";
         }
-        const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
         const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
         if (dynamicData.statTrak > -1)
         {
             cmd += "StatTrak\u2122 ";
         }
-        cmd += name + " | " + staticData.name;
-        break;
     }
-    case StaticData::Type::Collectible:
-    case StaticData::Type::Graffiti:
-    case StaticData::Type::Music:
-    case StaticData::Type::Patch:
-    case StaticData::Type::Sticker: {
-        cmd += name;
-    }
-    default:
-        return;
-    }
-
+    cmd += name + " | " + StaticData::paintKits()[gameItem.dataIndex].name;
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
 }
 
@@ -1583,13 +1567,6 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
 
     ImGui::Checkbox("Fake Case Open", &miscConfig.fakeCaseOpenEnabled);
-    /* Creates problems with message length in CSGO chat
-    ImGui::SameLine();
-    ImGui::PushItemWidth(120.0f);
-    ImGui::PushID("Fake Case Open Radio Text");
-    ImGui::InputText("", &miscConfig.fakeCaseOpenRadioText);
-    ImGui::PopID();
-    */
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
@@ -1702,7 +1679,6 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
     read(j, "Fake Case Open", m.fakeCaseOpenEnabled);
-    // read<value_t::string>(j, "Fake Case Open Radio Text", m.fakeCaseOpenRadioText); // Creates problems with message length in CSGO chat
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1842,7 +1818,6 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
     WRITE("Fake Case Open", fakeCaseOpenEnabled);
-    // WRITE("Fake Case Open Radio Text", fakeCaseOpenRadioText); // Creates problems with message length in CSGO chat
 }
 
 json Misc::toJson() noexcept
