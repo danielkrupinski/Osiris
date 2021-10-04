@@ -53,6 +53,9 @@
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
+#include <iostream>
+#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/Inventory.h>
 
 struct PreserveKillfeed {
     bool enabled = false;
@@ -159,6 +162,9 @@ struct MiscConfig {
         int delay = 1;
         int rounds = 1;
     } reportbot;
+
+    bool fakeCaseOpenEnabled{ false };
+    std::string fakeCaseOpenRadioText{ "" };
 
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
@@ -1132,6 +1138,87 @@ void Misc::onVoteFailed() noexcept
         memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
+void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexcept
+{
+    if (!miscConfig.fakeCaseOpenEnabled)
+        return;
+
+    if (!interfaces->engine->isConnected())
+        return;
+
+    std::cout << "isConnected()" << std::endl;
+
+    const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
+
+    std::string cmd = "playerradio Radio.WePlanted \"";
+    cmd += miscConfig.fakeCaseOpenRadioText;
+    cmd += " \u2028\x03\x03";
+    cmd += localPlayer->getPlayerName();
+    cmd += " \x01has opened a container and found: ";
+
+    std::cout << (int)gameItem.rarity << std::endl;
+
+    const char* rarityHex[] = { "\x0C", "\x0D", "\x0E", "\x0F", "\x0F" }; // Blue, Purple, Pink, Red, Special
+
+    cmd += rarityHex[gameItem.rarity - 3];
+
+    std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
+
+    switch (gameItem.type) {
+    case StaticData::Type::Glove: {
+        std::cout << "Type = Glove" << std::endl;
+        cmd += "\u2605";
+        const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+        cmd += name + " | " + staticData.name;
+        break;
+    }
+    case StaticData::Type::Skin: {
+        if (gameItem.weaponID == WeaponId::Butterfly ||
+            gameItem.weaponID == WeaponId::Falchion ||
+            gameItem.weaponID == WeaponId::Daggers ||
+            gameItem.weaponID == WeaponId::Bowie ||
+            gameItem.weaponID == WeaponId::Ursus ||
+            gameItem.weaponID == WeaponId::SkeletonKnife ||
+            gameItem.weaponID == WeaponId::NomadKnife ||
+            gameItem.weaponID == WeaponId::Paracord ||
+            gameItem.weaponID == WeaponId::SurvivalKnife ||
+            gameItem.weaponID == WeaponId::Stiletto ||
+            gameItem.weaponID == WeaponId::Talon)
+        {
+            std::cout << "Type = Knife (skin)" << std::endl;
+            cmd += "\u2605";
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
+            std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
+            if (dynamicData.statTrak > -1) //buggy (-1)
+            {
+                std::cout << dynamicData.statTrak << std::endl;
+                cmd += "StatTrak\u2122 ";
+            }
+            cmd += name + " | " + staticData.name;
+        }
+        else
+        {
+            std::cout << "Type = Skin" << std::endl;
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
+            std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
+            if (dynamicData.statTrak > -1)
+            {
+                std::cout << dynamicData.statTrak << std::endl;
+                cmd += "StatTrak\u2122 ";
+            }
+            cmd += name + " | " + staticData.name;
+        }
+        break;
+    }
+    default:
+        return;
+    }
+
+    interfaces->engine->clientCmdUnrestricted(cmd.c_str());
+}
+
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
 static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
 {
@@ -1505,6 +1592,11 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Fake Case Open (Test)", &miscConfig.fakeCaseOpenEnabled);
+    ImGui::SameLine();
+    ImGui::InputText("Radio Text", &miscConfig.fakeCaseOpenRadioText);
+    ImGui::PushID("Fake Case Open (Test)");
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
@@ -1615,6 +1707,8 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read(j, "Fake Case Open", m.fakeCaseOpenEnabled);
+    read<value_t::string>(j, "Fake Case Open Radio Text", m.fakeCaseOpenRadioText);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1753,6 +1847,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Fake Case Open", fakeCaseOpenEnabled);
+    WRITE("Fake Case Open Radio Text", fakeCaseOpenRadioText);
 }
 
 json Misc::toJson() noexcept

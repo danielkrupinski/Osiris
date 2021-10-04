@@ -10,6 +10,7 @@
 #include <iostream>
 #include <SDK/LocalPlayer.h>
 #include <SDK/Engine.h>
+#include "../Hacks/Misc.h"
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
@@ -120,87 +121,7 @@ private:
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
             initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false));
-
-            // MIL SPEC WRONG BLUE (ONE BELOW)
-            // PINK SKINS ARE RED IN CHAT
-
-            if (!interfaces->engine->isConnected())
-                return;
-
-            std::cout << "isConnected()" << std::endl;
-
-            const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
-
-            std::string cmd = "playerradio Radio.WePlanted \" \u2028\x03\x03";
-            cmd += localPlayer->getPlayerName();
-            cmd += " \x01has opened a container and found: ";
-
-            std::cout << (int)gameItem.rarity << std::endl;
-
-            if (gameItem.rarity == 3) // Blue (Mil-Spec)
-                cmd += "\x0C";
-            else if (gameItem.rarity == 4) // Purple (Restricted)
-                cmd += "\x0D";
-            else if (gameItem.rarity == 5) // Pink (Classified)
-                cmd += "\x0E";
-            else if (gameItem.rarity == 6 || gameItem.rarity == 7) // Red (Covert) or Special
-                cmd += "\x0F";
-
-            std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
-
-            switch (gameItem.type) {
-            case StaticData::Type::Glove: {
-                std::cout << "Type = Glove" << std::endl;
-                cmd += "\u2605";
-                const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-                cmd += name + " | " + staticData.name;
-                break;
-            }
-            case StaticData::Type::Skin: {
-                if (gameItem.weaponID == WeaponId::Butterfly ||
-                    gameItem.weaponID == WeaponId::Falchion ||
-                    gameItem.weaponID == WeaponId::Daggers ||
-                    gameItem.weaponID == WeaponId::Bowie ||
-                    gameItem.weaponID == WeaponId::Ursus ||
-                    gameItem.weaponID == WeaponId::SkeletonKnife ||
-                    gameItem.weaponID == WeaponId::NomadKnife ||
-                    gameItem.weaponID == WeaponId::Paracord ||
-                    gameItem.weaponID == WeaponId::SurvivalKnife ||
-                    gameItem.weaponID == WeaponId::Stiletto ||
-                    gameItem.weaponID == WeaponId::Talon)
-                {
-                    std::cout << "Type = Knife (skin)" << std::endl;
-                    cmd += "\u2605";
-                    const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-                    const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
-                    std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
-                    if (dynamicData.statTrak > -1) //buggy (-1)
-                    {
-                        std::cout << dynamicData.statTrak << std::endl;
-                        cmd += "StatTrak\u2122 ";
-                    }
-                    cmd += name + " | " + staticData.name;
-                }
-                else
-                {
-                    std::cout << "Type = Skin" << std::endl;
-                    const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-                    const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
-                    std::cout << dynamicData.statTrak << " = stattrack\n" << std::endl;
-                    if (dynamicData.statTrak > -1)
-                    { 
-                        std::cout << dynamicData.statTrak << std::endl;
-                        cmd += "StatTrak\u2122 ";
-                    }
-                    cmd += name + " | " + staticData.name;
-                }
-                break;
-            }
-            default:
-                return;
-            }
-
-            interfaces->engine->clientCmdUnrestricted(cmd.c_str());
+            Misc::runFakeCaseOpen(unlockedItemIdx, dynamicDataIdx);
         }
     }
 

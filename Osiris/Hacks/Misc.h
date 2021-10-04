@@ -61,6 +61,7 @@ namespace Misc
     void onVoteFailed() noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
+    void runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
