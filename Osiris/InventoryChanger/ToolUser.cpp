@@ -10,9 +10,7 @@
 #include <iostream>
 #include <SDK/LocalPlayer.h>
 #include <SDK/Engine.h>
-#include <future>
 
-std::promise<void> promise; // XXXCEPT
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
@@ -24,7 +22,6 @@ static void initItemCustomizationNotification(std::string_view typeStr, std::uin
     const char* dummy;
     if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-    promise.set_value(); // XXXCEPT
 }
 
 enum class Action {
@@ -122,20 +119,10 @@ private:
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
-
-            std::future<void> future = promise.get_future(); // XXXCEPT
-            // THERE IS A CRASH HERE
-            // WHEN YOU OPEN A CASE AND INTANTLY CLOSE OUT OF IT
             initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false));
-            std::cout << "function awaited and completed successfully" << std::endl; // XXXCEPT
-            future.wait(); // XXXCEPT
 
-            // XXXCEPT CODE DOWN HERE
-            // TODO LIST
-            // 
             // MIL SPEC WRONG BLUE (ONE BELOW)
             // PINK SKINS ARE RED IN CHAT
-            //
 
             if (!interfaces->engine->isConnected())
                 return;
@@ -148,7 +135,7 @@ private:
             cmd += localPlayer->getPlayerName();
             cmd += " \x01has opened a container and found: ";
 
-            std::cout << (char *)((uint8_t *)gameItem.rarity) << std::endl;
+            std::cout << (int)gameItem.rarity << std::endl;
 
             if (gameItem.rarity == 3) // Blue (Mil-Spec)
                 cmd += "\u3043"; // "\x0C"
@@ -212,8 +199,6 @@ private:
             default:
                 return;
             }
-
-            //`playerradio Radio.WePlanted "\u2028\x03\x03${name} \x01has opened a container and found: ${rarity}${starred}${stattrak} ${item} | ${paintkit}"`;
 
             interfaces->engine->clientCmdUnrestricted(cmd.c_str());
         }
