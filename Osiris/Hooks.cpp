@@ -687,6 +687,7 @@ void Hooks::uninstall() noexcept
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
     {
         CloseHandle(thread);
+        FreeConsole(); //xxxcept
     }
 #else
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;

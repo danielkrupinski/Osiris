@@ -57,6 +57,9 @@
 #include "../InventoryChanger/StaticData.h"
 #include "../InventoryChanger/Inventory.h"
 
+//xxxcept
+#include <iostream>
+
 struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
@@ -1147,13 +1150,38 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
 
     const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
 
+    if (gameItem.rarity == 0)
+        return;
+
     std::string cmd = "playerradio Radio.WePlanted \"";
     cmd += " \u2028\u0003"; // " \u2028\x03\x03"
     cmd += localPlayer->getPlayerName();
     cmd += " \u0001has opened a container and found: ";
 
-    const char* rarity[] = { "\u000C", "\u000B", "\u000E", "\u000F", "\u000F" };
-    cmd += rarity[gameItem.rarity - 3];
+    // { default, White, Gray, Red, Orange, Yellow, Blue, Pink }
+    std::vector<int> colours{ 3, 17, 13, 15, 16, 9, 12, 14 };
+    std::cout << static_cast<int>(gameItem.rarity) << std::endl;
+
+    switch (static_cast<int>(gameItem.rarity)) { 
+    case 3: { //blue
+        cmd += std::string{ static_cast<char>(colours[6]) };
+        break;
+    }
+    case 4: { //purp
+        cmd += std::string{ static_cast<char>(colours[4]) };
+        break;
+    }
+    case 5: { //pink
+        cmd += std::string{ static_cast<char>(colours[7]) };
+        break;
+    }
+    case 6: { //red
+        cmd += std::string{ static_cast<char>(colours[3]) };
+        break;
+    }
+    default:
+        return;
+    }
 
     std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
 
@@ -1192,7 +1220,12 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
             cmd += "StatTrak\u2122 ";
         }
     }
-    cmd += name + " | " + StaticData::paintKits()[gameItem.dataIndex].name;
+
+    if (!gameItem.isCollectible())
+        cmd += name + " | " + StaticData::paintKits()[gameItem.dataIndex].name;
+    else
+        cmd += name;
+
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
 }
 
