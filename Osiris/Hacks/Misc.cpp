@@ -1153,7 +1153,6 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
     cmd += " \u0001has opened a container and found: ";
 
     const char* rarity[] = { "\u000C", "\u000B", "\u000E", "\u000F", "\u000F" };
-
     cmd += rarity[gameItem.rarity - 3];
 
     std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
@@ -1179,7 +1178,11 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
             gameItem.weaponID == WeaponId::Stiletto ||
             gameItem.weaponID == WeaponId::Talon ||
             gameItem.weaponID == WeaponId::SkeletonKnife ||
-            gameItem.type == StaticData::Type::Glove) // Would like to clean up this mess by just saying "if weaponId is in the range of 500 to 525 (knife range)" but since I can't do that and there is no StaticData::Type::Glove, it's annoying..
+            gameItem.type == StaticData::Type::Glove)
+            // Would like to clean up this mess by just saying
+            // "if weaponId is in the range of 500 to 525 (knife range)"
+            // but since I can't do that (bc it's enum) and there is no StaticData::Type::Knife, it's annoying..
+            // Open for suggestions / change.
         {
             cmd += "\u2605";
         }
