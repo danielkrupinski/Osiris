@@ -53,7 +53,9 @@
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
-#include <InventoryChanger/StaticData.h>
+
+#include <../InventoryChanger/StaticData.h>
+#include <InventoryChanger/Inventory.h>
 
 struct PreserveKillfeed {
     bool enabled = false;
