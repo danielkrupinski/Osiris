@@ -54,7 +54,6 @@
 
 #include "../imguiCustom.h"
 #include <iostream>
-#include <InventoryChanger/StaticData.h>
 #include <InventoryChanger/Inventory.h>
 
 struct PreserveKillfeed {
