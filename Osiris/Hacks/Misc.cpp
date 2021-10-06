@@ -1144,42 +1144,33 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
 
     if (!interfaces->engine->isConnected())
         return;
+    
+    if(!localPlayer->isAlive)
+        return;
 
     const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
-
-    if (gameItem.rarity == 0)
-        return;
 
     std::string cmd = "playerradio Radio.WePlanted \"";
     cmd += " \u2028\u0003"; // " \u2028\x03\x03"
     cmd += localPlayer->getPlayerName();
     cmd += " \u0001has opened a container and found: ";
 
-    // { default, White, Gray, Red, Orange, Yellow, Blue, Pink }
-    std::vector<int> colours{ 3, 17, 13, 15, 16, 9, 12, 14 };
-
     switch (static_cast<int>(gameItem.rarity)) { 
-    case 3: { //blue
-        cmd += std::string{ static_cast<char>(colours[6]) };
+    case 3: {
+        cmd += std::string{ static_cast<char>(12) };
         break;
     }
-    case 4: { //purp
-        cmd += std::string{ static_cast<char>(colours[4]) };
+    case 5: {
+        cmd += std::string{ static_cast<char>(14) };
         break;
     }
-    case 5: { //pink
-        cmd += std::string{ static_cast<char>(colours[7]) };
-        break;
-    }
-    case 6: { //red
-        cmd += std::string{ static_cast<char>(colours[3]) };
+    case 6: {
+        cmd += std::string{ static_cast<char>(15) };
         break;
     }
     default:
         return;
     }
-
-    std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
 
     if (gameItem.type == StaticData::Type::Glove || gameItem.type == StaticData::Type::Skin)
     {
@@ -1203,20 +1194,13 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
             gameItem.weaponID == WeaponId::Talon ||
             gameItem.weaponID == WeaponId::SkeletonKnife ||
             gameItem.type == StaticData::Type::Glove)
-            // Would like to clean up this mess by just saying
-            // "if weaponId is in the range of 500 to 525 (knife range)"
-            // but since I can't do that (bc it's enum) and there is no StaticData::Type::Knife, it's annoying..
-            // Open for suggestions / change.
-        {
-            cmd += "\u2605";
-        }
+                cmd += "\u2605";
         const auto& dynamicData = Inventory::dynamicSkinData(dynamicDataIdx);
         if (dynamicData.statTrak > -1)
-        {
             cmd += "StatTrak\u2122 ";
-        }
     }
 
+    std::string name = StaticData::getWeaponName(gameItem.weaponID).data();
     if (!gameItem.isCollectible())
         cmd += name + " | " + StaticData::paintKits()[gameItem.dataIndex].name;
     else
