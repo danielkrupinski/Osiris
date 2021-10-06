@@ -1157,7 +1157,6 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
 
     // { default, White, Gray, Red, Orange, Yellow, Blue, Pink }
     std::vector<int> colours{ 3, 17, 13, 15, 16, 9, 12, 14 };
-    std::cout << static_cast<int>(gameItem.rarity) << std::endl;
 
     switch (static_cast<int>(gameItem.rarity)) { 
     case 3: { //blue
