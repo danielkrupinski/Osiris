@@ -58,6 +58,7 @@ namespace Misc
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
+    void forceRelayCluster() noexcept;
     void voteRevealer(GameEvent& event) noexcept;
     void onVoteStart(const void* data, int size) noexcept;
     void onVotePass() noexcept;

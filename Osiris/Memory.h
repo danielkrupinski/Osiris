@@ -118,6 +118,7 @@ public:
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress1;
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress2;
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
+    std::string* forceRelayCluster;
 
     std::add_pointer_t<EconItemView* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
