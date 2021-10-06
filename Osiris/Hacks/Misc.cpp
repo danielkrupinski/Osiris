@@ -57,9 +57,6 @@
 #include "../InventoryChanger/StaticData.h"
 #include "../InventoryChanger/Inventory.h"
 
-//xxxcept
-#include <iostream>
-
 struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
