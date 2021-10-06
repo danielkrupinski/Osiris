@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+
+    <!-- Adapter Specific sections -->
+    <Catch2Adapter>
+        <FilenameFilter>.*</FilenameFilter>
+        <!-- Regex filter -->
+    </Catch2Adapter>
+
+</RunSettings>

@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Osiris", "Osiris\Osiris.vcxproj", "{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{D8501E5E-394D-4E42-9C89-EB600537E315}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B886B9C-EF4F-4379-81F6-892DA25C55EA}"
+	ProjectSection(SolutionItems) = preProject
+		tests.runsettings = tests.runsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Debug|x86.ActiveCfg = Debug|Win32
+		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Debug|x86.Build.0 = Debug|Win32
+		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Release|x86.ActiveCfg = Release|Win32
+		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Release|x86.Build.0 = Release|Win32
+		{D8501E5E-394D-4E42-9C89-EB600537E315}.Debug|x86.ActiveCfg = Debug|Win32
+		{D8501E5E-394D-4E42-9C89-EB600537E315}.Debug|x86.Build.0 = Debug|Win32
+		{D8501E5E-394D-4E42-9C89-EB600537E315}.Release|x86.ActiveCfg = Release|Win32
+		{D8501E5E-394D-4E42-9C89-EB600537E315}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D19EC35-7F55-4342-9454-22163FADE56D}
+	EndGlobalSection
+EndGlobal

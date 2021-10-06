@@ -1,0 +1,22 @@
+name: IWYU
+
+on:
+  schedule:
+    - cron: '0 0 * * WED'
+
+jobs:
+  linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
+    - name: configure
+      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+    - name: include what you use
+      uses: danielkrupinski/include-what-you-use-action@master
+      with:
+        compilation-database-path: './Release/'
+        no-error: 'true'
