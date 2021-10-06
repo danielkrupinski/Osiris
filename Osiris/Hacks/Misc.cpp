@@ -1145,7 +1145,7 @@ void Misc::runFakeCaseOpen(size_t unlockedItemIdx, size_t dynamicDataIdx) noexce
     if (!interfaces->engine->isConnected())
         return;
     
-    if(!localPlayer->isAlive)
+    if(!localPlayer->isAlive())
         return;
 
     const auto& gameItem = StaticData::gameItems()[unlockedItemIdx];
