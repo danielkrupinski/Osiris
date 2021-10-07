@@ -7,8 +7,6 @@
 #include "../SDK/Panorama.h"
 #include "StaticData.h"
 #include "ToolUser.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/Engine.h"
 #include "../Hacks/Misc.h"
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
