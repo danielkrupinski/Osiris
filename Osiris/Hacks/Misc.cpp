@@ -1618,6 +1618,32 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    if (ImGui::Button("Nuke chat", { 92.0f, 0.0f }))
+    {
+        std::ostringstream ss;
+
+        ss << "say ";
+
+        for (int i = 0; i <= 75; i++)
+            ss << "\xE2\x80\xA9";
+
+        interfaces->engine->clientCmdUnrestricted(ss.str().c_str());
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Basmala chat", { 94.0f, 0.0f }))
+    {
+        std::ostringstream ss;
+
+        ss << "say ";
+
+        for (int i = 0; i <= 30; i++)
+            ss << "\uFDFD ";
+
+        interfaces->engine->clientCmdUnrestricted(ss.str().c_str());
+    }
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
