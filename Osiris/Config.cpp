@@ -70,7 +70,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
         path = homeDir;
 #endif
 
-    path /= "BagCox";
+    path /= "Osiris";
     return path;
 }
 
