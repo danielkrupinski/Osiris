@@ -1240,6 +1240,70 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     }
 }
 
+
+Vector Misc::calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept
+{
+    Vector delta = destination - source;
+    Vector angles{ Helpers::rad2deg(atan2f(-delta.z, std::hypotf(delta.x, delta.y))), Helpers::rad2deg(atan2f(delta.y, delta.x)), 0.f };
+    angles.normalize();
+    return angles;
+}
+
+int Misc::distance(Vector a, Vector b) noexcept
+{
+    double distance;
+    distance = sqrt(((int)a.x - (int)b.x) * ((int)a.x - (int)b.x) +
+        ((int)a.y - (int)b.y) * ((int)a.y - (int)b.y) +
+        ((int)a.z - (int)b.z) * ((int)a.z - (int)b.z));
+
+    return (int)abs(round(distance));
+}
+
+void Misc::playerBlocker(UserCmd* cmd) noexcept
+{
+    if (miscConfig.playerBlocker) {
+        float bestdist = 250.f;
+        int index = -1;
+        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
+            auto entity = interfaces->entityList->getEntity(i);
+
+            if (!entity)
+                continue;
+
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get() || GetAsyncKeyState(config->misc.playerBlockerKey))
+                continue;
+
+            float dist = Misc::distance((Vector)(localPlayer->origin()), (Vector)(entity->origin()));
+            if (dist < bestdist)
+            {
+                bestdist = dist;
+                index = i;
+            }
+        }
+
+        if (index == -1)
+            return;
+
+        auto target = interfaces->entityList->getEntity(index);
+
+        if (!target)
+            return;
+
+        Vector angles = Misc::calculateRelativeAngle(localPlayer->origin(), target->origin(), {});
+
+        angles.y -= localPlayer->eyeAngles().y;
+        angles.normalize();
+        angles.y = std::clamp(angles.y, -180.f, 180.f);
+
+        if (angles.y < 0.0f)
+            cmd->sidemove = 450.f;
+        else if (angles.y > 0.0f)
+            cmd->sidemove = -450.f;
+
+    }
+}
+
+
 void Misc::autoAccept(const char* soundEntry) noexcept
 {
     if (!miscConfig.autoAccept)
@@ -1332,7 +1396,12 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::hotkey("", miscConfig.slowwalkKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
-    ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
+    ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);   
+    
+    ImGui::Checkbox("Blockbot", &miscConfig.playerBlocker);
+    ImGui::SameLine();
+    ImGui::hotkey("", miscConfig.playerBlockerKey);
+    
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
     ImGui::Checkbox("Auto accept", &miscConfig.autoAccept);
