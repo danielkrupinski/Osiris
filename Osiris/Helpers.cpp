@@ -11,6 +11,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#else
+#include <SDL2/SDL_messagebox.h>
 #endif
 
 #include "imgui/imgui.h"
@@ -214,4 +216,26 @@ bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& scr
     const bool onScreen = transformWorldPositionToScreenPosition(GameData::toScreenMatrix(), worldPosition, screenPosition);
     screenPosition = ImFloor(screenPosition);
     return onScreen;
+}
+
+void Helpers::messageBox(std::string_view title, std::string_view msg, const int type) noexcept
+{
+    const auto flags = [type]() {
+        switch (type) {
+        case 1:
+            return WIN32_LINUX(MB_OK | MB_ICONWARNING, SDL_MESSAGEBOX_WARNING);
+            break;
+        case 2:
+            return WIN32_LINUX(MB_OK | MB_ICONINFORMATION, SDL_MESSAGEBOX_INFORMATION);
+            break;
+        default:
+            return WIN32_LINUX(MB_OK | MB_ICONERROR, SDL_MESSAGEBOX_ERROR);
+            break;
+        }
+    }();
+#ifdef _WIN32
+    MessageBoxA(nullptr, msg.data(), title.data(), flags);
+#else
+    SDL_ShowSimpleMessageBox(flags, title.data(), msg.data(), nullptr);
+#endif
 }

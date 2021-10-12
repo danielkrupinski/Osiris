@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 #endif
 
+#include "Helpers.h"
 #include "SDK/Platform.h"
 
 class BaseFileSystem;
@@ -80,9 +81,7 @@ private:
                 return foundInterface;
         }
 
-#ifdef _WIN32
-        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
-#endif
+        Helpers::messageBox("Osiris", ("Failed to find " + std::string{name} + " interface!").c_str());
         std::exit(EXIT_FAILURE);
     }
 };

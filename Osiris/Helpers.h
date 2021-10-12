@@ -68,6 +68,8 @@ namespace Helpers
         return weaponID == WeaponId::Mp5sd && paintKit == 800;
     }
 
+    void messageBox(std::string_view title, std::string_view msg, const int type = 0) noexcept;
+
     class RandomGenerator {
     public:
         template <std::integral T>
