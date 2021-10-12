@@ -1272,7 +1272,7 @@ void Misc::playerBlocker(UserCmd* cmd) noexcept
             if (!entity)
                 continue;
 
-            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get() || miscConfig.playerBlockerKey.isDown())
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get() || !miscConfig.playerBlockerKey.isDown())
                 continue;
 
             float dist = Misc::distance((Vector)(localPlayer->origin()), (Vector)(entity->origin()));
