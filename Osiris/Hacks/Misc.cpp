@@ -1332,12 +1332,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::hotkey("", miscConfig.slowwalkKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
-    ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);   
-    
-    ImGui::Checkbox("Blockbot", &miscConfig.playerBlocker);
-    ImGui::SameLine();
-    ImGui::hotkey("", miscConfig.playerBlockerKey);
-    
+    ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);  
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
     ImGui::Checkbox("Auto accept", &miscConfig.autoAccept);
