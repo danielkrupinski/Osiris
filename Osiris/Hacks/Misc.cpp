@@ -81,6 +81,8 @@ struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
 
     KeyBind menuKey{ KeyBind::INSERT };
+    bool playerBlocker{ false };
+    KeyBind playerBlockerKey;
     bool antiAfkKick{ false };
     bool autoStrafe{ false };
     bool bunnyHop{ false };
