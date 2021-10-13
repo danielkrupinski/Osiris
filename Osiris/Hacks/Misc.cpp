@@ -1686,6 +1686,8 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read(j, "Blockbot", m.playerBlocker);
+    read(j, "Blockbot Key", m.playerBlockerKey);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1824,6 +1826,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Blockbot", playerBlocker);
+    WRITE("Blockbot Key", playerBlockerKey);
 }
 
 json Misc::toJson() noexcept
