@@ -68,6 +68,7 @@ public:
     std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__THISCALL* getSequenceActivity)(void*, int);
     bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
+    std::add_pointer_t<bool __FASTCALL(Entity*)> isBreakableEntity;
     std::uintptr_t hud;
     int*(__THISCALL* findHudElement)(std::uintptr_t, const char*);
     int(__THISCALL* clearHudWeapon)(int*, int);
