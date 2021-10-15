@@ -78,7 +78,11 @@ namespace HitGroup {
 struct Trace {
     Vector startpos;
     Vector endpos;
-    std::byte pad[20];
+    struct Plane {
+	Vector normal;
+	float distance;
+    } plane;
+    std::byte pad[4];
     float fraction;
     int contents;
     unsigned short dispFlags;
@@ -94,6 +98,8 @@ struct Trace {
     std::byte pad2[4];
     Entity* entity;
     int hitbox;
+
+    bool didHit() { return (fraction < 1.0f || allSolid || startSolid); }
 };
 
 // #define TRACE_STATS // - enable to see how many rays are cast per frame
