@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../JsonForward.h"
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 class GameEvent;
@@ -17,6 +18,10 @@ namespace Misc
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
+
+    Vector calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept;
+    int distance(Vector a, Vector b) noexcept;
+    void playerBlocker(UserCmd* cmd) noexcept;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;

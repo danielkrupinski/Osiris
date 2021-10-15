@@ -256,6 +256,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     }
     Backtrack::UpdateIncomingSequences();
    Visuals::viewModel();
+    Misc::playerBlocker(cmd);
 
     EnginePrediction::run(cmd);
 
