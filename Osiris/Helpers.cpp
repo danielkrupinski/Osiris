@@ -8,6 +8,8 @@
 #include <span>
 #include <string_view>
 #include <unordered_map>
+#include <locale>
+#include <codecvt>
 
 #ifdef _WIN32
 #include <Windows.h>
