@@ -37,6 +37,18 @@ namespace Helpers
                (firstByte & 0xF8) == 0xF0 ? 4 :
                -1;
     }
+    
+    std::string To_UTF8(const std::u16string &s);
+
+    std::string To_UTF8(const std::u32string &s);
+
+    std::u16string To_UTF16(const std::string &s);
+
+    std::u16string To_UTF16(const std::u32string &s);
+
+    std::u32string To_UTF32(const std::string &s);
+
+    std::u32string To_UTF32(const std::u16string &s);
 
     std::wstring toWideString(const std::string& str) noexcept;
     std::wstring toUpper(std::wstring str) noexcept;
