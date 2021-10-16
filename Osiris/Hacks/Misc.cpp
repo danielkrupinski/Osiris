@@ -224,51 +224,51 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
-{    
-	static auto lastTime = 0.0f; /*Used in clocktag*/
-
+{
 	const float svtickrate = 1.f / memory->globalVars->intervalPerTick;
-	
-	int lagCompensation = GameData::getNetOutgoingLatency() / memory->globalVars->intervalPerTick;
-	
+
+	int lagCompensation = GameData::getNetOutgoingLatency() / (1000.0f / svtickrate);
+
 	int ticksPerChange = 1 * svtickrate; // Sec * TickRate
 					     //TODO: Add custom speed in menu
-	
-	int OffsetCount = static_cast<int>((memory->globalVars->tickCount + lagCompensation) / ticksPerChange);
-	
-	static int lastOffset = 0;
-	
-   	if (miscConfig.clocktag) //Still the same
-	{
-        	if (memory->globalVars->realtime - lastTime < 1.0f)
-        	    return;
 
-        	const auto time = std::time(nullptr);
-        	const auto localTime = std::localtime(&time);
-        	char s[11];
-        	s[0] = '\0';
-        	snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        	lastTime = memory->globalVars->realtime;
-        	memory->setClanTag(s, s);
-  	} 
-	else if (miscConfig.customClanTag) 
+	int OffsetCount = static_cast<int>((memory->globalVars->tickCount + lagCompensation) / ticksPerChange);
+
+	static int lastOffset = 0;
+
+   	if (miscConfig.clocktag) //Still the same
+    {
+        if(lastOffset == OffsetCount) //Prevent from changing clantag every tick
+			return;
+
+        const auto time = std::time(nullptr);
+        const auto localTime = std::localtime(&time);
+        char s[11];
+        s[0] = '\0';
+        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+        lastOffset = OffsetCount;
+        memory->setClanTag(s, s);
+  	}
+	else if (miscConfig.customClanTag)
 	{
 		if(lastOffset == OffsetCount) //Prevent from changing clantag every tick
-			return; 
-		
-		std::string setTag = std::string(miscConfig.clanTag);
-		
-		if(setTag.size() < 2)
-			setTag = "Osiris ";
-		
-        	if (miscConfig.animatedClanTag) 
-		{
-          		const auto offset = OffsetCount % setTag.size();
+			return;
+
+		std::u32string setTag = Helpers::To_UTF32(std::string(miscConfig.clanTag));
+
+		if(setTag.length() < 2)
+			setTag = U"Osiris ";
+
+        if (miscConfig.animatedClanTag)
+        {
+            auto offset = OffsetCount % setTag.length();
 			std::rotate(setTag.begin(), setTag.begin() + offset, setTag.end());
-        	}
-		
-		lastOffset = OffsetCount;
-        	memory->setClanTag(setTag.c_str(), setTag.c_str());
+        }
+
+        lastOffset = OffsetCount;
+
+        std::string _u8setTag = Helpers::To_UTF8(setTag);
+        memory->setClanTag(_u8setTag.c_str(), _u8setTag.c_str());
     	}
 }
 
