@@ -12,7 +12,7 @@ public:
     void hookAt(std::size_t index, void* fun) noexcept;
 
     template<typename T, std::size_t Idx, typename ...Args>
-    constexpr auto getOriginal(Args... args) const noexcept
+    constexpr auto getOriginal(Args...) const noexcept
     {
         return reinterpret_cast<T(__THISCALL*)(void*, Args...)>(originals[Idx]);
     }

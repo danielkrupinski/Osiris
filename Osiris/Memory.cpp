@@ -27,16 +27,21 @@ static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
     return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
 }
 
-static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
+struct ModuleInfo {
+    void* base;
+    std::size_t size;
+};
+
+static ModuleInfo getModuleInformation(const char* name) noexcept
 {
 #ifdef _WIN32
     if (HMODULE handle = GetModuleHandleA(name)) {
         if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
-            return std::make_pair(moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage);
+            return ModuleInfo{ moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage };
     }
     return {};
 #elif __linux__
-    struct ModuleInfo {
+    struct ModuleInfo_ {
         const char* name;
         void* base = nullptr;
         std::size_t size = 0;
@@ -45,7 +50,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
     moduleInfo.name = name;
 
     dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
-        const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
+        const auto moduleInfo = reinterpret_cast<ModuleInfo_*>(data);
         if (!std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name))
             return 0;
 
@@ -79,7 +84,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
         return 1;
     }, &moduleInfo);
 
-    return std::make_pair(moduleInfo.base, moduleInfo.size);
+    return ModuleInfo{ moduleInfo.base, moduleInfo.size };
 #endif
 }
 
@@ -102,19 +107,18 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
     return table;
 }
 
-static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern, bool reportNotFound = true) noexcept
+template <bool ReportNotFound = true>
+static std::uintptr_t findPattern(ModuleInfo moduleInfo, std::string_view pattern) noexcept
 {
     static auto id = 0;
     ++id;
 
-    const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
-
-    if (moduleBase && moduleSize) {
+    if (moduleInfo.base && moduleInfo.size) {
         const auto lastIdx = pattern.length() - 1;
         const auto badCharTable = generateBadCharTable(pattern);
 
-        auto start = static_cast<const char*>(moduleBase);
-        const auto end = start + moduleSize - pattern.length();
+        auto start = static_cast<const char*>(moduleInfo.base);
+        const auto end = start + moduleInfo.size - pattern.length();
 
         while (start <= end) {
             int i = lastIdx;
@@ -130,10 +134,16 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
 
     assert(false);
 #ifdef _WIN32
-    if (reportNotFound)
+    if constexpr (ReportNotFound)
         MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return 0;
+}
+
+template <bool ReportNotFound = true>
+static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
+{
+    return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
 
 Memory::Memory() noexcept
@@ -161,7 +171,7 @@ Memory::Memory() noexcept
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") + 1);
     insertIntoTree = findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") + 5;
     dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x0B\xE8????\x8B\x3D") + 3);
-    traceToExit = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
+    traceToExit = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x4C\xF3\x0F\x10\x75");
     viewRender = **reinterpret_cast<ViewRender***>(findPattern(CLIENT_DLL, "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08") + 2);
     viewRenderBeams = *reinterpret_cast<ViewRenderBeams**>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1);
     drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x0C\x8D\x4D\xF8") + 1);
@@ -237,7 +247,7 @@ Memory::Memory() noexcept
     weaponSystem = *relativeToAbsolute<WeaponSystem**>(findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") + 12);
 
     isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") + 1);
-    lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x40\x0F\xB6\xFF\x55"));
+    lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0"));
     getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x4C\x89\xF7") + 1);
 
     hud = relativeToAbsolute<decltype(hud)>(findPattern(CLIENT_DLL, "\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8") + 4);
@@ -301,7 +311,7 @@ Memory::Memory() noexcept
     deleteItemGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDE\x48\x89\xC7\xE8????\x48\x89\xC3\xE8????\x48\x89\xDE");
     setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") - 95;
     createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDE\x5B\x48\x8B\x10") + 1);
-    insertIntoTree = findPattern(CLIENT_DLL, "\x74\x2A\x4C\x8B\x10") + 31;
+    insertIntoTree = findPattern(CLIENT_DLL, "\x74\x24\x4C\x8B\x10") + 31;
     uiComponentInventory = relativeToAbsolute<decltype(uiComponentInventory)>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E") + 8);
     setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x85????\x41\x83\xC4\x01") + 1);
 

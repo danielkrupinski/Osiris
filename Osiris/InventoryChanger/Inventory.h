@@ -58,6 +58,10 @@ struct DynamicSouvenirPackageData {
     ProPlayer proPlayer{};
 };
 
+struct DynamicServiceMedalData {
+    std::uint32_t issueDateTimestamp = 0;
+};
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
@@ -85,6 +89,7 @@ public:
     bool isPatch() const noexcept { return isValid() && get().isPatch(); }
     bool isStatTrakSwapTool() const noexcept { return isValid() && get().isStatTrakSwapTool(); }
     bool isViewerPass() const noexcept { return isValid() && get().isViewerPass(); }
+    bool isServiceMedal() const noexcept { return isValid() && get().isServiceMedal(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
@@ -93,7 +98,7 @@ public:
 
 namespace Inventory
 {
-    constexpr auto INVALID_DYNAMIC_DATA_IDX = static_cast<std::size_t>(-1);
+    constexpr auto InvalidDynamicDataIdx = static_cast<std::size_t>(-1);
 
     std::vector<InventoryItem>& get() noexcept;
     void addItemUnacknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept;
@@ -112,10 +117,12 @@ namespace Inventory
     DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
     DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
     DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
+    DynamicServiceMedalData& dynamicServiceMedalData(std::size_t index) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
+    std::size_t emplaceDynamicData(DynamicServiceMedalData&& data) noexcept;
 }

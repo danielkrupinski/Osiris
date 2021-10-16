@@ -16,6 +16,7 @@
 #include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../ProtobufReader.h"
 
 #include "EnginePrediction.h"
 #include "Misc.h"
@@ -52,6 +53,29 @@
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
+
+struct PreserveKillfeed {
+    bool enabled = false;
+    bool onlyHeadshots = false;
+};
+
+struct OffscreenEnemies : ColorToggle {
+    OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
+    HealthBar healthBar;
+};
+
+struct PurchaseList {
+    bool enabled = false;
+    bool onlyDuringFreezeTime = false;
+    bool showPrices = false;
+    bool noTitleBar = false;
+
+    enum Mode {
+        Details = 0,
+        Summary
+    };
+    int mode = Details;
+};
 
 struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
@@ -315,7 +339,12 @@ void Misc::spectatorList() noexcept
             continue;
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
-            ImGui::TextWrapped("%s", it->name.c_str());
+            if (const auto texture = it->getAvatarTexture()) {
+                const auto textSize = ImGui::CalcTextSize(it->name.c_str());
+                ImGui::Image(texture, ImVec2(textSize.y, textSize.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                ImGui::SameLine();
+                ImGui::TextWrapped("%s", it->name.c_str());
+            }
         }
     }
 
@@ -359,22 +388,6 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
 }
 
-
-static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
-{
-    const auto& matrix = GameData::toScreenMatrix();
-
-    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
-    if (w < 0.001f)
-        return false;
-
-    out = ImGui::GetIO().DisplaySize / 2.0f;
-    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
-    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-    out = ImFloor(out);
-    return true;
-}
-
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!miscConfig.recoilCrosshair.asColorToggle().enabled)
@@ -389,7 +402,7 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
-    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+    if (ImVec2 pos; Helpers::worldToScreenPixelAligned(localPlayerData.aimPunch, pos))
         drawCrosshair(drawList, pos, Helpers::calculateColor(miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
@@ -1089,6 +1102,46 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     const char color = votedYes ? '\x06' : '\x07';
 
     memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+}
+
+void Misc::onVoteStart(const void* data, int size) noexcept
+{
+    if (!miscConfig.revealVotes)
+        return;
+
+    constexpr auto voteName = [](int index) {
+        switch (index) {
+        case 0: return "Kick";
+        case 1: return "Change Level";
+        case 6: return "Surrender";
+        case 13: return "Start TimeOut";
+        default: return "";
+        }
+    };
+
+    const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
+    const auto entityIndex = reader.readInt32(2);
+
+    const auto entity = interfaces->entityList->getEntity(entityIndex);
+    if (!entity || !entity->isPlayer())
+        return;
+
+    const auto isLocal = localPlayer && entity == localPlayer.get();
+
+    const auto voteType = reader.readInt32(3);
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
+}
+
+void Misc::onVotePass() noexcept
+{
+    if (miscConfig.revealVotes)
+        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
+}
+
+void Misc::onVoteFailed() noexcept
+{
+    if (miscConfig.revealVotes)
+        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV

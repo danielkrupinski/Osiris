@@ -19,7 +19,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "imgui/GL/gl3w.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 #endif
@@ -95,55 +94,6 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
 
-static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
-{
-    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
-
-    if (config->loadScheduledFonts())
-        ImGui_ImplDX9_DestroyFontsTexture();
-
-    ImGui_ImplDX9_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
-    StreamProofESP::render();
-    Misc::purchaseList();
-    Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
-    Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
-    Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
-    Misc::drawBombTimer();
-    Misc::spectatorList();
-    Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
-    Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
-    Misc::watermark();
-
-    Aimbot::updateInput();
-    Visuals::updateInput();
-    StreamProofESP::updateInput();
-    Misc::updateInput();
-    Triggerbot::updateInput();
-    Chams::updateInput();
-    Glow::updateInput();
-
-    gui->handleToggle();
-
-    if (gui->isOpen())
-        gui->render();
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    if (device->BeginScene() == D3D_OK) {
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-        device->EndScene();
-    }
-    
-    GameData::clearUnusedAvatars();
-    InventoryChanger::clearUnusedItemIconTextures();
-
-    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
-}
-
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
@@ -153,6 +103,74 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 }
 
 #endif
+
+#ifdef _WIN32
+static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
+{
+    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+
+    if (config->loadScheduledFonts())
+        ImGui_ImplDX9_DestroyFontsTexture();
+
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+#else
+static void swapWindow(SDL_Window * window) noexcept
+{
+    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+#endif
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        StreamProofESP::render();
+        Misc::purchaseList();
+        Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
+        Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
+        Misc::drawBombTimer();
+        Misc::spectatorList();
+        Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
+        Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
+        Misc::watermark();
+
+        Aimbot::updateInput();
+        Visuals::updateInput();
+        StreamProofESP::updateInput();
+        Misc::updateInput();
+        Triggerbot::updateInput();
+        Chams::updateInput();
+        Glow::updateInput();
+
+        gui->handleToggle();
+
+        if (gui->isOpen())
+            gui->render();
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+
+#ifdef _WIN32
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
+#else
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
+
+    GameData::clearUnusedAvatars();
+    InventoryChanger::clearUnusedItemIconTextures();
+
+#ifdef _WIN32
+    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
+#else
+    hooks->swapWindow(window);
+#endif
+}
 
 static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
@@ -491,7 +509,13 @@ static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessag
 {
     if (type == UserMessageType::Text)
         InventoryChanger::onUserTextMsg(data, size);
-
+    else if (type == UserMessageType::VoteStart)
+        Misc::onVoteStart(data, size);
+    else if (type == UserMessageType::VotePass)
+        Misc::onVotePass();
+    else if (type == UserMessageType::VoteFailed)
+        Misc::onVoteFailed();
+    
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
@@ -510,54 +534,6 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
 }
 
-#else
-
-static void swapWindow(SDL_Window* window) noexcept
-{
-    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
-    
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-
-    ImGui::NewFrame();
-
-    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        StreamProofESP::render();
-        Misc::purchaseList();
-        Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
-        Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
-        Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
-        Misc::drawBombTimer();
-        Misc::spectatorList();
-        Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
-        Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
-        Misc::watermark();
-
-        Aimbot::updateInput();
-        Visuals::updateInput();
-        StreamProofESP::updateInput();
-        Misc::updateInput();
-        Triggerbot::updateInput();
-        Chams::updateInput();
-        Glow::updateInput();
-
-        gui->handleToggle();
-
-        if (gui->isOpen())
-            gui->render();
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    GameData::clearUnusedAvatars();
-    InventoryChanger::clearUnusedItemIconTextures();
-
-    hooks->swapWindow(window);
-}
-
 #endif
 
 void Hooks::install() noexcept
@@ -571,7 +547,6 @@ void Hooks::install() noexcept
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
 #else
-    gl3wInit();
     ImGui_ImplOpenGL3_Init();
 
     swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);

@@ -156,33 +156,6 @@ struct Projectile : Shared {
     using Shared::operator=;
 };
 
-struct PurchaseList {
-    bool enabled = false;
-    bool onlyDuringFreezeTime = false;
-    bool showPrices = false;
-    bool noTitleBar = false;
-
-    enum Mode {
-        Details = 0,
-        Summary
-    };
-    int mode = Details;
-};
-
-struct PreserveKillfeed {
-    bool enabled = false;
-    bool onlyHeadshots = false;
-};
-
-struct OffscreenEnemies : ColorToggle {
-    OffscreenEnemies() : ColorToggle{ 1.0f, 0.26f, 0.21f, 1.0f } {}
-    HealthBar healthBar;
-};
-
-struct BulletTracers : ColorToggle {
-    BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
-};
-
 using value_t = json::value_t;
 
 // WRITE macro requires:
@@ -192,7 +165,7 @@ using value_t = json::value_t;
 #define WRITE(name, valueName) to_json(j[name], o.valueName, dummy.valueName)
 
 template <typename T>
-static void to_json(json& j, const T& o, const T& dummy)
+void to_json(json& j, const T& o, const T& dummy)
 {
     if (o != dummy)
         j = o;
@@ -208,7 +181,7 @@ void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness&
 void to_json(json& j, const HealthBar& o, const HealthBar& dummy = {});
 
 template <value_t Type, typename T>
-static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
+std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
 {
     if (!j.contains(key))
         return;
@@ -225,11 +198,10 @@ void read(const json& j, const char* key, KeyBind& o) noexcept;
 void read(const json& j, const char* key, char* o, std::size_t size) noexcept;
 
 template <typename T, size_t Size>
-static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
+void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
     if (j.contains(key) && j[key].type() == value_t::array) {
-        std::size_t i = 0;
-        for (const auto& e : j[key]) {
+        for (std::size_t i = 0; const auto& e : j[key]) {
             if (i >= o.size())
                 break;
 
@@ -243,7 +215,7 @@ static void read_array_opt(const json& j, const char* key, std::array<T, Size>& 
 }
 
 template <typename T, size_t Size>
-static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
+void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
     if (!j.contains(key))
         return;
@@ -257,7 +229,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
 {
     if (j.contains(key) && j[key].is_object()) {
         for (auto& element : j[key].items())

@@ -134,8 +134,7 @@ KeyBind::KeyBind(KeyCode keyCode) noexcept : keyCode{ static_cast<std::size_t>(k
 
 KeyBind::KeyBind(const char* keyName) noexcept
 {
-    auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name);
-    if (it != keyMap.end() && it->name == keyName)
+    if (const auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name); it != keyMap.end() && it->name == keyName)
         keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
     else
         keyCode = KeyCode::NONE;

@@ -75,6 +75,7 @@ public:
     VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), (this))
     VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
+    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), (this))
 
     std::uint8_t getQuality() noexcept
     {
@@ -86,18 +87,34 @@ public:
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
     }
 
+    int getItemType() noexcept
+    {
+        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x130, 0x1C8));
+    }
+
+    bool isServiceMedal() noexcept
+    {
+        return getItemType() == 5; /* prestige_coin */
+    }
+
     const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
     {
         return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
     }
 
-    std::uint32_t getCrateSeriesNumber() noexcept
+    std::uint32_t getAttributeValue(std::uint16_t attributeDefinitionIndex) noexcept
     {
         const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 68 /* "set supply crate series" */)
+        for (int i = 0; i < staticAttributes.size; ++i) {
+            if (staticAttributes[i].defIndex == attributeDefinitionIndex)
                 return staticAttributes[i].value.asUint32;
+        }
         return 0;
+    }
+
+    std::uint32_t getCrateSeriesNumber() noexcept
+    {
+        return getAttributeValue(68 /* "set supply crate series" */);
     }
 
     bool hasCrateSeries() noexcept
@@ -107,16 +124,17 @@ public:
 
     std::uint32_t getTournamentEventID() noexcept
     {
-        const auto& staticAttributes = getStaticAttributes();
-        for (int i = 0; i < staticAttributes.size; ++i)
-            if (staticAttributes[i].defIndex == 137 /* "tournament event id" */)
-                return staticAttributes[i].value.asUint32;
-        return 0;
+        return getAttributeValue(137 /* "tournament event id" */);
     }
 
     bool hasTournamentEventID() noexcept
     {
         return getTournamentEventID() != 0;
+    }
+
+    std::uint32_t getServiceMedalYear() noexcept
+    {
+        return getAttributeValue(221 /* "prestige year" */);
     }
 
     bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
@@ -225,7 +243,7 @@ public:
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
 
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
@@ -234,6 +252,11 @@ public:
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+
+    auto getItemDefinitionInterface(WeaponId id) noexcept
+    {
+        return getItemDefinitionInterface(static_cast<int>(id));
+    }
 };
 
 class ItemSystem {
@@ -307,6 +330,24 @@ enum TournamentTeam : std::uint8_t {
     BIG = 69,
     VegaSquadron = 70,
     Immortals = 71,
+    SproutEsports = 72,
+    SpaceSoldiers = 73,
+    Tyloo = 74,
+    Avangar = 75,
+    QuantumBellatorFire = 76,
+    MisfitsGaming = 77,
+    _100Thieves = 78,
+    FlashGaming = 79,
+    MIBR = 80,
+    TeamSpirit = 81,
+    Rogue = 82,
+    WinstrikeTeam = 83,
+    ENCE = 84,
+    FURIA = 85,
+    GrayhoundGaming = 86,
+    NRG = 87,
+    ViCiGaming = 88,
+    Vitality = 89,
 };
 
 enum TournamentStage : std::uint8_t {
@@ -314,7 +355,8 @@ enum TournamentStage : std::uint8_t {
     Quarterfinal = 5,
     Semifinal = 8,
     GrandFinal = 11,
-    AllStar = 14
+    AllStar = 14,
+    ChallengersStage = 27
 };
 
 enum ProPlayer {
@@ -472,11 +514,90 @@ enum ProPlayer {
     autimatic = 94605121,
     LUCAS1 = 4780624,
     kNgV = 6732863,
-    HEN1 = 57761535
+    HEN1 = 57761535,
+    Nifty = 163358521,
+    qikert = 166970562,
+    buster = 212936195,
+    Jame = 75859856,
+    dimasick = 825268,
+    KrizzeN = 107672171,
+    Twistzz = 55989477,
+    devoduvek = 116664993,
+    AmaNEk = 108679223,
+    ShahZaM = 86003016,
+    SicK = 23556959,
+    XANTARES = 83853068,
+    paz = 68524615,
+    ngiN = 17887362,
+    Calyx = 92280537,
+    MAJ3R = 7167161,
+    Boombl4 = 185941338,
+    waterfaLLZ = 12720124,
+    jmqa = 115223433,
+    Kvik = 40982505,
+    balblna = 50204800,
+    Kaze = 16127541,
+    Attacker = 88001036,
+    Karsa = 85358333,
+    LoveYY = 48886373,
+    Summer = 52964519,
+    xms = 38509481,
+    v4lde = 154664140,
+    Golden = 116509497,
+    fitch = 33208850,
+    cadiaN = 43849788,
+    vice = 135979468,
+    MICHU = 60359075,
+    snatchie = 111436809,
+    REZ = 73906687,
+    BnTet = 111817512,
+    xccurate = 177428807,
+    somebody = 85131873,
+    DD = 169982617,
+    captainMo = 109036162,
+    smooya = 211423593,
+    tiziaN = 37291208,
+    crush = 36981424,
+    tonyblack = 15738602,
+    sdy = 80311472,
+    Dima = 51718767,
+    S0tF1k = 174857712,
+    COLDYY1 = 34364443,
+    niko = 29470855,
+    ISSAA = 77546728,
+    woxic = 123219778,
+    gade = 21355604,
+    JUGi = 83626376,
+    Snappi = 29157337,
+    ANDROID = 1936433,
+    yay = 57496765,
+    dephh = 26995179,
+    draken = 159123007,
+    Gratisfaction = 5543683,
+    Liazz = 112055988,
+    Brollan = 178562747,
+    advent = 41786057,
+    zhokiNg = 99494192,
+    Freeman = 208355715,
+    aumaN = 46223698,
+    BnTeT = 111817512,
+    ZywOo = 153400465,
+    ALEX = 44605706,
+    dexter = 101535513,
+    malta = 181905573,
+    erkaSt = 131305548,
+    sterling = 100224621,
+    DickStacy = 192019632,
+    xseveN = 52906775,
+    Aleksib = 52977598,
+    sergej = 67574097,
+    Aerial = 2445180
 };
 
 class EconItem {
 public:
+    INCONSTRUCTIBLE(EconItem)
+
 #ifdef _WIN32
     VIRTUAL_METHOD(void, destructor, 0, (), (this, true))
 #else
@@ -519,6 +640,8 @@ public:
     void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
     void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
+    void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
+    void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
 
     void setStickerID(int slot, int stickerID) noexcept
     {

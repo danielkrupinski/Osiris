@@ -9,7 +9,7 @@ on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  msvc:
+  msvc-release:
     # The type of runner that the job will run on
     runs-on: windows-latest
     
@@ -24,7 +24,7 @@ jobs:
     # Build command
     - name: Build
       shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Release'
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Release'
       
   msvc-debug:
     runs-on: windows-latest
@@ -37,7 +37,7 @@ jobs:
 
     - name: Build
       shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Debug'
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Debug'
       
   clang:
     # The type of runner that the job will run on
@@ -54,4 +54,4 @@ jobs:
     # Build command
     - name: Build
       shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Release /p:PlatformToolset=ClangCL'
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Release /p:PlatformToolset=ClangCL'
