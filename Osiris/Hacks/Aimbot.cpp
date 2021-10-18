@@ -27,6 +27,11 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
+/*
+ * "range" and "step" parameters controls distance and accuracy of tracing.
+ * Less "range": more performance
+ * Less "step": more accuracy
+ */
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace, float range = 90.f, float step = 4.0f)
 {
     float distance{ 0.0f };
