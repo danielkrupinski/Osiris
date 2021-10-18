@@ -179,12 +179,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     if (!cmd->commandNumber)
         return result;
 
-#ifdef _WIN32
-    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-#else
-    bool dummy;
-    bool& sendPacket = dummy;
-#endif
+    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - WIN32_LINUX(0x1C, 0x18));
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
