@@ -76,7 +76,6 @@ public:
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
     std::uintptr_t insertIntoTree;
     int* dispatchSound;
-    std::uintptr_t traceToExit;
     ViewRender* viewRender;
     ViewRenderBeams* viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
