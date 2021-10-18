@@ -27,32 +27,50 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
-static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace, float range = 90.f, float step = 4.0f)
 {
-    bool result = false;
-#if defined(_WIN32)
-    const auto traceToExitFn = memory->traceToExit;
-    __asm {
-        push 0
-        push 0
-        push 0
-        push exitTrace
-        mov eax, direction
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov eax, start
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov edx, enterTrace
-        mov ecx, end
-        call traceToExitFn
-        add esp, 40
-        mov result, al
+    float distance{ 0.0f };
+    int previousContents{ 0 };
+
+    while (distance <= range)
+    {
+        distance += step;
+        Vector origin{ start + direction * distance };
+
+        if (!previousContents)
+            previousContents = interfaces->engineTrace->getPointContents(origin, 0x4600400B);
+
+        const int currentContents = interfaces->engineTrace->getPointContents(origin, 0x4600400B);
+        if (!(currentContents & 0x600400B) || (currentContents & 0x40000000 && currentContents != previousContents))
+        {
+            const Vector destination{ origin - (direction * step) };
+
+            if (interfaces->engineTrace->traceRay({ origin, destination }, 0x4600400B, nullptr, exitTrace); exitTrace.startSolid && exitTrace.surface.flags & 0x8000)
+            {
+                if (interfaces->engineTrace->traceRay({ origin, start }, 0x600400B, { exitTrace.entity }, exitTrace); exitTrace.didHit() && !exitTrace.startSolid)
+                    return true;
+
+                continue;
+            }
+
+            if (exitTrace.didHit() && !exitTrace.startSolid)
+            {
+                if (memory->isBreakableEntity(enterTrace.entity) && memory->isBreakableEntity(exitTrace.entity))
+                    return true;
+
+                if (enterTrace.surface.flags & 0x0080 || (!(exitTrace.surface.flags & 0x0080) && exitTrace.plane.normal.dotProduct(direction) <= 1.0f))
+                    return true;
+
+                continue;
+            } else {
+                if (enterTrace.entity && enterTrace.entity->index() != 0 && memory->isBreakableEntity(enterTrace.entity))
+                    return true;
+
+                continue;
+            }
+        }
     }
-#endif
-    return result;
+    return false;
 }
 
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
