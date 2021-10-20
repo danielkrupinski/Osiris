@@ -54,6 +54,8 @@ namespace Misc
     void oppositeHandKnife(FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
+    void deathLog(GameEvent& event) noexcept;
+    void damageLog(GameEvent& event) noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void voteRevealer(GameEvent& event) noexcept;
     void onVoteStart(const void* data, int size) noexcept;

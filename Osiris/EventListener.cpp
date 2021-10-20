@@ -31,11 +31,13 @@ namespace
                 InventoryChanger::overrideHudIcon(*event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);
+                Misc::deathLog(*event);
                 break;
             case fnv::hash("player_hurt"):
                 Misc::playHitSound(*event);
                 Visuals::hitEffect(event);
                 Visuals::hitMarker(event);
+                Misc::damageLog(*event);
                 break;
             case fnv::hash("vote_cast"):
                 Misc::voteRevealer(*event);

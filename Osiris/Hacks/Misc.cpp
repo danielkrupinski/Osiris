@@ -161,6 +161,13 @@ struct MiscConfig {
     } reportbot;
 
     OffscreenEnemies offscreenEnemies;
+
+
+    struct PlayerLog {
+        bool enabled = false;
+        bool deathLog = false;
+        bool damageLog = false;
+    } playerLog;
 } miscConfig;
 
 bool Misc::shouldRevealMoney() noexcept
@@ -1041,6 +1048,86 @@ void Misc::resetReportbot() noexcept
     reportedPlayers.clear();
 }
 
+void Misc::deathLog(GameEvent& event) noexcept {
+    if (!miscConfig.playerLog.enabled)
+        return;
+
+    if (!miscConfig.playerLog.deathLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+    const auto attacker = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("attacker")));
+
+    if (!attacker || !userid || !localPlayer)
+        return;
+
+    const auto isAttacker = localPlayer && attacker == localPlayer.get();
+    const auto isUserID = localPlayer && userid == localPlayer.get();
+    const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
+    const std::vector hitgroups = { "Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear" };
+
+    std::string information = "";
+    information += " \x0C\u2022Osiris\u2022 ";
+    information += colour;
+
+    if (attacker->getPlayerName() == "") {
+        information += userid->getPlayerName().c_str();
+        information += "\x01 died because of fall damage. ";
+    } else {
+        information += attacker->getPlayerName().c_str();
+        information += "\x01 killed ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+    }
+
+    memory->clientMode->getHudChat()->printf(0, information.c_str());
+}
+
+void Misc::damageLog(GameEvent& event) noexcept {
+    if (!miscConfig.playerLog.enabled)
+        return;
+
+    if (!miscConfig.playerLog.damageLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+    const auto attacker = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("attacker")));
+
+    if (!attacker || !userid || !localPlayer)
+        return;
+
+    const auto damage = event.getInt("dmg_health") + event.getInt("dmg_armor");
+    const auto isAttacker = localPlayer && attacker == localPlayer.get();
+    const auto isUserID = localPlayer && userid == localPlayer.get();
+    const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
+    const std::vector hitgroups = {"Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear"};
+
+    std::string information = "";
+    information += " \x0C\u2022Osiris\u2022 ";
+    information += colour;
+
+    if (attacker->getPlayerName() == "") {
+        information += userid->getPlayerName().c_str();
+        information += "\x01 took ";
+        information += colour;
+        information += std::to_string(damage).c_str();
+        information += "\x01 damage because of fall damage. ";
+    } else {
+        information += attacker->getPlayerName().c_str();
+        information += "\x01 hit ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 for ";
+        information += colour;
+        information += std::to_string(damage).c_str();
+        information += "\x01 in the ";
+        information += colour;
+        information += hitgroups[event.getInt("hitgroup")];
+    }
+
+    memory->clientMode->getHudChat()->printf(0, information.c_str());
+}
+
 void Misc::preserveKillfeed(bool roundStart) noexcept
 {
     if (!miscConfig.preserveKillfeed.enabled)
@@ -1505,6 +1592,22 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Player Log", &miscConfig.playerLog.enabled);
+
+    ImGui::SameLine();
+    ImGui::PushID("Player Log");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Checkbox("Death Log", &miscConfig.playerLog.deathLog);
+        ImGui::Checkbox("Damage Log", &miscConfig.playerLog.damageLog);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
@@ -1643,6 +1746,18 @@ static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::R
     WRITE("Other Hacking", other);
 }
 
+static void from_json(const json& j, MiscConfig::PlayerLog& l) {
+    read(j, "Enabled", l.enabled);
+    read(j, "Damage Log", l.damageLog);
+    read(j, "Death Log", l.deathLog);
+}
+
+static void to_json(json& j, const MiscConfig::PlayerLog& o, const MiscConfig::PlayerLog& dummy = {}) {
+    WRITE("Enabled", enabled);
+    WRITE("Damage Log", damageLog);
+    WRITE("Death Log", deathLog);
+}
+
 static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
 {
     WRITE("Enabled", enabled);
@@ -1753,6 +1868,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Player Log", playerLog);
 }
 
 json Misc::toJson() noexcept
