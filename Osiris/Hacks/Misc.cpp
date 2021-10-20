@@ -162,9 +162,9 @@ struct MiscConfig {
 
     OffscreenEnemies offscreenEnemies;
 
-
     struct PlayerLog {
         bool enabled = false;
+        int type = 0;
         bool deathLog = false;
         bool damageLog = false;
     } playerLog;
@@ -1067,20 +1067,41 @@ void Misc::deathLog(GameEvent& event) noexcept {
     const std::vector hitgroups = { "Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear" };
 
     std::string information = "";
-    information += " \x0C\u2022Osiris\u2022 ";
-    information += colour;
 
-    if (attacker->getPlayerName() == "") {
-        information += userid->getPlayerName().c_str();
-        information += "\x01 died because of fall damage. ";
-    } else {
-        information += attacker->getPlayerName().c_str();
-        information += "\x01 killed ";
-        information += colour;
-        information += userid->getPlayerName().c_str();
+    if (miscConfig.playerLog.type == 0) {
+        information += "echo \"[Osiris] ";
+
+        if (attacker->getPlayerName() == "") {
+            information += userid->getPlayerName().c_str();
+            information += " died because of fall damage.\"";
+        }
+        else {
+            information += attacker->getPlayerName().c_str();
+            information += " killed ";
+            information += colour;
+            information += userid->getPlayerName().c_str();
+            information += "\"";
+        }
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
     }
+    else {
+        information += " \x0C\u2022Osiris\u2022 ";
+        information += colour;
 
-    memory->clientMode->getHudChat()->printf(0, information.c_str());
+        if (attacker->getPlayerName() == "") {
+            information += userid->getPlayerName().c_str();
+            information += "\x01 died because of fall damage. ";
+        }
+        else {
+            information += attacker->getPlayerName().c_str();
+            information += "\x01 killed ";
+            information += colour;
+            information += userid->getPlayerName().c_str();
+        }
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
 }
 
 void Misc::damageLog(GameEvent& event) noexcept {
@@ -1103,29 +1124,54 @@ void Misc::damageLog(GameEvent& event) noexcept {
     const std::vector hitgroups = {"Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear"};
 
     std::string information = "";
-    information += " \x0C\u2022Osiris\u2022 ";
-    information += colour;
 
-    if (attacker->getPlayerName() == "") {
-        information += userid->getPlayerName().c_str();
-        information += "\x01 took ";
-        information += colour;
-        information += std::to_string(damage).c_str();
-        information += "\x01 damage because of fall damage. ";
+    if (miscConfig.playerLog.type == 0) {
+        information += "echo \"[Osiris] ";
+
+        if (attacker->getPlayerName() == "") {
+            information += userid->getPlayerName().c_str();
+            information += " took ";
+            information += std::to_string(damage).c_str();
+            information += " damage because of fall damage. \"";
+        }
+        else {
+            information += attacker->getPlayerName().c_str();
+            information += " hit ";
+            information += userid->getPlayerName().c_str();
+            information += " for ";
+            information += std::to_string(damage).c_str();
+            information += " in the ";
+            information += hitgroups[event.getInt("hitgroup")];
+            information += "\"";
+        }
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
     } else {
-        information += attacker->getPlayerName().c_str();
-        information += "\x01 hit ";
+        information += " \x0C\u2022Osiris\u2022 ";
         information += colour;
-        information += userid->getPlayerName().c_str();
-        information += "\x01 for ";
-        information += colour;
-        information += std::to_string(damage).c_str();
-        information += "\x01 in the ";
-        information += colour;
-        information += hitgroups[event.getInt("hitgroup")];
-    }
 
-    memory->clientMode->getHudChat()->printf(0, information.c_str());
+        if (attacker->getPlayerName() == "") {
+            information += userid->getPlayerName().c_str();
+            information += "\x01 took ";
+            information += colour;
+            information += std::to_string(damage).c_str();
+            information += "\x01 damage because of fall damage. ";
+        }
+        else {
+            information += attacker->getPlayerName().c_str();
+            information += "\x01 hit ";
+            information += colour;
+            information += userid->getPlayerName().c_str();
+            information += "\x01 for ";
+            information += colour;
+            information += std::to_string(damage).c_str();
+            information += "\x01 in the ";
+            information += colour;
+            information += hitgroups[event.getInt("hitgroup")];
+        }
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
 }
 
 void Misc::preserveKillfeed(bool roundStart) noexcept
@@ -1602,6 +1648,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
 
     if (ImGui::BeginPopup("")) {
         ImGui::PushItemWidth(80.0f);
+        ImGui::Combo("Type", &miscConfig.playerLog.type, "Console\0Chat");
         ImGui::Checkbox("Death Log", &miscConfig.playerLog.deathLog);
         ImGui::Checkbox("Damage Log", &miscConfig.playerLog.damageLog);
         ImGui::EndPopup();
@@ -1748,12 +1795,14 @@ static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::R
 
 static void from_json(const json& j, MiscConfig::PlayerLog& l) {
     read(j, "Enabled", l.enabled);
+    read(j, "Type", l.type);
     read(j, "Damage Log", l.damageLog);
     read(j, "Death Log", l.deathLog);
 }
 
 static void to_json(json& j, const MiscConfig::PlayerLog& o, const MiscConfig::PlayerLog& dummy = {}) {
     WRITE("Enabled", enabled);
+    WRITE("Type", type);
     WRITE("Damage Log", damageLog);
     WRITE("Death Log", deathLog);
 }
