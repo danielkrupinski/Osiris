@@ -1765,6 +1765,7 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read<value_t::object>(j, "Player Log", m.playerLog);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
