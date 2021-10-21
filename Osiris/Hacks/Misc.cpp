@@ -1073,12 +1073,9 @@ void Misc::deathLog(GameEvent& event) noexcept {
 
     std::string information = "";
 
-    //if (attacker->getPlayerName().c_str() == "")
-        //attacker->getPlayerName() = "world";
-
     if (miscConfig.eventLog.type == 0) {
         information += "echo \"[Osiris] ";
-        information += attacker->getPlayerName().c_str();
+        information += attacker->getPlayerName().empty() ? "world" : attacker->getPlayerName().c_str();
         information += " killed ";
         information += userid->getPlayerName().c_str();
         information += "\"";
@@ -1092,7 +1089,7 @@ void Misc::deathLog(GameEvent& event) noexcept {
 
         information += " \x0C\u2022Osiris\u2022 ";
         information += colour;
-        information += attacker->getPlayerName().c_str();
+        information += attacker->getPlayerName().empty() ? "world" : attacker->getPlayerName().c_str();
         information += "\x01 killed ";
         information += colour;
         information += userid->getPlayerName().c_str();
@@ -1114,8 +1111,10 @@ void Misc::damageLog(GameEvent& event) noexcept {
     if (!attacker || !userid || !localPlayer)
         return;
 
-    //if (attacker->getPlayerName().c_str() == "")
-        //attacker->getPlayerName() = "world";
+    if (attacker->getPlayerName().empty())
+        return;
+
+    memory->clientMode->getHudChat()->printf(0, std::string{ attacker->getPlayerName().empty() }.c_str());
 
     const auto damage = event.getInt("dmg_health") + event.getInt("dmg_armor");
     const std::vector hitgroups = {"Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear"};
@@ -1318,7 +1317,7 @@ void Misc::bombBeginDefuseLog(GameEvent& event) noexcept {
     if (!userid || !localPlayer)
         return;
 
-    const auto hasKit = event.getInt("haskit") == 0 ? " with a kit" : "";
+    const auto hasKit = event.getInt("haskit") == 1 ? " with a kit" : "";
 
     std::string information = "";
 
