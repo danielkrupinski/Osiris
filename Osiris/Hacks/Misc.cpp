@@ -1975,6 +1975,11 @@ static void from_json(const json& j, MiscConfig::EventLog& l) {
     read(j, "Type", l.type);
     read(j, "Damage Log", l.damageLog);
     read(j, "Death Log", l.deathLog);
+    read(j, "Fall Damage Log", l.fallDamageLog);
+    read(j, "Bomb Planted Log", l.bombPlantedLog);
+    read(j, "Bomb Defused Log", l.bombDefusedLog);
+    read(j, "Bomb Exploded Log", l.bombExplodedLog);
+    read(j, "Bomb Begin Defuse Log", l.bombBeginDefuseLog);
 }
 
 static void to_json(json& j, const MiscConfig::EventLog& o, const MiscConfig::EventLog& dummy = {}) {
@@ -1982,6 +1987,11 @@ static void to_json(json& j, const MiscConfig::EventLog& o, const MiscConfig::Ev
     WRITE("Type", type);
     WRITE("Damage Log", damageLog);
     WRITE("Death Log", deathLog);
+    WRITE("Fall Damage Log", fallDamageLog);
+    WRITE("Bomb Planted Log", bombPlantedLog);
+    WRITE("Bomb Defused Log", bombDefusedLog);
+    WRITE("Bomb Exploded Log", bombExplodedLog);
+    WRITE("Bomb Begin Defuse Log", bombBeginDefuseLog);
 }
 
 static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
