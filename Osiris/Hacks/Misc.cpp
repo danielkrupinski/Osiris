@@ -162,12 +162,20 @@ struct MiscConfig {
 
     OffscreenEnemies offscreenEnemies;
 
-    struct PlayerLog {
+    struct EventLog {
         bool enabled = false;
         int type = 0;
+
         bool deathLog = false;
         bool damageLog = false;
-    } playerLog;
+        bool fallDamageLog = false;
+        bool bombPlantedLog = false;
+        bool bombDefusedLog = false;
+        bool bombExplodedLog = false;
+        bool bombBeginDefuseLog = false;
+        bool bombAbortDefuseLog = false;
+    } eventLog;
+
 } miscConfig;
 
 bool Misc::shouldRevealMoney() noexcept
@@ -1049,10 +1057,10 @@ void Misc::resetReportbot() noexcept
 }
 
 void Misc::deathLog(GameEvent& event) noexcept {
-    if (!miscConfig.playerLog.enabled)
+    if (!miscConfig.eventLog.enabled)
         return;
 
-    if (!miscConfig.playerLog.deathLog)
+    if (!miscConfig.eventLog.deathLog)
         return;
 
     const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
@@ -1061,54 +1069,43 @@ void Misc::deathLog(GameEvent& event) noexcept {
     if (!attacker || !userid || !localPlayer)
         return;
 
-    const auto isAttacker = localPlayer && attacker == localPlayer.get();
-    const auto isUserID = localPlayer && userid == localPlayer.get();
-    const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
     const std::vector hitgroups = { "Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear" };
 
     std::string information = "";
 
-    if (miscConfig.playerLog.type == 0) {
-        information += "echo \"[Osiris] ";
+    //if (attacker->getPlayerName().c_str() == "")
+        //attacker->getPlayerName() = "world";
 
-        if (attacker->getPlayerName() == "") {
-            information += userid->getPlayerName().c_str();
-            information += " died because of fall damage.\"";
-        }
-        else {
-            information += attacker->getPlayerName().c_str();
-            information += " killed ";
-            information += colour;
-            information += userid->getPlayerName().c_str();
-            information += "\"";
-        }
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] ";
+        information += attacker->getPlayerName().c_str();
+        information += " killed ";
+        information += userid->getPlayerName().c_str();
+        information += "\"";
 
         interfaces->engine->clientCmdUnrestricted(information.c_str());
     }
     else {
+        const auto isAttacker = localPlayer && attacker == localPlayer.get();
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
+
         information += " \x0C\u2022Osiris\u2022 ";
         information += colour;
-
-        if (attacker->getPlayerName() == "") {
-            information += userid->getPlayerName().c_str();
-            information += "\x01 died because of fall damage. ";
-        }
-        else {
-            information += attacker->getPlayerName().c_str();
-            information += "\x01 killed ";
-            information += colour;
-            information += userid->getPlayerName().c_str();
-        }
+        information += attacker->getPlayerName().c_str();
+        information += "\x01 killed ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
 
         memory->clientMode->getHudChat()->printf(0, information.c_str());
     }
 }
 
 void Misc::damageLog(GameEvent& event) noexcept {
-    if (!miscConfig.playerLog.enabled)
+    if (!miscConfig.eventLog.enabled)
         return;
 
-    if (!miscConfig.playerLog.damageLog)
+    if (!miscConfig.eventLog.damageLog)
         return;
 
     const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
@@ -1117,58 +1114,233 @@ void Misc::damageLog(GameEvent& event) noexcept {
     if (!attacker || !userid || !localPlayer)
         return;
 
+    //if (attacker->getPlayerName().c_str() == "")
+        //attacker->getPlayerName() = "world";
+
     const auto damage = event.getInt("dmg_health") + event.getInt("dmg_armor");
-    const auto isAttacker = localPlayer && attacker == localPlayer.get();
-    const auto isUserID = localPlayer && userid == localPlayer.get();
-    const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
     const std::vector hitgroups = {"Generic", "Head", "Chest", "Stomach", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "", "", "Gear"};
 
     std::string information = "";
 
-    if (miscConfig.playerLog.type == 0) {
+    if (miscConfig.eventLog.type == 0) {
         information += "echo \"[Osiris] ";
-
-        if (attacker->getPlayerName() == "") {
-            information += userid->getPlayerName().c_str();
-            information += " took ";
-            information += std::to_string(damage).c_str();
-            information += " damage because of fall damage. \"";
-        }
-        else {
-            information += attacker->getPlayerName().c_str();
-            information += " hit ";
-            information += userid->getPlayerName().c_str();
-            information += " for ";
-            information += std::to_string(damage).c_str();
-            information += " in the ";
-            information += hitgroups[event.getInt("hitgroup")];
-            information += "\"";
-        }
+        information += attacker->getPlayerName().c_str();
+        information += " hit ";
+        information += userid->getPlayerName().c_str();
+        information += " for ";
+        information += std::to_string(damage).c_str();
+        information += " in the ";
+        information += hitgroups[event.getInt("hitgroup")];
+        information += "\"";
 
         interfaces->engine->clientCmdUnrestricted(information.c_str());
-    } else {
+    }
+    else {
+        const auto isAttacker = localPlayer && attacker == localPlayer.get();
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isAttacker ? "\x06" : (isUserID ? "\x06" : "\x07");
+
         information += " \x0C\u2022Osiris\u2022 ";
         information += colour;
+        information += attacker->getPlayerName().c_str();
+        information += "\x01 hit ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 for ";
+        information += colour;
+        information += std::to_string(damage).c_str();
+        information += "\x01 in the ";
+        information += colour;
+        information += hitgroups[event.getInt("hitgroup")];
 
-        if (attacker->getPlayerName() == "") {
-            information += userid->getPlayerName().c_str();
-            information += "\x01 took ";
-            information += colour;
-            information += std::to_string(damage).c_str();
-            information += "\x01 damage because of fall damage. ";
-        }
-        else {
-            information += attacker->getPlayerName().c_str();
-            information += "\x01 hit ";
-            information += colour;
-            information += userid->getPlayerName().c_str();
-            information += "\x01 for ";
-            information += colour;
-            information += std::to_string(damage).c_str();
-            information += "\x01 in the ";
-            information += colour;
-            information += hitgroups[event.getInt("hitgroup")];
-        }
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
+}
+
+void Misc::fallDamageLog(GameEvent& event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    if (!miscConfig.eventLog.fallDamageLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    const auto damage = event.getFloat("damage");
+
+    std::string information = "";
+
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] ";
+        information += userid->getPlayerName().c_str();
+        information += " took ";
+        information += std::to_string(damage).c_str();
+        information += " damage because of fall damage.\"";
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
+    }
+    else {
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isUserID ? "\x06" : "\x07";
+
+        information += " \x0C\u2022Osiris\u2022 ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 took ";
+        information += colour;
+        information += std::to_string(static_cast<int>(std::round(damage))).c_str();
+        information += "\x01 damage because of fall damage.";
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
+}
+
+void Misc::bombPlantedLog(GameEvent& event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    if (!miscConfig.eventLog.bombPlantedLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    const auto site = event.getInt("site") == 0 ? "A Site" : "B Site";
+
+    std::string information = "";
+
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] ";
+        information += userid->getPlayerName().c_str();
+        information += " planted the bomb at ";
+        information += site;
+        information += "\"";
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
+    }
+    else {
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isUserID ? "\x06" : "\x07";
+
+        information += " \x0C\u2022Osiris\u2022 ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 planted the bomb at ";
+        information += colour;
+        information += site;
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
+}
+
+void Misc::bombDefusedLog(GameEvent& event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    if (!miscConfig.eventLog.bombDefusedLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    const auto site = event.getInt("site") == 0 ? "A Site" : "B Site";
+
+    std::string information = "";
+
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] ";
+        information += userid->getPlayerName().c_str();
+        information += " defused the bomb";
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
+    }
+    else {
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isUserID ? "\x06" : "\x07";
+
+        information += " \x0C\u2022Osiris\u2022 ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 defused the bomb";
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
+}
+
+void Misc::bombExplodedLog(GameEvent& event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    if (!miscConfig.eventLog.bombExplodedLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    const auto site = event.getInt("site") == 0 ? "A Site" : "B Site";
+
+    std::string information = "";
+
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] The bomb has exploded";
+        information += "\"";
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
+    }
+    else {
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isUserID ? "\x06" : "\x07";
+
+        information += " \x0C\u2022Osiris\u2022\x01 The bomb has exploded";
+
+        memory->clientMode->getHudChat()->printf(0, information.c_str());
+    }
+}
+
+void Misc::bombBeginDefuseLog(GameEvent& event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    if (!miscConfig.eventLog.bombBeginDefuseLog)
+        return;
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event.getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    const auto hasKit = event.getInt("haskit") == 0 ? " with a kit" : "";
+
+    std::string information = "";
+
+    if (miscConfig.eventLog.type == 0) {
+        information += "echo \"[Osiris] ";
+        information += userid->getPlayerName().c_str();
+        information += " is defusing the bomb";
+        information += hasKit;
+        information += "\"";
+
+        interfaces->engine->clientCmdUnrestricted(information.c_str());
+    }
+    else {
+        const auto isUserID = localPlayer && userid == localPlayer.get();
+        const auto colour = isUserID ? "\x06" : "\x07";
+
+        information += " \x0C\u2022Osiris\u2022 ";
+        information += colour;
+        information += userid->getPlayerName().c_str();
+        information += "\x01 is defusing the bomb";
+        information += colour;
+        information += hasKit;
 
         memory->clientMode->getHudChat()->printf(0, information.c_str());
     }
@@ -1638,19 +1810,24 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
-    ImGui::Checkbox("Player Log", &miscConfig.playerLog.enabled);
+    ImGui::Checkbox("Event Log", &miscConfig.eventLog.enabled);
 
     ImGui::SameLine();
-    ImGui::PushID("Player Log");
+    ImGui::PushID("Event Log");
 
     if (ImGui::Button("..."))
         ImGui::OpenPopup("");
 
     if (ImGui::BeginPopup("")) {
         ImGui::PushItemWidth(80.0f);
-        ImGui::Combo("Type", &miscConfig.playerLog.type, "Console\0Chat");
-        ImGui::Checkbox("Death Log", &miscConfig.playerLog.deathLog);
-        ImGui::Checkbox("Damage Log", &miscConfig.playerLog.damageLog);
+        ImGui::Combo("Type", &miscConfig.eventLog.type, "Console\0Chat");
+        ImGui::Checkbox("Death Log", &miscConfig.eventLog.deathLog);
+        ImGui::Checkbox("Damage Log", &miscConfig.eventLog.damageLog);
+        ImGui::Checkbox("Fall Damage Log", &miscConfig.eventLog.fallDamageLog);
+        ImGui::Checkbox("Bomb Planted Log", &miscConfig.eventLog.bombPlantedLog);
+        ImGui::Checkbox("Bomb Defused Log", &miscConfig.eventLog.bombDefusedLog);
+        ImGui::Checkbox("Bomb Explode Log", &miscConfig.eventLog.bombExplodedLog);
+        ImGui::Checkbox("Bomb Begin Defuse Log", &miscConfig.eventLog.bombBeginDefuseLog);
         ImGui::EndPopup();
     }
     ImGui::PopID();
@@ -1765,7 +1942,7 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
-    read<value_t::object>(j, "Player Log", m.playerLog);
+    read<value_t::object>(j, "Event Log", m.eventLog);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1794,14 +1971,14 @@ static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::R
     WRITE("Other Hacking", other);
 }
 
-static void from_json(const json& j, MiscConfig::PlayerLog& l) {
+static void from_json(const json& j, MiscConfig::EventLog& l) {
     read(j, "Enabled", l.enabled);
     read(j, "Type", l.type);
     read(j, "Damage Log", l.damageLog);
     read(j, "Death Log", l.deathLog);
 }
 
-static void to_json(json& j, const MiscConfig::PlayerLog& o, const MiscConfig::PlayerLog& dummy = {}) {
+static void to_json(json& j, const MiscConfig::EventLog& o, const MiscConfig::EventLog& dummy = {}) {
     WRITE("Enabled", enabled);
     WRITE("Type", type);
     WRITE("Damage Log", damageLog);
@@ -1918,7 +2095,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
-    WRITE("Player Log", playerLog);
+    WRITE("Event Log", eventLog);
 }
 
 json Misc::toJson() noexcept

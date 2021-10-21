@@ -39,6 +39,21 @@ namespace
                 Visuals::hitMarker(event);
                 Misc::damageLog(*event);
                 break;
+            case fnv::hash("player_falldamage"):
+                Misc::fallDamageLog(*event);
+                break;
+            case fnv::hash("bomb_planted"):
+                Misc::bombPlantedLog(*event);
+                break;
+            case fnv::hash("bomb_defused"):
+                Misc::bombDefusedLog(*event);
+                break;
+            case fnv::hash("bomb_exploded"):
+                Misc::bombExplodedLog(*event);
+                break;
+            case fnv::hash("bomb_begindefuse"):
+                Misc::bombBeginDefuseLog(*event);
+                break;
             case fnv::hash("vote_cast"):
                 Misc::voteRevealer(*event);
                 break;
@@ -68,6 +83,11 @@ void EventListener::init() noexcept
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_freeze_end");
     gameEventManager->addListener(&EventListenerImpl::instance(), "player_hurt");
     gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_falldamage");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_planted");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_defused");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_exploded");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_begindefuse");
     gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_mvp");
 

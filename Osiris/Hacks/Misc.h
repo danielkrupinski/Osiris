@@ -54,8 +54,6 @@ namespace Misc
     void oppositeHandKnife(FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
-    void deathLog(GameEvent& event) noexcept;
-    void damageLog(GameEvent& event) noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void voteRevealer(GameEvent& event) noexcept;
     void onVoteStart(const void* data, int size) noexcept;
@@ -63,6 +61,14 @@ namespace Misc
     void onVoteFailed() noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
+
+    void deathLog(GameEvent& event) noexcept;
+    void damageLog(GameEvent& event) noexcept;
+    void fallDamageLog(GameEvent& event) noexcept;
+    void bombPlantedLog(GameEvent& event) noexcept;
+    void bombDefusedLog(GameEvent& event) noexcept;
+    void bombExplodedLog(GameEvent& event) noexcept;
+    void bombBeginDefuseLog(GameEvent& event) noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
