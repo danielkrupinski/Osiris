@@ -458,6 +458,11 @@ private:
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isSticker(); });
     }
 
+    [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
+    {
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isPatch(); });
+    }
+
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
     {
         for (auto& crate : _cases) {
