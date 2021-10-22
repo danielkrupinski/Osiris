@@ -466,7 +466,7 @@ private:
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
     {
         for (auto& crate : _cases) {
-            if (isStickerCapsule(crate))
+            if (isStickerCapsule(crate) || isPatchPack(crate))
                 crate.souvenirPackageTournamentID = 0;
         }
     }
