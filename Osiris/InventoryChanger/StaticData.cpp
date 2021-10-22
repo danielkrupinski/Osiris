@@ -222,7 +222,7 @@ private:
                 continue;
 
             const auto name = std::string_view{ stickerKit->name.data(), static_cast<std::size_t>(stickerKit->name.length - 1) };
-            const auto isPatch = name.starts_with("patch");
+            const auto isPatch = name.starts_with("patch") || name.starts_with("stockh2021_teampatch");
             const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
             const auto isSticker = !isPatch && !isGraffiti;
             
