@@ -389,6 +389,8 @@ private:
             return TournamentMap::Nuke;
         if (lootListName.ends_with("de_vertigo"))
             return TournamentMap::Vertigo;
+        if (lootListName.ends_with("de_ancient"))
+            return TournamentMap::Ancient;
         return TournamentMap::None;
     }
 
