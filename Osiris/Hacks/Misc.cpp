@@ -282,6 +282,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 		if(setTag.length() < 2)
 			setTag = U"Osiris ";
+		
+		 std::replace( setTag.begin(), setTag.end(), U' ', U'\u2800');
 
         if (miscConfig.animatedClanTag)
         {
