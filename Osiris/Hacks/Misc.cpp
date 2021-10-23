@@ -91,6 +91,7 @@ struct MiscConfig {
     bool moonwalk{ false };
     bool edgejump{ false };
     bool slowwalk{ false };
+    bool blockbot{ false };
     bool autoPistol{ false };
     bool autoReload{ false };
     bool autoAccept{ false };
@@ -110,13 +111,13 @@ struct MiscConfig {
     bool fixTabletSignal{ false };
     bool fastPlant{ false };
     bool fastStop{ false };
-    bool quickReload{ false };
     bool prepareRevolver{ false };
     bool oppositeHandKnife = false;
     PreserveKillfeed preserveKillfeed;
     char clanTag[16];
     KeyBind edgejumpkey;
     KeyBind slowwalkKey;
+    KeyBind blockbotKey;
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
 
@@ -141,7 +142,6 @@ struct MiscConfig {
     int hitSound{ 0 };
     int chokedPackets{ 0 };
     KeyBind chokedPacketsKey;
-    int quickHealthshotKey{ 0 };
     float maxAngleDelta{ 255.0f };
     int killSound{ 0 };
     std::string customKillSound;
@@ -161,6 +161,17 @@ struct MiscConfig {
     } reportbot;
 
     OffscreenEnemies offscreenEnemies;
+
+    struct EventLog {
+        bool enabled = false;
+        bool localOnly = false;
+        bool chat = false;
+        bool console = false;
+
+        bool deathLog = false;
+        bool damageLog = false;
+        bool bombLog = false;
+    } eventLog;
 } miscConfig;
 
 bool Misc::shouldRevealMoney() noexcept
@@ -583,42 +594,6 @@ void Misc::disablePanoramablur() noexcept
 {
     static auto blur = interfaces->cvar->findVar("@panorama_disable_blur");
     blur->setValue(miscConfig.disablePanoramablur);
-}
-
-void Misc::quickReload(UserCmd* cmd) noexcept
-{
-    if (miscConfig.quickReload) {
-        static Entity* reloadedWeapon{ nullptr };
-
-        if (reloadedWeapon) {
-            for (auto weaponHandle : localPlayer->weapons()) {
-                if (weaponHandle == -1)
-                    break;
-
-                if (interfaces->entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
-                    cmd->weaponselect = reloadedWeapon->index();
-                    cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
-                    break;
-                }
-            }
-            reloadedWeapon = nullptr;
-        }
-
-        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->isInReload() && activeWeapon->clip() == activeWeapon->getWeaponData()->maxClip) {
-            reloadedWeapon = activeWeapon;
-
-            for (auto weaponHandle : localPlayer->weapons()) {
-                if (weaponHandle == -1)
-                    break;
-
-                if (auto weapon{ interfaces->entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
-                    cmd->weaponselect = weapon->index();
-                    cmd->weaponsubtype = weapon->getWeaponSubType();
-                    break;
-                }
-            }
-        }
-    }
 }
 
 bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
@@ -1280,6 +1255,125 @@ void Misc::updateEventListeners(bool forceRemove) noexcept
     }
 }
 
+void Misc::blockbot(UserCmd* cmd) noexcept
+{
+    if (!miscConfig.blockbot || !miscConfig.blockbotKey.isDown())
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+        return;
+
+    float bestDistance = 200.0f;
+    int plyIndex = -1;
+
+    for (int i = 1; i < interfaces->engine->getMaxClients(); i++)
+    {
+        Entity* ply = interfaces->entityList->getEntity(i);
+
+        if (!ply)
+            continue;
+
+        if (!ply->isAlive() || ply->isDormant() || ply == localPlayer.get())
+            continue;
+
+        float distance = localPlayer->origin().distTo(ply->origin());
+
+        if (distance < bestDistance)
+        {
+            bestDistance = distance;
+            plyIndex = i;
+        }
+    }
+
+    if (plyIndex == -1)
+        return;
+
+    Entity* target = interfaces->entityList->getEntity(plyIndex);
+
+    if (!target)
+        return;
+
+    if (localPlayer->origin().z - target->origin().z > 20)
+    {
+        Vector vecForward = target->origin() - localPlayer->origin();
+
+        cmd->forwardmove = ((sin(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.y) + (cos(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.x)) * 450.0f;
+        cmd->sidemove = ((cos(Helpers::deg2rad(cmd->viewangles.y)) * -vecForward.y) + (sin(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.x)) * 450.0f;
+    }
+    else {
+        Vector angles = Helpers::calculateRelativeAngle(localPlayer->origin(), target->origin());
+
+        angles.y = angles.y - localPlayer->eyeAngles().y;
+        angles.normalize();
+
+        if (angles.y < 0.0f)
+            cmd->sidemove = 450.0f;
+        else if (angles.y > 0.0f)
+            cmd->sidemove = -450.0f;
+    }
+}
+
+void Misc::runLog(GameEvent* event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    std::string printedText = " ";
+    auto eventName = fnv::hashRuntime(event->getName());
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
+
+    if (!userid || !localPlayer) {
+        interfaces->engine->clientCmdUnrestricted(std::string("echo [Osiris] Invalid UserID entity or Local entity.").c_str());
+        return;
+    }
+
+    printedText += userid->getPlayerName() + " ";
+
+    if (eventName == fnv::hash("player_death") || eventName == fnv::hash("player_hurt"))
+    {
+        const auto attacker = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("attacker")));
+
+        if (!attacker)
+            return;
+
+        if (miscConfig.eventLog.localOnly && attacker != localPlayer.get() && userid != localPlayer.get())
+            return;
+
+        if (eventName == fnv::hash("player_hurt"))
+            printedText += "was hurt by " + attacker->getPlayerName() + " for " + std::to_string(event->getInt("dmg_health")) + " health.";
+        else
+            printedText += "was killed by " + attacker->getPlayerName() + ".";
+    }
+    else
+    {
+        if (miscConfig.eventLog.localOnly && userid != localPlayer.get())
+            return;
+        switch (eventName) {
+        case fnv::hash("bomb_planted"):
+            printedText += "planted the bomb.";
+            break;
+        case fnv::hash("bomb_defused"):
+            printedText += "defused the bomb.";
+            break;
+        case fnv::hash("bomb_beginplant"):
+            printedText += "has started planting the bomb.";
+            break;
+        case fnv::hash("bomb_begindefuse"):
+            printedText += "has started defusing the bomb.";
+            break;
+        }
+    }
+
+    if (miscConfig.eventLog.chat)
+        memory->clientMode->getHudChat()->printf(0, std::string(" \x06 [Osiris]\x01" + printedText).c_str());
+
+    if (miscConfig.eventLog.console)
+        interfaces->engine->clientCmdUnrestricted(std::string("echo [Osiris]" + printedText).c_str());
+}
+
 void Misc::updateInput() noexcept
 {
 
@@ -1330,6 +1424,11 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
+    ImGui::PopID();
+    ImGui::Checkbox("Block Bot", &miscConfig.blockbot);
+    ImGui::SameLine();
+    ImGui::PushID("Block Bot Key");
+    ImGui::hotkey("", miscConfig.blockbotKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
@@ -1412,7 +1511,6 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
-    ImGui::Checkbox("Quick reload", &miscConfig.quickReload);
     ImGui::Checkbox("Prepare revolver", &miscConfig.prepareRevolver);
     ImGui::SameLine();
     ImGui::PushID("Prepare revolver Key");
@@ -1439,11 +1537,6 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PushID("Choked packets Key");
     ImGui::hotkey("", miscConfig.chokedPacketsKey);
     ImGui::PopID();
-    /*
-    ImGui::Text("Quick healthshot");
-    ImGui::SameLine();
-    hotkey(miscConfig.quickHealthshotKey);
-    */
     ImGui::Checkbox("Grenade Prediction", &miscConfig.nadePredict);
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
@@ -1501,6 +1594,36 @@ void Misc::drawGUI(bool contentOnly) noexcept
         ImGui::Checkbox("Other Hacking", &miscConfig.reportbot.other);
         if (ImGui::Button("Reset"))
             Misc::resetReportbot();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
+
+    ImGui::Checkbox("Event Log", &miscConfig.eventLog.enabled);
+    ImGui::SameLine();
+    ImGui::PushID("Event Log");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+
+        if (ImGui::Button("Types"))
+            ImGui::OpenPopup("Type");
+
+        if (ImGui::BeginPopup("Type")) {
+            ImGui::PushItemWidth(80.0f);
+
+            ImGui::Checkbox("Chat", &miscConfig.eventLog.chat);
+            ImGui::Checkbox("Console", &miscConfig.eventLog.console);
+            ImGui::EndPopup();
+        }
+
+        ImGui::Checkbox("Local Only", &miscConfig.eventLog.localOnly);
+        ImGui::Checkbox("Death Logs", &miscConfig.eventLog.deathLog);
+        ImGui::Checkbox("Damage Logs", &miscConfig.eventLog.damageLog);
+        ImGui::Checkbox("Bomb Logs", &miscConfig.eventLog.bombLog);
         ImGui::EndPopup();
     }
     ImGui::PopID();
@@ -1570,6 +1693,8 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
     read(j, "Slowwalk key", m.slowwalkKey);
+    read(j, "Block Bot", m.blockbot);
+    read(j, "Block Bot Key", m.blockbotKey);
     read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
     read(j, "Auto pistol", m.autoPistol);
@@ -1597,13 +1722,11 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Fast plant", m.fastPlant);
     read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
-    read(j, "Quick reload", m.quickReload);
     read(j, "Prepare revolver", m.prepareRevolver);
     read(j, "Prepare revolver key", m.prepareRevolverKey);
     read(j, "Hit sound", m.hitSound);
     read(j, "Choked packets", m.chokedPackets);
     read(j, "Choked packets key", m.chokedPacketsKey);
-    read(j, "Quick healthshot key", m.quickHealthshotKey);
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
@@ -1615,6 +1738,7 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read<value_t::object>(j, "Event Log", m.eventLog);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1628,6 +1752,26 @@ static void from_json(const json& j, MiscConfig::Reportbot& r)
     read(j, "Wall Hacking", r.wallhack);
     read(j, "Aim Hacking", r.aimbot);
     read(j, "Other Hacking", r.other);
+}
+
+static void from_json(const json& j, MiscConfig::EventLog& l) {
+    read(j, "Enabled", l.enabled);
+    read(j, "Local Only", l.localOnly);
+    read(j, "Chat", l.chat);
+    read(j, "Console", l.console);
+    read(j, "Damage Log", l.damageLog);
+    read(j, "Death Log", l.deathLog);
+    read(j, "Bomb Log", l.bombLog);
+}
+
+static void to_json(json& j, const MiscConfig::EventLog& o, const MiscConfig::EventLog& dummy = {}) {
+    WRITE("Enabled", enabled);
+    WRITE("Local Only", localOnly);
+    WRITE("Chat", chat);
+    WRITE("Console", console);
+    WRITE("Damage Log", damageLog);
+    WRITE("Death Log", deathLog);
+    WRITE("Bomb Log", bombLog);
 }
 
 static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::Reportbot& dummy = {})
@@ -1708,6 +1852,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Edge Jump Key", edgejumpkey);
     WRITE("Slowwalk", slowwalk);
     WRITE("Slowwalk key", slowwalkKey);
+    WRITE("Block Bot", blockbot);
+    WRITE("Block Bot Key", blockbotKey);
     WRITE("Noscope crosshair", noscopeCrosshair);
     WRITE("Recoil crosshair", recoilCrosshair);
     WRITE("Auto pistol", autoPistol);
@@ -1735,13 +1881,11 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Fast plant", fastPlant);
     WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
-    WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
     WRITE("Hit sound", hitSound);
     WRITE("Choked packets", chokedPackets);
     WRITE("Choked packets key", chokedPacketsKey);
-    WRITE("Quick healthshot key", quickHealthshotKey);
     WRITE("Grenade predict", nadePredict);
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
@@ -1753,6 +1897,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Event Log", eventLog);
 }
 
 json Misc::toJson() noexcept

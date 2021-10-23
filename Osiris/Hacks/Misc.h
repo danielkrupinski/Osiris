@@ -20,6 +20,7 @@ namespace Misc
 
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
+    void blockbot(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
     void noscopeCrosshair(ImDrawList* drawlist) noexcept;
@@ -31,7 +32,6 @@ namespace Misc
     void drawBombTimer() noexcept;
     void stealNames() noexcept;
     void disablePanoramablur() noexcept;
-    void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
@@ -61,6 +61,7 @@ namespace Misc
     void onVoteFailed() noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
+    void runLog(GameEvent* event) noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;

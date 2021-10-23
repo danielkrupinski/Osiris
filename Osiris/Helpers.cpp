@@ -215,3 +215,10 @@ bool Helpers::worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& scr
     screenPosition = ImFloor(screenPosition);
     return onScreen;
 }
+
+Vector Helpers::calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept
+{
+    Vector delta = destination - source;
+    Vector angles{ Helpers::rad2deg(atan2f(-delta.z, std::hypotf(delta.x, delta.y))), Helpers::rad2deg(atan2f(delta.y, delta.x)), 0.f };
+    return angles.normalize();;
+}
