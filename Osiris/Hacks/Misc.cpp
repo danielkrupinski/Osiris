@@ -1325,10 +1325,8 @@ void Misc::runLog(GameEvent* event) noexcept {
 
     const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
-    if (!userid || !localPlayer) {
-        interfaces->engine->clientCmdUnrestricted(std::string("echo [Osiris] Invalid UserID entity or Local entity.").c_str());
+    if (!userid || !localPlayer)
         return;
-    }
 
     printedText += userid->getPlayerName() + " ";
 
