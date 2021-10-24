@@ -1161,8 +1161,11 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
     if (tournamentID != 1) {
         stickers[1].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team1);
         stickers[2].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team2);
+
         if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2); match && match->hasMVPs())
             stickers[3].stickerID = StaticData::getTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
+        else if (tournamentID >= 18) // starting with PGL Stockholm 2021
+            stickers[3].stickerID = StaticData::getTournamentMapGoldStickerID(map);
     }
 
     std::mt19937 gen{ std::random_device{}() };

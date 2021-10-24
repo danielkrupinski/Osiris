@@ -84,6 +84,7 @@ namespace StaticData
 
     enum class TournamentMap : std::uint8_t {
         None = 0,
+        Ancient,
         Cache,
         Cobblestone,
         Dust2,
@@ -118,6 +119,7 @@ namespace StaticData
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
+    int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     bool isCollectibleGenuine(const GameItem& collectible) noexcept;
     std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
 }
