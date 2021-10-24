@@ -325,7 +325,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
 {
-    if (strncmp(interfaces->engine->getLevelName(), "dz", 2))
+    if (!strncmp(interfaces->engine->getLevelName(), "dz", 2))
         return;
     
     if (!localPlayer)
