@@ -316,7 +316,7 @@ void Misc::spectatorList() noexcept
         ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
-    ImGui::Begin("Spectator list", nullptr, windowFlags);
+    ImGui::Begin("Spectator List", nullptr, windowFlags);
     ImGui::PopStyleVar();
 
     if (!gui->isOpen())
@@ -409,7 +409,7 @@ void Misc::watermark() noexcept
     static auto frameRate = 1.0f;
     frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
 
-    ImGui::Text("Osiris | %d fps | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
+    ImGui::Text("Osiris | %d FPS | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
     ImGui::End();
 }
 
@@ -525,14 +525,14 @@ void Misc::drawBombTimer() noexcept
         if (plantedC4.defuserHandle == GameData::local().handle) {
             if (canDefuse) {
                 ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
-                ImGui::textUnformattedCentered("You can defuse!");
+                ImGui::textUnformattedCentered("You can Defuse!");
             } else {
                 ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-                ImGui::textUnformattedCentered("You can not defuse!");
+                ImGui::textUnformattedCentered("You can't Defuse!");
             }
             ImGui::PopStyleColor();
         } else if (const auto defusingPlayer = GameData::playerByHandle(plantedC4.defuserHandle)) {
-            std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
+            std::ostringstream ss; ss << defusingPlayer->name << " is Defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
 
             ImGui::textUnformattedCentered(ss.str().c_str());
 
@@ -1089,7 +1089,7 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     const auto isLocal = localPlayer && entity == localPlayer.get();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 Voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::onVoteStart(const void* data, int size) noexcept
@@ -1102,7 +1102,7 @@ void Misc::onVoteStart(const void* data, int size) noexcept
         case 0: return "Kick";
         case 1: return "Change Level";
         case 6: return "Surrender";
-        case 13: return "Start TimeOut";
+        case 13: return "Start Timeout";
         default: return "";
         }
     };
@@ -1117,7 +1117,7 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     const auto isLocal = localPlayer && entity == localPlayer.get();
 
     const auto voteType = reader.readInt32(3);
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 Call Vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass() noexcept
