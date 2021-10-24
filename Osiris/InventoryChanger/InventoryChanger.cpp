@@ -30,6 +30,7 @@
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/EconItemView.h"
+#include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FileSystem.h"
@@ -324,6 +325,9 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
 {
+    if (strncmp(interfaces->engine->getLevelName(), "dz", 2))
+        return;
+    
     if (!localPlayer)
         return;
 
