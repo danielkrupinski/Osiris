@@ -186,33 +186,33 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Enabled", a.enabled);
     read(j, "Aimlock", a.aimlock);
     read(j, "Silent", a.silent);
-    read(j, "Friendly fire", a.friendlyFire);
-    read(j, "Visible only", a.visibleOnly);
-    read(j, "Scoped only", a.scopedOnly);
-    read(j, "Ignore flash", a.ignoreFlash);
-    read(j, "Ignore smoke", a.ignoreSmoke);
-    read(j, "Auto shot", a.autoShot);
-    read(j, "Auto scope", a.autoScope);
-    read(j, "Fov", a.fov);
+    read(j, "Friendly Fire", a.friendlyFire);
+    read(j, "Visible Only", a.visibleOnly);
+    read(j, "Scoped Only", a.scopedOnly);
+    read(j, "Ignore Flash", a.ignoreFlash);
+    read(j, "Ignore Smoke", a.ignoreSmoke);
+    read(j, "Auto Shot", a.autoShot);
+    read(j, "Auto Scope", a.autoScope);
+    read(j, "FOV", a.fov);
     read(j, "Smooth", a.smooth);
     read(j, "Bone", a.bone);
-    read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
-    read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
-    read(j, "Min damage", a.minDamage);
+    read(j, "Max Aim Inaccuracy", a.maxAimInaccuracy);
+    read(j, "Max Shot Inaccuracy", a.maxShotInaccuracy);
+    read(j, "Minimum Damage", a.minDamage);
     read(j, "Killshot", a.killshot);
-    read(j, "Between shots", a.betweenShots);
+    read(j, "Between Shots", a.betweenShots);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
 {
     read(j, "Enabled", t.enabled);
-    read(j, "Friendly fire", t.friendlyFire);
-    read(j, "Scoped only", t.scopedOnly);
-    read(j, "Ignore flash", t.ignoreFlash);
-    read(j, "Ignore smoke", t.ignoreSmoke);
+    read(j, "Friendly Fire", t.friendlyFire);
+    read(j, "Scoped Only", t.scopedOnly);
+    read(j, "Ignore Flash", t.ignoreFlash);
+    read(j, "Ignore Smoke", t.ignoreSmoke);
     read(j, "Hitgroup", t.hitgroup);
-    read(j, "Shot delay", t.shotDelay);
-    read(j, "Min damage", t.minDamage);
+    read(j, "Shot Delay", t.shotDelay);
+    read(j, "Minimum Damage", t.minDamage);
     read(j, "Killshot", t.killshot);
     read(j, "Burst Time", t.burstTime);
 }
@@ -222,7 +222,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
     from_json(j, static_cast<Color4&>(m));
 
     read(j, "Enabled", m.enabled);
-    read(j, "Health based", m.healthBased);
+    read(j, "Health Based", m.healthBased);
     read(j, "Blinking", m.blinking);
     read(j, "Wireframe", m.wireframe);
     read(j, "Cover", m.cover);
@@ -249,8 +249,8 @@ static void from_json(const json& j, Config::StreamProofESP& e)
 
 static void from_json(const json& j, Config::Style& s)
 {
-    read(j, "Menu style", s.menuStyle);
-    read(j, "Menu colors", s.menuColors);
+    read(j, "Menu Style", s.menuStyle);
+    read(j, "Menu Colors", s.menuColors);
 
     if (j.contains("Colors") && j["Colors"].is_object()) {
         const auto& colors = j["Colors"];
@@ -291,9 +291,9 @@ void Config::load(const char8_t* name, bool incremental) noexcept
         reset();
 
     read(j, "Aimbot", aimbot);
-    read(j, "Aimbot On key", aimbotOnKey);
+    read(j, "Aimbot on Key", aimbotOnKey);
     read(j, "Aimbot Key", aimbotKey);
-    read(j, "Aimbot Key mode", aimbotKeyMode);
+    read(j, "Aimbot Key Mode", aimbotKeyMode);
 
     read(j, "Triggerbot", triggerbot);
     read(j, "Triggerbot Key", triggerbotHoldKey);
@@ -304,7 +304,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Style", style);
 
-    AntiAim::fromJson(j["Anti aim"]);
+    AntiAim::fromJson(j["Anti Aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     Visuals::fromJson(j["Visuals"]);
@@ -405,33 +405,33 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Enabled", enabled);
     WRITE("Aimlock", aimlock);
     WRITE("Silent", silent);
-    WRITE("Friendly fire", friendlyFire);
-    WRITE("Visible only", visibleOnly);
-    WRITE("Scoped only", scopedOnly);
-    WRITE("Ignore flash", ignoreFlash);
-    WRITE("Ignore smoke", ignoreSmoke);
-    WRITE("Auto shot", autoShot);
-    WRITE("Auto scope", autoScope);
-    WRITE("Fov", fov);
+    WRITE("Friendly Fire", friendlyFire);
+    WRITE("Visible Only", visibleOnly);
+    WRITE("Scoped Only", scopedOnly);
+    WRITE("Ignore Flash", ignoreFlash);
+    WRITE("Ignore Smoke", ignoreSmoke);
+    WRITE("Auto Shot", autoShot);
+    WRITE("Auto Scope", autoScope);
+    WRITE("FOV", fov);
     WRITE("Smooth", smooth);
     WRITE("Bone", bone);
-    WRITE("Max aim inaccuracy", maxAimInaccuracy);
-    WRITE("Max shot inaccuracy", maxShotInaccuracy);
-    WRITE("Min damage", minDamage);
+    WRITE("Max Aim Inaccuracy", maxAimInaccuracy);
+    WRITE("Max Shot Inaccuracy", maxShotInaccuracy);
+    WRITE("Minimum Damage", minDamage);
     WRITE("Killshot", killshot);
-    WRITE("Between shots", betweenShots);
+    WRITE("Between Shots", betweenShots);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
 {
     WRITE("Enabled", enabled);
-    WRITE("Friendly fire", friendlyFire);
-    WRITE("Scoped only", scopedOnly);
-    WRITE("Ignore flash", ignoreFlash);
-    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Friendly Fire", friendlyFire);
+    WRITE("Scoped Only", scopedOnly);
+    WRITE("Ignore Flash", ignoreFlash);
+    WRITE("Ignore Smoke", ignoreSmoke);
     WRITE("Hitgroup", hitgroup);
-    WRITE("Shot delay", shotDelay);
-    WRITE("Min damage", minDamage);
+    WRITE("Shot Delay", shotDelay);
+    WRITE("Minimum Damage", minDamage);
     WRITE("Killshot", killshot);
     WRITE("Burst Time", burstTime);
 }
@@ -442,7 +442,7 @@ static void to_json(json& j, const Config::Chams::Material& o)
 
     to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
-    WRITE("Health based", healthBased);
+    WRITE("Health Based", healthBased);
     WRITE("Blinking", blinking);
     WRITE("Wireframe", wireframe);
     WRITE("Cover", cover);
@@ -479,8 +479,8 @@ static void to_json(json& j, const Config::Style& o)
 {
     const Config::Style dummy;
 
-    WRITE("Menu style", menuStyle);
-    WRITE("Menu colors", menuColors);
+    WRITE("Menu Style", menuStyle);
+    WRITE("Menu Colors", menuColors);
 
     auto& colors = j["Colors"];
     ImGuiStyle& style = ImGui::GetStyle();
@@ -507,15 +507,15 @@ void Config::save(size_t id) const noexcept
     json j;
 
     j["Aimbot"] = aimbot;
-    j["Aimbot On key"] = aimbotOnKey;
+    j["Aimbot on Key"] = aimbotOnKey;
     to_json(j["Aimbot Key"], aimbotKey, {});
-    j["Aimbot Key mode"] = aimbotKeyMode;
+    j["Aimbot Key Mode"] = aimbotKeyMode;
 
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
     j["Backtrack"] = Backtrack::toJson();
-    j["Anti aim"] = AntiAim::toJson();
+    j["Anti Aim"] = AntiAim::toJson();
     j["Glow"] = Glow::toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});

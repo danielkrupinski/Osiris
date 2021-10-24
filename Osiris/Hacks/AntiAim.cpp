@@ -44,16 +44,16 @@ static bool antiAimOpen = false;
 
 void AntiAim::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Anti aim")) {
+    if (ImGui::MenuItem("Anti Aim")) {
         antiAimOpen = true;
-        ImGui::SetWindowFocus("Anti aim");
-        ImGui::SetWindowPos("Anti aim", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("Anti Aim");
+        ImGui::SetWindowPos("Anti Aim", { 100.0f, 100.0f });
     }
 }
 
 void AntiAim::tabItem() noexcept
 {
-    if (ImGui::BeginTabItem("Anti aim")) {
+    if (ImGui::BeginTabItem("Anti Aim")) {
         drawGUI(true);
         ImGui::EndTabItem();
     }
@@ -65,7 +65,7 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
         if (!antiAimOpen)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Anti aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Anti Aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
     ImGui::Checkbox("##pitch", &antiAimConfig.pitch);
@@ -80,7 +80,7 @@ static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy 
 {
     WRITE("Enabled", enabled);
     WRITE("Pitch", pitch);
-    WRITE("Pitch angle", pitchAngle);
+    WRITE("Pitch Angle", pitchAngle);
     WRITE("Yaw", yaw);
 }
 
@@ -96,7 +96,7 @@ static void from_json(const json& j, AntiAimConfig& a)
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
     read(j, "Yaw", a.yaw);
-    read(j, "Pitch angle", a.pitchAngle);
+    read(j, "Pitch Angle", a.pitchAngle);
 }
 
 void AntiAim::fromJson(const json& j) noexcept

@@ -239,7 +239,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &currentItem->healthBased);
+    ImGui::Checkbox("Health Based", &currentItem->healthBased);
 
     ImGuiCustom::colorPicker("Color", *currentItem);
 
@@ -256,7 +256,7 @@ static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
 {
     to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
-    WRITE("Health based", healthBased);
+    WRITE("Health Based", healthBased);
     WRITE("Style", style);
 }
 
@@ -282,7 +282,7 @@ static void from_json(const json& j, GlowItem& g)
     from_json(j, static_cast<Color4&>(g));
 
     read(j, "Enabled", g.enabled);
-    read(j, "Health based", g.healthBased);
+    read(j, "Health Based", g.healthBased);
     read(j, "Style", g.style);
 }
 

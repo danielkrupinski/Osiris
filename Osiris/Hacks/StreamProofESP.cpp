@@ -892,7 +892,7 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
             if (ImGui::BeginPopup("")) {
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
+                ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D Corners\0" "3D\0" "3D Corners\0");
                 ImGui::SetNextItemWidth(275.0f);
                 ImGui::SliderFloat3("Scale", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
                 ImGuiCustom::colorPicker("Fill", playerConfig.headBox.fill);
@@ -912,7 +912,7 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
             if (ImGui::BeginPopup("")) {
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("Type", &playerConfig.healthBar.type, "Gradient\0Solid\0Health-based\0");
+                ImGui::Combo("Type", &playerConfig.healthBar.type, "Gradient\0Solid\0Health-Based\0");
                 if (playerConfig.healthBar.type == HealthBar::Solid) {
                     ImGui::SameLine();
                     ImGuiCustom::colorPicker("", playerConfig.healthBar.asColor4());

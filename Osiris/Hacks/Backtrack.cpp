@@ -209,10 +209,10 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
         ImGui::Begin("Backtrack", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Checkbox("Enabled", &backtrackConfig.enabled);
-    ImGui::Checkbox("Ignore smoke", &backtrackConfig.ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &backtrackConfig.recoilBasedFov);
+    ImGui::Checkbox("Ignore Smoke", &backtrackConfig.ignoreSmoke);
+    ImGui::Checkbox("Recoil Based FOV", &backtrackConfig.recoilBasedFov);
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &backtrackConfig.timeLimit, 1, 200, "%d ms");
+    ImGui::SliderInt("Time Limit", &backtrackConfig.timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
@@ -221,9 +221,9 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
 static void to_json(json& j, const BacktrackConfig& o, const BacktrackConfig& dummy = {})
 {
     WRITE("Enabled", enabled);
-    WRITE("Ignore smoke", ignoreSmoke);
-    WRITE("Recoil based fov", recoilBasedFov);
-    WRITE("Time limit", timeLimit);
+    WRITE("Ignore Smoke", ignoreSmoke);
+    WRITE("Recoil Based FOV", recoilBasedFov);
+    WRITE("Time Limit", timeLimit);
 }
 
 json Backtrack::toJson() noexcept
@@ -236,9 +236,9 @@ json Backtrack::toJson() noexcept
 static void from_json(const json& j, BacktrackConfig& b)
 {
     read(j, "Enabled", b.enabled);
-    read(j, "Ignore smoke", b.ignoreSmoke);
-    read(j, "Recoil based fov", b.recoilBasedFov);
-    read(j, "Time limit", b.timeLimit);
+    read(j, "Ignore Smoke", b.ignoreSmoke);
+    read(j, "Recoil Based FOV", b.recoilBasedFov);
+    read(j, "Time Limit", b.timeLimit);
 }
 
 void Backtrack::fromJson(const json& j) noexcept

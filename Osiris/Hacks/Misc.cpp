@@ -1316,10 +1316,10 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
     ImGui::hotkey("Menu Key", miscConfig.menuKey);
-    ImGui::Checkbox("Anti AFK kick", &miscConfig.antiAfkKick);
-    ImGui::Checkbox("Auto strafe", &miscConfig.autoStrafe);
-    ImGui::Checkbox("Bunny hop", &miscConfig.bunnyHop);
-    ImGui::Checkbox("Fast duck", &miscConfig.fastDuck);
+    ImGui::Checkbox("Anti AFK Kick", &miscConfig.antiAfkKick);
+    ImGui::Checkbox("Auto Strafe", &miscConfig.autoStrafe);
+    ImGui::Checkbox("Bunny Hop", &miscConfig.bunnyHop);
+    ImGui::Checkbox("Fast Duck", &miscConfig.fastDuck);
     ImGui::Checkbox("Moonwalk", &miscConfig.moonwalk);
     ImGui::Checkbox("Edge Jump", &miscConfig.edgejump);
     ImGui::SameLine();
@@ -1331,21 +1331,21 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
     ImGui::PopID();
-    ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
-    ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
-    ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
-    ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
-    ImGui::Checkbox("Auto accept", &miscConfig.autoAccept);
-    ImGui::Checkbox("Radar hack", &miscConfig.radarHack);
-    ImGui::Checkbox("Reveal ranks", &miscConfig.revealRanks);
-    ImGui::Checkbox("Reveal money", &miscConfig.revealMoney);
-    ImGui::Checkbox("Reveal suspect", &miscConfig.revealSuspect);
-    ImGui::Checkbox("Reveal votes", &miscConfig.revealVotes);
+    ImGuiCustom::colorPicker("Noscope Crosshair", miscConfig.noscopeCrosshair);
+    ImGuiCustom::colorPicker("Recoil Crosshair", miscConfig.recoilCrosshair);
+    ImGui::Checkbox("Auto Pistol", &miscConfig.autoPistol);
+    ImGui::Checkbox("Auto Reload", &miscConfig.autoReload);
+    ImGui::Checkbox("Auto Accept", &miscConfig.autoAccept);
+    ImGui::Checkbox("Radar Hack", &miscConfig.radarHack);
+    ImGui::Checkbox("Reveal Ranks", &miscConfig.revealRanks);
+    ImGui::Checkbox("Reveal Money", &miscConfig.revealMoney);
+    ImGui::Checkbox("Reveal Suspect", &miscConfig.revealSuspect);
+    ImGui::Checkbox("Reveal Votes", &miscConfig.revealVotes);
 
-    ImGui::Checkbox("Spectator list", &miscConfig.spectatorList.enabled);
+    ImGui::Checkbox("Spectator List", &miscConfig.spectatorList.enabled);
     ImGui::SameLine();
 
-    ImGui::PushID("Spectator list");
+    ImGui::PushID("Spectator List");
     if (ImGui::Button("..."))
         ImGui::OpenPopup("");
 
@@ -1366,7 +1366,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
         ImGui::Checkbox("Health Bar", &miscConfig.offscreenEnemies.healthBar.enabled);
         ImGui::SameLine();
         ImGui::SetNextItemWidth(95.0f);
-        ImGui::Combo("Type", &miscConfig.offscreenEnemies.healthBar.type, "Gradient\0Solid\0Health-based\0");
+        ImGui::Combo("Type", &miscConfig.offscreenEnemies.healthBar.type, "Gradient\0Solid\0Health-Based\0");
         if (miscConfig.offscreenEnemies.healthBar.type == HealthBar::Solid) {
             ImGui::SameLine();
             ImGuiCustom::colorPicker("", miscConfig.offscreenEnemies.healthBar.asColor4());
@@ -1374,16 +1374,16 @@ void Misc::drawGUI(bool contentOnly) noexcept
         ImGui::EndPopup();
     }
     ImGui::PopID();
-    ImGui::Checkbox("Fix animation LOD", &miscConfig.fixAnimationLOD);
-    ImGui::Checkbox("Fix bone matrix", &miscConfig.fixBoneMatrix);
-    ImGui::Checkbox("Fix movement", &miscConfig.fixMovement);
-    ImGui::Checkbox("Disable model occlusion", &miscConfig.disableModelOcclusion);
+    ImGui::Checkbox("Fix Animation LOD", &miscConfig.fixAnimationLOD);
+    ImGui::Checkbox("Fix Bone Matrix", &miscConfig.fixBoneMatrix);
+    ImGui::Checkbox("Fix Movement", &miscConfig.fixMovement);
+    ImGui::Checkbox("Disable Model Occlusion", &miscConfig.disableModelOcclusion);
     ImGui::SliderFloat("Aspect Ratio", &miscConfig.aspectratio, 0.0f, 5.0f, "%.2f");
     ImGui::NextColumn();
-    ImGui::Checkbox("Disable HUD blur", &miscConfig.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &miscConfig.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &miscConfig.clocktag);
-    ImGui::Checkbox("Custom clantag", &miscConfig.customClanTag);
+    ImGui::Checkbox("Disable HUD Blur", &miscConfig.disablePanoramablur);
+    ImGui::Checkbox("Animated Clantag", &miscConfig.animatedClanTag);
+    ImGui::Checkbox("Clock Tag", &miscConfig.clocktag);
+    ImGui::Checkbox("Custom Clantag", &miscConfig.customClanTag);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
@@ -1391,52 +1391,52 @@ void Misc::drawGUI(bool contentOnly) noexcept
     if (ImGui::InputText("", miscConfig.clanTag, sizeof(miscConfig.clanTag)))
         Misc::updateClanTag(true);
     ImGui::PopID();
-    ImGui::Checkbox("Kill message", &miscConfig.killMessage);
+    ImGui::Checkbox("Kill Message", &miscConfig.killMessage);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(1);
     ImGui::InputText("", &miscConfig.killMessageString);
     ImGui::PopID();
-    ImGui::Checkbox("Name stealer", &miscConfig.nameStealer);
+    ImGui::Checkbox("Name Stealer", &miscConfig.nameStealer);
     ImGui::PushID(3);
     ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("", &miscConfig.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
+    ImGui::Combo("", &miscConfig.banColor, "White\0Red\0Purple\0Green\0Light Green\0Turquoise\0Light Red\0Gray\0Yellow\0Gray 2\0Light Blue\0Gray/Purple\0Blue\0Pink\0Dark Orange\0Orange\0");
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(4);
     ImGui::InputText("", &miscConfig.banText);
     ImGui::PopID();
     ImGui::SameLine();
-    if (ImGui::Button("Setup fake ban"))
+    if (ImGui::Button("Setup Fake Ban"))
         Misc::fakeBan(true);
-    ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
+    ImGui::Checkbox("Fast Plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
-    ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
-    ImGui::Checkbox("Quick reload", &miscConfig.quickReload);
-    ImGui::Checkbox("Prepare revolver", &miscConfig.prepareRevolver);
+    ImGuiCustom::colorPicker("Bomb Timer", miscConfig.bombTimer);
+    ImGui::Checkbox("Quick Reload", &miscConfig.quickReload);
+    ImGui::Checkbox("Prepare Revolver", &miscConfig.prepareRevolver);
     ImGui::SameLine();
-    ImGui::PushID("Prepare revolver Key");
+    ImGui::PushID("Prepare Revolver Key");
     ImGui::hotkey("", miscConfig.prepareRevolverKey);
     ImGui::PopID();
     ImGui::Combo("Hit Sound", &miscConfig.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (miscConfig.hitSound == 5) {
-        ImGui::InputText("Hit Sound filename", &miscConfig.customHitSound);
+        ImGui::InputText("Hit Sound Filename", &miscConfig.customHitSound);
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
+            ImGui::SetTooltip("Audio file must be put in csgo/sound/ directory.");
     }
     ImGui::PushID(5);
     ImGui::Combo("Kill Sound", &miscConfig.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (miscConfig.killSound == 5) {
-        ImGui::InputText("Kill Sound filename", &miscConfig.customKillSound);
+        ImGui::InputText("Kill Sound Filename", &miscConfig.customKillSound);
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
+            ImGui::SetTooltip("Audio file must be put in csgo/sound/ directory.");
     }
     ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
-    ImGui::InputInt("Choked packets", &miscConfig.chokedPackets, 1, 5);
+    ImGui::InputInt("Choked Packets", &miscConfig.chokedPackets, 1, 5);
     miscConfig.chokedPackets = std::clamp(miscConfig.chokedPackets, 0, 64);
     ImGui::SameLine();
-    ImGui::PushID("Choked packets Key");
+    ImGui::PushID("Choked Packets Key");
     ImGui::hotkey("", miscConfig.chokedPacketsKey);
     ImGui::PopID();
     /*
@@ -1445,9 +1445,9 @@ void Misc::drawGUI(bool contentOnly) noexcept
     hotkey(miscConfig.quickHealthshotKey);
     */
     ImGui::Checkbox("Grenade Prediction", &miscConfig.nadePredict);
-    ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
+    ImGui::Checkbox("Fix Tablet Signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
-    ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+    ImGui::SliderFloat("Max Angle Delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
@@ -1556,60 +1556,59 @@ static void from_json(const json& j, PreserveKillfeed& o)
 
 static void from_json(const json& j, MiscConfig& m)
 {
-    read(j, "Menu key", m.menuKey);
-    read(j, "Anti AFK kick", m.antiAfkKick);
-    read(j, "Auto strafe", m.autoStrafe);
-    read(j, "Bunny hop", m.bunnyHop);
-    read(j, "Custom clan tag", m.customClanTag);
-    read(j, "Clock tag", m.clocktag);
-    read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
-    read(j, "Animated clan tag", m.animatedClanTag);
-    read(j, "Fast duck", m.fastDuck);
+    read(j, "Menu Key", m.menuKey);
+    read(j, "Anti AFK Kick", m.antiAfkKick);
+    read(j, "Auto Strafe", m.autoStrafe);
+    read(j, "Bunny Hop", m.bunnyHop);
+    read(j, "Custom Clantag", m.customClanTag);
+    read(j, "Clock Tag", m.clocktag);
+    read(j, "Clantag", m.clanTag, sizeof(m.clanTag));
+    read(j, "Animated Clantag", m.animatedClanTag);
+    read(j, "Fast Duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
     read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
-    read(j, "Slowwalk key", m.slowwalkKey);
-    read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
-    read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
-    read(j, "Auto pistol", m.autoPistol);
-    read(j, "Auto reload", m.autoReload);
-    read(j, "Auto accept", m.autoAccept);
-    read(j, "Radar hack", m.radarHack);
-    read(j, "Reveal ranks", m.revealRanks);
-    read(j, "Reveal money", m.revealMoney);
-    read(j, "Reveal suspect", m.revealSuspect);
-    read(j, "Reveal votes", m.revealVotes);
-    read<value_t::object>(j, "Spectator list", m.spectatorList);
+    read(j, "Slowwalk Key", m.slowwalkKey);
+    read<value_t::object>(j, "Noscope Crosshair", m.noscopeCrosshair);
+    read<value_t::object>(j, "Recoil Crosshair", m.recoilCrosshair);
+    read(j, "Auto Pistol", m.autoPistol);
+    read(j, "Auto Reload", m.autoReload);
+    read(j, "Auto Accept", m.autoAccept);
+    read(j, "Radar Hack", m.radarHack);
+    read(j, "Reveal Ranks", m.revealRanks);
+    read(j, "Reveal Money", m.revealMoney);
+    read(j, "Reveal Suspect", m.revealSuspect);
+    read(j, "Reveal Votes", m.revealVotes);
+    read<value_t::object>(j, "Spectator List", m.spectatorList);
     read<value_t::object>(j, "Watermark", m.watermark);
     read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
-    read(j, "Fix animation LOD", m.fixAnimationLOD);
-    read(j, "Fix bone matrix", m.fixBoneMatrix);
-    read(j, "Fix movement", m.fixMovement);
-    read(j, "Disable model occlusion", m.disableModelOcclusion);
+    read(j, "Fix Animation LOD", m.fixAnimationLOD);
+    read(j, "Fix Bone Matrix", m.fixBoneMatrix);
+    read(j, "Fix Movement", m.fixMovement);
+    read(j, "Disable Model Occlusion", m.disableModelOcclusion);
     read(j, "Aspect Ratio", m.aspectratio);
-    read(j, "Kill message", m.killMessage);
-    read<value_t::string>(j, "Kill message string", m.killMessageString);
-    read(j, "Name stealer", m.nameStealer);
-    read(j, "Disable HUD blur", m.disablePanoramablur);
-    read(j, "Ban color", m.banColor);
-    read<value_t::string>(j, "Ban text", m.banText);
-    read(j, "Fast plant", m.fastPlant);
+    read(j, "Kill Message", m.killMessage);
+    read<value_t::string>(j, "Kill Message String", m.killMessageString);
+    read(j, "Name Stealer", m.nameStealer);
+    read(j, "Disable HUD Blur", m.disablePanoramablur);
+    read(j, "Ban Color", m.banColor);
+    read<value_t::string>(j, "Ban Text", m.banText);
+    read(j, "Fast Plant", m.fastPlant);
     read(j, "Fast Stop", m.fastStop);
-    read<value_t::object>(j, "Bomb timer", m.bombTimer);
-    read(j, "Quick reload", m.quickReload);
-    read(j, "Prepare revolver", m.prepareRevolver);
-    read(j, "Prepare revolver key", m.prepareRevolverKey);
-    read(j, "Hit sound", m.hitSound);
-    read(j, "Choked packets", m.chokedPackets);
-    read(j, "Choked packets key", m.chokedPacketsKey);
-    read(j, "Quick healthshot key", m.quickHealthshotKey);
-    read(j, "Grenade predict", m.nadePredict);
-    read(j, "Fix tablet signal", m.fixTabletSignal);
-    read(j, "Max angle delta", m.maxAngleDelta);
-    read(j, "Fix tablet signal", m.fixTabletSignal);
+    read<value_t::object>(j, "Bomb Timer", m.bombTimer);
+    read(j, "Quick Reload", m.quickReload);
+    read(j, "Prepare Revolver", m.prepareRevolver);
+    read(j, "Prepare Revolver Key", m.prepareRevolverKey);
+    read(j, "Hit Sound", m.hitSound);
+    read(j, "Choked Packets", m.chokedPackets);
+    read(j, "Choked Packets Key", m.chokedPacketsKey);
+    read(j, "Quick Healthshot Key", m.quickHealthshotKey);
+    read(j, "Grenade Predict", m.nadePredict);
+    read(j, "Fix Tablet signal", m.fixTabletSignal);
+    read(j, "Max Angle Delta", m.maxAngleDelta);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
-    read(j, "Kill sound", m.killSound);
+    read(j, "Kill Sound", m.killSound);
     read<value_t::string>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
     read<value_t::object>(j, "Reportbot", m.reportbot);
@@ -1670,7 +1669,7 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
     WRITE("Enabled", enabled);
     WRITE("No Title Bar", noTitleBar);
 
-    if (const auto window = ImGui::FindWindowByName("Spectator list")) {
+    if (const auto window = ImGui::FindWindowByName("Spectator List")) {
         j["Pos"] = window->Pos;
         j["Size"] = window->SizeFull;
     }
@@ -1691,63 +1690,63 @@ static void to_json(json& j, const MiscConfig& o)
 {
     const MiscConfig dummy;
 
-    WRITE("Menu key", menuKey);
-    WRITE("Anti AFK kick", antiAfkKick);
-    WRITE("Auto strafe", autoStrafe);
-    WRITE("Bunny hop", bunnyHop);
-    WRITE("Custom clan tag", customClanTag);
-    WRITE("Clock tag", clocktag);
+    WRITE("Menu Key", menuKey);
+    WRITE("Anti AFK Kick", antiAfkKick);
+    WRITE("Auto Strafe", autoStrafe);
+    WRITE("Bunny Hop", bunnyHop);
+    WRITE("Custom Clantag", customClanTag);
+    WRITE("Clock Tag", clocktag);
 
     if (o.clanTag[0])
-        j["Clan tag"] = o.clanTag;
+        j["Clantag"] = o.clanTag;
 
-    WRITE("Animated clan tag", animatedClanTag);
-    WRITE("Fast duck", fastDuck);
+    WRITE("Animated Clantag", animatedClanTag);
+    WRITE("Fast Duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);
     WRITE("Edge Jump Key", edgejumpkey);
     WRITE("Slowwalk", slowwalk);
-    WRITE("Slowwalk key", slowwalkKey);
-    WRITE("Noscope crosshair", noscopeCrosshair);
-    WRITE("Recoil crosshair", recoilCrosshair);
-    WRITE("Auto pistol", autoPistol);
-    WRITE("Auto reload", autoReload);
-    WRITE("Auto accept", autoAccept);
-    WRITE("Radar hack", radarHack);
-    WRITE("Reveal ranks", revealRanks);
-    WRITE("Reveal money", revealMoney);
-    WRITE("Reveal suspect", revealSuspect);
-    WRITE("Reveal votes", revealVotes);
-    WRITE("Spectator list", spectatorList);
+    WRITE("Slowwalk Key", slowwalkKey);
+    WRITE("Noscope Crosshair", noscopeCrosshair);
+    WRITE("Recoil Crosshair", recoilCrosshair);
+    WRITE("Auto Pistol", autoPistol);
+    WRITE("Auto Reload", autoReload);
+    WRITE("Auto Accept", autoAccept);
+    WRITE("Radar Hack", radarHack);
+    WRITE("Reveal Ranks", revealRanks);
+    WRITE("Reveal Money", revealMoney);
+    WRITE("Reveal Suspect", revealSuspect);
+    WRITE("Reveal Votes", revealVotes);
+    WRITE("Spectator List", spectatorList);
     WRITE("Watermark", watermark);
     WRITE("Offscreen Enemies", offscreenEnemies);
-    WRITE("Fix animation LOD", fixAnimationLOD);
-    WRITE("Fix bone matrix", fixBoneMatrix);
-    WRITE("Fix movement", fixMovement);
-    WRITE("Disable model occlusion", disableModelOcclusion);
+    WRITE("Fix Animation LOD", fixAnimationLOD);
+    WRITE("Fix Bone Matrix", fixBoneMatrix);
+    WRITE("Fix Movement", fixMovement);
+    WRITE("Disable Model Occlusion", disableModelOcclusion);
     WRITE("Aspect Ratio", aspectratio);
-    WRITE("Kill message", killMessage);
-    WRITE("Kill message string", killMessageString);
-    WRITE("Name stealer", nameStealer);
-    WRITE("Disable HUD blur", disablePanoramablur);
-    WRITE("Ban color", banColor);
-    WRITE("Ban text", banText);
-    WRITE("Fast plant", fastPlant);
+    WRITE("Kill Message", killMessage);
+    WRITE("Kill Message String", killMessageString);
+    WRITE("Name Stealer", nameStealer);
+    WRITE("Disable HUD Blur", disablePanoramablur);
+    WRITE("Ban Color", banColor);
+    WRITE("Ban Text", banText);
+    WRITE("Fast Plant", fastPlant);
     WRITE("Fast Stop", fastStop);
-    WRITE("Bomb timer", bombTimer);
-    WRITE("Quick reload", quickReload);
-    WRITE("Prepare revolver", prepareRevolver);
-    WRITE("Prepare revolver key", prepareRevolverKey);
-    WRITE("Hit sound", hitSound);
-    WRITE("Choked packets", chokedPackets);
-    WRITE("Choked packets key", chokedPacketsKey);
-    WRITE("Quick healthshot key", quickHealthshotKey);
-    WRITE("Grenade predict", nadePredict);
-    WRITE("Fix tablet signal", fixTabletSignal);
-    WRITE("Max angle delta", maxAngleDelta);
-    WRITE("Fix tablet signal", fixTabletSignal);
+    WRITE("Bomb Timer", bombTimer);
+    WRITE("Quick Reload", quickReload);
+    WRITE("Prepare Revolver", prepareRevolver);
+    WRITE("Prepare Revolver Key", prepareRevolverKey);
+    WRITE("Hit Sound", hitSound);
+    WRITE("Choked Packets", chokedPackets);
+    WRITE("Choked Packets Key", chokedPacketsKey);
+    WRITE("Quick Healthshot Key", quickHealthshotKey);
+    WRITE("Grenade Predict", nadePredict);
+    WRITE("Fix Tablet Signal", fixTabletSignal);
+    WRITE("Max Angle Delta", maxAngleDelta);
+    WRITE("Fix Tablet Signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
-    WRITE("Kill sound", killSound);
+    WRITE("Kill Sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
     WRITE("Reportbot", reportbot);

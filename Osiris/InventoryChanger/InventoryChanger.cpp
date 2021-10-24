@@ -770,7 +770,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
     static bool isInAddMode = false;
 
-    if (!isInAddMode && ImGui::Button("Add items.."))
+    if (!isInAddMode && ImGui::Button("Add Items.."))
         isInAddMode = true;
 
     if (!isInAddMode) {
@@ -808,7 +808,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
             ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
         }
-        if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
+        if (ImGui::Button(("Add Selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
             isInAddMode = false;
             addToInventory(selectedToAdd, toAddOrder);
             selectedToAdd.clear();
@@ -820,7 +820,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
-        ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
+        ImGui::InputTextWithHint("##search", "Search Weapon Skins, Stickers, Knives, Gloves, Music Kits..", &filter);
 
         constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
             constexpr auto delimiter = L" ";
