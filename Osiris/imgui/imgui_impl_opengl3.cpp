@@ -216,11 +216,14 @@ static void ImGui_ImplOpenGL3_SetupRenderState(ImDrawData* draw_data, int fb_wid
 #endif
 
     // Support for GL 4.5 rarely used glClipControl(GL_UPPER_LEFT)
-#if defined(GL_CLIP_ORIGIN) && !defined(__APPLE__)
+#if defined(GL_CLIP_ORIGIN)
     bool clip_origin_lower_left = true;
-    GLenum current_clip_origin = 0; glGetIntegerv(GL_CLIP_ORIGIN, (GLint*)&current_clip_origin);
-    if (current_clip_origin == GL_UPPER_LEFT)
-        clip_origin_lower_left = false;
+    if (g_GlVersion >= 450)
+    {
+        GLenum current_clip_origin = 0; glGetIntegerv(GL_CLIP_ORIGIN, (GLint*)&current_clip_origin);
+        if (current_clip_origin == GL_UPPER_LEFT)
+            clip_origin_lower_left = false;
+    }
 #endif
 
     // Setup viewport, orthographic projection matrix
@@ -230,7 +233,7 @@ static void ImGui_ImplOpenGL3_SetupRenderState(ImDrawData* draw_data, int fb_wid
     float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
     float T = draw_data->DisplayPos.y;
     float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
-#if defined(GL_CLIP_ORIGIN) && !defined(__APPLE__)
+#if defined(GL_CLIP_ORIGIN)
     if (!clip_origin_lower_left) { float tmp = T; T = B; B = tmp; } // Swap top and bottom if origin is upper left
 #endif
     const float ortho_projection[4][4] =
