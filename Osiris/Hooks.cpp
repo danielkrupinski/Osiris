@@ -614,9 +614,9 @@ void Hooks::install() noexcept
 #endif
     }
 
-#ifdef _WIN32
     surface.hookAt(67, &lockCursor);
 
+#ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
 #endif
