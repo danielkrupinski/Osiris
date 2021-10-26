@@ -988,9 +988,14 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 });
 
 constexpr auto pglStockholm2021Matches = std::to_array<Match>({
+    { TournamentMap::Dust2, ChallengersStage, Astralis, Entropiq, {} },
     { TournamentMap::Inferno, ChallengersStage, paiNGaming, VirtusPro, {} },
+    { TournamentMap::Inferno, ChallengersStage, Heroic, Tyloo, {} },
+    { TournamentMap::Inferno, ChallengersStage, MOUZ, SharksEsports, {} },
     { TournamentMap::Nuke, ChallengersStage, ENCE, GODSENT, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, Entropiq, {} },
+    { TournamentMap::Nuke, ChallengersStage, MovistarRiders, Renegades, {} },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, GODSENT, {} },
     { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames, {} },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan, {} }
 });
