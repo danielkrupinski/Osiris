@@ -987,6 +987,12 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GrandFinal, ENCE, Astralis, { xseveN, sergej, Aerial } },
 });
 
+constexpr auto pglStockholm2021Matches = std::to_array<Match>({
+    { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames, {} },
+    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan, {} }
+});
+static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &Match::map));
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
@@ -1001,6 +1007,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 12, pglKrakow2017Matches },
     { 13, eleagueBoston2018Matches },
     { 14, faceitLondon2018Matches },
+    { 18, pglStockholm2021Matches },
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
