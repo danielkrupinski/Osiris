@@ -129,10 +129,10 @@ void GUI::handleToggle() noexcept
         open = !open;
         if (!open)
             interfaces->inputSystem->resetInputState();
-#ifndef _WIN32
-        ImGui::GetIO().MouseDrawCursor = gui->open;
-#endif
     }
+#ifndef _WIN32
+    ImGui::GetIO().MouseDrawCursor = gui->open;
+#endif
 }
 
 static void menuBarItem(const char* name, bool& enabled) noexcept
