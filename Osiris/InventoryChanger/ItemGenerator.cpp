@@ -988,12 +988,16 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
 });
 
 constexpr auto pglStockholm2021Matches = std::to_array<Match>({
+    { TournamentMap::Ancient, ChallengersStage, VirtusPro, FaZeClan, {} },
     { TournamentMap::Dust2, ChallengersStage, Astralis, Entropiq, {} },
     { TournamentMap::Dust2, ChallengersStage, ENCE, FaZeClan, {} },
     { TournamentMap::Inferno, ChallengersStage, paiNGaming, VirtusPro, {} },
     { TournamentMap::Inferno, ChallengersStage, Heroic, Tyloo, {} },
     { TournamentMap::Inferno, ChallengersStage, MOUZ, SharksEsports, {} },
+    { TournamentMap::Inferno, ChallengersStage, BIG, Renegades, {} },
     { TournamentMap::Mirage, ChallengersStage, Tyloo, SharksEsports, {} },
+    { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Entropiq, {} },
+    { TournamentMap::Mirage, ChallengersStage, VirtusPro, FaZeClan, {} },
     { TournamentMap::Nuke, ChallengersStage, ENCE, GODSENT, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, Entropiq, {} },
     { TournamentMap::Nuke, ChallengersStage, MovistarRiders, Renegades, {} },
@@ -1001,9 +1005,15 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, paiNGaming, Renegades, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, CopenhagenFlames, {} },
     { TournamentMap::Nuke, ChallengersStage, Heroic, MOUZ, {} },
+    { TournamentMap::Nuke, ChallengersStage, ENCE, MOUZ, {} },
+    { TournamentMap::Nuke, ChallengersStage, Heroic, CopenhagenFlames, {} },
     { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames, {} },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan, {} },
-    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, VirtusPro, {} }
+    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Tyloo, {} },
+    { TournamentMap::Overpass, ChallengersStage, Heroic, CopenhagenFlames, {} },
+    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, VirtusPro, {} },
+    { TournamentMap::Vertigo, ChallengersStage, Heroic, CopenhagenFlames, {} },
+    { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports, {} }
 });
 static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &Match::map));
 
