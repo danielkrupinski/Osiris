@@ -348,6 +348,14 @@ enum TournamentTeam : std::uint8_t {
     NRG = 87,
     ViCiGaming = 88,
     Vitality = 89,
+    Heroic = 95,
+    EvilGeniuses = 98,
+    CopenhagenFlames = 101,
+    paiNGaming = 102,
+    MovistarRiders = 103,
+    SharksEsports = 104,
+    Entropiq = 105,
+    MOUZ = 106
 };
 
 enum TournamentStage : std::uint8_t {
