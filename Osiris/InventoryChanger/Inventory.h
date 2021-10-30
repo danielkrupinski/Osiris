@@ -91,6 +91,7 @@ public:
     bool isViewerPass() const noexcept { return isValid() && get().isViewerPass(); }
     bool isServiceMedal() const noexcept { return isValid() && get().isServiceMedal(); }
     bool isSouvenirToken() const noexcept { return isValid() && get().isSouvenirToken(); }
+    bool isTournamentCoin() const noexcept { return isValid() && get().isTournamentCoin(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
