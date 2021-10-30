@@ -33,7 +33,8 @@ namespace StaticData
         OperationPass,
         StatTrakSwapTool,
         ViewerPass,
-        ServiceMedal
+        ServiceMedal,
+        SouvenirToken
     };
 
     struct GameItem {
