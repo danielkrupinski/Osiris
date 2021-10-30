@@ -34,7 +34,8 @@ namespace StaticData
         StatTrakSwapTool,
         ViewerPass,
         ServiceMedal,
-        SouvenirToken
+        SouvenirToken,
+        TournamentCoin
     };
 
     struct GameItem {
