@@ -274,6 +274,8 @@ private:
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
                     _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
+                } else if (item->isTournamentCoin()) {
+                    _gameItems.emplace_back(Type::TournamentCoin, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
