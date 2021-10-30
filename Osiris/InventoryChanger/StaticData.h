@@ -56,6 +56,7 @@ namespace StaticData
         bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
         bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
         bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
+        bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
