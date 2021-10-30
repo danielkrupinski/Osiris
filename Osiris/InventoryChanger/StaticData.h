@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 #include <string_view>
@@ -61,6 +62,8 @@ namespace StaticData
         bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
+
+        int tournamentEventID() const noexcept { assert(isTournamentCoin()); return static_cast<int>(dataIndex); }
 
         Type type;
         std::uint8_t rarity;
