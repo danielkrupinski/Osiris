@@ -302,7 +302,7 @@ private:
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
                     _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
-                    _gameItems.emplace_back(Helpers::isSouvenirToken(weaponID) ? Type::SouvenirToken : Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Helpers::isSouvenirToken(weaponID) ? Type::SouvenirToken : Type::ViewerPass, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
             } else if (item->isPaintable()) {
                 _gameItems.emplace_back(Type::Skin, 0, weaponID, vanillaPaintIndex, inventoryImage);
             }
