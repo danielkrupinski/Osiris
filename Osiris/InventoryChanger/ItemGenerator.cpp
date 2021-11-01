@@ -1198,6 +1198,8 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
         DynamicServiceMedalData dynamicData;
         dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
+    } else if (item.isTournamentCoin()) {
+        index = Inventory::emplaceDynamicData(DynamicTournamentCoinData{});
     }
 
     return index;
