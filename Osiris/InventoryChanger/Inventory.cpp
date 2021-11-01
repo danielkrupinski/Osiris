@@ -11,6 +11,7 @@
 #include "../SDK/ItemSchema.h"
 
 using Inventory::InvalidDynamicDataIdx;
+using Inventory::BASE_ITEMID;
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
@@ -22,8 +23,6 @@ static std::vector<DynamicTournamentCoinData> dynamicTournamentCoinData;
 
 class InventoryImpl {
 public:
-    static constexpr auto BASE_ITEMID = 1152921504606746975;
-
     struct ToEquip {
         ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
 
