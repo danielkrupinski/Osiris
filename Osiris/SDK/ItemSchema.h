@@ -655,6 +655,7 @@ public:
     void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
     void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
     void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
+    void setDropsAwarded(std::uint32_t n) noexcept { setAttributeValue(237, &n); }
     void setDropsRedeemed(std::uint32_t n) noexcept { setAttributeValue(240, &n); }
 
     void setStickerID(int slot, int stickerID) noexcept
