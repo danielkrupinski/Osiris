@@ -1001,6 +1001,7 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Dust2, ChallengersStage, BIG, MOUZ, {} },
     { TournamentMap::Dust2, ChallengersStage, TeamSpirit, Astralis, {} },
     { TournamentMap::Dust2, GroupStage, EvilGeniuses, FaZeClan, {} },
+    { TournamentMap::Dust2, GroupStage, TeamLiquid, ENCE, {} },
     { TournamentMap::Inferno, ChallengersStage, paiNGaming, VirtusPro, {} },
     { TournamentMap::Inferno, ChallengersStage, Heroic, Tyloo, {} },
     { TournamentMap::Inferno, ChallengersStage, MOUZ, SharksEsports, {} },
@@ -1014,6 +1015,8 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Inferno, GroupStage, Vitality, VirtusPro, {} },
     { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MOUZ, {} },
     { TournamentMap::Inferno, GroupStage, FURIA, Astralis, {} },
+    { TournamentMap::Inferno, GroupStage, FURIA, MOUZ, {} },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, Astralis, {} },
     { TournamentMap::Mirage, ChallengersStage, Tyloo, SharksEsports, {} },
     { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Entropiq, {} },
     { TournamentMap::Mirage, ChallengersStage, VirtusPro, FaZeClan, {} },
@@ -1021,6 +1024,7 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Tyloo, {} },
     { TournamentMap::Mirage, ChallengersStage, BIG, ENCE, {} },
     { TournamentMap::Mirage, ChallengersStage, MOUZ, Renegades, {} },
+    { TournamentMap::Mirage, GroupStage, G2Esports, FaZeClan, {} },
     { TournamentMap::Nuke, ChallengersStage, ENCE, GODSENT, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, Entropiq, {} },
     { TournamentMap::Nuke, ChallengersStage, MovistarRiders, Renegades, {} },
@@ -1036,6 +1040,7 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Nuke, ChallengersStage, BIG, ENCE, {} },
     { TournamentMap::Nuke, ChallengersStage, Astralis, paiNGaming, {} },
     { TournamentMap::Nuke, ChallengersStage, BIG, MOUZ, {} },
+    { TournamentMap::Nuke, GroupStage, EvilGeniuses, CopenhagenFlames, {} },
     { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames, {} },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan, {} },
     { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Tyloo, {} },
@@ -1043,6 +1048,8 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Overpass, ChallengersStage, VirtusPro, TeamSpirit, {} },
     { TournamentMap::Overpass, ChallengersStage, Heroic, MovistarRiders, {} },
     { TournamentMap::Overpass, GroupStage, GambitEsports, ENCE, {} },
+    { TournamentMap::Overpass, GroupStage, Vitality, Heroic, {} },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, VirtusPro, {} },
     { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, VirtusPro, {} },
     { TournamentMap::Vertigo, ChallengersStage, Heroic, CopenhagenFlames, {} },
     { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports, {} },
@@ -1050,7 +1057,8 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports, {} },
     { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, Tyloo, {} },
     { TournamentMap::Vertigo, ChallengersStage, MOUZ, Renegades, {} },
-    { TournamentMap::Vertigo, GroupStage, TeamLiquid, Entropiq, {} }
+    { TournamentMap::Vertigo, GroupStage, TeamLiquid, Entropiq, {} },
+    { TournamentMap::Vertigo, GroupStage, GambitEsports, Entropiq, {} }
 });
 static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &Match::map));
 
