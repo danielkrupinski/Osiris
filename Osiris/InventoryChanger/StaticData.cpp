@@ -274,6 +274,8 @@ private:
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
                     _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
+                } else if (item->isTournamentCoin()) {
+                    _gameItems.emplace_back(Type::TournamentCoin, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
@@ -300,7 +302,7 @@ private:
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
                     _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
-                    _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Helpers::isSouvenirToken(weaponID) ? Type::SouvenirToken : Type::ViewerPass, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
             } else if (item->isPaintable()) {
                 _gameItems.emplace_back(Type::Skin, 0, weaponID, vanillaPaintIndex, inventoryImage);
             }
