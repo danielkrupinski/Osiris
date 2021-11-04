@@ -286,7 +286,7 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
     if (RETURN_ADDRESS() == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
-    
+
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
 }
 
