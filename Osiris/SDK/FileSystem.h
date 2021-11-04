@@ -12,3 +12,4 @@ public:
     VIRTUAL_METHOD(void, close, 3, (void* handle), (this, handle))
     VIRTUAL_METHOD(unsigned int, size, WIN32_LINUX(7, 6), (void* handle), (this, handle))
 };
+

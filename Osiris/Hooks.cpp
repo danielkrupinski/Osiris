@@ -286,8 +286,13 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
     if (RETURN_ADDRESS() == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
-
+    
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+}
+
+static int __STDCALL hkFileCRCGoByeBye(void* _this)
+{
+    return 0;
 }
 
 static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
@@ -601,6 +606,9 @@ void Hooks::install() noexcept
     viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);
     viewRender.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay);
 
+    svPure.init(interfaces->fullFileSystem);
+    svPure.hookAt(WIN32_LINUX(101, 102), reinterpret_cast<void*>(hkFileCRCGoByeBye));
+
 #ifdef _WIN32
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
 #else
@@ -668,6 +676,8 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+
+    svPure.restore();
 
     Netvars::restore();
 
