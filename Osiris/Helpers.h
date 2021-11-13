@@ -60,6 +60,17 @@ namespace Helpers
         return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
     }
 
+    constexpr auto isSouvenirToken(WeaponId id) noexcept
+    {
+        switch (id) {
+        case WeaponId::Berlin2019SouvenirToken:
+        case WeaponId::Stockholm2021SouvenirToken:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
     bool worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
 
