@@ -11,6 +11,7 @@
 #include "../SDK/ItemSchema.h"
 
 using Inventory::InvalidDynamicDataIdx;
+using Inventory::BASE_ITEMID;
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
@@ -18,11 +19,10 @@ static std::vector<DynamicAgentData> dynamicAgentData;
 static std::vector<DynamicMusicData> dynamicMusicData;
 static std::vector<DynamicSouvenirPackageData> dynamicSouvenirPackageData;
 static std::vector<DynamicServiceMedalData> dynamicServiceMedalData;
+static std::vector<DynamicTournamentCoinData> dynamicTournamentCoinData;
 
 class InventoryImpl {
 public:
-    static constexpr auto BASE_ITEMID = 1152921504606746975;
-
     struct ToEquip {
         ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
 
@@ -201,6 +201,9 @@ private:
         } else if (item.isServiceMedal()) {
             if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
                 econItem->setIssueDate(dynamicData.issueDateTimestamp);
+        } else if (item.isTournamentCoin()) {
+            econItem->setDropsAwarded(dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
+            econItem->setDropsRedeemed(0);
         } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
@@ -366,6 +369,11 @@ DynamicServiceMedalData& Inventory::dynamicServiceMedalData(std::size_t index) n
     return ::dynamicServiceMedalData[index];
 }
 
+DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(std::size_t index) noexcept
+{
+    return ::dynamicTournamentCoinData[index];
+}
+
 std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept
 {
     ::dynamicSkinData.push_back(std::move(data));
@@ -400,6 +408,12 @@ std::size_t Inventory::emplaceDynamicData(DynamicServiceMedalData&& data) noexce
 {
     ::dynamicServiceMedalData.push_back(std::move(data));
     return ::dynamicServiceMedalData.size() - 1;
+}
+
+std::size_t Inventory::emplaceDynamicData(DynamicTournamentCoinData&& data) noexcept
+{
+    ::dynamicTournamentCoinData.push_back(std::move(data));
+    return ::dynamicTournamentCoinData.size() - 1;
 }
 
 std::vector<InventoryItem>& Inventory::get() noexcept
