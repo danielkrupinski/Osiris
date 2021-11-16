@@ -153,7 +153,7 @@ public:
 
     bool isInReload() noexcept
     {
-        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
+        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + WIN32_LINUX(0x41, 0x45));
     }
 
     int getUserId() noexcept;
