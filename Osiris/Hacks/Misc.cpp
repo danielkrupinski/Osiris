@@ -2056,6 +2056,15 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
     }
 }
 
+static void from_json(const json& j, MiscConfig::DamageList& dl)
+{
+    read(j, "Enabled", dl.enabled);
+    read(j, "No Title Bar", dl.noTitleBar);
+    read<value_t::object>(j, "Pos", dl.pos);
+    read<value_t::object>(j, "Size", dl.size);
+    read(j, "Max rows", dl.maxRows);
+}
+
 static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::Watermark& dummy = {})
 {
     WRITE("Enabled", enabled);
