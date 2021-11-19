@@ -62,6 +62,7 @@ public:
     VmtSwap networkChannel;
     HookType viewRender;
     HookType svCheats;
+    HookType svPure;
 private:
 #ifdef _WIN32
     HMODULE moduleHandle;
