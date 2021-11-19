@@ -1680,6 +1680,23 @@ void Misc::drawGUI(bool contentOnly) noexcept
         ImGui::EndPopup();
     }
     ImGui::PopID();
+    
+    ImGui::Checkbox("Damage list", &miscConfig.damageList.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Damage list");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("No Title Bar", &miscConfig.damageList.noTitleBar);
+        miscConfig.damageList.maxRows = std::clamp(miscConfig.damageList.maxRows, 1, 64);
+        ImGui::PushItemWidth(100.0f);
+        ImGui::InputInt("Maximum rows", &miscConfig.damageList.maxRows);
+        ImGui::PopItemWidth();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
 
     ImGui::Checkbox("Watermark", &miscConfig.watermark.enabled);
     ImGuiCustom::colorPicker("Offscreen Enemies", miscConfig.offscreenEnemies.asColor4(), &miscConfig.offscreenEnemies.enabled);
