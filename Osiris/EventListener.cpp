@@ -34,6 +34,7 @@ namespace
                 InventoryChanger::overrideHudIcon(*event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);
+                Misc::damageList(event);
                 break;
             case fnv::hash("player_hurt"):
                 Misc::playHitSound(*event);
