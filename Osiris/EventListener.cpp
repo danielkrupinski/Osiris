@@ -37,6 +37,7 @@ namespace
                 Misc::damageList(event);
                 break;
             case fnv::hash("player_hurt"):
+                Misc::damageList(event);
                 Misc::playHitSound(*event);
                 Visuals::hitEffect(event);
                 Visuals::hitMarker(event);
