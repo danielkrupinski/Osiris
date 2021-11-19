@@ -21,6 +21,7 @@ namespace
         {
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("round_start"):
+                Misc::damageList(event);
                 GameData::clearProjectileList();
                 Misc::preserveKillfeed(true);
                 [[fallthrough]];
