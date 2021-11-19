@@ -1969,6 +1969,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Name stealer", m.nameStealer);
     read(j, "Disable HUD blur", m.disablePanoramablur);
     read(j, "Ban color", m.banColor);
+    read<value_t::object>(j, "Damage list", m.damageList);
     read<value_t::string>(j, "Ban text", m.banText);
     read(j, "Fast plant", m.fastPlant);
     read(j, "Fast Stop", m.fastStop);
