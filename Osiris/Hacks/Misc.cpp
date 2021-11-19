@@ -370,6 +370,95 @@ void Misc::spectatorList() noexcept
     ImGui::End();
 }
 
+void Misc::damageList(GameEvent* event) noexcept
+{
+    if (!miscConfig.damageList.enabled)
+        return;
+
+    static std::mutex mtx;
+    std::scoped_lock _{mtx};
+
+    static std::unordered_map<int, int> damageCount;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("round_start"):
+            damageCount.clear();
+            break;
+        case fnv::hash("player_hurt"):
+            if (const auto localPlayerId = localPlayer ? localPlayer->getUserId() : 0; localPlayerId && event->getInt("attacker") == localPlayerId && event->getInt("userid") != localPlayerId)
+                if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player)
+                    damageCount[player->handle()] += event->getInt("dmg_health");
+            break;
+        case fnv::hash("player_death"):
+            if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player)
+                damageCount.erase(player->handle());
+            break;
+        }
+    } else {
+        if ((damageCount.empty() || !interfaces->engine->isInGame()) && !gui->isOpen())
+            return;
+
+        if (miscConfig.damageList.pos != ImVec2{}) {
+            ImGui::SetNextWindowPos(miscConfig.damageList.pos);
+            miscConfig.damageList.pos = {};
+        }
+
+        if (miscConfig.damageList.size != ImVec2{}) {
+            ImGui::SetNextWindowSize(ImClamp(miscConfig.damageList.size, {}, ImGui::GetIO().DisplaySize));
+            miscConfig.damageList.size = {};
+        }
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+        if (!gui->isOpen())
+            windowFlags |= ImGuiWindowFlags_NoInputs;
+        if (miscConfig.damageList.noTitleBar)
+            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+        if (!gui->isOpen())
+            ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, {0.5f, 0.5f});
+        ImGui::Begin("Damage list", nullptr, windowFlags);
+        ImGui::PopStyleVar();
+
+        if (!gui->isOpen())
+            ImGui::PopStyleColor();
+
+        std::vector<std::pair<int, int>> damageList(damageCount.cbegin(), damageCount.cend());
+        std::ranges::sort(damageList, std::ranges::greater{}, &std::pair<int, int>::second);
+        GameData::Lock lock;
+
+        for (std::size_t rowsCount = 0; const auto &[handle, damage] : damageList) {
+            if (rowsCount >= miscConfig.damageList.maxRows)
+                break;
+
+            if (damage == 0)
+                continue;
+
+            if (const auto playerData = GameData::playerByHandle(handle)) {
+                if (playerData->health == 0)
+                    continue;
+
+                if (const auto texture = playerData->getAvatarTexture()) {
+                    const auto textSize = ImGui::CalcTextSize(playerData->name.c_str());
+                    ImGui::Image(texture, ImVec2(textSize.y, textSize.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                    ImGui::SameLine();
+                    ImGui::TextWrapped("%s: ", playerData->name.c_str());
+                    ImGui::SameLine(0.f, 1.f);
+                    if (!rowsCount)
+                        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+                    ImGui::TextWrapped("Dmg: %d | Health: %d", damage, playerData->health);
+                    if (!rowsCount)
+                        ImGui::PopStyleColor();
+                    ++rowsCount;
+                }
+            }
+        }
+        ImGui::End();
+    }
+}
+
 static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
 {
     // dot
