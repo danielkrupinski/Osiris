@@ -134,6 +134,16 @@ struct MiscConfig {
         ImVec2 pos;
         ImVec2 size{ 200.0f, 200.0f };
     };
+    
+    
+    struct DamageList {
+        bool enabled = false;
+        bool noTitleBar = false;
+        int maxRows = 3;
+        ImVec2 pos;
+        ImVec2 size{ 300.0f, 200.0f };
+    };
+    DamageList damageList;
 
     SpectatorList spectatorList;
     struct Watermark {
