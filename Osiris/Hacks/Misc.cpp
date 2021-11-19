@@ -2161,6 +2161,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
     WRITE("Force relay cluster", forceRelayCluster);
+    WRITE("Damage list", damageList);
 }
 
 json Misc::toJson() noexcept
