@@ -2011,6 +2011,15 @@ static void from_json(const json& j, MiscConfig::Reportbot& r)
     read(j, "Other Hacking", r.other);
 }
 
+static void from_json(const json& j, MiscConfig::DamageList& dl)
+{
+    read(j, "Enabled", dl.enabled);
+    read(j, "No Title Bar", dl.noTitleBar);
+    read<value_t::object>(j, "Pos", dl.pos);
+    read<value_t::object>(j, "Size", dl.size);
+    read(j, "Max rows", dl.maxRows);
+}
+
 static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::Reportbot& dummy = {})
 {
     WRITE("Enabled", enabled);
@@ -2057,13 +2066,18 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
     }
 }
 
-static void from_json(const json& j, MiscConfig::DamageList& dl)
+
+
+static void to_json(json& j, const MiscConfig::DamageList& o, const MiscConfig::DamageList& dummy = {})
 {
-    read(j, "Enabled", dl.enabled);
-    read(j, "No Title Bar", dl.noTitleBar);
-    read<value_t::object>(j, "Pos", dl.pos);
-    read<value_t::object>(j, "Size", dl.size);
-    read(j, "Max rows", dl.maxRows);
+    WRITE("Enabled", enabled);
+    WRITE("No Title Bar", noTitleBar);
+    WRITE("Max rows", maxRows);
+
+    if (const auto window = ImGui::FindWindowByName("Damage list")) {
+        j["Pos"] = window->Pos;
+        j["Size"] = window->SizeFull;
+    }
 }
 
 static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::Watermark& dummy = {})
