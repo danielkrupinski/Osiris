@@ -143,6 +143,11 @@ public:
 
     float getMaxDesyncAngle() noexcept;
 
+    bool isInReload() noexcept
+    {
+        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + WIN32_LINUX(0x41, 0x45));
+    }
+
     int getUserId() noexcept;
     std::uint64_t getSteamId() noexcept;
 
