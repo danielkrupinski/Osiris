@@ -210,7 +210,6 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
-    NETVAR_OFFSET(isInReload, "CBaseCombatWeapon", "m_iClip1", 65, bool)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
@@ -264,4 +263,4 @@ public:
     }
 };
 
-static_assert(sizeof(Entity) == 1);
+static_assert(sizeof(Entity) == 1); 
