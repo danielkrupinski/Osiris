@@ -161,6 +161,7 @@ static void swapWindow(SDL_Window * window) noexcept
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render();
         Misc::purchaseList();
+        Misc::damageList();
         Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
@@ -338,6 +339,11 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
         return true;
 
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+}
+    
+static int __STDCALL hkFileCRCGoByeBye(void* _this)
+{
+    return 0;
 }
 
 static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
@@ -707,6 +713,9 @@ void Hooks::install() noexcept
     viewRender.init(memory->viewRender);
     viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);
     viewRender.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay);
+    
+    svPure.init(interfaces->fullFileSystem);
+    svPure.hookAt(WIN32_LINUX(101, 102), reinterpret_cast<void*>(hkFileCRCGoByeBye));
 
 #ifdef _WIN32
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -775,6 +784,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+    svPure.restore();
     networkChannel.restore();
 
     Netvars::restore();
