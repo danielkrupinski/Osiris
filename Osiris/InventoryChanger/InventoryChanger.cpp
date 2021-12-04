@@ -659,7 +659,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete, bool& shouldEdit) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -741,11 +741,23 @@ namespace ImGui
         RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
 
         const auto removeButtonSize = CalcTextSize("Delete", nullptr) + style.FramePadding * 2.0f;
+        const auto editButtonSize = CalcTextSize("Edit", nullptr) + style.FramePadding * 2.0f;
         const auto cursorPosNext = window->DC.CursorPos.y;
-        SameLine(window->WorkRect.Max.x - pos.x - removeButtonSize.x - 7.0f);
+        SameLine(window->WorkRect.Max.x - pos.x - removeButtonSize.x - editButtonSize.x - 14.0f); // I have no Idea why 14, but it works
         const auto cursorPosBackup = window->DC.CursorPos.y;
 
         window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
+        if (item.isSkin())
+        {
+            if (Button("Edit"))
+                shouldEdit = true;
+        }
+        else {  // for spacing
+            BeginDisabled();
+            Button("Edit");
+            EndDisabled();
+        }
+        SameLine();
         if (Button("Delete"))
             shouldDelete = true;
 
@@ -858,6 +870,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::EndChild();
     } else {
+        static std::size_t to_edit;
+        static DynamicSkinData newDynamicData;
+        static bool inEditMode;
         if (ImGui::BeginChild("##scrollarea2", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             auto& inventory = Inventory::get();
             for (std::size_t i = inventory.size(); i-- > 0;) {
@@ -866,11 +881,129 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete);
+                bool shouldEdit = false;
+                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete, shouldEdit);
                 if (shouldDelete)
                     inventory[i].markToDelete();
+                if (shouldEdit)
+                {
+                    to_edit = i;
+                    inEditMode = true;
+                }
                 ImGui::PopID();
             }
+            
+            if (inEditMode)
+            {
+                newDynamicData = Inventory::dynamicSkinData(inventory[to_edit].getDynamicDataIndex());
+                ImGui::OpenPopup("Edit Inventory Item");
+                inEditMode = false;
+            }
+            
+            if (ImGui::BeginPopupModal("Edit Inventory Item", nullptr,ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                static int currentSticker;
+                bool scrollToItem = false;
+                auto &item = inventory[to_edit].get();
+                const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+                const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "Vanilla";
+                
+                ImGui::Text("%s - %s",itemName,paintKitName);
+                if (const auto icon = getItemIconTexture(item.iconPath)) {
+                    ImGui::Image(icon, { 200.0f, 150.0f });
+                }
+                ImGui::SameLine();
+
+
+                ImGui::BeginGroup();
+                ImGui::InputText("Name Tag", &newDynamicData.nameTag);
+                ImGui::InputFloat("Wear",&newDynamicData.wear,0,0,"%.9f"); 
+                newDynamicData.wear = std::clamp(newDynamicData.wear,StaticData::paintKits()[item.dataIndex].wearRemapMin,StaticData::paintKits()[item.dataIndex].wearRemapMax);
+                ImGui::InputInt("Seed",&newDynamicData.seed);
+                newDynamicData.seed = std::clamp(newDynamicData.seed,1,1000);
+
+                // not to display "-1"
+                bool stattrakEnabled = (newDynamicData.statTrak>-1); 
+                ImGui::Checkbox("Enable Stattrak",&stattrakEnabled);
+                if (stattrakEnabled)
+                {
+                    if (newDynamicData.statTrak == -1) 
+                        newDynamicData.statTrak += 1;
+                    ImGui::InputInt("Stattrak",&newDynamicData.statTrak);
+                }
+                else 
+                {
+                    newDynamicData.statTrak = -1;
+                    ImGui::BeginDisabled(); //spacing
+                    int zero = 0; // great
+                    ImGui::InputInt("Stattrak",&zero);
+                    ImGui::EndDisabled();
+                }
+                
+                // stickers, shouldn't we disable this for knives and gloves?
+                for (auto index:{0,1,2,3})
+                {
+                    std::string label = "Sticker " + std::to_string(index+1);
+                    label.append(newDynamicData.stickers[index].stickerID ? " [*]":"    ");
+                    if( ImGui::Button(label.c_str()) )
+                    {
+                        currentSticker = index; scrollToItem = true;
+                        ImGui::OpenPopup("sticker");
+                    }
+                    if (index !=3)
+                        ImGui::SameLine();
+                }
+                
+
+                if (ImGui::BeginPopup("sticker"))
+                {
+                    ImGui::BeginChild("##stickerList",{300.f,400.f});
+                    
+                    if(ImGui::Selectable("None",(newDynamicData.stickers[currentSticker].stickerID == 0)))
+                    {
+                        newDynamicData.stickers[currentSticker].stickerID = 0;
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    for (auto& kit : StaticData::gameItems())
+                    {
+                        if(!kit.isSticker())
+                            continue;
+                        const auto kitId = StaticData::paintKits()[kit.dataIndex].id;
+                        
+                        bool selected = (newDynamicData.stickers[currentSticker].stickerID == kitId);
+                        
+                        if(ImGui::SkinSelectable(kit, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(kit.rarity), selected))
+                        {
+                            newDynamicData.stickers[currentSticker].stickerID = kitId;
+                            ImGui::CloseCurrentPopup();
+                        }
+                        if (selected && scrollToItem)
+                        {
+                            ImGui::ScrollToItem();
+                            scrollToItem = false;
+                        }
+                    }
+                    ImGui::EndChild();
+
+                    ImGui::EndPopup();
+                }
+                ImGui::EndGroup();
+
+                if(ImGui::Button("Apply"))
+                {
+                    inventory[to_edit].markToDelete();
+                    const auto itemIndex = StaticData::getItemIndex(item.weaponID, item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].id : 0);
+                    auto dynamicDataIdx = Inventory::emplaceDynamicData(std::move(newDynamicData));
+                    Inventory::addItemUnacknowledged(itemIndex, dynamicDataIdx);
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if(ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+            }
+            
         }
         ImGui::EndChild();
     }
