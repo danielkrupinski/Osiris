@@ -957,14 +957,22 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 if (ImGui::BeginPopup("sticker"))
                 {
-                    ImGui::BeginChild("##stickerList",{300.f,400.f});
+                    ImGui::SliderFloat("wear",&newDynamicData.stickers[currentSticker].wear,0.0f,1.0f,"%.9f");
                     
-                    if(ImGui::Selectable("None",(newDynamicData.stickers[currentSticker].stickerID == 0)))
+                    if(ImGui::Button("Remove"))
                     {
                         newDynamicData.stickers[currentSticker].stickerID = 0;
+                        newDynamicData.stickers[currentSticker].wear = 0.f;
                         ImGui::CloseCurrentPopup();
                     }
-
+                    ImGui::BeginChild("##stickerList",{300.f,400.f});
+                    
+                    if(!newDynamicData.stickers[currentSticker].stickerID &&scrollToItem)
+                    {
+                        ImGui::SetScrollHereY();
+                        scrollToItem = false;
+                    }
+                    
                     for (auto& kit : StaticData::gameItems())
                     {
                         if(!kit.isSticker())
