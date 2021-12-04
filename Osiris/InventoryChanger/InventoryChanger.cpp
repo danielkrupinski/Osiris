@@ -952,6 +952,26 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     }
                     if (index !=3)
                         ImGui::SameLine();
+                    
+                    if (ImGui::BeginDragDropSource()) {
+                        ImGui::SetDragDropPayload("StickerID", &newDynamicData.stickers[index].stickerID, sizeof(int), ImGuiCond_Once);
+                        ImGui::SetDragDropPayload("StickerWear", &newDynamicData.stickers[index].wear, sizeof(float), ImGuiCond_Once);
+                        ImGui::EndDragDropSource();
+                    }
+                    if(ImGui::BeginDragDropTarget())
+                    {
+                        if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("StickerID"))
+                        {
+                            const auto& data = *(int*)payload->Data;
+                            newDynamicData.stickers[index].stickerID = data;
+                        }
+                        if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("StickerWear"))
+                        {
+                            const auto& data = *(float*)payload->Data;
+                            newDynamicData.stickers[index].wear = data;
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
                 }
                 
 
