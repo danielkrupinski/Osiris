@@ -943,17 +943,50 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 // stickers, shouldn't we disable this for knives and gloves?
                 for (auto index:{0,1,2,3})
                 {
-                    std::string label = "Sticker " + std::to_string(index+1);
-                    label.append(newDynamicData.stickers[index].stickerID ? " [*]":"    ");
-                    if( ImGui::Button(label.c_str()) )
+                    ImTextureID icon;
+                    if (newDynamicData.stickers[index].stickerID)
                     {
-                        currentSticker = index; scrollToItem = true;
-                        ImGui::OpenPopup("sticker");
+                        const auto itemIndex = StaticData::getItemIndex(WeaponId::Sticker, newDynamicData.stickers[index].stickerID);
+                        if (itemIndex)
+                            icon = getItemIconTexture(StaticData::gameItems()[itemIndex].iconPath);
+                    }
+                    else
+                    {
+                        icon = getItemIconTexture("econ/weapon_cases/default_rare_item");
+                    }
+                    if (icon)
+                    {
+                        // I hate this
+                        ImGuiID buttonID;
+                        switch (index)
+                        {
+                        case 0:
+                            buttonID=ImGui::GetID("#Sticker1");
+                            break;
+                        case 1:
+                            buttonID=ImGui::GetID("#Sticker2");
+                            break;
+                        case 2:
+                            buttonID=ImGui::GetID("#Sticker3");
+                            break;
+                        case 3:
+                            buttonID=ImGui::GetID("#Sticker4");
+                            break;
+                        default:
+                            break;
+                        }
+                        if(ImGui::ImageButtonEx(buttonID, icon, {74.f,56.f}, {0,0}, {1.f,1.f},ImGui::GetStyle().FramePadding, ImVec4(0,0,0,0), ImVec4(1,1,1,1)))
+                        {
+                            currentSticker = index; scrollToItem = true;
+                            ImGui::OpenPopup("sticker");
+                        }
+
                     }
                     if (index !=3)
                         ImGui::SameLine();
                     
-                    if (ImGui::BeginDragDropSource()) {
+                    if (newDynamicData.stickers[index].stickerID && ImGui::BeginDragDropSource()) {
+                        ImGui::Image(icon,{74.f,56.f});
                         ImGui::SetDragDropPayload("StickerID", &newDynamicData.stickers[index].stickerID, sizeof(int), ImGuiCond_Once);
                         ImGui::SetDragDropPayload("StickerWear", &newDynamicData.stickers[index].wear, sizeof(float), ImGuiCond_Once);
                         ImGui::EndDragDropSource();
