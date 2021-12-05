@@ -1027,16 +1027,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                     ImGui::SetNextItemWidth(300.f);
 
-                    if (ImGui::InputTextWithHint("","search for stickers",&filter,ImGuiInputTextFlags_EnterReturnsTrue))
+                    if (ImGui::InputTextWithHint("","search for stickers",&filter))
                         scrollToTop = true;
                     ImGui::BeginChild("##stickerList",{300.f,400.f});
-                    
-                    if(scrollToTop)
-                    {
-                        ImGui::SetScrollHereY();
-                        scrollToTop = false;
-                    }
-                    
                     for (auto& kit : StaticData::gameItems())
                     {
                         if(!kit.isSticker())
@@ -1060,6 +1053,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                             ImGui::ScrollToItem();
                             scrollToItem = false;
                         }
+                    }
+                    if(scrollToTop)
+                    {
+                        ImGui::SetScrollY(0.0f);
+                        scrollToTop = false;
                     }
                     ImGui::EndChild();
                     if(ImGui::Button("Close"))
