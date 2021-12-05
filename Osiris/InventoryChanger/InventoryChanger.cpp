@@ -805,6 +805,18 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
     };
 
+    constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+        constexpr auto delimiter = L" ";
+        wchar_t* _;
+        wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
+        while (token) {
+            if (!std::wcsstr(str.c_str(), token))
+                return false;
+            token = std::wcstok(nullptr, delimiter, &_);
+        }
+        return true;
+    };
+    
     if (isInAddMode) {
         static std::unordered_map<StaticData::ItemIndex, int> selectedToAdd;
         static std::vector<StaticData::ItemIndex> toAddOrder;
@@ -833,18 +845,6 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
         ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
-
-        constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
-            constexpr auto delimiter = L" ";
-            wchar_t* _;
-            wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
-            while (token) {
-                if (!std::wcsstr(str.c_str(), token))
-                    return false;
-                token = std::wcstok(nullptr, delimiter, &_);
-            }
-            return true;
-        };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             const auto& gameItems = StaticData::gameItems();
@@ -904,6 +904,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             {
                 static int currentSticker;
                 bool scrollToItem = false;
+                bool scrollToTop = false;
                 auto &item = inventory[to_edit].get();
                 const auto itemName = StaticData::getWeaponName(item.weaponID).data();
                 const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "Vanilla";
@@ -1010,20 +1011,25 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 if (ImGui::BeginPopup("sticker"))
                 {
+                    static std::string filter;
+                    if(!newDynamicData.stickers[currentSticker].stickerID)
+                        ImGui::BeginDisabled();
+                        
                     ImGui::SliderFloat("wear",&newDynamicData.stickers[currentSticker].wear,0.0f,1.0f,"%.9f");
-                    
-                    if(ImGui::Button("Remove"))
-                    {
-                        newDynamicData.stickers[currentSticker].stickerID = 0;
-                        newDynamicData.stickers[currentSticker].wear = 0.f;
-                        ImGui::CloseCurrentPopup();
-                    }
+
+                    if(!newDynamicData.stickers[currentSticker].stickerID)
+                        ImGui::EndDisabled();
+
+                    ImGui::SetNextItemWidth(300.f);
+
+                    if (ImGui::InputTextWithHint("","search for stickers",&filter,ImGuiInputTextFlags_EnterReturnsTrue))
+                        scrollToTop = true;
                     ImGui::BeginChild("##stickerList",{300.f,400.f});
                     
-                    if(!newDynamicData.stickers[currentSticker].stickerID &&scrollToItem)
+                    if(scrollToTop)
                     {
                         ImGui::SetScrollHereY();
-                        scrollToItem = false;
+                        scrollToTop = false;
                     }
                     
                     for (auto& kit : StaticData::gameItems())
@@ -1031,13 +1037,18 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                         if(!kit.isSticker())
                             continue;
                         const auto kitId = StaticData::paintKits()[kit.dataIndex].id;
+                        const auto kitName = StaticData::paintKits()[kit.dataIndex].nameUpperCase;
                         
                         bool selected = (newDynamicData.stickers[currentSticker].stickerID == kitId);
-                        
+
+                        if(!selected && !filter.empty() && !passesFilter(kitName, Helpers::toUpper(Helpers::toWideString(filter))))
+                            continue;
+
                         if(ImGui::SkinSelectable(kit, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(kit.rarity), selected))
                         {
                             newDynamicData.stickers[currentSticker].stickerID = kitId;
-                            ImGui::CloseCurrentPopup();
+                            filter.clear();
+                            ImGui::CloseCurrentPopup();                            
                         }
                         if (selected && scrollToItem)
                         {
@@ -1046,7 +1057,22 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                         }
                     }
                     ImGui::EndChild();
-
+                    if(ImGui::Button("Close"))
+                    {
+                        filter.clear();
+                        ImGui::CloseCurrentPopup();
+                    }
+                    if (newDynamicData.stickers[currentSticker].stickerID)
+                    {
+                        ImGui::SameLine();
+                        if(ImGui::Button("Remove"))
+                        {
+                            newDynamicData.stickers[currentSticker].stickerID = 0;
+                            newDynamicData.stickers[currentSticker].wear = 0.f;
+                            filter.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
                     ImGui::EndPopup();
                 }
                 ImGui::EndGroup();
