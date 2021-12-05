@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 #include <string_view>
@@ -33,7 +34,9 @@ namespace StaticData
         OperationPass,
         StatTrakSwapTool,
         ViewerPass,
-        ServiceMedal
+        ServiceMedal,
+        SouvenirToken,
+        TournamentCoin
     };
 
     struct GameItem {
@@ -55,8 +58,12 @@ namespace StaticData
         bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
         bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
         bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
+        bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
+        bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
+
+        int tournamentEventID() const noexcept { assert(isTournamentCoin()); return static_cast<int>(dataIndex); }
 
         Type type;
         std::uint8_t rarity;
@@ -84,6 +91,7 @@ namespace StaticData
 
     enum class TournamentMap : std::uint8_t {
         None = 0,
+        Ancient,
         Cache,
         Cobblestone,
         Dust2,
@@ -118,6 +126,7 @@ namespace StaticData
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
+    int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     bool isCollectibleGenuine(const GameItem& collectible) noexcept;
     std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
 }

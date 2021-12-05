@@ -222,7 +222,7 @@ private:
                 continue;
 
             const auto name = std::string_view{ stickerKit->name.data(), static_cast<std::size_t>(stickerKit->name.length - 1) };
-            const auto isPatch = name.starts_with("patch");
+            const auto isPatch = name.starts_with("patch") || name.starts_with("stockh2021_teampatch");
             const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
             const auto isSticker = !isPatch && !isGraffiti;
             
@@ -274,6 +274,8 @@ private:
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
                     _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
+                } else if (item->isTournamentCoin()) {
+                    _gameItems.emplace_back(Type::TournamentCoin, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
@@ -300,7 +302,7 @@ private:
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
                     _gameItems.emplace_back(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0)
-                    _gameItems.emplace_back(Type::ViewerPass, rarity, weaponID, 0, inventoryImage);
+                    _gameItems.emplace_back(Helpers::isSouvenirToken(weaponID) ? Type::SouvenirToken : Type::ViewerPass, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
             } else if (item->isPaintable()) {
                 _gameItems.emplace_back(Type::Skin, 0, weaponID, vanillaPaintIndex, inventoryImage);
             }
@@ -389,6 +391,8 @@ private:
             return TournamentMap::Nuke;
         if (lootListName.ends_with("de_vertigo"))
             return TournamentMap::Vertigo;
+        if (lootListName.ends_with("de_ancient"))
+            return TournamentMap::Ancient;
         return TournamentMap::None;
     }
 
@@ -456,10 +460,15 @@ private:
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isSticker(); });
     }
 
+    [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
+    {
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isPatch(); });
+    }
+
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
     {
         for (auto& crate : _cases) {
-            if (isStickerCapsule(crate))
+            if (isStickerCapsule(crate) || isPatchPack(crate))
                 crate.souvenirPackageTournamentID = 0;
         }
     }
@@ -561,6 +570,20 @@ int StaticData::getTournamentTeamGoldStickerID(std::uint32_t tournamentID, Tourn
 int StaticData::getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept
 {
     return StaticDataImpl::instance().getTournamentPlayerGoldStickerID(tournamentID, tournamentPlayerID);
+}
+
+int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
+{
+    switch (map) {
+    case TournamentMap::Ancient: return 1689;
+    case TournamentMap::Dust2: return 1690;
+    case TournamentMap::Inferno: return 1691;
+    case TournamentMap::Mirage: return 1692;
+    case TournamentMap::Nuke: return 1693;
+    case TournamentMap::Overpass: return 1694;
+    case TournamentMap::Vertigo: return 1695;
+    default: return 0;
+    }
 }
 
 bool StaticData::isCollectibleGenuine(const GameItem& collectible) noexcept
