@@ -941,9 +941,14 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     ImGui::EndDisabled();
                 }
                 
-                // stickers, shouldn't we disable this for knives and gloves?
+                // stickers
+                bool is_knife  = (item.weaponID >= WeaponId::Bayonet && item.weaponID < WeaponId::GloveStuddedBrokenfang) 
+                || item.weaponID == WeaponId::KnifeT || item.weaponID == WeaponId::Knife;
+                
                 for (auto index:{0,1,2,3})
                 {
+                    if (is_knife || item.isGlove()) // knives and gloves have no stickers
+                        continue;
                     ImTextureID icon;
                     if (newDynamicData.stickers[index].stickerID)
                     {
