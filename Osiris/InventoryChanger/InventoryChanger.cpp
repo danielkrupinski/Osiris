@@ -543,6 +543,17 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
 
 namespace ImGui
 {
+    static void BeginDisabled()
+    {
+        ImGuiContext& g = *GImGui;
+        PushStyleVar(ImGuiStyleVar_Alpha, 0.25f);
+    }
+
+    static void EndDisabled()
+    {
+    PopStyleVar();
+    }
+    
     static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
@@ -1050,7 +1061,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                         }
                         if (selected && scrollToItem)
                         {
-                            ImGui::ScrollToItem();
+                            //ImGui::ScrollToItem(); // To enable this update to latest Imgui version
                             scrollToItem = false;
                         }
                     }
