@@ -13,6 +13,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <locale>
+#include <codecvt>
 #endif
 
 #include "imgui/imgui.h"
