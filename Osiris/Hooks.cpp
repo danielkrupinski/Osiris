@@ -251,6 +251,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
         Visuals::inverseRagdollGravity();
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness();
+        Visuals::changeGlowOutlineWidth();
         Visuals::remove3dSky();
         Glow::render();
     }
