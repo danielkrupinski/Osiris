@@ -15,7 +15,7 @@ bool Entity::setupBones(matrix3x4* out, int maxBones, int boneMask, float curren
 {
 #ifdef _WIN32
     if (Misc::shouldFixBoneMatrix()) {
-        int* render = reinterpret_cast<int*>(this + 0x274);
+        int* render = reinterpret_cast<int*>(this + 0x278);
         int backup = *render;
         Vector absOrigin = getAbsOrigin();
         *render = 0;
