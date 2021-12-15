@@ -72,6 +72,7 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
+    float glowOutlineWidth{ 6.0f };
 
     struct ColorCorrection {
         bool enabled = false;
@@ -130,6 +131,7 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Far Z", v.farZ);
     read(j, "Flash reduction", v.flashReduction);
     read(j, "Brightness", v.brightness);
+    read(j, "Glow thickness", v.glowOutlineWidth)
     read(j, "Skybox", v.skybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
@@ -190,6 +192,7 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Far Z", farZ);
     WRITE("Flash reduction", flashReduction);
     WRITE("Brightness", brightness);
+    WRITE("Glow thickness", glowOutlineWidth);
     WRITE("Skybox", skybox);
     WRITE("World", world);
     WRITE("Sky", sky);
@@ -365,6 +368,12 @@ void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces->cvar->findVar("mat_force_tonemap_scale");
     brightness->setValue(visualsConfig.brightness);
+}
+
+void Visuals::changeGlowThickness() noexcept
+{
+    const auto glowWidth = interfaces->cvar->findVar("glow_outline_width");
+    glowWidth->setValue(visualsCofnig.glowOutlineWidth);
 }
 
 void Visuals::removeGrass(FrameStage stage) noexcept
