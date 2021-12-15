@@ -373,7 +373,7 @@ void Visuals::updateBrightness() noexcept
 void Visuals::changeGlowThickness() noexcept
 {
     const auto glowWidth = interfaces->cvar->findVar("glow_outline_width");
-    glowWidth->setValue(visualsCofnig.glowOutlineWidth);
+    glowWidth->setValue(visualsConfig.glowOutlineWidth);
 }
 
 void Visuals::removeGrass(FrameStage stage) noexcept
