@@ -387,8 +387,8 @@ static inline float  ImRecip(float x)           { return _mm_cvtss_f32(_mm_rcp_p
 static inline float  ImRsqrt(float x)           { return 1.0f / sqrtf(x); }
 static inline float  ImRecip(float x)           { return 1.0f / x; }
 #endif
-static inline float  ImRsqrt(double x)          { return _mm_cvtss_f32(_mm_rsqrt_ss(_mm_set_ss(x))); }
-static inline float  ImRecip(double x)          { return _mm_cvtss_f32(_mm_rcp_ps(_mm_set_ss(x))); }
+static inline float  ImRsqrt(double x)          { return 1.0 / sqrt(x); }
+static inline float  ImRecip(double x)          { return 1.0 / x; }
 #endif
 // - ImMin/ImMax/ImClamp/ImLerp/ImSwap are used by widgets which support variety of types: signed/unsigned int/long long float/double
 // (Exceptionally using templates here but we could also redefine them for those types)
