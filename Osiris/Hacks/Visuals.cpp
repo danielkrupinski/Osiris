@@ -755,6 +755,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 280.0f);
     ImGui::Checkbox("Disable post-processing", &visualsConfig.disablePostProcessing);
     ImGui::Checkbox("Inverse ragdoll gravity", &visualsConfig.inverseRagdollGravity);
+    ImGui::Checkbox("Ragdoll force", &visualsConfig.ragdollForce);
     ImGui::Checkbox("No fog", &visualsConfig.noFog);
     ImGui::Checkbox("No 3d sky", &visualsConfig.no3dSky);
     ImGui::Checkbox("No aim punch", &visualsConfig.noAimPunch);
