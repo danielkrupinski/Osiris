@@ -798,6 +798,9 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::PushID(5);
     ImGui::SliderFloat("", &visualsConfig.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
+    ImGui::PushID(6);
+    ImGui::SliderFloat("", &visualsConfig.glowOutlineWidth, 0.0f, 100.0f, "Glow thickness: %.2f");
+    ImGui::PopID();
     ImGui::PopItemWidth();
     ImGui::Combo("Skybox", &visualsConfig.skybox, Visuals::skyboxList.data(), Visuals::skyboxList.size());
     ImGuiCustom::colorPicker("World color", visualsConfig.world);
