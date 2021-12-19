@@ -83,6 +83,7 @@ struct VisualsConfig {
         float green = 0.0f;
         float yellow = 0.0f;
     } colorCorrection;
+    bool ragdollForce{ false };
 } visualsConfig;
 
 
@@ -107,6 +108,7 @@ static void from_json(const json& j, VisualsConfig& v)
 {
     read(j, "Disable post-processing", v.disablePostProcessing);
     read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
+    read(j, "Ragdoll force", v.ragdollForce);
     read(j, "No fog", v.noFog);
     read(j, "No 3d sky", v.no3dSky);
     read(j, "No aim punch", v.noAimPunch);
@@ -167,6 +169,7 @@ static void to_json(json& j, const VisualsConfig& o)
 
     WRITE("Disable post-processing", disablePostProcessing);
     WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
+    WRITE("Ragdoll force", ragdollForce);
     WRITE("No fog", noFog);
     WRITE("No 3d sky", no3dSky);
     WRITE("No aim punch", noAimPunch);
@@ -271,6 +274,12 @@ void Visuals::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
     ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+}
+
+void Visuals::ragdollForce() noexcept
+{
+    const auto force = interfaces->cvar->findVar("phys_pushscale");
+    force->setValue(visualsConfig.ragdollForce ? 800 : 1);
 }
 
 void Visuals::colorWorld() noexcept
