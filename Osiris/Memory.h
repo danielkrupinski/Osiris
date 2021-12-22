@@ -5,6 +5,7 @@
 #include <memory>
 #include <type_traits>
 
+#include "SDK/AnimState.h"
 #include "SDK/Platform.h"
 
 class ClientMode;
@@ -73,6 +74,7 @@ public:
     int(__THISCALL* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
+    void(__THISCALL* setAbsAngle)(Entity*, const Vector&);
     std::uintptr_t insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
@@ -127,6 +129,7 @@ public:
     SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
     void** uiComponentInventory;
     void(__THISCALL* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
+    std::uintptr_t setEyePositionAndVectors;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -153,11 +156,17 @@ public:
 #endif
     }
 
+    void updateState(AnimState* state, Vector& angle) const noexcept
+    {
+        return reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(updateStateFn)(state, nullptr, 0.0f, angle.y, angle.x, nullptr);
+    }
+
 private:
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
     std::uintptr_t setDynamicAttributeValueFn;
+    std::uintptr_t updateStateFn;
 };
 
 inline std::unique_ptr<const Memory> memory;

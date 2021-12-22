@@ -31,6 +31,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 
+#include "Hacks/Animations.h"
 #include "Hacks/Aimbot.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
@@ -210,6 +211,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::slowwalk(cmd);
 
     EnginePrediction::run(cmd);
+    Animations::hookPlayers();
 
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
@@ -240,6 +242,8 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
+
+    Animations::updateData(cmd, sendPacket);
 
     return false;
 }
@@ -306,6 +310,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Visuals::colorWorld();
         Misc::updateEventListeners();
         Visuals::updateEventListeners();
+        Animations::updateLocal();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
@@ -671,6 +676,7 @@ void Hooks::uninstall() noexcept
 
     Netvars::restore();
 
+    Animations::restorePlayers();
     Glow::clearCustomObjects();
     InventoryChanger::clearInventory();
 

@@ -17,3 +17,13 @@ float GlobalVars::serverTime(UserCmd* cmd) const noexcept
     }
     return tick * intervalPerTick;
 }
+
+bool GlobalVars::newTick() const noexcept
+{
+    static float lastTick = 0.f;
+    if (lastTick != tickCount) {
+        lastTick = tickCount;
+        return true;
+    }
+    return false;
+}

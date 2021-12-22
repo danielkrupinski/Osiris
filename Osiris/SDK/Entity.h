@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 
+#include "AnimLayer.h"
 #include "AnimState.h"
 #include "Inconstructible.h"
 #include "Platform.h"
@@ -143,10 +144,25 @@ public:
     AnimState* getAnimstate() noexcept
     {
 #ifdef _WIN32
-        return *reinterpret_cast<AnimState**>(this + 0x3914);
+        return *reinterpret_cast<AnimState**>(this + 0x9960);
 #else
         return nullptr;
 #endif
+    }
+
+    AnimLayer* getAnimOverlays() noexcept
+    {
+        return *reinterpret_cast<AnimLayer**>(this + 0x2990);
+    }
+
+    std::array<float, 24>& getPoseParameters() noexcept
+    {
+        return *reinterpret_cast<std::array<float, 24>*>(this + Netvars::get(fnv::hash("CBaseAnimating->m_flPoseParameter")));
+    }
+
+    uint32_t& getEffects() noexcept
+    {
+        return *(uint32_t*)(this + 0xF0);
     }
 
     float getMaxDesyncAngle() noexcept;
@@ -170,6 +186,7 @@ public:
     bool canSee(Entity* other, const Vector& pos) noexcept;
     bool visibleTo(Entity* other) noexcept;
 
+    NETVAR(clientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 

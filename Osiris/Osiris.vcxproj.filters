@@ -251,6 +251,9 @@
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Animations.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -633,6 +636,12 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\TournamentMatches.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Animations.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\AnimLayer.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

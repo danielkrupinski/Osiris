@@ -16,4 +16,5 @@ struct GlobalVars {
     const float intervalPerTick;
 
     float serverTime(UserCmd* = nullptr) const noexcept;
+    bool newTick() const noexcept;
 };
