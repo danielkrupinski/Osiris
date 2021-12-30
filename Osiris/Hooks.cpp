@@ -508,7 +508,7 @@ int __fastcall canLoadThirdPartyFiles(void* thisPointer, void* edx) noexcept
 {
     if (Misc::shouldEnableSvPureBypass())
         return 1;
-    return hooks->fileSystem.callOriginal<int, 127>(thisPointer);
+    return hooks->fileSystem.callOriginal<int, 128>(thisPointer);
 }
 
 #endif
@@ -631,7 +631,7 @@ void Hooks::install() noexcept
  #ifdef _WIN32
     fileSystem.init(interfaces->fileSystem);
     fileSystem.hookAt(101, getUnverifiedFileHashes);
-    fileSystem.hookAt(127, canLoadThirdPartyFiles);
+    fileSystem.hookAt(128, canLoadThirdPartyFiles);
 #endif
 
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
