@@ -3,46 +3,17 @@ name: Linux
 on: [push, pull_request]
 
 jobs:
-  gcc-release:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++-10, clang++-12]
+        configuration: [Debug, Release]
     steps:
     - uses: actions/checkout@v2
     - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev gcc-10 g++-10
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev ${{ matrix.compiler }}
     - name: configure
-      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc-10 -D CMAKE_CXX_COMPILER=g++-10 ..
+      run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -S . -B ${{ matrix.configuration }}
     - name: build
-      run: cd Release && make -j $(nproc --all)
-
-  gcc-debug:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev gcc-10 g++-10
-    - name: configure
-      run: mkdir Debug && cd Debug && cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=gcc-10 -D CMAKE_CXX_COMPILER=g++-10 ..
-    - name: build
-      run: cd Debug && make -j $(nproc --all)
-
-  clang-release:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev clang-12
-    - name: configure
-      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-12 -D CMAKE_CXX_COMPILER=clang++-12 ..
-    - name: build
-      run: cd Release && make -j $(nproc --all)
-
-  clang-debug:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev clang-12
-    - name: configure
-      run: mkdir Debug && cd Debug && cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=clang-12 -D CMAKE_CXX_COMPILER=clang++-12 ..
-    - name: build
-      run: cd Debug && make -j $(nproc --all)
+      run: cmake --build ${{ matrix.configuration }} -j $(nproc --all)

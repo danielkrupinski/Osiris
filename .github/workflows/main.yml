@@ -10,25 +10,12 @@ on: [push, pull_request]
 jobs:
   # This workflow contains a single job called "build"
   msvc-release:
-    # The type of runner that the job will run on
     runs-on: windows-latest
     
-    env:
-      MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-
-    # Build command
-    - name: Build
-      shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Release'
-      
-  msvc-debug:
-    runs-on: windows-latest
-    
     env:
       MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\
 
@@ -37,8 +24,8 @@ jobs:
 
     - name: Build
       shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Debug'
-      
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=${{ matrix.configuration }}'
+
   clang:
     # The type of runner that the job will run on
     runs-on: windows-latest

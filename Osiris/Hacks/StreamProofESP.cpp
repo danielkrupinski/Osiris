@@ -36,8 +36,8 @@ public:
 
     BoundingBox(const Vector& mins, const Vector& maxs, const std::array<float, 3>& scale, const matrix3x4* matrix = nullptr) noexcept
     {
-        min.y = min.x = std::numeric_limits<float>::max();
-        max.y = max.x = -std::numeric_limits<float>::max();
+        min.y = min.x = (std::numeric_limits<float>::max)();
+        max.y = max.x = -(std::numeric_limits<float>::max)();
 
         const auto scaledMins = mins + (maxs - mins) * 2 * (0.25f - scale);
         const auto scaledMaxs = maxs - (maxs - mins) * 2 * (0.25f - scale);
@@ -52,10 +52,10 @@ public:
                 return;
             }
 
-            min.x = std::min(min.x, vertices[i].x);
-            min.y = std::min(min.y, vertices[i].y);
-            max.x = std::max(max.x, vertices[i].x);
-            max.y = std::max(max.y, vertices[i].y);
+            min.x = (std::min)(min.x, vertices[i].x);
+            min.y = (std::min)(min.y, vertices[i].y);
+            max.x = (std::max)(max.x, vertices[i].x);
+            max.y = (std::max)(max.y, vertices[i].y);
         }
         valid = true;
     }
@@ -324,7 +324,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
     }
 
     if (config.flashDuration.enabled && playerData.flashDuration > 0.0f) {
-        const auto radius = std::max(5.0f - playerData.distanceToLocal / 600.0f, 1.0f);
+        const auto radius = (std::max)(5.0f - playerData.distanceToLocal / 600.0f, 1.0f);
         ImVec2 flashDurationPos{ (bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f };
 
         const auto color = Helpers::calculateColor(config.flashDuration.asColor4());
