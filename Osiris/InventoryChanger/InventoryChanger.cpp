@@ -30,6 +30,7 @@
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/EconItemView.h"
+#include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FileSystem.h"
@@ -324,6 +325,9 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
 {
+    if (!strncmp(interfaces->engine->getLevelName(), "dz", 2))
+        return;
+
     if (!localPlayer)
         return;
 
@@ -543,6 +547,17 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
 
 namespace ImGui
 {
+    static void BeginDisabled()
+    {
+        ImGuiContext& g = *GImGui;
+        PushStyleVar(ImGuiStyleVar_Alpha, 0.25f);
+    }
+
+    static void EndDisabled()
+    {
+        PopStyleVar();
+    }
+
     static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
@@ -659,7 +674,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete, bool& shouldEdit) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -741,11 +756,23 @@ namespace ImGui
         RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
 
         const auto removeButtonSize = CalcTextSize("Delete", nullptr) + style.FramePadding * 2.0f;
+        const auto editButtonSize = CalcTextSize("Edit", nullptr) + style.FramePadding * 2.0f;
         const auto cursorPosNext = window->DC.CursorPos.y;
-        SameLine(window->WorkRect.Max.x - pos.x - removeButtonSize.x - 7.0f);
+        SameLine(window->WorkRect.Max.x - pos.x - removeButtonSize.x - editButtonSize.x - 14.0f); // I have no Idea why 14, but it works
         const auto cursorPosBackup = window->DC.CursorPos.y;
 
         window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
+        if (item.isSkin())
+        {
+            if (Button("Edit"))
+                shouldEdit = true;
+        }
+        else {  // for spacing
+            BeginDisabled();
+            Button("Edit");
+            EndDisabled();
+        }
+        SameLine();
         if (Button("Delete"))
             shouldDelete = true;
 
@@ -793,6 +820,18 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
     };
 
+    constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+        constexpr auto delimiter = L" ";
+        wchar_t* _;
+        wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
+        while (token) {
+            if (!std::wcsstr(str.c_str(), token))
+                return false;
+            token = std::wcstok(nullptr, delimiter, &_);
+        }
+        return true;
+    };
+
     if (isInAddMode) {
         static std::unordered_map<StaticData::ItemIndex, int> selectedToAdd;
         static std::vector<StaticData::ItemIndex> toAddOrder;
@@ -822,18 +861,6 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextItemWidth(-1.0f);
         ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
-        constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
-            constexpr auto delimiter = L" ";
-            wchar_t* _;
-            wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
-            while (token) {
-                if (!std::wcsstr(str.c_str(), token))
-                    return false;
-                token = std::wcstok(nullptr, delimiter, &_);
-            }
-            return true;
-        };
-
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             const auto& gameItems = StaticData::gameItems();
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
@@ -858,6 +885,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::EndChild();
     } else {
+        static std::size_t to_edit;
+        static DynamicSkinData newDynamicData;
+        static bool inEditMode;
         if (ImGui::BeginChild("##scrollarea2", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             auto& inventory = Inventory::get();
             for (std::size_t i = inventory.size(); i-- > 0;) {
@@ -866,10 +896,216 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete);
+                bool shouldEdit = false;
+                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete, shouldEdit);
                 if (shouldDelete)
                     inventory[i].markToDelete();
+                if (shouldEdit)
+                {
+                    to_edit = i;
+                    inEditMode = true;
+                }
                 ImGui::PopID();
+            }
+            if (inEditMode)
+            {
+                newDynamicData = Inventory::dynamicSkinData(inventory[to_edit].getDynamicDataIndex());
+                ImGui::OpenPopup("Edit Inventory Item");
+                inEditMode = false;
+            }
+
+            if (ImGui::BeginPopupModal("Edit Inventory Item", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                static int currentSticker;
+                bool scrollToItem = false;
+                bool scrollToTop = false;
+                auto& item = inventory[to_edit].get();
+                const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+                const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "Vanilla";
+
+                ImGui::Text("%s - %s", itemName, paintKitName);
+                if (const auto icon = getItemIconTexture(item.iconPath)) {
+                    ImGui::Image(icon, { 200.0f, 150.0f });
+                }
+                ImGui::SameLine();
+
+
+                ImGui::BeginGroup();
+                ImGui::InputText("Name Tag", &newDynamicData.nameTag);
+                ImGui::InputFloat("Wear", &newDynamicData.wear, 0, 0, "%.9f");
+                newDynamicData.wear = std::clamp(newDynamicData.wear, StaticData::paintKits()[item.dataIndex].wearRemapMin, StaticData::paintKits()[item.dataIndex].wearRemapMax);
+                ImGui::InputInt("Seed", &newDynamicData.seed);
+                newDynamicData.seed = std::clamp(newDynamicData.seed, 1, 1000);
+
+                // not to display "-1"
+                bool stattrakEnabled = (newDynamicData.statTrak > -1);
+                ImGui::Checkbox("Enable Stattrak", &stattrakEnabled);
+                if (stattrakEnabled)
+                {
+                    if (newDynamicData.statTrak == -1)
+                        newDynamicData.statTrak += 1;
+                    ImGui::InputInt("Stattrak", &newDynamicData.statTrak);
+                }
+                else
+                {
+                    newDynamicData.statTrak = -1;
+                    ImGui::BeginDisabled(); //spacing
+                    int zero = 0; // great
+                    ImGui::InputInt("Stattrak", &zero);
+                    ImGui::EndDisabled();
+                }
+
+                // stickers
+                bool is_knife = (item.weaponID >= WeaponId::Bayonet && item.weaponID < WeaponId::GloveStuddedBrokenfang)
+                    || item.weaponID == WeaponId::KnifeT || item.weaponID == WeaponId::Knife;
+
+                for (auto index : { 0,1,2,3 })
+                {
+                    if (is_knife || item.isGlove()) // knives and gloves have no stickers
+                        continue;
+                    ImTextureID icon;
+                    if (newDynamicData.stickers[index].stickerID)
+                    {
+                        const auto itemIndex = StaticData::getItemIndex(WeaponId::Sticker, newDynamicData.stickers[index].stickerID);
+                        if (itemIndex)
+                            icon = getItemIconTexture(StaticData::gameItems()[itemIndex].iconPath);
+                    }
+                    else
+                    {
+                        icon = getItemIconTexture("econ/weapon_cases/default_rare_item");
+                    }
+                    if (icon)
+                    {
+                        // I hate this
+                        ImGuiID buttonID;
+                        switch (index)
+                        {
+                        case 0:
+                            buttonID = ImGui::GetID("#Sticker1");
+                            break;
+                        case 1:
+                            buttonID = ImGui::GetID("#Sticker2");
+                            break;
+                        case 2:
+                            buttonID = ImGui::GetID("#Sticker3");
+                            break;
+                        case 3:
+                            buttonID = ImGui::GetID("#Sticker4");
+                            break;
+                        default:
+                            break;
+                        }
+                        if (ImGui::ImageButtonEx(buttonID, icon, { 74.f,56.f }, { 0,0 }, { 1.f,1.f }, ImGui::GetStyle().FramePadding, ImVec4(0, 0, 0, 0), ImVec4(1, 1, 1, 1)))
+                        {
+                            currentSticker = index; scrollToItem = true;
+                            ImGui::OpenPopup("sticker");
+                        }
+
+                    }
+                    if (index != 3)
+                        ImGui::SameLine();
+
+                    if (newDynamicData.stickers[index].stickerID && ImGui::BeginDragDropSource()) {
+                        ImGui::Image(icon, { 74.f,56.f });
+                        ImGui::SetDragDropPayload("StickerID", &newDynamicData.stickers[index].stickerID, sizeof(int), ImGuiCond_Once);
+                        ImGui::SetDragDropPayload("StickerWear", &newDynamicData.stickers[index].wear, sizeof(float), ImGuiCond_Once);
+                        ImGui::EndDragDropSource();
+                    }
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("StickerID"))
+                        {
+                            const auto& data = *(int*)payload->Data;
+                            newDynamicData.stickers[index].stickerID = data;
+                        }
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("StickerWear"))
+                        {
+                            const auto& data = *(float*)payload->Data;
+                            newDynamicData.stickers[index].wear = data;
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+                }
+
+
+                if (ImGui::BeginPopup("sticker"))
+                {
+                    static std::string filter;
+                    if (!newDynamicData.stickers[currentSticker].stickerID)
+                        ImGui::BeginDisabled();
+
+                    ImGui::SliderFloat("wear", &newDynamicData.stickers[currentSticker].wear, 0.0f, 1.0f, "%.9f");
+
+                    if (!newDynamicData.stickers[currentSticker].stickerID)
+                        ImGui::EndDisabled();
+
+                    ImGui::SetNextItemWidth(300.f);
+
+                    if (ImGui::InputTextWithHint("", "search for stickers", &filter))
+                        scrollToTop = true;
+                    ImGui::BeginChild("##stickerList", { 300.f,400.f });
+                    for (auto& kit : StaticData::gameItems())
+                    {
+                        if (!kit.isSticker())
+                            continue;
+                        const auto kitId = StaticData::paintKits()[kit.dataIndex].id;
+                        const auto kitName = StaticData::paintKits()[kit.dataIndex].nameUpperCase;
+
+                        bool selected = (newDynamicData.stickers[currentSticker].stickerID == kitId);
+
+                        if (!selected && !filter.empty() && !passesFilter(kitName, Helpers::toUpper(Helpers::toWideString(filter))))
+                            continue;
+
+                        if (ImGui::SkinSelectable(kit, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(kit.rarity), selected))
+                        {
+                            newDynamicData.stickers[currentSticker].stickerID = kitId;
+                            filter.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                        if (selected && scrollToItem)
+                        {
+                            //ImGui::ScrollToItem(); // To enable this update to latest Imgui version
+                            scrollToItem = false;
+                        }
+                    }
+                    if (scrollToTop)
+                    {
+                        ImGui::SetScrollY(0.0f);
+                        scrollToTop = false;
+                    }
+                    ImGui::EndChild();
+                    if (ImGui::Button("Close"))
+                    {
+                        filter.clear();
+                        ImGui::CloseCurrentPopup();
+                    }
+                    if (newDynamicData.stickers[currentSticker].stickerID)
+                    {
+                        ImGui::SameLine();
+                        if (ImGui::Button("Remove"))
+                        {
+                            newDynamicData.stickers[currentSticker].stickerID = 0;
+                            newDynamicData.stickers[currentSticker].wear = 0.f;
+                            filter.clear();
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
+                    ImGui::EndPopup();
+                }
+                ImGui::EndGroup();
+
+                if (ImGui::Button("Apply"))
+                {
+                    inventory[to_edit].markToDelete();
+                    const auto itemIndex = StaticData::getItemIndex(item.weaponID, item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].id : 0);
+                    auto dynamicDataIdx = Inventory::emplaceDynamicData(std::move(newDynamicData));
+                    Inventory::addItemUnacknowledged(itemIndex, dynamicDataIdx);
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
             }
         }
         ImGui::EndChild();
@@ -1097,7 +1333,7 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
         assert(handle);
         if (handle) {
             if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
-                const auto buffer = std::make_unique<std::uint8_t[]>(size);
+                const auto buffer = std::unique_ptr<std::uint8_t[]>(new std::uint8_t[size]);
                 if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
                     int width, height;
                     stbi_set_flip_vertically_on_load_thread(false);

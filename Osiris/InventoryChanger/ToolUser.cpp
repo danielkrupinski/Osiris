@@ -208,26 +208,31 @@ private:
             _openContainer(*destItem);
             return;
         }
-
         const auto tool = Inventory::getItem(toolItemID);
         if (!tool)
             return;
-
         if (tool->isSealedGraffiti()) {
             _unsealGraffiti(*tool);
-        } else if (tool->isOperationPass()) {
+        }
+        else if (tool->isOperationPass()) {
             _activateOperationPass(*tool);
-        } else if (tool->isSticker()) {
+        }
+        else if (tool->isSticker()) {
             _applySticker(*tool);
-        } else if (tool->isNameTag()) {
+        }
+        else if (tool->isNameTag()) {
             _addNameTag(*tool);
-        } else if (tool->isPatch()) {
+        }
+        else if (tool->isPatch()) {
             _applyPatch(*tool);
-        } else if (tool->isStatTrakSwapTool()) {
+        }
+        else if (tool->isStatTrakSwapTool()) {
             _swapStatTrak(*tool);
-        } else if (tool->isViewerPass()) {
+        }
+        else if (tool->isViewerPass()) {
             _activateViewerPass(*tool);
-        } else if (tool->isSouvenirToken()) {
+        }
+        else if (tool->isSouvenirToken()) {
             _activateSouvenirToken(*tool, localInventory);
         }
     }
@@ -236,12 +241,13 @@ private:
     {
         if (useTime > memory->globalVars->realtime)
             return;
-
         if (action == Action::WearSticker) {
             _wearSticker(localInventory);
-        } else if (action == Action::RemoveNameTag) {
+        }
+        else if (action == Action::RemoveNameTag) {
             _removeNameTag();
-        } else if (action == Action::Use) {
+        }
+        else if (action == Action::Use) {
             _useTool(localInventory);
         }
 

@@ -274,6 +274,12 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
     ImGui_ImplDX9_DestroyFontsTexture();
 }
 
+void ImGui_ImplDX9_NewFrame()
+{
+    if (!g_FontTexture)
+        ImGui_ImplDX9_CreateDeviceObjects();
+}
+
 void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
 {
     IDirect3DTexture9* tempTexture;
@@ -312,13 +318,7 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
     return texture;
 }
 
-void ImGui_DestroyTexture(void* texture)
+void ImGui_DestroyTexture(ImTextureID texture)
 {
     reinterpret_cast<IDirect3DTexture9*>(texture)->Release();
-}
-
-void ImGui_ImplDX9_NewFrame()
-{
-    if (!g_FontTexture)
-        ImGui_ImplDX9_CreateDeviceObjects();
 }

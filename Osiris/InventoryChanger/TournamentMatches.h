@@ -1064,6 +1064,6 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 13, eleagueBoston2018Matches },
     { 14, faceitLondon2018Matches },
     { 18, pglStockholm2021Matches },
-});
+    });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));

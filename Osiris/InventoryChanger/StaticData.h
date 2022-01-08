@@ -14,7 +14,6 @@ namespace StaticData
 {
     using ItemIndex = std::size_t;
     constexpr auto InvalidItemIdx = static_cast<ItemIndex>(-1);
-
     enum class Type : std::uint8_t {
         // has paint kit, must match GameItem::hasPaintKit() below
         Sticker,
@@ -24,7 +23,6 @@ namespace StaticData
         Patch,
         Graffiti,
         SealedGraffiti,
-
         // has other data
         Collectible,
         NameTag,
@@ -38,10 +36,8 @@ namespace StaticData
         SouvenirToken,
         TournamentCoin
     };
-
     struct GameItem {
         GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept;
-
         bool isSticker() const noexcept { return type == Type::Sticker; }
         bool isSkin() const noexcept { return type == Type::Skin; }
         bool isGlove() const noexcept { return type == Type::Glove; }

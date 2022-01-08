@@ -274,7 +274,8 @@ private:
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
                     _gameItems.emplace_back(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
-                } else if (item->isTournamentCoin()) {
+                }
+                else if (item->isTournamentCoin()) {
                     _gameItems.emplace_back(Type::TournamentCoin, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
@@ -464,7 +465,6 @@ private:
     {
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](std::size_t itemIndex) { return _gameItems[itemIndex].isPatch(); });
     }
-
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
     {
         for (auto& crate : _cases) {
@@ -585,7 +585,6 @@ int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
     default: return 0;
     }
 }
-
 bool StaticData::isCollectibleGenuine(const GameItem& collectible) noexcept
 {
     return StaticDataImpl::instance().isCollectibleGenuine(collectible);

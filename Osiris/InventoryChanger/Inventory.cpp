@@ -201,7 +201,8 @@ private:
         } else if (item.isServiceMedal()) {
             if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
                 econItem->setIssueDate(dynamicData.issueDateTimestamp);
-        } else if (item.isTournamentCoin()) {
+        }
+        else if (item.isTournamentCoin()) {
             econItem->setDropsAwarded(dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
             econItem->setDropsRedeemed(0);
         } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
@@ -287,7 +288,7 @@ private:
 
     void _addItems() noexcept
     {
-        for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
+        for (const auto& [index, dynamicDataIndex, asUnacknowledged] : toAdd)
             _addItem(index, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }

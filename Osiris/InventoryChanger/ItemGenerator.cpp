@@ -201,7 +201,8 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
         DynamicServiceMedalData dynamicData;
         dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
-    } else if (item.isTournamentCoin()) {
+    }
+    else if (item.isTournamentCoin()) {
         index = Inventory::emplaceDynamicData(DynamicTournamentCoinData{});
     }
 
@@ -234,7 +235,6 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
     if (tournamentID != 1) {
         stickers[1].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team1);
         stickers[2].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team2);
-
         if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2); match && match->hasMVPs())
             stickers[3].stickerID = StaticData::getTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
         else if (tournamentID >= 18) // starting with PGL Stockholm 2021
