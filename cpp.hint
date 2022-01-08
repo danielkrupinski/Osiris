@@ -1,0 +1,6 @@
+// Файлы указаний помогают среде IDE Visual Studio интерпретировать идентификаторы Visual C++
+// (например, имена функций и макросов).
+// Дополнительные сведения: https://go.microsoft.com/fwlink/?linkid=865984
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define VIRTUAL_METHOD(returnType, name, idx, args, argsRaw) returnType name args noexcept { return VirtualMethod::call<returnType, idx>argsRaw; }
+#define WIN32_LINUX(win32, linux)

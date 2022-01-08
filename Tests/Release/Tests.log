@@ -1,0 +1,6 @@
+﻿  HelpersTests.cpp
+  ItemGeneratorTests.cpp
+  Main.cpp
+C:\Users\peeea\source\repos\210818\Osiris\SDK\Utils.h(7,110): error C2065: M_PI: необъявленный идентификатор (компилируется исходный файл ItemGeneratorTests.cpp)
+C:\Users\peeea\source\repos\210818\Osiris\SDK\Utils.h(8,119): error C2065: M_PI: необъявленный идентификатор (компилируется исходный файл ItemGeneratorTests.cpp)
+C:\Users\peeea\source\repos\210818\Osiris\Memory.h(162,96): error C2065: updateStateFn: необъявленный идентификатор (компилируется исходный файл ItemGeneratorTests.cpp)
