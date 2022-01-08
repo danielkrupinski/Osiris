@@ -125,6 +125,15 @@ struct Player : Shared {
     using Shared::operator=;
 };
 
+static void read(const json& j, const char* key, std::vector<std::string>& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_array())
+        o = val.get<std::vector<std::string>>();
+}
+
 struct Weapon : Shared {
     ColorToggle ammo;
 
@@ -235,6 +244,16 @@ void read(const json& j, const char* key, std::unordered_map<std::string, T>& o)
         for (auto& element : j[key].items())
             element.value().get_to(o[element.key()]);
     }
+}
+
+template <typename T>
+void read_number(const json& j, const char* key, T& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number())
+        val.get_to(o);
 }
 
 void from_json(const json& j, Color4& c);

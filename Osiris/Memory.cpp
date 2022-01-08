@@ -108,7 +108,7 @@ static ModuleInfo getModuleInformation(const char* name) noexcept
 }
 
 template <bool ReportNotFound = true>
-static std::uintptr_t findPattern(ModuleInfo moduleInfo, std::string_view pattern) noexcept
+static std::uintptr_t findPattern(ModuleInfo moduleInfo, std::string_view pattern) noexcept 
 {
     static auto id = 0;
     ++id;
@@ -218,6 +218,9 @@ Memory::Memory() noexcept
     setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 = findPattern(CLIENT_DLL, "\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37");
     setStatTrakSwapToolItemsGetArgAsStringReturnAddress2 = setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 + 44;
     acknowledgeNewItemByItemIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9");
+    smokeHandles = *reinterpret_cast<decltype(smokeHandles)*>(std::uintptr_t(lineGoesThroughSmoke) + 46);
+    getGameModeNameFn = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x8B\x0D????\x53\x57\x8B\x01");
+    gameRules = *reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") + 4);
 
     findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
     getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") + 1);
@@ -248,6 +251,7 @@ Memory::Memory() noexcept
 
     isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") + 1);
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0"));
+    smokeHandles = relativeToAbsolute<decltype(smokeHandles)>(std::uintptr_t(lineGoesThroughSmoke) + 143);
     getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x4C\x89\xF7") + 1);
 
     hud = relativeToAbsolute<decltype(hud)>(findPattern(CLIENT_DLL, "\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8") + 4);

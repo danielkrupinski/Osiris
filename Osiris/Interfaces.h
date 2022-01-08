@@ -64,6 +64,7 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
     GAME_INTERFACE(EngineSound, sound, ENGINE_DLL, "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")
     GAME_INTERFACE(StudioRender, studioRender, STUDIORENDER_DLL, "VStudioRender026")
+    GAME_INTERFACE(BaseFileSystem, fullFileSystem, FILESYSTEM_DLL, "VFileSystem017")
 
 #undef GAME_INTERFACE
 private:
@@ -81,7 +82,7 @@ private:
         }
 
 #ifdef _WIN32
-        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Peach.XYZ", MB_OK | MB_ICONERROR);
 #endif
         std::exit(EXIT_FAILURE);
     }

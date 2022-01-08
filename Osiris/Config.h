@@ -44,12 +44,16 @@ public:
         bool ignoreSmoke{ false };
         bool autoShot{ false };
         bool autoScope{ false };
+        bool autoStop{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
-        int bone{ 0 };
+        int bone{ 1 };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
+        bool hitchance{ false };
+        int hitchanceAmmount{ 1 };
         int minDamage{ 1 };
+        bool smartMinDamage{ false };
         bool killshot{ false };
         bool betweenShots{ true };
     };
@@ -67,7 +71,10 @@ public:
         bool killshot = false;
         int hitgroup = 0;
         int shotDelay = 0;
+        bool hitChance = false;
+        int hitChanceAmmount = 0;
         int minDamage = 1;
+        bool smartMinDamage = false;
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;

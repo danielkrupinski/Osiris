@@ -60,7 +60,9 @@ public:
     HookType sound;
     HookType surface;
     HookType viewRender;
+    VmtSwap networkChannel;
     HookType svCheats;
+    HookType svPure;
 private:
 #ifdef _WIN32
     HMODULE moduleHandle;

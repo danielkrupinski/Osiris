@@ -21,6 +21,7 @@ struct LootCrateData;
 struct ProjectileData;
 struct BombData;
 struct InfernoData;
+struct SmokeData;
 
 struct Matrix4x4;
 
@@ -43,6 +44,7 @@ namespace GameData
     int getNetOutgoingLatency() noexcept;
 
     // You have to acquire Lock before using these getters
+    bool worldToScreen(const Vector& in, ImVec2& out, bool floor = false) noexcept;
     const Matrix4x4& toScreenMatrix() noexcept;
     const LocalPlayerData& local() noexcept;
     const std::vector<PlayerData>& players() noexcept;
@@ -52,6 +54,8 @@ namespace GameData
     const std::vector<EntityData>& entities() noexcept;
     const std::vector<LootCrateData>& lootCrates() noexcept;
     const std::forward_list<ProjectileData>& projectiles() noexcept;
+    const std::vector<InfernoData>& infernos() noexcept;
+    const std::vector<SmokeData>& smokes() noexcept;
     const BombData& plantedC4() noexcept;
     const std::vector<InfernoData>& infernos() noexcept;
 }
@@ -101,6 +105,7 @@ struct ProjectileData : BaseData {
     bool exploded = false;
     bool thrownByLocalPlayer = false;
     bool thrownByEnemy = false;
+    float explosionTime = 0.0f;
     int handle;
     const char* name = nullptr;
     std::vector<std::pair<float, Vector>> trajectory;
@@ -116,7 +121,9 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
+    const std::string& getRankName() const noexcept;
     [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
+    ImTextureID getRankTexture() const noexcept;
     [[nodiscard]] float fadingAlpha() const noexcept;
 
     bool dormant;
@@ -126,17 +133,39 @@ struct PlayerData : BaseData {
     bool spotted;
     bool inViewFrustum;
     bool alive;
-    bool immune = false;
+    bool immune;
     float flashDuration;
     float lastContactTime = 0.0f;
     int health;
+    int armor;
+    int userId;
     int handle;
+    int money;
+    int competitiveWins;
     Team team;
+    std::uint64_t steamID;
     std::string name;
     Vector headMins, headMaxs;
     Vector origin;
     std::string activeWeapon;
     std::vector<std::pair<Vector, Vector>> bones;
+    std::string lastPlaceName;
+    int skillgroup;
+
+    class Texture {
+        ImTextureID texture = nullptr;
+    public:
+        Texture() = default;
+        ~Texture();
+        Texture(const Texture&) = delete;
+        Texture& operator=(const Texture&) = delete;
+        Texture(Texture&& other) noexcept : texture{ other.texture } { other.texture = nullptr; }
+        Texture& operator=(Texture&& other) noexcept { clear(); texture = other.texture; other.texture = nullptr; return *this; }
+
+        void init(int width, int height, const std::uint8_t* data) noexcept;
+        void clear() noexcept;
+        ImTextureID get() const noexcept { return texture; }
+    };
 };
 
 struct WeaponData : BaseData {
@@ -178,4 +207,12 @@ struct InfernoData {
     InfernoData(Entity* inferno) noexcept;
 
     std::vector<Vector> points;
+};
+
+struct SmokeData {
+    SmokeData(const Vector& origin, int handle) noexcept;
+
+    Vector origin;
+    float explosionTime;
+    int handle;
 };

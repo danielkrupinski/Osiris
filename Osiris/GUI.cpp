@@ -125,12 +125,20 @@ void GUI::updateColors() const noexcept
 
 void GUI::handleToggle() noexcept
 {
+    const auto esc = KeyBind::KeyCode::ESCAPE;
+    const static KeyBind closeMenuKeybind(esc);
+
+    if (closeMenuKeybind.isPressed() && !ImGui::IsAnyItemActive()) {
+        open = false;
+        interfaces->inputSystem->resetInputState();
+    }
+
     if (Misc::isMenuKeyPressed()) {
         open = !open;
         if (!open)
             interfaces->inputSystem->resetInputState();
 #ifndef _WIN32
-        ImGui::GetIO().MouseDrawCursor = gui->open;
+    ImGui::GetIO().MouseDrawCursor = gui->open;
 #endif
     }
 }
@@ -160,7 +168,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Style", window.style);
         Misc::menuBarItem();
         menuBarItem("Config", window.config);
-        ImGui::EndMainMenuBar();   
+        ImGui::EndMainMenuBar();
     }
 }
 
@@ -285,6 +293,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
     ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
     ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
+    ImGui::Checkbox("Auto stop", &config->aimbot[currentWeapon].autoStop);
     ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
@@ -292,8 +301,11 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
     ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::Checkbox("Hitchance", &config->aimbot[currentWeapon].hitchance);
+    ImGui::SliderInt("Ammount", &config->aimbot[currentWeapon].hitchanceAmmount, 0, 100, "%d %");
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+    ImGui::Checkbox("Smart Min Damage", &config->aimbot[currentWeapon].smartMinDamage);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
@@ -413,8 +425,11 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::Combo("Hitgroup", &config->triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
     ImGui::PushItemWidth(220.0f);
     ImGui::SliderInt("Shot delay", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+    ImGui::Checkbox("Hitchance", &config->triggerbot[currentWeapon].hitChance);
+    ImGui::SliderInt("Ammount", &config->triggerbot[currentWeapon].hitChanceAmmount, 0, 100, "%d %");
     ImGui::InputInt("Min damage", &config->triggerbot[currentWeapon].minDamage);
     config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
+    ImGui::Checkbox("Smart Min Damage", &config->triggerbot[currentWeapon].smartMinDamage);
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
     ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
@@ -441,7 +456,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
 
     static int material = 1;
 
-    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Ragdolls\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
         material = 1;
 
     ImGui::PopID();
@@ -456,7 +471,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "Allies", "Enemies", "Ragdolls", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
 
     ImGui::SameLine();
 

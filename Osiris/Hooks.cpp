@@ -28,6 +28,7 @@
 #include "GameData.h"
 #include "GUI.h"
 #include "Hooks.h"
+#include "Hooks/MinHook.h"
 #include "Interfaces.h"
 #include "Memory.h"
 
@@ -127,14 +128,17 @@ static void swapWindow(SDL_Window * window) noexcept
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render();
         Misc::purchaseList();
-        Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer();
         Misc::spectatorList();
+        Misc::damageList();
         Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
         Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
-        Misc::watermark();
+        Visuals::drawSmokeTimer(ImGui::GetBackgroundDrawList());
+        Visuals::drawPreESP(ImGui::GetBackgroundDrawList());
+        Visuals::drawPostESP(ImGui::GetBackgroundDrawList());
+        Misc::watermark(ImGui::GetBackgroundDrawList());
 
         Aimbot::updateInput();
         Visuals::updateInput();
@@ -172,6 +176,35 @@ static void swapWindow(SDL_Window * window) noexcept
 #endif
 }
 
+static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
+{
+    auto original = hooks->networkChannel.getOriginal<int, 46, void*>(datagram);
+    if (!backtrackConfig.fakeLatency || datagram || !interfaces->engine->isInGame() || !backtrackConfig.enabled)
+    {
+        return original(network, datagram);
+    }
+    int instate = network->InReliableState;
+    int insequencenr = network->InSequenceNr;
+    int faketimeLimit = backtrackConfig.timeLimit; 
+    if (faketimeLimit <= 200) {
+        faketimeLimit = 0;
+    }
+    else {
+        faketimeLimit -= 200;
+    }
+    float delta = (std::max)(0.f, std::clamp(faketimeLimit / 1000.f, 0.f, 0.2f) - network->getLatency(0));
+    Backtrack::AddLatencyToNetwork(network, delta + (delta / 20.0f));
+
+    int result = original(network, datagram);
+
+    network->InReliableState = instate;
+    network->InSequenceNr = insequencenr;
+
+    return result;
+}
+
+//static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
+
 static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
@@ -179,12 +212,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     if (!cmd->commandNumber)
         return result;
 
-#ifdef _WIN32
-    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-#else
-    bool dummy;
-    bool& sendPacket = dummy;
-#endif
+    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - WIN32_LINUX(0x1C, 0x18));
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
@@ -208,6 +236,8 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Misc::blockbot(cmd);
+    Misc::noscopeCrosshair();
 
     EnginePrediction::run(cmd);
 
@@ -217,6 +247,18 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(cmd);
+
+    static void* oldPointer = nullptr;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (oldPointer != network && network && localPlayer)
+    {
+        oldPointer = network;
+        Backtrack::UpdateIncomingSequences(true);
+        hooks->networkChannel.init(network);
+        hooks->networkChannel.hookAt(46, SendDatagram);
+    }
+    Backtrack::UpdateIncomingSequences();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -241,6 +283,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
 
     previousViewAngles = cmd->viewangles;
 
+
     return false;
 }
 
@@ -249,6 +292,9 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
         Visuals::inverseRagdollGravity();
+        Visuals::ragdollForce();
+        Visuals::fullBright();
+        Visuals::changeGlowThickness();
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness();
         Visuals::remove3dSky();
@@ -290,9 +336,15 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
 }
 
+static int __STDCALL hkFileCRCGoByeBye(void* _this)
+{
+    return 0;
+}
+
 static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
+    [[maybe_unused]] static auto aimbotInit = (Aimbot::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
@@ -304,6 +356,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
+        Visuals::doBloomEffects();
         Misc::updateEventListeners();
         Visuals::updateEventListeners();
     }
@@ -318,6 +371,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
+        Visuals::rainbowCrosshair();
     }
     InventoryChanger::run(stage);
 
@@ -601,6 +655,9 @@ void Hooks::install() noexcept
     viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);
     viewRender.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay);
 
+    svPure.init(interfaces->fullFileSystem);
+    svPure.hookAt(WIN32_LINUX(101, 102), reinterpret_cast<void*>(hkFileCRCGoByeBye));
+
 #ifdef _WIN32
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
 #else
@@ -614,9 +671,9 @@ void Hooks::install() noexcept
 #endif
     }
 
-#ifdef _WIN32
     surface.hookAt(67, &lockCursor);
 
+#ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
 #endif
@@ -668,6 +725,10 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+
+    networkChannel.restore();
+
+    svPure.restore();
 
     Netvars::restore();
 

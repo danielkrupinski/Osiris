@@ -57,8 +57,10 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    UtlVector<int>* smokeHandles;
     UtlVector<PlantedC4*>* plantedC4s;
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
+    Entity** gameRules;
 
     bool* disablePostProcessing;
 
@@ -101,7 +103,6 @@ public:
     std::uintptr_t demoOrHLTV;
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;
-    Entity** gameRules;
     InventoryManager* inventoryManager;
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
     bool(__THISCALL* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
@@ -158,6 +159,7 @@ private:
 
     std::uintptr_t submitReportFunction;
     std::uintptr_t setDynamicAttributeValueFn;
+    std::uintptr_t getGameModeNameFn;
 };
 
 inline std::unique_ptr<const Memory> memory;

@@ -242,6 +242,7 @@
     <ClInclude Include="MinHook\trampoline.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nlohmann\json.hpp" />
+    <ClInclude Include="pstring.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProtobufReader.h" />
     <ClInclude Include="Resources\avatar_ct.h" />
@@ -271,6 +272,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="SDK\Angle.h" />
     <ClInclude Include="SDK\FileSystem.h" />
     <ClInclude Include="SDK\FrameStage.h" />
     <ClInclude Include="SDK\GameEvent.h" />
@@ -325,6 +327,10 @@
     <ClInclude Include="SDK\WeaponSystem.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="xorstr.hpp" />
+    <ClInclude Include="VMP\def.h" />
+    <ClInclude Include="VMP\VMProtectSDK.h" />
+    <ClInclude Include="VMP\VMProtectSDK32.lib" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
@@ -350,6 +356,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
@@ -357,6 +364,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>false</SpectreMitigation>
@@ -388,8 +396,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;_DEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+	  <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;_DEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
@@ -453,6 +461,60 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\blur_x.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>blur_x</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\blur_x.h</HeaderFileOutput>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Resources\Shaders\Build\Release\blur_x.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Resources\Shaders\Build\Debug\blur_x.h</HeaderFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\blur_y.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>blur_y</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\blur_y.h</HeaderFileOutput>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Resources\Shaders\Build\Debug\blur_y.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Resources\Shaders\Build\Release\blur_y.h</HeaderFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\chromatic_aberration.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>chromatic_aberration</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\chromatic_aberration.h</HeaderFileOutput>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Resources\Shaders\Build\Release\chromatic_aberration.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Resources\Shaders\Build\Debug\chromatic_aberration.h</HeaderFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>default_vs</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\default_vs.h</HeaderFileOutput>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Resources\Shaders\Build\Debug\default_vs.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Resources\Shaders\Build\Release\default_vs.h</HeaderFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\monochrome.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>monochrome</VariableName>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\monochrome.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Resources\Shaders\Build\Release\monochrome.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Resources\Shaders\Build\Debug\monochrome.h</HeaderFileOutput>
+    </FxCompile>
+  </ItemGroup>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>

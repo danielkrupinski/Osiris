@@ -20,6 +20,7 @@ namespace
         {
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("round_start"):
+                Misc::damageList(event);
                 GameData::clearProjectileList();
                 Misc::preserveKillfeed(true);
                 [[fallthrough]];
@@ -31,17 +32,40 @@ namespace
                 InventoryChanger::overrideHudIcon(*event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);
+                Misc::damageList(event);
+                Misc::runLog(event);
                 break;
             case fnv::hash("player_hurt"):
                 Misc::playHitSound(*event);
                 Visuals::hitEffect(event);
+                Visuals::hitEffect2(*event);
                 Visuals::hitMarker(event);
+                Misc::damageList(event);
+                Misc::runLog(event);
+                break;
+            case fnv::hash("bomb_planted"):
+                Misc::runLog(event);
+                break;
+            case fnv::hash("bomb_defused"):
+                Misc::runLog(event);
+                break;
+            case fnv::hash("bomb_beginplant"):
+                Misc::runLog(event);
+                break;
+            case fnv::hash("bomb_begindefuse"):
+                Misc::runLog(event);
+                break;
+            case fnv::hash("cs_win_panel_match"):
+                Misc::autoDisconnect(*event);
                 break;
             case fnv::hash("vote_cast"):
                 Misc::voteRevealer(*event);
                 break;
             case fnv::hash("round_mvp"):
                 InventoryChanger::onRoundMVP(*event);
+                break;
+            case fnv::hash("smokegrenade_detonate"):
+                Visuals::drawSmokeTimerEvent(event);
                 break;
             }
         }
@@ -64,10 +88,18 @@ void EventListener::init() noexcept
     const auto gameEventManager = interfaces->gameEventManager;
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_start");
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_freeze_end");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "player_hurt");
     gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "player_hurt");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_planted");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_defused");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_beginplant");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "bomb_begindefuse");
     gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
     gameEventManager->addListener(&EventListenerImpl::instance(), "round_mvp");
+    gameEventManager->addListener(&EventListenerImpl::instance(), "cs_win_panel_match");
+
+    //idk about AntiDLL
+    gameEventManager->addListener(&EventListenerImpl::instance(), "smokegrenade_detonate");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))

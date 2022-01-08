@@ -7,6 +7,12 @@
 #include <memory>
 #include <unordered_map>
 
+#ifdef _WIN32
+#include "imgui/imgui_impl_dx9.h"
+#else
+#include "imgui/imgui_impl_opengl3.h"
+#endif
+
 #include "fnv.h"
 #include "GameData.h"
 #include "Interfaces.h"
@@ -14,6 +20,7 @@
 
 #include "Resources/avatar_ct.h"
 #include "Resources/avatar_tt.h"
+#include "Resources/skillgroups.h"
 
 #include "stb_image.h"
 
@@ -50,8 +57,12 @@ static std::vector<EntityData> entityData;
 static std::vector<LootCrateData> lootCrateData;
 static std::forward_list<ProjectileData> projectileData;
 static BombData bombData;
+static std::string gameModeName;
 static std::vector<InfernoData> infernoData;
+static std::vector<SmokeData> smokeGrenades;
 static std::atomic_int netOutgoingLatency;
+static std::array<std::string, 19> skillGroupNames;
+static std::array<std::string, 16> skillGroupNamesDangerzone;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
@@ -90,6 +101,7 @@ void GameData::update() noexcept
     entityData.clear();
     lootCrateData.clear();
     infernoData.clear();
+    smokeGrenades.clear();
 
     localPlayerData.update();
     bombData.update();
@@ -98,6 +110,17 @@ void GameData::update() noexcept
         playerData.clear();
         projectileData.clear();
         return;
+    }
+
+    std::erase_if(smokeGrenades, [](const auto& smoke) { return interfaces->entityList->getEntityFromHandle(smoke.handle) == nullptr; });
+    for (int i = 0; i < memory->smokeHandles->size; ++i) {
+        const auto handle = memory->smokeHandles->memory[i];
+        const auto smoke = interfaces->entityList->getEntityFromHandle(handle);
+        if (!smoke)
+            continue;
+
+        if (std::ranges::find(std::as_const(smokeGrenades), handle, &SmokeData::handle) == smokeGrenades.cend())
+            smokeGrenades.emplace_back(smoke->getAbsOrigin() + Vector{ 0.0f, 0.0f, 60.0f }, handle);
     }
 
     viewMatrix = interfaces->engine->worldToScreenMatrix();
@@ -134,8 +157,11 @@ void GameData::update() noexcept
                 switch (entity->getClientClass()->classId) {
                 case ClassId::BaseCSGrenadeProjectile:
                     if (!entity->shouldDraw()) {
-                        if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
+                        if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end()) {
+                            if (!it->exploded)
+                                it->explosionTime = memory->globalVars->realtime;
                             it->exploded = true;
+                        }
                         break;
                     }
                     [[fallthrough]];
@@ -211,6 +237,22 @@ struct PlayerAvatar {
     std::unique_ptr<std::uint8_t[]> rgba;
 };
 
+bool GameData::worldToScreen(const Vector& in, ImVec2& out, bool floor) noexcept
+{
+    const auto& matrix = viewMatrix;
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    if (floor)
+        out = ImFloor(out);
+    return true;
+}
+
 static std::unordered_map<int, PlayerAvatar> playerAvatars;
 
 void GameData::clearTextures() noexcept
@@ -273,19 +315,24 @@ const std::vector<LootCrateData>& GameData::lootCrates() noexcept
     return lootCrateData;
 }
 
-const std::forward_list<ProjectileData>& GameData::projectiles() noexcept
-{
-    return projectileData;
-}
-
 const BombData& GameData::plantedC4() noexcept
 {
     return bombData;
 }
 
+const std::forward_list<ProjectileData>& GameData::projectiles() noexcept
+{
+    return projectileData;
+}
+
 const std::vector<InfernoData>& GameData::infernos() noexcept
 {
     return infernoData;
+}
+
+const std::vector<SmokeData>& GameData::smokes() noexcept
+{
+    return smokeGrenades;
 }
 
 void LocalPlayerData::update() noexcept
@@ -300,9 +347,9 @@ void LocalPlayerData::update() noexcept
 
     if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
         inReload = activeWeapon->isInReload();
-        shooting = localPlayer->shotsFired() > 1;
         noScope = activeWeapon->isSniperRifle() && !localPlayer->isScoped();
         nextWeaponAttack = activeWeapon->nextPrimaryAttack();
+        shooting = activeWeapon->isPistol() ? !inReload && nextWeaponAttack > memory->globalVars->serverTime() : localPlayer->shotsFired() > 1;
     }
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
     handle = localPlayer->handle();
@@ -398,7 +445,7 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ en
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
         PlayerAvatar playerAvatar;
-        playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
+        playerAvatar.rgba = std::unique_ptr<std::uint8_t[]>(new std::uint8_t[rgbaDataSize]);
         if (ctx->steamUtils->getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
             playerAvatars[handle] = std::move(playerAvatar);
     }
@@ -491,9 +538,34 @@ void PlayerData::update(Entity* entity) noexcept
     }
 }
 
-struct PNGTexture {
+PlayerData::Texture::~Texture()
+{
+    clear();
+}
+
+void PlayerData::Texture::init(int width, int height, const std::uint8_t* data) noexcept
+{
+    texture = ImGui_CreateTextureRGBA(width, height, data);
+}
+
+void PlayerData::Texture::clear() noexcept
+{
+    if (texture)
+        ImGui_DestroyTexture(texture);
+    texture = nullptr;
+}
+
+const std::string& PlayerData::getRankName() const noexcept
+{
+    if (gameModeName == "survival")
+        return skillGroupNamesDangerzone[std::size_t(skillgroup) < skillGroupNamesDangerzone.size() ? skillgroup : 0];
+    else
+        return skillGroupNames[std::size_t(skillgroup) < skillGroupNames.size() ? skillgroup : 0];
+}
+
+struct SkillgroupImage {
     template <std::size_t N>
-    PNGTexture(const std::array<char, N>& png) noexcept : pngData{ png.data() }, pngDataSize{ png.size() } {}
+    SkillgroupImage(const std::array<char, N>& png) noexcept : pngData{ png.data() }, pngDataSize{ png.size() } {}
 
     ImTextureID getTexture() const noexcept
     {
@@ -504,7 +576,8 @@ struct PNGTexture {
             if (const auto data = stbi_load_from_memory((const stbi_uc*)pngData, pngDataSize, &width, &height, nullptr, STBI_rgb_alpha)) {
                 texture.init(width, height, data);
                 stbi_image_free(data);
-            } else {
+            }
+            else {
                 assert(false);
             }
         }
@@ -518,17 +591,20 @@ private:
     const char* pngData;
     std::size_t pngDataSize;
 
-    mutable Texture texture;
+    mutable PlayerData::Texture texture;
 };
 
-static const PNGTexture avatarTT{ Resource::avatar_tt };
-static const PNGTexture avatarCT{ Resource::avatar_ct };
+static const SkillgroupImage avatarTT{ Resource::avatar_tt };
+static const SkillgroupImage avatarCT{ Resource::avatar_ct };
 
-static void clearAvatarTextures() noexcept
-{
-    avatarTT.clearTexture();
-    avatarCT.clearTexture();
-}
+static const auto skillgroupImages = std::array<SkillgroupImage, 19>({
+Resource::skillgroup0, Resource::skillgroup1, Resource::skillgroup2, Resource::skillgroup3, Resource::skillgroup4, Resource::skillgroup5, Resource::skillgroup6, Resource::skillgroup7,
+Resource::skillgroup8, Resource::skillgroup9, Resource::skillgroup10, Resource::skillgroup11, Resource::skillgroup12, Resource::skillgroup13, Resource::skillgroup14, Resource::skillgroup15,
+Resource::skillgroup16, Resource::skillgroup17, Resource::skillgroup18 });
+
+static const auto dangerZoneImages = std::array<SkillgroupImage, 16>({
+Resource::dangerzone0, Resource::dangerzone1, Resource::dangerzone2, Resource::dangerzone3, Resource::dangerzone4, Resource::dangerzone5, Resource::dangerzone6, Resource::dangerzone7,
+Resource::dangerzone8, Resource::dangerzone9, Resource::dangerzone10, Resource::dangerzone11, Resource::dangerzone12, Resource::dangerzone13, Resource::dangerzone14, Resource::dangerzone15 });
 
 ImTextureID PlayerData::getAvatarTexture() const noexcept
 {
@@ -540,6 +616,20 @@ ImTextureID PlayerData::getAvatarTexture() const noexcept
     if (!avatar.texture.get())
         avatar.texture.init(32, 32, avatar.rgba.get());
     return avatar.texture.get();
+}
+
+static void clearAvatarTextures() noexcept
+{
+    avatarTT.clearTexture();
+    avatarCT.clearTexture();
+}
+
+ImTextureID PlayerData::getRankTexture() const noexcept
+{
+    if (gameModeName == "survival")
+        return dangerZoneImages[std::size_t(skillgroup) < dangerZoneImages.size() ? skillgroup : 0].getTexture();
+    else
+        return skillgroupImages[std::size_t(skillgroup) < skillgroupImages.size() ? skillgroup : 0].getTexture();
 }
 
 float PlayerData::fadingAlpha() const noexcept
@@ -701,3 +791,5 @@ InfernoData::InfernoData(Entity* inferno) noexcept
             points.emplace_back(inferno->fireXDelta()[i] + origin.x, inferno->fireYDelta()[i] + origin.y, inferno->fireZDelta()[i] + origin.z);
     }
 }
+
+SmokeData::SmokeData(const Vector& origin, int handle) noexcept : origin{ origin }, explosionTime{ memory->globalVars->realtime }, handle{ handle } {}

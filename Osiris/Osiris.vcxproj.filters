@@ -535,6 +535,9 @@
     <ClInclude Include="SDK\Panorama.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Angle.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
     <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -546,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="SDK\ViewRenderBeams.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="pstring.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
@@ -637,6 +643,23 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\blur_x.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\blur_y.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\chromatic_aberration.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\monochrome.hlsl">
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

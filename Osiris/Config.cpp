@@ -193,11 +193,14 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Ignore smoke", a.ignoreSmoke);
     read(j, "Auto shot", a.autoShot);
     read(j, "Auto scope", a.autoScope);
+    read(j, "Auto stop", a.autoStop);
     read(j, "Fov", a.fov);
     read(j, "Smooth", a.smooth);
     read(j, "Bone", a.bone);
     read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
     read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
+    read(j, "Hitchance enable", a.hitchance);
+    read(j, "Hitchance ammount", a.hitchanceAmmount);
     read(j, "Min damage", a.minDamage);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
@@ -212,6 +215,8 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read(j, "Ignore smoke", t.ignoreSmoke);
     read(j, "Hitgroup", t.hitgroup);
     read(j, "Shot delay", t.shotDelay);
+    read(j, "Hitchance enable", t.hitChance);
+    read(j, "Hitchance ammount", t.hitChanceAmmount);
     read(j, "Min damage", t.minDamage);
     read(j, "Killshot", t.killshot);
     read(j, "Burst Time", t.burstTime);
@@ -412,11 +417,14 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Auto shot", autoShot);
     WRITE("Auto scope", autoScope);
+    WRITE("Auto stop", autoStop);
     WRITE("Fov", fov);
     WRITE("Smooth", smooth);
     WRITE("Bone", bone);
     WRITE("Max aim inaccuracy", maxAimInaccuracy);
     WRITE("Max shot inaccuracy", maxShotInaccuracy);
+    WRITE("Hitchance enable", hitchance);
+    WRITE("Hitchance ammount", hitchanceAmmount);
     WRITE("Min damage", minDamage);
     WRITE("Killshot", killshot);
     WRITE("Between shots", betweenShots);
@@ -431,6 +439,8 @@ static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerb
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Hitgroup", hitgroup);
     WRITE("Shot delay", shotDelay);
+    WRITE("Hitchance enable", hitChance);
+    WRITE("Hitchance ammount", hitChanceAmmount);
     WRITE("Min damage", minDamage);
     WRITE("Killshot", killshot);
     WRITE("Burst Time", burstTime);
