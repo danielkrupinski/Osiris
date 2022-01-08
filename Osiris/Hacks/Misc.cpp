@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <array>
 #include <iomanip>
 #include <mutex>
@@ -17,6 +17,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../ProtobufReader.h"
+#include "../pstring.h"
 
 #include "EnginePrediction.h"
 #include "Misc.h"
@@ -42,10 +43,13 @@
 #include "../SDK/Platform.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/UtlVector.h"
+#include "../SDK/Steam.h"
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/WeaponSystem.h"
+
+#include "../SDK/Utils.h"
 
 #include "../GUI.h"
 #include "../Helpers.h"
@@ -64,33 +68,26 @@ struct OffscreenEnemies : ColorToggle {
     HealthBar healthBar;
 };
 
-struct PurchaseList {
-    bool enabled = false;
-    bool onlyDuringFreezeTime = false;
-    bool showPrices = false;
-    bool noTitleBar = false;
-
-    enum Mode {
-        Details = 0,
-        Summary
-    };
-    int mode = Details;
-};
-
 struct MiscConfig {
     MiscConfig() { clanTag[0] = '\0'; }
 
     KeyBind menuKey{ KeyBind::INSERT };
     bool antiAfkKick{ false };
     bool autoStrafe{ false };
+    bool rageStrafe{ false };
     bool bunnyHop{ false };
+    bool dzBunnyHop{ false };
     bool customClanTag{ false };
-    bool clocktag{ false };
-    bool animatedClanTag{ false };
+    int tagType{ 0 };
+    float tagUpdateInterval{ 0.5f };
+    std::vector<std::string> tagAnimationSteps{ "","" };
     bool fastDuck{ false };
     bool moonwalk{ false };
     bool edgejump{ false };
+    bool fastshift{ false };
+    int fastshiftspeed{ 3 };
     bool slowwalk{ false };
+    bool blockbot{ false };
     bool autoPistol{ false };
     bool autoReload{ false };
     bool autoAccept{ false };
@@ -108,6 +105,7 @@ struct MiscConfig {
     bool killMessage{ false };
     bool nadePredict{ false };
     bool fixTabletSignal{ false };
+    bool quickHealthshot{ false };
     bool fastPlant{ false };
     bool fastStop{ false };
     bool quickReload{ false };
@@ -116,8 +114,10 @@ struct MiscConfig {
     PreserveKillfeed preserveKillfeed;
     char clanTag[16];
     KeyBind edgejumpkey;
+    KeyBind fastshiftKey;
     KeyBind slowwalkKey;
-    ColorToggleThickness noscopeCrosshair;
+    KeyBind blockbotKey;
+    bool noscopeCrosshair{ false };
     ColorToggleThickness recoilCrosshair;
 
     struct SpectatorList {
@@ -128,6 +128,33 @@ struct MiscConfig {
     };
 
     SpectatorList spectatorList;
+
+    struct DamageList {
+        bool enabled = false;
+        bool noTitleBar = false;
+        int maxRows = 3;
+        ImVec2 pos;
+        ImVec2 size{ 300.0f, 200.0f };
+    };
+    DamageList damageList;
+
+    struct PurchaseList {
+        bool enabled = false;
+        bool onlyDuringFreezeTime = false;
+        bool showPrices = false;
+        bool noTitleBar = false;
+
+        enum Mode {
+            Details = 0,
+            Summary
+        };
+        int mode = Details;
+
+        ImVec2 pos;
+        ImVec2 size{ 400.0f, 200.0f };
+    };
+    PurchaseList purchaseList;
+
     struct Watermark {
         bool enabled = false;
     };
@@ -138,15 +165,15 @@ struct MiscConfig {
     std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
     ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
     KeyBind prepareRevolverKey;
+    float revolverPrepareTime{ 0.238288879f };
     int hitSound{ 0 };
     int chokedPackets{ 0 };
     KeyBind chokedPacketsKey;
-    int quickHealthshotKey{ 0 };
+    KeyBind quickHealthshotKey;
     float maxAngleDelta{ 255.0f };
     int killSound{ 0 };
     std::string customKillSound;
     std::string customHitSound;
-    PurchaseList purchaseList;
 
     struct Reportbot {
         bool enabled = false;
@@ -161,6 +188,18 @@ struct MiscConfig {
     } reportbot;
 
     OffscreenEnemies offscreenEnemies;
+    bool autoDisconnect{ false };
+
+    struct EventLog {
+        bool enabled = false;
+        bool localOnly = false;
+        bool chat = false;
+        bool console = false;
+
+        bool deathLog = false;
+        bool damageLog = false;
+        bool bombLog = false;
+    } eventLog;
 } miscConfig;
 
 bool Misc::shouldRevealMoney() noexcept
@@ -218,6 +257,39 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
+void Misc::fastshift(UserCmd* cmd) noexcept
+{
+    if (!miscConfig.fastshift || !miscConfig.fastshiftKey.isDown())
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    const auto weaponData = activeWeapon->getWeaponData();
+    if (!weaponData)
+        return;
+
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex());
+
+
+
+    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+    if (cmd->forwardmove && cmd->sidemove) {
+        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+    } else if (cmd->forwardmove) {
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+    } else if (cmd->sidemove) {
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+    }
+}
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (!miscConfig.slowwalk || !miscConfig.slowwalkKey.isDown())
@@ -250,34 +322,83 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
     static std::string clanTag;
+    static std::string origTag;
+    static bool flip = false;
+    static int count = 0;
 
     if (tagChanged) {
         clanTag = miscConfig.clanTag;
-        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
+        origTag = miscConfig.clanTag;
+        count = 0;
+        flip = false;
+        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ') {
             clanTag.push_back(' ');
+            origTag.push_back(' ');
+        }
         return;
     }
     
     static auto lastTime = 0.0f;
 
-    if (miscConfig.clocktag) {
-        if (memory->globalVars->realtime - lastTime < 1.0f)
+    if (miscConfig.customClanTag) {
+        if ((memory->globalVars->realtime - lastTime < miscConfig.tagUpdateInterval) && (!tagChanged || origTag.empty()) && miscConfig.tagType != 5)
             return;
 
         const auto time = std::time(nullptr);
         const auto localTime = std::localtime(&time);
-        char s[11];
-        s[0] = '\0';
-        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(s, s);
-    } else if (miscConfig.customClanTag) {
-        if (memory->globalVars->realtime - lastTime < 0.6f)
-            return;
+        auto offset = 0;
 
-        if (miscConfig.animatedClanTag && !clanTag.empty()) {
-            if (const auto offset = Helpers::utf8SeqLen(clanTag[0]); offset <= clanTag.length())
+        switch (miscConfig.tagType) {
+        case 1: //normal anim
+            offset = Helpers::utf8SeqLen(clanTag[0]);
+            if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+            break;
+
+        case 2: //auto reverse
+            offset = Helpers::utf8SeqLen(origTag[0]);
+            if (origTag.length() > clanTag.length() && !flip)
+                clanTag = origTag.substr(0, clanTag.length() + offset);
+            else if (clanTag.length() == 0)
+                flip = false;
+            else if (origTag.length() <= clanTag.length() || flip) {
+                flip = true;
+                clanTag = origTag.substr(0, clanTag.length() - offset);
+            }
+            break;
+
+        case 3: //reverse auto reverse?
+            offset = Helpers::utf8SeqLen(origTag[0]);
+            if (origTag.length() > clanTag.length() && !flip)
+                clanTag = origTag.substr(0, clanTag.length() + offset);
+            else if (clanTag.length() == 0) {
+                flip = false;
+                count = 0;
+            }
+            else if (origTag.length() <= clanTag.length() || flip) {
+                flip = true;
+                clanTag = origTag.substr(0 + (offset * ++count), origTag.length());
+            }
+            break;
+
+        case 4: //custom animation
+            clanTag = miscConfig.tagAnimationSteps[count];
+            if (count < miscConfig.tagAnimationSteps.size() - 1)
+                count++;
+            else
+                count = 0;
+            break;
+
+        case 5: //clock
+            if (memory->globalVars->realtime - lastTime < 1.0f)
+                return;
+
+            char s[11];
+            s[0] = '\0';
+            snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+            lastTime = memory->globalVars->realtime;
+            memory->setClanTag(s, s);
+            return;
         }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
@@ -339,41 +460,124 @@ void Misc::spectatorList() noexcept
     ImGui::End();
 }
 
-static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
+void Misc::damageList(GameEvent* event) noexcept
 {
-    // dot
-    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
-
-    // left
-    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
-
-    // right
-    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
-
-    // top (left with swapped x/y offsets)
-    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
-
-    // bottom (right with swapped x/y offsets)
-    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
-    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
-}
-
-void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
-{
-    if (!miscConfig.noscopeCrosshair.asColorToggle().enabled)
+    if (!miscConfig.damageList.enabled)
         return;
 
-    {
-        GameData::Lock lock;
-        if (const auto& local = GameData::local(); !local.exists || !local.alive || !local.noScope)
-            return;
-    }
+    static std::mutex mtx;
+    std::scoped_lock _{ mtx };
 
-    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
+    static std::unordered_map<int, int> damageCount;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("round_start"):
+            damageCount.clear();
+            break;
+        case fnv::hash("player_hurt"):
+            if (const auto localPlayerId = localPlayer ? localPlayer->getUserId() : 0; localPlayerId && event->getInt("attacker") == localPlayerId && event->getInt("userid") != localPlayerId)
+                if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player)
+                    damageCount[player->handle()] += event->getInt("dmg_health");
+            break;
+        case fnv::hash("player_death"):
+            if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player)
+                damageCount.erase(player->handle());
+            break;
+        }
+    }
+    else {
+        if ((damageCount.empty() || !interfaces->engine->isInGame()) && !gui->isOpen())
+            return;
+
+        if (miscConfig.damageList.pos != ImVec2{}) {
+            ImGui::SetNextWindowPos(miscConfig.damageList.pos);
+            miscConfig.damageList.pos = {};
+        }
+
+        if (miscConfig.damageList.size != ImVec2{}) {
+            ImGui::SetNextWindowSize(ImClamp(miscConfig.damageList.size, {}, ImGui::GetIO().DisplaySize));
+            miscConfig.damageList.size = {};
+        }
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+        if (!gui->isOpen())
+            windowFlags |= ImGuiWindowFlags_NoInputs;
+        if (miscConfig.damageList.noTitleBar)
+            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+        if (!gui->isOpen())
+            ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+        ImGui::Begin("Damage list", nullptr, windowFlags);
+        ImGui::PopStyleVar();
+
+        if (!gui->isOpen())
+            ImGui::PopStyleColor();
+
+        std::vector<std::pair<int, int>> damageList(damageCount.cbegin(), damageCount.cend());
+        std::ranges::sort(damageList, std::ranges::greater{}, &std::pair<int, int>::second);
+        GameData::Lock lock;
+
+        for (std::size_t rowsCount = 0; const auto & [handle, damage] : damageList) {
+            if (rowsCount >= miscConfig.damageList.maxRows)
+                break;
+
+            if (damage == 0)
+                continue;
+
+            if (const auto playerData = GameData::playerByHandle(handle)) {
+                if (playerData->health == 0)
+                    continue;
+
+                if (const auto texture = playerData->getAvatarTexture()) {
+                    const auto textSize = ImGui::CalcTextSize(playerData->name.c_str());
+                    ImGui::Image(texture, ImVec2(textSize.y, textSize.y), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 0.3f));
+                    ImGui::SameLine();
+                    ImGui::TextWrapped("%s: ", playerData->name.c_str());
+                    ImGui::SameLine(0.f, 1.f);
+                    if (!rowsCount)
+                        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+                    ImGui::TextWrapped("Dmg: %d | Health: %d", damage, playerData->health);
+                    if (!rowsCount)
+                        ImGui::PopStyleColor();
+                    ++rowsCount;
+                }
+            }
+        }
+        ImGui::End();
+    }
+}
+
+static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
+{
+    drawList->AddCircleFilled(pos, miscConfig.recoilCrosshair.thickness, color, 360);
+    drawList->AddCircle(pos, miscConfig.recoilCrosshair.thickness, IM_COL32_BLACK, 360, 0.5);
+}
+
+void Misc::noscopeCrosshair() noexcept
+{
+    static auto nozoom_crosshair = interfaces->cvar->findVar("weapon_debug_spread_show");
+
+    GameData::Lock lock;
+    if (const auto& local = GameData::local(); !miscConfig.noscopeCrosshair || !local.exists || !local.alive || !local.noScope)
+        nozoom_crosshair->setValue(0);
+    else
+        nozoom_crosshair->setValue(3);
+}
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
+    return true;
 }
 
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
@@ -394,29 +598,124 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
         drawCrosshair(drawList, pos, Helpers::calculateColor(miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::watermark() noexcept
+// ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
+static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
 {
+    ImVec2 gradient_extent = gradient_p1 - gradient_p0;
+    float gradient_inv_length2 = 1.0f / ImLengthSqr(gradient_extent);
+    ImDrawVert* vert_start = draw_list->VtxBuffer.Data + vert_start_idx;
+    ImDrawVert* vert_end = draw_list->VtxBuffer.Data + vert_end_idx;
+
+    ImVec4 col0HSV = ImGui::ColorConvertU32ToFloat4(col0);
+    ImVec4 col1HSV = ImGui::ColorConvertU32ToFloat4(col1);
+    ImGui::ColorConvertRGBtoHSV(col0HSV.x, col0HSV.y, col0HSV.z, col0HSV.x, col0HSV.y, col0HSV.z);
+    ImGui::ColorConvertRGBtoHSV(col1HSV.x, col1HSV.y, col1HSV.z, col1HSV.x, col1HSV.y, col1HSV.z);
+    ImVec4 colDelta = col1HSV - col0HSV;
+
+    for (ImDrawVert* vert = vert_start; vert < vert_end; vert++)
+    {
+        float d = ImDot(vert->pos - gradient_p0, gradient_extent);
+        float t = ImClamp(d * gradient_inv_length2, 0.0f, 1.0f);
+
+        float h = col0HSV.x + colDelta.x * t;
+        float s = col0HSV.y + colDelta.y * t;
+        float v = col0HSV.z + colDelta.z * t;
+
+        ImVec4 rgb;
+        ImGui::ColorConvertHSVtoRGB(h, s, v, rgb.x, rgb.y, rgb.z);
+        vert->col = (ImGui::ColorConvertFloat4ToU32(rgb) & ~IM_COL32_A_MASK) | (vert->col & IM_COL32_A_MASK);
+    }
+}
+
+void Misc::watermark(ImDrawList* drawList) noexcept
+{
+    std::vector<std::reference_wrapper<const PlayerData>> playersOrdered{ GameData::players().begin(), GameData::players().end() };
+    std::ranges::sort(playersOrdered, [](const PlayerData& a, const PlayerData& b) {
+        // enemies first
+        if (a.enemy != b.enemy)
+            return a.enemy && !b.enemy;
+
+        return a.handle < b.handle;
+        });
+
     if (!miscConfig.watermark.enabled)
         return;
 
-    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
-    if (!gui->isOpen())
-        windowFlags |= ImGuiWindowFlags_NoInputs;
+    for (const PlayerData& player : playersOrdered) {
 
-    ImGui::SetNextWindowBgAlpha(0.3f);
-    ImGui::Begin("Watermark", nullptr, windowFlags);
+        //NAME
+        const char* name = interfaces->engine->getSteamAPIContext()->steamFriends->getPersonaName();
 
-    static auto frameRate = 1.0f;
-    frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
+        //FPS
+        static auto fps = 1.0f;
+        fps = 0.9f * fps + 0.1f * memory->globalVars->absoluteFrameTime;
 
-    ImGui::Text("Osiris | %d fps | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
-    ImGui::End();
+        //PING
+        const auto ping = GameData::getNetOutgoingLatency();
+
+        //TICKRATE
+        const auto tick = 1.f / memory->globalVars->intervalPerTick;
+
+        //TIME
+        std::time_t t = std::time(nullptr);
+        std::ostringstream time;
+        time << std::put_time(std::localtime(&t), ("%H:%M:%S"));
+
+        std::ostringstream format;
+        format << "Osiris"
+            << " | " << name
+            << " | " << (fps != 0.0f ? static_cast<int>(1 / fps) : 0) << " fps";
+
+        if (interfaces->engine->isClientLocalToActiveServer()) {
+            format << " | local " << tick << " tick";
+        }
+        else if (interfaces->engine->isInGame()) {
+            auto* pInfo = interfaces->engine->getNetworkChannel();
+            if (pInfo) {
+                if ((*memory->gameRules)->isValveDS())
+                    format << " | official DS " << pInfo->getAddress();
+                else
+                    format << " | online " << pInfo->getAddress();
+
+                format << " | " << ping << " ms " << tick << " tick";
+            }
+        }
+        else if (interfaces->engine->isConnected())
+            format << " | loading";
+
+        format << " | " << time.str().c_str();
+
+        const auto textSize = ImGui::CalcTextSize(format.str().c_str());
+        const auto displaySize = ImGui::GetIO().DisplaySize;
+
+        ImRect window{
+            displaySize.x - textSize.x - 9.f,
+            1.f,
+            displaySize.x - 1.f,
+            textSize.y + 9.f
+        };
+
+        drawList->AddRectFilled(window.Min, window.Max, ImGui::GetColorU32(ImGuiCol_WindowBg), 4);
+        const int vertStartIdx = drawList->VtxBuffer.Size;
+        drawList->AddRect(window.Min, window.Max, ImGui::GetColorU32(ImGuiCol_TitleBgActive), 4);
+        const int vertEndIdx = drawList->VtxBuffer.Size;
+
+        float r, g, b;
+        std::tie(r, g, b) = rainbowColor(3.f);
+        shadeVertsHSVColorGradientKeepAlpha(drawList, vertStartIdx, vertEndIdx, window.GetTL(), window.GetBR(), ImColor(r, g, b, 1.f), ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+        ImVec2 textPos{
+            window.GetCenter().x - (textSize.x / 2),
+            window.GetCenter().y - (textSize.y / 2)
+        };
+        drawList->AddText(textPos, ImGui::GetColorU32(ImGuiCol_Text), format.str().c_str());
+    }
 }
 
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick); };
-    constexpr float revolverPrepareTime{ 0.234375f };
+    float revolverPrepareTime{ miscConfig.revolverPrepareTime };
 
     static float readyTime;
     if (miscConfig.prepareRevolver && localPlayer && (!miscConfig.prepareRevolverKey.isSet() || miscConfig.prepareRevolverKey.isDown())) {
@@ -658,7 +957,11 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
 
     if (miscConfig.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+    {
         cmd->buttons &= ~UserCmd::IN_JUMP;
+        if (miscConfig.dzBunnyHop && !(localPlayer->flags() & 1) && !wasLastTimeOnGround)
+            cmd->buttons &= ~UserCmd::IN_DUCK;
+    }
 
     wasLastTimeOnGround = localPlayer->flags() & 1;
 }
@@ -670,8 +973,11 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && localPlayer->isAlive())
+    {
+        interfaces->engine->clientCmdUnrestricted(("playerchatwheel . \"Cheer! \xe2\x80\xa8" + std::string{ static_cast<char>(miscConfig.banColor + 1) } + miscConfig.banText + "\"").c_str());
         shouldSet = false;
+    }
 }
 
 void Misc::nadePredict() noexcept
@@ -680,6 +986,35 @@ void Misc::nadePredict() noexcept
 
     nadeVar->onChangeCallbacks.size = 0;
     nadeVar->setValue(miscConfig.nadePredict);
+}
+
+void Misc::quickHealthshot(UserCmd* cmd) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    static bool inProgress{ false };
+
+    if (!miscConfig.quickHealthshotKey.isSet() || miscConfig.quickHealthshotKey.isDown())
+        inProgress = true;
+
+    if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
+        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory->globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
+            cmd->buttons |= UserCmd::IN_ATTACK;
+        else {
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (const auto weapon{ interfaces->entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon->getClientClass()->classId == ClassId::Healthshot) {
+                    cmd->weaponselect = weapon->index();
+                    cmd->weaponsubtype = weapon->getWeaponSubType();
+                    return;
+                }
+            }
+        }
+        inProgress = false;
+    }
 }
 
 void Misc::fixTabletSignal() noexcept
@@ -779,12 +1114,62 @@ void Misc::revealRanks(UserCmd* cmd) noexcept
         interfaces->client->dispatchUserMessage(50, 0, 0, nullptr);
 }
 
+static float NormalizeYaw(float offset) {
+    if (offset > 180.f) {
+        offset = (offset - 180.f) + -180.f;
+    }
+    if (offset < -180) {
+        offset = (offset + 180.f) + 180.f;
+    }
+    return offset;
+}
+
+void Misc::RageStrafe(UserCmd* cmd) noexcept { /* Pasterino Cause I just aint got time to bother*/
+    if ((localPlayer->flags() & ONGROUND))
+        return;
+
+    float speed = localPlayer->velocity().length2D();
+    Vector velocity = localPlayer->velocity();
+    float yawVelocity = radiansToDegrees(atan2(velocity.y, velocity.x));
+    float velocityDelta = NormalizeYaw(cmd->viewangles.y - yawVelocity);
+    static float sideSpeed = interfaces->cvar->findVar("cl_sidespeed")->getFloat();
+
+
+
+    if (fabsf(cmd->mousedx > 2)) {
+
+        cmd->sidemove = (cmd->mousedx < 0.f) ? -sideSpeed : sideSpeed;
+        return;
+    }
+
+    if (cmd->buttons & UserCmd::IN_BACK)
+        cmd->viewangles.y -= 180.f;
+    else if (cmd->buttons & UserCmd::IN_MOVELEFT)
+        cmd->viewangles.y -= 90.f;
+    else if (cmd->buttons & UserCmd::IN_MOVERIGHT)
+        cmd->viewangles.y += 90.f;
+
+    if (!speed > 0.5f || speed == NAN || speed == INFINITE) {
+
+        cmd->forwardmove = 450.f;
+        return;
+    }
+
+    cmd->forwardmove = std::clamp(5850.f / speed, -450.f, 450.f);
+
+    if ((cmd->forwardmove < -450.f || cmd->forwardmove > 450.f))
+        cmd->forwardmove = 0.f;
+
+    cmd->sidemove = (velocityDelta > 0.0f) ? -sideSpeed : sideSpeed;
+    cmd->viewangles.y = NormalizeYaw(cmd->viewangles.y - velocityDelta);
+}
+
 void Misc::autoStrafe(UserCmd* cmd) noexcept
 {
-    if (localPlayer
-        && miscConfig.autoStrafe
-        && !(localPlayer->flags() & 1)
-        && localPlayer->moveType() != MoveType::NOCLIP) {
+    if (!localPlayer || miscConfig.rageStrafe)
+        return;
+
+    if (localPlayer && miscConfig.autoStrafe && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::NOCLIP) {
         if (cmd->mousedx < 0)
             cmd->sidemove = -450.0f;
         else if (cmd->mousedx > 0)
@@ -902,7 +1287,15 @@ void Misc::purchaseList(GameEvent* event) noexcept
         if (static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime"); (!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
             return;
 
-        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+        if (miscConfig.purchaseList.pos != ImVec2{}) {
+            ImGui::SetNextWindowPos(miscConfig.purchaseList.pos);
+            miscConfig.purchaseList.pos = {};
+        }
+
+        if (miscConfig.purchaseList.size != ImVec2{}) {
+            ImGui::SetNextWindowSize(ImClamp(miscConfig.purchaseList.size, {}, ImGui::GetIO().DisplaySize));
+            miscConfig.purchaseList.size = {};
+        }
 
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
         if (!gui->isOpen())
@@ -914,7 +1307,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
 
-        if (miscConfig.purchaseList.mode == PurchaseList::Details) {
+        if (miscConfig.purchaseList.mode == miscConfig.PurchaseList::Details) {
             GameData::Lock lock;
 
             for (const auto& [handle, purchases] : playerPurchases) {
@@ -936,7 +1329,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
                         ImGui::TextWrapped("%s: %s", player->name.c_str(), s.c_str());
                 }
             }
-        } else if (miscConfig.purchaseList.mode == PurchaseList::Summary) {
+        } else if (miscConfig.purchaseList.mode == miscConfig.PurchaseList::Summary) {
             for (const auto& purchase : purchaseTotal)
                 ImGui::TextWrapped("%d x %s", purchase.second, purchase.first.c_str());
 
@@ -1132,33 +1525,13 @@ void Misc::onVoteFailed() noexcept
         memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
-// ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
-static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
+void Misc::autoDisconnect(GameEvent& event) noexcept
 {
-    ImVec2 gradient_extent = gradient_p1 - gradient_p0;
-    float gradient_inv_length2 = 1.0f / ImLengthSqr(gradient_extent);
-    ImDrawVert* vert_start = draw_list->VtxBuffer.Data + vert_start_idx;
-    ImDrawVert* vert_end = draw_list->VtxBuffer.Data + vert_end_idx;
+    if (!miscConfig.autoDisconnect)
+        return;
 
-    ImVec4 col0HSV = ImGui::ColorConvertU32ToFloat4(col0);
-    ImVec4 col1HSV = ImGui::ColorConvertU32ToFloat4(col1);
-    ImGui::ColorConvertRGBtoHSV(col0HSV.x, col0HSV.y, col0HSV.z, col0HSV.x, col0HSV.y, col0HSV.z);
-    ImGui::ColorConvertRGBtoHSV(col1HSV.x, col1HSV.y, col1HSV.z, col1HSV.x, col1HSV.y, col1HSV.z);
-    ImVec4 colDelta = col1HSV - col0HSV;
-
-    for (ImDrawVert* vert = vert_start; vert < vert_end; vert++)
-    {
-        float d = ImDot(vert->pos - gradient_p0, gradient_extent);
-        float t = ImClamp(d * gradient_inv_length2, 0.0f, 1.0f);
-
-        float h = col0HSV.x + colDelta.x * t;
-        float s = col0HSV.y + colDelta.y * t;
-        float v = col0HSV.z + colDelta.z * t;
-
-        ImVec4 rgb;
-        ImGui::ColorConvertHSVtoRGB(h, s, v, rgb.x, rgb.y, rgb.z);
-        vert->col = (ImGui::ColorConvertFloat4ToU32(rgb) & ~IM_COL32_A_MASK) | (vert->col & IM_COL32_A_MASK);
-    }
+    if (miscConfig.autoDisconnect)
+        interfaces->engine->clientCmdUnrestricted("disconnect");
 }
 
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
@@ -1261,6 +1634,83 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
+void Misc::fixMouseDelta(UserCmd* cmd) noexcept
+{
+    if (!cmd)
+        return;
+
+    static Vector delta_viewangles{ };
+    Vector delta = cmd->viewangles - delta_viewangles;
+
+    delta.x = std::clamp(delta.x, -89.0f, 89.0f);
+    delta.y = std::clamp(delta.y, -180.0f, 180.0f);
+    delta.z = 0.0f;
+    static ConVar* sensitivity;
+    if (!sensitivity)
+        sensitivity = interfaces->cvar->findVar("sensitivity");;
+    if (delta.x != 0.f) {
+        static ConVar* m_pitch;
+
+        if (!m_pitch)
+            m_pitch = interfaces->cvar->findVar("m_pitch");
+
+        int final_dy = static_cast<int>((delta.x / m_pitch->getFloat()) / sensitivity->getFloat());
+        if (final_dy <= 32767) {
+            if (final_dy >= -32768) {
+                if (final_dy >= 1 || final_dy < 0) {
+                    if (final_dy <= -1 || final_dy > 0)
+                        final_dy = final_dy;
+                    else
+                        final_dy = -1;
+                }
+                else {
+                    final_dy = 1;
+                }
+            }
+            else {
+                final_dy = 32768;
+            }
+        }
+        else {
+            final_dy = 32767;
+        }
+
+        cmd->mousedy = static_cast<short>(final_dy);
+    }
+
+    if (delta.y != 0.f) {
+        static ConVar* m_yaw;
+
+        if (!m_yaw)
+            m_yaw = interfaces->cvar->findVar("m_yaw");
+
+        int final_dx = static_cast<int>((delta.y / m_yaw->getFloat()) / sensitivity->getFloat());
+        if (final_dx <= 32767) {
+            if (final_dx >= -32768) {
+                if (final_dx >= 1 || final_dx < 0) {
+                    if (final_dx <= -1 || final_dx > 0)
+                        final_dx = final_dx;
+                    else
+                        final_dx = -1;
+                }
+                else {
+                    final_dx = 1;
+                }
+            }
+            else {
+                final_dx = 32768;
+            }
+        }
+        else {
+            final_dx = 32767;
+        }
+
+        cmd->mousedx = static_cast<short>(final_dx);
+    }
+
+    delta_viewangles = cmd->viewangles;
+}
+
 void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
@@ -1278,6 +1728,123 @@ void Misc::updateEventListeners(bool forceRemove) noexcept
         interfaces->gameEventManager->removeListener(&listener);
         listenerRegistered = false;
     }
+}
+
+void Misc::blockbot(UserCmd* cmd) noexcept
+{
+    if (!miscConfig.blockbot || !miscConfig.blockbotKey.isDown())
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+        return;
+
+    float bestDistance = 200.0f;
+    int plyIndex = -1;
+
+    for (int i = 1; i < interfaces->engine->getMaxClients(); i++)
+    {
+        Entity* ply = interfaces->entityList->getEntity(i);
+
+        if (!ply)
+            continue;
+
+        if (!ply->isAlive() || ply->isDormant() || ply == localPlayer.get())
+            continue;
+
+        float distance = localPlayer->origin().distTo(ply->origin());
+
+        if (distance < bestDistance)
+        {
+            bestDistance = distance;
+            plyIndex = i;
+        }
+    }
+
+    if (plyIndex == -1)
+        return;
+
+    Entity* target = interfaces->entityList->getEntity(plyIndex);
+
+    if (!target)
+        return;
+
+    if (localPlayer->origin().z - target->origin().z > 20)
+    {
+        Vector vecForward = target->origin() - localPlayer->origin();
+
+        cmd->forwardmove = ((sin(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.y) + (cos(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.x)) * 450.0f;
+        cmd->sidemove = ((cos(Helpers::deg2rad(cmd->viewangles.y)) * -vecForward.y) + (sin(Helpers::deg2rad(cmd->viewangles.y)) * vecForward.x)) * 450.0f;
+    }
+    else {
+        Vector angles = Helpers::calculateRelativeAngle(localPlayer->origin(), target->origin());
+
+        angles.y = angles.y - localPlayer->eyeAngles().y;
+        angles.normalize();
+
+        if (angles.y < 0.0f)
+            cmd->sidemove = 450.0f;
+        else if (angles.y > 0.0f)
+            cmd->sidemove = -450.0f;
+    }
+}
+
+void Misc::runLog(GameEvent* event) noexcept {
+    if (!miscConfig.eventLog.enabled)
+        return;
+
+    std::string printedText = " ";
+    auto eventName = fnv::hashRuntime(event->getName());
+
+    const auto userid = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
+
+    if (!userid || !localPlayer)
+        return;
+
+    printedText += userid->getPlayerName() + " ";
+
+    if (eventName == fnv::hash("player_death") || eventName == fnv::hash("player_hurt"))
+    {
+        const auto attacker = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("attacker")));
+
+        if (!attacker)
+            return;
+
+        if (miscConfig.eventLog.localOnly && attacker != localPlayer.get() && userid != localPlayer.get())
+            return;
+
+        if (eventName == fnv::hash("player_hurt"))
+            printedText += "was hurt by " + attacker->getPlayerName() + " for " + std::to_string(event->getInt("dmg_health")) + " health.";
+        else
+            printedText += "was killed by " + attacker->getPlayerName() + ".";
+    }
+    else
+    {
+        if (miscConfig.eventLog.localOnly && userid != localPlayer.get())
+            return;
+        switch (eventName) {
+        case fnv::hash("bomb_planted"):
+            printedText += "planted the bomb.";
+            break;
+        case fnv::hash("bomb_defused"):
+            printedText += "defused the bomb.";
+            break;
+        case fnv::hash("bomb_beginplant"):
+            printedText += "has started planting the bomb.";
+            break;
+        case fnv::hash("bomb_begindefuse"):
+            printedText += "has started defusing the bomb.";
+            break;
+        }
+    }
+
+    if (miscConfig.eventLog.chat)
+        memory->clientMode->getHudChat()->printf(0, std::string(" \x06 [Osiris]\x01" + printedText).c_str());
+
+    if (miscConfig.eventLog.console)
+        interfaces->engine->clientCmdUnrestricted(std::string("echo [Osiris]" + printedText).c_str());
 }
 
 void Misc::updateInput() noexcept
@@ -1318,7 +1885,15 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::hotkey("Menu Key", miscConfig.menuKey);
     ImGui::Checkbox("Anti AFK kick", &miscConfig.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &miscConfig.autoStrafe);
+    if (miscConfig.autoStrafe) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Rage strafe", &miscConfig.rageStrafe);
+    }
     ImGui::Checkbox("Bunny hop", &miscConfig.bunnyHop);
+    if (miscConfig.bunnyHop) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Bunny hop +squat", &miscConfig.dzBunnyHop);
+    };
     ImGui::Checkbox("Fast duck", &miscConfig.fastDuck);
     ImGui::Checkbox("Moonwalk", &miscConfig.moonwalk);
     ImGui::Checkbox("Edge Jump", &miscConfig.edgejump);
@@ -1326,12 +1901,25 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PushID("Edge Jump Key");
     ImGui::hotkey("", miscConfig.edgejumpkey);
     ImGui::PopID();
+    ImGui::Checkbox("Fastshift", &miscConfig.fastshift);
+    if (miscConfig.fastshift) {
+        ImGui::SameLine();
+        ImGui::PushID("Fastshift Key");
+        ImGui::hotkey("", miscConfig.fastshiftKey);
+        ImGui::InputInt("Fastshift Speed", &miscConfig.fastshiftspeed, 1, 500);
+    }
+    ImGui::PopID();
     ImGui::Checkbox("Slowwalk", &miscConfig.slowwalk);
     ImGui::SameLine();
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
     ImGui::PopID();
-    ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
+    ImGui::Checkbox("Block Bot", &miscConfig.blockbot);
+    ImGui::SameLine();
+    ImGui::PushID("Block Bot Key");
+    ImGui::hotkey("", miscConfig.blockbotKey);
+    ImGui::PopID();
+    ImGui::Checkbox("Noscope crosshair", &miscConfig.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
@@ -1351,6 +1939,23 @@ void Misc::drawGUI(bool contentOnly) noexcept
 
     if (ImGui::BeginPopup("")) {
         ImGui::Checkbox("No Title Bar", &miscConfig.spectatorList.noTitleBar);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
+    ImGui::Checkbox("Damage list", &miscConfig.damageList.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Damage list");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("No Title Bar", &miscConfig.damageList.noTitleBar);
+        miscConfig.damageList.maxRows = std::clamp(miscConfig.damageList.maxRows, 1, 64);
+        ImGui::PushItemWidth(100.0f);
+        ImGui::InputInt("Maximum rows", &miscConfig.damageList.maxRows);
+        ImGui::PopItemWidth();
         ImGui::EndPopup();
     }
     ImGui::PopID();
@@ -1381,8 +1986,6 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Aspect Ratio", &miscConfig.aspectratio, 0.0f, 5.0f, "%.2f");
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &miscConfig.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &miscConfig.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &miscConfig.clocktag);
     ImGui::Checkbox("Custom clantag", &miscConfig.customClanTag);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
@@ -1390,6 +1993,41 @@ void Misc::drawGUI(bool contentOnly) noexcept
 
     if (ImGui::InputText("", miscConfig.clanTag, sizeof(miscConfig.clanTag)))
         Misc::updateClanTag(true);
+    ImGui::PopID();
+    ImGui::SameLine();
+    ImGui::PushID("Clantag options");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::SameLine();
+        ImGui::PushItemWidth(120.0f);
+        if (ImGui::Combo("Animation", &miscConfig.tagType, "Static\0Animated\0Auto reverse\0Reverse auto reverse\0Custom\0Clock\0"))
+            Misc::updateClanTag(true);
+        if (miscConfig.tagType != 0 && miscConfig.tagType != 5) //dont ask for update rate if it is static or clock
+            ImGui::SliderFloat("Update rate", &miscConfig.tagUpdateInterval, 0.5f, 3.f, "%.1f");
+        if (miscConfig.tagType == 4) {
+            for (auto i = 0; i < miscConfig.tagAnimationSteps.size(); i++) {
+                ImGui::PushID(i + 100);
+                ImGui::InputText("", &miscConfig.tagAnimationSteps[i]);
+                ImGui::PopID();
+            }
+
+            if (ImGui::Button("+")) {
+                miscConfig.tagAnimationSteps.push_back("");
+                Misc::updateClanTag(true);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("-") && miscConfig.tagAnimationSteps.size() > 2) {
+                miscConfig.tagAnimationSteps.pop_back();
+                Misc::updateClanTag(true);
+            }
+        }
+        ImGui::PopItemWidth();
+        ImGui::EndPopup();
+    }
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &miscConfig.killMessage);
     ImGui::SameLine();
@@ -1417,6 +2055,10 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushID("Prepare revolver Key");
     ImGui::hotkey("", miscConfig.prepareRevolverKey);
+    if (miscConfig.prepareRevolver) {
+        ImGui::SameLine();
+        ImGui::SliderFloat("Prepare revolver time", &miscConfig.revolverPrepareTime, 0.0f, 255.0f, "%.9f");
+    }
     ImGui::PopID();
     ImGui::Combo("Hit Sound", &miscConfig.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (miscConfig.hitSound == 5) {
@@ -1434,21 +2076,22 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Choked packets", &miscConfig.chokedPackets, 1, 5);
-    miscConfig.chokedPackets = std::clamp(miscConfig.chokedPackets, 0, 64);
+    miscConfig.chokedPackets = std::clamp(miscConfig.chokedPackets, 0, 128);
     ImGui::SameLine();
     ImGui::PushID("Choked packets Key");
     ImGui::hotkey("", miscConfig.chokedPacketsKey);
     ImGui::PopID();
-    /*
-    ImGui::Text("Quick healthshot");
-    ImGui::SameLine();
-    hotkey(miscConfig.quickHealthshotKey);
-    */
     ImGui::Checkbox("Grenade Prediction", &miscConfig.nadePredict);
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
+    ImGui::Checkbox("Quick Healthshot", &miscConfig.quickHealthshot);
+    if (miscConfig.quickHealthshot) {
+        ImGui::SameLine();
+        ImGui::hotkey("", miscConfig.quickHealthshotKey);
+    }
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &miscConfig.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
+    ImGui::Checkbox("Auto disconnect", &miscConfig.autoDisconnect);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
     ImGui::SameLine();
 
@@ -1505,6 +2148,35 @@ void Misc::drawGUI(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Event Log", &miscConfig.eventLog.enabled);
+    ImGui::SameLine();
+    ImGui::PushID("Event Log");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+
+        if (ImGui::Button("Types"))
+            ImGui::OpenPopup("Type");
+
+        if (ImGui::BeginPopup("Type")) {
+            ImGui::PushItemWidth(80.0f);
+
+            ImGui::Checkbox("Chat", &miscConfig.eventLog.chat);
+            ImGui::Checkbox("Console", &miscConfig.eventLog.console);
+            ImGui::EndPopup();
+        }
+
+        ImGui::Checkbox("Local Only", &miscConfig.eventLog.localOnly);
+        ImGui::Checkbox("Death Logs", &miscConfig.eventLog.deathLog);
+        ImGui::Checkbox("Damage Logs", &miscConfig.eventLog.damageLog);
+        ImGui::Checkbox("Bomb Logs", &miscConfig.eventLog.bombLog);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
@@ -1519,13 +2191,15 @@ static void from_json(const json& j, ImVec2& v)
     read(j, "Y", v.y);
 }
 
-static void from_json(const json& j, PurchaseList& pl)
+static void from_json(const json& j, MiscConfig::PurchaseList& pl)
 {
     read(j, "Enabled", pl.enabled);
     read(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
     read(j, "Show Prices", pl.showPrices);
     read(j, "No Title Bar", pl.noTitleBar);
     read(j, "Mode", pl.mode);
+    read<value_t::object>(j, "Pos", pl.pos);
+    read<value_t::object>(j, "Size", pl.size);
 }
 
 static void from_json(const json& j, OffscreenEnemies& o)
@@ -1541,6 +2215,15 @@ static void from_json(const json& j, MiscConfig::SpectatorList& sl)
     read(j, "No Title Bar", sl.noTitleBar);
     read<value_t::object>(j, "Pos", sl.pos);
     read<value_t::object>(j, "Size", sl.size);
+}
+
+static void from_json(const json& j, MiscConfig::DamageList& dl)
+{
+    read(j, "Enabled", dl.enabled);
+    read(j, "No Title Bar", dl.noTitleBar);
+    read<value_t::object>(j, "Pos", dl.pos);
+    read<value_t::object>(j, "Size", dl.size);
+    read(j, "Max rows", dl.maxRows);
 }
 
 static void from_json(const json& j, MiscConfig::Watermark& o)
@@ -1559,18 +2242,24 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Menu key", m.menuKey);
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
+    read(j, "Rage strafe", m.rageStrafe);
     read(j, "Bunny hop", m.bunnyHop);
+    read(j, "Bunny hop with a squat", m.dzBunnyHop);
     read(j, "Custom clan tag", m.customClanTag);
-    read(j, "Clock tag", m.clocktag);
     read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
-    read(j, "Animated clan tag", m.animatedClanTag);
+    read<value_t::object>(j, "Clan tag animation steps", m.tagAnimationSteps);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
     read(j, "Edge Jump Key", m.edgejumpkey);
+    read(j, "Fastshift", m.fastshift);
+    read(j, "Fastshift key", m.fastshiftKey);
+    read(j, "Fastshift speed", m.fastshiftspeed);
     read(j, "Slowwalk", m.slowwalk);
     read(j, "Slowwalk key", m.slowwalkKey);
-    read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
+    read(j, "Block Bot", m.blockbot);
+    read(j, "Block Bot Key", m.blockbotKey);
+    read(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
     read(j, "Auto pistol", m.autoPistol);
     read(j, "Auto reload", m.autoReload);
@@ -1581,6 +2270,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Reveal suspect", m.revealSuspect);
     read(j, "Reveal votes", m.revealVotes);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
+    read<value_t::object>(j, "Damage list", m.damageList);
     read<value_t::object>(j, "Watermark", m.watermark);
     read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
     read(j, "Fix animation LOD", m.fixAnimationLOD);
@@ -1600,14 +2290,15 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Quick reload", m.quickReload);
     read(j, "Prepare revolver", m.prepareRevolver);
     read(j, "Prepare revolver key", m.prepareRevolverKey);
+    read(j, "Prepare revolver time", m.revolverPrepareTime);
     read(j, "Hit sound", m.hitSound);
     read(j, "Choked packets", m.chokedPackets);
     read(j, "Choked packets key", m.chokedPacketsKey);
     read(j, "Quick healthshot key", m.quickHealthshotKey);
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
+    read(j, "Quick Healthshot", m.quickHealthshot);
     read(j, "Max angle delta", m.maxAngleDelta);
-    read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::string>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
     read<value_t::string>(j, "Custom Kill Sound", m.customKillSound);
@@ -1615,6 +2306,9 @@ static void from_json(const json& j, MiscConfig& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read<value_t::object>(j, "Event Log", m.eventLog);
+    read(j, "Auto disconnect", m.autoDisconnect);
+
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -1630,6 +2324,26 @@ static void from_json(const json& j, MiscConfig::Reportbot& r)
     read(j, "Other Hacking", r.other);
 }
 
+static void from_json(const json& j, MiscConfig::EventLog& l) {
+    read(j, "Enabled", l.enabled);
+    read(j, "Local Only", l.localOnly);
+    read(j, "Chat", l.chat);
+    read(j, "Console", l.console);
+    read(j, "Damage Log", l.damageLog);
+    read(j, "Death Log", l.deathLog);
+    read(j, "Bomb Log", l.bombLog);
+}
+
+static void to_json(json& j, const MiscConfig::EventLog& o, const MiscConfig::EventLog& dummy = {}) {
+    WRITE("Enabled", enabled);
+    WRITE("Local Only", localOnly);
+    WRITE("Chat", chat);
+    WRITE("Console", console);
+    WRITE("Damage Log", damageLog);
+    WRITE("Death Log", deathLog);
+    WRITE("Bomb Log", bombLog);
+}
+
 static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::Reportbot& dummy = {})
 {
     WRITE("Enabled", enabled);
@@ -1643,13 +2357,18 @@ static void to_json(json& j, const MiscConfig::Reportbot& o, const MiscConfig::R
     WRITE("Other Hacking", other);
 }
 
-static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
+static void to_json(json& j, const MiscConfig::PurchaseList& o, const MiscConfig::PurchaseList& dummy = {})
 {
     WRITE("Enabled", enabled);
     WRITE("Only During Freeze Time", onlyDuringFreezeTime);
     WRITE("Show Prices", showPrices);
     WRITE("No Title Bar", noTitleBar);
     WRITE("Mode", mode);
+
+    //if (const auto window = ImGui::FindWindowByName("Purchase list")) {
+    //    j["Pos"] = window->Pos;
+    //    j["Size"] = window->SizeFull;
+    //}
 }
 
 static void to_json(json& j, const ImVec2& o, const ImVec2& dummy = {})
@@ -1676,6 +2395,18 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
     }
 }
 
+static void to_json(json& j, const MiscConfig::DamageList& o, const MiscConfig::DamageList& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("No Title Bar", noTitleBar);
+    WRITE("Max rows", maxRows);
+
+    if (const auto window = ImGui::FindWindowByName("Damage list")) {
+        j["Pos"] = window->Pos;
+        j["Size"] = window->SizeFull;
+    }
+}
+
 static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::Watermark& dummy = {})
 {
     WRITE("Enabled", enabled);
@@ -1694,20 +2425,28 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Menu key", menuKey);
     WRITE("Anti AFK kick", antiAfkKick);
     WRITE("Auto strafe", autoStrafe);
+    WRITE("Rage strafe", rageStrafe);
     WRITE("Bunny hop", bunnyHop);
+    WRITE("Bunny hop with a squat", dzBunnyHop);
     WRITE("Custom clan tag", customClanTag);
-    WRITE("Clock tag", clocktag);
 
     if (o.clanTag[0])
         j["Clan tag"] = o.clanTag;
 
-    WRITE("Animated clan tag", animatedClanTag);
+    WRITE("Clan tag type", tagType);
+    WRITE("Clan tag update interval", tagUpdateInterval);
+    WRITE("Clan tag animation steps", tagAnimationSteps);
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);
     WRITE("Edge Jump Key", edgejumpkey);
+    WRITE("Fastshift", fastshift);
+    WRITE("Fastshift key", fastshiftKey);
+    WRITE("Fastshift speed", fastshiftspeed);
     WRITE("Slowwalk", slowwalk);
     WRITE("Slowwalk key", slowwalkKey);
+    WRITE("Block Bot", blockbot);
+    WRITE("Block Bot Key", blockbotKey);
     WRITE("Noscope crosshair", noscopeCrosshair);
     WRITE("Recoil crosshair", recoilCrosshair);
     WRITE("Auto pistol", autoPistol);
@@ -1719,6 +2458,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reveal suspect", revealSuspect);
     WRITE("Reveal votes", revealVotes);
     WRITE("Spectator list", spectatorList);
+    WRITE("Damage list", damageList);
     WRITE("Watermark", watermark);
     WRITE("Offscreen Enemies", offscreenEnemies);
     WRITE("Fix animation LOD", fixAnimationLOD);
@@ -1738,14 +2478,15 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
+    WRITE("Prepare revolver time", revolverPrepareTime);
     WRITE("Hit sound", hitSound);
     WRITE("Choked packets", chokedPackets);
     WRITE("Choked packets key", chokedPacketsKey);
     WRITE("Quick healthshot key", quickHealthshotKey);
     WRITE("Grenade predict", nadePredict);
     WRITE("Fix tablet signal", fixTabletSignal);
+    WRITE("Quick Healthshot", quickHealthshot);
     WRITE("Max angle delta", maxAngleDelta);
-    WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
@@ -1753,6 +2494,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Auto disconnect", autoDisconnect);
+    WRITE("Event Log", eventLog);
 }
 
 json Misc::toJson() noexcept

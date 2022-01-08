@@ -161,6 +161,12 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         const auto entity = interfaces->entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
             renderPlayer(entity);
+
+        if (!localPlayer)
+            return appliedChams;
+
+        if (entity && !entity->isDormant() && entity->getClientClass()->classId == ClassId::CSRagdoll)
+            applyChams(config->chams["Ragdolls"].materials);
     }
 
     return appliedChams;
@@ -183,11 +189,23 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Enemies"].materials, health);
 
         const auto records = Backtrack::getRecords(player->index());
-        if (records && !records->empty() && Backtrack::valid(records->front().simulationTime)) {
-            if (!appliedChams)
-                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-            applyChams(config->chams["Backtrack"].materials, health, records->back().matrix);
-            interfaces->studioRender->forcedMaterialOverride(nullptr);
+        if (!backtrackConfig.drawAllChams) {
+            if (records && !records->empty() && Backtrack::valid(records->front().simulationTime)) {
+                if (!appliedChams)
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+                applyChams(config->chams["Backtrack"].materials, health, records->back().matrix);
+                interfaces->studioRender->forcedMaterialOverride(nullptr);
+            }
+        }
+        else {
+            for (int i = 0; i < records->size(); i++) {
+                if (records && !records->empty() && Backtrack::valid(records->front().simulationTime)) {
+                    if (!appliedChams)
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+                    applyChams(config->chams["Backtrack"].materials, health, records->at(i).matrix);
+                    interfaces->studioRender->forcedMaterialOverride(nullptr);
+                }
+            }
         }
     } else {
         applyChams(config->chams["Allies"].materials, health);

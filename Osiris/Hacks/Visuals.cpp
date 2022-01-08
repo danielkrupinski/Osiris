@@ -1,23 +1,35 @@
+#include <algorithm>
 #include <array>
 #include <cstring>
 #include <string_view>
 #include <utility>
 #include <vector>
+#include <iostream>
+#include <numbers>
+#include <numeric>
+#include <sstream>
+#include <unordered_map>
+#include <ranges>
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
+#include "../imgui/imgui_stdlib.h"
 
 #include "../ConfigStructs.h"
 #include "../fnv.h"
 #include "../GameData.h"
 #include "../Helpers.h"
+#include "../Hooks.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../imguiCustom.h"
 #include "Visuals.h"
+#include "../PostProcessing.h"
+#include "../PostProcessing.cpp"
 
 #include "../SDK/ConVar.h"
+#include "../SDK/ClientClass.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
@@ -30,14 +42,31 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ViewRenderBeams.h"
+#include "../SDK/Utils.h"
 
 struct BulletTracers : ColorToggle {
     BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
 };
 
+struct HitEffect2 {
+    bool enabled = false;
+
+    enum Type {
+        ChromaticAberration = 0,
+        Monochrome = 1
+    };
+
+    int type = ChromaticAberration;
+};
+
 struct VisualsConfig {
     bool disablePostProcessing{ false };
     bool inverseRagdollGravity{ false };
+    int inverseRagdollGravityValue{ -600 };
+    bool inverseRagdollGravityCustomize{ false };
+    bool ragdollForce{ false };
+    int ragdollForceValue{ 800 };
+    bool ragdollForceCustomize{ false };
     bool noFog{ false };
     bool no3dSky{ false };
     bool noAimPunch{ false };
@@ -51,9 +80,12 @@ struct VisualsConfig {
     bool noGrass{ false };
     bool noShadows{ false };
     bool wireframeSmoke{ false };
+    bool rainbowCrosshair{ false };
+    float rainbowCrosshairSpeed{ 1.0f };
     bool zoom{ false };
     KeyBindToggle zoomKey;
     bool thirdperson{ false };
+    bool deadThirdperson{ false };
     KeyBindToggle thirdpersonKey;
     int thirdpersonDistance{ 0 };
     int viewmodelFov{ 0 };
@@ -62,6 +94,7 @@ struct VisualsConfig {
     int flashReduction{ 0 };
     float brightness{ 0.0f };
     int skybox{ 0 };
+    std::string customSkybox;
     ColorToggle3 world;
     ColorToggle3 sky;
     bool deagleSpinner{ false };
@@ -71,7 +104,18 @@ struct VisualsConfig {
     int hitMarker{ 0 };
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
+    HitEffect2 hitEffect2;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
+    ColorToggle smokeHull{ 0.0f, 0.81f, 1.0f, 0.60f };
+    ColorToggle nadeBlast{ 1.0f, 0.0f, 0.09f, 0.51f };
+
+    struct SmokeTimer {
+        bool enabled = false;
+        Color4 backgroundColor{ 1.0f, 1.0f, 1.0f, 0.5f };
+        Color4 timerColor{ 0.0f, 0.0f, 1.0f, 1.0f };
+        float timerThickness{ 1.f };
+        Color4 textColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+    } smokeTimer;
 
     struct ColorCorrection {
         bool enabled = false;
@@ -83,8 +127,28 @@ struct VisualsConfig {
         float green = 0.0f;
         float yellow = 0.0f;
     } colorCorrection;
-} visualsConfig;
 
+    struct CustomPostProcessing {
+        bool enabled = false;
+        float worldExposure = 0.0f;
+        float modelAmbient = 0.0f;
+        float bloomScale = 0.0f;
+    } customPostProcessing;
+
+    struct FogController {
+        struct FogSettings {
+            ColorToggle3 color;
+            int iStartDistance{ -1 };
+            int iEndDistance{ -1 };
+            float flHdrColorScale{ 1.f };
+        } Fog, Sky;
+    } FogControl;
+
+    bool fullBright{ false };
+
+    float glowOutlineWidth{ 6.0f };
+
+} visualsConfig;
 
 static void from_json(const json& j, VisualsConfig::ColorCorrection& c)
 {
@@ -103,10 +167,27 @@ static void from_json(const json& j, BulletTracers& o)
     from_json(j, static_cast<ColorToggle&>(o));
 }
 
+static void from_json(const json& j, VisualsConfig::CustomPostProcessing& c)
+{
+    read(j, "Enabled", c.enabled);
+    read(j, "World exposure", c.worldExposure);
+    read(j, "Model ambient", c.modelAmbient);
+    read(j, "Bloom scale", c.bloomScale);
+}
+
+static void from_json(const json& j, HitEffect2& o)
+{
+    read(j, "Enabled", o.enabled);
+    read_number(j, "Type", o.type);
+}
+
 static void from_json(const json& j, VisualsConfig& v)
 {
     read(j, "Disable post-processing", v.disablePostProcessing);
     read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
+    read(j, "inverseRagdollGravityValue", v.inverseRagdollGravityValue);
+    read(j, "inverseRagdollGravityCustomize", v.inverseRagdollGravityCustomize);
+    read(j, "Ragdoll force", v.ragdollForce);
     read(j, "No fog", v.noFog);
     read(j, "No 3d sky", v.no3dSky);
     read(j, "No aim punch", v.noAimPunch);
@@ -120,9 +201,13 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "No grass", v.noGrass);
     read(j, "No shadows", v.noShadows);
     read(j, "Wireframe smoke", v.wireframeSmoke);
+    read(j, "Rainbow crosshair", v.rainbowCrosshair);
+    read(j, "Rainbow crosshair speed", v.rainbowCrosshairSpeed);
+    read(j, "Full Brightness", v.fullBright);
     read(j, "Zoom", v.zoom);
     read(j, "Zoom key", v.zoomKey);
     read(j, "Thirdperson", v.thirdperson);
+    read(j, "deadThirdperson", v.deadThirdperson);
     read(j, "Thirdperson key", v.thirdpersonKey);
     read(j, "Thirdperson distance", v.thirdpersonDistance);
     read(j, "Viewmodel FOV", v.viewmodelFov);
@@ -131,6 +216,7 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Flash reduction", v.flashReduction);
     read(j, "Brightness", v.brightness);
     read(j, "Skybox", v.skybox);
+    read<value_t::object>(j, "Custom skybox", v.customSkybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
     read(j, "Deagle spinner", v.deagleSpinner);
@@ -139,9 +225,24 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Hit effect time", v.hitEffectTime);
     read(j, "Hit marker", v.hitMarker);
     read(j, "Hit marker time", v.hitMarkerTime);
+    read<value_t::object>(j, "Custom post-processing", v.customPostProcessing);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
+    read<value_t::object>(j, "Smoke timer", v.smokeTimer);
+    read<value_t::object>(j, "Smoke Hull", v.smokeHull);
+    read<value_t::object>(j, "Nade Blast", v.nadeBlast);
+    read<value_t::object>(j, "Hit Effect2", v.hitEffect2);
+    read(j, "Glow thickness", v.glowOutlineWidth);
+}
+
+static void from_json(const json& j, VisualsConfig::SmokeTimer& s)
+{
+    read(j, "Enabled", s.enabled);
+    read<value_t::object>(j, "Background color", s.backgroundColor);
+    read<value_t::object>(j, "Timer color", s.timerColor);
+    read(j, "Timer thickness", s.timerThickness);
+    read<value_t::object>(j, "Text color", s.textColor);
 }
 
 static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
@@ -156,9 +257,32 @@ static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const Visu
     WRITE("Yellow", yellow);
 }
 
+static void to_json(json& j, const VisualsConfig::SmokeTimer& o, const VisualsConfig::SmokeTimer& dummy)
+{
+    WRITE("Enabled", enabled);
+    WRITE("Background color", backgroundColor);
+    WRITE("Timer color", timerColor);
+    WRITE("Timer thickness", timerThickness);
+    WRITE("Text color", textColor);
+}
+
 static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
 {
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
+}
+
+static void to_json(json& j, const VisualsConfig::CustomPostProcessing& o, const VisualsConfig::CustomPostProcessing& dummy)
+{
+    WRITE("Enabled", enabled);
+    WRITE("World exposure", worldExposure);
+    WRITE("Model ambient", modelAmbient);
+    WRITE("Bloom scale", bloomScale);
+}
+
+static void to_json(json& j, const HitEffect2& o, const HitEffect2& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Type", type);
 }
 
 static void to_json(json& j, const VisualsConfig& o)
@@ -167,6 +291,9 @@ static void to_json(json& j, const VisualsConfig& o)
 
     WRITE("Disable post-processing", disablePostProcessing);
     WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
+    WRITE("inverseRagdollGravityValue", inverseRagdollGravityValue);
+    WRITE("inverseRagdollGravityCustomize", inverseRagdollGravityCustomize);
+    WRITE("Ragdoll force", ragdollForce);
     WRITE("No fog", noFog);
     WRITE("No 3d sky", no3dSky);
     WRITE("No aim punch", noAimPunch);
@@ -180,9 +307,13 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("No grass", noGrass);
     WRITE("No shadows", noShadows);
     WRITE("Wireframe smoke", wireframeSmoke);
+    WRITE("Rainbow crosshair", rainbowCrosshair);
+    WRITE("Rainbow crosshair speed", rainbowCrosshairSpeed);
+    WRITE("Full Brightness", fullBright);
     WRITE("Zoom", zoom);
     WRITE("Zoom key", zoomKey);
     WRITE("Thirdperson", thirdperson);
+    WRITE("deadThirdperson", deadThirdperson);
     WRITE("Thirdperson key", thirdpersonKey);
     WRITE("Thirdperson distance", thirdpersonDistance);
     WRITE("Viewmodel FOV", viewmodelFov);
@@ -191,6 +322,7 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Flash reduction", flashReduction);
     WRITE("Brightness", brightness);
     WRITE("Skybox", skybox);
+    WRITE("Custom skybox", customSkybox);
     WRITE("World", world);
     WRITE("Sky", sky);
     WRITE("Deagle spinner", deagleSpinner);
@@ -199,9 +331,70 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Hit effect time", hitEffectTime);
     WRITE("Hit marker", hitMarker);
     WRITE("Hit marker time", hitMarkerTime);
+    WRITE("Custom post-processing", customPostProcessing);
     WRITE("Color correction", colorCorrection);
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
+    WRITE("Smoke timer", smokeTimer);
+    WRITE("Smoke Hull", smokeHull);
+    WRITE("Nade Blast", nadeBlast);
+    WRITE("Hit Effect2", hitEffect2);
+    WRITE("Glow thickness", glowOutlineWidth);
+}
+
+inline void colorToStr(std::array<float, 3> color, char* buff) {
+    sprintf(buff, "%d %d %d",
+        (static_cast<int>(color[0] * 255.f)),
+        (static_cast<int>(color[1] * 255.f)),
+        (static_cast<int>(color[2] * 255.f))
+    );
+}
+
+static struct FogOptions {
+    ConVar* enable;
+    ConVar* color;
+    ConVar* maxDensity;
+    ConVar* hdr;
+    ConVar* start;
+    ConVar* end;
+};
+
+void Visuals::FogControl() noexcept {
+
+    if (!visualsConfig.FogControl.Fog.color.enabled && !visualsConfig.FogControl.Sky.color.enabled)
+        return;
+
+    /* Our ConVars */
+
+
+    static FogOptions Fog, Sky;
+    static bool init = false;
+
+    if (!interfaces->engine->isInGame() || !localPlayer.get() || !localPlayer->isAlive())
+    {
+        init = false;
+        return;
+    }
+
+    if (!init) { /* Init ConVars, but only once*/
+        Fog.enable = interfaces->cvar->findVar("fog_enable");
+        Fog.color = interfaces->cvar->findVar("fog_color");
+        Fog.maxDensity = interfaces->cvar->findVar("fog_maxdensity");
+        Fog.hdr = interfaces->cvar->findVar("fog_hdrcolorscale");
+        Fog.start = interfaces->cvar->findVar("fog_start");
+        Fog.end = interfaces->cvar->findVar("fog_end");
+
+        Sky.enable = interfaces->cvar->findVar("fog_enableskybox");
+        Sky.color = interfaces->cvar->findVar("fog_colorskybox");
+        Sky.maxDensity = interfaces->cvar->findVar("fog_maxdensityskybox");
+        Sky.hdr = interfaces->cvar->findVar("fog_hdrcolorscaleskybox");
+        Sky.start = interfaces->cvar->findVar("fog_startskybox");
+        Sky.end = interfaces->cvar->findVar("fog_endskybox");
+        init = true;
+        ConVar* fog_override{ interfaces->cvar->findVar("fog_override") };
+        fog_override->onChangeCallbacks.size = 0;
+        fog_override->setValue(1);
+    }
 }
 
 bool Visuals::isThirdpersonOn() noexcept
@@ -270,7 +463,7 @@ void Visuals::performColorCorrection() noexcept
 void Visuals::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+    ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? visualsConfig.inverseRagdollGravityValue : 600);
 }
 
 void Visuals::colorWorld() noexcept
@@ -321,11 +514,22 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
 
 void Visuals::thirdperson() noexcept
 {
+    static bool isInThirdperson{ true };
+    static float lastTime{ 0.0f };
+
+    if (GetAsyncKeyState(visualsConfig.thirdpersonKey.isSet()) && memory->globalVars->realtime - lastTime > 0.5f) {
+        isInThirdperson = !isInThirdperson;
+        lastTime = memory->globalVars->realtime;
+    }
+
     if (!visualsConfig.thirdperson)
         return;
 
     memory->input->isCameraInThirdPerson = (!visualsConfig.thirdpersonKey.isSet() || visualsConfig.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
-    memory->input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance); 
+    memory->input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance);
+    
+    if (!localPlayer->isAlive() && visualsConfig.deadThirdperson)
+        localPlayer->observerMode() = (!visualsConfig.thirdpersonKey.isSet() || isInThirdperson) ? ObserverMode::OBS_MODE_CHASE : ObserverMode::OBS_MODE_IN_EYE;
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -365,6 +569,24 @@ void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces->cvar->findVar("mat_force_tonemap_scale");
     brightness->setValue(visualsConfig.brightness);
+}
+
+void Visuals::fullBright() noexcept
+{
+    const auto bright = interfaces->cvar->findVar("mat_fullbright");
+    bright->setValue(visualsConfig.fullBright);
+}
+
+void Visuals::ragdollForce() noexcept
+{
+    const auto force = interfaces->cvar->findVar("phys_pushscale");
+    force->setValue(visualsConfig.ragdollForce ? visualsConfig.ragdollForceValue : 1);
+}
+
+void Visuals::changeGlowThickness() noexcept
+{
+    const auto glowWidth = interfaces->cvar->findVar("glow_outline_width");
+    glowWidth->setValue(visualsConfig.glowOutlineWidth);
 }
 
 void Visuals::removeGrass(FrameStage stage) noexcept
@@ -569,11 +791,55 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    if (stage == FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
+    if (stage == FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size() - 1) {
         memory->loadSky(skyboxList[visualsConfig.skybox]);
-    } else {
+    }
+    else if (static_cast<std::size_t>(visualsConfig.skybox) == 26 && stage == FrameStage::RENDER_START) {
+        memory->loadSky(visualsConfig.customSkybox.c_str());
+    }
+    else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
+    }
+}
+
+void Visuals::rainbowCrosshair() noexcept
+{
+    const auto red = interfaces->cvar->findVar("cl_crosshaircolor_r");
+    const auto green = interfaces->cvar->findVar("cl_crosshaircolor_g");
+    const auto blue = interfaces->cvar->findVar("cl_crosshaircolor_b");
+    const auto color = interfaces->cvar->findVar("cl_crosshaircolor");
+
+    auto [r, g, b] = rainbowColor(visualsConfig.rainbowCrosshairSpeed);
+    r *= 255;
+    g *= 255;
+    b *= 255;
+
+    static bool enabled = false;
+    static float backupR;
+    static float backupG;
+    static float backupB;
+    static int backupColor;
+
+    if (visualsConfig.rainbowCrosshair) {
+        red->setValue(r);
+        green->setValue(g);
+        blue->setValue(b);
+        color->setValue(5);
+        enabled = true;
+    }
+    else {
+        if (enabled) {
+            red->setValue(backupR);
+            green->setValue(backupG);
+            blue->setValue(backupB);
+            color->setValue(backupColor);
+        }
+        backupR = red->getFloat();
+        backupG = green->getFloat();
+        backupB = blue->getFloat();
+        backupColor = color->getInt();
+        enabled = false;
     }
 }
 
@@ -689,6 +955,270 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
+#define IM_NORMALIZE2F_OVER_ZERO(VX,VY)     do { float d2 = VX*VX + VY*VY; if (d2 > 0.0f) { float inv_len = 1.0f / ImSqrt(d2); VX *= inv_len; VY *= inv_len; } } while (0)
+#define IM_FIXNORMAL2F(VX,VY)               do { float d2 = VX*VX + VY*VY; if (d2 < 0.5f) d2 = 0.5f; float inv_lensq = 1.0f / d2; VX *= inv_lensq; VY *= inv_lensq; } while (0)
+
+static auto generateAntialiasedDot() noexcept
+{
+    constexpr auto segments = 12;
+    constexpr auto radius = 1.0f;
+
+    // based on ImDrawList::PathArcToFast()
+    std::array<ImVec2, segments> circleSegments;
+
+    for (int i = 0; i < segments; ++i) {
+        const auto data = ImGui::GetDrawListSharedData();
+        const ImVec2& c = data->ArcFastVtx[i % IM_ARRAYSIZE(data->ArcFastVtx)];
+        circleSegments[i] = ImVec2{ c.x * radius, c.y * radius };
+    }
+
+    // based on ImDrawList::AddConvexPolyFilled()
+    const float AA_SIZE = 1.0f; // _FringeScale;
+    constexpr int idx_count = (segments - 2) * 3 + segments * 6;
+    constexpr int vtx_count = (segments * 2);
+
+    std::array<ImDrawIdx, idx_count> indices;
+    std::size_t indexIdx = 0;
+
+    // Add indexes for fill
+    for (int i = 2; i < segments; ++i) {
+        indices[indexIdx++] = 0;
+        indices[indexIdx++] = (i - 1) << 1;
+        indices[indexIdx++] = i << 1;
+    }
+
+    // Compute normals
+    std::array<ImVec2, segments> temp_normals;
+    for (int i0 = segments - 1, i1 = 0; i1 < segments; i0 = i1++) {
+        const ImVec2& p0 = circleSegments[i0];
+        const ImVec2& p1 = circleSegments[i1];
+        float dx = p1.x - p0.x;
+        float dy = p1.y - p0.y;
+        IM_NORMALIZE2F_OVER_ZERO(dx, dy);
+        temp_normals[i0].x = dy;
+        temp_normals[i0].y = -dx;
+    }
+
+    std::array<ImVec2, vtx_count> vertices;
+    std::size_t vertexIdx = 0;
+
+    for (int i0 = segments - 1, i1 = 0; i1 < segments; i0 = i1++) {
+        // Average normals
+        const ImVec2& n0 = temp_normals[i0];
+        const ImVec2& n1 = temp_normals[i1];
+        float dm_x = (n0.x + n1.x) * 0.5f;
+        float dm_y = (n0.y + n1.y) * 0.5f;
+        IM_FIXNORMAL2F(dm_x, dm_y);
+        dm_x *= AA_SIZE * 0.5f;
+        dm_y *= AA_SIZE * 0.5f;
+
+        vertices[vertexIdx++] = ImVec2{ circleSegments[i1].x - dm_x, circleSegments[i1].y - dm_y };
+        vertices[vertexIdx++] = ImVec2{ circleSegments[i1].x + dm_x, circleSegments[i1].y + dm_y };
+
+        indices[indexIdx++] = (i1 << 1);
+        indices[indexIdx++] = (i0 << 1);
+        indices[indexIdx++] = (i0 << 1) + 1;
+        indices[indexIdx++] = (i0 << 1) + 1;
+        indices[indexIdx++] = (i1 << 1) + 1;
+        indices[indexIdx++] = (i1 << 1);
+    }
+
+    return std::make_pair(vertices, indices);
+}
+
+template <std::size_t N>
+static auto generateSpherePoints() noexcept
+{
+    constexpr auto goldenAngle = static_cast<float>(2.399963229728653);
+
+    std::array<Vector, N> points;
+    for (std::size_t i = 1; i <= points.size(); ++i) {
+        const auto latitude = std::asin(2.0f * i / (points.size() + 1) - 1.0f);
+        const auto longitude = goldenAngle * i;
+
+        points[i - 1] = Vector{ std::cos(longitude) * std::cos(latitude), std::sin(longitude) * std::cos(latitude), std::sin(latitude) };
+    }
+    return points;
+};
+
+template <std::size_t VTX_COUNT, std::size_t IDX_COUNT>
+static void drawPrecomputedPrimitive(ImDrawList* drawList, const ImVec2& pos, ImU32 color, const std::array<ImVec2, VTX_COUNT>& vertices, const std::array<ImDrawIdx, IDX_COUNT>& indices) noexcept
+{
+    drawList->PrimReserve(indices.size(), vertices.size());
+
+    const ImU32 colors[2]{ color, color & ~IM_COL32_A_MASK };
+    const auto uv = ImGui::GetDrawListSharedData()->TexUvWhitePixel;
+    for (std::size_t i = 0; i < vertices.size(); ++i) {
+        drawList->_VtxWritePtr[i].pos = vertices[i] + pos;
+        drawList->_VtxWritePtr[i].uv = uv;
+        drawList->_VtxWritePtr[i].col = colors[i & 1];
+    }
+    drawList->_VtxWritePtr += vertices.size();
+
+    std::memcpy(drawList->_IdxWritePtr, indices.data(), indices.size() * sizeof(ImDrawIdx));
+
+    const auto baseIdx = drawList->_VtxCurrentIdx;
+    for (std::size_t i = 0; i < indices.size(); ++i)
+        drawList->_IdxWritePtr[i] += baseIdx;
+
+    drawList->_IdxWritePtr += indices.size();
+    drawList->_VtxCurrentIdx += vertices.size();
+}
+
+static void drawSmokeHull(ImDrawList* drawList) noexcept
+{
+    if (!visualsConfig.smokeHull.enabled)
+        return;
+
+    const auto color = Helpers::calculateColor(visualsConfig.smokeHull.asColor4());
+
+    static const auto spherePoints = generateSpherePoints<2000>();
+    static const auto [vertices, indices] = generateAntialiasedDot();
+
+    constexpr auto animationDuration = 0.35f;
+
+    GameData::Lock lock;
+    for (const auto& smoke : GameData::smokes()) {
+        for (const auto& point : spherePoints) {
+            constexpr auto radius = 140.0f;
+            if (ImVec2 screenPos; GameData::worldToScreen(smoke.origin + point * Vector{ radius, radius, radius * 0.7f }, screenPos)) {
+                drawPrecomputedPrimitive(drawList, screenPos, color, vertices, indices);
+            }
+        }
+    }
+}
+
+static void drawNadeBlast(ImDrawList* drawList) noexcept
+{
+    if (!visualsConfig.nadeBlast.enabled)
+        return;
+
+    const auto color = Helpers::calculateColor(visualsConfig.nadeBlast.asColor4());
+
+    static const auto spherePoints = generateSpherePoints<1000>();
+    static const auto [vertices, indices] = generateAntialiasedDot();
+
+    constexpr auto blastDuration = 0.35f;
+
+    GameData::Lock lock;
+    for (const auto& projectile : GameData::projectiles()) {
+        if (!projectile.exploded || projectile.explosionTime + blastDuration < memory->globalVars->realtime)
+            continue;
+
+        for (const auto& point : spherePoints) {
+            const auto radius = ImLerp(10.0f, 70.0f, (memory->globalVars->realtime - projectile.explosionTime) / blastDuration);
+            if (ImVec2 screenPos; GameData::worldToScreen(projectile.coordinateFrame.origin() + point * radius, screenPos)) {
+                drawPrecomputedPrimitive(drawList, screenPos, color, vertices, indices);
+            }
+        }
+    }
+}
+
+static void hitEffect2(ImDrawList* drawList, GameEvent* event = nullptr) noexcept
+{
+    if (!visualsConfig.hitEffect2.enabled)
+        return;
+
+        constexpr auto effectDuration = 0.3f;
+        static float lastHitTime = 0.0f;
+
+    if (event) {
+        if (localPlayer && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->getUserId())
+            lastHitTime = memory->globalVars->realtime;
+    } else if (lastHitTime + effectDuration >= memory->globalVars->realtime) {
+        if (visualsConfig.hitEffect2.type == HitEffect2::ChromaticAberration)
+            PostProcessing::performFullscreenChromaticAberration(drawList, (1.0f - (memory->globalVars->realtime - lastHitTime) / effectDuration) * 0.01f);
+        else if (visualsConfig.hitEffect2.type == HitEffect2::Monochrome)
+            PostProcessing::performFullscreenMonochrome(drawList, (1.0f - (memory->globalVars->realtime - lastHitTime) / effectDuration));
+        
+    }
+}
+
+void Visuals::hitEffect2(GameEvent& event) noexcept
+{
+    hitEffect2(nullptr, &event);
+}
+
+void Visuals::drawPreESP(ImDrawList* drawList) noexcept
+{
+    drawMolotovHull(drawList);
+    drawSmokeHull(drawList);
+    drawNadeBlast(drawList);
+}
+
+void Visuals::drawPostESP(ImDrawList* drawList) noexcept
+{
+    /*drawReloadProgress(drawList);*/
+    hitEffect2(drawList);
+}
+
+#define SMOKEGRENADE_LIFETIME 17.5f
+
+struct SmokeData2
+{
+    SmokeData2(float destructionTime, Vector pos) : destructionTime{ destructionTime }, pos{ pos } {}
+
+    float destructionTime;
+    Vector pos;
+    float anim = 1.f;
+};
+
+static std::vector<SmokeData2> smokes;
+
+void Visuals::drawSmokeTimerEvent(GameEvent* event) noexcept
+{
+    smokes.push_back(SmokeData2(
+        memory->globalVars->realtime + SMOKEGRENADE_LIFETIME,
+        Vector(event->getFloat("x"), event->getFloat("y"), event->getFloat("z"))
+    ));
+}
+
+void Visuals::drawSmokeTimer(ImDrawList* drawList) noexcept
+{
+    if (!visualsConfig.smokeTimer.enabled)
+        return;
+
+    if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected())
+        return;
+
+    for (size_t i = 0; i < smokes.size(); i++) {
+        auto& smoke = smokes[i];
+
+        const auto time = std::clamp(smoke.destructionTime - memory->globalVars->realtime, 0.f, SMOKEGRENADE_LIFETIME);
+        std::ostringstream text; text << std::fixed << std::showpoint << std::setprecision(1) << time << " sec.";
+
+        const auto text_size = ImGui::CalcTextSize(text.str().c_str());
+        ImVec2 pos;
+
+        if (time >= 0.f && smoke.anim >= 0.f) {
+            if (Helpers::worldToScreen(smoke.pos, pos)) {
+
+                const auto radius = 10.f + visualsConfig.smokeTimer.timerThickness;
+                const auto fraction = std::clamp(time / SMOKEGRENADE_LIFETIME, 0.0f, 1.0f);
+
+                if (time == 0.f)
+                    smoke.anim -= 1.f * ImGui::GetIO().DeltaTime;
+
+                Helpers::setAlphaFactor(smoke.anim);
+                drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.backgroundColor), 40, 3.0f + visualsConfig.smokeTimer.timerThickness);
+                if (fraction == 1.0f) {
+                    drawList->AddCircle(pos, radius, Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), 40, 2.0f + visualsConfig.smokeTimer.timerThickness);
+                }
+                else {
+                    constexpr float pi = std::numbers::pi_v<float>;
+                    const auto arc270 = (3 * pi) / 2;
+                    drawList->PathArcTo(pos, radius - 0.5f, arc270 - (2 * pi * fraction), arc270, 40);
+                    drawList->PathStroke(Helpers::calculateColor(visualsConfig.smokeTimer.timerColor), false, 2.0f + visualsConfig.smokeTimer.timerThickness);
+                }
+                drawList->AddText(ImVec2(pos.x - (text_size.x / 2), pos.y + (visualsConfig.smokeTimer.timerThickness * 2.f) + (text_size.y / 2)), Helpers::calculateColor(visualsConfig.smokeTimer.textColor), text.str().c_str());
+                Helpers::setAlphaFactor(1.f);
+            }
+        }
+        else
+            smokes.erase(smokes.begin() + i);
+    }
+}
+
 void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
@@ -745,8 +1275,46 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
     ImGui::Checkbox("Disable post-processing", &visualsConfig.disablePostProcessing);
-    ImGui::Checkbox("Inverse ragdoll gravity", &visualsConfig.inverseRagdollGravity);
+    if (!visualsConfig.disablePostProcessing) {
+        ImGui::Checkbox("Custom post-processing", &visualsConfig.customPostProcessing.enabled);
+        ImGui::SameLine();
+        bool ppPopup = ImGui::Button("EdIt");
+
+        if (ppPopup)
+            ImGui::OpenPopup("##pppopup");
+
+        if (ImGui::BeginPopup("##pppopup"))
+        {
+            ImGui::SliderFloat("World exposure", &visualsConfig.customPostProcessing.worldExposure, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
+            ImGui::SliderFloat("Model ambient", &visualsConfig.customPostProcessing.modelAmbient, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
+            ImGui::SliderFloat("Bloom scale", &visualsConfig.customPostProcessing.bloomScale, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
+            ImGui::EndPopup();
+        };
+    };
+    ImGui::Checkbox("Flip ragdoll gravity", &visualsConfig.inverseRagdollGravity);
+    if (visualsConfig.inverseRagdollGravity) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Customize gravity", &visualsConfig.inverseRagdollGravityCustomize);
+    };
+    if (visualsConfig.inverseRagdollGravityCustomize && visualsConfig.inverseRagdollGravity) {
+        ImGui::InputInt("   ", &visualsConfig.inverseRagdollGravityValue, -999999999, 999999999);
+    };
+
+    ImGui::Checkbox("Ragdoll force", &visualsConfig.ragdollForce);
+    if (visualsConfig.ragdollForce) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Customize ragdoll force", &visualsConfig.ragdollForceCustomize);
+    };
+    if (visualsConfig.ragdollForceCustomize && visualsConfig.ragdollForce) {
+        ImGui::InputInt("   ", &visualsConfig.ragdollForceValue, -999999999, 999999999);
+    };
+
     ImGui::Checkbox("No fog", &visualsConfig.noFog);
+//    if (!visualsConfig.noFog) {
+//        ImGuiCustom::colorPicker("Fog color", visualsConfig.FogControl.Fog.color);
+//        ImGui::SliderFloat("HDR", &visualsConfig.FogControl.Fog.flHdrColorScale, 0.0f, 255.0f, "%.0f", ImGuiSliderFlags_Logarithmic);
+//
+//    }
     ImGui::Checkbox("No 3d sky", &visualsConfig.no3dSky);
     ImGui::Checkbox("No aim punch", &visualsConfig.noAimPunch);
     ImGui::Checkbox("No view punch", &visualsConfig.noViewPunch);
@@ -759,6 +1327,40 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &visualsConfig.noGrass);
     ImGui::Checkbox("No shadows", &visualsConfig.noShadows);
     ImGui::Checkbox("Wireframe smoke", &visualsConfig.wireframeSmoke);
+    ImGui::Checkbox("Rainbow crosshair", &visualsConfig.rainbowCrosshair);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(100.0f);
+    visualsConfig.rainbowCrosshairSpeed = std::clamp(visualsConfig.rainbowCrosshairSpeed, 0.0f, 25.0f);
+    ImGui::InputFloat("Speed", &visualsConfig.rainbowCrosshairSpeed, 0.1f, 0.15f, "%.2f");
+    ImGui::PopItemWidth();
+    ImGui::Checkbox("Hit Effect2", &visualsConfig.hitEffect2.enabled);
+    ImGui::PushID("Hit Effect2");
+    ImGui::SameLine();
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::SetNextItemWidth(150.0f);
+        ImGui::Combo("", &visualsConfig.hitEffect2.type, "Chromatic Aberration\0Monochrome\0");
+        ImGui::EndPopup();
+    }
+
+    ImGui::Checkbox("Smoke Timer", &visualsConfig.smokeTimer.enabled);
+    ImGui::SameLine();
+    if (ImGui::Button("...##smoke_timer"))
+        ImGui::OpenPopup("##popup_smokeTimer");
+
+    if (ImGui::BeginPopup("##popup_smokeTimer"))
+    {
+        ImGuiCustom::colorPicker("Background color", visualsConfig.smokeTimer.backgroundColor);
+        ImGuiCustom::colorPicker("Text color", visualsConfig.smokeTimer.textColor);
+        ImGuiCustom::colorPicker("Timer color", visualsConfig.smokeTimer.timerColor, nullptr, &visualsConfig.smokeTimer.timerThickness);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+    ImGui::Checkbox("Full brightness", &visualsConfig.fullBright);
+    ImGui::PopID();
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &visualsConfig.zoom);
     ImGui::SameLine();
@@ -766,6 +1368,8 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::hotkey("", visualsConfig.zoomKey);
     ImGui::PopID();
     ImGui::Checkbox("Thirdperson", &visualsConfig.thirdperson);
+    ImGui::SameLine();
+    ImGui::Checkbox("Dead thirdperson", &visualsConfig.deadThirdperson);
     ImGui::SameLine();
     ImGui::PushID("Thirdperson Key");
     ImGui::hotkey("", visualsConfig.thirdpersonKey);
@@ -786,11 +1390,21 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::PushID(4);
     ImGui::SliderInt("", &visualsConfig.flashReduction, 0, 100, "Flash reduction: %d%%");
     ImGui::PopID();
-    ImGui::PushID(5);
-    ImGui::SliderFloat("", &visualsConfig.brightness, 0.0f, 1.0f, "Brightness: %.2f");
+    if (!visualsConfig.customPostProcessing.enabled) {
+        ImGui::PushID(5);
+        ImGui::SliderFloat("", &visualsConfig.brightness, 0.0f, 1.0f, "Brightness: %.2f");
+        ImGui::PopID();
+    }
+    ImGui::PushID(6);
+    ImGui::SliderFloat("", &visualsConfig.glowOutlineWidth, 0.0f, 100.0f, "Glow thickness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
     ImGui::Combo("Skybox", &visualsConfig.skybox, Visuals::skyboxList.data(), Visuals::skyboxList.size());
+    if (visualsConfig.skybox == 26) {
+        ImGui::InputText("Skybox filename", &visualsConfig.customSkybox);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("skybox files must be put in csgo/materials/skybox/");
+    }
     ImGuiCustom::colorPicker("World color", visualsConfig.world);
     ImGuiCustom::colorPicker("Sky color", visualsConfig.sky);
     ImGui::Checkbox("Deagle spinner", &visualsConfig.deagleSpinner);
@@ -801,10 +1415,12 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit marker time", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("Bullet Tracers", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
+    ImGuiCustom::colorPicker("Smoke Hull", visualsConfig.smokeHull);
+    ImGuiCustom::colorPicker("Nade Blast", visualsConfig.nadeBlast);
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
     ImGui::SameLine();
-
+    
     if (bool ccPopup = ImGui::Button("Edit"))
         ImGui::OpenPopup("##popup");
 
@@ -839,4 +1455,39 @@ void Visuals::fromJson(const json& j) noexcept
 void Visuals::resetConfig() noexcept
 {
     visualsConfig = {};
+}
+
+void Visuals::doBloomEffects() noexcept
+{
+    if (!localPlayer)
+        return;
+    
+    for (int i = 0; i < 2048; i++)
+    {
+        Entity* ent = interfaces->entityList->getEntity(i);
+
+        if (!ent)
+            continue;
+
+        if (!std::string(ent->getClientClass()->networkName).ends_with("TonemapController"))
+            continue;
+
+        bool enabled = visualsConfig.customPostProcessing.enabled;
+        ent->useCustomAutoExposureMax() = enabled;
+        ent->useCustomAutoExposureMin() = enabled;
+        ent->useCustomBloomScale() = enabled;
+
+        if (!enabled)
+            return;
+
+        float worldExposure = visualsConfig.customPostProcessing.worldExposure;
+        ent->customAutoExposureMin() = worldExposure;
+        ent->customAutoExposureMax() = worldExposure;
+
+        float bloomScale = visualsConfig.customPostProcessing.bloomScale;
+        ent->customBloomScale() = bloomScale;
+
+        ConVar* modelAmbientMin = interfaces->cvar->findVar("r_modelAmbientMin");
+        modelAmbientMin->setValue(visualsConfig.customPostProcessing.modelAmbient);
+    }
 }

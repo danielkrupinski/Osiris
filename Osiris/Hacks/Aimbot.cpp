@@ -10,6 +10,11 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "Misc.h"
+#include "../SDK/BSPFlags.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/ClassId.h"
+#include "../SDK/ClientClass.h"
+#include "../SDK/Cvar.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
@@ -19,8 +24,17 @@
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/GameEvent.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../Hacks/Misc.h"
+
+struct Cvars {
+    ConVar* accelerate;
+    ConVar* maxSpeed;
+};
+
+static Cvars cvars;
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -163,7 +177,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
+    if (!config->aimbot[weaponIndex].betweenShots && (activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime() || (activeWeapon->isFullAuto() && localPlayer->shotsFired() > 1)))
         return;
 
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
@@ -200,7 +214,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!config->aimbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage, config->aimbot[weaponIndex].friendlyFire)))
+                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), (config->aimbot[weaponIndex].smartMinDamage ? ((entity->health() <= config->aimbot[weaponIndex].minDamage) ? entity->health() : config->aimbot[weaponIndex].minDamage) : (config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)), config->aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {
@@ -223,22 +237,28 @@ void Aimbot::run(UserCmd* cmd) noexcept
             bool clamped{ false };
 
             if (std::abs(angle.x) > Misc::maxAngleDelta() || std::abs(angle.y) > Misc::maxAngleDelta()) {
-                    angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-                    angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-                    clamped = true;
+                angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+                angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+                clamped = true;
             }
-            
+
             angle /= config->aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config->aimbot[weaponIndex].silent)
                 interfaces->engine->setViewAngles(cmd->viewangles);
 
+            if (config->aimbot[weaponIndex].autoStop)
+                autoStop(cmd);
+
+            float hitchance2 = 75.f + (config->aimbot[weaponIndex].hitchanceAmmount / 4);
+
             if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;
 
-            if (config->aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxShotInaccuracy)
-                cmd->buttons |= UserCmd::IN_ATTACK;
-
+            if (config->aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxShotInaccuracy) {
+                if (!config->aimbot[weaponIndex].hitchance || (1.0f - (activeWeapon->getInaccuracy())) * 100.f >= hitchance2)
+                    cmd->buttons |= UserCmd::IN_ATTACK;
+            }
             if (clamped)
                 cmd->buttons &= ~UserCmd::IN_ATTACK;
 
@@ -248,4 +268,49 @@ void Aimbot::run(UserCmd* cmd) noexcept
             lastCommand = cmd->commandNumber;
         }
     }
+}
+
+void Aimbot::autoStop(UserCmd* cmd) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (localPlayer->moveType() != MoveType::WALK)
+        return;
+
+    Vector velocity = localPlayer->velocity();
+    velocity.z = 0;
+
+    float speed = velocity.length2D();
+
+    if (speed < 1.f) {
+        cmd->forwardmove = 0.f;
+        cmd->sidemove = 0.f;
+        return;
+    }
+
+    float accel = cvars.accelerate->getFloat();
+    float maxSpeed = cvars.maxSpeed->getFloat();
+
+    float playerSurfaceFriction = 1.0f;
+    float maxAccelSpeed = accel * memory->globalVars->intervalPerTick * maxSpeed * playerSurfaceFriction;
+
+    float wishSpeed{};
+
+    if (speed - maxAccelSpeed <= -1.f) wishSpeed = maxAccelSpeed / (speed / (accel * memory->globalVars->intervalPerTick));
+    else wishSpeed = maxAccelSpeed;
+
+    Vector ndir = (velocity * -1.f).toAngle();
+
+    ndir.y = cmd->viewangles.y - ndir.y;
+    ndir = ndir.fromAngle(ndir);
+
+    cmd->forwardmove = ndir.x * wishSpeed;
+    cmd->sidemove = ndir.y * wishSpeed;
+}
+
+void Aimbot::init() noexcept
+{
+    cvars.accelerate = interfaces->cvar->findVar("sv_accelerate");
+    cvars.maxSpeed = interfaces->cvar->findVar("sv_maxspeed");
 }

@@ -19,12 +19,15 @@ namespace Misc
     float aspectRatio() noexcept;
 
     void edgejump(UserCmd* cmd) noexcept;
+    void fastshift(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
+    void blockbot(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
-    void noscopeCrosshair(ImDrawList* drawlist) noexcept;
+    void damageList(GameEvent* event = nullptr) noexcept;
+    void noscopeCrosshair() noexcept;
     void recoilCrosshair(ImDrawList* drawList) noexcept;
-    void watermark() noexcept;
+    void watermark(ImDrawList* drawList) noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
@@ -36,6 +39,7 @@ namespace Misc
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
+    void quickHealthshot(UserCmd* cmd) noexcept;
     void fixTabletSignal() noexcept;
     void killMessage(GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
@@ -45,6 +49,7 @@ namespace Misc
     void chokePackets(bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(UserCmd* cmd) noexcept;
+    void RageStrafe(UserCmd* cmd) noexcept;
     void autoStrafe(UserCmd* cmd) noexcept;
     void removeCrouchCooldown(UserCmd* cmd) noexcept;
     void moonwalk(UserCmd* cmd) noexcept;
@@ -61,7 +66,10 @@ namespace Misc
     void onVoteFailed() noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
+    void autoDisconnect(GameEvent& event) noexcept;
+    void runLog(GameEvent* event) noexcept;
 
+    void fixMouseDelta(UserCmd* cmd) noexcept;
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 

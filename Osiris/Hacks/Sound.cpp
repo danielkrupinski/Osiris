@@ -90,10 +90,10 @@ void Sound::drawGUI(bool contentOnly) noexcept
     ImGui::PushItemWidth(110.0f);
     ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
     ImGui::PopItemWidth();
-    ImGui::SliderInt("Master volume", &soundConfig.players[currentCategory].masterVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Headshot volume", &soundConfig.players[currentCategory].headshotVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Weapon volume", &soundConfig.players[currentCategory].weaponVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Footstep volume", &soundConfig.players[currentCategory].footstepVolume, 0, 200, "%d%%");
+    ImGui::SliderInt("Master volume", &soundConfig.players[currentCategory].masterVolume, 0, 300, "%d%%");
+    ImGui::SliderInt("Headshot volume", &soundConfig.players[currentCategory].headshotVolume, 0, 300, "%d%%");
+    ImGui::SliderInt("Weapon volume", &soundConfig.players[currentCategory].weaponVolume, 0, 300, "%d%%");
+    ImGui::SliderInt("Footstep volume", &soundConfig.players[currentCategory].footstepVolume, 0, 300, "%d%%");
     ImGui::PopID();
 
     if (!contentOnly)

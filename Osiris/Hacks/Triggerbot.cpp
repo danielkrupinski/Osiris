@@ -93,11 +93,15 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
     if (float armorRatio{ weaponData->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
         damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
-
-    if (damage >= (cfg.killshot ? trace.entity->health() : cfg.minDamage)) {
-        cmd->buttons |= UserCmd::IN_ATTACK;
-        lastTime = 0.0f;
-        lastContact = now;
+    
+    if (damage >= (cfg.smartMinDamage ? ((trace.entity->health() <= cfg.minDamage) ? trace.entity->health() : cfg.minDamage) : (cfg.killshot ? trace.entity->health() : cfg.minDamage))) {
+        float hitchance = 75.f + (cfg.hitChanceAmmount / 4);
+        if ((!cfg.hitChance || (1.0f - (activeWeapon->getInaccuracy())) * 100.f >= hitchance))
+        {
+            cmd->buttons |= UserCmd::IN_ATTACK;
+            lastTime = 0.0f;
+            lastContact = now;
+        }
     }
 }
 

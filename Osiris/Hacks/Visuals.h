@@ -8,6 +8,12 @@ struct ImDrawList;
 
 namespace Visuals
 {
+    void hitEffect2(GameEvent& event) noexcept;
+    void drawPreESP(ImDrawList* drawList) noexcept;
+    void drawPostESP(ImDrawList* drawList) noexcept;
+
+    void FogControl() noexcept;
+
     bool isThirdpersonOn() noexcept;
     bool isZoomOn() noexcept;
     bool isSmokeWireframe() noexcept;
@@ -27,6 +33,8 @@ namespace Visuals
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur(FrameStage stage) noexcept;
     void updateBrightness() noexcept;
+    void fullBright() noexcept;
+    void ragdollForce() noexcept;
     void removeGrass(FrameStage stage) noexcept;
     void remove3dSky() noexcept;
     void removeShadows() noexcept;
@@ -40,10 +48,15 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox(FrameStage stage) noexcept;
+    void rainbowCrosshair() noexcept;
+    void doBloomEffects() noexcept;
     void bulletTracer(GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
+    void drawSmokeTimer(ImDrawList* drawList) noexcept;
+    void drawSmokeTimerEvent(GameEvent* event) noexcept;
+    void changeGlowThickness() noexcept;
 
-    inline constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
+    inline constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec", "Custom" };
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
