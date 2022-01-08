@@ -22,9 +22,61 @@ struct ClientClass;
 struct Model;
 struct VarMap;
 
+constexpr auto EF_NODRAW = 0x20;
+
+enum PlayerFlags {
+    ONGROUND = 1 << 0,
+    DUCKING = 1 << 1,
+    WATERJUMP = 1 << 2,
+    ONTRAIN = 1 << 3,
+    INRAIN = 1 << 4,
+    FROZEN = 1 << 5,
+    ATCONTROLS = 1 << 6,
+    CLIENT = 1 << 7,
+    FAKECLIENT = 1 << 8,
+    INWATER = 1 << 9,
+    FLY = 1 << 10,
+    SWIM = 1 << 11,
+    CONVEYOR = 1 << 12,
+    NPC = 1 << 13,
+    GODMODE = 1 << 14,
+    NOTARGET = 1 << 15,
+    AIMTARGET = 1 << 16,
+    PARTIALGROUND = 1 << 17,
+    STATICPROP = 1 << 18,
+    GRAPHED = 1 << 19,
+    GRENADE = 1 << 20,
+    STEPMOVEMENT = 1 << 21,
+    DONTTOUCH = 1 << 22,
+    BASEVELOCITY = 1 << 23,
+    WORLDBRUSH = 1 << 24,
+    OBJECT = 1 << 25,
+    KILLME = 1 << 26,
+    ONFIRE = 1 << 27,
+    DISSOLVING = 1 << 28,
+    TRANSRAGDOLL = 1 << 29,
+    UNBLOCKABLE_BY_PLAYER = 1 << 30
+};
+
+enum ObserverMode {
+    OBS_MODE_IN_EYE = 4,
+    OBS_MODE_CHASE,
+    OBS_MODE_ROAMING = 7
+};
+
 enum class MoveType {
-    NOCLIP = 8,
-    LADDER = 9
+    NONE = 0,          /**< never moves */
+    ISOMETRIC,         /**< For players */
+    WALK,              /**< Player only - moving on the ground */
+    STEP,              /**< gravity, special edge handling -- monsters use this */
+    FLY,               /**< No gravity, but still collides with stuff */
+    FLYGRAVITY,        /**< flies through the air + is affected by gravity */
+    VPHYSICS,          /**< uses VPHYSICS for simulation */
+    PUSH,              /**< no clip to world, push and crush */
+    NOCLIP,            /**< No gravity, no collisions, still do velocity/avelocity */
+    LADDER,            /**< Used by players only when going onto a ladder */
+    OBSERVER,          /**< Observer movement, depends on player's observer mode */
+    CUSTOM             /**< Allows the entity to describe its own physics */
 };
 
 enum class ObsMode {
@@ -43,6 +95,12 @@ enum class Team {
     TT,
     CT
 };
+
+#define PROP(func_name, offset, type) \
+[[nodiscard]] std::add_lvalue_reference_t<std::add_const_t<type>> func_name() noexcept \
+{ \
+    return *reinterpret_cast<std::add_pointer_t<type>>(this + offset); \
+}
 
 class Collideable {
 public:
@@ -97,6 +155,13 @@ public:
         VirtualMethod::call<void, 285>(this, std::ref(v));
         return v;
     }
+
+    auto isEffectActive(int effect) noexcept
+    {
+        return (effectFlags() & effect) != 0;
+    }
+
+    PROP(effectFlags, WIN32_LINUX(0xF0, 0x128), int)
 
     auto getAimPunch() noexcept
     {
@@ -192,6 +257,7 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
+    NETVAR(observerMode, "CBasePlayer", "m_iObserverMode", ObserverMode)
     NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
@@ -218,6 +284,7 @@ public:
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
@@ -242,7 +309,15 @@ public:
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
         
+    NETVAR(useCustomAutoExposureMin, "CEnvTonemapController", "m_bUseCustomAutoExposureMin", bool)
+    NETVAR(useCustomAutoExposureMax, "CEnvTonemapController", "m_bUseCustomAutoExposureMax", bool)
+    NETVAR(useCustomBloomScale, "CEnvTonemapController", "m_bUseCustomBloomScale", bool)
+    NETVAR(customAutoExposureMin, "CEnvTonemapController", "m_flCustomAutoExposureMin", float)
+    NETVAR(customAutoExposureMax, "CEnvTonemapController", "m_flCustomAutoExposureMax", float)
+    NETVAR(customBloomScale, "CEnvTonemapController", "m_flCustomBloomScale", float)
+
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
+    NETVAR(isValveDS, "CCSGameRulesProxy", "m_bIsValveDS", bool)
 
     NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
     NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
@@ -253,6 +328,15 @@ public:
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
+    }
+
+    bool grenadeExploded() noexcept
+    {
+#ifdef _WIN32
+        return *reinterpret_cast<bool*>(this + 0x29E8);
+#else
+        return false;
+#endif
     }
 
     std::uint64_t originalOwnerXuid() noexcept

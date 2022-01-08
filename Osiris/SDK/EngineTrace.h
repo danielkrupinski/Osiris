@@ -109,6 +109,7 @@ public:
 
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (this, std::cref(absPosition), contentsMask, nullptr))
     VIRTUAL_METHOD(void, _traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (this, std::cref(ray), mask, std::cref(filter), std::ref(trace)))
+    VIRTUAL_METHOD(void, clipRayToEntity, 3, (const Ray& ray, unsigned int mask, Entity* pEnt, Trace& trace), (this, std::cref(ray), mask, pEnt, std::ref(trace)))
 
     void traceRay(const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace) noexcept
     {

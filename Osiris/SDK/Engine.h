@@ -70,6 +70,7 @@ public:
     VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
     VIRTUAL_METHOD(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (this, cmd, fromConsoleOrKeybind))
     VIRTUAL_METHOD_V(const SteamAPIContext*, getSteamAPIContext, 185, (), (this))
+    VIRTUAL_METHOD(bool, isClientLocalToActiveServer, 197, (), (this))
 
     auto getViewAngles() noexcept
     {
