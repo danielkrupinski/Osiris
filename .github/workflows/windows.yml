@@ -9,11 +9,12 @@ on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  msvc:
+  build:
     runs-on: windows-latest
     
     strategy:
       matrix:
+        toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
 
     env:
@@ -21,24 +22,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
+    - name: Set toolset
+      if: matrix.toolset == 'ClangCL'
+      run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Build
       shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=${{ matrix.configuration }}'
-
-  clang:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
-    
-    env:
-      MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-
-    # Build command
-    - name: Build
-      shell: cmd
-      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=Release /p:PlatformToolset=ClangCL'
+      run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris.sln /p:Platform=x86 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}'
