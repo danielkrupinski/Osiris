@@ -14,9 +14,9 @@ public:
     bool isMouseInitialized;
     bool isMouseActive;
 #ifdef _WIN32
-    PAD(178)
+    PAD(158)
 #else
-    PAD(182)
+    PAD(162)
 #endif
     bool isCameraInThirdPerson;
     bool cameraMovingWithMouse;
