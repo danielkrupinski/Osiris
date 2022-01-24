@@ -34,7 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install mingw
-      run: choco install mingw
+      run: choco upgrade mingw
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
