@@ -3,7 +3,7 @@
 
 KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
 {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__MINGW32__)
     const auto keyValuesFromString = memory->keyValuesFromString;
     KeyValues* keyValues;
     __asm {
@@ -15,6 +15,8 @@ KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
         mov keyValues, eax
     }
     return keyValues;
+#elif defined(__MINGW32__)
+    return nullptr;
 #else
     return reinterpret_cast<KeyValues*(*)(const char*, const char*, const char**)>(memory->keyValuesFromString)(name, value, nullptr);
 #endif
