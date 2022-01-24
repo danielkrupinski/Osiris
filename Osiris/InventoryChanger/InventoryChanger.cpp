@@ -823,6 +823,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
         constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+#ifndef __MINGW32__
             constexpr auto delimiter = L" ";
             wchar_t* _;
             wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
@@ -831,6 +832,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     return false;
                 token = std::wcstok(nullptr, delimiter, &_);
             }
+#endif
             return true;
         };
 
