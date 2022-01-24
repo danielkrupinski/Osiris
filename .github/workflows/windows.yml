@@ -35,7 +35,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: test
       shell: cmd
-      run: C:\msys64\usr\bin\g++.exe -v
+      run: dir C:\msys64\usr\bin\
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
