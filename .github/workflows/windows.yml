@@ -40,8 +40,10 @@ jobs:
     - name: test g++
       run: C:\msys64\mingw32\bin\g++.exe -v
     - name: where g++
+      shell: cmd
       run: where g++
     - name: where gcc
+      shell: cmd
       run: where gcc
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
