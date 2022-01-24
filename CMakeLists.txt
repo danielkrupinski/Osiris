@@ -16,14 +16,17 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/Osiris/*.cpp")
-list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp") 
-list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
-list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
-list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/pch.cpp") 
 
-find_package(Freetype REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(OpenGL REQUIRED)
+if (not WIN32)
+    list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp") 
+    list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
+    list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
+    list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/pch.cpp") 
+
+    find_package(Freetype REQUIRED)
+    find_package(SDL2 REQUIRED)
+    find_package(OpenGL REQUIRED)
+endif()
 
 add_library(Osiris SHARED ${SOURCES})
 
