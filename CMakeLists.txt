@@ -26,6 +26,8 @@ if (NOT WIN32)
     find_package(Freetype REQUIRED)
     find_package(SDL2 REQUIRED)
     find_package(OpenGL REQUIRED)
+else()
+    include_directories("${CMAKE_SOURCE_DIR}/Osiris/freetype/")
 endif()
 
 add_library(Osiris SHARED ${SOURCES})
