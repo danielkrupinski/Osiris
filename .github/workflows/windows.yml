@@ -36,7 +36,7 @@ jobs:
     - name: test
       run: dir C:\msys64\mingw32\bin
     - name: Set path
-      run: echo "C:\msys64\mingw32\bin\: | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      run: echo "C:\msys64\mingw32\bin\" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: test g++
       run: C:\msys64\mingw32\bin\g++.exe -v
     - name: configure
