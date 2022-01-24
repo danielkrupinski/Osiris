@@ -412,7 +412,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__MINGW32__)
 #undef xor
 #define DRAW_SCREEN_EFFECT(material) \
 { \
@@ -430,13 +430,15 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     } \
 }
 
-#else
+#elif !defined(__MINGW32__)
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     int w, h; \
     interfaces->engine->getScreenSize(w, h); \
     reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
+#else
+#define DRAW_SCREEN_EFFECT(material)
 #endif
 
 void Visuals::applyScreenEffects() noexcept
