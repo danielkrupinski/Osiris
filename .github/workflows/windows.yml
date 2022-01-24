@@ -34,7 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: test
-      run: echo C:\msys64\usr\bin\g++.exe -v
+      run: C:\msys64\usr\bin\g++.exe -v
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
