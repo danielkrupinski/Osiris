@@ -34,10 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install mingw
-      run: pacman -S mingw-w64-i686-gcc
-    - name: test
-      shell: cmd
-      run: dir C:\msys64\usr\bin\
+      run: C:\msys64\usr\bin\pacman -S mingw-w64-i686-gcc
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
