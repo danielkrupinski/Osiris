@@ -39,7 +39,11 @@ jobs:
       run: echo "C:\msys64\mingw32\bin\" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
     - name: test g++
       run: C:\msys64\mingw32\bin\g++.exe -v
+    - name: where g++
+      run: where g++
+    - name: where gcc
+      run: where gcc
     - name: configure
-      run: cmake -DCMAKE_CXX_COMPILER="C:\\msys64\\mingw32\\bin\\g++.exe" -G "MinGW Makefiles" -S . -B build
+      run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
       run: cmake --build build
