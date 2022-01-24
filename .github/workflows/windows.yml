@@ -34,7 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: test
-      run: dir C:\msys64\
+      run: dir C:\msys64\mingw32
     - name: configure
       run: cmake -G "MinGW Makefiles" -S . -B build
     - name: build
