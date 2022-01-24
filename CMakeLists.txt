@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(Osiris)
 
+add_compile_options(-fpermissive)
+
 set(CMAKE_C_FLAGS_RELEASE "-O3 -fvisibility=hidden -flto -fno-exceptions -DNDEBUG -Wfatal-errors")
 
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
