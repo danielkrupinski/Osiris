@@ -38,6 +38,6 @@ jobs:
     - name: test g++
       run: C:\msys64\mingw32\bin\g++.exe -v
     - name: configure
-      run: cmake -DCMAKE_CXX_COMPILER=C:\msys64\mingw32\bin\g++.exe -G "MinGW Makefiles" -S . -B build
+      run: cmake -DCMAKE_CXX_COMPILER="C:\\msys64\\mingw32\\bin\\g++.exe" -G "MinGW Makefiles" -S . -B build
     - name: build
       run: cmake --build build
