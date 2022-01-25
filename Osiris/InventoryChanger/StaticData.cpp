@@ -36,9 +36,94 @@ struct Collectible {
 
 class GameItemStorage {
 public:
-    void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addGloves(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
     {
-        gameItems.emplace_back(type, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::Glove, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addSkin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Skin, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addSticker(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Sticker, rarity, WeaponId::Sticker, dataIndex, std::move(iconPath));
+    }
+
+    void addPatch(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Patch, rarity, WeaponId::Patch, dataIndex, std::move(iconPath));
+    }
+
+    void addGraffiti(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, std::move(iconPath));
+    }
+
+    void addSealedGraffiti(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, std::move(iconPath));
+    }
+
+    void addMusicKit(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Music, rarity, WeaponId::MusicKit, dataIndex, std::move(iconPath));
+    }
+
+    void addServiceMedal(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::ServiceMedal, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addTournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::TournamentCoin, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addCollectible(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Collectible, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addNameTag(int rarity, WeaponId weaponID, std::string&& iconPath)
+    {
+        addItem(Type::NameTag, rarity, weaponID, 0, std::move(iconPath));
+    }
+
+    void addAgent(int rarity, WeaponId weaponID, std::string&& iconPath)
+    {
+        addItem(Type::Agent, rarity, weaponID, 0, std::move(iconPath));
+    }
+
+    void addCase(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::Case, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addCaseKey(int rarity, WeaponId weaponID, std::string&& iconPath)
+    {
+        addItem(Type::CaseKey, rarity, weaponID, 0, std::move(iconPath));
+    }
+
+    void addOperationPass(int rarity, WeaponId weaponID, std::string&& iconPath)
+    {
+        addItem(Type::OperationPass, rarity, weaponID, 0, std::move(iconPath));
+    }
+
+    void addStatTrakSwapTool(int rarity, WeaponId weaponID, std::string&& iconPath)
+    {
+        addItem(Type::StatTrakSwapTool, rarity, weaponID, 0, std::move(iconPath));
+    }
+
+    void addSouvenirToken(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::SouvenirToken, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
+    void addViewerPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        addItem(Type::ViewerPass, rarity, weaponID, dataIndex, std::move(iconPath));
     }
 
     auto& get() noexcept
@@ -67,6 +152,11 @@ public:
     }
 
 private:
+    void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    {
+        gameItems.emplace_back(type, rarity, weaponID, dataIndex, std::move(iconPath));
+    }
+
     std::vector<StaticData::GameItem> gameItems;
 };
 
@@ -240,9 +330,9 @@ private:
                     continue;
 
                 if (isGlove) {
-                    _gameItems.addItem(Type::Glove, paintKit->rarity, it->weaponId, _paintKits.size() - 1, it->iconPath);
+                    _gameItems.addGloves(paintKit->rarity, it->weaponId, _paintKits.size() - 1, it->iconPath);
                 } else {
-                    _gameItems.addItem(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _paintKits.size() - 1, it->iconPath);
+                    _gameItems.addSkin(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _paintKits.size() - 1, it->iconPath);
                 }
             }
         }
@@ -265,14 +355,14 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
-                _gameItems.addItem(Type::Sticker, stickerKit->rarity, WeaponId::Sticker, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                _gameItems.addSticker(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             } else if (isPatch) {
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
-                _gameItems.addItem(Type::Patch, stickerKit->rarity, WeaponId::Patch, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                _gameItems.addPatch(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             } else if (isGraffiti) {
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
-                _gameItems.addItem(Type::Graffiti, stickerKit->rarity, WeaponId::Graffiti, _paintKits.size() - 1, stickerKit->inventoryImage.data());
-                _gameItems.addItem(Type::SealedGraffiti, stickerKit->rarity, WeaponId::SealedGraffiti, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                _gameItems.addGraffiti(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                _gameItems.addSealedGraffiti(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             }
         }
     }
@@ -286,7 +376,7 @@ private:
 
             std::wstring name = interfaces->localize->findSafe(musicKit->nameLocalized);
             _paintKits.emplace_back(musicKit->id, std::move(name));
-            _gameItems.addItem(Type::Music, 3, WeaponId::MusicKit, _paintKits.size() - 1, musicKit->inventoryImage);
+            _gameItems.addMusicKit(3, _paintKits.size() - 1, musicKit->inventoryImage);
         }
     }
 
@@ -305,21 +395,21 @@ private:
             const auto rarity = item->getRarity();
 
             if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
-                _gameItems.addItem(Type::Skin, 6, weaponID, vanillaPaintIndex, inventoryImage);
+                _gameItems.addSkin(6, weaponID, vanillaPaintIndex, inventoryImage);
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
-                    _gameItems.addItem(Type::ServiceMedal, rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
+                    _gameItems.addServiceMedal(rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
                 } else if (item->isTournamentCoin()) {
-                    _gameItems.addItem(Type::TournamentCoin, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    _gameItems.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
                     _collectibles.emplace_back(isOriginal);
-                    _gameItems.addItem(Type::Collectible, rarity, weaponID, _collectibles.size() - 1, inventoryImage);
+                    _gameItems.addCollectible(rarity, weaponID, _collectibles.size() - 1, inventoryImage);
                 }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
-                _gameItems.addItem(Type::NameTag, rarity, weaponID, 0, inventoryImage);
+                _gameItems.addNameTag(rarity, weaponID, inventoryImage);
             } else if (item->isPatchable()) {
-                _gameItems.addItem(Type::Agent, rarity, weaponID, 0, inventoryImage);
+                _gameItems.addAgent(rarity, weaponID, inventoryImage);
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
                 const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
                 if (lootListIdx == -1)
@@ -329,18 +419,22 @@ private:
                 StaticData::Case caseData;
                 caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
-                _gameItems.addItem(Type::Case, rarity, weaponID, _cases.size() - 1, inventoryImage);
+                _gameItems.addCase(rarity, weaponID, _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                _gameItems.addItem(Type::CaseKey, rarity, weaponID, 0, inventoryImage);
+                _gameItems.addCaseKey(rarity, weaponID, inventoryImage);
             } else if (const auto tool = item->getEconTool()) {
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
-                    _gameItems.addItem(Type::OperationPass, rarity, weaponID, 0, inventoryImage);
+                    _gameItems.addOperationPass(rarity, weaponID, inventoryImage);
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
-                    _gameItems.addItem(Type::StatTrakSwapTool, rarity, weaponID, 0, inventoryImage);
-                else if (std::strcmp(tool->typeName, "fantoken") == 0)
-                    _gameItems.addItem(Helpers::isSouvenirToken(weaponID) ? Type::SouvenirToken : Type::ViewerPass, rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    _gameItems.addStatTrakSwapTool(rarity, weaponID, inventoryImage);
+                else if (std::strcmp(tool->typeName, "fantoken") == 0) {
+                    if (Helpers::isSouvenirToken(weaponID))
+                        _gameItems.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    else
+                        _gameItems.addViewerPass(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                }
             } else if (item->isPaintable()) {
-                _gameItems.addItem(Type::Skin, 0, weaponID, vanillaPaintIndex, inventoryImage);
+                _gameItems.addSkin(0, weaponID, vanillaPaintIndex, inventoryImage);
             }
         }
     }
