@@ -126,12 +126,12 @@ public:
         addItem(Type::ViewerPass, rarity, weaponID, dataIndex, std::move(iconPath));
     }
 
-    auto& get() noexcept
+    std::span<StaticData::GameItem> get() noexcept
     {
         return gameItems;
     }
 
-    const auto& get() const noexcept
+    std::span<const StaticData::GameItem> get() const noexcept
     {
         return gameItems;
     }
@@ -183,11 +183,11 @@ private:
     auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
-            explicit Comp(const std::vector<StaticData::GameItem>& gameItems) : gameItems{ gameItems } {}
+            explicit Comp(std::span<const StaticData::GameItem> gameItems) : gameItems{ gameItems } {}
             bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
             bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
         private:
-            const std::vector<StaticData::GameItem>& gameItems;
+            std::span<const StaticData::GameItem> gameItems;
         };
 
         assert(!_itemsSorted.empty());
