@@ -522,7 +522,7 @@ private:
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
 };
 
-const std::vector<StaticData::GameItem>& StaticData::gameItems() noexcept
+std::span<const StaticData::GameItem> StaticData::gameItems() noexcept
 {
     return StaticDataImpl::gameItems();
 }

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -114,7 +115,7 @@ namespace StaticData
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
-    const std::vector<GameItem>& gameItems() noexcept;
+    std::span<const GameItem> gameItems() noexcept;
     const std::vector<Case>& cases() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
     const std::vector<PaintKit>& paintKits() noexcept;
