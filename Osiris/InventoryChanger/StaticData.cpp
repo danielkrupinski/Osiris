@@ -367,6 +367,12 @@ private:
         }
     }
 
+    void addMusic(int musicID, std::wstring name, const char* inventoryImage)
+    {
+        _paintKits.emplace_back(musicID, std::move(name));
+        _gameItems.addMusicKit(3, _paintKits.size() - 1, inventoryImage);
+    }
+
     void initMusicData(ItemSchema* itemSchema) noexcept
     {
         for (const auto& node : itemSchema->musicKits) {
@@ -374,9 +380,7 @@ private:
             if (musicKit->id == 1 || musicKit->id == 2)
                 continue;
 
-            std::wstring name = interfaces->localize->findSafe(musicKit->nameLocalized);
-            _paintKits.emplace_back(musicKit->id, std::move(name));
-            _gameItems.addMusicKit(3, _paintKits.size() - 1, musicKit->inventoryImage);
+            addMusic(musicKit->id, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
         }
     }
 
