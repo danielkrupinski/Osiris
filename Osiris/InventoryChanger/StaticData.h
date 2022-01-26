@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -114,7 +115,7 @@ namespace StaticData
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
-    const std::vector<GameItem>& gameItems() noexcept;
+    std::span<const GameItem> gameItems() noexcept;
     const std::vector<Case>& cases() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
     const std::vector<PaintKit>& paintKits() noexcept;
@@ -129,4 +130,29 @@ namespace StaticData
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     bool isCollectibleGenuine(const GameItem& collectible) noexcept;
     std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
+
+    constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
+    {
+        if (lootListName.ends_with("de_dust2"))
+            return TournamentMap::Dust2;
+        if (lootListName.ends_with("de_mirage"))
+            return TournamentMap::Mirage;
+        if (lootListName.ends_with("de_inferno"))
+            return TournamentMap::Inferno;
+        if (lootListName.ends_with("de_cbble"))
+            return TournamentMap::Cobblestone;
+        if (lootListName.ends_with("de_overpass"))
+            return TournamentMap::Overpass;
+        if (lootListName.ends_with("de_cache"))
+            return TournamentMap::Cache;
+        if (lootListName.ends_with("de_train"))
+            return TournamentMap::Train;
+        if (lootListName.ends_with("de_nuke"))
+            return TournamentMap::Nuke;
+        if (lootListName.ends_with("de_vertigo"))
+            return TournamentMap::Vertigo;
+        if (lootListName.ends_with("de_ancient"))
+            return TournamentMap::Ancient;
+        return TournamentMap::None;
+    }
 }
