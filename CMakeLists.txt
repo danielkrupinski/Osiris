@@ -31,3 +31,10 @@ target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUD
 target_precompile_headers(Osiris PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/pch.h")
 target_link_libraries(Osiris PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
+
+option(BUILD_TESTS "Build unit tests" OFF)
+
+if (BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(Tests)
+endif()
