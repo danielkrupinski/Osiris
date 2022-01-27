@@ -27,14 +27,14 @@ find_package(OpenGL REQUIRED)
 
 add_library(OsirisOBJ OBJECT ${SOURCES})
 set_target_properties(OsirisOBJ PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
-add_library(Osiris SHARED $<TARGET_OBJECTS:OsirisOBJ>)
-
 target_include_directories(OsirisOBJ PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
 target_precompile_headers(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/pch.h")
 target_link_libraries(OsirisOBJ PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_compile_options(OsirisOBJ PRIVATE -flto)
 target_link_options(OsirisOBJ PRIVATE -flto)
+
+add_library(Osiris SHARED $<TARGET_OBJECTS:OsirisOBJ>)
+target_link_options(Osiris PRIVATE -flto)
 
 option(BUILD_TESTS "Build unit tests" OFF)
 
