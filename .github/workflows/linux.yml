@@ -17,3 +17,7 @@ jobs:
       run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -D BUILD_TESTS=1 -S . -B ${{ matrix.configuration }}
     - name: build
       run: cmake --build ${{ matrix.configuration }} -j $(nproc --all)
+    - name: run unit tests
+      run: |
+        cd ${{ matrix.configuration }}
+        ctest --output-on-failure --schedule-random -j $(nproc --all)
