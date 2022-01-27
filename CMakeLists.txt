@@ -20,6 +20,7 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/pch.cpp") 
+list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
 
 find_package(Freetype REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -33,7 +34,7 @@ target_link_libraries(OsirisOBJ PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freet
 target_compile_options(OsirisOBJ PRIVATE -flto)
 target_link_options(OsirisOBJ PRIVATE -flto)
 
-add_library(Osiris SHARED $<TARGET_OBJECTS:OsirisOBJ>)
+add_library(Osiris SHARED $<TARGET_OBJECTS:OsirisOBJ> "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
 target_link_options(Osiris PRIVATE -flto)
 
 option(BUILD_TESTS "Build unit tests" OFF)
