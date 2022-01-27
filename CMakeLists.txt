@@ -25,13 +25,16 @@ find_package(Freetype REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-add_library(Osiris SHARED ${SOURCES})
+add_library(OsirisOBJ OBJECT ${SOURCES})
+set_target_properties(OsirisOBJ PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
-target_precompile_headers(Osiris PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/pch.h")
-target_link_libraries(Osiris PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
-target_compile_options(Osiris PRIVATE -flto)
-target_link_options(Osiris PRIVATE -flto)
+add_library(Osiris SHARED $<TARGET_OBJECTS:OsirisOBJ>)
+
+target_include_directories(OsirisOBJ PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+target_precompile_headers(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/pch.h")
+target_link_libraries(OsirisOBJ PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
+target_compile_options(OsirisOBJ PRIVATE -flto)
+target_link_options(OsirisOBJ PRIVATE -flto)
 
 option(BUILD_TESTS "Build unit tests" OFF)
 
