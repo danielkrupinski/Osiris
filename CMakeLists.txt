@@ -50,6 +50,8 @@ else()
   target_compile_options(OsirisOBJ PRIVATE /utf-8)
   add_subdirectory(Osiris/freetype)
   target_link_libraries(OsirisOBJ PRIVATE FreeType)
+  add_subdirectory(Osiris/Resources/Shaders)
+  add_dependencies(OsirisOBJ Shaders)
 endif()
 
 add_library(Osiris SHARED "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
