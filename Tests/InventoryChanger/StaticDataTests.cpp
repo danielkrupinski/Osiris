@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../../Osiris/InventoryChanger/StaticData.cpp"
+#include "../../Osiris/InventoryChanger/GameItemStorage.h"
 
 TEST(GameItemStorage, AddedGlovesHasCorrectType) {
     GameItemStorage storage;
