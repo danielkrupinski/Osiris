@@ -43,6 +43,8 @@ else()
   target_compile_definitions(OsirisOBJ PRIVATE _USE_MATH_DEFINES)
   target_include_directories(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/freetype")
   target_compile_options(OsirisOBJ PRIVATE /utf-8)
+  add_subdirectory(Osiris/freetype)
+  target_link_libraries(OsirisOBJ PRIVATE FreeType)
 endif()
 
 add_library(Osiris SHARED "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
