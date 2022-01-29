@@ -36,6 +36,10 @@ TEST_P(Deg2RadTest, ReturnsCorrectValueForDouble) {
     ASSERT_DOUBLE_EQ(Helpers::deg2rad(static_cast<double>(GetParam().degrees)), static_cast<double>(GetParam().radians));
 }
 
+TEST_P(Deg2RadTest, ReturnsCorrectValueForLongDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::deg2rad(static_cast<long double>(GetParam().degrees)), static_cast<long double>(GetParam().radians));
+}
+
 INSTANTIATE_TEST_SUITE_P(Helpers_Deg2Rad, Deg2RadTest, valuesToTest);
 
 class Rad2DegTest : public testing::TestWithParam<ValuesPair> {};
@@ -46,6 +50,10 @@ TEST_P(Rad2DegTest, ReturnsCorrectValueForFloat) {
 
 TEST_P(Rad2DegTest, ReturnsCorrectValueForDouble) {
     ASSERT_DOUBLE_EQ(Helpers::rad2deg(static_cast<double>(GetParam().radians)), static_cast<double>(GetParam().degrees));
+}
+
+TEST_P(Rad2DegTest, ReturnsCorrectValueForLongDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::rad2deg(static_cast<long double>(GetParam().radians)), static_cast<long double>(GetParam().degrees));
 }
 
 INSTANTIATE_TEST_SUITE_P(Helpers_Rad2Deg, Rad2DegTest, valuesToTest);
