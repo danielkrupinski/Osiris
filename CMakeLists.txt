@@ -58,7 +58,12 @@ endif()
 
 add_library(Osiris SHARED "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
 target_link_libraries(Osiris PRIVATE OsirisOBJ)
-target_link_options(Osiris PRIVATE -flto)
+
+if (NOT WIN32)
+  target_link_options(Osiris PRIVATE -flto)
+else()
+  target_link_options(Osiris PRIVATE /ENTRY:DllEntryPoint)
+endif()
 
 option(BUILD_TESTS "Build unit tests" OFF)
 
