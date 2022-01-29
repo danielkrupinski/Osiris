@@ -50,8 +50,8 @@ namespace Helpers
     bool decodeVFONT(std::vector<char>& buffer) noexcept;
     std::vector<char> loadBinaryFile(const std::string& path) noexcept;
 
-    constexpr auto deg2rad(float degrees) noexcept { return degrees * (std::numbers::pi_v<float> / 180.0f); }
-    constexpr auto rad2deg(float radians) noexcept { return radians * (180.0f / std::numbers::pi_v<float>); }
+    template <typename T> constexpr auto deg2rad(T degrees) noexcept { return degrees * (std::numbers::pi_v<T> / static_cast<T>(180)); }
+    template <typename T> constexpr auto rad2deg(T radians) noexcept { return radians * (static_cast<T>(180) / std::numbers::pi_v<T>); }
 
     [[nodiscard]] std::size_t calculateVmtLength(const std::uintptr_t* vmt) noexcept;
 
