@@ -173,11 +173,11 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 }
                 else {
                     if (!invertw) {
-                        cmd->viewangles.y = -180.f;
+                        cmd->viewangles.y = -119.95f;
                         sent = cmd->viewangles.y;
                     }
                     else {
-                        cmd->viewangles.y = +180.f;
+                        cmd->viewangles.y = +119.95f;
                         sent = cmd->viewangles.y;
                     }
                 
