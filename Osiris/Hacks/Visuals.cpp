@@ -88,6 +88,7 @@ struct VisualsConfig {
         float yellow = 0.0f;
     } colorCorrection;
     bool ragdollForce{ false };
+    float glowOutlineWidth{ 6.0f };
 } visualsConfig;
 
 
@@ -140,6 +141,7 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Far Z", v.farZ);
     read(j, "Flash reduction", v.flashReduction);
     read(j, "Brightness", v.brightness);
+    read(j, "Glow thickness", v.glowOutlineWidth);
     read(j, "Skybox", v.skybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
@@ -205,6 +207,7 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Far Z", farZ);
     WRITE("Flash reduction", flashReduction);
     WRITE("Brightness", brightness);
+    WRITE("Glow thickness", glowOutlineWidth);
     WRITE("Skybox", skybox);
     WRITE("World", world);
     WRITE("Sky", sky);
@@ -568,6 +571,12 @@ void Visuals::reduceFlashEffect() noexcept
         localPlayer->flashMaxAlpha() = 255.0f - visualsConfig.flashReduction * 2.55f;
 }
 
+void Visuals::changeGlowThickness() noexcept
+{
+    const auto glowWidth = interfaces->cvar->findVar("glow_outline_width");
+    glowWidth->setValue(visualsConfig.glowOutlineWidth);
+}
+
 bool Visuals::removeHands(const char* modelName) noexcept
 {
     return visualsConfig.noHands && std::strstr(modelName, "arms") && !std::strstr(modelName, "sleeve");
@@ -880,6 +889,9 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::PushID(5);
     ImGui::SliderFloat("", &visualsConfig.brightness, 0.0f, 1.0f, "Brightness: %.2f");
+    ImGui::PopID();
+    ImGui::PushID(6);
+    ImGui::SliderFloat("", &visualsConfig.glowOutlineWidth, 0.0f, 100.0f, "Glow thickness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
     ImGui::Combo("Skybox", &visualsConfig.skybox, Visuals::skyboxList.data(), Visuals::skyboxList.size());
