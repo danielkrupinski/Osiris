@@ -345,7 +345,7 @@ private:
                     nameWide += interfaces->localize->findSafe("genuine");
                     nameWide += L")";
                 }
-                _weaponNames.emplace(item.weaponID, interfaces->localize->convertUnicodeToAnsi(nameWide.c_str()));
+                _weaponNames.emplace(item.weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide.c_str())));
                 _weaponNamesUpper.emplace(item.weaponID, Helpers::toUpper(std::move(nameWide)));
             }
         }
@@ -516,7 +516,7 @@ private:
     std::vector<StaticData::ItemIndex> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
-    std::unordered_map<WeaponId, std::string> _weaponNames;
+    std::unordered_map<WeaponId, std::string_view> _weaponNames;
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
     std::vector<StaticData::MusicKit> _musicKits;
 };
