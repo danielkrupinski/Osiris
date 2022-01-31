@@ -168,7 +168,7 @@ private:
         econItem->weaponId = item.weaponID;
 
         if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
+            econItem->setStickerID(0, StaticData::getStickerID(item));
         } else if (item.isMusic()) {
             econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];

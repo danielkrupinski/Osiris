@@ -118,7 +118,10 @@ namespace StaticData
     std::span<const GameItem> gameItems() noexcept;
     const std::vector<Case>& cases() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
+    
     [[deprecated]] const std::vector<PaintKit>& paintKits() noexcept;
+    [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
+    
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
