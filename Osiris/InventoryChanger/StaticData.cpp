@@ -135,6 +135,7 @@ public:
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& paintKits() noexcept { return instance()._paintKits; }
+    static const auto& musicKits() noexcept { return instance()._musicKits; }
 
     [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
     {
@@ -255,8 +256,8 @@ private:
 
     void addMusic(int musicID, std::wstring name, const char* inventoryImage)
     {
-        _paintKits.emplace_back(musicID, std::move(name));
-        _gameItems.addMusicKit(3, _paintKits.size() - 1, inventoryImage);
+        _musicKits.emplace_back(musicID, interfaces->localize->convertUnicodeToAnsi(name.c_str()), Helpers::toUpper(name));
+        _gameItems.addMusicKit(3, _musicKits.size() - 1, inventoryImage);
     }
 
     void initMusicData(ItemSchema* itemSchema) noexcept
@@ -515,6 +516,7 @@ private:
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
+    std::vector<StaticData::MusicKit> _musicKits;
 };
 
 std::span<const StaticData::GameItem> StaticData::gameItems() noexcept
@@ -546,7 +548,7 @@ const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
 [[nodiscard]] int StaticData::getMusicID(const GameItem& item) noexcept
 {
     assert(item.isMusic());
-    return StaticDataImpl::paintKits()[item.dataIndex].id;
+    return StaticDataImpl::musicKits()[item.dataIndex].id;
 }
 
 [[nodiscard]] int StaticData::getPatchID(const GameItem& item) noexcept
