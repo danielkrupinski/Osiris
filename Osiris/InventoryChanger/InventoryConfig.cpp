@@ -21,8 +21,7 @@ json InventoryChanger::toJson() noexcept
 
         switch (gameItem.type) {
         case StaticData::Type::Sticker: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            itemConfig["Sticker ID"] = staticData.id;
+            itemConfig["Sticker ID"] = StaticData::getStickerID(gameItem);
             break;
         }
         case StaticData::Type::Glove: {
@@ -75,15 +74,13 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Music: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            itemConfig["Music ID"] = staticData.id;
+            itemConfig["Music ID"] = StaticData::getMusicID(gameItem);
             if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
             break;
         }
         case StaticData::Type::Patch: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            itemConfig["Patch ID"] = staticData.id;
+            itemConfig["Patch ID"] = StaticData::getPatchID(gameItem);
             break;
         }
         case StaticData::Type::Graffiti: {

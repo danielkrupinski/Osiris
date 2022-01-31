@@ -122,6 +122,7 @@ namespace StaticData
     [[deprecated]] const std::vector<PaintKit>& paintKits() noexcept;
     [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
     [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
+    [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
     
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;

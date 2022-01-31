@@ -538,6 +538,12 @@ const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
     return StaticDataImpl::paintKits()[item.dataIndex].id;
 }
 
+[[nodiscard]] int StaticData::getPatchID(const GameItem& item) noexcept
+{
+    assert(item.isPatch());
+    return StaticDataImpl::paintKits()[item.dataIndex].id;
+}
+
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::instance().getWeaponNameUpper(weaponID);

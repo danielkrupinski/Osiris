@@ -318,8 +318,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isMusic())
         return;
 
-    const auto& itemData = StaticData::paintKits()[item->get().dataIndex];
-    pr->musicID()[localPlayer->index()] = itemData.id;
+    pr->musicID()[localPlayer->index()] = StaticData::getMusicID(item->get());
 }
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
