@@ -1,6 +1,12 @@
+#include <algorithm>
+#include <iomanip>
+#include <ostream>
+#include <string_view>
+
 #include <gtest/gtest.h>
 
 #include "../../Osiris/InventoryChanger/GameItemStorage.h"
+#include "../../Osiris/InventoryChanger/StaticData.h"
 
 TEST(GameItemStorage, AddedGlovesHasCorrectType) {
     GameItemStorage storage;
@@ -61,3 +67,44 @@ TEST(GameItemStorage, AddedSkinHasCorrectIconPath) {
     storage.addSkin(1, WeaponId::Ak47, 123, "D:\\");
     ASSERT_EQ(storage.get()[0].iconPath, "D:\\");
 }
+
+using StaticData::TournamentMap;
+
+struct TournamentMapTestParam {
+    std::string_view lootListName;
+    TournamentMap expectedMap;
+
+    friend std::ostream& operator<<(std::ostream& os, const TournamentMapTestParam& param)
+    {
+        return os << std::quoted(param.lootListName);
+    }
+};
+
+class GetTournamentMapOfSouvenirPackageTest : public testing::TestWithParam<TournamentMapTestParam> {};
+
+TEST_P(GetTournamentMapOfSouvenirPackageTest, ReturnsExpectedValue) {
+    ASSERT_EQ(static_cast<std::uint32_t>(StaticData::getTournamentMapOfSouvenirPackage(GetParam().lootListName)),
+              static_cast<std::uint32_t>(GetParam().expectedMap));
+}
+
+#define TournamentMapTestParams(name, map) \
+TournamentMapTestParam{ name, map }, \
+TournamentMapTestParam{ name "_", TournamentMap::None }
+
+INSTANTIATE_TEST_SUITE_P(
+    GetTournamentMapOfSouvenirPackageTests,
+    GetTournamentMapOfSouvenirPackageTest,
+    ::testing::Values(
+        TournamentMapTestParam{ {}, TournamentMap::None },
+        TournamentMapTestParams("", TournamentMap::None),
+        TournamentMapTestParams("de_ancient", TournamentMap::Ancient),
+        TournamentMapTestParams("de_cache", TournamentMap::Cache),
+        TournamentMapTestParams("de_cbble", TournamentMap::Cobblestone),
+        TournamentMapTestParams("de_dust2", TournamentMap::Dust2),
+        TournamentMapTestParams("de_inferno", TournamentMap::Inferno),
+        TournamentMapTestParams("de_mirage", TournamentMap::Mirage),
+        TournamentMapTestParams("de_nuke", TournamentMap::Nuke),
+        TournamentMapTestParams("de_overpass", TournamentMap::Overpass),
+        TournamentMapTestParams("de_train", TournamentMap::Train),
+        TournamentMapTestParams("de_vertigo", TournamentMap::Vertigo)
+));
