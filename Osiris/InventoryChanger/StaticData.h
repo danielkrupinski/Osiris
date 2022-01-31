@@ -74,6 +74,14 @@ namespace StaticData
         std::string iconPath;
     };
 
+    struct MusicKit {
+        MusicKit(int id, std::string name, std::wstring nameUpperCase) : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
+
+        int id;
+        std::string name;
+        std::wstring nameUpperCase;
+    };
+
     struct PaintKit {
         PaintKit(int id, std::wstring&& name) noexcept;
         PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
