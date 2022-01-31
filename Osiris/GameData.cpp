@@ -300,9 +300,9 @@ void LocalPlayerData::update() noexcept
 
     if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
         inReload = activeWeapon->isInReload();
-        shooting = localPlayer->shotsFired() > 1;
         noScope = activeWeapon->isSniperRifle() && !localPlayer->isScoped();
         nextWeaponAttack = activeWeapon->nextPrimaryAttack();
+        shooting = activeWeapon->isPistol() ? !inReload && nextWeaponAttack > memory->globalVars->serverTime() : localPlayer->shotsFired() > 1;
     }
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
     handle = localPlayer->handle();
