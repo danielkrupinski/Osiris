@@ -41,7 +41,7 @@ namespace StaticData
     };
 
     struct GameItem {
-        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept;
+        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept;
 
         bool isSticker() const noexcept { return type == Type::Sticker; }
         bool isSkin() const noexcept { return type == Type::Skin; }
@@ -71,7 +71,7 @@ namespace StaticData
         WeaponId weaponID;
         std::size_t dataIndex;
 
-        std::string iconPath;
+        std::string_view iconPath;
     };
 
     struct MusicKit {
