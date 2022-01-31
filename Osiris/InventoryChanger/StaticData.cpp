@@ -346,7 +346,7 @@ private:
                     nameWide += L")";
                 }
                 _weaponNames.emplace(item.weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide.c_str())));
-                _weaponNamesUpper.emplace(item.weaponID, Helpers::toUpper(std::move(nameWide)));
+                _weaponNamesUpper.emplace(item.weaponID, stringPoolWide.add(Helpers::toUpper(std::move(nameWide))));
             }
         }
     }
@@ -507,6 +507,7 @@ private:
     }
 
     StringPool<char> stringPool;
+    StringPool<wchar_t> stringPoolWide;
     GameItemStorage _gameItems;
     std::vector<Collectible> _collectibles;
     std::vector<ServiceMedal> _serviceMedals;
@@ -517,7 +518,7 @@ private:
     std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string_view> _weaponNames;
-    std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
+    std::unordered_map<WeaponId, std::wstring_view> _weaponNamesUpper;
     std::vector<StaticData::MusicKit> _musicKits;
 };
 
