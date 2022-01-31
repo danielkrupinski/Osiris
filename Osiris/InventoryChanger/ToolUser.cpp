@@ -109,7 +109,7 @@ private:
     void _openContainer(InventoryItem& container) const noexcept
     {
         assert(container.isCase());
-        const auto& caseData = StaticData::cases()[container.get().dataIndex];
+        const auto& caseData = StaticData::getCase(container.get());
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
             const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);

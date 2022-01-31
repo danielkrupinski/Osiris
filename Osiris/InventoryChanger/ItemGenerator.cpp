@@ -42,7 +42,7 @@ std::pair<StaticData::ItemIndex, std::size_t> ItemGenerator::generateItemFromCon
 {
     assert(caseItem.isCase());
 
-    const auto& caseData = StaticData::cases()[caseItem.get().dataIndex];
+    const auto& caseData = StaticData::getCase(caseItem.get());
     assert(caseData.hasLoot());
 
     const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
@@ -195,7 +195,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
     } else if (item.isMusic()) {
         index = Inventory::emplaceDynamicData(DynamicMusicData{});
     } else if (item.isCase()) {
-        if (const auto& staticData = StaticData::cases()[item.dataIndex]; staticData.isSouvenirPackage())
+        if (const auto& staticData = StaticData::getCase(item); staticData.isSouvenirPackage())
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
     } else if (item.isServiceMedal()) {
         DynamicServiceMedalData dynamicData;

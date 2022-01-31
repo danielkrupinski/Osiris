@@ -114,7 +114,7 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Case: {
-            if (StaticData::cases()[gameItem.dataIndex].isSouvenirPackage()) {
+            if (StaticData::getCase(gameItem).isSouvenirPackage()) {
                 if (const auto& dynamicData = Inventory::dynamicSouvenirPackageData(item.getDynamicDataIndex()); dynamicData.tournamentStage != TournamentStage{}) {
                     itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
                     itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
@@ -438,7 +438,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
         } else if (item.isServiceMedal()) {
             dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
-        } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
+        } else if (item.isCase() && StaticData::getCase(item).isSouvenirPackage()) {
             dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
         }
 
