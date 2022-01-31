@@ -213,6 +213,12 @@ private:
         }
     }
 
+    std::size_t addGraffitiPaint(int id, std::wstring name)
+    {
+        _paintKits.emplace_back(id, std::move(name));
+        return _paintKits.size() - 1;
+    }
+
     void initStickerData(ItemSchema* itemSchema) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
@@ -235,9 +241,9 @@ private:
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
                 _gameItems.addPatch(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             } else if (isGraffiti) {
-                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
-                _gameItems.addGraffiti(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
-                _gameItems.addSealedGraffiti(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                const auto paintID = addGraffitiPaint(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
+                _gameItems.addGraffiti(stickerKit->rarity, paintID, stickerKit->inventoryImage.data());
+                _gameItems.addSealedGraffiti(stickerKit->rarity, paintID, stickerKit->inventoryImage.data());
             }
         }
     }
