@@ -147,6 +147,7 @@ namespace StaticData
     [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
     
     [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
+    [[nodiscard]] const PaintKit& getPaintKit(const GameItem& item) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;

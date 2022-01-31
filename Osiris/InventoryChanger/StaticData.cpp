@@ -574,6 +574,12 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
     return "";
 }
 
+const StaticData::PaintKit& StaticData::getPaintKit(const GameItem& item) noexcept
+{
+    assert(item.hasPaintKit());
+    return StaticDataImpl::paintKits()[item.dataIndex];
+}
+
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
