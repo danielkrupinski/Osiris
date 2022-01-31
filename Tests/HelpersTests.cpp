@@ -1,62 +1,59 @@
+#include <limits>
 #include <numbers>
 
-#include "catch.hpp"
+#include <gtest/gtest.h>
 
 #include "../Osiris/Helpers.h"
 
-constexpr auto pi = std::numbers::pi_v<float>;
-constexpr auto floatEpsilon = std::numeric_limits<float>::epsilon();
+struct ValuesPair {
+    long double degrees;
+    long double radians;
 
-TEST_CASE("degrees to radians", "[Helpers]") {
-    SECTION("negative angle") {
-        CHECK(Helpers::deg2rad(-720.0f) == Approx(-4*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-540.0f) == Approx(-3*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-360.0f) == Approx(-2*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-180.0f) == Approx(-1*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-90.0f) == Approx(-0.5f * pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-45.0f) == Approx(-0.25f * pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-9.0f) == Approx(-0.05f * pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(-0.0f) == Approx(-0.0f * pi).epsilon(floatEpsilon));
+    friend std::ostream& operator<<(std::ostream& os, const ValuesPair& pair)
+    {
+        return os << pair.degrees << "deg";
     }
+};
 
-    SECTION("zero angle") {
-        CHECK(Helpers::deg2rad(0.0f) == Approx(0.0f).epsilon(floatEpsilon));
-    }
+constexpr auto pi = std::numbers::pi_v<long double>;
+static const auto valuesToTest = testing::Values(
+    ValuesPair{ -720.0l, -pi * 4 },
+    ValuesPair{ -180.0l, -pi },
+    ValuesPair{ -90.0l, -pi / 2 },
+    ValuesPair{ 0.0l, 0.0l },
+    ValuesPair{ 90.0l, pi / 2 },
+    ValuesPair{ 180.0l, pi },
+    ValuesPair{ 720.0l, pi * 4 }
+);
 
-    SECTION("positive angle") {
-        CHECK(Helpers::deg2rad(720.0f) == Approx(4*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(540.0f) == Approx(3*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(360.0f) == Approx(2*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(180.0f) == Approx(1*pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(90.0f) == Approx(0.5f * pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(45.0f) == Approx(0.25f * pi).epsilon(floatEpsilon));
-        CHECK(Helpers::deg2rad(9.0f) == Approx(0.05f * pi).epsilon(floatEpsilon));
-    }
+class Deg2RadTest : public testing::TestWithParam<ValuesPair> {};
+
+TEST_P(Deg2RadTest, ReturnsCorrectValueForFloat) {
+    ASSERT_FLOAT_EQ(Helpers::deg2rad(static_cast<float>(GetParam().degrees)), static_cast<float>(GetParam().radians));
 }
 
-TEST_CASE("radians to degrees", "[Helpers]") {
-    SECTION("negative angle") {
-        CHECK(Helpers::rad2deg(-4*pi) == Approx(-720.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-3*pi) == Approx(-540.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-2*pi) == Approx(-360.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-1*pi) == Approx(-180.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-0.5f * pi) == Approx(-90.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-0.25f * pi) == Approx(-45.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-0.05f * pi) == Approx(-9.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(-0.0f * pi) == Approx(-0.0f).epsilon(floatEpsilon));
-    }
-
-    SECTION("zero angle") {
-        CHECK(Helpers::rad2deg(0.0f) == Approx(0.0f).epsilon(floatEpsilon));
-    }
-
-    SECTION("positive angle") {
-        CHECK(Helpers::rad2deg(4*pi) == Approx(720.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(3*pi) == Approx(540.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(2*pi) == Approx(360.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(1*pi) == Approx(180.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(0.5f * pi) == Approx(90.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(0.25f * pi) == Approx(45.0f).epsilon(floatEpsilon));
-        CHECK(Helpers::rad2deg(0.05f * pi) == Approx(9.0f).epsilon(floatEpsilon));
-    }
+TEST_P(Deg2RadTest, ReturnsCorrectValueForDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::deg2rad(static_cast<double>(GetParam().degrees)), static_cast<double>(GetParam().radians));
 }
+
+TEST_P(Deg2RadTest, ReturnsCorrectValueForLongDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::deg2rad(static_cast<long double>(GetParam().degrees)), static_cast<long double>(GetParam().radians));
+}
+
+INSTANTIATE_TEST_SUITE_P(Helpers_Deg2Rad, Deg2RadTest, valuesToTest);
+
+class Rad2DegTest : public testing::TestWithParam<ValuesPair> {};
+
+TEST_P(Rad2DegTest, ReturnsCorrectValueForFloat) {
+    ASSERT_FLOAT_EQ(Helpers::rad2deg(static_cast<float>(GetParam().radians)), static_cast<float>(GetParam().degrees));
+}
+
+TEST_P(Rad2DegTest, ReturnsCorrectValueForDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::rad2deg(static_cast<double>(GetParam().radians)), static_cast<double>(GetParam().degrees));
+}
+
+TEST_P(Rad2DegTest, ReturnsCorrectValueForLongDouble) {
+    ASSERT_DOUBLE_EQ(Helpers::rad2deg(static_cast<long double>(GetParam().radians)), static_cast<long double>(GetParam().degrees));
+}
+
+INSTANTIATE_TEST_SUITE_P(Helpers_Rad2Deg, Rad2DegTest, valuesToTest);

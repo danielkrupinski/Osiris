@@ -86,7 +86,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HelpersTests.cpp" />
     <ClCompile Include="ItemGeneratorTests.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
