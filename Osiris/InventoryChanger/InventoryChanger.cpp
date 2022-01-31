@@ -538,7 +538,7 @@ void InventoryChanger::tabItem() noexcept
     }
 }
 
-static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
+static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
 namespace ImGui
 {
@@ -1064,12 +1064,12 @@ struct Icon {
 
 static std::unordered_map<std::string, Icon> iconTextures;
 
-static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
+static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
 
-    auto& icon = iconTextures[iconpath];
+    auto& icon = iconTextures[std::string{ iconpath }];
     if (!icon.texture.get()) {
         static int frameCount = 0;
         static float timeSpentThisFrame = 0.0f;
@@ -1089,9 +1089,9 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + (iconpath.find("status_icons") != std::string::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
+        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
-            handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + ".png").c_str(), "r", "GAME");
+            handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
 
         assert(handle);
         if (handle) {
