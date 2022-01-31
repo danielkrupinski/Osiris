@@ -170,7 +170,7 @@ private:
         if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
             econItem->setStickerID(0, StaticData::getStickerID(item));
         } else if (item.isMusic()) {
-            econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
+            econItem->setMusicID(StaticData::getMusicID(item));
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.statTrak > -1) {
                 econItem->setStatTrak(dynamicData.statTrak);
