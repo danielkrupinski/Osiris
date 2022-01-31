@@ -576,6 +576,12 @@ const StaticData::PaintKit& StaticData::getPaintKit(const GameItem& item) noexce
     return StaticDataImpl::paintKits()[item.dataIndex];
 }
 
+const StaticData::Case& StaticData::getCase(const GameItem& item) noexcept
+{
+    assert(item.isCase());
+    return StaticDataImpl::cases()[item.dataIndex];
+}
+
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
