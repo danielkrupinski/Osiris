@@ -37,7 +37,7 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Skin: {
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
-            itemConfig["Paint Kit"] = staticData.id;
+            itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
             itemConfig["Paint Kit Name"] = staticData.name;
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
