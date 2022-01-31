@@ -179,6 +179,7 @@ struct MiscConfig {
     } reportbot;
 
     OffscreenEnemies offscreenEnemies;
+    bool fullBright{ false };
 } miscConfig;
 
 Vector quickpeekstartpos = Vector{ 0, 0, 0 };
@@ -687,6 +688,12 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     const auto negatedDirection = Vector::fromAngle(direction) * -speed;
     cmd->forwardmove = negatedDirection.x;
     cmd->sidemove = negatedDirection.y;
+}
+
+void Misc::fullBright() noexcept
+{
+    const auto bright = interfaces->cvar->findVar("mat_fullbright");
+    bright->setValue(miscConfig.fullBright);
 }
 
 void Misc::drawBombTimer() noexcept
@@ -1854,6 +1861,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
         ImGui::EndPopup();
     }
     ImGui::PopID();
+    ImGui::Checkbox("Full bright", &miscConfig.fullBright);
 
     if (ImGui::Button("Nuke chat", { 92.0f, 0.0f }))
     {
@@ -1996,6 +2004,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
     read(j, "Force relay cluster", m.forceRelayCluster);    
+    read(j, "Full bright", m.fullBright);
 }
 
 static void from_json(const json& j, MiscConfig::Reportbot& r)
@@ -2162,6 +2171,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Preserve Killfeed", preserveKillfeed);
     WRITE("Force relay cluster", forceRelayCluster);
     WRITE("Damage list", damageList);
+    WRITE("Full bright", fullBright);
 }
 
 json Misc::toJson() noexcept
