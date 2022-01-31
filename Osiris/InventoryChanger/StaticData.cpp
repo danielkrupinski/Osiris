@@ -219,6 +219,12 @@ private:
         return _paintKits.size() - 1;
     }
 
+    void addPatch(int id, std::wstring name, int rarity, const char* inventoryImage)
+    {
+        _paintKits.emplace_back(id, std::move(name));
+        _gameItems.addPatch(rarity, _paintKits.size() - 1, inventoryImage);
+    }
+
     void initStickerData(ItemSchema* itemSchema) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
@@ -238,8 +244,7 @@ private:
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
                 _gameItems.addSticker(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             } else if (isPatch) {
-                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
-                _gameItems.addPatch(stickerKit->rarity, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+                addPatch(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()), stickerKit->rarity, stickerKit->inventoryImage.data());
             } else if (isGraffiti) {
                 const auto paintID = addGraffitiPaint(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
                 _gameItems.addGraffiti(stickerKit->rarity, paintID, stickerKit->inventoryImage.data());
