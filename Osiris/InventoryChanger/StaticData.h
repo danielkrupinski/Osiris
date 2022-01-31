@@ -140,7 +140,6 @@ namespace StaticData
     const std::vector<Case>& cases() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
     
-    [[deprecated]] const std::vector<PaintKit>& paintKits() noexcept;
     [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
     [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
     [[nodiscard]] int getPatchID(const GameItem& item) noexcept;

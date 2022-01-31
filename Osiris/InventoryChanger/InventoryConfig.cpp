@@ -25,7 +25,7 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Glove: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name;
 
@@ -36,7 +36,7 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Skin: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
             itemConfig["Paint Kit Name"] = staticData.name;
 
@@ -84,12 +84,12 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Graffiti: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Graffiti ID"] = staticData.id;
             break;
         }
         case StaticData::Type::SealedGraffiti: {
-            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Graffiti ID"] = staticData.id;
             break;
         }

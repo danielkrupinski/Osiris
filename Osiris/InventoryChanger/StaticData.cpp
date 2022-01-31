@@ -536,11 +536,6 @@ const std::vector<StaticData::ItemIndex>& StaticData::caseLoot() noexcept
     return StaticDataImpl::caseLoot();
 }
 
-const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
-{
-    return StaticDataImpl::paintKits();
-}
-
 [[nodiscard]] int StaticData::getStickerID(const GameItem& item) noexcept
 {
     assert(item.isSticker());
