@@ -234,7 +234,6 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Visuals::removeShadows();
     Misc::runReportbot();
     Misc::bunnyHop(cmd);
-    Misc::edgeBug(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
     Misc::autoPistol(cmd);
