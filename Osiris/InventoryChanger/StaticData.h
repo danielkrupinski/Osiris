@@ -82,6 +82,19 @@ namespace StaticData
         std::wstring nameUpperCase;
     };
 
+    struct StickerKit {
+        StickerKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+            : id{ id }, name{ name }, nameUpperCase{ nameUpperCase }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
+
+        int id;
+        std::string name;
+        std::wstring nameUpperCase;
+        std::uint32_t tournamentID = 0;
+        TournamentTeam tournamentTeam{};
+        bool isGoldenSticker = false;
+        int tournamentPlayerID = 0;
+    };
+
     struct PaintKit {
         PaintKit(int id, std::wstring&& name) noexcept;
         PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
