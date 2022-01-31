@@ -565,6 +565,15 @@ const std::vector<StaticData::PaintKit>& StaticData::paintKits() noexcept
     return StaticDataImpl::paintKits()[item.dataIndex].id;
 }
 
+std::string_view StaticData::getPaintName(const GameItem& item) noexcept
+{
+    if (item.hasPaintKit())
+        return StaticDataImpl::paintKits()[item.dataIndex].name;
+    if (item.isMusic())
+        return StaticDataImpl::musicKits()[item.dataIndex].name;
+    return "";
+}
+
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
