@@ -88,6 +88,7 @@ struct MiscConfig {
     bool antiAfkKick{ false };
     bool autoStrafe{ false };
     bool bunnyHop{ false };
+    bool edgeBug{ false };
     bool customClanTag{ false };
     bool clocktag{ false };
     bool animatedClanTag{ false };
@@ -123,6 +124,7 @@ struct MiscConfig {
     int forceRelayCluster = 0;
     char clanTag[16];
     KeyBind edgejumpkey;
+    KeyBind edgebugkey;
     KeyBind quickkey;
     KeyBind slowwalkKey;
     ColorToggleThickness noscopeCrosshair;
@@ -865,7 +867,82 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
 
     wasLastTimeOnGround = localPlayer->flags() & 1;
 }
+void Misc::edgeBug(UserCmd* cmd) noexcept
+{
+    if (!miscConfig.edgeBug || !localPlayer || !localPlayer->isAlive())
+        return;
 
+    const auto localPlayer2 = localPlayer.get();
+    float max_radias = M_PI * 2;
+    float step = max_radias / 128;
+    float xThick = 23;
+
+    if (miscConfig.edgebugkey.isDown() && (localPlayer->flags() & 1))
+    {
+        Vector pos = localPlayer->origin();
+        for (float a = 0.f; a < max_radias; a += step)
+        {
+            Vector pt;
+            pt.x = (xThick * cos(a)) + pos.x;
+            pt.y = (xThick * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace trace;
+
+            TraceFilter flt = localPlayer2;
+
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, trace);
+
+            if (trace.fraction != 1.0f && trace.fraction != 0.0f)
+            {
+                cmd->buttons |= UserCmd::IN_DUCK;
+            }
+        }
+        for (float a = 0.f; a < max_radias; a += step)
+        {
+            Vector pt;
+            pt.x = ((xThick - 2.f) * cos(a)) + pos.x;
+            pt.y = ((xThick - 2.f) * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace trace;
+
+            TraceFilter flt = localPlayer2;
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, trace);
+
+            if (trace.fraction != 1.f && trace.fraction != 0.f)
+            {
+                cmd->buttons |= UserCmd::IN_DUCK;
+            }
+        }
+        for (float a = 0.f; a < max_radias; a += step)
+        {
+            Vector pt;
+            pt.x = ((xThick - 20.f) * cos(a)) + pos.x;
+            pt.y = ((xThick - 20.f) * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace trace;
+
+            TraceFilter flt = localPlayer2;
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, trace);
+
+            if (trace.fraction != 1.f && trace.fraction != 0.f)
+            {
+                cmd->buttons |= UserCmd::IN_DUCK;
+            }
+        }
+    }
+}
 void Misc::fakeBan(bool set) noexcept
 {
     static bool shouldSet = false;
@@ -1644,6 +1721,11 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Bunny hop", &miscConfig.bunnyHop);
     ImGui::Checkbox("Fast duck", &miscConfig.fastDuck);
     ImGui::Checkbox("Moonwalk", &miscConfig.moonwalk);
+    ImGui::Checkbox("Edge Bug", &miscConfig.edgeBug);
+    ImGui::SameLine();
+    ImGui::PushID("Edge Bug Key");
+    ImGui::hotkey("", miscConfig.edgebugkey);
+    ImGui::PopID();
     ImGui::Checkbox("Edge Jump", &miscConfig.edgejump);
     ImGui::SameLine();
     ImGui::PushID("Edge Jump Key");
@@ -1942,6 +2024,8 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
+    read(j, "Edge Bug", m.edgeBug);
+    read(j, "Edge Bug Key", m.edgebugkey);
     read(j, "Edge Jump", m.edgejump);
     read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
@@ -2108,6 +2192,8 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Animated clan tag", animatedClanTag);
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
+    WRITE("Edge Bug", edgeBug);
+    WRITE("Edge Bug Key", edgebugkey);
     WRITE("Edge Jump", edgejump);
     WRITE("Edge Jump Key", edgejumpkey);
     WRITE("Slowwalk", slowwalk);
