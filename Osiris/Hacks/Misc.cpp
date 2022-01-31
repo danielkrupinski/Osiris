@@ -1804,6 +1804,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("Fake Prime", &miscConfig.fakePrime);
     ImGui::Checkbox("Quick Peek", &miscConfig.quickbool);
     ImGui::SameLine();
+    ImGui::PushID("Quick Peek Key");
     ImGui::hotkey("", miscConfig.quickkey);
     ImGui::Checkbox("Opposite Hand Knife", &miscConfig.oppositeHandKnife);
     ImGui::Checkbox("Preserve Killfeed", &miscConfig.preserveKillfeed.enabled);
