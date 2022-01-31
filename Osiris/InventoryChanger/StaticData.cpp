@@ -527,11 +527,6 @@ std::span<const StaticData::GameItem> StaticData::gameItems() noexcept
     return StaticDataImpl::gameItems().get();
 }
 
-const std::vector<StaticData::Case>& StaticData::cases() noexcept
-{
-    return StaticDataImpl::cases();
-}
-
 const std::vector<StaticData::ItemIndex>& StaticData::caseLoot() noexcept
 {
     return StaticDataImpl::caseLoot();
