@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include <span>
-#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -13,94 +13,94 @@ using StaticData::Type;
 
 class GameItemStorage {
 public:
-    void addGloves(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addGloves(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Glove, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::Glove, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addSkin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addSkin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Skin, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::Skin, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addSticker(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    void addSticker(int rarity, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Sticker, rarity, WeaponId::Sticker, dataIndex, std::move(iconPath));
+        addItem(Type::Sticker, rarity, WeaponId::Sticker, dataIndex, iconPath);
     }
 
-    void addPatch(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    void addPatch(int rarity, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Patch, rarity, WeaponId::Patch, dataIndex, std::move(iconPath));
+        addItem(Type::Patch, rarity, WeaponId::Patch, dataIndex, iconPath);
     }
 
-    void addGraffiti(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    void addGraffiti(int rarity, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, std::move(iconPath));
+        addItem(Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, iconPath);
     }
 
-    void addSealedGraffiti(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    void addSealedGraffiti(int rarity, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, std::move(iconPath));
+        addItem(Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, iconPath);
     }
 
-    void addMusicKit(int rarity, std::size_t dataIndex, std::string&& iconPath)
+    void addMusicKit(int rarity, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Music, rarity, WeaponId::MusicKit, dataIndex, std::move(iconPath));
+        addItem(Type::Music, rarity, WeaponId::MusicKit, dataIndex, iconPath);
     }
 
-    void addServiceMedal(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addServiceMedal(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::ServiceMedal, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::ServiceMedal, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addTournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addTournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::TournamentCoin, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::TournamentCoin, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addCollectible(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addCollectible(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Collectible, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::Collectible, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addNameTag(int rarity, WeaponId weaponID, std::string&& iconPath)
+    void addNameTag(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Type::NameTag, rarity, weaponID, 0, std::move(iconPath));
+        addItem(Type::NameTag, rarity, weaponID, 0, iconPath);
     }
 
-    void addAgent(int rarity, WeaponId weaponID, std::string&& iconPath)
+    void addAgent(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Type::Agent, rarity, weaponID, 0, std::move(iconPath));
+        addItem(Type::Agent, rarity, weaponID, 0, iconPath);
     }
 
-    void addCase(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addCase(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::Case, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::Case, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addCaseKey(int rarity, WeaponId weaponID, std::string&& iconPath)
+    void addCaseKey(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Type::CaseKey, rarity, weaponID, 0, std::move(iconPath));
+        addItem(Type::CaseKey, rarity, weaponID, 0, iconPath);
     }
 
-    void addOperationPass(int rarity, WeaponId weaponID, std::string&& iconPath)
+    void addOperationPass(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Type::OperationPass, rarity, weaponID, 0, std::move(iconPath));
+        addItem(Type::OperationPass, rarity, weaponID, 0, iconPath);
     }
 
-    void addStatTrakSwapTool(int rarity, WeaponId weaponID, std::string&& iconPath)
+    void addStatTrakSwapTool(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Type::StatTrakSwapTool, rarity, weaponID, 0, std::move(iconPath));
+        addItem(Type::StatTrakSwapTool, rarity, weaponID, 0, iconPath);
     }
 
-    void addSouvenirToken(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addSouvenirToken(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::SouvenirToken, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::SouvenirToken, rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addViewerPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addViewerPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        addItem(Type::ViewerPass, rarity, weaponID, dataIndex, std::move(iconPath));
+        addItem(Type::ViewerPass, rarity, weaponID, dataIndex, iconPath);
     }
 
     std::span<StaticData::GameItem> get() noexcept
@@ -129,9 +129,9 @@ public:
     }
 
 private:
-    void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath)
+    void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
-        gameItems.emplace_back(type, rarity, weaponID, dataIndex, std::move(iconPath));
+        gameItems.emplace_back(type, rarity, weaponID, dataIndex, iconPath);
     }
 
     std::vector<StaticData::GameItem> gameItems;
