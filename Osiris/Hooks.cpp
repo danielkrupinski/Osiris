@@ -492,6 +492,22 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
     return result;
 }
+#ifdef _WIN32
+int __stdcall getUnverifiedFileHashes(void* thisPointer, int maxFiles)
+{
+    if (Misc::shouldEnableSvPureBypass())
+        return 0;
+    return hooks->fileSystem.callOriginal<int, 101>(thisPointer, maxFiles);
+}
+
+int __fastcall canLoadThirdPartyFiles(void* thisPointer, void* edx) noexcept
+{
+    if (Misc::shouldEnableSvPureBypass())
+        return 1;
+    return hooks->fileSystem.callOriginal<int, 128>(thisPointer);
+}
+
+#endif
 
 static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
@@ -575,11 +591,18 @@ void Hooks::install() noexcept
     engine.init(interfaces->engine);
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
-    engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
+  
+ #ifdef _WIN32
+    fileSystem.init(interfaces->fileSystem);
+    fileSystem.hookAt(101, getUnverifiedFileHashes);
+    fileSystem.hookAt(128, canLoadThirdPartyFiles);
+#endif
 
+    engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
+  
     inventory.init(memory->inventoryManager->getLocalInventory());
     inventory.hookAt(1, &soUpdated);
-
+  
     inventoryManager.init(memory->inventoryManager);
     inventoryManager.hookAt(WIN32_LINUX(20, 21), &equipItemInLoadout);
 
@@ -662,6 +685,9 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
+#ifdef _WIN32
+    fileSystem.restore();
+#endif
     inventory.restore();
     inventoryManager.restore();
     modelRender.restore();

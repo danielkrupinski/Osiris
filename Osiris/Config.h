@@ -112,7 +112,7 @@ public:
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
-
+	
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
     const auto& getSystemFonts() const noexcept { return systemFonts; }
