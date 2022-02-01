@@ -337,21 +337,21 @@ private:
 
     void initWeaponNames(ItemSchema* itemSchema) noexcept
     {
-        for (const auto& item : _gameItems.get()) {
-            if (!_weaponNames.contains(item.weaponID)) {
-                const auto def = itemSchema->getItemDefinitionInterface(item.weaponID);
-                if (!def)
-                    continue;
+        for (const auto weaponID : _gameItems.getUniqueWeaponIDs()) {
+            const auto def = itemSchema->getItemDefinitionInterface(weaponID);
+            if (!def)
+                continue;
 
-                std::wstring nameWide = interfaces->localize->findSafe(def->getItemBaseName());
-                if (item.isCollectible() && _collectibles[item.dataIndex].isOriginal) {
-                    nameWide += L" (";
-                    nameWide += interfaces->localize->findSafe("genuine");
-                    nameWide += L")";
-                }
-                _weaponNames.emplace(item.weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide.c_str())));
-                _weaponNamesUpper.emplace(item.weaponID, stringPoolWide.add(Helpers::toUpper(std::move(nameWide))));
+            std::wstring nameWide = interfaces->localize->findSafe(def->getItemBaseName());
+            /*
+            if (item.isCollectible() && _collectibles[item.dataIndex].isOriginal) {
+                nameWide += L" (";
+                nameWide += interfaces->localize->findSafe("genuine");
+                nameWide += L")";
             }
+            */
+            _weaponNames.emplace(weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide.c_str())));
+            _weaponNamesUpper.emplace(weaponID, stringPoolWide.add(Helpers::toUpper(std::move(nameWide))));
         }
     }
 
