@@ -96,9 +96,9 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name) noexcept;
-        PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
-        PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;

@@ -198,7 +198,8 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()), paintKit->wearRemapMin, paintKit->wearRemapMax);
+            const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
+            _paintKits.emplace_back(paintKit->id, interfaces->localize->convertUnicodeToAnsi(paintKitName), Helpers::toUpper(paintKitName), paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -215,15 +216,15 @@ private:
         }
     }
 
-    std::size_t addGraffitiPaint(int id, std::wstring name)
+    std::size_t addGraffitiPaint(int id, std::string name, std::wstring nameUpperCase)
     {
-        _paintKits.emplace_back(id, std::move(name));
+        _paintKits.emplace_back(id, std::move(name), std::move(nameUpperCase));
         return _paintKits.size() - 1;
     }
 
-    void addPatch(int id, std::wstring name, int rarity, const char* inventoryImage)
+    void addPatch(int id, std::string name, std::wstring nameUpperCase, int rarity, const char* inventoryImage)
     {
-        _paintKits.emplace_back(id, std::move(name));
+        _paintKits.emplace_back(id, std::move(name), std::move(nameUpperCase));
         _gameItems.addPatch(rarity, _paintKits.size() - 1, stringPool.add(inventoryImage));
     }
 
@@ -243,12 +244,15 @@ private:
             
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
-                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
+                _paintKits.emplace_back(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(stickerName), Helpers::toUpper(stickerName), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
                 _gameItems.addSticker(stickerKit->rarity, _paintKits.size() - 1, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isPatch) {
-                addPatch(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()), stickerKit->rarity, stickerKit->inventoryImage.data());
+                const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
+                addPatch(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(patchName), Helpers::toUpper(patchName), stickerKit->rarity, stickerKit->inventoryImage.data());
             } else if (isGraffiti) {
-                const auto paintID = addGraffitiPaint(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
+                const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
+                const auto paintID = addGraffitiPaint(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(paintName), Helpers::toUpper(paintName));
                 _gameItems.addGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
                 _gameItems.addSealedGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
             }
@@ -515,7 +519,7 @@ private:
     std::vector<StaticData::ItemIndex> _caseLoot;
     std::vector<StaticData::ItemIndex> _itemsSorted;
     std::vector<StaticData::ItemIndex> _tournamentStickersSorted;
-    std::vector<StaticData::PaintKit> _paintKits{ { 0, L"" } };
+    std::vector<StaticData::PaintKit> _paintKits{ { 0, "", L"" } };
     static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string_view> _weaponNames;
     std::unordered_map<WeaponId, std::wstring_view> _weaponNamesUpper;
@@ -633,20 +637,8 @@ std::uint16_t StaticData::getServiceMedalYear(const GameItem& serviceMedal) noex
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
-}
+StaticData::PaintKit::PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept : id{ id }, name{ std::move(name) }, nameUpperCase{ std::move(nameUpperCase) } {}
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, nameUpperCase{ std::move(name) }
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
-}
+StaticData::PaintKit::PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ std::move(name) }, nameUpperCase{ std::move(nameUpperCase) } {}
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept : id{ id }, nameUpperCase{ std::move(name) }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, tournamentPlayerID{ tournamentPlayerID }, isGoldenSticker{ isGoldenSticker }
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(std::move(nameUpperCase));
-}
+StaticData::PaintKit::PaintKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept : id{ id }, name{ std::move(name) }, nameUpperCase{ std::move(nameUpperCase) }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, tournamentPlayerID{ tournamentPlayerID }, isGoldenSticker{ isGoldenSticker } {}
