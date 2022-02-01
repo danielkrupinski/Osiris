@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <span>
 #include <string_view>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -131,6 +132,14 @@ public:
     [[nodiscard]] std::size_t size() const
     {
         return gameItems.size();
+    }
+
+    [[nodiscard]] std::unordered_set<WeaponId> getUniqueWeaponIDs() const
+    {
+        std::unordered_set<WeaponId> uniqueWeaponIDs;
+        for (const auto& gameItem : gameItems)
+            uniqueWeaponIDs.emplace(gameItem.weaponID);
+        return uniqueWeaponIDs;
     }
 
 private:
