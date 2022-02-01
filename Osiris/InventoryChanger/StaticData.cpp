@@ -581,6 +581,11 @@ const StaticData::Case& StaticData::getCase(const GameItem& item) noexcept
     return StaticDataImpl::cases()[item.dataIndex];
 }
 
+const StaticData::GameItem& StaticData::getGameItem(ItemIndex itemIndex) noexcept
+{
+    return StaticDataImpl::gameItems().get(itemIndex);
+}
+
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
