@@ -68,6 +68,33 @@ TEST(GameItemStorage, AddedSkinHasCorrectIconPath) {
     ASSERT_EQ(storage.get(0).iconPath, "D:\\");
 }
 
+TEST(GameItemStorage, EmptyStorageHasNoUniqueWeaponIDs) {
+    GameItemStorage storage;
+    ASSERT_TRUE(storage.getUniqueWeaponIDs().empty());
+}
+
+TEST(GameItemStorage, HasOneUniqueWeaponIdAfterAddingFirstItem) {
+    GameItemStorage storage;
+    storage.addSkin(2, WeaponId::Bayonet, 0, "");
+    ASSERT_EQ(storage.getUniqueWeaponIDs().size(), 1);
+}
+
+TEST(GameItemStorage, HasCorrectNumberOfUniqueWeaponIDs) {
+    GameItemStorage storage;
+    storage.addSkin(2, WeaponId::Bayonet, 0, "");
+    storage.addOperationPass(1, WeaponId::OperationHydraPass, "");
+    ASSERT_EQ(storage.getUniqueWeaponIDs().size(), 2);
+}
+
+TEST(GameItemStorage, UniqueWeaponIDsAreUnique) {
+    GameItemStorage storage;
+    storage.addSkin(2, WeaponId::M9Bayonet, 0, "");
+    storage.addSkin(3, WeaponId::Ak47, 0, "");
+    storage.addSkin(2, WeaponId::M9Bayonet, 0, "");
+    storage.addSkin(4, WeaponId::Ak47, 0, "");
+    ASSERT_EQ(storage.getUniqueWeaponIDs().size(), 2);
+}
+
 using StaticData::TournamentMap;
 
 struct TournamentMapTestParam {
