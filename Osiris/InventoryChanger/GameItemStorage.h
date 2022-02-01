@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cstddef>
 #include <span>
 #include <string_view>
@@ -140,6 +141,12 @@ public:
         for (const auto& gameItem : gameItems)
             uniqueWeaponIDs.emplace(gameItem.weaponID);
         return uniqueWeaponIDs;
+    }
+
+    template <typename Comparator>
+    void sort(Comparator comparator)
+    {
+        std::ranges::sort(gameItems, comparator);
     }
 
 private:

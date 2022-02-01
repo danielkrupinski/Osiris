@@ -486,7 +486,7 @@ private:
         initItemData(itemSchema, lootListIndices);
         initWeaponNames(itemSchema);
 
-        std::ranges::sort(_gameItems.get(), [this](const auto& a, const auto& b) {
+        _gameItems.sort([this](const auto& a, const auto& b) {
             if (a.weaponID == b.weaponID && a.hasPaintKit() && b.hasPaintKit())
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
 
