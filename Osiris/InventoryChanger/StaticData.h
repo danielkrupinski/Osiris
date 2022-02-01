@@ -75,11 +75,11 @@ namespace StaticData
     };
 
     struct MusicKit {
-        MusicKit(int id, std::string name, std::wstring nameUpperCase) : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
+        MusicKit(int id, std::string_view name, std::wstring_view nameUpperCase) : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
 
         int id;
-        std::string name;
-        std::wstring nameUpperCase;
+        std::string_view name;
+        std::wstring_view nameUpperCase;
     };
 
     struct StickerKit {

@@ -261,7 +261,7 @@ private:
 
     void addMusic(int musicID, std::wstring name, const char* inventoryImage)
     {
-        _musicKits.emplace_back(musicID, interfaces->localize->convertUnicodeToAnsi(name.c_str()), Helpers::toUpper(name));
+        _musicKits.emplace_back(musicID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(name.c_str())), stringPoolWide.add(Helpers::toUpper(name)));
         _gameItems.addMusicKit(3, _musicKits.size() - 1, stringPool.add(inventoryImage));
     }
 
