@@ -155,6 +155,7 @@ public:
 
 #ifdef _WIN32
     class KeyValuesSystem* keyValuesSystem;
+    std::uintptr_t keyValuesAllocEngine;
 #endif
 
 private:
