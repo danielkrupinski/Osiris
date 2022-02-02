@@ -153,6 +153,10 @@ public:
 #endif
     }
 
+#ifdef _WIN32
+    class KeyValuesSystem* keyValuesSystem;
+#endif
+
 private:
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
