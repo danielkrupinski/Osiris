@@ -637,6 +637,9 @@
     <ClInclude Include="InventoryChanger\GameItemStorage.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
+    <ClInclude Include="StringPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

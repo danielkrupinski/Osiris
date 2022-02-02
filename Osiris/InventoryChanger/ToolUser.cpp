@@ -100,7 +100,7 @@ private:
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::paintKits()[sealedGraffiti.get().dataIndex].id); idx != StaticData::InvalidItemIdx) {
+        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getPaintKit(sealedGraffiti.get()).id); idx != StaticData::InvalidItemIdx) {
             sealedGraffiti.markToDelete();
             initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
         }
@@ -109,14 +109,14 @@ private:
     void _openContainer(InventoryItem& container) const noexcept
     {
         assert(container.isCase());
-        const auto& caseData = StaticData::cases()[container.get().dataIndex];
+        const auto& caseData = StaticData::getCase(container.get());
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
             const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
-            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, false));
+            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, true));
         }
     }
 
@@ -127,7 +127,7 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::paintKits()[sticker.get().dataIndex].id;
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::getStickerID(sticker.get());
         Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
         sticker.markToDelete();
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
@@ -152,7 +152,7 @@ private:
         if (!dest || !dest->isAgent())
             return;
 
-        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::paintKits()[patch.get().dataIndex].id;
+        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::getPatchID(patch.get());
         patch.markToDelete();
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }

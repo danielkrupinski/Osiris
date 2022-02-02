@@ -98,7 +98,7 @@ private:
     {
         assert(inventoryItem.isSkin());
 
-        const auto paintKit = StaticData::paintKits()[inventoryItem.get().dataIndex].id;
+        const auto paintKit = StaticData::getPaintKit(inventoryItem.get()).id;
         econItem.setPaintKit(static_cast<float>(paintKit));
 
         const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
@@ -168,9 +168,9 @@ private:
         econItem->weaponId = item.weaponID;
 
         if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
+            econItem->setStickerID(0, StaticData::getStickerID(item));
         } else if (item.isMusic()) {
-            econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
+            econItem->setMusicID(StaticData::getMusicID(item));
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.statTrak > -1) {
                 econItem->setStatTrak(dynamicData.statTrak);
@@ -181,7 +181,7 @@ private:
             initSkinEconItem(inventoryItem, *econItem);
         } else if (item.isGlove()) {
             econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
+            econItem->setPaintKit(static_cast<float>(StaticData::getPaintKit(item).id));
 
             const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);
@@ -204,7 +204,7 @@ private:
         } else if (item.isTournamentCoin()) {
             econItem->setDropsAwarded(dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
             econItem->setDropsRedeemed(0);
-        } else if (item.isCase() && StaticData::cases()[item.dataIndex].isSouvenirPackage()) {
+        } else if (item.isCase() && StaticData::getCase(item).isSouvenirPackage()) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
                 econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));

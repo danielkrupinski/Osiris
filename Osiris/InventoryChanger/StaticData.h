@@ -41,7 +41,7 @@ namespace StaticData
     };
 
     struct GameItem {
-        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept;
+        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept;
 
         bool isSticker() const noexcept { return type == Type::Sticker; }
         bool isSkin() const noexcept { return type == Type::Skin; }
@@ -62,7 +62,7 @@ namespace StaticData
         bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
+        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
 
         int tournamentEventID() const noexcept { assert(isTournamentCoin()); return static_cast<int>(dataIndex); }
 
@@ -71,13 +71,34 @@ namespace StaticData
         WeaponId weaponID;
         std::size_t dataIndex;
 
-        std::string iconPath;
+        std::string_view iconPath;
+    };
+
+    struct MusicKit {
+        MusicKit(int id, std::string_view name, std::wstring_view nameUpperCase) : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
+
+        int id;
+        std::string_view name;
+        std::wstring_view nameUpperCase;
+    };
+
+    struct StickerKit {
+        StickerKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+            : id{ id }, name{ name }, nameUpperCase{ nameUpperCase }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
+
+        int id;
+        std::string name;
+        std::wstring nameUpperCase;
+        std::uint32_t tournamentID = 0;
+        TournamentTeam tournamentTeam{};
+        bool isGoldenSticker = false;
+        int tournamentPlayerID = 0;
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name) noexcept;
-        PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept;
-        PaintKit(int id, std::wstring&& name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
@@ -116,9 +137,18 @@ namespace StaticData
     };
 
     std::span<const GameItem> gameItems() noexcept;
-    const std::vector<Case>& cases() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
-    const std::vector<PaintKit>& paintKits() noexcept;
+    
+    [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
+    [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
+    [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
+    [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
+    
+    [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
+    [[nodiscard]] const PaintKit& getPaintKit(const GameItem& item) noexcept;
+    [[nodiscard]] const Case& getCase(const GameItem& item) noexcept;
+    [[nodiscard]] const GameItem& getGameItem(ItemIndex itemIndex) noexcept;
+
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 

@@ -318,8 +318,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isMusic())
         return;
 
-    const auto& itemData = StaticData::paintKits()[item->get().dataIndex];
-    pr->musicID()[localPlayer->index()] = itemData.id;
+    pr->musicID()[localPlayer->index()] = StaticData::getMusicID(item->get());
 }
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
@@ -539,7 +538,7 @@ void InventoryChanger::tabItem() noexcept
     }
 }
 
-static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
+static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
 namespace ImGui
 {
@@ -555,7 +554,7 @@ namespace ImGui
         const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
+        const auto paintKitName = StaticData::getPaintName(item).data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -671,7 +670,7 @@ namespace ImGui
         const auto itemName = StaticData::getWeaponName(item.weaponID).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
+        const auto paintKitName = StaticData::getPaintName(item).data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -838,7 +837,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const auto& gameItems = StaticData::gameItems();
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < gameItems.size(); ++i) {
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItems[i].weaponID)), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::paintKits()[gameItems[i].dataIndex].nameUpperCase, filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItems[i].weaponID)), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::getPaintKit(gameItems[i]).nameUpperCase, filterWide)))
                     continue;
                 ImGui::PushID(i);
 
@@ -1065,12 +1064,12 @@ struct Icon {
 
 static std::unordered_map<std::string, Icon> iconTextures;
 
-static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
+static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
 
-    auto& icon = iconTextures[iconpath];
+    auto& icon = iconTextures[std::string{ iconpath }];
     if (!icon.texture.get()) {
         static int frameCount = 0;
         static float timeSpentThisFrame = 0.0f;
@@ -1090,9 +1089,9 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
 
         const auto start = std::chrono::high_resolution_clock::now();
 
-        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + (iconpath.find("status_icons") != std::string::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
+        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
-            handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + ".png").c_str(), "r", "GAME");
+            handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
 
         assert(handle);
         if (handle) {
