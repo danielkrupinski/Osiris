@@ -34,5 +34,9 @@ void KeyValues::setString(const char* keyName, const char* value) noexcept
 
 const char* KeyValues::getName() noexcept
 {
+#ifdef _WIN32
     return memory->keyValuesSystem->getStringForSymbol(*reinterpret_cast<std::uint8_t*>(std::uintptr_t(this) + 3) | (*reinterpret_cast<std::uint16_t*>(std::uintptr_t(this) + 18) << 8));
+#else
+    return nullptr;
+#endif
 }
