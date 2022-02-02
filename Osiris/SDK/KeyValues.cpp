@@ -1,4 +1,5 @@
 #include "KeyValues.h"
+#include "KeyValuesSystem.h"
 #include "../Memory.h"
 
 KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
@@ -29,4 +30,9 @@ void KeyValues::setString(const char* keyName, const char* value) noexcept
 {
     if (const auto key = findKey(keyName, true))
         memory->keyValuesSetString(key, value);
+}
+
+const char* KeyValues::getName() noexcept
+{
+    return memory->keyValuesSystem->getStringForSymbol(*reinterpret_cast<std::uint8_t*>(std::uintptr_t(this) + 3) | (*reinterpret_cast<std::uint16_t*>(std::uintptr_t(this) + 18) << 8));
 }
