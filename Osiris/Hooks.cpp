@@ -521,6 +521,13 @@ static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessag
 
 #ifdef _WIN32
 
+static void* __STDCALL allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
+{
+    if (const auto returnAddress = RETURN_ADDRESS(); returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
+        return nullptr;
+    return hooks->keyValuesSystem.callOriginal<void*, 1>(size);
+}
+
 Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 {
 #ifndef __MINGW32__
@@ -575,6 +582,10 @@ void Hooks::install() noexcept
     engine.init(interfaces->engine);
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
+#ifdef _WIN32
+    keyValuesSystem.init(memory->keyValuesSystem);
+    keyValuesSystem.hookAt(1, &allocKeyValuesMemory);
+#endif
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
     inventory.init(memory->inventoryManager->getLocalInventory());
@@ -677,6 +688,8 @@ void Hooks::uninstall() noexcept
     InventoryChanger::clearInventory();
 
 #ifdef _WIN32
+    keyValuesSystem.restore();
+
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory->present) = originalPresent;
     **reinterpret_cast<void***>(memory->reset) = originalReset;
