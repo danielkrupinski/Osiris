@@ -105,19 +105,9 @@ public:
         addItem(Type::ViewerPass, rarity, weaponID, dataIndex, iconPath);
     }
 
-    std::span<StaticData::GameItem> get() noexcept
-    {
-        return gameItems;
-    }
-
     const StaticData::GameItem& get(std::size_t index) const noexcept
     {
         return gameItems[index];
-    }
-
-    std::span<const StaticData::GameItem> get() const noexcept
-    {
-        return gameItems;
     }
 
     void shrinkToFit()
