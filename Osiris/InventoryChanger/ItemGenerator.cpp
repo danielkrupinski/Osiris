@@ -127,7 +127,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return dynamicData;
 }
 
-[[nodiscard]] static std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
+[[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
 {
 #ifdef _WIN32
     return _mkgmtime(&tm);
@@ -136,7 +136,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 #endif
 }
 
-[[nodiscard]] static std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
+[[nodiscard]] std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
 {
     assert(year >= 1900);
     std::tm tm{};
@@ -145,7 +145,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return tmToUTCTimestamp(tm);
 }
 
-[[nodiscard]] static std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
+[[nodiscard]] std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
 {
     assert(year >= 1900);
     std::tm tm{};
