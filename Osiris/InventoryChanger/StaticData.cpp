@@ -534,11 +534,6 @@ private:
     std::vector<StaticData::MusicKit> _musicKits;
 };
 
-std::span<const StaticData::GameItem> StaticData::gameItems() noexcept
-{
-    return StaticDataImpl::gameItems().get();
-}
-
 [[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
 {
     return StaticDataImpl::gameItems().size();

@@ -136,7 +136,6 @@ namespace StaticData
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
-    std::span<const GameItem> gameItems() noexcept;
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;
     const std::vector<ItemIndex>& caseLoot() noexcept;
     
