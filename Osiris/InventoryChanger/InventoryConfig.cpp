@@ -424,7 +424,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         if (itemIndex == StaticData::InvalidItemIdx)
             continue;
 
-        const auto& item = StaticData::gameItems()[itemIndex];
+        const auto& item = StaticData::getGameItem(itemIndex);
         auto dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
         if (item.isSkin()) {

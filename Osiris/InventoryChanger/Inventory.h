@@ -99,7 +99,7 @@ public:
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
-    const StaticData::GameItem& get() const noexcept { assert(isValid()); return StaticData::gameItems()[itemIndex]; }
+    const StaticData::GameItem& get() const noexcept { assert(isValid()); return StaticData::getGameItem(itemIndex); }
 };
 
 namespace Inventory
