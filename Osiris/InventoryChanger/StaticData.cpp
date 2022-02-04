@@ -59,15 +59,15 @@ private:
     auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
-            explicit Comp(std::span<const StaticData::GameItem> gameItems) : gameItems{ gameItems } {}
-            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems[index].weaponID; }
-            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems[index].weaponID < weaponID; }
+            explicit Comp(const GameItemStorage& gameItems) : gameItems{ gameItems } {}
+            bool operator()(WeaponId weaponID, std::size_t index) const noexcept { return weaponID < gameItems.get(index).weaponID; }
+            bool operator()(std::size_t index, WeaponId weaponID) const noexcept { return gameItems.get(index).weaponID < weaponID; }
         private:
-            std::span<const StaticData::GameItem> gameItems;
+            const GameItemStorage& gameItems;
         };
 
         assert(!_itemsSorted.empty());
-        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems.get() }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
     }
 
 public:
