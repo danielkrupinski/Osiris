@@ -834,16 +834,17 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            const auto& gameItems = StaticData::gameItems();
+            const auto gameItemsCount = StaticData::getGameItemsCount();
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
-            for (std::size_t i = 0; i < gameItems.size(); ++i) {
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItems[i].weaponID)), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::getPaintKit(gameItems[i]).nameUpperCase, filterWide)))
+            for (std::size_t i = 0; i < gameItemsCount; ++i) {
+                const auto& gameItem = StaticData::getGameItem(i);
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!gameItem.hasPaintKit() || !passesFilter(StaticData::getPaintKit(gameItem).nameUpperCase, filterWide)))
                     continue;
                 ImGui::PushID(i);
 
                 const auto selected = selectedToAdd.contains(i);
 
-                if (const auto toAddCount = selected ? &selectedToAdd[i] : nullptr; ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[i] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.rarity), selected, toAddCount)) {
                     if (selected) {
                         selectedToAdd.erase(i);
                         std::erase(toAddOrder, i);
