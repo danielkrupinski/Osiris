@@ -48,7 +48,7 @@ std::pair<StaticData::ItemIndex, std::size_t> ItemGenerator::generateItemFromCon
     const auto unlockedItemIdx = getRandomItemIndexFromContainer(caseData);
     std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
-    if (const auto& item = StaticData::gameItems()[unlockedItemIdx]; caseData.willProduceStatTrak && item.isMusic()) {
+    if (const auto& item = StaticData::getGameItem(unlockedItemIdx); caseData.willProduceStatTrak && item.isMusic()) {
         DynamicMusicData dynamicData;
         dynamicData.statTrak = 0;
         dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
@@ -174,7 +174,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex gameIt
 {
     std::size_t index = Inventory::InvalidDynamicDataIdx;
 
-    if (const auto& item = StaticData::gameItems()[gameItemIndex]; item.isSkin()) {
+    if (const auto& item = StaticData::getGameItem(gameItemIndex); item.isSkin()) {
         const auto& staticData = StaticData::getPaintKit(item);
         DynamicSkinData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
