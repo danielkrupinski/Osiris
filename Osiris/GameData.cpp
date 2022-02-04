@@ -104,7 +104,8 @@ void GameData::update() noexcept
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
-    for (int i = 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
+    const auto highestEntityIndex = interfaces->entityList->getHighestEntityIndex();
+    for (int i = 1; i <= highestEntityIndex; ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
         if (!entity)
             continue;
