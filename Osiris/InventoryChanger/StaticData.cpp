@@ -131,6 +131,14 @@ public:
         return InvalidItemIdx;
     }
 
+    [[nodiscard]] StaticData::ItemIndex getMusicIndex(int musicKit) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::MusicKit);
+        if (const auto it = std::find_if(begin, end, [this, musicKit](std::size_t index) { return _musicKits[_gameItems.get(index).dataIndex].id == musicKit; }); it != end)
+            return *it;
+        return InvalidItemIdx;
+    }
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
@@ -599,6 +607,11 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 StaticData::ItemIndex StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 {
     return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
+}
+
+StaticData::ItemIndex StaticData::getMusicIndex(int musicID) noexcept
+{
+    return StaticDataImpl::instance().getMusicIndex(musicID);
 }
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept

@@ -153,6 +153,7 @@ namespace StaticData
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
     ItemIndex getItemIndex(WeaponId weaponID, int paintKit) noexcept;
+    ItemIndex getMusicIndex(int musicID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
