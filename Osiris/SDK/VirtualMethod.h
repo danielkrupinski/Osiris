@@ -9,7 +9,7 @@ namespace VirtualMethod
     template <typename T, std::size_t Idx, typename ...Args>
     constexpr T call(void* classBase, Args... args) noexcept
     {
-        return (*reinterpret_cast<T(__THISCALL***)(void*, Args...)>(classBase))[Idx](classBase, args...);
+        return (*reinterpret_cast<T(THISCALL_CONV***)(void*, Args...)>(classBase))[Idx](classBase, args...);
     }
 }
 

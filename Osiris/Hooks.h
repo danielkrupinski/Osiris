@@ -47,7 +47,7 @@ public:
     void uninstall() noexcept;
     void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
-    std::add_pointer_t<int __FASTCALL(SoundInfo&)> originalDispatchSound;
+    std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;
 
     HookType bspQuery;
     HookType client;

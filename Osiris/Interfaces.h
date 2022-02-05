@@ -69,7 +69,7 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
 private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __CDECL(const char* name, int* returnCode)>>(
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* CDECL_CONV(const char* name, int* returnCode)>>(
 #ifdef _WIN32
             GetProcAddress(GetModuleHandleA(moduleName), "CreateInterface")
 #else

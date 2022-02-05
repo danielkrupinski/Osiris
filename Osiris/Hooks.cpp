@@ -172,7 +172,7 @@ static void swapWindow(SDL_Window * window) noexcept
 #endif
 }
 
-static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
+static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
 
@@ -244,7 +244,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     return false;
 }
 
-static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
+static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
@@ -257,7 +257,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
 
-static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
+static float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
     float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
@@ -268,7 +268,7 @@ static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
     return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
 }
 
-static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces->studioRender->isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -282,7 +282,7 @@ static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, voi
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
-static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
+static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
 {
     if (RETURN_ADDRESS() == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
@@ -290,7 +290,7 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
 }
 
-static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
+static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
@@ -324,7 +324,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
     hooks->client.callOriginal<void, 37>(stage);
 }
 
-static int __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
+static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
     Sound::modulateSound(soundEntry, entityIndex, volume);
     Misc::autoAccept(soundEntry);
@@ -333,7 +333,7 @@ static int __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int enti
     return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
-static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
+static bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
@@ -353,21 +353,21 @@ static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
     return !Visuals::shouldRemoveFog();
 }
 
-static bool __STDCALL shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
+static bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 {
     if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
 }
 
-static void __STDCALL lockCursor() noexcept
+static void STDCALL_CONV lockCursor() noexcept
 {
     if (gui->isOpen())
         return interfaces->surface->unlockCursor();
     return hooks->surface.callOriginal<void, 67>();
 }
 
-static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
+static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
     if (Visuals::shouldRemoveScopeOverlay() && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
         a = 0;
@@ -382,7 +382,7 @@ struct ViewSetup {
     float farZ;
 };
 
-static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
+static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer->isScoped())
         setup->fov += Visuals::fov();
@@ -397,7 +397,7 @@ struct RenderableInfo {
     uint16_t flags2;
 };
 
-static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
+static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     if (Misc::shouldDisableModelOcclusion() && RETURN_ADDRESS() == memory->insertIntoTree) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
@@ -414,7 +414,7 @@ static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& m
     return hooks->bspQuery.callOriginal<int, 6>(std::cref(mins), std::cref(maxs), list, listMax);
 }
 
-static int __FASTCALL dispatchSound(SoundInfo& soundInfo) noexcept
+static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
         Sound::modulateSound(soundName, soundInfo.entityIndex, soundInfo.volume);
@@ -423,14 +423,14 @@ static int __FASTCALL dispatchSound(SoundInfo& soundInfo) noexcept
     return hooks->originalDispatchSound(soundInfo);
 }
 
-static void __STDCALL render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
+static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
 {
     Visuals::applyScreenEffects();
     Visuals::hitEffect();
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
-static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
+static const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
     const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
 
@@ -444,7 +444,7 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_A
     return params;
 }
 
-static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
+static bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
     if (Misc::shouldRevealMoney() && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + WIN32_LINUX(8, 24)) == memory->money)
         return true;
@@ -452,7 +452,7 @@ static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
     return hooks->engine.callOriginal<bool, 82>();
 }
 
-static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
+static void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
 
@@ -461,14 +461,14 @@ static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) no
         *memory->vignette = 0.0f;
 }
 
-static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
+static float STDCALL_CONV getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
 {
     if (Misc::aspectRatio() != 0.0f)
         return Misc::aspectRatio();
     return hooks->engine.callOriginal<float, 101>(width, height);
 }
 
-static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
+static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
     if (Visuals::shouldRemoveSmoke() || Visuals::isSmokeWireframe())
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
@@ -476,14 +476,14 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
         hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
 }
 
-static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
+static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
     InventoryChanger::getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
-static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
+static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
@@ -493,19 +493,19 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
     return result;
 }
 
-static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
+static bool STDCALL_CONV equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
     InventoryChanger::onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<bool, WIN32_LINUX(20, 21)>(team, slot, itemID, swap);
 }
 
-static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
+static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
 {
     InventoryChanger::onSoUpdated(object);
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
-static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
+static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
     if (type == UserMessageType::Text)
         InventoryChanger::onUserTextMsg(data, size);
@@ -521,7 +521,7 @@ static bool __STDCALL dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessag
 
 #ifdef _WIN32
 
-static void* __STDCALL allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
+static void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
 {
     if (const auto returnAddress = RETURN_ADDRESS(); returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
         return nullptr;

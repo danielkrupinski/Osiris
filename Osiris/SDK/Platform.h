@@ -2,17 +2,17 @@
 
 #ifdef _WIN32
 
-#define __THISCALL __thiscall
-#define __FASTCALL __fastcall
-#define __CDECL __cdecl
-#define __STDCALL __stdcall
+#define THISCALL_CONV __thiscall
+#define FASTCALL_CONV __fastcall
+#define CDECL_CONV __cdecl
+#define STDCALL_CONV __stdcall
 
 #else
 
-#define __THISCALL
-#define __FASTCALL
-#define __CDECL
-#define __STDCALL
+#define THISCALL_CONV
+#define FASTCALL_CONV
+#define CDECL_CONV
+#define STDCALL_CONV
 
 #endif
 

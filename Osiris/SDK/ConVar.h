@@ -18,10 +18,10 @@ struct ConVar {
     VIRTUAL_METHOD(void, setValue, WIN32_LINUX(16, 19), (int value), (this, value))
 
     PAD(WIN32_LINUX(24, 48))
-    std::add_pointer_t<void __CDECL()> changeCallback;
+    std::add_pointer_t<void CDECL_CONV()> changeCallback;
     ConVar* parent;
     const char* defaultValue;
     char* string;
     PAD(28)
-    UtlVector<void(__CDECL*)()> onChangeCallbacks;
+    UtlVector<void(CDECL_CONV*)()> onChangeCallbacks;
 };

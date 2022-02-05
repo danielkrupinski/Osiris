@@ -9,7 +9,7 @@ class Entity;
 struct RecvTable;
 
 struct ClientClass {
-    std::add_pointer_t<Entity* __CDECL(int, int)> createFunction;
+    std::add_pointer_t<Entity* CDECL_CONV(int, int)> createFunction;
     void* createEventFunction;
     char* networkName;
     RecvTable* recvTable;

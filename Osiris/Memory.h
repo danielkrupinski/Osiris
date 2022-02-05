@@ -62,40 +62,40 @@ public:
 
     bool* disablePostProcessing;
 
-    std::add_pointer_t<void __FASTCALL(const char*)> loadSky;
-    std::add_pointer_t<void __FASTCALL(const char*, const char*)> setClanTag;
+    std::add_pointer_t<void FASTCALL_CONV(const char*)> loadSky;
+    std::add_pointer_t<void FASTCALL_CONV(const char*, const char*)> setClanTag;
     std::uintptr_t cameraThink;
-    std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
-    int(__THISCALL* getSequenceActivity)(void*, int);
-    bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
+    std::add_pointer_t<bool CDECL_CONV(Vector, Vector, short)> lineGoesThroughSmoke;
+    int(THISCALL_CONV* getSequenceActivity)(void*, int);
+    bool(THISCALL_CONV* isOtherEnemy)(Entity*, Entity*);
     std::uintptr_t hud;
-    int*(__THISCALL* findHudElement)(std::uintptr_t, const char*);
-    int(__THISCALL* clearHudWeapon)(int*, int);
-    std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
-    void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
+    int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
+    int(THISCALL_CONV* clearHudWeapon)(int*, int);
+    std::add_pointer_t<ItemSystem* CDECL_CONV()> itemSystem;
+    void(THISCALL_CONV* setAbsOrigin)(Entity*, const Vector&);
     std::uintptr_t insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
     ViewRender* viewRender;
     ViewRenderBeams* viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
-    std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
-    std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
+    std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
+    std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
-    int(__THISCALL* equipWearable)(void* wearable, void* player);
+    int(THISCALL_CONV* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
     std::uintptr_t keyValuesFromString;
-    KeyValues*(__THISCALL* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
-    void(__THISCALL* keyValuesSetString)(KeyValues* keyValues, const char* value);
+    KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
+    void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
-    std::add_pointer_t<const char** __FASTCALL(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
-    GameEventDescriptor* (__THISCALL* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
+    std::add_pointer_t<const char** FASTCALL_CONV(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
+    GameEventDescriptor* (THISCALL_CONV* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;
-    const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
     std::uintptr_t scopeDust;
     std::uintptr_t scopeArc;
     std::uintptr_t demoOrHLTV;
@@ -103,9 +103,9 @@ public:
     std::uintptr_t demoFileEndReached;
     Entity** gameRules;
     InventoryManager* inventoryManager;
-    std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
-    bool(__THISCALL* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
-    void(__THISCALL* clearInventoryImageRGBA)(EconItemView* itemView);
+    std::add_pointer_t<EconItem* STDCALL_CONV()> createEconItemSharedObject;
+    bool(THISCALL_CONV* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
     std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
@@ -118,15 +118,15 @@ public:
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress2;
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
 
-    std::add_pointer_t<EconItemView* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
-    void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
+    std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    void*(THISCALL_CONV* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
     std::uintptr_t useToolGetArgAsStringReturnAddress;
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
-    EconItem*(__THISCALL* getSOCData)(void* itemView);
-    void(__THISCALL* setCustomName)(EconItem* thisptr, const char* name);
-    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
+    EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
+    void(THISCALL_CONV* setCustomName)(EconItem* thisptr, const char* name);
+    SharedObjectTypeCache<EconItem>*(THISCALL_CONV* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
     void** uiComponentInventory;
-    void(__THISCALL* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
+    void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -160,7 +160,7 @@ public:
 #endif
 
 private:
-    void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
+    void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
     std::uintptr_t setDynamicAttributeValueFn;

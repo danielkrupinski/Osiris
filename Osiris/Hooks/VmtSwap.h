@@ -23,7 +23,7 @@ public:
     template<typename T, std::size_t Idx, typename ...Args>
     constexpr auto getOriginal(Args...) const noexcept
     {
-        return reinterpret_cast<T(__THISCALL*)(void*, Args...)>(oldVmt[Idx]);
+        return reinterpret_cast<T(THISCALL_CONV*)(void*, Args...)>(oldVmt[Idx]);
     }
 
     template<typename T, std::size_t Idx, typename ...Args>

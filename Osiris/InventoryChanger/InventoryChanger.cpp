@@ -62,7 +62,7 @@ static void addToInventory(const std::unordered_map<StaticData::ItemIndex, int>&
 static Entity* createGlove(int entry, int serial) noexcept
 {
     static const auto createWearable = []{
-        std::add_pointer_t<Entity* __CDECL(int, int)> createWearableFn = nullptr;
+        std::add_pointer_t<Entity* CDECL_CONV(int, int)> createWearableFn = nullptr;
         for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next) {
             if (clientClass->classId == ClassId::EconWearable) {
                 createWearableFn = clientClass->createFunction;

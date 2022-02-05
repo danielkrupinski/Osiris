@@ -24,7 +24,7 @@
 
 static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxies;
 
-static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void CDECL_CONV spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (Misc::isRadarHackOn())
         data.value._int = 1;
@@ -33,7 +33,7 @@ static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noe
     proxies[hash].first(data, arg2, arg3);
 }
 
-static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
+static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
     const auto viewModel = reinterpret_cast<Entity*>(outStruct);
 

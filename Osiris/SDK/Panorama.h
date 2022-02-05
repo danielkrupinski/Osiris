@@ -18,8 +18,8 @@ public:
 struct PanoramaEventRegistration {
     int numberOfArgs;
     PAD(4)
-    void* (__CDECL* makeEvent)(void*);
-    void* (__CDECL* createEventFromString)(void*, const char* args, const char** result);
+    void* (CDECL_CONV* makeEvent)(void*);
+    void* (CDECL_CONV* createEventFromString)(void*, const char* args, const char** result);
     PAD(WIN32_LINUX(24, 48))
 };
 

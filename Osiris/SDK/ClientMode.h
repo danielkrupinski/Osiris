@@ -12,7 +12,7 @@ public:
     template <typename... Args>
     void printf(int filter, const char* fmt, Args... args) noexcept
     {
-        (*reinterpret_cast<void(__CDECL***)(void*, int, const char*, ...)>(this))[WIN32_LINUX(26, 29)](this, filter, fmt, args...);
+        (*reinterpret_cast<void(CDECL_CONV***)(void*, int, const char*, ...)>(this))[WIN32_LINUX(26, 29)](this, filter, fmt, args...);
     }
 };
 
