@@ -420,6 +420,8 @@ void InventoryChanger::fromJson(const json& j) noexcept
             itemIndex = StaticData::getItemIndex(weaponID, jsonItem["Patch ID"]);
         else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer())
             itemIndex = StaticData::getItemIndex(weaponID, jsonItem["Graffiti ID"]);
+        else
+            itemIndex = StaticData::getItemIndex(weaponID, 0);
 
         if (itemIndex == StaticData::InvalidItemIdx)
             continue;
