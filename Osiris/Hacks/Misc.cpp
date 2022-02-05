@@ -301,12 +301,9 @@ void Misc::spectatorList() noexcept
         miscConfig.spectatorList.pos = {};
     }
 
-    if (miscConfig.spectatorList.size != ImVec2{}) {
-        ImGui::SetNextWindowSize(ImClamp(miscConfig.spectatorList.size, {}, ImGui::GetIO().DisplaySize));
-        miscConfig.spectatorList.size = {};
-    }
+    ImGui::SetNextWindowSize({ 200.0f, 0.f });
 
-    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
     if (!gui->isOpen())
         windowFlags |= ImGuiWindowFlags_NoInputs;
     if (miscConfig.spectatorList.noTitleBar)
