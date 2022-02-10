@@ -838,7 +838,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < gameItemsCount; ++i) {
                 const auto& gameItem = StaticData::getGameItem(i);
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!gameItem.hasPaintKit() || !passesFilter(StaticData::getPaintKit(gameItem).nameUpperCase, filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!passesFilter(std::wstring(StaticData::getPaintNameUpper(gameItem)), filterWide)))
                     continue;
                 ImGui::PushID(i);
 

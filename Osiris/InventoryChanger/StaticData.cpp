@@ -577,6 +577,15 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
     return "";
 }
 
+std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
+{
+    if (item.hasPaintKit())
+        return StaticDataImpl::paintKits()[item.dataIndex].nameUpperCase;
+    if (item.isMusic())
+        return StaticDataImpl::musicKits()[item.dataIndex].nameUpperCase;
+    return L"";
+}
+
 const StaticData::PaintKit& StaticData::getPaintKit(const GameItem& item) noexcept
 {
     assert(item.hasPaintKit());
