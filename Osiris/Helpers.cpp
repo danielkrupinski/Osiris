@@ -75,6 +75,42 @@ void Helpers::healthColor(float fraction, float& outR, float& outG, float& outB)
     convertHSVtoRGB(std::lerp(redHue, greenHue, fraction), 1.0f, 1.0f, outR, outG, outB);
 }
 
+float Helpers::normalizeYaw(float Yaw)
+{
+    while (Yaw < -180.0f)
+        Yaw += 360.0f;
+
+    while (Yaw > 180.0f)
+        Yaw -= 360.0f;
+
+    return Yaw;
+}
+
+void Helpers::vectorAngles(const Vector& forward, Vector& angles)
+{
+    Vector view;
+
+    if (!forward[0] && !forward[1])
+    {
+        view[0] = 0.0f;
+        view[1] = 0.0f;
+    }
+    else
+    {
+        view[1] = atan2(forward[1], forward[0]) * 180.0f / M_PI;
+
+        if (view[1] < 0.0f)
+            view[1] += 360.0f;
+
+        view[2] = sqrt(forward[0] * forward[0] + forward[1] * forward[1]);
+        view[0] = atan2(forward[2], view[2]) * 180.0f / M_PI;
+    }
+
+    angles[0] = -view[0];
+    angles[1] = view[1];
+    angles[2] = 0.f;
+}
+
 unsigned int Helpers::healthColor(float fraction) noexcept
 {
     float r, g, b;

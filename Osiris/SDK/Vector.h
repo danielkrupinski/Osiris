@@ -16,6 +16,16 @@ struct Vector {
         return x || y || z;
     }
     
+    float& operator[](int i)
+    {
+        return ((float*)this)[i];
+    }
+
+    float operator[](int i) const
+    {
+        return ((float*)this)[i];
+    }
+
     friend constexpr auto operator==(const Vector& a, const Vector& b) noexcept
     {
         return a.x == b.x && a.y == b.y && a.z == b.z;

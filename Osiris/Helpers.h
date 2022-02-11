@@ -19,6 +19,8 @@ struct Vector;
 
 namespace Helpers
 {
+    const float M_RADPI = 57.295779513082F;
+
     unsigned int calculateColor(Color4 color) noexcept;
     unsigned int calculateColor(Color3 color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
@@ -27,6 +29,8 @@ namespace Helpers
     void convertHSVtoRGB(float h, float s, float v, float& outR, float& outG, float& outB) noexcept;
     void healthColor(float fraction, float& outR, float& outG, float& outB) noexcept;
     unsigned int healthColor(float fraction) noexcept;
+    float normalizeYaw(float Yaw);
+    void vectorAngles(const Vector& forward, Vector& angles);
 
     constexpr auto units2meters(float units) noexcept
     {

@@ -54,6 +54,8 @@
 
 #include "../imguiCustom.h"
 
+#define CheckIfNonValidNumber(Number) (fpclassify(Number) == FP_INFINITE || fpclassify(Number) == FP_NAN || fpclassify(Number) == FP_SUBNORMAL)
+
 struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
@@ -781,14 +783,108 @@ void Misc::revealRanks(UserCmd* cmd) noexcept
 
 void Misc::autoStrafe(UserCmd* cmd) noexcept
 {
-    if (localPlayer
-        && miscConfig.autoStrafe
-        && !(localPlayer->flags() & 1)
-        && localPlayer->moveType() != MoveType::NOCLIP) {
-        if (cmd->mousedx < 0)
-            cmd->sidemove = -450.0f;
-        else if (cmd->mousedx > 0)
-            cmd->sidemove = 450.0f;
+    if (localPlayer && miscConfig.autoStrafe && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::NOCLIP && localPlayer->moveType() != MoveType::LADDER)
+    {
+        auto SideSpeed = interfaces->cvar->findVar("cl_sidespeed")->getFloat();
+        auto GetVelocityDegree = [](float Velocity)
+        {
+            auto Degree = Helpers::rad2deg(atan(30.F / Velocity));
+
+            if (CheckIfNonValidNumber(Degree) || Degree > 90.F)
+                return 90.F;
+            else if (Degree < .0F)
+                return .0F;
+            else
+                return Degree;
+        };
+        auto Velocity = localPlayer->velocity();
+        Velocity.z = .0F; 
+        static auto OldYaw = .0F;
+        auto ForwardMove = cmd->forwardmove;
+        auto SideMove = cmd->sidemove;
+
+        if (Velocity.length2D() < 5.F && !ForwardMove && !SideMove)
+            return;
+
+        static auto Flip = false;
+        Flip = !Flip;
+        auto TurnDirectionModifier = Flip ? 1.F : -1.F;
+        auto ViewAngles = cmd->viewangles;
+
+        if (ForwardMove || SideMove)
+        {
+            cmd->forwardmove = .0F;
+            cmd->sidemove = .0F;
+            auto TurnAngle = atan2(-SideMove, ForwardMove);
+            ViewAngles.y += TurnAngle * Helpers::M_RADPI;
+        }
+        else if (ForwardMove)
+            cmd->forwardmove = .0F;
+
+        auto StrafeAngle = Helpers::rad2deg(atan(15.F / Velocity.length2D()));
+
+        if (StrafeAngle > 90.F)
+            StrafeAngle = 90.F;
+        else if (StrafeAngle < .0F)
+            StrafeAngle = .0F;
+
+        auto Orientation = Vector(.0F, ViewAngles.y - OldYaw, .0F);
+        Orientation.y = Helpers::normalizeYaw(Orientation.y);
+        auto YawDelta = Orientation.y;
+        OldYaw = ViewAngles.y;
+        auto FABSYawDelta = fabs(YawDelta);
+
+        if (FABSYawDelta <= StrafeAngle || FABSYawDelta >= 30.F)
+        {
+            Vector VelocityAngles;
+
+            Helpers::vectorAngles(Velocity, VelocityAngles);
+
+            Orientation = Vector(.0F, ViewAngles.y - VelocityAngles.y, .0F);
+            Orientation.y = Helpers::normalizeYaw(Orientation.y);
+            auto VelocityAngleYawDelta = Orientation.y;
+            auto VelocityDegree = GetVelocityDegree(Velocity.length2D());
+
+            if (VelocityAngleYawDelta <= VelocityDegree || Velocity.length2D() <= 15.F)
+            {
+                if (-VelocityDegree <= VelocityAngleYawDelta || Velocity.length2D() <= 15.F)
+                {
+                    ViewAngles.y += StrafeAngle * TurnDirectionModifier;
+                    cmd->sidemove = SideSpeed * TurnDirectionModifier;
+                }
+                else
+                {
+                    ViewAngles.y = VelocityAngles.y - VelocityDegree;
+                    cmd->sidemove = SideSpeed;
+                }
+            }
+            else
+            {
+                ViewAngles.y = VelocityAngles.y + VelocityDegree;
+                cmd->sidemove = -SideSpeed;
+            }
+        }
+        else if (YawDelta > .0F)
+            cmd->sidemove = -SideSpeed;
+        else if (YawDelta < .0F)
+            cmd->sidemove = SideSpeed;
+
+        auto Move = Vector(cmd->forwardmove, cmd->sidemove, .0F);
+        auto Speed = Move.length();
+        Vector MoveAngles;
+
+        Helpers::vectorAngles(Move, MoveAngles);
+
+        auto NormalizedX = fmod(cmd->viewangles.x + 180.F, 360.F) - 180.F;
+        auto NormalizedY = fmod(cmd->viewangles.y + 180.F, 360.F) - 180.F;
+        auto Yaw = Helpers::deg2rad(NormalizedY - ViewAngles.y + MoveAngles.y);
+
+        if (NormalizedX >= 90.F || NormalizedX <= -90.F || cmd->viewangles.x >= 90.F && cmd->viewangles.x <= 200.F || cmd->viewangles.x <= -90.F && cmd->viewangles.x <= 200.F)
+            cmd->forwardmove = -cos(Yaw) * Speed;
+        else
+            cmd->forwardmove = cos(Yaw) * Speed;
+
+        cmd->sidemove = sin(Yaw) * Speed;
     }
 }
 
