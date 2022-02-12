@@ -267,10 +267,15 @@ private:
         }
     }
 
+    void addMusic(int musicID, std::string_view name, std::wstring_view nameUpperCase, std::string_view inventoryImage)
+    {
+        _musicKits.emplace_back(musicID, name, nameUpperCase);
+        _gameItems.addMusicKit(3, _musicKits.size() - 1, inventoryImage);
+    }
+
     void addMusic(int musicID, std::wstring name, const char* inventoryImage)
     {
-        _musicKits.emplace_back(musicID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(name.c_str())), stringPoolWide.add(Helpers::toUpper(name)));
-        _gameItems.addMusicKit(3, _musicKits.size() - 1, stringPool.add(inventoryImage));
+        addMusic(musicID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(name.c_str())), stringPoolWide.add(Helpers::toUpper(name)), stringPool.add(inventoryImage));
     }
 
     void initMusicData(ItemSchema* itemSchema) noexcept
