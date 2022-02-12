@@ -1074,6 +1074,46 @@ void Misc::oppositeHandKnife(FrameStage stage) noexcept
 static std::vector<std::uint64_t> reportedPlayers;
 static int reportbotRound;
 
+[[nodiscard]] static std::string generateReportString()
+{
+    std::string report;
+    if (miscConfig.reportbot.textAbuse)
+        report += "textabuse,";
+    if (miscConfig.reportbot.griefing)
+        report += "grief,";
+    if (miscConfig.reportbot.wallhack)
+        report += "wallhack,";
+    if (miscConfig.reportbot.aimbot)
+        report += "aimbot,";
+    if (miscConfig.reportbot.other)
+        report += "speedhack,";
+    return report;
+}
+
+[[nodiscard]] static bool isPlayerReported(std::uint64_t xuid)
+{
+    return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
+}
+
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported()
+{
+    std::vector<std::uint64_t> xuids;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
+            continue;
+
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(i, playerInfo) && !playerInfo.fakeplayer)
+            xuids.push_back(playerInfo.xuid);
+    }
+
+    return xuids;
+}
+
 void Misc::runReportbot() noexcept
 {
     if (!miscConfig.reportbot.enabled)
@@ -1090,41 +1130,15 @@ void Misc::runReportbot() noexcept
     if (reportbotRound >= miscConfig.reportbot.rounds)
         return;
 
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
-        const auto entity = interfaces->entityList->getEntity(i);
-
-        if (!entity || entity == localPlayer.get())
+    for (const auto& xuid : getXuidsOfCandidatesToBeReported()) {
+        if (isPlayerReported(xuid))
             continue;
 
-        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
-            continue;
-
-        PlayerInfo playerInfo;
-        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
-            continue;
-
-        if (playerInfo.fakeplayer || std::ranges::find(reportedPlayers, playerInfo.xuid) != reportedPlayers.cend())
-            continue;
-
-        std::string report;
-
-        if (miscConfig.reportbot.textAbuse)
-            report += "textabuse,";
-        if (miscConfig.reportbot.griefing)
-            report += "grief,";
-        if (miscConfig.reportbot.wallhack)
-            report += "wallhack,";
-        if (miscConfig.reportbot.aimbot)
-            report += "aimbot,";
-        if (miscConfig.reportbot.other)
-            report += "speedhack,";
-
-        if (!report.empty()) {
-            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+        if (const auto report = generateReportString(); !report.empty()) {
+            memory->submitReport(std::to_string(xuid).c_str(), report.c_str());
             lastReportTime = memory->globalVars->realtime;
-            reportedPlayers.push_back(playerInfo.xuid);
+            reportedPlayers.push_back(xuid);
         }
-        return;
     }
 
     reportedPlayers.clear();
