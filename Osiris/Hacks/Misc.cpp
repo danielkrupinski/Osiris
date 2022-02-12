@@ -999,6 +999,25 @@ static int reportbotRound;
     return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
 }
 
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported()
+{
+    std::vector<std::uint64_t> xuids;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
+            continue;
+
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(i, playerInfo) && !playerInfo.fakeplayer)
+            xuids.push_back(playerInfo.xuid);
+    }
+
+    return xuids;
+}
+
 void Misc::runReportbot() noexcept
 {
     if (!miscConfig.reportbot.enabled)
@@ -1015,28 +1034,15 @@ void Misc::runReportbot() noexcept
     if (reportbotRound >= miscConfig.reportbot.rounds)
         return;
 
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
-        const auto entity = interfaces->entityList->getEntity(i);
-
-        if (!entity || entity == localPlayer.get())
-            continue;
-
-        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
-            continue;
-
-        PlayerInfo playerInfo;
-        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
-            continue;
-
-        if (playerInfo.fakeplayer || isPlayerReported(playerInfo.xuid))
+    for (const auto& xuid : getXuidsOfCandidatesToBeReported()) {
+        if (isPlayerReported(xuid))
             continue;
 
         if (const auto report = generateReportString(); !report.empty()) {
-            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            memory->submitReport(std::to_string(xuid).c_str(), report.c_str());
             lastReportTime = memory->globalVars->realtime;
-            reportedPlayers.push_back(playerInfo.xuid);
+            reportedPlayers.push_back(xuid);
         }
-        return;
     }
 
     reportedPlayers.clear();
