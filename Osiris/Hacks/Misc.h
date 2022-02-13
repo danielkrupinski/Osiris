@@ -62,6 +62,14 @@ namespace Misc
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
 
+    void deathLog(GameEvent& event) noexcept;
+    void damageLog(GameEvent& event) noexcept;
+    void fallDamageLog(GameEvent& event) noexcept;
+    void bombPlantedLog(GameEvent& event) noexcept;
+    void bombDefusedLog(GameEvent& event) noexcept;
+    void bombExplodedLog(GameEvent& event) noexcept;
+    void bombBeginDefuseLog(GameEvent& event) noexcept;
+
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
