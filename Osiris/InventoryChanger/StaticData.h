@@ -62,7 +62,7 @@ namespace StaticData
         bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
+        bool hasPaintKit() const noexcept { return type > Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
 
         int tournamentEventID() const noexcept { assert(isTournamentCoin()); return static_cast<int>(dataIndex); }
 
@@ -98,15 +98,10 @@ namespace StaticData
     struct PaintKit {
         PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept;
         PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
-        PaintKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
         float wearRemapMax = 1.0f;
-        std::uint32_t tournamentID = 0;
-        TournamentTeam tournamentTeam{};
-        bool isGoldenSticker = false;
-        int tournamentPlayerID = 0;
         std::string name;
         std::wstring nameUpperCase;
     };
