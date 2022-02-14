@@ -579,6 +579,12 @@ int StaticData::getGraffitiID(const GameItem& item) noexcept
     return StaticDataImpl::paintKits()[item.dataIndex].id;
 }
 
+int StaticData::getSealedGraffitiID(const GameItem& item) noexcept
+{
+    assert(item.isSealedGraffiti());
+    return StaticDataImpl::paintKits()[item.dataIndex].id;
+}
+
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())
