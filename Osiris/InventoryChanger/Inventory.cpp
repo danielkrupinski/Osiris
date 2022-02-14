@@ -167,8 +167,14 @@ private:
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
 
-        if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
+        if (item.isSticker()) {
             econItem->setStickerID(0, StaticData::getStickerID(item));
+        } else if (item.isPatch()) {
+            econItem->setStickerID(0, StaticData::getPatchID(item));
+        } else if (item.isGraffiti()) {
+            econItem->setStickerID(0, StaticData::getGraffitiID(item));
+        } else if (item.isSealedGraffiti()) {
+            econItem->setStickerID(0, StaticData::getSealedGraffitiID(item));
         } else if (item.isMusic()) {
             econItem->setMusicID(StaticData::getMusicID(item));
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
