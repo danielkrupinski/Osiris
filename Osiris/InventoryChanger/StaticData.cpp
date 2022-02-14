@@ -573,6 +573,12 @@ const std::vector<StaticData::ItemIndex>& StaticData::caseLoot() noexcept
     return StaticDataImpl::paintKits()[item.dataIndex].id;
 }
 
+int StaticData::getGraffitiID(const GameItem& item) noexcept
+{
+    assert(item.isGraffiti());
+    return StaticDataImpl::paintKits()[item.dataIndex].id;
+}
+
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())

@@ -143,6 +143,7 @@ namespace StaticData
     [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
     [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
     [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
+    [[nodiscard]] int getGraffitiID(const GameItem& item) noexcept;
     
     [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
     [[nodiscard]] std::wstring_view getPaintNameUpper(const GameItem& item) noexcept;
