@@ -274,11 +274,6 @@ private:
         _gameItems.addMusicKit(3, _musicKits.size() - 1, inventoryImage);
     }
 
-    void addMusic(int musicID, std::wstring name, const char* inventoryImage)
-    {
-        addMusic(musicID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(name.c_str())), stringPoolWide.add(Helpers::toUpper(name)), stringPool.add(inventoryImage));
-    }
-
     void initMusicData(ItemSchema* itemSchema) noexcept
     {
         for (const auto& node : itemSchema->musicKits) {
@@ -286,7 +281,8 @@ private:
             if (musicKit->id == 1 || musicKit->id == 2)
                 continue;
 
-            addMusic(musicKit->id, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
+            const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
+            addMusic(musicKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)), stringPool.add(musicKit->inventoryImage));
         }
     }
 
