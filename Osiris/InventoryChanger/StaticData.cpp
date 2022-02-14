@@ -208,7 +208,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            _paintKits.emplace_back(paintKit->id, interfaces->localize->convertUnicodeToAnsi(paintKitName), Helpers::toUpper(paintKitName), paintKit->wearRemapMin, paintKit->wearRemapMax);
+            _paintKits.emplace_back(paintKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)), paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -225,15 +225,15 @@ private:
         }
     }
 
-    std::size_t addGraffitiPaint(int id, std::string name, std::wstring nameUpperCase)
+    std::size_t addGraffitiPaint(int id, std::string_view name, std::wstring_view nameUpperCase)
     {
-        _paintKits.emplace_back(id, std::move(name), std::move(nameUpperCase));
+        _paintKits.emplace_back(id, stringPool.add(name), stringPoolWide.add(nameUpperCase));
         return _paintKits.size() - 1;
     }
 
-    void addPatch(int id, std::string name, std::wstring nameUpperCase, int rarity, const char* inventoryImage)
+    void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, const char* inventoryImage)
     {
-        _paintKits.emplace_back(id, std::move(name), std::move(nameUpperCase));
+        _paintKits.emplace_back(id, stringPool.add(name), stringPoolWide.add(nameUpperCase));
         _gameItems.addPatch(rarity, _paintKits.size() - 1, stringPool.add(inventoryImage));
     }
 
@@ -690,6 +690,6 @@ std::uint16_t StaticData::getServiceMedalYear(const GameItem& serviceMedal) noex
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
-StaticData::PaintKit::PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept : id{ id }, name{ std::move(name) }, nameUpperCase{ std::move(nameUpperCase) } {}
+StaticData::PaintKit::PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase) noexcept : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
 
-StaticData::PaintKit::PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ std::move(name) }, nameUpperCase{ std::move(nameUpperCase) } {}
+StaticData::PaintKit::PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name }, nameUpperCase{ nameUpperCase } {}

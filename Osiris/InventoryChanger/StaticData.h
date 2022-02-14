@@ -96,16 +96,16 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept;
-        PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase) noexcept;
+        PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
         float wearRemapMax = 1.0f;
-        std::string name;
-        std::wstring nameUpperCase;
+        std::string_view name;
+        std::wstring_view nameUpperCase;
     };
-
+    
     enum class TournamentMap : std::uint8_t {
         None = 0,
         Ancient,
