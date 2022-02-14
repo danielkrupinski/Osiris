@@ -83,12 +83,12 @@ namespace StaticData
     };
 
     struct StickerKit {
-        StickerKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+        StickerKit(int id, std::string_view name, std::wstring_view nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
             : id{ id }, name{ name }, nameUpperCase{ nameUpperCase }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
 
         int id;
-        std::string name;
-        std::wstring nameUpperCase;
+        std::string_view name;
+        std::wstring_view nameUpperCase;
         std::uint32_t tournamentID = 0;
         TournamentTeam tournamentTeam{};
         bool isGoldenSticker = false;

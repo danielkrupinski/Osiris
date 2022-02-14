@@ -254,7 +254,7 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                _stickerKits.emplace_back(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(stickerName), Helpers::toUpper(stickerName), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                _stickerKits.emplace_back(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
                 _gameItems.addSticker(stickerKit->rarity, _stickerKits.size() - 1, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
