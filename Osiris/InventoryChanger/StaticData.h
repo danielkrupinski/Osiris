@@ -13,6 +13,16 @@ enum TournamentTeam : std::uint8_t;
 
 namespace StaticData
 {
+    struct ItemIndex2 {
+        explicit ItemIndex2(std::size_t value) : value{ value } {}
+        ItemIndex2() = default;
+        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
+
+        std::size_t value = static_cast<std::size_t>(-1);
+    };
+
+    constexpr auto InvalidItemIdx2 = ItemIndex2{};
+
     using ItemIndex = std::size_t;
     constexpr auto InvalidItemIdx = static_cast<ItemIndex>(-1);
 
