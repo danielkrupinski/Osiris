@@ -227,14 +227,14 @@ private:
 
     std::size_t addGraffitiPaint(int id, std::string_view name, std::wstring_view nameUpperCase)
     {
-        _paintKits.emplace_back(id, stringPool.add(name), stringPoolWide.add(nameUpperCase));
+        _paintKits.emplace_back(id, name, nameUpperCase);
         return _paintKits.size() - 1;
     }
 
-    void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, const char* inventoryImage)
+    void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
     {
-        _paintKits.emplace_back(id, stringPool.add(name), stringPoolWide.add(nameUpperCase));
-        _gameItems.addPatch(rarity, _paintKits.size() - 1, stringPool.add(inventoryImage));
+        _paintKits.emplace_back(id, name, nameUpperCase);
+        _gameItems.addPatch(rarity, _paintKits.size() - 1, inventoryImage);
     }
 
     void initStickerData(ItemSchema* itemSchema) noexcept
@@ -258,10 +258,10 @@ private:
                 _gameItems.addSticker(stickerKit->rarity, _stickerKits.size() - 1, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                addPatch(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(patchName), Helpers::toUpper(patchName), stickerKit->rarity, stickerKit->inventoryImage.data());
+                addPatch(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                const auto paintID = addGraffitiPaint(stickerKit->id, interfaces->localize->convertUnicodeToAnsi(paintName), Helpers::toUpper(paintName));
+                const auto paintID = addGraffitiPaint(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)));
                 _gameItems.addGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
                 _gameItems.addSealedGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
             }
