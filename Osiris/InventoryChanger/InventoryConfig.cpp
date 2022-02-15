@@ -84,13 +84,11 @@ json InventoryChanger::toJson() noexcept
             break;
         }
         case StaticData::Type::Graffiti: {
-            const auto& staticData = StaticData::getPaintKit(gameItem);
-            itemConfig["Graffiti ID"] = staticData.id;
+            itemConfig["Graffiti ID"] = StaticData::getGraffitiID(gameItem);
             break;
         }
         case StaticData::Type::SealedGraffiti: {
-            const auto& staticData = StaticData::getPaintKit(gameItem);
-            itemConfig["Graffiti ID"] = staticData.id;
+            itemConfig["Graffiti ID"] = StaticData::getSealedGraffitiID(gameItem);
             break;
         }
         case StaticData::Type::Agent: {

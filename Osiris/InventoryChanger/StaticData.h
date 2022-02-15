@@ -62,7 +62,7 @@ namespace StaticData
         bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
+        bool hasPaintKit() const noexcept { return type > Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
 
         int tournamentEventID() const noexcept { assert(isTournamentCoin()); return static_cast<int>(dataIndex); }
 
@@ -83,12 +83,12 @@ namespace StaticData
     };
 
     struct StickerKit {
-        StickerKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+        StickerKit(int id, std::string_view name, std::wstring_view nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
             : id{ id }, name{ name }, nameUpperCase{ nameUpperCase }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
 
         int id;
-        std::string name;
-        std::wstring nameUpperCase;
+        std::string_view name;
+        std::wstring_view nameUpperCase;
         std::uint32_t tournamentID = 0;
         TournamentTeam tournamentTeam{};
         bool isGoldenSticker = false;
@@ -98,15 +98,10 @@ namespace StaticData
     struct PaintKit {
         PaintKit(int id, std::string name, std::wstring nameUpperCase) noexcept;
         PaintKit(int id, std::string name, std::wstring nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
-        PaintKit(int id, std::string name, std::wstring nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
         float wearRemapMax = 1.0f;
-        std::uint32_t tournamentID = 0;
-        TournamentTeam tournamentTeam{};
-        bool isGoldenSticker = false;
-        int tournamentPlayerID = 0;
         std::string name;
         std::wstring nameUpperCase;
     };
@@ -143,6 +138,8 @@ namespace StaticData
     [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
     [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
     [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
+    [[nodiscard]] int getGraffitiID(const GameItem& item) noexcept;
+    [[nodiscard]] int getSealedGraffitiID(const GameItem& item) noexcept;
     
     [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
     [[nodiscard]] std::wstring_view getPaintNameUpper(const GameItem& item) noexcept;
