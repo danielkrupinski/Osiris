@@ -834,23 +834,37 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            const auto gameItemsCount = StaticData::getGameItemsCount();
+            static auto itemIndices = StaticData::getItemIndices();
+            if (static bool sorted = false; !sorted) {
+                std::ranges::sort(itemIndices, [](const auto aIndex, const auto bIndex) {
+                    const auto& a = StaticData::getGameItem(aIndex);
+                    const auto& b = StaticData::getGameItem(bIndex);
+                    if (a.weaponID == b.weaponID)
+                        return StaticData::getPaintNameUpper(a) < StaticData::getPaintNameUpper(b);
+                    const auto comp = StaticData::getWeaponNameUpper(a.weaponID).compare(StaticData::getWeaponNameUpper(b.weaponID));
+                    if (comp == 0)
+                        return a.weaponID < b.weaponID;
+                    return comp < 0;
+                });
+                sorted = true;
+            }
+
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
-            for (std::size_t i = 0; i < gameItemsCount; ++i) {
-                const auto& gameItem = StaticData::getGameItem(StaticData::ItemIndex2{ i });
+            for (std::size_t i = 0; i < itemIndices.size(); ++i) {
+                const auto& gameItem = StaticData::getGameItem(itemIndices[i]);
                 if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!passesFilter(std::wstring(StaticData::getPaintNameUpper(gameItem)), filterWide)))
                     continue;
                 ImGui::PushID(i);
 
-                const auto selected = selectedToAdd.contains(StaticData::ItemIndex2{ i });
+                const auto selected = selectedToAdd.contains(itemIndices[i]);
 
-                if (const auto toAddCount = selected ? &selectedToAdd[StaticData::ItemIndex2{ i }] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.rarity), selected, toAddCount)) {
                     if (selected) {
-                        selectedToAdd.erase(StaticData::ItemIndex2{ i });
-                        std::erase(toAddOrder, StaticData::ItemIndex2{ i });
+                        selectedToAdd.erase(itemIndices[i]);
+                        std::erase(toAddOrder, itemIndices[i]);
                     } else {
-                        selectedToAdd.emplace(i, 1);
-                        toAddOrder.push_back(StaticData::ItemIndex2{ i });
+                        selectedToAdd.emplace(itemIndices[i], 1);
+                        toAddOrder.push_back(itemIndices[i]);
                     }
                 }
                 ImGui::PopID();
