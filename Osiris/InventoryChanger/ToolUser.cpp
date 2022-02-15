@@ -100,7 +100,7 @@ private:
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getPaintKit(sealedGraffiti.get()).id); idx != StaticData::InvalidItemIdx) {
+        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getSealedGraffitiID(sealedGraffiti.get())); idx != StaticData::InvalidItemIdx) {
             sealedGraffiti.markToDelete();
             initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
         }
