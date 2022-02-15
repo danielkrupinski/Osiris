@@ -238,6 +238,12 @@ private:
         _gameItems.addSealedGraffiti(rarity, _paintKits.size() - 1, inventoryImage);
     }
 
+    void addSticker(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+    {
+        _stickerKits.emplace_back(id, name, nameUpperCase, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
+        _gameItems.addSticker(rarity, _stickerKits.size() - 1, inventoryImage);
+    }
+
     void initStickerData(ItemSchema* itemSchema) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
@@ -255,8 +261,7 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                _stickerKits.emplace_back(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
-                _gameItems.addSticker(stickerKit->rarity, _stickerKits.size() - 1, stringPool.add(stickerKit->inventoryImage.data()));
+                addSticker(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
                 addPatch(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
