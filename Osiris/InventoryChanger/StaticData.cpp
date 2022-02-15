@@ -225,12 +225,6 @@ private:
         }
     }
 
-    std::size_t addGraffitiPaint(int id, std::string_view name, std::wstring_view nameUpperCase)
-    {
-        _paintKits.emplace_back(id, name, nameUpperCase);
-        return _paintKits.size() - 1;
-    }
-
     void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
     {
         _paintKits.emplace_back(id, name, nameUpperCase);
