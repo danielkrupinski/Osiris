@@ -406,7 +406,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const WeaponId weaponID = jsonItem["Weapon ID"];
-        StaticData::ItemIndex itemIndex = StaticData::InvalidItemIdx;
+        StaticData::ItemIndex2 itemIndex;
 
         if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
             itemIndex = StaticData::getItemIndex(weaponID, jsonItem["Paint Kit"]);
@@ -421,7 +421,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         else
             itemIndex = StaticData::getItemIndex(weaponID, 0);
 
-        if (itemIndex == StaticData::InvalidItemIdx)
+        if (itemIndex == StaticData::InvalidItemIdx2)
             continue;
 
         const auto& item = StaticData::getGameItem(itemIndex);

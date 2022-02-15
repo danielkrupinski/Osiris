@@ -86,7 +86,7 @@ private:
         const auto passWeaponID = pass.get().weaponID;
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx)
+        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx2)
             Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, true);
     }
 
@@ -94,13 +94,13 @@ private:
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
         pass.markToDelete();
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx)
+        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx2)
             initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
     }
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getSealedGraffitiID(sealedGraffiti.get())); idx != StaticData::InvalidItemIdx) {
+        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getSealedGraffitiID(sealedGraffiti.get())); idx != StaticData::InvalidItemIdx2) {
             sealedGraffiti.markToDelete();
             initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
         }

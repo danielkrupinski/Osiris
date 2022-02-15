@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <span>
 #include <string>
 #include <string_view>
@@ -22,9 +23,6 @@ namespace StaticData
     };
 
     constexpr auto InvalidItemIdx2 = ItemIndex2{};
-
-    using ItemIndex = std::size_t;
-    constexpr auto InvalidItemIdx = static_cast<ItemIndex>(-1);
 
     enum class Type : std::uint8_t {
         // has paint kit, must match GameItem::hasPaintKit() below
@@ -134,10 +132,10 @@ namespace StaticData
         bool willProduceStatTrak = false;
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
-        ItemIndex lootBeginIdx = 0;
-        ItemIndex lootEndIdx = 0;
+        ItemIndex2 lootBeginIdx;
+        ItemIndex2 lootEndIdx;
 
-        bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
+        bool hasLoot() const noexcept { return lootEndIdx.value > lootBeginIdx.value; }
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
@@ -155,13 +153,13 @@ namespace StaticData
     [[nodiscard]] std::wstring_view getPaintNameUpper(const GameItem& item) noexcept;
     [[nodiscard]] const PaintKit& getPaintKit(const GameItem& item) noexcept;
     [[nodiscard]] const Case& getCase(const GameItem& item) noexcept;
-    [[nodiscard]] const GameItem& getGameItem(ItemIndex itemIndex) noexcept;
+    [[nodiscard]] const GameItem& getGameItem(ItemIndex2 itemIndex) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    ItemIndex getItemIndex(WeaponId weaponID, int paintKit) noexcept;
-    ItemIndex getMusicIndex(int musicID) noexcept;
+    ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) noexcept;
+    ItemIndex2 getMusicIndex(int musicID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
@@ -195,3 +193,11 @@ namespace StaticData
         return TournamentMap::None;
     }
 }
+
+template <>
+struct std::hash<StaticData::ItemIndex2> {
+    std::size_t operator()(StaticData::ItemIndex2 s) const noexcept
+    {
+        return std::hash<std::size_t>{}(s.value);
+    }
+};

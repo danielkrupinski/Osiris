@@ -12,7 +12,6 @@
 #include "../StringPool.h"
 
 using StaticData::TournamentMap;
-using StaticData::InvalidItemIdx;
 using StaticData::Type;
 
 constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
@@ -418,12 +417,12 @@ private:
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
             const auto lootListName = itemSchema->revolvingLootLists.memory[lootListIndices[i]].value;
 
-            _cases[i].lootBeginIdx = _caseLoot.size();
+            _cases[i].lootBeginIdx = StaticData::ItemIndex2{ _caseLoot.size() };
             if (const auto lootList = itemSchema->getLootList(lootListName))
                 fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[i].willProduceStatTrak);
             else
                 rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
-            _cases[i].lootEndIdx = _caseLoot.size();
+            _cases[i].lootEndIdx = StaticData::ItemIndex2{ _caseLoot.size() };
 
             if (_cases[i].isSouvenirPackage())
                 _cases[i].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
@@ -473,12 +472,12 @@ private:
 
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isSticker(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx.value, _caseLoot.begin() + caseData.lootEndIdx.value, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isSticker(); });
     }
 
     [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isPatch(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx.value, _caseLoot.begin() + caseData.lootEndIdx.value, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isPatch(); });
     }
 
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
@@ -625,9 +624,9 @@ const StaticData::Case& StaticData::getCase(const GameItem& item) noexcept
     return StaticDataImpl::cases()[item.dataIndex];
 }
 
-const StaticData::GameItem& StaticData::getGameItem(ItemIndex itemIndex) noexcept
+const StaticData::GameItem& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
 {
-    return StaticDataImpl::gameItems().get(itemIndex);
+    return StaticDataImpl::gameItems().get(itemIndex.value);
 }
 
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
@@ -640,14 +639,14 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return StaticDataImpl::instance().getWeaponName(weaponID);
 }
 
-StaticData::ItemIndex StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
+StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
 {
-    return StaticDataImpl::instance().getItemIndex(weaponID, paintKit).value;
+    return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
 }
 
-StaticData::ItemIndex StaticData::getMusicIndex(int musicID) noexcept
+StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
 {
-    return StaticDataImpl::instance().getMusicIndex(musicID).value;
+    return StaticDataImpl::instance().getMusicIndex(musicID);
 }
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
