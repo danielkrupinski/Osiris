@@ -554,6 +554,15 @@ const std::vector<StaticData::ItemIndex2>& StaticData::caseLoot() noexcept
     return StaticDataImpl::caseLoot();
 }
 
+std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
+{
+    const auto itemIndexCount = StaticDataImpl::gameItems().size();
+    std::vector<StaticData::ItemIndex2> indices(itemIndexCount);
+    for (std::size_t i = 0; i < itemIndexCount; ++i)
+        indices[i] = StaticData::ItemIndex2{ i };
+    return indices;
+}
+
 [[nodiscard]] int StaticData::getStickerID(const GameItem& item) noexcept
 {
     assert(item.isSticker());
