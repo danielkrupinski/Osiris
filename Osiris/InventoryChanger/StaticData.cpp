@@ -237,6 +237,13 @@ private:
         _gameItems.addPatch(rarity, _paintKits.size() - 1, inventoryImage);
     }
 
+    void addGraffiti(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
+    {
+        _paintKits.emplace_back(id, name, nameUpperCase);
+        _gameItems.addGraffiti(rarity, _paintKits.size() - 1, inventoryImage);
+        _gameItems.addSealedGraffiti(rarity, _paintKits.size() - 1, inventoryImage);
+    }
+
     void initStickerData(ItemSchema* itemSchema) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
@@ -261,9 +268,7 @@ private:
                 addPatch(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                const auto paintID = addGraffitiPaint(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)));
-                _gameItems.addGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
-                _gameItems.addSealedGraffiti(stickerKit->rarity, paintID, stringPool.add(stickerKit->inventoryImage.data()));
+                addGraffiti(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
