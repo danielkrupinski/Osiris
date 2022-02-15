@@ -500,19 +500,6 @@ private:
         initItemData(itemSchema, lootListIndices);
         initWeaponNames(itemSchema);
 
-        _gameItems.sort([this](const auto& a, const auto& b) {
-            if (a.weaponID == b.weaponID) {
-                if (a.hasPaintKit() && b.hasPaintKit())
-                    return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
-                if (a.isSticker() && b.isSticker())
-                    return _stickerKits[a.dataIndex].nameUpperCase < _stickerKits[b.dataIndex].nameUpperCase;
-            }
-            const auto comp = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
-            if (comp == 0)
-                return a.weaponID < b.weaponID;
-            return comp < 0;
-        });
-
         initSortedItemsVector();
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
