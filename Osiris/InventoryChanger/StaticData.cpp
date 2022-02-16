@@ -1,6 +1,9 @@
 #include <algorithm>
 #include <cstring>
 #include <numeric>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
 
 #include "GameItemStorage.h"
 #include "StaticData.h"
@@ -33,6 +36,31 @@ struct Collectible {
     explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
 
     bool isOriginal;
+};
+
+class WeaponNames {
+public:
+    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const
+    {
+        if (const auto it = names.find(weaponID); it != names.end())
+            return it->second.first;
+        return "";
+    }
+
+    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const
+    {
+        if (const auto it = names.find(weaponID); it != names.end())
+            return it->second.second;
+        return L"";
+    }
+
+    void add(WeaponId weaponID, std::string_view name, std::wstring_view nameUpperCase)
+    {
+        names.emplace(weaponID, std::make_pair(name, nameUpperCase));
+    }
+
+private:
+    std::unordered_map<WeaponId, std::pair<std::string_view, std::wstring_view>> names;
 };
 
 class StaticDataImpl {
@@ -151,16 +179,12 @@ public:
 
     [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
     {
-        if (const auto it = _weaponNamesUpper.find(weaponID); it != _weaponNamesUpper.end())
-            return it->second;
-        return L"";
+        return weaponNames.getWeaponNameUpper(weaponID);
     }
 
     [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const noexcept
     {
-        if (const auto it = _weaponNames.find(weaponID); it != _weaponNames.end())
-            return it->second;
-        return "";
+        return weaponNames.getWeaponName(weaponID);
     }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
@@ -358,7 +382,7 @@ private:
             if (!def)
                 continue;
 
-            std::wstring nameWide = interfaces->localize->findSafe(def->getItemBaseName());
+            const auto nameWide = interfaces->localize->findSafe(def->getItemBaseName());
             /*
             if (item.isCollectible() && _collectibles[item.dataIndex].isOriginal) {
                 nameWide += L" (";
@@ -366,8 +390,7 @@ private:
                 nameWide += L")";
             }
             */
-            _weaponNames.emplace(weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide.c_str())));
-            _weaponNamesUpper.emplace(weaponID, stringPoolWide.add(Helpers::toUpper(std::move(nameWide))));
+            weaponNames.add(weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
         }
     }
 
@@ -515,10 +538,9 @@ private:
     std::vector<StaticData::ItemIndex2> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, "", L"" } };
     static constexpr auto vanillaPaintIndex = 0;
-    std::unordered_map<WeaponId, std::string_view> _weaponNames;
-    std::unordered_map<WeaponId, std::wstring_view> _weaponNamesUpper;
     std::vector<StaticData::MusicKit> _musicKits;
     std::vector<StaticData::StickerKit> _stickerKits;
+    WeaponNames weaponNames;
 };
 
 [[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
