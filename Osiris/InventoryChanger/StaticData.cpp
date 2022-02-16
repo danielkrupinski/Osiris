@@ -58,15 +58,12 @@ private:
     auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
-            explicit Comp(const GameItemStorage& gameItems) : gameItems{ gameItems } {}
-            bool operator()(WeaponId weaponID, StaticData::ItemIndex2 index) const noexcept { return weaponID < gameItems.get(index.value).weaponID; }
-            bool operator()(StaticData::ItemIndex2 index, WeaponId weaponID) const noexcept { return gameItems.get(index.value).weaponID < weaponID; }
-        private:
-            const GameItemStorage& gameItems;
+            bool operator()(WeaponId weaponID, const StaticData::GameItem& item) const noexcept { return weaponID < item.weaponID; }
+            bool operator()(const StaticData::GameItem& item, WeaponId weaponID) const noexcept { return item.weaponID < weaponID; }
         };
 
-        assert(!_itemsSorted.empty());
-        return std::equal_range(_itemsSorted.cbegin(), _itemsSorted.cend(), weaponID, Comp{ _gameItems }); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+        assert(!_gameItems.empty());
+        return std::equal_range(_gameItems.cbegin(), _gameItems.cend(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
     }
 
 public:
@@ -125,16 +122,16 @@ public:
     [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](StaticData::ItemIndex2 index, int paintKit) { return _gameItems.get(index.value).hasPaintKit() && _paintKits[_gameItems.get(index.value).dataIndex].id < paintKit; }); it != end && _gameItems.get(it->value).weaponID == weaponID && (!_gameItems.get(it->value).hasPaintKit() || _paintKits[_gameItems.get(it->value).dataIndex].id == paintKit))
-            return *it;
+        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return item.hasPaintKit() && _paintKits[item.dataIndex].id < paintKit; }); it != end && it->weaponID == weaponID && (!it->hasPaintKit() || _paintKits[it->dataIndex].id == paintKit))
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(_gameItems.begin(), it)) };
         return StaticData::InvalidItemIdx2;
     }
 
     [[nodiscard]] StaticData::ItemIndex2 getMusicIndex(int musicKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::MusicKit);
-        if (const auto it = std::find_if(begin, end, [this, musicKit](StaticData::ItemIndex2 index) { return _musicKits[_gameItems.get(index.value).dataIndex].id == musicKit; }); it != end)
-            return *it;
+        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return _musicKits[item.dataIndex].id == musicKit; }); it != end)
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(_gameItems.begin(), it)) };
         return StaticData::InvalidItemIdx2;
     }
 
@@ -429,27 +426,11 @@ private:
         }
     }
 
-    void initSortedItemsVector() noexcept
-    {
-        _itemsSorted.resize(_gameItems.size());
-        for (std::size_t i = 0; i < _itemsSorted.size(); ++i)
-            _itemsSorted[i].value = i;
-
-        std::ranges::sort(_itemsSorted, [this](StaticData::ItemIndex2 a, StaticData::ItemIndex2 b) {
-            const auto& itemA = _gameItems.get(a.value);
-            const auto& itemB = _gameItems.get(b.value);
-            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
-                return _paintKits[itemA.dataIndex].id < _paintKits[itemB.dataIndex].id;
-            return itemA.weaponID < itemB.weaponID;
-        });
-    }
-
     void initTournamentSortedStickers() noexcept
     {
-        assert(!_itemsSorted.empty());
-
         const auto stickers = findItems(WeaponId::Sticker);
-        _tournamentStickersSorted = { stickers.first, stickers.second };
+        for (auto i = std::distance(_gameItems.cbegin(), stickers.first); i < std::distance(_gameItems.cbegin(), stickers.second); ++i)
+            _tournamentStickersSorted.emplace_back(static_cast<std::size_t>(i));
 
         std::ranges::sort(_tournamentStickersSorted, [this](StaticData::ItemIndex2 a, StaticData::ItemIndex2 b) {
             const auto& itemA = _gameItems.get(a.value);
@@ -500,7 +481,12 @@ private:
         initItemData(itemSchema, lootListIndices);
         initWeaponNames(itemSchema);
 
-        initSortedItemsVector();
+        std::ranges::sort(_gameItems, [this](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
+            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
+                return _paintKits[itemA.dataIndex].id < _paintKits[itemB.dataIndex].id;
+            return itemA.weaponID < itemB.weaponID;
+        });
+
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
         initTournamentSortedStickers();
@@ -509,7 +495,6 @@ private:
         _collectibles.shrink_to_fit();
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
-        _itemsSorted.shrink_to_fit();
         _tournamentStickersSorted.shrink_to_fit();
         _paintKits.shrink_to_fit();
     }
@@ -521,7 +506,6 @@ private:
     std::vector<ServiceMedal> _serviceMedals;
     std::vector<StaticData::Case> _cases;
     std::vector<StaticData::ItemIndex2> _caseLoot;
-    std::vector<StaticData::ItemIndex2> _itemsSorted;
     std::vector<StaticData::ItemIndex2> _tournamentStickersSorted;
     std::vector<StaticData::PaintKit> _paintKits{ { 0, "", L"" } };
     static constexpr auto vanillaPaintIndex = 0;
