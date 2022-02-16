@@ -133,12 +133,6 @@ public:
         return uniqueWeaponIDs;
     }
 
-    template <typename Comparator>
-    void sort(Comparator comparator)
-    {
-        std::ranges::sort(gameItems, comparator);
-    }
-
     auto begin() { return gameItems.begin(); }
     auto begin() const { return gameItems.begin(); }
     auto cbegin() const { return gameItems.cbegin(); }
