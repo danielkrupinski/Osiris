@@ -62,7 +62,6 @@ private:
             bool operator()(const StaticData::GameItem& item, WeaponId weaponID) const noexcept { return item.weaponID < weaponID; }
         };
 
-        assert(!_gameItems.empty());
         return std::equal_range(_gameItems.cbegin(), _gameItems.cend(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
     }
 
