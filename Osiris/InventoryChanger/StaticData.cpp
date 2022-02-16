@@ -631,6 +631,11 @@ StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID, int paintKit)
     return StaticDataImpl::instance().getItemIndex(weaponID, paintKit);
 }
 
+StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID) noexcept
+{
+    return StaticDataImpl::instance().getItemIndex(weaponID);
+}
+
 StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
 {
     return StaticDataImpl::instance().getMusicIndex(musicID);

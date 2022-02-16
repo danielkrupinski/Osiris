@@ -86,7 +86,7 @@ private:
         const auto passWeaponID = pass.get().weaponID;
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx2)
+        if (const auto idx = StaticData::getItemIndex(coinID); idx != StaticData::InvalidItemIdx2)
             Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, true);
     }
 
@@ -94,7 +94,7 @@ private:
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
         pass.markToDelete();
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx2)
+        if (const auto idx = StaticData::getItemIndex(coinID); idx != StaticData::InvalidItemIdx2)
             initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
     }
 
