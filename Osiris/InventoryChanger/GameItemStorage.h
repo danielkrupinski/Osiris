@@ -139,6 +139,13 @@ public:
         std::ranges::sort(gameItems, comparator);
     }
 
+    auto begin() { return gameItems.begin(); }
+    auto begin() const { return gameItems.begin(); }
+    auto cbegin() const { return gameItems.cbegin(); }
+    auto end() { return gameItems.end(); }
+    auto end() const { return gameItems.end(); }
+    auto cend() const { return gameItems.cend(); }
+
 private:
     void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
