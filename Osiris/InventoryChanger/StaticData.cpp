@@ -127,6 +127,13 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID) const noexcept
+    {
+        if (const auto it = std::ranges::lower_bound(_gameItems, weaponID, {}, &StaticData::GameItem::weaponID); it != _gameItems.end())
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(_gameItems.begin(), it)) };
+        return StaticData::InvalidItemIdx2;
+    }
+
     [[nodiscard]] StaticData::ItemIndex2 getMusicIndex(int musicKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::MusicKit);
