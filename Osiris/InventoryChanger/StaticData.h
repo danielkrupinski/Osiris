@@ -132,10 +132,10 @@ namespace StaticData
         bool willProduceStatTrak = false;
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
-        ItemIndex2 lootBeginIdx;
-        ItemIndex2 lootEndIdx;
+        std::size_t lootBeginIdx;
+        std::size_t lootEndIdx;
 
-        bool hasLoot() const noexcept { return lootEndIdx.value > lootBeginIdx.value; }
+        bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
         bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 

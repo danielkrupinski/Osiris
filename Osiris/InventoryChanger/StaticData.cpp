@@ -414,12 +414,12 @@ private:
         for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
             const auto lootListName = itemSchema->revolvingLootLists.memory[lootListIndices[i]].value;
 
-            _cases[i].lootBeginIdx = StaticData::ItemIndex2{ _caseLoot.size() };
+            _cases[i].lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(lootListName))
                 fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[i].willProduceStatTrak);
             else
                 rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
-            _cases[i].lootEndIdx = StaticData::ItemIndex2{ _caseLoot.size() };
+            _cases[i].lootEndIdx = _caseLoot.size();
 
             if (_cases[i].isSouvenirPackage())
                 _cases[i].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
@@ -453,12 +453,12 @@ private:
 
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx.value, _caseLoot.begin() + caseData.lootEndIdx.value, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isSticker(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isSticker(); });
     }
 
     [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx.value, _caseLoot.begin() + caseData.lootEndIdx.value, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isPatch(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return _gameItems.get(itemIndex.value).isPatch(); });
     }
 
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
