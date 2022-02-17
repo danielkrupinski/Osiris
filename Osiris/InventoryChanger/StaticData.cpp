@@ -226,6 +226,8 @@ private:
     {
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
+        ToUtf8Converter converter{ *interfaces->localize };
+
         _gameItems.reserve(itemSchema->paintKits.lastAlloc);
         for (const auto& node : itemSchema->paintKits) {
             const auto paintKit = node.value;
@@ -234,7 +236,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            _paintKits.emplace_back(paintKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)), paintKit->wearRemapMin, paintKit->wearRemapMax);
+            _paintKits.emplace_back(paintKit->id, stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)), paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -272,6 +274,8 @@ private:
 
     void initStickerData(ItemSchema* itemSchema) noexcept
     {
+        ToUtf8Converter converter{ *interfaces->localize };
+
         const auto& stickerMap = itemSchema->stickerKits;
         _gameItems.reserve(_gameItems.size() + stickerMap.numElements);
         for (const auto& node : stickerMap) {
@@ -287,13 +291,13 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                addSticker(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                addSticker(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                addPatch(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                addPatch(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                addGraffiti(stickerKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                addGraffiti(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
@@ -306,13 +310,15 @@ private:
 
     void initMusicData(ItemSchema* itemSchema) noexcept
     {
+        ToUtf8Converter converter{ *interfaces->localize };
+
         for (const auto& node : itemSchema->musicKits) {
             const auto musicKit = node.value;
             if (musicKit->id == 1 || musicKit->id == 2)
                 continue;
 
             const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            addMusic(musicKit->id, stringPool.add(interfaces->localize->convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)), stringPool.add(musicKit->inventoryImage));
+            addMusic(musicKit->id, stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)), stringPool.add(musicKit->inventoryImage));
         }
     }
 
@@ -392,6 +398,7 @@ private:
 
     void initWeaponNames(ItemSchema* itemSchema) noexcept
     {
+        ToUtf8Converter converter{ *interfaces->localize };
         for (const auto weaponID : _gameItems.getUniqueWeaponIDs()) {
             const auto def = itemSchema->getItemDefinitionInterface(weaponID);
             if (!def)
@@ -405,7 +412,7 @@ private:
                 nameWide += L")";
             }
             */
-            weaponNames.add(weaponID, stringPool.add(interfaces->localize->convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
+            weaponNames.add(weaponID, stringPool.add(converter.convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
         }
     }
 
