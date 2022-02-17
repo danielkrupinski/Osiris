@@ -321,6 +321,12 @@ private:
         _gameItems.addSkin(6, weaponID, vanillaPaintIndex, inventoryImage);
     }
 
+    void addCollectible(int rarity, WeaponId weaponID, bool isOriginal, std::string_view inventoryImage)
+    {
+        _collectibles.emplace_back(isOriginal);
+        _gameItems.addCollectible(rarity, weaponID, _collectibles.size() - 1, inventoryImage);
+    }
+
     void initItemData(ItemSchema* itemSchema, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
@@ -344,8 +350,7 @@ private:
                 } else if (item->isTournamentCoin()) {
                     _gameItems.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                 } else {
-                    _collectibles.emplace_back(isOriginal);
-                    _gameItems.addCollectible(rarity, weaponID, _collectibles.size() - 1, stringPool.add(inventoryImage));
+                    addCollectible(rarity, weaponID, isOriginal, stringPool.add(inventoryImage));
                 }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 _gameItems.addNameTag(rarity, weaponID, stringPool.add(inventoryImage));
