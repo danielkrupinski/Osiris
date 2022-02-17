@@ -316,6 +316,11 @@ private:
         }
     }
 
+    void addVanillaKnife(WeaponId weaponID, std::string_view inventoryImage)
+    {
+        _gameItems.addSkin(6, weaponID, vanillaPaintIndex, inventoryImage);
+    }
+
     void initItemData(ItemSchema* itemSchema, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
@@ -331,7 +336,7 @@ private:
             const auto rarity = item->getRarity();
 
             if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
-                _gameItems.addSkin(6, weaponID, vanillaPaintIndex, stringPool.add(inventoryImage));
+                addVanillaKnife(weaponID, stringPool.add(inventoryImage));
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
                     _serviceMedals.emplace_back(item->getServiceMedalYear());
