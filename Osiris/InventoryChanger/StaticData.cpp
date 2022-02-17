@@ -404,20 +404,12 @@ private:
     void initWeaponNames(ItemSchema* itemSchema) noexcept
     {
         ToUtf8Converter converter{ *interfaces->localize };
-        for (const auto weaponID : _gameItems.getUniqueWeaponIDs()) {
-            const auto def = itemSchema->getItemDefinitionInterface(weaponID);
-            if (!def)
-                continue;
 
-            const auto nameWide = interfaces->localize->findSafe(def->getItemBaseName());
-            /*
-            if (item.isCollectible() && _collectibles[item.dataIndex].isOriginal) {
-                nameWide += L" (";
-                nameWide += interfaces->localize->findSafe("genuine");
-                nameWide += L")";
-            }
-            */
-            weaponNames.add(weaponID, stringPool.add(converter.convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
+        for (const auto& node : itemSchema->itemsSorted) {
+            const auto item = node.value;
+            const auto nameWide = interfaces->localize->findSafe(item->getItemBaseName());
+
+            weaponNames.add(item->getWeaponId(), stringPool.add(converter.convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
         }
     }
 
