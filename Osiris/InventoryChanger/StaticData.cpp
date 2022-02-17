@@ -428,7 +428,7 @@ private:
                 else if ((idx = getItemIndex(WeaponId::Patch, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
             } else if (contents[j].musicKit != 0) {
-                if (const auto idx = getItemIndex(WeaponId::MusicKit, contents[j].musicKit); idx != StaticData::InvalidItemIdx2)
+                if (const auto idx = getMusicIndex(contents[j].musicKit); idx != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
             } else if (contents[j].isNestedList) {
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
