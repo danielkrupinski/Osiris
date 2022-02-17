@@ -327,6 +327,11 @@ private:
         _gameItems.addCollectible(rarity, weaponID, _collectibles.size() - 1, inventoryImage);
     }
 
+    void addVanillaSkin(WeaponId weaponID, std::string_view inventoryImage)
+    {
+        _gameItems.addSkin(0, weaponID, vanillaPaintIndex, inventoryImage);
+    }
+
     void initItemData(ItemSchema* itemSchema, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
@@ -380,7 +385,7 @@ private:
                         _gameItems.addViewerPass(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                 }
             } else if (item->isPaintable()) {
-                _gameItems.addSkin(0, weaponID, vanillaPaintIndex, stringPool.add(inventoryImage));
+                addVanillaSkin(weaponID, stringPool.add(inventoryImage));
             }
         }
     }
