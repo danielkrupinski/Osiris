@@ -63,6 +63,48 @@ private:
     std::unordered_map<WeaponId, std::pair<std::string_view, std::wstring_view>> names;
 };
 
+class WeaponNamesStorage {
+public:
+    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const
+    {
+        return weaponNames.getWeaponName(weaponID);
+    }
+
+    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const
+    {
+        return weaponNames.getWeaponNameUpper(weaponID);
+    }
+
+    void add(WeaponId weaponID, std::string_view name, std::wstring_view nameUpperCase)
+    {
+        weaponNames.add(weaponID, pool.add(name), poolWide.add(nameUpperCase));
+    }
+
+private:
+    StringPool<char> pool;
+    StringPool<wchar_t> poolWide;
+    WeaponNames weaponNames;
+};
+
+[[nodiscard]] static WeaponNamesStorage createWeaponNamesStorage(ItemSchema* itemSchema)
+{
+    WeaponNamesStorage storage;
+    ToUtf8Converter converter{ *interfaces->localize };
+
+    for (const auto& node : itemSchema->itemsSorted) {
+        const auto item = node.value;
+        const auto nameWide = interfaces->localize->findSafe(item->getItemBaseName());
+        storage.add(item->getWeaponId(), converter.convertUnicodeToAnsi(nameWide), Helpers::toUpper(nameWide));
+    }
+    return storage;
+}
+
+[[nodiscard]] static const WeaponNamesStorage& getWeaponNamesInstance()
+{
+    static const WeaponNamesStorage storage{ createWeaponNamesStorage(memory->itemSystem()->getItemSchema()) };
+    return storage;
+}
+
 class StaticDataImpl {
 private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
@@ -176,16 +218,6 @@ public:
     static const auto& paintKits() noexcept { return instance()._paintKits; }
     static const auto& musicKits() noexcept { return instance()._musicKits; }
     static const auto& stickerKits() noexcept { return instance()._stickerKits; }
-
-    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const noexcept
-    {
-        return weaponNames.getWeaponNameUpper(weaponID);
-    }
-
-    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const noexcept
-    {
-        return weaponNames.getWeaponName(weaponID);
-    }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
@@ -401,18 +433,6 @@ private:
         }
     }
 
-    void initWeaponNames(ItemSchema* itemSchema) noexcept
-    {
-        ToUtf8Converter converter{ *interfaces->localize };
-
-        for (const auto& node : itemSchema->itemsSorted) {
-            const auto item = node.value;
-            const auto nameWide = interfaces->localize->findSafe(item->getItemBaseName());
-
-            weaponNames.add(item->getWeaponId(), stringPool.add(converter.convertUnicodeToAnsi(nameWide)), stringPoolWide.add(Helpers::toUpper(nameWide)));
-        }
-    }
-
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<StaticData::ItemIndex2>& loot, bool* willProduceStatTrak = nullptr) const noexcept
     {
         if (willProduceStatTrak)
@@ -527,7 +547,6 @@ private:
         initMusicData(itemSchema);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, lootListIndices);
-        initWeaponNames(itemSchema);
 
         std::ranges::sort(_gameItems, [this](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
             if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
@@ -559,7 +578,6 @@ private:
     static constexpr auto vanillaPaintIndex = 0;
     std::vector<StaticData::MusicKit> _musicKits;
     std::vector<StaticData::StickerKit> _stickerKits;
-    WeaponNames weaponNames;
 };
 
 [[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
@@ -658,12 +676,12 @@ const StaticData::GameItem& StaticData::getGameItem(ItemIndex2 itemIndex) noexce
 
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
-    return StaticDataImpl::instance().getWeaponNameUpper(weaponID);
+    return getWeaponNamesInstance().getWeaponNameUpper(weaponID);
 }
 
 std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 {
-    return StaticDataImpl::instance().getWeaponName(weaponID);
+    return getWeaponNamesInstance().getWeaponName(weaponID);
 }
 
 StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
