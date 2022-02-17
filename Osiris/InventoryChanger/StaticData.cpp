@@ -338,6 +338,12 @@ private:
         _gameItems.addSkin(0, weaponID, vanillaPaintIndex, inventoryImage);
     }
 
+    void addServiceMedal(int rarity, std::uint32_t year, WeaponId weaponID, std::string_view inventoryImage)
+    {
+        _serviceMedals.emplace_back(year);
+        _gameItems.addServiceMedal(rarity, weaponID, _serviceMedals.size() - 1, inventoryImage);
+    }
+
     void initItemData(ItemSchema* itemSchema, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
@@ -356,8 +362,7 @@ private:
                 addVanillaKnife(weaponID, stringPool.add(inventoryImage));
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
-                    _serviceMedals.emplace_back(item->getServiceMedalYear());
-                    _gameItems.addServiceMedal(rarity, weaponID, _serviceMedals.size() - 1, stringPool.add(inventoryImage));
+                    addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, stringPool.add(inventoryImage));
                 } else if (item->isTournamentCoin()) {
                     _gameItems.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                 } else {
