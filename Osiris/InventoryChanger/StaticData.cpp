@@ -738,6 +738,12 @@ std::uint16_t StaticData::getServiceMedalYear(const GameItem& serviceMedal) noex
     return StaticDataImpl::instance().getServiceMedalYear(serviceMedal);
 }
 
+std::uint32_t StaticData::getTournamentEventID(const GameItem& item) noexcept
+{
+    assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
+    return static_cast<std::uint32_t>(item.dataIndex);
+}
+
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
 StaticData::PaintKit::PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase) noexcept : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}

@@ -169,6 +169,7 @@ namespace StaticData
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     bool isCollectibleGenuine(const GameItem& collectible) noexcept;
     std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
+    [[nodiscard]] std::uint32_t getTournamentEventID(const GameItem& item) noexcept;
 
     constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {
