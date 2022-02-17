@@ -125,14 +125,6 @@ public:
         return gameItems.size();
     }
 
-    [[nodiscard]] std::unordered_set<WeaponId> getUniqueWeaponIDs() const
-    {
-        std::unordered_set<WeaponId> uniqueWeaponIDs;
-        for (const auto& gameItem : gameItems)
-            uniqueWeaponIDs.emplace(gameItem.weaponID);
-        return uniqueWeaponIDs;
-    }
-
     auto begin() { return gameItems.begin(); }
     auto begin() const { return gameItems.begin(); }
     auto cbegin() const { return gameItems.cbegin(); }
