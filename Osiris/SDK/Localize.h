@@ -22,3 +22,20 @@ public:
         return buffer;
     }
 };
+
+template <std::size_t BufferSize = 4096>
+class ToUtf8Converter {
+public:
+    ToUtf8Converter(Localize& localize) : localize{ localize } {}
+    
+    [[nodiscard]] std::string_view convertUnicodeToAnsi(const wchar_t* string)
+    {
+        localize.convertUnicodeToAnsi(string, buffer.data(), buffer.size());
+        buffer.back() = '\0';
+        return buffer.data();
+    }
+
+private:
+    Localize& localize;
+    std::array<char, BufferSize> buffer;
+};
