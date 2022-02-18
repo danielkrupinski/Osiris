@@ -211,6 +211,14 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] StaticData::ItemIndex2 getStickerIndex(int stickerKit) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::Sticker);
+        if (const auto it = std::find_if(begin, end, [this, stickerKit](const StaticData::GameItem& item) { return _stickerKits[item.dataIndex].id == stickerKit; }); it != end)
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(_gameItems.begin(), it)) };
+        return StaticData::InvalidItemIdx2;
+    }
+
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
     static const auto& cases() noexcept { return instance()._cases; }
@@ -441,7 +449,7 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                if (auto idx = getItemIndex(WeaponId::Sticker, contents[j].stickerKit); idx != StaticData::InvalidItemIdx2)
+                if (auto idx = getStickerIndex(contents[j].stickerKit); idx != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
                 else if ((idx = getItemIndex(WeaponId::Graffiti, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
