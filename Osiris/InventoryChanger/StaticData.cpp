@@ -340,9 +340,9 @@ public:
     static const auto& collectibles() noexcept { return instance().storage.getCollectibles(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
-    static const auto& musicKits() noexcept { return instance().storage.getMusicKits(); }
     static const auto& stickerKits() noexcept { return instance().storage.getStickerKits(); }
     static const auto& getPaintKit(std::size_t index) noexcept { return instance().storage.getPaintKits()[index]; }
+    static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().storage.getMusicKits()[item.dataIndex]; }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
@@ -678,7 +678,7 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 [[nodiscard]] int StaticData::getMusicID(const GameItem& item) noexcept
 {
     assert(item.isMusic());
-    return StaticDataImpl::musicKits()[item.dataIndex].id;
+    return StaticDataImpl::getMusicKit(item).id;
 }
 
 [[nodiscard]] int StaticData::getPatchID(const GameItem& item) noexcept
@@ -710,7 +710,7 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
     if (item.hasPaintKit())
         return StaticDataImpl::getPaintKit(item.dataIndex).name.forDisplay;
     if (item.isMusic())
-        return StaticDataImpl::musicKits()[item.dataIndex].name.forDisplay;
+        return StaticDataImpl::getMusicKit(item).name.forDisplay;
     if (item.isSticker())
         return StaticDataImpl::stickerKits()[item.dataIndex].name.forDisplay;
     return "";
@@ -721,7 +721,7 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
     if (item.hasPaintKit())
         return StaticDataImpl::getPaintKit(item.dataIndex).name.forSearch;
     if (item.isMusic())
-        return StaticDataImpl::musicKits()[item.dataIndex].name.forSearch;
+        return StaticDataImpl::getMusicKit(item).name.forSearch;
     if (item.isSticker())
         return StaticDataImpl::stickerKits()[item.dataIndex].name.forSearch;
     return L"";
