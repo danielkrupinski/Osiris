@@ -180,9 +180,10 @@ public:
         return stickerKits[item.dataIndex];
     }
 
-    const auto& getMusicKits() const
+    const auto& getMusicKit(const StaticData::GameItem& item) const
     {
-        return musicKits;
+        assert(item.isMusic());
+        return musicKits[item.dataIndex];
     }
 
     const auto& getPaintKit(const StaticData::GameItem& item) const
@@ -329,7 +330,7 @@ public:
     [[nodiscard]] StaticData::ItemIndex2 getMusicIndex(int musicKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::MusicKit);
-        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return storage.getMusicKits()[item.dataIndex].id == musicKit; }); it != end)
+        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return storage.getMusicKit(item).id == musicKit; }); it != end)
             return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
         return StaticData::InvalidItemIdx2;
     }
@@ -347,7 +348,7 @@ public:
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& getStickerKit(const StaticData::GameItem& item) noexcept { return instance().storage.getStickerKit(item); }
     static const auto& getPaintKit(const StaticData::GameItem& item) noexcept { return instance().storage.getPaintKit(item); }
-    static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().storage.getMusicKits()[item.dataIndex]; }
+    static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().storage.getMusicKit(item); }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
