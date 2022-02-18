@@ -192,11 +192,6 @@ public:
         return paintKits[item.dataIndex];
     }
 
-    const auto& getCollectibles() const
-    {
-        return paintKits;
-    }
-
     auto& getGameItems()
     {
         return gameItems;
