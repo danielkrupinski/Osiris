@@ -174,9 +174,15 @@ public:
         return musicKits;
     }
 
-    const auto& getPaintKits() const
+    [[deprecated]] const auto& getPaintKits() const
     {
         return paintKits;
+    }
+
+    const auto& getPaintKit(const StaticData::GameItem& item) const
+    {
+        assert(item.hasPaintKit());
+        return paintKits[item.dataIndex];
     }
 
     const auto& getCollectibles() const
@@ -302,7 +308,7 @@ public:
     [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return item.hasPaintKit() && storage.getPaintKits()[item.dataIndex].id < paintKit; }); it != end && it->weaponID == weaponID && (!it->hasPaintKit() || storage.getPaintKits()[it->dataIndex].id == paintKit))
+        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return item.hasPaintKit() && storage.getPaintKit(item).id < paintKit; }); it != end && it->weaponID == weaponID && (!it->hasPaintKit() || storage.getPaintKit(*it).id == paintKit))
             return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
         return StaticData::InvalidItemIdx2;
     }
@@ -623,7 +629,7 @@ private:
 
         std::ranges::sort(storage.getGameItems(), [this](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
             if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
-                return storage.getPaintKits()[itemA.dataIndex].id < storage.getPaintKits()[itemB.dataIndex].id;
+                return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
             return itemA.weaponID < itemB.weaponID;
         });
 
