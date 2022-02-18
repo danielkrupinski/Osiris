@@ -343,7 +343,6 @@ public:
     }
 
     static const auto& gameItems() noexcept { return instance().storage.getGameItems(); }
-    static const auto& collectibles() noexcept { return instance().storage.getCollectibles(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
     static const auto& getStickerKit(const StaticData::GameItem& item) noexcept { return instance().storage.getStickerKit(item); }
