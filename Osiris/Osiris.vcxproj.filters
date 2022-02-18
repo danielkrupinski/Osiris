@@ -643,6 +643,9 @@
     <ClInclude Include="SDK\KeyValuesSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\StaticDataStorage.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
