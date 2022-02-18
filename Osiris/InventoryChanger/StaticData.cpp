@@ -174,11 +174,6 @@ public:
         gameItems.addSkin(rarity, weaponID, paintKits.size() - 1, iconPath);
     }
 
-    [[deprecated]] const auto& getStickerKits() const
-    {
-        return stickerKits;
-    }
-
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());
