@@ -139,8 +139,7 @@ public:
 
     void addCollectible(int rarity, WeaponId weaponID, bool isOriginal, std::string_view inventoryImage)
     {
-        collectibles.emplace_back(isOriginal);
-        gameItems.addCollectible(rarity, weaponID, collectibles.size() - 1, inventoryImage);
+        gameItems.addCollectible(rarity, weaponID, static_cast<std::size_t>(isOriginal), inventoryImage);
     }
 
     void addVanillaSkin(WeaponId weaponID, std::string_view inventoryImage)
@@ -211,7 +210,7 @@ public:
     [[nodiscard]] bool isCollectibleGenuine(const StaticData::GameItem& collectible) const noexcept
     {
         assert(collectible.isCollectible());
-        return collectibles[collectible.dataIndex].isOriginal;
+        return static_cast<bool>(collectible.dataIndex);
     }
 
 private:
@@ -219,7 +218,6 @@ private:
     std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" } } };
     std::vector<StaticData::StickerKit> stickerKits;
     std::vector<StaticData::MusicKit> musicKits;
-    std::vector<Collectible> collectibles;
     std::vector<ServiceMedal> serviceMedals;
     GameItemStorage gameItems;
 };
