@@ -32,12 +32,6 @@ private:
     std::uint8_t yearsSince2015;
 };
 
-struct Collectible {
-    explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
-
-    bool isOriginal;
-};
-
 class WeaponNames {
 public:
     [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const
