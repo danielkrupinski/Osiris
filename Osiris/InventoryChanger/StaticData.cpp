@@ -234,14 +234,12 @@ private:
     auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
         // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
-        const auto begin = std::lower_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](StaticData::ItemIndex2 index, std::uint32_t tournamentID) {
-            const auto& item = storage.getGameItems().get(index.value);
+        const auto begin = std::lower_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](const StaticData::GameItem& item, std::uint32_t tournamentID) {
             assert(item.isSticker());
             return storage.getStickerKit(item).tournamentID < tournamentID;
         });
 
-        const auto end = std::upper_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::uint32_t tournamentID, StaticData::ItemIndex2 index) {
-            const auto& item = storage.getGameItems().get(index.value);
+        const auto end = std::upper_bound(_tournamentStickersSorted.begin(), _tournamentStickersSorted.end(), tournamentID, [this](std::uint32_t tournamentID, const StaticData::GameItem& item) {
             assert(item.isSticker());
             return storage.getStickerKit(item).tournamentID > tournamentID;
         });
@@ -278,8 +276,8 @@ public:
         const auto it = getTournamentStickers(tournamentID).first;
         if (it == _tournamentStickersSorted.end())
             return 0;
-        assert(storage.getGameItems().get(it->value).isSticker());
-        return storage.getStickerKit(storage.getGameItems().get(it->value)).tournamentID == tournamentID ? storage.getStickerKit(storage.getGameItems().get(it->value)).id : 0;
+        assert(it->get().isSticker());
+        return storage.getStickerKit(*it).tournamentID == tournamentID ? storage.getStickerKit(*it).id : 0;
     }
 
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
@@ -294,22 +292,21 @@ public:
 
         const auto range = getTournamentStickers(tournamentID);
 
-        const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](StaticData::ItemIndex2 index) {
-            const auto& item = storage.getGameItems().get(index.value);
+        const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](const StaticData::GameItem& item) {
             assert(item.isSticker());
             return storage.getStickerKit(item).tournamentTeam;
         });
         if (it == range.second)
             return 0;
-        assert(storage.getGameItems().get(it->value).isSticker());
-        return storage.getStickerKit(storage.getGameItems().get(it->value)).tournamentTeam == team ? storage.getStickerKit(storage.getGameItems().get(it->value)).id : 0;
+        assert(it->get().isSticker());
+        return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
     }
 
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
     {
         const auto range = getTournamentStickers(tournamentID);
-        const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](StaticData::ItemIndex2 index) { return storage.getStickerKit(storage.getGameItems().get(index.value)).tournamentPlayerID; });
-        return (it != range.second ? storage.getStickerKit(storage.getGameItems().get(it->value)).id : 0);
+        const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](const StaticData::GameItem& item) { return storage.getStickerKit(item).tournamentPlayerID; });
+        return (it != range.second ? storage.getStickerKit(*it).id : 0);
     }
 
     [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) const noexcept
@@ -580,12 +577,9 @@ private:
     void initTournamentSortedStickers() noexcept
     {
         const auto stickers = findItems(WeaponId::Sticker);
-        for (auto i = std::distance(storage.getGameItems().cbegin(), stickers.first); i < std::distance(storage.getGameItems().cbegin(), stickers.second); ++i)
-            _tournamentStickersSorted.emplace_back(static_cast<std::size_t>(i));
+        _tournamentStickersSorted = { stickers.first, stickers.second };
 
-        std::ranges::sort(_tournamentStickersSorted, [this](StaticData::ItemIndex2 a, StaticData::ItemIndex2 b) {
-            const auto& itemA = storage.getGameItems().get(a.value);
-            const auto& itemB = storage.getGameItems().get(b.value);
+        std::ranges::sort(_tournamentStickersSorted, [this](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
             assert(itemA.isSticker() && itemB.isSticker());
 
             const auto& paintKitA = storage.getStickerKit(itemA);
@@ -651,7 +645,7 @@ private:
     StaticDataStorage storage;
     std::vector<StaticData::Case> _cases;
     std::vector<StaticData::ItemIndex2> _caseLoot;
-    std::vector<StaticData::ItemIndex2> _tournamentStickersSorted;
+    std::vector<std::reference_wrapper<const StaticData::GameItem>> _tournamentStickersSorted;
 };
 
 [[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
