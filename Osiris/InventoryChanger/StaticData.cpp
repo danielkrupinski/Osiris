@@ -143,8 +143,7 @@ public:
 
     void addServiceMedal(int rarity, std::uint32_t year, WeaponId weaponID, std::string_view inventoryImage)
     {
-        serviceMedals.emplace_back(year);
-        gameItems.addServiceMedal(rarity, weaponID, serviceMedals.size() - 1, inventoryImage);
+        gameItems.addServiceMedal(rarity, weaponID, static_cast<std::size_t>(year), inventoryImage);
     }
 
     void addTournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
@@ -198,7 +197,7 @@ public:
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
         assert(serviceMedal.isServiceMedal());
-        return serviceMedals[serviceMedal.dataIndex].getServiceYear();
+        return static_cast<std::uint16_t>(serviceMedal.dataIndex);
     }
 
     [[nodiscard]] bool isCollectibleGenuine(const StaticData::GameItem& collectible) const noexcept
@@ -212,7 +211,6 @@ private:
     std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" } } };
     std::vector<StaticData::StickerKit> stickerKits;
     std::vector<StaticData::MusicKit> musicKits;
-    std::vector<ServiceMedal> serviceMedals;
     GameItemStorage gameItems;
 };
 
