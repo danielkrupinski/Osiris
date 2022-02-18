@@ -80,21 +80,24 @@ namespace StaticData
         std::string_view iconPath;
     };
 
+    struct ItemName {
+        std::string_view forDisplay;
+        std::wstring_view forSearch;
+    };
+
     struct MusicKit {
-        MusicKit(int id, std::string_view name, std::wstring_view nameUpperCase) : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
+        MusicKit(int id, ItemName name) : id{ id }, name{ name } {}
 
         int id;
-        std::string_view name;
-        std::wstring_view nameUpperCase;
+        ItemName name;
     };
 
     struct StickerKit {
-        StickerKit(int id, std::string_view name, std::wstring_view nameUpperCase, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
-            : id{ id }, name{ name }, nameUpperCase{ nameUpperCase }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
+        StickerKit(int id, ItemName name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+            : id{ id }, name{ name }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
 
         int id;
-        std::string_view name;
-        std::wstring_view nameUpperCase;
+        ItemName name;
         std::uint32_t tournamentID = 0;
         TournamentTeam tournamentTeam{};
         bool isGoldenSticker = false;
@@ -102,14 +105,13 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase) noexcept;
-        PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, ItemName name) noexcept;
+        PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept;
 
         int id;
         float wearRemapMin = 0.0f;
         float wearRemapMax = 1.0f;
-        std::string_view name;
-        std::wstring_view nameUpperCase;
+        ItemName name;
     };
     
     enum class TournamentMap : std::uint8_t {

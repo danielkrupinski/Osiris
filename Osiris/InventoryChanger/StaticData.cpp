@@ -268,7 +268,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            _paintKits.emplace_back(paintKit->id, stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)), paintKit->wearRemapMin, paintKit->wearRemapMax);
+            _paintKits.emplace_back(paintKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -287,20 +287,20 @@ private:
 
     void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
     {
-        _paintKits.emplace_back(id, name, nameUpperCase);
+        _paintKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase });
         _gameItems.addPatch(rarity, _paintKits.size() - 1, inventoryImage);
     }
 
     void addGraffiti(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
     {
-        _paintKits.emplace_back(id, name, nameUpperCase);
+        _paintKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase });
         _gameItems.addGraffiti(rarity, _paintKits.size() - 1, inventoryImage);
         _gameItems.addSealedGraffiti(rarity, _paintKits.size() - 1, inventoryImage);
     }
 
     void addSticker(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
     {
-        _stickerKits.emplace_back(id, name, nameUpperCase, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
+        _stickerKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase }, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
         _gameItems.addSticker(rarity, _stickerKits.size() - 1, inventoryImage);
     }
 
@@ -336,7 +336,7 @@ private:
 
     void addMusic(int musicID, std::string_view name, std::wstring_view nameUpperCase, std::string_view inventoryImage)
     {
-        _musicKits.emplace_back(musicID, name, nameUpperCase);
+        _musicKits.emplace_back(musicID, StaticData::ItemName{ name, nameUpperCase });
         _gameItems.addMusicKit(3, _musicKits.size() - 1, inventoryImage);
     }
 
@@ -574,7 +574,7 @@ private:
     std::vector<StaticData::Case> _cases;
     std::vector<StaticData::ItemIndex2> _caseLoot;
     std::vector<StaticData::ItemIndex2> _tournamentStickersSorted;
-    std::vector<StaticData::PaintKit> _paintKits{ { 0, "", L"" } };
+    std::vector<StaticData::PaintKit> _paintKits{ { 0, { "", L"" } } };
     static constexpr auto vanillaPaintIndex = 0;
     std::vector<StaticData::MusicKit> _musicKits;
     std::vector<StaticData::StickerKit> _stickerKits;
@@ -638,22 +638,22 @@ int StaticData::getSealedGraffitiID(const GameItem& item) noexcept
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())
-        return StaticDataImpl::paintKits()[item.dataIndex].name;
+        return StaticDataImpl::paintKits()[item.dataIndex].name.forDisplay;
     if (item.isMusic())
-        return StaticDataImpl::musicKits()[item.dataIndex].name;
+        return StaticDataImpl::musicKits()[item.dataIndex].name.forDisplay;
     if (item.isSticker())
-        return StaticDataImpl::stickerKits()[item.dataIndex].name;
+        return StaticDataImpl::stickerKits()[item.dataIndex].name.forDisplay;
     return "";
 }
 
 std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())
-        return StaticDataImpl::paintKits()[item.dataIndex].nameUpperCase;
+        return StaticDataImpl::paintKits()[item.dataIndex].name.forSearch;
     if (item.isMusic())
-        return StaticDataImpl::musicKits()[item.dataIndex].nameUpperCase;
+        return StaticDataImpl::musicKits()[item.dataIndex].name.forSearch;
     if (item.isSticker())
-        return StaticDataImpl::stickerKits()[item.dataIndex].nameUpperCase;
+        return StaticDataImpl::stickerKits()[item.dataIndex].name.forSearch;
     return L"";
 }
 
@@ -746,6 +746,6 @@ std::uint32_t StaticData::getTournamentEventID(const GameItem& item) noexcept
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
-StaticData::PaintKit::PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase) noexcept : id{ id }, name{ name }, nameUpperCase{ nameUpperCase } {}
+StaticData::PaintKit::PaintKit(int id, ItemName name) noexcept : id{ id }, name{ name } {}
 
-StaticData::PaintKit::PaintKit(int id, std::string_view name, std::wstring_view nameUpperCase, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name }, nameUpperCase{ nameUpperCase } {}
+StaticData::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}

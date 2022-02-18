@@ -27,7 +27,7 @@ json InventoryChanger::toJson() noexcept
         case StaticData::Type::Glove: {
             const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Paint Kit Name"] = staticData.name;
+            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
             const auto& dynamicData = Inventory::dynamicGloveData(item.getDynamicDataIndex());
 
@@ -38,7 +38,7 @@ json InventoryChanger::toJson() noexcept
         case StaticData::Type::Skin: {
             const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
-            itemConfig["Paint Kit Name"] = staticData.name;
+            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
 
