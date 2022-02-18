@@ -351,7 +351,7 @@ public:
     static const auto& collectibles() noexcept { return instance().storage.getCollectibles(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
-    static const auto& stickerKits() noexcept { return instance().storage.getStickerKits(); }
+    static const auto& getStickerKit(const StaticData::GameItem& item) noexcept { return instance().storage.getStickerKit(item); }
     static const auto& getPaintKit(const StaticData::GameItem& item) noexcept { return instance().storage.getPaintKit(item); }
     static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().storage.getMusicKits()[item.dataIndex]; }
 
@@ -681,7 +681,7 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 [[nodiscard]] int StaticData::getStickerID(const GameItem& item) noexcept
 {
     assert(item.isSticker());
-    return StaticDataImpl::stickerKits()[item.dataIndex].id;
+    return StaticDataImpl::getStickerKit(item).id;
 }
 
 [[nodiscard]] int StaticData::getMusicID(const GameItem& item) noexcept
@@ -721,7 +721,7 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
     if (item.isMusic())
         return StaticDataImpl::getMusicKit(item).name.forDisplay;
     if (item.isSticker())
-        return StaticDataImpl::stickerKits()[item.dataIndex].name.forDisplay;
+        return StaticDataImpl::getStickerKit(item).name.forDisplay;
     return "";
 }
 
@@ -732,7 +732,7 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
     if (item.isMusic())
         return StaticDataImpl::getMusicKit(item).name.forSearch;
     if (item.isSticker())
-        return StaticDataImpl::stickerKits()[item.dataIndex].name.forSearch;
+        return StaticDataImpl::getStickerKit(item).name.forSearch;
     return L"";
 }
 
