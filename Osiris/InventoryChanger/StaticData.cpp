@@ -107,28 +107,28 @@ private:
 
 class StaticDataStorage {
 public:
-    void addPatch(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
+    void addPatch(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
-        paintKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase });
+        paintKits.emplace_back(id, name);
         gameItems.addPatch(rarity, paintKits.size() - 1, inventoryImage);
     }
 
-    void addGraffiti(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage)
+    void addGraffiti(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
-        paintKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase });
+        paintKits.emplace_back(id, name);
         gameItems.addGraffiti(rarity, paintKits.size() - 1, inventoryImage);
         gameItems.addSealedGraffiti(rarity, paintKits.size() - 1, inventoryImage);
     }
 
-    void addSticker(int id, std::string_view name, std::wstring_view nameUpperCase, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+    void addSticker(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
     {
-        stickerKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase }, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
+        stickerKits.emplace_back(id, name, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
         gameItems.addSticker(rarity, stickerKits.size() - 1, inventoryImage);
     }
 
-    void addMusic(int musicID, std::string_view name, std::wstring_view nameUpperCase, std::string_view inventoryImage)
+    void addMusic(int musicID, StaticData::ItemName name, std::string_view inventoryImage)
     {
-        musicKits.emplace_back(musicID, StaticData::ItemName{ name, nameUpperCase });
+        musicKits.emplace_back(musicID, name);
         gameItems.addMusicKit(3, musicKits.size() - 1, inventoryImage);
     }
 
@@ -159,9 +159,9 @@ public:
         gameItems.addTournamentCoin(rarity, weaponID, dataIndex, iconPath);
     }
 
-    void addPaintKit(int id, std::string_view name, std::wstring_view nameUpperCase, float wearRemapMin, float wearRemapMax)
+    void addPaintKit(int id, StaticData::ItemName name, float wearRemapMin, float wearRemapMax)
     {
-        paintKits.emplace_back(id, StaticData::ItemName{ name, nameUpperCase }, wearRemapMin, wearRemapMax);
+        paintKits.emplace_back(id, name, wearRemapMin, wearRemapMax);
     }
 
     const auto& getStickerKits() const
@@ -392,7 +392,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            storage.addPaintKit(paintKit->id, stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)), paintKit->wearRemapMin, paintKit->wearRemapMax);
+            storage.addPaintKit(paintKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -430,13 +430,13 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                storage.addSticker(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                storage.addSticker(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addPatch(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addPatch(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addGraffiti(stickerKit->id, stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)), stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addGraffiti(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
@@ -451,7 +451,7 @@ private:
                 continue;
 
             const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            storage.addMusic(musicKit->id, stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)), stringPool.add(musicKit->inventoryImage));
+            storage.addMusic(musicKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
         }
     }
 
