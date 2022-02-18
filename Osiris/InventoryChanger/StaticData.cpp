@@ -164,6 +164,11 @@ public:
         paintKits.emplace_back(id, name, wearRemapMin, wearRemapMax);
     }
 
+    void addGlovesWithLastPaintKit(int rarity, WeaponId weaponID, std::string_view iconPath)
+    {
+        gameItems.addGloves(rarity, weaponID, paintKits.size() - 1, iconPath);
+    }
+
     const auto& getStickerKits() const
     {
         return stickerKits;
@@ -401,7 +406,7 @@ private:
                     continue;
 
                 if (isGlove) {
-                    storage.getGameItems().addGloves(paintKit->rarity, it->weaponId, storage.getPaintKits().size() - 1, stringPool.add(it->iconPath));
+                    storage.addGlovesWithLastPaintKit(paintKit->rarity, it->weaponId, stringPool.add(it->iconPath));
                 } else {
                     storage.getGameItems().addSkin(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, storage.getPaintKits().size() - 1, stringPool.add(it->iconPath));
                 }
