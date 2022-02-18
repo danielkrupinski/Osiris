@@ -334,9 +334,9 @@ public:
     static const auto& collectibles() noexcept { return instance().storage.getCollectibles(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
-    static const auto& paintKits() noexcept { return instance().storage.getPaintKits(); }
     static const auto& musicKits() noexcept { return instance().storage.getMusicKits(); }
     static const auto& stickerKits() noexcept { return instance().storage.getStickerKits(); }
+    static const auto& getPaintKit(std::size_t index) noexcept { return instance().storage.getPaintKits()[index]; }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
@@ -678,31 +678,31 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 [[nodiscard]] int StaticData::getPatchID(const GameItem& item) noexcept
 {
     assert(item.isPatch());
-    return StaticDataImpl::paintKits()[item.dataIndex].id;
+    return StaticDataImpl::getPaintKit(item.dataIndex).id;
 }
 
 [[nodiscard]] int StaticData::getSkinPaintID(const GameItem& item) noexcept
 {
     assert(item.isSkin());
-    return StaticDataImpl::paintKits()[item.dataIndex].id;
+    return StaticDataImpl::getPaintKit(item.dataIndex).id;
 }
 
 int StaticData::getGraffitiID(const GameItem& item) noexcept
 {
     assert(item.isGraffiti());
-    return StaticDataImpl::paintKits()[item.dataIndex].id;
+    return StaticDataImpl::getPaintKit(item.dataIndex).id;
 }
 
 int StaticData::getSealedGraffitiID(const GameItem& item) noexcept
 {
     assert(item.isSealedGraffiti());
-    return StaticDataImpl::paintKits()[item.dataIndex].id;
+    return StaticDataImpl::getPaintKit(item.dataIndex).id;
 }
 
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())
-        return StaticDataImpl::paintKits()[item.dataIndex].name.forDisplay;
+        return StaticDataImpl::getPaintKit(item.dataIndex).name.forDisplay;
     if (item.isMusic())
         return StaticDataImpl::musicKits()[item.dataIndex].name.forDisplay;
     if (item.isSticker())
@@ -713,7 +713,7 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
 {
     if (item.hasPaintKit())
-        return StaticDataImpl::paintKits()[item.dataIndex].name.forSearch;
+        return StaticDataImpl::getPaintKit(item.dataIndex).name.forSearch;
     if (item.isMusic())
         return StaticDataImpl::musicKits()[item.dataIndex].name.forSearch;
     if (item.isSticker())
@@ -724,7 +724,7 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
 const StaticData::PaintKit& StaticData::getPaintKit(const GameItem& item) noexcept
 {
     assert(item.hasPaintKit());
-    return StaticDataImpl::paintKits()[item.dataIndex];
+    return StaticDataImpl::getPaintKit(item.dataIndex);
 }
 
 const StaticData::Case& StaticData::getCase(const GameItem& item) noexcept
