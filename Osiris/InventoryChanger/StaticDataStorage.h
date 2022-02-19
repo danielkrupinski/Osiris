@@ -100,6 +100,11 @@ public:
         gameItems.addItem(StaticData::GameItem::statTrakSwapTool(rarity, weaponID, 0, iconPath));
     }
 
+    void addSouvenirToken(int rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
+    {
+        gameItems.addItem(StaticData::GameItem::souvenirToken(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
+    }
+
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());
