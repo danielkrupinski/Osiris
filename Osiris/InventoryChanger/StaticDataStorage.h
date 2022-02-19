@@ -75,6 +75,11 @@ public:
         gameItems.addItem(StaticData::GameItem::nameTag(rarity, weaponID, 0, iconPath));
     }
 
+    void addAgent(int rarity, WeaponId weaponID, std::string_view iconPath)
+    {
+        gameItems.addItem(StaticData::GameItem::agent(rarity, weaponID, 0, iconPath));
+    }
+
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());

@@ -344,7 +344,7 @@ private:
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 storage.addNameTag(rarity, weaponID, stringPool.add(inventoryImage));
             } else if (item->isPatchable()) {
-                storage.getGameItems().addAgent(rarity, weaponID, stringPool.add(inventoryImage));
+                storage.addAgent(rarity, weaponID, stringPool.add(inventoryImage));
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
                 const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
                 if (lootListIdx == -1)
