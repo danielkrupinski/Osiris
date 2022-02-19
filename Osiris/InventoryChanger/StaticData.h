@@ -51,6 +51,96 @@ namespace StaticData
     struct GameItem {
         GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept;
 
+        [[nodiscard]] static GameItem sticker(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Sticker, rarity, WeaponId::Sticker, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem skin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Skin, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem gloves(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Glove, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem musicKit(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Music, rarity, WeaponId::MusicKit, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem collectible(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Collectible, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem nameTag(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::NameTag, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem patch(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Patch, rarity, WeaponId::Patch, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem graffiti(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem sealedGraffiti(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem agent(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Agent, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem case_(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::Case, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem caseKey(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::CaseKey, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem operationPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::OperationPass, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem statTrakSwapTool(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::StatTrakSwapTool, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem viewerPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::ViewerPass, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem serviceMedal(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::ServiceMedal, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem souvenirToken(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::SouvenirToken, rarity, weaponID, dataIndex, iconPath };
+        }
+
+        [[nodiscard]] static GameItem tournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        {
+            return GameItem{ Type::TournamentCoin, rarity, weaponID, dataIndex, iconPath };
+        }
+
         bool isSticker() const noexcept { return type == Type::Sticker; }
         bool isSkin() const noexcept { return type == Type::Skin; }
         bool isGlove() const noexcept { return type == Type::Glove; }
