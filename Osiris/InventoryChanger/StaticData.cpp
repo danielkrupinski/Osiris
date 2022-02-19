@@ -356,7 +356,7 @@ private:
                 _cases.push_back(std::move(caseData));
                 storage.getGameItems().addCase(rarity, weaponID, _cases.size() - 1, stringPool.add(inventoryImage));
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                storage.getGameItems().addCaseKey(rarity, weaponID, stringPool.add(inventoryImage));
+                storage.addCaseKey(rarity, weaponID, stringPool.add(inventoryImage));
             } else if (const auto tool = item->getEconTool()) {
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
                     storage.getGameItems().addOperationPass(rarity, weaponID, stringPool.add(inventoryImage));
