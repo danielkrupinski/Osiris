@@ -132,6 +132,11 @@ public:
     auto end() const { return gameItems.end(); }
     auto cend() const { return gameItems.cend(); }
 
+    void addItem(const StaticData::GameItem& item)
+    {
+        gameItems.push_back(item);
+    }
+
 private:
     void addItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
     {
