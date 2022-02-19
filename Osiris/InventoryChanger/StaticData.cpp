@@ -400,7 +400,7 @@ private:
             if (contents[j].stickerKit != 0) {
                 if (auto idx = getStickerIndex(contents[j].stickerKit); idx != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
-                else if ((idx = getItemIndex(WeaponId::Graffiti, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
+                else if ((idx = getItemIndex(WeaponId::SealedGraffiti, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
                 else if ((idx = getItemIndex(WeaponId::Patch, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
                     loot.push_back(idx);
