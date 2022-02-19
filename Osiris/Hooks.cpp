@@ -180,7 +180,9 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
         return result;
 
 #ifdef _WIN32
-    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
+    // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
+    // since 19.02.2022 game update sendPacket is no longer on stack
+    bool sendPacket = true;
 #else
     bool dummy;
     bool& sendPacket = dummy;
