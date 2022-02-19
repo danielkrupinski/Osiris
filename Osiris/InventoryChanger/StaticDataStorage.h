@@ -70,6 +70,11 @@ public:
         gameItems.addSkin(rarity, weaponID, paintKits.size() - 1, iconPath);
     }
 
+    void addNameTag(int rarity, WeaponId weaponID, std::string_view iconPath)
+    {
+        gameItems.addNameTag(rarity, weaponID, iconPath);
+    }
+
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());
