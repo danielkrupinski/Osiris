@@ -172,9 +172,14 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
 std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex2 gameItemIndex) noexcept
 {
+    return createDefaultDynamicData(StaticData::getGameItem(gameItemIndex));
+}
+
+std::size_t ItemGenerator::createDefaultDynamicData(const StaticData::GameItem& item) noexcept
+{
     std::size_t index = Inventory::InvalidDynamicDataIdx;
 
-    if (const auto& item = StaticData::getGameItem(gameItemIndex); item.isSkin()) {
+    if (item.isSkin()) {
         const auto& staticData = StaticData::getPaintKit(item);
         DynamicSkinData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
