@@ -354,7 +354,7 @@ private:
                 StaticData::Case caseData;
                 caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
-                storage.getGameItems().addCase(rarity, weaponID, _cases.size() - 1, stringPool.add(inventoryImage));
+                storage.addCase(rarity, weaponID, _cases.size() - 1, stringPool.add(inventoryImage));
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 storage.addCaseKey(rarity, weaponID, stringPool.add(inventoryImage));
             } else if (const auto tool = item->getEconTool()) {

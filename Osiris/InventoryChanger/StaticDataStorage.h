@@ -80,6 +80,11 @@ public:
         gameItems.addItem(StaticData::GameItem::agent(rarity, weaponID, 0, iconPath));
     }
 
+    void addCase(int rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath)
+    {
+        gameItems.addItem(StaticData::GameItem::case_(rarity, weaponID, descriptorIndex, iconPath));
+    }
+
     void addCaseKey(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
         gameItems.addItem(StaticData::GameItem::caseKey(rarity, weaponID, 0, iconPath));
