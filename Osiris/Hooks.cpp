@@ -180,7 +180,7 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
         return result;
 
 #ifdef _WIN32
-    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
+    bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x34);
 #else
     bool dummy;
     bool& sendPacket = dummy;
