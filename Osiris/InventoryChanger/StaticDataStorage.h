@@ -50,9 +50,9 @@ public:
         gameItems.addServiceMedal(rarity, weaponID, static_cast<std::size_t>(year), inventoryImage);
     }
 
-    void addTournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath)
+    void addTournamentCoin(int rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
     {
-        gameItems.addTournamentCoin(rarity, weaponID, dataIndex, iconPath);
+        gameItems.addTournamentCoin(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath);
     }
 
     void addPaintKit(int id, StaticData::ItemName name, float wearRemapMin, float wearRemapMax)

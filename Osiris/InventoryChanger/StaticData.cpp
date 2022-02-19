@@ -337,7 +337,7 @@ private:
                 if (item->isServiceMedal()) {
                     storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, stringPool.add(inventoryImage));
                 } else if (item->isTournamentCoin()) {
-                    storage.getGameItems().addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
+                    storage.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                 } else {
                     storage.addCollectible(rarity, weaponID, isOriginal, stringPool.add(inventoryImage));
                 }
