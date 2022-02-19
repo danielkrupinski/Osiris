@@ -8,51 +8,51 @@ public:
     void addPatch(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
         paintKits.emplace_back(id, name);
-        gameItems.addItem(StaticData::GameItem::patch(rarity, paintKits.size() - 1, inventoryImage));
+        addItem(StaticData::GameItem::patch(rarity, paintKits.size() - 1, inventoryImage));
     }
 
     void addGraffiti(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
         paintKits.emplace_back(id, name);
-        gameItems.addItem(StaticData::GameItem::graffiti(rarity, paintKits.size() - 1, inventoryImage));
-        gameItems.addItem(StaticData::GameItem::sealedGraffiti(rarity, paintKits.size() - 1, inventoryImage));
+        addItem(StaticData::GameItem::graffiti(rarity, paintKits.size() - 1, inventoryImage));
+        addItem(StaticData::GameItem::sealedGraffiti(rarity, paintKits.size() - 1, inventoryImage));
     }
 
     void addSticker(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
     {
         stickerKits.emplace_back(id, name, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
-        gameItems.addItem(StaticData::GameItem::sticker(rarity, stickerKits.size() - 1, inventoryImage));
+        addItem(StaticData::GameItem::sticker(rarity, stickerKits.size() - 1, inventoryImage));
     }
 
     void addMusic(int musicID, StaticData::ItemName name, std::string_view inventoryImage)
     {
         musicKits.emplace_back(musicID, name);
-        gameItems.addItem(StaticData::GameItem::musicKit(3, musicKits.size() - 1, inventoryImage));
+        addItem(StaticData::GameItem::musicKit(3, musicKits.size() - 1, inventoryImage));
     }
 
     void addVanillaKnife(WeaponId weaponID, std::string_view inventoryImage)
     {
-        gameItems.addItem(StaticData::GameItem::skin(6, weaponID, vanillaPaintIndex, inventoryImage));
+        addItem(StaticData::GameItem::skin(6, weaponID, vanillaPaintIndex, inventoryImage));
     }
 
     void addCollectible(int rarity, WeaponId weaponID, bool isOriginal, std::string_view inventoryImage)
     {
-        gameItems.addItem(StaticData::GameItem::collectible(rarity, weaponID, static_cast<std::size_t>(isOriginal), inventoryImage));
+        addItem(StaticData::GameItem::collectible(rarity, weaponID, static_cast<std::size_t>(isOriginal), inventoryImage));
     }
 
     void addVanillaSkin(WeaponId weaponID, std::string_view inventoryImage)
     {
-        gameItems.addItem(StaticData::GameItem::skin(0, weaponID, vanillaPaintIndex, inventoryImage));
+        addItem(StaticData::GameItem::skin(0, weaponID, vanillaPaintIndex, inventoryImage));
     }
 
     void addServiceMedal(int rarity, std::uint32_t year, WeaponId weaponID, std::string_view inventoryImage)
     {
-        gameItems.addItem(StaticData::GameItem::serviceMedal(rarity, weaponID, static_cast<std::size_t>(year), inventoryImage));
+        addItem(StaticData::GameItem::serviceMedal(rarity, weaponID, static_cast<std::size_t>(year), inventoryImage));
     }
 
     void addTournamentCoin(int rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::tournamentCoin(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
+        addItem(StaticData::GameItem::tournamentCoin(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
     }
 
     void addPaintKit(int id, StaticData::ItemName name, float wearRemapMin, float wearRemapMax)
@@ -62,52 +62,52 @@ public:
 
     void addGlovesWithLastPaintKit(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::gloves(rarity, weaponID, paintKits.size() - 1, iconPath));
+        addItem(StaticData::GameItem::gloves(rarity, weaponID, paintKits.size() - 1, iconPath));
     }
 
     void addSkinWithLastPaintKit(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::skin(rarity, weaponID, paintKits.size() - 1, iconPath));
+        addItem(StaticData::GameItem::skin(rarity, weaponID, paintKits.size() - 1, iconPath));
     }
 
     void addNameTag(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::nameTag(rarity, weaponID, 0, iconPath));
+        addItem(StaticData::GameItem::nameTag(rarity, weaponID, 0, iconPath));
     }
 
     void addAgent(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::agent(rarity, weaponID, 0, iconPath));
+        addItem(StaticData::GameItem::agent(rarity, weaponID, 0, iconPath));
     }
 
     void addCase(int rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::case_(rarity, weaponID, descriptorIndex, iconPath));
+        addItem(StaticData::GameItem::case_(rarity, weaponID, descriptorIndex, iconPath));
     }
 
     void addCaseKey(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::caseKey(rarity, weaponID, 0, iconPath));
+        addItem(StaticData::GameItem::caseKey(rarity, weaponID, 0, iconPath));
     }
 
     void addOperationPass(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::operationPass(rarity, weaponID, 0, iconPath));
+        addItem(StaticData::GameItem::operationPass(rarity, weaponID, 0, iconPath));
     }
 
     void addStatTrakSwapTool(int rarity, WeaponId weaponID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::statTrakSwapTool(rarity, weaponID, 0, iconPath));
+        addItem(StaticData::GameItem::statTrakSwapTool(rarity, weaponID, 0, iconPath));
     }
 
     void addSouvenirToken(int rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::souvenirToken(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
+        addItem(StaticData::GameItem::souvenirToken(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
     }
 
     void addViewerPass(int rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
     {
-        gameItems.addItem(StaticData::GameItem::viewerPass(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
+        addItem(StaticData::GameItem::viewerPass(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
     }
 
     const auto& getStickerKit(const StaticData::GameItem& item) const
@@ -151,6 +151,11 @@ public:
     }
 
 private:
+    void addItem(const StaticData::GameItem& item)
+    {
+        gameItems.addItem(item);
+    }
+
     static constexpr auto vanillaPaintIndex = 0;
     std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" } } };
     std::vector<StaticData::StickerKit> stickerKits;
