@@ -43,7 +43,7 @@ public:
 
     static std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return instance()._addItem(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+        return instance()._addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -261,9 +261,9 @@ private:
         item->markAsDeleted();
     }
 
-    std::uint64_t _addItem(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    std::uint64_t _addItem(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(StaticData::getGameItem(gameItemIndex), dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItem, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItem)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
@@ -294,7 +294,7 @@ private:
     void _addItems() noexcept
     {
         for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
-            _addItem(index, dynamicDataIndex, asUnacknowledged);
+            _addItem(StaticData::getGameItem(index), dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }
 
