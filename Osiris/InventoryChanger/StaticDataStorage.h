@@ -90,6 +90,11 @@ public:
         gameItems.addItem(StaticData::GameItem::caseKey(rarity, weaponID, 0, iconPath));
     }
 
+    void addOperationPass(int rarity, WeaponId weaponID, std::string_view iconPath)
+    {
+        gameItems.addItem(StaticData::GameItem::operationPass(rarity, weaponID, 0, iconPath));
+    }
+
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());
