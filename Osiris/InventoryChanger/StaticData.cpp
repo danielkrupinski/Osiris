@@ -193,6 +193,14 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getMusic(int musicKit) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::MusicKit);
+        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return storage.getMusicKit(item).id == musicKit; }); it != end)
+            return *it;
+        return {};
+    }
+
     [[nodiscard]] StaticData::ItemIndex2 getStickerIndex(int stickerKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Sticker);
