@@ -201,6 +201,14 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSticker(int stickerKit) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::Sticker);
+        if (const auto it = std::find_if(begin, end, [this, stickerKit](const StaticData::GameItem& item) { return storage.getStickerKit(item).id == stickerKit; }); it != end)
+            return *it;
+        return {};
+    }
+
     static const auto& gameItems() noexcept { return instance().storage.getGameItems(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
