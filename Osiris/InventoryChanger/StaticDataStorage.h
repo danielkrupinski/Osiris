@@ -95,6 +95,11 @@ public:
         gameItems.addItem(StaticData::GameItem::operationPass(rarity, weaponID, 0, iconPath));
     }
 
+    void addStatTrakSwapTool(int rarity, WeaponId weaponID, std::string_view iconPath)
+    {
+        gameItems.addItem(StaticData::GameItem::statTrakSwapTool(rarity, weaponID, 0, iconPath));
+    }
+
     const auto& getStickerKit(const StaticData::GameItem& item) const
     {
         assert(item.isSticker());

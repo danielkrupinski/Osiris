@@ -361,7 +361,7 @@ private:
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
                     storage.addOperationPass(rarity, weaponID, stringPool.add(inventoryImage));
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
-                    storage.getGameItems().addStatTrakSwapTool(rarity, weaponID, stringPool.add(inventoryImage));
+                    storage.addStatTrakSwapTool(rarity, weaponID, stringPool.add(inventoryImage));
                 else if (std::strcmp(tool->typeName, "fantoken") == 0) {
                     if (Helpers::isSouvenirToken(weaponID))
                         storage.getGameItems().addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
