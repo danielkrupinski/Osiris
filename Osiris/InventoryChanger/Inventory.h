@@ -72,7 +72,7 @@ private:
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
     bool toDelete = false;
 public:
-    explicit InventoryItem(StaticData::ItemIndex2 itemIndex, std::size_t dynamicDataIndex) noexcept : item{ StaticData::getGameItem(itemIndex) }, dynamicDataIndex{ dynamicDataIndex } {}
+    explicit InventoryItem(const StaticData::GameItem& item, std::size_t dynamicDataIndex) noexcept : item{ item }, dynamicDataIndex{ dynamicDataIndex } {}
 
     void markAsDeleted() noexcept { item.reset(); }
     bool isDeleted() const noexcept { return !item.has_value(); }
