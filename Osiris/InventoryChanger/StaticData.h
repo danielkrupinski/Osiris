@@ -49,8 +49,9 @@ namespace StaticData
     };
 
     struct GameItem {
+    private:
         GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept;
-
+    public:
         [[nodiscard]] static GameItem sticker(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Sticker, rarity, WeaponId::Sticker, dataIndex, iconPath };
