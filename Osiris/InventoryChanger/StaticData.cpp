@@ -366,7 +366,7 @@ private:
                     if (Helpers::isSouvenirToken(weaponID))
                         storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                     else
-                        storage.getGameItems().addViewerPass(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
+                        storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
                 }
             } else if (item->isPaintable()) {
                 storage.addVanillaSkin(weaponID, stringPool.add(inventoryImage));
