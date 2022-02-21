@@ -1042,6 +1042,7 @@ void Misc::runReportbot() noexcept
             memory->submitReport(std::to_string(xuid).c_str(), report.c_str());
             lastReportTime = memory->globalVars->realtime;
             reportedPlayers.push_back(xuid);
+            return;
         }
     }
 
