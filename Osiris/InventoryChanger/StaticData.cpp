@@ -222,6 +222,7 @@ public:
     static const auto& getStickerKit(const StaticData::GameItem& item) noexcept { return instance().storage.getStickerKit(item); }
     static const auto& getPaintKit(const StaticData::GameItem& item) noexcept { return instance().storage.getPaintKit(item); }
     static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().storage.getMusicKit(item); }
+    static const auto& getGraffitiKit(const StaticData::GameItem& item) noexcept { return instance().storage.getGraffitiKit(item); }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
@@ -570,13 +571,13 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 int StaticData::getGraffitiID(const GameItem& item) noexcept
 {
     assert(item.isGraffiti());
-    return StaticDataImpl::getPaintKit(item).id;
+    return StaticDataImpl::getGraffitiKit(item).id;
 }
 
 int StaticData::getSealedGraffitiID(const GameItem& item) noexcept
 {
     assert(item.isSealedGraffiti());
-    return StaticDataImpl::getPaintKit(item).id;
+    return StaticDataImpl::getGraffitiKit(item).id;
 }
 
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
@@ -587,6 +588,8 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
         return StaticDataImpl::getMusicKit(item).name.forDisplay;
     if (item.isSticker())
         return StaticDataImpl::getStickerKit(item).name.forDisplay;
+    if (item.isGraffiti() || item.isSealedGraffiti())
+        return StaticDataImpl::getGraffitiKit(item).name.forDisplay;
     return "";
 }
 
@@ -598,6 +601,8 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
         return StaticDataImpl::getMusicKit(item).name.forSearch;
     if (item.isSticker())
         return StaticDataImpl::getStickerKit(item).name.forSearch;
+    if (item.isGraffiti() || item.isSealedGraffiti())
+        return StaticDataImpl::getGraffitiKit(item).name.forSearch;
     return L"";
 }
 

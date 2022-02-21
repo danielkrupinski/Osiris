@@ -135,20 +135,20 @@ namespace StaticData
         bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type > Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
+        bool hasPaintKit() const noexcept { return type >= Type::Glove && type <= Type::Patch; }
 
     private:
         enum class Type : std::uint8_t {
             // has paint kit, must match GameItem::hasPaintKit() below
-            Sticker,
             Glove,
             Skin,
-            Music,
             Patch,
-            Graffiti,
-            SealedGraffiti,
 
             // has other data
+            Sticker,
+            Music,
+            Graffiti,
+            SealedGraffiti,
             Collectible,
             NameTag,
             Agent,
@@ -179,6 +179,13 @@ namespace StaticData
 
     struct MusicKit {
         MusicKit(int id, ItemName name) : id{ id }, name{ name } {}
+
+        int id;
+        ItemName name;
+    };
+
+    struct GraffitiKit {
+        GraffitiKit(int id, ItemName name) : id{ id }, name{ name } {}
 
         int id;
         ItemName name;

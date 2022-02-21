@@ -15,11 +15,10 @@ public:
 
     void addGraffiti(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
-        paintKits.emplace_back(id, name);
-        const auto index = paintKits.size() - 1;
+        graffitiKits.emplace_back(id, name);
+        const auto index = graffitiKits.size() - 1;
         addItem(StaticData::GameItem::graffiti(rarity, index, inventoryImage));
         addItem(StaticData::GameItem::sealedGraffiti(rarity, index, inventoryImage));
-
     }
 
     void addSticker(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
@@ -132,6 +131,12 @@ public:
         return paintKits[item.dataIndex];
     }
 
+    const auto& getGraffitiKit(const StaticData::GameItem& item) const
+    {
+        assert(item.isGraffiti() || item.isSealedGraffiti());
+        return graffitiKits[item.dataIndex];
+    }
+
     auto& getGameItems()
     {
         return gameItems;
@@ -164,5 +169,6 @@ private:
     std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" } } };
     std::vector<StaticData::StickerKit> stickerKits;
     std::vector<StaticData::MusicKit> musicKits;
+    std::vector<StaticData::GraffitiKit> graffitiKits;
     std::vector<StaticData::GameItem> gameItems;
 };
