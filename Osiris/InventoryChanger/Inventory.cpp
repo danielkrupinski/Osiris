@@ -41,9 +41,9 @@ public:
         instance().toAdd.emplace_back(gameItem, dynamicDataIdx, asUnacknowledged);
     }
 
-    static std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    static std::uint64_t addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return instance()._addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
+        return instance()._addItem(gameItem, dynamicDataIdx, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -439,7 +439,7 @@ void Inventory::addItemAcknowledged(StaticData::ItemIndex2 gameItemIndex, std::s
 
 std::uint64_t Inventory::addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
 {
-    return InventoryImpl::addItemNow(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+    return InventoryImpl::addItemNow(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
 }
 
 void Inventory::deleteItemNow(std::uint64_t itemID) noexcept
