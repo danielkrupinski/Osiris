@@ -427,9 +427,9 @@ std::vector<InventoryItem>& Inventory::get() noexcept
     return InventoryImpl::get();
 }
 
-void Inventory::addItemUnacknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept
+void Inventory::addItemUnacknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, true);
+    InventoryImpl::addItem(gameItem, dynamicDataIdx, true);
 }
 
 void Inventory::addItemAcknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept
