@@ -634,9 +634,6 @@
     <ClInclude Include="InventoryChanger\TournamentMatches.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItemStorage.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="StringPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>

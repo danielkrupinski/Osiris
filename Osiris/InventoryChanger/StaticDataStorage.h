@@ -1,6 +1,8 @@
 #pragma once
 
-#include "GameItemStorage.h"
+#include <string_view>
+#include <vector>
+
 #include "StaticData.h"
 
 class StaticDataStorage {
