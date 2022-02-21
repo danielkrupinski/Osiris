@@ -163,7 +163,9 @@ namespace StaticData
 
         bool hasPaintKit() const noexcept { return type > Type::Sticker && type <= Type::SealedGraffiti && type != Type::Music; }
 
+    private:
         Type type;
+    public:
         std::uint8_t rarity;
         WeaponId weaponID;
         std::size_t dataIndex;
