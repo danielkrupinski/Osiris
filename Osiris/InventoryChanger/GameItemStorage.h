@@ -11,8 +11,6 @@
 #include "StaticData.h"
 #include "../SDK/WeaponId.h"
 
-using StaticData::Type;
-
 class GameItemStorage {
 public:
     const StaticData::GameItem& get(std::size_t index) const noexcept

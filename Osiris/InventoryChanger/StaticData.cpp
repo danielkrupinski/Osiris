@@ -17,7 +17,6 @@
 #include "StaticDataStorage.h"
 
 using StaticData::TournamentMap;
-using StaticData::Type;
 
 constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 {
