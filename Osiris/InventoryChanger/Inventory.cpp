@@ -36,9 +36,9 @@ public:
         return instance().inventory;
     }
 
-    static void addItem(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    static void addItem(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        instance().toAdd.emplace_back(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
+        instance().toAdd.emplace_back(gameItem, dynamicDataIdx, asUnacknowledged);
     }
 
     static std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
@@ -429,12 +429,12 @@ std::vector<InventoryItem>& Inventory::get() noexcept
 
 void Inventory::addItemUnacknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(gameItemIndex, dynamicDataIdx, true);
+    InventoryImpl::addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, true);
 }
 
 void Inventory::addItemAcknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(gameItemIndex, dynamicDataIdx, false);
+    InventoryImpl::addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, false);
 }
 
 std::uint64_t Inventory::addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
