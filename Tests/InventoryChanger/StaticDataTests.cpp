@@ -5,7 +5,6 @@
 
 #include <gtest/gtest.h>
 
-#include "../../Osiris/InventoryChanger/GameItemStorage.h"
 #include "../../Osiris/InventoryChanger/StaticData.h"
 
 TEST(GameItem, CreatedStickerIsSticker) {
