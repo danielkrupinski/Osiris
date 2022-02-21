@@ -153,12 +153,12 @@ public:
 private:
     void addItem(const StaticData::GameItem& item)
     {
-        gameItems.addItem(item);
+        gameItems.push_back(item);
     }
 
     static constexpr auto vanillaPaintIndex = 0;
     std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" } } };
     std::vector<StaticData::StickerKit> stickerKits;
     std::vector<StaticData::MusicKit> musicKits;
-    GameItemStorage gameItems;
+    std::vector<StaticData::GameItem> gameItems;
 };

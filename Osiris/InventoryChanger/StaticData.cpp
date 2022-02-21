@@ -475,12 +475,12 @@ private:
 
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return storage.getGameItems().get(itemIndex.value).isSticker(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return storage.getGameItems()[itemIndex.value].isSticker(); });
     }
 
     [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return storage.getGameItems().get(itemIndex.value).isPatch(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return storage.getGameItems()[itemIndex.value].isPatch(); });
     }
 
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
@@ -616,7 +616,7 @@ const StaticData::Case& StaticData::getCase(const GameItem& item) noexcept
 
 const StaticData::GameItem& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
 {
-    return StaticDataImpl::gameItems().get(itemIndex.value);
+    return StaticDataImpl::gameItems()[itemIndex.value];
 }
 
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
