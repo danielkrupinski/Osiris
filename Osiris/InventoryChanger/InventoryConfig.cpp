@@ -19,12 +19,9 @@ json InventoryChanger::toJson() noexcept
         itemConfig["Weapon ID"] = gameItem.weaponID;
         itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.weaponID);
 
-        switch (gameItem.type) {
-        case StaticData::Type::Sticker: {
+        if (gameItem.isSticker()) {
             itemConfig["Sticker ID"] = StaticData::getStickerID(gameItem);
-            break;
-        }
-        case StaticData::Type::Glove: {
+        } else if (gameItem.isGlove()) {
             const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
@@ -33,9 +30,7 @@ json InventoryChanger::toJson() noexcept
 
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
-            break;
-        }
-        case StaticData::Type::Skin: {
+        } else if (gameItem.isSkin()) {
             const auto& staticData = StaticData::getPaintKit(gameItem);
             itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
@@ -71,27 +66,17 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
                 itemConfig["Tournament Player"] = dynamicData.proPlayer;
             }
-            break;
-        }
-        case StaticData::Type::Music: {
+        } else if (gameItem.isMusic()) {
             itemConfig["Music ID"] = StaticData::getMusicID(gameItem);
             if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
-            break;
-        }
-        case StaticData::Type::Patch: {
+        } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = StaticData::getPatchID(gameItem);
-            break;
-        }
-        case StaticData::Type::Graffiti: {
+        } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::getGraffitiID(gameItem);
-            break;
-        }
-        case StaticData::Type::SealedGraffiti: {
+        } else if (gameItem.isSealedGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::getSealedGraffitiID(gameItem);
-            break;
-        }
-        case StaticData::Type::Agent: {
+        } else if (gameItem.isAgent()) {
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
             for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
@@ -104,14 +89,10 @@ json InventoryChanger::toJson() noexcept
                 patchConfig["Slot"] = i;
                 stickers.push_back(std::move(patchConfig));
             }
-            break;
-        }
-        case StaticData::Type::ServiceMedal: {
+        } else if (gameItem.isServiceMedal()) {
             if (const auto& dynamicData = Inventory::dynamicServiceMedalData(item.getDynamicDataIndex()); dynamicData.issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = dynamicData.issueDateTimestamp;
-            break;
-        }
-        case StaticData::Type::Case: {
+        } else if (gameItem.isCase()) {
             if (StaticData::getCase(gameItem).isSouvenirPackage()) {
                 if (const auto& dynamicData = Inventory::dynamicSouvenirPackageData(item.getDynamicDataIndex()); dynamicData.tournamentStage != TournamentStage{}) {
                     itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
@@ -120,9 +101,6 @@ json InventoryChanger::toJson() noexcept
                     itemConfig["Tournament Player"] = dynamicData.proPlayer;
                 }
             }
-        }
-        default:
-            break;
         }
 
         items.push_back(std::move(itemConfig));
