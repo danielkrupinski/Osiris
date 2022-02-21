@@ -216,6 +216,22 @@ public:
         return {};
     }
 
+    [[nodiscard]] StaticData::ItemIndex2 getGraffitiIndex(int graffitiID) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::Graffiti);
+        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
+        return StaticData::InvalidItemIdx2;
+    }
+
+    [[nodiscard]] StaticData::ItemIndex2 getSealedGraffitiIndex(int graffitiID) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
+        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
+        return StaticData::InvalidItemIdx2;
+    }
+
     static const auto& gameItems() noexcept { return instance().storage.getGameItems(); }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
@@ -646,6 +662,16 @@ StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID) noexcept
 StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
 {
     return StaticDataImpl::instance().getMusicIndex(musicID);
+}
+
+StaticData::ItemIndex2 StaticData::getGraffitiIndex(int graffitiID) noexcept
+{
+    return StaticDataImpl::instance().getGraffitiIndex(graffitiID);
+}
+
+StaticData::ItemIndex2 StaticData::getSealedGraffitiIndex(int graffitiID) noexcept
+{
+    return StaticDataImpl::instance().getSealedGraffitiIndex(graffitiID);
 }
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
