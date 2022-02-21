@@ -38,7 +38,7 @@ public:
 
     static void addItem(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        instance().toAdd.emplace_back(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+        instance().toAdd.emplace_back(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
     }
 
     static std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
@@ -293,8 +293,8 @@ private:
 
     void _addItems() noexcept
     {
-        for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
-            _addItem(StaticData::getGameItem(index), dynamicDataIndex, asUnacknowledged);
+        for (const auto [gameItem, dynamicDataIndex, asUnacknowledged] : toAdd)
+            _addItem(gameItem, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }
 
@@ -340,7 +340,7 @@ private:
         return inventory;
     }
 
-    std::vector<std::tuple<StaticData::ItemIndex2, std::size_t, bool>> toAdd;
+    std::vector<std::tuple<std::reference_wrapper<const StaticData::GameItem>, std::size_t, bool>> toAdd;
     std::vector<ToEquip> toEquip;
     std::vector<InventoryItem> inventory;
 };
