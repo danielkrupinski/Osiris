@@ -674,6 +674,11 @@ StaticData::ItemIndex2 StaticData::getSealedGraffitiIndex(int graffitiID) noexce
     return StaticDataImpl::instance().getSealedGraffitiIndex(graffitiID);
 }
 
+StaticData::ItemIndex2 StaticData::getStickerIndex(int stickerID) noexcept
+{
+    return StaticDataImpl::instance().getStickerIndex(stickerID);
+}
+
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
     return StaticDataImpl::instance().getTournamentEventStickerID(tournamentID);

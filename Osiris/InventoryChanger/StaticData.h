@@ -263,6 +263,7 @@ namespace StaticData
     ItemIndex2 getMusicIndex(int musicID) noexcept;
     ItemIndex2 getGraffitiIndex(int graffitiID) noexcept;
     ItemIndex2 getSealedGraffitiIndex(int graffitiID) noexcept;
+    ItemIndex2 getStickerIndex(int stickerID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
