@@ -432,9 +432,9 @@ void Inventory::addItemUnacknowledged(const StaticData::GameItem& gameItem, std:
     InventoryImpl::addItem(gameItem, dynamicDataIdx, true);
 }
 
-void Inventory::addItemAcknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept
+void Inventory::addItemAcknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, false);
+    InventoryImpl::addItem(gameItem, dynamicDataIdx, false);
 }
 
 std::uint64_t Inventory::addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept

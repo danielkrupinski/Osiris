@@ -111,7 +111,7 @@ namespace Inventory
 
     std::vector<InventoryItem>& get() noexcept;
     void addItemUnacknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
-    void addItemAcknowledged(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx) noexcept;
+    void addItemAcknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
     std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;

@@ -419,7 +419,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
         }
 
-        Inventory::addItemAcknowledged(itemIndex, dynamicDataIdx);
+        Inventory::addItemAcknowledged(StaticData::getGameItem(itemIndex), dynamicDataIdx);
     }
 
     loadEquipmentFromJson(j);
