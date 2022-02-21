@@ -16,8 +16,10 @@ public:
     void addGraffiti(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage)
     {
         paintKits.emplace_back(id, name);
-        addItem(StaticData::GameItem::graffiti(rarity, paintKits.size() - 1, inventoryImage));
-        addItem(StaticData::GameItem::sealedGraffiti(rarity, paintKits.size() - 1, inventoryImage));
+        const auto index = paintKits.size() - 1;
+        addItem(StaticData::GameItem::graffiti(rarity, index, inventoryImage));
+        addItem(StaticData::GameItem::sealedGraffiti(rarity, index, inventoryImage));
+
     }
 
     void addSticker(int id, StaticData::ItemName name, int rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
