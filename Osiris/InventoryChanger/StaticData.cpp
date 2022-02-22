@@ -498,6 +498,11 @@ StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID) noexcept
     return StaticDataImpl::instance().container_().getItemIndex(weaponID);
 }
 
+std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getItem(WeaponId weaponID) noexcept
+{
+    return StaticDataImpl::container_().getItem(weaponID);
+}
+
 StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
 {
     return StaticDataImpl::instance().container_().getMusicIndex(musicID);
