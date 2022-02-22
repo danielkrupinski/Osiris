@@ -172,79 +172,115 @@ static void swapWindow(SDL_Window * window) noexcept
 #endif
 }
 
-static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
-{
-    auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
-
-    if (!cmd->commandNumber)
-        return result;
-
 #ifdef _WIN32
-    // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-    // since 19.02.2022 game update sendPacket is no longer on stack
-    bool sendPacket = true;
-#else
-    bool dummy;
-    bool& sendPacket = dummy;
+#pragma intrinsic(_ReturnAddress)
+
+bool sendPacket = true;
+DWORD retAddr = NULL;
+
+__declspec(naked) void __fastcall createMove_End() noexcept
+{
+	__asm
+	{
+		mov bl, sendPacket
+		jmp retAddr
+	}
+}
+
+void** searchPtr(void** addr, void* value)
+{
+		while (*addr != value) addr++;
+		return addr;
+}
 #endif
 
-    static auto previousViewAngles{ cmd->viewangles };
-    const auto currentViewAngles{ cmd->viewangles };
+static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, UserCmd * cmd) noexcept
+{
+	auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
 
-    memory->globalVars->serverTime(cmd);
-    Misc::nadePredict();
-    Misc::antiAfkKick(cmd);
-    Misc::fastStop(cmd);
-    Misc::prepareRevolver(cmd);
-    Visuals::removeShadows();
-    Misc::runReportbot();
-    Misc::bunnyHop(cmd);
-    Misc::autoStrafe(cmd);
-    Misc::removeCrouchCooldown(cmd);
-    Misc::autoPistol(cmd);
-    Misc::autoReload(cmd);
-    Misc::updateClanTag();
-    Misc::fakeBan();
-    Misc::stealNames();
-    Misc::revealRanks(cmd);
-    Misc::quickReload(cmd);
-    Misc::fixTabletSignal();
-    Misc::slowwalk(cmd);
+	if (!cmd->commandNumber)
+		return result;
 
-    EnginePrediction::run(cmd);
+#ifndef _WIN32
+	bool dummy;
+	bool& sendPacket = dummy;
+#endif
 
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
-    Backtrack::run(cmd);
-    Misc::edgejump(cmd);
-    Misc::moonwalk(cmd);
-    Misc::fastPlant(cmd);
+	static auto previousViewAngles{ cmd->viewangles };
+	const auto currentViewAngles{ cmd->viewangles };
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-    }
+	memory->globalVars->serverTime(cmd);
+	Misc::nadePredict();
+	Misc::antiAfkKick(cmd);
+	Misc::fastStop(cmd);
+	Misc::prepareRevolver(cmd);
+	Visuals::removeShadows();
+	Misc::runReportbot();
+	Misc::bunnyHop(cmd);
+	Misc::autoStrafe(cmd);
+	Misc::removeCrouchCooldown(cmd);
+	Misc::autoPistol(cmd);
+	Misc::autoReload(cmd);
+	Misc::updateClanTag();
+	Misc::fakeBan();
+	Misc::stealNames();
+	Misc::revealRanks(cmd);
+	Misc::quickReload(cmd);
+	Misc::fixTabletSignal();
+	Misc::slowwalk(cmd);
 
-    auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
-    viewAnglesDelta.normalize();
-    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+	EnginePrediction::run(cmd);
 
-    cmd->viewangles = previousViewAngles + viewAnglesDelta;
+	Aimbot::run(cmd);
+	Triggerbot::run(cmd);
+	Backtrack::run(cmd);
+	Misc::edgejump(cmd);
+	Misc::moonwalk(cmd);
+	Misc::fastPlant(cmd);
 
-    cmd->viewangles.normalize();
-    Misc::fixMovement(cmd, currentViewAngles.y);
+	if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+		Misc::chokePackets(sendPacket);
+		AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+	}
 
-    cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-    cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-    cmd->viewangles.z = 0.0f;
-    cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
-    cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
+	auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
+	viewAnglesDelta.normalize();
+	viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+	viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
 
-    previousViewAngles = cmd->viewangles;
+	cmd->viewangles = previousViewAngles + viewAnglesDelta;
 
-    return false;
+	cmd->viewangles.normalize();
+	Misc::fixMovement(cmd, currentViewAngles.y);
+
+	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+	cmd->viewangles.z = 0.0f;
+	cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
+	cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
+
+	previousViewAngles = cmd->viewangles;
+
+#ifdef _WIN32
+	retAddr = (DWORD)_ReturnAddress();
+
+	void** p = searchPtr((void**)&p, (void*)retAddr);
+	*p = createMove_End;
+#endif
+
+	return false;
 }
+
+#ifdef _WIN32
+__declspec(naked) void __fastcall createMove_Start(LINUX_ARGS(void* thisptr, ) float inputSampleTime, UserCmd * cmd) noexcept
+{
+	__asm
+	{
+		mov sendPacket, bl
+		jmp createMove
+	}
+}
+#endif
 
 static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
 {
@@ -575,7 +611,11 @@ void Hooks::install() noexcept
     clientMode.init(memory->clientMode);
     clientMode.hookAt(WIN32_LINUX(17, 18), &shouldDrawFog);
     clientMode.hookAt(WIN32_LINUX(18, 19), &overrideView);
-    clientMode.hookAt(WIN32_LINUX(24, 25), &createMove);
+#ifdef WIN32
+	clientMode.hookAt(WIN32_LINUX(24, 25), &createMove_Start);
+#else
+	clientMode.hookAt(WIN32_LINUX(24, 25), &createMove);
+#endif
     clientMode.hookAt(WIN32_LINUX(27, 28), &shouldDrawViewModel);
     clientMode.hookAt(WIN32_LINUX(35, 36), &getViewModelFov);
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
