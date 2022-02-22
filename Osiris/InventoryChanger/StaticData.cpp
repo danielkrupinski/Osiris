@@ -515,11 +515,6 @@ private:
         }
     }
 
-    void initTournamentSortedStickers() noexcept
-    {
-
-    }
-
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
         return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return container.getStorage().getGameItems()[itemIndex.value].isSticker(); });
@@ -554,7 +549,6 @@ private:
 
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
-        initTournamentSortedStickers();
 
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
