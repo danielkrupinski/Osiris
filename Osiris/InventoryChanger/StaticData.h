@@ -161,8 +161,10 @@ namespace StaticData
             SouvenirToken,
             TournamentCoin
         };
-        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept;
-        
+
+        constexpr GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+            : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
+
         Type type;
     public:
         std::uint8_t rarity;

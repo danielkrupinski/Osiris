@@ -568,8 +568,6 @@ std::uint32_t StaticData::getTournamentEventID(const GameItem& item) noexcept
     return static_cast<std::uint32_t>(item.dataIndex);
 }
 
-StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
-
 StaticData::PaintKit::PaintKit(int id, ItemName name) noexcept : id{ id }, name{ name } {}
 
 StaticData::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}
