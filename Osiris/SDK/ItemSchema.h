@@ -15,6 +15,17 @@
 
 enum class WeaponId : short;
 
+enum class EconRarity : std::uint8_t {
+    Default = 0,
+    Gray,
+    LightBlue,
+    Blue,
+    Purple,
+    Pink,
+    Red,
+    Gold
+};
+
 struct PaintKit {
     int id;
     UtlString name;
