@@ -116,24 +116,24 @@ namespace StaticData
             return GameItem{ Type::TournamentCoin, rarity, weaponID, dataIndex, iconPath };
         }
 
-        bool isSticker() const noexcept { return type == Type::Sticker; }
-        bool isSkin() const noexcept { return type == Type::Skin; }
-        bool isGlove() const noexcept { return type == Type::Glove; }
-        bool isMusic() const noexcept { return type == Type::Music; }
-        bool isCollectible() const noexcept { return type == Type::Collectible; }
-        bool isNameTag() const noexcept { return type == Type::NameTag; }
-        bool isPatch() const noexcept { return type == Type::Patch; }
-        bool isGraffiti() const noexcept { return type == Type::Graffiti; }
-        bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
-        bool isAgent() const noexcept { return type == Type::Agent; }
-        bool isCase() const noexcept { return type == Type::Case; }
-        bool isCaseKey() const noexcept { return type == Type::CaseKey; }
-        bool isOperationPass() const noexcept { return type == Type::OperationPass; }
-        bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
-        bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
-        bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
-        bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
-        bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
+        constexpr bool isSticker() const noexcept { return type == Type::Sticker; }
+        constexpr bool isSkin() const noexcept { return type == Type::Skin; }
+        constexpr bool isGlove() const noexcept { return type == Type::Glove; }
+        constexpr bool isMusic() const noexcept { return type == Type::Music; }
+        constexpr bool isCollectible() const noexcept { return type == Type::Collectible; }
+        constexpr bool isNameTag() const noexcept { return type == Type::NameTag; }
+        constexpr bool isPatch() const noexcept { return type == Type::Patch; }
+        constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
+        constexpr bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
+        constexpr bool isAgent() const noexcept { return type == Type::Agent; }
+        constexpr bool isCase() const noexcept { return type == Type::Case; }
+        constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
+        constexpr bool isOperationPass() const noexcept { return type == Type::OperationPass; }
+        constexpr bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
+        constexpr bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
+        constexpr bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
+        constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
+        constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
         bool hasPaintKit() const noexcept { return type >= Type::Glove && type <= Type::Patch; }
 
