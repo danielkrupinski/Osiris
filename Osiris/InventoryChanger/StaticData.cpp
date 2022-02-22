@@ -164,9 +164,9 @@ private:
                     continue;
 
                 if (isGlove) {
-                    storage.addGlovesWithLastPaintKit(paintKit->rarity, it->weaponId, stringPool.add(it->iconPath));
+                    storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, stringPool.add(it->iconPath));
                 } else {
-                    storage.addSkinWithLastPaintKit(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, stringPool.add(it->iconPath));
+                    storage.addSkinWithLastPaintKit(static_cast<EconRarity>(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6)), it->weaponId, stringPool.add(it->iconPath));
                 }
             }
         }
@@ -191,13 +191,13 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                storage.addSticker(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                storage.addSticker(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addPatch(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addPatch(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addGraffiti(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, stickerKit->rarity, stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addGraffiti(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
@@ -228,9 +228,9 @@ private:
             if (!inventoryImage)
                 continue;
 
-            const auto rarity = item->getRarity();
+            const auto rarity = EconRarity{ item->getRarity() };
 
-            if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == 6) {
+            if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == EconRarity::Red) {
                 storage.addVanillaKnife(weaponID, stringPool.add(inventoryImage));
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {

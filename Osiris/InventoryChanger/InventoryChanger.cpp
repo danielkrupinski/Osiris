@@ -778,7 +778,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             InventoryChanger::scheduleHudUpdate();
     }
 
-    constexpr auto rarityColor = [](int rarity) noexcept {
+    constexpr auto rarityColor = [](EconRarity rarity) noexcept {
         constexpr auto rarityColors = std::to_array<ImU32>({
             IM_COL32(106,  97,  85, 255),
             IM_COL32(176, 195, 217, 255),
@@ -789,7 +789,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             IM_COL32(235,  75,  75, 255),
             IM_COL32(228, 174,  57, 255)
             });
-        return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
+        return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? static_cast<std::size_t>(rarity) : 0];
     };
 
     if (isInAddMode) {

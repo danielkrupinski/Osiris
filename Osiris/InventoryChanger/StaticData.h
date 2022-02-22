@@ -11,6 +11,7 @@
 #include "../SDK/WeaponId.h"
 
 enum TournamentTeam : std::uint8_t;
+enum class EconRarity : std::uint8_t;
 
 namespace StaticData
 {
@@ -26,92 +27,92 @@ namespace StaticData
 
     struct GameItem {
     public:
-        [[nodiscard]] static constexpr GameItem sticker(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem sticker(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Sticker, rarity, WeaponId::Sticker, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem skin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem skin(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Skin, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem gloves(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem gloves(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Glove, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem musicKit(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem musicKit(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Music, rarity, WeaponId::MusicKit, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem collectible(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem collectible(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Collectible, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem nameTag(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem nameTag(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::NameTag, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem patch(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem patch(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Patch, rarity, WeaponId::Patch, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem graffiti(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem graffiti(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem sealedGraffiti(int rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem sealedGraffiti(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem agent(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem agent(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Agent, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem case_(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem case_(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Case, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem caseKey(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem caseKey(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::CaseKey, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem operationPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem operationPass(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::OperationPass, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem statTrakSwapTool(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem statTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::StatTrakSwapTool, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem viewerPass(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem viewerPass(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::ViewerPass, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem serviceMedal(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem serviceMedal(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::ServiceMedal, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem souvenirToken(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem souvenirToken(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::SouvenirToken, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem tournamentCoin(int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem tournamentCoin(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::TournamentCoin, rarity, weaponID, dataIndex, iconPath };
         }
@@ -162,12 +163,12 @@ namespace StaticData
             TournamentCoin
         };
 
-        constexpr GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-            : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
+        constexpr GameItem(Type type, EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+            : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
         Type type;
     public:
-        std::uint8_t rarity;
+        EconRarity rarity;
         WeaponId weaponID;
         std::size_t dataIndex;
 

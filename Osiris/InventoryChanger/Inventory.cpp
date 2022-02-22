@@ -163,7 +163,7 @@ private:
         econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size();
 
         const auto& item = inventoryItem.get();
-        econItem->rarity = item.rarity;
+        econItem->rarity = static_cast<std::uint16_t>(item.rarity);
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
 
