@@ -264,7 +264,7 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampl
 #ifdef _WIN32
 	retAddr = _ReturnAddress();
 
-	void** p = searchPtr((void**)&p, (void*)retAddr);
+	void** p = searchPtr(reinterpret_cast<void**>(&p), retAddr);
 	*p = createMove_End;
 #endif
 
