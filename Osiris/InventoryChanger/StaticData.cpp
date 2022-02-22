@@ -92,7 +92,7 @@ private:
 class StaticDataContainer {
 public:
     StaticDataContainer() = default;
-    explicit StaticDataContainer(StaticDataStorage storage) : storage{ std::move(storage) } {}
+    explicit StaticDataContainer(StaticDataStorage dataStorage) : storage{ sorted(std::move(dataStorage)) } {}
 
     const StaticDataStorage& getStorage() const noexcept
     {
@@ -100,6 +100,16 @@ public:
     }
 
 private:
+    [[nodiscard]] static StaticDataStorage sorted(StaticDataStorage storage)
+    {
+        std::ranges::sort(storage.getGameItems(), [&storage](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
+            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
+                return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
+            return itemA.weaponID < itemB.weaponID;
+        });
+        return storage;
+    }
+
     StaticDataStorage storage;
 };
 
@@ -533,11 +543,6 @@ private:
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
 
-        std::ranges::sort(storage.getGameItems(), [&storage](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
-            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
-                return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
-            return itemA.weaponID < itemB.weaponID;
-        });
         container = StaticDataContainer{ std::move(storage) };
 
         buildLootLists(itemSchema, lootListIndices);
