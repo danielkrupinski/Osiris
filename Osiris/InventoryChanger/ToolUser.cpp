@@ -112,11 +112,11 @@ private:
         const auto& caseData = StaticData::getCase(container.get());
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
-            const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
+            const auto [unlockedItem, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
-            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(StaticData::getGameItem(unlockedItemIdx), dynamicDataIdx, true));
+            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItem, dynamicDataIdx, true));
         }
     }
 
