@@ -83,7 +83,7 @@ public:
 
     bool isSticker() const noexcept { return isValid() && get().isSticker(); }
     bool isSkin() const noexcept { return isValid() && get().isSkin(); }
-    bool isGlove() const noexcept { return isValid() && get().isGlove(); }
+    bool isGlove() const noexcept { return isValid() && get().isGloves(); }
     bool isMusic() const noexcept { return isValid() && get().isMusic(); }
     bool isAgent() const noexcept { return isValid() && get().isAgent(); }
     bool isCollectible() const noexcept { return isValid() && get().isCollectible(); }
