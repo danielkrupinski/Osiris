@@ -652,6 +652,9 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+    // Restore PE Header/PEB
+    anti_detection.reset();
+
     _CRT_INIT(moduleHandle, DLL_PROCESS_DETACH, nullptr);
 
     FreeLibraryAndExitThread(moduleHandle, 0);

@@ -251,6 +251,9 @@
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="AntiDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -645,6 +648,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\StaticDataContainer.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiDetection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,8 @@ union SDL_Event;
 
 #include "SDK/Platform.h"
 
+#include "AntiDetection.h"
+
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
@@ -72,4 +74,7 @@ private:
 #endif
 };
 
+#ifdef _WIN32
+inline std::unique_ptr<AntiDetection> anti_detection;
+#endif
 inline std::unique_ptr<Hooks> hooks;
