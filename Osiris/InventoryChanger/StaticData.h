@@ -40,7 +40,7 @@ namespace StaticData
 
         [[nodiscard]] static constexpr GameItem gloves(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
-            return GameItem{ Type::Glove, rarity, weaponID, dataIndex, iconPath };
+            return GameItem{ Type::Gloves, rarity, weaponID, dataIndex, iconPath };
         }
 
         [[nodiscard]] static constexpr GameItem musicKit(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
@@ -120,7 +120,7 @@ namespace StaticData
 
         constexpr bool isSticker() const noexcept { return type == Type::Sticker; }
         constexpr bool isSkin() const noexcept { return type == Type::Skin; }
-        constexpr bool isGloves() const noexcept { return type == Type::Glove; }
+        constexpr bool isGloves() const noexcept { return type == Type::Gloves; }
         constexpr bool isMusic() const noexcept { return type == Type::Music; }
         constexpr bool isCollectible() const noexcept { return type == Type::Collectible; }
         constexpr bool isNameTag() const noexcept { return type == Type::NameTag; }
@@ -137,12 +137,12 @@ namespace StaticData
         constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type >= Type::Glove && type <= Type::Patch; }
+        bool hasPaintKit() const noexcept { return type >= Type::Gloves && type <= Type::Patch; }
 
     private:
         enum class Type : std::uint8_t {
             // has paint kit, must match GameItem::hasPaintKit() below
-            Glove,
+            Gloves,
             Skin,
             Patch,
 
