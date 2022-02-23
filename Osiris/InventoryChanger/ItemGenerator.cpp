@@ -189,7 +189,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const StaticData::GameItem& 
             dynamicData.stickers[3].stickerID = 28;
 
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
-    } else if (item.isGlove()) {
+    } else if (item.isGloves()) {
         const auto& staticData = StaticData::getPaintKit(item);
         DynamicGloveData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));

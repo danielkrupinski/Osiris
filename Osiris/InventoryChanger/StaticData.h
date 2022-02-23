@@ -120,7 +120,7 @@ namespace StaticData
 
         constexpr bool isSticker() const noexcept { return type == Type::Sticker; }
         constexpr bool isSkin() const noexcept { return type == Type::Skin; }
-        constexpr bool isGlove() const noexcept { return type == Type::Glove; }
+        constexpr bool isGloves() const noexcept { return type == Type::Glove; }
         constexpr bool isMusic() const noexcept { return type == Type::Music; }
         constexpr bool isCollectible() const noexcept { return type == Type::Collectible; }
         constexpr bool isNameTag() const noexcept { return type == Type::NameTag; }

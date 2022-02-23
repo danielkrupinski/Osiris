@@ -185,7 +185,7 @@ private:
             }
         } else if (item.isSkin()) {
             initSkinEconItem(inventoryItem, *econItem);
-        } else if (item.isGlove()) {
+        } else if (item.isGloves()) {
             econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::getPaintKit(item).id));
 
