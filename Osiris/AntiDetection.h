@@ -70,7 +70,7 @@ private:
         {
             ULONG TimeDateStamp;
             PVOID LoadedImports;
-        };
+        } DUMMYUNIONNAME2;
         _ACTIVATION_CONTEXT* EntryPointActivationContext;
         PVOID PatchInformation;
         LIST_ENTRY ForwarderLinks;
