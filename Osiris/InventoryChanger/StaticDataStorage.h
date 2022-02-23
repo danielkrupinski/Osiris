@@ -128,7 +128,7 @@ public:
 
     const auto& getPaintKit(const StaticData::GameItem& item) const
     {
-        assert(item.hasPaintKit());
+        assert(item.isSkin() || item.isGloves() || item.isPatch());
         return paintKits[item.dataIndex];
     }
 
