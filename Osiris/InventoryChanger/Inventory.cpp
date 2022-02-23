@@ -185,7 +185,7 @@ private:
             }
         } else if (item.isSkin()) {
             initSkinEconItem(inventoryItem, *econItem);
-        } else if (item.isGlove()) {
+        } else if (item.isGloves()) {
             econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::getPaintKit(item).id));
 
@@ -437,9 +437,9 @@ void Inventory::addItemAcknowledged(const StaticData::GameItem& gameItem, std::s
     InventoryImpl::addItem(gameItem, dynamicDataIdx, false);
 }
 
-std::uint64_t Inventory::addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+std::uint64_t Inventory::addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
 {
-    return InventoryImpl::addItemNow(StaticData::getGameItem(gameItemIndex), dynamicDataIdx, asUnacknowledged);
+    return InventoryImpl::addItemNow(gameItem, dynamicDataIdx, asUnacknowledged);
 }
 
 void Inventory::deleteItemNow(std::uint64_t itemID) noexcept

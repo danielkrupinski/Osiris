@@ -52,12 +52,10 @@ private:
     {
         // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
         const auto begin = std::lower_bound(tournamentStickersSorted.begin(), tournamentStickersSorted.end(), tournamentID, [this](const StaticData::GameItem& item, std::uint32_t tournamentID) {
-            assert(item.isSticker());
             return storage.getStickerKit(item).tournamentID < tournamentID;
         });
 
         const auto end = std::upper_bound(tournamentStickersSorted.begin(), tournamentStickersSorted.end(), tournamentID, [this](std::uint32_t tournamentID, const StaticData::GameItem& item) {
-            assert(item.isSticker());
             return storage.getStickerKit(item).tournamentID > tournamentID;
         });
 
@@ -77,7 +75,6 @@ public:
         const auto it = getTournamentStickers(tournamentID).first;
         if (it == tournamentStickersSorted.end())
             return 0;
-        assert(it->get().isSticker());
         return storage.getStickerKit(*it).tournamentID == tournamentID ? storage.getStickerKit(*it).id : 0;
     }
 
@@ -94,12 +91,10 @@ public:
         const auto range = getTournamentStickers(tournamentID);
 
         const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](const StaticData::GameItem& item) {
-            assert(item.isSticker());
             return storage.getStickerKit(item).tournamentTeam;
         });
         if (it == range.second)
             return 0;
-        assert(it->get().isSticker());
         return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
     }
 

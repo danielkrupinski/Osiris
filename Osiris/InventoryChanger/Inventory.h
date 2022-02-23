@@ -83,7 +83,7 @@ public:
 
     bool isSticker() const noexcept { return isValid() && get().isSticker(); }
     bool isSkin() const noexcept { return isValid() && get().isSkin(); }
-    bool isGlove() const noexcept { return isValid() && get().isGlove(); }
+    bool isGlove() const noexcept { return isValid() && get().isGloves(); }
     bool isMusic() const noexcept { return isValid() && get().isMusic(); }
     bool isAgent() const noexcept { return isValid() && get().isAgent(); }
     bool isCollectible() const noexcept { return isValid() && get().isCollectible(); }
@@ -112,7 +112,7 @@ namespace Inventory
     std::vector<InventoryItem>& get() noexcept;
     void addItemUnacknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
     void addItemAcknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
-    std::uint64_t addItemNow(StaticData::ItemIndex2 gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
+    std::uint64_t addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
     InventoryItem* getItem(std::uint64_t itemID) noexcept;
