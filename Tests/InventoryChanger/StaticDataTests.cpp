@@ -35,7 +35,7 @@ TEST_P(GameItemRarityTest, CreatedSkinHasCorrectRarity) {
 }
 
 TEST(GameItem, CreatedGlovesAreGloves) {
-    ASSERT_TRUE(StaticData::GameItem::gloves(EconRarity::Default, WeaponId::None, 0, {}).isGlove());
+    ASSERT_TRUE(StaticData::GameItem::gloves(EconRarity::Default, WeaponId::None, 0, {}).isGloves());
 }
 
 TEST(GameItem, CreatedGlovesHaveCorrectWeaponID) {
