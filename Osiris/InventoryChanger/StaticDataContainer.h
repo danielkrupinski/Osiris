@@ -108,7 +108,10 @@ public:
     [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return item.hasPaintKit() && storage.getPaintKit(item).id < paintKit; }); it != end && it->weaponID == weaponID && (!it->hasPaintKit() || storage.getPaintKit(*it).id == paintKit))
+        if (begin != end && !begin->hasPaintKit())
+            return StaticData::InvalidItemIdx2;
+
+        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return storage.getPaintKit(item).id < paintKit; }); it != end && storage.getPaintKit(*it).id == paintKit)
             return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
         return StaticData::InvalidItemIdx2;
     }
