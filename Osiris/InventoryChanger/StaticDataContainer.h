@@ -183,6 +183,14 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSealedGraffiti(int graffitiID) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
+        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+            return *it;
+        return {};
+    }
+
 private:
     [[nodiscard]] static StaticDataStorage sorted(StaticDataStorage storage)
     {
