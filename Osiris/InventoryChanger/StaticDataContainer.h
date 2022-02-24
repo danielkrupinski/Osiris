@@ -167,6 +167,14 @@ public:
         return StaticData::InvalidItemIdx2;
     }
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getGraffiti(int graffitiID) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::Graffiti);
+        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+            return *it;
+        return {};
+    }
+
     [[nodiscard]] StaticData::ItemIndex2 getSealedGraffitiIndex(int graffitiID) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
