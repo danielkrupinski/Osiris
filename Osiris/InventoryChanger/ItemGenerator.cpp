@@ -35,7 +35,7 @@ using StaticData::TournamentMap;
 [[nodiscard]] const StaticData::GameItem& getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
 {
     assert(container.hasLoot());
-    return StaticData::getGameItem(StaticData::caseLoot()[Helpers::random(container.lootBeginIdx, container.lootEndIdx - 1)]);
+    return StaticData::caseLoot()[Helpers::random(container.lootBeginIdx, container.lootEndIdx - 1)];
 }
 
 std::pair<const StaticData::GameItem&, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept

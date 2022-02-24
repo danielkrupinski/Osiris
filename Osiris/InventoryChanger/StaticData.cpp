@@ -273,7 +273,7 @@ private:
         }
     }
 
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<StaticData::ItemIndex2>& loot, bool* willProduceStatTrak = nullptr) const noexcept
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::reference_wrapper<const StaticData::GameItem>>& loot, bool* willProduceStatTrak = nullptr) const noexcept
     {
         if (willProduceStatTrak)
             *willProduceStatTrak = *willProduceStatTrak || lootList->willProduceStatTrak();
@@ -281,31 +281,31 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                if (auto idx = container.getStickerIndex(contents[j].stickerKit); idx != StaticData::InvalidItemIdx2)
-                    loot.push_back(idx);
-                else if ((idx = container.getSealedGraffitiIndex(contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
-                    loot.push_back(idx);
-                else if ((idx = container.getItemIndex(WeaponId::Patch, contents[j].stickerKit)) != StaticData::InvalidItemIdx2)
-                    loot.push_back(idx);
+                if (auto idx = container.getSticker(contents[j].stickerKit); idx != std::nullopt)
+                    loot.push_back(*idx);
+                else if ((idx = container.getSealedGraffiti(contents[j].stickerKit)) != std::nullopt)
+                    loot.push_back(*idx);
+                else if ((idx = container.getItem(WeaponId::Patch, contents[j].stickerKit)) != std::nullopt)
+                    loot.push_back(*idx);
             } else if (contents[j].musicKit != 0) {
-                if (const auto idx = container.getMusicIndex(contents[j].musicKit); idx != StaticData::InvalidItemIdx2)
-                    loot.push_back(idx);
+                if (const auto idx = container.getMusic(contents[j].musicKit); idx.has_value())
+                    loot.push_back(*idx);
             } else if (contents[j].isNestedList) {
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
                     fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
             } else if (contents[j].itemDef != 0) {
-                if (const auto idx = container.getItemIndex(contents[j].weaponId(), contents[j].paintKit); idx != StaticData::InvalidItemIdx2)
-                    loot.push_back(idx);
+                if (const auto idx = container.getItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
+                    loot.push_back(*idx);
             }
         }
     }
 
     // a few loot lists aren't present in client item schema, so we need to provide them ourselves
-    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<StaticData::ItemIndex2>& loot) const noexcept
+    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<std::reference_wrapper<const StaticData::GameItem>>& loot) const noexcept
     {
         if (lootListID == 292) { // crate_xray_p250_lootlist
-            if (const auto idx = container.getItemIndex(WeaponId::P250, 125 /* cu_xray_p250 */); idx != StaticData::InvalidItemIdx2)
-                loot.push_back(idx);
+            if (const auto idx = container.getItem(WeaponId::P250, 125 /* cu_xray_p250 */); idx.has_value())
+                loot.push_back(*idx);
         } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
             constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
             for (const auto collection : dreamHack2013Collections) {
@@ -336,12 +336,12 @@ private:
 
     [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return container.getStorage().getGameItems()[itemIndex.value].isSticker(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [](const StaticData::GameItem& item) { return item.isSticker(); });
     }
 
     [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
     {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [this](StaticData::ItemIndex2 itemIndex) { return container.getStorage().getGameItems()[itemIndex.value].isPatch(); });
+        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [](const StaticData::GameItem& item) { return item.isPatch(); });
     }
 
     void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
@@ -377,7 +377,7 @@ private:
     StringPool<wchar_t> stringPoolWide;
     StaticDataContainer container;
     std::vector<StaticData::Case> _cases;
-    std::vector<StaticData::ItemIndex2> _caseLoot;
+    std::vector<std::reference_wrapper<const StaticData::GameItem>> _caseLoot;
 };
 
 [[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
@@ -385,7 +385,7 @@ private:
     return StaticDataImpl::gameItems().size();
 }
 
-const std::vector<StaticData::ItemIndex2>& StaticData::caseLoot() noexcept
+const std::vector<std::reference_wrapper<const StaticData::GameItem>>& StaticData::caseLoot() noexcept
 {
     return StaticDataImpl::caseLoot();
 }
