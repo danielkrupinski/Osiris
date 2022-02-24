@@ -86,23 +86,23 @@ private:
         const auto passWeaponID = pass.get().weaponID;
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-        if (const auto idx = StaticData::getItemIndex(coinID); idx != StaticData::InvalidItemIdx2)
-            Inventory::addItemNow(StaticData::getGameItem(idx), Inventory::InvalidDynamicDataIdx, true);
+        if (const auto item = StaticData::getItem(coinID); item.has_value())
+            Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, true);
     }
 
     void _activateViewerPass(InventoryItem& pass) const noexcept
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
         pass.markToDelete();
-        if (const auto idx = StaticData::getItemIndex(coinID); idx != StaticData::InvalidItemIdx2)
-            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(StaticData::getGameItem(idx), Inventory::InvalidDynamicDataIdx, false));
+        if (const auto item = StaticData::getItem(coinID); item.has_value())
+            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
     }
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto idx = StaticData::getGraffitiIndex(StaticData::getSealedGraffitiID(sealedGraffiti.get())); idx != StaticData::InvalidItemIdx2) {
+        if (const auto item = StaticData::getGraffiti(StaticData::getSealedGraffitiID(sealedGraffiti.get())); item.has_value()) {
             sealedGraffiti.markToDelete();
-            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(StaticData::getGameItem(idx), Inventory::InvalidDynamicDataIdx, false));
+            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
         }
     }
 
