@@ -518,6 +518,11 @@ std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::ge
     return StaticDataImpl::container_().getMusic(musicID);
 }
 
+std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getSticker(int stickerID) noexcept
+{
+    return StaticDataImpl::container_().getSticker(stickerID);
+}
+
 StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
 {
     return StaticDataImpl::instance().container_().getMusicIndex(musicID);
