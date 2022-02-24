@@ -508,6 +508,11 @@ std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::ge
     return StaticDataImpl::container_().getGraffiti(graffitiID);
 }
 
+std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getSealedGraffiti(int graffitiID) noexcept
+{
+    return StaticDataImpl::container_().getSealedGraffiti(graffitiID);
+}
+
 std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getMusic(int musicID) noexcept
 {
     return StaticDataImpl::container_().getMusic(musicID);

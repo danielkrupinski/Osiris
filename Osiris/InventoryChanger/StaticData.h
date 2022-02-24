@@ -266,6 +266,7 @@ namespace StaticData
     [[nodiscard]] ItemIndex2 getItemIndex(WeaponId weaponID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItem(WeaponId weaponID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getGraffiti(int graffitiID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSealedGraffiti(int graffitiID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getMusic(int musicID) noexcept;
     ItemIndex2 getMusicIndex(int musicID) noexcept;
     ItemIndex2 getGraffitiIndex(int graffitiID) noexcept;
