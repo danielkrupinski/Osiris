@@ -137,16 +137,12 @@ namespace StaticData
         constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        [[deprecated]] bool hasPaintKit() const noexcept { return type >= Type::Gloves && type <= Type::Patch; }
-
     private:
         enum class Type : std::uint8_t {
-            // has paint kit, must match GameItem::hasPaintKit() below
             Gloves,
             Skin,
             Patch,
 
-            // has other data
             Sticker,
             Music,
             Graffiti,
