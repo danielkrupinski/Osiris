@@ -264,6 +264,7 @@ namespace StaticData
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSealedGraffiti(int graffitiID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getMusic(int musicID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSticker(int stickerID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getPatch(int patchID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;

@@ -518,6 +518,11 @@ std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::ge
     return StaticDataImpl::container_().getSticker(stickerID);
 }
 
+std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getPatch(int patchID) noexcept
+{
+    return StaticDataImpl::container_().getPatch(patchID);
+}
+
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
     return StaticDataImpl::instance().container_().getTournamentEventStickerID(tournamentID);
