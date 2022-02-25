@@ -128,7 +128,7 @@ public:
 
     const auto& getPaintKit(const StaticData::GameItem& item) const
     {
-        assert(item.isSkin() || item.isGloves() || item.isPatch());
+        assert(item.isSkin() || item.isGloves());
         return paintKits[item.dataIndex];
     }
 
@@ -136,6 +136,12 @@ public:
     {
         assert(item.isGraffiti() || item.isSealedGraffiti());
         return graffitiKits[item.dataIndex];
+    }
+
+    const auto& getPatchKit(const StaticData::GameItem& item) const
+    {
+        assert(item.isPatch());
+        return paintKits[item.dataIndex];
     }
 
     auto& getGameItems()
