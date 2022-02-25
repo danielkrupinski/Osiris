@@ -488,16 +488,6 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return getWeaponNamesInstance().getWeaponName(weaponID);
 }
 
-StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID, int paintKit) noexcept
-{
-    return StaticDataImpl::instance().container_().getItemIndex(weaponID, paintKit);
-}
-
-StaticData::ItemIndex2 StaticData::getItemIndex(WeaponId weaponID) noexcept
-{
-    return StaticDataImpl::instance().container_().getItemIndex(weaponID);
-}
-
 std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getItem(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::container_().getItem(weaponID);
@@ -526,26 +516,6 @@ std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::ge
 std::optional<std::reference_wrapper<const StaticData::GameItem>> StaticData::getSticker(int stickerID) noexcept
 {
     return StaticDataImpl::container_().getSticker(stickerID);
-}
-
-StaticData::ItemIndex2 StaticData::getMusicIndex(int musicID) noexcept
-{
-    return StaticDataImpl::instance().container_().getMusicIndex(musicID);
-}
-
-StaticData::ItemIndex2 StaticData::getGraffitiIndex(int graffitiID) noexcept
-{
-    return StaticDataImpl::instance().container_().getGraffitiIndex(graffitiID);
-}
-
-StaticData::ItemIndex2 StaticData::getSealedGraffitiIndex(int graffitiID) noexcept
-{
-    return StaticDataImpl::instance().container_().getSealedGraffitiIndex(graffitiID);
-}
-
-StaticData::ItemIndex2 StaticData::getStickerIndex(int stickerID) noexcept
-{
-    return StaticDataImpl::instance().container_().getStickerIndex(stickerID);
 }
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept

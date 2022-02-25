@@ -262,18 +262,12 @@ namespace StaticData
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) noexcept;
-    [[nodiscard]] ItemIndex2 getItemIndex(WeaponId weaponID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItem(WeaponId weaponID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getGraffiti(int graffitiID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSealedGraffiti(int graffitiID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getMusic(int musicID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSticker(int stickerID) noexcept;
-    ItemIndex2 getMusicIndex(int musicID) noexcept;
-    ItemIndex2 getGraffitiIndex(int graffitiID) noexcept;
-    ItemIndex2 getSealedGraffitiIndex(int graffitiID) noexcept;
-    ItemIndex2 getStickerIndex(int stickerID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
