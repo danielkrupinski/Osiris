@@ -106,6 +106,7 @@ public:
     static const auto& getPaintKit(const StaticData::GameItem& item) noexcept { return instance().container.getStorage().getPaintKit(item); }
     static const auto& getMusicKit(const StaticData::GameItem& item) noexcept { return instance().container.getStorage().getMusicKit(item); }
     static const auto& getGraffitiKit(const StaticData::GameItem& item) noexcept { return instance().container.getStorage().getGraffitiKit(item); }
+    static const auto& getPatchKit(const StaticData::GameItem& item) noexcept { return instance().container.getStorage().getPatchKit(item); }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const StaticData::GameItem& serviceMedal) const noexcept
     {
@@ -409,7 +410,7 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 [[nodiscard]] int StaticData::getPatchID(const GameItem& item) noexcept
 {
     assert(item.isPatch());
-    return StaticDataImpl::getPaintKit(item).id;
+    return StaticDataImpl::getPatchKit(item).id;
 }
 
 [[nodiscard]] int StaticData::getSkinPaintID(const GameItem& item) noexcept
@@ -440,6 +441,8 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
         return StaticDataImpl::getStickerKit(item).name.forDisplay;
     if (item.isGraffiti() || item.isSealedGraffiti())
         return StaticDataImpl::getGraffitiKit(item).name.forDisplay;
+    if (item.isPatch())
+        return StaticDataImpl::getPatchKit(item).name.forDisplay;
     return "";
 }
 
@@ -453,6 +456,8 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
         return StaticDataImpl::getStickerKit(item).name.forSearch;
     if (item.isGraffiti() || item.isSealedGraffiti())
         return StaticDataImpl::getGraffitiKit(item).name.forSearch;
+    if (item.isPatch())
+        return StaticDataImpl::getPatchKit(item).name.forSearch;
     return L"";
 }
 
