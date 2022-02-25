@@ -11,7 +11,6 @@ struct InventoryItem;
 namespace ItemGenerator
 {
     std::pair<const StaticData::GameItem&, std::size_t> generateItemFromContainer(const InventoryItem& caseItem) noexcept;
-    std::size_t createDefaultDynamicData(StaticData::ItemIndex2 gameItemIndex) noexcept;
     std::size_t createDefaultDynamicData(const StaticData::GameItem& item) noexcept;
 }
 

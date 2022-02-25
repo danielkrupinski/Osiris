@@ -170,11 +170,6 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-std::size_t ItemGenerator::createDefaultDynamicData(StaticData::ItemIndex2 gameItemIndex) noexcept
-{
-    return createDefaultDynamicData(StaticData::getGameItem(gameItemIndex));
-}
-
 std::size_t ItemGenerator::createDefaultDynamicData(const StaticData::GameItem& item) noexcept
 {
     std::size_t index = Inventory::InvalidDynamicDataIdx;
