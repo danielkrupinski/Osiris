@@ -155,6 +155,14 @@ public:
         return {};
     }
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getPatch(int patchID) const noexcept
+    {
+        const auto [begin, end] = findItems(WeaponId::Patch);
+        if (const auto it = std::find_if(begin, end, [this, patchID](const StaticData::GameItem& item) { return storage.getPatchKit(item).id == patchID; }); it != end)
+            return *it;
+        return {};
+    }
+
 private:
     [[nodiscard]] static StaticDataStorage sorted(StaticDataStorage storage)
     {
