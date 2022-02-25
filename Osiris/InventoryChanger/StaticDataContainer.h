@@ -126,7 +126,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getMusic(int musicKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::MusicKit);
-        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return storage.getMusicKit(item).id == musicKit; }); it != end)
+        if (const auto it = std::ranges::find(begin, end, musicKit, [this](const StaticData::GameItem& item) { return storage.getMusicKit(item).id; }); it != end)
             return *it;
         return {};
     }
@@ -134,7 +134,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSticker(int stickerKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Sticker);
-        if (const auto it = std::find_if(begin, end, [this, stickerKit](const StaticData::GameItem& item) { return storage.getStickerKit(item).id == stickerKit; }); it != end)
+        if (const auto it = std::ranges::find(begin, end, stickerKit, [this](const StaticData::GameItem& item) { return storage.getStickerKit(item).id; }); it != end)
             return *it;
         return {};
     }
@@ -142,7 +142,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getGraffiti(int graffitiID) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Graffiti);
-        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+        if (const auto it = std::ranges::find(begin, end, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; }); it != end)
             return *it;
         return {};
     }
@@ -150,7 +150,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSealedGraffiti(int graffitiID) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
-        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
+        if (const auto it = std::ranges::find(begin, end, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; }); it != end)
             return *it;
         return {};
     }
@@ -158,7 +158,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getPatch(int patchID) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Patch);
-        if (const auto it = std::find_if(begin, end, [this, patchID](const StaticData::GameItem& item) { return storage.getPatchKit(item).id == patchID; }); it != end)
+        if (const auto it = std::ranges::find(begin, end, patchID, [this](const StaticData::GameItem& item) { return storage.getPatchKit(item).id; }); it != end)
             return *it;
         return {};
     }
