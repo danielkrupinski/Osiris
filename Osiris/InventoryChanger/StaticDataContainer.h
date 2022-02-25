@@ -108,7 +108,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
-        if (begin != end && !begin->hasPaintKit())
+        if (begin != end && !begin->isSkin() && !begin->isGloves())
             return {};
 
         if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return storage.getPaintKit(item).id < paintKit; }); it != end && storage.getPaintKit(*it).id == paintKit)
@@ -159,7 +159,7 @@ private:
     [[nodiscard]] static StaticDataStorage sorted(StaticDataStorage storage)
     {
         std::ranges::sort(storage.getGameItems(), [&storage](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
-            if (itemA.weaponID == itemB.weaponID && itemA.hasPaintKit() && itemB.hasPaintKit())
+            if (itemA.weaponID == itemB.weaponID && (itemA.isSkin() || itemA.isGloves()) && (itemB.isSkin() || itemB.isGloves()))
                 return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
             return itemA.weaponID < itemB.weaponID;
         });

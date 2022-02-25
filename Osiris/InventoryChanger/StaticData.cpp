@@ -437,7 +437,7 @@ int StaticData::getSealedGraffitiID(const GameItem& item) noexcept
 
 std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 {
-    if (item.hasPaintKit())
+    if (item.isSkin() || item.isGloves())
         return StaticDataImpl::getPaintKit(item).name.forDisplay;
     if (item.isMusic())
         return StaticDataImpl::getMusicKit(item).name.forDisplay;
@@ -450,7 +450,7 @@ std::string_view StaticData::getPaintName(const GameItem& item) noexcept
 
 std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
 {
-    if (item.hasPaintKit())
+    if (item.isSkin() || item.isGloves())
         return StaticDataImpl::getPaintKit(item).name.forSearch;
     if (item.isMusic())
         return StaticDataImpl::getMusicKit(item).name.forSearch;
@@ -463,7 +463,7 @@ std::wstring_view StaticData::getPaintNameUpper(const GameItem& item) noexcept
 
 const StaticData::PaintKit& StaticData::getPaintKit(const GameItem& item) noexcept
 {
-    assert(item.hasPaintKit());
+    assert(item.isSkin() || item.isGloves());
     return StaticDataImpl::getPaintKit(item);
 }
 
