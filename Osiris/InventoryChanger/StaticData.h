@@ -191,6 +191,13 @@ namespace StaticData
         ItemName name;
     };
 
+    struct PatchKit {
+        PatchKit(int id, ItemName name) : id{ id }, name{ name } {}
+
+        int id;
+        ItemName name;
+    };
+
     struct StickerKit {
         StickerKit(int id, ItemName name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
             : id{ id }, name{ name }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
