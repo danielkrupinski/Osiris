@@ -125,45 +125,39 @@ public:
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getMusic(int musicKit) const noexcept
     {
-        const auto [begin, end] = findItems(WeaponId::MusicKit);
-        if (const auto it = std::ranges::find(begin, end, musicKit, [this](const StaticData::GameItem& item) { return storage.getMusicKit(item).id; }); it != end)
-            return *it;
-        return {};
+        return findItem(WeaponId::MusicKit, musicKit, [this](const StaticData::GameItem& item) { return storage.getMusicKit(item).id; });
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSticker(int stickerKit) const noexcept
     {
-        const auto [begin, end] = findItems(WeaponId::Sticker);
-        if (const auto it = std::ranges::find(begin, end, stickerKit, [this](const StaticData::GameItem& item) { return storage.getStickerKit(item).id; }); it != end)
-            return *it;
-        return {};
+        return findItem(WeaponId::Sticker, stickerKit, [this](const StaticData::GameItem& item) { return storage.getStickerKit(item).id; });
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getGraffiti(int graffitiID) const noexcept
     {
-        const auto [begin, end] = findItems(WeaponId::Graffiti);
-        if (const auto it = std::ranges::find(begin, end, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; }); it != end)
-            return *it;
-        return {};
+        return findItem(WeaponId::Graffiti, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; });
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSealedGraffiti(int graffitiID) const noexcept
     {
-        const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
-        if (const auto it = std::ranges::find(begin, end, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; }); it != end)
-            return *it;
-        return {};
+        return findItem(WeaponId::SealedGraffiti, graffitiID, [this](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id; });
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getPatch(int patchID) const noexcept
     {
-        const auto [begin, end] = findItems(WeaponId::Patch);
-        if (const auto it = std::ranges::find(begin, end, patchID, [this](const StaticData::GameItem& item) { return storage.getPatchKit(item).id; }); it != end)
+        return findItem(WeaponId::Patch, patchID, [this](const StaticData::GameItem& item) { return storage.getPatchKit(item).id; });
+    }
+
+private:
+    template <typename T, typename Projection>
+    [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> findItem(WeaponId weaponID, const T& value, Projection projection) const
+    {
+        const auto [begin, end] = findItems(weaponID);
+        if (const auto it = std::ranges::find(begin, end, value, projection); it != end)
             return *it;
         return {};
     }
 
-private:
     [[nodiscard]] static StaticDataStorage sorted(StaticDataStorage storage)
     {
         std::ranges::sort(storage.getGameItems(), [&storage](const StaticData::GameItem& itemA, const StaticData::GameItem& itemB) {
