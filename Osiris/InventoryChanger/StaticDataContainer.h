@@ -105,17 +105,6 @@ public:
         return (it != range.second ? storage.getStickerKit(*it).id : 0);
     }
 
-    [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID, int paintKit) const noexcept
-    {
-        const auto [begin, end] = findItems(weaponID);
-        if (begin != end && !begin->hasPaintKit())
-            return StaticData::InvalidItemIdx2;
-
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const StaticData::GameItem& item, int paintKit) { return storage.getPaintKit(item).id < paintKit; }); it != end && storage.getPaintKit(*it).id == paintKit)
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
-    }
-
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
@@ -127,26 +116,11 @@ public:
         return {};
     }
 
-    [[nodiscard]] StaticData::ItemIndex2 getItemIndex(WeaponId weaponID) const noexcept
-    {
-        if (const auto it = std::ranges::lower_bound(storage.getGameItems(), weaponID, {}, &StaticData::GameItem::weaponID); it != storage.getGameItems().end())
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
-    }
-
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getItem(WeaponId weaponID) const noexcept
     {
         if (const auto it = std::ranges::lower_bound(storage.getGameItems(), weaponID, {}, &StaticData::GameItem::weaponID); it != storage.getGameItems().end())
             return *it;
         return {};
-    }
-
-    [[nodiscard]] StaticData::ItemIndex2 getMusicIndex(int musicKit) const noexcept
-    {
-        const auto [begin, end] = findItems(WeaponId::MusicKit);
-        if (const auto it = std::find_if(begin, end, [this, musicKit](const StaticData::GameItem& item) { return storage.getMusicKit(item).id == musicKit; }); it != end)
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getMusic(int musicKit) const noexcept
@@ -157,14 +131,6 @@ public:
         return {};
     }
 
-    [[nodiscard]] StaticData::ItemIndex2 getStickerIndex(int stickerKit) const noexcept
-    {
-        const auto [begin, end] = findItems(WeaponId::Sticker);
-        if (const auto it = std::find_if(begin, end, [this, stickerKit](const StaticData::GameItem& item) { return storage.getStickerKit(item).id == stickerKit; }); it != end)
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
-    }
-
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSticker(int stickerKit) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Sticker);
@@ -173,28 +139,12 @@ public:
         return {};
     }
 
-    [[nodiscard]] StaticData::ItemIndex2 getGraffitiIndex(int graffitiID) const noexcept
-    {
-        const auto [begin, end] = findItems(WeaponId::Graffiti);
-        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
-    }
-
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getGraffiti(int graffitiID) const noexcept
     {
         const auto [begin, end] = findItems(WeaponId::Graffiti);
         if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
             return *it;
         return {};
-    }
-
-    [[nodiscard]] StaticData::ItemIndex2 getSealedGraffitiIndex(int graffitiID) const noexcept
-    {
-        const auto [begin, end] = findItems(WeaponId::SealedGraffiti);
-        if (const auto it = std::find_if(begin, end, [this, graffitiID](const StaticData::GameItem& item) { return storage.getGraffitiKit(item).id == graffitiID; }); it != end)
-            return StaticData::ItemIndex2{ static_cast<std::size_t>(std::distance(storage.getGameItems().begin(), it)) };
-        return StaticData::InvalidItemIdx2;
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const StaticData::GameItem>> getSealedGraffiti(int graffitiID) const noexcept
