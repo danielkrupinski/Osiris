@@ -280,7 +280,7 @@ private:
                     loot.push_back(*idx);
                 else if ((idx = container.getSealedGraffiti(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);
-                else if ((idx = container.getItem(WeaponId::Patch, contents[j].stickerKit)) != std::nullopt)
+                else if ((idx = container.getPatch(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);
             } else if (contents[j].musicKit != 0) {
                 if (const auto idx = container.getMusic(contents[j].musicKit); idx.has_value())
