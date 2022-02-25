@@ -10,8 +10,8 @@ class StaticDataStorage {
 public:
     void addPatch(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
     {
-        paintKits.emplace_back(id, name);
-        addItem(StaticData::GameItem::patch(rarity, paintKits.size() - 1, inventoryImage));
+        patchKits.emplace_back(id, name);
+        addItem(StaticData::GameItem::patch(rarity, patchKits.size() - 1, inventoryImage));
     }
 
     void addGraffiti(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
@@ -141,7 +141,7 @@ public:
     const auto& getPatchKit(const StaticData::GameItem& item) const
     {
         assert(item.isPatch());
-        return paintKits[item.dataIndex];
+        return patchKits[item.dataIndex];
     }
 
     auto& getGameItems()
@@ -177,5 +177,6 @@ private:
     std::vector<StaticData::StickerKit> stickerKits;
     std::vector<StaticData::MusicKit> musicKits;
     std::vector<StaticData::GraffitiKit> graffitiKits;
+    std::vector<StaticData::PatchKit> patchKits;
     std::vector<StaticData::GameItem> gameItems;
 };
