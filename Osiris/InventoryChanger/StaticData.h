@@ -137,7 +137,7 @@ namespace StaticData
         constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
         constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-        bool hasPaintKit() const noexcept { return type >= Type::Gloves && type <= Type::Patch; }
+        [[deprecated]] bool hasPaintKit() const noexcept { return type >= Type::Gloves && type <= Type::Patch; }
 
     private:
         enum class Type : std::uint8_t {
