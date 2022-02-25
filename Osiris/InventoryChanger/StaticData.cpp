@@ -141,11 +141,9 @@ private:
         return kitsWeapons;
     }
 
-    void initSkinData(ItemSchema* itemSchema, StaticDataStorage& storage) noexcept
+    void initSkinData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
-
-        ToUtf8Converter converter{ *interfaces->localize };
 
         storage.getGameItems().reserve(itemSchema->paintKits.lastAlloc);
         for (const auto& node : itemSchema->paintKits) {
@@ -172,10 +170,8 @@ private:
         }
     }
 
-    void initStickerData(ItemSchema* itemSchema, StaticDataStorage& storage) noexcept
+    void initStickerData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
-        ToUtf8Converter converter{ *interfaces->localize };
-
         const auto& stickerMap = itemSchema->stickerKits;
         storage.getGameItems().reserve(storage.getGameItems().size() + stickerMap.numElements);
         for (const auto& node : stickerMap) {
@@ -202,10 +198,8 @@ private:
         }
     }
 
-    void initMusicData(ItemSchema* itemSchema, StaticDataStorage& storage) noexcept
+    void initMusicData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
-        ToUtf8Converter converter{ *interfaces->localize };
-
         for (const auto& node : itemSchema->musicKits) {
             const auto musicKit = node.value;
             if (musicKit->id == 1 || musicKit->id == 2)
@@ -358,9 +352,10 @@ private:
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         StaticDataStorage storage;
-        initSkinData(itemSchema, storage);
-        initStickerData(itemSchema, storage);
-        initMusicData(itemSchema, storage);
+        ToUtf8Converter converter{ *interfaces->localize };
+        initSkinData(itemSchema, storage, converter);
+        initStickerData(itemSchema, storage, converter);
+        initMusicData(itemSchema, storage, converter);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
 
