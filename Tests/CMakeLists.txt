@@ -12,7 +12,7 @@ FetchContent_Declare(
 set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests InventoryChanger/StaticDataTests.cpp InventoryChanger/ItemGeneratorTests.cpp HelpersTests.cpp)
+add_executable(Tests InventoryChanger/GameItems/ItemTests.cpp InventoryChanger/StaticDataTests.cpp InventoryChanger/ItemGeneratorTests.cpp HelpersTests.cpp)
 target_link_libraries(Tests gtest_main Threads::Threads OsirisOBJ)
 
 include(GoogleTest)
