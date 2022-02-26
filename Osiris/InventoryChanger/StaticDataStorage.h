@@ -6,6 +6,9 @@
 #include "../SDK/ItemSchema.h"
 #include "StaticData.h"
 
+namespace game_items
+{
+
 class StaticDataStorage {
 public:
     void addPatch(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
@@ -180,3 +183,5 @@ private:
     std::vector<StaticData::PatchKit> patchKits;
     std::vector<game_items::Item> gameItems;
 };
+
+}

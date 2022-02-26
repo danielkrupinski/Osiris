@@ -142,7 +142,7 @@ private:
         return kitsWeapons;
     }
 
-    void initSkinData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
+    void initSkinData(ItemSchema* itemSchema, game_items::StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
@@ -171,7 +171,7 @@ private:
         }
     }
 
-    void initStickerData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
+    void initStickerData(ItemSchema* itemSchema, game_items::StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
         storage.getGameItems().reserve(storage.getGameItems().size() + stickerMap.numElements);
@@ -199,7 +199,7 @@ private:
         }
     }
 
-    void initMusicData(ItemSchema* itemSchema, StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
+    void initMusicData(ItemSchema* itemSchema, game_items::StaticDataStorage& storage, ToUtf8Converter<>& converter) noexcept
     {
         for (const auto& node : itemSchema->musicKits) {
             const auto musicKit = node.value;
@@ -211,7 +211,7 @@ private:
         }
     }
 
-    void initItemData(ItemSchema* itemSchema, StaticDataStorage& storage, std::vector<int>& lootListIndices) noexcept
+    void initItemData(ItemSchema* itemSchema, game_items::StaticDataStorage& storage, std::vector<int>& lootListIndices) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
@@ -352,7 +352,7 @@ private:
         assert(memory && interfaces);
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
-        StaticDataStorage storage;
+        game_items::StaticDataStorage storage;
         ToUtf8Converter converter{ *interfaces->localize };
         initSkinData(itemSchema, storage, converter);
         initStickerData(itemSchema, storage, converter);
