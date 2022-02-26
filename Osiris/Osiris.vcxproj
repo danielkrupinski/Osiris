@@ -225,6 +225,7 @@
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
+    <ClInclude Include="InventoryChanger\GameItems\Storage.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
     <ClInclude Include="InventoryChanger\InventoryConfig.h" />
