@@ -3,7 +3,6 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/WeaponId.h"
 #include "StaticData.h"
-#include "StaticDataStorage.h"
 #include "../Helpers.h"
 #include "GameItems/Storage.h"
 

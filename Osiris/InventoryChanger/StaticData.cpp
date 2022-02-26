@@ -13,7 +13,6 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
 #include "../StringPool.h"
-#include "StaticDataStorage.h"
 #include "StaticDataContainer.h"
 
 using StaticData::TournamentMap;
