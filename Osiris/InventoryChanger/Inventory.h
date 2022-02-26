@@ -9,6 +9,8 @@
 #include "../SDK/ItemSchema.h"
 #include "StaticData.h"
 
+#include "GameItems/Item.h"
+
 enum class Team;
 
 struct StickerConfig {

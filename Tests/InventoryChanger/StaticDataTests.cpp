@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include "../../Osiris/InventoryChanger/GameItems/Item.h"
 #include "../../Osiris/InventoryChanger/StaticData.h"
 #include "../../Osiris/SDK/ItemSchema.h"
 

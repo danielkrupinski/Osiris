@@ -10,13 +10,14 @@
 #include <vector>
 
 #include "../SDK/WeaponId.h"
-#include "GameItems/Item.h"
 
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
 namespace game_items
 {
+    struct Item;
+
     struct ItemName {
         std::string_view forDisplay;
         std::wstring_view forSearch;
