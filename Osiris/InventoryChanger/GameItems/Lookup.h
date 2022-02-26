@@ -114,7 +114,7 @@ public:
         if (begin != end && !begin->isSkin() && !begin->isGloves())
             return {};
 
-        if (const auto it = std::lower_bound(begin, end, paintKit, [this](const Item& item, int paintKit) { return storage.getPaintKit(item).id < paintKit; }); it != end && storage.getPaintKit(*it).id == paintKit)
+        if (const auto it = std::ranges::lower_bound(begin, end, paintKit, {}, [this](const Item& item) { return storage.getPaintKit(item).id; }); it != end && storage.getPaintKit(*it).id == paintKit)
             return *it;
         return {};
     }
