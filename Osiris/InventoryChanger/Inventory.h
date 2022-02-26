@@ -69,11 +69,11 @@ struct DynamicTournamentCoinData {
 
 struct InventoryItem {
 private:
-    std::optional<std::reference_wrapper<const StaticData::GameItem>> item;
+    std::optional<std::reference_wrapper<const game_items::GameItem>> item;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
     bool toDelete = false;
 public:
-    explicit InventoryItem(const StaticData::GameItem& item, std::size_t dynamicDataIndex) noexcept : item{ item }, dynamicDataIndex{ dynamicDataIndex } {}
+    explicit InventoryItem(const game_items::GameItem& item, std::size_t dynamicDataIndex) noexcept : item{ item }, dynamicDataIndex{ dynamicDataIndex } {}
 
     void markAsDeleted() noexcept { item.reset(); }
     bool isDeleted() const noexcept { return !item.has_value(); }
@@ -101,7 +101,7 @@ public:
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
-    const StaticData::GameItem& get() const noexcept { assert(isValid()); return item.value(); }
+    const game_items::GameItem& get() const noexcept { assert(isValid()); return item.value(); }
 };
 
 namespace Inventory
@@ -110,9 +110,9 @@ namespace Inventory
     constexpr auto BASE_ITEMID = 1152921504606746975;
 
     std::vector<InventoryItem>& get() noexcept;
-    void addItemUnacknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
-    void addItemAcknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
-    std::uint64_t addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
+    void addItemUnacknowledged(const game_items::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
+    void addItemAcknowledged(const game_items::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept;
+    std::uint64_t addItemNow(const game_items::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
     InventoryItem* getItem(std::uint64_t itemID) noexcept;

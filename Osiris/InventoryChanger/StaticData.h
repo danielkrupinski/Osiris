@@ -14,18 +14,8 @@
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
-namespace StaticData
+namespace game_items
 {
-    struct ItemIndex2 {
-        explicit ItemIndex2(std::size_t value) : value{ value } {}
-        ItemIndex2() = default;
-        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
-
-        std::size_t value = static_cast<std::size_t>(-1);
-    };
-
-    constexpr auto InvalidItemIdx2 = ItemIndex2{};
-
     struct GameItem {
     public:
         [[nodiscard]] static constexpr GameItem sticker(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
@@ -171,6 +161,19 @@ namespace StaticData
 
         std::string_view iconPath;
     };
+}
+
+namespace StaticData
+{
+    struct ItemIndex2 {
+        explicit ItemIndex2(std::size_t value) : value{ value } {}
+        ItemIndex2() = default;
+        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
+
+        std::size_t value = static_cast<std::size_t>(-1);
+    };
+
+    constexpr auto InvalidItemIdx2 = ItemIndex2{};
 
     struct ItemName {
         std::string_view forDisplay;
@@ -245,40 +248,40 @@ namespace StaticData
     };
 
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;
-    const std::vector<std::reference_wrapper<const GameItem>>& caseLoot() noexcept;
+    const std::vector<std::reference_wrapper<const game_items::GameItem>>& caseLoot() noexcept;
     [[nodiscard]] std::vector<ItemIndex2> getItemIndices() noexcept;
     
-    [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
-    [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
-    [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
-    [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
-    [[nodiscard]] int getGraffitiID(const GameItem& item) noexcept;
-    [[nodiscard]] int getSealedGraffitiID(const GameItem& item) noexcept;
+    [[nodiscard]] int getStickerID(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] int getMusicID(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] int getPatchID(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] int getSkinPaintID(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] int getGraffitiID(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] int getSealedGraffitiID(const game_items::GameItem& item) noexcept;
     
-    [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
-    [[nodiscard]] std::wstring_view getPaintNameUpper(const GameItem& item) noexcept;
-    [[nodiscard]] const PaintKit& getPaintKit(const GameItem& item) noexcept;
-    [[nodiscard]] const Case& getCase(const GameItem& item) noexcept;
-    [[nodiscard]] const GameItem& getGameItem(ItemIndex2 itemIndex) noexcept;
+    [[nodiscard]] std::string_view getPaintName(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] std::wstring_view getPaintNameUpper(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] const PaintKit& getPaintKit(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] const Case& getCase(const game_items::GameItem& item) noexcept;
+    [[nodiscard]] const game_items::GameItem& getGameItem(ItemIndex2 itemIndex) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItem(WeaponId weaponID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSealedGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getMusic(int musicID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSticker(int stickerID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getPatch(int patchID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getItem(WeaponId weaponID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getGraffiti(int graffitiID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getSealedGraffiti(int graffitiID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getMusic(int musicID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getSticker(int stickerID) noexcept;
+    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::GameItem>> getPatch(int patchID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
-    bool isCollectibleGenuine(const GameItem& collectible) noexcept;
-    std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
-    [[nodiscard]] std::uint32_t getTournamentEventID(const GameItem& item) noexcept;
+    bool isCollectibleGenuine(const game_items::GameItem& collectible) noexcept;
+    std::uint16_t getServiceMedalYear(const game_items::GameItem& serviceMedal) noexcept;
+    [[nodiscard]] std::uint32_t getTournamentEventID(const game_items::GameItem& item) noexcept;
 
     constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {

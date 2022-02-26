@@ -384,7 +384,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const WeaponId weaponID = jsonItem["Weapon ID"];
-        std::optional<std::reference_wrapper<const StaticData::GameItem>> itemOptional;
+        std::optional<std::reference_wrapper<const game_items::GameItem>> itemOptional;
 
         if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
             itemOptional = StaticData::getItemWithPaintkit(weaponID, jsonItem["Paint Kit"]);

@@ -10,8 +10,8 @@ struct InventoryItem;
 
 namespace ItemGenerator
 {
-    std::pair<const StaticData::GameItem&, std::size_t> generateItemFromContainer(const InventoryItem& caseItem) noexcept;
-    std::size_t createDefaultDynamicData(const StaticData::GameItem& item) noexcept;
+    std::pair<const game_items::GameItem&, std::size_t> generateItemFromContainer(const InventoryItem& caseItem) noexcept;
+    std::size_t createDefaultDynamicData(const game_items::GameItem& item) noexcept;
 }
 
 [[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept;
