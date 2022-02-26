@@ -5,6 +5,7 @@
 #include "StaticData.h"
 #include "StaticDataStorage.h"
 #include "../Helpers.h"
+#include "GameItems/Storage.h"
 
 class StaticDataContainer {
 private:
