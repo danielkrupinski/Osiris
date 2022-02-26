@@ -389,20 +389,20 @@ void InventoryChanger::fromJson(const json& j) noexcept
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional;
 
         if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
-            itemOptional = StaticData::lookup().getItem(weaponID, jsonItem["Paint Kit"]);
+            itemOptional = StaticData::lookup().findItem(weaponID, jsonItem["Paint Kit"]);
         else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
-            itemOptional = StaticData::lookup().getSticker(jsonItem["Sticker ID"]);
+            itemOptional = StaticData::lookup().findSticker(jsonItem["Sticker ID"]);
         else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
-            itemOptional = StaticData::lookup().getMusic(jsonItem["Music ID"]);
+            itemOptional = StaticData::lookup().findMusic(jsonItem["Music ID"]);
         else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
-            itemOptional = StaticData::lookup().getPatch(jsonItem["Patch ID"]);
+            itemOptional = StaticData::lookup().findPatch(jsonItem["Patch ID"]);
         else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer()) {
             if (weaponID == WeaponId::Graffiti)
-                itemOptional = StaticData::lookup().getGraffiti(jsonItem["Graffiti ID"]);
+                itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
             else
-                itemOptional = StaticData::lookup().getSealedGraffiti(jsonItem["Graffiti ID"]);
+                itemOptional = StaticData::lookup().findSealedGraffiti(jsonItem["Graffiti ID"]);
         } else
-            itemOptional = StaticData::lookup().getItem(weaponID);
+            itemOptional = StaticData::lookup().findItem(weaponID);
 
         if (!itemOptional.has_value())
             continue;

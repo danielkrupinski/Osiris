@@ -275,20 +275,20 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                if (auto idx = container.getSticker(contents[j].stickerKit); idx != std::nullopt)
+                if (auto idx = container.findSticker(contents[j].stickerKit); idx != std::nullopt)
                     loot.push_back(*idx);
-                else if ((idx = container.getSealedGraffiti(contents[j].stickerKit)) != std::nullopt)
+                else if ((idx = container.findSealedGraffiti(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);
-                else if ((idx = container.getPatch(contents[j].stickerKit)) != std::nullopt)
+                else if ((idx = container.findPatch(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);
             } else if (contents[j].musicKit != 0) {
-                if (const auto idx = container.getMusic(contents[j].musicKit); idx.has_value())
+                if (const auto idx = container.findMusic(contents[j].musicKit); idx.has_value())
                     loot.push_back(*idx);
             } else if (contents[j].isNestedList) {
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
                     fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
             } else if (contents[j].itemDef != 0) {
-                if (const auto idx = container.getItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
+                if (const auto idx = container.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
                     loot.push_back(*idx);
             }
         }
@@ -298,7 +298,7 @@ private:
     void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<std::reference_wrapper<const game_items::Item>>& loot) const noexcept
     {
         if (lootListID == 292) { // crate_xray_p250_lootlist
-            if (const auto idx = container.getItem(WeaponId::P250, 125 /* cu_xray_p250 */); idx.has_value())
+            if (const auto idx = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); idx.has_value())
                 loot.push_back(*idx);
         } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
             constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
@@ -494,17 +494,17 @@ const game_items::Lookup& StaticData::lookup() noexcept
 
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
-    return StaticDataImpl::instance().container_().getTournamentEventStickerID(tournamentID);
+    return StaticDataImpl::instance().container_().findTournamentEventStickerID(tournamentID);
 }
 
 int StaticData::getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept
 {
-    return StaticDataImpl::instance().container_().getTournamentTeamGoldStickerID(tournamentID, team);
+    return StaticDataImpl::instance().container_().findTournamentTeamGoldStickerID(tournamentID, team);
 }
 
 int StaticData::getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept
 {
-    return StaticDataImpl::instance().container_().getTournamentPlayerGoldStickerID(tournamentID, tournamentPlayerID);
+    return StaticDataImpl::instance().container_().findTournamentPlayerGoldStickerID(tournamentID, tournamentPlayerID);
 }
 
 int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept

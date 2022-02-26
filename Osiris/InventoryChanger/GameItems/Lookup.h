@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    auto getTournamentStickers(std::uint32_t tournamentID) const noexcept
+    auto findTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
         // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
         const auto begin = std::lower_bound(tournamentStickersSorted.begin(), tournamentStickersSorted.end(), tournamentID, [this](const Item& item, std::uint32_t tournamentID) {
@@ -66,7 +66,7 @@ private:
     }
 
 public:
-    int getTournamentEventStickerID(std::uint32_t tournamentID) const noexcept
+    int findTournamentEventStickerID(std::uint32_t tournamentID) const noexcept
     {
         if (tournamentID == 1) // DreamHack 2013
             return Helpers::random(1, 12);
@@ -75,13 +75,13 @@ public:
         else if (tournamentID == 4) // ELS One Cologne 2014
             return 172;
 
-        const auto it = getTournamentStickers(tournamentID).first;
+        const auto it = findTournamentStickers(tournamentID).first;
         if (it == tournamentStickersSorted.end())
             return 0;
         return storage.getStickerKit(*it).tournamentID == tournamentID ? storage.getStickerKit(*it).id : 0;
     }
 
-    int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
+    int findTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
     {
         if (tournamentID == 0 || team == TournamentTeam::None)
             return 0;
@@ -91,7 +91,7 @@ public:
         if (team == TournamentTeam::AllStarTeamEurope)
             return 1316;
 
-        const auto range = getTournamentStickers(tournamentID);
+        const auto range = findTournamentStickers(tournamentID);
 
         const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](const Item& item) {
             return storage.getStickerKit(item).tournamentTeam;
@@ -101,14 +101,14 @@ public:
         return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
     }
 
-    int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
+    int findTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
     {
-        const auto range = getTournamentStickers(tournamentID);
+        const auto range = findTournamentStickers(tournamentID);
         const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](const Item& item) { return storage.getStickerKit(item).tournamentPlayerID; });
         return (it != range.second ? storage.getStickerKit(*it).id : 0);
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getItem(WeaponId weaponID, int paintKit) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
         if (begin != end && !begin->isSkin() && !begin->isGloves())
@@ -119,34 +119,34 @@ public:
         return {};
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getItem(WeaponId weaponID) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID) const noexcept
     {
         if (const auto it = std::ranges::lower_bound(storage.getGameItems(), weaponID, {}, &Item::weaponID); it != storage.getGameItems().end())
             return *it;
         return {};
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getMusic(int musicKit) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findMusic(int musicKit) const noexcept
     {
         return findItem(WeaponId::MusicKit, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getSticker(int stickerKit) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findSticker(int stickerKit) const noexcept
     {
         return findItem(WeaponId::Sticker, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getGraffiti(int graffitiID) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findGraffiti(int graffitiID) const noexcept
     {
         return findItem(WeaponId::Graffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getSealedGraffiti(int graffitiID) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findSealedGraffiti(int graffitiID) const noexcept
     {
         return findItem(WeaponId::SealedGraffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> getPatch(int patchID) const noexcept
+    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findPatch(int patchID) const noexcept
     {
         return findItem(WeaponId::Patch, patchID, [this](const Item& item) { return storage.getPatchKit(item).id; });
     }
