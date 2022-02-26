@@ -9,7 +9,7 @@
 namespace game_items
 {
 
-class StaticDataStorage {
+class Storage {
 public:
     void addPatch(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
     {

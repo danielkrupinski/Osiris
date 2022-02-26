@@ -20,7 +20,7 @@ private:
 
 public:
     StaticDataContainer() = default;
-    explicit StaticDataContainer(game_items::StaticDataStorage dataStorage) : storage{ sorted(std::move(dataStorage)) }
+    explicit StaticDataContainer(game_items::Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
         const auto stickers = findItems(WeaponId::Sticker);
         tournamentStickersSorted = { stickers.first, stickers.second };
@@ -42,7 +42,7 @@ public:
         });
     }
 
-    const game_items::StaticDataStorage& getStorage() const noexcept
+    const game_items::Storage& getStorage() const noexcept
     {
         return storage;
     }
@@ -158,7 +158,7 @@ private:
         return {};
     }
 
-    [[nodiscard]] static game_items::StaticDataStorage sorted(game_items::StaticDataStorage storage)
+    [[nodiscard]] static game_items::Storage sorted(game_items::Storage storage)
     {
         std::ranges::sort(storage.getGameItems(), [&storage](const game_items::Item& itemA, const game_items::Item& itemB) {
             if (itemA.weaponID == itemB.weaponID && (itemA.isSkin() || itemA.isGloves()) && (itemB.isSkin() || itemB.isGloves()))
@@ -168,6 +168,6 @@ private:
         return storage;
     }
 
-    game_items::StaticDataStorage storage;
+    game_items::Storage storage;
     std::vector<std::reference_wrapper<const game_items::Item>> tournamentStickersSorted;
 };
