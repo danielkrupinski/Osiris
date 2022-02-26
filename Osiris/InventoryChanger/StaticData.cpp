@@ -14,6 +14,7 @@
 #include "../SDK/Localize.h"
 #include "../StringPool.h"
 #include "StaticDataContainer.h"
+#include "GameItems/Lookup.h"
 
 using StaticData::TournamentMap;
 
