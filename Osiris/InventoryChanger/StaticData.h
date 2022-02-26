@@ -211,7 +211,6 @@ namespace StaticData
     };
 
     struct PaintKit {
-        PaintKit(int id, ItemName name) noexcept;
         PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept;
 
         int id;
