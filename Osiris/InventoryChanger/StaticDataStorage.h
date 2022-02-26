@@ -86,7 +86,7 @@ public:
 
     void addCase(EconRarity rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath)
     {
-        addItem(StaticData::GameItem::case_(rarity, weaponID, descriptorIndex, iconPath));
+        addItem(StaticData::GameItem::crate(rarity, weaponID, descriptorIndex, iconPath));
     }
 
     void addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)

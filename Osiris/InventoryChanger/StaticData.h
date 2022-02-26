@@ -78,7 +78,7 @@ namespace StaticData
             return GameItem{ Type::Agent, rarity, weaponID, dataIndex, iconPath };
         }
 
-        [[nodiscard]] static constexpr GameItem case_(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
+        [[nodiscard]] static constexpr GameItem crate(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         {
             return GameItem{ Type::Case, rarity, weaponID, dataIndex, iconPath };
         }

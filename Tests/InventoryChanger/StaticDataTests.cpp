@@ -131,15 +131,15 @@ TEST_P(GameItemRarityTest, CreatedAgentHasCorrectRarity) {
 }
 
 TEST(GameItem, CreatedCaseIsCase) {
-    ASSERT_TRUE(StaticData::GameItem::case_(EconRarity::Default, WeaponId::None, 0, {}).isCase());
+    ASSERT_TRUE(StaticData::GameItem::crate(EconRarity::Default, WeaponId::None, 0, {}).isCase());
 }
 
 TEST(GameItem, CreatedCaseHasCorrectWeaponID) {
-    ASSERT_EQ(StaticData::GameItem::case_(EconRarity::Default, WeaponId::None, 0, {}).weaponID, WeaponId::None);
+    ASSERT_EQ(StaticData::GameItem::crate(EconRarity::Default, WeaponId::None, 0, {}).weaponID, WeaponId::None);
 }
 
 TEST_P(GameItemRarityTest, CreatedCaseHasCorrectRarity) {
-    ASSERT_EQ(StaticData::GameItem::case_(GetParam(), WeaponId::None, 0, {}).rarity, GetParam());
+    ASSERT_EQ(StaticData::GameItem::crate(GetParam(), WeaponId::None, 0, {}).rarity, GetParam());
 }
 
 TEST(GameItem, CreatedCaseKeyIsCaseKey) {
