@@ -9,7 +9,7 @@
 namespace game_items
 {
 
-class StaticDataContainer {
+class Lookup {
 private:
     auto findItems(WeaponId weaponID) const noexcept
     {
@@ -22,8 +22,8 @@ private:
     }
 
 public:
-    StaticDataContainer() = default;
-    explicit StaticDataContainer(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
+    Lookup() = default;
+    explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
         const auto stickers = findItems(WeaponId::Sticker);
         tournamentStickersSorted = { stickers.first, stickers.second };

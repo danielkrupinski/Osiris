@@ -359,7 +359,7 @@ private:
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
 
-        container = game_items::StaticDataContainer{ std::move(storage) };
+        container = game_items::Lookup{ std::move(storage) };
 
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
@@ -370,7 +370,7 @@ private:
 
     StringPool<char> stringPool;
     StringPool<wchar_t> stringPoolWide;
-    game_items::StaticDataContainer container;
+    game_items::Lookup container;
     std::vector<StaticData::Case> _cases;
     std::vector<std::reference_wrapper<const game_items::Item>> _caseLoot;
 };
