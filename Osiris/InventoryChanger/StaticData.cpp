@@ -153,7 +153,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            storage.addPaintKit(paintKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
+            storage.addPaintKit(paintKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -187,13 +187,13 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                storage.addSticker(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                storage.addSticker(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addPatch(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addPatch(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addGraffiti(stickerKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addGraffiti(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
@@ -206,7 +206,7 @@ private:
                 continue;
 
             const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            storage.addMusic(musicKit->id, StaticData::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
+            storage.addMusic(musicKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
         }
     }
 

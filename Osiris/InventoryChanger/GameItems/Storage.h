@@ -12,13 +12,13 @@ namespace game_items
 
 class Storage {
 public:
-    void addPatch(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
+    void addPatch(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage)
     {
         patchKits.emplace_back(id, name);
         addItem(Item::patch(rarity, patchKits.size() - 1, inventoryImage));
     }
 
-    void addGraffiti(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage)
+    void addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage)
     {
         graffitiKits.emplace_back(id, name);
         const auto index = graffitiKits.size() - 1;
@@ -26,13 +26,13 @@ public:
         addItem(Item::sealedGraffiti(rarity, index, inventoryImage));
     }
 
-    void addSticker(int id, StaticData::ItemName name, EconRarity rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
     {
         stickerKits.emplace_back(id, name, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
         addItem(Item::sticker(rarity, stickerKits.size() - 1, inventoryImage));
     }
 
-    void addMusic(int musicID, StaticData::ItemName name, std::string_view inventoryImage)
+    void addMusic(int musicID, ItemName name, std::string_view inventoryImage)
     {
         musicKits.emplace_back(musicID, name);
         addItem(Item::musicKit(EconRarity::Blue, musicKits.size() - 1, inventoryImage));
@@ -63,7 +63,7 @@ public:
         addItem(Item::tournamentCoin(rarity, weaponID, static_cast<std::size_t>(tournamentEventID), iconPath));
     }
 
-    void addPaintKit(int id, StaticData::ItemName name, float wearRemapMin, float wearRemapMax)
+    void addPaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax)
     {
         paintKits.emplace_back(id, name, wearRemapMin, wearRemapMax);
     }

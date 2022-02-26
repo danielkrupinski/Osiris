@@ -77,8 +77,6 @@ namespace StaticData
 
     constexpr auto InvalidItemIdx2 = ItemIndex2{};
 
-    using game_items::ItemName;
-
     enum class TournamentMap : std::uint8_t {
         None = 0,
         Ancient,
