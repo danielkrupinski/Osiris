@@ -643,9 +643,6 @@
     <ClInclude Include="SDK\KeyValuesSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\StaticDataContainer.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\GameItems\Item.h">
       <Filter>InventoryChanger\GameItems</Filter>
     </ClInclude>
