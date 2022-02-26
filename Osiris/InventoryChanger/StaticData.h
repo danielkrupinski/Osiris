@@ -15,6 +15,14 @@
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
+namespace game_items
+{
+    struct ItemName {
+        std::string_view forDisplay;
+        std::wstring_view forSearch;
+    };
+}
+
 namespace StaticData
 {
     struct ItemIndex2 {
@@ -27,10 +35,7 @@ namespace StaticData
 
     constexpr auto InvalidItemIdx2 = ItemIndex2{};
 
-    struct ItemName {
-        std::string_view forDisplay;
-        std::wstring_view forSearch;
-    };
+    using game_items::ItemName;
 
     struct MusicKit {
         MusicKit(int id, ItemName name) : id{ id }, name{ name } {}
