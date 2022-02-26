@@ -487,6 +487,11 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return getWeaponNamesInstance().getWeaponName(weaponID);
 }
 
+const game_items::Lookup& StaticData::lookup() noexcept
+{
+    return StaticDataImpl::container_();
+}
+
 std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getItem(WeaponId weaponID) noexcept
 {
     return StaticDataImpl::container_().getItem(weaponID);

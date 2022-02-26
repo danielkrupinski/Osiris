@@ -17,6 +17,7 @@ enum class EconRarity : std::uint8_t;
 namespace game_items
 {
     struct Item;
+    class Lookup;
 
     struct ItemName {
         std::string_view forDisplay;
@@ -123,6 +124,7 @@ namespace StaticData
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
+    [[nodiscard]] const game_items::Lookup& lookup() noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getItem(WeaponId weaponID) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
     [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getGraffiti(int graffitiID) noexcept;
