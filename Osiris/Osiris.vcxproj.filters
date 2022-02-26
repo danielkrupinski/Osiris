@@ -39,6 +39,9 @@
     <Filter Include="InventoryChanger">
       <UniqueIdentifier>{2d9b89c7-c323-4423-a60d-412e3bd1637f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\GameItems">
+      <UniqueIdentifier>{4bde1f1b-2fcb-40ca-ad3c-31ce0fbab3d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -645,6 +648,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\StaticDataContainer.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\GameItems\Item.h">
+      <Filter>InventoryChanger\GameItems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
