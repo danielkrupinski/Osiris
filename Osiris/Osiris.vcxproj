@@ -224,12 +224,13 @@
     <ClInclude Include="imgui\imgui_freetype.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
-    <ClInclude Include="InventoryChanger\GameItemStorage.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
     <ClInclude Include="InventoryChanger\InventoryConfig.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\StaticData.h" />
+    <ClInclude Include="InventoryChanger\StaticDataContainer.h" />
+    <ClInclude Include="InventoryChanger\StaticDataStorage.h" />
     <ClInclude Include="InventoryChanger\ToolUser.h" />
     <ClInclude Include="InventoryChanger\TournamentMatches.h" />
     <ClInclude Include="JsonForward.h" />

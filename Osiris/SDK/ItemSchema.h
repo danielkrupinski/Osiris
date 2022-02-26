@@ -15,6 +15,17 @@
 
 enum class WeaponId : short;
 
+enum class EconRarity : std::uint8_t {
+    Default = 0,
+    Gray,
+    LightBlue,
+    Blue,
+    Purple,
+    Pink,
+    Red,
+    Gold
+};
+
 struct PaintKit {
     int id;
     UtlString name;
@@ -189,7 +200,7 @@ public:
 
     bool willProduceStatTrak() noexcept
     {
-        return *reinterpret_cast<bool*>(std::uintptr_t(this) + WIN32_LINUX(0x36, 0x56));
+        return *reinterpret_cast<bool*>(std::uintptr_t(this) + WIN32_LINUX(0x38, 0x58));
     }
 };
 

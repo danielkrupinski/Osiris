@@ -36,14 +36,14 @@ public:
         return instance().inventory;
     }
 
-    static void addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    static void addItem(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        instance().toAdd.emplace_back(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+        instance().toAdd.emplace_back(gameItem, dynamicDataIdx, asUnacknowledged);
     }
 
-    static std::uint64_t addItemNow(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    static std::uint64_t addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return instance()._addItem(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+        return instance()._addItem(gameItem, dynamicDataIdx, asUnacknowledged);
     }
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
@@ -163,7 +163,7 @@ private:
         econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size();
 
         const auto& item = inventoryItem.get();
-        econItem->rarity = item.rarity;
+        econItem->rarity = static_cast<std::uint16_t>(item.rarity);
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
 
@@ -185,7 +185,7 @@ private:
             }
         } else if (item.isSkin()) {
             initSkinEconItem(inventoryItem, *econItem);
-        } else if (item.isGlove()) {
+        } else if (item.isGloves()) {
             econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::getPaintKit(item).id));
 
@@ -261,9 +261,9 @@ private:
         item->markAsDeleted();
     }
 
-    std::uint64_t _addItem(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+    std::uint64_t _addItem(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(gameItemIndex, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItemIndex)), asUnacknowledged);
+        return _createSOCItem(inventory.emplace_back(gameItem, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItem)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
@@ -293,8 +293,8 @@ private:
 
     void _addItems() noexcept
     {
-        for (const auto [index, dynamicDataIndex, asUnacknowledged] : toAdd)
-            _addItem(index, dynamicDataIndex, asUnacknowledged);
+        for (const auto [gameItem, dynamicDataIndex, asUnacknowledged] : toAdd)
+            _addItem(gameItem, dynamicDataIndex, asUnacknowledged);
         toAdd.clear();
     }
 
@@ -340,7 +340,7 @@ private:
         return inventory;
     }
 
-    std::vector<std::tuple<std::size_t, std::size_t, bool>> toAdd;
+    std::vector<std::tuple<std::reference_wrapper<const StaticData::GameItem>, std::size_t, bool>> toAdd;
     std::vector<ToEquip> toEquip;
     std::vector<InventoryItem> inventory;
 };
@@ -427,19 +427,19 @@ std::vector<InventoryItem>& Inventory::get() noexcept
     return InventoryImpl::get();
 }
 
-void Inventory::addItemUnacknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept
+void Inventory::addItemUnacknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(gameItemIndex, dynamicDataIdx, true);
+    InventoryImpl::addItem(gameItem, dynamicDataIdx, true);
 }
 
-void Inventory::addItemAcknowledged(std::size_t gameItemIndex, std::size_t dynamicDataIdx) noexcept
+void Inventory::addItemAcknowledged(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx) noexcept
 {
-    InventoryImpl::addItem(gameItemIndex, dynamicDataIdx, false);
+    InventoryImpl::addItem(gameItem, dynamicDataIdx, false);
 }
 
-std::uint64_t Inventory::addItemNow(std::size_t gameItemIndex, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
+std::uint64_t Inventory::addItemNow(const StaticData::GameItem& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
 {
-    return InventoryImpl::addItemNow(gameItemIndex, dynamicDataIdx, asUnacknowledged);
+    return InventoryImpl::addItemNow(gameItem, dynamicDataIdx, asUnacknowledged);
 }
 
 void Inventory::deleteItemNow(std::uint64_t itemID) noexcept

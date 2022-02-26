@@ -634,14 +634,17 @@
     <ClInclude Include="InventoryChanger\TournamentMatches.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItemStorage.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="StringPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\KeyValuesSystem.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\StaticDataStorage.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\StaticDataContainer.h">
+      <Filter>InventoryChanger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

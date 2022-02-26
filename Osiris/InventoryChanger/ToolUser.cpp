@@ -86,23 +86,23 @@ private:
         const auto passWeaponID = pass.get().weaponID;
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx)
-            Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, true);
+        if (const auto item = StaticData::getItem(coinID); item.has_value())
+            Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, true);
     }
 
     void _activateViewerPass(InventoryItem& pass) const noexcept
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
         pass.markToDelete();
-        if (const auto idx = StaticData::getItemIndex(coinID, 0); idx != StaticData::InvalidItemIdx)
-            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
+        if (const auto item = StaticData::getItem(coinID); item.has_value())
+            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
     }
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto idx = StaticData::getItemIndex(WeaponId::Graffiti, StaticData::getPaintKit(sealedGraffiti.get()).id); idx != StaticData::InvalidItemIdx) {
+        if (const auto item = StaticData::getGraffiti(StaticData::getSealedGraffitiID(sealedGraffiti.get())); item.has_value()) {
             sealedGraffiti.markToDelete();
-            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(idx, Inventory::InvalidDynamicDataIdx, false));
+            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
         }
     }
 
@@ -112,11 +112,11 @@ private:
         const auto& caseData = StaticData::getCase(container.get());
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
-            const auto [unlockedItemIdx, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
+            const auto [unlockedItem, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
-            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItemIdx, dynamicDataIdx, true));
+            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItem, dynamicDataIdx, true));
         }
     }
 
@@ -184,7 +184,7 @@ private:
         assert(souvenirToken.isSouvenirToken());
 
         const auto& inventory = Inventory::get();
-        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && inventoryItem.get().tournamentEventID() == souvenirToken.get().tournamentEventID(); });
+        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::getTournamentEventID(inventoryItem.get()) == StaticData::getTournamentEventID(souvenirToken.get()); });
         if (it != inventory.cend()) {
             souvenirToken.markToDelete();
 
