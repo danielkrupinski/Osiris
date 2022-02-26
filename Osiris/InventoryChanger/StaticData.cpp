@@ -492,41 +492,6 @@ const game_items::Lookup& StaticData::lookup() noexcept
     return StaticDataImpl::container_();
 }
 
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getItem(WeaponId weaponID) noexcept
-{
-    return StaticDataImpl::container_().getItem(weaponID);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept
-{
-    return StaticDataImpl::container_().getItem(weaponID, paintKit);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getGraffiti(int graffitiID) noexcept
-{
-    return StaticDataImpl::container_().getGraffiti(graffitiID);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getSealedGraffiti(int graffitiID) noexcept
-{
-    return StaticDataImpl::container_().getSealedGraffiti(graffitiID);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getMusic(int musicID) noexcept
-{
-    return StaticDataImpl::container_().getMusic(musicID);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getSticker(int stickerID) noexcept
-{
-    return StaticDataImpl::container_().getSticker(stickerID);
-}
-
-std::optional<std::reference_wrapper<const game_items::Item>> StaticData::getPatch(int patchID) noexcept
-{
-    return StaticDataImpl::container_().getPatch(patchID);
-}
-
 int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
 {
     return StaticDataImpl::instance().container_().getTournamentEventStickerID(tournamentID);

@@ -1,6 +1,8 @@
 #include "Inventory.h"
 #include "InventoryConfig.h"
 
+#include "GameItems/Lookup.h"
+
 constexpr auto CONFIG_VERSION = 3;
 
 json InventoryChanger::toJson() noexcept
@@ -387,20 +389,20 @@ void InventoryChanger::fromJson(const json& j) noexcept
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional;
 
         if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
-            itemOptional = StaticData::getItemWithPaintkit(weaponID, jsonItem["Paint Kit"]);
+            itemOptional = StaticData::lookup().getItem(weaponID, jsonItem["Paint Kit"]);
         else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
-            itemOptional = StaticData::getSticker(jsonItem["Sticker ID"]);
+            itemOptional = StaticData::lookup().getSticker(jsonItem["Sticker ID"]);
         else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
-            itemOptional = StaticData::getMusic(jsonItem["Music ID"]);
+            itemOptional = StaticData::lookup().getMusic(jsonItem["Music ID"]);
         else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
-            itemOptional = StaticData::getPatch(jsonItem["Patch ID"]);
+            itemOptional = StaticData::lookup().getPatch(jsonItem["Patch ID"]);
         else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer()) {
             if (weaponID == WeaponId::Graffiti)
-                itemOptional = StaticData::getGraffiti(jsonItem["Graffiti ID"]);
+                itemOptional = StaticData::lookup().getGraffiti(jsonItem["Graffiti ID"]);
             else
-                itemOptional = StaticData::getSealedGraffiti(jsonItem["Graffiti ID"]);
+                itemOptional = StaticData::lookup().getSealedGraffiti(jsonItem["Graffiti ID"]);
         } else
-            itemOptional = StaticData::getItem(weaponID);
+            itemOptional = StaticData::lookup().getItem(weaponID);
 
         if (!itemOptional.has_value())
             continue;

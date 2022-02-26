@@ -125,13 +125,6 @@ namespace StaticData
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
     [[nodiscard]] const game_items::Lookup& lookup() noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getItem(WeaponId weaponID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getSealedGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getMusic(int musicID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getSticker(int stickerID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const game_items::Item>> getPatch(int patchID) noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
