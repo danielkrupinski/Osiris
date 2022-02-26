@@ -32,13 +32,13 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
-[[nodiscard]] const game_items::GameItem& getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
 {
     assert(container.hasLoot());
     return StaticData::caseLoot()[Helpers::random(container.lootBeginIdx, container.lootEndIdx - 1)];
 }
 
-std::pair<const game_items::GameItem&, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
+std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
 {
     assert(caseItem.isCase());
 
@@ -170,7 +170,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-std::size_t ItemGenerator::createDefaultDynamicData(const game_items::GameItem& item) noexcept
+std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item) noexcept
 {
     std::size_t index = Inventory::InvalidDynamicDataIdx;
 
