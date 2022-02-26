@@ -460,7 +460,7 @@ std::wstring_view StaticData::getPaintNameUpper(const game_items::Item& item) no
     return L"";
 }
 
-const StaticData::PaintKit& StaticData::getPaintKit(const game_items::Item& item) noexcept
+const game_items::PaintKit& StaticData::getPaintKit(const game_items::Item& item) noexcept
 {
     assert(item.isSkin() || item.isGloves());
     return StaticDataImpl::getPaintKit(item);
@@ -567,4 +567,4 @@ std::uint32_t StaticData::getTournamentEventID(const game_items::Item& item) noe
     return static_cast<std::uint32_t>(item.dataIndex);
 }
 
-StaticData::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}
+game_items::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}

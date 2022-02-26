@@ -177,11 +177,11 @@ private:
     }
 
     static constexpr auto vanillaPaintIndex = 0;
-    std::vector<StaticData::PaintKit> paintKits{ { 0, { "", L"" }, 0.0f, 1.0f } };
-    std::vector<StaticData::StickerKit> stickerKits;
-    std::vector<StaticData::MusicKit> musicKits;
-    std::vector<StaticData::GraffitiKit> graffitiKits;
-    std::vector<StaticData::PatchKit> patchKits;
+    std::vector<PaintKit> paintKits{ { 0, { "", L"" }, 0.0f, 1.0f } };
+    std::vector<StickerKit> stickerKits;
+    std::vector<MusicKit> musicKits;
+    std::vector<GraffitiKit> graffitiKits;
+    std::vector<PatchKit> patchKits;
     std::vector<Item> gameItems;
 };
 

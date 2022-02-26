@@ -21,21 +21,6 @@ namespace game_items
         std::string_view forDisplay;
         std::wstring_view forSearch;
     };
-}
-
-namespace StaticData
-{
-    struct ItemIndex2 {
-        explicit ItemIndex2(std::size_t value) : value{ value } {}
-        ItemIndex2() = default;
-        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
-
-        std::size_t value = static_cast<std::size_t>(-1);
-    };
-
-    constexpr auto InvalidItemIdx2 = ItemIndex2{};
-
-    using game_items::ItemName;
 
     struct MusicKit {
         MusicKit(int id, ItemName name) : id{ id }, name{ name } {}
@@ -78,7 +63,22 @@ namespace StaticData
         float wearRemapMax = 1.0f;
         ItemName name;
     };
-    
+}
+
+namespace StaticData
+{
+    struct ItemIndex2 {
+        explicit ItemIndex2(std::size_t value) : value{ value } {}
+        ItemIndex2() = default;
+        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
+
+        std::size_t value = static_cast<std::size_t>(-1);
+    };
+
+    constexpr auto InvalidItemIdx2 = ItemIndex2{};
+
+    using game_items::ItemName;
+
     enum class TournamentMap : std::uint8_t {
         None = 0,
         Ancient,
@@ -117,7 +117,7 @@ namespace StaticData
     
     [[nodiscard]] std::string_view getPaintName(const game_items::Item& item) noexcept;
     [[nodiscard]] std::wstring_view getPaintNameUpper(const game_items::Item& item) noexcept;
-    [[nodiscard]] const PaintKit& getPaintKit(const game_items::Item& item) noexcept;
+    [[nodiscard]] const game_items::PaintKit& getPaintKit(const game_items::Item& item) noexcept;
     [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] const game_items::Item& getGameItem(ItemIndex2 itemIndex) noexcept;
 
