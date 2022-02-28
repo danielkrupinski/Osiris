@@ -469,7 +469,7 @@ const game_items::PaintKit& StaticData::getPaintKit(const game_items::Item& item
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());
-    return StaticDataImpl::cases()[item.dataIndex];
+    return StaticDataImpl::cases()[item.getDataIndex()];
 }
 
 const game_items::Item& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
@@ -534,7 +534,7 @@ std::uint16_t StaticData::getServiceMedalYear(const game_items::Item& serviceMed
 std::uint32_t StaticData::getTournamentEventID(const game_items::Item& item) noexcept
 {
     assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
-    return static_cast<std::uint32_t>(item.dataIndex);
+    return static_cast<std::uint32_t>(item.getDataIndex());
 }
 
 game_items::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}
