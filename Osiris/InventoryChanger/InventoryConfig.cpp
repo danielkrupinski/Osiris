@@ -18,8 +18,8 @@ json InventoryChanger::toJson() noexcept
         json itemConfig;
 
         const auto& gameItem = item.get();
-        itemConfig["Weapon ID"] = gameItem.weaponID;
-        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.weaponID);
+        itemConfig["Weapon ID"] = gameItem.getWeaponID();
+        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
             itemConfig["Sticker ID"] = StaticData::getStickerID(gameItem);

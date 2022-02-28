@@ -85,7 +85,7 @@ private:
 
     void _activateOperationPass(InventoryItem& pass) const noexcept
     {
-        const auto passWeaponID = pass.get().weaponID;
+        const auto passWeaponID = pass.get().getWeaponID();
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
         if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
@@ -94,7 +94,7 @@ private:
 
     void _activateViewerPass(InventoryItem& pass) const noexcept
     {
-        const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
+        const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().getWeaponID()) + 1);
         pass.markToDelete();
         if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
             initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));

@@ -114,10 +114,10 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     bool dataUpdated = false;
-    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().weaponID) {
-        definitionIndex = item->get().weaponID;
+    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().getWeaponID()) {
+        definitionIndex = item->get().getWeaponID();
 
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID))
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID()))
             glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
@@ -179,10 +179,10 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
-        if (definitionIndex != item->get().weaponID) {
-            definitionIndex = item->get().weaponID;
+        if (definitionIndex != item->get().getWeaponID()) {
+            definitionIndex = item->get().getWeaponID();
 
-            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID())) {
                 weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
@@ -338,7 +338,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isAgent())
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID);
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID());
     if (!def)
         return;
 
@@ -380,7 +380,7 @@ static void applyMedal(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isCollectible())
         return;
 
-    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().weaponID);
+    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().getWeaponID());
 }
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -551,7 +551,7 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = StaticData::getPaintName(item).data();
@@ -667,7 +667,7 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = StaticData::getPaintName(item).data();
@@ -839,11 +839,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 std::ranges::sort(itemIndices, [](const auto aIndex, const auto bIndex) {
                     const auto& a = StaticData::getGameItem(aIndex);
                     const auto& b = StaticData::getGameItem(bIndex);
-                    if (a.weaponID == b.weaponID)
+                    if (a.getWeaponID() == b.getWeaponID())
                         return StaticData::getPaintNameUpper(a) < StaticData::getPaintNameUpper(b);
-                    const auto comp = StaticData::getWeaponNameUpper(a.weaponID).compare(StaticData::getWeaponNameUpper(b.weaponID));
+                    const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
                     if (comp == 0)
-                        return a.weaponID < b.weaponID;
+                        return a.getWeaponID() < b.getWeaponID();
                     return comp < 0;
                 });
                 sorted = true;
@@ -852,7 +852,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
                 const auto& gameItem = StaticData::getGameItem(itemIndices[i]);
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!passesFilter(std::wstring(StaticData::getPaintNameUpper(gameItem)), filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(StaticData::getPaintNameUpper(gameItem)), filterWide)))
                     continue;
                 ImGui::PushID(i);
 
@@ -916,7 +916,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
         }
     } else if (item->isSkin()) {
         const auto view = localInventory->getItemInLoadout(team, slot);
-        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().weaponID));
+        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().getWeaponID()));
         if (view) {
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);

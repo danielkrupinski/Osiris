@@ -14,8 +14,8 @@ private:
     auto findItems(WeaponId weaponID) const noexcept
     {
         struct Comp {
-            bool operator()(WeaponId weaponID, const Item& item) const noexcept { return weaponID < item.weaponID; }
-            bool operator()(const Item& item, WeaponId weaponID) const noexcept { return item.weaponID < weaponID; }
+            bool operator()(WeaponId weaponID, const Item& item) const noexcept { return weaponID < item.getWeaponID(); }
+            bool operator()(const Item& item, WeaponId weaponID) const noexcept { return item.getWeaponID() < weaponID; }
         };
 
         return std::equal_range(storage.getGameItems().cbegin(), storage.getGameItems().cend(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
@@ -121,7 +121,7 @@ public:
 
     [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(storage.getGameItems(), weaponID, {}, &Item::weaponID); it != storage.getGameItems().end())
+        if (const auto it = std::ranges::lower_bound(storage.getGameItems(), weaponID, {}, &Item::getWeaponID); it != storage.getGameItems().end())
             return *it;
         return {};
     }
@@ -164,9 +164,9 @@ private:
     [[nodiscard]] static Storage sorted(Storage storage)
     {
         std::ranges::sort(storage.getGameItems(), [&storage](const Item& itemA, const Item& itemB) {
-            if (itemA.weaponID == itemB.weaponID && (itemA.isSkin() || itemA.isGloves()) && (itemB.isSkin() || itemB.isGloves()))
+            if (itemA.getWeaponID() == itemB.getWeaponID() && (itemA.isSkin() || itemA.isGloves()) && (itemB.isSkin() || itemB.isGloves()))
                 return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
-            return itemA.weaponID < itemB.weaponID;
+            return itemA.getWeaponID() < itemB.getWeaponID();
         });
         return storage;
     }

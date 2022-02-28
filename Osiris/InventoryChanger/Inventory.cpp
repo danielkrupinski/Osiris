@@ -102,7 +102,7 @@ private:
         econItem.setPaintKit(static_cast<float>(paintKit));
 
         const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
-        const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.get().weaponID, paintKit);
+        const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.get().getWeaponID(), paintKit);
         if (dynamicData.isSouvenir() || isMP5LabRats) {
             econItem.quality = 12;
         } else {
@@ -165,7 +165,7 @@ private:
         const auto& item = inventoryItem.get();
         econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
         econItem->quality = 4;
-        econItem->weaponId = item.weaponID;
+        econItem->weaponId = item.getWeaponID();
 
         if (item.isSticker()) {
             econItem->setStickerID(0, StaticData::getStickerID(item));

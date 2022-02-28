@@ -148,10 +148,12 @@ private:
 
     Type type;
     EconRarity rarity;
+    WeaponId weaponID;
+
 public:
     [[nodiscard]] constexpr EconRarity getRarity() const noexcept { return rarity; }
+    [[nodiscard]] constexpr WeaponId getWeaponID() const noexcept { return weaponID; }
 
-    WeaponId weaponID;
     std::size_t dataIndex;
 
     std::string_view iconPath;
