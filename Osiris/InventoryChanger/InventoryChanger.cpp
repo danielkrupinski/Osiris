@@ -858,7 +858,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 const auto selected = selectedToAdd.contains(itemIndices[i]);
 
-                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), selected, toAddCount)) {
                     if (selected) {
                         selectedToAdd.erase(itemIndices[i]);
                         std::erase(toAddOrder, itemIndices[i]);
@@ -880,7 +880,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete);
+                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().getRarity()), shouldDelete);
                 if (shouldDelete)
                     inventory[i].markToDelete();
                 ImGui::PopID();

@@ -41,7 +41,7 @@ public:
                 return paintKitA.tournamentPlayerID < paintKitB.tournamentPlayerID;
             if (paintKitA.isGoldenSticker != paintKitB.isGoldenSticker)
                 return paintKitA.isGoldenSticker;
-            return itemA.rarity > itemB.rarity;
+            return itemA.getRarity() > itemB.getRarity();
         });
     }
 

@@ -147,8 +147,10 @@ private:
         : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
     Type type;
-public:
     EconRarity rarity;
+public:
+    [[nodiscard]] constexpr EconRarity getRarity() const noexcept { return rarity; }
+
     WeaponId weaponID;
     std::size_t dataIndex;
 
