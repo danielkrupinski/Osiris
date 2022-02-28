@@ -621,7 +621,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.iconPath)) {
+        if (const auto icon = getItemIconTexture(item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -722,7 +722,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.iconPath)) {
+        if (const auto icon = getItemIconTexture(item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
