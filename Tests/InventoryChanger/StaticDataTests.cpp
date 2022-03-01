@@ -9,6 +9,20 @@
 #include "../../Osiris/InventoryChanger/StaticData.h"
 #include "../../Osiris/SDK/ItemSchema.h"
 
+class EconRaritiesTest : public testing::TestWithParam<EconRarity> {};
+
+TEST(EconRarities, DefaultConstructedHasNoRarity) {
+    ASSERT_EQ(StaticData::EconRarities{}.count(), 0);
+}
+
+TEST_P(EconRaritiesTest, SettingUnsetRarityIncrementsCount) {
+    StaticData::EconRarities rarities;
+    rarities.set(GetParam());
+    ASSERT_EQ(rarities.count(), 1);
+}
+
+INSTANTIATE_TEST_SUITE_P(, EconRaritiesTest, testing::Values(EconRarity::Default, EconRarity::Purple, EconRarity::Gold));
+
 using StaticData::TournamentMap;
 
 struct TournamentMapTestParam {
