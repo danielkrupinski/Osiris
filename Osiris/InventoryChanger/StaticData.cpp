@@ -346,6 +346,14 @@ private:
         }
     }
 
+    void computeRarities() noexcept
+    {
+        for (auto& crate : _cases) {
+            for (auto it = _caseLoot.begin() + crate.lootBeginIdx; it != _caseLoot.begin() + crate.lootEndIdx; ++it)
+                crate.rarities.set(it->get().getRarity());
+        }
+    }
+
     StaticDataImpl()
     {
         assert(memory && interfaces);
@@ -363,6 +371,7 @@ private:
 
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
+        computeRarities();
 
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();

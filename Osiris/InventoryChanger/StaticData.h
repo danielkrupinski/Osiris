@@ -122,6 +122,7 @@ namespace StaticData
 
     struct Case {
         bool willProduceStatTrak = false;
+        EconRarities rarities{};
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
         std::size_t lootBeginIdx;
