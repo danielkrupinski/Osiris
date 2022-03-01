@@ -111,6 +111,18 @@ namespace StaticData
                 bits |= (std::byte{ 1 } << rarityBit);
         }
 
+        [[nodiscard]] constexpr EconRarity getNthRarity(std::uint8_t n) const noexcept
+        {
+            for (std::uint8_t i = 0; i < std::numeric_limits<std::uint8_t>::digits; ++i) {
+                if (std::to_integer<std::uint8_t>(bits & (std::byte{ 1 } << i)) != 0) {
+                    if (n == 0)
+                        return static_cast<EconRarity>(i);
+                    --n;
+                }
+            }
+            return EconRarity::Default;
+        }
+
         [[nodiscard]] constexpr std::size_t count() const noexcept
         {
             return static_cast<std::size_t>(std::popcount(std::to_integer<std::uint8_t>(bits)));
