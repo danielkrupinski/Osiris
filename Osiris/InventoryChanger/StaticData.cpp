@@ -366,7 +366,7 @@ private:
         initMusicData(itemSchema, storage, converter);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
-
+        storage.compress();
         container = game_items::Lookup{ std::move(storage) };
 
         buildLootLists(itemSchema, lootListIndices);
