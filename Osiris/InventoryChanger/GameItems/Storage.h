@@ -170,6 +170,16 @@ public:
         return static_cast<bool>(collectible.getDataIndex());
     }
 
+    void compress()
+    {
+        paintKits.shrink_to_fit();
+        stickerKits.shrink_to_fit();
+        musicKits.shrink_to_fit();
+        graffitiKits.shrink_to_fit();
+        patchKits.shrink_to_fit();
+        gameItems.shrink_to_fit();
+    }
+
 private:
     void addItem(const Item& item)
     {
