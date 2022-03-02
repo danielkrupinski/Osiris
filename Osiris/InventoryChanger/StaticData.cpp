@@ -354,6 +354,13 @@ private:
         }
     }
 
+    void sortLoot() noexcept
+    {
+        for (const auto& crate : _cases) {
+            std::ranges::sort(_caseLoot.begin() + crate.lootBeginIdx, _caseLoot.begin() + crate.lootEndIdx, {}, [](const game_items::Item& item) { return item.getRarity(); });
+        }
+    }
+
     StaticDataImpl()
     {
         assert(memory && interfaces);
@@ -372,6 +379,7 @@ private:
         buildLootLists(itemSchema, lootListIndices);
         excludeTournamentStickerCapsulesFromSouvenirPackages();
         computeRarities();
+        sortLoot();
 
         _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
