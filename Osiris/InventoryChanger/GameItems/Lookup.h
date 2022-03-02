@@ -54,13 +54,8 @@ private:
     auto findTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
         // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
-        const auto begin = std::lower_bound(tournamentStickersSorted.begin(), tournamentStickersSorted.end(), tournamentID, [this](const Item& item, std::uint32_t tournamentID) {
-            return storage.getStickerKit(item).tournamentID < tournamentID;
-        });
-
-        const auto end = std::upper_bound(tournamentStickersSorted.begin(), tournamentStickersSorted.end(), tournamentID, [this](std::uint32_t tournamentID, const Item& item) {
-            return storage.getStickerKit(item).tournamentID > tournamentID;
-        });
+        const auto begin = std::ranges::lower_bound(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
+        const auto end = std::ranges::upper_bound(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
 
         return std::make_pair(begin, end);
     }
