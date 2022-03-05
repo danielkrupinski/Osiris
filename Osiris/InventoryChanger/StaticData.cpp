@@ -397,11 +397,6 @@ private:
     return StaticDataImpl::gameItems().size();
 }
 
-const std::vector<std::reference_wrapper<const game_items::Item>>& StaticData::caseLoot() noexcept
-{
-    return StaticDataImpl::caseLoot();
-}
-
 std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLoot(const StaticData::Case& crate) noexcept
 {
     if (!crate.hasLoot())
