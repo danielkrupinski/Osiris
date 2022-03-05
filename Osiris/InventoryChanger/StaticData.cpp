@@ -402,6 +402,14 @@ const std::vector<std::reference_wrapper<const game_items::Item>>& StaticData::c
     return StaticDataImpl::caseLoot();
 }
 
+std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLoot(const StaticData::Case& crate) noexcept
+{
+    if (!crate.hasLoot())
+        return {};
+
+    return { StaticDataImpl::caseLoot().begin() + crate.lootBeginIdx, StaticDataImpl::caseLoot().begin() + crate.lootEndIdx };
+}
+
 std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 {
     const auto itemIndexCount = StaticDataImpl::gameItems().size();

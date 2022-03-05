@@ -146,6 +146,7 @@ namespace StaticData
 
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;
     const std::vector<std::reference_wrapper<const game_items::Item>>& caseLoot() noexcept;
+    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
     [[nodiscard]] std::vector<ItemIndex2> getItemIndices() noexcept;
     
     [[nodiscard]] int getStickerID(const game_items::Item& item) noexcept;
