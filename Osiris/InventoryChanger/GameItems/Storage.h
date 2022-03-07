@@ -170,6 +170,12 @@ public:
         return static_cast<bool>(collectible.getDataIndex());
     }
 
+    [[nodiscard]] std::uint32_t getTournamentEventID(const Item& item) const noexcept
+    {
+        assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
+        return static_cast<std::uint32_t>(item.getDataIndex());
+    }
+
     void compress()
     {
         paintKits.shrink_to_fit();
