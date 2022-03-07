@@ -405,6 +405,11 @@ std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getC
     return { StaticDataImpl::caseLoot().begin() + crate.lootBeginIdx, StaticDataImpl::caseLoot().begin() + crate.lootEndIdx };
 }
 
+std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLootOfRarity(const StaticData::Case& crate, EconRarity rarity) noexcept
+{
+    return std::ranges::equal_range(getCrateLoot(crate), rarity, {}, [](const game_items::Item& item) { return item.getRarity(); });
+}
+
 std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
 {
     const auto itemIndexCount = StaticDataImpl::gameItems().size();
