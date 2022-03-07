@@ -107,11 +107,6 @@ public:
     static const auto& getGraffitiKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getGraffitiKit(item); }
     static const auto& getPatchKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getPatchKit(item); }
 
-    [[nodiscard]] bool isCollectibleGenuine(const game_items::Item& collectible) const noexcept
-    {
-        return container.getStorage().isCollectibleGenuine(collectible);
-    }
-
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
@@ -539,11 +534,6 @@ int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
     case TournamentMap::Vertigo: return 1695;
     default: return 0;
     }
-}
-
-bool StaticData::isCollectibleGenuine(const game_items::Item& collectible) noexcept
-{
-    return StaticDataImpl::instance().isCollectibleGenuine(collectible);
 }
 
 std::uint32_t StaticData::getTournamentEventID(const game_items::Item& item) noexcept

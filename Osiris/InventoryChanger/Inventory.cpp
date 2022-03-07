@@ -9,6 +9,7 @@
 #include "../SDK/EconItemView.h"
 #include "../SDK/Entity.h"
 #include "../SDK/ItemSchema.h"
+#include "GameItems/Lookup.h"
 
 using Inventory::InvalidDynamicDataIdx;
 using Inventory::BASE_ITEMID;
@@ -193,7 +194,7 @@ private:
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            if (StaticData::isCollectibleGenuine(item))
+            if (StaticData::lookup().getStorage().isCollectibleGenuine(item))
                 econItem->quality = 1;
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
