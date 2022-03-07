@@ -521,10 +521,4 @@ int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
     }
 }
 
-std::uint32_t StaticData::getTournamentEventID(const game_items::Item& item) noexcept
-{
-    assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
-    return static_cast<std::uint32_t>(item.getDataIndex());
-}
-
 game_items::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}

@@ -186,7 +186,7 @@ private:
         assert(souvenirToken.isSouvenirToken());
 
         const auto& inventory = Inventory::get();
-        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::getTournamentEventID(inventoryItem.get()) == StaticData::getTournamentEventID(souvenirToken.get()); });
+        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::lookup().getStorage(). getTournamentEventID(inventoryItem.get()) == StaticData::lookup().getStorage().getTournamentEventID(souvenirToken.get()); });
         if (it != inventory.cend()) {
             souvenirToken.markToDelete();
 
