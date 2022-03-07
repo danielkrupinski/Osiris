@@ -12,6 +12,7 @@
 
 #include "../SDK/ItemSchema.h"
 #include "TournamentMatches.h"
+#include "GameItems/Lookup.h"
 
 static float generateWear() noexcept
 {
@@ -255,7 +256,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
     } else if (item.isServiceMedal()) {
         DynamicServiceMedalData dynamicData;
-        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::getServiceMedalYear(item));
+        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::lookup().getStorage().getServiceMedalYear(item));
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isTournamentCoin()) {
         index = Inventory::emplaceDynamicData(DynamicTournamentCoinData{});

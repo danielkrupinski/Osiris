@@ -107,11 +107,6 @@ public:
     static const auto& getGraffitiKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getGraffitiKit(item); }
     static const auto& getPatchKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getPatchKit(item); }
 
-    [[nodiscard]] std::uint16_t getServiceMedalYear(const game_items::Item& serviceMedal) const noexcept
-    {
-        return container.getStorage().getServiceMedalYear(serviceMedal);
-    }
-
     [[nodiscard]] bool isCollectibleGenuine(const game_items::Item& collectible) const noexcept
     {
         return container.getStorage().isCollectibleGenuine(collectible);
@@ -549,11 +544,6 @@ int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
 bool StaticData::isCollectibleGenuine(const game_items::Item& collectible) noexcept
 {
     return StaticDataImpl::instance().isCollectibleGenuine(collectible);
-}
-
-std::uint16_t StaticData::getServiceMedalYear(const game_items::Item& serviceMedal) noexcept
-{
-    return StaticDataImpl::instance().getServiceMedalYear(serviceMedal);
 }
 
 std::uint32_t StaticData::getTournamentEventID(const game_items::Item& item) noexcept
