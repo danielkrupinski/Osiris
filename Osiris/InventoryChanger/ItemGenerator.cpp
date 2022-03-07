@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <ctime>
 #include <random>
@@ -32,10 +33,64 @@ using StaticData::TournamentMap;
 
 [[nodiscard]] static std::array<StickerConfig, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
+template <typename Integral, std::size_t N>
+[[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
+{
+    std::array<Integral, N> integers;
+    for (std::size_t i = 0; i < N; ++i)
+        integers[i] = static_cast<Integral>(floats[i] * (std::numeric_limits<Integral>::max)());
+    return integers;
+}
+
+class DropRate {
+public:
+    static constexpr auto MaxDistinctRarities = 6; // in Cobblestone souvenir package, gray to red
+    using T = std::uint16_t;
+
+    constexpr DropRate(StaticData::EconRarities rarities, const std::array<float, MaxDistinctRarities>& chances)
+        : rarities{ rarities }, chances{ normalizedFloatsToIntegers<T>(chances) } {}
+
+    [[nodiscard]] constexpr EconRarity mapToRarity(T number) const
+    {
+        for (std::uint8_t i = 0; i < chances.size(); ++i) {
+            if (number < chances[i])
+                return rarities.getNthRarity(i);
+            number -= chances[i];
+        }
+        return rarities.getNthRarity(0);
+    }
+
+    StaticData::EconRarities rarities;
+    std::array<T, MaxDistinctRarities> chances{};
+};
+
+constexpr auto dropRates = std::to_array<DropRate>({
+    { { EconRarity::Blue, EconRarity::Purple, EconRarity::Pink, EconRarity::Red }, { 0.7992f, 0.1598f, 0.032f, 0.0064f } }
+});
+
+[[nodiscard]] static EconRarity getRandomRarity(const StaticData::Case& container)
+{
+    if (const auto rate = std::ranges::find(dropRates, container.rarities, &DropRate::rarities); rate != dropRates.end()) {
+        const auto rolledNumber = Helpers::random((std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)());
+        return rate->mapToRarity(rolledNumber);
+    }
+    return EconRarity::Default;
+}
+
+[[nodiscard]] static std::span<const std::reference_wrapper<const game_items::Item>> getLoot(const StaticData::Case& container)
+{
+    if (container.rarities.count() > 1) {
+        if (const auto rarity = getRandomRarity(container); rarity != EconRarity::Default)
+            return StaticData::getCrateLootOfRarity(container, rarity);
+    }
+    return StaticData::getCrateLoot(container);
+}
+
 [[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
 {
     assert(container.hasLoot());
-    const auto loot = StaticData::getCrateLoot(container);
+    std::span<const std::reference_wrapper<const game_items::Item>> loot = getLoot(container);
+    assert(!loot.empty());
     return loot[Helpers::random(0u, loot.size() - 1u)];
 }
 
