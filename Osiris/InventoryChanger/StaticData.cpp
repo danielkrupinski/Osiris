@@ -507,11 +507,6 @@ const game_items::Lookup& StaticData::lookup() noexcept
     return StaticDataImpl::container_();
 }
 
-int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept
-{
-    return StaticDataImpl::instance().container_().findTournamentEventStickerID(tournamentID);
-}
-
 int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
 {
     switch (map) {
