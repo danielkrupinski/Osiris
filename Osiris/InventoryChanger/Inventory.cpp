@@ -99,7 +99,7 @@ private:
     {
         assert(inventoryItem.isSkin());
 
-        const auto paintKit = StaticData::getPaintKit(inventoryItem.get()).id;
+        const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.get()).id;
         econItem.setPaintKit(static_cast<float>(paintKit));
 
         const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
@@ -188,7 +188,7 @@ private:
             initSkinEconItem(inventoryItem, *econItem);
         } else if (item.isGloves()) {
             econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(StaticData::getPaintKit(item).id));
+            econItem->setPaintKit(static_cast<float>(StaticData::lookup().getStorage().getPaintKit(item).id));
 
             const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);

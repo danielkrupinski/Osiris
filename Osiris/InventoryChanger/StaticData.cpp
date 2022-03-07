@@ -475,12 +475,6 @@ std::wstring_view StaticData::getPaintNameUpper(const game_items::Item& item) no
     return L"";
 }
 
-const game_items::PaintKit& StaticData::getPaintKit(const game_items::Item& item) noexcept
-{
-    assert(item.isSkin() || item.isGloves());
-    return StaticDataImpl::getPaintKit(item);
-}
-
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());

@@ -24,7 +24,7 @@ json InventoryChanger::toJson() noexcept
         if (gameItem.isSticker()) {
             itemConfig["Sticker ID"] = StaticData::getStickerID(gameItem);
         } else if (gameItem.isGloves()) {
-            const auto& staticData = StaticData::getPaintKit(gameItem);
+            const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
@@ -33,7 +33,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
         } else if (gameItem.isSkin()) {
-            const auto& staticData = StaticData::getPaintKit(gameItem);
+            const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
             itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 

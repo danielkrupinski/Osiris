@@ -111,7 +111,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
         dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (unlockedItem.isSkin()) {
         DynamicSkinData dynamicData;
-        const auto& staticData = StaticData::getPaintKit(unlockedItem);
+        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(unlockedItem);
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
@@ -232,17 +232,17 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
     std::size_t index = Inventory::InvalidDynamicDataIdx;
 
     if (item.isSkin()) {
-        const auto& staticData = StaticData::getPaintKit(item);
+        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
         DynamicSkinData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (Helpers::isMP5LabRats(item.getWeaponID(), StaticData::getPaintKit(item).id))
+        if (Helpers::isMP5LabRats(item.getWeaponID(), StaticData::lookup().getStorage().getPaintKit(item).id))
             dynamicData.stickers[3].stickerID = 28;
 
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isGloves()) {
-        const auto& staticData = StaticData::getPaintKit(item);
+        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
         DynamicGloveData dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
