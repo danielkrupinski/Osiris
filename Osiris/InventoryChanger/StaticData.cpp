@@ -397,7 +397,14 @@ std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getC
 
 std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLootOfRarity(const StaticData::Case& crate, EconRarity rarity) noexcept
 {
-    return std::ranges::equal_range(getCrateLoot(crate), rarity, {}, [](const game_items::Item& item) { return item.getRarity(); });
+    struct Comp {
+        bool operator()(EconRarity rarity, const game_items::Item& item) const noexcept { return rarity < item.getRarity(); }
+        bool operator()(const game_items::Item& item, EconRarity rarity) const noexcept { return item.getRarity() < rarity; }
+    };
+
+    const auto loot = getCrateLoot(crate);
+    const auto [begin, end] = std::equal_range(loot.begin(), loot.end(), rarity, Comp{});
+    return { begin, end };
 }
 
 std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
