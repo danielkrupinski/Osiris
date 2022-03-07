@@ -92,7 +92,7 @@ constexpr auto dropRates = std::to_array<DropRate>({
     assert(container.hasLoot());
     std::span<const std::reference_wrapper<const game_items::Item>> loot = getLoot(container);
     assert(!loot.empty());
-    return loot[Helpers::random(0u, loot.size() - 1u)];
+    return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
 std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromContainer(const InventoryItem& caseItem) noexcept
