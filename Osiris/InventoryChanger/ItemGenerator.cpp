@@ -289,8 +289,8 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
     stickers[0].stickerID = StaticData::findSouvenirTournamentSticker(tournamentID);
 
     if (tournamentID != 1) {
-        stickers[1].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team1);
-        stickers[2].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team2);
+        stickers[1].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team1);
+        stickers[2].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team2);
 
         if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2); match && match->hasMVPs())
             stickers[3].stickerID = StaticData::lookup().findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));

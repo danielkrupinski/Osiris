@@ -170,7 +170,6 @@ namespace StaticData
     [[nodiscard]] const game_items::Lookup& lookup() noexcept;
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
-    int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     [[nodiscard]] std::uint32_t getTournamentEventID(const game_items::Item& item) noexcept;
 

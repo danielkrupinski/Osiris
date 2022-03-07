@@ -512,11 +512,6 @@ int StaticData::findSouvenirTournamentSticker(std::uint32_t tournamentID) noexce
     return StaticDataImpl::instance().container_().findTournamentEventStickerID(tournamentID);
 }
 
-int StaticData::getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept
-{
-    return StaticDataImpl::instance().container_().findTournamentTeamGoldStickerID(tournamentID, team);
-}
-
 int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
 {
     switch (map) {
