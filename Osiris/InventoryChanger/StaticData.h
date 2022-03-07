@@ -128,6 +128,8 @@ namespace StaticData
             return static_cast<std::size_t>(std::popcount(std::to_integer<std::uint8_t>(bits)));
         }
 
+        [[nodiscard]] constexpr bool operator==(const EconRarities&) const = default;
+
     private:
         std::byte bits{ 0 };
     };
