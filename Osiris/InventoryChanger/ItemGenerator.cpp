@@ -293,7 +293,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
         stickers[2].stickerID = StaticData::getTournamentTeamGoldStickerID(tournamentID, team2);
 
         if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2); match && match->hasMVPs())
-            stickers[3].stickerID = StaticData::getTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
+            stickers[3].stickerID = StaticData::lookup().findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
         else if (tournamentID >= 18) // starting with PGL Stockholm 2021
             stickers[3].stickerID = StaticData::getTournamentMapGoldStickerID(map);
     }

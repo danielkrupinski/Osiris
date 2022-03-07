@@ -171,7 +171,6 @@ namespace StaticData
 
     int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
     int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
-    int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
     [[nodiscard]] std::uint32_t getTournamentEventID(const game_items::Item& item) noexcept;
 
