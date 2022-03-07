@@ -67,7 +67,8 @@ public:
 
 constexpr auto dropRates = std::to_array<DropRate>({
     { { EconRarity::Blue, EconRarity::Purple, EconRarity::Pink, EconRarity::Red }, { 0.7992f, 0.1598f, 0.032f, 0.0064f } },
-    { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue }, { 0.7992f, 0.1598f, 0.041f } } // Inferno souvenir package
+    { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue }, { 0.7992f, 0.1598f, 0.041f } }, // Inferno souvenir package
+    { { EconRarity::Blue, EconRarity::Purple }, { 0.80f, 0.20f } } // Stockholm 2021 Team Patch Packs, Sticker capsules: Pinups, Sugarface, Poorly Drawn, Recoil
 });
 
 [[nodiscard]] static EconRarity getRandomRarity(const StaticData::Case& container)
