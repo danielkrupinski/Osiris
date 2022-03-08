@@ -120,7 +120,6 @@ public:
     constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
     constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
 
-private:
     enum class Type : std::uint8_t {
         Gloves,
         Skin,
@@ -146,6 +145,7 @@ private:
     constexpr Item(Type type, EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
         : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
 
+private:
     Type type;
     EconRarity rarity;
     WeaponId weaponID;
