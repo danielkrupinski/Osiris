@@ -457,35 +457,6 @@ int StaticData::getSealedGraffitiID(const game_items::Item& item) noexcept
     return StaticDataImpl::getGraffitiKit(item).id;
 }
 
-[[nodiscard]] const game_items::ItemName& getItemName(const game_items::Item& item)
-{
-    const auto& storage = StaticData::lookup().getStorage();
-
-    if (item.isSkin() || item.isGloves())
-        return storage.getPaintKit(item).name;
-    if (item.isMusic())
-        return storage.getMusicKit(item).name;
-    if (item.isSticker())
-        return storage.getStickerKit(item).name;
-    if (item.isGraffiti() || item.isSealedGraffiti())
-        return storage.getGraffitiKit(item).name;
-    if (item.isPatch())
-        return storage.getPatchKit(item).name;
-
-    static constexpr game_items::ItemName fallback{ "", L"" };
-    return fallback;
-}
-
-std::string_view StaticData::getPaintName(const game_items::Item& item) noexcept
-{
-    return getItemName(item).forDisplay;
-}
-
-std::wstring_view StaticData::getPaintNameUpper(const game_items::Item& item) noexcept
-{
-    return getItemName(item).forSearch;
-}
-
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());

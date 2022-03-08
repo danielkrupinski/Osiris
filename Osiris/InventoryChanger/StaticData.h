@@ -157,9 +157,7 @@ namespace StaticData
     [[nodiscard]] int getSkinPaintID(const game_items::Item& item) noexcept;
     [[nodiscard]] int getGraffitiID(const game_items::Item& item) noexcept;
     [[nodiscard]] int getSealedGraffitiID(const game_items::Item& item) noexcept;
-    
-    [[nodiscard]] std::string_view getPaintName(const game_items::Item& item) noexcept;
-    [[nodiscard]] std::wstring_view getPaintNameUpper(const game_items::Item& item) noexcept;
+
     [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] const game_items::Item& getGameItem(ItemIndex2 itemIndex) noexcept;
 
