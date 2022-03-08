@@ -148,14 +148,14 @@ public:
         return patchKits[item.getDataIndex()];
     }
 
-    auto& getGameItems()
+    auto& getItems()
     {
-        return gameItems;
+        return items;
     }
 
-    const auto& getGameItems() const
+    const auto& getItems() const
     {
-        return gameItems;
+        return items;
     }
 
     [[nodiscard]] std::uint16_t getServiceMedalYear(const Item& serviceMedal) const noexcept
@@ -183,13 +183,13 @@ public:
         musicKits.shrink_to_fit();
         graffitiKits.shrink_to_fit();
         patchKits.shrink_to_fit();
-        gameItems.shrink_to_fit();
+        items.shrink_to_fit();
     }
 
 private:
     void addItem(const Item& item)
     {
-        gameItems.push_back(item);
+        items.push_back(item);
     }
 
     static constexpr auto vanillaPaintIndex = 0;
@@ -198,7 +198,7 @@ private:
     std::vector<MusicKit> musicKits;
     std::vector<GraffitiKit> graffitiKits;
     std::vector<PatchKit> patchKits;
-    std::vector<Item> gameItems;
+    std::vector<Item> items;
 };
 
 }

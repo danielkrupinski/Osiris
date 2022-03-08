@@ -97,7 +97,7 @@ public:
         return staticData;
     }
 
-    static const auto& gameItems() noexcept { return instance().container.getStorage().getGameItems(); }
+    static const auto& gameItems() noexcept { return instance().container.getStorage().getItems(); }
     static const auto& container_() noexcept { return instance().container; }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
@@ -135,7 +135,7 @@ private:
     {
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
-        storage.getGameItems().reserve(itemSchema->paintKits.lastAlloc);
+        storage.getItems().reserve(itemSchema->paintKits.lastAlloc);
         for (const auto& node : itemSchema->paintKits) {
             const auto paintKit = node.value;
 
@@ -163,7 +163,7 @@ private:
     void initStickerData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
-        storage.getGameItems().reserve(storage.getGameItems().size() + stickerMap.numElements);
+        storage.getItems().reserve(storage.getItems().size() + stickerMap.numElements);
         for (const auto& node : stickerMap) {
             const auto stickerKit = node.value;
             if (stickerKit->id == 0)
