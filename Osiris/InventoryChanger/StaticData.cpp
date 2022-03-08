@@ -278,8 +278,13 @@ private:
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
                     fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
             } else if (contents[j].itemDef != 0) {
-                if (const auto idx = container.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
-                    loot.push_back(*idx);
+                if (contents[j].paintKit != 0) {
+                    if (const auto idx = container.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
+                        loot.push_back(*idx);
+                } else {
+                    if (const auto idx = container.findItem(contents[j].weaponId()); idx.has_value())
+                        loot.push_back(*idx);
+                }
             }
         }
     }
