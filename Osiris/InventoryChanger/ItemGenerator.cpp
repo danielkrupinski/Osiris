@@ -76,6 +76,7 @@ constexpr auto dropRates = std::to_array<DropRate>({
     { { EconRarity::Blue, EconRarity::Purple, EconRarity::Pink }, { 0.7992f, 0.1598f, 0.041f } }, // Regular sticker capsules
     { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue, EconRarity::Purple, EconRarity::Pink }, { 0.80f, 0.16f, 0.032f, 0.0064f, 0.0016f } }, // DreamHack2013 Collections, Souvenir package: Nuke 2018, Inferno 2018, Overpass, Dust 2
     { { EconRarity::Blue, EconRarity::Purple, EconRarity::Red }, { 0.8013f, 0.1923f, 0.0064f } }, // Autograph sticker capsules
+    { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue, EconRarity::Purple, EconRarity::Pink, EconRarity::Red }, { 0.80f, 0.16f, 0.032f, 0.0064f, 0.0012f, 0.0004f } }, // Souvenir package: Cobblestone, Ancient, Vertigo 2021, Mirage 2021, Dust 2 2021
 });
 
 [[nodiscard]] static EconRarity getRandomRarity(const StaticData::Case& container)
