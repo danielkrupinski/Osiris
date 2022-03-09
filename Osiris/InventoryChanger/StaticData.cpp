@@ -102,11 +102,6 @@ public:
     static const auto& container_() noexcept { return instance().container; }
     static const auto& cases() noexcept { return instance()._cases; }
     static const auto& caseLoot() noexcept { return instance()._caseLoot; }
-    static const auto& getStickerKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getStickerKit(item); }
-    static const auto& getPaintKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getPaintKit(item); }
-    static const auto& getMusicKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getMusicKit(item); }
-    static const auto& getGraffitiKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getGraffitiKit(item); }
-    static const auto& getPatchKit(const game_items::Item& item) noexcept { return instance().container.getStorage().getPatchKit(item); }
 
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
