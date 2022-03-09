@@ -60,7 +60,8 @@ namespace game_items
     };
 
     struct PaintKit {
-        PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept;
+        PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept
+            : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}
 
         int id;
         float wearRemapMin = 0.0f;

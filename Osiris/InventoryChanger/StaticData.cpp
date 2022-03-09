@@ -456,5 +456,3 @@ int StaticData::getTournamentMapGoldStickerID(TournamentMap map) noexcept
     default: return 0;
     }
 }
-
-game_items::PaintKit::PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, name{ name } {}
