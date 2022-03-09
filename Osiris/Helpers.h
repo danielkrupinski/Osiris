@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <cwctype>
 #include <mutex>
 #include <numbers>
 #include <random>
