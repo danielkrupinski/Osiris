@@ -870,7 +870,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 sorted = true;
             }
 
-            const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
+            const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
                 const auto& gameItem = StaticData::getGameItem(itemIndices[i]);
                 if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(gameItem).forSearch), filterWide)))

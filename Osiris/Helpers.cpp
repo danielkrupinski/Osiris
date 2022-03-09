@@ -111,31 +111,6 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
     return wide;
 }
 
-static void toUpper(std::span<wchar_t> str) noexcept
-{
-    static std::unordered_map<wchar_t, wchar_t> upperCache;
-
-    for (auto& c : str) {
-        if (c >= 'a' && c <= 'z') {
-            c -= ('a' - 'A');
-        } else if (c > 127) {
-            if (const auto it = upperCache.find(c); it != upperCache.end()) {
-                c = it->second;
-            } else {
-                const auto upper = std::towupper(c);
-                upperCache.emplace(c, upper);
-                c = upper;
-            }
-        }
-    }
-}
-
-std::wstring Helpers::toUpper(std::wstring str) noexcept
-{
-    ::toUpper(str);
-    return str;
-}
-
 bool Helpers::decodeVFONT(std::vector<char>& buffer) noexcept
 {
     constexpr std::string_view tag = "VFONT1";

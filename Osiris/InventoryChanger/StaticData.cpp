@@ -74,11 +74,12 @@ private:
 {
     WeaponNamesStorage storage;
     ToUtf8Converter converter{ *interfaces->localize };
+    Helpers::ToUpperConverter toUpperConverter;
 
     for (const auto& node : itemSchema->itemsSorted) {
         const auto item = node.value;
         const auto nameWide = interfaces->localize->findSafe(item->getItemBaseName());
-        storage.add(item->getWeaponId(), converter.convertUnicodeToAnsi(nameWide), Helpers::toUpper(nameWide));
+        storage.add(item->getWeaponId(), converter.convertUnicodeToAnsi(nameWide), toUpperConverter.toUpper(nameWide));
     }
     return storage;
 }
@@ -131,7 +132,7 @@ private:
         return kitsWeapons;
     }
 
-    void initSkinData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter) noexcept
+    void initSkinData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter, Helpers::ToUpperConverter& toUpperConverter) noexcept
     {
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
@@ -143,7 +144,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            storage.addPaintKit(paintKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(Helpers::toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
+            storage.addPaintKit(paintKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(toUpperConverter.toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -160,7 +161,7 @@ private:
         }
     }
 
-    void initStickerData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter) noexcept
+    void initStickerData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter, Helpers::ToUpperConverter& toUpperConverter) noexcept
     {
         const auto& stickerMap = itemSchema->stickerKits;
         storage.getItems().reserve(storage.getItems().size() + stickerMap.numElements);
@@ -177,18 +178,18 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                storage.addSticker(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(Helpers::toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                storage.addSticker(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(toUpperConverter.toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addPatch(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(Helpers::toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addPatch(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(toUpperConverter.toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addGraffiti(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(Helpers::toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addGraffiti(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(toUpperConverter.toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
             }
         }
     }
 
-    void initMusicData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter) noexcept
+    void initMusicData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter, Helpers::ToUpperConverter& toUpperConverter) noexcept
     {
         for (const auto& node : itemSchema->musicKits) {
             const auto musicKit = node.value;
@@ -196,7 +197,7 @@ private:
                 continue;
 
             const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            storage.addMusic(musicKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(Helpers::toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
+            storage.addMusic(musicKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(toUpperConverter.toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
         }
     }
 
@@ -363,9 +364,11 @@ private:
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         game_items::Storage storage;
         ToUtf8Converter converter{ *interfaces->localize };
-        initSkinData(itemSchema, storage, converter);
-        initStickerData(itemSchema, storage, converter);
-        initMusicData(itemSchema, storage, converter);
+        Helpers::ToUpperConverter toUpperConverter;
+
+        initSkinData(itemSchema, storage, converter, toUpperConverter);
+        initStickerData(itemSchema, storage, converter, toUpperConverter);
+        initMusicData(itemSchema, storage, converter, toUpperConverter);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
         storage.compress();
