@@ -150,13 +150,6 @@ namespace StaticData
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLootOfRarity(const Case& crate, EconRarity rarity) noexcept;
     [[nodiscard]] std::vector<ItemIndex2> getItemIndices() noexcept;
-    
-    [[nodiscard]] int getStickerID(const game_items::Item& item) noexcept;
-    [[nodiscard]] int getMusicID(const game_items::Item& item) noexcept;
-    [[nodiscard]] int getPatchID(const game_items::Item& item) noexcept;
-    [[nodiscard]] int getSkinPaintID(const game_items::Item& item) noexcept;
-    [[nodiscard]] int getGraffitiID(const game_items::Item& item) noexcept;
-    [[nodiscard]] int getSealedGraffitiID(const game_items::Item& item) noexcept;
 
     [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] const game_items::Item& getGameItem(ItemIndex2 itemIndex) noexcept;

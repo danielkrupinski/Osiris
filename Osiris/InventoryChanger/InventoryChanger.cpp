@@ -320,7 +320,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isMusic())
         return;
 
-    pr->musicID()[localPlayer->index()] = StaticData::getMusicID(item->get());
+    pr->musicID()[localPlayer->index()] = StaticData::lookup().getStorage().getMusicKit(item->get()).id;
 }
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept

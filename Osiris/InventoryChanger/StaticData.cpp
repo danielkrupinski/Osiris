@@ -422,42 +422,6 @@ std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
     return indices;
 }
 
-[[nodiscard]] int StaticData::getStickerID(const game_items::Item& item) noexcept
-{
-    assert(item.isSticker());
-    return StaticDataImpl::getStickerKit(item).id;
-}
-
-[[nodiscard]] int StaticData::getMusicID(const game_items::Item& item) noexcept
-{
-    assert(item.isMusic());
-    return StaticDataImpl::getMusicKit(item).id;
-}
-
-[[nodiscard]] int StaticData::getPatchID(const game_items::Item& item) noexcept
-{
-    assert(item.isPatch());
-    return StaticDataImpl::getPatchKit(item).id;
-}
-
-[[nodiscard]] int StaticData::getSkinPaintID(const game_items::Item& item) noexcept
-{
-    assert(item.isSkin());
-    return StaticDataImpl::getPaintKit(item).id;
-}
-
-int StaticData::getGraffitiID(const game_items::Item& item) noexcept
-{
-    assert(item.isGraffiti());
-    return StaticDataImpl::getGraffitiKit(item).id;
-}
-
-int StaticData::getSealedGraffitiID(const game_items::Item& item) noexcept
-{
-    assert(item.isSealedGraffiti());
-    return StaticDataImpl::getGraffitiKit(item).id;
-}
-
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());

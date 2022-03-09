@@ -169,15 +169,13 @@ private:
         econItem->weaponId = item.getWeaponID();
 
         if (item.isSticker()) {
-            econItem->setStickerID(0, StaticData::getStickerID(item));
+            econItem->setStickerID(0, StaticData::lookup().getStorage().getStickerKit(item).id);
         } else if (item.isPatch()) {
-            econItem->setStickerID(0, StaticData::getPatchID(item));
-        } else if (item.isGraffiti()) {
-            econItem->setStickerID(0, StaticData::getGraffitiID(item));
-        } else if (item.isSealedGraffiti()) {
-            econItem->setStickerID(0, StaticData::getSealedGraffitiID(item));
+            econItem->setStickerID(0, StaticData::lookup().getStorage().getPatchKit(item).id);
+        } else if (item.isGraffiti() || item.isSealedGraffiti()) {
+            econItem->setStickerID(0, StaticData::lookup().getStorage().getGraffitiKit(item).id);
         } else if (item.isMusic()) {
-            econItem->setMusicID(StaticData::getMusicID(item));
+            econItem->setMusicID(StaticData::lookup().getStorage().getMusicKit(item).id);
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.statTrak > -1) {
                 econItem->setStatTrak(dynamicData.statTrak);

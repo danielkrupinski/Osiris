@@ -22,7 +22,7 @@ json InventoryChanger::toJson() noexcept
         itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
-            itemConfig["Sticker ID"] = StaticData::getStickerID(gameItem);
+            itemConfig["Sticker ID"] = StaticData::lookup().getStorage().getStickerKit(gameItem).id;
         } else if (gameItem.isGloves()) {
             const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
@@ -34,7 +34,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Seed"] = dynamicData.seed;
         } else if (gameItem.isSkin()) {
             const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
-            itemConfig["Paint Kit"] = StaticData::getSkinPaintID(gameItem);
+            itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
             const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
@@ -69,15 +69,13 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["Tournament Player"] = dynamicData.proPlayer;
             }
         } else if (gameItem.isMusic()) {
-            itemConfig["Music ID"] = StaticData::getMusicID(gameItem);
+            itemConfig["Music ID"] = StaticData::lookup().getStorage().getMusicKit(gameItem).id;
             if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
         } else if (gameItem.isPatch()) {
-            itemConfig["Patch ID"] = StaticData::getPatchID(gameItem);
-        } else if (gameItem.isGraffiti()) {
-            itemConfig["Graffiti ID"] = StaticData::getGraffitiID(gameItem);
-        } else if (gameItem.isSealedGraffiti()) {
-            itemConfig["Graffiti ID"] = StaticData::getSealedGraffitiID(gameItem);
+            itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatchKit(gameItem).id;
+        } else if (gameItem.isGraffiti() || gameItem.isSealedGraffiti()) {
+            itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
         } else if (gameItem.isAgent()) {
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
