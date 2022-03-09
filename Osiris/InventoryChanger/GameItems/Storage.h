@@ -1,5 +1,6 @@
 #pragma once
 
+#include <span>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -149,12 +150,12 @@ public:
         return patchKits[item.getDataIndex()];
     }
 
-    auto& getItems()
+    std::span<Item> getItems()
     {
         return items;
     }
 
-    const auto& getItems() const
+    std::span<const Item> getItems() const
     {
         return items;
     }

@@ -18,7 +18,7 @@ private:
             bool operator()(const Item& item, WeaponId weaponID) const noexcept { return item.getWeaponID() < weaponID; }
         };
 
-        return std::equal_range(storage.getItems().cbegin(), storage.getItems().cend(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+        return std::equal_range(storage.getItems().begin(), storage.getItems().end(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
     }
 
 public:
