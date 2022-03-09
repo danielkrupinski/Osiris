@@ -13,50 +13,50 @@ namespace game_items
 
 class Storage {
 public:
-    void addPatch(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage)
+    void addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath)
     {
         patchKits.emplace_back(id, name);
-        addItem(Item{ Item::Type::Patch, rarity, WeaponId::Patch, patchKits.size() - 1, inventoryImage });
+        addItem(Item::Type::Patch, rarity, WeaponId::Patch, patchKits.size() - 1, iconPath);
     }
 
-    void addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage)
+    void addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view iconPath)
     {
         graffitiKits.emplace_back(id, name);
         const auto index = graffitiKits.size() - 1;
-        addItem(Item::Type::Graffiti, rarity, WeaponId::Graffiti, index, inventoryImage);
-        addItem(Item::Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, index, inventoryImage);
+        addItem(Item::Type::Graffiti, rarity, WeaponId::Graffiti, index, iconPath);
+        addItem(Item::Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, index, iconPath);
     }
 
-    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view inventoryImage, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
     {
         stickerKits.emplace_back(id, name, tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
-        addItem(Item::Type::Sticker, rarity, WeaponId::Sticker, stickerKits.size() - 1, inventoryImage);
+        addItem(Item::Type::Sticker, rarity, WeaponId::Sticker, stickerKits.size() - 1, iconPath);
     }
 
-    void addMusic(int musicID, ItemName name, std::string_view inventoryImage)
+    void addMusic(int musicID, ItemName name, std::string_view iconPath)
     {
         musicKits.emplace_back(musicID, name);
-        addItem(Item::Type::Music, EconRarity::Blue, WeaponId::MusicKit, musicKits.size() - 1, inventoryImage);
+        addItem(Item::Type::Music, EconRarity::Blue, WeaponId::MusicKit, musicKits.size() - 1, iconPath);
     }
 
-    void addVanillaKnife(WeaponId weaponID, std::string_view inventoryImage)
+    void addVanillaKnife(WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Item::Type::Skin, EconRarity::Red, weaponID, vanillaPaintIndex, inventoryImage);
+        addItem(Item::Type::Skin, EconRarity::Red, weaponID, vanillaPaintIndex, iconPath);
     }
 
-    void addCollectible(EconRarity rarity, WeaponId weaponID, bool isOriginal, std::string_view inventoryImage)
+    void addCollectible(EconRarity rarity, WeaponId weaponID, bool isOriginal, std::string_view iconPath)
     {
-        addItem(Item::Type::Collectible, rarity, weaponID, static_cast<std::size_t>(isOriginal), inventoryImage);
+        addItem(Item::Type::Collectible, rarity, weaponID, static_cast<std::size_t>(isOriginal), iconPath);
     }
 
-    void addVanillaSkin(WeaponId weaponID, std::string_view inventoryImage)
+    void addVanillaSkin(WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Item::Type::Skin, EconRarity::Default, weaponID, vanillaPaintIndex, inventoryImage);
+        addItem(Item::Type::Skin, EconRarity::Default, weaponID, vanillaPaintIndex, iconPath);
     }
 
-    void addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId weaponID, std::string_view inventoryImage)
+    void addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId weaponID, std::string_view iconPath)
     {
-        addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), inventoryImage);
+        addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), iconPath);
     }
 
     void addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
