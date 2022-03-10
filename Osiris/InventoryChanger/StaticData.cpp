@@ -317,24 +317,6 @@ private:
         }
     }
 
-    [[nodiscard]] bool isStickerCapsule(const StaticData::Case& caseData) const noexcept
-    {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [](const game_items::Item& item) { return item.isSticker(); });
-    }
-
-    [[nodiscard]] bool isPatchPack(const StaticData::Case& caseData) const noexcept
-    {
-        return std::all_of(_caseLoot.begin() + caseData.lootBeginIdx, _caseLoot.begin() + caseData.lootEndIdx, [](const game_items::Item& item) { return item.isPatch(); });
-    }
-
-    void excludeTournamentStickerCapsulesFromSouvenirPackages() noexcept
-    {
-        for (auto& crate : _cases) {
-            if (isStickerCapsule(crate) || isPatchPack(crate))
-                crate.souvenirPackageTournamentID = 0;
-        }
-    }
-
     void computeRarities() noexcept
     {
         for (auto& crate : _cases) {
@@ -368,7 +350,6 @@ private:
         container = game_items::Lookup{ std::move(storage) };
 
         buildLootLists(itemSchema, lootListIndices);
-        excludeTournamentStickerCapsulesFromSouvenirPackages();
         computeRarities();
         sortLoot();
 
