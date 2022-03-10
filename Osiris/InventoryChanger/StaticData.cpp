@@ -423,6 +423,11 @@ const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexce
     return StaticDataImpl::cases()[item.getDataIndex()];
 }
 
+bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
+{
+    return getCase(crate).souvenirPackageTournamentID != 0;
+}
+
 const game_items::Item& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
 {
     return StaticDataImpl::gameItems()[itemIndex.value];
