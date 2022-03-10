@@ -49,76 +49,101 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, IconPathTest, testing::Values(std::string
     return Item{ type, EconRarity::Blue, WeaponId::None, 0, {} };
 }
 
-TEST(GameItemTest, CreatedStickerIsSticker) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Sticker).isSticker());
+class TypeTest : public testing::TestWithParam<Item::Type> {};
+
+TEST_P(TypeTest, CreatedItemIsSticker) {
+    ASSERT_EQ(createItemOfType(GetParam()).isSticker(), GetParam() == Item::Type::Sticker);
 }
 
-TEST(GameItemTest, CreatedSkinIsSkin) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Skin).isSkin());
+TEST_P(TypeTest, CreatedItemIsSkin) {
+    ASSERT_EQ(createItemOfType(GetParam()).isSkin(), GetParam() == Item::Type::Skin);
 }
 
-TEST(GameItemTest, CreatedGlovesIsGloves) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Gloves).isGloves());
+TEST_P(TypeTest, CreatedItemIsGloves) {
+    ASSERT_EQ(createItemOfType(GetParam()).isGloves(), GetParam() == Item::Type::Gloves);
 }
 
-TEST(GameItemTest, CreatedMusicIsMusic) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Music).isMusic());
+TEST_P(TypeTest, CreatedItemIsMusic) {
+    ASSERT_EQ(createItemOfType(GetParam()).isMusic(), GetParam() == Item::Type::Music);
 }
 
-TEST(GameItemTest, CreatedCollectibleIsCollectible) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Collectible).isCollectible());
+TEST_P(TypeTest, CreatedItemIsCollectible) {
+    ASSERT_EQ(createItemOfType(GetParam()).isCollectible(), GetParam() == Item::Type::Collectible);
 }
 
-TEST(GameItemTest, CreatedNameTagIsNameTag) {
-    ASSERT_TRUE(createItemOfType(Item::Type::NameTag).isNameTag());
+TEST_P(TypeTest, CreatedItemIsNameTag) {
+    ASSERT_EQ(createItemOfType(GetParam()).isNameTag(), GetParam() == Item::Type::NameTag);
 }
 
-TEST(GameItemTest, CreatedPatchIsPatch) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Patch).isPatch());
+TEST_P(TypeTest, CreatedItemIsPatch) {
+    ASSERT_EQ(createItemOfType(GetParam()).isPatch(), GetParam() == Item::Type::Patch);
 }
 
-TEST(GameItemTest, CreatedGraffitiIsGraffiti) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Graffiti).isGraffiti());
+TEST_P(TypeTest, CreatedItemIsGraffiti) {
+    ASSERT_EQ(createItemOfType(GetParam()).isGraffiti(), GetParam() == Item::Type::Graffiti);
 }
 
-TEST(GameItemTest, CreatedSealedGraffitiIsSealedGraffiti) {
-    ASSERT_TRUE(createItemOfType(Item::Type::SealedGraffiti).isSealedGraffiti());
+TEST_P(TypeTest, CreatedItemIsSealedGraffiti) {
+    ASSERT_EQ(createItemOfType(GetParam()).isSealedGraffiti(), GetParam() == Item::Type::SealedGraffiti);
 }
 
-TEST(GameItemTest, CreatedAgentIsAgent) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Agent).isAgent());
+TEST_P(TypeTest, CreatedItemIsAgent) {
+    ASSERT_EQ(createItemOfType(GetParam()).isAgent(), GetParam() == Item::Type::Agent);
 }
 
-TEST(GameItemTest, CreatedCaseIsCase) {
-    ASSERT_TRUE(createItemOfType(Item::Type::Case).isCase());
+TEST_P(TypeTest, CreatedItemIsCase) {
+    ASSERT_EQ(createItemOfType(GetParam()).isCase(), GetParam() == Item::Type::Case);
 }
 
-TEST(GameItemTest, CreatedCaseKeyIsCaseKey) {
-    ASSERT_TRUE(createItemOfType(Item::Type::CaseKey).isCaseKey());
+TEST_P(TypeTest, CreatedItemIsCaseKey) {
+    ASSERT_EQ(createItemOfType(GetParam()).isCaseKey(), GetParam() == Item::Type::CaseKey);
 }
 
-TEST(GameItemTest, CreatedOperationPassIsOperationPass) {
-    ASSERT_TRUE(createItemOfType(Item::Type::OperationPass).isOperationPass());
+TEST_P(TypeTest, CreatedItemIsOperationPass) {
+    ASSERT_EQ(createItemOfType(GetParam()).isOperationPass(), GetParam() == Item::Type::OperationPass);
 }
 
-TEST(GameItemTest, CreatedStatTrakSwapToolIsStatTrakSwapTool) {
-    ASSERT_TRUE(createItemOfType(Item::Type::StatTrakSwapTool).isStatTrakSwapTool());
+TEST_P(TypeTest, CreatedItemIsStatTrakSwapTool) {
+    ASSERT_EQ(createItemOfType(GetParam()).isStatTrakSwapTool(), GetParam() == Item::Type::StatTrakSwapTool);
 }
 
-TEST(GameItemTest, CreatedViewerPassIsViewerPass) {
-    ASSERT_TRUE(createItemOfType(Item::Type::ViewerPass).isViewerPass());
+TEST_P(TypeTest, CreatedItemIsViewerPass) {
+    ASSERT_EQ(createItemOfType(GetParam()).isViewerPass(), GetParam() == Item::Type::ViewerPass);
 }
 
-TEST(GameItemTest, CreatedServiceMedalIsServiceMedal) {
-    ASSERT_TRUE(createItemOfType(Item::Type::ServiceMedal).isServiceMedal());
+TEST_P(TypeTest, CreatedItemIsServiceMedal) {
+    ASSERT_EQ(createItemOfType(GetParam()).isServiceMedal(), GetParam() == Item::Type::ServiceMedal);
 }
 
-TEST(GameItemTest, CreatedSouvenirTokenIsSouvenirToken) {
-    ASSERT_TRUE(createItemOfType(Item::Type::SouvenirToken).isSouvenirToken());
+TEST_P(TypeTest, CreatedItemIsSouvenirToken) {
+    ASSERT_EQ(createItemOfType(GetParam()).isSouvenirToken(), GetParam() == Item::Type::SouvenirToken);
 }
 
-TEST(GameItemTest, CreatedTournamentCoinIsTournamentCoin) {
-    ASSERT_TRUE(createItemOfType(Item::Type::TournamentCoin).isTournamentCoin());
+TEST_P(TypeTest, CreatedItemIsTournamentCoin) {
+    ASSERT_EQ(createItemOfType(GetParam()).isTournamentCoin(), GetParam() == Item::Type::TournamentCoin);
 }
+
+INSTANTIATE_TEST_SUITE_P(GameItemTest, TypeTest,
+    testing::Values(
+        Item::Type::Gloves,
+        Item::Type::Skin,
+        Item::Type::Patch,
+        Item::Type::Sticker,
+        Item::Type::Music,
+        Item::Type::Graffiti,
+        Item::Type::SealedGraffiti,
+        Item::Type::Collectible,
+        Item::Type::NameTag,
+        Item::Type::Agent,
+        Item::Type::Case,
+        Item::Type::CaseKey,
+        Item::Type::OperationPass,
+        Item::Type::StatTrakSwapTool,
+        Item::Type::ViewerPass,
+        Item::Type::ServiceMedal,
+        Item::Type::SouvenirToken,
+        Item::Type::TournamentCoin
+    )
+);
 
 }
