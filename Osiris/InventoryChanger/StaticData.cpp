@@ -425,7 +425,11 @@ const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexce
 
 bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
 {
-    return getCase(crate).souvenirPackageTournamentID != 0;
+    const auto& crateData = getCase(crate);
+    if (crateData.souvenirPackageTournamentID == 0)
+        return false;
+    const auto loot = getCrateLoot(crateData);
+    return !loot.empty() && loot[0].get().isSkin();
 }
 
 const game_items::Item& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
