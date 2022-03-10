@@ -144,7 +144,6 @@ namespace StaticData
         std::size_t lootEndIdx;
 
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
-        bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;

@@ -312,7 +312,7 @@ private:
                 rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
             _cases[i].lootEndIdx = _caseLoot.size();
 
-            if (_cases[i].isSouvenirPackage())
+            if (_cases[i].souvenirPackageTournamentID != 0)
                 _cases[i].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
         }
     }

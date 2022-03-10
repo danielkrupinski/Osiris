@@ -125,7 +125,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (caseData.isSouvenirPackage()) {
+        if (StaticData::isSouvenirPackage(caseItem.get())) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
             const auto& souvenir = Inventory::dynamicSouvenirPackageData(caseItem.getDynamicDataIndex());
             dynamicData.tournamentStage = souvenir.tournamentStage;
@@ -262,7 +262,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
     } else if (item.isMusic()) {
         index = Inventory::emplaceDynamicData(DynamicMusicData{});
     } else if (item.isCase()) {
-        if (const auto& staticData = StaticData::getCase(item); staticData.isSouvenirPackage())
+        if (const auto& staticData = StaticData::getCase(item); StaticData::isSouvenirPackage(item))
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
     } else if (item.isServiceMedal()) {
         DynamicServiceMedalData dynamicData;

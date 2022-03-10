@@ -209,7 +209,7 @@ private:
         } else if (item.isTournamentCoin()) {
             econItem->setDropsAwarded(dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
             econItem->setDropsRedeemed(0);
-        } else if (item.isCase() && StaticData::getCase(item).isSouvenirPackage()) {
+        } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
                 econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
                 econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
