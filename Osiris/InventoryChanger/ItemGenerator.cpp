@@ -147,7 +147,6 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
 {
     if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
         return it->matches;
-    assert(false && "Missing tournament match data!");
     return {};
 }
 
@@ -172,13 +171,11 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     if (const auto [begin, end] = std::equal_range(matches.begin(), matches.end(), map, Comp{}); begin != end)
         return { begin, end };
 
-    assert(false && "Couldn't find a match played on a map of a souvenir package!");
     return {};
 }
 
 [[nodiscard]] static auto generateSouvenirPackageData(const StaticData::Case& caseData) noexcept
 {
-    assert(caseData.isSouvenirPackage());
     DynamicSouvenirPackageData dynamicData;
 
     if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
