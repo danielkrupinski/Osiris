@@ -3,8 +3,8 @@
 #include <cstddef>
 #include <string_view>
 
-#include "../../SDK/ItemSchema.h"
-#include "../../SDK/WeaponId.h"
+enum class WeaponId : short;
+enum class EconRarity : std::uint8_t;
 
 namespace game_items
 {
@@ -39,7 +39,6 @@ public:
         Gloves,
         Skin,
         Patch,
-
         Sticker,
         Music,
         Graffiti,
