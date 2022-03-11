@@ -6,8 +6,7 @@
 #include <vector>
 
 #include "Item.h"
-
-#include "../StaticData.h"
+#include "Structs.h"
 
 namespace game_items
 {
