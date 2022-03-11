@@ -7,6 +7,8 @@
 
 namespace game_items
 {
+namespace
+{
 
 class RarityTest : public testing::TestWithParam<EconRarity> {};
 
@@ -146,4 +148,5 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, TypeTest,
     )
 );
 
+}
 }
