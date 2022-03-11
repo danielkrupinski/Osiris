@@ -227,6 +227,7 @@
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
     <ClInclude Include="InventoryChanger\GameItems\Storage.h" />
+    <ClInclude Include="InventoryChanger\GameItems\Structs.h" />
     <ClInclude Include="InventoryChanger\Inventory.h" />
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
     <ClInclude Include="InventoryChanger\InventoryConfig.h" />

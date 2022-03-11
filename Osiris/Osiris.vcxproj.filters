@@ -652,6 +652,9 @@
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h">
       <Filter>InventoryChanger\GameItems</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\GameItems\Structs.h">
+      <Filter>InventoryChanger\GameItems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
