@@ -148,5 +148,17 @@ TEST_P(GameItemsStorageItemRarityTest, AddedItemHasCorrectRarity) {
 INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageItemRarityTest,
     testing::Combine(typesToTest, testing::Values(EconRarity::Default, EconRarity::Blue, EconRarity::Gold)));
 
+class GameItemsStorageItemImagePathTest : public testing::TestWithParam<std::tuple<Item::Type, std::string_view>> {};
+
+TEST_P(GameItemsStorageItemImagePathTest, AddedItemHasCorrectImagePath) {
+    Storage storage;
+    const auto [type, imagePath] = GetParam();
+    const auto& item = addToStorage(storage, type, EconRarity::Default, WeaponId::None, 0, imagePath);
+    ASSERT_EQ(item.getIconPath(), imagePath);
+}
+
+INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageItemImagePathTest,
+    testing::Combine(typesToTest, testing::Values(std::string_view{}, "image.png")));
+
 }
 }
