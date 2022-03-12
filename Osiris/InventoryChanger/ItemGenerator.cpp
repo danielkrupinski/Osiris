@@ -141,6 +141,11 @@ constexpr auto operationRiptideKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Daggers, 579 }, // Bright Water
 });
 
+struct CrateRareSpecialItems {
+    WeaponId crateWeaponID;
+    std::span<const RareSpecialItem> items;
+};
+
 [[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
