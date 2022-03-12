@@ -151,6 +151,13 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives }
 });
 
+[[nodiscard]] constexpr std::span<const RareSpecialItem> getRareSpecialItems(WeaponId crateWeaponID)
+{
+    if (const auto it = std::ranges::find(crateRareSpecialItems, crateWeaponID, &CrateRareSpecialItems::crateWeaponID); it != crateRareSpecialItems.end())
+        return it->items;
+    return {};
+}
+
 [[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
