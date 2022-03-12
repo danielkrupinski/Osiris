@@ -79,9 +79,9 @@ constexpr auto dropRates = std::to_array<DropRate>({
     { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue, EconRarity::Purple, EconRarity::Pink, EconRarity::Red }, { 0.80f, 0.16f, 0.032f, 0.0064f, 0.0012f, 0.0004f } }, // Souvenir package: Cobblestone, Ancient, Vertigo 2021, Mirage 2021, Dust 2 2021
 });
 
-[[nodiscard]] static EconRarity getRandomRarity(const StaticData::Case& container)
+[[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
-    if (const auto rate = std::ranges::find(dropRates, container.rarities, &DropRate::rarities); rate != dropRates.end()) {
+    if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
         const auto rolledNumber = Helpers::random((std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)());
         return rate->mapToRarity(rolledNumber);
     }
@@ -91,7 +91,7 @@ constexpr auto dropRates = std::to_array<DropRate>({
 [[nodiscard]] static std::span<const std::reference_wrapper<const game_items::Item>> getLoot(const StaticData::Case& container)
 {
     if (container.rarities.count() > 1) {
-        if (const auto rarity = getRandomRarity(container); rarity != EconRarity::Default)
+        if (const auto rarity = getRandomRarity(container.rarities); rarity != EconRarity::Default)
             return StaticData::getCrateLootOfRarity(container, rarity);
     }
     return StaticData::getCrateLoot(container);
