@@ -84,7 +84,62 @@ struct RareSpecialItem {
     int paintKit;
 };
 
+constexpr auto operationRiptideKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bowie, 1104 }, // Lore
+    { WeaponId::Bowie, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Bowie, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Bowie, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Bowie, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Bowie, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Bowie, 1114 }, // Autotronic
+    { WeaponId::Bowie, 1109 }, // Black Laminate
+    { WeaponId::Bowie, 581 }, // Freehand
+    { WeaponId::Bowie, 579 }, // Bright Water
 
+    { WeaponId::Butterfly, 1115 }, // Autotronic
+    { WeaponId::Butterfly, 579 }, // Bright Water
+    { WeaponId::Butterfly, 1105 }, // Lore
+    { WeaponId::Butterfly, 1110 }, // Black Laminate
+    { WeaponId::Butterfly, 581 }, // Freehand
+    { WeaponId::Butterfly, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Butterfly, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Butterfly, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Butterfly, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Butterfly, 572 }, // Gamma Doppler Phase 4
+
+    { WeaponId::Falchion, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Falchion, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Falchion, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Falchion, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Falchion, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Falchion, 1106 }, // Lore
+    { WeaponId::Falchion, 1116 }, // Autotronic
+    { WeaponId::Falchion, 1111 }, // Black Laminate
+    { WeaponId::Falchion, 579 }, // Bright Water
+    { WeaponId::Falchion, 581 }, // Freehand
+
+    { WeaponId::Huntsman, 1107 }, // Lore
+    { WeaponId::Huntsman, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Huntsman, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Huntsman, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Huntsman, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Huntsman, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Huntsman, 1112 }, // Black Laminate
+    { WeaponId::Huntsman, 1117 }, // Autotronic
+    { WeaponId::Huntsman, 581 }, // Freehand
+    { WeaponId::Huntsman, 579 }, // Bright Water
+
+    { WeaponId::Daggers, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Daggers, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Daggers, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Daggers, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Daggers, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Daggers, 1108 }, // Lore
+    { WeaponId::Daggers, 1118 }, // Autotronic
+    { WeaponId::Daggers, 1113 }, // Black Laminate
+    { WeaponId::Daggers, 581 }, // Freehand
+    { WeaponId::Daggers, 579 }, // Bright Water
+});
 
 [[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
