@@ -168,19 +168,28 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-[[nodiscard]] static std::span<const std::reference_wrapper<const game_items::Item>> getLoot(const StaticData::Case& container)
-{
-    if (container.rarities.count() > 1) {
-        if (const auto rarity = getRandomRarity(container.rarities); rarity != EconRarity::Default)
-            return StaticData::getCrateLootOfRarity(container, rarity);
-    }
-    return StaticData::getCrateLoot(container);
-}
-
-[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const StaticData::Case& container) noexcept
+[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const StaticData::Case& container) noexcept
 {
     assert(container.hasLoot());
-    std::span<const std::reference_wrapper<const game_items::Item>> loot = getLoot(container);
+
+    const auto rareSpecialItems = getRareSpecialItems(weaponID);
+    auto rarities = container.rarities;
+
+    if (!rareSpecialItems.empty())
+        rarities.set(EconRarity::Gold);
+
+    if (const auto rarity = getRandomRarity(rarities); rarity != EconRarity::Default) {
+        if (rarity == EconRarity::Gold) {
+            const auto& randomRareSpecialItem = rareSpecialItems[Helpers::random<std::size_t>(0u, rareSpecialItems.size() - 1u)];
+            if (const auto item = StaticData::lookup().findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
+                return *item;
+        } else {
+            const auto loot = StaticData::getCrateLootOfRarity(container, rarity);
+            return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
+        }
+    }
+
+    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::getCrateLoot(container);
     assert(!loot.empty());
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
@@ -192,7 +201,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
     const auto& caseData = StaticData::getCase(caseItem.get());
     assert(caseData.hasLoot());
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(caseData);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.get().getWeaponID(), caseData);
     std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
     if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
