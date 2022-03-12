@@ -146,6 +146,11 @@ struct CrateRareSpecialItems {
     std::span<const RareSpecialItem> items;
 };
 
+constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
+    { WeaponId::OperationRiptideCase, operationRiptideKnives },
+    { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives }
+});
+
 [[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
