@@ -8,6 +8,8 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
+#include "GameItems/Lookup.h"
+
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
@@ -83,24 +85,24 @@ private:
 
     void _activateOperationPass(InventoryItem& pass) const noexcept
     {
-        const auto passWeaponID = pass.get().weaponID;
+        const auto passWeaponID = pass.get().getWeaponID();
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
-        if (const auto item = StaticData::getItem(coinID); item.has_value())
+        if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
             Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, true);
     }
 
     void _activateViewerPass(InventoryItem& pass) const noexcept
     {
-        const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().weaponID) + 1);
+        const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().getWeaponID()) + 1);
         pass.markToDelete();
-        if (const auto item = StaticData::getItem(coinID); item.has_value())
+        if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
             initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
     }
 
     void _unsealGraffiti(InventoryItem& sealedGraffiti) const noexcept
     {
-        if (const auto item = StaticData::getGraffiti(StaticData::getSealedGraffitiID(sealedGraffiti.get())); item.has_value()) {
+        if (const auto item = StaticData::lookup().findGraffiti(StaticData::lookup().getStorage().getGraffitiKit(sealedGraffiti.get()).id); item.has_value()) {
             sealedGraffiti.markToDelete();
             initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
         }
@@ -127,7 +129,7 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::getStickerID(sticker.get());
+        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::lookup().getStorage().getStickerKit(sticker.get()).id;
         Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
         sticker.markToDelete();
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
@@ -152,7 +154,7 @@ private:
         if (!dest || !dest->isAgent())
             return;
 
-        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::getPatchID(patch.get());
+        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatchKit(patch.get()).id;
         patch.markToDelete();
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
@@ -184,7 +186,7 @@ private:
         assert(souvenirToken.isSouvenirToken());
 
         const auto& inventory = Inventory::get();
-        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::getTournamentEventID(inventoryItem.get()) == StaticData::getTournamentEventID(souvenirToken.get()); });
+        const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::lookup().getStorage(). getTournamentEventID(inventoryItem.get()) == StaticData::lookup().getStorage().getTournamentEventID(souvenirToken.get()); });
         if (it != inventory.cend()) {
             souvenirToken.markToDelete();
 

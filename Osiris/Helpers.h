@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <cwctype>
 #include <mutex>
 #include <numbers>
 #include <random>
@@ -49,8 +50,7 @@ namespace Helpers
     }
 
     std::wstring toWideString(const std::string& str) noexcept;
-    std::wstring toUpper(std::wstring str) noexcept;
-
+ 
     bool decodeVFONT(std::vector<char>& buffer) noexcept;
     std::vector<char> loadBinaryFile(const std::string& path) noexcept;
 
@@ -114,4 +114,37 @@ namespace Helpers
     {
         return RandomGenerator::random(min, max);
     }
+
+    class ToUpperConverter {
+    public:
+        std::wstring_view toUpper(std::wstring_view string)
+        {
+            assert(string.length() < buffer.size());
+            std::size_t length = 0;
+            for (auto c : string)
+                buffer[length++] = toUpper(c);
+            buffer[length] = '\0';
+            return { buffer.data(), length };
+        }
+
+    private:
+        wchar_t toUpper(wchar_t c)
+        {
+            if (c >= 'a' && c <= 'z') {
+                return c - ('a' - 'A');
+            } else if (c > 127) {
+                if (const auto it = cache.find(c); it != cache.end()) {
+                    return it->second;
+                } else {
+                    const auto upper = std::towupper(c);
+                    cache.emplace(c, upper);
+                    return upper;
+                }
+            }
+            return c;
+        }
+
+        std::unordered_map<wchar_t, wchar_t> cache;
+        std::array<wchar_t, 4096> buffer;
+    };
 }

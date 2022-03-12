@@ -1,6 +1,8 @@
 #pragma once
 
+#include <bit>
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <optional>
@@ -8,11 +10,17 @@
 #include <string>
 #include <string_view>
 #include <vector>
-
+#include "../SDK/ItemSchema.h"
 #include "../SDK/WeaponId.h"
 
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
+
+namespace game_items
+{
+    struct Item;
+    class Lookup;
+}
 
 namespace StaticData
 {
@@ -26,200 +34,6 @@ namespace StaticData
 
     constexpr auto InvalidItemIdx2 = ItemIndex2{};
 
-    struct GameItem {
-    public:
-        [[nodiscard]] static constexpr GameItem sticker(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Sticker, rarity, WeaponId::Sticker, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem skin(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Skin, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem gloves(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Gloves, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem musicKit(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Music, rarity, WeaponId::MusicKit, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem collectible(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Collectible, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem nameTag(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::NameTag, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem patch(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Patch, rarity, WeaponId::Patch, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem graffiti(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Graffiti, rarity, WeaponId::Graffiti, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem sealedGraffiti(EconRarity rarity, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem agent(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Agent, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem case_(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::Case, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem caseKey(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::CaseKey, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem operationPass(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::OperationPass, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem statTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::StatTrakSwapTool, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem viewerPass(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::ViewerPass, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem serviceMedal(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::ServiceMedal, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem souvenirToken(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::SouvenirToken, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        [[nodiscard]] static constexpr GameItem tournamentCoin(EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-        {
-            return GameItem{ Type::TournamentCoin, rarity, weaponID, dataIndex, iconPath };
-        }
-
-        constexpr bool isSticker() const noexcept { return type == Type::Sticker; }
-        constexpr bool isSkin() const noexcept { return type == Type::Skin; }
-        constexpr bool isGloves() const noexcept { return type == Type::Gloves; }
-        constexpr bool isMusic() const noexcept { return type == Type::Music; }
-        constexpr bool isCollectible() const noexcept { return type == Type::Collectible; }
-        constexpr bool isNameTag() const noexcept { return type == Type::NameTag; }
-        constexpr bool isPatch() const noexcept { return type == Type::Patch; }
-        constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
-        constexpr bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
-        constexpr bool isAgent() const noexcept { return type == Type::Agent; }
-        constexpr bool isCase() const noexcept { return type == Type::Case; }
-        constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
-        constexpr bool isOperationPass() const noexcept { return type == Type::OperationPass; }
-        constexpr bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
-        constexpr bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
-        constexpr bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
-        constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
-        constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
-
-    private:
-        enum class Type : std::uint8_t {
-            Gloves,
-            Skin,
-            Patch,
-
-            Sticker,
-            Music,
-            Graffiti,
-            SealedGraffiti,
-            Collectible,
-            NameTag,
-            Agent,
-            Case,
-            CaseKey,
-            OperationPass,
-            StatTrakSwapTool,
-            ViewerPass,
-            ServiceMedal,
-            SouvenirToken,
-            TournamentCoin
-        };
-
-        constexpr GameItem(Type type, EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept
-            : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ iconPath } {}
-
-        Type type;
-    public:
-        EconRarity rarity;
-        WeaponId weaponID;
-        std::size_t dataIndex;
-
-        std::string_view iconPath;
-    };
-
-    struct ItemName {
-        std::string_view forDisplay;
-        std::wstring_view forSearch;
-    };
-
-    struct MusicKit {
-        MusicKit(int id, ItemName name) : id{ id }, name{ name } {}
-
-        int id;
-        ItemName name;
-    };
-
-    struct GraffitiKit {
-        GraffitiKit(int id, ItemName name) : id{ id }, name{ name } {}
-
-        int id;
-        ItemName name;
-    };
-
-    struct PatchKit {
-        PatchKit(int id, ItemName name) : id{ id }, name{ name } {}
-
-        int id;
-        ItemName name;
-    };
-
-    struct StickerKit {
-        StickerKit(int id, ItemName name, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
-            : id{ id }, name{ name }, tournamentID{ tournamentID }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
-
-        int id;
-        ItemName name;
-        std::uint32_t tournamentID = 0;
-        TournamentTeam tournamentTeam{};
-        bool isGoldenSticker = false;
-        int tournamentPlayerID = 0;
-    };
-
-    struct PaintKit {
-        PaintKit(int id, ItemName name) noexcept;
-        PaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax) noexcept;
-
-        int id;
-        float wearRemapMin = 0.0f;
-        float wearRemapMax = 1.0f;
-        ItemName name;
-    };
-    
     enum class TournamentMap : std::uint8_t {
         None = 0,
         Ancient,
@@ -234,52 +48,71 @@ namespace StaticData
         Vertigo
     };
 
+    class EconRarities {
+    public:
+        EconRarities() = default;
+
+        template <typename... Args>
+        constexpr EconRarities(Args... args) noexcept
+        {
+            (set(args), ...);
+        }
+
+        constexpr void set(EconRarity rarity) noexcept
+        {
+            if (const auto rarityBit = static_cast<std::uint8_t>(rarity); rarityBit < std::numeric_limits<std::uint8_t>::digits)
+                bits |= (std::byte{ 1 } << rarityBit);
+        }
+
+        [[nodiscard]] constexpr EconRarity getNthRarity(std::uint8_t n) const noexcept
+        {
+            for (std::uint8_t i = 0; i < std::numeric_limits<std::uint8_t>::digits; ++i) {
+                if (std::to_integer<std::uint8_t>(bits & (std::byte{ 1 } << i)) != 0) {
+                    if (n == 0)
+                        return static_cast<EconRarity>(i);
+                    --n;
+                }
+            }
+            return EconRarity::Default;
+        }
+
+        [[nodiscard]] constexpr std::size_t count() const noexcept
+        {
+            return static_cast<std::size_t>(std::popcount(std::to_integer<std::uint8_t>(bits)));
+        }
+
+        [[nodiscard]] constexpr bool operator==(const EconRarities&) const = default;
+
+    private:
+        std::byte bits{ 0 };
+    };
+
     struct Case {
         bool willProduceStatTrak = false;
+        EconRarities rarities{};
         TournamentMap tournamentMap = TournamentMap::None;
         std::uint32_t souvenirPackageTournamentID = 0;
         std::size_t lootBeginIdx;
         std::size_t lootEndIdx;
 
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
-        bool isSouvenirPackage() const noexcept { return souvenirPackageTournamentID != 0; }
     };
 
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;
-    const std::vector<std::reference_wrapper<const GameItem>>& caseLoot() noexcept;
+    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
+    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLootOfRarity(const Case& crate, EconRarity rarity) noexcept;
     [[nodiscard]] std::vector<ItemIndex2> getItemIndices() noexcept;
-    
-    [[nodiscard]] int getStickerID(const GameItem& item) noexcept;
-    [[nodiscard]] int getMusicID(const GameItem& item) noexcept;
-    [[nodiscard]] int getPatchID(const GameItem& item) noexcept;
-    [[nodiscard]] int getSkinPaintID(const GameItem& item) noexcept;
-    [[nodiscard]] int getGraffitiID(const GameItem& item) noexcept;
-    [[nodiscard]] int getSealedGraffitiID(const GameItem& item) noexcept;
-    
-    [[nodiscard]] std::string_view getPaintName(const GameItem& item) noexcept;
-    [[nodiscard]] std::wstring_view getPaintNameUpper(const GameItem& item) noexcept;
-    [[nodiscard]] const PaintKit& getPaintKit(const GameItem& item) noexcept;
-    [[nodiscard]] const Case& getCase(const GameItem& item) noexcept;
-    [[nodiscard]] const GameItem& getGameItem(ItemIndex2 itemIndex) noexcept;
+
+    [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
+    [[nodiscard]] bool isSouvenirPackage(const game_items::Item& crate) noexcept;
+    [[nodiscard]] const game_items::Item& getGameItem(ItemIndex2 itemIndex) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItem(WeaponId weaponID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getItemWithPaintkit(WeaponId weaponID, int paintKit) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSealedGraffiti(int graffitiID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getMusic(int musicID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getSticker(int stickerID) noexcept;
-    [[nodiscard]] std::optional<std::reference_wrapper<const GameItem>> getPatch(int patchID) noexcept;
+    [[nodiscard]] const game_items::Lookup& lookup() noexcept;
 
-    int findSouvenirTournamentSticker(std::uint32_t tournamentID) noexcept;
-    int getTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) noexcept;
-    int getTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) noexcept;
     int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
-    bool isCollectibleGenuine(const GameItem& collectible) noexcept;
-    std::uint16_t getServiceMedalYear(const GameItem& serviceMedal) noexcept;
-    [[nodiscard]] std::uint32_t getTournamentEventID(const GameItem& item) noexcept;
 
     constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {

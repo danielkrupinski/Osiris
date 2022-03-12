@@ -49,6 +49,8 @@
 #include "StaticData.h"
 #include "ToolUser.h"
 
+#include "GameItems/Lookup.h"
+
 static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
 {
     for (const auto item : order) {
@@ -114,10 +116,10 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     bool dataUpdated = false;
-    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().weaponID) {
-        definitionIndex = item->get().weaponID;
+    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().getWeaponID()) {
+        definitionIndex = item->get().getWeaponID();
 
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID))
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID()))
             glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
@@ -179,10 +181,10 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
-        if (definitionIndex != item->get().weaponID) {
-            definitionIndex = item->get().weaponID;
+        if (definitionIndex != item->get().getWeaponID()) {
+            definitionIndex = item->get().getWeaponID();
 
-            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID)) {
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID())) {
                 weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
@@ -318,7 +320,7 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isMusic())
         return;
 
-    pr->musicID()[localPlayer->index()] = StaticData::getMusicID(item->get());
+    pr->musicID()[localPlayer->index()] = StaticData::lookup().getStorage().getMusicKit(item->get()).id;
 }
 
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
@@ -338,7 +340,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isAgent())
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().weaponID);
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID());
     if (!def)
         return;
 
@@ -380,7 +382,7 @@ static void applyMedal(CSPlayerInventory& localInventory) noexcept
     if (!item || !item->isCollectible())
         return;
 
-    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().weaponID);
+    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().getWeaponID());
 }
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -540,9 +542,28 @@ void InventoryChanger::tabItem() noexcept
 
 static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
+[[nodiscard]] const game_items::ItemName& getItemName(const game_items::Item& item)
+{
+    const auto& storage = StaticData::lookup().getStorage();
+
+    if (item.isSkin() || item.isGloves())
+        return storage.getPaintKit(item).name;
+    if (item.isMusic())
+        return storage.getMusicKit(item).name;
+    if (item.isSticker())
+        return storage.getStickerKit(item).name;
+    if (item.isGraffiti() || item.isSealedGraffiti())
+        return storage.getGraffitiKit(item).name;
+    if (item.isPatch())
+        return storage.getPatchKit(item).name;
+
+    static constexpr game_items::ItemName fallback{ "", L"" };
+    return fallback;
+}
+
 namespace ImGui
 {
-    static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
+    static bool SkinSelectable(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -551,10 +572,10 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = StaticData::getPaintName(item).data();
+        const auto paintKitName = getItemName(item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -621,7 +642,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.iconPath)) {
+        if (const auto icon = getItemIconTexture(item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -658,7 +679,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -667,10 +688,10 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.weaponID).data();
+        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = StaticData::getPaintName(item).data();
+        const auto paintKitName = getItemName(item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -722,7 +743,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.iconPath)) {
+        if (const auto icon = getItemIconTexture(item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -839,26 +860,26 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 std::ranges::sort(itemIndices, [](const auto aIndex, const auto bIndex) {
                     const auto& a = StaticData::getGameItem(aIndex);
                     const auto& b = StaticData::getGameItem(bIndex);
-                    if (a.weaponID == b.weaponID)
-                        return StaticData::getPaintNameUpper(a) < StaticData::getPaintNameUpper(b);
-                    const auto comp = StaticData::getWeaponNameUpper(a.weaponID).compare(StaticData::getWeaponNameUpper(b.weaponID));
+                    if (a.getWeaponID() == b.getWeaponID())
+                        return getItemName(a).forSearch < getItemName(b).forSearch;
+                    const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
                     if (comp == 0)
-                        return a.weaponID < b.weaponID;
+                        return a.getWeaponID() < b.getWeaponID();
                     return comp < 0;
                 });
                 sorted = true;
             }
 
-            const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
+            const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
                 const auto& gameItem = StaticData::getGameItem(itemIndices[i]);
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.weaponID)), filterWide) && (!passesFilter(std::wstring(StaticData::getPaintNameUpper(gameItem)), filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(gameItem).forSearch), filterWide)))
                     continue;
                 ImGui::PushID(i);
 
                 const auto selected = selectedToAdd.contains(itemIndices[i]);
 
-                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.rarity), selected, toAddCount)) {
+                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), selected, toAddCount)) {
                     if (selected) {
                         selectedToAdd.erase(itemIndices[i]);
                         std::erase(toAddOrder, itemIndices[i]);
@@ -880,7 +901,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete);
+                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().getRarity()), shouldDelete);
                 if (shouldDelete)
                     inventory[i].markToDelete();
                 ImGui::PopID();
@@ -916,7 +937,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
         }
     } else if (item->isSkin()) {
         const auto view = localInventory->getItemInLoadout(team, slot);
-        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().weaponID));
+        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().getWeaponID()));
         if (view) {
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
