@@ -79,6 +79,13 @@ constexpr auto dropRates = std::to_array<DropRate>({
     { { EconRarity::Gray, EconRarity::LightBlue, EconRarity::Blue, EconRarity::Purple, EconRarity::Pink, EconRarity::Red }, { 0.80f, 0.16f, 0.032f, 0.0064f, 0.0012f, 0.0004f } }, // Souvenir package: Cobblestone, Ancient, Vertigo 2021, Mirage 2021, Dust 2 2021
 });
 
+struct RareSpecialItem {
+    WeaponId weaponID;
+    int paintKit;
+};
+
+
+
 [[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
