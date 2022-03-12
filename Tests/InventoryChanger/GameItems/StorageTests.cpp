@@ -1,3 +1,5 @@
+#include <string_view>
+
 #include <gtest/gtest.h>
 
 #include "../../../Osiris/InventoryChanger/GameItems/Storage.h"
@@ -133,6 +135,18 @@ const auto typesToTest = testing::Values(
 );
 
 INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageTest, typesToTest);
+
+class GameItemsStorageItemRarityTest : public testing::TestWithParam<std::tuple<Item::Type, EconRarity>> {};
+
+TEST_P(GameItemsStorageItemRarityTest, AddedItemHasCorrectRarity) {
+    Storage storage;
+    const auto [type, rarity] = GetParam();
+    const auto& item = addToStorage(storage, type, rarity, WeaponId::None, 0, {});
+    ASSERT_EQ(item.getRarity(), type == Item::Type::Music ? EconRarity::Blue : rarity);
+}
+
+INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageItemRarityTest,
+    testing::Combine(typesToTest, testing::Values(EconRarity::Default, EconRarity::Blue, EconRarity::Gold)));
 
 }
 }
