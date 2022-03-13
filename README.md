@@ -308,7 +308,7 @@ When injected, menu is openable under `INSERT` key.
 
 #### On Linux
 Take the injector.sh from the repository and copy it into the folder.
-After that change its permissions to be runnable using `sudo chmod +X injector.sh`
+After that change its permissions to be runnable using `sudo chmod +X inject.sh`
 and execute it. If everything was done right osiris should load into CSGO and you should be able to use the cheat how you would on windows.
 
 
