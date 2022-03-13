@@ -246,6 +246,11 @@ Free open-source cross-platform cheat software for **Counter-Strike: Global Offe
 ### Prerequisites
 Microsoft Visual Studio 2019 16.10 (or newer), platform toolset v142 and Windows SDK 10.0.x.x are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
+
+Linux pre requisites:
+Ubuntu: sudo apt-get update && sudo apt-get install -y libsdl2-dev gcc-10 g++-10
+Arch Linux: sudo pacman -S --needed lib32-sdl2 gcc cmake
+
 ### Downloading
 
 There are two options of downloading the source code:
@@ -268,17 +273,44 @@ Open git command prompt and enter following command:
 
 ### Compiling from source
 
+
+##### On Windows.
 When you have equipped a copy of the source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
 
 Then change build configuration to `Release | x86` and simply press **Build solution**.
 
 If everything went right you should receive `Osiris.dll`  binary file.
 
-### Loading / Injecting into game process
+##### On linux.
 
+cd into the directory where you have extracted the source code.
+Run these 2 commands.
+```
+cmake CMakeLists.txt
+make
+```
+Once these 2 commands have been ran, you should have recieved libOsiris.so, this is the Shared Object that we will be injecting
+
+Move this file anywhere on your computer, here we will be moving it to the desktop.
+Run these commands:
+
+`sudo mkdir ~/Desktop/Osiris`
+`sudo mv libOsiris.so  ~/Desktop/Osiris/libOsiris.so`
+
+You should now have a new folder with libOsiris.so on your desktop.
+
+
+### Loading / Injecting into game process
+#### On Windows
 Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
 
 When injected, menu is openable under `INSERT` key.
+
+#### On Linux
+Take the injector.sh from the repository and copy it into the folder.
+After that change its permissions to be runnable using `sudo chmod +X injector.sh`
+and execute it. If everything was done right osiris should load into CSGO and you should be able to use the cheat how you would on windows.
+
 
 ### Further optimizations
 If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
