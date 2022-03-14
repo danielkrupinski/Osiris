@@ -142,6 +142,38 @@ constexpr auto operationRiptideKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Daggers, 579 }, // Bright Water
 });
 
+constexpr auto operationBrokenFangGloves = std::to_array<RareSpecialItem>({
+    { WeaponId::GloveStuddedBrokenfang, 10085 }, // Jade
+    { WeaponId::GloveStuddedBrokenfang, 10088 }, // Unhinged
+    { WeaponId::GloveStuddedBrokenfang, 10087 }, // Needle Point
+    { WeaponId::GloveStuddedBrokenfang, 10086 }, // Yellow-banded
+
+    { WeaponId::GloveSlick, 10070 }, // Snow Leopard
+    { WeaponId::GloveSlick, 10072 }, // Black Tie
+    { WeaponId::GloveSlick, 10071 }, // Queen Jaguar
+    { WeaponId::GloveSlick, 10069 }, // Rezan the Red
+
+    { WeaponId::GloveLeatherWrap, 10084 }, // CAUTION!
+    { WeaponId::GloveLeatherWrap, 10083 }, // Constrictor
+    { WeaponId::GloveLeatherWrap, 10082 }, // Giraffe
+    { WeaponId::GloveLeatherWrap, 10081 }, // Desert Shamagh
+
+    { WeaponId::GloveMotorcycle, 10078 }, // Smoke Out
+    { WeaponId::GloveMotorcycle, 10080 }, // 3rd Commando Company
+    { WeaponId::GloveMotorcycle, 10077 }, // Finish Line
+    { WeaponId::GloveMotorcycle, 10079 }, // Blood Pressure
+
+    { WeaponId::GloveSpecialist, 10065 }, // Marble Fade
+    { WeaponId::GloveSpecialist, 10068 }, // Field Agent
+    { WeaponId::GloveSpecialist, 10067 }, // Tiger Strike
+    { WeaponId::GloveSpecialist, 10066 }, // Lt. Commander
+
+    { WeaponId::GloveSporty, 10073 }, // Slingshot
+    { WeaponId::GloveSporty, 10074 }, // Big Game
+    { WeaponId::GloveSporty, 10076 }, // Nocts
+    { WeaponId::GloveSporty, 10075 }, // Scarlet Shamagh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
