@@ -89,6 +89,8 @@ enum class WeaponId : short {
     Patch = 4609,
     Berlin2019SouvenirToken = 4628,
     GloveStuddedBrokenfang = 4725,
+    OperationBrokenFangCase = 4717,
+    SnakebiteCase = 4747,
     OperationRiptideCase = 4790,
     Stockholm2021SouvenirToken = 4802,
     DreamsAndNightmaresCase = 4818,
