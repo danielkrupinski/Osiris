@@ -292,7 +292,9 @@ struct CrateRareSpecialItems {
 };
 
 constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
+    { WeaponId::PrismaCase, prismaKnives },
     { WeaponId::ShatteredWebCase, shatteredWebKnives },
+    { WeaponId::Prisma2Case, prismaKnives },
     { WeaponId::FractureCase, shatteredWebKnives },
     { WeaponId::OperationBrokenFangCase, operationBrokenFangGloves },
     { WeaponId::SnakebiteCase, operationBrokenFangGloves },
