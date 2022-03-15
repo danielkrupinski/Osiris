@@ -174,6 +174,64 @@ constexpr auto operationBrokenFangGloves = std::to_array<RareSpecialItem>({
     { WeaponId::GloveSporty, 10075 }, // Scarlet Shamagh
 });
 
+constexpr auto shatteredWebKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::NomadKnife, 38 }, // Fade
+    { WeaponId::NomadKnife, 59 }, // Slaughter
+    { WeaponId::NomadKnife, 12 }, // Crimson Web
+    { WeaponId::NomadKnife, 44 }, // Case Hardened
+    { WeaponId::NomadKnife, 0 }, // (Vanilla)
+    { WeaponId::NomadKnife, 42 }, // Blue Steel
+    { WeaponId::NomadKnife, 143 }, // Urban Masked
+    { WeaponId::NomadKnife, 43 }, // Stained
+    { WeaponId::NomadKnife, 735 }, // Night Stripe
+    { WeaponId::NomadKnife, 5 }, // Forest DDPAT
+    { WeaponId::NomadKnife, 77 }, // Boreal Forest
+    { WeaponId::NomadKnife, 175 }, // Scorched
+    { WeaponId::NomadKnife, 72 }, // Safari Mesh
+
+    { WeaponId::Paracord, 38 }, // Fade
+    { WeaponId::Paracord, 59 }, // Slaughter
+    { WeaponId::Paracord, 12 }, // Crimson Web
+    { WeaponId::Paracord, 44 }, // Case Hardened
+    { WeaponId::Paracord, 0 }, // (Vanilla)
+    { WeaponId::Paracord, 42 }, // Blue Steel
+    { WeaponId::Paracord, 143 }, // Urban Masked
+    { WeaponId::Paracord, 43 }, // Stained
+    { WeaponId::Paracord, 735 }, // Night Stripe
+    { WeaponId::Paracord, 5 }, // Forest DDPAT
+    { WeaponId::Paracord, 77 }, // Boreal Forest
+    { WeaponId::Paracord, 175 }, // Scorched
+    { WeaponId::Paracord, 72 }, // Safari Mesh
+
+    { WeaponId::SkeletonKnife, 38 }, // Fade
+    { WeaponId::SkeletonKnife, 59 }, // Slaughter
+    { WeaponId::SkeletonKnife, 12 }, // Crimson Web
+    { WeaponId::SkeletonKnife, 44 }, // Case Hardened
+    { WeaponId::SkeletonKnife, 0 }, // (Vanilla)
+    { WeaponId::SkeletonKnife, 42 }, // Blue Steel
+    { WeaponId::SkeletonKnife, 143 }, // Urban Masked
+    { WeaponId::SkeletonKnife, 43 }, // Stained
+    { WeaponId::SkeletonKnife, 735 }, // Night Stripe
+    { WeaponId::SkeletonKnife, 5 }, // Forest DDPAT
+    { WeaponId::SkeletonKnife, 77 }, // Boreal Forest
+    { WeaponId::SkeletonKnife, 175 }, // Scorched
+    { WeaponId::SkeletonKnife, 72 }, // Safari Mesh
+
+    { WeaponId::SurvivalKnife, 38 }, // Fade
+    { WeaponId::SurvivalKnife, 59 }, // Slaughter
+    { WeaponId::SurvivalKnife, 12 }, // Crimson Web
+    { WeaponId::SurvivalKnife, 44 }, // Case Hardened
+    { WeaponId::SurvivalKnife, 0 }, // (Vanilla)
+    { WeaponId::SurvivalKnife, 42 }, // Blue Steel
+    { WeaponId::SurvivalKnife, 143 }, // Urban Masked
+    { WeaponId::SurvivalKnife, 43 }, // Stained
+    { WeaponId::SurvivalKnife, 735 }, // Night Stripe
+    { WeaponId::SurvivalKnife, 5 }, // Forest DDPAT
+    { WeaponId::SurvivalKnife, 77 }, // Boreal Forest
+    { WeaponId::SurvivalKnife, 175 }, // Scorched
+    { WeaponId::SurvivalKnife, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
