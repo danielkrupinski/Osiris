@@ -286,6 +286,22 @@ constexpr auto prismaKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Ursus, 414 }, // Rust Coat
 });
 
+constexpr auto cs20Knives = std::to_array<RareSpecialItem>({
+    { WeaponId::ClassicKnife, 38 }, // Fade
+    { WeaponId::ClassicKnife, 12 }, // Crimson Web
+    { WeaponId::ClassicKnife, 0 }, // (Vanilla)
+    { WeaponId::ClassicKnife, 44 }, // Case Hardened
+    { WeaponId::ClassicKnife, 59 }, // Slaughter
+    { WeaponId::ClassicKnife, 175 }, // Scorched
+    { WeaponId::ClassicKnife, 735 }, // Night Stripe
+    { WeaponId::ClassicKnife, 42 }, // Blue Steel
+    { WeaponId::ClassicKnife, 77 }, // Boreal Forest
+    { WeaponId::ClassicKnife, 43 }, // Stained
+    { WeaponId::ClassicKnife, 143 }, // Urban Masked
+    { WeaponId::ClassicKnife, 72 }, // Safari Mesh
+    { WeaponId::ClassicKnife, 5 }, // Forest DDPAT
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
