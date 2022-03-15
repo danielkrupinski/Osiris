@@ -436,6 +436,8 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     { WeaponId::ChromaCase, chromaKnives },
     { WeaponId::Chroma2Case, chromaKnives },
     { WeaponId::Chroma3Case, chromaKnives },
+    { WeaponId::HorizonCase, horizonKnives },
+    { WeaponId::DangerZoneCase, horizonKnives },
     { WeaponId::PrismaCase, prismaKnives },
     { WeaponId::CS20Case, cs20Knives },
     { WeaponId::ShatteredWebCase, shatteredWebKnives },
