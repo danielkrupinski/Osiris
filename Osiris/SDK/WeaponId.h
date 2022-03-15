@@ -90,6 +90,7 @@ enum class WeaponId : short {
     Patch = 4609,
     ShatteredWebCase = 4620,
     Berlin2019SouvenirToken = 4628,
+    CS20Case = 4669,
     Prisma2Case = 4695,
     FractureCase = 4698,
     GloveStuddedBrokenfang = 4725,
