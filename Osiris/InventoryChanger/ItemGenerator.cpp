@@ -369,6 +369,64 @@ constexpr auto chromaKnives = std::to_array<RareSpecialItem>({
     { WeaponId::M9Bayonet, 414 }, // Rust Coat
 });
 
+constexpr auto horizonKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Navaja, 38 }, // Fade
+    { WeaponId::Navaja, 143 }, // Urban Masked
+    { WeaponId::Navaja, 72 }, // Safari Mesh
+    { WeaponId::Navaja, 12 }, // Crimson Web
+    { WeaponId::Navaja, 735 }, // Night Stripe
+    { WeaponId::Navaja, 44 }, // Case Hardened
+    { WeaponId::Navaja, 59 }, // Slaughter
+    { WeaponId::Navaja, 42 }, // Blue Steel
+    { WeaponId::Navaja, 5 }, // Forest DDPAT
+    { WeaponId::Navaja, 43 }, // Stained
+    { WeaponId::Navaja, 175 }, // Scorched
+    { WeaponId::Navaja, 77 }, // Boreal Forest
+    { WeaponId::Navaja, 0 }, // (Vanilla)
+
+    { WeaponId::Stiletto, 38 }, // Fade
+    { WeaponId::Stiletto, 143 }, // Urban Masked
+    { WeaponId::Stiletto, 72 }, // Safari Mesh
+    { WeaponId::Stiletto, 12 }, // Crimson Web
+    { WeaponId::Stiletto, 735 }, // Night Stripe
+    { WeaponId::Stiletto, 44 }, // Case Hardened
+    { WeaponId::Stiletto, 59 }, // Slaughter
+    { WeaponId::Stiletto, 42 }, // Blue Steel
+    { WeaponId::Stiletto, 5 }, // Forest DDPAT
+    { WeaponId::Stiletto, 43 }, // Stained
+    { WeaponId::Stiletto, 175 }, // Scorched
+    { WeaponId::Stiletto, 77 }, // Boreal Forest
+    { WeaponId::Stiletto, 0 }, // (Vanilla)
+
+    { WeaponId::Talon, 38 }, // Fade
+    { WeaponId::Talon, 143 }, // Urban Masked
+    { WeaponId::Talon, 72 }, // Safari Mesh
+    { WeaponId::Talon, 12 }, // Crimson Web
+    { WeaponId::Talon, 735 }, // Night Stripe
+    { WeaponId::Talon, 44 }, // Case Hardened
+    { WeaponId::Talon, 59 }, // Slaughter
+    { WeaponId::Talon, 42 }, // Blue Steel
+    { WeaponId::Talon, 5 }, // Forest DDPAT
+    { WeaponId::Talon, 43 }, // Stained
+    { WeaponId::Talon, 175 }, // Scorched
+    { WeaponId::Talon, 77 }, // Boreal Forest
+    { WeaponId::Talon, 0 }, // (Vanilla)
+
+    { WeaponId::Ursus, 38 }, // Fade
+    { WeaponId::Ursus, 143 }, // Urban Masked
+    { WeaponId::Ursus, 72 }, // Safari Mesh
+    { WeaponId::Ursus, 12 }, // Crimson Web
+    { WeaponId::Ursus, 735 }, // Night Stripe
+    { WeaponId::Ursus, 44 }, // Case Hardened
+    { WeaponId::Ursus, 59 }, // Slaughter
+    { WeaponId::Ursus, 42 }, // Blue Steel
+    { WeaponId::Ursus, 5 }, // Forest DDPAT
+    { WeaponId::Ursus, 43 }, // Stained
+    { WeaponId::Ursus, 175 }, // Scorched
+    { WeaponId::Ursus, 77 }, // Boreal Forest
+    { WeaponId::Ursus, 0 }, // (Vanilla)
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
