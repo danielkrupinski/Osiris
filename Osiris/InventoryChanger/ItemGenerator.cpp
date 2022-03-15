@@ -232,6 +232,60 @@ constexpr auto shatteredWebKnives = std::to_array<RareSpecialItem>({
     { WeaponId::SurvivalKnife, 72 }, // Safari Mesh
 });
 
+constexpr auto prismaKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Navaja, 415 }, // Doppler Ruby
+    { WeaponId::Navaja, 416 }, // Doppler Sapphire
+    { WeaponId::Navaja, 417 }, // Doppler Black Pearl
+    { WeaponId::Navaja, 418 }, // Doppler Phase 1
+    { WeaponId::Navaja, 419 }, // Doppler Phase 2
+    { WeaponId::Navaja, 420 }, // Doppler Phase 3
+    { WeaponId::Navaja, 421 }, // Doppler Phase 4
+    { WeaponId::Navaja, 413 }, // Marble Fade
+    { WeaponId::Navaja, 409 }, // Tiger Tooth
+    { WeaponId::Navaja, 98 }, // Ultraviolet
+    { WeaponId::Navaja, 857 }, // Damascus Steel
+    { WeaponId::Navaja, 414 }, // Rust Coat
+
+    { WeaponId::Stiletto, 415 }, // Doppler Ruby
+    { WeaponId::Stiletto, 416 }, // Doppler Sapphire
+    { WeaponId::Stiletto, 417 }, // Doppler Black Pearl
+    { WeaponId::Stiletto, 418 }, // Doppler Phase 1
+    { WeaponId::Stiletto, 419 }, // Doppler Phase 2
+    { WeaponId::Stiletto, 420 }, // Doppler Phase 3
+    { WeaponId::Stiletto, 421 }, // Doppler Phase 4
+    { WeaponId::Stiletto, 413 }, // Marble Fade
+    { WeaponId::Stiletto, 409 }, // Tiger Tooth
+    { WeaponId::Stiletto, 98 }, // Ultraviolet
+    { WeaponId::Stiletto, 857 }, // Damascus Steel
+    { WeaponId::Stiletto, 414 }, // Rust Coat
+
+    { WeaponId::Talon, 415 }, // Doppler Ruby
+    { WeaponId::Talon, 416 }, // Doppler Sapphire
+    { WeaponId::Talon, 417 }, // Doppler Black Pearl
+    { WeaponId::Talon, 852 }, // Doppler Phase 1
+    { WeaponId::Talon, 853 }, // Doppler Phase 2
+    { WeaponId::Talon, 854 }, // Doppler Phase 3
+    { WeaponId::Talon, 855 }, // Doppler Phase 4
+    { WeaponId::Talon, 856 }, // Marble Fade
+    { WeaponId::Talon, 409 }, // Tiger Tooth
+    { WeaponId::Talon, 98 }, // Ultraviolet
+    { WeaponId::Talon, 858 }, // Damascus Steel
+    { WeaponId::Talon, 414 }, // Rust Coat
+
+    { WeaponId::Ursus, 415 }, // Doppler Ruby
+    { WeaponId::Ursus, 416 }, // Doppler Sapphire
+    { WeaponId::Ursus, 417 }, // Doppler Black Pearl
+    { WeaponId::Ursus, 418 }, // Doppler Phase 1
+    { WeaponId::Ursus, 419 }, // Doppler Phase 2
+    { WeaponId::Ursus, 420 }, // Doppler Phase 3
+    { WeaponId::Ursus, 421 }, // Doppler Phase 4
+    { WeaponId::Ursus, 413 }, // Marble Fade
+    { WeaponId::Ursus, 409 }, // Tiger Tooth
+    { WeaponId::Ursus, 98 }, // Ultraviolet
+    { WeaponId::Ursus, 857 }, // Damascus Steel
+    { WeaponId::Ursus, 414 }, // Rust Coat
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
