@@ -302,6 +302,73 @@ constexpr auto cs20Knives = std::to_array<RareSpecialItem>({
     { WeaponId::ClassicKnife, 5 }, // Forest DDPAT
 });
 
+constexpr auto chromaKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bayonet, 413 }, // Marble Fade
+    { WeaponId::Bayonet, 409 }, // Tiger Tooth
+    { WeaponId::Bayonet, 415 }, // Doppler Ruby
+    { WeaponId::Bayonet, 416 }, // Doppler Sapphire
+    { WeaponId::Bayonet, 417 }, // Doppler Black Pearl
+    { WeaponId::Bayonet, 418 }, // Doppler Phase 1
+    { WeaponId::Bayonet, 419 }, // Doppler Phase 2
+    { WeaponId::Bayonet, 420 }, // Doppler Phase 3
+    { WeaponId::Bayonet, 421 }, // Doppler Phase 4
+    { WeaponId::Bayonet, 98 }, // Ultraviolet
+    { WeaponId::Bayonet, 410 }, // Damascus Steel
+    { WeaponId::Bayonet, 414 }, // Rust Coat
+
+    { WeaponId::Flip, 413 }, // Marble Fade
+    { WeaponId::Flip, 409 }, // Tiger Tooth
+    { WeaponId::Flip, 415 }, // Doppler Ruby
+    { WeaponId::Flip, 416 }, // Doppler Sapphire
+    { WeaponId::Flip, 417 }, // Doppler Black Pearl
+    { WeaponId::Flip, 418 }, // Doppler Phase 1
+    { WeaponId::Flip, 419 }, // Doppler Phase 2
+    { WeaponId::Flip, 420 }, // Doppler Phase 3
+    { WeaponId::Flip, 421 }, // Doppler Phase 4
+    { WeaponId::Flip, 98 }, // Ultraviolet
+    { WeaponId::Flip, 410 }, // Damascus Steel
+    { WeaponId::Flip, 414 }, // Rust Coat
+
+    { WeaponId::Gut, 413 }, // Marble Fade
+    { WeaponId::Gut, 409 }, // Tiger Tooth
+    { WeaponId::Gut, 415 }, // Doppler Ruby
+    { WeaponId::Gut, 416 }, // Doppler Sapphire
+    { WeaponId::Gut, 417 }, // Doppler Black Pearl
+    { WeaponId::Gut, 418 }, // Doppler Phase 1
+    { WeaponId::Gut, 419 }, // Doppler Phase 2
+    { WeaponId::Gut, 420 }, // Doppler Phase 3
+    { WeaponId::Gut, 421 }, // Doppler Phase 4
+    { WeaponId::Gut, 98 }, // Ultraviolet
+    { WeaponId::Gut, 410 }, // Damascus Steel
+    { WeaponId::Gut, 414 }, // Rust Coat
+
+    { WeaponId::Karambit, 413 }, // Marble Fade
+    { WeaponId::Karambit, 409 }, // Tiger Tooth
+    { WeaponId::Karambit, 415 }, // Doppler Ruby
+    { WeaponId::Karambit, 416 }, // Doppler Sapphire
+    { WeaponId::Karambit, 417 }, // Doppler Black Pearl
+    { WeaponId::Karambit, 418 }, // Doppler Phase 1
+    { WeaponId::Karambit, 419 }, // Doppler Phase 2
+    { WeaponId::Karambit, 420 }, // Doppler Phase 3
+    { WeaponId::Karambit, 421 }, // Doppler Phase 4
+    { WeaponId::Karambit, 98 }, // Ultraviolet
+    { WeaponId::Karambit, 410 }, // Damascus Steel
+    { WeaponId::Karambit, 414 }, // Rust Coat
+
+    { WeaponId::M9Bayonet, 413 }, // Marble Fade
+    { WeaponId::M9Bayonet, 409 }, // Tiger Tooth
+    { WeaponId::M9Bayonet, 415 }, // Doppler Ruby
+    { WeaponId::M9Bayonet, 416 }, // Doppler Sapphire
+    { WeaponId::M9Bayonet, 417 }, // Doppler Black Pearl
+    { WeaponId::M9Bayonet, 418 }, // Doppler Phase 1
+    { WeaponId::M9Bayonet, 419 }, // Doppler Phase 2
+    { WeaponId::M9Bayonet, 420 }, // Doppler Phase 3
+    { WeaponId::M9Bayonet, 421 }, // Doppler Phase 4
+    { WeaponId::M9Bayonet, 98 }, // Ultraviolet
+    { WeaponId::M9Bayonet, 411 }, // Damascus Steel
+    { WeaponId::M9Bayonet, 414 }, // Rust Coat
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
