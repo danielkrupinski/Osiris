@@ -427,6 +427,38 @@ constexpr auto horizonKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Ursus, 0 }, // (Vanilla)
 });
 
+constexpr auto clutchGloves = std::to_array<RareSpecialItem>({
+    { WeaponId::GloveSlick, 10041 }, // King Snake
+    { WeaponId::GloveSlick, 10042 }, // Imperial Plaid
+    { WeaponId::GloveSlick, 10043 }, // Overtake
+    { WeaponId::GloveSlick, 10044 }, // Racing Green
+
+    { WeaponId::GloveLeatherWrap, 10053 }, // Cobalt Skulls
+    { WeaponId::GloveLeatherWrap, 10054 }, // Overprint
+    { WeaponId::GloveLeatherWrap, 10056 }, // Arboreal
+    { WeaponId::GloveLeatherWrap, 10055 }, // Duct Tape
+
+    { WeaponId::GloveHydra, 10060 }, // Case Hardened
+    { WeaponId::GloveHydra, 10057 }, // Emerald
+    { WeaponId::GloveHydra, 10059 }, // Rattler
+    { WeaponId::GloveHydra, 10058 }, // Mangrove
+
+    { WeaponId::GloveMotorcycle, 10049 }, // POW!
+    { WeaponId::GloveMotorcycle, 10052 }, // Polygon
+    { WeaponId::GloveMotorcycle, 10050 }, // Turtle
+    { WeaponId::GloveMotorcycle, 10051 }, // Transport
+
+    { WeaponId::GloveSpecialist, 10064 }, // Mogul
+    { WeaponId::GloveSpecialist, 10061 }, // Crimson Web
+    { WeaponId::GloveSpecialist, 10063 }, // Fade
+    { WeaponId::GloveSpecialist, 10062 }, // Buckshot
+
+    { WeaponId::GloveSporty, 10048 }, // Vice
+    { WeaponId::GloveSporty, 10047 }, // Omega
+    { WeaponId::GloveSporty, 10045 }, // Amphibious
+    { WeaponId::GloveSporty, 10046 }, // Bronze Morph
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
