@@ -459,6 +459,73 @@ constexpr auto clutchGloves = std::to_array<RareSpecialItem>({
     { WeaponId::GloveSporty, 10046 }, // Bronze Morph
 });
 
+constexpr auto spectrumKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bowie, 415 }, // Doppler Ruby
+    { WeaponId::Bowie, 416 }, // Doppler Sapphire
+    { WeaponId::Bowie, 417 }, // Doppler Black Pearl
+    { WeaponId::Bowie, 418 }, // Doppler Phase 1
+    { WeaponId::Bowie, 419 }, // Doppler Phase 2
+    { WeaponId::Bowie, 420 }, // Doppler Phase 3
+    { WeaponId::Bowie, 421 }, // Doppler Phase 4
+    { WeaponId::Bowie, 413 }, // Marble Fade
+    { WeaponId::Bowie, 409 }, // Tiger Tooth
+    { WeaponId::Bowie, 98 }, // Ultraviolet
+    { WeaponId::Bowie, 411 }, // Damascus Steel
+    { WeaponId::Bowie, 414 }, // Rust Coat
+
+    { WeaponId::Butterfly, 415 }, // Doppler Ruby
+    { WeaponId::Butterfly, 619 }, // Doppler Sapphire
+    { WeaponId::Butterfly, 617 }, // Doppler Black Pearl
+    { WeaponId::Butterfly, 418 }, // Doppler Phase 1
+    { WeaponId::Butterfly, 618 }, // Doppler Phase 2
+    { WeaponId::Butterfly, 420 }, // Doppler Phase 3
+    { WeaponId::Butterfly, 421 }, // Doppler Phase 4
+    { WeaponId::Butterfly, 413 }, // Marble Fade
+    { WeaponId::Butterfly, 409 }, // Tiger Tooth
+    { WeaponId::Butterfly, 98 }, // Ultraviolet
+    { WeaponId::Butterfly, 411 }, // Damascus Steel
+    { WeaponId::Butterfly, 414 }, // Rust Coat
+
+    { WeaponId::Falchion, 415 }, // Doppler Ruby
+    { WeaponId::Falchion, 416 }, // Doppler Sapphire
+    { WeaponId::Falchion, 417 }, // Doppler Black Pearl
+    { WeaponId::Falchion, 418 }, // Doppler Phase 1
+    { WeaponId::Falchion, 419 }, // Doppler Phase 2
+    { WeaponId::Falchion, 420 }, // Doppler Phase 3
+    { WeaponId::Falchion, 421 }, // Doppler Phase 4
+    { WeaponId::Falchion, 413 }, // Marble Fade
+    { WeaponId::Falchion, 409 }, // Tiger Tooth
+    { WeaponId::Falchion, 621 }, // Ultraviolet
+    { WeaponId::Falchion, 411 }, // Damascus Steel
+    { WeaponId::Falchion, 414 }, // Rust Coat
+
+    { WeaponId::Huntsman, 415 }, // Doppler Ruby
+    { WeaponId::Huntsman, 416 }, // Doppler Sapphire
+    { WeaponId::Huntsman, 417 }, // Doppler Black Pearl
+    { WeaponId::Huntsman, 418 }, // Doppler Phase 1
+    { WeaponId::Huntsman, 419 }, // Doppler Phase 2
+    { WeaponId::Huntsman, 420 }, // Doppler Phase 3
+    { WeaponId::Huntsman, 421 }, // Doppler Phase 4
+    { WeaponId::Huntsman, 413 }, // Marble Fade
+    { WeaponId::Huntsman, 409 }, // Tiger Tooth
+    { WeaponId::Huntsman, 620 }, // Ultraviolet
+    { WeaponId::Huntsman, 411 }, // Damascus Steel
+    { WeaponId::Huntsman, 414 }, // Rust Coat
+
+    { WeaponId::Daggers, 415 }, // Doppler Ruby
+    { WeaponId::Daggers, 619 }, // Doppler Sapphire
+    { WeaponId::Daggers, 617 }, // Doppler Black Pearl
+    { WeaponId::Daggers, 418 }, // Doppler Phase 1
+    { WeaponId::Daggers, 618 }, // Doppler Phase 2
+    { WeaponId::Daggers, 420 }, // Doppler Phase 3
+    { WeaponId::Daggers, 421 }, // Doppler Phase 4
+    { WeaponId::Daggers, 413 }, // Marble Fade
+    { WeaponId::Daggers, 409 }, // Tiger Tooth
+    { WeaponId::Daggers, 98 }, // Ultraviolet
+    { WeaponId::Daggers, 411 }, // Damascus Steel
+    { WeaponId::Daggers, 414 }, // Rust Coat
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
