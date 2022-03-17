@@ -703,6 +703,22 @@ constexpr auto armsDealKnives = std::to_array<RareSpecialItem>({
     { WeaponId::M9Bayonet, 72 }, // Safari Mesh
 });
 
+constexpr auto shadowCaseKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Daggers, 38 }, // Fade
+    { WeaponId::Daggers, 0 }, // (Vanilla)
+    { WeaponId::Daggers, 59 }, // Slaughter
+    { WeaponId::Daggers, 12 }, // Crimson Web
+    { WeaponId::Daggers, 44 }, // Case Hardened
+    { WeaponId::Daggers, 42 }, // Blue Steel
+    { WeaponId::Daggers, 43 }, // Stained
+    { WeaponId::Daggers, 40 }, // Night
+    { WeaponId::Daggers, 175 }, // Scorched
+    { WeaponId::Daggers, 5 }, // Forest DDPAT
+    { WeaponId::Daggers, 143 }, // Urban Masked
+    { WeaponId::Daggers, 77 }, // Boreal Forest
+    { WeaponId::Daggers, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
