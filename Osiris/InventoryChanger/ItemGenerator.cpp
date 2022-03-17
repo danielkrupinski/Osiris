@@ -735,6 +735,22 @@ constexpr auto falchionCaseKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Falchion, 72 }, // Safari Mesh
 });
 
+constexpr auto operationBreakoutKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Butterfly, 38 }, // Fade
+    { WeaponId::Butterfly, 0 }, // (Vanilla)
+    { WeaponId::Butterfly, 59 }, // Slaughter
+    { WeaponId::Butterfly, 12 }, // Crimson Web
+    { WeaponId::Butterfly, 44 }, // Case Hardened
+    { WeaponId::Butterfly, 42 }, // Blue Steel
+    { WeaponId::Butterfly, 43 }, // Stained
+    { WeaponId::Butterfly, 40 }, // Night
+    { WeaponId::Butterfly, 175 }, // Scorched
+    { WeaponId::Butterfly, 5 }, // Forest DDPAT
+    { WeaponId::Butterfly, 143 }, // Urban Masked
+    { WeaponId::Butterfly, 77 }, // Boreal Forest
+    { WeaponId::Butterfly, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
