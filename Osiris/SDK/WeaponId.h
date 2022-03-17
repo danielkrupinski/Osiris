@@ -87,6 +87,7 @@ enum class WeaponId : short {
     OperationHydraPass = 1352,
     ChromaCase = 4061,
     Chroma2Case = 4089,
+    OperationWildfireCase = 4187,
     Chroma3Case = 4233,
     GammaCase = 4236,
     Gamma2Case = 4281,
