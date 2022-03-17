@@ -97,6 +97,7 @@ enum class WeaponId : short {
     OperationVanguardCase = 4029,
     ChromaCase = 4061,
     Chroma2Case = 4089,
+    FalchionCase = 4091,
     ShadowCase = 4138,
     RevolverCase = 4186,
     OperationWildfireCase = 4187,
