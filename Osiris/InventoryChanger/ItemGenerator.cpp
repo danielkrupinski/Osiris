@@ -709,6 +709,9 @@ struct CrateRareSpecialItems {
 };
 
 constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
+    { WeaponId::CSGOWeaponCase, armsDealKnives },
+    { WeaponId::CSGOWeaponCase2, armsDealKnives },
+    { WeaponId::CSGOWeaponCase3, armsDealKnives },
     { WeaponId::ChromaCase, chromaKnives },
     { WeaponId::Chroma2Case, chromaKnives },
     { WeaponId::OperationWildfireCase, operationWildfireKnives },
