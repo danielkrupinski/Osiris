@@ -615,6 +615,22 @@ constexpr auto gammaKnives = std::to_array<RareSpecialItem>({
     { WeaponId::M9Bayonet, 581 }, // Freehand
 });
 
+constexpr auto operationWildfireKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bowie, 38 }, // Fade
+    { WeaponId::Bowie, 59 }, // Slaughter
+    { WeaponId::Bowie, 40 }, // Night
+    { WeaponId::Bowie, 12 }, // Crimson Web
+    { WeaponId::Bowie, 44 }, // Case Hardened
+    { WeaponId::Bowie, 43 }, // Stained
+    { WeaponId::Bowie, 0 }, // (Vanilla)
+    { WeaponId::Bowie, 42 }, // Blue Steel
+    { WeaponId::Bowie, 77 }, // Boreal Forest
+    { WeaponId::Bowie, 143 }, // Urban Masked
+    { WeaponId::Bowie, 5 }, // Forest DDPAT
+    { WeaponId::Bowie, 175 }, // Scorched
+    { WeaponId::Bowie, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
