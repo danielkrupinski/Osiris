@@ -558,6 +558,63 @@ constexpr auto gloveCaseGloves = std::to_array<RareSpecialItem>({
     { WeaponId::GloveSporty, 10019 }, // Arid
 });
 
+constexpr auto gammaKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bayonet, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Bayonet, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Bayonet, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Bayonet, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Bayonet, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Bayonet, 558 }, // Lore
+    { WeaponId::Bayonet, 573 }, // Autotronic
+    { WeaponId::Bayonet, 563 }, // Black Laminate
+    { WeaponId::Bayonet, 578 }, // Bright Water
+    { WeaponId::Bayonet, 580 }, // Freehand
+
+    { WeaponId::Flip, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Flip, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Flip, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Flip, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Flip, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Flip, 559 }, // Lore
+    { WeaponId::Flip, 574 }, // Autotronic
+    { WeaponId::Flip, 564 }, // Black Laminate
+    { WeaponId::Flip, 578 }, // Bright Water
+    { WeaponId::Flip, 580 }, // Freehand
+
+    { WeaponId::Gut, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Gut, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Gut, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Gut, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Gut, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Gut, 560 }, // Lore
+    { WeaponId::Gut, 575 }, // Autotronic
+    { WeaponId::Gut, 565 }, // Black Laminate
+    { WeaponId::Gut, 578 }, // Bright Water
+    { WeaponId::Gut, 580 }, // Freehand
+
+    { WeaponId::Karambit, 568 }, // Gamma Doppler Emerald
+    { WeaponId::Karambit, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::Karambit, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::Karambit, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::Karambit, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::Karambit, 561 }, // Lore
+    { WeaponId::Karambit, 576 }, // Autotronic
+    { WeaponId::Karambit, 566 }, // Black Laminate
+    { WeaponId::Karambit, 578 }, // Bright Water
+    { WeaponId::Karambit, 582 }, // Freehand
+
+    { WeaponId::M9Bayonet, 568 }, // Gamma Doppler Emerald
+    { WeaponId::M9Bayonet, 569 }, // Gamma Doppler Phase 1
+    { WeaponId::M9Bayonet, 570 }, // Gamma Doppler Phase 2
+    { WeaponId::M9Bayonet, 571 }, // Gamma Doppler Phase 3
+    { WeaponId::M9Bayonet, 572 }, // Gamma Doppler Phase 4
+    { WeaponId::M9Bayonet, 562 }, // Lore
+    { WeaponId::M9Bayonet, 577 }, // Autotronic
+    { WeaponId::M9Bayonet, 567 }, // Black Laminate
+    { WeaponId::M9Bayonet, 579 }, // Bright Water
+    { WeaponId::M9Bayonet, 581 }, // Freehand
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
