@@ -88,6 +88,8 @@ enum class WeaponId : short {
     ChromaCase = 4061,
     Chroma2Case = 4089,
     Chroma3Case = 4233,
+    GammaCase = 4236,
+    Gamma2Case = 4281,
     GloveCase = 4288,
     SpectrumCase = 4351,
     BronzeOperationHydraCoin = 4353,
