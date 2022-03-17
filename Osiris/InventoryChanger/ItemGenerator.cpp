@@ -526,6 +526,38 @@ constexpr auto spectrumKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Daggers, 414 }, // Rust Coat
 });
 
+constexpr auto gloveCaseGloves = std::to_array<RareSpecialItem>({
+    { WeaponId::GloveStuddedBloodhound, 10007 }, // Snakebite
+    { WeaponId::GloveStuddedBloodhound, 10008 }, // Bronzed
+    { WeaponId::GloveStuddedBloodhound, 10006 }, // Charred
+    { WeaponId::GloveStuddedBloodhound, 10039 }, // Guerrilla
+
+    { WeaponId::GloveSlick, 10016 }, // Crimson Weave
+    { WeaponId::GloveSlick, 10015 }, // Convoy
+    { WeaponId::GloveSlick, 10013 }, // Lunar Weave
+    { WeaponId::GloveSlick, 10040 }, // Diamondback
+
+    { WeaponId::GloveLeatherWrap, 10021 }, // Slaughter
+    { WeaponId::GloveLeatherWrap, 10009 }, // Leather
+    { WeaponId::GloveLeatherWrap, 10036 }, // Badlands
+    { WeaponId::GloveLeatherWrap, 10010 }, // Spruce DDPAT
+
+    { WeaponId::GloveMotorcycle, 10026 }, // Spearmint
+    { WeaponId::GloveMotorcycle, 10028 }, // Cool Mint
+    { WeaponId::GloveMotorcycle, 10027 }, // Boom!
+    { WeaponId::GloveMotorcycle, 10024 }, // Eclipse
+
+    { WeaponId::GloveSpecialist, 10033 }, // Crimson Kimono
+    { WeaponId::GloveSpecialist, 10034 }, // Emerald Web
+    { WeaponId::GloveSpecialist, 10035 }, // Foundation
+    { WeaponId::GloveSpecialist, 10030 }, // Forest DDPAT
+
+    { WeaponId::GloveSporty, 10037 }, // Pandora's Box
+    { WeaponId::GloveSporty, 10038 }, // Hedge Maze
+    { WeaponId::GloveSporty, 10018 }, // Superconductor
+    { WeaponId::GloveSporty, 10019 }, // Arid
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
