@@ -93,6 +93,7 @@ enum class WeaponId : short {
     WinterOffensiveCase = 4009,
     CSGOWeaponCase3 = 4010,
     OperationPhoenixCase = 4011,
+    OperationBreakoutCase = 4018,
     Esports2014SummerCase = 4019,
     OperationVanguardCase = 4029,
     ChromaCase = 4061,
