@@ -631,6 +631,78 @@ constexpr auto operationWildfireKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Bowie, 72 }, // Safari Mesh
 });
 
+constexpr auto armsDealKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Bayonet, 38 }, // Fade
+    { WeaponId::Bayonet, 0 }, // (Vanilla)
+    { WeaponId::Bayonet, 59 }, // Slaughter
+    { WeaponId::Bayonet, 12 }, // Crimson Web
+    { WeaponId::Bayonet, 44 }, // Case Hardened
+    { WeaponId::Bayonet, 42 }, // Blue Steel
+    { WeaponId::Bayonet, 43 }, // Stained
+    { WeaponId::Bayonet, 40 }, // Night
+    { WeaponId::Bayonet, 175 }, // Scorched
+    { WeaponId::Bayonet, 5 }, // Forest DDPAT
+    { WeaponId::Bayonet, 143 }, // Urban Masked
+    { WeaponId::Bayonet, 77 }, // Boreal Forest
+    { WeaponId::Bayonet, 72 }, // Safari Mesh
+
+    { WeaponId::Flip, 38 }, // Fade
+    { WeaponId::Flip, 0 }, // (Vanilla)
+    { WeaponId::Flip, 59 }, // Slaughter
+    { WeaponId::Flip, 12 }, // Crimson Web
+    { WeaponId::Flip, 44 }, // Case Hardened
+    { WeaponId::Flip, 42 }, // Blue Steel
+    { WeaponId::Flip, 43 }, // Stained
+    { WeaponId::Flip, 40 }, // Night
+    { WeaponId::Flip, 175 }, // Scorched
+    { WeaponId::Flip, 5 }, // Forest DDPAT
+    { WeaponId::Flip, 143 }, // Urban Masked
+    { WeaponId::Flip, 77 }, // Boreal Forest
+    { WeaponId::Flip, 72 }, // Safari Mesh
+
+    { WeaponId::Gut, 38 }, // Fade
+    { WeaponId::Gut, 0 }, // (Vanilla)
+    { WeaponId::Gut, 59 }, // Slaughter
+    { WeaponId::Gut, 12 }, // Crimson Web
+    { WeaponId::Gut, 44 }, // Case Hardened
+    { WeaponId::Gut, 42 }, // Blue Steel
+    { WeaponId::Gut, 43 }, // Stained
+    { WeaponId::Gut, 40 }, // Night
+    { WeaponId::Gut, 175 }, // Scorched
+    { WeaponId::Gut, 5 }, // Forest DDPAT
+    { WeaponId::Gut, 143 }, // Urban Masked
+    { WeaponId::Gut, 77 }, // Boreal Forest
+    { WeaponId::Gut, 72 }, // Safari Mesh
+
+    { WeaponId::Karambit, 38 }, // Fade
+    { WeaponId::Karambit, 0 }, // (Vanilla)
+    { WeaponId::Karambit, 59 }, // Slaughter
+    { WeaponId::Karambit, 12 }, // Crimson Web
+    { WeaponId::Karambit, 44 }, // Case Hardened
+    { WeaponId::Karambit, 42 }, // Blue Steel
+    { WeaponId::Karambit, 43 }, // Stained
+    { WeaponId::Karambit, 40 }, // Night
+    { WeaponId::Karambit, 175 }, // Scorched
+    { WeaponId::Karambit, 5 }, // Forest DDPAT
+    { WeaponId::Karambit, 143 }, // Urban Masked
+    { WeaponId::Karambit, 77 }, // Boreal Forest
+    { WeaponId::Karambit, 72 }, // Safari Mesh
+
+    { WeaponId::M9Bayonet, 38 }, // Fade
+    { WeaponId::M9Bayonet, 0 }, // (Vanilla)
+    { WeaponId::M9Bayonet, 59 }, // Slaughter
+    { WeaponId::M9Bayonet, 12 }, // Crimson Web
+    { WeaponId::M9Bayonet, 44 }, // Case Hardened
+    { WeaponId::M9Bayonet, 42 }, // Blue Steel
+    { WeaponId::M9Bayonet, 43 }, // Stained
+    { WeaponId::M9Bayonet, 40 }, // Night
+    { WeaponId::M9Bayonet, 175 }, // Scorched
+    { WeaponId::M9Bayonet, 5 }, // Forest DDPAT
+    { WeaponId::M9Bayonet, 143 }, // Urban Masked
+    { WeaponId::M9Bayonet, 77 }, // Boreal Forest
+    { WeaponId::M9Bayonet, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
