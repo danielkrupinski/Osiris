@@ -719,6 +719,22 @@ constexpr auto shadowCaseKnives = std::to_array<RareSpecialItem>({
     { WeaponId::Daggers, 72 }, // Safari Mesh
 });
 
+constexpr auto falchionCaseKnives = std::to_array<RareSpecialItem>({
+    { WeaponId::Falchion, 38 }, // Fade
+    { WeaponId::Falchion, 0 }, // (Vanilla)
+    { WeaponId::Falchion, 59 }, // Slaughter
+    { WeaponId::Falchion, 12 }, // Crimson Web
+    { WeaponId::Falchion, 44 }, // Case Hardened
+    { WeaponId::Falchion, 42 }, // Blue Steel
+    { WeaponId::Falchion, 43 }, // Stained
+    { WeaponId::Falchion, 40 }, // Night
+    { WeaponId::Falchion, 175 }, // Scorched
+    { WeaponId::Falchion, 5 }, // Forest DDPAT
+    { WeaponId::Falchion, 143 }, // Urban Masked
+    { WeaponId::Falchion, 77 }, // Boreal Forest
+    { WeaponId::Falchion, 72 }, // Safari Mesh
+});
+
 struct CrateRareSpecialItems {
     WeaponId crateWeaponID;
     std::span<const RareSpecialItem> items;
