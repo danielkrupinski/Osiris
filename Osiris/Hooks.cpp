@@ -207,9 +207,9 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Misc::blockbot(cmd);
 
     EnginePrediction::run(cmd);
 
