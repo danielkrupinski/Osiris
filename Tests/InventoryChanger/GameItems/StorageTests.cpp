@@ -104,7 +104,6 @@ constexpr bool validateItemType(const Item& item, ItemType desiredType) noexcept
     case ItemType::Sticker: return item.isSticker();
     case ItemType::Music: return item.isMusic();
     case ItemType::Graffiti: return item.isGraffiti();
-    case ItemType::SealedGraffiti: return item.isSealedGraffiti();
     case ItemType::Collectible: return item.isCollectible();
     case ItemType::NameTag: return item.isNameTag();
     case ItemType::Agent: return item.isAgent();
