@@ -85,6 +85,9 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
     case ItemType::TournamentCoin:
         storage.addTournamentCoin(rarity, weaponID, 0, iconPath);
         break;
+    case ItemType::VanillaKnife:
+        storage.addVanillaKnife(weaponID, iconPath);
+        break;
     default:
         assert(false && "Unhandled item type!");
         break;
@@ -113,6 +116,7 @@ constexpr bool validateItemType(const Item& item, ItemType desiredType) noexcept
     case ItemType::ServiceMedal: return item.isServiceMedal();
     case ItemType::SouvenirToken: return item.isSouvenirToken();
     case ItemType::TournamentCoin: return item.isTournamentCoin();
+    case ItemType::VanillaKnife: return item.isSkin();
     default: return false;
     }
 }
@@ -153,7 +157,8 @@ const auto typesToTest = testing::Values(
     ItemType::ViewerPass,
     ItemType::ServiceMedal,
     ItemType::SouvenirToken,
-    ItemType::TournamentCoin
+    ItemType::TournamentCoin,
+    ItemType::VanillaKnife
 );
 
 INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageTest, typesToTest);
@@ -164,7 +169,10 @@ TEST_P(GameItemsStorageItemRarityTest, AddedItemHasCorrectRarity) {
     Storage storage;
     const auto [type, rarity] = GetParam();
     const auto& item = addToStorage(storage, type, rarity, WeaponId::None, 0, {});
-    ASSERT_EQ(item.getRarity(), type == ItemType::Music ? EconRarity::Blue : rarity);
+    if (type == ItemType::VanillaKnife)
+        ASSERT_EQ(item.getRarity(), EconRarity::Red);
+    else
+        ASSERT_EQ(item.getRarity(), type == ItemType::Music ? EconRarity::Blue : rarity);
 }
 
 INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageItemRarityTest,
