@@ -37,6 +37,7 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Osiris.cpp")
 add_library(OsirisOBJ OBJECT ${SOURCES})
 set_target_properties(OsirisOBJ PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_precompile_headers(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Osiris/pch.h")
+target_include_directories(OsirisOBJ PUBLIC "${CMAKE_SOURCE_DIR}/Osiris")
 
 if (NOT WIN32)
   find_package(Freetype REQUIRED)
