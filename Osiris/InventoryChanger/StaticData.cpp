@@ -261,7 +261,7 @@ private:
             if (contents[j].stickerKit != 0) {
                 if (auto idx = container.findSticker(contents[j].stickerKit); idx != std::nullopt)
                     loot.push_back(*idx);
-                else if ((idx = container.findSealedGraffiti(contents[j].stickerKit)) != std::nullopt)
+                else if ((idx = container.findGraffiti(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);
                 else if ((idx = container.findPatch(contents[j].stickerKit)) != std::nullopt)
                     loot.push_back(*idx);

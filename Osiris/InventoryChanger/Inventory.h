@@ -95,7 +95,7 @@ public:
     bool isCollectible() const noexcept { return isValid() && get().isCollectible(); }
     bool isCase() const noexcept { return isValid() && get().isCase(); }
     bool isCaseKey() const noexcept { return isValid() && get().isCaseKey(); }
-    bool isSealedGraffiti() const noexcept { return isValid() && get().isSealedGraffiti(); }
+    bool isGraffiti() const noexcept { return isValid() && get().isGraffiti(); }
     bool isOperationPass() const noexcept { return isValid() && get().isOperationPass(); }
     bool isNameTag() const noexcept { return isValid() && get().isNameTag(); }
     bool isPatch() const noexcept { return isValid() && get().isPatch(); }

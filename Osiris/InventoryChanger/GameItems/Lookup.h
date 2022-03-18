@@ -133,11 +133,6 @@ public:
 
     [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findGraffiti(int graffitiID) const noexcept
     {
-        return findItem(WeaponId::Graffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
-    }
-
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findSealedGraffiti(int graffitiID) const noexcept
-    {
         return findItem(WeaponId::SealedGraffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 

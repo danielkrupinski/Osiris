@@ -1016,7 +1016,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isTournamentCoin()) {
         index = Inventory::emplaceDynamicData(DynamicTournamentCoinData{});
-    } else if (item.isGraffiti() || item.isSealedGraffiti()) {
+    } else if (item.isGraffiti()) {
         index = Inventory::emplaceDynamicData(DynamicGraffitiData{});
     }
 

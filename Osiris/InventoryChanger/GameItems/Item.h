@@ -24,7 +24,6 @@ public:
     [[nodiscard]] constexpr bool isNameTag() const noexcept { return type == Type::NameTag; }
     [[nodiscard]] constexpr bool isPatch() const noexcept { return type == Type::Patch; }
     [[nodiscard]] constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
-    [[nodiscard]] constexpr bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
     [[nodiscard]] constexpr bool isAgent() const noexcept { return type == Type::Agent; }
     [[nodiscard]] constexpr bool isCase() const noexcept { return type == Type::Case; }
     [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
@@ -42,7 +41,6 @@ public:
         Sticker,
         Music,
         Graffiti,
-        SealedGraffiti,
         Collectible,
         NameTag,
         Agent,

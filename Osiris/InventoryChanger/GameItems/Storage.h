@@ -23,8 +23,7 @@ public:
     {
         graffitiKits.emplace_back(id, name);
         const auto index = graffitiKits.size() - 1;
-        addItem(Item::Type::Graffiti, rarity, WeaponId::Graffiti, index, iconPath);
-        addItem(Item::Type::SealedGraffiti, rarity, WeaponId::SealedGraffiti, index, iconPath);
+        addItem(Item::Type::Graffiti, rarity, WeaponId::SealedGraffiti, index, iconPath);
     }
 
     void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
@@ -139,7 +138,7 @@ public:
 
     const auto& getGraffitiKit(const Item& item) const
     {
-        assert(item.isGraffiti() || item.isSealedGraffiti());
+        assert(item.isGraffiti());
         return graffitiKits[item.getDataIndex()];
     }
 

@@ -74,10 +74,12 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["StatTrak"] = dynamicData.statTrak;
         } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatchKit(gameItem).id;
-        } else if (gameItem.isGraffiti() || gameItem.isSealedGraffiti()) {
+        } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
-            if (const auto& dynamicData = Inventory::dynamicGraffitiData(item.getDynamicDataIndex()); dynamicData.usesLeft >= 0)
+            if (const auto& dynamicData = Inventory::dynamicGraffitiData(item.getDynamicDataIndex()); dynamicData.usesLeft >= 0) {
                 itemConfig["Uses Left"] = dynamicData.usesLeft;
+                itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
+            }
         } else if (gameItem.isAgent()) {
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
@@ -397,6 +399,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
         const WeaponId weaponID = jsonItem["Weapon ID"];
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional;
+        auto dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
         if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
             itemOptional = StaticData::lookup().findItem(weaponID, jsonItem["Paint Kit"]);
@@ -407,10 +410,14 @@ void InventoryChanger::fromJson(const json& j) noexcept
         else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
             itemOptional = StaticData::lookup().findPatch(jsonItem["Patch ID"]);
         else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer()) {
-            if (weaponID == WeaponId::Graffiti)
-                itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
-            else
-                itemOptional = StaticData::lookup().findSealedGraffiti(jsonItem["Graffiti ID"]);
+            itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
+            if (weaponID == WeaponId::Graffiti) {
+                if (itemOptional.has_value()) {
+                    DynamicGraffitiData dynamicData;
+                    dynamicData.usesLeft = 50;
+                    dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+                }
+            }
         } else
             itemOptional = StaticData::lookup().findItem(weaponID);
 
@@ -418,7 +425,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const auto& item = itemOptional->get();
-        auto dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
         if (item.isSkin()) {
             dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);
@@ -432,7 +438,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
-        } else if (item.isGraffiti() || item.isSealedGraffiti()) {
+        } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
             dynamicDataIdx = loadDynamicGraffitiDataFromJson(jsonItem);
         }
 

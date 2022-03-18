@@ -173,8 +173,13 @@ private:
             econItem->setStickerID(0, StaticData::lookup().getStorage().getStickerKit(item).id);
         } else if (item.isPatch()) {
             econItem->setStickerID(0, StaticData::lookup().getStorage().getPatchKit(item).id);
-        } else if (item.isGraffiti() || item.isSealedGraffiti()) {
+        } else if (item.isGraffiti()) {
             econItem->setStickerID(0, StaticData::lookup().getStorage().getGraffitiKit(item).id);
+            const auto& dynamicData = dynamicGraffitiData[inventoryItem.getDynamicDataIndex()];
+            if (dynamicData.usesLeft >= 0) {
+                econItem->weaponId = WeaponId::Graffiti;
+                econItem->setSpraysRemaining(dynamicData.usesLeft);
+            }
         } else if (item.isMusic()) {
             econItem->setMusicID(StaticData::lookup().getStorage().getMusicKit(item).id);
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];

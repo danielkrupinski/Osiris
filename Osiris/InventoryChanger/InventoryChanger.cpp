@@ -552,7 +552,7 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
         return storage.getMusicKit(item).name;
     if (item.isSticker())
         return storage.getStickerKit(item).name;
-    if (item.isGraffiti() || item.isSealedGraffiti())
+    if (item.isGraffiti())
         return storage.getGraffitiKit(item).name;
     if (item.isPatch())
         return storage.getPatchKit(item).name;
