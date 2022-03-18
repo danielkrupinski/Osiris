@@ -17,7 +17,6 @@ enum class ItemType {
     Sticker,
     Music,
     Graffiti,
-    SealedGraffiti,
     Collectible,
     NameTag,
     Agent,
@@ -51,6 +50,9 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         break;
     case ItemType::Music:
         storage.addMusic(0, {}, iconPath);
+        break;
+    case ItemType::Graffiti:
+        storage.addGraffiti(0, {}, rarity, iconPath);
         break;
     case ItemType::Collectible:
         storage.addCollectible(rarity, weaponID, false, iconPath);
@@ -144,8 +146,7 @@ const auto typesToTest = testing::Values(
     ItemType::Patch,
     ItemType::Sticker,
     ItemType::Music,
-    // ItemType::Graffiti,
-    // ItemType::SealedGraffiti,
+    ItemType::Graffiti,
     ItemType::Collectible,
     ItemType::NameTag,
     ItemType::Agent,
