@@ -76,6 +76,8 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatchKit(gameItem).id;
         } else if (gameItem.isGraffiti() || gameItem.isSealedGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
+            if (const auto& dynamicData = Inventory::dynamicGraffitiData(item.getDynamicDataIndex()); dynamicData.usesLeft >= 0)
+                itemConfig["Uses Left"] = dynamicData.usesLeft;
         } else if (gameItem.isAgent()) {
             const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
             auto& stickers = itemConfig["Patches"];
@@ -367,6 +369,16 @@ void loadEquipmentFromJson(const json& j) noexcept
     }
 }
 
+[[nodiscard]] std::size_t loadDynamicGraffitiDataFromJson(const json& j) noexcept
+{
+    DynamicGraffitiData dynamicData;
+    if (j.contains("Uses Left")) {
+        if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
+            dynamicData.usesLeft = usesLeft;
+    }
+    return Inventory::emplaceDynamicData(std::move(dynamicData));
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -420,6 +432,8 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
+        } else if (item.isGraffiti() || item.isSealedGraffiti()) {
+            dynamicDataIdx = loadDynamicGraffitiDataFromJson(jsonItem);
         }
 
         Inventory::addItemAcknowledged(item, dynamicDataIdx);
