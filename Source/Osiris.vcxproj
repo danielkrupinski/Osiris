@@ -11,6 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_freetype.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigStructs.cpp" />
     <ClCompile Include="EventListener.cpp" />
@@ -126,9 +135,6 @@
     <ClCompile Include="Hooks\VmtHook.cpp" />
     <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
-    <ClCompile Include="imgui\imgui_freetype.cpp" />
-    <ClCompile Include="imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
@@ -171,12 +177,6 @@
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Hacks\Misc.cpp" />
     <ClCompile Include="Hooks.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="pch-c.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -198,6 +198,16 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\imgui\imconfig.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui_freetype.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui_impl_dx9.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="..\Dependencies\imgui\imgui_stdlib.h" />
+    <ClInclude Include="..\Dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />
@@ -221,8 +231,6 @@
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />
     <ClInclude Include="imguiCustom.h" />
-    <ClInclude Include="imgui\imgui_freetype.h" />
-    <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
@@ -265,14 +273,6 @@
     <ClInclude Include="SDK\ClassId.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx9.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\FileSystem.h" />
