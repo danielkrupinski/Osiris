@@ -22,4 +22,5 @@ else()
   target_link_libraries(imgui PRIVATE SDL2 GL Freetype::Freetype)
 endif()
 
+set_target_properties(imgui PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(imgui PUBLIC FreeType)
