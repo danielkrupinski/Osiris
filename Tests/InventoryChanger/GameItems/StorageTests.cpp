@@ -169,14 +169,30 @@ TEST_P(GameItemsStorageItemRarityTest, AddedItemHasCorrectRarity) {
     Storage storage;
     const auto [type, rarity] = GetParam();
     const auto& item = addToStorage(storage, type, rarity, WeaponId::None, 0, {});
-    if (type == ItemType::VanillaKnife)
-        ASSERT_EQ(item.getRarity(), EconRarity::Red);
-    else
-        ASSERT_EQ(item.getRarity(), type == ItemType::Music ? EconRarity::Blue : rarity);
+    ASSERT_EQ(item.getRarity(), rarity);
 }
 
+const auto typesToTestRarity = testing::Values(
+    ItemType::Gloves,
+    ItemType::Skin,
+    ItemType::Patch,
+    ItemType::Sticker,
+    ItemType::Graffiti,
+    ItemType::Collectible,
+    ItemType::NameTag,
+    ItemType::Agent,
+    ItemType::Case,
+    ItemType::CaseKey,
+    ItemType::OperationPass,
+    ItemType::StatTrakSwapTool,
+    ItemType::ViewerPass,
+    ItemType::ServiceMedal,
+    ItemType::SouvenirToken,
+    ItemType::TournamentCoin
+);
+
 INSTANTIATE_TEST_SUITE_P(InventoryChanger, GameItemsStorageItemRarityTest,
-    testing::Combine(typesToTest, testing::Values(EconRarity::Default, EconRarity::Blue, EconRarity::Gold)));
+    testing::Combine(typesToTestRarity, testing::Values(EconRarity::Default, EconRarity::Blue, EconRarity::Gold)));
 
 class GameItemsStorageItemImagePathTest : public testing::TestWithParam<std::tuple<ItemType, std::string_view>> {};
 
