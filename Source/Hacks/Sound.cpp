@@ -3,7 +3,7 @@
 #include <memory>
 #include <string_view>
 
-#include "../imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
 #include "../Interfaces.h"

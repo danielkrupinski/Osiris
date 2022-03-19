@@ -2,7 +2,7 @@
 
 #include "AntiAim.h"
 
-#include "../imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
 #include "../SDK/Entity.h"

@@ -32,7 +32,7 @@ using Microsoft::WRL::ComPtr;
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 
-#include "../Resources/Shaders/Build/default_vs.h"
+#include "../../Source/Resources/Shaders/Build/default_vs.h"
 
 // DirectX data
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;

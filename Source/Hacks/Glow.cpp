@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "../nlohmann/json.hpp"
-#include "../imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
 #include "../InputUtil.h"
