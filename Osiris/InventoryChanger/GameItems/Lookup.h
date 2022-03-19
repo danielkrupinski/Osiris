@@ -103,7 +103,10 @@ public:
         return (it != range.second ? storage.getStickerKit(*it).id : 0);
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID, int paintKit) const noexcept
+    using ItemReference = std::reference_wrapper<const Item>;
+    using OptionalItemReference = std::optional<ItemReference>;
+
+    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto [begin, end] = findItems(weaponID);
         if (begin != end && !begin->isSkin() && !begin->isGloves())
@@ -114,36 +117,36 @@ public:
         return {};
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID) const noexcept
+    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID) const noexcept
     {
         if (const auto it = std::ranges::lower_bound(storage.getItems(), weaponID, {}, &Item::getWeaponID); it != storage.getItems().end())
             return *it;
         return {};
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findMusic(int musicKit) const noexcept
+    [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
     {
         return findItem(WeaponId::MusicKit, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findSticker(int stickerKit) const noexcept
+    [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
     {
         return findItem(WeaponId::Sticker, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findGraffiti(int graffitiID) const noexcept
+    [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
     {
         return findItem(WeaponId::SealedGraffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findPatch(int patchID) const noexcept
+    [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
     {
         return findItem(WeaponId::Patch, patchID, [this](const Item& item) { return storage.getPatchKit(item).id; });
     }
 
 private:
     template <typename T, typename Projection>
-    [[nodiscard]] std::optional<std::reference_wrapper<const Item>> findItem(WeaponId weaponID, const T& value, Projection projection) const
+    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, const T& value, Projection projection) const
     {
         const auto [begin, end] = findItems(weaponID);
         if (const auto it = std::ranges::find(begin, end, value, projection); it != end)
@@ -162,7 +165,7 @@ private:
     }
 
     Storage storage;
-    std::vector<std::reference_wrapper<const Item>> tournamentStickersSorted;
+    std::vector<ItemReference> tournamentStickersSorted;
 };
 
 }
