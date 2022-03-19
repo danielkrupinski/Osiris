@@ -2,8 +2,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../../../Osiris/InventoryChanger/GameItems/Item.h"
-#include "../../../Osiris/SDK/ItemSchema.h"
+#include <InventoryChanger/GameItems/Item.h>
+#include <SDK/ItemSchema.h>
 
 namespace game_items
 {
