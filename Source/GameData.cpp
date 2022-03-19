@@ -15,7 +15,7 @@
 #include "Resources/avatar_ct.h"
 #include "Resources/avatar_tt.h"
 
-#include "stb_image.h"
+#include <stb_image.h>
 
 #include "SDK/ClassId.h"
 #include "SDK/ClientClass.h"

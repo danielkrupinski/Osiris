@@ -328,7 +328,6 @@
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
-    <ClInclude Include="stb_image.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
@@ -381,12 +380,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</IncludePath>
+    <IncludePath>$(ProjectDir)\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Dependencies;$(ProjectDir)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(ProjectDir)\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</IncludePath>
+    <IncludePath>$(ProjectDir)\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Dependencies;$(ProjectDir)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
