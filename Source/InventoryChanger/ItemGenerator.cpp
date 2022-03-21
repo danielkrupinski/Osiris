@@ -82,7 +82,7 @@ constexpr auto dropRates = std::to_array<DropRate>({
 
 struct RareSpecialItem {
     WeaponId weaponID;
-    int paintKit;
+    short paintKit;
 };
 
 constexpr auto operationRiptideKnives = std::to_array<RareSpecialItem>({
