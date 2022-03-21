@@ -7,5 +7,5 @@
 
 #define PAD(size) \
 private: \
-    std::byte PAD_NAME(__LINE__) [size]; \
+    [[maybe_unused]] std::byte PAD_NAME(__LINE__) [size]; \
 public:
