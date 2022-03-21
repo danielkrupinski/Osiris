@@ -505,9 +505,6 @@
     <ClInclude Include="Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nlohmann\json.hpp">
-      <Filter>nlohmann</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Panorama.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -648,6 +645,9 @@
     </ClInclude>
     <ClInclude Include="..\Dependencies\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\nlohmann\json.hpp">
+      <Filter>nlohmann</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

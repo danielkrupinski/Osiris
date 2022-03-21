@@ -22,7 +22,7 @@
 #include "../ProtobufReader.h"
 #include "../Texture.h"
 
-#include "../nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 #include "../SDK/ClassId.h"
 #include "../SDK/Client.h"

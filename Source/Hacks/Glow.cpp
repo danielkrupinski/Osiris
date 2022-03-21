@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "../nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 #include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
