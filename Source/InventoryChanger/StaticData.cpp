@@ -12,7 +12,7 @@
 #include "../Interfaces.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
-#include "../StringPool.h"
+#include <StringPool.h>
 #include "GameItems/Lookup.h"
 
 using StaticData::TournamentMap;
