@@ -9,7 +9,7 @@
 #include <imgui/imgui_internal.h>
 
 #include "../ConfigStructs.h"
-#include "../fnv.h"
+#include <fnv.h>
 #include "../GameData.h"
 #include "../Helpers.h"
 #include "../Interfaces.h"

@@ -213,7 +213,6 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />
-    <ClInclude Include="fnv.h" />
     <ClInclude Include="freetype\freetype\config\ftmodule.h" />
     <ClInclude Include="freetype\freetype\config\ftoption.h" />
     <ClInclude Include="GameData.h" />
