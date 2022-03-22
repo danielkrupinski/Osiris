@@ -5,4 +5,5 @@ target_sources(OsirisOBJ PRIVATE
   ItemGenerator.cpp
   StaticData.cpp
   ToolUser.cpp
+  GameItems/Storage.cpp
 )
