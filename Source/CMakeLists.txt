@@ -17,7 +17,3 @@ add_subdirectory(Hacks)
 add_subdirectory(Hooks)
 add_subdirectory(InventoryChanger)
 add_subdirectory(SDK)
-
-if (WIN32)
-  add_subdirectory(MinHook)
-endif()

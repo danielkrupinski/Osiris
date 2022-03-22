@@ -1,5 +1,5 @@
 #include "MinHook.h"
-#include "../MinHook/MinHook.h"
+#include <MinHook/MinHook.h>
 #include "../Helpers.h"
 
 void MinHook::init(void* base) noexcept
