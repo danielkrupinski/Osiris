@@ -5,6 +5,8 @@
 #include <utility>
 #include <vector>
 
+#include <StringPool.h>
+
 #include "Item.h"
 #include "Structs.h"
 
@@ -106,7 +108,13 @@ private:
         items.emplace_back(std::forward<Args>(args)...);
     }
 
+    [[nodiscard]] std::string_view pooled(std::string_view string);
+    [[nodiscard]] ItemName pooled(const ItemName& name);
+
     static constexpr auto vanillaPaintIndex = 0;
+
+    StringPool<char> stringPool;
+    StringPool<wchar_t> stringPoolWide;
     std::vector<PaintKit> paintKits{ { 0, { "", L"" }, 0.0f, 1.0f } };
     std::vector<StickerKit> stickerKits;
     std::vector<MusicKit> musicKits;

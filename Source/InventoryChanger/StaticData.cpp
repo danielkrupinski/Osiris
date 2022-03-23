@@ -138,7 +138,7 @@ private:
                 continue;
 
             const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
-            storage.addPaintKit(paintKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintKitName)), stringPoolWide.add(toUpperConverter.toUpper(paintKitName)) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
+            storage.addPaintKit(paintKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(paintKitName), toUpperConverter.toUpper(paintKitName) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -147,9 +147,9 @@ private:
                     continue;
 
                 if (isGlove) {
-                    storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, stringPool.add(it->iconPath));
+                    storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, it->iconPath);
                 } else {
-                    storage.addSkinWithLastPaintKit(static_cast<EconRarity>(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6)), it->weaponId, stringPool.add(it->iconPath));
+                    storage.addSkinWithLastPaintKit(static_cast<EconRarity>(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6)), it->weaponId, it->iconPath);
                 }
             }
         }
@@ -171,13 +171,13 @@ private:
             if (isSticker) {
                 const auto isGolden = name.ends_with("gold");
                 const auto stickerName = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
-                storage.addSticker(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(stickerName)), stringPoolWide.add(toUpperConverter.toUpper(stickerName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
+                storage.addSticker(stickerKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(stickerName), toUpperConverter.toUpper(stickerName) }, static_cast<EconRarity>(stickerKit->rarity),stickerKit->inventoryImage.data(), stickerKit->tournamentID, static_cast<TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
             } else if (isPatch) {
                 const auto patchName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addPatch(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(patchName)), stringPoolWide.add(toUpperConverter.toUpper(patchName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addPatch(stickerKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(patchName), toUpperConverter.toUpper(patchName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data());
             } else if (isGraffiti) {
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
-                storage.addGraffiti(stickerKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(paintName)), stringPoolWide.add(toUpperConverter.toUpper(paintName)) }, static_cast<EconRarity>(stickerKit->rarity), stringPool.add(stickerKit->inventoryImage.data()));
+                storage.addGraffiti(stickerKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(paintName), toUpperConverter.toUpper(paintName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data());
             }
         }
     }
@@ -190,7 +190,7 @@ private:
                 continue;
 
             const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            storage.addMusic(musicKit->id, game_items::ItemName{ stringPool.add(converter.convertUnicodeToAnsi(musicName)), stringPoolWide.add(toUpperConverter.toUpper(musicName)) }, stringPool.add(musicKit->inventoryImage));
+            storage.addMusic(musicKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(musicName), toUpperConverter.toUpper(musicName) }, musicKit->inventoryImage);
         }
     }
 
@@ -209,19 +209,19 @@ private:
             const auto rarity = EconRarity{ item->getRarity() };
 
             if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == EconRarity::Red) {
-                storage.addVanillaKnife(weaponID, stringPool.add(inventoryImage));
+                storage.addVanillaKnife(weaponID, inventoryImage);
             } else if (isCollectible) {
                 if (item->isServiceMedal()) {
-                    storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, stringPool.add(inventoryImage));
+                    storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, inventoryImage);
                 } else if (item->isTournamentCoin()) {
-                    storage.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
+                    storage.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 } else {
-                    storage.addCollectible(rarity, weaponID, isOriginal, stringPool.add(inventoryImage));
+                    storage.addCollectible(rarity, weaponID, isOriginal, inventoryImage);
                 }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
-                storage.addNameTag(rarity, weaponID, stringPool.add(inventoryImage));
+                storage.addNameTag(rarity, weaponID, inventoryImage);
             } else if (item->isPatchable()) {
-                storage.addAgent(rarity, weaponID, stringPool.add(inventoryImage));
+                storage.addAgent(rarity, weaponID, inventoryImage);
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
                 const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
                 if (lootListIdx == -1)
@@ -231,22 +231,22 @@ private:
                 StaticData::Case caseData;
                 caseData.souvenirPackageTournamentID = item->getTournamentEventID();
                 _cases.push_back(std::move(caseData));
-                storage.addCase(rarity, weaponID, _cases.size() - 1, stringPool.add(inventoryImage));
+                storage.addCase(rarity, weaponID, _cases.size() - 1, inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                storage.addCaseKey(rarity, weaponID, stringPool.add(inventoryImage));
+                storage.addCaseKey(rarity, weaponID, inventoryImage);
             } else if (const auto tool = item->getEconTool()) {
                 if (std::strcmp(tool->typeName, "season_pass") == 0)
-                    storage.addOperationPass(rarity, weaponID, stringPool.add(inventoryImage));
+                    storage.addOperationPass(rarity, weaponID, inventoryImage);
                 else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
-                    storage.addStatTrakSwapTool(rarity, weaponID, stringPool.add(inventoryImage));
+                    storage.addStatTrakSwapTool(rarity, weaponID, inventoryImage);
                 else if (std::strcmp(tool->typeName, "fantoken") == 0) {
                     if (Helpers::isSouvenirToken(weaponID))
-                        storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
+                        storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                     else
-                        storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), stringPool.add(inventoryImage));
+                        storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 }
             } else if (item->isPaintable()) {
-                storage.addVanillaSkin(weaponID, stringPool.add(inventoryImage));
+                storage.addVanillaSkin(weaponID, inventoryImage);
             }
         }
     }
@@ -357,8 +357,6 @@ private:
         _caseLoot.shrink_to_fit();
     }
 
-    StringPool<char> stringPool;
-    StringPool<wchar_t> stringPoolWide;
     game_items::Lookup container;
     std::vector<StaticData::Case> _cases;
     std::vector<std::reference_wrapper<const game_items::Item>> _caseLoot;
