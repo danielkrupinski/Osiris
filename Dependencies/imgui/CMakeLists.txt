@@ -9,12 +9,9 @@ add_library(imgui STATIC
 )
 
 if (WIN32)
-  target_sources(imgui PRIVATE imgui_impl_dx9.cpp)
-  target_sources(imgui PRIVATE imgui_impl_win32.cpp)
+  target_sources(imgui PRIVATE imgui_impl_dx9.cpp imgui_impl_win32.cpp)
 else()
-  target_sources(imgui PRIVATE imgui_impl_opengl3.cpp)
-  target_sources(imgui PRIVATE imgui_impl_sdl.cpp)
-
+  target_sources(imgui PRIVATE imgui_impl_opengl3.cpp imgui_impl_sdl.cpp)
   find_package(Freetype REQUIRED)
   find_package(SDL2 REQUIRED)
   find_package(OpenGL REQUIRED)
