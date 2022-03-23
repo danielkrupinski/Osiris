@@ -1,0 +1,5 @@
+add_subdirectory(imgui)
+
+if (WIN32)
+  add_subdirectory(MinHook)
+endif()

@@ -16,11 +16,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 add_library(OsirisOBJ OBJECT "")
+add_subdirectory(Dependencies)
 add_subdirectory(Source)
-
-if (WIN32)
-  add_subdirectory(Dependencies/MinHook)
-endif()
 
 set_target_properties(OsirisOBJ PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_precompile_headers(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Source/pch.h")
@@ -28,7 +25,6 @@ target_include_directories(OsirisOBJ PUBLIC "${CMAKE_SOURCE_DIR}/Source")
 target_include_directories(OsirisOBJ PUBLIC "${CMAKE_SOURCE_DIR}/Dependencies")
 
 add_subdirectory(Source/freetype)
-add_subdirectory(Dependencies/imgui)
 target_link_libraries(OsirisOBJ PUBLIC imgui)
 
 if (NOT WIN32)
