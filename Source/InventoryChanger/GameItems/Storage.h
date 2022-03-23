@@ -74,6 +74,11 @@ public:
         return items;
     }
 
+    std::span<const PaintKit> getPaintKits() const
+    {
+        return paintKits;
+    }
+
     [[nodiscard]] std::uint16_t getServiceMedalYear(const Item& serviceMedal) const noexcept
     {
         assert(serviceMedal.isServiceMedal());
