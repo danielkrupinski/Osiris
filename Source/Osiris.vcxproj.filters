@@ -42,6 +42,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{b1414ace-e5da-40a5-8ad7-f44d19c9c430}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\Inventory">
+      <UniqueIdentifier>{270217aa-a98f-429f-8f75-6afc8c109b1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -648,6 +651,9 @@
     </ClInclude>
     <ClInclude Include="..\Dependencies\MinHook\hde\table64.h">
       <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Inventory\Item.h">
+      <Filter>InventoryChanger\Inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
