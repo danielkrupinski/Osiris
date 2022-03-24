@@ -143,7 +143,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] auto loadSkinStickersFromJson(const json& j) noexcept
 {
-    std::array<inventory::Skin::StickerConfig, 5> skinStickers;
+    std::array<inventory::Skin::Sticker, 5> skinStickers;
 
     if (!j.contains("Stickers"))
         return skinStickers;

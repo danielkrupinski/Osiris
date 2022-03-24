@@ -21,7 +21,7 @@ namespace inventory
 {
 
 struct Skin {
-    struct StickerConfig {
+    struct Sticker {
         int stickerID = 0;
         float wear = 0.0f;
     };
@@ -30,7 +30,7 @@ struct Skin {
     int seed = 1;
     int statTrak = -1;
     std::uint32_t tournamentID = 0;
-    std::array<StickerConfig, 5> stickers;
+    std::array<Sticker, 5> stickers;
     std::string nameTag;
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
