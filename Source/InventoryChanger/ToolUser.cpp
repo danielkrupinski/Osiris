@@ -83,7 +83,7 @@ private:
         Inventory::recreateItem(destItemID);
     }
 
-    void _activateOperationPass(inventory::InventoryItem& pass) const noexcept
+    void _activateOperationPass(inventory::Item& pass) const noexcept
     {
         const auto passWeaponID = pass.get().getWeaponID();
         pass.markToDelete();
@@ -92,7 +92,7 @@ private:
             Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, true);
     }
 
-    void _activateViewerPass(inventory::InventoryItem& pass) const noexcept
+    void _activateViewerPass(inventory::Item& pass) const noexcept
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().getWeaponID()) + 1);
         pass.markToDelete();
@@ -100,7 +100,7 @@ private:
             initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
     }
 
-    void _unsealGraffiti(inventory::InventoryItem& sealedGraffiti) const noexcept
+    void _unsealGraffiti(inventory::Item& sealedGraffiti) const noexcept
     {
         if (const auto item = StaticData::lookup().findGraffiti(StaticData::lookup().getStorage().getGraffitiKit(sealedGraffiti.get()).id); item.has_value()) {
             sealedGraffiti.markToDelete();
@@ -110,7 +110,7 @@ private:
         }
     }
 
-    void _openContainer(inventory::InventoryItem& container) const noexcept
+    void _openContainer(inventory::Item& container) const noexcept
     {
         assert(container.isCase());
         const auto& caseData = StaticData::getCase(container.get());
@@ -124,7 +124,7 @@ private:
         }
     }
 
-    void _applySticker(inventory::InventoryItem& sticker) const noexcept
+    void _applySticker(inventory::Item& sticker) const noexcept
     {
         assert(sticker.isSticker());
         const auto dest = Inventory::getItem(destItemID);
@@ -137,7 +137,7 @@ private:
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
     }
 
-    void _addNameTag(inventory::InventoryItem& nameTagItem) const noexcept
+    void _addNameTag(inventory::Item& nameTagItem) const noexcept
     {
         assert(nameTagItem.isNameTag());
         const auto dest = Inventory::getItem(destItemID);
@@ -149,7 +149,7 @@ private:
         initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
     }
 
-    void _applyPatch(inventory::InventoryItem& patch) const noexcept
+    void _applyPatch(inventory::Item& patch) const noexcept
     {
         assert(patch.isPatch());
         const auto dest = Inventory::getItem(destItemID);
@@ -161,7 +161,7 @@ private:
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
 
-    void _swapStatTrak(inventory::InventoryItem& statTrakSwapTool) const noexcept
+    void _swapStatTrak(inventory::Item& statTrakSwapTool) const noexcept
     {
         const auto item1 = Inventory::getItem(statTrakSwapItem1);
         if (!item1 || !item1->isSkin())
@@ -183,7 +183,7 @@ private:
         initItemCustomizationNotification("stattrack_swap", recreatedItemID2);
     }
 
-    void _activateSouvenirToken(inventory::InventoryItem& souvenirToken, CSPlayerInventory& localInventory) const noexcept
+    void _activateSouvenirToken(inventory::Item& souvenirToken, CSPlayerInventory& localInventory) const noexcept
     {
         assert(souvenirToken.isSouvenirToken());
 

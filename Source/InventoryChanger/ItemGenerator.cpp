@@ -854,7 +854,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromContainer(const inventory::InventoryItem& caseItem) noexcept
+std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.isCase());
 

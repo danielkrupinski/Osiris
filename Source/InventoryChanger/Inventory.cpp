@@ -33,7 +33,7 @@ public:
         std::size_t index;
     };
 
-    static std::vector<inventory::InventoryItem>& get() noexcept
+    static std::vector<inventory::Item>& get() noexcept
     {
         return instance().inventory;
     }
@@ -58,7 +58,7 @@ public:
         instance()._runFrame();
     }
 
-    static inventory::InventoryItem* getItem(std::uint64_t itemID) noexcept
+    static inventory::Item* getItem(std::uint64_t itemID) noexcept
     {
         return instance()._getItem(itemID);
     }
@@ -83,7 +83,7 @@ public:
         return instance()._getItemIndex(itemID);
     }
 private:
-    inventory::InventoryItem* _getItem(std::uint64_t itemID) noexcept
+    inventory::Item* _getItem(std::uint64_t itemID) noexcept
     {
         if (itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size())
             return &inventory[static_cast<std::size_t>(itemID - BASE_ITEMID)];
@@ -96,7 +96,7 @@ private:
         return static_cast<std::size_t>(itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
     }
 
-    static void initSkinEconItem(const inventory::InventoryItem& inventoryItem, EconItem& econItem) noexcept
+    static void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) noexcept
     {
         assert(inventoryItem.isSkin());
 
@@ -146,7 +146,7 @@ private:
         }
     }
 
-    std::uint64_t _createSOCItem(const inventory::InventoryItem& inventoryItem, bool asUnacknowledged) const noexcept
+    std::uint64_t _createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged) const noexcept
     {
         const auto localInventory = memory->inventoryManager->getLocalInventory();
         if (!localInventory)
@@ -347,52 +347,52 @@ private:
 
     std::vector<std::tuple<std::reference_wrapper<const game_items::Item>, std::size_t, bool>> toAdd;
     std::vector<ToEquip> toEquip;
-    std::vector<inventory::InventoryItem> inventory;
+    std::vector<inventory::Item> inventory;
 };
 
-inventory::DynamicSkinData& Inventory::dynamicSkinData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicSkinData& Inventory::dynamicSkinData(const inventory::Item& item) noexcept
 {
     assert(item.isSkin());
     return ::dynamicSkinData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicGloveData& Inventory::dynamicGloveData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicGloveData& Inventory::dynamicGloveData(const inventory::Item& item) noexcept
 {
     assert(item.isGlove());
     return ::dynamicGloveData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicAgentData& Inventory::dynamicAgentData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicAgentData& Inventory::dynamicAgentData(const inventory::Item& item) noexcept
 {
     assert(item.isAgent());
     return ::dynamicAgentData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicMusicData& Inventory::dynamicMusicData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicMusicData& Inventory::dynamicMusicData(const inventory::Item& item) noexcept
 {
     assert(item.isMusic());
     return ::dynamicMusicData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(const inventory::Item& item) noexcept
 {
     assert(item.isCase() && StaticData::isSouvenirPackage(item.get()));
     return ::dynamicSouvenirPackageData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicServiceMedalData& Inventory::dynamicServiceMedalData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicServiceMedalData& Inventory::dynamicServiceMedalData(const inventory::Item& item) noexcept
 {
     assert(item.isServiceMedal());
     return ::dynamicServiceMedalData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(const inventory::Item& item) noexcept
 {
     assert(item.isTournamentCoin());
     return ::dynamicTournamentCoinData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicGraffitiData& Inventory::dynamicGraffitiData(const inventory::InventoryItem& item) noexcept
+inventory::DynamicGraffitiData& Inventory::dynamicGraffitiData(const inventory::Item& item) noexcept
 {
     assert(item.isGraffiti());
     return ::dynamicGraffitiData[item.getDynamicDataIndex()];
@@ -446,7 +446,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::DynamicGraffitiData&& data)
     return ::dynamicGraffitiData.size() - 1;
 }
 
-std::vector<inventory::InventoryItem>& Inventory::get() noexcept
+std::vector<inventory::Item>& Inventory::get() noexcept
 {
     return InventoryImpl::get();
 }
@@ -476,7 +476,7 @@ void Inventory::runFrame() noexcept
     InventoryImpl::runFrame();
 }
 
-inventory::InventoryItem* Inventory::getItem(std::uint64_t itemID) noexcept
+inventory::Item* Inventory::getItem(std::uint64_t itemID) noexcept
 {
     return InventoryImpl::getItem(itemID);
 }
