@@ -11,6 +11,7 @@
 #include "../SDK/ItemSchema.h"
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
+#include "Inventory/Structs.h"
 
 using Inventory::InvalidDynamicDataIdx;
 using Inventory::BASE_ITEMID;

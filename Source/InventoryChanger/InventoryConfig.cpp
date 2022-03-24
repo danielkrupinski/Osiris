@@ -3,6 +3,7 @@
 
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
+#include "Inventory/Structs.h"
 
 constexpr auto CONFIG_VERSION = 3;
 

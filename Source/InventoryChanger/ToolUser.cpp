@@ -10,6 +10,7 @@
 
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
+#include "Inventory/Structs.h"
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {

@@ -51,6 +51,7 @@
 
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
+#include "Inventory/Structs.h"
 
 static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
 {

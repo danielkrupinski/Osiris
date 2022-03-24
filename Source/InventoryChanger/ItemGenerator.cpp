@@ -14,6 +14,7 @@
 #include "TournamentMatches.h"
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
+#include "Inventory/Structs.h"
 
 static float generateWear() noexcept
 {
