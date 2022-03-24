@@ -68,7 +68,7 @@ struct ServiceMedal {
     std::uint32_t issueDateTimestamp = 0;
 };
 
-struct DynamicTournamentCoinData {
+struct TournamentCoin {
     std::uint32_t dropsAwarded = 0;
 };
 
@@ -102,7 +102,7 @@ namespace Inventory
     inventory::Music& dynamicMusicData(const inventory::Item& item) noexcept;
     inventory::SouvenirPackage& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
     inventory::ServiceMedal& dynamicServiceMedalData(const inventory::Item& item) noexcept;
-    inventory::DynamicTournamentCoinData& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
+    inventory::TournamentCoin& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
     inventory::DynamicGraffitiData& dynamicGraffitiData(const inventory::Item& item) noexcept;
 
     std::size_t emplaceDynamicData(inventory::Skin&& data) noexcept;
@@ -111,6 +111,6 @@ namespace Inventory
     std::size_t emplaceDynamicData(inventory::Music&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::SouvenirPackage&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::ServiceMedal&& data) noexcept;
-    std::size_t emplaceDynamicData(inventory::DynamicTournamentCoinData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::TournamentCoin&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicGraffitiData&& data) noexcept;
 }

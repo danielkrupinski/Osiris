@@ -21,7 +21,7 @@ static std::vector<inventory::Agent> dynamicAgentData;
 static std::vector<inventory::Music> dynamicMusicData;
 static std::vector<inventory::SouvenirPackage> dynamicSouvenirPackageData;
 static std::vector<inventory::ServiceMedal> dynamicServiceMedalData;
-static std::vector<inventory::DynamicTournamentCoinData> dynamicTournamentCoinData;
+static std::vector<inventory::TournamentCoin> dynamicTournamentCoinData;
 static std::vector<inventory::DynamicGraffitiData> dynamicGraffitiData;
 
 class InventoryImpl {
@@ -387,7 +387,7 @@ inventory::ServiceMedal& Inventory::dynamicServiceMedalData(const inventory::Ite
     return ::dynamicServiceMedalData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(const inventory::Item& item) noexcept
+inventory::TournamentCoin& Inventory::dynamicTournamentCoinData(const inventory::Item& item) noexcept
 {
     assert(item.isTournamentCoin());
     return ::dynamicTournamentCoinData[item.getDynamicDataIndex()];
@@ -435,7 +435,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::ServiceMedal&& data) noexce
     return ::dynamicServiceMedalData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicTournamentCoinData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::TournamentCoin&& data) noexcept
 {
     ::dynamicTournamentCoinData.push_back(std::move(data));
     return ::dynamicTournamentCoinData.size() - 1;
