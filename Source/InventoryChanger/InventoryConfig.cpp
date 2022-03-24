@@ -180,7 +180,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicSkinDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicSkinData dynamicData;
+    inventory::Skin dynamicData;
 
     if (j.contains("Tournament ID")) {
         if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())

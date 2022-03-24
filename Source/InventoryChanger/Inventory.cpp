@@ -14,7 +14,7 @@
 using Inventory::InvalidDynamicDataIdx;
 using Inventory::BASE_ITEMID;
 
-static std::vector<inventory::DynamicSkinData> dynamicSkinData;
+static std::vector<inventory::Skin> dynamicSkinData;
 static std::vector<inventory::DynamicGloveData> dynamicGloveData;
 static std::vector<inventory::DynamicAgentData> dynamicAgentData;
 static std::vector<inventory::DynamicMusicData> dynamicMusicData;
@@ -350,7 +350,7 @@ private:
     std::vector<inventory::Item> inventory;
 };
 
-inventory::DynamicSkinData& Inventory::dynamicSkinData(const inventory::Item& item) noexcept
+inventory::Skin& Inventory::dynamicSkinData(const inventory::Item& item) noexcept
 {
     assert(item.isSkin());
     return ::dynamicSkinData[item.getDynamicDataIndex()];
@@ -398,7 +398,7 @@ inventory::DynamicGraffitiData& Inventory::dynamicGraffitiData(const inventory::
     return ::dynamicGraffitiData[item.getDynamicDataIndex()];
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicSkinData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::Skin&& data) noexcept
 {
     ::dynamicSkinData.push_back(std::move(data));
     return ::dynamicSkinData.size() - 1;

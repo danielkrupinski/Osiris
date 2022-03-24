@@ -25,7 +25,7 @@ struct StickerConfig {
     float wear = 0.0f;
 };
 
-struct DynamicSkinData {
+struct Skin {
     float wear = 0.0f;
     int seed = 1;
     int statTrak = -1;
@@ -132,7 +132,7 @@ namespace Inventory
     void equipItem(Team team, int slot, std::size_t index) noexcept;
     std::size_t getItemIndex(std::uint64_t itemID) noexcept;
 
-    inventory::DynamicSkinData& dynamicSkinData(const inventory::Item& item) noexcept;
+    inventory::Skin& dynamicSkinData(const inventory::Item& item) noexcept;
     inventory::DynamicGloveData& dynamicGloveData(const inventory::Item& item) noexcept;
     inventory::DynamicAgentData& dynamicAgentData(const inventory::Item& item) noexcept;
     inventory::DynamicMusicData& dynamicMusicData(const inventory::Item& item) noexcept;
@@ -141,7 +141,7 @@ namespace Inventory
     inventory::DynamicTournamentCoinData& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
     inventory::DynamicGraffitiData& dynamicGraffitiData(const inventory::Item& item) noexcept;
 
-    std::size_t emplaceDynamicData(inventory::DynamicSkinData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::Skin&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicGloveData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicAgentData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicMusicData&& data) noexcept;

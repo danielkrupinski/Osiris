@@ -869,7 +869,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
         dynamicData.statTrak = 0;
         dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (unlockedItem.isSkin()) {
-        inventory::DynamicSkinData dynamicData;
+        inventory::Skin dynamicData;
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(unlockedItem);
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
@@ -989,7 +989,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
 
     if (item.isSkin()) {
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
-        inventory::DynamicSkinData dynamicData;
+        inventory::Skin dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
 
