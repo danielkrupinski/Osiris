@@ -9,6 +9,7 @@
 #include "ToolUser.h"
 
 #include "GameItems/Lookup.h"
+#include "Inventory/Item.h"
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {

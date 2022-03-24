@@ -10,6 +10,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/ItemSchema.h"
 #include "GameItems/Lookup.h"
+#include "Inventory/Item.h"
 
 using Inventory::InvalidDynamicDataIdx;
 using Inventory::BASE_ITEMID;

@@ -13,6 +13,7 @@
 #include "../SDK/ItemSchema.h"
 #include "TournamentMatches.h"
 #include "GameItems/Lookup.h"
+#include "Inventory/Item.h"
 
 static float generateWear() noexcept
 {
