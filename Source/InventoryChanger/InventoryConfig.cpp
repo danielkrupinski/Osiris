@@ -263,7 +263,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
 {
-    std::array<inventory::Agent::PatchConfig, 5> agentPatches;
+    std::array<inventory::Agent::Patch, 5> agentPatches;
 
     if (!j.contains("Patches"))
         return agentPatches;

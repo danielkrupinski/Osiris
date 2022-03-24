@@ -41,11 +41,11 @@ struct Skin {
 };
 
 struct Agent {
-    struct PatchConfig {
+    struct Patch {
         int patchID = 0;
     };
 
-    std::array<PatchConfig, 5> patches;
+    std::array<Patch, 5> patches;
 };
 
 struct DynamicGloveData {
