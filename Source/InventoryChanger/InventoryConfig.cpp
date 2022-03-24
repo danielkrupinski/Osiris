@@ -374,7 +374,7 @@ void loadEquipmentFromJson(const json& j) noexcept
 
 [[nodiscard]] std::size_t loadDynamicGraffitiDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicGraffitiData dynamicData;
+    inventory::Graffiti dynamicData;
     if (j.contains("Uses Left")) {
         if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
             dynamicData.usesLeft = usesLeft;
@@ -414,7 +414,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
             if (weaponID == WeaponId::Graffiti) {
                 if (itemOptional.has_value()) {
-                    inventory::DynamicGraffitiData dynamicData;
+                    inventory::Graffiti dynamicData;
                     dynamicData.usesLeft = 50;
                     dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                 }

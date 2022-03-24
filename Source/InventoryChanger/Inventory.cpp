@@ -22,7 +22,7 @@ static std::vector<inventory::Music> dynamicMusicData;
 static std::vector<inventory::SouvenirPackage> dynamicSouvenirPackageData;
 static std::vector<inventory::ServiceMedal> dynamicServiceMedalData;
 static std::vector<inventory::TournamentCoin> dynamicTournamentCoinData;
-static std::vector<inventory::DynamicGraffitiData> dynamicGraffitiData;
+static std::vector<inventory::Graffiti> dynamicGraffitiData;
 
 class InventoryImpl {
 public:
@@ -393,7 +393,7 @@ inventory::TournamentCoin& Inventory::dynamicTournamentCoinData(const inventory:
     return ::dynamicTournamentCoinData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicGraffitiData& Inventory::dynamicGraffitiData(const inventory::Item& item) noexcept
+inventory::Graffiti& Inventory::dynamicGraffitiData(const inventory::Item& item) noexcept
 {
     assert(item.isGraffiti());
     return ::dynamicGraffitiData[item.getDynamicDataIndex()];
@@ -441,7 +441,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::TournamentCoin&& data) noex
     return ::dynamicTournamentCoinData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicGraffitiData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::Graffiti&& data) noexcept
 {
     ::dynamicGraffitiData.push_back(std::move(data));
     return ::dynamicGraffitiData.size() - 1;

@@ -105,7 +105,7 @@ private:
     {
         if (const auto item = StaticData::lookup().findGraffiti(StaticData::lookup().getStorage().getGraffitiKit(sealedGraffiti.get()).id); item.has_value()) {
             sealedGraffiti.markToDelete();
-            inventory::DynamicGraffitiData dynamicData;
+            inventory::Graffiti dynamicData;
             dynamicData.usesLeft = 50;
             initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(*item, Inventory::emplaceDynamicData(std::move(dynamicData)), false));
         }
