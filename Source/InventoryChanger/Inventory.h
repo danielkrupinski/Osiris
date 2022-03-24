@@ -64,7 +64,7 @@ struct SouvenirPackage {
     ProPlayer proPlayer{};
 };
 
-struct DynamicServiceMedalData {
+struct ServiceMedal {
     std::uint32_t issueDateTimestamp = 0;
 };
 
@@ -101,7 +101,7 @@ namespace Inventory
     inventory::Agent& dynamicAgentData(const inventory::Item& item) noexcept;
     inventory::Music& dynamicMusicData(const inventory::Item& item) noexcept;
     inventory::SouvenirPackage& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
-    inventory::DynamicServiceMedalData& dynamicServiceMedalData(const inventory::Item& item) noexcept;
+    inventory::ServiceMedal& dynamicServiceMedalData(const inventory::Item& item) noexcept;
     inventory::DynamicTournamentCoinData& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
     inventory::DynamicGraffitiData& dynamicGraffitiData(const inventory::Item& item) noexcept;
 
@@ -110,7 +110,7 @@ namespace Inventory
     std::size_t emplaceDynamicData(inventory::Agent&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::Music&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::SouvenirPackage&& data) noexcept;
-    std::size_t emplaceDynamicData(inventory::DynamicServiceMedalData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::ServiceMedal&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicTournamentCoinData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicGraffitiData&& data) noexcept;
 }

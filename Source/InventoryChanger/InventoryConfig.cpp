@@ -301,7 +301,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicServiceMedalDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicServiceMedalData dynamicData;
+    inventory::ServiceMedal dynamicData;
 
     if (j.contains("Issue Date Timestamp")) {
         if (const auto& issueDateTimestamp = j["Issue Date Timestamp"]; issueDateTimestamp.is_number_unsigned())

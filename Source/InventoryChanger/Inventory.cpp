@@ -20,7 +20,7 @@ static std::vector<inventory::Glove> dynamicGloveData;
 static std::vector<inventory::Agent> dynamicAgentData;
 static std::vector<inventory::Music> dynamicMusicData;
 static std::vector<inventory::SouvenirPackage> dynamicSouvenirPackageData;
-static std::vector<inventory::DynamicServiceMedalData> dynamicServiceMedalData;
+static std::vector<inventory::ServiceMedal> dynamicServiceMedalData;
 static std::vector<inventory::DynamicTournamentCoinData> dynamicTournamentCoinData;
 static std::vector<inventory::DynamicGraffitiData> dynamicGraffitiData;
 
@@ -381,7 +381,7 @@ inventory::SouvenirPackage& Inventory::dynamicSouvenirPackageData(const inventor
     return ::dynamicSouvenirPackageData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicServiceMedalData& Inventory::dynamicServiceMedalData(const inventory::Item& item) noexcept
+inventory::ServiceMedal& Inventory::dynamicServiceMedalData(const inventory::Item& item) noexcept
 {
     assert(item.isServiceMedal());
     return ::dynamicServiceMedalData[item.getDynamicDataIndex()];
@@ -429,7 +429,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::SouvenirPackage&& data) noe
     return ::dynamicSouvenirPackageData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicServiceMedalData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::ServiceMedal&& data) noexcept
 {
     ::dynamicServiceMedalData.push_back(std::move(data));
     return ::dynamicServiceMedalData.size() - 1;
