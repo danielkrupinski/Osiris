@@ -1000,7 +1000,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isGloves()) {
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
-        inventory::DynamicGloveData dynamicData;
+        inventory::Glove dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
         index = Inventory::emplaceDynamicData(std::move(dynamicData));

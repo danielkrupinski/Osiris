@@ -16,7 +16,7 @@ using Inventory::InvalidDynamicDataIdx;
 using Inventory::BASE_ITEMID;
 
 static std::vector<inventory::Skin> dynamicSkinData;
-static std::vector<inventory::DynamicGloveData> dynamicGloveData;
+static std::vector<inventory::Glove> dynamicGloveData;
 static std::vector<inventory::Agent> dynamicAgentData;
 static std::vector<inventory::DynamicMusicData> dynamicMusicData;
 static std::vector<inventory::DynamicSouvenirPackageData> dynamicSouvenirPackageData;
@@ -357,7 +357,7 @@ inventory::Skin& Inventory::dynamicSkinData(const inventory::Item& item) noexcep
     return ::dynamicSkinData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicGloveData& Inventory::dynamicGloveData(const inventory::Item& item) noexcept
+inventory::Glove& Inventory::dynamicGloveData(const inventory::Item& item) noexcept
 {
     assert(item.isGlove());
     return ::dynamicGloveData[item.getDynamicDataIndex()];
@@ -405,7 +405,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::Skin&& data) noexcept
     return ::dynamicSkinData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicGloveData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::Glove&& data) noexcept
 {
     ::dynamicGloveData.push_back(std::move(data));
     return ::dynamicGloveData.size() - 1;

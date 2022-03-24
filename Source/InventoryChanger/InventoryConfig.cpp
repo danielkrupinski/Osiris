@@ -234,7 +234,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicGloveDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicGloveData dynamicData;
+    inventory::Glove dynamicData;
 
     if (j.contains("Wear")) {
         if (const auto& wear = j["Wear"]; wear.is_number_float())
