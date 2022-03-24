@@ -19,7 +19,7 @@ static std::vector<inventory::Skin> dynamicSkinData;
 static std::vector<inventory::Glove> dynamicGloveData;
 static std::vector<inventory::Agent> dynamicAgentData;
 static std::vector<inventory::Music> dynamicMusicData;
-static std::vector<inventory::DynamicSouvenirPackageData> dynamicSouvenirPackageData;
+static std::vector<inventory::SouvenirPackage> dynamicSouvenirPackageData;
 static std::vector<inventory::DynamicServiceMedalData> dynamicServiceMedalData;
 static std::vector<inventory::DynamicTournamentCoinData> dynamicTournamentCoinData;
 static std::vector<inventory::DynamicGraffitiData> dynamicGraffitiData;
@@ -375,7 +375,7 @@ inventory::Music& Inventory::dynamicMusicData(const inventory::Item& item) noexc
     return ::dynamicMusicData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(const inventory::Item& item) noexcept
+inventory::SouvenirPackage& Inventory::dynamicSouvenirPackageData(const inventory::Item& item) noexcept
 {
     assert(item.isCase() && StaticData::isSouvenirPackage(item.get()));
     return ::dynamicSouvenirPackageData[item.getDynamicDataIndex()];
@@ -423,7 +423,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::Music&& data) noexcept
     return ::dynamicMusicData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicSouvenirPackageData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::SouvenirPackage&& data) noexcept
 {
     ::dynamicSouvenirPackageData.push_back(std::move(data));
     return ::dynamicSouvenirPackageData.size() - 1;

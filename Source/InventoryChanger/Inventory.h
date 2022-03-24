@@ -57,7 +57,7 @@ struct Music {
     int statTrak = -1;
 };
 
-struct DynamicSouvenirPackageData {
+struct SouvenirPackage {
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
     TournamentTeam tournamentTeam2{};
@@ -100,7 +100,7 @@ namespace Inventory
     inventory::Glove& dynamicGloveData(const inventory::Item& item) noexcept;
     inventory::Agent& dynamicAgentData(const inventory::Item& item) noexcept;
     inventory::Music& dynamicMusicData(const inventory::Item& item) noexcept;
-    inventory::DynamicSouvenirPackageData& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
+    inventory::SouvenirPackage& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
     inventory::DynamicServiceMedalData& dynamicServiceMedalData(const inventory::Item& item) noexcept;
     inventory::DynamicTournamentCoinData& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
     inventory::DynamicGraffitiData& dynamicGraffitiData(const inventory::Item& item) noexcept;
@@ -109,7 +109,7 @@ namespace Inventory
     std::size_t emplaceDynamicData(inventory::Glove&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::Agent&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::Music&& data) noexcept;
-    std::size_t emplaceDynamicData(inventory::DynamicSouvenirPackageData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::SouvenirPackage&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicServiceMedalData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicTournamentCoinData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicGraffitiData&& data) noexcept;

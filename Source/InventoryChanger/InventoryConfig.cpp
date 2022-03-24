@@ -313,7 +313,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicSouvenirPackageData dynamicData;
+    inventory::SouvenirPackage dynamicData;
 
     if (j.contains("Tournament Stage")) {
         if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())

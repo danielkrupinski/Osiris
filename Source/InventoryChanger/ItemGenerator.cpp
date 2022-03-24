@@ -926,7 +926,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 
 [[nodiscard]] static auto generateSouvenirPackageData(const StaticData::Case& caseData) noexcept
 {
-    inventory::DynamicSouvenirPackageData dynamicData;
+    inventory::SouvenirPackage dynamicData;
 
     if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
         if (const auto matchesOnMap = filterMatchesToMap(matches, caseData.tournamentMap); !matchesOnMap.empty()) {
