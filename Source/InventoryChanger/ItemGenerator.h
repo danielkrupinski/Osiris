@@ -4,13 +4,14 @@
 #include <ctime>
 #include <utility>
 
+#include "Inventory.h"
 #include "StaticData.h"
 
 struct InventoryItem;
 
 namespace ItemGenerator
 {
-    std::pair<const game_items::Item&, std::size_t> generateItemFromContainer(const InventoryItem& caseItem) noexcept;
+    std::pair<const game_items::Item&, std::size_t> generateItemFromContainer(const inventory::InventoryItem& caseItem) noexcept;
     std::size_t createDefaultDynamicData(const game_items::Item& item) noexcept;
 }
 

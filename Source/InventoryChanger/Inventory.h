@@ -13,14 +13,17 @@
 
 enum class Team;
 
+enum TournamentTeam : std::uint8_t;
+enum TournamentStage : std::uint8_t;
+enum ProPlayer;
+
+namespace inventory
+{
+
 struct StickerConfig {
     int stickerID = 0;
     float wear = 0.0f;
 };
-
-enum TournamentTeam : std::uint8_t;
-enum TournamentStage : std::uint8_t;
-enum ProPlayer;
 
 struct DynamicSkinData {
     float wear = 0.0f;
@@ -110,38 +113,40 @@ public:
     const game_items::Item& get() const noexcept { assert(isValid()); return item.value(); }
 };
 
+}
+
 namespace Inventory
 {
     constexpr auto InvalidDynamicDataIdx = static_cast<std::size_t>(-1);
     constexpr auto BASE_ITEMID = 1152921504606746975;
 
-    std::vector<InventoryItem>& get() noexcept;
+    std::vector<inventory::InventoryItem>& get() noexcept;
     void addItemUnacknowledged(const game_items::Item& gameItem, std::size_t dynamicDataIdx) noexcept;
     void addItemAcknowledged(const game_items::Item& gameItem, std::size_t dynamicDataIdx) noexcept;
     std::uint64_t addItemNow(const game_items::Item& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
-    InventoryItem* getItem(std::uint64_t itemID) noexcept;
+    inventory::InventoryItem* getItem(std::uint64_t itemID) noexcept;
     std::uint64_t recreateItem(std::uint64_t itemID) noexcept;
     void clear() noexcept;
     void equipItem(Team team, int slot, std::size_t index) noexcept;
     std::size_t getItemIndex(std::uint64_t itemID) noexcept;
 
-    DynamicSkinData& dynamicSkinData(const InventoryItem& item) noexcept;
-    DynamicGloveData& dynamicGloveData(const InventoryItem& item) noexcept;
-    DynamicAgentData& dynamicAgentData(const InventoryItem& item) noexcept;
-    DynamicMusicData& dynamicMusicData(const InventoryItem& item) noexcept;
-    DynamicSouvenirPackageData& dynamicSouvenirPackageData(const InventoryItem& item) noexcept;
-    DynamicServiceMedalData& dynamicServiceMedalData(const InventoryItem& item) noexcept;
-    DynamicTournamentCoinData& dynamicTournamentCoinData(const InventoryItem& item) noexcept;
-    DynamicGraffitiData& dynamicGraffitiData(const InventoryItem& item) noexcept;
+    inventory::DynamicSkinData& dynamicSkinData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicGloveData& dynamicGloveData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicAgentData& dynamicAgentData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicMusicData& dynamicMusicData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicSouvenirPackageData& dynamicSouvenirPackageData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicServiceMedalData& dynamicServiceMedalData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicTournamentCoinData& dynamicTournamentCoinData(const inventory::InventoryItem& item) noexcept;
+    inventory::DynamicGraffitiData& dynamicGraffitiData(const inventory::InventoryItem& item) noexcept;
 
-    std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicAgentData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicMusicData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicSouvenirPackageData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicServiceMedalData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicTournamentCoinData&& data) noexcept;
-    std::size_t emplaceDynamicData(DynamicGraffitiData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicSkinData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicGloveData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicAgentData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicMusicData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicSouvenirPackageData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicServiceMedalData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicTournamentCoinData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::DynamicGraffitiData&& data) noexcept;
 }

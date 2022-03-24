@@ -142,7 +142,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] auto loadSkinStickersFromJson(const json& j) noexcept
 {
-    std::array<StickerConfig, 5> skinStickers;
+    std::array<inventory::StickerConfig, 5> skinStickers;
 
     if (!j.contains("Stickers"))
         return skinStickers;
@@ -180,7 +180,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicSkinDataFromJson(const json& j) noexcept
 {
-    DynamicSkinData dynamicData;
+    inventory::DynamicSkinData dynamicData;
 
     if (j.contains("Tournament ID")) {
         if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
@@ -233,7 +233,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicGloveDataFromJson(const json& j) noexcept
 {
-    DynamicGloveData dynamicData;
+    inventory::DynamicGloveData dynamicData;
 
     if (j.contains("Wear")) {
         if (const auto& wear = j["Wear"]; wear.is_number_float())
@@ -250,7 +250,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicMusicDataFromJson(const json& j) noexcept
 {
-    DynamicMusicData dynamicData;
+    inventory::DynamicMusicData dynamicData;
 
     if (j.contains("StatTrak")) {
         if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)
@@ -262,7 +262,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
 {
-    std::array<PatchConfig, 5> agentPatches;
+    std::array<inventory::PatchConfig, 5> agentPatches;
 
     if (!j.contains("Patches"))
         return agentPatches;
@@ -293,14 +293,14 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicAgentDataFromJson(const json& j) noexcept
 {
-    DynamicAgentData dynamicData;
+    inventory::DynamicAgentData dynamicData;
     dynamicData.patches = loadAgentPatchesFromJson(j);
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }
 
 [[nodiscard]] std::size_t loadDynamicServiceMedalDataFromJson(const json& j) noexcept
 {
-    DynamicServiceMedalData dynamicData;
+    inventory::DynamicServiceMedalData dynamicData;
 
     if (j.contains("Issue Date Timestamp")) {
         if (const auto& issueDateTimestamp = j["Issue Date Timestamp"]; issueDateTimestamp.is_number_unsigned())
@@ -312,7 +312,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
 {
-    DynamicSouvenirPackageData dynamicData;
+    inventory::DynamicSouvenirPackageData dynamicData;
 
     if (j.contains("Tournament Stage")) {
         if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
@@ -373,7 +373,7 @@ void loadEquipmentFromJson(const json& j) noexcept
 
 [[nodiscard]] std::size_t loadDynamicGraffitiDataFromJson(const json& j) noexcept
 {
-    DynamicGraffitiData dynamicData;
+    inventory::DynamicGraffitiData dynamicData;
     if (j.contains("Uses Left")) {
         if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
             dynamicData.usesLeft = usesLeft;
@@ -413,7 +413,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
             if (weaponID == WeaponId::Graffiti) {
                 if (itemOptional.has_value()) {
-                    DynamicGraffitiData dynamicData;
+                    inventory::DynamicGraffitiData dynamicData;
                     dynamicData.usesLeft = 50;
                     dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                 }
