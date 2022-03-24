@@ -350,44 +350,52 @@ private:
     std::vector<InventoryItem> inventory;
 };
 
-DynamicSkinData& Inventory::dynamicSkinData(std::size_t index) noexcept
+DynamicSkinData& Inventory::dynamicSkinData(const InventoryItem& item) noexcept
 {
-    return ::dynamicSkinData[index];
+    assert(item.isSkin());
+    return ::dynamicSkinData[item.getDynamicDataIndex()];
 }
 
-DynamicGloveData& Inventory::dynamicGloveData(std::size_t index) noexcept
+DynamicGloveData& Inventory::dynamicGloveData(const InventoryItem& item) noexcept
 {
-    return ::dynamicGloveData[index];
+    assert(item.isGlove());
+    return ::dynamicGloveData[item.getDynamicDataIndex()];
 }
 
-DynamicAgentData& Inventory::dynamicAgentData(std::size_t index) noexcept
+DynamicAgentData& Inventory::dynamicAgentData(const InventoryItem& item) noexcept
 {
-    return ::dynamicAgentData[index];
+    assert(item.isAgent());
+    return ::dynamicAgentData[item.getDynamicDataIndex()];
 }
 
-DynamicMusicData& Inventory::dynamicMusicData(std::size_t index) noexcept
+DynamicMusicData& Inventory::dynamicMusicData(const InventoryItem& item) noexcept
 {
-    return ::dynamicMusicData[index];
+    assert(item.isMusic());
+    return ::dynamicMusicData[item.getDynamicDataIndex()];
 }
 
-DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(std::size_t index) noexcept
+DynamicSouvenirPackageData& Inventory::dynamicSouvenirPackageData(const InventoryItem& item) noexcept
 {
-    return ::dynamicSouvenirPackageData[index];
+    assert(item.isCase() && StaticData::isSouvenirPackage(item.get()));
+    return ::dynamicSouvenirPackageData[item.getDynamicDataIndex()];
 }
 
-DynamicServiceMedalData& Inventory::dynamicServiceMedalData(std::size_t index) noexcept
+DynamicServiceMedalData& Inventory::dynamicServiceMedalData(const InventoryItem& item) noexcept
 {
-    return ::dynamicServiceMedalData[index];
+    assert(item.isServiceMedal());
+    return ::dynamicServiceMedalData[item.getDynamicDataIndex()];
 }
 
-DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(std::size_t index) noexcept
+DynamicTournamentCoinData& Inventory::dynamicTournamentCoinData(const InventoryItem& item) noexcept
 {
-    return ::dynamicTournamentCoinData[index];
+    assert(item.isTournamentCoin());
+    return ::dynamicTournamentCoinData[item.getDynamicDataIndex()];
 }
 
-DynamicGraffitiData& Inventory::dynamicGraffitiData(std::size_t index) noexcept
+DynamicGraffitiData& Inventory::dynamicGraffitiData(const InventoryItem& item) noexcept
 {
-    return ::dynamicGraffitiData[index];
+    assert(item.isGraffiti());
+    return ::dynamicGraffitiData[item.getDynamicDataIndex()];
 }
 
 std::size_t Inventory::emplaceDynamicData(DynamicSkinData&& data) noexcept

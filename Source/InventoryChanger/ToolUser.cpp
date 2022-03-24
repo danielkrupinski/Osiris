@@ -54,10 +54,10 @@ private:
 
         if (dest->isSkin()) {
             constexpr auto wearStep = 0.12f;
-            const auto newWear = (Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear += wearStep);
+            const auto newWear = (Inventory::dynamicSkinData(*dest).stickers[stickerSlot].wear += wearStep);
 
             if (const auto shouldRemove = (newWear >= 1.0f + wearStep); shouldRemove) {
-                Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot] = {};
+                Inventory::dynamicSkinData(*dest).stickers[stickerSlot] = {};
                 initItemCustomizationNotification("sticker_remove", Inventory::recreateItem(destItemID));
             } else {
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
@@ -68,7 +68,7 @@ private:
                 }
             }
         } else if (dest->isAgent()) {
-            Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot] = {};
+            Inventory::dynamicAgentData(*dest).patches[stickerSlot] = {};
             initItemCustomizationNotification("patch_remove", Inventory::recreateItem(destItemID));
         }
     }
@@ -79,7 +79,7 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag.clear();
+        Inventory::dynamicSkinData(*dest).nameTag.clear();
         Inventory::recreateItem(destItemID);
     }
 
@@ -131,8 +131,8 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].stickerID = StaticData::lookup().getStorage().getStickerKit(sticker.get()).id;
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).stickers[stickerSlot].wear = 0.0f;
+        Inventory::dynamicSkinData(*dest).stickers[stickerSlot].stickerID = StaticData::lookup().getStorage().getStickerKit(sticker.get()).id;
+        Inventory::dynamicSkinData(*dest).stickers[stickerSlot].wear = 0.0f;
         sticker.markToDelete();
         initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
     }
@@ -144,7 +144,7 @@ private:
         if (!dest || !dest->isSkin())
             return;
 
-        Inventory::dynamicSkinData(dest->getDynamicDataIndex()).nameTag = nameTag;
+        Inventory::dynamicSkinData(*dest).nameTag = nameTag;
         nameTagItem.markToDelete();
         initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
     }
@@ -156,7 +156,7 @@ private:
         if (!dest || !dest->isAgent())
             return;
 
-        Inventory::dynamicAgentData(dest->getDynamicDataIndex()).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatchKit(patch.get()).id;
+        Inventory::dynamicAgentData(*dest).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatchKit(patch.get()).id;
         patch.markToDelete();
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
@@ -171,7 +171,7 @@ private:
         if (!item2 || !item2->isSkin())
             return;
 
-        std::swap(Inventory::dynamicSkinData(item1->getDynamicDataIndex()).statTrak, Inventory::dynamicSkinData(item2->getDynamicDataIndex()).statTrak);
+        std::swap(Inventory::dynamicSkinData(*item1).statTrak, Inventory::dynamicSkinData(*item2).statTrak);
         statTrakSwapTool.markToDelete();
 
         const auto recreatedItemID1 = Inventory::recreateItem(statTrakSwapItem1);
@@ -192,7 +192,7 @@ private:
         if (it != inventory.cend()) {
             souvenirToken.markToDelete();
 
-            const auto newDropsAwarded = (++Inventory::dynamicTournamentCoinData(it->getDynamicDataIndex()).dropsAwarded);
+            const auto newDropsAwarded = (++Inventory::dynamicTournamentCoinData(*it).dropsAwarded);
             const auto coinItemID = std::distance(inventory.begin(), it) + Inventory::BASE_ITEMID;
 
             if (const auto view = memory->findOrCreateEconItemViewForItemID(coinItemID)) {

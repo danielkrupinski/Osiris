@@ -876,7 +876,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
 
         if (StaticData::isSouvenirPackage(caseItem.get())) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
-            const auto& souvenir = Inventory::dynamicSouvenirPackageData(caseItem.getDynamicDataIndex());
+            const auto& souvenir = Inventory::dynamicSouvenirPackageData(caseItem);
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;

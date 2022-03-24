@@ -28,7 +28,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            const auto& dynamicData = Inventory::dynamicGloveData(item.getDynamicDataIndex());
+            const auto& dynamicData = Inventory::dynamicGloveData(item);
 
             itemConfig["Wear"] = dynamicData.wear;
             itemConfig["Seed"] = dynamicData.seed;
@@ -37,7 +37,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            const auto& dynamicData = Inventory::dynamicSkinData(item.getDynamicDataIndex());
+            const auto& dynamicData = Inventory::dynamicSkinData(item);
 
             if (dynamicData.tournamentID != 0)
                 itemConfig["Tournament ID"] = dynamicData.tournamentID;
@@ -70,18 +70,18 @@ json InventoryChanger::toJson() noexcept
             }
         } else if (gameItem.isMusic()) {
             itemConfig["Music ID"] = StaticData::lookup().getStorage().getMusicKit(gameItem).id;
-            if (const auto& dynamicData = Inventory::dynamicMusicData(item.getDynamicDataIndex()); dynamicData.statTrak > -1)
+            if (const auto& dynamicData = Inventory::dynamicMusicData(item); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
         } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatchKit(gameItem).id;
         } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
-            if (const auto& dynamicData = Inventory::dynamicGraffitiData(item.getDynamicDataIndex()); dynamicData.usesLeft >= 0) {
+            if (const auto& dynamicData = Inventory::dynamicGraffitiData(item); dynamicData.usesLeft >= 0) {
                 itemConfig["Uses Left"] = dynamicData.usesLeft;
                 itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
-            const auto& dynamicData = Inventory::dynamicAgentData(item.getDynamicDataIndex());
+            const auto& dynamicData = Inventory::dynamicAgentData(item);
             auto& stickers = itemConfig["Patches"];
             for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
                 const auto& patch = dynamicData.patches[i];
@@ -94,11 +94,11 @@ json InventoryChanger::toJson() noexcept
                 stickers.push_back(std::move(patchConfig));
             }
         } else if (gameItem.isServiceMedal()) {
-            if (const auto& dynamicData = Inventory::dynamicServiceMedalData(item.getDynamicDataIndex()); dynamicData.issueDateTimestamp != 0)
+            if (const auto& dynamicData = Inventory::dynamicServiceMedalData(item); dynamicData.issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = dynamicData.issueDateTimestamp;
         } else if (gameItem.isCase()) {
             if (StaticData::isSouvenirPackage(gameItem)) {
-                if (const auto& dynamicData = Inventory::dynamicSouvenirPackageData(item.getDynamicDataIndex()); dynamicData.tournamentStage != TournamentStage{}) {
+                if (const auto& dynamicData = Inventory::dynamicSouvenirPackageData(item); dynamicData.tournamentStage != TournamentStage{}) {
                     itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
                     itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
                     itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;

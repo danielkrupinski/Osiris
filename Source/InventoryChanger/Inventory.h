@@ -127,14 +127,14 @@ namespace Inventory
     void equipItem(Team team, int slot, std::size_t index) noexcept;
     std::size_t getItemIndex(std::uint64_t itemID) noexcept;
 
-    DynamicSkinData& dynamicSkinData(std::size_t index) noexcept;
-    DynamicGloveData& dynamicGloveData(std::size_t index) noexcept;
-    DynamicAgentData& dynamicAgentData(std::size_t index) noexcept;
-    DynamicMusicData& dynamicMusicData(std::size_t index) noexcept;
-    DynamicSouvenirPackageData& dynamicSouvenirPackageData(std::size_t index) noexcept;
-    DynamicServiceMedalData& dynamicServiceMedalData(std::size_t index) noexcept;
-    DynamicTournamentCoinData& dynamicTournamentCoinData(std::size_t index) noexcept;
-    DynamicGraffitiData& dynamicGraffitiData(std::size_t index) noexcept;
+    DynamicSkinData& dynamicSkinData(const InventoryItem& item) noexcept;
+    DynamicGloveData& dynamicGloveData(const InventoryItem& item) noexcept;
+    DynamicAgentData& dynamicAgentData(const InventoryItem& item) noexcept;
+    DynamicMusicData& dynamicMusicData(const InventoryItem& item) noexcept;
+    DynamicSouvenirPackageData& dynamicSouvenirPackageData(const InventoryItem& item) noexcept;
+    DynamicServiceMedalData& dynamicServiceMedalData(const InventoryItem& item) noexcept;
+    DynamicTournamentCoinData& dynamicTournamentCoinData(const InventoryItem& item) noexcept;
+    DynamicGraffitiData& dynamicGraffitiData(const InventoryItem& item) noexcept;
 
     std::size_t emplaceDynamicData(DynamicSkinData&& data) noexcept;
     std::size_t emplaceDynamicData(DynamicGloveData&& data) noexcept;

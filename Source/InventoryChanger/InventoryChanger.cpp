@@ -348,7 +348,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!model)
         return;
 
-    const auto& dynamicData = Inventory::dynamicAgentData(item->getDynamicDataIndex());
+    const auto& dynamicData = Inventory::dynamicAgentData(*item);
     for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
         if (const auto& patch = dynamicData.patches[i]; patch.patchID != 0)
             localPlayer->playerPatchIndices()[i] = patch.patchID;
@@ -480,7 +480,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     if (!soc)
         return;
 
-    auto& dynamicData = Inventory::dynamicSkinData(item->getDynamicDataIndex());
+    auto& dynamicData = Inventory::dynamicSkinData(*item);
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         soc->setStatTrak(dynamicData.statTrak);
@@ -512,7 +512,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (!item || !item->isMusic())
         return;
 
-    auto& dynamicData = Inventory::dynamicMusicData(item->getDynamicDataIndex());
+    auto& dynamicData = Inventory::dynamicMusicData(*item);
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         event.setInt("musickitmvps", dynamicData.statTrak);
