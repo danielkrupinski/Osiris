@@ -40,11 +40,11 @@ struct Skin {
     [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
 
-struct PatchConfig {
-    int patchID = 0;
-};
-
 struct Agent {
+    struct PatchConfig {
+        int patchID = 0;
+    };
+
     std::array<PatchConfig, 5> patches;
 };
 
