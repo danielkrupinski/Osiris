@@ -294,7 +294,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicAgentDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicAgentData dynamicData;
+    inventory::Agent dynamicData;
     dynamicData.patches = loadAgentPatchesFromJson(j);
     return Inventory::emplaceDynamicData(std::move(dynamicData));
 }

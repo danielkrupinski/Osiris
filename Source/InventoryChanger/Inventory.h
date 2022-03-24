@@ -44,7 +44,7 @@ struct PatchConfig {
     int patchID = 0;
 };
 
-struct DynamicAgentData {
+struct Agent {
     std::array<PatchConfig, 5> patches;
 };
 
@@ -98,7 +98,7 @@ namespace Inventory
 
     inventory::Skin& dynamicSkinData(const inventory::Item& item) noexcept;
     inventory::DynamicGloveData& dynamicGloveData(const inventory::Item& item) noexcept;
-    inventory::DynamicAgentData& dynamicAgentData(const inventory::Item& item) noexcept;
+    inventory::Agent& dynamicAgentData(const inventory::Item& item) noexcept;
     inventory::DynamicMusicData& dynamicMusicData(const inventory::Item& item) noexcept;
     inventory::DynamicSouvenirPackageData& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
     inventory::DynamicServiceMedalData& dynamicServiceMedalData(const inventory::Item& item) noexcept;
@@ -107,7 +107,7 @@ namespace Inventory
 
     std::size_t emplaceDynamicData(inventory::Skin&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicGloveData&& data) noexcept;
-    std::size_t emplaceDynamicData(inventory::DynamicAgentData&& data) noexcept;
+    std::size_t emplaceDynamicData(inventory::Agent&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicMusicData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicSouvenirPackageData&& data) noexcept;
     std::size_t emplaceDynamicData(inventory::DynamicServiceMedalData&& data) noexcept;

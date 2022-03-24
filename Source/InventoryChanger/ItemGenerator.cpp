@@ -1005,7 +1005,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
         dynamicData.seed = Helpers::random(1, 1000);
         index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isAgent()) {
-        index = Inventory::emplaceDynamicData(inventory::DynamicAgentData{});
+        index = Inventory::emplaceDynamicData(inventory::Agent{});
     } else if (item.isMusic()) {
         index = Inventory::emplaceDynamicData(inventory::DynamicMusicData{});
     } else if (item.isCase()) {
