@@ -20,12 +20,12 @@ enum ProPlayer;
 namespace inventory
 {
 
-struct StickerConfig {
-    int stickerID = 0;
-    float wear = 0.0f;
-};
-
 struct Skin {
+    struct StickerConfig {
+        int stickerID = 0;
+        float wear = 0.0f;
+    };
+
     float wear = 0.0f;
     int seed = 1;
     int statTrak = -1;
