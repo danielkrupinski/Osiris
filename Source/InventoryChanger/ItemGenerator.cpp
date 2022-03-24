@@ -866,7 +866,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
     std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
     if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
-        inventory::DynamicMusicData dynamicData;
+        inventory::Music dynamicData;
         dynamicData.statTrak = 0;
         dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (unlockedItem.isSkin()) {
@@ -1007,7 +1007,7 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
     } else if (item.isAgent()) {
         index = Inventory::emplaceDynamicData(inventory::Agent{});
     } else if (item.isMusic()) {
-        index = Inventory::emplaceDynamicData(inventory::DynamicMusicData{});
+        index = Inventory::emplaceDynamicData(inventory::Music{});
     } else if (item.isCase()) {
         if (const auto& staticData = StaticData::getCase(item); StaticData::isSouvenirPackage(item))
             index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));

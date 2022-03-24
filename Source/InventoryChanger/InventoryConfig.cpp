@@ -251,7 +251,7 @@ json InventoryChanger::toJson() noexcept
 
 [[nodiscard]] std::size_t loadDynamicMusicDataFromJson(const json& j) noexcept
 {
-    inventory::DynamicMusicData dynamicData;
+    inventory::Music dynamicData;
 
     if (j.contains("StatTrak")) {
         if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)

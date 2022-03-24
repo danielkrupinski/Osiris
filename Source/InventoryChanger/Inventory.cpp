@@ -18,7 +18,7 @@ using Inventory::BASE_ITEMID;
 static std::vector<inventory::Skin> dynamicSkinData;
 static std::vector<inventory::Glove> dynamicGloveData;
 static std::vector<inventory::Agent> dynamicAgentData;
-static std::vector<inventory::DynamicMusicData> dynamicMusicData;
+static std::vector<inventory::Music> dynamicMusicData;
 static std::vector<inventory::DynamicSouvenirPackageData> dynamicSouvenirPackageData;
 static std::vector<inventory::DynamicServiceMedalData> dynamicServiceMedalData;
 static std::vector<inventory::DynamicTournamentCoinData> dynamicTournamentCoinData;
@@ -369,7 +369,7 @@ inventory::Agent& Inventory::dynamicAgentData(const inventory::Item& item) noexc
     return ::dynamicAgentData[item.getDynamicDataIndex()];
 }
 
-inventory::DynamicMusicData& Inventory::dynamicMusicData(const inventory::Item& item) noexcept
+inventory::Music& Inventory::dynamicMusicData(const inventory::Item& item) noexcept
 {
     assert(item.isMusic());
     return ::dynamicMusicData[item.getDynamicDataIndex()];
@@ -417,7 +417,7 @@ std::size_t Inventory::emplaceDynamicData(inventory::Agent&& data) noexcept
     return ::dynamicAgentData.size() - 1;
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::DynamicMusicData&& data) noexcept
+std::size_t Inventory::emplaceDynamicData(inventory::Music&& data) noexcept
 {
     ::dynamicMusicData.push_back(std::move(data));
     return ::dynamicMusicData.size() - 1;
