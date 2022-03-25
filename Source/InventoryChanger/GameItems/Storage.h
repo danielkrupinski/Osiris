@@ -66,12 +66,12 @@ public:
         return patchKits[item.getDataIndex()];
     }
 
-    std::span<Item> getItems()
+    [[nodiscard]] std::span<Item> getItems()
     {
         return items;
     }
 
-    std::span<const Item> getItems() const
+    [[nodiscard]] std::span<const Item> getItems() const
     {
         return items;
     }
