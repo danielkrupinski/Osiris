@@ -117,7 +117,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 #else
 static void swapWindow(SDL_Window * window) noexcept
 {
-    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+    [[maybe_unused]] static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(window);
