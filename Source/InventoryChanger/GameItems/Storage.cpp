@@ -5,8 +5,8 @@ namespace game_items
 
 void Storage::addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath)
 {
-    patchKits.emplace_back(id, pooled(name));
-    addItem(Item::Type::Patch, rarity, WeaponId::Patch, patchKits.size() - 1, pooled(iconPath));
+    patches.emplace_back(id, pooled(name));
+    addItem(Item::Type::Patch, rarity, WeaponId::Patch, patches.size() - 1, pooled(iconPath));
 }
 
 void Storage::addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view iconPath)
@@ -114,7 +114,7 @@ void Storage::compress()
     stickerKits.shrink_to_fit();
     musicKits.shrink_to_fit();
     graffitiKits.shrink_to_fit();
-    patchKits.shrink_to_fit();
+    patches.shrink_to_fit();
     items.shrink_to_fit();
 }
 

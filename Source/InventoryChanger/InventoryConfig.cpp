@@ -75,7 +75,7 @@ json InventoryChanger::toJson() noexcept
             if (const auto& dynamicData = Inventory::dynamicMusicData(item); dynamicData.statTrak > -1)
                 itemConfig["StatTrak"] = dynamicData.statTrak;
         } else if (gameItem.isPatch()) {
-            itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatchKit(gameItem).id;
+            itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
             if (const auto& dynamicData = Inventory::dynamicGraffitiData(item); dynamicData.usesLeft >= 0) {

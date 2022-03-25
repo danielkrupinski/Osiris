@@ -141,7 +141,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
     {
-        return findItem(WeaponId::Patch, patchID, [this](const Item& item) { return storage.getPatchKit(item).id; });
+        return findItem(WeaponId::Patch, patchID, [this](const Item& item) { return storage.getPatch(item).id; });
     }
 
 private:

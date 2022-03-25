@@ -60,10 +60,10 @@ public:
         return graffitiKits[item.getDataIndex()];
     }
 
-    const auto& getPatchKit(const Item& item) const
+    const auto& getPatch(const Item& item) const
     {
         assert(item.isPatch());
-        return patchKits[item.getDataIndex()];
+        return patches[item.getDataIndex()];
     }
 
     [[nodiscard]] std::span<Item> getItems()
@@ -119,7 +119,7 @@ private:
     std::vector<StickerKit> stickerKits;
     std::vector<MusicKit> musicKits;
     std::vector<GraffitiKit> graffitiKits;
-    std::vector<Patch> patchKits;
+    std::vector<Patch> patches;
     std::vector<Item> items;
 };
 

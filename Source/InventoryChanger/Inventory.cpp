@@ -174,7 +174,7 @@ private:
         if (item.isSticker()) {
             econItem->setStickerID(0, StaticData::lookup().getStorage().getStickerKit(item).id);
         } else if (item.isPatch()) {
-            econItem->setStickerID(0, StaticData::lookup().getStorage().getPatchKit(item).id);
+            econItem->setStickerID(0, StaticData::lookup().getStorage().getPatch(item).id);
         } else if (item.isGraffiti()) {
             econItem->setStickerID(0, StaticData::lookup().getStorage().getGraffitiKit(item).id);
             const auto& dynamicData = dynamicGraffitiData[inventoryItem.getDynamicDataIndex()];

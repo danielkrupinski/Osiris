@@ -557,7 +557,7 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
     if (item.isGraffiti())
         return storage.getGraffitiKit(item).name;
     if (item.isPatch())
-        return storage.getPatchKit(item).name;
+        return storage.getPatch(item).name;
 
     static constexpr game_items::ItemName fallback{ "", L"" };
     return fallback;

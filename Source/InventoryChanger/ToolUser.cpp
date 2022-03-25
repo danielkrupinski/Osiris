@@ -158,7 +158,7 @@ private:
         if (!dest || !dest->isAgent())
             return;
 
-        Inventory::dynamicAgentData(*dest).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatchKit(patch.get()).id;
+        Inventory::dynamicAgentData(*dest).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatch(patch.get()).id;
         patch.markToDelete();
         initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
