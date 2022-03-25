@@ -24,8 +24,6 @@ target_precompile_headers(OsirisOBJ PRIVATE "${CMAKE_SOURCE_DIR}/Source/pch.h")
 target_include_directories(OsirisOBJ PUBLIC "${CMAKE_SOURCE_DIR}/Source")
 target_include_directories(OsirisOBJ PUBLIC "${CMAKE_SOURCE_DIR}/Dependencies")
 
-add_subdirectory(Source/freetype)
-
 if (NOT WIN32)
   target_link_libraries(OsirisOBJ PRIVATE ${CMAKE_DL_LIBS})
   target_compile_options(OsirisOBJ PRIVATE -flto)

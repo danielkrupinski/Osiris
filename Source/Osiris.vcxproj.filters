@@ -134,54 +134,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="freetype\src\autofit\autofit.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\cff\cff.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftbase.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftbitmap.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftdebug.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftglyph.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftinit.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftsynth.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\base\ftsystem.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\psaux\psaux.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\pshinter\pshinter.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\psnames\psnames.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\raster\raster.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\sfnt\sfnt.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\smooth\smooth.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="freetype\src\truetype\truetype.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Sound.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -259,6 +211,54 @@
     </ClCompile>
     <ClCompile Include="..\Dependencies\MinHook\hde\hde64.c">
       <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\autofit\autofit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\cff\cff.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftbase.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftsystem.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftsynth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftinit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftglyph.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftdebug.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\base\ftbitmap.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\psaux\psaux.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\pshinter\pshinter.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\psnames\psnames.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\raster\raster.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\sfnt\sfnt.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\smooth\smooth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\freetype\src\truetype\truetype.c">
+      <Filter>freetype</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -520,12 +520,6 @@
     <ClInclude Include="SDK\ClientMode.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="freetype\freetype\config\ftmodule.h">
-      <Filter>freetype</Filter>
-    </ClInclude>
-    <ClInclude Include="freetype\freetype\config\ftoption.h">
-      <Filter>freetype</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Sound.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -657,6 +651,12 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\Inventory\Structs.h">
       <Filter>InventoryChanger\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h">
+      <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftoption.h">
+      <Filter>freetype</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

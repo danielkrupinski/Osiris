@@ -1,3 +1,4 @@
+add_subdirectory(freetype)
 add_subdirectory(imgui)
 
 if (WIN32)
