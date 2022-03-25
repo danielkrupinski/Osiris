@@ -119,7 +119,7 @@ private:
     std::vector<StickerKit> stickerKits;
     std::vector<MusicKit> musicKits;
     std::vector<GraffitiKit> graffitiKits;
-    std::vector<PatchKit> patchKits;
+    std::vector<Patch> patchKits;
     std::vector<Item> items;
 };
 
