@@ -180,7 +180,7 @@ json InventoryChanger::toJson() noexcept
     return skinStickers;
 }
 
-[[nodiscard]] std::size_t loadDynamicSkinDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::Skin loadDynamicSkinDataFromJson(const json& j) noexcept
 {
     inventory::Skin dynamicData;
 
@@ -230,10 +230,10 @@ json InventoryChanger::toJson() noexcept
     }
 
     dynamicData.stickers = loadSkinStickersFromJson(j);
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
-[[nodiscard]] std::size_t loadDynamicGloveDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::Glove loadDynamicGloveDataFromJson(const json& j) noexcept
 {
     inventory::Glove dynamicData;
 
@@ -247,10 +247,10 @@ json InventoryChanger::toJson() noexcept
             dynamicData.seed = seed;
     }
 
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
-[[nodiscard]] std::size_t loadDynamicMusicDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::Music loadDynamicMusicDataFromJson(const json& j) noexcept
 {
     inventory::Music dynamicData;
 
@@ -259,7 +259,7 @@ json InventoryChanger::toJson() noexcept
             dynamicData.statTrak = statTrak;
     }
 
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
 [[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
@@ -293,14 +293,14 @@ json InventoryChanger::toJson() noexcept
     return agentPatches;
 }
 
-[[nodiscard]] std::size_t loadDynamicAgentDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::Agent loadDynamicAgentDataFromJson(const json& j) noexcept
 {
     inventory::Agent dynamicData;
     dynamicData.patches = loadAgentPatchesFromJson(j);
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
-[[nodiscard]] std::size_t loadDynamicServiceMedalDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::ServiceMedal loadDynamicServiceMedalDataFromJson(const json& j) noexcept
 {
     inventory::ServiceMedal dynamicData;
 
@@ -309,10 +309,10 @@ json InventoryChanger::toJson() noexcept
             dynamicData.issueDateTimestamp = issueDateTimestamp;
     }
 
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
-[[nodiscard]] std::size_t loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::SouvenirPackage loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
 {
     inventory::SouvenirPackage dynamicData;
 
@@ -336,7 +336,7 @@ json InventoryChanger::toJson() noexcept
             dynamicData.proPlayer = tournamentPlayer;
     }
 
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
 void loadEquipmentFromJson(const json& j) noexcept
@@ -373,14 +373,14 @@ void loadEquipmentFromJson(const json& j) noexcept
     }
 }
 
-[[nodiscard]] std::size_t loadDynamicGraffitiDataFromJson(const json& j) noexcept
+[[nodiscard]] inventory::Graffiti loadDynamicGraffitiDataFromJson(const json& j) noexcept
 {
     inventory::Graffiti dynamicData;
     if (j.contains("Uses Left")) {
         if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
             dynamicData.usesLeft = usesLeft;
     }
-    return Inventory::emplaceDynamicData(std::move(dynamicData));
+    return dynamicData;
 }
 
 void InventoryChanger::fromJson(const json& j) noexcept
@@ -429,19 +429,19 @@ void InventoryChanger::fromJson(const json& j) noexcept
         const auto& item = itemOptional->get();
 
         if (item.isSkin()) {
-            dynamicDataIdx = loadDynamicSkinDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicSkinDataFromJson(jsonItem));
         } else if (item.isGloves()) {
-            dynamicDataIdx = loadDynamicGloveDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicGloveDataFromJson(jsonItem));
         } else if (item.isMusic()) {
-            dynamicDataIdx = loadDynamicMusicDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicMusicDataFromJson(jsonItem));
         } else if (item.isAgent()) {
-            dynamicDataIdx = loadDynamicAgentDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicAgentDataFromJson(jsonItem));
         } else if (item.isServiceMedal()) {
-            dynamicDataIdx = loadDynamicServiceMedalDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicServiceMedalDataFromJson(jsonItem));
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-            dynamicDataIdx = loadDynamicSouvenirPackageDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicSouvenirPackageDataFromJson(jsonItem));
         } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
-            dynamicDataIdx = loadDynamicGraffitiDataFromJson(jsonItem);
+            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicGraffitiDataFromJson(jsonItem));
         }
 
         Inventory::addItemAcknowledged(item, dynamicDataIdx);
