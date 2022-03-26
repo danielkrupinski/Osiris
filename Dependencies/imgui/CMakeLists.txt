@@ -18,5 +18,3 @@ else()
   target_include_directories(OsirisOBJ PUBLIC ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
   target_link_libraries(OsirisOBJ PRIVATE SDL2 GL Freetype::Freetype)
 endif()
-
-target_link_libraries(OsirisOBJ PUBLIC FreeType)
