@@ -50,4 +50,16 @@ SouvenirPackage souvenirPackageFromJson(const json& j)
     return souvenirPackage;
 }
 
+Music musicFromJson(const json& j)
+{
+    Music music;
+
+    if (j.contains("StatTrak")) {
+        if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)
+            music.statTrak = statTrak;
+    }
+
+    return music;
+}
+
 }
