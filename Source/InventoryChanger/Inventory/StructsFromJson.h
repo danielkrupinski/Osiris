@@ -6,5 +6,8 @@
 
 namespace inventory
 {
-    [[nodiscard]] Glove gloveFromJson(const json& j);
+
+[[nodiscard]] Glove gloveFromJson(const json& j);
+[[nodiscard]] SouvenirPackage souvenirPackageFromJson(const json& j);
+
 }

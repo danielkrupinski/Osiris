@@ -23,4 +23,31 @@ Glove inventory::gloveFromJson(const json& j)
     return glove;
 }
 
+SouvenirPackage souvenirPackageFromJson(const json& j)
+{
+    SouvenirPackage souvenirPackage;
+
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            souvenirPackage.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            souvenirPackage.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            souvenirPackage.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            souvenirPackage.proPlayer = tournamentPlayer;
+    }
+
+    return souvenirPackage;
+}
+
 }
