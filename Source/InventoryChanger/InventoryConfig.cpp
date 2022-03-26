@@ -296,33 +296,6 @@ json InventoryChanger::toJson() noexcept
     return dynamicData;
 }
 
-[[nodiscard]] inventory::SouvenirPackage loadDynamicSouvenirPackageDataFromJson(const json& j) noexcept
-{
-    inventory::SouvenirPackage dynamicData;
-
-    if (j.contains("Tournament Stage")) {
-        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
-            dynamicData.tournamentStage = tournamentStage;
-    }
-
-    if (j.contains("Tournament Team 1")) {
-        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
-            dynamicData.tournamentTeam1 = tournamentTeam1;
-    }
-
-    if (j.contains("Tournament Team 2")) {
-        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
-            dynamicData.tournamentTeam2 = tournamentTeam2;
-    }
-
-    if (j.contains("Tournament Player")) {
-        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
-            dynamicData.proPlayer = tournamentPlayer;
-    }
-
-    return dynamicData;
-}
-
 void loadEquipmentFromJson(const json& j) noexcept
 {
     if (!j.contains("Equipment"))
@@ -423,7 +396,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (item.isServiceMedal()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicServiceMedalDataFromJson(jsonItem));
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicSouvenirPackageDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::souvenirPackageFromJson(jsonItem));
         } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicGraffitiDataFromJson(jsonItem));
         }
