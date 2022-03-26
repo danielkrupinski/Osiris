@@ -4,6 +4,7 @@
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
 #include "Inventory/Structs.h"
+#include "Inventory/StructsFromJson.h"
 
 constexpr auto CONFIG_VERSION = 3;
 
@@ -233,23 +234,6 @@ json InventoryChanger::toJson() noexcept
     return dynamicData;
 }
 
-[[nodiscard]] inventory::Glove loadDynamicGloveDataFromJson(const json& j) noexcept
-{
-    inventory::Glove dynamicData;
-
-    if (j.contains("Wear")) {
-        if (const auto& wear = j["Wear"]; wear.is_number_float())
-            dynamicData.wear = wear;
-    }
-
-    if (j.contains("Seed")) {
-        if (const auto& seed = j["Seed"]; seed.is_number_integer())
-            dynamicData.seed = seed;
-    }
-
-    return dynamicData;
-}
-
 [[nodiscard]] inventory::Music loadDynamicMusicDataFromJson(const json& j) noexcept
 {
     inventory::Music dynamicData;
@@ -431,7 +415,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         if (item.isSkin()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicSkinDataFromJson(jsonItem));
         } else if (item.isGloves()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicGloveDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::gloveFromJson(jsonItem));
         } else if (item.isMusic()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicMusicDataFromJson(jsonItem));
         } else if (item.isAgent()) {
