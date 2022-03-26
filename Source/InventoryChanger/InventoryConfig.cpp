@@ -234,18 +234,6 @@ json InventoryChanger::toJson() noexcept
     return dynamicData;
 }
 
-[[nodiscard]] inventory::Music loadDynamicMusicDataFromJson(const json& j) noexcept
-{
-    inventory::Music dynamicData;
-
-    if (j.contains("StatTrak")) {
-        if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer() && statTrak > -1)
-            dynamicData.statTrak = statTrak;
-    }
-
-    return dynamicData;
-}
-
 [[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
 {
     std::array<inventory::Agent::Patch, 5> agentPatches;
@@ -390,7 +378,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (item.isGloves()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::gloveFromJson(jsonItem));
         } else if (item.isMusic()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicMusicDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::musicFromJson(jsonItem));
         } else if (item.isAgent()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicAgentDataFromJson(jsonItem));
         } else if (item.isServiceMedal()) {
