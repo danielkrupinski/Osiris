@@ -260,6 +260,9 @@
     <ClCompile Include="..\Dependencies\freetype\src\truetype\truetype.c">
       <Filter>freetype</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp">
+      <Filter>InventoryChanger\Inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
