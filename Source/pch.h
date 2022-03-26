@@ -6,6 +6,9 @@
 #include <ShlObj.h>
 #endif
 #include <Windows.h>
+#if !defined(__cplusplus) && defined(interface)
+#undef interface
+#endif
 #endif
 
 #ifdef __cplusplus
