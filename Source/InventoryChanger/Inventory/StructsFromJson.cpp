@@ -6,7 +6,7 @@
 namespace inventory
 {
 
-Glove inventory::gloveFromJson(const json& j)
+Glove gloveFromJson(const json& j)
 {
     Glove glove;
 
