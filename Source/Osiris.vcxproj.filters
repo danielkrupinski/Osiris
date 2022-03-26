@@ -658,6 +658,9 @@
     <ClInclude Include="..\Dependencies\freetype\freetype\config\ftoption.h">
       <Filter>freetype</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h">
+      <Filter>InventoryChanger\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
