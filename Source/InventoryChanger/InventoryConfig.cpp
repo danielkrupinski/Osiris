@@ -143,59 +143,6 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
-[[nodiscard]] inventory::Skin loadDynamicSkinDataFromJson(const json& j) noexcept
-{
-    inventory::Skin dynamicData;
-
-    if (j.contains("Tournament ID")) {
-        if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
-            dynamicData.tournamentID = tournamentID;
-    }
-
-    if (j.contains("Wear")) {
-        if (const auto& wear = j["Wear"]; wear.is_number_float())
-            dynamicData.wear = wear;
-    }
-
-    if (j.contains("Seed")) {
-        if (const auto& seed = j["Seed"]; seed.is_number_integer())
-            dynamicData.seed = seed;
-    }
-
-    if (j.contains("StatTrak")) {
-        if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer())
-            dynamicData.statTrak = statTrak;
-    }
-
-    if (j.contains("Name Tag")) {
-        if (const auto& nameTag = j["Name Tag"]; nameTag.is_string())
-            dynamicData.nameTag = nameTag;
-    }
-
-    if (j.contains("Tournament Stage")) {
-        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
-            dynamicData.tournamentStage = tournamentStage;
-    }
-
-    if (j.contains("Tournament Team 1")) {
-        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
-            dynamicData.tournamentTeam1 = tournamentTeam1;
-    }
-
-    if (j.contains("Tournament Team 2")) {
-        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
-            dynamicData.tournamentTeam2 = tournamentTeam2;
-    }
-
-    if (j.contains("Tournament Player")) {
-        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
-            dynamicData.proPlayer = tournamentPlayer;
-    }
-
-    dynamicData.stickers = inventory::skinStickersFromJson(j);
-    return dynamicData;
-}
-
 [[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
 {
     std::array<inventory::Agent::Patch, 5> agentPatches;
@@ -314,7 +261,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         const auto& item = itemOptional->get();
 
         if (item.isSkin()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicSkinDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::skinFromJson(jsonItem));
         } else if (item.isGloves()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::gloveFromJson(jsonItem));
         } else if (item.isMusic()) {
