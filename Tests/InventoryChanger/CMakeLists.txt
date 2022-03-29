@@ -4,3 +4,4 @@ target_sources(Tests PRIVATE
 )
 
 add_subdirectory(GameItems)
+add_subdirectory(Inventory)
