@@ -74,4 +74,16 @@ ServiceMedal serviceMedalFromJson(const json& j)
     return serviceMedal;
 }
 
+Graffiti graffitiFromJson(const json& j)
+{
+    Graffiti graffiti;
+
+    if (j.contains("Uses Left")) {
+        if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
+            graffiti.usesLeft = usesLeft;
+    }
+
+    return graffiti;
+}
+
 }
