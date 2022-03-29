@@ -62,4 +62,16 @@ Music musicFromJson(const json& j)
     return music;
 }
 
+ServiceMedal serviceMedalFromJson(const json& j)
+{
+    ServiceMedal serviceMedal;
+
+    if (j.contains("Issue Date Timestamp")) {
+        if (const auto& issueDateTimestamp = j["Issue Date Timestamp"]; issueDateTimestamp.is_number_unsigned())
+            serviceMedal.issueDateTimestamp = issueDateTimestamp;
+    }
+
+    return serviceMedal;
+}
+
 }
