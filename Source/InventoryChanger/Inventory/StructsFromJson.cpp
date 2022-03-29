@@ -124,4 +124,57 @@ std::array<Skin::Sticker, 5> skinStickersFromJson(const json& j)
     return skinStickers;
 }
 
+Skin skinFromJson(const json& j)
+{
+    Skin skin;
+
+    if (j.contains("Tournament ID")) {
+        if (const auto& tournamentID = j["Tournament ID"]; tournamentID.is_number_unsigned())
+            skin.tournamentID = tournamentID;
+    }
+
+    if (j.contains("Wear")) {
+        if (const auto& wear = j["Wear"]; wear.is_number_float())
+            skin.wear = wear;
+    }
+
+    if (j.contains("Seed")) {
+        if (const auto& seed = j["Seed"]; seed.is_number_integer())
+            skin.seed = seed;
+    }
+
+    if (j.contains("StatTrak")) {
+        if (const auto& statTrak = j["StatTrak"]; statTrak.is_number_integer())
+            skin.statTrak = statTrak;
+    }
+
+    if (j.contains("Name Tag")) {
+        if (const auto& nameTag = j["Name Tag"]; nameTag.is_string())
+            skin.nameTag = nameTag;
+    }
+
+    if (j.contains("Tournament Stage")) {
+        if (const auto& tournamentStage = j["Tournament Stage"]; tournamentStage.is_number_unsigned())
+            skin.tournamentStage = tournamentStage;
+    }
+
+    if (j.contains("Tournament Team 1")) {
+        if (const auto& tournamentTeam1 = j["Tournament Team 1"]; tournamentTeam1.is_number_unsigned())
+            skin.tournamentTeam1 = tournamentTeam1;
+    }
+
+    if (j.contains("Tournament Team 2")) {
+        if (const auto& tournamentTeam2 = j["Tournament Team 2"]; tournamentTeam2.is_number_unsigned())
+            skin.tournamentTeam2 = tournamentTeam2;
+    }
+
+    if (j.contains("Tournament Player")) {
+        if (const auto& tournamentPlayer = j["Tournament Player"]; tournamentPlayer.is_number_unsigned())
+            skin.proPlayer = tournamentPlayer;
+    }
+
+    skin.stickers = inventory::skinStickersFromJson(j);
+    return skin;
+}
+
 }

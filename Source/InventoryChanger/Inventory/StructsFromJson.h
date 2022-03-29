@@ -15,5 +15,6 @@ namespace inventory
 [[nodiscard]] ServiceMedal serviceMedalFromJson(const json& j);
 [[nodiscard]] Graffiti graffitiFromJson(const json& j);
 [[nodiscard]] std::array<Skin::Sticker, 5> skinStickersFromJson(const json& j);
+[[nodiscard]] Skin skinFromJson(const json& j);
 
 }
