@@ -157,6 +157,8 @@ public:
     class KeyValuesSystem* keyValuesSystem;
     std::uintptr_t keyValuesAllocEngine;
     std::uintptr_t keyValuesAllocClient;
+
+    std::uintptr_t jmpEbxGadgetInClient;
 #endif
 
 private:
