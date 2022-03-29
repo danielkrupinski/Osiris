@@ -143,44 +143,6 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
-[[nodiscard]] auto loadSkinStickersFromJson(const json& j) noexcept
-{
-    std::array<inventory::Skin::Sticker, 5> skinStickers;
-
-    if (!j.contains("Stickers"))
-        return skinStickers;
-
-    const auto& stickers = j["Stickers"];
-    if (!stickers.is_array())
-        return skinStickers;
-
-    for (const auto& sticker : stickers) {
-        if (!sticker.is_object())
-            continue;
-
-        if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
-            continue;
-
-        if (!sticker.contains("Slot") || !sticker["Slot"].is_number_integer())
-            continue;
-
-        const int stickerID = sticker["Sticker ID"];
-        if (stickerID == 0)
-            continue;
-
-        const std::size_t slot = sticker["Slot"];
-        if (slot >= skinStickers.size())
-            continue;
-
-        skinStickers[slot].stickerID = stickerID;
-
-        if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
-            skinStickers[slot].wear = sticker["Wear"];
-    }
-
-    return skinStickers;
-}
-
 [[nodiscard]] inventory::Skin loadDynamicSkinDataFromJson(const json& j) noexcept
 {
     inventory::Skin dynamicData;
@@ -230,7 +192,7 @@ json InventoryChanger::toJson() noexcept
             dynamicData.proPlayer = tournamentPlayer;
     }
 
-    dynamicData.stickers = loadSkinStickersFromJson(j);
+    dynamicData.stickers = inventory::skinStickersFromJson(j);
     return dynamicData;
 }
 
