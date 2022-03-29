@@ -4,12 +4,21 @@
 
 #include "Platform.h"
 
+#ifdef _WIN32
+#include <x86RetSpoof.h>
+#include "../Memory.h"
+#endif
+
 namespace VirtualMethod
 {
-    template <typename T, std::size_t Idx, typename ...Args>
+    template <typename T, std::size_t Idx, typename... Args>
     constexpr T call(void* classBase, Args... args) noexcept
     {
+#ifdef _WIN32
+        return x86RetSpoof::invokeThiscall<T, Args...>(std::uintptr_t(classBase), (*reinterpret_cast<std::uintptr_t**>(classBase))[Idx], memory->jmpEbxGadgetInClient, args...);
+#else
         return (*reinterpret_cast<T(THISCALL_CONV***)(void*, Args...)>(classBase))[Idx](classBase, args...);
+#endif
     }
 }
 
