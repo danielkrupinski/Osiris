@@ -272,18 +272,6 @@ json InventoryChanger::toJson() noexcept
     return dynamicData;
 }
 
-[[nodiscard]] inventory::ServiceMedal loadDynamicServiceMedalDataFromJson(const json& j) noexcept
-{
-    inventory::ServiceMedal dynamicData;
-
-    if (j.contains("Issue Date Timestamp")) {
-        if (const auto& issueDateTimestamp = j["Issue Date Timestamp"]; issueDateTimestamp.is_number_unsigned())
-            dynamicData.issueDateTimestamp = issueDateTimestamp;
-    }
-
-    return dynamicData;
-}
-
 void loadEquipmentFromJson(const json& j) noexcept
 {
     if (!j.contains("Equipment"))
@@ -382,7 +370,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (item.isAgent()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicAgentDataFromJson(jsonItem));
         } else if (item.isServiceMedal()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicServiceMedalDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::serviceMedalFromJson(jsonItem));
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::souvenirPackageFromJson(jsonItem));
         } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
