@@ -306,16 +306,6 @@ void loadEquipmentFromJson(const json& j) noexcept
     }
 }
 
-[[nodiscard]] inventory::Graffiti loadDynamicGraffitiDataFromJson(const json& j) noexcept
-{
-    inventory::Graffiti dynamicData;
-    if (j.contains("Uses Left")) {
-        if (const auto& usesLeft = j["Uses Left"]; usesLeft.is_number_integer())
-            dynamicData.usesLeft = usesLeft;
-    }
-    return dynamicData;
-}
-
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -374,7 +364,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::souvenirPackageFromJson(jsonItem));
         } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicGraffitiDataFromJson(jsonItem));
+            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::graffitiFromJson(jsonItem));
         }
 
         Inventory::addItemAcknowledged(item, dynamicDataIdx);
