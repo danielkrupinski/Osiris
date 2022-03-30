@@ -43,5 +43,39 @@ TEST_P(InventoryChanger_Inventory_GloveFromJsonWearTest, GloveFromJsonHasCorrect
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonWearTest, testing::Values(0.0f, 0.123f, 1.0f));
 
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromEmptyJsonHasDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({}).seed, Glove{}.seed);
+}
+
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromJsonWithoutSeedHasDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({ { "key", "value" } }).seed, Glove{}.seed);
+}
+
+class InventoryChanger_Inventory_GloveFromJsonSeedTypeTest : public testing::TestWithParam<json::value_t> {};
+
+TEST_P(InventoryChanger_Inventory_GloveFromJsonSeedTypeTest, GloveFromJsonWithSeedNotAsIntegerHasDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({ { "Seed", GetParam() } }).seed, Glove{}.seed);
+}
+
+INSTANTIATE_TEST_SUITE_P(,
+    InventoryChanger_Inventory_GloveFromJsonSeedTypeTest,
+    testing::Values(json::value_t::array,
+                    json::value_t::binary,
+                    json::value_t::boolean,
+                    json::value_t::discarded,
+                    json::value_t::null,
+                    json::value_t::number_float,
+                    json::value_t::object,
+                    json::value_t::string)
+);
+
+class InventoryChanger_Inventory_GloveFromJsonSeedTest : public testing::TestWithParam<int> {};
+
+TEST_P(InventoryChanger_Inventory_GloveFromJsonSeedTest, GloveFromJsonHasCorrectSeed) {
+    ASSERT_EQ(gloveFromJson({ { "Seed", GetParam() } }).seed, GetParam());
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonSeedTest, testing::Values(0, 123, 1000));
+
 }
 }
