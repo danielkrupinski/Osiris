@@ -77,5 +77,23 @@ TEST_P(InventoryChanger_Inventory_GloveFromJsonSeedTest, GloveFromJsonHasCorrect
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonSeedTest, testing::Values(0, 123, 1000));
 
+class InventoryChanger_Inventory_GloveFromJsonAllParamsTest : public testing::TestWithParam<std::tuple<float, int>> {};
+
+TEST_P(InventoryChanger_Inventory_GloveFromJsonAllParamsTest, GloveFromJsonHasCorrectWear) {
+    const auto [wear, seed] = GetParam();
+    ASSERT_FLOAT_EQ(gloveFromJson({ { "Wear", wear }, { "Seed", seed } }).wear, wear);
+}
+
+TEST_P(InventoryChanger_Inventory_GloveFromJsonAllParamsTest, GloveFromJsonHasCorrectSeed) {
+    const auto [wear, seed] = GetParam();
+    ASSERT_EQ(gloveFromJson({ { "Wear", wear }, { "Seed", seed } }).seed, seed);
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonAllParamsTest,
+    testing::Combine(
+        testing::Values(0.0f, 0.123f, 1.0f),
+        testing::Values(0, 123, 1000)
+));
+
 }
 }
