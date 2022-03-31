@@ -39,6 +39,12 @@ public:
         items.emplace_back(gameItem, std::make_unique<Music>(music));
     }
 
+    void addGraffiti(const game_items::Item& gameItem, const Graffiti& graffiti)
+    {
+        assert(gameItem.isGraffiti());
+        items.emplace_back(gameItem, std::make_unique<Graffiti>(graffiti));
+    }
+
     [[nodiscard]] Skin& getSkin(const Item_v2& item) const
     {
         assert(item.gameItem().isSkin());
@@ -61,6 +67,12 @@ public:
     {
         assert(item.gameItem().isMusic());
         return *std::get<std::unique_ptr<Music>>(item.getData()).get();
+    }
+
+    [[nodiscard]] Graffiti& getGraffiti(const Item_v2& item) const
+    {
+        assert(item.gameItem().isGraffiti());
+        return *std::get<std::unique_ptr<Graffiti>>(item.getData()).get();
     }
 
     [[nodiscard]] auto begin()
