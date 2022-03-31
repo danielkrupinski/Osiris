@@ -2,7 +2,9 @@
 
 #include <cstddef>
 #include <functional>
+#include <memory>
 #include <optional>
+#include <variant>
 
 #include <InventoryChanger/GameItems/Item.h>
 
@@ -44,6 +46,25 @@ public:
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
     const game_items::Item& get() const noexcept { assert(isValid()); return item.value(); }
+};
+
+class Item_v2 {
+public:
+    using Data = std::variant<
+        std::unique_ptr<Skin>,
+        std::unique_ptr<Glove>,
+        std::unique_ptr<Agent>,
+        std::unique_ptr<Music>
+    >;
+
+    explicit Item_v2(const game_items::Item& item, Data data) noexcept : item{ item }, data{ std::move(data) } {}
+
+    [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
+    [[nodiscard]] const Data& getData() const noexcept { return data; }
+
+private:
+    std::reference_wrapper<const game_items::Item> item;
+    Data data;
 };
 
 }
