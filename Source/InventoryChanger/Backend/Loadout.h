@@ -47,12 +47,6 @@ public:
         return std::nullopt;
     }
 
-    [[nodiscard]] static Loadout& instance()
-    {
-        static Loadout loadout;
-        return loadout;
-    }
-
 private:
     std::unordered_map<Slot, InventoryItemIndex> ct;
     std::unordered_map<Slot, InventoryItemIndex> tt;
