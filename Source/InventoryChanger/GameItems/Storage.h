@@ -76,7 +76,7 @@ public:
         return items;
     }
 
-    std::span<const PaintKit> getPaintKits() const
+    [[nodiscard]] std::span<const PaintKit> getPaintKits() const
     {
         return paintKits;
     }
