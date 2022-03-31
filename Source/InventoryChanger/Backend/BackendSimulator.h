@@ -12,6 +12,21 @@ public:
         return loadout;
     }
 
+    void equipItemCT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    {
+        loadout.equipItemCT(index, slot);
+    }
+
+    void equipItemTT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    {
+        loadout.equipItemTT(index, slot);
+    }
+
+    void equipItemNoTeam(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    {
+        loadout.equipItemNoTeam(index, slot);
+    }
+
     [[nodiscard]] static BackendSimulator& instance()
     {
         static BackendSimulator backendSimulator;

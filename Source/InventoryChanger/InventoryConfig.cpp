@@ -6,7 +6,7 @@
 #include "Inventory/Structs.h"
 #include "Inventory/StructsFromJson.h"
 
-#include "Backend/Loadout.h"
+#include "Backend/BackendSimulator.h"
 
 constexpr auto CONFIG_VERSION = 3;
 
@@ -121,11 +121,11 @@ json InventoryChanger::toJson() noexcept
             json slot;
 
             using namespace inventory_changer::backend;
-            if (const auto ct = Loadout::instance().getItemInSlotCT(i); ct.has_value())
+            if (const auto ct = BackendSimulator::instance().getLoadout().getItemInSlotCT(i); ct.has_value())
                 slot["CT"] = *ct;
-            if (const auto tt = Loadout::instance().getItemInSlotTT(i); tt.has_value())
+            if (const auto tt = BackendSimulator::instance().getLoadout().getItemInSlotTT(i); tt.has_value())
                 slot["TT"] = *tt;
-            if (const auto noTeam = Loadout::instance().getItemInSlotNoTeam(i); noTeam.has_value())
+            if (const auto noTeam = BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(i); noTeam.has_value())
                 slot["NOTEAM"] = *noTeam;
 
             /*
@@ -212,21 +212,21 @@ void loadEquipmentFromJson(const json& j) noexcept
         if (equipped.contains("CT")) {
             if (const auto& ct = equipped["CT"]; ct.is_number_integer()) {
                 Inventory::equipItem(Team::CT, slot, ct);
-                inventory_changer::backend::Loadout::instance().equipItemCT(ct, slot);
+                inventory_changer::backend::BackendSimulator::instance().equipItemCT(ct, slot);
             }
         }
 
         if (equipped.contains("TT")) {
             if (const auto& tt = equipped["TT"]; tt.is_number_integer()) {
                 Inventory::equipItem(Team::TT, slot, tt);
-                inventory_changer::backend::Loadout::instance().equipItemTT(tt, slot);
+                inventory_changer::backend::BackendSimulator::instance().equipItemTT(tt, slot);
             }
         }
 
         if (equipped.contains("NOTEAM")) {
             if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer()) {
                 Inventory::equipItem(Team::None, slot, noteam);
-                inventory_changer::backend::Loadout::instance().equipItemNoTeam(noteam, slot);
+                inventory_changer::backend::BackendSimulator::instance().equipItemNoTeam(noteam, slot);
             }
         }
     }

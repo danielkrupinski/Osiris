@@ -53,6 +53,7 @@
 #include "Inventory/Item.h"
 #include "Inventory/Structs.h"
 #include "Backend/Loadout.h"
+#include "Backend/BackendSimulator.h"
 
 static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
 {
@@ -936,12 +937,12 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
         return;
 
     using inventory_changer::backend::Loadout;
-    if (auto& loadout = Loadout::instance(); team == Team::CT) {
-        loadout.equipItemCT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+    if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
+        backendSimulator.equipItemCT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
     } else if (team == Team::TT) {
-        loadout.equipItemTT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+        backendSimulator.equipItemTT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
     } else if (team == Team::None) {
-        loadout.equipItemNoTeam(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+        backendSimulator.equipItemNoTeam(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
     }
 
     if (item->isCollectible() || item->isServiceMedal()) {
