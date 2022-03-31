@@ -45,6 +45,12 @@ public:
         items.emplace_back(gameItem, std::make_unique<Graffiti>(graffiti));
     }
 
+    void addServiceMedal(const game_items::Item& gameItem, const ServiceMedal& serviceMedal)
+    {
+        assert(gameItem.isServiceMedal());
+        items.emplace_back(gameItem, std::make_unique<ServiceMedal>(serviceMedal));
+    }
+
     [[nodiscard]] Skin& getSkin(const Item_v2& item) const
     {
         assert(item.gameItem().isSkin());
@@ -73,6 +79,12 @@ public:
     {
         assert(item.gameItem().isGraffiti());
         return *std::get<std::unique_ptr<Graffiti>>(item.getData()).get();
+    }
+
+    [[nodiscard]] ServiceMedal& getServiceMedal(const Item_v2& item) const
+    {
+        assert(item.gameItem().isServiceMedal());
+        return *std::get<std::unique_ptr<ServiceMedal>>(item.getData()).get();
     }
 
     [[nodiscard]] auto begin()
