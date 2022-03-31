@@ -57,6 +57,12 @@ public:
         return *std::get<std::unique_ptr<Agent>>(item.getData()).get();
     }
 
+    [[nodiscard]] Music& getMusic(const Item_v2& item) const
+    {
+        assert(item.gameItem().isMusic());
+        return *std::get<std::unique_ptr<Music>>(item.getData()).get();
+    }
+
     [[nodiscard]] auto begin()
     {
         return items.begin();
