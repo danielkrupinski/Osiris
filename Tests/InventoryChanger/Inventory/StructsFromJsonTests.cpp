@@ -95,5 +95,51 @@ INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonAllParamsTest
         testing::Values(0, 123, 1000)
 ));
 
+TEST(InventoryChanger_Inventory_SouvenirPackageFromJsonTests, SouvenirPackageFromEmptyJsonHasDefaultTournamentStage) {
+    ASSERT_EQ(souvenirPackageFromJson({}).tournamentStage, SouvenirPackage{}.tournamentStage);
+}
+
+TEST(InventoryChanger_Inventory_SouvenirPackageFromJsonTests, SouvenirPackageFromEmptyJsonHasDefaultTournamentTeam1) {
+    ASSERT_EQ(souvenirPackageFromJson({}).tournamentTeam1, SouvenirPackage{}.tournamentTeam1);
+}
+
+TEST(InventoryChanger_Inventory_SouvenirPackageFromJsonTests, SouvenirPackageFromEmptyJsonHasDefaultTournamentTeam2) {
+    ASSERT_EQ(souvenirPackageFromJson({}).tournamentTeam2, SouvenirPackage{}.tournamentTeam2);
+}
+
+TEST(InventoryChanger_Inventory_SouvenirPackageFromJsonTests, SouvenirPackageFromEmptyJsonHasDefaultProPlayer) {
+    ASSERT_EQ(souvenirPackageFromJson({}).proPlayer, SouvenirPackage{}.proPlayer);
+}
+
+class InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest : public testing::TestWithParam<json::value_t> {};
+
+TEST_P(InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest, FromJsonWithTournamentStageNotAsUintHasDefaultTournamentStage) {
+    ASSERT_EQ(souvenirPackageFromJson({ { "Tournament Stage", GetParam() } }).tournamentStage, SouvenirPackage{}.tournamentStage);
+}
+
+TEST_P(InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest, FromJsonWithTournamentTeam1NotAsUintHasDefaultTournamentTeam1) {
+    ASSERT_EQ(souvenirPackageFromJson({ { "Tournament Team 1", GetParam() } }).tournamentTeam1, SouvenirPackage{}.tournamentTeam1);
+}
+
+TEST_P(InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest, FromJsonWithTournamentTeam2NotAsUintHasDefaultTournamentTeam2) {
+    ASSERT_EQ(souvenirPackageFromJson({ { "Tournament Team 2", GetParam() } }).tournamentTeam2, SouvenirPackage{}.tournamentTeam2);
+}
+
+TEST_P(InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest, FromJsonWithProPlayerNotAsUintHasDefaultProPlayer) {
+    ASSERT_EQ(souvenirPackageFromJson({ { "Tournament Player", GetParam() } }).proPlayer, SouvenirPackage{}.proPlayer);
+}
+
+INSTANTIATE_TEST_SUITE_P(,
+    InventoryChanger_Inventory_SouvenirPackageFromJsonTypeTest,
+    testing::Values(json::value_t::array,
+                    json::value_t::binary,
+                    json::value_t::boolean,
+                    json::value_t::discarded,
+                    json::value_t::null,
+                    json::value_t::number_float,
+                    json::value_t::object,
+                    json::value_t::string)
+);
+
 }
 }
