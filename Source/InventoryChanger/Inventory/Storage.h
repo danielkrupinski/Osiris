@@ -39,19 +39,19 @@ public:
         items.emplace_back(gameItem, std::make_unique<Music>(music));
     }
 
-    [[nodiscard]] Skin& getSkin(const Item_v2& item)
+    [[nodiscard]] Skin& getSkin(const Item_v2& item) const
     {
         assert(item.gameItem().isSkin());
         return *std::get<std::unique_ptr<Skin>>(item.getData()).get();
     }
 
-    [[nodiscard]] Glove& getGloves(const Item_v2& item)
+    [[nodiscard]] Glove& getGloves(const Item_v2& item) const
     {
         assert(item.gameItem().isGloves());
         return *std::get<std::unique_ptr<Glove>>(item.getData()).get();
     }
 
-    [[nodiscard]] Agent& getAgent(const Item_v2& item)
+    [[nodiscard]] Agent& getAgent(const Item_v2& item) const
     {
         assert(item.gameItem().isAgent());
         return *std::get<std::unique_ptr<Agent>>(item.getData()).get();
