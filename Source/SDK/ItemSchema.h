@@ -618,6 +618,49 @@ enum ProPlayer {
     Aerial = 2445180
 };
 
+class EconItemAttributeSetter {
+public:
+    explicit EconItemAttributeSetter(ItemSchema& itemSchema) : itemSchema{ itemSchema } {}
+
+    void setPaintKit(EconItem& econItem, float paintKit) noexcept { setAttributeValue(econItem, 6, &paintKit); }
+    void setSeed(EconItem& econItem, float seed) noexcept { setAttributeValue(econItem, 7, &seed); }
+    void setWear(EconItem& econItem, float wear) noexcept { setAttributeValue(econItem, 8, &wear); }
+    void setMusicID(EconItem& econItem, int musicID) noexcept { setAttributeValue(econItem, 166, &musicID); }
+    void setStatTrak(EconItem& econItem, int value) noexcept { setAttributeValue(econItem, 80, &value); }
+    void setStatTrakType(EconItem& econItem, int type) noexcept { setAttributeValue(econItem, 81, &type); }
+    void setTournamentID(EconItem& econItem, int id) noexcept { setAttributeValue(econItem, 137, &id); }
+    void setTournamentStage(EconItem& econItem, int stage) noexcept { setAttributeValue(econItem, 138, &stage); }
+    void setTournamentTeam1(EconItem& econItem, int team) noexcept { setAttributeValue(econItem, 139, &team); }
+    void setTournamentTeam2(EconItem& econItem, int team) noexcept { setAttributeValue(econItem, 140, &team); }
+    void setTournamentPlayer(EconItem& econItem, int player) noexcept { setAttributeValue(econItem, 223, &player); }
+    void setSpecialEventID(EconItem& econItem, int id) noexcept { setAttributeValue(econItem, 267, &id); }
+    void setIssueDate(EconItem& econItem, std::uint32_t date) noexcept { setAttributeValue(econItem, 222, &date); }
+    void setSpraysRemaining(EconItem& econItem, std::uint32_t n) noexcept { setAttributeValue(econItem, 232, &n); }
+    void setDropsAwarded(EconItem& econItem, std::uint32_t n) noexcept { setAttributeValue(econItem, 237, &n); }
+    void setDropsRedeemed(EconItem& econItem, std::uint32_t n) noexcept { setAttributeValue(econItem, 240, &n); }
+
+    void setStickerID(EconItem& econItem, int slot, int stickerID) noexcept
+    {
+        if (slot >= 0 && slot <= 5)
+            setAttributeValue(econItem, 113 + 4 * slot, &stickerID);
+    }
+
+    void setStickerWear(EconItem& econItem, int slot, float wear) noexcept
+    {
+        if (slot >= 0 && slot <= 5)
+            setAttributeValue(econItem, 114 + 4 * slot, &wear);
+    }
+
+private:
+    void setAttributeValue(EconItem& econItem, int index, void* value) noexcept
+    {
+        if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
+            memory->setDynamicAttributeValue(&econItem, attribute, value);
+    }
+
+    ItemSchema& itemSchema;
+};
+
 class EconItem {
 public:
     INCONSTRUCTIBLE(EconItem)
@@ -646,41 +689,6 @@ public:
     std::int16_t itemSet;
     int soUpdateFrame;
     std::uint8_t flags;
-
-    void setAttributeValue(int index, void* value) noexcept
-    {
-        if (const auto attribute = memory->itemSystem()->getItemSchema()->getAttributeDefinitionInterface(index))
-            memory->setDynamicAttributeValue(this, attribute, value);
-    }
-
-    void setPaintKit(float paintKit) noexcept { setAttributeValue(6, &paintKit); }
-    void setSeed(float seed) noexcept { setAttributeValue(7, &seed); }
-    void setWear(float wear) noexcept { setAttributeValue(8, &wear); }
-    void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
-    void setStatTrak(int value) noexcept { setAttributeValue(80, &value); }
-    void setStatTrakType(int type) noexcept { setAttributeValue(81, &type); }
-    void setTournamentID(int id) noexcept { setAttributeValue(137, &id); }
-    void setTournamentStage(int stage) noexcept { setAttributeValue(138, &stage); }
-    void setTournamentTeam1(int team) noexcept { setAttributeValue(139, &team); }
-    void setTournamentTeam2(int team) noexcept { setAttributeValue(140, &team); }
-    void setTournamentPlayer(int player) noexcept { setAttributeValue(223, &player); }
-    void setSpecialEventID(int id) noexcept { setAttributeValue(267, &id); }
-    void setIssueDate(std::uint32_t date) noexcept { setAttributeValue(222, &date); }
-    void setSpraysRemaining(std::uint32_t n) noexcept { setAttributeValue(232, &n); }
-    void setDropsAwarded(std::uint32_t n) noexcept { setAttributeValue(237, &n); }
-    void setDropsRedeemed(std::uint32_t n) noexcept { setAttributeValue(240, &n); }
-
-    void setStickerID(int slot, int stickerID) noexcept
-    {
-        if (slot >= 0 && slot <= 5)
-            setAttributeValue(113 + 4 * slot, &stickerID);
-    }
-
-    void setStickerWear(int slot, float wear) noexcept
-    {
-        if (slot >= 0 && slot <= 5)
-            setAttributeValue(114 + 4 * slot, &wear);
-    }
 };
 
 class SharedObject {

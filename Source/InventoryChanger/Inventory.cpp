@@ -102,8 +102,10 @@ private:
     {
         assert(inventoryItem.isSkin());
 
+        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+
         const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.get()).id;
-        econItem.setPaintKit(static_cast<float>(paintKit));
+        attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
 
         const auto& dynamicData = dynamicSkinData[inventoryItem.getDynamicDataIndex()];
         const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.get().getWeaponID(), paintKit);
@@ -111,8 +113,8 @@ private:
             econItem.quality = 12;
         } else {
             if (dynamicData.statTrak > -1) {
-                econItem.setStatTrak(dynamicData.statTrak);
-                econItem.setStatTrakType(0);
+                attributeSetter.setStatTrak(econItem, dynamicData.statTrak);
+                attributeSetter.setStatTrakType(econItem, 0);
                 econItem.quality = 9;
             }
             if (Helpers::isKnife(econItem.weaponId))
@@ -120,22 +122,22 @@ private:
         }
 
         if (isMP5LabRats) {
-            econItem.setSpecialEventID(1);
+            attributeSetter.setSpecialEventID(econItem, 1);
         } else {
             if (dynamicData.tournamentID != 0)
-                econItem.setTournamentID(dynamicData.tournamentID);
+                attributeSetter.setTournamentID(econItem, dynamicData.tournamentID);
 
             if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
-                econItem.setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
-                econItem.setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
-                econItem.setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
+                attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));
+                attributeSetter.setTournamentTeam1(econItem, static_cast<int>(dynamicData.tournamentTeam1));
+                attributeSetter.setTournamentTeam2(econItem, static_cast<int>(dynamicData.tournamentTeam2));
                 if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
-                    econItem.setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
+                    attributeSetter.setTournamentPlayer(econItem, static_cast<int>(dynamicData.proPlayer));
             }
         }
 
-        econItem.setWear(dynamicData.wear);
-        econItem.setSeed(static_cast<float>(dynamicData.seed));
+        attributeSetter.setWear(econItem, dynamicData.wear);
+        attributeSetter.setSeed(econItem, static_cast<float>(dynamicData.seed));
         memory->setCustomName(&econItem, dynamicData.nameTag.c_str());
 
         for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
@@ -143,8 +145,8 @@ private:
             if (sticker.stickerID == 0)
                 continue;
 
-            econItem.setStickerID(j, sticker.stickerID);
-            econItem.setStickerWear(j, sticker.wear);
+            attributeSetter.setStickerID(econItem, j, sticker.stickerID);
+            attributeSetter.setStickerWear(econItem, j, sticker.wear);
         }
     }
 
@@ -173,34 +175,36 @@ private:
 
         const auto& storage = StaticData::lookup().getStorage();
 
+        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+
         if (item.isSticker()) {
-            econItem->setStickerID(0, storage.getStickerKit(item).id);
+            attributeSetter.setStickerID(*econItem, 0, storage.getStickerKit(item).id);
         } else if (item.isPatch()) {
-            econItem->setStickerID(0, storage.getPatch(item).id);
+            attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
         } else if (item.isGraffiti()) {
-            econItem->setStickerID(0, storage.getGraffitiKit(item).id);
+            attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
             const auto& dynamicData = dynamicGraffitiData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.usesLeft >= 0) {
                 econItem->weaponId = WeaponId::Graffiti;
-                econItem->setSpraysRemaining(dynamicData.usesLeft);
+                attributeSetter.setSpraysRemaining(*econItem, dynamicData.usesLeft);
             }
         } else if (item.isMusic()) {
-            econItem->setMusicID(storage.getMusicKit(item).id);
+            attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.statTrak > -1) {
-                econItem->setStatTrak(dynamicData.statTrak);
-                econItem->setStatTrakType(1);
+                attributeSetter.setStatTrak(*econItem, dynamicData.statTrak);
+                attributeSetter.setStatTrakType(*econItem, 1);
                 econItem->quality = 9;
             }
         } else if (item.isSkin()) {
             initSkinEconItem(inventoryItem, *econItem);
         } else if (item.isGloves()) {
             econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(storage.getPaintKit(item).id));
+            attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
 
             const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
-            econItem->setWear(dynamicData.wear);
-            econItem->setSeed(static_cast<float>(dynamicData.seed));
+            attributeSetter.setWear(*econItem, dynamicData.wear);
+            attributeSetter.setSeed(*econItem, static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
             if (storage.isCollectibleGenuine(item))
                 econItem->quality = 1;
@@ -211,21 +215,21 @@ private:
                 if (patch.patchID == 0)
                     continue;
 
-                econItem->setStickerID(j, patch.patchID);
+                attributeSetter.setStickerID(*econItem, j, patch.patchID);
             }
         } else if (item.isServiceMedal()) {
             if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
-                econItem->setIssueDate(dynamicData.issueDateTimestamp);
+                attributeSetter.setIssueDate(*econItem, dynamicData.issueDateTimestamp);
         } else if (item.isTournamentCoin()) {
-            econItem->setDropsAwarded(dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
-            econItem->setDropsRedeemed(0);
+            attributeSetter.setDropsAwarded(*econItem, dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
+            attributeSetter.setDropsRedeemed(*econItem, 0);
         } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
             if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
-                econItem->setTournamentStage(static_cast<int>(dynamicData.tournamentStage));
-                econItem->setTournamentTeam1(static_cast<int>(dynamicData.tournamentTeam1));
-                econItem->setTournamentTeam2(static_cast<int>(dynamicData.tournamentTeam2));
+                attributeSetter.setTournamentStage(*econItem, static_cast<int>(dynamicData.tournamentStage));
+                attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(dynamicData.tournamentTeam1));
+                attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(dynamicData.tournamentTeam2));
                 if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
-                    econItem->setTournamentPlayer(static_cast<int>(dynamicData.proPlayer));
+                    attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(dynamicData.proPlayer));
             }
         }
 

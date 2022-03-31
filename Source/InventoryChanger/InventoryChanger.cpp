@@ -485,7 +485,8 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     auto& dynamicData = Inventory::dynamicSkinData(*item);
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
-        soc->setStatTrak(dynamicData.statTrak);
+        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+        attributeSetter.setStatTrak(*soc, dynamicData.statTrak);
         localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
     }
 }
@@ -518,7 +519,8 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (dynamicData.statTrak > -1) {
         ++dynamicData.statTrak;
         event.setInt("musickitmvps", dynamicData.statTrak);
-        soc->setStatTrak(dynamicData.statTrak);
+        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+        attributeSetter.setStatTrak(*soc, dynamicData.statTrak);
         localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
     }
 }

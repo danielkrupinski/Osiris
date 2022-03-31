@@ -64,7 +64,8 @@ private:
             } else {
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                     if (const auto soc = memory->getSOCData(view)) {
-                        soc->setStickerWear(stickerSlot, newWear);
+                        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+                        attributeSetter.setStickerWear(*soc, stickerSlot, newWear);
                         localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
                     }
                 }
@@ -199,7 +200,8 @@ private:
 
             if (const auto view = memory->findOrCreateEconItemViewForItemID(coinItemID)) {
                 if (const auto soc = memory->getSOCData(view)) {
-                    soc->setDropsAwarded(newDropsAwarded);
+                    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+                    attributeSetter.setDropsAwarded(*soc, newDropsAwarded);
                     localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
                 }
             }
