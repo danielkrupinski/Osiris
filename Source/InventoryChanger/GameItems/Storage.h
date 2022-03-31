@@ -36,31 +36,31 @@ public:
     void addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath);
     void addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath);
 
-    const auto& getStickerKit(const Item& item) const
+    [[nodiscard]] const auto& getStickerKit(const Item& item) const
     {
         assert(item.isSticker());
         return stickerKits[item.getDataIndex()];
     }
 
-    const auto& getMusicKit(const Item& item) const
+    [[nodiscard]] const auto& getMusicKit(const Item& item) const
     {
         assert(item.isMusic());
         return musicKits[item.getDataIndex()];
     }
 
-    const auto& getPaintKit(const Item& item) const
+    [[nodiscard]] const auto& getPaintKit(const Item& item) const
     {
         assert(item.isSkin() || item.isGloves());
         return paintKits[item.getDataIndex()];
     }
 
-    const auto& getGraffitiKit(const Item& item) const
+    [[nodiscard]] const auto& getGraffitiKit(const Item& item) const
     {
         assert(item.isGraffiti());
         return graffitiKits[item.getDataIndex()];
     }
 
-    const auto& getPatch(const Item& item) const
+    [[nodiscard]] const auto& getPatch(const Item& item) const
     {
         assert(item.isPatch());
         return patches[item.getDataIndex()];
