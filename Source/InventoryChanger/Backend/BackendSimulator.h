@@ -1,5 +1,7 @@
 #pragma once
 
+#include <InventoryChanger/Inventory/Storage.h>
+
 #include "Loadout.h"
 
 namespace inventory_changer::backend
@@ -10,6 +12,11 @@ public:
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
         return loadout;
+    }
+
+    [[nodiscard]] const inventory::Storage& getInventory() const noexcept
+    {
+        return inventory;
     }
 
     void equipItemCT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
@@ -34,6 +41,7 @@ public:
     }
 
 private:
+    inventory::Storage inventory;
     Loadout loadout;
 };
 
