@@ -171,19 +171,21 @@ private:
         econItem->quality = 4;
         econItem->weaponId = item.getWeaponID();
 
+        const auto& storage = StaticData::lookup().getStorage();
+
         if (item.isSticker()) {
-            econItem->setStickerID(0, StaticData::lookup().getStorage().getStickerKit(item).id);
+            econItem->setStickerID(0, storage.getStickerKit(item).id);
         } else if (item.isPatch()) {
-            econItem->setStickerID(0, StaticData::lookup().getStorage().getPatch(item).id);
+            econItem->setStickerID(0, storage.getPatch(item).id);
         } else if (item.isGraffiti()) {
-            econItem->setStickerID(0, StaticData::lookup().getStorage().getGraffitiKit(item).id);
+            econItem->setStickerID(0, storage.getGraffitiKit(item).id);
             const auto& dynamicData = dynamicGraffitiData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.usesLeft >= 0) {
                 econItem->weaponId = WeaponId::Graffiti;
                 econItem->setSpraysRemaining(dynamicData.usesLeft);
             }
         } else if (item.isMusic()) {
-            econItem->setMusicID(StaticData::lookup().getStorage().getMusicKit(item).id);
+            econItem->setMusicID(storage.getMusicKit(item).id);
             const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
             if (dynamicData.statTrak > -1) {
                 econItem->setStatTrak(dynamicData.statTrak);
@@ -194,13 +196,13 @@ private:
             initSkinEconItem(inventoryItem, *econItem);
         } else if (item.isGloves()) {
             econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(StaticData::lookup().getStorage().getPaintKit(item).id));
+            econItem->setPaintKit(static_cast<float>(storage.getPaintKit(item).id));
 
             const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            if (StaticData::lookup().getStorage().isCollectibleGenuine(item))
+            if (storage.isCollectibleGenuine(item))
                 econItem->quality = 1;
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
