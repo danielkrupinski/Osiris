@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 project(Osiris)
 
 if (NOT WIN32)
-  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fvisibility=hidden -fno-exceptions -Wfatal-errors")
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-exceptions -Wfatal-errors")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-rtti")
 endif()
 
@@ -16,6 +16,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 add_library(OsirisOBJ OBJECT "")
+set_target_properties(OsirisOBJ PROPERTIES CXX_VISIBILITY_PRESET hidden C_VISIBILITY_PRESET hidden)
 add_subdirectory(Dependencies)
 add_subdirectory(Source)
 
