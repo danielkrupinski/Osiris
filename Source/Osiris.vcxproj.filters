@@ -45,6 +45,9 @@
     <Filter Include="InventoryChanger\Inventory">
       <UniqueIdentifier>{270217aa-a98f-429f-8f75-6afc8c109b1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\Backend">
+      <UniqueIdentifier>{4d2a3734-8406-4a2b-8393-a5c4264a4e46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -663,6 +666,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h">
       <Filter>InventoryChanger\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Loadout.h">
+      <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
