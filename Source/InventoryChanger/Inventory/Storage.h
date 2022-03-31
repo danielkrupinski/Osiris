@@ -51,6 +51,12 @@ public:
         items.emplace_back(gameItem, std::make_unique<ServiceMedal>(serviceMedal));
     }
 
+    void addSouvenirPackage(const game_items::Item& gameItem, const SouvenirPackage& souvenirPackage)
+    {
+        assert(gameItem.isCase());
+        items.emplace_back(gameItem, std::make_unique<SouvenirPackage>(souvenirPackage));
+    }
+
     [[nodiscard]] Skin& getSkin(const Item_v2& item) const
     {
         assert(item.gameItem().isSkin());
@@ -85,6 +91,12 @@ public:
     {
         assert(item.gameItem().isServiceMedal());
         return *std::get<std::unique_ptr<ServiceMedal>>(item.getData()).get();
+    }
+
+    [[nodiscard]] SouvenirPackage& getSouvenirPackage(const Item_v2& item) const
+    {
+        assert(item.gameItem().isCase());
+        return *std::get<std::unique_ptr<SouvenirPackage>>(item.getData()).get();
     }
 
     [[nodiscard]] auto begin()
