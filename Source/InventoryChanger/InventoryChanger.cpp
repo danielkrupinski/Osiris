@@ -52,6 +52,7 @@
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
 #include "Inventory/Structs.h"
+#include "Backend/Loadout.h"
 
 static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
 {
@@ -933,6 +934,15 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     const auto item = Inventory::getItem(itemID);
     if (!item)
         return;
+
+    using inventory_changer::backend::Loadout;
+    if (auto& loadout = Loadout::instance(); team == Team::CT) {
+        loadout.equipItemCT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+    } else if (team == Team::TT) {
+        loadout.equipItemTT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+    } else if (team == Team::None) {
+        loadout.equipItemNoTeam(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+    }
 
     if (item->isCollectible() || item->isServiceMedal()) {
         if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {

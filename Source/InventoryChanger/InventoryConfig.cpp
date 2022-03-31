@@ -6,6 +6,8 @@
 #include "Inventory/Structs.h"
 #include "Inventory/StructsFromJson.h"
 
+#include "Backend/Loadout.h"
+
 constexpr auto CONFIG_VERSION = 3;
 
 json InventoryChanger::toJson() noexcept
@@ -115,9 +117,18 @@ json InventoryChanger::toJson() noexcept
 
     if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
         auto& equipment = j["Equipment"];
-        for (std::size_t i = 0; i < 57; ++i) {
+        for (std::uint8_t i = 0; i < 57; ++i) {
             json slot;
 
+            using namespace inventory_changer::backend;
+            if (const auto ct = Loadout::instance().getItemInSlotCT(i); ct.has_value())
+                slot["CT"] = *ct;
+            if (const auto tt = Loadout::instance().getItemInSlotTT(i); tt.has_value())
+                slot["TT"] = *tt;
+            if (const auto noTeam = Loadout::instance().getItemInSlotNoTeam(i); noTeam.has_value())
+                slot["NOTEAM"] = *noTeam;
+
+            /*
             if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemCT); soc && Inventory::getItem(soc->itemID))
                     slot["CT"] = Inventory::getItemIndex(soc->itemID);
@@ -132,7 +143,7 @@ json InventoryChanger::toJson() noexcept
                 if (const auto soc = memory->getSOCData(itemNOTEAM); soc && Inventory::getItem(soc->itemID))
                     slot["NOTEAM"] = Inventory::getItemIndex(soc->itemID);
             }
-
+            */
             if (!slot.empty()) {
                 slot["Slot"] = i;
                 equipment.push_back(std::move(slot));
@@ -199,18 +210,24 @@ void loadEquipmentFromJson(const json& j) noexcept
             continue;
 
         if (equipped.contains("CT")) {
-            if (const auto& ct = equipped["CT"]; ct.is_number_integer())
+            if (const auto& ct = equipped["CT"]; ct.is_number_integer()) {
                 Inventory::equipItem(Team::CT, slot, ct);
+                inventory_changer::backend::Loadout::instance().equipItemCT(ct, slot);
+            }
         }
 
         if (equipped.contains("TT")) {
-            if (const auto& tt = equipped["TT"]; tt.is_number_integer())
+            if (const auto& tt = equipped["TT"]; tt.is_number_integer()) {
                 Inventory::equipItem(Team::TT, slot, tt);
+                inventory_changer::backend::Loadout::instance().equipItemTT(tt, slot);
+            }
         }
 
         if (equipped.contains("NOTEAM")) {
-            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer())
+            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer()) {
                 Inventory::equipItem(Team::None, slot, noteam);
+                inventory_changer::backend::Loadout::instance().equipItemNoTeam(noteam, slot);
+            }
         }
     }
 }
