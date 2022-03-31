@@ -55,7 +55,8 @@ public:
         std::unique_ptr<Glove>,
         std::unique_ptr<Agent>,
         std::unique_ptr<Music>,
-        std::unique_ptr<Graffiti>
+        std::unique_ptr<Graffiti>,
+        std::unique_ptr<ServiceMedal>
     >;
 
     explicit Item_v2(const game_items::Item& item, Data data) noexcept : item{ item }, data{ std::move(data) } {}
