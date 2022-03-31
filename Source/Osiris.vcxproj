@@ -215,6 +215,7 @@
     <ClInclude Include="InventoryChanger\InventoryChanger.h" />
     <ClInclude Include="InventoryChanger\InventoryConfig.h" />
     <ClInclude Include="InventoryChanger\Inventory\Item.h" />
+    <ClInclude Include="InventoryChanger\Inventory\Storage.h" />
     <ClInclude Include="InventoryChanger\Inventory\Structs.h" />
     <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator.h" />

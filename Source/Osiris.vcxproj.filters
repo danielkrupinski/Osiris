@@ -673,6 +673,9 @@
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Inventory\Storage.h">
+      <Filter>InventoryChanger\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
