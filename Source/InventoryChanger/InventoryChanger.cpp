@@ -60,7 +60,7 @@ static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>
     for (const auto item : order) {
         if (const auto count = toAdd.find(item); count != toAdd.end()) {
             for (int i = 0; i < count->second; ++i)
-                Inventory::addItemUnacknowledged(StaticData::getGameItem(item), Inventory::InvalidDynamicDataIdx);
+                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ StaticData::getGameItem(item), inventory::StructWrapper{} });
         }
     }
 }

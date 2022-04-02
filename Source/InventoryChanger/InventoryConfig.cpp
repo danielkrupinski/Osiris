@@ -288,7 +288,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::graffitiFromJson(jsonItem));
         }
 
-        Inventory::addItemAcknowledged(item, dynamicDataIdx);
+        // Inventory::addItemAcknowledged(item, dynamicDataIdx);
     }
 
     loadEquipmentFromJson(j);

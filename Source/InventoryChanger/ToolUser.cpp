@@ -11,6 +11,7 @@
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"
 #include "Inventory/Structs.h"
+#include "Backend/BackendSimulator.h"
 
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID) noexcept
 {
@@ -92,15 +93,17 @@ private:
         pass.markToDelete();
         const auto coinID = passWeaponID != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(passWeaponID) + 1) : WeaponId::BronzeOperationHydraCoin;
         if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
-            Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, true);
+            inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ *item, inventory::StructWrapper{} });
     }
 
     void _activateViewerPass(inventory::Item& pass) const noexcept
     {
         const auto coinID = static_cast<WeaponId>(static_cast<int>(pass.get().getWeaponID()) + 1);
         pass.markToDelete();
-        if (const auto item = StaticData::lookup().findItem(coinID); item.has_value())
-            initItemCustomizationNotification("ticket_activated", Inventory::addItemNow(*item, Inventory::InvalidDynamicDataIdx, false));
+        if (const auto item = StaticData::lookup().findItem(coinID); item.has_value()) {
+            inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ *item, inventory::StructWrapper{} });
+            // initItemCustomizationNotification("ticket_activated");
+        }
     }
 
     void _unsealGraffiti(inventory::Item& sealedGraffiti) const noexcept
@@ -109,7 +112,8 @@ private:
             sealedGraffiti.markToDelete();
             inventory::Graffiti dynamicData;
             dynamicData.usesLeft = 50;
-            initItemCustomizationNotification("graffity_unseal", Inventory::addItemNow(*item, Inventory::emplaceDynamicData(std::move(dynamicData)), false));
+            inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ *item, dynamicData });
+            // initItemCustomizationNotification("graffity_unseal");
         }
     }
 
@@ -123,7 +127,9 @@ private:
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
-            initItemCustomizationNotification("crate_unlock", Inventory::addItemNow(unlockedItem, dynamicDataIdx, true));
+
+            inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ unlockedItem, inventory::StructWrapper{} });
+           // initItemCustomizationNotification("crate_unlock");
         }
     }
 

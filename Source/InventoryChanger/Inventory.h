@@ -43,9 +43,6 @@ namespace Inventory
     constexpr auto BASE_ITEMID = 1152921504606746975;
 
     std::vector<inventory::Item>& get() noexcept;
-    void addItemUnacknowledged(const game_items::Item& gameItem, std::size_t dynamicDataIdx) noexcept;
-    void addItemAcknowledged(const game_items::Item& gameItem, std::size_t dynamicDataIdx) noexcept;
-    std::uint64_t addItemNow(const game_items::Item& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept;
     void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
     inventory::Item* getItem(std::uint64_t itemID) noexcept;
