@@ -18,85 +18,43 @@ public:
     void addSkin(const game_items::Item& gameItem, const Skin& skin)
     {
         assert(gameItem.isSkin());
-        items.emplace_back(gameItem, std::make_unique<Skin>(skin));
+        items.emplace_back(gameItem, skin);
     }
 
     void addGloves(const game_items::Item& gameItem, const Glove& gloves)
     {
         assert(gameItem.isGloves());
-        items.emplace_back(gameItem, std::make_unique<Glove>(gloves));
+        items.emplace_back(gameItem, gloves);
     }
 
     void addAgent(const game_items::Item& gameItem, const Agent& agent)
     {
         assert(gameItem.isAgent());
-        items.emplace_back(gameItem, std::make_unique<Agent>(agent));
+        items.emplace_back(gameItem, agent);
     }
 
     void addMusic(const game_items::Item& gameItem, const Music& music)
     {
         assert(gameItem.isMusic());
-        items.emplace_back(gameItem, std::make_unique<Music>(music));
+        items.emplace_back(gameItem, music);
     }
 
     void addGraffiti(const game_items::Item& gameItem, const Graffiti& graffiti)
     {
         assert(gameItem.isGraffiti());
-        items.emplace_back(gameItem, std::make_unique<Graffiti>(graffiti));
+        items.emplace_back(gameItem, graffiti);
     }
 
     void addServiceMedal(const game_items::Item& gameItem, const ServiceMedal& serviceMedal)
     {
         assert(gameItem.isServiceMedal());
-        items.emplace_back(gameItem, std::make_unique<ServiceMedal>(serviceMedal));
+        items.emplace_back(gameItem, serviceMedal);
     }
 
     void addSouvenirPackage(const game_items::Item& gameItem, const SouvenirPackage& souvenirPackage)
     {
         assert(gameItem.isCase());
-        items.emplace_back(gameItem, std::make_unique<SouvenirPackage>(souvenirPackage));
-    }
-
-    [[nodiscard]] Skin& getSkin(const Item_v2& item) const
-    {
-        assert(item.gameItem().isSkin());
-        return *std::get<std::unique_ptr<Skin>>(item.getData()).get();
-    }
-
-    [[nodiscard]] Glove& getGloves(const Item_v2& item) const
-    {
-        assert(item.gameItem().isGloves());
-        return *std::get<std::unique_ptr<Glove>>(item.getData()).get();
-    }
-
-    [[nodiscard]] Agent& getAgent(const Item_v2& item) const
-    {
-        assert(item.gameItem().isAgent());
-        return *std::get<std::unique_ptr<Agent>>(item.getData()).get();
-    }
-
-    [[nodiscard]] Music& getMusic(const Item_v2& item) const
-    {
-        assert(item.gameItem().isMusic());
-        return *std::get<std::unique_ptr<Music>>(item.getData()).get();
-    }
-
-    [[nodiscard]] Graffiti& getGraffiti(const Item_v2& item) const
-    {
-        assert(item.gameItem().isGraffiti());
-        return *std::get<std::unique_ptr<Graffiti>>(item.getData()).get();
-    }
-
-    [[nodiscard]] ServiceMedal& getServiceMedal(const Item_v2& item) const
-    {
-        assert(item.gameItem().isServiceMedal());
-        return *std::get<std::unique_ptr<ServiceMedal>>(item.getData()).get();
-    }
-
-    [[nodiscard]] SouvenirPackage& getSouvenirPackage(const Item_v2& item) const
-    {
-        assert(item.gameItem().isCase());
-        return *std::get<std::unique_ptr<SouvenirPackage>>(item.getData()).get();
+        items.emplace_back(gameItem, souvenirPackage);
     }
 
     [[nodiscard]] auto begin()

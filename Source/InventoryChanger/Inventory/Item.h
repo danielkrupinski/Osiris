@@ -48,26 +48,74 @@ public:
     const game_items::Item& get() const noexcept { assert(isValid()); return item.value(); }
 };
 
+class StructWrapper {
+public:
+    template <typename T>
+    StructWrapper(const T& object) : variant{ ValueWrapper{ object } } {}
+
+    template <typename T>
+    [[nodiscard]] T* get()
+    {
+        if (const auto item = std::get_if<ValueWrapper<T>>(&variant))
+            return &item->get();
+        return nullptr;
+    }
+
+    template <typename T>
+    [[nodiscard]] const T* get() const
+    {
+        if (const auto item = std::get_if<ValueWrapper<T>>(&variant))
+            return &item->get();
+        return nullptr;
+    }
+
+private:
+    template <typename T, typename = void>
+    struct ValueWrapper {
+        explicit ValueWrapper(const T& t) : object{ std::make_unique<T>(t) } {}
+
+        T& get() noexcept { return *object.get(); }
+        const T& get() const noexcept { return *object.get(); }
+    private:
+        std::unique_ptr<T> object;
+    };
+
+    template <typename T>
+    struct AlwaysFalse : std::false_type {};
+
+    // yet to be enabled for some types
+    template <typename T>
+    struct ValueWrapper<T, std::enable_if_t<AlwaysFalse<T>::value>> {
+        explicit ValueWrapper(const T& t) : object{ t } { }
+
+        T& get() noexcept { return object; }
+        const T& get() const noexcept { return object; }
+    private:
+        T object;
+    };
+
+    std::variant<
+        ValueWrapper<Skin>,
+        ValueWrapper<Glove>,
+        ValueWrapper<Agent>,
+        ValueWrapper<Music>,
+        ValueWrapper<Graffiti>,
+        ValueWrapper<ServiceMedal>,
+        ValueWrapper<SouvenirPackage>
+    > variant;
+};
+
 class Item_v2 {
 public:
-    using Data = std::variant<
-        std::unique_ptr<Skin>,
-        std::unique_ptr<Glove>,
-        std::unique_ptr<Agent>,
-        std::unique_ptr<Music>,
-        std::unique_ptr<Graffiti>,
-        std::unique_ptr<ServiceMedal>,
-        std::unique_ptr<SouvenirPackage>
-    >;
-
-    explicit Item_v2(const game_items::Item& item, Data data) noexcept : item{ item }, data{ std::move(data) } {}
+    explicit Item_v2(const game_items::Item& item, StructWrapper data) noexcept : item{ item }, data{ std::move(data) } {}
 
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
-    [[nodiscard]] const Data& getData() const noexcept { return data; }
+    [[nodiscard]] StructWrapper& getData() noexcept { return data; }
+    [[nodiscard]] const StructWrapper& getData() const noexcept { return data; }
 
 private:
     std::reference_wrapper<const game_items::Item> item;
-    Data data;
+    StructWrapper data;
 };
 
 }
