@@ -454,11 +454,6 @@ std::size_t Inventory::emplaceDynamicData(inventory::Graffiti&& data) noexcept
     return ::dynamicGraffitiData.size() - 1;
 }
 
-void Inventory::deleteItemNow(std::uint64_t itemID) noexcept
-{
-    InventoryImpl::deleteItemNow(itemID);
-}
-
 void Inventory::runFrame() noexcept
 {
     InventoryImpl::runFrame();

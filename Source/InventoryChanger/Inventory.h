@@ -42,7 +42,6 @@ namespace Inventory
     constexpr auto InvalidDynamicDataIdx = static_cast<std::size_t>(-1);
     constexpr auto BASE_ITEMID = 1152921504606746975;
 
-    void deleteItemNow(std::uint64_t itemID) noexcept;
     void runFrame() noexcept;
     inventory::Item* getItem(std::uint64_t itemID) noexcept;
     std::uint64_t recreateItem(std::uint64_t itemID) noexcept;
