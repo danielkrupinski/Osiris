@@ -112,6 +112,7 @@ private:
 class Item_v2 {
 public:
     explicit Item_v2(const game_items::Item& item, StructWrapper data) noexcept : item{ item }, data{ std::move(data) } {}
+    explicit Item_v2(const game_items::Item& item) noexcept : item{ item } {}
 
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
     [[nodiscard]] StructWrapper& getData() noexcept { return data; }
