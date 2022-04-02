@@ -856,7 +856,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
+inventory::Item_v2 ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.isCase());
 
@@ -864,12 +864,11 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
     assert(caseData.hasLoot());
 
     const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.get().getWeaponID(), caseData);
-    std::size_t dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
 
     if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
         dynamicData.statTrak = 0;
-        // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+        return inventory::Item_v2{ unlockedItem, dynamicData };
     } else if (unlockedItem.isSkin()) {
         inventory::Skin dynamicData;
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(unlockedItem);
@@ -888,10 +887,10 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
             dynamicData.statTrak = 0;
         }
 
-        // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+        return inventory::Item_v2{ unlockedItem, dynamicData };
     }
 
-    return std::make_pair(std::cref(unlockedItem), dynamicDataIdx);
+    return inventory::Item_v2{ unlockedItem };
 }
 
 [[nodiscard]] static std::span<const Match> getTournamentMatches(std::uint32_t tournamentID) noexcept

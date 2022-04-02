@@ -123,12 +123,12 @@ private:
         const auto& caseData = StaticData::getCase(container.get());
         assert(caseData.hasLoot());
         if (caseData.hasLoot()) {
-            const auto [unlockedItem, dynamicDataIdx] = ItemGenerator::generateItemFromContainer(container);
+            auto unlockedItem = ItemGenerator::generateItemFromContainer(container);
             container.markToDelete();
             if (const auto tool = Inventory::getItem(toolItemID); tool && tool->isCaseKey())
                 tool->markToDelete();
 
-            inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ unlockedItem, inventory::StructWrapper{} });
+            inventory_changer::backend::BackendSimulator::instance().addItem(std::move(unlockedItem));
            // initItemCustomizationNotification("crate_unlock");
         }
     }
