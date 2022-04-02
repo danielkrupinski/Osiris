@@ -1,5 +1,8 @@
 #pragma once
 
+#include <queue>
+#include <variant>
+
 #include <InventoryChanger/Inventory/Storage.h>
 
 #include "Loadout.h"
@@ -48,6 +51,7 @@ public:
     void addItem(inventory::Item_v2 item)
     {
         inventory.addItem(std::move(item));
+        responses.emplace(Response::Type::ItemAdded, std::prev(inventory.end()));
     }
 
     std::list<inventory::Item_v2>::iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
@@ -55,9 +59,29 @@ public:
         return inventory.removeItem(it);
     }
 
+    struct Response {
+        enum class Type {
+            ItemAdded,
+            ItemRemoved
+        };
+
+        Type type;
+        std::variant<std::list<inventory::Item_v2>::const_iterator> data;
+    };
+
+    template <typename ResponseHandler>
+    void run(ResponseHandler responseHandler)
+    {
+        while (!responses.empty()) {
+            responseHandler(responses.front());
+            responses.pop();
+        }
+    }
+
 private:
     inventory::Storage inventory;
     Loadout loadout;
+    std::queue<Response> responses;
 };
 
 }
