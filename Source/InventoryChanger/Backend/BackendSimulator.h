@@ -54,7 +54,7 @@ public:
         responses.emplace(Response::Type::ItemAdded, std::prev(inventory.end()));
     }
 
-    std::list<inventory::Item_v2>::iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
+    std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
     {
         return inventory.removeItem(it);
     }
