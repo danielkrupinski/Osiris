@@ -51,6 +51,8 @@ public:
 
 class StructWrapper {
 public:
+    StructWrapper() = default;
+
     template <typename T>
     StructWrapper(const T& object) : variant{ ValueWrapper{ object } } {}
 
@@ -96,6 +98,7 @@ private:
     };
 
     std::variant<
+        std::monostate,
         ValueWrapper<Skin>,
         ValueWrapper<Glove>,
         ValueWrapper<Agent>,
