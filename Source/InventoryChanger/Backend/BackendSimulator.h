@@ -50,6 +50,11 @@ public:
         inventory.addItem(std::move(item));
     }
 
+    std::vector<inventory::Item_v2>::iterator removeItem(std::vector<inventory::Item_v2>::const_iterator it)
+    {
+        return inventory.removeItem(it);
+    }
+
 private:
     inventory::Storage inventory;
     Loadout loadout;
