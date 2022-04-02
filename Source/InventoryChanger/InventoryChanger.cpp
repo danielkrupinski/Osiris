@@ -1073,14 +1073,19 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     if (!item)
         return;
 
-    using inventory_changer::backend::Loadout;
-    if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
-        backendSimulator.equipItemCT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
-    } else if (team == Team::TT) {
-        backendSimulator.equipItemTT(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
-    } else if (team == Team::None) {
-        backendSimulator.equipItemNoTeam(Inventory::getItemIndex(itemID), static_cast<Loadout::Slot>(slot));
+    if (const auto itemOptional = inventory::ItemIDMap::instance().get(itemID); itemOptional.has_value()) {
+        const auto& itemIterator = *itemOptional;
+
+        using inventory_changer::backend::Loadout;
+        if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
+            backendSimulator.equipItemCT(itemIterator, static_cast<Loadout::Slot>(slot));
+        } else if (team == Team::TT) {
+            backendSimulator.equipItemTT(itemIterator, static_cast<Loadout::Slot>(slot));
+        } else if (team == Team::None) {
+            backendSimulator.equipItemNoTeam(itemIterator, static_cast<Loadout::Slot>(slot));
+        }
     }
+
 
     if (item->isCollectible() || item->isServiceMedal()) {
         if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {

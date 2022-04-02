@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include <optional>
 #include <unordered_map>
 
@@ -8,7 +9,7 @@ namespace inventory_changer::backend
 
 class Loadout {
 public:
-    using InventoryItemIndex = std::size_t;
+    using InventoryItemIndex = std::list<inventory::Item_v2>::const_iterator;
     using Slot = std::uint8_t;
 
     void equipItemCT(InventoryItemIndex index, Slot slot)

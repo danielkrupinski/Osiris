@@ -118,6 +118,7 @@ json InventoryChanger::toJson() noexcept
         for (std::uint8_t i = 0; i < 57; ++i) {
             json slot;
 
+            /*
             using namespace inventory_changer::backend;
             if (const auto ct = BackendSimulator::instance().getLoadout().getItemInSlotCT(i); ct.has_value())
                 slot["CT"] = *ct;
@@ -125,7 +126,7 @@ json InventoryChanger::toJson() noexcept
                 slot["TT"] = *tt;
             if (const auto noTeam = BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(i); noTeam.has_value())
                 slot["NOTEAM"] = *noTeam;
-
+            */
             /*
             if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemCT); soc && Inventory::getItem(soc->itemID))
@@ -207,6 +208,7 @@ void loadEquipmentFromJson(const json& j) noexcept
         if (!slot.is_number_integer())
             continue;
 
+        /*
         if (equipped.contains("CT")) {
             if (const auto& ct = equipped["CT"]; ct.is_number_integer()) {
                 inventory_changer::backend::BackendSimulator::instance().equipItemCT(ct, slot);
@@ -224,6 +226,7 @@ void loadEquipmentFromJson(const json& j) noexcept
                 inventory_changer::backend::BackendSimulator::instance().equipItemNoTeam(noteam, slot);
             }
         }
+        */
     }
 }
 
