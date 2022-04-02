@@ -92,6 +92,11 @@ public:
         items.clear();
     }
 
+    [[nodiscard]] std::size_t size() const noexcept
+    {
+        return items.size();
+    }
+
 private:
     std::vector<Item_v2> items;
 };
