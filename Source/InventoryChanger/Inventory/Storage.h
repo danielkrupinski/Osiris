@@ -82,7 +82,7 @@ public:
         return items.end();
     }
 
-    std::vector<Item_v2>::iterator removeItem(std::vector<Item_v2>::iterator it)
+    std::vector<Item_v2>::iterator removeItem(std::vector<Item_v2>::const_iterator it)
     {
         return items.erase(it);
     }
