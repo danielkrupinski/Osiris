@@ -856,14 +856,14 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-inventory::Item_v2 ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
+inventory::Item_v2 ItemGenerator::generateItemFromContainer(const inventory::Item_v2& caseItem) noexcept
 {
-    assert(caseItem.isCase());
+    assert(caseItem.gameItem().isCase());
 
-    const auto& caseData = StaticData::getCase(caseItem.get());
+    const auto& caseData = StaticData::getCase(caseItem.gameItem());
     assert(caseData.hasLoot());
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.get().getWeaponID(), caseData);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.gameItem().getWeaponID(), caseData);
 
     if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
@@ -875,9 +875,9 @@ inventory::Item_v2 ItemGenerator::generateItemFromContainer(const inventory::Ite
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (StaticData::isSouvenirPackage(caseItem.get())) {
+        if (StaticData::isSouvenirPackage(caseItem.gameItem())) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
-            const auto& souvenir = Inventory::dynamicSouvenirPackageData(caseItem);
+            const auto& souvenir = *caseItem.getData().get<inventory::SouvenirPackage>();
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;

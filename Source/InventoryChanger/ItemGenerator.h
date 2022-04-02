@@ -13,7 +13,7 @@ struct InventoryItem;
 
 namespace ItemGenerator
 {
-    inventory::Item_v2 generateItemFromContainer(const inventory::Item& caseItem) noexcept;
+    inventory::Item_v2 generateItemFromContainer(const inventory::Item_v2& caseItem) noexcept;
     std::size_t createDefaultDynamicData(const game_items::Item& item) noexcept;
 }
 
