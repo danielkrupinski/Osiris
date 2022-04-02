@@ -15,6 +15,11 @@ namespace inventory
 
 class Storage {
 public:
+    void addItem(Item_v2 item)
+    {
+        items.push_back(std::move(item));
+    }
+
     void addSkin(const game_items::Item& gameItem, const Skin& skin)
     {
         assert(gameItem.isSkin());
