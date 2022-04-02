@@ -56,7 +56,9 @@ public:
 
     std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
     {
-        return inventory.removeItem(it);
+        const auto newIterator = inventory.removeItem(it);
+        responses.emplace(Response::Type::ItemRemoved, it);
+        return newIterator;
     }
 
     struct Response {
