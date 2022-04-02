@@ -499,11 +499,6 @@ void Inventory::clear() noexcept
     InventoryImpl::clear();
 }
 
-void Inventory::equipItem(Team team, int slot, std::size_t index) noexcept
-{
-    InventoryImpl::equipItem(team, slot, index);
-}
-
 std::size_t Inventory::getItemIndex(std::uint64_t itemID) noexcept
 {
     return InventoryImpl::getItemIndex(itemID);

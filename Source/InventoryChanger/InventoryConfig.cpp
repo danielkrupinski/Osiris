@@ -209,21 +209,18 @@ void loadEquipmentFromJson(const json& j) noexcept
 
         if (equipped.contains("CT")) {
             if (const auto& ct = equipped["CT"]; ct.is_number_integer()) {
-                Inventory::equipItem(Team::CT, slot, ct);
                 inventory_changer::backend::BackendSimulator::instance().equipItemCT(ct, slot);
             }
         }
 
         if (equipped.contains("TT")) {
             if (const auto& tt = equipped["TT"]; tt.is_number_integer()) {
-                Inventory::equipItem(Team::TT, slot, tt);
                 inventory_changer::backend::BackendSimulator::instance().equipItemTT(tt, slot);
             }
         }
 
         if (equipped.contains("NOTEAM")) {
             if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer()) {
-                Inventory::equipItem(Team::None, slot, noteam);
                 inventory_changer::backend::BackendSimulator::instance().equipItemNoTeam(noteam, slot);
             }
         }

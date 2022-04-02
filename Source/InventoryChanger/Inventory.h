@@ -39,7 +39,6 @@ namespace Inventory
     inventory::Item* getItem(std::uint64_t itemID) noexcept;
     std::uint64_t recreateItem(std::uint64_t itemID) noexcept;
     void clear() noexcept;
-    [[deprecated]] void equipItem(Team team, int slot, std::size_t index) noexcept;
     std::size_t getItemIndex(std::uint64_t itemID) noexcept;
 
     inventory::Skin& dynamicSkinData(const inventory::Item& item) noexcept;
