@@ -38,6 +38,16 @@ namespace inventory
             itemIDs.emplace(itemID, iterator);
         }
 
+        std::optional<std::uint64_t> remove(std::list<Item_v2>::const_iterator iterator)
+        {
+            if (const auto it = std::ranges::find(itemIDs, iterator, &decltype(itemIDs)::value_type::second); it != itemIDs.end()) {
+                const auto itemID = it->first;
+                itemIDs.erase(it);
+                return itemID;
+            }
+            return {};
+        }
+
         [[nodiscard]] static ItemIDMap instance()
         {
             static ItemIDMap map;
