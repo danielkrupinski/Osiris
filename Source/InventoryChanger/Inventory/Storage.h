@@ -82,6 +82,11 @@ public:
         return items.erase(it);
     }
 
+    void clear()
+    {
+        items.clear();
+    }
+
 private:
     std::vector<Item_v2> items;
 };
