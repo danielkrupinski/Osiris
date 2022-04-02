@@ -150,103 +150,6 @@ private:
         }
     }
 
-    std::uint64_t _createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged) const noexcept
-    {
-        const auto localInventory = memory->inventoryManager->getLocalInventory();
-        if (!localInventory)
-            return 0;
-
-        const auto baseTypeCache = localInventory->getItemBaseTypeCache();
-        if (!baseTypeCache)
-            return 0;
-
-        static const auto baseInvID = localInventory->getHighestIDs().second;
-
-        const auto econItem = memory->createEconItemSharedObject();
-        econItem->itemID = BASE_ITEMID + inventory.size() - 1;
-        econItem->originalID = 0;
-        econItem->accountID = localInventory->getAccountID();
-        econItem->inventory = asUnacknowledged ? 0 : baseInvID + inventory.size();
-
-        const auto& item = inventoryItem.get();
-        econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
-        econItem->quality = 4;
-        econItem->weaponId = item.getWeaponID();
-
-        const auto& storage = StaticData::lookup().getStorage();
-
-        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-
-        if (item.isSticker()) {
-            attributeSetter.setStickerID(*econItem, 0, storage.getStickerKit(item).id);
-        } else if (item.isPatch()) {
-            attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
-        } else if (item.isGraffiti()) {
-            attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
-            const auto& dynamicData = dynamicGraffitiData[inventoryItem.getDynamicDataIndex()];
-            if (dynamicData.usesLeft >= 0) {
-                econItem->weaponId = WeaponId::Graffiti;
-                attributeSetter.setSpraysRemaining(*econItem, dynamicData.usesLeft);
-            }
-        } else if (item.isMusic()) {
-            attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
-            const auto& dynamicData = dynamicMusicData[inventoryItem.getDynamicDataIndex()];
-            if (dynamicData.statTrak > -1) {
-                attributeSetter.setStatTrak(*econItem, dynamicData.statTrak);
-                attributeSetter.setStatTrakType(*econItem, 1);
-                econItem->quality = 9;
-            }
-        } else if (item.isSkin()) {
-            initSkinEconItem(inventoryItem, *econItem);
-        } else if (item.isGloves()) {
-            econItem->quality = 3;
-            attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
-
-            const auto& dynamicData = dynamicGloveData[inventoryItem.getDynamicDataIndex()];
-            attributeSetter.setWear(*econItem, dynamicData.wear);
-            attributeSetter.setSeed(*econItem, static_cast<float>(dynamicData.seed));
-        } else if (item.isCollectible()) {
-            if (storage.isCollectibleGenuine(item))
-                econItem->quality = 1;
-        } else if (item.isAgent()) {
-            const auto& dynamicData = dynamicAgentData[inventoryItem.getDynamicDataIndex()];
-            for (std::size_t j = 0; j < dynamicData.patches.size(); ++j) {
-                const auto& patch = dynamicData.patches[j];
-                if (patch.patchID == 0)
-                    continue;
-
-                attributeSetter.setStickerID(*econItem, j, patch.patchID);
-            }
-        } else if (item.isServiceMedal()) {
-            if (const auto& dynamicData = dynamicServiceMedalData[inventoryItem.getDynamicDataIndex()]; dynamicData.issueDateTimestamp != 0)
-                attributeSetter.setIssueDate(*econItem, dynamicData.issueDateTimestamp);
-        } else if (item.isTournamentCoin()) {
-            attributeSetter.setDropsAwarded(*econItem, dynamicTournamentCoinData[inventoryItem.getDynamicDataIndex()].dropsAwarded);
-            attributeSetter.setDropsRedeemed(*econItem, 0);
-        } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-            if (const auto& dynamicData = dynamicSouvenirPackageData[inventoryItem.getDynamicDataIndex()]; dynamicData.tournamentStage != TournamentStage{ 0 }) {
-                attributeSetter.setTournamentStage(*econItem, static_cast<int>(dynamicData.tournamentStage));
-                attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(dynamicData.tournamentTeam1));
-                attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(dynamicData.tournamentTeam2));
-                if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
-                    attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(dynamicData.proPlayer));
-            }
-        }
-
-        baseTypeCache->addObject(econItem);
-        localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-
-        if (const auto inventoryComponent = *memory->uiComponentInventory) {
-            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
-            memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
-        }
-
-        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
-            view->clearInventoryImageRGBA();
-
-        return econItem->itemID;
-    }
-
     void _deleteItem(std::uint64_t itemID) noexcept
     {
         const auto item = _getItem(itemID);
@@ -276,7 +179,7 @@ private:
 
     std::uint64_t _addItem(const game_items::Item& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
-        return _createSOCItem(inventory.emplace_back(gameItem, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItem)), asUnacknowledged);
+        return 0;// _createSOCItem(inventory.emplace_back(gameItem, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItem)), asUnacknowledged);
     }
 
     std::uint64_t _recreateItem(std::uint64_t itemID) noexcept
@@ -301,7 +204,7 @@ private:
         }
 
         _deleteItem(itemID);
-        return _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
+        return 0;// _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
     }
 
     void _addItems() noexcept
