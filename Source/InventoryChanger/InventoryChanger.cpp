@@ -520,7 +520,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
         if (response.type == BackendSimulator::Response::Type::ItemAdded) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
             if (it) {
-                _createSOCItem(**it, true);
+                const auto itemID = _createSOCItem(**it, true);
+                inventory::ItemIDMap::instance().add(itemID, *it);
             }
         }
     });
