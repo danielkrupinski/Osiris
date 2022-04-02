@@ -7,6 +7,7 @@
 #include <variant>
 
 #include <InventoryChanger/GameItems/Item.h>
+#include "Structs.h"
 
 namespace inventory
 {

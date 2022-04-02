@@ -9,6 +9,7 @@
 #include "StaticData.h"
 
 #include "GameItems/Item.h"
+#include "Inventory/Item.h"
 
 enum class Team;
 
@@ -23,6 +24,17 @@ namespace inventory
     struct ServiceMedal;
     struct TournamentCoin;
     struct Graffiti;
+
+    class ItemIDMap {
+    public:
+        [[nodiscard]] std::vector<Item_v2>::iterator get(std::uint64_t itemID)
+        {
+            return std::vector<Item_v2>::iterator{};
+        }
+
+    private:
+        [[maybe_unused]] std::unordered_map<std::uint64_t, std::vector<Item_v2>::iterator> itemIDs;
+    };
 }
 
 namespace Inventory
