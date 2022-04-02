@@ -27,13 +27,25 @@ namespace inventory
 
     class ItemIDMap {
     public:
-        [[nodiscard]] std::vector<Item_v2>::iterator get(std::uint64_t itemID)
+        [[nodiscard]] std::optional<std::list<Item_v2>::const_iterator> get(std::uint64_t itemID) const
         {
-            return std::vector<Item_v2>::iterator{};
+            const auto it = itemIDs.find(itemID);
+            return it != itemIDs.end() ? std::make_optional(it->second) : std::nullopt;
+        }
+
+        void add(std::uint64_t itemID, std::list<Item_v2>::const_iterator iterator)
+        {
+            itemIDs.emplace(itemID, iterator);
+        }
+
+        [[nodiscard]] static ItemIDMap instance()
+        {
+            static ItemIDMap map;
+            return map;
         }
 
     private:
-        [[maybe_unused]] std::unordered_map<std::uint64_t, std::vector<Item_v2>::iterator> itemIDs;
+        std::unordered_map<std::uint64_t, std::list<Item_v2>::const_iterator> itemIDs;
     };
 }
 
