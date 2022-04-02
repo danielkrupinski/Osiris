@@ -105,7 +105,8 @@ private:
         ValueWrapper<Music>,
         ValueWrapper<Graffiti>,
         ValueWrapper<ServiceMedal>,
-        ValueWrapper<SouvenirPackage>
+        ValueWrapper<SouvenirPackage>,
+        ValueWrapper<TournamentCoin>
     > variant;
 };
 
