@@ -45,6 +45,11 @@ public:
         inventory.clear();
     }
 
+    void addItem(inventory::Item_v2 item)
+    {
+        inventory.addItem(std::move(item));
+    }
+
 private:
     inventory::Storage inventory;
     Loadout loadout;
