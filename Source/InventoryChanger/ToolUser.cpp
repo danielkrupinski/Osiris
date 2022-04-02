@@ -196,6 +196,7 @@ private:
     {
         assert(souvenirToken.isSouvenirToken());
 
+        /*
         const auto& inventory = Inventory::get();
         const auto it = std::ranges::find_if(inventory, [&souvenirToken](const auto& inventoryItem) { return inventoryItem.isTournamentCoin() && StaticData::lookup().getStorage(). getTournamentEventID(inventoryItem.get()) == StaticData::lookup().getStorage().getTournamentEventID(souvenirToken.get()); });
         if (it != inventory.cend()) {
@@ -214,6 +215,7 @@ private:
 
             initItemCustomizationNotification("ticket_activated", coinItemID);
         }
+        */
     }
 
     void _useTool(CSPlayerInventory& localInventory) const noexcept
