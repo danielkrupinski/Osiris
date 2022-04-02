@@ -261,7 +261,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 if (itemOptional.has_value()) {
                     inventory::Graffiti dynamicData;
                     dynamicData.usesLeft = 50;
-                    dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+                    // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
                 }
             }
         } else
@@ -272,6 +272,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
         const auto& item = itemOptional->get();
 
+        /*
         if (item.isSkin()) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::skinFromJson(jsonItem));
         } else if (item.isGloves()) {
@@ -287,7 +288,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
         } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
             dynamicDataIdx = Inventory::emplaceDynamicData(inventory::graffitiFromJson(jsonItem));
         }
-
+        */
         // Inventory::addItemAcknowledged(item, dynamicDataIdx);
     }
 

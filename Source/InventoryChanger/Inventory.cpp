@@ -406,54 +406,6 @@ inventory::Graffiti& Inventory::dynamicGraffitiData(const inventory::Item& item)
     return ::dynamicGraffitiData[item.getDynamicDataIndex()];
 }
 
-std::size_t Inventory::emplaceDynamicData(inventory::Skin&& data) noexcept
-{
-    ::dynamicSkinData.push_back(std::move(data));
-    return ::dynamicSkinData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::Glove&& data) noexcept
-{
-    ::dynamicGloveData.push_back(std::move(data));
-    return ::dynamicGloveData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::Agent&& data) noexcept
-{
-    ::dynamicAgentData.push_back(std::move(data));
-    return ::dynamicAgentData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::Music&& data) noexcept
-{
-    ::dynamicMusicData.push_back(std::move(data));
-    return ::dynamicMusicData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::SouvenirPackage&& data) noexcept
-{
-    ::dynamicSouvenirPackageData.push_back(std::move(data));
-    return ::dynamicSouvenirPackageData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::ServiceMedal&& data) noexcept
-{
-    ::dynamicServiceMedalData.push_back(std::move(data));
-    return ::dynamicServiceMedalData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::TournamentCoin&& data) noexcept
-{
-    ::dynamicTournamentCoinData.push_back(std::move(data));
-    return ::dynamicTournamentCoinData.size() - 1;
-}
-
-std::size_t Inventory::emplaceDynamicData(inventory::Graffiti&& data) noexcept
-{
-    ::dynamicGraffitiData.push_back(std::move(data));
-    return ::dynamicGraffitiData.size() - 1;
-}
-
 void Inventory::runFrame() noexcept
 {
     InventoryImpl::runFrame();

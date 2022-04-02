@@ -869,7 +869,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
     if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
         dynamicData.statTrak = 0;
-        dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+        // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (unlockedItem.isSkin()) {
         inventory::Skin dynamicData;
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(unlockedItem);
@@ -888,7 +888,7 @@ std::pair<const game_items::Item&, std::size_t> ItemGenerator::generateItemFromC
             dynamicData.statTrak = 0;
         }
 
-        dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
+        // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
     }
 
     return std::make_pair(std::cref(unlockedItem), dynamicDataIdx);
@@ -998,28 +998,28 @@ std::size_t ItemGenerator::createDefaultDynamicData(const game_items::Item& item
         if (Helpers::isMP5LabRats(item.getWeaponID(), StaticData::lookup().getStorage().getPaintKit(item).id))
             dynamicData.stickers[3].stickerID = 28;
 
-        index = Inventory::emplaceDynamicData(std::move(dynamicData));
+        // index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isGloves()) {
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
         inventory::Glove dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
-        index = Inventory::emplaceDynamicData(std::move(dynamicData));
+        // index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isAgent()) {
-        index = Inventory::emplaceDynamicData(inventory::Agent{});
+        // index = Inventory::emplaceDynamicData(inventory::Agent{});
     } else if (item.isMusic()) {
-        index = Inventory::emplaceDynamicData(inventory::Music{});
+        // index = Inventory::emplaceDynamicData(inventory::Music{});
     } else if (item.isCase()) {
         if (const auto& staticData = StaticData::getCase(item); StaticData::isSouvenirPackage(item))
-            index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
+            ;// index = Inventory::emplaceDynamicData(generateSouvenirPackageData(staticData));
     } else if (item.isServiceMedal()) {
         inventory::ServiceMedal dynamicData;
         dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::lookup().getStorage().getServiceMedalYear(item));
-        index = Inventory::emplaceDynamicData(std::move(dynamicData));
+        // index = Inventory::emplaceDynamicData(std::move(dynamicData));
     } else if (item.isTournamentCoin()) {
-        index = Inventory::emplaceDynamicData(inventory::TournamentCoin{});
+        // index = Inventory::emplaceDynamicData(inventory::TournamentCoin{});
     } else if (item.isGraffiti()) {
-        index = Inventory::emplaceDynamicData(inventory::Graffiti{});
+        // index = Inventory::emplaceDynamicData(inventory::Graffiti{});
     }
 
     return index;
