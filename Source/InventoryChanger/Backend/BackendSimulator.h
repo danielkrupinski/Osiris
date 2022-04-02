@@ -40,6 +40,11 @@ public:
         return backendSimulator;
     }
 
+    void clearInventory()
+    {
+        inventory.clear();
+    }
+
 private:
     inventory::Storage inventory;
     Loadout loadout;
