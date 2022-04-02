@@ -485,6 +485,28 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
     return econItem->itemID;
 }
 
+void _deleteItem(std::uint64_t itemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
+
+    if (const auto baseTypeCache = localInventory->getItemBaseTypeCache())
+        baseTypeCache->removeObject(econItem);
+
+    econItem->destructor();
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -522,6 +544,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
             if (it) {
                 const auto itemID = _createSOCItem(**it, true);
                 inventory::ItemIDMap::instance().add(itemID, *it);
+            }
+        } else if (response.type == BackendSimulator::Response::Type::ItemRemoved) {
+            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
+            if (it) {
+                if (const auto itemID = inventory::ItemIDMap::instance().remove(*it); itemID.has_value())
+                    _deleteItem(*itemID);
             }
         }
     });
