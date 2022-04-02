@@ -17,7 +17,7 @@ public:
         return loadout;
     }
 
-    [[nodiscard]] const inventory::Storage& getInventory() const noexcept
+    [[nodiscard]] const std::list<inventory::Item_v2>& getInventory() const noexcept
     {
         return inventory;
     }
@@ -50,13 +50,13 @@ public:
 
     void addItem(inventory::Item_v2 item)
     {
-        inventory.addItem(std::move(item));
+        inventory.push_back(std::move(item));
         responses.emplace(Response::Type::ItemAdded, std::prev(inventory.end()));
     }
 
     std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
     {
-        const auto newIterator = inventory.removeItem(it);
+        const auto newIterator = inventory.erase(it);
         responses.emplace(Response::Type::ItemRemoved, it);
         return newIterator;
     }
@@ -81,7 +81,7 @@ public:
     }
 
 private:
-    inventory::Storage inventory;
+    std::list<inventory::Item_v2> inventory;
     Loadout loadout;
     std::queue<Response> responses;
 };
