@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cassert>
+#include <list>
 #include <memory>
 #include <variant>
-#include <vector>
 
 #include <InventoryChanger/GameItems/Item.h>
 
@@ -82,7 +82,7 @@ public:
         return items.end();
     }
 
-    std::vector<Item_v2>::iterator removeItem(std::vector<Item_v2>::const_iterator it)
+    std::list<Item_v2>::iterator removeItem(std::list<Item_v2>::const_iterator it)
     {
         return items.erase(it);
     }
@@ -98,7 +98,7 @@ public:
     }
 
 private:
-    std::vector<Item_v2> items;
+    std::list<Item_v2> items;
 };
 
 }
