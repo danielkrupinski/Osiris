@@ -52,7 +52,7 @@ public:
 
     static void deleteItemNow(std::uint64_t itemID) noexcept
     {
-        instance()._deleteItem(itemID);
+        // instance()._deleteItem(itemID);
     }
 
     static void runFrame() noexcept
@@ -150,33 +150,6 @@ private:
         }
     }
 
-    void _deleteItem(std::uint64_t itemID) noexcept
-    {
-        const auto item = _getItem(itemID);
-        if (!item)
-            return;
-
-        const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-        if (!view)
-            return;
-
-        const auto econItem = memory->getSOCData(view);
-        if (!econItem)
-            return;
-
-        const auto localInventory = memory->inventoryManager->getLocalInventory();
-        if (!localInventory)
-            return;
-
-        localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
-
-        if (const auto baseTypeCache = localInventory->getItemBaseTypeCache())
-            baseTypeCache->removeObject(econItem);
-
-        econItem->destructor();
-        item->markAsDeleted();
-    }
-
     std::uint64_t _addItem(const game_items::Item& gameItem, std::size_t dynamicDataIdx, bool asUnacknowledged) noexcept
     {
         return 0;// _createSOCItem(inventory.emplace_back(gameItem, dynamicDataIdx != InvalidDynamicDataIdx ? dynamicDataIdx : ItemGenerator::createDefaultDynamicData(gameItem)), asUnacknowledged);
@@ -203,7 +176,7 @@ private:
             }
         }
 
-        _deleteItem(itemID);
+        // _deleteItem(itemID);
         return 0;// _createSOCItem(inventory.emplace_back(std::move(itemCopy)), false);
     }
 
@@ -216,19 +189,11 @@ private:
 
     void _deleteItems() noexcept
     {
-        for (std::size_t i = 0; i < inventory.size(); ++i) {
-            if (inventory[i].shouldDelete()) {
-                _deleteItem(BASE_ITEMID + i);
-                inventory[i].markAsDeleted();
-            }
-        }
+
     }
 
     void _clear() noexcept
     {
-        for (std::size_t i = 0; i < inventory.size(); ++i)
-            _deleteItem(BASE_ITEMID + i);
-
         inventory.clear();
         dynamicSkinData.clear();
         dynamicGloveData.clear();
