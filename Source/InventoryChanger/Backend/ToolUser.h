@@ -15,7 +15,7 @@ class BackendSimulator;
 
 class ToolUser {
 public:
-    std::optional<Response> applySticker(BackendSimulator backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
+    std::optional<Response> applySticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
 };
 
 }

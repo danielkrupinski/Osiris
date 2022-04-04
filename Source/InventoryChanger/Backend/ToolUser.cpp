@@ -4,7 +4,7 @@
 namespace inventory_changer::backend
 {
 
-std::optional<Response> ToolUser::applySticker(BackendSimulator backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot)
+std::optional<Response> ToolUser::applySticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
