@@ -4,6 +4,7 @@
 #include <variant>
 
 #include "Loadout.h"
+#include "Response.h"
 
 namespace inventory_changer::backend
 {
@@ -69,17 +70,6 @@ public:
     {
         inventory.splice(inventory.end(), inventory, it);
     }
-
-    struct Response {
-        enum class Type {
-            ItemAdded,
-            ItemRemoved,
-            StatTrakUpdated
-        };
-
-        Type type;
-        std::variant<std::list<inventory::Item_v2>::const_iterator> data;
-    };
 
     template <typename ResponseHandler>
     void run(ResponseHandler responseHandler)

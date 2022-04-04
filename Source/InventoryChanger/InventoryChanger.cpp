@@ -598,21 +598,21 @@ void InventoryChanger::run(FrameStage stage) noexcept
     ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
 
-    using inventory_changer::backend::BackendSimulator;
-    BackendSimulator::instance().run([](const BackendSimulator::Response& response) {
-        if (response.type == BackendSimulator::Response::Type::ItemAdded) {
+    using namespace inventory_changer::backend;
+    BackendSimulator::instance().run([](const Response& response) {
+        if (response.type == Response::Type::ItemAdded) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
             if (it) {
                 const auto itemID = _createSOCItem(**it, true);
                 inventory::ItemIDMap::instance().add(itemID, *it);
             }
-        } else if (response.type == BackendSimulator::Response::Type::ItemRemoved) {
+        } else if (response.type == Response::Type::ItemRemoved) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
             if (it) {
                 if (const auto itemID = inventory::ItemIDMap::instance().remove(*it); itemID.has_value())
                     _deleteItem(*itemID);
             }
-        } else if (response.type == BackendSimulator::Response::Type::StatTrakUpdated) {
+        } else if (response.type == Response::Type::StatTrakUpdated) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
             if (it) {
                 if (const auto skin = (*it)->get<inventory::Skin>()) {
