@@ -84,8 +84,11 @@ public:
 
     void updateStatTrak(std::list<inventory::Item_v2>::const_iterator it, int newStatTrak)
     {
-        if (updateStatTrak(removeConstness(it), newStatTrak))
-            responses.emplace(Response::Type::StatTrakUpdated, it);
+        if (!updateStatTrak(removeConstness(it), newStatTrak))
+            return;
+
+        if (const auto itemID = getItemID(it); itemID.has_value())
+            responses.emplace(Response::Type::StatTrakUpdated, Response::StatTrakUpdated{ *itemID, newStatTrak });
     }
 
     void moveToFront(std::list<inventory::Item_v2>::const_iterator it)

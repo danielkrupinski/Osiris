@@ -624,17 +624,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 _deleteItem(*it);
             }
         } else if (response.type == Response::Type::StatTrakUpdated) {
-            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
-            if (it) {
-                if (const auto skin = (*it)->get<inventory::Skin>()) {
-                    if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
-                        ::updateStatTrak(*itemID, skin->statTrak);
-                }
-
-                if (const auto music = (*it)->get<inventory::Music>()) {
-                    if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
-                        ::updateStatTrak(*itemID, music->statTrak);
-                }
+            if (const auto it = std::get_if<Response::StatTrakUpdated>(&response.data)) {
+                ::updateStatTrak(it->itemID, it->newStatTrakValue);
             }
         }
     });
