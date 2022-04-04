@@ -568,6 +568,8 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+static inventory_changer::backend::UseToolRequest useToolRequest;
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -595,7 +597,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
     applyPlayerAgent(*localInventory);
     applyMedal();
 
-    ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
 
     using namespace inventory_changer::backend;
@@ -1286,30 +1287,35 @@ static std::uint64_t stringToUint64(const char* str) noexcept
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        ToolUser::setTool(stringToUint64(string));
+        useToolRequest.toolItemID = stringToUint64(string);
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
-        ToolUser::setItemToApplyTool(stringToUint64(string));
+        useToolRequest.destItemID = stringToUint64(string);
+        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::Use;
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        ToolUser::setItemToWearSticker(stringToUint64(string));
+        useToolRequest.destItemID = stringToUint64(string);
+        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::WearSticker;
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        ToolUser::setNameTag(string);
+        useToolRequest.nameTag = string;
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        ToolUser::setItemToRemoveNameTag(stringToUint64(string));
+        useToolRequest.destItemID = stringToUint64(string);
+        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::RemoveNameTag;
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
-        InventoryChanger::deleteItem(stringToUint64(string));
+        auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
+            backend.removeItem(*itOptional);
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         InventoryChanger::acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        ToolUser::setStatTrakSwapItem1(stringToUint64(string));
+        useToolRequest.statTrakSwapItem1 = stringToUint64(string);
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-        ToolUser::setStatTrakSwapItem2(stringToUint64(string));
+        useToolRequest.statTrakSwapItem2 = stringToUint64(string);
     }
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress || returnAddress == memory->wearItemStickerGetArgAsNumberReturnAddress)
-        ToolUser::setStickerSlot(number);
+        useToolRequest.stickerSlot = number;
 }
 
 struct Icon {
