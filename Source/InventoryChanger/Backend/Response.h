@@ -22,8 +22,13 @@ struct Response {
         std::uint8_t stickerSlot;
     };
 
+    struct StatTrakUpdated {
+        std::uint64_t itemID;
+        int newStatTrakValue;
+    };
+
     Type type;
-    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t> data;
+    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t, StatTrakUpdated> data;
 };
 
 }
