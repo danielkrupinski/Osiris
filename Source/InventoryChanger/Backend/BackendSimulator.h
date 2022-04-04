@@ -3,6 +3,7 @@
 #include <queue>
 #include <variant>
 
+#include "ItemIDMap.h"
 #include "Loadout.h"
 #include "Response.h"
 
@@ -71,6 +72,21 @@ public:
         inventory.splice(inventory.end(), inventory, it);
     }
 
+    void assignItemID(std::list<inventory::Item_v2>::const_iterator it, std::uint64_t itemID)
+    {
+        itemIDMap.add(itemID, it);
+    }
+
+    [[nodiscard]] std::optional<std::list<inventory::Item_v2>::const_iterator> itemFromID(std::uint64_t itemID)
+    {
+        return itemIDMap.get(itemID);
+    }
+
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item_v2>::const_iterator it)
+    {
+        return itemIDMap.getItemID(it);
+    }
+
     template <typename ResponseHandler>
     void run(ResponseHandler responseHandler)
     {
@@ -104,6 +120,7 @@ private:
     std::list<inventory::Item_v2> inventory;
     Loadout loadout;
     std::queue<Response> responses;
+    ItemIDMap itemIDMap;
 };
 
 }
