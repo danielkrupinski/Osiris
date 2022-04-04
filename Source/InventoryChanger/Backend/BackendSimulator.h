@@ -12,6 +12,7 @@ namespace inventory_changer::backend
 
 struct UseToolRequest {
     enum class Action {
+        None,
         Use,
         WearSticker,
         RemoveNameTag
@@ -21,7 +22,7 @@ struct UseToolRequest {
     std::uint64_t destItemID = 0;
     std::uint64_t statTrakSwapItem1 = 0;
     std::uint64_t statTrakSwapItem2 = 0;
-    Action action;
+    Action action = Action::None;
     float useTime = 0.0f;
     int stickerSlot = 0;
     std::string nameTag;
@@ -106,6 +107,12 @@ public:
         return itemIDMap.getItemID(it);
     }
 
+    void useTool(const UseToolRequest& request)
+    {
+        if (const auto response = processUseToolRequest(request); response.has_value())
+            responses.push(*response);
+    }
+
     template <typename ResponseHandler>
     void run(ResponseHandler responseHandler)
     {
@@ -116,6 +123,11 @@ public:
     }
 
 private:
+    std::optional<Response> processUseToolRequest([[maybe_unused]] const UseToolRequest& request)
+    {
+        return {};
+    }
+
     static bool updateStatTrak(std::list<inventory::Item_v2>::iterator item, int newStatTrak)
     {
         if (const auto skin = item->get<inventory::Skin>()) {
