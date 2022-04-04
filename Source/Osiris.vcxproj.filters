@@ -679,6 +679,9 @@
     <ClInclude Include="InventoryChanger\Backend\Response.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
