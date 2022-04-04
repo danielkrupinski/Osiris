@@ -116,8 +116,12 @@ public:
     explicit Item_v2(const game_items::Item& item) noexcept : item{ item } {}
 
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
-    [[nodiscard]] StructWrapper& getData() noexcept { return data; }
-    [[nodiscard]] const StructWrapper& getData() const noexcept { return data; }
+
+    template <typename T>
+    [[nodiscard]] T* get() { return data.get<T>(); }
+
+    template <typename T>
+    [[nodiscard]] const T* get() const { return data.get<T>(); }
 
 private:
     std::reference_wrapper<const game_items::Item> item;

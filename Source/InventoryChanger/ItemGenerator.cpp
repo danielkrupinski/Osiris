@@ -877,7 +877,7 @@ inventory::Item_v2 ItemGenerator::generateItemFromContainer(const inventory::Ite
 
         if (StaticData::isSouvenirPackage(caseItem.gameItem())) {
             dynamicData.tournamentID = caseData.souvenirPackageTournamentID;
-            const auto& souvenir = *caseItem.getData().get<inventory::SouvenirPackage>();
+            const auto& souvenir = *caseItem.get<inventory::SouvenirPackage>();
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;

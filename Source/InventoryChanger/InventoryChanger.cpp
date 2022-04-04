@@ -416,14 +416,14 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
         attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
     } else if (item.isGraffiti()) {
         attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
-        const auto& dynamicData = *inventoryItem.getData().get<inventory::Graffiti>();
+        const auto& dynamicData = *inventoryItem.get<inventory::Graffiti>();
         if (dynamicData.usesLeft >= 0) {
             econItem->weaponId = WeaponId::Graffiti;
             attributeSetter.setSpraysRemaining(*econItem, dynamicData.usesLeft);
         }
     } else if (item.isMusic()) {
         attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
-        const auto& dynamicData = *inventoryItem.getData().get<inventory::Music>();
+        const auto& dynamicData = *inventoryItem.get<inventory::Music>();
         if (dynamicData.statTrak > -1) {
             attributeSetter.setStatTrak(*econItem, dynamicData.statTrak);
             attributeSetter.setStatTrakType(*econItem, 1);
@@ -435,14 +435,14 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
 
-        const auto& dynamicData = *inventoryItem.getData().get<inventory::Glove>();
+        const auto& dynamicData = *inventoryItem.get<inventory::Glove>();
         attributeSetter.setWear(*econItem, dynamicData.wear);
         attributeSetter.setSeed(*econItem, static_cast<float>(dynamicData.seed));
     } else if (item.isCollectible()) {
         if (storage.isCollectibleGenuine(item))
             econItem->quality = 1;
     } else if (item.isAgent()) {
-        if (const auto agent = inventoryItem.getData().get<inventory::Agent>()) {
+        if (const auto agent = inventoryItem.get<inventory::Agent>()) {
             for (std::size_t j = 0; j < agent->patches.size(); ++j) {
                 const auto& patch = agent->patches[j];
                 if (patch.patchID == 0)
@@ -452,13 +452,13 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
             }
         }
     } else if (item.isServiceMedal()) {
-        if (const auto& dynamicData = *inventoryItem.getData().get<inventory::ServiceMedal>(); dynamicData.issueDateTimestamp != 0)
+        if (const auto& dynamicData = *inventoryItem.get<inventory::ServiceMedal>(); dynamicData.issueDateTimestamp != 0)
             attributeSetter.setIssueDate(*econItem, dynamicData.issueDateTimestamp);
     } else if (item.isTournamentCoin()) {
-        attributeSetter.setDropsAwarded(*econItem, inventoryItem.getData().get<inventory::TournamentCoin>()->dropsAwarded);
+        attributeSetter.setDropsAwarded(*econItem, inventoryItem.get<inventory::TournamentCoin>()->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
     } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-        if (const auto& dynamicData = *inventoryItem.getData().get<inventory::SouvenirPackage>(); dynamicData.tournamentStage != TournamentStage{ 0 }) {
+        if (const auto& dynamicData = *inventoryItem.get<inventory::SouvenirPackage>(); dynamicData.tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(dynamicData.tournamentStage));
             attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(dynamicData.tournamentTeam1));
             attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(dynamicData.tournamentTeam2));
