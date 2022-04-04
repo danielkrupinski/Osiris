@@ -65,6 +65,11 @@ public:
             responses.emplace(Response::Type::StatTrakUpdated, it);
     }
 
+    void moveToFront(std::list<inventory::Item_v2>::const_iterator it)
+    {
+        inventory.splice(inventory.end(), inventory, it);
+    }
+
     struct Response {
         enum class Type {
             ItemAdded,
