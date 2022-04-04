@@ -75,7 +75,6 @@ namespace Inventory
 
     void runFrame() noexcept;
     inventory::Item* getItem(std::uint64_t itemID) noexcept;
-    std::uint64_t recreateItem(std::uint64_t itemID) noexcept;
 
     inventory::Skin& dynamicSkinData(const inventory::Item& item) noexcept;
     inventory::Glove& dynamicGloveData(const inventory::Item& item) noexcept;

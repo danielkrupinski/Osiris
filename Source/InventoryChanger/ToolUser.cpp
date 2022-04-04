@@ -61,7 +61,7 @@ private:
 
             if (const auto shouldRemove = (newWear >= 1.0f + wearStep); shouldRemove) {
                 Inventory::dynamicSkinData(*dest).stickers[stickerSlot] = {};
-                initItemCustomizationNotification("sticker_remove", Inventory::recreateItem(destItemID));
+               // initItemCustomizationNotification("sticker_remove", Inventory::recreateItem(destItemID));
             } else {
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(destItemID)) {
                     if (const auto soc = memory->getSOCData(view)) {
@@ -73,7 +73,7 @@ private:
             }
         } else if (dest->isAgent()) {
             Inventory::dynamicAgentData(*dest).patches[stickerSlot] = {};
-            initItemCustomizationNotification("patch_remove", Inventory::recreateItem(destItemID));
+           // initItemCustomizationNotification("patch_remove", Inventory::recreateItem(destItemID));
         }
     }
 
@@ -84,7 +84,7 @@ private:
             return;
 
         Inventory::dynamicSkinData(*dest).nameTag.clear();
-        Inventory::recreateItem(destItemID);
+       // Inventory::recreateItem(destItemID);
     }
 
     void _activateOperationPass(inventory::Item& pass) const noexcept
@@ -144,7 +144,7 @@ private:
         Inventory::dynamicSkinData(*dest).stickers[stickerSlot].stickerID = StaticData::lookup().getStorage().getStickerKit(sticker.get()).id;
         Inventory::dynamicSkinData(*dest).stickers[stickerSlot].wear = 0.0f;
         sticker.markToDelete();
-        initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
+        // initItemCustomizationNotification("sticker_apply", Inventory::recreateItem(destItemID));
     }
 
     void _addNameTag(inventory::Item& nameTagItem) const noexcept
@@ -156,7 +156,7 @@ private:
 
         Inventory::dynamicSkinData(*dest).nameTag = nameTag;
         nameTagItem.markToDelete();
-        initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
+        // initItemCustomizationNotification("nametag_add", Inventory::recreateItem(destItemID));
     }
 
     void _applyPatch(inventory::Item& patch) const noexcept
@@ -168,7 +168,7 @@ private:
 
         Inventory::dynamicAgentData(*dest).patches[stickerSlot].patchID = StaticData::lookup().getStorage().getPatch(patch.get()).id;
         patch.markToDelete();
-        initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
+        // initItemCustomizationNotification("patch_apply", Inventory::recreateItem(destItemID));
     }
 
     void _swapStatTrak(inventory::Item& statTrakSwapTool) const noexcept
@@ -184,6 +184,7 @@ private:
         std::swap(Inventory::dynamicSkinData(*item1).statTrak, Inventory::dynamicSkinData(*item2).statTrak);
         statTrakSwapTool.markToDelete();
 
+        /*
         const auto recreatedItemID1 = Inventory::recreateItem(statTrakSwapItem1);
         const auto recreatedItemID2 = Inventory::recreateItem(statTrakSwapItem2);
         if (const auto inventoryComponent = *memory->uiComponentInventory) {
@@ -191,6 +192,7 @@ private:
             memory->setItemSessionPropertyValue(inventoryComponent, recreatedItemID2, "updated", "1");
         }
         initItemCustomizationNotification("stattrack_swap", recreatedItemID2);
+        */
     }
 
     void _activateSouvenirToken(inventory::Item& souvenirToken, CSPlayerInventory& localInventory) const noexcept
