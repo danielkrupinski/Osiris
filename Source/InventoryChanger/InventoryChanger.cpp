@@ -710,29 +710,18 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (const auto localUserId = localPlayer->getUserId(); event.getInt("userid") != localUserId)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(54);
+    if (!optionalItem.has_value())
         return;
 
-    const auto itemView = localInventory->getItemInLoadout(Team::None, 54);
-    if (!itemView)
+    const auto& item = *optionalItem;
+    const auto music = item->get<inventory::Skin>();
+    if (!music)
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    const auto item = Inventory::getItem(soc->itemID);
-    if (!item || !item->isMusic())
-        return;
-
-    auto& dynamicData = Inventory::dynamicMusicData(*item);
-    if (dynamicData.statTrak > -1) {
-        ++dynamicData.statTrak;
-        event.setInt("musickitmvps", dynamicData.statTrak);
-        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-        attributeSetter.setStatTrak(*soc, dynamicData.statTrak);
-        localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+    if (music->statTrak > -1) {
+        event.setInt("musickitmvps", music->statTrak + 1);
+        inventory_changer::backend::BackendSimulator::instance().updateStatTrak(item, music->statTrak + 1);
     }
 }
 
