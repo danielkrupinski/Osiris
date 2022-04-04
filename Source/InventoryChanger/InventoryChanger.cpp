@@ -54,13 +54,14 @@
 #include "Inventory/Structs.h"
 #include "Backend/Loadout.h"
 #include "Backend/BackendSimulator.h"
+#include "ItemGenerator.h"
 
 static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
 {
     for (const auto item : order) {
         if (const auto count = toAdd.find(item); count != toAdd.end()) {
             for (int i = 0; i < count->second; ++i)
-                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ StaticData::getGameItem(item), inventory::StructWrapper{} });
+                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
         }
     }
 }
