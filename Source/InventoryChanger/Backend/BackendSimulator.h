@@ -6,6 +6,7 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "Response.h"
+#include "ToolUser.h"
 
 namespace inventory_changer::backend
 {
@@ -123,8 +124,22 @@ public:
     }
 
 private:
-    std::optional<Response> processUseToolRequest([[maybe_unused]] const UseToolRequest& request)
+    std::optional<Response> processUseToolRequest(const UseToolRequest& request)
     {
+        if (request.action == UseToolRequest::Action::Use) {
+            const auto destItem = itemIDMap.get(request.destItemID);
+            if (!destItem.has_value())
+                return {};
+
+            const auto tool = itemIDMap.get(request.toolItemID);
+            if (!tool.has_value())
+                return {};
+
+            if ((*tool)->gameItem().isSticker()) {
+                return ToolUser{}.applySticker(*this, removeConstness(*destItem), *tool, request.stickerSlot);
+            }
+        }
+
         return {};
     }
 
