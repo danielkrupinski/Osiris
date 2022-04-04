@@ -601,6 +601,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
     Inventory::runFrame();
 
     using namespace inventory_changer::backend;
+
+    if (useToolRequest.action != UseToolRequest::Action::None) {
+        BackendSimulator::instance().useTool(useToolRequest);
+        useToolRequest.action = UseToolRequest::Action::None;
+    }
+
     BackendSimulator::instance().run([](const Response& response) {
         if (response.type == Response::Type::ItemAdded) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
