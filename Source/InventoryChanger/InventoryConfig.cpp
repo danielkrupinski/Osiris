@@ -10,6 +10,44 @@
 
 constexpr auto CONFIG_VERSION = 3;
 
+[[nodiscard]] json toJson(const inventory::Skin& skin)
+{
+    json j;
+
+    if (skin.tournamentID != 0)
+        j["Tournament ID"] = skin.tournamentID;
+
+    j["Wear"] = skin.wear;
+    j["Seed"] = skin.seed;
+    if (skin.statTrak > -1)
+        j["StatTrak"] = skin.statTrak;
+
+    if (!skin.nameTag.empty())
+        j["Name Tag"] = skin.nameTag;
+
+    auto& stickers = j["Stickers"];
+    for (std::size_t i = 0; i < skin.stickers.size(); ++i) {
+        const auto& sticker = skin.stickers[i];
+        if (sticker.stickerID == 0)
+            continue;
+
+        json stickerConfig;
+        stickerConfig["Sticker ID"] = sticker.stickerID;
+        stickerConfig["Wear"] = sticker.wear;
+        stickerConfig["Slot"] = i;
+        stickers.push_back(std::move(stickerConfig));
+    }
+
+    if (skin.tournamentStage != TournamentStage{}) {
+        j["Tournament Stage"] = skin.tournamentStage;
+        j["Tournament Team 1"] = skin.tournamentTeam1;
+        j["Tournament Team 2"] = skin.tournamentTeam2;
+        j["Tournament Player"] = skin.proPlayer;
+    }
+
+    return j;
+}
+
 json InventoryChanger::toJson() noexcept
 {
     json j;
@@ -40,37 +78,9 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            const auto& dynamicData = *item.get<inventory::Skin>();
+            if (const auto skin = item.get<inventory::Skin>())
+                itemConfig.update(::toJson(*skin));
 
-            if (dynamicData.tournamentID != 0)
-                itemConfig["Tournament ID"] = dynamicData.tournamentID;
-            itemConfig["Wear"] = dynamicData.wear;
-            itemConfig["Seed"] = dynamicData.seed;
-            if (dynamicData.statTrak > -1)
-                itemConfig["StatTrak"] = dynamicData.statTrak;
-
-            if (!dynamicData.nameTag.empty())
-                itemConfig["Name Tag"] = dynamicData.nameTag;
-
-            auto& stickers = itemConfig["Stickers"];
-            for (std::size_t i = 0; i < dynamicData.stickers.size(); ++i) {
-                const auto& sticker = dynamicData.stickers[i];
-                if (sticker.stickerID == 0)
-                    continue;
-
-                json stickerConfig;
-                stickerConfig["Sticker ID"] = sticker.stickerID;
-                stickerConfig["Wear"] = sticker.wear;
-                stickerConfig["Slot"] = i;
-                stickers.push_back(std::move(stickerConfig));
-            }
-
-            if (dynamicData.tournamentStage != TournamentStage{}) {
-                itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
-                itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
-                itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
-                itemConfig["Tournament Player"] = dynamicData.proPlayer;
-            }
         } else if (gameItem.isMusic()) {
             itemConfig["Music ID"] = StaticData::lookup().getStorage().getMusicKit(gameItem).id;
             if (const auto& dynamicData = *item.get<inventory::Music>(); dynamicData.statTrak > -1)
