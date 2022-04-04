@@ -389,7 +389,11 @@ static void initSkinEconItem(const inventory::Item_v2& inventoryItem, EconItem& 
     const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
 
-    const auto& dynamicData = *inventoryItem.get<inventory::Skin>();
+    const auto skin = inventoryItem.get<inventory::Skin>();
+    if (!skin)
+        return;
+
+    const auto& dynamicData = *skin;
     const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.gameItem().getWeaponID(), paintKit);
     if (dynamicData.isSouvenir() || isMP5LabRats) {
         econItem.quality = 12;
