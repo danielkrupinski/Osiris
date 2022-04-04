@@ -236,8 +236,3 @@ std::uint64_t Inventory::recreateItem(std::uint64_t itemID) noexcept
 {
     return InventoryImpl::recreateItem(itemID);
 }
-
-std::size_t Inventory::getItemIndex(std::uint64_t itemID) noexcept
-{
-    return InventoryImpl::getItemIndex(itemID);
-}
