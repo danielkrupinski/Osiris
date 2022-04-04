@@ -63,13 +63,15 @@ public:
 
     void updateStatTrak(std::list<inventory::Item_v2>::const_iterator it, int newStatTrak)
     {
-        updateStatTrak(removeConstness(it), newStatTrak);
+        if (updateStatTrak(removeConstness(it), newStatTrak))
+            responses.emplace(Response::Type::StatTrakUpdated, it);
     }
 
     struct Response {
         enum class Type {
             ItemAdded,
-            ItemRemoved
+            ItemRemoved,
+            StatTrakUpdated
         };
 
         Type type;
