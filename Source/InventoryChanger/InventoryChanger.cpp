@@ -361,7 +361,7 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
         ragdoll->setModelIndex(idx);
 }
 
-static void applyMedal(CSPlayerInventory& localInventory) noexcept
+static void applyMedal() noexcept
 {
     if (!localPlayer)
         return;
@@ -370,19 +370,15 @@ static void applyMedal(CSPlayerInventory& localInventory) noexcept
     if (!pr)
         return;
 
-    const auto itemView = localInventory.getItemInLoadout(Team::None, 55);
-    if (!itemView)
+    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(55);
+    if (!optionalItem.has_value())
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
+    const auto& item = *optionalItem;
+    if (!item->gameItem().isCollectible())
         return;
 
-    const auto item = Inventory::getItem(soc->itemID);
-    if (!item || !item->isCollectible())
-        return;
-
-    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->get().getWeaponID());
+    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->gameItem().getWeaponID());
 }
 
 std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUnacknowledged)
@@ -547,7 +543,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     applyMusicKit();
     applyPlayerAgent(*localInventory);
-    applyMedal(*localInventory);
+    applyMedal();
 
     ToolUser::preAddItems(*localInventory);
     Inventory::runFrame();
