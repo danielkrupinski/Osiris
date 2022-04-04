@@ -23,7 +23,7 @@ struct Response {
     };
 
     Type type;
-    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied> data;
+    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t> data;
 };
 
 }

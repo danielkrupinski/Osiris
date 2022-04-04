@@ -56,8 +56,10 @@ public:
 
     std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
     {
+        const auto itemID = itemIDMap.getItemID(it);
         const auto newIterator = inventory.erase(it);
-        responses.emplace(Response::Type::ItemRemoved, it);
+        if (itemID.has_value())
+            responses.emplace(Response::Type::ItemRemoved, *itemID);
         return newIterator;
     }
 
