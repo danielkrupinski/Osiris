@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <list>
 #include <optional>
 #include <string>
 #include <vector>
