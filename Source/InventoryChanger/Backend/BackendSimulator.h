@@ -3,8 +3,6 @@
 #include <queue>
 #include <variant>
 
-#include <InventoryChanger/Inventory/Storage.h>
-
 #include "Loadout.h"
 
 namespace inventory_changer::backend
