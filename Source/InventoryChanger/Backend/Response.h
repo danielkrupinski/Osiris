@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <list>
 #include <variant>
 
@@ -12,11 +13,17 @@ struct Response {
     enum class Type {
         ItemAdded,
         ItemRemoved,
-        StatTrakUpdated
+        StatTrakUpdated,
+        StickerApplied
+    };
+
+    struct StickerApplied {
+        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::uint8_t stickerSlot;
     };
 
     Type type;
-    std::variant<std::list<inventory::Item_v2>::const_iterator> data;
+    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied> data;
 };
 
 }
