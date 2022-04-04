@@ -503,6 +503,25 @@ void _deleteItem(std::uint64_t itemID)
     econItem->destructor();
 }
 
+void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setStatTrak(*econItem, newStatTrakValue);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -546,6 +565,19 @@ void InventoryChanger::run(FrameStage stage) noexcept
             if (it) {
                 if (const auto itemID = inventory::ItemIDMap::instance().remove(*it); itemID.has_value())
                     _deleteItem(*itemID);
+            }
+        } else if (response.type == BackendSimulator::Response::Type::StatTrakUpdated) {
+            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
+            if (it) {
+                if (const auto skin = (*it)->get<inventory::Skin>()) {
+                    if (const auto itemID = inventory::ItemIDMap::instance().getItemID(*it); itemID.has_value())
+                        ::updateStatTrak(*itemID, skin->statTrak);
+                }
+
+                if (const auto music = (*it)->get<inventory::Music>()) {
+                    if (const auto itemID = inventory::ItemIDMap::instance().getItemID(*it); itemID.has_value())
+                        ::updateStatTrak(*itemID, music->statTrak);
+                }
             }
         }
     });
