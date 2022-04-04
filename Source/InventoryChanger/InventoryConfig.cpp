@@ -230,6 +230,46 @@ void loadEquipmentFromJson(const json& j) noexcept
     }
 }
 
+[[nodiscard]] game_items::Lookup::OptionalItemReference gameItemFromJson(const game_items::Lookup& lookup, const json& j)
+{
+    if (const auto stickerID = j.find("Sticker ID"); stickerID != j.end() && stickerID->is_number_integer())
+        return lookup.findSticker(stickerID->get<int>());
+    if (const auto musicID = j.find("Music ID"); musicID != j.end() && musicID->is_number_integer())
+        return lookup.findMusic(musicID->get<int>());
+    if (const auto patchID = j.find("Patch ID"); patchID != j.end() && patchID->is_number_integer())
+        return lookup.findPatch(patchID->get<int>());
+    if (const auto graffitiID = j.find("Graffiti ID"); graffitiID != j.end() && graffitiID->is_number_integer())
+        return lookup.findGraffiti(graffitiID->get<int>());
+
+    const auto weaponID = j.find("Weapon ID");
+    if (weaponID == j.end() || !weaponID->is_number_integer())
+        return {};
+
+    if (const auto paintKit = j.find("Paint Kit"); paintKit != j.end() && paintKit->is_number_integer())
+        return lookup.findItem(weaponID->get<WeaponId>(), paintKit->get<int>());
+
+    return lookup.findItem(weaponID->get<WeaponId>());
+}
+
+[[nodiscard]] inventory::StructWrapper itemFromJson(const game_items::Item& gameItem, const json& j)
+{
+    if (gameItem.isSkin())
+        return inventory::skinFromJson(j);
+    if (gameItem.isGloves())
+        return inventory::gloveFromJson(j);
+    if (gameItem.isMusic())
+        return inventory::musicFromJson(j);
+    if (gameItem.isAgent())
+        return loadDynamicAgentDataFromJson(j);
+    if (gameItem.isServiceMedal())
+        return inventory::serviceMedalFromJson(j);
+    if (gameItem.isCase() && StaticData::isSouvenirPackage(gameItem))
+        return inventory::souvenirPackageFromJson(j);
+    if (gameItem.isGraffiti())
+        return inventory::graffitiFromJson(j);
+    return {};
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -240,59 +280,12 @@ void InventoryChanger::fromJson(const json& j) noexcept
         return;
 
     for (const auto& jsonItem : items) {
-        if (jsonItem.empty() || !jsonItem.is_object())
-            continue;
-
-        if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
-            continue;
-
-        const WeaponId weaponID = jsonItem["Weapon ID"];
-        std::optional<std::reference_wrapper<const game_items::Item>> itemOptional;
-        auto dynamicDataIdx = Inventory::InvalidDynamicDataIdx;
-
-        if (jsonItem.contains("Paint Kit") && jsonItem["Paint Kit"].is_number_integer())
-            itemOptional = StaticData::lookup().findItem(weaponID, jsonItem["Paint Kit"]);
-        else if (jsonItem.contains("Sticker ID") && jsonItem["Sticker ID"].is_number_integer())
-            itemOptional = StaticData::lookup().findSticker(jsonItem["Sticker ID"]);
-        else if (jsonItem.contains("Music ID") && jsonItem["Music ID"].is_number_integer())
-            itemOptional = StaticData::lookup().findMusic(jsonItem["Music ID"]);
-        else if (jsonItem.contains("Patch ID") && jsonItem["Patch ID"].is_number_integer())
-            itemOptional = StaticData::lookup().findPatch(jsonItem["Patch ID"]);
-        else if (jsonItem.contains("Graffiti ID") && jsonItem["Graffiti ID"].is_number_integer()) {
-            itemOptional = StaticData::lookup().findGraffiti(jsonItem["Graffiti ID"]);
-            if (weaponID == WeaponId::Graffiti) {
-                if (itemOptional.has_value()) {
-                    inventory::Graffiti dynamicData;
-                    dynamicData.usesLeft = 50;
-                    // dynamicDataIdx = Inventory::emplaceDynamicData(std::move(dynamicData));
-                }
-            }
-        } else
-            itemOptional = StaticData::lookup().findItem(weaponID);
-
+        std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
         if (!itemOptional.has_value())
             continue;
 
-        const auto& item = itemOptional->get();
-
-        /*
-        if (item.isSkin()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::skinFromJson(jsonItem));
-        } else if (item.isGloves()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::gloveFromJson(jsonItem));
-        } else if (item.isMusic()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::musicFromJson(jsonItem));
-        } else if (item.isAgent()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(loadDynamicAgentDataFromJson(jsonItem));
-        } else if (item.isServiceMedal()) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::serviceMedalFromJson(jsonItem));
-        } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::souvenirPackageFromJson(jsonItem));
-        } else if (item.isGraffiti() && dynamicDataIdx == Inventory::InvalidDynamicDataIdx) {
-            dynamicDataIdx = Inventory::emplaceDynamicData(inventory::graffitiFromJson(jsonItem));
-        }
-        */
-        // Inventory::addItemAcknowledged(item, dynamicDataIdx);
+        const game_items::Item& item = itemOptional->get();
+        inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ item, itemFromJson(item, jsonItem) });
     }
 
     loadEquipmentFromJson(j);
