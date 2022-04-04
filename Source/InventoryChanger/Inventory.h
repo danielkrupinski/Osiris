@@ -33,6 +33,13 @@ namespace inventory
             return it != itemIDs.end() ? std::make_optional(it->second) : std::nullopt;
         }
 
+        [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<Item_v2>::const_iterator iterator) const
+        {
+            if (const auto it = std::ranges::find(itemIDs, iterator, &decltype(itemIDs)::value_type::second); it != itemIDs.end())
+                return it->first;
+            return {};
+        }
+
         void add(std::uint64_t itemID, std::list<Item_v2>::const_iterator iterator)
         {
             itemIDs.emplace(itemID, iterator);
