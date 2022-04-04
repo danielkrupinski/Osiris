@@ -381,6 +381,56 @@ static void applyMedal() noexcept
     pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->gameItem().getWeaponID());
 }
 
+static void initSkinEconItem(const inventory::Item_v2& inventoryItem, EconItem& econItem) noexcept
+{
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+
+    const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.gameItem()).id;
+    attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
+
+    const auto& dynamicData = *inventoryItem.get<inventory::Skin>();
+    const auto isMP5LabRats = Helpers::isMP5LabRats(inventoryItem.gameItem().getWeaponID(), paintKit);
+    if (dynamicData.isSouvenir() || isMP5LabRats) {
+        econItem.quality = 12;
+    } else {
+        if (dynamicData.statTrak > -1) {
+            attributeSetter.setStatTrak(econItem, dynamicData.statTrak);
+            attributeSetter.setStatTrakType(econItem, 0);
+            econItem.quality = 9;
+        }
+        if (Helpers::isKnife(econItem.weaponId))
+            econItem.quality = 3;
+    }
+
+    if (isMP5LabRats) {
+        attributeSetter.setSpecialEventID(econItem, 1);
+    } else {
+        if (dynamicData.tournamentID != 0)
+            attributeSetter.setTournamentID(econItem, dynamicData.tournamentID);
+
+        if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
+            attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));
+            attributeSetter.setTournamentTeam1(econItem, static_cast<int>(dynamicData.tournamentTeam1));
+            attributeSetter.setTournamentTeam2(econItem, static_cast<int>(dynamicData.tournamentTeam2));
+            if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
+                attributeSetter.setTournamentPlayer(econItem, static_cast<int>(dynamicData.proPlayer));
+        }
+    }
+
+    attributeSetter.setWear(econItem, dynamicData.wear);
+    attributeSetter.setSeed(econItem, static_cast<float>(dynamicData.seed));
+    memory->setCustomName(&econItem, dynamicData.nameTag.c_str());
+
+    for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
+        const auto& sticker = dynamicData.stickers[j];
+        if (sticker.stickerID == 0)
+            continue;
+
+        attributeSetter.setStickerID(econItem, j, sticker.stickerID);
+        attributeSetter.setStickerWear(econItem, j, sticker.wear);
+    }
+}
+
 std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUnacknowledged)
 {
     const auto localInventory = memory->inventoryManager->getLocalInventory();
@@ -426,7 +476,7 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
             econItem->quality = 9;
         }
     } else if (item.isSkin()) {
-        // initSkinEconItem(inventoryItem, *econItem);
+        initSkinEconItem(inventoryItem, *econItem);
     } else if (item.isGloves()) {
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
