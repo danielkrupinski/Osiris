@@ -31,4 +31,19 @@ void ToolUser::activateOperationPass(BackendSimulator& backend, std::list<invent
     }
 }
 
+std::optional<Response> ToolUser::activateViewerPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item)
+{
+    const auto& gameItem = item->gameItem();
+    if (!gameItem.isViewerPass())
+        return {};
+
+    const auto coinID = static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1);
+    if (const auto eventCoin = StaticData::lookup().findItem(coinID); eventCoin.has_value()) {
+        const auto addedEventCoin = backend.addItem(inventory::Item_v2{ *eventCoin });
+        backend.removeItem(item);
+        return Response{ Response::Type::ViewerPassActivated, addedEventCoin };
+    }
+    return {};
+}
+
 }
