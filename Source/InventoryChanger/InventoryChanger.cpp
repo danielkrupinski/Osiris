@@ -39,6 +39,7 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/Panorama.h"
 #include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
@@ -506,7 +507,8 @@ std::uint64_t _createSOCItem(const inventory::Item_v2& inventoryItem, bool asUna
         if (const auto& dynamicData = *inventoryItem.get<inventory::ServiceMedal>(); dynamicData.issueDateTimestamp != 0)
             attributeSetter.setIssueDate(*econItem, dynamicData.issueDateTimestamp);
     } else if (item.isTournamentCoin()) {
-        attributeSetter.setDropsAwarded(*econItem, inventoryItem.get<inventory::TournamentCoin>()->dropsAwarded);
+        if (const auto tournamentCoin = inventoryItem.get<inventory::TournamentCoin>())
+            attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
     } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
         if (const auto& dynamicData = *inventoryItem.get<inventory::SouvenirPackage>(); dynamicData.tournamentStage != TournamentStage{ 0 }) {
@@ -595,6 +597,19 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     return newItemID;
 }
 
+static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID)
+{
+    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
+    if (idx == -1)
+        return;
+
+    using namespace std::string_view_literals;
+    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(itemID); args += '\'';
+    const char* dummy;
+    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+}
+
 static inventory_changer::backend::UseToolRequest useToolRequest;
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -654,6 +669,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
         } else if (response.type == Response::Type::StatTrakUpdated) {
             if (const auto it = std::get_if<Response::StatTrakUpdated>(&response.data)) {
                 ::updateStatTrak(it->itemID, it->newStatTrakValue);
+            }
+        } else if (response.type == Response::Type::ViewerPassActivated) {
+            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
+            if (it) {
+                if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
+                    initItemCustomizationNotification("ticket_activated", *itemID);
             }
         }
     });
