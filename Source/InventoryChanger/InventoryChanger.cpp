@@ -573,6 +573,28 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+[[nodiscard]] std::uint64_t assingNewItemID(std::uint64_t itemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return itemID;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return itemID;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return itemID;
+
+    localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    const auto newItemID = localInventory->getHighestIDs().first + 1;
+    econItem->itemID = newItemID;
+    localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+
+    return newItemID;
+}
+
 static inventory_changer::backend::UseToolRequest useToolRequest;
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -617,6 +639,12 @@ void InventoryChanger::run(FrameStage stage) noexcept
             if (it) {
                 const auto itemID = _createSOCItem(**it, true);
                 BackendSimulator::instance().assignItemID(*it, itemID);
+            }
+        } else if (response.type == Response::Type::ItemMovedToFront) {
+            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
+            if (it) {
+                if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
+                    BackendSimulator::instance().assignItemID(*it, assingNewItemID(*itemID));
             }
         } else if (response.type == Response::Type::ItemRemoved) {
             const auto it = std::get_if<std::uint64_t>(&response.data);
