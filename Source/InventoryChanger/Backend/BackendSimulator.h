@@ -131,16 +131,18 @@ private:
     std::optional<Response> processUseToolRequest(const UseToolRequest& request)
     {
         if (request.action == UseToolRequest::Action::Use) {
-            const auto destItem = itemIDMap.get(request.destItemID);
-            if (!destItem.has_value())
-                return {};
-
             const auto tool = itemIDMap.get(request.toolItemID);
             if (!tool.has_value())
                 return {};
 
             if ((*tool)->gameItem().isSticker()) {
+                const auto destItem = itemIDMap.get(request.destItemID);
+                if (!destItem.has_value())
+                    return {};
+
                 return ToolUser{}.applySticker(*this, removeConstness(*destItem), *tool, request.stickerSlot);
+            } else if ((*tool)->gameItem().isOperationPass()) {
+                ToolUser{}.activateOperationPass(*this, *tool);
             }
         }
 
