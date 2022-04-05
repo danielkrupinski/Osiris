@@ -67,10 +67,12 @@ public:
         inventory.clear();
     }
 
-    void addItem(inventory::Item_v2 item)
+    std::list<inventory::Item_v2>::const_iterator addItem(inventory::Item_v2 item)
     {
         inventory.push_back(std::move(item));
-        responses.emplace(Response::Type::ItemAdded, std::prev(inventory.end()));
+        const auto added = std::prev(inventory.end());
+        responses.emplace(Response::Type::ItemAdded, added);
+        return added;
     }
 
     std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
