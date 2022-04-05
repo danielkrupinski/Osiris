@@ -12,6 +12,7 @@ namespace inventory_changer::backend
 struct Response {
     enum class Type {
         ItemAdded,
+        ItemMovedToFront,
         ItemRemoved,
         StatTrakUpdated,
         StickerApplied
