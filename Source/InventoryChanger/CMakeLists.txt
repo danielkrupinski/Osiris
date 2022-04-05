@@ -6,6 +6,7 @@ target_sources(OsirisOBJ PRIVATE
   StaticData.cpp
   ToolUser.cpp
   GameItems/Storage.cpp
+  Backend/ToolUser.cpp
 )
 
 add_subdirectory(Inventory)
