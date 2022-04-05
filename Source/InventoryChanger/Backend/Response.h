@@ -15,7 +15,8 @@ struct Response {
         ItemMovedToFront,
         ItemRemoved,
         StatTrakUpdated,
-        StickerApplied
+        StickerApplied,
+        ViewerPassActivated
     };
 
     struct StickerApplied {
