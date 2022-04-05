@@ -145,6 +145,8 @@ private:
                 return ToolUser{}.applySticker(*this, removeConstness(*destItem), *tool, request.stickerSlot);
             } else if ((*tool)->gameItem().isOperationPass()) {
                 ToolUser{}.activateOperationPass(*this, *tool);
+            } else if ((*tool)->gameItem().isViewerPass()) {
+                return ToolUser{}.activateViewerPass(*this, *tool);
             }
         }
 
