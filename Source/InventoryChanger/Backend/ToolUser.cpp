@@ -18,4 +18,17 @@ std::optional<Response> ToolUser::applySticker(BackendSimulator& backend, std::l
     return Response{ Response::Type::StickerApplied, Response::StickerApplied{ item, slot } };
 }
 
+void ToolUser::activateOperationPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item)
+{
+    const auto& gameItem = item->gameItem();
+    if (!gameItem.isOperationPass())
+        return;
+
+    const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
+    if (const auto operationCoin = StaticData::lookup().findItem(coinID); operationCoin.has_value()) {
+        backend.addItem(inventory::Item_v2{ *operationCoin });
+        backend.removeItem(item);
+    }
+}
+
 }
