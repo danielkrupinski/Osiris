@@ -597,6 +597,19 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     return newItemID;
 }
 
+static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID)
+{
+    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
+    if (idx == -1)
+        return;
+
+    using namespace std::string_view_literals;
+    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(itemID); args += '\'';
+    const char* dummy;
+    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+}
+
 void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
@@ -616,19 +629,7 @@ void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-}
-
-static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID)
-{
-    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
-    if (idx == -1)
-        return;
-
-    using namespace std::string_view_literals;
-    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(itemID); args += '\'';
-    const char* dummy;
-    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
-        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+    initItemCustomizationNotification("sticker_apply", itemID);
 }
 
 static inventory_changer::backend::UseToolRequest useToolRequest;
