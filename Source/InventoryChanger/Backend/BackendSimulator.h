@@ -104,6 +104,11 @@ public:
         itemIDMap.add(itemID, it);
     }
 
+    void updateItemID(std::uint64_t oldItemID, std::uint64_t newItemID)
+    {
+        itemIDMap.update(oldItemID, newItemID);
+    }
+
     [[nodiscard]] std::optional<std::list<inventory::Item_v2>::const_iterator> itemFromID(std::uint64_t itemID)
     {
         return itemIDMap.get(itemID);
