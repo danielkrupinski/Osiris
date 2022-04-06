@@ -597,6 +597,27 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     return newItemID;
 }
 
+void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setStickerID(*econItem, slot, stickerID);
+    attributeSetter.setStickerWear(*econItem, slot, 0.0f);
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 static void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID)
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
@@ -660,7 +681,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             if (it) {
                 if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
                     BackendSimulator::instance().assignItemID(*it, assingNewItemID(*itemID));
-            }
+                }
         } else if (response.type == Response::Type::ItemRemoved) {
             const auto it = std::get_if<std::uint64_t>(&response.data);
             if (it) {
@@ -669,6 +690,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
         } else if (response.type == Response::Type::StatTrakUpdated) {
             if (const auto it = std::get_if<Response::StatTrakUpdated>(&response.data)) {
                 ::updateStatTrak(it->itemID, it->newStatTrakValue);
+            }
+        } else if (response.type == Response::Type::StickerApplied) {
+            if (const auto it = std::get_if<Response::StickerApplied>(&response.data)) {
+                if (const auto itemID = BackendSimulator::instance().getItemID(it->skinItem); itemID.has_value()) {
+                    if (const auto skin = it->skinItem->get<inventory::Skin>())
+                        applySticker(*itemID, skin->stickers[it->stickerSlot].stickerID, it->stickerSlot);
+                }
             }
         } else if (response.type == Response::Type::ViewerPassActivated) {
             const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
