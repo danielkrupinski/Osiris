@@ -16,10 +16,16 @@ struct Response {
         ItemRemoved,
         StatTrakUpdated,
         StickerApplied,
-        ViewerPassActivated
+        ViewerPassActivated,
+        StickerScraped
     };
 
     struct StickerApplied {
+        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::uint8_t stickerSlot;
+    };
+
+    struct StickerScraped {
         std::list<inventory::Item_v2>::const_iterator skinItem;
         std::uint8_t stickerSlot;
     };
@@ -30,7 +36,7 @@ struct Response {
     };
 
     Type type;
-    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t, StatTrakUpdated> data;
+    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t, StatTrakUpdated, StickerScraped> data;
 };
 
 }
