@@ -96,7 +96,8 @@ public:
     void moveToFront(std::list<inventory::Item_v2>::const_iterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
-        responses.emplace(Response::Type::ItemMovedToFront, it);
+        if (const auto itemID = getItemID(it); itemID.has_value())
+            responses.emplace(Response::Type::ItemMovedToFront, *itemID);
     }
 
     void assignItemID(std::list<inventory::Item_v2>::const_iterator it, std::uint64_t itemID)
