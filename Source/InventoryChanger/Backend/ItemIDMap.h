@@ -30,6 +30,18 @@ public:
             itemIDsIterators.try_emplace(itemID, iterator);
     }
 
+    void update(std::uint64_t oldItemID, std::uint64_t newItemID)
+    {
+        if (const auto itemIDToIterator = itemIDsIterators.find(oldItemID); itemIDToIterator != itemIDsIterators.end()) {
+            if (const auto iteratorToItemID = iteratorsItemIDs.find(itemIDToIterator->second); iteratorToItemID != iteratorsItemIDs.end())
+                iteratorToItemID->second = newItemID;
+
+            auto node = itemIDsIterators.extract(itemIDToIterator);
+            node.key() = newItemID;
+            itemIDsIterators.insert(std::move(node));
+        }
+    }
+
     std::optional<std::uint64_t> remove(std::list<inventory::Item_v2>::const_iterator iterator)
     {
         if (const auto it = iteratorsItemIDs.find(iterator); it != iteratorsItemIDs.end()) {
