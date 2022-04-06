@@ -594,6 +594,9 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     econItem->itemID = newItemID;
     localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
+    if (const auto newView = memory->findOrCreateEconItemViewForItemID(newItemID))
+        newView->clearInventoryImageRGBA();
+
     return newItemID;
 }
 
