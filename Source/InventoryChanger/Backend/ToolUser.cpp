@@ -46,4 +46,19 @@ std::optional<Response> ToolUser::activateViewerPass(BackendSimulator& backend, 
     return {};
 }
 
+std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::uint8_t slot)
+{
+    const auto skin = item->get<inventory::Skin>();
+    if (!skin)
+        return {};
+
+    constexpr auto wearStep = 0.12f;
+    const auto newWear = (skin->stickers[slot].wear += wearStep);
+
+    if (const auto shouldRemove = (newWear >= 1.0f + wearStep))
+        skin->stickers[slot] = {};
+
+    return Response{ Response::Type::StickerScraped, item };
+}
+
 }
