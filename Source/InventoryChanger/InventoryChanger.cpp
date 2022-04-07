@@ -284,7 +284,7 @@ static void updateHud() noexcept
 
 void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
 {
-    if (Inventory::getItem(itemID) == nullptr)
+    if (!inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID).has_value())
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();
