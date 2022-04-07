@@ -35,13 +35,4 @@ namespace Inventory
 
     void runFrame() noexcept;
     inventory::Item* getItem(std::uint64_t itemID) noexcept;
-
-    inventory::Skin& dynamicSkinData(const inventory::Item& item) noexcept;
-    inventory::Glove& dynamicGloveData(const inventory::Item& item) noexcept;
-    inventory::Agent& dynamicAgentData(const inventory::Item& item) noexcept;
-    inventory::Music& dynamicMusicData(const inventory::Item& item) noexcept;
-    inventory::SouvenirPackage& dynamicSouvenirPackageData(const inventory::Item& item) noexcept;
-    inventory::ServiceMedal& dynamicServiceMedalData(const inventory::Item& item) noexcept;
-    inventory::TournamentCoin& dynamicTournamentCoinData(const inventory::Item& item) noexcept;
-    inventory::Graffiti& dynamicGraffitiData(const inventory::Item& item) noexcept;
 }
