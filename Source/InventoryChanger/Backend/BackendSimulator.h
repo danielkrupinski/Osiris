@@ -115,7 +115,7 @@ public:
         return itemIDMap.get(itemID);
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item_v2>::const_iterator it)
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item_v2>::const_iterator it) const
     {
         return itemIDMap.getItemID(it);
     }
