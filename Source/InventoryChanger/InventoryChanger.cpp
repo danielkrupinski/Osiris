@@ -282,12 +282,6 @@ static void updateHud() noexcept
     hudUpdateRequired = false;
 }
 
-void InventoryChanger::deleteItem(std::uint64_t itemID) noexcept
-{
-    if (const auto item = Inventory::getItem(itemID))
-        item->markToDelete();
-}
-
 void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
 {
     if (Inventory::getItem(itemID) == nullptr)
