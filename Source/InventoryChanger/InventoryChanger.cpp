@@ -715,6 +715,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 initItemCustomizationNotification("ticket_activated", *itemID);
         }
 
+        void operator()(const Response::NameTagRemoved& response) const
+        {
+
+        }
+
     private:
         BackendSimulator& backend;
     };

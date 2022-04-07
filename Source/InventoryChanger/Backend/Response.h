@@ -41,6 +41,10 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator createdEventCoin;
     };
 
+    struct NameTagRemoved {
+        std::list<inventory::Item_v2>::const_iterator skinItem;
+    };
+
     std::variant<
         ItemAdded,
         ItemMovedToFront,
@@ -48,7 +52,8 @@ struct Response {
         StickerApplied,
         StickerScraped,
         StatTrakUpdated,
-        ViewerPassActivated
+        ViewerPassActivated,
+        NameTagRemoved
     > data;
 };
 
