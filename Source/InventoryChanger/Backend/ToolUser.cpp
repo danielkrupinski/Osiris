@@ -61,6 +61,17 @@ std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::li
     return Response{ Response::StickerScraped{ item } };
 }
 
+std::optional<Response> ToolUser::addNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag)
+{
+    const auto skin = item->get<inventory::Skin>();
+    if (!skin)
+        return {};
+
+    skin->nameTag = nameTag;
+    backend.moveToFront(item);
+    return Response{ Response::NameTagAdded{ item } };
+}
+
 std::optional<Response> ToolUser::removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item)
 {
     if (const auto skin = item->get<inventory::Skin>()) {
