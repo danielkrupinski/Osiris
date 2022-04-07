@@ -88,18 +88,25 @@ static Entity* createGlove(int entry, int serial) noexcept
     return nullptr;
 }
 
+static std::optional<std::list<inventory::Item_v2>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
+{
+    switch (team) {
+    case Team::None: return loadout.getItemInSlotNoTeam(slot);
+    case Team::CT: return loadout.getItemInSlotCT(slot);
+    case Team::TT: return loadout.getItemInSlotTT(slot);
+    default: return {};
+    }
+}
+
 static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 41);
-    if (!itemView)
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 41);
+    if (!optionalItem.has_value())
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    const auto item = Inventory::getItem(soc->itemID);
-    if (!item || !item->isGlove())
+    const auto& item = *optionalItem;
+    const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+    if (!itemID.has_value())
         return;
 
     const auto wearables = local->wearables();
@@ -122,18 +129,18 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
     local->body() = 1;
 
     bool dataUpdated = false;
-    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->get().getWeaponID()) {
-        definitionIndex = item->get().getWeaponID();
+    if (auto& definitionIndex = glove->itemDefinitionIndex(); definitionIndex != item->gameItem().getWeaponID()) {
+        definitionIndex = item->gameItem().getWeaponID();
 
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID()))
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID()))
             glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
     }
 
-    if (glove->itemID() != soc->itemID) {
-        glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
-        glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+    if (glove->itemID() != *itemID) {
+        glove->itemIDHigh() = std::uint32_t(*itemID >> 32);
+        glove->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
         dataUpdated = true;
     }
 
@@ -317,16 +324,6 @@ static void applyMusicKit() noexcept
         return;
 
     pr->musicID()[localPlayer->index()] = StaticData::lookup().getStorage().getMusicKit(item->gameItem()).id;
-}
-
-static std::optional<std::list<inventory::Item_v2>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
-{
-    switch (team) {
-    case Team::None: return loadout.getItemInSlotNoTeam(slot);
-    case Team::CT: return loadout.getItemInSlotCT(slot);
-    case Team::TT: return loadout.getItemInSlotTT(slot);
-    default: return {};
-    }
 }
 
 static void applyPlayerAgent() noexcept
