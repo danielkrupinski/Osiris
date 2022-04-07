@@ -153,6 +153,12 @@ private:
                 ToolUser{}.activateOperationPass(*this, *tool);
             } else if ((*tool)->gameItem().isViewerPass()) {
                 return ToolUser{}.activateViewerPass(*this, *tool);
+            } else if ((*tool)->gameItem().isNameTag()) {
+                const auto destItem = itemIDMap.get(request.destItemID);
+                if (!destItem.has_value())
+                    return {};
+
+                return ToolUser{}.addNameTag(*this, removeConstness(*destItem), *tool, request.nameTag);
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             const auto destItem = itemIDMap.get(request.destItemID);
