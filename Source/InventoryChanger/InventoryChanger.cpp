@@ -676,23 +676,23 @@ void InventoryChanger::run(FrameStage stage) noexcept
     struct Visitor {
         explicit Visitor(BackendSimulator& backend) : backend{ backend } {}
 
-        void operator()(const Response::ItemAdded& response)
+        void operator()(const Response::ItemAdded& response) const
         {
             const auto itemID = _createSOCItem(*response.item, true);
             backend.assignItemID(response.item, itemID);
         }
 
-        void operator()(const Response::ItemMovedToFront& response)
+        void operator()(const Response::ItemMovedToFront& response) const
         {
             backend.updateItemID(response.itemID, assingNewItemID(response.itemID));
         }
 
-        void operator()(const Response::ItemRemoved& response)
+        void operator()(const Response::ItemRemoved& response) const
         {
             _deleteItem(response.itemID);
         }
 
-        void operator()(const Response::StickerApplied& response)
+        void operator()(const Response::StickerApplied& response) const
         {
             if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
                 if (const auto skin = response.skinItem->get<inventory::Skin>())
@@ -700,17 +700,17 @@ void InventoryChanger::run(FrameStage stage) noexcept
             }
         }
 
-        void operator()(const Response::StickerScraped& response)
+        void operator()(const Response::StickerScraped& response) const
         {
            
         }
         
-        void operator()(const Response::StatTrakUpdated& response)
+        void operator()(const Response::StatTrakUpdated& response) const
         {
             ::updateStatTrak(response.itemID, response.newStatTrakValue);
         }
 
-        void operator()(const Response::ViewerPassActivated& response)
+        void operator()(const Response::ViewerPassActivated& response) const
         {
             if (const auto itemID = backend.getItemID(response.createdEventCoin); itemID.has_value())
                 initItemCustomizationNotification("ticket_activated", *itemID);
