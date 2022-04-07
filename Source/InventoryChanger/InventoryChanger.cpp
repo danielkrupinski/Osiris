@@ -162,16 +162,13 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
 {
     const auto localXuid = local->getSteamId();
 
-    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 0);
-    if (!itemView)
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    if (!optionalItem.has_value())
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    const auto item = Inventory::getItem(soc->itemID);
-    if (!item || !item->isSkin())
+    const auto& item = *optionalItem;
+    const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+    if (!itemID.has_value())
         return;
 
     for (auto& weapons = local->weapons(); auto weaponHandle : weapons) {
@@ -190,14 +187,14 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
-        weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
-        weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+        weapon->itemIDHigh() = std::uint32_t(*itemID >> 32);
+        weapon->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
-        if (definitionIndex != item->get().getWeaponID()) {
-            definitionIndex = item->get().getWeaponID();
+        if (definitionIndex != item->gameItem().getWeaponID()) {
+            definitionIndex = item->gameItem().getWeaponID();
 
-            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID())) {
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
                 weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
