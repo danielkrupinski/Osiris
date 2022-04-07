@@ -319,24 +319,30 @@ static void applyMusicKit() noexcept
     pr->musicID()[localPlayer->index()] = StaticData::lookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
+static std::optional<std::list<inventory::Item_v2>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
+{
+    switch (team) {
+    case Team::None: return loadout.getItemInSlotNoTeam(slot);
+    case Team::CT: return loadout.getItemInSlotCT(slot);
+    case Team::TT: return loadout.getItemInSlotTT(slot);
+    default: return {};
+    }
+}
+
 static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
 {
     if (!localPlayer)
         return;
 
-    const auto itemView = localInventory.getItemInLoadout(localPlayer->getTeamNumber(), 38);
-    if (!itemView)
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 38);
+    if (!optionalItem.has_value())
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
+    const auto item = *optionalItem;
+    if (!item->gameItem().isAgent())
         return;
 
-    const auto item = Inventory::getItem(soc->itemID);
-    if (!item || !item->isAgent())
-        return;
-
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->get().getWeaponID());
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID());
     if (!def)
         return;
 
@@ -344,10 +350,11 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!model)
         return;
 
-    const auto& dynamicData = Inventory::dynamicAgentData(*item);
-    for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
-        if (const auto& patch = dynamicData.patches[i]; patch.patchID != 0)
-            localPlayer->playerPatchIndices()[i] = patch.patchID;
+    if (const auto agent = item->get<inventory::Agent>()) {
+        for (std::size_t i = 0; i < agent->patches.size(); ++i) {
+            if (const auto& patch = agent->patches[i]; patch.patchID != 0)
+                localPlayer->playerPatchIndices()[i] = patch.patchID;
+        }
     }
 
     const auto idx = interfaces->modelInfo->getModelIndex(model);
