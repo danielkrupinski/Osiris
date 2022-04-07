@@ -110,7 +110,7 @@ public:
         itemIDMap.update(oldItemID, newItemID);
     }
 
-    [[nodiscard]] std::optional<std::list<inventory::Item_v2>::const_iterator> itemFromID(std::uint64_t itemID)
+    [[nodiscard]] std::optional<std::list<inventory::Item_v2>::const_iterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
     }
