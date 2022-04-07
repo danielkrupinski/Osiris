@@ -636,6 +636,24 @@ void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
     initItemCustomizationNotification("sticker_apply", itemID);
 }
 
+void removeNameTag(std::uint64_t itemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    memory->setCustomName(econItem, "");
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 static inventory_changer::backend::UseToolRequest useToolRequest;
 
 void InventoryChanger::run(FrameStage stage) noexcept
@@ -717,7 +735,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
         void operator()(const Response::NameTagRemoved& response) const
         {
-
+            if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
+                removeNameTag(*itemID);
         }
 
     private:
