@@ -665,8 +665,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
     applyPlayerAgent();
     applyMedal();
 
-    Inventory::runFrame();
-
     using namespace inventory_changer::backend;
 
     if (useToolRequest.action != UseToolRequest::Action::None) {

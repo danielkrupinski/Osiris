@@ -174,11 +174,6 @@ private:
     std::vector<inventory::Item> inventory;
 };
 
-void Inventory::runFrame() noexcept
-{
-    InventoryImpl::runFrame();
-}
-
 inventory::Item* Inventory::getItem(std::uint64_t itemID) noexcept
 {
     return InventoryImpl::getItem(itemID);
