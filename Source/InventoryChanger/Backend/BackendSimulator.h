@@ -154,6 +154,11 @@ private:
             } else if ((*tool)->gameItem().isViewerPass()) {
                 return ToolUser{}.activateViewerPass(*this, *tool);
             }
+        } else if (request.action == UseToolRequest::Action::WearSticker) {
+            const auto destItem = itemIDMap.get(request.destItemID);
+            if (!destItem.has_value())
+                return {};
+            return ToolUser{}.wearSticker(*this, removeConstness(*destItem), request.stickerSlot);
         }
 
         return {};
