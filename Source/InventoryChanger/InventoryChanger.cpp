@@ -674,15 +674,17 @@ void InventoryChanger::run(FrameStage stage) noexcept
     }
 
     struct Visitor {
+        explicit Visitor(BackendSimulator& backend) : backend{ backend } {}
+
         void operator()(const Response::ItemAdded& response)
         {
             const auto itemID = _createSOCItem(*response.item, true);
-            BackendSimulator::instance().assignItemID(response.item, itemID);
+            backend.assignItemID(response.item, itemID);
         }
 
         void operator()(const Response::ItemMovedToFront& response)
         {
-            BackendSimulator::instance().updateItemID(response.itemID, assingNewItemID(response.itemID));
+            backend.updateItemID(response.itemID, assingNewItemID(response.itemID));
         }
 
         void operator()(const Response::ItemRemoved& response)
@@ -692,7 +694,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
         void operator()(const Response::StickerApplied& response)
         {
-            if (const auto itemID = BackendSimulator::instance().getItemID(response.skinItem); itemID.has_value()) {
+            if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
                 if (const auto skin = response.skinItem->get<inventory::Skin>())
                     applySticker(*itemID, skin->stickers[response.stickerSlot].stickerID, response.stickerSlot);
             }
@@ -710,13 +712,16 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
         void operator()(const Response::ViewerPassActivated& response)
         {
-            if (const auto itemID = BackendSimulator::instance().getItemID(response.createdEventCoin); itemID.has_value())
+            if (const auto itemID = backend.getItemID(response.createdEventCoin); itemID.has_value())
                 initItemCustomizationNotification("ticket_activated", *itemID);
         }
+
+    private:
+        BackendSimulator& backend;
     };
 
     BackendSimulator::instance().run([](const Response& response) {
-        std::visit(Visitor{}, response.data);
+        std::visit(Visitor{ BackendSimulator::instance() }, response.data);
     });
 }
 
