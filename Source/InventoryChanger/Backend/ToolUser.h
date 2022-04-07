@@ -19,6 +19,7 @@ public:
     void activateOperationPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item);
     std::optional<Response> activateViewerPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item);
     std::optional<Response> wearSticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::uint8_t slot);
+    std::optional<Response> removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item);
 };
 
 }

@@ -61,4 +61,14 @@ std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::li
     return Response{ Response::StickerScraped{ item } };
 }
 
+std::optional<Response> ToolUser::removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item)
+{
+    if (const auto skin = item->get<inventory::Skin>()) {
+        skin->nameTag.clear();
+        backend.moveToFront(item);
+        return Response{ Response::NameTagRemoved{ item } };
+    }
+    return {};
+}
+
 }
