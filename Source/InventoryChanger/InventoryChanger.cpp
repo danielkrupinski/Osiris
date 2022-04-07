@@ -762,34 +762,23 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
     const auto weapon = localPlayer->getActiveWeapon();
     if (!weapon)
         return;
 
     const auto itemID = weapon->itemID();
-    const auto item = Inventory::getItem(itemID);
-    if (!item || !item->isSkin())
+
+    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID);
+    if (!optionalItem.has_value())
         return;
 
-    const auto itemView = memory->getInventoryItemByItemID(localInventory, itemID);
-    if (!itemView)
+    const auto item = *optionalItem;
+    const auto skin = item->get<inventory::Skin>();
+    if (!skin)
         return;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    auto& dynamicData = Inventory::dynamicSkinData(*item);
-    if (dynamicData.statTrak > -1) {
-        ++dynamicData.statTrak;
-        EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-        attributeSetter.setStatTrak(*soc, dynamicData.statTrak);
-        localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
-    }
+    if (skin->statTrak > -1)
+        inventory_changer::backend::BackendSimulator::instance().updateStatTrak(item, skin->statTrak + 1);
 }
 
 void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
