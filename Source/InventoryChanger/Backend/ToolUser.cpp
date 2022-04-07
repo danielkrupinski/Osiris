@@ -15,7 +15,7 @@ std::optional<Response> ToolUser::applySticker(BackendSimulator& backend, std::l
 
     backend.moveToFront(item);
     backend.removeItem(sticker);
-    return Response{ Response::Type::StickerApplied, Response::StickerApplied{ item, slot } };
+    return Response{ Response::StickerApplied{ item, slot } };
 }
 
 void ToolUser::activateOperationPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item)
@@ -41,7 +41,7 @@ std::optional<Response> ToolUser::activateViewerPass(BackendSimulator& backend, 
     if (const auto eventCoin = StaticData::lookup().findItem(coinID); eventCoin.has_value()) {
         const auto addedEventCoin = backend.addItem(inventory::Item_v2{ *eventCoin });
         backend.removeItem(item);
-        return Response{ Response::Type::ViewerPassActivated, addedEventCoin };
+        return Response{ Response::ViewerPassActivated{ addedEventCoin } };
     }
     return {};
 }
@@ -58,7 +58,7 @@ std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::li
     if (const auto shouldRemove = (newWear >= 1.0f + wearStep))
         skin->stickers[slot] = {};
 
-    return Response{ Response::Type::StickerScraped, item };
+    return Response{ Response::StickerScraped{ item } };
 }
 
 }

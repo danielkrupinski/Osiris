@@ -71,7 +71,7 @@ public:
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());
-        responses.emplace(Response::Type::ItemAdded, added);
+        responses.emplace(Response::ItemAdded{ added });
         return added;
     }
 
@@ -80,7 +80,7 @@ public:
         const auto itemID = itemIDMap.remove(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
-            responses.emplace(Response::Type::ItemRemoved, *itemID);
+            responses.emplace(Response::ItemRemoved{ *itemID });
         return newIterator;
     }
 
@@ -90,14 +90,14 @@ public:
             return;
 
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responses.emplace(Response::Type::StatTrakUpdated, Response::StatTrakUpdated{ *itemID, newStatTrak });
+            responses.emplace(Response::StatTrakUpdated{ *itemID, newStatTrak });
     }
 
     void moveToFront(std::list<inventory::Item_v2>::const_iterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responses.emplace(Response::Type::ItemMovedToFront, *itemID);
+            responses.emplace(Response::ItemMovedToFront{ *itemID });
     }
 
     void assignItemID(std::list<inventory::Item_v2>::const_iterator it, std::uint64_t itemID)

@@ -10,14 +10,16 @@ namespace inventory_changer::backend
 {
 
 struct Response {
-    enum class Type {
-        ItemAdded,
-        ItemMovedToFront,
-        ItemRemoved,
-        StatTrakUpdated,
-        StickerApplied,
-        ViewerPassActivated,
-        StickerScraped
+    struct ItemAdded {
+        std::list<inventory::Item_v2>::const_iterator item;
+    };
+
+    struct ItemMovedToFront {
+        std::uint64_t itemID;
+    };
+
+    struct ItemRemoved {
+        std::uint64_t itemID;
     };
 
     struct StickerApplied {
@@ -35,8 +37,19 @@ struct Response {
         int newStatTrakValue;
     };
 
-    Type type;
-    std::variant<std::list<inventory::Item_v2>::const_iterator, StickerApplied, std::uint64_t, StatTrakUpdated, StickerScraped> data;
+    struct ViewerPassActivated {
+        std::list<inventory::Item_v2>::const_iterator createdEventCoin;
+    };
+
+    std::variant<
+        ItemAdded,
+        ItemMovedToFront,
+        ItemRemoved,
+        StickerApplied,
+        StickerScraped,
+        StatTrakUpdated,
+        ViewerPassActivated
+    > data;
 };
 
 }

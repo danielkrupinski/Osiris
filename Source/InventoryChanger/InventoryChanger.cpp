@@ -673,40 +673,50 @@ void InventoryChanger::run(FrameStage stage) noexcept
         useToolRequest.action = UseToolRequest::Action::None;
     }
 
-    BackendSimulator::instance().run([](const Response& response) {
-        if (response.type == Response::Type::ItemAdded) {
-            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
-            if (it) {
-                const auto itemID = _createSOCItem(**it, true);
-                BackendSimulator::instance().assignItemID(*it, itemID);
-            }
-        } else if (response.type == Response::Type::ItemMovedToFront) {
-            if (const auto itemID = std::get_if<std::uint64_t>(&response.data)) {
-                BackendSimulator::instance().updateItemID(*itemID, assingNewItemID(*itemID));
-            }
-        } else if (response.type == Response::Type::ItemRemoved) {
-            const auto it = std::get_if<std::uint64_t>(&response.data);
-            if (it) {
-                _deleteItem(*it);
-            }
-        } else if (response.type == Response::Type::StatTrakUpdated) {
-            if (const auto it = std::get_if<Response::StatTrakUpdated>(&response.data)) {
-                ::updateStatTrak(it->itemID, it->newStatTrakValue);
-            }
-        } else if (response.type == Response::Type::StickerApplied) {
-            if (const auto it = std::get_if<Response::StickerApplied>(&response.data)) {
-                if (const auto itemID = BackendSimulator::instance().getItemID(it->skinItem); itemID.has_value()) {
-                    if (const auto skin = it->skinItem->get<inventory::Skin>())
-                        applySticker(*itemID, skin->stickers[it->stickerSlot].stickerID, it->stickerSlot);
-                }
-            }
-        } else if (response.type == Response::Type::ViewerPassActivated) {
-            const auto it = std::get_if<std::list<inventory::Item_v2>::const_iterator>(&response.data);
-            if (it) {
-                if (const auto itemID = BackendSimulator::instance().getItemID(*it); itemID.has_value())
-                    initItemCustomizationNotification("ticket_activated", *itemID);
+    struct Visitor {
+        void operator()(const Response::ItemAdded& response)
+        {
+            const auto itemID = _createSOCItem(*response.item, true);
+            BackendSimulator::instance().assignItemID(response.item, itemID);
+        }
+
+        void operator()(const Response::ItemMovedToFront& response)
+        {
+            BackendSimulator::instance().updateItemID(response.itemID, assingNewItemID(response.itemID));
+        }
+
+        void operator()(const Response::ItemRemoved& response)
+        {
+            _deleteItem(response.itemID);
+        }
+
+        void operator()(const Response::StickerApplied& response)
+        {
+            if (const auto itemID = BackendSimulator::instance().getItemID(response.skinItem); itemID.has_value()) {
+                if (const auto skin = response.skinItem->get<inventory::Skin>())
+                    applySticker(*itemID, skin->stickers[response.stickerSlot].stickerID, response.stickerSlot);
             }
         }
+
+        void operator()(const Response::StickerScraped& response)
+        {
+           
+        }
+        
+        void operator()(const Response::StatTrakUpdated& response)
+        {
+            ::updateStatTrak(response.itemID, response.newStatTrakValue);
+        }
+
+        void operator()(const Response::ViewerPassActivated& response)
+        {
+            if (const auto itemID = BackendSimulator::instance().getItemID(response.createdEventCoin); itemID.has_value())
+                initItemCustomizationNotification("ticket_activated", *itemID);
+        }
+    };
+
+    BackendSimulator::instance().run([](const Response& response) {
+        std::visit(Visitor{}, response.data);
     });
 }
 
