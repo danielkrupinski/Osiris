@@ -329,7 +329,7 @@ static std::optional<std::list<inventory::Item_v2>::const_iterator> getItemFromL
     }
 }
 
-static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
+static void applyPlayerAgent() noexcept
 {
     if (!localPlayer)
         return;
@@ -662,7 +662,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         applyGloves(*localInventory, localPlayer.get());
 
     applyMusicKit();
-    applyPlayerAgent(*localInventory);
+    applyPlayerAgent();
     applyMedal();
 
     Inventory::runFrame();
