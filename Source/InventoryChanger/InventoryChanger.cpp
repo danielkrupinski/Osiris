@@ -636,7 +636,7 @@ void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
     initItemCustomizationNotification("sticker_apply", itemID);
 }
 
-void removeNameTag(std::uint64_t itemID)
+void updateNameTag(std::uint64_t itemID, const char* newNameTag)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
     if (!view)
@@ -650,7 +650,7 @@ void removeNameTag(std::uint64_t itemID)
     if (!localInventory)
         return;
 
-    memory->setCustomName(econItem, "");
+    memory->setCustomName(econItem, newNameTag);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
@@ -735,13 +735,18 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
         void operator()(const Response::NameTagAdded& response) const
         {
-
+            if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
+                if (const auto skin = response.skinItem->get<inventory::Skin>()) {
+                    updateNameTag(*itemID, skin->nameTag.c_str());
+                    initItemCustomizationNotification("nametag_add", *itemID);
+                }
+            }
         }
 
         void operator()(const Response::NameTagRemoved& response) const
         {
             if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
-                removeNameTag(*itemID);
+                updateNameTag(*itemID, "");
         }
 
     private:
