@@ -41,6 +41,10 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator createdEventCoin;
     };
 
+    struct NameTagAdded {
+        std::list<inventory::Item_v2>::const_iterator skinItem;
+    };
+
     struct NameTagRemoved {
         std::list<inventory::Item_v2>::const_iterator skinItem;
     };
@@ -53,6 +57,7 @@ struct Response {
         StickerScraped,
         StatTrakUpdated,
         ViewerPassActivated,
+        NameTagAdded,
         NameTagRemoved
     > data;
 };

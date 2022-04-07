@@ -733,6 +733,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 initItemCustomizationNotification("ticket_activated", *itemID);
         }
 
+        void operator()(const Response::NameTagAdded& response) const
+        {
+
+        }
+
         void operator()(const Response::NameTagRemoved& response) const
         {
             if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
