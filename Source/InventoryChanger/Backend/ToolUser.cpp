@@ -68,6 +68,7 @@ std::optional<Response> ToolUser::addNameTag(BackendSimulator& backend, std::lis
         return {};
 
     skin->nameTag = nameTag;
+    backend.removeItem(nameTagItem);
     backend.moveToFront(item);
     return Response{ Response::NameTagAdded{ item } };
 }
