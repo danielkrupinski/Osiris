@@ -1320,20 +1320,11 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (!localPlayer)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    if (!optionalItem.has_value())
         return;
 
-    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
-    if (!itemView)
-        return;
-
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    if (const auto item = Inventory::getItem(soc->itemID); !item || !item->isSkin())
-        return;
+    const auto& item = *optionalItem;
 
     constexpr auto HUD_PRINTTALK = 3;
     constexpr auto HUD_PRINTCENTER = 4;
@@ -1357,7 +1348,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
         if (!itemSchema)
             return;
 
-        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
         if (!def)
             return;
 
@@ -1382,7 +1373,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
         if (!itemSchema)
             return;
 
-        const auto def = itemSchema->getItemDefinitionInterface(soc->weaponId);
+        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
         if (!def)
             return;
 
