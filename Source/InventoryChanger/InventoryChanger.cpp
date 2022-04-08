@@ -247,17 +247,21 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto loadoutSlot = def->getLoadoutSlot(localTeam);
-        const auto itemView = localInventory.getItemInLoadout(localTeam, loadoutSlot);
-        if (!itemView)
+        const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localTeam, loadoutSlot);
+        if (!optionalItem.has_value())
+            continue;
+        
+        const auto& item = *optionalItem;
+        if (definitionIndex != item->gameItem().getWeaponID())
             continue;
 
-        const auto soc = memory->getSOCData(itemView);
-        if (!soc || soc->weaponId != definitionIndex || !Inventory::getItem(soc->itemID))
+        const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+        if (!itemID.has_value())
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
-        weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
-        weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+        weapon->itemIDHigh() = std::uint32_t(*itemID >> 32);
+        weapon->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
     }
 }
 
