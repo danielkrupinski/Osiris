@@ -46,7 +46,6 @@
 
 #include "../Helpers.h"
 
-#include "Inventory.h"
 #include "StaticData.h"
 #include "ToolUser.h"
 

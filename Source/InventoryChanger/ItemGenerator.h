@@ -4,7 +4,6 @@
 #include <ctime>
 #include <utility>
 
-#include "Inventory.h"
 #include "StaticData.h"
 
 #include "Inventory/Item.h"

@@ -1,4 +1,3 @@
-#include "Inventory.h"
 #include "InventoryConfig.h"
 
 #include "GameItems/Lookup.h"

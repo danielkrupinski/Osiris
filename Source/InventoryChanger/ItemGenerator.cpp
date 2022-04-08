@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "../Helpers.h"
-#include "Inventory.h"
 #include "ItemGenerator.h"
 
 #include "../SDK/ItemSchema.h"
