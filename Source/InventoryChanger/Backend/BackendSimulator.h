@@ -143,7 +143,7 @@ private:
 
         if (request.action == UseToolRequest::Action::Use) {
             if (destItem.has_value() && (*destItem)->gameItem().isCase())
-                return ToolUser{}.openContainer(*this, *destItem, tool);
+                return ToolUser{ *this }.openContainer(*destItem, tool);
 
             if (!tool.has_value())
                 return {};
@@ -152,21 +152,21 @@ private:
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{}.applySticker(*this, removeConstness(*destItem), *tool, request.stickerSlot);
+                return ToolUser{ *this }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
             } else if ((*tool)->gameItem().isOperationPass()) {
-                ToolUser{}.activateOperationPass(*this, *tool);
+                ToolUser{ *this }.activateOperationPass(*tool);
             } else if ((*tool)->gameItem().isViewerPass()) {
-                return ToolUser{}.activateViewerPass(*this, *tool);
+                return ToolUser{ *this }.activateViewerPass(*tool);
             } else if ((*tool)->gameItem().isNameTag()) {
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{}.addNameTag(*this, removeConstness(*destItem), *tool, request.nameTag);
+                return ToolUser{ *this }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             if (!destItem.has_value())
                 return {};
-            return ToolUser{}.wearSticker(*this, removeConstness(*destItem), request.stickerSlot);
+            return ToolUser{ *this }.wearSticker(removeConstness(*destItem), request.stickerSlot);
         }
 
         return {};

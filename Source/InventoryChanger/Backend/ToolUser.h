@@ -16,14 +16,18 @@ class BackendSimulator;
 
 class ToolUser {
 public:
-    std::optional<Response> applySticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
-    void activateOperationPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item);
-    std::optional<Response> activateViewerPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item);
-    std::optional<Response> wearSticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::uint8_t slot);
-    std::optional<Response> addNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag);
-    std::optional<Response> removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item);
-    std::optional<Response> openContainer(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
+    explicit ToolUser(BackendSimulator& backend) : backend{ backend } {}
 
+    std::optional<Response> applySticker(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
+    void activateOperationPass(std::list<inventory::Item_v2>::const_iterator item);
+    std::optional<Response> activateViewerPass(std::list<inventory::Item_v2>::const_iterator item);
+    std::optional<Response> wearSticker(std::list<inventory::Item_v2>::iterator item, std::uint8_t slot);
+    std::optional<Response> addNameTag(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag);
+    std::optional<Response> removeNameTag(std::list<inventory::Item_v2>::iterator item);
+    std::optional<Response> openContainer(std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
+
+private:
+    BackendSimulator& backend;
 };
 
 }

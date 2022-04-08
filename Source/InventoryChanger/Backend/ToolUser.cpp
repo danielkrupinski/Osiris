@@ -6,7 +6,7 @@
 namespace inventory_changer::backend
 {
 
-std::optional<Response> ToolUser::applySticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot)
+std::optional<Response> ToolUser::applySticker(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -20,7 +20,7 @@ std::optional<Response> ToolUser::applySticker(BackendSimulator& backend, std::l
     return Response{ Response::StickerApplied{ item, slot } };
 }
 
-void ToolUser::activateOperationPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item)
+void ToolUser::activateOperationPass(std::list<inventory::Item_v2>::const_iterator item)
 {
     const auto& gameItem = item->gameItem();
     if (!gameItem.isOperationPass())
@@ -33,7 +33,7 @@ void ToolUser::activateOperationPass(BackendSimulator& backend, std::list<invent
     }
 }
 
-std::optional<Response> ToolUser::activateViewerPass(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item)
+std::optional<Response> ToolUser::activateViewerPass(std::list<inventory::Item_v2>::const_iterator item)
 {
     const auto& gameItem = item->gameItem();
     if (!gameItem.isViewerPass())
@@ -48,7 +48,7 @@ std::optional<Response> ToolUser::activateViewerPass(BackendSimulator& backend, 
     return {};
 }
 
-std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::uint8_t slot)
+std::optional<Response> ToolUser::wearSticker(std::list<inventory::Item_v2>::iterator item, std::uint8_t slot)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -65,7 +65,7 @@ std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::li
     return Response{ Response::StickerScraped{ item, slot } };
 }
 
-std::optional<Response> ToolUser::addNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag)
+std::optional<Response> ToolUser::addNameTag(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -77,7 +77,7 @@ std::optional<Response> ToolUser::addNameTag(BackendSimulator& backend, std::lis
     return Response{ Response::NameTagAdded{ item } };
 }
 
-std::optional<Response> ToolUser::removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item)
+std::optional<Response> ToolUser::removeNameTag(std::list<inventory::Item_v2>::iterator item)
 {
     if (const auto skin = item->get<inventory::Skin>()) {
         skin->nameTag.clear();
@@ -87,7 +87,7 @@ std::optional<Response> ToolUser::removeNameTag(BackendSimulator& backend, std::
     return {};
 }
 
-std::optional<Response> ToolUser::openContainer(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator container, std::optional<std::list<inventory::Item_v2>::const_iterator> key)
+std::optional<Response> ToolUser::openContainer(std::list<inventory::Item_v2>::const_iterator container, std::optional<std::list<inventory::Item_v2>::const_iterator> key)
 {
     if (!container->gameItem().isCase())
         return {};
