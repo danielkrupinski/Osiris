@@ -1622,15 +1622,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex()))
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
-    if (!itemView)
-        return;
-
-    if (const auto soc = memory->getSOCData(itemView); !soc || Inventory::getItem(soc->itemID) == nullptr)
+    if (const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0); !optionalItem.has_value())
         return;
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
