@@ -126,11 +126,11 @@ public:
             responses.push(*response);
     }
 
-    template <typename ResponseHandler>
-    void run(ResponseHandler responseHandler)
+    template <typename Visitor>
+    void run(Visitor visitor)
     {
         while (!responses.empty()) {
-            responseHandler(responses.front());
+            std::visit(visitor, responses.front().data);
             responses.pop();
         }
     }

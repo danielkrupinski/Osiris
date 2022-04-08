@@ -755,9 +755,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         BackendSimulator& backend;
     };
 
-    BackendSimulator::instance().run([](const Response& response) {
-        std::visit(Visitor{ BackendSimulator::instance() }, response.data);
-    });
+    BackendSimulator::instance().run(Visitor{ BackendSimulator::instance() });
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
