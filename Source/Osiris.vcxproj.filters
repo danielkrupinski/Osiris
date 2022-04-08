@@ -155,9 +155,6 @@
     <ClCompile Include="InventoryChanger\StaticData.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
-    <ClCompile Include="InventoryChanger\Inventory.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
     <ClCompile Include="SDK\EconItemView.cpp">
       <Filter>SDK</Filter>
     </ClCompile>

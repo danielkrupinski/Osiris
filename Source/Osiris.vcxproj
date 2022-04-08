@@ -131,7 +131,6 @@
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Backend\ToolUser.cpp" />
     <ClCompile Include="InventoryChanger\GameItems\Storage.cpp" />
-    <ClCompile Include="InventoryChanger\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp" />
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp" />
