@@ -1,6 +1,8 @@
 #include "BackendSimulator.h"
 #include "ToolUser.h"
 
+#include <InventoryChanger/ItemGenerator.h>
+
 namespace inventory_changer::backend
 {
 
@@ -83,6 +85,22 @@ std::optional<Response> ToolUser::removeNameTag(BackendSimulator& backend, std::
         return Response{ Response::NameTagRemoved{ item } };
     }
     return {};
+}
+
+std::optional<Response> ToolUser::openContainer(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator container, std::optional<std::list<inventory::Item_v2>::const_iterator> key)
+{
+    if (!container->gameItem().isCase())
+        return {};
+
+    if (key.has_value()) {
+        if (const auto& keyItem = *key; keyItem->gameItem().isCaseKey())
+            backend.removeItem(keyItem);
+    }
+
+    auto generatedItem = ItemGenerator::generateItemFromContainer(*container);
+    backend.removeItem(container);
+    const auto receivedItem = backend.addItem(std::move(generatedItem));
+    return Response{ Response::ContainerOpened{ receivedItem } };
 }
 
 }

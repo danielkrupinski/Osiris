@@ -22,6 +22,8 @@ public:
     std::optional<Response> wearSticker(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::uint8_t slot);
     std::optional<Response> addNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag);
     std::optional<Response> removeNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item);
+    std::optional<Response> openContainer(BackendSimulator& backend, std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
+
 };
 
 }
