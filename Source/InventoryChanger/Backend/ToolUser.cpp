@@ -55,10 +55,12 @@ std::optional<Response> ToolUser::wearSticker(BackendSimulator& backend, std::li
     constexpr auto wearStep = 0.12f;
     const auto newWear = (skin->stickers[slot].wear += wearStep);
 
-    if (const auto shouldRemove = (newWear >= 1.0f + wearStep))
+    if (const auto shouldRemove = (newWear >= 1.0f + wearStep)) {
         skin->stickers[slot] = {};
+        return Response{ Response::StickerRemoved{ item, slot } };
+    }
 
-    return Response{ Response::StickerScraped{ item } };
+    return Response{ Response::StickerScraped{ item, slot } };
 }
 
 std::optional<Response> ToolUser::addNameTag(BackendSimulator& backend, std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag)
