@@ -773,19 +773,13 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    if (!optionalItem.has_value())
         return;
 
-    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
-    if (!itemView)
-        return;
+    const auto& item = *optionalItem;
 
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc || Inventory::getItem(soc->itemID) == nullptr)
-        return;
-
-    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
         if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
             event.setString("weapon", defName + 7);
     }
