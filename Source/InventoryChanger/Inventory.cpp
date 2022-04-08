@@ -173,8 +173,3 @@ private:
     std::vector<ToEquip> toEquip;
     std::vector<inventory::Item> inventory;
 };
-
-inventory::Item* Inventory::getItem(std::uint64_t itemID) noexcept
-{
-    return InventoryImpl::getItem(itemID);
-}

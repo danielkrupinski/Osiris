@@ -1238,6 +1238,7 @@ void InventoryChanger::clearInventory() noexcept
 static std::size_t lastEquippedCount = 0;
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
 {
+    /*
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
@@ -1245,6 +1246,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     const auto item = Inventory::getItem(itemID);
     if (!item)
         return;
+    */
 
     if (const auto itemOptional = inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID); itemOptional.has_value()) {
         const auto& itemIterator = *itemOptional;
@@ -1259,7 +1261,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
         }
     }
 
-
+    /*
     if (item->isCollectible() || item->isServiceMedal()) {
         if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
             if (const auto econItem = memory->getSOCData(view))
@@ -1274,6 +1276,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
         }
         ++lastEquippedCount;
     }
+    */
 }
 
 void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
