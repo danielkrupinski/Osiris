@@ -757,6 +757,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 initItemCustomizationNotification("crate_unlock", *itemID);
         }
 
+        void operator()(const Response::PatchApplied& response) const
+        {
+
+        }
+
     private:
         BackendSimulator& backend;
     };

@@ -58,6 +58,11 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator receivedItem;
     };
 
+    struct PatchApplied {
+        std::list<inventory::Item_v2>::const_iterator agentItem;
+        std::uint8_t patchSlot;
+    };
+
     std::variant<
         ItemAdded,
         ItemMovedToFront,
@@ -69,7 +74,8 @@ struct Response {
         ViewerPassActivated,
         NameTagAdded,
         NameTagRemoved,
-        ContainerOpened
+        ContainerOpened,
+        PatchApplied
     > data;
 };
 
