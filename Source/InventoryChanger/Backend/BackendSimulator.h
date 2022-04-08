@@ -86,7 +86,7 @@ public:
 
     void updateStatTrak(std::list<inventory::Item_v2>::const_iterator it, int newStatTrak)
     {
-        if (!updateStatTrak(removeConstness(it), newStatTrak))
+        if (!updateStatTrak(*removeConstness(it), newStatTrak))
             return;
 
         if (const auto itemID = getItemID(it); itemID.has_value())
@@ -170,14 +170,14 @@ private:
         return {};
     }
 
-    static bool updateStatTrak(std::list<inventory::Item_v2>::iterator item, int newStatTrak)
+    static bool updateStatTrak(inventory::Item_v2& item, int newStatTrak)
     {
-        if (const auto skin = item->get<inventory::Skin>()) {
+        if (const auto skin = item.get<inventory::Skin>()) {
             skin->statTrak = newStatTrak;
             return true;
         }
 
-        if (const auto music = item->get<inventory::Music>()) {
+        if (const auto music = item.get<inventory::Music>()) {
             music->statTrak = newStatTrak;
             return true;
         }
