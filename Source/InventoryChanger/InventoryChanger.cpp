@@ -719,6 +719,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
            
         }
         
+        void operator()(const Response::StickerRemoved& response) const
+        {
+
+        }
+
         void operator()(const Response::StatTrakUpdated& response) const
         {
             ::updateStatTrak(response.itemID, response.newStatTrakValue);

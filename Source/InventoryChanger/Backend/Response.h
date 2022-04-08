@@ -32,6 +32,11 @@ struct Response {
         std::uint8_t stickerSlot;
     };
 
+    struct StickerRemoved {
+        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::uint8_t stickerSlot;
+    };
+
     struct StatTrakUpdated {
         std::uint64_t itemID;
         int newStatTrakValue;
@@ -55,6 +60,7 @@ struct Response {
         ItemRemoved,
         StickerApplied,
         StickerScraped,
+        StickerRemoved,
         StatTrakUpdated,
         ViewerPassActivated,
         NameTagAdded,
