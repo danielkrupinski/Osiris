@@ -751,6 +751,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 updateNameTag(*itemID, "");
         }
 
+        void operator()(const Response::ContainerOpened& response) const
+        {
+
+        }
+
     private:
         BackendSimulator& backend;
     };

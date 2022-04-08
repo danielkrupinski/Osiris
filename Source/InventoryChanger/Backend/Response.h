@@ -54,6 +54,10 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator skinItem;
     };
 
+    struct ContainerOpened {
+        std::list<inventory::Item_v2>::const_iterator receivedItem;
+    };
+
     std::variant<
         ItemAdded,
         ItemMovedToFront,
@@ -64,7 +68,8 @@ struct Response {
         StatTrakUpdated,
         ViewerPassActivated,
         NameTagAdded,
-        NameTagRemoved
+        NameTagRemoved,
+        ContainerOpened
     > data;
 };
 
