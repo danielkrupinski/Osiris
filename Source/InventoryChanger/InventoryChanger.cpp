@@ -753,7 +753,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
         void operator()(const Response::ContainerOpened& response) const
         {
-
+            if (const auto itemID = backend.getItemID(response.receivedItem); itemID.has_value())
+                initItemCustomizationNotification("crate_unlock", *itemID);
         }
 
     private:
