@@ -279,7 +279,7 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
-void applyPatch(std::uint64_t itemID, int stickerID, std::uint8_t slot)
+void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
     if (!view)
@@ -294,8 +294,18 @@ void applyPatch(std::uint64_t itemID, int stickerID, std::uint8_t slot)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-    attributeSetter.setStickerID(*econItem, slot, stickerID);
+    attributeSetter.setStickerID(*econItem, slot, patchID);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
+void applyPatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
+{
+    updatePatch(itemID, patchID, slot);
+}
+
+void removePatch(std::uint64_t itemID, std::uint8_t slot)
+{
+    updatePatch(itemID, 0, slot);
 }
 
 void updateSouvenirDropsAwarded(std::uint64_t itemID, std::uint32_t dropsAwarded)
@@ -387,6 +397,12 @@ void BackendResponseHandler::operator()(const backend::Response::PatchApplied& r
             initItemCustomizationNotification("patch_apply", *itemID);
         }
     }
+}
+
+void BackendResponseHandler::operator()(const backend::Response::PatchRemoved& response) const
+{
+    if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value())
+        removePatch(*itemID, response.patchSlot);
 }
 
 void BackendResponseHandler::operator()(const backend::Response::SouvenirTokenActivated& response) const
