@@ -33,6 +33,8 @@ struct UseToolRequest {
 
 class BackendSimulator {
 public:
+    explicit BackendSimulator(const game_items::Lookup& gameItemLookup) : gameItemLookup{ gameItemLookup } {}
+
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
         return loadout;
@@ -60,7 +62,7 @@ public:
 
     [[nodiscard]] static BackendSimulator& instance()
     {
-        static BackendSimulator backendSimulator;
+        static BackendSimulator backendSimulator{ StaticData::lookup() };
         return backendSimulator;
     }
 
@@ -145,7 +147,7 @@ private:
 
         if (request.action == UseToolRequest::Action::Use) {
             if (destItem.has_value() && (*destItem)->gameItem().isCase())
-                return ToolUser{ *this, StaticData::lookup() }.openContainer(*destItem, tool);
+                return ToolUser{ *this, gameItemLookup }.openContainer(*destItem, tool);
 
             if (!tool.has_value())
                 return {};
@@ -154,26 +156,26 @@ private:
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this, StaticData::lookup() }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
+                return ToolUser{ *this, gameItemLookup }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
             } else if ((*tool)->gameItem().isOperationPass()) {
-                ToolUser{ *this, StaticData::lookup() }.activateOperationPass(*tool);
+                ToolUser{ *this, gameItemLookup }.activateOperationPass(*tool);
             } else if ((*tool)->gameItem().isViewerPass()) {
-                return ToolUser{ *this, StaticData::lookup() }.activateViewerPass(*tool);
+                return ToolUser{ *this, gameItemLookup }.activateViewerPass(*tool);
             } else if ((*tool)->gameItem().isNameTag()) {
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this, StaticData::lookup() }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
+                return ToolUser{ *this, gameItemLookup }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
             } else if ((*tool)->gameItem().isPatch()) {
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this, StaticData::lookup() }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
+                return ToolUser{ *this, gameItemLookup }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             if (!destItem.has_value())
                 return {};
-            return ToolUser{ *this, StaticData::lookup() }.wearSticker(removeConstness(*destItem), request.stickerSlot);
+            return ToolUser{ *this, gameItemLookup }.wearSticker(removeConstness(*destItem), request.stickerSlot);
         }
 
         return {};
@@ -203,6 +205,7 @@ private:
     Loadout loadout;
     std::queue<Response> responses;
     ItemIDMap itemIDMap;
+    const game_items::Lookup& gameItemLookup;
 };
 
 }
