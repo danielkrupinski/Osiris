@@ -2,6 +2,7 @@
 #include "ToolUser.h"
 
 #include <InventoryChanger/ItemGenerator.h>
+#include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend
 {
@@ -12,7 +13,7 @@ std::optional<Response> ToolUser::applySticker(std::list<inventory::Item_v2>::it
     if (!skin)
         return {};
 
-    skin->stickers[slot].stickerID = StaticData::lookup().getStorage().getStickerKit(sticker->gameItem()).id;
+    skin->stickers[slot].stickerID = gameItemLookup.getStorage().getStickerKit(sticker->gameItem()).id;
     skin->stickers[slot].wear = 0.0f;
 
     backend.moveToFront(item);
@@ -26,7 +27,7 @@ std::optional<Response> ToolUser::applyPatch(std::list<inventory::Item_v2>::iter
     if (!agent)
         return {};
 
-    agent->patches[slot].patchID = StaticData::lookup().getStorage().getPatch(patch->gameItem()).id;
+    agent->patches[slot].patchID = gameItemLookup.getStorage().getPatch(patch->gameItem()).id;
     backend.moveToFront(item);
     backend.removeItem(patch);
     return Response{ Response::PatchApplied{ item, slot } };
@@ -39,7 +40,7 @@ void ToolUser::activateOperationPass(std::list<inventory::Item_v2>::const_iterat
         return;
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
-    if (const auto operationCoin = StaticData::lookup().findItem(coinID); operationCoin.has_value()) {
+    if (const auto operationCoin = gameItemLookup.findItem(coinID); operationCoin.has_value()) {
         backend.addItem(inventory::Item_v2{ *operationCoin });
         backend.removeItem(item);
     }
@@ -52,7 +53,7 @@ std::optional<Response> ToolUser::activateViewerPass(std::list<inventory::Item_v
         return {};
 
     const auto coinID = static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1);
-    if (const auto eventCoin = StaticData::lookup().findItem(coinID); eventCoin.has_value()) {
+    if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
         const auto addedEventCoin = backend.addItem(inventory::Item_v2{ *eventCoin });
         backend.removeItem(item);
         return Response{ Response::ViewerPassActivated{ addedEventCoin } };

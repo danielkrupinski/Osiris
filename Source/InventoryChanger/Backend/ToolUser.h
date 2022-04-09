@@ -4,10 +4,13 @@
 #include <string_view>
 
 #include <InventoryChanger/Inventory/Item.h>
-#include <InventoryChanger/StaticData.h>
-#include <InventoryChanger/GameItems/Lookup.h>
 
 #include "Response.h"
+
+namespace game_items
+{
+    class Lookup;
+}
 
 namespace inventory_changer::backend
 {
@@ -16,7 +19,7 @@ class BackendSimulator;
 
 class ToolUser {
 public:
-    explicit ToolUser(BackendSimulator& backend) : backend{ backend } {}
+    explicit ToolUser(BackendSimulator& backend, const game_items::Lookup& gameItemLookup) : backend{ backend }, gameItemLookup{ gameItemLookup } {}
 
     std::optional<Response> applySticker(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
     std::optional<Response> applyPatch(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator patch, std::uint8_t slot);
@@ -29,6 +32,7 @@ public:
 
 private:
     BackendSimulator& backend;
+    const game_items::Lookup& gameItemLookup;
 };
 
 }

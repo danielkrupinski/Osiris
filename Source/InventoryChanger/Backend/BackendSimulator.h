@@ -8,6 +8,8 @@
 #include "Response.h"
 #include "ToolUser.h"
 
+#include <InventoryChanger/StaticData.h>
+
 namespace inventory_changer::backend
 {
 
@@ -143,7 +145,7 @@ private:
 
         if (request.action == UseToolRequest::Action::Use) {
             if (destItem.has_value() && (*destItem)->gameItem().isCase())
-                return ToolUser{ *this }.openContainer(*destItem, tool);
+                return ToolUser{ *this, StaticData::lookup() }.openContainer(*destItem, tool);
 
             if (!tool.has_value())
                 return {};
@@ -152,26 +154,26 @@ private:
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
+                return ToolUser{ *this, StaticData::lookup() }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
             } else if ((*tool)->gameItem().isOperationPass()) {
-                ToolUser{ *this }.activateOperationPass(*tool);
+                ToolUser{ *this, StaticData::lookup() }.activateOperationPass(*tool);
             } else if ((*tool)->gameItem().isViewerPass()) {
-                return ToolUser{ *this }.activateViewerPass(*tool);
+                return ToolUser{ *this, StaticData::lookup() }.activateViewerPass(*tool);
             } else if ((*tool)->gameItem().isNameTag()) {
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
+                return ToolUser{ *this, StaticData::lookup() }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
             } else if ((*tool)->gameItem().isPatch()) {
                 if (!destItem.has_value())
                     return {};
 
-                return ToolUser{ *this }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
+                return ToolUser{ *this, StaticData::lookup() }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             if (!destItem.has_value())
                 return {};
-            return ToolUser{ *this }.wearSticker(removeConstness(*destItem), request.stickerSlot);
+            return ToolUser{ *this, StaticData::lookup() }.wearSticker(removeConstness(*destItem), request.stickerSlot);
         }
 
         return {};

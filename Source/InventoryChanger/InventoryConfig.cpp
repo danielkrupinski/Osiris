@@ -7,6 +7,8 @@
 
 #include "Backend/BackendSimulator.h"
 
+#include "StaticData.h"
+
 constexpr auto CONFIG_VERSION = 3;
 
 [[nodiscard]] json toJson(const inventory::Skin& skin)
