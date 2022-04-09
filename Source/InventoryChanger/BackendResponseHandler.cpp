@@ -94,10 +94,9 @@ std::uint64_t createSOCItem(const inventory::Item_v2& inventoryItem, bool asUnac
         attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
     } else if (item.isGraffiti()) {
         attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
-        const auto& dynamicData = *inventoryItem.get<inventory::Graffiti>();
-        if (dynamicData.usesLeft >= 0) {
+        if (const auto graffiti = inventoryItem.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
             econItem->weaponId = WeaponId::Graffiti;
-            attributeSetter.setSpraysRemaining(*econItem, dynamicData.usesLeft);
+            attributeSetter.setSpraysRemaining(*econItem, graffiti->usesLeft);
         }
     } else if (item.isMusic()) {
         attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
@@ -327,6 +326,27 @@ void updateSouvenirDropsAwarded(std::uint64_t itemID, std::uint32_t dropsAwarded
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void graffitiUnseal(std::uint64_t itemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem || econItem->weaponId != WeaponId::SealedGraffiti)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setSpraysRemaining(*econItem, 50);
+    econItem->weaponId = WeaponId::Graffiti;
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
+
 }
 
 namespace inventory_changer
@@ -412,6 +432,14 @@ void BackendResponseHandler::operator()(const backend::Response::SouvenirTokenAc
             updateSouvenirDropsAwarded(*itemID, tournamentCoin->dropsAwarded);
             initItemCustomizationNotification("ticket_activated", *itemID);
         }
+    }
+}
+
+void BackendResponseHandler::operator()(const backend::Response::GraffitiUnsealed& response) const
+{
+    if (const auto itemID = backend.getItemID(response.graffitiItem); itemID.has_value()) {
+        graffitiUnseal(*itemID);
+        initItemCustomizationNotification("graffity_unseal", *itemID);
     }
 }
 
