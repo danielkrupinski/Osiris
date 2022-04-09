@@ -47,7 +47,6 @@
 #include "../Helpers.h"
 
 #include "StaticData.h"
-#include "ToolUser.h"
 
 #include "GameItems/Lookup.h"
 #include "Inventory/Item.h"

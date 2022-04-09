@@ -547,9 +547,6 @@
     <ClInclude Include="ProtobufReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\ToolUser.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\EconItemView.h">
       <Filter>SDK</Filter>
     </ClInclude>
