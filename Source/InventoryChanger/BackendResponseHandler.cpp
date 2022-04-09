@@ -279,6 +279,25 @@ void updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void applyPatch(std::uint64_t itemID, int stickerID, std::uint8_t slot)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setStickerID(*econItem, slot, stickerID);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 }
 
 namespace inventory_changer
@@ -339,6 +358,16 @@ void BackendResponseHandler::operator()(const backend::Response::ContainerOpened
 {
     if (const auto itemID = backend.getItemID(response.receivedItem); itemID.has_value())
         initItemCustomizationNotification("crate_unlock", *itemID);
+}
+
+void BackendResponseHandler::operator()(const backend::Response::PatchApplied& response) const
+{
+    if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value()) {
+        if (const auto agent = response.agentItem->get<inventory::Agent>()) {
+            applyPatch(*itemID, agent->patches[response.patchSlot].patchID, response.patchSlot);
+            initItemCustomizationNotification("patch_apply", *itemID);
+        }
+    }
 }
 
 }
