@@ -123,6 +123,15 @@ public:
     template <typename T>
     [[nodiscard]] const T* get() const { return data.get<T>(); }
 
+    template <typename T>
+    [[nodiscard]] T* getOrCreate()
+    {
+        if (const auto got = data.get<T>())
+            return got;
+        data = T{};
+        return data.get<T>();
+    }
+
 private:
     std::reference_wrapper<const game_items::Item> item;
     StructWrapper data;
