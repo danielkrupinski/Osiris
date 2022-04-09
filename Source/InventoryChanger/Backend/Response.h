@@ -72,6 +72,10 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator tournamentCoin;
     };
 
+    struct GraffitiUnsealed {
+        std::list<inventory::Item_v2>::const_iterator graffitiItem;
+    };
+
     std::variant<
         ItemAdded,
         ItemMovedToFront,
@@ -86,7 +90,8 @@ struct Response {
         ContainerOpened,
         PatchApplied,
         PatchRemoved,
-        SouvenirTokenActivated
+        SouvenirTokenActivated,
+        GraffitiUnsealed
     > data;
 };
 

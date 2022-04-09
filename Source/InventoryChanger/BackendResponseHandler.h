@@ -23,6 +23,7 @@ struct BackendResponseHandler {
     void operator()(const backend::Response::PatchApplied& response) const;
     void operator()(const backend::Response::PatchRemoved& response) const;
     void operator()(const backend::Response::SouvenirTokenActivated& response) const;
+    void operator()(const backend::Response::GraffitiUnsealed& response) const {}
 
 private:
     backend::BackendSimulator& backend;
