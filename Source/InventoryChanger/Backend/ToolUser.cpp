@@ -141,4 +141,19 @@ std::optional<Response> ToolUser::activateSouvenirToken(std::list<inventory::Ite
     return Response{ Response::SouvenirTokenActivated{ tournamentCoin } };
 }
 
+std::optional<Response> ToolUser::unsealGraffiti(std::list<inventory::Item_v2>::iterator item)
+{
+    if (!item->gameItem().isGraffiti())
+        return {};
+
+    const auto graffiti = item->getOrCreate<inventory::Graffiti>();
+    if (!graffiti)
+        return {};
+
+    graffiti->usesLeft = 50;
+
+    backend.moveToFront(item);
+    return Response{ Response::GraffitiUnsealed{ item } };
+}
+
 }

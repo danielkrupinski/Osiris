@@ -31,6 +31,7 @@ public:
     std::optional<Response> removeNameTag(std::list<inventory::Item_v2>::iterator item);
     std::optional<Response> openContainer(std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
     std::optional<Response> activateSouvenirToken(std::list<inventory::Item_v2>::const_iterator item, std::list<inventory::Item_v2>::iterator tournamentCoin);
+    std::optional<Response> unsealGraffiti(std::list<inventory::Item_v2>::iterator item);
 
 private:
     BackendSimulator& backend;
