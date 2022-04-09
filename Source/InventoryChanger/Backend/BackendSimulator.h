@@ -162,6 +162,11 @@ private:
                     return {};
 
                 return ToolUser{ *this }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
+            } else if ((*tool)->gameItem().isPatch()) {
+                if (!destItem.has_value())
+                    return {};
+
+                return ToolUser{ *this }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             if (!destItem.has_value())
