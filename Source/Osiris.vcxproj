@@ -129,6 +129,7 @@
     <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="InputUtil.cpp" />
+    <ClCompile Include="InventoryChanger\BackendResponseHandler.cpp" />
     <ClCompile Include="InventoryChanger\Backend\ToolUser.cpp" />
     <ClCompile Include="InventoryChanger\GameItems\Storage.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
