@@ -21,7 +21,7 @@ struct BackendResponseHandler {
     void operator()(const backend::Response::NameTagRemoved& response) const;
     void operator()(const backend::Response::ContainerOpened& response) const;
     void operator()(const backend::Response::PatchApplied& response) const;
-    void operator()(const backend::Response::SouvenirTokenActivated& response) const {}
+    void operator()(const backend::Response::SouvenirTokenActivated& response) const;
 
 private:
     backend::BackendSimulator& backend;

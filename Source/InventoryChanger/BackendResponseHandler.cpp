@@ -298,6 +298,25 @@ void applyPatch(std::uint64_t itemID, int stickerID, std::uint8_t slot)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void updateSouvenirDropsAwarded(std::uint64_t itemID, std::uint32_t dropsAwarded)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setDropsAwarded(*econItem, dropsAwarded);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 }
 
 namespace inventory_changer
@@ -366,6 +385,16 @@ void BackendResponseHandler::operator()(const backend::Response::PatchApplied& r
         if (const auto agent = response.agentItem->get<inventory::Agent>()) {
             applyPatch(*itemID, agent->patches[response.patchSlot].patchID, response.patchSlot);
             initItemCustomizationNotification("patch_apply", *itemID);
+        }
+    }
+}
+
+void BackendResponseHandler::operator()(const backend::Response::SouvenirTokenActivated& response) const
+{
+    if (const auto itemID = backend.getItemID(response.tournamentCoin); itemID.has_value()) {
+        if (const auto tournamentCoin = response.tournamentCoin->get<inventory::TournamentCoin>()) {
+            updateSouvenirDropsAwarded(*itemID, tournamentCoin->dropsAwarded);
+            initItemCustomizationNotification("ticket_activated", *itemID);
         }
     }
 }
