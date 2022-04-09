@@ -76,6 +76,10 @@ struct Response {
         std::list<inventory::Item_v2>::const_iterator graffitiItem;
     };
 
+    struct StatTrakSwapped {
+        std::list<inventory::Item_v2>::const_iterator swapDestinationItem;
+    };
+
     std::variant<
         ItemAdded,
         ItemMovedToFront,
@@ -91,7 +95,8 @@ struct Response {
         PatchApplied,
         PatchRemoved,
         SouvenirTokenActivated,
-        GraffitiUnsealed
+        GraffitiUnsealed,
+        StatTrakSwapped
     > data;
 };
 

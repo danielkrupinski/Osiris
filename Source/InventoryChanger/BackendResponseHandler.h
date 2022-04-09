@@ -24,6 +24,7 @@ struct BackendResponseHandler {
     void operator()(const backend::Response::PatchRemoved& response) const;
     void operator()(const backend::Response::SouvenirTokenActivated& response) const;
     void operator()(const backend::Response::GraffitiUnsealed& response) const {}
+    void operator()(const backend::Response::StatTrakSwapped& response) const {}
 
 private:
     backend::BackendSimulator& backend;
