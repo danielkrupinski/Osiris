@@ -219,6 +219,25 @@ void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
     initItemCustomizationNotification("sticker_apply", itemID);
 }
 
+void removeSticker(std::uint64_t itemID, std::uint8_t slot)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setStickerID(*econItem, slot, 0);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 void updateNameTag(std::uint64_t itemID, const char* newNameTag)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
@@ -374,6 +393,12 @@ void BackendResponseHandler::operator()(const backend::Response::StickerApplied&
         if (const auto skin = response.skinItem->get<inventory::Skin>())
             applySticker(*itemID, skin->stickers[response.stickerSlot].stickerID, response.stickerSlot);
     }
+}
+
+void BackendResponseHandler::operator()(const backend::Response::StickerRemoved& response) const
+{
+    if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
+        removeSticker(*itemID, response.stickerSlot);
 }
 
 void BackendResponseHandler::operator()(const backend::Response::StatTrakUpdated& response) const
