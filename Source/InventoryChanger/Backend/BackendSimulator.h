@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <queue>
 #include <variant>
 
@@ -75,7 +76,7 @@ public:
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());
-        responses.emplace(Response::ItemAdded{ added });
+        responses.emplace(std::chrono::high_resolution_clock::now(), Response::ItemAdded{ added });
         return added;
     }
 
@@ -84,7 +85,7 @@ public:
         const auto itemID = itemIDMap.remove(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
-            responses.emplace(Response::ItemRemoved{ *itemID });
+            responses.emplace(std::chrono::high_resolution_clock::now(), Response::ItemRemoved{ *itemID });
         return newIterator;
     }
 
@@ -94,14 +95,14 @@ public:
             return;
 
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responses.emplace(Response::StatTrakUpdated{ *itemID, newStatTrak });
+            responses.emplace(std::chrono::high_resolution_clock::now(), Response::StatTrakUpdated{ *itemID, newStatTrak });
     }
 
     void moveToFront(std::list<inventory::Item_v2>::const_iterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responses.emplace(Response::ItemMovedToFront{ *itemID });
+            responses.emplace(std::chrono::high_resolution_clock::now(), Response::ItemMovedToFront{ *itemID });
     }
 
     void assignItemID(std::list<inventory::Item_v2>::const_iterator it, std::uint64_t itemID)
@@ -127,14 +128,17 @@ public:
     void useTool(const UseToolRequest& request)
     {
         if (const auto response = processUseToolRequest(request); response.has_value())
-            responses.push(*response);
+            responses.emplace(std::chrono::high_resolution_clock::now(), *response);
     }
 
     template <typename Visitor>
     void run(Visitor visitor)
     {
         while (!responses.empty()) {
-            std::visit(visitor, responses.front().data);
+            const auto& [timestamp, response] = responses.front();
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timestamp) < std::chrono::milliseconds(200))
+                break;
+            std::visit(visitor, response.data);
             responses.pop();
         }
     }
@@ -205,7 +209,7 @@ private:
 
     std::list<inventory::Item_v2> inventory;
     Loadout loadout;
-    std::queue<Response> responses;
+    std::queue<std::pair<std::chrono::time_point<std::chrono::high_resolution_clock>, Response>> responses;
     ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
 };
