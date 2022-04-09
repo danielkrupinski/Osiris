@@ -33,6 +33,17 @@ std::optional<Response> ToolUser::applyPatch(std::list<inventory::Item_v2>::iter
     return Response{ Response::PatchApplied{ item, slot } };
 }
 
+std::optional<Response> ToolUser::removePatch(std::list<inventory::Item_v2>::iterator item, std::uint8_t slot)
+{
+    const auto agent = item->get<inventory::Agent>();
+    if (!agent)
+        return {};
+
+    agent->patches[slot].patchID = 0;
+    backend.moveToFront(item);
+    return Response{ Response::PatchRemoved{ item, slot } };
+}
+
 void ToolUser::activateOperationPass(std::list<inventory::Item_v2>::const_iterator item)
 {
     const auto& gameItem = item->gameItem();
