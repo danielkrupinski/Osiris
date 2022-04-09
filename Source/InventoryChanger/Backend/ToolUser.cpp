@@ -20,6 +20,18 @@ std::optional<Response> ToolUser::applySticker(std::list<inventory::Item_v2>::it
     return Response{ Response::StickerApplied{ item, slot } };
 }
 
+std::optional<Response> ToolUser::applyPatch(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator patch, std::uint8_t slot)
+{
+    const auto agent = item->getOrCreate<inventory::Agent>();
+    if (!agent)
+        return {};
+
+    agent->patches[slot].patchID = StaticData::lookup().getStorage().getPatch(patch->gameItem()).id;
+    backend.moveToFront(item);
+    backend.removeItem(patch);
+    return Response{ Response::PatchApplied{ item, slot } };
+}
+
 void ToolUser::activateOperationPass(std::list<inventory::Item_v2>::const_iterator item)
 {
     const auto& gameItem = item->gameItem();

@@ -19,6 +19,7 @@ public:
     explicit ToolUser(BackendSimulator& backend) : backend{ backend } {}
 
     std::optional<Response> applySticker(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator sticker, std::uint8_t slot);
+    std::optional<Response> applyPatch(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator patch, std::uint8_t slot);
     void activateOperationPass(std::list<inventory::Item_v2>::const_iterator item);
     std::optional<Response> activateViewerPass(std::list<inventory::Item_v2>::const_iterator item);
     std::optional<Response> wearSticker(std::list<inventory::Item_v2>::iterator item, std::uint8_t slot);
