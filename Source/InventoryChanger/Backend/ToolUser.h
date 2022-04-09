@@ -29,6 +29,7 @@ public:
     std::optional<Response> addNameTag(std::list<inventory::Item_v2>::iterator item, std::list<inventory::Item_v2>::const_iterator nameTagItem, std::string_view nameTag);
     std::optional<Response> removeNameTag(std::list<inventory::Item_v2>::iterator item);
     std::optional<Response> openContainer(std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
+    std::optional<Response> activateSouvenirToken(std::list<inventory::Item_v2>::const_iterator item, std::list<inventory::Item_v2>::iterator tournamentCoin);
 
 private:
     BackendSimulator& backend;

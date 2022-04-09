@@ -116,4 +116,18 @@ std::optional<Response> ToolUser::openContainer(std::list<inventory::Item_v2>::c
     return Response{ Response::ContainerOpened{ receivedItem } };
 }
 
+std::optional<Response> ToolUser::activateSouvenirToken(std::list<inventory::Item_v2>::const_iterator item, std::list<inventory::Item_v2>::iterator tournamentCoin)
+{
+    if (!item->gameItem().isSouvenirToken())
+        return {};
+
+    const auto tournamentCoinData = tournamentCoin->get<inventory::TournamentCoin>();
+    if (!tournamentCoinData)
+        return {};
+
+    ++tournamentCoinData->dropsAwarded;
+    backend.removeItem(item);
+    return Response{ Response::SouvenirTokenActivated{ tournamentCoin } };
+}
+
 }
