@@ -77,6 +77,7 @@ struct Response {
     };
 
     struct StatTrakSwapped {
+        std::list<inventory::Item_v2>::const_iterator swapSourceItem;
         std::list<inventory::Item_v2>::const_iterator swapDestinationItem;
     };
 

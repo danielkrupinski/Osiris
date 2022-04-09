@@ -173,7 +173,7 @@ std::optional<Response> ToolUser::swapStatTrak(std::list<inventory::Item_v2>::it
     backend.removeItem(statTrakSwapTool);
     backend.moveToFront(itemFrom);
     backend.moveToFront(itemTo);
-    return Response{ Response::StatTrakSwapped{ itemTo } };
+    return Response{ Response::StatTrakSwapped{ itemFrom, itemTo } };
 }
 
 }
