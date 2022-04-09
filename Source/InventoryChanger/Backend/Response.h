@@ -63,6 +63,11 @@ struct Response {
         std::uint8_t patchSlot;
     };
 
+    struct PatchRemoved {
+        std::list<inventory::Item_v2>::const_iterator agentItem;
+        std::uint8_t patchSlot;
+    };
+
     struct SouvenirTokenActivated {
         std::list<inventory::Item_v2>::const_iterator tournamentCoin;
     };
@@ -80,6 +85,7 @@ struct Response {
         NameTagRemoved,
         ContainerOpened,
         PatchApplied,
+        PatchRemoved,
         SouvenirTokenActivated
     > data;
 };
