@@ -32,6 +32,7 @@ public:
     std::optional<Response> openContainer(std::list<inventory::Item_v2>::const_iterator item, std::optional<std::list<inventory::Item_v2>::const_iterator> key);
     std::optional<Response> activateSouvenirToken(std::list<inventory::Item_v2>::const_iterator item, std::list<inventory::Item_v2>::iterator tournamentCoin);
     std::optional<Response> unsealGraffiti(std::list<inventory::Item_v2>::iterator item);
+    std::optional<Response> swapStatTrak(std::list<inventory::Item_v2>::iterator itemFrom, std::list<inventory::Item_v2>::iterator itemTo, std::list<inventory::Item_v2>::const_iterator statTrakSwapTool);
 
 private:
     BackendSimulator& backend;

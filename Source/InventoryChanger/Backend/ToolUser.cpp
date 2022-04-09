@@ -156,4 +156,24 @@ std::optional<Response> ToolUser::unsealGraffiti(std::list<inventory::Item_v2>::
     return Response{ Response::GraffitiUnsealed{ item } };
 }
 
+std::optional<Response> ToolUser::swapStatTrak(std::list<inventory::Item_v2>::iterator itemFrom, std::list<inventory::Item_v2>::iterator itemTo, std::list<inventory::Item_v2>::const_iterator statTrakSwapTool)
+{
+    if (!(itemFrom->gameItem().isSkin() && itemTo->gameItem().isSkin() && statTrakSwapTool->gameItem().isStatTrakSwapTool()))
+        return {};
+
+    const auto skinFrom = itemFrom->get<inventory::Skin>();
+    if (!skinFrom)
+        return {};
+
+    const auto skinTo = itemFrom->get<inventory::Skin>();
+    if (!skinTo)
+        return {};
+
+    std::swap(skinFrom->statTrak, skinTo->statTrak);
+    backend.removeItem(statTrakSwapTool);
+    backend.moveToFront(itemFrom);
+    backend.moveToFront(itemTo);
+    return Response{ Response::StatTrakSwapped{ itemTo } };
+}
+
 }
