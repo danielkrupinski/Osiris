@@ -171,6 +171,8 @@ private:
                     return {};
 
                 return ToolUser{ *this, gameItemLookup }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
+            } else if ((*tool)->gameItem().isGraffiti()) {
+                return ToolUser{ *this, gameItemLookup }.unsealGraffiti(removeConstness(*tool));
             }
         } else if (request.action == UseToolRequest::Action::WearSticker) {
             if (!destItem.has_value())
