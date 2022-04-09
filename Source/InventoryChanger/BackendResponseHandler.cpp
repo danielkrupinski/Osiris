@@ -443,4 +443,33 @@ void BackendResponseHandler::operator()(const backend::Response::GraffitiUnseale
     }
 }
 
+void BackendResponseHandler::operator()(const backend::Response::StatTrakSwapped& response) const
+{
+    const auto sourceItemID = backend.getItemID(response.swapSourceItem);
+    if (!sourceItemID.has_value())
+        return;
+
+    const auto destinationItemID = backend.getItemID(response.swapDestinationItem);
+    if (!destinationItemID.has_value())
+        return;
+
+    const auto sourceSkin = response.swapSourceItem->get<inventory::Skin>();
+    if (!sourceSkin)
+        return;
+
+    const auto destinationSkin = response.swapDestinationItem->get<inventory::Skin>();
+    if (!destinationSkin)
+        return;
+
+    updateStatTrak(*sourceItemID, sourceSkin->statTrak);
+    updateStatTrak(*destinationItemID, destinationSkin->statTrak);
+
+    if (const auto inventoryComponent = *memory->uiComponentInventory) {
+        memory->setItemSessionPropertyValue(inventoryComponent, *sourceItemID, "updated", "1");
+        memory->setItemSessionPropertyValue(inventoryComponent, *destinationItemID, "updated", "1");
+    }
+
+    initItemCustomizationNotification("stattrack_swap", *destinationItemID);
+}
+
 }
