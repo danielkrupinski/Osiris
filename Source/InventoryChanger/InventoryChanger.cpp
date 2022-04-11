@@ -162,7 +162,7 @@ static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcep
 {
     const auto localXuid = local->getSteamId();
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), local->getTeamNumber(), 0);
     if (!optionalItem.has_value())
         return;
 
