@@ -9,6 +9,8 @@
 
 #include "StaticData.h"
 
+#include "BackendResponseHandler.h"
+
 constexpr auto CONFIG_VERSION = 3;
 
 [[nodiscard]] json toJson(const inventory::Skin& skin)
@@ -304,5 +306,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
 void InventoryChanger::resetConfig() noexcept
 {
-    inventory_changer::backend::BackendSimulator::instance().clearInventory();
+    auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    backend.clearInventory();
+    backend.run(inventory_changer::BackendResponseHandler{ backend }, std::chrono::milliseconds{ 0 });
 }
