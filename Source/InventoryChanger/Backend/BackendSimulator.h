@@ -132,11 +132,11 @@ public:
     }
 
     template <typename Visitor>
-    void run(Visitor visitor)
+    void run(Visitor visitor, std::chrono::milliseconds delay)
     {
         while (!responses.empty()) {
             const auto& [timestamp, response] = responses.front();
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timestamp) < std::chrono::milliseconds(200))
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timestamp) < delay)
                 break;
             std::visit(visitor, response.data);
             responses.pop();
