@@ -72,10 +72,10 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            const auto& dynamicData = *item.get<inventory::Glove>();
-
-            itemConfig["Wear"] = dynamicData.wear;
-            itemConfig["Seed"] = dynamicData.seed;
+            if (const auto glove = item.get<inventory::Glove>()) {
+                itemConfig["Wear"] = glove->wear;
+                itemConfig["Seed"] = glove->seed;
+            }
         } else if (gameItem.isSkin()) {
             const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
@@ -86,39 +86,40 @@ json InventoryChanger::toJson() noexcept
 
         } else if (gameItem.isMusic()) {
             itemConfig["Music ID"] = StaticData::lookup().getStorage().getMusicKit(gameItem).id;
-            if (const auto& dynamicData = *item.get<inventory::Music>(); dynamicData.statTrak > -1)
-                itemConfig["StatTrak"] = dynamicData.statTrak;
+            if (const auto music = item.get<inventory::Music>(); music && music->statTrak > -1)
+                itemConfig["StatTrak"] = music->statTrak;
         } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
-            if (const auto& dynamicData = *item.get<inventory::Graffiti>(); dynamicData.usesLeft >= 0) {
-                itemConfig["Uses Left"] = dynamicData.usesLeft;
+            if (const auto graffiti = item.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
+                itemConfig["Uses Left"] = graffiti->usesLeft;
                 itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
-            const auto& dynamicData = *item.get<inventory::Agent>();
-            auto& stickers = itemConfig["Patches"];
-            for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
-                const auto& patch = dynamicData.patches[i];
-                if (patch.patchID == 0)
-                    continue;
+            if (const auto agent = item.get<inventory::Agent>()) {
+                auto& stickers = itemConfig["Patches"];
+                for (std::size_t i = 0; i < agent->patches.size(); ++i) {
+                    const auto& patch = agent->patches[i];
+                    if (patch.patchID == 0)
+                        continue;
 
-                json patchConfig;
-                patchConfig["Patch ID"] = patch.patchID;
-                patchConfig["Slot"] = i;
-                stickers.push_back(std::move(patchConfig));
+                    json patchConfig;
+                    patchConfig["Patch ID"] = patch.patchID;
+                    patchConfig["Slot"] = i;
+                    stickers.push_back(std::move(patchConfig));
+                }
             }
         } else if (gameItem.isServiceMedal()) {
-            if (const auto& dynamicData = *item.get<inventory::ServiceMedal>(); dynamicData.issueDateTimestamp != 0)
-                itemConfig["Issue Date Timestamp"] = dynamicData.issueDateTimestamp;
+            if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
+                itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
         } else if (gameItem.isCase()) {
             if (StaticData::isSouvenirPackage(gameItem)) {
-                if (const auto& dynamicData = *item.get<inventory::SouvenirPackage>(); dynamicData.tournamentStage != TournamentStage{}) {
-                    itemConfig["Tournament Stage"] = dynamicData.tournamentStage;
-                    itemConfig["Tournament Team 1"] = dynamicData.tournamentTeam1;
-                    itemConfig["Tournament Team 2"] = dynamicData.tournamentTeam2;
-                    itemConfig["Tournament Player"] = dynamicData.proPlayer;
+                if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+                    itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
+                    itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
+                    itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
+                    itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
                 }
             }
         }
