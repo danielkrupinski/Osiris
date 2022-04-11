@@ -100,9 +100,8 @@ std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnackno
         }
     } else if (item.isMusic()) {
         attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
-        const auto& dynamicData = *inventoryItem.get<inventory::Music>();
-        if (dynamicData.statTrak > -1) {
-            attributeSetter.setStatTrak(*econItem, dynamicData.statTrak);
+        if (const auto music = inventoryItem.get<inventory::Music>(); music && music->statTrak > -1) {
+            attributeSetter.setStatTrak(*econItem, music->statTrak);
             attributeSetter.setStatTrakType(*econItem, 1);
             econItem->quality = 9;
         }
