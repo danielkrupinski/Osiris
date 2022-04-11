@@ -41,7 +41,7 @@ public:
         return loadout;
     }
 
-    [[nodiscard]] const std::list<inventory::Item_v2>& getInventory() const noexcept
+    [[nodiscard]] const std::list<inventory::Item>& getInventory() const noexcept
     {
         return inventory;
     }
@@ -72,7 +72,7 @@ public:
         inventory.clear();
     }
 
-    std::list<inventory::Item_v2>::const_iterator addItem(inventory::Item_v2 item)
+    std::list<inventory::Item>::const_iterator addItem(inventory::Item item)
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());
@@ -80,7 +80,7 @@ public:
         return added;
     }
 
-    std::list<inventory::Item_v2>::const_iterator removeItem(std::list<inventory::Item_v2>::const_iterator it)
+    std::list<inventory::Item>::const_iterator removeItem(std::list<inventory::Item>::const_iterator it)
     {
         const auto itemID = itemIDMap.remove(it);
         const auto newIterator = inventory.erase(it);
@@ -89,7 +89,7 @@ public:
         return newIterator;
     }
 
-    void updateStatTrak(std::list<inventory::Item_v2>::const_iterator it, int newStatTrak)
+    void updateStatTrak(std::list<inventory::Item>::const_iterator it, int newStatTrak)
     {
         if (!updateStatTrak(*removeConstness(it), newStatTrak))
             return;
@@ -98,14 +98,14 @@ public:
             responses.emplace(std::chrono::high_resolution_clock::now(), Response::StatTrakUpdated{ *itemID, newStatTrak });
     }
 
-    void moveToFront(std::list<inventory::Item_v2>::const_iterator it)
+    void moveToFront(std::list<inventory::Item>::const_iterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         if (const auto itemID = getItemID(it); itemID.has_value())
             responses.emplace(std::chrono::high_resolution_clock::now(), Response::ItemMovedToFront{ *itemID });
     }
 
-    void assignItemID(std::list<inventory::Item_v2>::const_iterator it, std::uint64_t itemID)
+    void assignItemID(std::list<inventory::Item>::const_iterator it, std::uint64_t itemID)
     {
         itemIDMap.add(itemID, it);
     }
@@ -115,12 +115,12 @@ public:
         itemIDMap.update(oldItemID, newItemID);
     }
 
-    [[nodiscard]] std::optional<std::list<inventory::Item_v2>::const_iterator> itemFromID(std::uint64_t itemID) const
+    [[nodiscard]] std::optional<std::list<inventory::Item>::const_iterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item_v2>::const_iterator it) const
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item>::const_iterator it) const
     {
         return itemIDMap.getItemID(it);
     }
@@ -187,7 +187,7 @@ private:
         return {};
     }
 
-    static bool updateStatTrak(inventory::Item_v2& item, int newStatTrak)
+    static bool updateStatTrak(inventory::Item& item, int newStatTrak)
     {
         if (const auto skin = item.get<inventory::Skin>()) {
             skin->statTrak = newStatTrak;
@@ -202,12 +202,12 @@ private:
         return false;
     }
 
-    [[nodiscard]] std::list<inventory::Item_v2>::iterator removeConstness(std::list<inventory::Item_v2>::const_iterator it)
+    [[nodiscard]] std::list<inventory::Item>::iterator removeConstness(std::list<inventory::Item>::const_iterator it)
     {
         return inventory.erase(it, it);
     }
 
-    std::list<inventory::Item_v2> inventory;
+    std::list<inventory::Item> inventory;
     Loadout loadout;
     std::queue<std::pair<std::chrono::time_point<std::chrono::high_resolution_clock>, Response>> responses;
     ItemIDMap itemIDMap;

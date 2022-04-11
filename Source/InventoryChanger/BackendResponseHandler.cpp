@@ -9,7 +9,7 @@
 namespace
 {
 
-void initSkinEconItem(const inventory::Item_v2& inventoryItem, EconItem& econItem) noexcept
+void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
@@ -63,7 +63,7 @@ void initSkinEconItem(const inventory::Item_v2& inventoryItem, EconItem& econIte
     }
 }
 
-std::uint64_t createSOCItem(const inventory::Item_v2& inventoryItem, bool asUnacknowledged)
+std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)

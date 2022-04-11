@@ -296,7 +296,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const game_items::Item& item = itemOptional->get();
-        inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ item, itemFromJson(item, jsonItem) });
+        inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item{ item, itemFromJson(item, jsonItem) });
     }
 
     loadEquipmentFromJson(j);

@@ -11,7 +11,7 @@ namespace inventory_changer::backend
 
 struct Response {
     struct ItemAdded {
-        std::list<inventory::Item_v2>::const_iterator item;
+        std::list<inventory::Item>::const_iterator item;
     };
 
     struct ItemMovedToFront {
@@ -23,17 +23,17 @@ struct Response {
     };
 
     struct StickerApplied {
-        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::list<inventory::Item>::const_iterator skinItem;
         std::uint8_t stickerSlot;
     };
 
     struct StickerScraped {
-        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::list<inventory::Item>::const_iterator skinItem;
         std::uint8_t stickerSlot;
     };
 
     struct StickerRemoved {
-        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::list<inventory::Item>::const_iterator skinItem;
         std::uint8_t stickerSlot;
     };
 
@@ -43,42 +43,42 @@ struct Response {
     };
 
     struct ViewerPassActivated {
-        std::list<inventory::Item_v2>::const_iterator createdEventCoin;
+        std::list<inventory::Item>::const_iterator createdEventCoin;
     };
 
     struct NameTagAdded {
-        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::list<inventory::Item>::const_iterator skinItem;
     };
 
     struct NameTagRemoved {
-        std::list<inventory::Item_v2>::const_iterator skinItem;
+        std::list<inventory::Item>::const_iterator skinItem;
     };
 
     struct ContainerOpened {
-        std::list<inventory::Item_v2>::const_iterator receivedItem;
+        std::list<inventory::Item>::const_iterator receivedItem;
     };
 
     struct PatchApplied {
-        std::list<inventory::Item_v2>::const_iterator agentItem;
+        std::list<inventory::Item>::const_iterator agentItem;
         std::uint8_t patchSlot;
     };
 
     struct PatchRemoved {
-        std::list<inventory::Item_v2>::const_iterator agentItem;
+        std::list<inventory::Item>::const_iterator agentItem;
         std::uint8_t patchSlot;
     };
 
     struct SouvenirTokenActivated {
-        std::list<inventory::Item_v2>::const_iterator tournamentCoin;
+        std::list<inventory::Item>::const_iterator tournamentCoin;
     };
 
     struct GraffitiUnsealed {
-        std::list<inventory::Item_v2>::const_iterator graffitiItem;
+        std::list<inventory::Item>::const_iterator graffitiItem;
     };
 
     struct StatTrakSwapped {
-        std::list<inventory::Item_v2>::const_iterator swapSourceItem;
-        std::list<inventory::Item_v2>::const_iterator swapDestinationItem;
+        std::list<inventory::Item>::const_iterator swapSourceItem;
+        std::list<inventory::Item>::const_iterator swapDestinationItem;
     };
 
     std::variant<

@@ -62,7 +62,7 @@ static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>
     for (const auto item : order) {
         if (const auto count = toAdd.find(item); count != toAdd.end()) {
             for (int i = 0; i < count->second; ++i)
-                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item_v2{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
+                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
         }
     }
 }
@@ -88,7 +88,7 @@ static Entity* createGlove(int entry, int serial) noexcept
     return nullptr;
 }
 
-static std::optional<std::list<inventory::Item_v2>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
+static std::optional<std::list<inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
 {
     switch (team) {
     case Team::None: return loadout.getItemInSlotNoTeam(slot);
