@@ -210,6 +210,7 @@
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\Response.h" />
+    <ClInclude Include="InventoryChanger\Backend\ResponseQueue.h" />
     <ClInclude Include="InventoryChanger\Backend\ToolUser.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
