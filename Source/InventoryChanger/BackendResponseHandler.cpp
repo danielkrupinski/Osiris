@@ -111,9 +111,10 @@ std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnackno
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
 
-        const auto& dynamicData = *inventoryItem.get<inventory::Glove>();
-        attributeSetter.setWear(*econItem, dynamicData.wear);
-        attributeSetter.setSeed(*econItem, static_cast<float>(dynamicData.seed));
+        if (const auto glove = inventoryItem.get<inventory::Glove>()) {
+            attributeSetter.setWear(*econItem, glove->wear);
+            attributeSetter.setSeed(*econItem, static_cast<float>(glove->seed));
+        }
     } else if (item.isCollectible()) {
         if (storage.isCollectibleGenuine(item))
             econItem->quality = 1;
@@ -128,19 +129,19 @@ std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnackno
             }
         }
     } else if (item.isServiceMedal()) {
-        if (const auto& dynamicData = *inventoryItem.get<inventory::ServiceMedal>(); dynamicData.issueDateTimestamp != 0)
-            attributeSetter.setIssueDate(*econItem, dynamicData.issueDateTimestamp);
+        if (const auto serviceMedal = inventoryItem.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
+            attributeSetter.setIssueDate(*econItem, serviceMedal->issueDateTimestamp);
     } else if (item.isTournamentCoin()) {
         if (const auto tournamentCoin = inventoryItem.get<inventory::TournamentCoin>())
             attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
     } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
-        if (const auto& dynamicData = *inventoryItem.get<inventory::SouvenirPackage>(); dynamicData.tournamentStage != TournamentStage{ 0 }) {
-            attributeSetter.setTournamentStage(*econItem, static_cast<int>(dynamicData.tournamentStage));
-            attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(dynamicData.tournamentTeam1));
-            attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(dynamicData.tournamentTeam2));
-            if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
-                attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(dynamicData.proPlayer));
+        if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
+            attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
+            attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(souvenirPackage->tournamentTeam1));
+            attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(souvenirPackage->tournamentTeam2));
+            if (souvenirPackage->proPlayer != static_cast<ProPlayer>(0))
+                attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
     }
 
