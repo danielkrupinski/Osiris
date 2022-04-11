@@ -62,7 +62,7 @@ static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>
     for (const auto item : order) {
         if (const auto count = toAdd.find(item); count != toAdd.end()) {
             for (int i = 0; i < count->second; ++i)
-                inventory_changer::backend::BackendSimulator::instance().addItem(inventory::Item{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
+                inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory::Item{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
         }
     }
 }

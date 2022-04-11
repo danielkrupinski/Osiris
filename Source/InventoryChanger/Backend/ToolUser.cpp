@@ -52,7 +52,7 @@ void ToolUser::activateOperationPass(std::list<inventory::Item>::const_iterator 
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
     if (const auto operationCoin = gameItemLookup.findItem(coinID); operationCoin.has_value()) {
-        backend.addItem(inventory::Item{ *operationCoin });
+        backend.addItemUnacknowledged(inventory::Item{ *operationCoin });
         backend.removeItem(item);
     }
 }
@@ -65,7 +65,7 @@ std::optional<Response> ToolUser::activateViewerPass(std::list<inventory::Item>:
 
     const auto coinID = static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1);
     if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
-        const auto addedEventCoin = backend.addItem(inventory::Item{ *eventCoin });
+        const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin });
         backend.removeItem(item);
         return Response{ Response::ViewerPassActivated{ addedEventCoin } };
     }
@@ -123,7 +123,7 @@ std::optional<Response> ToolUser::openContainer(std::list<inventory::Item>::cons
 
     auto generatedItem = ItemGenerator::generateItemFromContainer(*container);
     backend.removeItem(container);
-    const auto receivedItem = backend.addItem(std::move(generatedItem));
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(generatedItem));
     return Response{ Response::ContainerOpened{ receivedItem } };
 }
 

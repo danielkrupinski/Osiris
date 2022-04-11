@@ -74,12 +74,14 @@ public:
             it = removeItem(it);
     }
 
-    std::list<inventory::Item>::const_iterator addItem(inventory::Item item)
+    std::list<inventory::Item>::const_iterator addItemUnacknowledged(inventory::Item item)
     {
-        inventory.push_back(std::move(item));
-        const auto added = std::prev(inventory.end());
-        responseQueue.add(Response{ Response::ItemAdded{ added } });
-        return added;
+        return addItem(std::move(item), true);
+    }
+
+    std::list<inventory::Item>::const_iterator addItemAcknowledged(inventory::Item item)
+    {
+        return addItem(std::move(item), false);
     }
 
     std::list<inventory::Item>::const_iterator removeItem(std::list<inventory::Item>::const_iterator it)
@@ -140,6 +142,14 @@ public:
     }
 
 private:
+    std::list<inventory::Item>::const_iterator addItem(inventory::Item item, bool asUnacknowledged)
+    {
+        inventory.push_back(std::move(item));
+        const auto added = std::prev(inventory.end());
+        responseQueue.add(Response{ Response::ItemAdded{ added, asUnacknowledged } });
+        return added;
+    }
+
     std::optional<Response> processUseToolRequest(const UseToolRequest& request)
     {
         const auto destItem = itemIDMap.get(request.destItemID);
