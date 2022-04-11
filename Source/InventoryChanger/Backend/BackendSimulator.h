@@ -70,7 +70,8 @@ public:
 
     void clearInventory()
     {
-        inventory.clear();
+        for (auto it = inventory.cbegin(); it != inventory.cend();)
+            it = removeItem(it);
     }
 
     std::list<inventory::Item>::const_iterator addItem(inventory::Item item)
