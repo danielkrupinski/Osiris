@@ -13,7 +13,7 @@ class ResponseQueue {
 public:
     void add(const Response& response)
     {
-        responses.emplace(std::chrono::high_resolution_clock::now(), response);
+        responses.emplace(Clock::now(), response);
     }
 
     template <typename Visitor>
@@ -21,7 +21,7 @@ public:
     {
         while (!responses.empty()) {
             const auto& [timestamp, response] = responses.front();
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timestamp) < delay)
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - timestamp) < delay)
                 break;
             std::visit(visitor, response.data);
             responses.pop();
@@ -29,7 +29,8 @@ public:
     }
 
 private:
-    std::queue<std::pair<std::chrono::time_point<std::chrono::high_resolution_clock>, Response>> responses;
+    using Clock = std::chrono::high_resolution_clock;
+    std::queue<std::pair<Clock::time_point, Response>> responses;
 };
 
 }
