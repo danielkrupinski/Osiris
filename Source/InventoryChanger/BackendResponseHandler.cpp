@@ -424,8 +424,10 @@ void BackendResponseHandler::operator()(const backend::Response::StickerScraped&
 
 void BackendResponseHandler::operator()(const backend::Response::StickerRemoved& response) const
 {
-    if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
+    if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
         removeSticker(*itemID, response.stickerSlot);
+        initItemCustomizationNotification("sticker_remove", *itemID);
+    }
 }
 
 void BackendResponseHandler::operator()(const backend::Response::StatTrakUpdated& response) const
