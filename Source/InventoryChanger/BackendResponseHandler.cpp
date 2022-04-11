@@ -392,7 +392,7 @@ namespace inventory_changer
 
 void BackendResponseHandler::operator()(const backend::Response::ItemAdded& response) const
 {
-    const auto itemID = createSOCItem(*response.item, true);
+    const auto itemID = createSOCItem(*response.item, response.asUnacknowledged);
     backend.assignItemID(response.item, itemID);
 }
 

@@ -12,6 +12,7 @@ namespace inventory_changer::backend
 struct Response {
     struct ItemAdded {
         std::list<inventory::Item>::const_iterator item;
+        bool asUnacknowledged;
     };
 
     struct ItemMovedToFront {
