@@ -27,6 +27,13 @@ public:
         noTeam[slot] = index;
     }
 
+    void unequipItem(InventoryItemIndex item)
+    {
+        eraseItemFromMaps(item, ct, ctReversed);
+        eraseItemFromMaps(item, tt, ttReversed);
+        eraseItemFromMaps(item, noTeam, noTeamReversed);
+    }
+
     [[nodiscard]] std::optional<InventoryItemIndex> getItemInSlotCT(Slot slot) const
     {
         if (const auto it = ct.find(slot); it != ct.end())
@@ -49,9 +56,30 @@ public:
     }
 
 private:
-    std::unordered_map<Slot, InventoryItemIndex> ct;
-    std::unordered_map<Slot, InventoryItemIndex> tt;
-    std::unordered_map<Slot, InventoryItemIndex> noTeam;
+    struct ItemIteratorHasher {
+        [[nodiscard]] std::size_t operator()(std::list<inventory::Item>::const_iterator iterator) const noexcept
+        {
+            return std::hash<const inventory::Item*>{}(std::to_address(iterator));
+        }
+    };
+
+    using SlotToItem = std::unordered_map<Slot, InventoryItemIndex>;
+    using ItemToSlot = std::unordered_map<InventoryItemIndex, Slot, ItemIteratorHasher>;
+
+    static void eraseItemFromMaps(InventoryItemIndex item, SlotToItem& slotToItemMap, ItemToSlot& itemToSlotMap)
+    {
+        if (const auto it = itemToSlotMap.find(item); it != itemToSlotMap.end()) {
+            slotToItemMap.erase(it->second);
+            itemToSlotMap.erase(it);
+        }
+    }
+
+    SlotToItem ct;
+    ItemToSlot ctReversed;
+    SlotToItem tt;
+    ItemToSlot ttReversed;
+    SlotToItem noTeam;
+    ItemToSlot noTeamReversed;
 };
 
 }
