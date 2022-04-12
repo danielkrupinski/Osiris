@@ -15,16 +15,19 @@ public:
     void equipItemCT(InventoryItemIndex index, Slot slot)
     {
         ct[slot] = index;
+        ctReversed[index] = slot;
     }
 
     void equipItemTT(InventoryItemIndex index, Slot slot)
     {
         tt[slot] = index;
+        ttReversed[index] = slot;
     }
 
     void equipItemNoTeam(InventoryItemIndex index, Slot slot)
     {
         noTeam[slot] = index;
+        noTeamReversed[index] = slot;
     }
 
     void unequipItem(InventoryItemIndex item)
