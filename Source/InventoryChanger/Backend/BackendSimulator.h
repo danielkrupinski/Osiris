@@ -87,6 +87,7 @@ public:
     std::list<inventory::Item>::const_iterator removeItem(std::list<inventory::Item>::const_iterator it)
     {
         const auto itemID = itemIDMap.remove(it);
+        loadout.unequipItem(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
             responseQueue.add(Response{ Response::ItemRemoved{ *itemID } });
