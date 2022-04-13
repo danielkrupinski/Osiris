@@ -11,6 +11,7 @@ struct BackendResponseHandler {
 
     void operator()(const backend::Response::ItemAdded& response) const;
     void operator()(const backend::Response::ItemMovedToFront& response) const;
+    void operator()(const backend::Response::ItemEquipped& response) const {}
     void operator()(const backend::Response::ItemRemoved& response) const;
     void operator()(const backend::Response::StickerApplied& response) const;
     void operator()(const backend::Response::StickerScraped& response) const;

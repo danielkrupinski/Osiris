@@ -19,6 +19,12 @@ struct Response {
         std::uint64_t itemID;
     };
 
+    struct ItemEquipped {
+        std::list<inventory::Item>::const_iterator item;
+        std::uint8_t slot;
+        Team team;
+    };
+
     struct ItemRemoved {
         std::uint64_t itemID;
     };
@@ -85,6 +91,7 @@ struct Response {
     std::variant<
         ItemAdded,
         ItemMovedToFront,
+        ItemEquipped,
         ItemRemoved,
         StickerApplied,
         StickerScraped,
