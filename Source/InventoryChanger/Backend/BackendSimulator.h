@@ -50,16 +50,19 @@ public:
     void equipItemCT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
     {
         loadout.equipItemCT(index, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::CT } });
     }
 
     void equipItemTT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
     {
         loadout.equipItemTT(index, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::TT } });
     }
 
     void equipItemNoTeam(Loadout::InventoryItemIndex index, Loadout::Slot slot)
     {
         loadout.equipItemNoTeam(index, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::None } });
     }
 
     [[nodiscard]] static BackendSimulator& instance()
