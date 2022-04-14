@@ -800,4 +800,5 @@ public:
 
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (Team team, int slot, std::uint64_t itemID, bool swap = false), (this, team, slot, itemID, swap))
     VIRTUAL_METHOD_V(CSPlayerInventory*, getLocalInventory, 23, (), (this))
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
 };
