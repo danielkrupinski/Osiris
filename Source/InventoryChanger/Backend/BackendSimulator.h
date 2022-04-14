@@ -29,7 +29,6 @@ struct UseToolRequest {
     std::uint64_t statTrakSwapItem1 = 0;
     std::uint64_t statTrakSwapItem2 = 0;
     Action action = Action::None;
-    float useTime = 0.0f;
     int stickerSlot = 0;
     std::string nameTag;
 };
