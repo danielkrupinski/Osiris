@@ -384,6 +384,22 @@ void graffitiUnseal(std::uint64_t itemID)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    memory->inventoryManager->updateInventoryEquippedState(localInventory, (std::uint64_t(0xF) << 60) | static_cast<short>(econItem->weaponId), team, slot, false);
+}
 
 }
 
@@ -399,6 +415,13 @@ void BackendResponseHandler::operator()(const backend::Response::ItemAdded& resp
 void BackendResponseHandler::operator()(const backend::Response::ItemMovedToFront& response) const
 {
     backend.updateItemID(response.itemID, assingNewItemID(response.itemID));
+}
+
+void BackendResponseHandler::operator()(const backend::Response::ItemEquipped& response) const
+{
+    if (const auto itemID = backend.getItemID(response.item); itemID.has_value()) {
+        equipItem(*itemID, response.team, response.slot);
+    }
 }
 
 void BackendResponseHandler::operator()(const backend::Response::ItemRemoved& response) const
