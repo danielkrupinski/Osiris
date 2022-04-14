@@ -7,7 +7,7 @@
 namespace inventory_changer::backend
 {
 
-std::optional<Response> ToolUser::applySticker(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator sticker, std::uint8_t slot)
+std::optional<Response> ToolUser::applySticker(ItemIterator item, ItemConstIterator sticker, std::uint8_t slot)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -21,7 +21,7 @@ std::optional<Response> ToolUser::applySticker(std::list<inventory::Item>::itera
     return Response{ Response::StickerApplied{ item, slot } };
 }
 
-std::optional<Response> ToolUser::applyPatch(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator patch, std::uint8_t slot)
+std::optional<Response> ToolUser::applyPatch(ItemIterator item, ItemConstIterator patch, std::uint8_t slot)
 {
     const auto agent = item->getOrCreate<inventory::Agent>();
     if (!agent)
@@ -33,7 +33,7 @@ std::optional<Response> ToolUser::applyPatch(std::list<inventory::Item>::iterato
     return Response{ Response::PatchApplied{ item, slot } };
 }
 
-std::optional<Response> ToolUser::removePatch(std::list<inventory::Item>::iterator item, std::uint8_t slot)
+std::optional<Response> ToolUser::removePatch(ItemIterator item, std::uint8_t slot)
 {
     const auto agent = item->get<inventory::Agent>();
     if (!agent)
@@ -44,7 +44,7 @@ std::optional<Response> ToolUser::removePatch(std::list<inventory::Item>::iterat
     return Response{ Response::PatchRemoved{ item, slot } };
 }
 
-void ToolUser::activateOperationPass(std::list<inventory::Item>::const_iterator item)
+void ToolUser::activateOperationPass(ItemConstIterator item)
 {
     const auto& gameItem = item->gameItem();
     if (!gameItem.isOperationPass())
@@ -57,7 +57,7 @@ void ToolUser::activateOperationPass(std::list<inventory::Item>::const_iterator 
     }
 }
 
-std::optional<Response> ToolUser::activateViewerPass(std::list<inventory::Item>::const_iterator item)
+std::optional<Response> ToolUser::activateViewerPass(ItemConstIterator item)
 {
     const auto& gameItem = item->gameItem();
     if (!gameItem.isViewerPass())
@@ -72,7 +72,7 @@ std::optional<Response> ToolUser::activateViewerPass(std::list<inventory::Item>:
     return {};
 }
 
-std::optional<Response> ToolUser::wearSticker(std::list<inventory::Item>::iterator item, std::uint8_t slot)
+std::optional<Response> ToolUser::wearSticker(ItemIterator item, std::uint8_t slot)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -89,7 +89,7 @@ std::optional<Response> ToolUser::wearSticker(std::list<inventory::Item>::iterat
     return Response{ Response::StickerScraped{ item, slot } };
 }
 
-std::optional<Response> ToolUser::addNameTag(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator nameTagItem, std::string_view nameTag)
+std::optional<Response> ToolUser::addNameTag(ItemIterator item, ItemConstIterator nameTagItem, std::string_view nameTag)
 {
     const auto skin = item->get<inventory::Skin>();
     if (!skin)
@@ -101,7 +101,7 @@ std::optional<Response> ToolUser::addNameTag(std::list<inventory::Item>::iterato
     return Response{ Response::NameTagAdded{ item } };
 }
 
-std::optional<Response> ToolUser::removeNameTag(std::list<inventory::Item>::iterator item)
+std::optional<Response> ToolUser::removeNameTag(ItemIterator item)
 {
     if (const auto skin = item->get<inventory::Skin>()) {
         skin->nameTag.clear();
@@ -111,7 +111,7 @@ std::optional<Response> ToolUser::removeNameTag(std::list<inventory::Item>::iter
     return {};
 }
 
-std::optional<Response> ToolUser::openContainer(std::list<inventory::Item>::const_iterator container, std::optional<std::list<inventory::Item>::const_iterator> key)
+std::optional<Response> ToolUser::openContainer(ItemConstIterator container, std::optional<ItemConstIterator> key)
 {
     if (!container->gameItem().isCase())
         return {};
@@ -127,7 +127,7 @@ std::optional<Response> ToolUser::openContainer(std::list<inventory::Item>::cons
     return Response{ Response::ContainerOpened{ receivedItem } };
 }
 
-std::optional<Response> ToolUser::activateSouvenirToken(std::list<inventory::Item>::const_iterator item, std::list<inventory::Item>::iterator tournamentCoin)
+std::optional<Response> ToolUser::activateSouvenirToken(ItemConstIterator item, ItemIterator tournamentCoin)
 {
     if (!item->gameItem().isSouvenirToken())
         return {};
@@ -141,7 +141,7 @@ std::optional<Response> ToolUser::activateSouvenirToken(std::list<inventory::Ite
     return Response{ Response::SouvenirTokenActivated{ tournamentCoin } };
 }
 
-std::optional<Response> ToolUser::unsealGraffiti(std::list<inventory::Item>::iterator item)
+std::optional<Response> ToolUser::unsealGraffiti(ItemIterator item)
 {
     if (!item->gameItem().isGraffiti())
         return {};
@@ -156,7 +156,7 @@ std::optional<Response> ToolUser::unsealGraffiti(std::list<inventory::Item>::ite
     return Response{ Response::GraffitiUnsealed{ item } };
 }
 
-std::optional<Response> ToolUser::swapStatTrak(std::list<inventory::Item>::iterator itemFrom, std::list<inventory::Item>::iterator itemTo, std::list<inventory::Item>::const_iterator statTrakSwapTool)
+std::optional<Response> ToolUser::swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, ItemConstIterator statTrakSwapTool)
 {
     if (!(itemFrom->gameItem().isSkin() && itemTo->gameItem().isSkin() && statTrakSwapTool->gameItem().isStatTrakSwapTool()))
         return {};

@@ -4,6 +4,7 @@
 #include <queue>
 #include <variant>
 
+#include "Item.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "Response.h"
@@ -42,24 +43,24 @@ public:
         return loadout;
     }
 
-    [[nodiscard]] const std::list<inventory::Item>& getInventory() const noexcept
+    [[nodiscard]] const ItemList& getInventory() const noexcept
     {
         return inventory;
     }
 
-    void equipItemCT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    void equipItemCT(ItemConstIterator index, Loadout::Slot slot)
     {
         loadout.equipItemCT(index, slot);
         responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::CT } });
     }
 
-    void equipItemTT(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    void equipItemTT(ItemConstIterator index, Loadout::Slot slot)
     {
         loadout.equipItemTT(index, slot);
         responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::TT } });
     }
 
-    void equipItemNoTeam(Loadout::InventoryItemIndex index, Loadout::Slot slot)
+    void equipItemNoTeam(ItemConstIterator index, Loadout::Slot slot)
     {
         loadout.equipItemNoTeam(index, slot);
         responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::None } });
@@ -77,17 +78,17 @@ public:
             it = removeItem(it);
     }
 
-    std::list<inventory::Item>::const_iterator addItemUnacknowledged(inventory::Item item)
+    ItemConstIterator addItemUnacknowledged(inventory::Item item)
     {
         return addItem(std::move(item), true);
     }
 
-    std::list<inventory::Item>::const_iterator addItemAcknowledged(inventory::Item item)
+    ItemConstIterator addItemAcknowledged(inventory::Item item)
     {
         return addItem(std::move(item), false);
     }
 
-    std::list<inventory::Item>::const_iterator removeItem(std::list<inventory::Item>::const_iterator it)
+    ItemConstIterator removeItem(ItemConstIterator it)
     {
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);
@@ -97,7 +98,7 @@ public:
         return newIterator;
     }
 
-    void updateStatTrak(std::list<inventory::Item>::const_iterator it, int newStatTrak)
+    void updateStatTrak(ItemConstIterator it, int newStatTrak)
     {
         if (!updateStatTrak(*removeConstness(it), newStatTrak))
             return;
@@ -106,14 +107,14 @@ public:
             responseQueue.add(Response{ Response::StatTrakUpdated{ *itemID, newStatTrak } });
     }
 
-    void moveToFront(std::list<inventory::Item>::const_iterator it)
+    void moveToFront(ItemConstIterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         if (const auto itemID = getItemID(it); itemID.has_value())
             responseQueue.add(Response{ Response::ItemMovedToFront{ *itemID } });
     }
 
-    void assignItemID(std::list<inventory::Item>::const_iterator it, std::uint64_t itemID)
+    void assignItemID(ItemConstIterator it, std::uint64_t itemID)
     {
         itemIDMap.add(itemID, it);
     }
@@ -123,12 +124,12 @@ public:
         itemIDMap.update(oldItemID, newItemID);
     }
 
-    [[nodiscard]] std::optional<std::list<inventory::Item>::const_iterator> itemFromID(std::uint64_t itemID) const
+    [[nodiscard]] std::optional<ItemConstIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(std::list<inventory::Item>::const_iterator it) const
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemConstIterator it) const
     {
         return itemIDMap.getItemID(it);
     }
@@ -146,7 +147,7 @@ public:
     }
 
 private:
-    std::list<inventory::Item>::const_iterator addItem(inventory::Item item, bool asUnacknowledged)
+    ItemConstIterator addItem(inventory::Item item, bool asUnacknowledged)
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());
@@ -212,12 +213,12 @@ private:
         return false;
     }
 
-    [[nodiscard]] std::list<inventory::Item>::iterator removeConstness(std::list<inventory::Item>::const_iterator it)
+    [[nodiscard]] ItemIterator removeConstness(ItemConstIterator it)
     {
         return inventory.erase(it, it);
     }
 
-    std::list<inventory::Item> inventory;
+    ItemList inventory;
     Loadout loadout;
     ResponseQueue responseQueue;
     ItemIDMap itemIDMap;

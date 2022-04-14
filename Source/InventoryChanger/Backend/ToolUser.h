@@ -5,6 +5,7 @@
 
 #include <InventoryChanger/Inventory/Item.h>
 
+#include "Item.h"
 #include "Response.h"
 
 namespace game_items
@@ -21,18 +22,18 @@ class ToolUser {
 public:
     explicit ToolUser(BackendSimulator& backend, const game_items::Lookup& gameItemLookup) : backend{ backend }, gameItemLookup{ gameItemLookup } {}
 
-    std::optional<Response> applySticker(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator sticker, std::uint8_t slot);
-    std::optional<Response> applyPatch(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator patch, std::uint8_t slot);
-    std::optional<Response> removePatch(std::list<inventory::Item>::iterator item, std::uint8_t slot);
-    void activateOperationPass(std::list<inventory::Item>::const_iterator item);
-    std::optional<Response> activateViewerPass(std::list<inventory::Item>::const_iterator item);
-    std::optional<Response> wearSticker(std::list<inventory::Item>::iterator item, std::uint8_t slot);
-    std::optional<Response> addNameTag(std::list<inventory::Item>::iterator item, std::list<inventory::Item>::const_iterator nameTagItem, std::string_view nameTag);
-    std::optional<Response> removeNameTag(std::list<inventory::Item>::iterator item);
-    std::optional<Response> openContainer(std::list<inventory::Item>::const_iterator item, std::optional<std::list<inventory::Item>::const_iterator> key);
-    std::optional<Response> activateSouvenirToken(std::list<inventory::Item>::const_iterator item, std::list<inventory::Item>::iterator tournamentCoin);
-    std::optional<Response> unsealGraffiti(std::list<inventory::Item>::iterator item);
-    std::optional<Response> swapStatTrak(std::list<inventory::Item>::iterator itemFrom, std::list<inventory::Item>::iterator itemTo, std::list<inventory::Item>::const_iterator statTrakSwapTool);
+    std::optional<Response> applySticker(ItemIterator item, ItemConstIterator sticker, std::uint8_t slot);
+    std::optional<Response> applyPatch(ItemIterator item, ItemConstIterator patch, std::uint8_t slot);
+    std::optional<Response> removePatch(ItemIterator item, std::uint8_t slot);
+    void activateOperationPass(ItemConstIterator item);
+    std::optional<Response> activateViewerPass(ItemConstIterator item);
+    std::optional<Response> wearSticker(ItemIterator item, std::uint8_t slot);
+    std::optional<Response> addNameTag(ItemIterator item, ItemConstIterator nameTagItem, std::string_view nameTag);
+    std::optional<Response> removeNameTag(ItemIterator item);
+    std::optional<Response> openContainer(ItemConstIterator item, std::optional<ItemConstIterator> key);
+    std::optional<Response> activateSouvenirToken(ItemConstIterator item, ItemIterator tournamentCoin);
+    std::optional<Response> unsealGraffiti(ItemIterator item);
+    std::optional<Response> swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, ItemConstIterator statTrakSwapTool);
 
 private:
     BackendSimulator& backend;
