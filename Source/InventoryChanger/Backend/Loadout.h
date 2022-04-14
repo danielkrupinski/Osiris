@@ -13,22 +13,58 @@ class Loadout {
 public:
     using Slot = std::uint8_t;
 
-    void equipItemCT(ItemConstIterator index, Slot slot)
+    std::optional<ItemConstIterator> equipItemCT(ItemConstIterator itemIterator, Slot slot)
     {
-        ct[slot] = index;
-        ctReversed[index] = slot;
+        if (const auto it = ct.find(slot); it != ct.end()) {
+            const auto previous = it->second;
+            it->second = itemIterator;
+
+            auto node = ctReversed.extract(previous);
+            node.key() = itemIterator;
+            ctReversed.insert(std::move(node));
+
+            return previous;
+        }
+
+        ct.try_emplace(slot, itemIterator);
+        ctReversed.try_emplace(itemIterator, slot);
+        return {};
     }
 
-    void equipItemTT(ItemConstIterator index, Slot slot)
+    std::optional<ItemConstIterator> equipItemTT(ItemConstIterator itemIterator, Slot slot)
     {
-        tt[slot] = index;
-        ttReversed[index] = slot;
+        if (const auto it = tt.find(slot); it != tt.end()) {
+            const auto previous = it->second;
+            it->second = itemIterator;
+
+            auto node = ttReversed.extract(previous);
+            node.key() = itemIterator;
+            ttReversed.insert(std::move(node));
+
+            return previous;
+        }
+
+        tt.try_emplace(slot, itemIterator);
+        ttReversed.try_emplace(itemIterator, slot);
+        return {};
     }
 
-    void equipItemNoTeam(ItemConstIterator index, Slot slot)
+    std::optional<ItemConstIterator> equipItemNoTeam(ItemConstIterator itemIterator, Slot slot)
     {
-        noTeam[slot] = index;
-        noTeamReversed[index] = slot;
+        if (const auto it = noTeam.find(slot); it != noTeam.end()) {
+            const auto previous = it->second;
+            it->second = itemIterator;
+
+            auto node = noTeamReversed.extract(previous);
+            node.key() = itemIterator;
+            noTeamReversed.insert(std::move(node));
+
+            return previous;
+        }
+
+        noTeam.try_emplace(slot, itemIterator);
+        noTeamReversed.try_emplace(itemIterator, slot);
+        return {};
     }
 
     void unequipItem(ItemConstIterator item)
