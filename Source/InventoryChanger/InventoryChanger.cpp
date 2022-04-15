@@ -950,7 +950,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID) n
                 backendSimulator.markItemEquippedNoTeam(itemIterator, static_cast<Loadout::Slot>(slot));
             }
 
-            equipRequests.emplace_back(std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID());
+            equipRequests.push_back({ std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID() });
         } else {
            // unequip
         }
