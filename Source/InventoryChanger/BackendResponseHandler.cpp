@@ -386,19 +386,7 @@ void graffitiUnseal(std::uint64_t itemID)
 
 void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
-    if (!econItem)
-        return;
-
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    memory->inventoryManager->updateInventoryEquippedState(localInventory, (std::uint64_t(0xF) << 60) | static_cast<short>(econItem->weaponId), team, slot, false);
+    memory->inventoryManager->equipItemInSlot(team, slot, itemID);
 }
 
 }
