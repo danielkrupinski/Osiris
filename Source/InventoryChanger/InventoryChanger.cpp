@@ -384,6 +384,40 @@ static void applyMedal() noexcept
 
 static inventory_changer::backend::UseToolRequest useToolRequest;
 
+struct EquipRequest {
+    std::chrono::steady_clock::time_point time;
+    std::uint64_t itemID;
+    WeaponId weaponID;
+    std::uint8_t counter = 0;
+};
+static std::vector<EquipRequest> equipRequests;
+
+static void simulateItemUpdate(std::uint64_t itemID)
+{
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
+        if (const auto soc = memory->getSOCData(view))
+            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+    }
+}
+
+static void processEquipRequests()
+{
+    const auto now = std::chrono::steady_clock::now();
+    for (auto it = equipRequests.begin(); it != equipRequests.end();) {
+        if (now - it->time >= std::chrono::milliseconds{ 500 }) {
+            if (it->counter == 0)
+                simulateItemUpdate(it->itemID);
+            it = equipRequests.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -418,6 +452,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         useToolRequest.action = UseToolRequest::Action::None;
     }
 
+    processEquipRequests();
     BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance() }, std::chrono::milliseconds{ 200 });
 }
 
@@ -900,55 +935,38 @@ void InventoryChanger::clearInventory() noexcept
     resetConfig();
 }
 
-static std::size_t lastEquippedCount = 0;
-void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
+void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept
 {
-    /*
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    const auto item = Inventory::getItem(itemID);
-    if (!item)
-        return;
-    */
-
     if (const auto itemOptional = inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID); itemOptional.has_value()) {
         const auto& itemIterator = *itemOptional;
 
-        using inventory_changer::backend::Loadout;
-        if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
-            backendSimulator.equipItemCT(itemIterator, static_cast<Loadout::Slot>(slot));
-        } else if (team == Team::TT) {
-            backendSimulator.equipItemTT(itemIterator, static_cast<Loadout::Slot>(slot));
-        } else if (team == Team::None) {
-            backendSimulator.equipItemNoTeam(itemIterator, static_cast<Loadout::Slot>(slot));
-        }
-    }
+        if (slot != 0xFFFF) {
+            using inventory_changer::backend::Loadout;
+            if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
+                backendSimulator.markItemEquippedCT(itemIterator, static_cast<Loadout::Slot>(slot));
+            } else if (team == Team::TT) {
+                backendSimulator.markItemEquippedTT(itemIterator, static_cast<Loadout::Slot>(slot));
+            } else if (team == Team::None) {
+                backendSimulator.markItemEquippedNoTeam(itemIterator, static_cast<Loadout::Slot>(slot));
+            }
 
-    /*
-    if (item->isCollectible() || item->isServiceMedal()) {
-        if (const auto view = memory->getInventoryItemByItemID(localInventory, itemID)) {
-            if (const auto econItem = memory->getSOCData(view))
-                localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+            equipRequests.emplace_back(std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID());
+        } else {
+           // unequip
         }
-    } else if (item->isSkin()) {
-        const auto view = localInventory->getItemInLoadout(team, slot);
-        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item->get().getWeaponID()));
-        if (view) {
-            if (const auto econItem = memory->getSOCData(view))
-                localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-        }
-        ++lastEquippedCount;
+
+        itemID = (std::uint64_t(0xF) << 60) | static_cast<short>(itemIterator->gameItem().getWeaponID());
     }
-    */
 }
 
 void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
 {
-    if (lastEquippedCount > 0 && object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
-        *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C)) = WeaponId::None;
-        --lastEquippedCount;
+    if (object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
+        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C));
+        if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
+            ++it->counter;
+            weaponID = WeaponId::None;
+        }
     }
 }
 
