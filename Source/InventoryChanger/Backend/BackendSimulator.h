@@ -47,22 +47,37 @@ public:
         return inventory;
     }
 
-    void equipItemCT(ItemConstIterator index, Loadout::Slot slot)
+    void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
-        loadout.equipItemCT(index, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::CT } });
+        loadout.equipItemCT(itemIterator, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::CT } });
     }
 
-    void equipItemTT(ItemConstIterator index, Loadout::Slot slot)
+    void markItemEquippedCT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
-        loadout.equipItemTT(index, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::TT } });
+        loadout.equipItemCT(itemIterator, slot);
     }
 
-    void equipItemNoTeam(ItemConstIterator index, Loadout::Slot slot)
+    void equipItemTT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
-        loadout.equipItemNoTeam(index, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ index, slot, Team::None } });
+        loadout.equipItemTT(itemIterator, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::TT } });
+    }
+
+    void markItemEquippedTT(ItemConstIterator itemIterator, Loadout::Slot slot)
+    {
+        loadout.equipItemTT(itemIterator, slot);
+    }
+
+    void equipItemNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
+    {
+        loadout.equipItemNoTeam(itemIterator, slot);
+        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::None } });
+    }
+
+    void markItemEquippedNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
+    {
+        loadout.equipItemNoTeam(itemIterator, slot);
     }
 
     [[nodiscard]] static BackendSimulator& instance()
