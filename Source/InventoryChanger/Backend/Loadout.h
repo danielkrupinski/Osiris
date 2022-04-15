@@ -95,6 +95,27 @@ public:
         return std::nullopt;
     }
 
+    [[nodiscard]] std::optional<Slot> getItemEquippedSlotCT(ItemConstIterator itemIterator) const
+    {
+        if (const auto it = ctReversed.find(itemIterator); it != ctReversed.end())
+            return it->second;
+        return {};
+    }
+
+    [[nodiscard]] std::optional<Slot> getItemEquippedSlotTT(ItemConstIterator itemIterator) const
+    {
+        if (const auto it = ttReversed.find(itemIterator); it != ttReversed.end())
+            return it->second;
+        return {};
+    }
+
+    [[nodiscard]] std::optional<Slot> getItemEquippedSlotNoTeam(ItemConstIterator itemIterator) const
+    {
+        if (const auto it = noTeamReversed.find(itemIterator); it != noTeamReversed.end())
+            return it->second;
+        return {};
+    }
+
 private:
     struct ItemIteratorHasher {
         [[nodiscard]] std::size_t operator()(ItemConstIterator iterator) const noexcept
