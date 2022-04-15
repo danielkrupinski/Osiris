@@ -11,7 +11,7 @@
 
 #include "BackendResponseHandler.h"
 
-constexpr auto CONFIG_VERSION = 3;
+constexpr auto CONFIG_VERSION = 4;
 
 [[nodiscard]] json toJson(const inventory::Skin& skin)
 {
