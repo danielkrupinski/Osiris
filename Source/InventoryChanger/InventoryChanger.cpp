@@ -910,12 +910,12 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         if (ImGui::BeginChild("##scrollarea2", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             const auto& inventory = inventory_changer::backend::BackendSimulator::instance().getInventory();
             std::size_t i = 0;
-            for (auto it = inventory.begin(); it != inventory.end();) {
+            for (auto it = inventory.rbegin(); it != inventory.rend();) {
                 ImGui::PushID(i);
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
-                    it = inventory_changer::backend::BackendSimulator::instance().removeItem(it);
+                    it = std::make_reverse_iterator(inventory_changer::backend::BackendSimulator::instance().removeItem(std::next(it).base()));
                 } else {
                     ++it;
                 }
