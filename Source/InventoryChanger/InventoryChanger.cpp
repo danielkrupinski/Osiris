@@ -525,7 +525,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
         return;
 
     const auto& item = *optionalItem;
-    const auto music = item->get<inventory::Skin>();
+    const auto music = item->get<inventory::Music>();
     if (!music)
         return;
 
