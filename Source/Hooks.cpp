@@ -495,11 +495,6 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     return result;
 }
 
-static bool STDCALL_CONV equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
-{
-    return hooks->inventoryManager.callOriginal<bool, WIN32_LINUX(20, 21)>(team, slot, itemID, swap);
-}
-
 static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
 {
     InventoryChanger::onItemEquip(team, slot, itemID);
@@ -599,7 +594,6 @@ void Hooks::install() noexcept
     inventory.hookAt(1, &soUpdated);
 
     inventoryManager.init(memory->inventoryManager);
-    inventoryManager.hookAt(WIN32_LINUX(20, 21), &equipItemInLoadout);
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
     modelRender.init(interfaces->modelRender);
