@@ -501,6 +501,11 @@ static bool STDCALL_CONV equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team tea
     return hooks->inventoryManager.callOriginal<bool, WIN32_LINUX(20, 21)>(team, slot, itemID, swap);
 }
 
+static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
+{
+    return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
+}
+
 static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
 {
     InventoryChanger::onSoUpdated(object);
@@ -595,6 +600,7 @@ void Hooks::install() noexcept
 
     inventoryManager.init(memory->inventoryManager);
     inventoryManager.hookAt(WIN32_LINUX(20, 21), &equipItemInLoadout);
+    inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, &drawModelExecute);
