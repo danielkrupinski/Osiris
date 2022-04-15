@@ -57,10 +57,27 @@ json InventoryChanger::toJson() noexcept
 
     j["Version"] = CONFIG_VERSION;
 
-    const auto& inventory = inventory_changer::backend::BackendSimulator::instance().getInventory();
-    for (auto& items = j["Items"]; const auto & item : inventory) {
+    const auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    const auto& loadout = backend.getLoadout();
+    const auto& inventory = backend.getInventory();
+    auto& items = j["Items"];
+    for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
         json itemConfig;
 
+        if (const auto slotCT = loadout.getItemEquippedSlotCT(itemIt); slotCT.has_value()) {
+            itemConfig["Equipped Slot"] = *slotCT;
+            itemConfig["Equipped"].push_back("CT");
+        }
+        if (const auto slotTT = loadout.getItemEquippedSlotTT(itemIt); slotTT.has_value()) {
+            itemConfig["Equipped Slot"] = *slotTT;
+            itemConfig["Equipped"].push_back("TT");
+        }
+        if (const auto slotNoTeam = loadout.getItemEquippedSlotNoTeam(itemIt); slotNoTeam.has_value()) {
+            itemConfig["Equipped Slot"] = *slotNoTeam;
+            itemConfig["Equipped"].push_back("NOTEAM");
+        }
+
+        const auto& item = *itemIt;
         const auto& gameItem = item.gameItem();
         itemConfig["Weapon ID"] = gameItem.getWeaponID();
         itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
@@ -127,43 +144,6 @@ json InventoryChanger::toJson() noexcept
         items.push_back(std::move(itemConfig));
     }
 
-    if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
-        auto& equipment = j["Equipment"];
-        for (std::uint8_t i = 0; i < 57; ++i) {
-            json slot;
-
-            /*
-            using namespace inventory_changer::backend;
-            if (const auto ct = BackendSimulator::instance().getLoadout().getItemInSlotCT(i); ct.has_value())
-                slot["CT"] = *ct;
-            if (const auto tt = BackendSimulator::instance().getLoadout().getItemInSlotTT(i); tt.has_value())
-                slot["TT"] = *tt;
-            if (const auto noTeam = BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(i); noTeam.has_value())
-                slot["NOTEAM"] = *noTeam;
-            */
-            /*
-            if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemCT); soc && Inventory::getItem(soc->itemID))
-                    slot["CT"] = Inventory::getItemIndex(soc->itemID);
-            }
-
-            if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemTT); soc && Inventory::getItem(soc->itemID))
-                    slot["TT"] = Inventory::getItemIndex(soc->itemID);
-            }
-
-            if (const auto itemNOTEAM = localInventory->getItemInLoadout(Team::None, static_cast<int>(i))) {
-                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && Inventory::getItem(soc->itemID))
-                    slot["NOTEAM"] = Inventory::getItemIndex(soc->itemID);
-            }
-            */
-            if (!slot.empty()) {
-                slot["Slot"] = i;
-                equipment.push_back(std::move(slot));
-            }
-        }
-    }
-
     return j;
 }
 
@@ -203,45 +183,6 @@ json InventoryChanger::toJson() noexcept
     inventory::Agent dynamicData;
     dynamicData.patches = loadAgentPatchesFromJson(j);
     return dynamicData;
-}
-
-void loadEquipmentFromJson(const json& j) noexcept
-{
-    if (!j.contains("Equipment"))
-        return;
-
-    const auto& equipment = j["Equipment"];
-    if (!equipment.is_array())
-        return;
-
-    for (const auto& equipped : equipment) {
-        if (!equipped.contains("Slot"))
-            continue;
-
-        const auto& slot = equipped["Slot"];
-        if (!slot.is_number_integer())
-            continue;
-
-        /*
-        if (equipped.contains("CT")) {
-            if (const auto& ct = equipped["CT"]; ct.is_number_integer()) {
-                inventory_changer::backend::BackendSimulator::instance().equipItemCT(ct, slot);
-            }
-        }
-
-        if (equipped.contains("TT")) {
-            if (const auto& tt = equipped["TT"]; tt.is_number_integer()) {
-                inventory_changer::backend::BackendSimulator::instance().equipItemTT(tt, slot);
-            }
-        }
-
-        if (equipped.contains("NOTEAM")) {
-            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer()) {
-                inventory_changer::backend::BackendSimulator::instance().equipItemNoTeam(noteam, slot);
-            }
-        }
-        */
-    }
 }
 
 [[nodiscard]] game_items::Lookup::OptionalItemReference gameItemFromJson(const game_items::Lookup& lookup, const json& j)
@@ -284,6 +225,41 @@ void loadEquipmentFromJson(const json& j) noexcept
     return {};
 }
 
+struct EquippedState {
+    bool ct = false;
+    bool tt = false;
+    bool noTeam = false;
+};
+
+[[nodiscard]] EquippedState equippedFromJson(const json& j)
+{
+    EquippedState state;
+
+    if (const auto equipped = j.find("Equipped"); equipped != j.end() && equipped->is_array()) {
+        for (auto& team : *equipped) {
+            if (!team.is_string())
+                continue;
+
+            const auto teamString = team.get<std::string>();
+            if (teamString == "CT") {
+                state.ct = true;
+            } else if (teamString == "TT") {
+                state.tt = true;
+            } else if (teamString == "NOTEAM") {
+                state.noTeam = true;
+            }
+        }
+    }
+    return state;
+}
+
+[[nodiscard]] std::uint8_t equippedSlotFromJson(const json& j)
+{
+    if (const auto equippedSlot = j.find("Equipped Slot"); equippedSlot != j.end() && equippedSlot->is_number_integer())
+        return equippedSlot->get<std::uint8_t>();
+    return static_cast<std::uint8_t>(-1);
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
@@ -293,16 +269,26 @@ void InventoryChanger::fromJson(const json& j) noexcept
     if (!items.is_array())
         return;
 
+    auto& backend = inventory_changer::backend::BackendSimulator::instance();
     for (const auto& jsonItem : items) {
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
         if (!itemOptional.has_value())
             continue;
 
         const game_items::Item& item = itemOptional->get();
-        inventory_changer::backend::BackendSimulator::instance().addItemAcknowledged(inventory::Item{ item, itemFromJson(item, jsonItem) });
-    }
+        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(item, jsonItem) });
 
-    loadEquipmentFromJson(j);
+        if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
+            const auto equippedState = equippedFromJson(jsonItem);
+            if (equippedState.ct)
+                backend.equipItemCT(itemAdded, equippedSlot);
+            if (equippedState.tt)
+                backend.equipItemTT(itemAdded, equippedSlot);
+            if (equippedState.noTeam)
+                backend.equipItemNoTeam(itemAdded, equippedSlot);
+        }
+        
+    }
 }
 
 void InventoryChanger::resetConfig() noexcept
