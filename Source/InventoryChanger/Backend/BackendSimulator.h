@@ -150,8 +150,8 @@ public:
 
     void useTool(const UseToolRequest& request)
     {
-        if (const auto response = processUseToolRequest(request); response.has_value())
-            responseQueue.add(*response);
+        if (const auto response = processUseToolRequest(request); !response.isEmpty())
+            responseQueue.add(response);
     }
 
     template <typename Visitor>
@@ -169,7 +169,7 @@ private:
         return added;
     }
 
-    std::optional<Response> processUseToolRequest(const UseToolRequest& request)
+    Response processUseToolRequest(const UseToolRequest& request)
     {
         const auto destItem = itemIDMap.get(request.destItemID);
         const auto tool = itemIDMap.get(request.toolItemID);

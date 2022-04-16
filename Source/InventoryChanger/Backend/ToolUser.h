@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <string_view>
 
 #include <InventoryChanger/Inventory/Item.h>
@@ -22,18 +21,18 @@ class ToolUser {
 public:
     explicit ToolUser(BackendSimulator& backend, const game_items::Lookup& gameItemLookup) : backend{ backend }, gameItemLookup{ gameItemLookup } {}
 
-    std::optional<Response> applySticker(ItemIterator item, ItemConstIterator sticker, std::uint8_t slot);
-    std::optional<Response> applyPatch(ItemIterator item, ItemConstIterator patch, std::uint8_t slot);
-    std::optional<Response> removePatch(ItemIterator item, std::uint8_t slot);
+    Response applySticker(ItemIterator item, ItemConstIterator sticker, std::uint8_t slot);
+    Response applyPatch(ItemIterator item, ItemConstIterator patch, std::uint8_t slot);
+    Response removePatch(ItemIterator item, std::uint8_t slot);
     void activateOperationPass(ItemConstIterator item);
-    std::optional<Response> activateViewerPass(ItemConstIterator item);
-    std::optional<Response> wearSticker(ItemIterator item, std::uint8_t slot);
-    std::optional<Response> addNameTag(ItemIterator item, ItemConstIterator nameTagItem, std::string_view nameTag);
-    std::optional<Response> removeNameTag(ItemIterator item);
-    std::optional<Response> openContainer(ItemConstIterator item, std::optional<ItemConstIterator> key);
-    std::optional<Response> activateSouvenirToken(ItemConstIterator item, ItemIterator tournamentCoin);
-    std::optional<Response> unsealGraffiti(ItemIterator item);
-    std::optional<Response> swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, ItemConstIterator statTrakSwapTool);
+    Response activateViewerPass(ItemConstIterator item);
+    Response wearSticker(ItemIterator item, std::uint8_t slot);
+    Response addNameTag(ItemIterator item, ItemConstIterator nameTagItem, std::string_view nameTag);
+    Response removeNameTag(ItemIterator item);
+    Response openContainer(ItemConstIterator item, std::optional<ItemConstIterator> key);
+    Response activateSouvenirToken(ItemConstIterator item, ItemIterator tournamentCoin);
+    Response unsealGraffiti(ItemIterator item);
+    Response swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, ItemConstIterator statTrakSwapTool);
 
 private:
     BackendSimulator& backend;
