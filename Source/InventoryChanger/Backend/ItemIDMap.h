@@ -56,15 +56,8 @@ public:
     }
 
 private:
-    struct ItemIteratorHasher {
-        [[nodiscard]] std::size_t operator()(ItemConstIterator iterator) const noexcept
-        {
-            return std::hash<const inventory::Item*>{}(std::to_address(iterator));
-        }
-    };
-
     std::unordered_map<std::uint64_t, ItemConstIterator> itemIDsIterators;
-    std::unordered_map<ItemConstIterator, std::uint64_t, ItemIteratorHasher> iteratorsItemIDs;
+    std::unordered_map<ItemConstIterator, std::uint64_t> iteratorsItemIDs;
 };
 
 }

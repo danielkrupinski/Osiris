@@ -117,15 +117,8 @@ public:
     }
 
 private:
-    struct ItemIteratorHasher {
-        [[nodiscard]] std::size_t operator()(ItemConstIterator iterator) const noexcept
-        {
-            return std::hash<const inventory::Item*>{}(std::to_address(iterator));
-        }
-    };
-
     using SlotToItem = std::unordered_map<Slot, ItemConstIterator>;
-    using ItemToSlot = std::unordered_map<ItemConstIterator, Slot, ItemIteratorHasher>;
+    using ItemToSlot = std::unordered_map<ItemConstIterator, Slot>;
 
     static void eraseItemFromMaps(ItemConstIterator item, SlotToItem& slotToItemMap, ItemToSlot& itemToSlotMap)
     {
