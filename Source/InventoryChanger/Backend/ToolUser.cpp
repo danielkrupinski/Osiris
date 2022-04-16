@@ -18,7 +18,7 @@ Response ToolUser::applySticker(ItemIterator item, ItemConstIterator sticker, st
 
     backend.moveToFront(item);
     backend.removeItem(sticker);
-    return Response{ response::StickerApplied{ item, slot } };
+    return response::StickerApplied{ item, slot };
 }
 
 Response ToolUser::applyPatch(ItemIterator item, ItemConstIterator patch, std::uint8_t slot)
@@ -30,7 +30,7 @@ Response ToolUser::applyPatch(ItemIterator item, ItemConstIterator patch, std::u
     agent->patches[slot].patchID = gameItemLookup.getStorage().getPatch(patch->gameItem()).id;
     backend.moveToFront(item);
     backend.removeItem(patch);
-    return Response{ response::PatchApplied{ item, slot } };
+    return response::PatchApplied{ item, slot };
 }
 
 Response ToolUser::removePatch(ItemIterator item, std::uint8_t slot)
@@ -41,7 +41,7 @@ Response ToolUser::removePatch(ItemIterator item, std::uint8_t slot)
 
     agent->patches[slot].patchID = 0;
     backend.moveToFront(item);
-    return Response{ response::PatchRemoved{ item, slot } };
+    return response::PatchRemoved{ item, slot };
 }
 
 void ToolUser::activateOperationPass(ItemConstIterator item)
@@ -67,7 +67,7 @@ Response ToolUser::activateViewerPass(ItemConstIterator item)
     if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
         const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin });
         backend.removeItem(item);
-        return Response{ response::ViewerPassActivated{ addedEventCoin } };
+        return response::ViewerPassActivated{ addedEventCoin };
     }
     return {};
 }
@@ -83,10 +83,10 @@ Response ToolUser::wearSticker(ItemIterator item, std::uint8_t slot)
 
     if (const auto shouldRemove = (newWear >= 1.0f + wearStep)) {
         skin->stickers[slot] = {};
-        return Response{ response::StickerRemoved{ item, slot } };
+        return response::StickerRemoved{ item, slot };
     }
 
-    return Response{ response::StickerScraped{ item, slot } };
+    return response::StickerScraped{ item, slot };
 }
 
 Response ToolUser::addNameTag(ItemIterator item, ItemConstIterator nameTagItem, std::string_view nameTag)
@@ -98,7 +98,7 @@ Response ToolUser::addNameTag(ItemIterator item, ItemConstIterator nameTagItem, 
     skin->nameTag = nameTag;
     backend.removeItem(nameTagItem);
     backend.moveToFront(item);
-    return Response{ response::NameTagAdded{ item } };
+    return response::NameTagAdded{ item };
 }
 
 Response ToolUser::removeNameTag(ItemIterator item)
@@ -106,7 +106,7 @@ Response ToolUser::removeNameTag(ItemIterator item)
     if (const auto skin = item->get<inventory::Skin>()) {
         skin->nameTag.clear();
         backend.moveToFront(item);
-        return Response{ response::NameTagRemoved{ item } };
+        return response::NameTagRemoved{ item };
     }
     return {};
 }
@@ -124,7 +124,7 @@ Response ToolUser::openContainer(ItemConstIterator container, std::optional<Item
     auto generatedItem = ItemGenerator::generateItemFromContainer(*container);
     backend.removeItem(container);
     const auto receivedItem = backend.addItemUnacknowledged(std::move(generatedItem));
-    return Response{ response::ContainerOpened{ receivedItem } };
+    return response::ContainerOpened{ receivedItem };
 }
 
 Response ToolUser::activateSouvenirToken(ItemConstIterator item, ItemIterator tournamentCoin)
@@ -138,7 +138,7 @@ Response ToolUser::activateSouvenirToken(ItemConstIterator item, ItemIterator to
 
     ++tournamentCoinData->dropsAwarded;
     backend.removeItem(item);
-    return Response{ response::SouvenirTokenActivated{ tournamentCoin } };
+    return response::SouvenirTokenActivated{ tournamentCoin };
 }
 
 Response ToolUser::unsealGraffiti(ItemIterator item)
@@ -153,7 +153,7 @@ Response ToolUser::unsealGraffiti(ItemIterator item)
     graffiti->usesLeft = 50;
 
     backend.moveToFront(item);
-    return Response{ response::GraffitiUnsealed{ item } };
+    return response::GraffitiUnsealed{ item };
 }
 
 Response ToolUser::swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, ItemConstIterator statTrakSwapTool)
@@ -173,7 +173,7 @@ Response ToolUser::swapStatTrak(ItemIterator itemFrom, ItemIterator itemTo, Item
     backend.removeItem(statTrakSwapTool);
     backend.moveToFront(itemFrom);
     backend.moveToFront(itemTo);
-    return Response{ response::StatTrakSwapped{ itemFrom, itemTo } };
+    return response::StatTrakSwapped{ itemFrom, itemTo };
 }
 
 }

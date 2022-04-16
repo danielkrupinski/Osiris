@@ -13,6 +13,11 @@ namespace inventory_changer::backend
 {
 
 struct Response {
+    template <typename T>
+    explicit(false) Response(const T& responseData) : data{ responseData } {}
+
+    Response() = default;
+
     [[nodiscard]] constexpr bool isEmpty() const noexcept
     {
         return std::holds_alternative<std::monostate>(data);
