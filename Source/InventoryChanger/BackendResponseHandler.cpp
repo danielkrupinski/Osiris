@@ -394,30 +394,30 @@ void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
 namespace inventory_changer
 {
 
-void BackendResponseHandler::operator()(const backend::Response::ItemAdded& response) const
+void BackendResponseHandler::operator()(const backend::response::ItemAdded& response) const
 {
     const auto itemID = createSOCItem(*response.item, response.asUnacknowledged);
     backend.assignItemID(response.item, itemID);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::ItemMovedToFront& response) const
+void BackendResponseHandler::operator()(const backend::response::ItemMovedToFront& response) const
 {
     backend.updateItemID(response.itemID, assingNewItemID(response.itemID));
 }
 
-void BackendResponseHandler::operator()(const backend::Response::ItemEquipped& response) const
+void BackendResponseHandler::operator()(const backend::response::ItemEquipped& response) const
 {
     if (const auto itemID = backend.getItemID(response.item); itemID.has_value()) {
         equipItem(*itemID, response.team, response.slot);
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::ItemRemoved& response) const
+void BackendResponseHandler::operator()(const backend::response::ItemRemoved& response) const
 {
     deleteItem(response.itemID);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::StickerApplied& response) const
+void BackendResponseHandler::operator()(const backend::response::StickerApplied& response) const
 {
     if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
         if (const auto skin = response.skinItem->get<inventory::Skin>())
@@ -425,7 +425,7 @@ void BackendResponseHandler::operator()(const backend::Response::StickerApplied&
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::StickerScraped& response) const
+void BackendResponseHandler::operator()(const backend::response::StickerScraped& response) const
 {
     if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
         if (const auto skin = response.skinItem->get<inventory::Skin>())
@@ -433,7 +433,7 @@ void BackendResponseHandler::operator()(const backend::Response::StickerScraped&
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::StickerRemoved& response) const
+void BackendResponseHandler::operator()(const backend::response::StickerRemoved& response) const
 {
     if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
         removeSticker(*itemID, response.stickerSlot);
@@ -441,18 +441,18 @@ void BackendResponseHandler::operator()(const backend::Response::StickerRemoved&
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::StatTrakUpdated& response) const
+void BackendResponseHandler::operator()(const backend::response::StatTrakUpdated& response) const
 {
     updateStatTrak(response.itemID, response.newStatTrakValue);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::ViewerPassActivated& response) const
+void BackendResponseHandler::operator()(const backend::response::ViewerPassActivated& response) const
 {
     if (const auto itemID = backend.getItemID(response.createdEventCoin); itemID.has_value())
         initItemCustomizationNotification("ticket_activated", *itemID);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::NameTagAdded& response) const
+void BackendResponseHandler::operator()(const backend::response::NameTagAdded& response) const
 {
     if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
         if (const auto skin = response.skinItem->get<inventory::Skin>()) {
@@ -462,19 +462,19 @@ void BackendResponseHandler::operator()(const backend::Response::NameTagAdded& r
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::NameTagRemoved& response) const
+void BackendResponseHandler::operator()(const backend::response::NameTagRemoved& response) const
 {
     if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
         updateNameTag(*itemID, "");
 }
 
-void BackendResponseHandler::operator()(const backend::Response::ContainerOpened& response) const
+void BackendResponseHandler::operator()(const backend::response::ContainerOpened& response) const
 {
     if (const auto itemID = backend.getItemID(response.receivedItem); itemID.has_value())
         initItemCustomizationNotification("crate_unlock", *itemID);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::PatchApplied& response) const
+void BackendResponseHandler::operator()(const backend::response::PatchApplied& response) const
 {
     if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value()) {
         if (const auto agent = response.agentItem->get<inventory::Agent>()) {
@@ -484,13 +484,13 @@ void BackendResponseHandler::operator()(const backend::Response::PatchApplied& r
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::PatchRemoved& response) const
+void BackendResponseHandler::operator()(const backend::response::PatchRemoved& response) const
 {
     if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value())
         removePatch(*itemID, response.patchSlot);
 }
 
-void BackendResponseHandler::operator()(const backend::Response::SouvenirTokenActivated& response) const
+void BackendResponseHandler::operator()(const backend::response::SouvenirTokenActivated& response) const
 {
     if (const auto itemID = backend.getItemID(response.tournamentCoin); itemID.has_value()) {
         if (const auto tournamentCoin = response.tournamentCoin->get<inventory::TournamentCoin>()) {
@@ -500,7 +500,7 @@ void BackendResponseHandler::operator()(const backend::Response::SouvenirTokenAc
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::GraffitiUnsealed& response) const
+void BackendResponseHandler::operator()(const backend::response::GraffitiUnsealed& response) const
 {
     if (const auto itemID = backend.getItemID(response.graffitiItem); itemID.has_value()) {
         graffitiUnseal(*itemID);
@@ -508,7 +508,7 @@ void BackendResponseHandler::operator()(const backend::Response::GraffitiUnseale
     }
 }
 
-void BackendResponseHandler::operator()(const backend::Response::StatTrakSwapped& response) const
+void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped& response) const
 {
     const auto sourceItemID = backend.getItemID(response.swapSourceItem);
     if (!sourceItemID.has_value())

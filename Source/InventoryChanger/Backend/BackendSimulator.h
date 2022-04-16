@@ -50,7 +50,7 @@ public:
     void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::CT } });
+        responseQueue.add(Response{ response::ItemEquipped{ itemIterator, slot, Team::CT } });
     }
 
     void markItemEquippedCT(ItemConstIterator itemIterator, Loadout::Slot slot)
@@ -61,7 +61,7 @@ public:
     void equipItemTT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemTT(itemIterator, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::TT } });
+        responseQueue.add(Response{ response::ItemEquipped{ itemIterator, slot, Team::TT } });
     }
 
     void markItemEquippedTT(ItemConstIterator itemIterator, Loadout::Slot slot)
@@ -72,7 +72,7 @@ public:
     void equipItemNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemNoTeam(itemIterator, slot);
-        responseQueue.add(Response{ Response::ItemEquipped{ itemIterator, slot, Team::None } });
+        responseQueue.add(Response{ response::ItemEquipped{ itemIterator, slot, Team::None } });
     }
 
     void markItemEquippedNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
@@ -108,7 +108,7 @@ public:
         loadout.unequipItem(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
-            responseQueue.add(Response{ Response::ItemRemoved{ *itemID } });
+            responseQueue.add(Response{ response::ItemRemoved{ *itemID } });
         return newIterator;
     }
 
@@ -118,14 +118,14 @@ public:
             return;
 
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responseQueue.add(Response{ Response::StatTrakUpdated{ *itemID, newStatTrak } });
+            responseQueue.add(Response{ response::StatTrakUpdated{ *itemID, newStatTrak } });
     }
 
     void moveToFront(ItemConstIterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         if (const auto itemID = getItemID(it); itemID.has_value())
-            responseQueue.add(Response{ Response::ItemMovedToFront{ *itemID } });
+            responseQueue.add(Response{ response::ItemMovedToFront{ *itemID } });
     }
 
     void assignItemID(ItemConstIterator it, std::uint64_t itemID)
@@ -165,7 +165,7 @@ private:
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());
-        responseQueue.add(Response{ Response::ItemAdded{ added, asUnacknowledged } });
+        responseQueue.add(Response{ response::ItemAdded{ added, asUnacknowledged } });
         return added;
     }
 
