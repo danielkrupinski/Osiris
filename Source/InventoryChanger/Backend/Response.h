@@ -125,6 +125,7 @@ struct Response {
     };
 
     std::variant<
+        std::monostate,
         ItemAdded,
         ItemMovedToFront,
         ItemEquipped,

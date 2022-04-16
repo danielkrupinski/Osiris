@@ -1,5 +1,7 @@
 #pragma once
 
+#include <variant>
+
 #include "Backend/BackendSimulator.h"
 #include "Backend/Response.h"
 
@@ -9,6 +11,7 @@ namespace inventory_changer
 struct BackendResponseHandler {
     explicit BackendResponseHandler(backend::BackendSimulator& backend) : backend{ backend } {}
 
+    void operator()(std::monostate) const { /* Empty response, this should never be called */ }
     void operator()(const backend::Response::ItemAdded& response) const;
     void operator()(const backend::Response::ItemMovedToFront& response) const;
     void operator()(const backend::Response::ItemEquipped& response) const;
