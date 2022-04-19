@@ -36,26 +36,17 @@ struct ItemRemoved {
     std::uint64_t itemID;
 };
 
-struct StickerApplied {
-    StickerApplied(ItemConstIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
+template <typename Tag>
+struct StickerModified {
+    StickerModified(ItemConstIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
 
     ItemConstIterator skinItem;
     std::uint8_t stickerSlot;
 };
 
-struct StickerScraped {
-    StickerScraped(ItemConstIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
-
-    ItemConstIterator skinItem;
-    std::uint8_t stickerSlot;
-};
-
-struct StickerRemoved {
-    StickerRemoved(ItemConstIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
-
-    ItemConstIterator skinItem;
-    std::uint8_t stickerSlot;
-};
+using StickerApplied = StickerModified<struct StickerAppliedTag>;
+using StickerScraped = StickerModified<struct StickerScrapedTag>;
+using StickerRemoved = StickerModified<struct StickerRemovedTag>;
 
 struct StatTrakUpdated {
     StatTrakUpdated(std::uint64_t itemID, int newStatTrakValue) : itemID{ itemID }, newStatTrakValue{ newStatTrakValue } {}
