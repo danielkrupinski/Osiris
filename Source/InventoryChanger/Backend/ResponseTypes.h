@@ -79,19 +79,16 @@ struct ContainerOpened {
     ItemConstIterator receivedItem;
 };
 
-struct PatchApplied {
-    PatchApplied(ItemConstIterator agentItem, std::uint8_t patchSlot) : agentItem{ agentItem }, patchSlot{ patchSlot } {}
+template <typename Tag>
+struct PatchModified {
+    PatchModified(ItemConstIterator agentItem, std::uint8_t patchSlot) : agentItem{ agentItem }, patchSlot{ patchSlot } {}
 
     ItemConstIterator agentItem;
     std::uint8_t patchSlot;
 };
 
-struct PatchRemoved {
-    PatchRemoved(ItemConstIterator agentItem, std::uint8_t patchSlot) : agentItem{ agentItem }, patchSlot{ patchSlot } {}
-
-    ItemConstIterator agentItem;
-    std::uint8_t patchSlot;
-};
+using PatchApplied = PatchModified<struct PatchAppliedTag>;
+using PatchRemoved = PatchModified<struct PatchRemovedTag>;
 
 struct SouvenirTokenActivated {
     explicit SouvenirTokenActivated(ItemConstIterator tournamentCoin) : tournamentCoin{ tournamentCoin } {}
