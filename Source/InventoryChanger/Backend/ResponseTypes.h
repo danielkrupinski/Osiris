@@ -61,17 +61,15 @@ struct ViewerPassActivated {
     ItemConstIterator createdEventCoin;
 };
 
-struct NameTagAdded {
-    explicit NameTagAdded(ItemConstIterator skinItem) : skinItem{ skinItem } {}
+template <typename Tag>
+struct NameTagModified {
+    explicit NameTagModified(ItemConstIterator skinItem) : skinItem{ skinItem } {}
 
     ItemConstIterator skinItem;
 };
 
-struct NameTagRemoved {
-    explicit NameTagRemoved(ItemConstIterator skinItem) : skinItem{ skinItem } {}
-
-    ItemConstIterator skinItem;
-};
+using NameTagAdded = NameTagModified<struct NameTagAddedTag>;
+using NameTagRemoved = NameTagModified<struct NameTagRemovedTag>;
 
 struct ContainerOpened {
     explicit ContainerOpened(ItemConstIterator receivedItem) : receivedItem{ receivedItem } {}
