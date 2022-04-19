@@ -21,7 +21,7 @@ public:
     {
         while (!responses.empty()) {
             const auto& [timestamp, response] = responses.front();
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - timestamp) < delay)
+            if (Clock::now() - timestamp < delay)
                 break;
             std::visit(visitor, response.data);
             responses.pop();
