@@ -4,8 +4,8 @@ target_sources(OsirisOBJ PRIVATE
   ItemGenerator.cpp
   StaticData.cpp
   GameItems/Storage.cpp
-  Backend/ToolUser.cpp
   BackendResponseHandler.cpp
 )
 
+add_subdirectory(Backend)
 add_subdirectory(Inventory)
