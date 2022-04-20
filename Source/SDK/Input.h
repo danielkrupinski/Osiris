@@ -5,19 +5,11 @@
 
 class Input {
 public:
-#ifdef _WIN32
-    PAD(12)
-#else
-    PAD(16)
-#endif
+    PAD(WIN32_LINUX(12, 16))
     bool isTrackIRAvailable;
     bool isMouseInitialized;
     bool isMouseActive;
-#ifdef _WIN32
-    PAD(158)
-#else
-    PAD(162)
-#endif
+    PAD(WIN32_LINUX(158, 162))
     bool isCameraInThirdPerson;
     bool cameraMovingWithMouse;
     Vector cameraOffset;
