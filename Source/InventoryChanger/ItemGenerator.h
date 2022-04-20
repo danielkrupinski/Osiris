@@ -8,8 +8,6 @@
 
 #include "Inventory/Item.h"
 
-struct InventoryItem;
-
 namespace ItemGenerator
 {
     inventory::Item generateItemFromContainer(const inventory::Item& caseItem) noexcept;
