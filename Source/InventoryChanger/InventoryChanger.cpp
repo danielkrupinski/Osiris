@@ -453,7 +453,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
     }
 
     processEquipRequests();
-    BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance() }, std::chrono::milliseconds{ 200 });
+    BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance() }, std::chrono::milliseconds{ 300 });
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
