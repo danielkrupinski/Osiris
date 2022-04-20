@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <queue>
+#include <utility>
 #include <variant>
 
 #include "Response.h"
@@ -18,13 +19,13 @@ public:
     }
 
     template <typename Visitor>
-    void visit(Visitor visitor, std::chrono::milliseconds delay)
+    void visit(Visitor&& visitor, std::chrono::milliseconds delay)
     {
         while (!responses.empty()) {
             const auto& [timestamp, response] = responses.front();
             if (Clock::now() - timestamp < delay)
                 break;
-            std::visit(visitor, response.data);
+            std::visit(std::forward<Visitor>(visitor), response.data);
             responses.pop();
         }
     }
