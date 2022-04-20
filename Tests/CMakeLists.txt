@@ -9,12 +9,11 @@ FetchContent_Declare(
   URL_HASH SHA256=353571c2440176ded91c2de6d6cd88ddd41401d14692ec1f99e35d013feda55a
 )
 
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(Tests HelpersTests.cpp)
 add_subdirectory(InventoryChanger)
-target_link_libraries(Tests gtest_main Threads::Threads OsirisOBJ)
+target_link_libraries(Tests gtest_main gmock Threads::Threads OsirisOBJ)
 
 include(GoogleTest)
 gtest_discover_tests(Tests)
