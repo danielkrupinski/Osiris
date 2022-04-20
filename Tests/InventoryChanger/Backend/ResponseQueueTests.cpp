@@ -55,5 +55,28 @@ TEST_P(InventoryChanger_Backend_ResponseQueue_InstantResponseTest, ResponsesAreH
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_ResponseQueue_InstantResponseTest, testing::Values(-1ms, 0ms, 1ms));
 
+struct ResponseTime {
+    std::chrono::microseconds timePassed;
+    std::chrono::milliseconds delay;
+};
+
+class InventoryChanger_Backend_ResponseQueue_ResponseTimeTest : public testing::TestWithParam<ResponseTime> {};
+
+TEST_P(InventoryChanger_Backend_ResponseQueue_ResponseTimeTest, ResponsesAreHandledImmediatelyForDelayNotGreaterThanZero) {
+    ResponseQueue<FakeClock> queue;
+    queue.add(response::ItemAdded{ {}, false });
+    queue.add(response::StickerApplied{ {}, 0 });
+
+    FakeClock::advance(GetParam().timePassed);
+
+    MockResponseHandler mock;
+    EXPECT_CALL(mock, responseHandled()).Times(GetParam().timePassed >= GetParam().delay ? 2 : 0);
+    queue.visit(mock, GetParam().delay);
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_ResponseQueue_ResponseTimeTest,
+    testing::Values(ResponseTime{ 999us, 1ms }, ResponseTime{ 1ms, 1ms }, ResponseTime{ 10ms, 1ms })
+);
+
 }
 }
