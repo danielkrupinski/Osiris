@@ -235,6 +235,7 @@ void removeSticker(std::uint64_t itemID, std::uint8_t slot)
 
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
     attributeSetter.setStickerID(*econItem, slot, 0);
+    attributeSetter.setStickerWear(*econItem, slot, 0.0f);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
