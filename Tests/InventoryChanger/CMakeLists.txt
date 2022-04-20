@@ -3,5 +3,6 @@ target_sources(Tests PRIVATE
   ItemGeneratorTests.cpp
 )
 
+add_subdirectory(Backend)
 add_subdirectory(GameItems)
 add_subdirectory(Inventory)
