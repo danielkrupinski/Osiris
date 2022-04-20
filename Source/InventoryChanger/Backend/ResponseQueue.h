@@ -9,6 +9,7 @@
 namespace inventory_changer::backend
 {
 
+template <typename Clock = std::chrono::steady_clock>
 class ResponseQueue {
 public:
     void add(const Response& response)
@@ -29,8 +30,7 @@ public:
     }
 
 private:
-    using Clock = std::chrono::steady_clock;
-    std::queue<std::pair<Clock::time_point, Response>> responses;
+    std::queue<std::pair<typename Clock::time_point, Response>> responses;
 };
 
 }

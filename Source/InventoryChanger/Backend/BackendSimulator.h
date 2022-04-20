@@ -234,7 +234,7 @@ private:
 
     ItemList inventory;
     Loadout loadout;
-    ResponseQueue responseQueue;
+    ResponseQueue<> responseQueue;
     ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
 };
