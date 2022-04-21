@@ -62,7 +62,7 @@ struct ResponseTime {
 
 class InventoryChanger_Backend_ResponseQueue_ResponseTimeTest : public testing::TestWithParam<ResponseTime> {};
 
-TEST_P(InventoryChanger_Backend_ResponseQueue_ResponseTimeTest, ResponsesAreHandledImmediatelyForDelayNotGreaterThanZero) {
+TEST_P(InventoryChanger_Backend_ResponseQueue_ResponseTimeTest, ResponsesAreHandledWhenDelayHasPassed) {
     ResponseQueue<FakeClock> queue;
     queue.add(response::ItemAdded{ {}, false });
     queue.add(response::StickerApplied{ {}, 0 });
