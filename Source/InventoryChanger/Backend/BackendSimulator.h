@@ -7,6 +7,8 @@
 #include "Item.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
+#include "Request.h"
+#include "RequestHandler.h"
 #include "Response.h"
 #include "ResponseQueue.h"
 #include "ToolUser.h"
@@ -152,6 +154,11 @@ public:
     {
         if (const auto response = processUseToolRequest(request); !response.isEmpty())
             responseQueue.add(response);
+    }
+
+    void handleRequest(const Request& request)
+    {
+        std::visit(RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }, request);
     }
 
     template <typename Visitor>
