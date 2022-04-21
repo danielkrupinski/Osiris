@@ -266,6 +266,9 @@
     <ClCompile Include="InventoryChanger\BackendResponseHandler.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">

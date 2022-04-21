@@ -1,3 +1,4 @@
 target_sources(OsirisOBJ PRIVATE
-  ToolUser.cpp  
+  RequestHandler.cpp
+  ToolUser.cpp
 )
