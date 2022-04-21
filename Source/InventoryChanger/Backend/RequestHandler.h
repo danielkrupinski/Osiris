@@ -16,6 +16,8 @@ class BackendSimulator;
 struct RequestHandler {
     RequestHandler(BackendSimulator& backend, const game_items::Lookup& gameItemLookup, ItemConstRemover constRemover) : backend{ backend }, gameItemLookup{ gameItemLookup }, constRemover{ constRemover } {}
 
+    Response operator()(const request::ApplySticker& request);
+
 private:
     BackendSimulator& backend;
     const game_items::Lookup& gameItemLookup;
