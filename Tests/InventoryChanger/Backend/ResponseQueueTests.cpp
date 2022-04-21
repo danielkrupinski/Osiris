@@ -78,5 +78,17 @@ INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_ResponseQueue_ResponseTimeTe
     testing::Values(ResponseTime{ 999us, 1ms }, ResponseTime{ 1ms, 1ms }, ResponseTime{ 10ms, 1ms })
 );
 
+TEST(InventoryChanger_Backend_ResponseQueueTest, ResponsesAreKeptInQueueWhenNotHandled) {
+    ResponseQueue<FakeClock> queue;
+    queue.add(response::ItemAdded{ {}, false });
+    queue.add(response::StickerApplied{ {}, 0 });
+
+    queue.visit([](auto&&){}, 1ms);
+
+    MockResponseHandler mock;
+    EXPECT_CALL(mock, responseHandled()).Times(2);
+    queue.visit(mock, 0ms);
+}
+
 }
 }
