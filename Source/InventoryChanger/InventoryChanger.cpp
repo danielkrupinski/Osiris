@@ -1094,6 +1094,12 @@ namespace inventory_changer
             }
         }
 
+        void wearStickerOf(std::uint64_t skinItemID)
+        {
+            if (const auto skinItem = backend.itemFromID(skinItemID); skinItem.has_value())
+                backend.handleRequest(backend::request::WearSticker{ *skinItem, stickerSlot });
+        }
+
         [[nodiscard]] static BackendRequestBuilder& instance()
         {
             static BackendRequestBuilder builder{ backend::BackendSimulator::instance() };
@@ -1121,8 +1127,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
         inventory_changer::BackendRequestBuilder::instance().useToolOn(stringToUint64(string));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        useToolRequest.destItemID = stringToUint64(string);
-        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::WearSticker;
+        inventory_changer::BackendRequestBuilder::instance().wearStickerOf(stringToUint64(string));
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
         useToolRequest.nameTag = string;
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
