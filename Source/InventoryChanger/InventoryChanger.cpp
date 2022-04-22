@@ -447,11 +447,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     using namespace inventory_changer::backend;
 
-    if (useToolRequest.action != UseToolRequest::Action::None) {
-        BackendSimulator::instance().useTool(useToolRequest);
-        useToolRequest.action = UseToolRequest::Action::None;
-    }
-
     processEquipRequests();
     BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance() }, std::chrono::milliseconds{ 300 });
 }
@@ -1073,13 +1068,58 @@ static std::uint64_t stringToUint64(const char* str) noexcept
     return result;
 }
 
+namespace inventory_changer
+{
+    class BackendRequestBuilder {
+    public:
+        explicit BackendRequestBuilder(backend::BackendSimulator& backend) : backend{ backend } {}
+
+        void setToolItemID(std::uint64_t itemID) noexcept
+        {
+            toolItemID = itemID;
+        }
+
+        void setStickerSlot(std::uint8_t slot) noexcept
+        {
+            stickerSlot = slot;
+        }
+
+        void useToolOn(std::uint64_t destItemID)
+        {
+            const auto toolItem = backend.itemFromID(toolItemID);
+            const auto destItem = backend.itemFromID(destItemID);
+
+            if (toolItem.has_value() && destItem.has_value()) {
+                useToolOnItem(*toolItem, *destItem);
+            }
+        }
+
+        [[nodiscard]] static BackendRequestBuilder& instance()
+        {
+            static BackendRequestBuilder builder{ backend::BackendSimulator::instance() };
+            return builder;
+        }
+
+    private:
+        void useToolOnItem(backend::ItemConstIterator tool, backend::ItemConstIterator destItem)
+        {
+            if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
+                backend.handleRequest(backend::request::ApplySticker{ destItem, tool, stickerSlot });
+            }
+        }
+
+        backend::BackendSimulator& backend;
+        std::uint64_t toolItemID = 0;
+        std::uint8_t stickerSlot = 0;
+    };
+}
+
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        useToolRequest.toolItemID = stringToUint64(string);
+        inventory_changer::BackendRequestBuilder::instance().setToolItemID(stringToUint64(string));
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
-        useToolRequest.destItemID = stringToUint64(string);
-        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::Use;
+        inventory_changer::BackendRequestBuilder::instance().useToolOn(stringToUint64(string));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
         useToolRequest.destItemID = stringToUint64(string);
         useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::WearSticker;
@@ -1104,7 +1144,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
 void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress || returnAddress == memory->wearItemStickerGetArgAsNumberReturnAddress)
-        useToolRequest.stickerSlot = number;
+        inventory_changer::BackendRequestBuilder::instance().setStickerSlot(static_cast<std::uint8_t>(number));
 }
 
 struct Icon {
