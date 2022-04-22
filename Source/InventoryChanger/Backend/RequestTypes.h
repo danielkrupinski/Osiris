@@ -18,4 +18,10 @@ struct WearSticker {
     std::uint8_t slot;
 };
 
+struct SwapStatTrak {
+    ItemConstIterator itemFrom;
+    ItemConstIterator itemTo;
+    ItemConstIterator statTrakSwapTool;
+};
+
 }

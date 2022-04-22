@@ -8,6 +8,7 @@ namespace inventory_changer::backend
 {
     using Request = std::variant<
         request::ApplySticker,
-        request::WearSticker
+        request::WearSticker,
+        request::SwapStatTrak
     >;
 }
