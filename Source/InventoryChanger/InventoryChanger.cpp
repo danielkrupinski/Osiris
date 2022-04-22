@@ -1103,6 +1103,8 @@ namespace inventory_changer
                 useToolOnItem(*toolItem, *destItem);
             } else if (toolItem.has_value()) {
                 useTool(*toolItem);
+            } else if (destItem.has_value()) {
+                useItem(*destItem);
             }
         }
 
@@ -1123,6 +1125,8 @@ namespace inventory_changer
         {
             if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
                 backend.handleRequest(backend::request::ApplySticker{ destItem, tool, stickerSlot });
+            } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
+                backend.handleRequest(backend::request::OpenContainer{ destItem, tool });
             }
         }
 
@@ -1135,6 +1139,12 @@ namespace inventory_changer
                 if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
                     backend.handleRequest(backend::request::SwapStatTrak{ *statTrakSwapItem1, *statTrakSwapItem2, tool });
             }
+        }
+
+        void useItem(backend::ItemConstIterator item)
+        {
+            if (item->gameItem().isCase())
+                backend.handleRequest(backend::request::OpenContainer{ item });
         }
 
         backend::BackendSimulator& backend;
