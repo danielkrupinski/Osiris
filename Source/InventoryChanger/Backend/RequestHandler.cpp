@@ -2,6 +2,7 @@
 #include "RequestHandler.h"
 
 #include <InventoryChanger/GameItems/Lookup.h>
+#include <InventoryChanger/ItemGenerator.h>
 
 namespace inventory_changer::backend
 {
@@ -55,6 +56,22 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request)
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
     return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
+}
+
+Response RequestHandler::operator()(const request::OpenContainer& request)
+{
+    if (!request.container->gameItem().isCase())
+        return {};
+
+    if (request.key.has_value()) {
+        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
+            backend.removeItem(keyItem);
+    }
+
+    auto generatedItem = ItemGenerator::generateItemFromContainer(*request.container);
+    backend.removeItem(request.container);
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(generatedItem));
+    return response::ContainerOpened{ receivedItem };
 }
 
 }
