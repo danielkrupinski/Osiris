@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 #include "Item.h"
 
@@ -22,6 +23,11 @@ struct SwapStatTrak {
     ItemConstIterator itemFrom;
     ItemConstIterator itemTo;
     ItemConstIterator statTrakSwapTool;
+};
+
+struct OpenContainer {
+    ItemConstIterator container;
+    std::optional<ItemConstIterator> key;
 };
 
 }
