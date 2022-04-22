@@ -1084,6 +1084,16 @@ namespace inventory_changer
             stickerSlot = slot;
         }
 
+        void setStatTrakSwapItem1(std::uint64_t itemID) noexcept
+        {
+            statTrakSwapItemID1 = itemID;
+        }
+
+        void setStatTrakSwapItem2(std::uint64_t itemID) noexcept
+        {
+            statTrakSwapItemID2 = itemID;
+        }
+
         void useToolOn(std::uint64_t destItemID)
         {
             const auto toolItem = backend.itemFromID(toolItemID);
@@ -1091,6 +1101,8 @@ namespace inventory_changer
 
             if (toolItem.has_value() && destItem.has_value()) {
                 useToolOnItem(*toolItem, *destItem);
+            } else if (toolItem.has_value()) {
+                useTool(*toolItem);
             }
         }
 
@@ -1114,9 +1126,22 @@ namespace inventory_changer
             }
         }
 
+        void useTool(backend::ItemConstIterator tool)
+        {
+            if (tool->gameItem().isStatTrakSwapTool()) {
+                const auto statTrakSwapItem1 = backend.itemFromID(statTrakSwapItemID1);
+                const auto statTrakSwapItem2 = backend.itemFromID(statTrakSwapItemID2);
+
+                if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
+                    backend.handleRequest(backend::request::SwapStatTrak{ *statTrakSwapItem1, *statTrakSwapItem2, tool });
+            }
+        }
+
         backend::BackendSimulator& backend;
         std::uint64_t toolItemID = 0;
         std::uint8_t stickerSlot = 0;
+        std::uint64_t statTrakSwapItemID1 = 0;
+        std::uint64_t statTrakSwapItemID2 = 0;
     };
 }
 
@@ -1140,9 +1165,9 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         InventoryChanger::acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        useToolRequest.statTrakSwapItem1 = stringToUint64(string);
+        inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem1(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-        useToolRequest.statTrakSwapItem2 = stringToUint64(string);
+        inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem2(stringToUint64(string));
     }
 }
 
