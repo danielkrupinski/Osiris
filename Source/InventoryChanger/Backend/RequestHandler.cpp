@@ -20,4 +20,21 @@ Response RequestHandler::operator()(const request::ApplySticker& request)
     return response::StickerApplied{ request.item, request.slot };
 }
 
+Response RequestHandler::operator()(const request::WearSticker& request)
+{
+    const auto skin = constRemover.removeConstness(request.skin)->get<inventory::Skin>();
+    if (!skin)
+        return {};
+
+    constexpr auto wearStep = 0.12f;
+    const auto newWear = (skin->stickers[request.slot].wear += wearStep);
+
+    if (const auto shouldRemove = (newWear >= 1.0f + wearStep)) {
+        skin->stickers[request.slot] = {};
+        return response::StickerRemoved{ request.skin, request.slot };
+    }
+
+    return response::StickerScraped{ request.skin, request.slot };
+}
+
 }
