@@ -37,4 +37,24 @@ Response RequestHandler::operator()(const request::WearSticker& request)
     return response::StickerScraped{ request.skin, request.slot };
 }
 
+Response RequestHandler::operator()(const request::SwapStatTrak& request)
+{
+    if (!(request.itemFrom->gameItem().isSkin() && request.itemTo->gameItem().isSkin() && request.statTrakSwapTool->gameItem().isStatTrakSwapTool()))
+        return {};
+
+    const auto skinFrom = constRemover.removeConstness(request.itemFrom)->get<inventory::Skin>();
+    if (!skinFrom)
+        return {};
+
+    const auto skinTo = constRemover.removeConstness(request.itemFrom)->get<inventory::Skin>();
+    if (!skinTo)
+        return {};
+
+    std::swap(skinFrom->statTrak, skinTo->statTrak);
+    backend.removeItem(request.statTrakSwapTool);
+    backend.moveToFront(request.itemFrom);
+    backend.moveToFront(request.itemTo);
+    return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
+}
+
 }
