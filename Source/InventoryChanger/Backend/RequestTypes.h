@@ -13,4 +13,9 @@ struct ApplySticker {
     std::uint8_t slot;
 };
 
+struct WearSticker {
+    ItemConstIterator skin;
+    std::uint8_t slot;
+};
+
 }
