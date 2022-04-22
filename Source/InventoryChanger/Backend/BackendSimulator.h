@@ -158,7 +158,8 @@ public:
 
     void handleRequest(const Request& request)
     {
-        std::visit(RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }, request);
+        if (const auto response = std::visit(RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }, request); !response.isEmpty())
+            responseQueue.add(response);
     }
 
     template <typename Visitor>
