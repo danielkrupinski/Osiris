@@ -111,4 +111,19 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
     return {};
 }
 
+Response RequestHandler::operator()(const request::ActivateViewerPass& request)
+{
+    const auto& gameItem = request.viewerPass->gameItem();
+    if (!gameItem.isViewerPass())
+        return {};
+
+    const auto coinID = static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1);
+    if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
+        const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin });
+        backend.removeItem(request.viewerPass);
+        return response::ViewerPassActivated{ addedEventCoin };
+    }
+    return {};
+}
+
 }
