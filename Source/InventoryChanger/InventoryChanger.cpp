@@ -1127,6 +1127,8 @@ namespace inventory_changer
                 backend.handleRequest(backend::request::ApplySticker{ destItem, tool, stickerSlot });
             } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
                 backend.handleRequest(backend::request::OpenContainer{ destItem, tool });
+            } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
+                backend.handleRequest(backend::request::ApplyPatch{ destItem, tool, stickerSlot });
             }
         }
 
