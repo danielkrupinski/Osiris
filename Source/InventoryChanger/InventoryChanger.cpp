@@ -1168,6 +1168,8 @@ namespace inventory_changer
                 backend.handleRequest(backend::request::ActivateViewerPass{ tool });
             } else if (tool->gameItem().isSouvenirToken()) {
                 backend.handleRequest(backend::request::ActivateSouvenirToken{ tool });
+            } else if (tool->gameItem().isGraffiti()) {
+                backend.handleRequest(backend::request::UnsealGraffiti{ tool });
             }
         }
 
