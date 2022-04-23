@@ -168,4 +168,19 @@ Response RequestHandler::operator()(const request::ActivateSouvenirToken& reques
     return response::SouvenirTokenActivated{ tournamentCoin };
 }
 
+Response RequestHandler::operator()(const request::UnsealGraffiti& request)
+{
+    if (!request.item->gameItem().isGraffiti())
+        return {};
+
+    const auto graffiti = constRemover.removeConstness(request.item)->getOrCreate<inventory::Graffiti>();
+    if (!graffiti)
+        return {};
+
+    graffiti->usesLeft = 50;
+
+    backend.moveToFront(request.item);
+    return response::GraffitiUnsealed{ request.item };
+}
+
 }

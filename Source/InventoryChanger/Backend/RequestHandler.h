@@ -27,7 +27,7 @@ struct RequestHandler {
     Response operator()(const request::AddNameTag& request);
     Response operator()(const request::RemoveNameTag& request);
     Response operator()(const request::ActivateSouvenirToken& request);
-    Response operator()(const request::UnsealGraffiti& request) { return {}; }
+    Response operator()(const request::UnsealGraffiti& request);
 
 private:
     BackendSimulator& backend;
