@@ -30,4 +30,10 @@ struct OpenContainer {
     std::optional<ItemConstIterator> key;
 };
 
+struct ApplyPatch {
+    ItemConstIterator item;
+    ItemConstIterator patch;
+    std::uint8_t slot;
+};
+
 }

@@ -20,6 +20,7 @@ struct RequestHandler {
     Response operator()(const request::WearSticker& request);
     Response operator()(const request::SwapStatTrak& request);
     Response operator()(const request::OpenContainer& request);
+    Response operator()(const request::ApplyPatch& request) { return {}; }
 
 private:
     BackendSimulator& backend;
