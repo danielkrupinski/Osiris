@@ -56,4 +56,8 @@ struct AddNameTag {
     std::string_view nameTag;
 };
 
+struct RemoveNameTag {
+    ItemConstIterator item;
+};
+
 }
