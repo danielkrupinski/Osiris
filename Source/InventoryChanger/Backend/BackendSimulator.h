@@ -11,7 +11,6 @@
 #include "RequestHandler.h"
 #include "Response.h"
 #include "ResponseQueue.h"
-#include "ToolUser.h"
 
 #include <InventoryChanger/StaticData.h>
 

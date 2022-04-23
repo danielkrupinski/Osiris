@@ -667,9 +667,6 @@
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\ToolUser.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\Response.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
