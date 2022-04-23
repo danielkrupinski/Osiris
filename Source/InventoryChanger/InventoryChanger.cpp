@@ -1166,6 +1166,8 @@ namespace inventory_changer
                 backend.handleRequest(backend::request::ActivateOperationPass{ tool });
             } else if (tool->gameItem().isViewerPass()) {
                 backend.handleRequest(backend::request::ActivateViewerPass{ tool });
+            } else if (tool->gameItem().isSouvenirToken()) {
+                backend.handleRequest(backend::request::ActivateSouvenirToken{ tool });
             }
         }
 
