@@ -1146,6 +1146,8 @@ namespace inventory_changer
 
                 if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
                     backend.handleRequest(backend::request::SwapStatTrak{ *statTrakSwapItem1, *statTrakSwapItem2, tool });
+            } else if (tool->gameItem().isOperationPass()) {
+                backend.handleRequest(backend::request::ActivateOperationPass{ tool });
             }
         }
 
