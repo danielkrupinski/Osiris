@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <optional>
+#include <string_view>
 
 #include "Item.h"
 
@@ -47,6 +48,12 @@ struct ActivateOperationPass {
 
 struct ActivateViewerPass {
     ItemConstIterator viewerPass;
+};
+
+struct AddNameTag {
+    ItemConstIterator item;
+    ItemConstIterator nameTagItem;
+    std::string_view nameTag;
 };
 
 }

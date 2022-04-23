@@ -14,6 +14,7 @@ namespace inventory_changer::backend
         request::ApplyPatch,
         request::RemovePatch,
         request::ActivateOperationPass,
-        request::ActivateViewerPass
+        request::ActivateViewerPass,
+        request::AddNameTag
     >;
 }

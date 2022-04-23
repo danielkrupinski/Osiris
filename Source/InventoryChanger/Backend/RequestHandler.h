@@ -24,6 +24,7 @@ struct RequestHandler {
     Response operator()(const request::RemovePatch& request);
     Response operator()(const request::ActivateOperationPass& request);
     Response operator()(const request::ActivateViewerPass& request);
+    Response operator()(const request::AddNameTag& request) { return {}; }
 
 private:
     BackendSimulator& backend;
