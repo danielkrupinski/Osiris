@@ -41,4 +41,8 @@ struct RemovePatch {
     std::uint8_t slot;
 };
 
+struct ActivateOperationPass {
+    ItemConstIterator operationPass;
+};
+
 }

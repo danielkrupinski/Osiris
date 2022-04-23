@@ -12,6 +12,7 @@ namespace inventory_changer::backend
         request::SwapStatTrak,
         request::OpenContainer,
         request::ApplyPatch,
-        request::RemovePatch
+        request::RemovePatch,
+        request::ActivateOperationPass
     >;
 }
