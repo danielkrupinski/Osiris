@@ -150,12 +150,6 @@ public:
         return itemIDMap.getItemID(it);
     }
 
-    void useTool(const UseToolRequest& request)
-    {
-        if (const auto response = processUseToolRequest(request); !response.isEmpty())
-            responseQueue.add(response);
-    }
-
     void handleRequest(const Request& request)
     {
         if (const auto response = std::visit(RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }, request); !response.isEmpty())
@@ -175,49 +169,6 @@ private:
         const auto added = std::prev(inventory.end());
         responseQueue.add(response::ItemAdded{ added, asUnacknowledged });
         return added;
-    }
-
-    Response processUseToolRequest(const UseToolRequest& request)
-    {
-        const auto destItem = itemIDMap.get(request.destItemID);
-        const auto tool = itemIDMap.get(request.toolItemID);
-
-        if (request.action == UseToolRequest::Action::Use) {
-            if (destItem.has_value() && (*destItem)->gameItem().isCase())
-                return ToolUser{ *this, gameItemLookup }.openContainer(*destItem, tool);
-
-            if (!tool.has_value())
-                return {};
-
-            if ((*tool)->gameItem().isSticker()) {
-                if (!destItem.has_value())
-                    return {};
-
-                return ToolUser{ *this, gameItemLookup }.applySticker(removeConstness(*destItem), *tool, request.stickerSlot);
-            } else if ((*tool)->gameItem().isOperationPass()) {
-                ToolUser{ *this, gameItemLookup }.activateOperationPass(*tool);
-            } else if ((*tool)->gameItem().isViewerPass()) {
-                return ToolUser{ *this, gameItemLookup }.activateViewerPass(*tool);
-            } else if ((*tool)->gameItem().isNameTag()) {
-                if (!destItem.has_value())
-                    return {};
-
-                return ToolUser{ *this, gameItemLookup }.addNameTag(removeConstness(*destItem), *tool, request.nameTag);
-            } else if ((*tool)->gameItem().isPatch()) {
-                if (!destItem.has_value())
-                    return {};
-
-                return ToolUser{ *this, gameItemLookup }.applyPatch(removeConstness(*destItem), *tool, request.stickerSlot);
-            } else if ((*tool)->gameItem().isGraffiti()) {
-                return ToolUser{ *this, gameItemLookup }.unsealGraffiti(removeConstness(*tool));
-            }
-        } else if (request.action == UseToolRequest::Action::WearSticker) {
-            if (!destItem.has_value())
-                return {};
-            return ToolUser{ *this, gameItemLookup }.wearSticker(removeConstness(*destItem), request.stickerSlot);
-        }
-
-        return {};
     }
 
     static bool updateStatTrak(inventory::Item& item, int newStatTrak)
