@@ -1148,6 +1148,8 @@ namespace inventory_changer
                     backend.handleRequest(backend::request::SwapStatTrak{ *statTrakSwapItem1, *statTrakSwapItem2, tool });
             } else if (tool->gameItem().isOperationPass()) {
                 backend.handleRequest(backend::request::ActivateOperationPass{ tool });
+            } else if (tool->gameItem().isViewerPass()) {
+                backend.handleRequest(backend::request::ActivateViewerPass{ tool });
             }
         }
 
