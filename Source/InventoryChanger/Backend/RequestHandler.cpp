@@ -148,4 +148,24 @@ Response RequestHandler::operator()(const request::RemoveNameTag& request)
     return {};
 }
 
+Response RequestHandler::operator()(const request::ActivateSouvenirToken& request)
+{
+    if (!request.souvenirToken->gameItem().isSouvenirToken())
+        return {};
+
+    const auto tournamentEventID = gameItemLookup.getStorage().getTournamentEventID(request.souvenirToken->gameItem());
+    const auto& inventory = backend.getInventory();
+    const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && gameItemLookup.getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
+    if (tournamentCoin == inventory.end())
+        return {};
+
+    const auto tournamentCoinData = constRemover.removeConstness(tournamentCoin)->getOrCreate<inventory::TournamentCoin>();
+    if (!tournamentCoinData)
+        return {};
+
+    ++tournamentCoinData->dropsAwarded;
+    backend.removeItem(request.souvenirToken);
+    return response::SouvenirTokenActivated{ tournamentCoin };
+}
+
 }
