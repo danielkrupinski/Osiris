@@ -126,4 +126,16 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request)
     return {};
 }
 
+Response RequestHandler::operator()(const request::AddNameTag& request)
+{
+    const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>();
+    if (!skin)
+        return {};
+
+    skin->nameTag = request.nameTag;
+    backend.removeItem(request.nameTagItem);
+    backend.moveToFront(request.item);
+    return response::NameTagAdded{ request.item };
+}
+
 }
