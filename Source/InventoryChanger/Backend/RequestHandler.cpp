@@ -97,4 +97,18 @@ Response RequestHandler::operator()(const request::RemovePatch& request)
     return response::PatchRemoved{ request.item, request.slot };
 }
 
+Response RequestHandler::operator()(const request::ActivateOperationPass& request)
+{
+    const auto& gameItem = request.operationPass->gameItem();
+    if (!gameItem.isOperationPass())
+        return {};
+
+    const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
+    if (const auto operationCoin = gameItemLookup.findItem(coinID); operationCoin.has_value()) {
+        backend.addItemUnacknowledged(inventory::Item{ *operationCoin });
+        backend.removeItem(request.operationPass);
+    }
+    return {};
+}
+
 }

@@ -22,7 +22,7 @@ struct RequestHandler {
     Response operator()(const request::OpenContainer& request);
     Response operator()(const request::ApplyPatch& request);
     Response operator()(const request::RemovePatch& request);
-    Response operator()(const request::ActivateOperationPass& request) { return {}; }
+    Response operator()(const request::ActivateOperationPass& request);
 
 private:
     BackendSimulator& backend;
