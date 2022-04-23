@@ -260,9 +260,6 @@
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp">
       <Filter>InventoryChanger\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="InventoryChanger\Backend\ToolUser.cpp">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClCompile>
     <ClCompile Include="InventoryChanger\BackendResponseHandler.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
