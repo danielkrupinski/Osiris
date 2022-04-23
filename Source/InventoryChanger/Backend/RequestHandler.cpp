@@ -74,4 +74,16 @@ Response RequestHandler::operator()(const request::OpenContainer& request)
     return response::ContainerOpened{ receivedItem };
 }
 
+Response RequestHandler::operator()(const request::ApplyPatch& request)
+{
+    const auto agent = constRemover.removeConstness(request.item)->getOrCreate<inventory::Agent>();
+    if (!agent)
+        return {};
+
+    agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
+    backend.moveToFront(request.item);
+    backend.removeItem(request.patch);
+    return response::PatchApplied{ request.item, request.slot };
+}
+
 }
