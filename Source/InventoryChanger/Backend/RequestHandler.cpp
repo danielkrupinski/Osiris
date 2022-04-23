@@ -138,4 +138,14 @@ Response RequestHandler::operator()(const request::AddNameTag& request)
     return response::NameTagAdded{ request.item };
 }
 
+Response RequestHandler::operator()(const request::RemoveNameTag& request)
+{
+    if (const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>()) {
+        skin->nameTag.clear();
+        backend.moveToFront(request.item);
+        return response::NameTagRemoved{ request.item };
+    }
+    return {};
+}
+
 }
