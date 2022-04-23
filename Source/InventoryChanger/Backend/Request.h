@@ -13,6 +13,7 @@ namespace inventory_changer::backend
         request::OpenContainer,
         request::ApplyPatch,
         request::RemovePatch,
-        request::ActivateOperationPass
+        request::ActivateOperationPass,
+        request::ActivateViewerPass
     >;
 }

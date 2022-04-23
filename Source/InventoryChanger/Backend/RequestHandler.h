@@ -23,6 +23,7 @@ struct RequestHandler {
     Response operator()(const request::ApplyPatch& request);
     Response operator()(const request::RemovePatch& request);
     Response operator()(const request::ActivateOperationPass& request);
+    Response operator()(const request::ActivateViewerPass& request) { return {}; }
 
 private:
     BackendSimulator& backend;

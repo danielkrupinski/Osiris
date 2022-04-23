@@ -45,4 +45,8 @@ struct ActivateOperationPass {
     ItemConstIterator operationPass;
 };
 
+struct ActivateViewerPass {
+    ItemConstIterator viewerPass;
+};
+
 }
