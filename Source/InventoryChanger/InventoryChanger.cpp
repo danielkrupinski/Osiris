@@ -1094,6 +1094,11 @@ namespace inventory_changer
             statTrakSwapItemID2 = itemID;
         }
 
+        void setNameTag(std::string_view newName)
+        {
+            nameTag = newName;
+        }
+
         void useToolOn(std::uint64_t destItemID)
         {
             const auto toolItem = backend.itemFromID(toolItemID);
@@ -1135,6 +1140,8 @@ namespace inventory_changer
                 backend.handleRequest(backend::request::OpenContainer{ destItem, tool });
             } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
                 backend.handleRequest(backend::request::ApplyPatch{ destItem, tool, stickerSlot });
+            } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
+                backend.handleRequest(backend::request::AddNameTag{ destItem, tool, nameTag });
             }
         }
 
@@ -1164,6 +1171,7 @@ namespace inventory_changer
         std::uint8_t stickerSlot = 0;
         std::uint64_t statTrakSwapItemID1 = 0;
         std::uint64_t statTrakSwapItemID2 = 0;
+        std::string nameTag;
     };
 }
 
@@ -1176,7 +1184,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
         inventory_changer::BackendRequestBuilder::instance().wearStickerOf(stringToUint64(string));
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        useToolRequest.nameTag = string;
+        inventory_changer::BackendRequestBuilder::instance().setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
         useToolRequest.destItemID = stringToUint64(string);
         useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::RemoveNameTag;
