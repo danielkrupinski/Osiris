@@ -17,6 +17,7 @@ namespace inventory_changer::backend
         request::ActivateViewerPass,
         request::ActivateSouvenirToken,
         request::AddNameTag,
-        request::RemoveNameTag
+        request::RemoveNameTag,
+        request::UnsealGraffiti
     >;
 }

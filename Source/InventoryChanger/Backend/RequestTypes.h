@@ -64,4 +64,8 @@ struct RemoveNameTag {
     ItemConstIterator item;
 };
 
+struct UnsealGraffiti {
+    ItemConstIterator item;
+};
+
 }
