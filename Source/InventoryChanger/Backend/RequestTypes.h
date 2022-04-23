@@ -50,6 +50,10 @@ struct ActivateViewerPass {
     ItemConstIterator viewerPass;
 };
 
+struct ActivateSouvenirToken {
+    ItemConstIterator souvenirToken;
+};
+
 struct AddNameTag {
     ItemConstIterator item;
     ItemConstIterator nameTagItem;
