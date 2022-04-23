@@ -86,4 +86,15 @@ Response RequestHandler::operator()(const request::ApplyPatch& request)
     return response::PatchApplied{ request.item, request.slot };
 }
 
+Response RequestHandler::operator()(const request::RemovePatch& request)
+{
+    const auto agent = constRemover.removeConstness(request.item)->get<inventory::Agent>();
+    if (!agent)
+        return {};
+
+    agent->patches[request.slot].patchID = 0;
+    backend.moveToFront(request.item);
+    return response::PatchRemoved{ request.item, request.slot };
+}
+
 }
