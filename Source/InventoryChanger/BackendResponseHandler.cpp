@@ -487,8 +487,10 @@ void BackendResponseHandler::operator()(const backend::response::PatchApplied& r
 
 void BackendResponseHandler::operator()(const backend::response::PatchRemoved& response) const
 {
-    if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value())
+    if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value()) {
         removePatch(*itemID, response.patchSlot);
+        initItemCustomizationNotification("patch_remove", *itemID);
+    }
 }
 
 void BackendResponseHandler::operator()(const backend::response::SouvenirTokenActivated& response) const
