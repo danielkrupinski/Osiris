@@ -36,4 +36,9 @@ struct ApplyPatch {
     std::uint8_t slot;
 };
 
+struct RemovePatch {
+    ItemConstIterator item;
+    std::uint8_t slot;
+};
+
 }

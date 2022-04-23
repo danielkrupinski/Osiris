@@ -11,6 +11,7 @@ namespace inventory_changer::backend
         request::WearSticker,
         request::SwapStatTrak,
         request::OpenContainer,
-        request::ApplyPatch
+        request::ApplyPatch,
+        request::RemovePatch
     >;
 }
