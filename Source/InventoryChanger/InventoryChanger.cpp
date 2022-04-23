@@ -1108,10 +1108,16 @@ namespace inventory_changer
             }
         }
 
-        void wearStickerOf(std::uint64_t skinItemID)
+        void wearStickerOf(std::uint64_t itemID)
         {
-            if (const auto skinItem = backend.itemFromID(skinItemID); skinItem.has_value())
-                backend.handleRequest(backend::request::WearSticker{ *skinItem, stickerSlot });
+            const auto item = backend.itemFromID(itemID);
+            if (!item.has_value())
+                return;
+
+            if (const auto gameItem = (*item)->gameItem(); gameItem.isSkin())
+                backend.handleRequest(backend::request::WearSticker{ *item, stickerSlot });
+            else if (gameItem.isAgent())
+                backend.handleRequest(backend::request::RemovePatch{ *item, stickerSlot });
         }
 
         [[nodiscard]] static BackendRequestBuilder& instance()
