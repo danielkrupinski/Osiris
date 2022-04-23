@@ -1125,6 +1125,15 @@ namespace inventory_changer
                 backend.handleRequest(backend::request::RemovePatch{ *item, stickerSlot });
         }
 
+        void removeNameTagFrom(std::uint64_t itemID)
+        {
+            const auto item = backend.itemFromID(itemID);
+            if (!item.has_value())
+                return;
+
+            backend.handleRequest(backend::request::RemoveNameTag{ *item });
+        }
+
         [[nodiscard]] static BackendRequestBuilder& instance()
         {
             static BackendRequestBuilder builder{ backend::BackendSimulator::instance() };
@@ -1186,8 +1195,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
         inventory_changer::BackendRequestBuilder::instance().setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        useToolRequest.destItemID = stringToUint64(string);
-        useToolRequest.action = inventory_changer::backend::UseToolRequest::Action::RemoveNameTag;
+        inventory_changer::BackendRequestBuilder::instance().removeNameTagFrom(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         auto& backend = inventory_changer::backend::BackendSimulator::instance();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
