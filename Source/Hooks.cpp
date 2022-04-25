@@ -66,7 +66,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
-#include "SDK/UserMessages.h"
+#include "SDK/Constants/UserMessages.h"
 
 #ifdef _WIN32
 

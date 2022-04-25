@@ -239,6 +239,7 @@
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\Constants\ClassId.h" />
     <ClInclude Include="SDK\Constants\FrameStage.h" />
+    <ClInclude Include="SDK\Constants\UserMessages.h" />
     <ClInclude Include="SDK\ConVar.h" />
     <ClInclude Include="SDK\EconItemView.h" />
     <ClInclude Include="SDK\EngineTrace.h" />
@@ -290,7 +291,6 @@
     <ClInclude Include="SDK\StudioRender.h" />
     <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />
-    <ClInclude Include="SDK\UserMessages.h" />
     <ClInclude Include="SDK\UtlMap.h" />
     <ClInclude Include="SDK\UtlMemory.h" />
     <ClInclude Include="SDK\UtlString.h" />

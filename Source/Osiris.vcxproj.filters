@@ -550,9 +550,6 @@
     <ClInclude Include="SDK\PlantedC4.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\UserMessages.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\UtlMap.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -692,6 +689,9 @@
       <Filter>SDK\Constants</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Constants\FrameStage.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\UserMessages.h">
       <Filter>SDK\Constants</Filter>
     </ClInclude>
   </ItemGroup>
