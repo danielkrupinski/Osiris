@@ -11,7 +11,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
-#include "../SDK/FrameStage.h"
+#include <SDK/Constants/FrameStage.h>
 #include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/NetworkChannel.h"

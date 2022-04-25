@@ -382,9 +382,6 @@
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\FrameStage.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -692,6 +689,9 @@
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Constants\ClassId.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\FrameStage.h">
       <Filter>SDK\Constants</Filter>
     </ClInclude>
   </ItemGroup>
