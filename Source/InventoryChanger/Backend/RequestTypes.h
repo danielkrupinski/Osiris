@@ -68,4 +68,9 @@ struct UnsealGraffiti {
     ItemConstIterator item;
 };
 
+struct UpdateStatTrak {
+    ItemConstIterator item;
+    int newStatTrak;
+};
+
 }
