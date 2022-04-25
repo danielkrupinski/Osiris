@@ -149,9 +149,10 @@ public:
         return itemIDMap.getItemID(it);
     }
 
-    void handleRequest(const Request& request)
+    template <typename Request, typename... Args>
+    void handleRequest(Args&&... args)
     {
-        if (const auto response = std::visit(RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }, request); !response.isEmpty())
+        if (const auto response = RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !response.isEmpty())
             responseQueue.add(response);
     }
 
