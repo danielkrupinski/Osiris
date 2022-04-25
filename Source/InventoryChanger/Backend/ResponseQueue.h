@@ -25,7 +25,7 @@ public:
             const auto& [timestamp, response] = responses.front();
             if (Clock::now() - timestamp < delay)
                 break;
-            std::visit(std::forward<Visitor>(visitor), response.data);
+            std::visit(std::forward<Visitor>(visitor), response);
             responses.pop();
         }
     }
