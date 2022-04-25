@@ -48,6 +48,9 @@
     <Filter Include="InventoryChanger\Backend">
       <UniqueIdentifier>{4d2a3734-8406-4a2b-8393-a5c4264a4e46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\Constants">
+      <UniqueIdentifier>{5c09d2f8-2275-47ed-b3e9-33887a01a723}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -335,9 +338,6 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Entity.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\ClassId.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\EntityList.h">
@@ -690,6 +690,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\RequestHandler.h">
       <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\ClassId.h">
+      <Filter>SDK\Constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

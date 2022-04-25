@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-#include "ClassId.h"
+#include "Constants/ClassId.h"
 #include "Platform.h"
 
 class Entity;

@@ -21,7 +21,7 @@
 #include "EnginePrediction.h"
 #include "Misc.h"
 
-#include "../SDK/ClassId.h"
+#include <SDK/Constants/ClassId.h>
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/ClientMode.h"

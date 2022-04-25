@@ -15,7 +15,7 @@
 #include "../Memory.h"
 #include "Backtrack.h"
 #include "../InputUtil.h"
-#include "../SDK/ClassId.h"
+#include <SDK/Constants/ClassId.h>
 #include "../SDK/ClientClass.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"

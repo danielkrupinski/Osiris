@@ -15,7 +15,7 @@
 #include "../Helpers.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-#include "../SDK/ClassId.h"
+#include <SDK/Constants/ClassId.h>
 #include "../SDK/ClientClass.h"
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"

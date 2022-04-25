@@ -17,7 +17,7 @@
 
 #include <stb_image.h>
 
-#include "SDK/ClassId.h"
+#include "SDK/Constants/ClassId.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
