@@ -18,11 +18,6 @@ struct Response {
 
     Response() = default;
 
-    [[nodiscard]] constexpr bool isEmpty() const noexcept
-    {
-        return std::holds_alternative<std::monostate>(data);
-    }
-
     std::variant<
         std::monostate,
         response::ItemAdded,
@@ -44,5 +39,10 @@ struct Response {
         response::StatTrakSwapped
     > data;
 };
+
+[[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept
+{
+    return std::holds_alternative<std::monostate>(response.data);
+}
 
 }
