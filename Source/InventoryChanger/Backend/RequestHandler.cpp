@@ -7,7 +7,7 @@
 namespace inventory_changer::backend
 {
 
-Response RequestHandler::operator()(const request::ApplySticker& request)
+Response RequestHandler::operator()(const request::ApplySticker& request) const
 {
     const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>();
     if (!skin)
@@ -21,7 +21,7 @@ Response RequestHandler::operator()(const request::ApplySticker& request)
     return response::StickerApplied{ request.item, request.slot };
 }
 
-Response RequestHandler::operator()(const request::WearSticker& request)
+Response RequestHandler::operator()(const request::WearSticker& request) const
 {
     const auto skin = constRemover.removeConstness(request.skin)->get<inventory::Skin>();
     if (!skin)
@@ -38,7 +38,7 @@ Response RequestHandler::operator()(const request::WearSticker& request)
     return response::StickerScraped{ request.skin, request.slot };
 }
 
-Response RequestHandler::operator()(const request::SwapStatTrak& request)
+Response RequestHandler::operator()(const request::SwapStatTrak& request) const
 {
     if (!request.statTrakSwapTool->gameItem().isStatTrakSwapTool())
         return {};
@@ -58,7 +58,7 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request)
     return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
 }
 
-Response RequestHandler::operator()(const request::OpenContainer& request)
+Response RequestHandler::operator()(const request::OpenContainer& request) const
 {
     if (!request.container->gameItem().isCase())
         return {};
@@ -74,7 +74,7 @@ Response RequestHandler::operator()(const request::OpenContainer& request)
     return response::ContainerOpened{ receivedItem };
 }
 
-Response RequestHandler::operator()(const request::ApplyPatch& request)
+Response RequestHandler::operator()(const request::ApplyPatch& request) const
 {
     const auto agent = constRemover.removeConstness(request.item)->getOrCreate<inventory::Agent>();
     if (!agent)
@@ -86,7 +86,7 @@ Response RequestHandler::operator()(const request::ApplyPatch& request)
     return response::PatchApplied{ request.item, request.slot };
 }
 
-Response RequestHandler::operator()(const request::RemovePatch& request)
+Response RequestHandler::operator()(const request::RemovePatch& request) const
 {
     const auto agent = constRemover.removeConstness(request.item)->get<inventory::Agent>();
     if (!agent)
@@ -97,7 +97,7 @@ Response RequestHandler::operator()(const request::RemovePatch& request)
     return response::PatchRemoved{ request.item, request.slot };
 }
 
-Response RequestHandler::operator()(const request::ActivateOperationPass& request)
+Response RequestHandler::operator()(const request::ActivateOperationPass& request) const
 {
     const auto& gameItem = request.operationPass->gameItem();
     if (!gameItem.isOperationPass())
@@ -111,7 +111,7 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
     return {};
 }
 
-Response RequestHandler::operator()(const request::ActivateViewerPass& request)
+Response RequestHandler::operator()(const request::ActivateViewerPass& request) const
 {
     const auto& gameItem = request.viewerPass->gameItem();
     if (!gameItem.isViewerPass())
@@ -129,7 +129,7 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request)
     return {};
 }
 
-Response RequestHandler::operator()(const request::AddNameTag& request)
+Response RequestHandler::operator()(const request::AddNameTag& request) const
 {
     const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>();
     if (!skin)
@@ -141,7 +141,7 @@ Response RequestHandler::operator()(const request::AddNameTag& request)
     return response::NameTagAdded{ request.item };
 }
 
-Response RequestHandler::operator()(const request::RemoveNameTag& request)
+Response RequestHandler::operator()(const request::RemoveNameTag& request) const
 {
     if (const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>()) {
         skin->nameTag.clear();
@@ -151,7 +151,7 @@ Response RequestHandler::operator()(const request::RemoveNameTag& request)
     return {};
 }
 
-Response RequestHandler::operator()(const request::ActivateSouvenirToken& request)
+Response RequestHandler::operator()(const request::ActivateSouvenirToken& request) const
 {
     if (!request.souvenirToken->gameItem().isSouvenirToken())
         return {};
@@ -171,7 +171,7 @@ Response RequestHandler::operator()(const request::ActivateSouvenirToken& reques
     return response::SouvenirTokenActivated{ tournamentCoin };
 }
 
-Response RequestHandler::operator()(const request::UnsealGraffiti& request)
+Response RequestHandler::operator()(const request::UnsealGraffiti& request) const
 {
     if (!request.item->gameItem().isGraffiti())
         return {};
@@ -186,7 +186,7 @@ Response RequestHandler::operator()(const request::UnsealGraffiti& request)
     return response::GraffitiUnsealed{ request.item };
 }
 
-Response RequestHandler::operator()(const request::UpdateStatTrak& request)
+Response RequestHandler::operator()(const request::UpdateStatTrak& request) const
 {
     const auto statTrak = inventory::getStatTrak(*constRemover.removeConstness(request.item));
     if (!statTrak)

@@ -16,19 +16,19 @@ class BackendSimulator;
 struct RequestHandler {
     RequestHandler(BackendSimulator& backend, const game_items::Lookup& gameItemLookup, ItemConstRemover constRemover) : backend{ backend }, gameItemLookup{ gameItemLookup }, constRemover{ constRemover } {}
 
-    Response operator()(const request::ApplySticker& request);
-    Response operator()(const request::WearSticker& request);
-    Response operator()(const request::SwapStatTrak& request);
-    Response operator()(const request::OpenContainer& request);
-    Response operator()(const request::ApplyPatch& request);
-    Response operator()(const request::RemovePatch& request);
-    Response operator()(const request::ActivateOperationPass& request);
-    Response operator()(const request::ActivateViewerPass& request);
-    Response operator()(const request::AddNameTag& request);
-    Response operator()(const request::RemoveNameTag& request);
-    Response operator()(const request::ActivateSouvenirToken& request);
-    Response operator()(const request::UnsealGraffiti& request);
-    Response operator()(const request::UpdateStatTrak& request);
+    Response operator()(const request::ApplySticker& request) const;
+    Response operator()(const request::WearSticker& request) const;
+    Response operator()(const request::SwapStatTrak& request) const;
+    Response operator()(const request::OpenContainer& request) const;
+    Response operator()(const request::ApplyPatch& request) const;
+    Response operator()(const request::RemovePatch& request) const;
+    Response operator()(const request::ActivateOperationPass& request) const;
+    Response operator()(const request::ActivateViewerPass& request) const;
+    Response operator()(const request::AddNameTag& request) const;
+    Response operator()(const request::RemoveNameTag& request) const;
+    Response operator()(const request::ActivateSouvenirToken& request) const;
+    Response operator()(const request::UnsealGraffiti& request) const;
+    Response operator()(const request::UpdateStatTrak& request) const;
 
 private:
     BackendSimulator& backend;
