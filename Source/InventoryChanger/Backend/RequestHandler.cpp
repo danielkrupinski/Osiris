@@ -40,18 +40,18 @@ Response RequestHandler::operator()(const request::WearSticker& request)
 
 Response RequestHandler::operator()(const request::SwapStatTrak& request)
 {
-    if (!(request.itemFrom->gameItem().isSkin() && request.itemTo->gameItem().isSkin() && request.statTrakSwapTool->gameItem().isStatTrakSwapTool()))
+    if (!request.statTrakSwapTool->gameItem().isStatTrakSwapTool())
         return {};
 
-    const auto skinFrom = constRemover.removeConstness(request.itemFrom)->get<inventory::Skin>();
-    if (!skinFrom)
+    const auto statTrakFrom = inventory::getStatTrak(*constRemover.removeConstness(request.itemFrom));
+    if (!statTrakFrom)
         return {};
 
-    const auto skinTo = constRemover.removeConstness(request.itemFrom)->get<inventory::Skin>();
-    if (!skinTo)
+    const auto statTrakTo = inventory::getStatTrak(*constRemover.removeConstness(request.itemTo));
+    if (!statTrakTo)
         return {};
 
-    std::swap(skinFrom->statTrak, skinTo->statTrak);
+    std::swap(*statTrakFrom, *statTrakTo);
     backend.removeItem(request.statTrakSwapTool);
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);

@@ -521,16 +521,16 @@ void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped
     if (!destinationItemID.has_value())
         return;
 
-    const auto sourceSkin = response.swapSourceItem->get<inventory::Skin>();
-    if (!sourceSkin)
+    const auto sourceStatTrak = inventory::getStatTrak(*response.swapSourceItem);
+    if (!sourceStatTrak)
         return;
 
-    const auto destinationSkin = response.swapDestinationItem->get<inventory::Skin>();
-    if (!destinationSkin)
+    const auto destinationStatTrak = inventory::getStatTrak(*response.swapDestinationItem);
+    if (!destinationStatTrak)
         return;
 
-    updateStatTrak(*sourceItemID, sourceSkin->statTrak);
-    updateStatTrak(*destinationItemID, destinationSkin->statTrak);
+    updateStatTrak(*sourceItemID, *sourceStatTrak);
+    updateStatTrak(*destinationItemID, *destinationStatTrak);
 
     if (const auto inventoryComponent = *memory->uiComponentInventory) {
         memory->setItemSessionPropertyValue(inventoryComponent, *sourceItemID, "updated", "1");
