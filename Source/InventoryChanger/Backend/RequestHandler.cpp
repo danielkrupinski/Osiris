@@ -122,7 +122,7 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request)
         return {};
 
     if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
-        const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin });
+        const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) } });
         backend.removeItem(request.viewerPass);
         return response::ViewerPassActivated{ addedEventCoin };
     }
