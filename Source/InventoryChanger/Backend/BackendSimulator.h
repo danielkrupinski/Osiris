@@ -7,7 +7,6 @@
 #include "Item.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
-#include "Request.h"
 #include "RequestHandler.h"
 #include "Response.h"
 #include "ResponseQueue.h"

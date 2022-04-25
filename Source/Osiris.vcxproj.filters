@@ -688,9 +688,6 @@
     <ClInclude Include="InventoryChanger\Backend\RequestTypes.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\RequestHandler.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
