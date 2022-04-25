@@ -983,7 +983,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-inventory::StructWrapper ItemGenerator::createDefaultDynamicData(const game_items::Item& item) noexcept
+inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);

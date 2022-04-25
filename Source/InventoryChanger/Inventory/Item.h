@@ -12,12 +12,13 @@
 namespace inventory
 {
 
+template <typename... Types>
 class StructWrapper {
 public:
     StructWrapper() = default;
 
     template <typename T>
-    StructWrapper(const T& object) : variant{ ValueWrapper{ object } } {}
+    StructWrapper(const T& object) : variant{ ValueWrapper<T>{ object } } {}
 
     template <typename T>
     [[nodiscard]] T* get()
@@ -51,7 +52,8 @@ private:
 
     // yet to be enabled for some types
     template <typename T>
-    struct ValueWrapper<T, std::enable_if_t<AlwaysFalse<T>::value>> {
+    struct ValueWrapper<T, std::enable_if_t<std::is_same_v<T, std::monostate>>> {
+        ValueWrapper() = default;
         explicit ValueWrapper(const T& t) : object{ t } { }
 
         T& get() noexcept { return object; }
@@ -60,22 +62,24 @@ private:
         T object;
     };
 
-    std::variant<
-        std::monostate,
-        ValueWrapper<Skin>,
-        ValueWrapper<Glove>,
-        ValueWrapper<Agent>,
-        ValueWrapper<Music>,
-        ValueWrapper<Graffiti>,
-        ValueWrapper<ServiceMedal>,
-        ValueWrapper<SouvenirPackage>,
-        ValueWrapper<TournamentCoin>
-    > variant;
+    std::variant<ValueWrapper<Types>...> variant;
 };
+
+using ItemData = StructWrapper<
+    std::monostate,
+    Skin,
+    Glove,
+    Agent,
+    Music,
+    Graffiti,
+    ServiceMedal,
+    SouvenirPackage,
+    TournamentCoin
+>;
 
 class Item {
 public:
-    explicit Item(const game_items::Item& item, StructWrapper data) noexcept : item{ item }, data{ std::move(data) } {}
+    explicit Item(const game_items::Item& item, ItemData data) noexcept : item{ item }, data{ std::move(data) } {}
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
@@ -97,7 +101,7 @@ public:
 
 private:
     std::reference_wrapper<const game_items::Item> item;
-    StructWrapper data;
+    ItemData data;
 };
 
 [[nodiscard]] inline int* getStatTrak(Item& item)

@@ -206,7 +206,7 @@ json InventoryChanger::toJson() noexcept
     return lookup.findItem(weaponID->get<WeaponId>());
 }
 
-[[nodiscard]] inventory::StructWrapper itemFromJson(const game_items::Item& gameItem, const json& j)
+[[nodiscard]] inventory::ItemData itemFromJson(const game_items::Item& gameItem, const json& j)
 {
     if (gameItem.isSkin())
         return inventory::skinFromJson(j);
