@@ -112,15 +112,6 @@ public:
         return newIterator;
     }
 
-    void updateStatTrak(ItemConstIterator it, int newStatTrak)
-    {
-        if (!updateStatTrak(*removeConstness(it), newStatTrak))
-            return;
-
-        if (const auto itemID = getItemID(it); itemID.has_value())
-            responseQueue.add(response::StatTrakUpdated{ *itemID, newStatTrak });
-    }
-
     void moveToFront(ItemConstIterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
@@ -168,26 +159,6 @@ private:
         const auto added = std::prev(inventory.end());
         responseQueue.add(response::ItemAdded{ added, asUnacknowledged });
         return added;
-    }
-
-    static bool updateStatTrak(inventory::Item& item, int newStatTrak)
-    {
-        if (const auto skin = item.get<inventory::Skin>()) {
-            skin->statTrak = newStatTrak;
-            return true;
-        }
-
-        if (const auto music = item.get<inventory::Music>()) {
-            music->statTrak = newStatTrak;
-            return true;
-        }
-
-        return false;
-    }
-
-    [[nodiscard]] ItemIterator removeConstness(ItemConstIterator it)
-    {
-        return inventory.erase(it, it);
     }
 
     ItemList inventory;

@@ -504,7 +504,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     if (skin->statTrak > -1)
-        inventory_changer::backend::BackendSimulator::instance().updateStatTrak(item, skin->statTrak + 1);
+        inventory_changer::backend::BackendSimulator::instance().handleRequest<inventory_changer::backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
 }
 
 [[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
@@ -528,7 +528,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
 
     if (music->statTrak > -1) {
         event.setInt("musickitmvps", music->statTrak + 1);
-        inventory_changer::backend::BackendSimulator::instance().updateStatTrak(item, music->statTrak + 1);
+        inventory_changer::backend::BackendSimulator::instance().handleRequest<inventory_changer::backend::request::UpdateStatTrak>(item, music->statTrak + 1);
     }
 }
 
