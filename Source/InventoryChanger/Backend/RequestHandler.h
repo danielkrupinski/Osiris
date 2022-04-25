@@ -28,6 +28,7 @@ struct RequestHandler {
     Response operator()(const request::RemoveNameTag& request);
     Response operator()(const request::ActivateSouvenirToken& request);
     Response operator()(const request::UnsealGraffiti& request);
+    Response operator()(const request::UpdateStatTrak& request);
 
 private:
     BackendSimulator& backend;

@@ -183,4 +183,16 @@ Response RequestHandler::operator()(const request::UnsealGraffiti& request)
     return response::GraffitiUnsealed{ request.item };
 }
 
+Response RequestHandler::operator()(const request::UpdateStatTrak& request)
+{
+    const auto statTrak = inventory::getStatTrak(*constRemover.removeConstness(request.item));
+    if (!statTrak)
+        return {};
+
+    *statTrak = request.newStatTrak;
+    if (const auto itemID = backend.getItemID(request.item); itemID.has_value())
+        return response::StatTrakUpdated{ *itemID, request.newStatTrak };
+    return {};
+}
+
 }
