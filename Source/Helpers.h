@@ -83,6 +83,15 @@ namespace Helpers
         }
     }
 
+    constexpr std::uint8_t numberOfTokensWithViewerPass(WeaponId id) noexcept
+    {
+        switch (id) {
+        case WeaponId::Berlin2019ViewerPassWith3Tokens: 
+        case WeaponId::Stockholm2021ViewerPassWith3Tokens: return 3;
+        default: return 0;
+        }
+    }
+
     bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
     bool worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
 
