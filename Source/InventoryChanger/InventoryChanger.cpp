@@ -382,8 +382,6 @@ static void applyMedal() noexcept
     pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->gameItem().getWeaponID());
 }
 
-static inventory_changer::backend::UseToolRequest useToolRequest;
-
 struct EquipRequest {
     std::chrono::steady_clock::time_point time;
     std::uint64_t itemID;

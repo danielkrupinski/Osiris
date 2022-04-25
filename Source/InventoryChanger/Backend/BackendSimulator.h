@@ -16,23 +16,6 @@
 namespace inventory_changer::backend
 {
 
-struct UseToolRequest {
-    enum class Action {
-        None,
-        Use,
-        WearSticker,
-        RemoveNameTag
-    };
-
-    std::uint64_t toolItemID = 0;
-    std::uint64_t destItemID = 0;
-    std::uint64_t statTrakSwapItem1 = 0;
-    std::uint64_t statTrakSwapItem2 = 0;
-    Action action = Action::None;
-    int stickerSlot = 0;
-    std::string nameTag;
-};
-
 class BackendSimulator {
 public:
     explicit BackendSimulator(const game_items::Lookup& gameItemLookup) : gameItemLookup{ gameItemLookup } {}
