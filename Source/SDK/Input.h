@@ -9,7 +9,7 @@ public:
     bool isTrackIRAvailable;
     bool isMouseInitialized;
     bool isMouseActive;
-    PAD(WIN32_LINUX(158, 162))
+    PAD(WIN32_LINUX(154, 162))
     bool isCameraInThirdPerson;
     bool cameraMovingWithMouse;
     Vector cameraOffset;
