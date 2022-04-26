@@ -12,7 +12,7 @@
 namespace inventory
 {
 
-template <typename... Types>
+template <std::size_t MaxStaticSize, typename... Types>
 class StructWrapper {
 public:
     StructWrapper() = default;
@@ -48,11 +48,7 @@ private:
     };
 
     template <typename T>
-    struct AlwaysFalse : std::false_type {};
-
-    // yet to be enabled for some types
-    template <typename T>
-    struct ValueWrapper<T, std::enable_if_t<std::is_same_v<T, std::monostate>>> {
+    struct ValueWrapper<T, std::enable_if_t<std::is_same_v<T, std::monostate> || sizeof(T) <= MaxStaticSize>> {
         ValueWrapper() = default;
         explicit ValueWrapper(const T& t) : object{ t } { }
 
@@ -65,7 +61,7 @@ private:
     std::variant<ValueWrapper<Types>...> variant;
 };
 
-using ItemData = StructWrapper<
+using ItemData = StructWrapper<32,
     std::monostate,
     Skin,
     Glove,
