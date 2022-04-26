@@ -147,41 +147,10 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
-[[nodiscard]] auto loadAgentPatchesFromJson(const json& j) noexcept
-{
-    std::array<inventory::Agent::Patch, 5> agentPatches;
-
-    if (!j.contains("Patches"))
-        return agentPatches;
-
-    const auto& patches = j["Patches"];
-    if (!patches.is_array())
-        return agentPatches;
-
-    for (const auto& patch : patches) {
-        if (!patch.is_object())
-            continue;
-
-        if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
-            continue;
-
-        if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
-            continue;
-
-        const int patchID = patch["Patch ID"];
-        const std::size_t slot = patch["Slot"];
-
-        if (patchID != 0 && slot < agentPatches.size())
-            agentPatches[slot].patchID = patchID;
-    }
-
-    return agentPatches;
-}
-
 [[nodiscard]] inventory::Agent loadDynamicAgentDataFromJson(const json& j) noexcept
 {
     inventory::Agent dynamicData;
-    dynamicData.patches = loadAgentPatchesFromJson(j);
+    dynamicData.patches = inventory::agentPatchesFromJson(j);
     return dynamicData;
 }
 
