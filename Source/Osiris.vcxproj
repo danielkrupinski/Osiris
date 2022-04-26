@@ -303,6 +303,7 @@
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
+    <ClInclude Include="SmallVariant.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
