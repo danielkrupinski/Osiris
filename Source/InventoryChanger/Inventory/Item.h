@@ -13,12 +13,12 @@ namespace inventory
 {
 
 template <std::size_t MaxStaticSize, typename... Types>
-class StructWrapper {
+class SmallVariant {
 public:
-    StructWrapper() = default;
+    SmallVariant() = default;
 
     template <typename T>
-    StructWrapper(const T& object) : variant{ ValueWrapper<T>{ object } } {}
+    SmallVariant(const T& object) : variant{ ValueWrapper<T>{ object } } {}
 
     template <typename T>
     [[nodiscard]] T* get()
@@ -61,7 +61,7 @@ private:
     std::variant<ValueWrapper<Types>...> variant;
 };
 
-using ItemData = StructWrapper<32,
+using ItemData = SmallVariant<32,
     std::monostate,
     Skin,
     Glove,
