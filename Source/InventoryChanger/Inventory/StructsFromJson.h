@@ -16,5 +16,6 @@ namespace inventory
 [[nodiscard]] Graffiti graffitiFromJson(const json& j);
 [[nodiscard]] std::array<Skin::Sticker, 5> skinStickersFromJson(const json& j);
 [[nodiscard]] Skin skinFromJson(const json& j);
+[[nodiscard]] std::array<Agent::Patch, 5> agentPatchesFromJson(const json& j);
 
 }

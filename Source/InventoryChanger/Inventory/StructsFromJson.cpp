@@ -173,4 +173,35 @@ Skin skinFromJson(const json& j)
     return skin;
 }
 
+std::array<Agent::Patch, 5> agentPatchesFromJson(const json& j)
+{
+    std::array<Agent::Patch, 5> agentPatches;
+
+    if (!j.contains("Patches"))
+        return agentPatches;
+
+    const auto& patches = j["Patches"];
+    if (!patches.is_array())
+        return agentPatches;
+
+    for (const auto& patch : patches) {
+        if (!patch.is_object())
+            continue;
+
+        if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
+            continue;
+
+        if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
+            continue;
+
+        const int patchID = patch["Patch ID"];
+        const std::size_t slot = patch["Slot"];
+
+        if (patchID != 0 && slot < agentPatches.size())
+            agentPatches[slot].patchID = patchID;
+    }
+
+    return agentPatches;
+}
+
 }
