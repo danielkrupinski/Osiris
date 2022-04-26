@@ -537,7 +537,7 @@ void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped
         memory->setItemSessionPropertyValue(inventoryComponent, *destinationItemID, "updated", "1");
     }
 
-    initItemCustomizationNotification("stattrack_swap", *destinationItemID);
+    initItemCustomizationNotification("stattrack_swap", *sourceStatTrak > *destinationStatTrak ? *sourceItemID : *destinationItemID);
 }
 
 }
