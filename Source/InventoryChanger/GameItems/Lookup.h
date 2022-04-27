@@ -28,6 +28,8 @@ public:
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
                 stickersSorted.emplace_back(item);
+            else if (item.isGraffiti())
+                graffitiSorted.emplace_back(item);
             else if (item.isMusic())
                 musicKitsSorted.emplace_back(item);
         }
@@ -37,6 +39,9 @@ public:
 
         std::ranges::sort(musicKitsSorted, {}, [this](const Item& item) { return storage.getMusicKit(item).id; });
         musicKitsSorted.shrink_to_fit();
+
+        std::ranges::sort(graffitiSorted, {}, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
+        graffitiSorted.shrink_to_fit();
 
         tournamentStickersSorted = stickersSorted;
 
@@ -152,7 +157,9 @@ public:
 
     [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
     {
-        return findItem(WeaponId::SealedGraffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
+        if (const auto it = std::ranges::lower_bound(graffitiSorted, graffitiID, {}, [this](const Item& item) { return storage.getGraffitiKit(item).id; }); it != graffitiSorted.end() && storage.getGraffitiKit(*it).id == graffitiID)
+            return *it;
+        return {};
     }
 
     [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
@@ -184,6 +191,7 @@ private:
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
     std::vector<ItemReference> musicKitsSorted;
+    std::vector<ItemReference> graffitiSorted;
 };
 
 }
