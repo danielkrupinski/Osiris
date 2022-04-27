@@ -51,5 +51,12 @@ TEST(InventoryChanger_GameItems_LookupTest, ItemWithStickerAsWeaponIdIsNotAssume
     ASSERT_FALSE(lookup.findSticker(0).has_value());
 }
 
+TEST(InventoryChanger_GameItems_LookupTest, ItemWithMusicKitAsWeaponIdIsNotAssumedToBeMusic) {
+    Storage storage;
+    storage.addTournamentCoin(EconRarity::Red, WeaponId::MusicKit, 0, {});
+    Lookup lookup{ std::move(storage) };
+    ASSERT_FALSE(lookup.findMusic(3).has_value());
+}
+
 }
 }
