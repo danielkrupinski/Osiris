@@ -37,5 +37,12 @@ TEST_F(InventoryChanger_GameItems_Lookup_EmptyStorageTest, PatchIsNotFound) {
     ASSERT_FALSE(lookup.findPatch(3).has_value());
 }
 
+TEST(InventoryChanger_GameItems_LookupTest, ItemNotFoundIfNotInStorage) {
+    Storage storage;
+    storage.addTournamentCoin(EconRarity::Red, WeaponId::Berlin2019BronzeCoin, 0, {});
+    Lookup lookup{ std::move(storage) };
+    ASSERT_FALSE(lookup.findItem(WeaponId::Katowice2019BronzeCoin).has_value());
+}
+
 }
 }
