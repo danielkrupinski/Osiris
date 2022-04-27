@@ -44,5 +44,12 @@ TEST(InventoryChanger_GameItems_LookupTest, ItemNotFoundIfNotInStorage) {
     ASSERT_FALSE(lookup.findItem(WeaponId::Katowice2019BronzeCoin).has_value());
 }
 
+TEST(InventoryChanger_GameItems_LookupTest, ItemWithStickerAsWeaponIdIsNotAssumedToBeSticker) {
+    Storage storage;
+    storage.addTournamentCoin(EconRarity::Red, WeaponId::Sticker, 0, {});
+    Lookup lookup{ std::move(storage) };
+    ASSERT_FALSE(lookup.findSticker(0).has_value());
+}
+
 }
 }
