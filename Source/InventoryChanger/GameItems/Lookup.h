@@ -25,8 +25,15 @@ public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
-        const auto stickers = findItems(WeaponId::Sticker);
-        tournamentStickersSorted = { stickers.first, stickers.second };
+        for (const auto& item : storage.getItems()) {
+            if (item.isSticker())
+                stickersSorted.emplace_back(item);
+        }
+
+        std::ranges::sort(stickersSorted, {}, [this](const Item& item) { return storage.getStickerKit(item).id; });
+        stickersSorted.shrink_to_fit();
+
+        tournamentStickersSorted = stickersSorted;
 
         std::ranges::sort(tournamentStickersSorted, [this](const Item& itemA, const Item& itemB) {
             assert(itemA.isSticker() && itemB.isSticker());
@@ -131,7 +138,9 @@ public:
 
     [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
     {
-        return findItem(WeaponId::Sticker, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
+        if (const auto it = std::ranges::lower_bound(stickersSorted, stickerKit, {}, [this](const Item& item) { return storage.getStickerKit(item).id; }); it != stickersSorted.end() && storage.getStickerKit(*it).id == stickerKit)
+            return *it;
+        return {};
     }
 
     [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
@@ -165,6 +174,7 @@ private:
     }
 
     Storage storage;
+    std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
 };
 
