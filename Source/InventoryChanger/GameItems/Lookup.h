@@ -28,10 +28,15 @@ public:
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
                 stickersSorted.emplace_back(item);
+            else if (item.isMusic())
+                musicKitsSorted.emplace_back(item);
         }
 
         std::ranges::sort(stickersSorted, {}, [this](const Item& item) { return storage.getStickerKit(item).id; });
         stickersSorted.shrink_to_fit();
+
+        std::ranges::sort(musicKitsSorted, {}, [this](const Item& item) { return storage.getMusicKit(item).id; });
+        musicKitsSorted.shrink_to_fit();
 
         tournamentStickersSorted = stickersSorted;
 
@@ -133,7 +138,9 @@ public:
 
     [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
     {
-        return findItem(WeaponId::MusicKit, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
+        if (const auto it = std::ranges::lower_bound(musicKitsSorted, musicKit, {}, [this](const Item& item) { return storage.getMusicKit(item).id; }); it != musicKitsSorted.end() && storage.getMusicKit(*it).id == musicKit)
+            return *it;
+        return {};
     }
 
     [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
@@ -176,6 +183,7 @@ private:
     Storage storage;
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
+    std::vector<ItemReference> musicKitsSorted;
 };
 
 }
