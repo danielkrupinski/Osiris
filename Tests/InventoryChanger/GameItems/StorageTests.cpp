@@ -145,6 +145,13 @@ TEST_P(GameItemsStorageTest, AddedItemHasCorrectType) {
     ASSERT_TRUE(validateItemType(item, GetParam()));
 }
 
+TEST_P(GameItemsStorageTest, AddingItemCopiesIconPath) {
+    Storage storage;
+    const std::string iconPath = "image.png";
+    const auto& item = addToStorage(storage, GetParam(), EconRarity::Default, WeaponId::None, 0, iconPath);
+    ASSERT_NE(item.getIconPath().data(), iconPath.c_str());
+}
+
 const auto typesToTest = testing::Values(
     ItemType::Gloves,
     ItemType::Skin,
