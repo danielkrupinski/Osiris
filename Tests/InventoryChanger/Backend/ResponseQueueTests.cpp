@@ -2,7 +2,7 @@
 
 #include <gmock/gmock.h>
 
-#include <InventoryChanger/Backend/ResponseQueue.h>
+#include <InventoryChanger/Backend/Response/ResponseQueue.h>
 
 namespace inventory_changer::backend
 {

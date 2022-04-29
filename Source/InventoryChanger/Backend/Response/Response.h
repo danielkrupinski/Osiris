@@ -4,9 +4,6 @@
 #include <list>
 #include <variant>
 
-#include <InventoryChanger/Inventory/Item.h>
-
-#include "Item.h"
 #include "ResponseTypes.h"
 
 namespace inventory_changer::backend

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RequestTypes.h"
-#include "Response.h"
+#include "Response/Response.h"
 
 namespace game_items
 {

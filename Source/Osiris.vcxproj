@@ -209,13 +209,13 @@
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
-    <ClInclude Include="InventoryChanger\Backend\ItemInResponse.h" />
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\RequestHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\RequestTypes.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response.h" />
-    <ClInclude Include="InventoryChanger\Backend\ResponseQueue.h" />
-    <ClInclude Include="InventoryChanger\Backend\ResponseTypes.h" />
+    <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
+    <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h" />
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
     <ClInclude Include="InventoryChanger\GameItems\Storage.h" />

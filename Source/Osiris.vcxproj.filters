@@ -51,6 +51,9 @@
     <Filter Include="SDK\Constants">
       <UniqueIdentifier>{5c09d2f8-2275-47ed-b3e9-33887a01a723}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\Backend\Response">
+      <UniqueIdentifier>{ae9e3dc7-2b8a-4e8e-8cb2-ee9cfc972084}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -661,22 +664,13 @@
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\BackendResponseHandler.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\ResponseQueue.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\Item.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\ResponseTypes.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\RequestTypes.h">
@@ -697,8 +691,17 @@
     <ClInclude Include="SmallVariant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\ItemInResponse.h">
-      <Filter>InventoryChanger\Backend</Filter>
+    <ClInclude Include="InventoryChanger\Backend\Response\Response.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,10 +4,7 @@
 #include <list>
 #include <memory>
 
-namespace inventory
-{
-    class Item;
-}
+#include <InventoryChanger/Inventory/Item.h>
 
 namespace inventory_changer::backend
 {

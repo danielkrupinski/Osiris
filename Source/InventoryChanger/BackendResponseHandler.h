@@ -3,7 +3,7 @@
 #include <variant>
 
 #include "Backend/BackendSimulator.h"
-#include "Backend/ResponseTypes.h"
+#include "Backend/Response/ResponseTypes.h"
 
 namespace inventory_changer
 {

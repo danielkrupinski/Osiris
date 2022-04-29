@@ -8,8 +8,8 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "RequestHandler.h"
-#include "Response.h"
-#include "ResponseQueue.h"
+#include "Response/Response.h"
+#include "Response/ResponseQueue.h"
 
 #include <InventoryChanger/StaticData.h>
 
