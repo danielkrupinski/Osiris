@@ -35,4 +35,9 @@ private:
     ItemConstIterator item;
 };
 
+inline bool responseContainsItem(const Response& response, ItemConstIterator item)
+{
+    return std::visit(ItemInResponse{ item }, response);
+}
+
 }
