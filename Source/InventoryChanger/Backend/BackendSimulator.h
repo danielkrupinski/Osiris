@@ -89,6 +89,7 @@ public:
     {
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);
+        responseQueue.removeResponsesReferencingItem(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
             responseQueue.add(response::ItemRemoved{ *itemID });
