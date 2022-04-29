@@ -21,13 +21,7 @@ public:
 
     void removeResponsesReferencingItem(ItemConstIterator item)
     {
-        for (auto it = responses.begin(); it != responses.end();) {
-            const auto& [timestamp, response] = *it;
-            if (responseContainsItem(response, item))
-                it = responses.erase(it);
-            else
-                ++it;
-        }
+        std::erase_if(responses, [item](const std::pair<typename Clock::time_point, Response>& pair) { return responseContainsItem(pair.second, item); });
     }
 
     template <typename Visitor>
