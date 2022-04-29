@@ -98,8 +98,7 @@ public:
     void moveToFront(ItemConstIterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
-        if (const auto itemID = getItemID(it); itemID.has_value())
-            responseQueue.add(response::ItemMovedToFront{ *itemID });
+        responseQueue.add(response::ItemMovedToFront{ it });
     }
 
     void assignItemID(ItemConstIterator it, std::uint64_t itemID)

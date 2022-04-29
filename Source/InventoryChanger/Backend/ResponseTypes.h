@@ -17,9 +17,9 @@ struct ItemAdded {
 };
 
 struct ItemMovedToFront {
-    explicit ItemMovedToFront(std::uint64_t itemID) : itemID{ itemID } {}
+    explicit ItemMovedToFront(ItemConstIterator item) : item{ item } {}
 
-    std::uint64_t itemID;
+    ItemConstIterator item;
 };
 
 struct ItemEquipped {

@@ -403,7 +403,8 @@ void BackendResponseHandler::operator()(const backend::response::ItemAdded& resp
 
 void BackendResponseHandler::operator()(const backend::response::ItemMovedToFront& response) const
 {
-    backend.updateItemID(response.itemID, assingNewItemID(response.itemID));
+    if (const auto itemID = backend.getItemID(response.item); itemID.has_value())
+        backend.updateItemID(*itemID, assingNewItemID(*itemID));
 }
 
 void BackendResponseHandler::operator()(const backend::response::ItemEquipped& response) const
