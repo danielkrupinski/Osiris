@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include <queue>
+#include <deque>
 #include <utility>
 #include <variant>
 
@@ -15,7 +15,7 @@ class ResponseQueue {
 public:
     void add(const Response& response)
     {
-        responses.emplace(Clock::now(), response);
+        responses.emplace_back(Clock::now(), response);
     }
 
     template <typename Visitor>
@@ -26,12 +26,12 @@ public:
             if (Clock::now() - timestamp < delay)
                 break;
             std::visit(std::forward<Visitor>(visitor), response);
-            responses.pop();
+            responses.pop_front();
         }
     }
 
 private:
-    std::queue<std::pair<typename Clock::time_point, Response>> responses;
+    std::deque<std::pair<typename Clock::time_point, Response>> responses;
 };
 
 }
