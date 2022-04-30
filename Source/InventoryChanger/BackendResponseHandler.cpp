@@ -534,8 +534,7 @@ void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped
     updateStatTrak(*destinationItemID, *destinationStatTrak);
 
     if (const auto inventoryComponent = *memory->uiComponentInventory) {
-        memory->setItemSessionPropertyValue(inventoryComponent, *sourceItemID, "updated", "1");
-        memory->setItemSessionPropertyValue(inventoryComponent, *destinationItemID, "updated", "1");
+        memory->setItemSessionPropertyValue(inventoryComponent, *destinationStatTrak >= *sourceStatTrak ? *sourceItemID : *destinationItemID, "updated", "1");
     }
 
     initItemCustomizationNotification("stattrack_swap", *sourceStatTrak > *destinationStatTrak ? *sourceItemID : *destinationItemID);
