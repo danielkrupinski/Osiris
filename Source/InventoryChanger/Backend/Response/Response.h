@@ -13,6 +13,7 @@ using Response = std::variant<
     std::monostate,
     response::ItemAdded,
     response::ItemMovedToFront,
+    response::ItemUpdated,
     response::ItemEquipped,
     response::ItemRemoved,
     response::StickerApplied,

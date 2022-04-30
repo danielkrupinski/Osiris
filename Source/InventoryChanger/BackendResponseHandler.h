@@ -14,6 +14,7 @@ struct BackendResponseHandler {
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
     void operator()(const backend::response::ItemAdded& response) const;
     void operator()(const backend::response::ItemMovedToFront& response) const;
+    void operator()(const backend::response::ItemUpdated& response) const {}
     void operator()(const backend::response::ItemEquipped& response) const;
     void operator()(const backend::response::ItemRemoved& response) const;
     void operator()(const backend::response::StickerApplied& response) const;
