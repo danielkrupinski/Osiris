@@ -4,6 +4,7 @@
 #include <optional>
 #include <vector>
 
+#include "ItemSorter.h"
 #include "Storage.h"
 
 namespace game_items
@@ -179,11 +180,7 @@ private:
 
     [[nodiscard]] static Storage sorted(Storage storage)
     {
-        std::ranges::sort(storage.getItems(), [&storage](const Item& itemA, const Item& itemB) {
-            if (itemA.getWeaponID() == itemB.getWeaponID() && (itemA.isSkin() || itemA.isGloves()) && (itemB.isSkin() || itemB.isGloves()))
-                return storage.getPaintKit(itemA).id < storage.getPaintKit(itemB).id;
-            return itemA.getWeaponID() < itemB.getWeaponID();
-        });
+        std::ranges::sort(storage.getItems(), ItemSorter{ storage });
         return storage;
     }
 
