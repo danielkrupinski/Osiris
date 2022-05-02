@@ -847,13 +847,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            static auto itemIndices = StaticData::getItemIndices();
+            static std::vector<std::reference_wrapper<const game_items::Item>> itemIndices{ StaticData::lookup().getStorage().getItems().begin(), StaticData::lookup().getStorage().getItems().end() };
             static std::vector<int> toAddCount(itemIndices.size(), 1);
 
             if (static bool sorted = false; !sorted) {
-                std::ranges::sort(itemIndices, [](const auto aIndex, const auto bIndex) {
-                    const auto& a = StaticData::getGameItem(aIndex);
-                    const auto& b = StaticData::getGameItem(bIndex);
+                std::ranges::sort(itemIndices, [](const game_items::Item& a, const game_items::Item& b) {
                     if (a.getWeaponID() == b.getWeaponID())
                         return getItemName(a).forSearch < getItemName(b).forSearch;
                     const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
@@ -866,7 +864,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
-                const auto& gameItem = StaticData::getGameItem(itemIndices[i]);
+                const auto& gameItem = itemIndices[i].get();
                 if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(gameItem).forSearch), filterWide)))
                     continue;
                 ImGui::PushID(i);
