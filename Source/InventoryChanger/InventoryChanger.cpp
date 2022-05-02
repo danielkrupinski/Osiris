@@ -57,16 +57,6 @@
 
 #include "BackendResponseHandler.h"
 
-static void addToInventory(const std::unordered_map<StaticData::ItemIndex2, int>& toAdd, const std::vector<StaticData::ItemIndex2>& order) noexcept
-{
-    for (const auto item : order) {
-        if (const auto count = toAdd.find(item); count != toAdd.end()) {
-            for (int i = 0; i < count->second; ++i)
-                inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory::Item{ StaticData::getGameItem(item), ItemGenerator::createDefaultDynamicData(StaticData::getGameItem(item)) });
-        }
-    }
-}
-
 static Entity* createGlove(int entry, int serial) noexcept
 {
     static const auto createWearable = []{
@@ -572,7 +562,7 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
 namespace ImGui
 {
-    static bool SkinSelectable(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
+    static bool SkinSelectable(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -630,11 +620,12 @@ namespace ImGui
         if (!ItemAdd(bb, id))
             return false;
 
-        const ImRect selectableBB{ bb.Min, ImVec2{ bb.Max.x - (selected ? 90.0f : 0.0f), bb.Max.y} };
+        const ImRect selectableBB{ bb.Min, ImVec2{ bb.Max.x - 130.0f, bb.Max.y} };
         // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
         ImGuiButtonFlags buttonFlags = 0;
         bool hovered, held;
-        bool pressed = ButtonBehavior(selectableBB, id, &hovered, &held, buttonFlags);
+        bool pressed = false;
+        ButtonBehavior(selectableBB, id, &hovered, &held, buttonFlags);
 
         // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
         if (pressed) {
@@ -645,7 +636,7 @@ namespace ImGui
             MarkItemEdited(id);
         }
 
-        if (hovered || selected) {
+        if (hovered) {
             const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
             RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
@@ -668,15 +659,27 @@ namespace ImGui
             window->DrawList->AddRectFilled(separatorMin, separatorMax, GetColorU32(ImGuiCol_Text));
         RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
 
-        if (selected && toAddCount) {
+        if (toAddCount) {
             const auto cursorPosNext = window->DC.CursorPos.y;
-            SameLine(window->WorkRect.Max.x - pos.x - 90.0f);
+            SameLine(window->WorkRect.Max.x - pos.x - 130.0f);
             const auto cursorPosBackup = window->DC.CursorPos.y;
 
             window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
             SetNextItemWidth(80.0f);
             InputInt("", toAddCount);
             *toAddCount = (std::max)(*toAddCount, 1);
+
+            window->DC.CursorPosPrevLine.y = cursorPosBackup;
+            window->DC.CursorPos.y = cursorPosNext;
+        }
+
+        {
+            const auto cursorPosNext = window->DC.CursorPos.y;
+            SameLine(window->WorkRect.Max.x - pos.x - 40.0f);
+            const auto cursorPosBackup = window->DC.CursorPos.y;
+
+            window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
+            pressed = Button("Add");
 
             window->DC.CursorPosPrevLine.y = cursorPosBackup;
             window->DC.CursorPos.y = cursorPosNext;
@@ -823,30 +826,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
     };
 
     if (isInAddMode) {
-        static std::unordered_map<StaticData::ItemIndex2, int> selectedToAdd;
-        static std::vector<StaticData::ItemIndex2> toAddOrder;
-
         if (ImGui::Button("Back")) {
             isInAddMode = false;
-            selectedToAdd.clear();
-            toAddOrder.clear();
         }
-        ImGui::SameLine();
-        const auto canAdd = !selectedToAdd.empty();
-        if (!canAdd) {
-            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-        }
-        if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
-            isInAddMode = false;
-            addToInventory(selectedToAdd, toAddOrder);
-            selectedToAdd.clear();
-            toAddOrder.clear();
-        }
-        if (!canAdd) {
-            ImGui::PopItemFlag();
-            ImGui::PopStyleVar();
-        }
+
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
         ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
@@ -865,6 +848,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             static auto itemIndices = StaticData::getItemIndices();
+            static std::vector<int> toAddCount(itemIndices.size(), 1);
+
             if (static bool sorted = false; !sorted) {
                 std::ranges::sort(itemIndices, [](const auto aIndex, const auto bIndex) {
                     const auto& a = StaticData::getGameItem(aIndex);
@@ -886,16 +871,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     continue;
                 ImGui::PushID(i);
 
-                const auto selected = selectedToAdd.contains(itemIndices[i]);
-
-                if (const auto toAddCount = selected ? &selectedToAdd[itemIndices[i]] : nullptr; ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), selected, toAddCount)) {
-                    if (selected) {
-                        selectedToAdd.erase(itemIndices[i]);
-                        std::erase(toAddOrder, itemIndices[i]);
-                    } else {
-                        selectedToAdd.emplace(itemIndices[i], 1);
-                        toAddOrder.push_back(itemIndices[i]);
-                    }
+                if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
+                    for (int j = 0; j < toAddCount[i]; ++j)
+                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory::Item{ gameItem, ItemGenerator::createDefaultDynamicData(gameItem) });
+                    toAddCount[i] = 1;
                 }
                 ImGui::PopID();
             }
