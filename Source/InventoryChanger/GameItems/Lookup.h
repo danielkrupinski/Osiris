@@ -13,12 +13,6 @@ namespace game_items
 {
 
 class Lookup {
-private:
-    auto findItems(WeaponId weaponID) const noexcept
-    {
-        return ranges::equal_range(storage.getItems(), weaponID, {}, &Item::getWeaponID);
-    }
-
 public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
