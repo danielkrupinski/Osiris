@@ -69,12 +69,24 @@ TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, MonostateNever
     ASSERT_FALSE(ItemInResponse{ item1 }(std::monostate{}));
 }
 
+TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForMonostate) {
+    ASSERT_FALSE(responseContainsItem(std::monostate{}, item1));
+}
+
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ItemRemovedResponseNeverContainsItem) {
     ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ 0 }));
 }
 
+TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForItemRemoved) {
+    ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ 0 }, item1));
+}
+
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, StatTrakUpdatedResponseNeverContainsItem) {
     ASSERT_FALSE(ItemInResponse{ item1 }(response::StatTrakUpdated{ 0, 1 }));
+}
+
+TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForStatTrakUpdated) {
+    ASSERT_FALSE(responseContainsItem(response::StatTrakUpdated{ 0, 1 }, item1));
 }
 
 template <typename ResponseType>
@@ -106,6 +118,14 @@ TYPED_TEST(InventoryChanger_Backend_ItemInResponseTest, ItemIsInResponse) {
 
 TYPED_TEST(InventoryChanger_Backend_ItemInResponseTest, ItemIsNotInResponse) {
     ASSERT_FALSE(ItemInResponse{ item1 }(makeResponse<TypeParam>(item2)));
+}
+
+TYPED_TEST(InventoryChanger_Backend_ItemInResponseTest, ResponseContainsItemReturnsTrueIfItemIsInResponse) {
+    ASSERT_TRUE(responseContainsItem(makeResponse<TypeParam>(item1), item1));
+}
+
+TYPED_TEST(InventoryChanger_Backend_ItemInResponseTest, ResponseContainsItemReturnsFalseIfItemIsNotInResponse) {
+    ASSERT_FALSE(responseContainsItem(makeResponse<TypeParam>(item1), item2));
 }
 
 }
