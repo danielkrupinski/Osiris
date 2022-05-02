@@ -104,7 +104,6 @@ namespace StaticData
 
     [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] bool isSouvenirPackage(const game_items::Item& crate) noexcept;
-    [[nodiscard]] const game_items::Item& getGameItem(ItemIndex2 itemIndex) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;

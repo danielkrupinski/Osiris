@@ -402,11 +402,6 @@ bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
     return !loot.empty() && loot[0].get().isSkin();
 }
 
-const game_items::Item& StaticData::getGameItem(ItemIndex2 itemIndex) noexcept
-{
-    return StaticDataImpl::gameItems()[itemIndex.value];
-}
-
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return getWeaponNamesInstance().getWeaponNameUpper(weaponID);
