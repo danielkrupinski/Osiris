@@ -99,6 +99,11 @@ public:
         return static_cast<std::uint32_t>(item.getDataIndex());
     }
 
+    [[nodiscard]] bool hasPaintKit(const Item& item) const noexcept
+    {
+        return item.isSkin() || item.isGloves();
+    }
+
     void compress();
 
 private:
