@@ -23,6 +23,9 @@ public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
+        itemsWithPaintKit = { storage.getItems().begin(),
+        std::ranges::partition_point(storage.getItems(), [this](const Item& item) { return storage.hasPaintKit(item); }) };
+
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
                 stickersSorted.emplace_back(item);
@@ -119,11 +122,9 @@ public:
 
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, int paintKit) const noexcept
     {
-        const auto [begin, end] = findItems(weaponID);
-        if (begin != end && !begin->isSkin() && !begin->isGloves())
-            return {};
+        const auto range = ranges::equal_range(itemsWithPaintKit, weaponID, {}, &Item::getWeaponID);
 
-        if (const auto it = std::ranges::lower_bound(begin, end, paintKit, {}, [this](const Item& item) { return storage.getPaintKit(item).id; }); it != end && storage.getPaintKit(*it).id == paintKit)
+        if (const auto it = std::ranges::lower_bound(range, paintKit, {}, [this](const Item& item) { return storage.getPaintKit(item).id; }); it != range.end() && storage.getPaintKit(*it).id == paintKit)
             return *it;
         return {};
     }
@@ -178,6 +179,7 @@ private:
     }
 
     Storage storage;
+    std::span<const Item> itemsWithPaintKit;
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
     std::vector<ItemReference> musicKitsSorted;
