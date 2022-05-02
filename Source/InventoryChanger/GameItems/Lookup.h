@@ -170,15 +170,6 @@ public:
     }
 
 private:
-    template <typename T, typename Projection>
-    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, const T& value, Projection projection) const
-    {
-        const auto [begin, end] = findItems(weaponID);
-        if (const auto it = std::ranges::find(begin, end, value, projection); it != end)
-            return *it;
-        return {};
-    }
-
     [[nodiscard]] static Storage sorted(Storage storage)
     {
         std::ranges::sort(storage.getItems(), ItemSorter{ storage });
