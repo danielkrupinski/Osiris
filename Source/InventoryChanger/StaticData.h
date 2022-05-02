@@ -101,7 +101,6 @@ namespace StaticData
     [[nodiscard]] std::size_t getGameItemsCount() noexcept;
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLootOfRarity(const Case& crate, EconRarity rarity) noexcept;
-    [[nodiscard]] std::vector<ItemIndex2> getItemIndices() noexcept;
 
     [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] bool isSouvenirPackage(const game_items::Item& crate) noexcept;

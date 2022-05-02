@@ -387,15 +387,6 @@ std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getC
     return { begin, end };
 }
 
-std::vector<StaticData::ItemIndex2> StaticData::getItemIndices() noexcept
-{
-    const auto itemIndexCount = StaticDataImpl::gameItems().size();
-    std::vector<StaticData::ItemIndex2> indices(itemIndexCount);
-    for (std::size_t i = 0; i < itemIndexCount; ++i)
-        indices[i] = StaticData::ItemIndex2{ i };
-    return indices;
-}
-
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());
