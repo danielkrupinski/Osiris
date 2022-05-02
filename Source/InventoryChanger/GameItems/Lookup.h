@@ -4,6 +4,8 @@
 #include <optional>
 #include <vector>
 
+#include <range/v3/algorithm/equal_range.hpp>
+
 #include "ItemSorter.h"
 #include "Storage.h"
 
@@ -14,12 +16,7 @@ class Lookup {
 private:
     auto findItems(WeaponId weaponID) const noexcept
     {
-        struct Comp {
-            bool operator()(WeaponId weaponID, const Item& item) const noexcept { return weaponID < item.getWeaponID(); }
-            bool operator()(const Item& item, WeaponId weaponID) const noexcept { return item.getWeaponID() < weaponID; }
-        };
-
-        return std::equal_range(storage.getItems().begin(), storage.getItems().end(), weaponID, Comp{}); // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
+        return ranges::equal_range(storage.getItems(), weaponID, {}, &Item::getWeaponID);
     }
 
 public:
@@ -71,11 +68,7 @@ public:
 private:
     auto findTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
-        // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
-        const auto begin = std::ranges::lower_bound(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
-        const auto end = std::ranges::upper_bound(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
-
-        return std::make_pair(begin, end);
+        return ranges::equal_range(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
     }
 
 public:
@@ -88,7 +81,7 @@ public:
         else if (tournamentID == 4) // ELS One Cologne 2014
             return 172;
 
-        const auto it = findTournamentStickers(tournamentID).first;
+        const auto it = findTournamentStickers(tournamentID).begin();
         if (it == tournamentStickersSorted.end())
             return 0;
         return storage.getStickerKit(*it).tournamentID == tournamentID ? storage.getStickerKit(*it).id : 0;
@@ -106,10 +99,10 @@ public:
 
         const auto range = findTournamentStickers(tournamentID);
 
-        const auto it = std::ranges::lower_bound(range.first, range.second, team, {}, [this](const Item& item) {
+        const auto it = std::ranges::lower_bound(range, team, {}, [this](const Item& item) {
             return storage.getStickerKit(item).tournamentTeam;
         });
-        if (it == range.second)
+        if (it == range.end())
             return 0;
         return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
     }
@@ -117,8 +110,8 @@ public:
     int findTournamentPlayerGoldStickerID(std::uint32_t tournamentID, int tournamentPlayerID) const noexcept
     {
         const auto range = findTournamentStickers(tournamentID);
-        const auto it = std::ranges::find(range.first, range.second, tournamentPlayerID, [this](const Item& item) { return storage.getStickerKit(item).tournamentPlayerID; });
-        return (it != range.second ? storage.getStickerKit(*it).id : 0);
+        const auto it = std::ranges::find(range, tournamentPlayerID, [this](const Item& item) { return storage.getStickerKit(item).tournamentPlayerID; });
+        return (it != range.end() ? storage.getStickerKit(*it).id : 0);
     }
 
     using ItemReference = std::reference_wrapper<const Item>;
