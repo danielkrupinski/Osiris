@@ -65,5 +65,12 @@ TEST(InventoryChanger_GameItems_LookupTest, ItemWithSealedGraffitiAsWeaponIdIsNo
     ASSERT_FALSE(lookup.findGraffiti(3).has_value());
 }
 
+TEST(InventoryChanger_GameItems_LookupTest, ItemWithPatchAsWeaponIdIsNotAssumedToBePatch) {
+    Storage storage;
+    storage.addTournamentCoin(EconRarity::Red, WeaponId::Patch, 0, {});
+    Lookup lookup{ std::move(storage) };
+    ASSERT_FALSE(lookup.findPatch(21).has_value());
+}
+
 }
 }
