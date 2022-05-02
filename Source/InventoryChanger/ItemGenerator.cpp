@@ -6,6 +6,8 @@
 #include <span>
 #include <vector>
 
+#include <range/v3/algorithm/equal_range.hpp>
+
 #include "../Helpers.h"
 #include "ItemGenerator.h"
 
@@ -910,17 +912,7 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
         return matches;
 
     assert(std::ranges::is_sorted(matches, {}, &Match::map));
-
-    struct Comp {
-        bool operator()(TournamentMap map, const Match& match) const noexcept { return map < match.map; }
-        bool operator()(const Match& match, TournamentMap map) const noexcept { return match.map < map; }
-    };
-
-    // not using std::ranges::equal_range() here because clang 12 on linux doesn't support it yet
-    if (const auto [begin, end] = std::equal_range(matches.begin(), matches.end(), map, Comp{}); begin != end)
-        return { begin, end };
-
-    return {};
+    return ranges::equal_range(matches, map, {}, &Match::map);
 }
 
 [[nodiscard]] static auto generateSouvenirPackageData(const StaticData::Case& caseData) noexcept
