@@ -24,16 +24,6 @@ namespace game_items
 
 namespace StaticData
 {
-    struct ItemIndex2 {
-        explicit ItemIndex2(std::size_t value) : value{ value } {}
-        ItemIndex2() = default;
-        friend bool operator==(const ItemIndex2& a, const ItemIndex2& b) = default;
-
-        std::size_t value = static_cast<std::size_t>(-1);
-    };
-
-    constexpr auto InvalidItemIdx2 = ItemIndex2{};
-
     enum class TournamentMap : std::uint8_t {
         None = 0,
         Ancient,
@@ -137,11 +127,3 @@ namespace StaticData
         return TournamentMap::None;
     }
 }
-
-template <>
-struct std::hash<StaticData::ItemIndex2> {
-    std::size_t operator()(StaticData::ItemIndex2 s) const noexcept
-    {
-        return std::hash<std::size_t>{}(s.value);
-    }
-};
