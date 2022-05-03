@@ -17,16 +17,16 @@ public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
-        patches = { storage.getItems().begin(),
-        std::ranges::partition_point(storage.getItems(), [](const Item& item) { return item.isPatch(); }) };
+        graffiti = { storage.getItems().begin(),
+        std::ranges::partition_point(storage.getItems(), [](const Item& item) { return item.isGraffiti(); }) };
+        patches = { graffiti.end(),
+        std::ranges::partition_point(graffiti.end(), std::as_const(storage).getItems().end(), [](const Item& item) { return item.isPatch(); }) };
         itemsWithPaintKit = { patches.end(),
         std::ranges::partition_point(patches.end(), std::as_const(storage).getItems().end(), [this](const Item& item) { return storage.hasPaintKit(item); }) };
 
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
                 stickersSorted.emplace_back(item);
-            else if (item.isGraffiti())
-                graffitiSorted.emplace_back(item);
             else if (item.isMusic())
                 musicKitsSorted.emplace_back(item);
         }
@@ -36,9 +36,6 @@ public:
 
         std::ranges::sort(musicKitsSorted, {}, [this](const Item& item) { return storage.getMusicKit(item).id; });
         musicKitsSorted.shrink_to_fit();
-
-        std::ranges::sort(graffitiSorted, {}, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
-        graffitiSorted.shrink_to_fit();
 
         tournamentStickersSorted = stickersSorted;
 
@@ -139,7 +136,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
     {
-        return find(graffitiSorted, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
+        return find(graffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
@@ -163,12 +160,12 @@ private:
     }
 
     Storage storage;
+    std::span<const Item> graffiti;
     std::span<const Item> patches;
     std::span<const Item> itemsWithPaintKit;
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
     std::vector<ItemReference> musicKitsSorted;
-    std::vector<ItemReference> graffitiSorted;
 };
 
 }
