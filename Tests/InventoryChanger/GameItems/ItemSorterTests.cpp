@@ -99,6 +99,51 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
     return storage.getItems().back();
 }
 
+class InventoryChanger_GameItems_ItemSorter_PatchPartitionTest : public testing::TestWithParam<ItemType> {
+protected:
+    InventoryChanger_GameItems_ItemSorter_PatchPartitionTest()
+    {
+        storage.addPatch(111, {}, EconRarity::Blue, {});
+        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::CS20Case, 0, {});
+    }
+
+    [[nodiscard]] const Item& patch() const noexcept { return storage.getItems()[0]; }
+    [[nodiscard]] const Item& otherItem() const noexcept { return storage.getItems()[1]; }
+
+    Storage storage;
+};
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_PatchPartitionTest, PatchComesBeforeOtherItems) {
+    ASSERT_TRUE(ItemSorter{ storage }(patch(), otherItem()));
+}
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_PatchPartitionTest, OtherItemsDoNotComeBeforePatch) {
+    ASSERT_FALSE(ItemSorter{ storage }(otherItem(), patch()));
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_PatchPartitionTest,
+    testing::Values(
+        ItemType::Gloves,
+        ItemType::Skin,
+        ItemType::Sticker,
+        ItemType::Music,
+        ItemType::Graffiti,
+        ItemType::Collectible,
+        ItemType::NameTag,
+        ItemType::Agent,
+        ItemType::Case,
+        ItemType::CaseKey,
+        ItemType::OperationPass,
+        ItemType::StatTrakSwapTool,
+        ItemType::ViewerPass,
+        ItemType::ServiceMedal,
+        ItemType::SouvenirToken,
+        ItemType::TournamentCoin,
+        ItemType::VanillaKnife,
+        ItemType::VanillaSkin
+    )
+);
+
 class InventoryChanger_GameItems_ItemSorter_PartitionTest : public testing::TestWithParam<ItemType> {
 protected:
     InventoryChanger_GameItems_ItemSorter_PartitionTest()
@@ -106,37 +151,34 @@ protected:
         storage.addPaintKit(1234, {}, 0.0f, 1.0f);
         storage.addSkinWithLastPaintKit(EconRarity::Red, WeaponId::Famas, {});
         storage.addGlovesWithLastPaintKit(EconRarity::Red, WeaponId::GloveStuddedBloodhound, {});
+        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
     }
 
     [[nodiscard]] const Item& skin() const noexcept { return storage.getItems()[0]; }
     [[nodiscard]] const Item& gloves() const noexcept { return storage.getItems()[1]; }
+    [[nodiscard]] const Item& otherItem() const noexcept { return storage.getItems()[2]; }
 
     Storage storage;
 };
 
 TEST_P(InventoryChanger_GameItems_ItemSorter_PartitionTest, SkinComesBeforeItemsNotHavingPaintKit) {
-    const auto& otherItem = addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
-    ASSERT_TRUE(ItemSorter{ storage }(skin(), otherItem));
+    ASSERT_TRUE(ItemSorter{ storage }(skin(), otherItem()));
 }
 
 TEST_P(InventoryChanger_GameItems_ItemSorter_PartitionTest, GlovesComesBeforeItemsNotHavingPaintKit) {
-    const auto& otherItem = addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
-    ASSERT_TRUE(ItemSorter{ storage }(gloves(), otherItem));
+    ASSERT_TRUE(ItemSorter{ storage }(gloves(), otherItem()));
 }
 
 TEST_P(InventoryChanger_GameItems_ItemSorter_PartitionTest, ItemsNotHavingPaintKitDoNotComeBeforeSkin) {
-    const auto& otherItem = addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
-    ASSERT_FALSE(ItemSorter{ storage }(otherItem, skin()));
+    ASSERT_FALSE(ItemSorter{ storage }(otherItem(), skin()));
 }
 
 TEST_P(InventoryChanger_GameItems_ItemSorter_PartitionTest, ItemsNotHavingPaintKitDoNotComeBeforeGloves) {
-    const auto& otherItem = addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
-    ASSERT_FALSE(ItemSorter{ storage }(otherItem, gloves()));
+    ASSERT_FALSE(ItemSorter{ storage }(otherItem(), gloves()));
 }
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_PartitionTest,
     testing::Values(
-        ItemType::Patch,
         ItemType::Sticker,
         ItemType::Music,
         ItemType::Graffiti,
@@ -208,6 +250,27 @@ TEST(InventoryChanger_GameItems_ItemSorter_ItemsWithPaintKit_SameWeaponIdTest, R
     const auto& skin1 = storage.getItems()[0];
     const auto& skin2 = storage.getItems()[1];
     ASSERT_FALSE(ItemSorter{ storage }(skin1, skin2));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_PatchTest, PatchWithSmallerIdComesFirst) {
+    Storage storage;
+    storage.addPatch(570, {}, EconRarity::Blue, {});
+    storage.addPatch(1024, {}, EconRarity::Blue, {});
+    ASSERT_TRUE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_PatchTest, PatchWithGreaterIdComesSecond) {
+    Storage storage;
+    storage.addPatch(570, {}, EconRarity::Blue, {});
+    storage.addPatch(1024, {}, EconRarity::Blue, {});
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[1], storage.getItems()[0]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_PatchTest, ReturnsFalseForEqualPatchId) {
+    Storage storage;
+    storage.addPatch(1024, {}, EconRarity::Blue, {});
+    storage.addPatch(1024, {}, EconRarity::Blue, {});
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
 }
 
 }

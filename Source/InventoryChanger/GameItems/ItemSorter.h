@@ -11,6 +11,12 @@ struct ItemSorter {
 
     [[nodiscard]] bool operator()(const Item& a, const Item& b) const
     {
+        if (a.isPatch() != b.isPatch())
+            return a.isPatch();
+
+        if (a.isPatch() && b.isPatch())
+            return storage.getPatch(a).id < storage.getPatch(b).id;
+
         const auto aHasPaintKit = storage.hasPaintKit(a);
         const auto bHasPaintKit = storage.hasPaintKit(b);
   
