@@ -119,48 +119,43 @@ public:
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto range = ranges::equal_range(itemsWithPaintKit, weaponID, {}, &Item::getWeaponID);
-
-        if (const auto it = std::ranges::lower_bound(range, paintKit, {}, [this](const Item& item) { return storage.getPaintKit(item).id; }); it != range.end() && storage.getPaintKit(*it).id == paintKit)
-            return *it;
-        return {};
+        return find(range, paintKit, [this](const Item& item) { return storage.getPaintKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(storage.getItems(), weaponID, {}, &Item::getWeaponID); it != storage.getItems().end() && it->getWeaponID() == weaponID)
-            return *it;
-        return {};
+        return find(storage.getItems(), weaponID, &Item::getWeaponID);
     }
 
     [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(musicKitsSorted, musicKit, {}, [this](const Item& item) { return storage.getMusicKit(item).id; }); it != musicKitsSorted.end() && storage.getMusicKit(*it).id == musicKit)
-            return *it;
-        return {};
+        return find(musicKitsSorted, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(stickersSorted, stickerKit, {}, [this](const Item& item) { return storage.getStickerKit(item).id; }); it != stickersSorted.end() && storage.getStickerKit(*it).id == stickerKit)
-            return *it;
-        return {};
+        return find(stickersSorted, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(graffitiSorted, graffitiID, {}, [this](const Item& item) { return storage.getGraffitiKit(item).id; }); it != graffitiSorted.end() && storage.getGraffitiKit(*it).id == graffitiID)
-            return *it;
-        return {};
+        return find(graffitiSorted, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(patches, patchID, {}, [this](const Item& item) { return storage.getPatch(item).id; }); it != patches.end() && storage.getPatch(*it).id == patchID)
+        return find(patches, patchID, [this](const Item& item) { return storage.getPatch(item).id; });
+    }
+
+private:
+    template <typename Container, typename T, typename Projection>
+    [[nodiscard]] static OptionalItemReference find(const Container& container, const T& value, Projection projection)
+    {
+        if (const auto it = std::ranges::lower_bound(container, value, {}, projection); it != std::end(container) && std::invoke(projection, *it) == value)
             return *it;
         return {};
     }
 
-private:
     [[nodiscard]] static Storage sorted(Storage storage)
     {
         std::ranges::sort(storage.getItems(), ItemSorter{ storage });
