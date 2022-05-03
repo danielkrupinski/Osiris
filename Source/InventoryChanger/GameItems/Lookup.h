@@ -17,8 +17,10 @@ public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
-        itemsWithPaintKit = { storage.getItems().begin(),
-        std::ranges::partition_point(storage.getItems(), [this](const Item& item) { return storage.hasPaintKit(item); }) };
+        patches = { storage.getItems().begin(),
+        std::ranges::partition_point(storage.getItems(), [](const Item& item) { return item.isPatch(); }) };
+        itemsWithPaintKit = { patches.end(),
+        std::ranges::partition_point(patches.end(), std::as_const(storage).getItems().end(), [this](const Item& item) { return storage.hasPaintKit(item); }) };
 
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
@@ -27,8 +29,6 @@ public:
                 graffitiSorted.emplace_back(item);
             else if (item.isMusic())
                 musicKitsSorted.emplace_back(item);
-            else if (item.isPatch())
-                patchesSorted.emplace_back(item);
         }
 
         std::ranges::sort(stickersSorted, {}, [this](const Item& item) { return storage.getStickerKit(item).id; });
@@ -39,9 +39,6 @@ public:
 
         std::ranges::sort(graffitiSorted, {}, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
         graffitiSorted.shrink_to_fit();
-
-        std::ranges::sort(patchesSorted, {}, [this](const Item& item) { return storage.getPatch(item).id; });
-        patchesSorted.shrink_to_fit();
 
         tournamentStickersSorted = stickersSorted;
 
@@ -158,7 +155,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
     {
-        if (const auto it = std::ranges::lower_bound(patchesSorted, patchID, {}, [this](const Item& item) { return storage.getPatch(item).id; }); it != patchesSorted.end() && storage.getPatch(*it).id == patchID)
+        if (const auto it = std::ranges::lower_bound(patches, patchID, {}, [this](const Item& item) { return storage.getPatch(item).id; }); it != patches.end() && storage.getPatch(*it).id == patchID)
             return *it;
         return {};
     }
@@ -171,12 +168,12 @@ private:
     }
 
     Storage storage;
+    std::span<const Item> patches;
     std::span<const Item> itemsWithPaintKit;
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
     std::vector<ItemReference> musicKitsSorted;
     std::vector<ItemReference> graffitiSorted;
-    std::vector<ItemReference> patchesSorted;
 };
 
 }
