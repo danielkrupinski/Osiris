@@ -262,5 +262,12 @@ INSTANTIATE_TEST_SUITE_P(TypesWithConstantWeaponID, GameItemsStorageWeaponIdTest
     )
 );
 
+TEST(InventoryChanger_GameItems_StorageTest, FirstAddedItemIsFirstInItemList) {
+    Storage storage;
+    storage.addNameTag(EconRarity::Gray, WeaponId::NameTag, {});
+    storage.addAgent(EconRarity::Pink, WeaponId::None, {});
+    ASSERT_TRUE(storage.getItems()[0].isNameTag());
+}
+
 }
 }
