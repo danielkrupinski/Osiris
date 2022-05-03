@@ -11,6 +11,12 @@ struct ItemSorter {
 
     [[nodiscard]] bool operator()(const Item& a, const Item& b) const
     {
+        if (a.isGraffiti() != b.isGraffiti())
+            return a.isGraffiti();
+
+        if (a.isGraffiti() && b.isGraffiti())
+            return storage.getGraffitiKit(a).id < storage.getGraffitiKit(b).id;
+
         if (a.isPatch() != b.isPatch())
             return a.isPatch();
 
