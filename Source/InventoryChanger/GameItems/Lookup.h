@@ -17,12 +17,14 @@ public:
     Lookup() = default;
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
-        graffiti = { storage.getItems().begin(),
-        std::ranges::partition_point(storage.getItems(), [](const Item& item) { return item.isGraffiti(); }) };
-        patches = { graffiti.end(),
-        std::ranges::partition_point(graffiti.end(), std::as_const(storage).getItems().end(), [](const Item& item) { return item.isPatch(); }) };
-        itemsWithPaintKit = { patches.end(),
-        std::ranges::partition_point(patches.end(), std::as_const(storage).getItems().end(), [this](const Item& item) { return storage.hasPaintKit(item); }) };
+        const auto items = std::as_const(storage).getItems();
+        const auto graffitiPartition = std::ranges::partition_point(items, [](const Item& item) { return item.isGraffiti(); });
+        const auto patchesPartition = std::ranges::partition_point(graffitiPartition, items.end(), [](const Item& item) { return item.isPatch(); });
+        const auto itemsWithPaintKitPartition = std::ranges::partition_point(patchesPartition, items.end(), [this](const Item& item) { return storage.hasPaintKit(item); });
+
+        graffiti = { items.begin(), graffitiPartition };
+        patches = { graffitiPartition, patchesPartition };
+        itemsWithPaintKit = { patchesPartition, itemsWithPaintKitPartition };
 
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
