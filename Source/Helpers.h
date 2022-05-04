@@ -65,6 +65,7 @@ namespace Helpers
         switch (id) {
         case WeaponId::Berlin2019SouvenirToken:
         case WeaponId::Stockholm2021SouvenirToken:
+        case WeaponId::Antwerp2022SouvenirToken:
             return true;
         default:
             return false;
@@ -79,6 +80,8 @@ namespace Helpers
         case WeaponId::Berlin2019ViewerPassWith3Tokens: return WeaponId::Berlin2019BronzeCoin;
         case WeaponId::Stockholm2021ViewerPass:
         case WeaponId::Stockholm2021ViewerPassWith3Tokens: return WeaponId::Stockholm2021BronzeCoin;
+        case WeaponId::Antwerp2022ViewerPass:
+        case WeaponId::Antwerp2022ViewerPassWith3Tokens: return WeaponId::Antwerp2022BronzeCoin;
         default: return WeaponId::None;
         }
     }
@@ -87,7 +90,8 @@ namespace Helpers
     {
         switch (id) {
         case WeaponId::Berlin2019ViewerPassWith3Tokens: 
-        case WeaponId::Stockholm2021ViewerPassWith3Tokens: return 3;
+        case WeaponId::Stockholm2021ViewerPassWith3Tokens:
+        case WeaponId::Antwerp2022ViewerPassWith3Tokens: return 3;
         default: return 0;
         }
     }
