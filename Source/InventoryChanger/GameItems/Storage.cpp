@@ -48,7 +48,7 @@ void Storage::addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId we
     addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), pooled(iconPath));
 }
 
-void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
+void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
 {
     addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
 }
@@ -98,12 +98,12 @@ void Storage::addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::str
     addItem(Item::Type::StatTrakSwapTool, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
+void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
 {
     addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
 }
 
-void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint32_t tournamentEventID, std::string_view iconPath)
+void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
 {
     addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
 }
