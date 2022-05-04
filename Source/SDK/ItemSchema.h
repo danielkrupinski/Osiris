@@ -143,6 +143,11 @@ public:
         return getAttributeValue(137 /* "tournament event id" */);
     }
 
+    std::uint32_t getStickerID() noexcept
+    {
+        return getAttributeValue(113 /* "sticker slot 0 id" */);
+    }
+
     bool hasTournamentEventID() noexcept
     {
         return getTournamentEventID() != 0;
