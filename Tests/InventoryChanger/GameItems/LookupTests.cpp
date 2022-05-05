@@ -39,35 +39,35 @@ TEST_F(InventoryChanger_GameItems_Lookup_EmptyStorageTest, PatchIsNotFound) {
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemNotFoundIfNotInStorage) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::Berlin2019BronzeCoin, 0, {});
+    storage.addServiceMedal(EconRarity::Red, 0, WeaponId::Berlin2019BronzeCoin, {});
     Lookup lookup{ std::move(storage) };
     ASSERT_FALSE(lookup.findItem(WeaponId::Katowice2019BronzeCoin).has_value());
 }
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemWithStickerAsWeaponIdIsNotAssumedToBeSticker) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::Sticker, 0, {});
+    storage.addServiceMedal(EconRarity::Red, 0, WeaponId::Sticker, {});
     Lookup lookup{ std::move(storage) };
     ASSERT_FALSE(lookup.findSticker(0).has_value());
 }
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemWithMusicKitAsWeaponIdIsNotAssumedToBeMusic) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::MusicKit, 0, {});
+    storage.addServiceMedal(EconRarity::Red, 0, WeaponId::MusicKit, {});
     Lookup lookup{ std::move(storage) };
     ASSERT_FALSE(lookup.findMusic(3).has_value());
 }
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemWithSealedGraffitiAsWeaponIdIsNotAssumedToBeGraffiti) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::SealedGraffiti, 0, {});
+    storage.addServiceMedal(EconRarity::Red, 0, WeaponId::SealedGraffiti, {});
     Lookup lookup{ std::move(storage) };
     ASSERT_FALSE(lookup.findGraffiti(3).has_value());
 }
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemWithPatchAsWeaponIdIsNotAssumedToBePatch) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::Patch, 0, {});
+    storage.addServiceMedal(EconRarity::Red, 0, WeaponId::Patch, {});
     Lookup lookup{ std::move(storage) };
     ASSERT_FALSE(lookup.findPatch(21).has_value());
 }
