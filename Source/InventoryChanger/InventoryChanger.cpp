@@ -367,7 +367,7 @@ static void applyMedal() noexcept
         return;
 
     const auto& item = *optionalItem;
-    if (!item->gameItem().isCollectible())
+    if (!item->gameItem().isCollectible() && !item->gameItem().isServiceMedal() && !item->gameItem().isTournamentCoin())
         return;
 
     pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->gameItem().getWeaponID());
