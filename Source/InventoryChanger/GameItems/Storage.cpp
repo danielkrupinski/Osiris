@@ -48,9 +48,9 @@ void Storage::addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId we
     addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), pooled(iconPath));
 }
 
-void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
+void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::uint16_t defaultGraffitiID, std::string_view iconPath)
 {
-    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
+    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournamentEventID | defaultGraffitiID << 8), pooled(iconPath));
 }
 
 void Storage::addPaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax)

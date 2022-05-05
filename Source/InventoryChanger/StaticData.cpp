@@ -216,7 +216,7 @@ private:
                 if (item->isServiceMedal()) {
                     storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, inventoryImage);
                 } else if (item->isTournamentCoin()) {
-                    storage.addTournamentCoin(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    storage.addTournamentCoin(rarity, weaponID, static_cast<std::uint8_t>(item->getTournamentEventID()), static_cast<std::uint16_t>(item->getStickerID()), inventoryImage);
                 } else {
                     storage.addCollectible(rarity, weaponID, isOriginal, inventoryImage);
                 }

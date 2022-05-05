@@ -23,7 +23,7 @@ public:
     void addCollectible(EconRarity rarity, WeaponId weaponID, bool isOriginal, std::string_view iconPath);
     void addVanillaSkin(WeaponId weaponID, std::string_view iconPath);
     void addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId weaponID, std::string_view iconPath);
-    void addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath);
+    void addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::uint16_t defaultGraffitiID, std::string_view iconPath);
     void addPaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax);
     void addGlovesWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addSkinWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
@@ -97,6 +97,12 @@ public:
     {
         assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
         return static_cast<std::uint8_t>(item.getDataIndex());
+    }
+
+    [[nodiscard]] std::uint16_t getDefaultTournamentGraffitiID(const Item& item) const noexcept
+    {
+        assert(item.isTournamentCoin());
+        return static_cast<std::uint16_t>(item.getDataIndex() >> 8);
     }
 
     [[nodiscard]] bool hasPaintKit(const Item& item) const noexcept
