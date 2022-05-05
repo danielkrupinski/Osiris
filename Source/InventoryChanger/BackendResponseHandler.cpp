@@ -135,8 +135,7 @@ std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnackno
         if (const auto tournamentCoin = inventoryItem.get<inventory::TournamentCoin>())
             attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
-        if (item.getWeaponID() == WeaponId::Antwerp2022BronzeCoin)
-            attributeSetter.setStickerID(*econItem, 0, 5395); // default tournament graffiti
+        attributeSetter.setStickerID(*econItem, 0, storage.getDefaultTournamentGraffitiID(item));
     } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
         if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
