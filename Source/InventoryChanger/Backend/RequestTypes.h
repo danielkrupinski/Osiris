@@ -73,4 +73,9 @@ struct UpdateStatTrak {
     int newStatTrak;
 };
 
+struct SelectTeamGraffiti {
+    ItemConstIterator tournamentCoin;
+    std::uint16_t graffitiID;
+};
+
 }
