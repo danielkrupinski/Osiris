@@ -30,7 +30,7 @@ struct BackendResponseHandler {
     void operator()(const backend::response::SouvenirTokenActivated& response) const;
     void operator()(const backend::response::GraffitiUnsealed& response) const;
     void operator()(const backend::response::StatTrakSwapped& response) const;
-    void operator()(const backend::response::TeamGraffitiSelected& response) const {}
+    void operator()(const backend::response::TeamGraffitiSelected& response) const;
 
 private:
     backend::BackendSimulator& backend;

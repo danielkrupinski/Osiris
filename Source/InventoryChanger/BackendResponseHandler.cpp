@@ -386,6 +386,25 @@ void graffitiUnseal(std::uint64_t itemID)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void selectTeamGraffiti(std::uint64_t itemID, std::uint16_t graffitiID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setStickerID(*econItem, 0, graffitiID);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
 {
     memory->inventoryManager->equipItemInSlot(team, slot, itemID);
@@ -547,6 +566,13 @@ void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped
     }
 
     initItemCustomizationNotification("stattrack_swap", *sourceStatTrak > *destinationStatTrak ? *sourceItemID : *destinationItemID);
+}
+
+void BackendResponseHandler::operator()(const backend::response::TeamGraffitiSelected& response) const
+{
+    if (const auto itemID = backend.getItemID(response.tournamentCoin); itemID.has_value()) {
+        selectTeamGraffiti(*itemID, response.graffitiID);
+    }
 }
 
 }
