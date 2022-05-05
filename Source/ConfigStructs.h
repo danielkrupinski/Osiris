@@ -61,7 +61,7 @@ struct ColorToggleThicknessRounding : ColorToggleRounding {
     float thickness = 1.0f;
 };
 
-struct Font {
+struct FontEx {
     int index = 0; // do not save
     std::string name;
 };
@@ -91,7 +91,7 @@ struct Box : ColorToggleRounding {
 
 struct Shared {
     bool enabled = false;
-    Font font;
+    FontEx font;
     Snapline snapline;
     Box box;
     ColorToggle name;
