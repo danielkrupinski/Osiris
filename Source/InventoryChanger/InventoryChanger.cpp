@@ -56,6 +56,7 @@
 #include "ItemGenerator.h"
 
 #include "BackendResponseHandler.h"
+#include "../Hooks.h"
 
 static Entity* createGlove(int entry, int serial) noexcept
 {
@@ -1185,6 +1186,15 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem1(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
         inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem2(stringToUint64(string));
+    } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
+        auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
+            const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+            if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
+                const auto graffitiID = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
+                backend.handleRequest<inventory_changer::backend::request::SelectTeamGraffiti>(*itOptional, static_cast<std::uint16_t>(graffitiID));
+            }
+        }
     }
 }
 
