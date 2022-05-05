@@ -202,6 +202,7 @@ Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) 
 {
     if (request.tournamentCoin->gameItem().isTournamentCoin())
         return response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID };
+    return {};
 }
 
 }
