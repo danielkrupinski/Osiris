@@ -490,7 +490,7 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        InventoryChanger::getArgAsStringHook(result, RETURN_ADDRESS());
+        InventoryChanger::getArgAsStringHook(result, RETURN_ADDRESS(), params);
 
     return result;
 }

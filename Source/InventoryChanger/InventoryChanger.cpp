@@ -1163,7 +1163,7 @@ namespace inventory_changer
     };
 }
 
-void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress) noexcept
+void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params) noexcept
 {
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
         inventory_changer::BackendRequestBuilder::instance().setToolItemID(stringToUint64(string));
