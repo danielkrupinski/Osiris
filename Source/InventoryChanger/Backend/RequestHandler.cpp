@@ -198,4 +198,10 @@ Response RequestHandler::operator()(const request::UpdateStatTrak& request) cons
     return {};
 }
 
+Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) const
+{
+    if (request.tournamentCoin->gameItem().isTournamentCoin())
+        return response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID };
+}
+
 }
