@@ -28,7 +28,8 @@ using Response = std::variant<
     response::PatchRemoved,
     response::SouvenirTokenActivated,
     response::GraffitiUnsealed,
-    response::StatTrakSwapped
+    response::StatTrakSwapped,
+    response::TeamGraffitiSelected
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept

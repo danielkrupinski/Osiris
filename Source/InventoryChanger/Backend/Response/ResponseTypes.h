@@ -113,4 +113,11 @@ struct StatTrakSwapped {
     ItemConstIterator swapDestinationItem;
 };
 
+struct TeamGraffitiSelected {
+    TeamGraffitiSelected(ItemConstIterator tournamentCoin, std::uint16_t graffitiID) : tournamentCoin{ tournamentCoin }, graffitiID{ graffitiID } {}
+
+    ItemConstIterator tournamentCoin;
+    std::uint16_t graffitiID;
+};
+
 }
