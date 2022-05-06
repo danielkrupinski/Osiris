@@ -18,26 +18,23 @@ public:
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
         const auto items = std::as_const(storage).getItems();
-        const auto graffitiPartition = std::ranges::partition_point(items, [](const Item& item) { return item.isGraffiti(); });
+        const auto musicPartition = std::ranges::partition_point(items, [](const Item& item) { return item.isMusic(); });
+        const auto graffitiPartition = std::ranges::partition_point(musicPartition, items.end(), [](const Item& item) { return item.isGraffiti(); });
         const auto patchesPartition = std::ranges::partition_point(graffitiPartition, items.end(), [](const Item& item) { return item.isPatch(); });
         const auto itemsWithPaintKitPartition = std::ranges::partition_point(patchesPartition, items.end(), [this](const Item& item) { return storage.hasPaintKit(item); });
 
-        graffiti = { items.begin(), graffitiPartition };
+        music = { items.begin(), musicPartition };
+        graffiti = { musicPartition, graffitiPartition };
         patches = { graffitiPartition, patchesPartition };
         itemsWithPaintKit = { patchesPartition, itemsWithPaintKitPartition };
 
         for (const auto& item : storage.getItems()) {
             if (item.isSticker())
                 stickersSorted.emplace_back(item);
-            else if (item.isMusic())
-                musicKitsSorted.emplace_back(item);
         }
 
         std::ranges::sort(stickersSorted, {}, [this](const Item& item) { return storage.getStickerKit(item).id; });
         stickersSorted.shrink_to_fit();
-
-        std::ranges::sort(musicKitsSorted, {}, [this](const Item& item) { return storage.getMusicKit(item).id; });
-        musicKitsSorted.shrink_to_fit();
 
         tournamentStickersSorted = stickersSorted;
 
@@ -128,7 +125,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
     {
-        return find(musicKitsSorted, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
+        return find(music, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
@@ -162,12 +159,12 @@ private:
     }
 
     Storage storage;
+    std::span<const Item> music;
     std::span<const Item> graffiti;
     std::span<const Item> patches;
     std::span<const Item> itemsWithPaintKit;
     std::vector<ItemReference> stickersSorted;
     std::vector<ItemReference> tournamentStickersSorted;
-    std::vector<ItemReference> musicKitsSorted;
 };
 
 }
