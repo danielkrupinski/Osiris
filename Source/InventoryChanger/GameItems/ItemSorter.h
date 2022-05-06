@@ -11,6 +11,12 @@ struct ItemSorter {
 
     [[nodiscard]] bool operator()(const Item& a, const Item& b) const
     {
+        if (a.isMusic() != b.isMusic())
+            return a.isMusic();
+
+        if (a.isMusic() && b.isMusic())
+            return storage.getMusicKit(a).id < storage.getMusicKit(b).id;
+
         if (a.isGraffiti() != b.isGraffiti())
             return a.isGraffiti();
 
