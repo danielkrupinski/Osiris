@@ -29,6 +29,7 @@ public:
         graffiti = { musicPartition, graffitiPartition };
         patches = { graffitiPartition, patchesPartition };
         itemsWithPaintKit = { patchesPartition, itemsWithPaintKitPartition };
+        otherItems = { itemsWithPaintKitPartition, items.end() };
 
         tournamentStickersSorted = { stickers.begin(), stickers.end() };
 
@@ -114,7 +115,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID) const noexcept
     {
-        return find(storage.getItems(), weaponID, &Item::getWeaponID);
+        return find(otherItems, weaponID, &Item::getWeaponID);
     }
 
     [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
