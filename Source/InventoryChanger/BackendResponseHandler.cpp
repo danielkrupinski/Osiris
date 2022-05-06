@@ -136,6 +136,7 @@ std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnackno
             attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
         attributeSetter.setStickerID(*econItem, 0, storage.getDefaultTournamentGraffitiID(item));
+        attributeSetter.setCampaignCompletion(*econItem, 1);
     } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
         if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
