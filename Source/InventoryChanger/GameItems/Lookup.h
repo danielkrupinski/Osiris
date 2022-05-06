@@ -18,25 +18,19 @@ public:
     explicit Lookup(Storage dataStorage) : storage{ sorted(std::move(dataStorage)) }
     {
         const auto items = std::as_const(storage).getItems();
-        const auto musicPartition = std::ranges::partition_point(items, [](const Item& item) { return item.isMusic(); });
+        const auto stickerPartition = std::ranges::partition_point(items, [](const Item& item) { return item.isSticker(); });
+        const auto musicPartition = std::ranges::partition_point(stickerPartition, items.end(), [](const Item& item) { return item.isMusic(); });
         const auto graffitiPartition = std::ranges::partition_point(musicPartition, items.end(), [](const Item& item) { return item.isGraffiti(); });
         const auto patchesPartition = std::ranges::partition_point(graffitiPartition, items.end(), [](const Item& item) { return item.isPatch(); });
         const auto itemsWithPaintKitPartition = std::ranges::partition_point(patchesPartition, items.end(), [this](const Item& item) { return storage.hasPaintKit(item); });
 
-        music = { items.begin(), musicPartition };
+        stickers = { items.begin(), stickerPartition };
+        music = { stickerPartition, musicPartition };
         graffiti = { musicPartition, graffitiPartition };
         patches = { graffitiPartition, patchesPartition };
         itemsWithPaintKit = { patchesPartition, itemsWithPaintKitPartition };
 
-        for (const auto& item : storage.getItems()) {
-            if (item.isSticker())
-                stickersSorted.emplace_back(item);
-        }
-
-        std::ranges::sort(stickersSorted, {}, [this](const Item& item) { return storage.getStickerKit(item).id; });
-        stickersSorted.shrink_to_fit();
-
-        tournamentStickersSorted = stickersSorted;
+        tournamentStickersSorted = { stickers.begin(), stickers.end() };
 
         std::ranges::sort(tournamentStickersSorted, [this](const Item& itemA, const Item& itemB) {
             assert(itemA.isSticker() && itemB.isSticker());
@@ -130,7 +124,7 @@ public:
 
     [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
     {
-        return find(stickersSorted, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
+        return find(stickers, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
@@ -159,11 +153,12 @@ private:
     }
 
     Storage storage;
+    std::span<const Item> stickers;
     std::span<const Item> music;
     std::span<const Item> graffiti;
     std::span<const Item> patches;
     std::span<const Item> itemsWithPaintKit;
-    std::vector<ItemReference> stickersSorted;
+    std::span<const Item> otherItems;
     std::vector<ItemReference> tournamentStickersSorted;
 };
 
