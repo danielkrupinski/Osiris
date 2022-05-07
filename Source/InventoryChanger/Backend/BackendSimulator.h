@@ -123,7 +123,7 @@ public:
     }
 
     template <typename Request, typename... Args>
-    void handleRequest(Args&&... args)
+    void request(Args&&... args)
     {
         if (const auto response = RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
             responseQueue.add(response);
