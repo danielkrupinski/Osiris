@@ -42,39 +42,18 @@ public:
 
     void add(WeaponId weaponID, std::string_view name, std::wstring_view nameUpperCase)
     {
-        names.emplace(weaponID, std::make_pair(name, nameUpperCase));
-    }
-
-private:
-    std::unordered_map<WeaponId, std::pair<std::string_view, std::wstring_view>> names;
-};
-
-class WeaponNamesStorage {
-public:
-    [[nodiscard]] std::string_view getWeaponName(WeaponId weaponID) const
-    {
-        return weaponNames.getWeaponName(weaponID);
-    }
-
-    [[nodiscard]] std::wstring_view getWeaponNameUpper(WeaponId weaponID) const
-    {
-        return weaponNames.getWeaponNameUpper(weaponID);
-    }
-
-    void add(WeaponId weaponID, std::string_view name, std::wstring_view nameUpperCase)
-    {
-        weaponNames.add(weaponID, pool.add(name), poolWide.add(nameUpperCase));
+        names.emplace(weaponID, std::make_pair(pool.add(name), poolWide.add(nameUpperCase)));
     }
 
 private:
     StringPool<char> pool;
     StringPool<wchar_t> poolWide;
-    WeaponNames weaponNames;
+    std::unordered_map<WeaponId, std::pair<std::string_view, std::wstring_view>> names;
 };
 
-[[nodiscard]] static WeaponNamesStorage createWeaponNamesStorage(ItemSchema* itemSchema)
+[[nodiscard]] static WeaponNames createWeaponNamesStorage(ItemSchema* itemSchema)
 {
-    WeaponNamesStorage storage;
+    WeaponNames storage;
     ToUtf8Converter converter{ *interfaces->localize };
     Helpers::ToUpperConverter toUpperConverter;
 
@@ -86,9 +65,9 @@ private:
     return storage;
 }
 
-[[nodiscard]] static const WeaponNamesStorage& getWeaponNamesInstance()
+[[nodiscard]] static const WeaponNames& getWeaponNamesInstance()
 {
-    static const WeaponNamesStorage storage{ createWeaponNamesStorage(memory->itemSystem()->getItemSchema()) };
+    static const WeaponNames storage{ createWeaponNamesStorage(memory->itemSystem()->getItemSchema()) };
     return storage;
 }
 
