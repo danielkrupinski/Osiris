@@ -1037,9 +1037,11 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Inferno, ChallengersStage, forZeESports, BadNewsEagles },
     { TournamentMap::Inferno, ChallengersStage, ImperialEsports, TeamLiquid },
     { TournamentMap::Mirage, ChallengersStage, ENCE, _9ZTeam },
+    { TournamentMap::Mirage, ChallengersStage, Astralis, Vitality },
     { TournamentMap::Nuke, ChallengersStage, forZeESports, Renegades },
     { TournamentMap::Nuke, ChallengersStage, Astralis, IHCEsports },
     { TournamentMap::Nuke, ChallengersStage, ComplexityGaming_, IHCEsports },
+    { TournamentMap::Overpass, ChallengersStage, MIBR, _9ZTeam },
     { TournamentMap::Vertigo, ChallengersStage, EternalFire, Renegades },
     { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders }
 });
