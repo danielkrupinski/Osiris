@@ -65,17 +65,17 @@ struct ActivateOperationPass {
     ItemConstIterator operationPass;
 };
 
-struct ActivateViewerPass {
-    explicit ActivateViewerPass(ItemConstIterator viewerPass) : viewerPass{ viewerPass } {}
+template <typename Tag>
+struct ModifyItem {
+    explicit ModifyItem(ItemConstIterator item) : item{ item } {}
 
-    ItemConstIterator viewerPass;
+    ItemConstIterator item;
 };
 
-struct ActivateSouvenirToken {
-    explicit ActivateSouvenirToken(ItemConstIterator souvenirToken) : souvenirToken{ souvenirToken } {}
-
-    ItemConstIterator souvenirToken;
-};
+using ActivateViewerPass = ModifyItem<struct ActivateViewerPassTag>;
+using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
+using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
+using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
 
 struct AddNameTag {
     AddNameTag(ItemConstIterator item, ItemConstIterator nameTagItem, std::string_view nameTag)
@@ -84,18 +84,6 @@ struct AddNameTag {
     ItemConstIterator item;
     ItemConstIterator nameTagItem;
     std::string_view nameTag;
-};
-
-struct RemoveNameTag {
-    explicit RemoveNameTag(ItemConstIterator item) : item{ item } {}
-
-    ItemConstIterator item;
-};
-
-struct UnsealGraffiti {
-    explicit UnsealGraffiti(ItemConstIterator item) : item{ item } {}
-
-    ItemConstIterator item;
 };
 
 struct UpdateStatTrak {

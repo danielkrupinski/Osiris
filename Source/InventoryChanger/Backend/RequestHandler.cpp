@@ -113,7 +113,7 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
 
 Response RequestHandler::operator()(const request::ActivateViewerPass& request) const
 {
-    const auto& gameItem = request.viewerPass->gameItem();
+    const auto& gameItem = request.item->gameItem();
     if (!gameItem.isViewerPass())
         return {};
 
@@ -123,7 +123,7 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request) 
 
     if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
         const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) } });
-        backend.removeItem(request.viewerPass);
+        backend.removeItem(request.item);
         return response::ViewerPassActivated{ addedEventCoin };
     }
     return {};
@@ -153,10 +153,10 @@ Response RequestHandler::operator()(const request::RemoveNameTag& request) const
 
 Response RequestHandler::operator()(const request::ActivateSouvenirToken& request) const
 {
-    if (!request.souvenirToken->gameItem().isSouvenirToken())
+    if (!request.item->gameItem().isSouvenirToken())
         return {};
 
-    const auto tournamentEventID = gameItemLookup.getStorage().getTournamentEventID(request.souvenirToken->gameItem());
+    const auto tournamentEventID = gameItemLookup.getStorage().getTournamentEventID(request.item->gameItem());
     const auto& inventory = backend.getInventory();
     const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && gameItemLookup.getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
     if (tournamentCoin == inventory.end())
@@ -167,7 +167,7 @@ Response RequestHandler::operator()(const request::ActivateSouvenirToken& reques
         return {};
 
     ++tournamentCoinData->dropsAwarded;
-    backend.removeItem(request.souvenirToken);
+    backend.removeItem(request.item);
     return response::SouvenirTokenActivated{ tournamentCoin };
 }
 
