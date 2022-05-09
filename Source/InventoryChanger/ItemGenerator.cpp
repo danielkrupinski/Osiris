@@ -894,42 +894,30 @@ inventory::Item ItemGenerator::generateItemFromContainer(const inventory::Item& 
     return inventory::Item{ unlockedItem };
 }
 
-[[nodiscard]] static std::span<const Match> getTournamentMatches(std::uint32_t tournamentID) noexcept
-{
-    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
-        return it->matches;
-    return {};
-}
-
 constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
 {
     return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
 }
 
-[[nodiscard]] static std::span<const Match> filterMatchesToMap(std::span<const Match> matches, TournamentMap map) noexcept
-{
-    if (map == TournamentMap::None)
-        return matches;
-
-    assert(std::ranges::is_sorted(matches, {}, &Match::map));
-    return ranges::equal_range(matches, map, {}, &Match::map);
-}
-
 [[nodiscard]] static auto generateSouvenirPackageData(const StaticData::Case& caseData) noexcept
 {
-    inventory::SouvenirPackage dynamicData;
+    return std::visit([](auto&& matches) {
+        inventory::SouvenirPackage dynamicData;
 
-    if (const auto matches = getTournamentMatches(caseData.souvenirPackageTournamentID); !matches.empty()) {
-        if (const auto matchesOnMap = filterMatchesToMap(matches, caseData.tournamentMap); !matchesOnMap.empty()) {
-            const auto& randomMatch = matchesOnMap[Helpers::random(static_cast<std::size_t>(0), matchesOnMap.size() - 1)];
-            dynamicData.tournamentStage = randomMatch.stage;
-            dynamicData.tournamentTeam1 = randomMatch.team1;
-            dynamicData.tournamentTeam2 = randomMatch.team2;
+        if (matches.empty())
+            return dynamicData;
+
+        const auto& randomMatch = matches[Helpers::random(static_cast<std::size_t>(0), matches.size() - 1)];
+        dynamicData.tournamentStage = randomMatch.stage;
+        dynamicData.tournamentTeam1 = randomMatch.team1;
+        dynamicData.tournamentTeam2 = randomMatch.team2;
+
+        if constexpr (std::is_same_v<decltype(randomMatch), const Match&>) {
             dynamicData.proPlayer = randomMatch.getRandomMVP();
         }
-    }
 
-    return dynamicData;
+        return dynamicData;
+    }, getTournamentMatchesOnMap(caseData.souvenirPackageTournamentID, caseData.tournamentMap));
 }
 
 [[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
@@ -1005,16 +993,6 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
     return {};
 }
 
-[[nodiscard]] static const Match* findTournamentMatch(std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2) noexcept
-{
-    const auto matchesOnMap = filterMatchesToMap(getTournamentMatches(tournamentID), map);
-    if (matchesOnMap.empty())
-        return nullptr;
-
-    const auto match = std::ranges::find_if(matchesOnMap, [stage, team1, team2](const auto& match) { return match.stage == stage && match.team1 == team1 && match.team2 == team2; });
-    return (match != matchesOnMap.end() ? &*match : nullptr);
-}
-
 [[nodiscard]] static std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
 {
     if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
@@ -1032,7 +1010,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
         stickers[1].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team1);
         stickers[2].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team2);
 
-        if (const auto match = findTournamentMatch(tournamentID, map, stage, team1, team2); match && match->hasMVPs())
+        if (player)
             stickers[3].stickerID = StaticData::lookup().findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
         else if (tournamentID >= 18) // starting with PGL Stockholm 2021
             stickers[3].stickerID = StaticData::getTournamentMapGoldStickerID(map);
