@@ -137,6 +137,7 @@
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp" />
     <ClCompile Include="InventoryChanger\ItemGenerator.cpp" />
     <ClCompile Include="InventoryChanger\StaticData.cpp" />
+    <ClCompile Include="InventoryChanger\TournamentMatches.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
