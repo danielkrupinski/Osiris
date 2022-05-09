@@ -1049,6 +1049,24 @@ constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     });
 static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, & Match::map));
 
+constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
+    { TournamentMap::Dust2, ChallengersStage, BadNewsEagles, EternalFire, {} },
+    { TournamentMap::Dust2, ChallengersStage, ImperialEsports, TeamSpirit, {} },
+    { TournamentMap::Dust2, ChallengersStage, MIBR, Outsiders, {} },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, TeamSpirit, {} },
+    { TournamentMap::Inferno, ChallengersStage, Vitality, ComplexityGaming_, {} },
+    { TournamentMap::Inferno, ChallengersStage, G2Esports, TeamLiquid, {} },
+    { TournamentMap::Inferno, ChallengersStage, forZeESports, BadNewsEagles, {} },
+    { TournamentMap::Inferno, ChallengersStage, ImperialEsports, TeamLiquid, {} },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, _9ZTeam, {} },
+    { TournamentMap::Nuke, ChallengersStage, forZeESports, Renegades, {} },
+    { TournamentMap::Nuke, ChallengersStage, Astralis, IHCEsports, {} },
+    { TournamentMap::Nuke, ChallengersStage, ComplexityGaming_, IHCEsports, {} },
+    { TournamentMap::Vertigo, ChallengersStage, EternalFire, Renegades, {} },
+    { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders, {} }
+});
+static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
+
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
     { 3, emsOneKatowice2014Matches },
@@ -1064,6 +1082,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 13, eleagueBoston2018Matches },
     { 14, faceitLondon2018Matches },
     { 18, pglStockholm2021Matches },
+    { 19, pglAntwerp2022Matches }
 });
 
 static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));
