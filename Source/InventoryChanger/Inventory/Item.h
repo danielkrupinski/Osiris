@@ -63,15 +63,15 @@ private:
     return nullptr;
 }
 
-[[nodiscard]] inline const int* getStatTrak(const Item& item)
+[[nodiscard]] inline std::optional<int> getStatTrak(const Item& item)
 {
     if (const auto skin = item.get<Skin>())
-        return &skin->statTrak;
+        return skin->statTrak;
 
     if (const auto music = item.get<Music>())
-        return &music->statTrak;
+        return music->statTrak;
 
-    return nullptr;
+    return std::nullopt;
 }
 
 }
