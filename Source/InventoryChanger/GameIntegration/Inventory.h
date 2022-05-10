@@ -25,6 +25,7 @@ public:
     void selectTeamGraffiti(std::uint64_t itemID, std::uint16_t graffitiID);
     void statTrakSwapped(std::uint64_t itemID);
     void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot);
+    void markItemUpdated(std::uint64_t itemID);
 };
 
 }

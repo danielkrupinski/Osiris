@@ -447,4 +447,12 @@ void Inventory::equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
     memory->inventoryManager->equipItemInSlot(team, slot, itemID);
 }
 
+void Inventory::markItemUpdated(std::uint64_t itemID)
+{
+    if (const auto inventoryComponent = *memory->uiComponentInventory) {
+        memory->setItemSessionPropertyValue(inventoryComponent, itemID, "recent", "0");
+        memory->setItemSessionPropertyValue(inventoryComponent, itemID, "updated", "1");
+    }
+}
+
 }
