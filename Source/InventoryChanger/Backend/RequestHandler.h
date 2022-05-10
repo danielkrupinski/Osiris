@@ -30,6 +30,7 @@ struct RequestHandler {
     Response operator()(const request::UnsealGraffiti& request) const;
     Response operator()(const request::UpdateStatTrak& request) const;
     Response operator()(const request::SelectTeamGraffiti& request) const;
+    Response operator()(const request::MarkItemUpdated& request) const;
 
 private:
     BackendSimulator& backend;

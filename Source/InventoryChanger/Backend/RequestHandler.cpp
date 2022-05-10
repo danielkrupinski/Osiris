@@ -206,4 +206,9 @@ Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) 
     return {};
 }
 
+Response RequestHandler::operator()(const request::MarkItemUpdated& request) const
+{
+    return response::ItemUpdated{ request.item };
+}
+
 }
