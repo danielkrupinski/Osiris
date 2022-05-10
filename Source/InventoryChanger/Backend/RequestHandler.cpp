@@ -43,16 +43,17 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
     if (!request.statTrakSwapTool->gameItem().isStatTrakSwapTool())
         return {};
 
-    const auto statTrakFrom = inventory::getStatTrak(*constRemover.removeConstness(request.itemFrom));
+    const auto statTrakFrom = inventory::getStatTrak(*request.itemFrom);
     if (!statTrakFrom)
         return {};
 
-    const auto statTrakTo = inventory::getStatTrak(*constRemover.removeConstness(request.itemTo));
+    const auto statTrakTo = inventory::getStatTrak(*request.itemTo);
     if (!statTrakTo)
         return {};
 
-    std::swap(*statTrakFrom, *statTrakTo);
     backend.removeItem(request.statTrakSwapTool);
+    backend.request<request::UpdateStatTrak>(request.itemFrom, *statTrakTo);
+    backend.request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
     return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
