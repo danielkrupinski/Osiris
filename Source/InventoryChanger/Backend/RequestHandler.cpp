@@ -56,6 +56,7 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
     backend.request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
+    backend.request<request::MarkItemUpdated>(*statTrakTo >= *statTrakFrom ? request.itemFrom : request.itemTo);
     return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
 }
 

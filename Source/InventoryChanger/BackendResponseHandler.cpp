@@ -147,10 +147,6 @@ void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped
     if (!destinationStatTrak)
         return;
 
-    if (const auto inventoryComponent = *memory->uiComponentInventory) {
-        memory->setItemSessionPropertyValue(inventoryComponent, *destinationStatTrak >= *sourceStatTrak ? *sourceItemID : *destinationItemID, "updated", "1");
-    }
-
     game_integration::Inventory{}.statTrakSwapped(*sourceStatTrak > *destinationStatTrak ? *sourceItemID : *destinationItemID);
 }
 
