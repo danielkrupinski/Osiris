@@ -218,6 +218,7 @@
     <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
+    <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\ItemSorter.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />

@@ -54,6 +54,9 @@
     <Filter Include="InventoryChanger\Backend\Response">
       <UniqueIdentifier>{ae9e3dc7-2b8a-4e8e-8cb2-ee9cfc972084}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\GameIntegration">
+      <UniqueIdentifier>{2bf8116d-2e4c-473a-a00e-a32ac7e88ad0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -711,6 +714,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\BackendRequestBuilder.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h">
+      <Filter>InventoryChanger\GameIntegration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
