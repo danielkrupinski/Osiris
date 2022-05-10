@@ -26,8 +26,7 @@ void BackendResponseHandler::operator()(const backend::response::ItemMovedToFron
 void BackendResponseHandler::operator()(const backend::response::ItemUpdated& response) const
 {
     if (const auto itemID = backend.getItemID(response.item); itemID.has_value()) {
-        if (const auto inventoryComponent = *memory->uiComponentInventory)
-            memory->setItemSessionPropertyValue(inventoryComponent, *itemID, "updated", "1");
+        game_integration::Inventory{}.markItemUpdated(*itemID);
     }
 }
 
