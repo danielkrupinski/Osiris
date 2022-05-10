@@ -278,6 +278,9 @@
     <ClCompile Include="InventoryChanger\TournamentMatches.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp">
+      <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
