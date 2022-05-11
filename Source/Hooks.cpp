@@ -53,6 +53,7 @@
 #include "SDK/Constants/FrameStage.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
+#include "SDK/Input.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/ItemSchema.h"
@@ -172,18 +173,23 @@ static void swapWindow(SDL_Window * window) noexcept
 #endif
 }
 
-static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
+#ifdef _WIN32
+static void STDCALL_CONV createMove(float inputSampleTime, UserCmd* cmd, bool& sendPacket) noexcept
+{
+#else
+static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
+#endif
 
     if (!cmd->commandNumber)
-        return result;
-
 #ifdef _WIN32
-    // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-    // since 19.02.2022 game update sendPacket is no longer on stack
-    bool sendPacket = true;
+        return;
 #else
+        return result;
+#endif
+
+#ifndef _WIN32
     bool dummy;
     bool& sendPacket = dummy;
 #endif
@@ -242,9 +248,47 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
-
+#ifndef _WIN32
     return false;
+#endif
 }
+
+#ifdef _WIN32
+void STDCALL_CONV CHLCreateMove(int sequenceNumber, float inputSampleTime, bool active, bool& sendPacket)
+{
+    auto result = hooks->client.callOriginal<bool, 22>(sequenceNumber, inputSampleTime, active);
+
+    UserCmd* cmd = memory->input->getUserCmd(sequenceNumber);
+    VerifiedUserCmd* verified = memory->input->getVerifiedUserCmd(sequenceNumber);
+    if (!cmd || !cmd->commandNumber || !verified)
+        return;
+
+    createMove(inputSampleTime, cmd, sendPacket);
+
+    verified->cmd = *cmd;
+    verified->crc = cmd->getChecksum();
+}
+
+#pragma warning(disable : 4409)
+__declspec(naked) void STDCALL_CONV createMoveProxy(int sequenceNumber, float inputSampleTime, bool active)
+{
+    __asm
+    {
+        PUSH	EBP
+        MOV		EBP, ESP
+        PUSH	EBX
+        LEA		ECX, [ESP]
+        PUSH	ECX
+        PUSH	active
+        PUSH	inputSampleTime
+        PUSH	sequenceNumber
+        CALL	CHLCreateMove
+        POP		EBX
+        POP		EBP
+        RETN	0xC
+    }
+}
+#endif
 
 static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
 {
@@ -569,13 +613,18 @@ void Hooks::install() noexcept
     bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(interfaces->client);
+#ifdef _WIN32
+    client.hookAt(22, &createMoveProxy);
+#endif
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 
     clientMode.init(memory->clientMode);
     clientMode.hookAt(WIN32_LINUX(17, 18), &shouldDrawFog);
     clientMode.hookAt(WIN32_LINUX(18, 19), &overrideView);
-    clientMode.hookAt(WIN32_LINUX(24, 25), &createMove);
+#ifndef _WIN32
+    clientMode.hookAt(25, &createMove);
+#endif
     clientMode.hookAt(WIN32_LINUX(27, 28), &shouldDrawViewModel);
     clientMode.hookAt(WIN32_LINUX(35, 36), &getViewModelFov);
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
