@@ -4,12 +4,13 @@
 
 #include "Backend/BackendSimulator.h"
 #include "Backend/Response/ResponseTypes.h"
+#include "GameIntegration/Inventory.h"
 
 namespace inventory_changer
 {
 
 struct BackendResponseHandler {
-    explicit BackendResponseHandler(backend::BackendSimulator& backend) : backend{ backend } {}
+    explicit BackendResponseHandler(backend::BackendSimulator& backend, game_integration::Inventory& gameInventory) : backend{ backend }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
     void operator()(const backend::response::ItemAdded& response) const;
@@ -34,6 +35,7 @@ struct BackendResponseHandler {
 
 private:
     backend::BackendSimulator& backend;
+    game_integration::Inventory& gameInventory;
 };
 
 }

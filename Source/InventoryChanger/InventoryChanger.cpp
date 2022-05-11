@@ -438,7 +438,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
     using namespace inventory_changer::backend;
 
     processEquipRequests();
-    BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance() }, std::chrono::milliseconds{ 300 });
+    static inventory_changer::game_integration::Inventory gameInventory{};
+    BackendSimulator::instance().run(inventory_changer::BackendResponseHandler{ BackendSimulator::instance(), gameInventory }, std::chrono::milliseconds{ 300 });
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
