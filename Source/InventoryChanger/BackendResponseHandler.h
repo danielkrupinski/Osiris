@@ -9,8 +9,9 @@
 namespace inventory_changer
 {
 
+template <typename GameInventory>
 struct BackendResponseHandler {
-    explicit BackendResponseHandler(backend::BackendSimulator& backend, game_integration::Inventory& gameInventory) : backend{ backend }, gameInventory{ gameInventory } {}
+    explicit BackendResponseHandler(backend::BackendSimulator& backend, GameInventory& gameInventory) : backend{ backend }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
 
@@ -138,7 +139,7 @@ struct BackendResponseHandler {
 
 private:
     backend::BackendSimulator& backend;
-    game_integration::Inventory& gameInventory;
+    GameInventory& gameInventory;
 };
 
 }
