@@ -274,18 +274,18 @@ __declspec(naked) void STDCALL_CONV createMoveProxy(int sequenceNumber, float in
 {
     __asm
     {
-        PUSH	EBP
-        MOV		EBP, ESP
-        PUSH	EBX
-        LEA		ECX, [ESP]
-        PUSH	ECX
-        PUSH	active
-        PUSH	inputSampleTime
-        PUSH	sequenceNumber
-        CALL	CHLCreateMove
-        POP		EBX
-        POP		EBP
-        RETN	0xC
+        PUSH EBP
+        MOV EBP, ESP
+        PUSH EBX
+        LEA ECX, [ESP]
+        PUSH ECX
+        PUSH active
+        PUSH inputSampleTime
+        PUSH sequenceNumber
+        CALL CHLCreateMove
+        POP EBX
+        POP EBP
+        RETN 0xC
     }
 }
 #endif
