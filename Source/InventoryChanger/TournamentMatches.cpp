@@ -1028,22 +1028,36 @@ constexpr auto pglStockholm2021Matches = std::to_array<MatchWithoutMVPs>({
 static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &MatchWithoutMVPs::map));
 
 constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
+    { TournamentMap::Ancient, ChallengersStage, TeamLiquid, _9ZTeam },
+    { TournamentMap::Ancient, ChallengersStage, ENCE, G2Esports },
     { TournamentMap::Dust2, ChallengersStage, BadNewsEagles, EternalFire },
     { TournamentMap::Dust2, ChallengersStage, ImperialEsports, TeamSpirit },
     { TournamentMap::Dust2, ChallengersStage, MIBR, Outsiders },
     { TournamentMap::Dust2, ChallengersStage, G2Esports, TeamSpirit },
+    { TournamentMap::Dust2, ChallengersStage, TeamSpirit, EternalFire },
+    { TournamentMap::Dust2, ChallengersStage, Renegades, IHCEsports },
+    { TournamentMap::Dust2, ChallengersStage, Vitality, forZeESports },
+    { TournamentMap::Dust2, ChallengersStage, ENCE, G2Esports },
     { TournamentMap::Inferno, ChallengersStage, Vitality, ComplexityGaming_ },
     { TournamentMap::Inferno, ChallengersStage, G2Esports, TeamLiquid },
     { TournamentMap::Inferno, ChallengersStage, forZeESports, BadNewsEagles },
     { TournamentMap::Inferno, ChallengersStage, ImperialEsports, TeamLiquid },
+    { TournamentMap::Inferno, ChallengersStage, Renegades, IHCEsports },
     { TournamentMap::Mirage, ChallengersStage, ENCE, _9ZTeam },
     { TournamentMap::Mirage, ChallengersStage, Astralis, Vitality },
+    { TournamentMap::Mirage, ChallengersStage, Vitality, forZeESports },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, G2Esports },
     { TournamentMap::Nuke, ChallengersStage, forZeESports, Renegades },
     { TournamentMap::Nuke, ChallengersStage, Astralis, IHCEsports },
     { TournamentMap::Nuke, ChallengersStage, ComplexityGaming_, IHCEsports },
+    { TournamentMap::Nuke, ChallengersStage, Vitality, forZeESports },
     { TournamentMap::Overpass, ChallengersStage, MIBR, _9ZTeam },
+    { TournamentMap::Overpass, ChallengersStage, Astralis, MIBR },
+    { TournamentMap::Overpass, ChallengersStage, ComplexityGaming_, Outsiders },
+    { TournamentMap::Overpass, ChallengersStage, TeamLiquid, _9ZTeam },
     { TournamentMap::Vertigo, ChallengersStage, EternalFire, Renegades },
-    { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders }
+    { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders },
+    { TournamentMap::Vertigo, ChallengersStage, BadNewsEagles, ImperialEsports }
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &MatchWithoutMVPs::map));
 
