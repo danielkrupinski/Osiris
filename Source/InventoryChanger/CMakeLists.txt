@@ -3,11 +3,11 @@ target_sources(OsirisOBJ PRIVATE
   InventoryConfig.cpp
   ItemGenerator.cpp
   StaticData.cpp
-  GameItems/Storage.cpp
   BackendResponseHandler.cpp
   TournamentMatches.cpp
   GameIntegration/Inventory.cpp
 )
 
 add_subdirectory(Backend)
+add_subdirectory(GameItems)
 add_subdirectory(Inventory)
