@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "CheckSumCRC.h"
 
 struct UserCmd {
     enum {
@@ -32,4 +33,36 @@ struct UserCmd {
     short mousedx;
     short mousedy;
     bool hasbeenpredicted;
+
+    const CRC32 getChecksum() noexcept
+    {
+        CRC32 crc;
+        CRC32_Init(&crc);
+
+        CRC32_ProcessBuffer(&crc, &commandNumber, sizeof(commandNumber));
+        CRC32_ProcessBuffer(&crc, &tickCount, sizeof(tickCount));
+        CRC32_ProcessBuffer(&crc, &viewangles, sizeof(viewangles));
+        CRC32_ProcessBuffer(&crc, &aimdirection, sizeof(aimdirection));
+        CRC32_ProcessBuffer(&crc, &forwardmove, sizeof(forwardmove));
+        CRC32_ProcessBuffer(&crc, &sidemove, sizeof(sidemove));
+        CRC32_ProcessBuffer(&crc, &upmove, sizeof(upmove));
+        CRC32_ProcessBuffer(&crc, &buttons, sizeof(buttons));
+        CRC32_ProcessBuffer(&crc, &impulse, sizeof(impulse));
+        CRC32_ProcessBuffer(&crc, &weaponselect, sizeof(weaponselect));
+        CRC32_ProcessBuffer(&crc, &weaponsubtype, sizeof(weaponsubtype));
+        CRC32_ProcessBuffer(&crc, &randomSeed, sizeof(randomSeed));
+        CRC32_ProcessBuffer(&crc, &mousedx, sizeof(mousedx));
+        CRC32_ProcessBuffer(&crc, &mousedy, sizeof(mousedy));
+
+        CRC32_Final(&crc);
+
+        return crc;
+    }
+};
+
+class VerifiedUserCmd
+{
+public:
+    UserCmd cmd;
+    CRC32 crc;
 };
