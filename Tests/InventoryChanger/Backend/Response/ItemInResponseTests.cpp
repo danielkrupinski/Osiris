@@ -47,6 +47,8 @@ template <typename ResponseType>
         return response::GraffitiUnsealed{ item };
     else if constexpr (std::is_same_v<ResponseType, response::TeamGraffitiSelected>)
         return response::TeamGraffitiSelected{ item, 0 };
+    else if constexpr (std::is_same_v<ResponseType, response::StatTrakSwapped>)
+        return response::StatTrakSwapped{ item };
     else
         static_assert(!std::is_same_v<ResponseType, ResponseType>, "Not implemented!");
 }
@@ -110,7 +112,8 @@ using ResponseTypes = testing::Types<
     response::PatchRemoved,
     response::SouvenirTokenActivated,
     response::GraffitiUnsealed,
-    response::TeamGraffitiSelected
+    response::TeamGraffitiSelected,
+    response::StatTrakSwapped
 >;
 
 TYPED_TEST_SUITE(InventoryChanger_Backend_ItemInResponseTest, ResponseTypes);
