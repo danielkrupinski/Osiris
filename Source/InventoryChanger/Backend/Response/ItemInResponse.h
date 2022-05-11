@@ -31,7 +31,7 @@ struct ItemInResponse {
     bool operator()(const response::PatchRemoved& response) const { return response.agentItem == item; }
     bool operator()(const response::SouvenirTokenActivated& response) const { return response.tournamentCoin == item; }
     bool operator()(const response::GraffitiUnsealed& response) const { return response.graffitiItem == item; }
-    bool operator()(const response::StatTrakSwapped& response) const { return response.swapDestinationItem == item || response.swapSourceItem == item; }
+    bool operator()(const response::StatTrakSwapped& response) const { return response.itemWithHigherStatTrakAfterSwap == item; }
     bool operator()(const response::TeamGraffitiSelected& response) const { return response.tournamentCoin == item; }
 
 private:

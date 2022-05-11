@@ -107,10 +107,10 @@ struct GraffitiUnsealed {
 };
 
 struct StatTrakSwapped {
-    StatTrakSwapped(ItemConstIterator swapSourceItem, ItemConstIterator swapDestinationItem) : swapSourceItem{ swapSourceItem }, swapDestinationItem{ swapDestinationItem } {}
+    explicit StatTrakSwapped(ItemConstIterator itemWithHigherStatTrakAfterSwap)
+        : itemWithHigherStatTrakAfterSwap{ itemWithHigherStatTrakAfterSwap } {}
 
-    ItemConstIterator swapSourceItem;
-    ItemConstIterator swapDestinationItem;
+    ItemConstIterator itemWithHigherStatTrakAfterSwap;
 };
 
 struct TeamGraffitiSelected {

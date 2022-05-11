@@ -131,23 +131,9 @@ void BackendResponseHandler::operator()(const backend::response::GraffitiUnseale
 
 void BackendResponseHandler::operator()(const backend::response::StatTrakSwapped& response) const
 {
-    const auto sourceItemID = backend.getItemID(response.swapSourceItem);
-    if (!sourceItemID.has_value())
-        return;
-
-    const auto destinationItemID = backend.getItemID(response.swapDestinationItem);
-    if (!destinationItemID.has_value())
-        return;
-
-    const auto sourceStatTrak = inventory::getStatTrak(*response.swapSourceItem);
-    if (!sourceStatTrak)
-        return;
-
-    const auto destinationStatTrak = inventory::getStatTrak(*response.swapDestinationItem);
-    if (!destinationStatTrak)
-        return;
-
-    game_integration::Inventory{}.statTrakSwapped(*sourceStatTrak > *destinationStatTrak ? *sourceItemID : *destinationItemID);
+    if (const auto itemID = backend.getItemID(response.itemWithHigherStatTrakAfterSwap); itemID.has_value()) {
+        game_integration::Inventory{}.statTrakSwapped(*itemID);
+    }
 }
 
 void BackendResponseHandler::operator()(const backend::response::TeamGraffitiSelected& response) const
