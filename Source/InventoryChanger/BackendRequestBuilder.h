@@ -51,16 +51,16 @@ public:
         }
     }
 
-    void wearStickerOf(std::uint64_t itemID)
+    void wearStickerOf(std::uint64_t itemID, std::uint8_t slot)
     {
         const auto item = backend.itemFromID(itemID);
         if (!item.has_value())
             return;
 
         if (const auto gameItem = (*item)->gameItem(); gameItem.isSkin())
-            backend.request<backend::request::WearSticker>(*item, stickerSlot);
+            backend.request<backend::request::WearSticker>(*item, slot);
         else if (gameItem.isAgent())
-            backend.request<backend::request::RemovePatch>(*item, stickerSlot);
+            backend.request<backend::request::RemovePatch>(*item, slot);
     }
 
     void removeNameTagFrom(std::uint64_t itemID)

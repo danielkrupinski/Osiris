@@ -1056,7 +1056,8 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
         requestBuilder.useToolOn(stringToUint64(string));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        requestBuilder.wearStickerOf(stringToUint64(string));
+        const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
+        requestBuilder.wearStickerOf(stringToUint64(string), slot);
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
         requestBuilder.setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
@@ -1085,7 +1086,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
 
 void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept
 {
-    if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress || returnAddress == memory->wearItemStickerGetArgAsNumberReturnAddress)
+    if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
         inventory_changer::BackendRequestBuilder::instance().setStickerSlot(static_cast<std::uint8_t>(number));
 }
 
