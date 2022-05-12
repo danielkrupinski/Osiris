@@ -5,6 +5,7 @@ target_sources(OsirisOBJ PRIVATE
   StaticData.cpp
   TournamentMatches.cpp
   GameIntegration/Inventory.cpp
+  GameIntegration/Items.cpp
 )
 
 add_subdirectory(Backend)
