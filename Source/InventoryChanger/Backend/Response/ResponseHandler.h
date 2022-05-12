@@ -22,19 +22,19 @@ struct ResponseHandler {
 
     void operator()(const response::ItemMovedToFront& response) const
     {
-        if (const auto itemID = backend.getItemID(response.item); itemID.has_value())
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
             backend.updateItemID(*itemID, gameInventory.assingNewItemID(*itemID));
     }
 
     void operator()(const response::ItemUpdated& response) const
     {
-        if (const auto itemID = backend.getItemID(response.item); itemID.has_value())
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
             gameInventory.markItemUpdated(*itemID);
     }
 
     void operator()(const response::ItemEquipped& response) const
     {
-        if (const auto itemID = backend.getItemID(response.item); itemID.has_value())
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
             gameInventory.equipItem(*itemID, response.team, response.slot);
     }
 
@@ -45,7 +45,7 @@ struct ResponseHandler {
 
     void operator()(const response::StickerApplied& response) const
     {
-        if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
+        if (const auto itemID = getItemID(response.skinItem); itemID.has_value()) {
             if (const auto skin = response.skinItem->get<inventory::Skin>())
                 gameInventory.applySticker(*itemID, skin->stickers[response.stickerSlot].stickerID, response.stickerSlot);
         }
@@ -53,7 +53,7 @@ struct ResponseHandler {
 
     void operator()(const response::StickerScraped& response) const
     {
-        if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
+        if (const auto itemID = getItemID(response.skinItem); itemID.has_value()) {
             if (const auto skin = response.skinItem->get<inventory::Skin>())
                 gameInventory.updateStickerWear(*itemID, response.stickerSlot, skin->stickers[response.stickerSlot].wear);
         }
@@ -61,7 +61,7 @@ struct ResponseHandler {
 
     void operator()(const response::StickerRemoved& response) const
     {
-        if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
+        if (const auto itemID = getItemID(response.skinItem); itemID.has_value())
             gameInventory.removeSticker(*itemID, response.stickerSlot);
     }
 
@@ -72,13 +72,13 @@ struct ResponseHandler {
 
     void operator()(const response::ViewerPassActivated& response) const
     {
-        if (const auto itemID = backend.getItemID(response.createdEventCoin); itemID.has_value())
+        if (const auto itemID = getItemID(response.createdEventCoin); itemID.has_value())
             gameInventory.viewerPassActivated(*itemID);
     }
 
     void operator()(const response::NameTagAdded& response) const
     {
-        if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value()) {
+        if (const auto itemID = getItemID(response.skinItem); itemID.has_value()) {
             if (const auto skin = response.skinItem->get<inventory::Skin>())
                 gameInventory.addNameTag(*itemID, skin->nameTag.c_str());
         }
@@ -86,19 +86,19 @@ struct ResponseHandler {
 
     void operator()(const response::NameTagRemoved& response) const
     {
-        if (const auto itemID = backend.getItemID(response.skinItem); itemID.has_value())
+        if (const auto itemID = getItemID(response.skinItem); itemID.has_value())
             gameInventory.removeNameTag(*itemID);
     }
 
     void operator()(const response::ContainerOpened& response) const
     {
-        if (const auto itemID = backend.getItemID(response.receivedItem); itemID.has_value())
+        if (const auto itemID = getItemID(response.receivedItem); itemID.has_value())
             gameInventory.containerOpened(*itemID);
     }
 
     void operator()(const response::PatchApplied& response) const
     {
-        if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value()) {
+        if (const auto itemID = getItemID(response.agentItem); itemID.has_value()) {
             if (const auto agent = response.agentItem->get<inventory::Agent>())
                 gameInventory.applyPatch(*itemID, agent->patches[response.patchSlot].patchID, response.patchSlot);
         }
@@ -106,13 +106,13 @@ struct ResponseHandler {
 
     void operator()(const response::PatchRemoved& response) const
     {
-        if (const auto itemID = backend.getItemID(response.agentItem); itemID.has_value())
+        if (const auto itemID = getItemID(response.agentItem); itemID.has_value())
             gameInventory.removePatch(*itemID, response.patchSlot);
     }
 
     void operator()(const response::SouvenirTokenActivated& response) const
     {
-        if (const auto itemID = backend.getItemID(response.tournamentCoin); itemID.has_value()) {
+        if (const auto itemID = getItemID(response.tournamentCoin); itemID.has_value()) {
             if (const auto tournamentCoin = response.tournamentCoin->get<inventory::TournamentCoin>())
                 gameInventory.souvenirTokenActivated(*itemID, tournamentCoin->dropsAwarded);
         }
@@ -120,23 +120,28 @@ struct ResponseHandler {
 
     void operator()(const response::GraffitiUnsealed& response) const
     {
-        if (const auto itemID = backend.getItemID(response.graffitiItem); itemID.has_value())
+        if (const auto itemID = getItemID(response.graffitiItem); itemID.has_value())
             gameInventory.unsealGraffiti(*itemID);
     }
 
     void operator()(const response::StatTrakSwapped& response) const
     {
-        if (const auto itemID = backend.getItemID(response.itemWithHigherStatTrakAfterSwap); itemID.has_value())
+        if (const auto itemID = getItemID(response.itemWithHigherStatTrakAfterSwap); itemID.has_value())
             gameInventory.statTrakSwapped(*itemID);
     }
 
     void operator()(const response::TeamGraffitiSelected& response) const
     {
-        if (const auto itemID = backend.getItemID(response.tournamentCoin); itemID.has_value())
+        if (const auto itemID = getItemID(response.tournamentCoin); itemID.has_value())
             gameInventory.selectTeamGraffiti(*itemID, response.graffitiID);
     }
 
 private:
+    [[nodiscard]] auto getItemID(ItemConstIterator item) const
+    {
+        return backend.getItemID(item);
+    }
+
     BackendSimulator& backend;
     GameInventory& gameInventory;
 };
