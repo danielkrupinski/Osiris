@@ -9,6 +9,7 @@
 #include "Loadout.h"
 #include "RequestHandler.h"
 #include "Response/Response.h"
+#include "Response/ResponseHandler.h"
 #include "Response/ResponseQueue.h"
 
 #include <InventoryChanger/StaticData.h>
@@ -129,10 +130,10 @@ public:
             responseQueue.add(response);
     }
 
-    template <typename Visitor>
-    void run(Visitor visitor, std::chrono::milliseconds delay)
+    template <typename GameInventory>
+    void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(visitor, delay);
+        responseQueue.visit(ResponseHandler{ *this, gameInventory }, delay);
     }
 
 private:

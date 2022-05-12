@@ -440,7 +440,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     processEquipRequests();
     static inventory_changer::game_integration::Inventory gameInventory{};
-    BackendSimulator::instance().run(inventory_changer::backend::ResponseHandler{ BackendSimulator::instance(), gameInventory }, std::chrono::milliseconds{ 300 });
+    BackendSimulator::instance().run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
