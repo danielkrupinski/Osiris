@@ -55,7 +55,7 @@
 #include "Backend/BackendSimulator.h"
 #include "ItemGenerator.h"
 
-#include "BackendResponseHandler.h"
+#include "Backend/Response/ResponseHandler.h"
 #include "BackendRequestBuilder.h"
 #include "../Hooks.h"
 

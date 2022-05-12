@@ -673,9 +673,6 @@
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\BackendResponseHandler.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\Item.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
@@ -717,6 +714,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h">
       <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

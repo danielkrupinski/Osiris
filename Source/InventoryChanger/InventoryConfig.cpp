@@ -9,7 +9,7 @@
 
 #include "StaticData.h"
 
-#include "BackendResponseHandler.h"
+#include "Backend/Response/ResponseHandler.h"
 
 constexpr auto CONFIG_VERSION = 4;
 
