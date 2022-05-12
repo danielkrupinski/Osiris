@@ -14,6 +14,7 @@ public:
     Items(ItemSchema& itemSchema, Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
 
     void getMusicKits(game_items::Storage& storage);
+    void getStickers(game_items::Storage& storage);
 
 private:
     ItemSchema& itemSchema;
