@@ -2,9 +2,8 @@
 
 #include <variant>
 
-#include "Backend/BackendSimulator.h"
-#include "Backend/Response/ResponseTypes.h"
-#include "GameIntegration/Inventory.h"
+#include <InventoryChanger/Backend/BackendSimulator.h>
+#include "ResponseTypes.h"
 
 namespace inventory_changer::backend
 {

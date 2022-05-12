@@ -57,6 +57,7 @@
 
 #include "Backend/Response/ResponseHandler.h"
 #include "BackendRequestBuilder.h"
+#include "GameIntegration/Inventory.h"
 #include "../Hooks.h"
 
 static Entity* createGlove(int entry, int serial) noexcept

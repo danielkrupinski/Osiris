@@ -10,6 +10,7 @@
 #include "StaticData.h"
 
 #include "Backend/Response/ResponseHandler.h"
+#include "GameIntegration/Inventory.h"
 
 constexpr auto CONFIG_VERSION = 4;
 
