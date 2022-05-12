@@ -44,4 +44,58 @@ void Items::getStickers(game_items::Storage& storage)
     }
 }
 
+namespace
+{
+
+struct KitWeapon {
+    KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
+    int paintKit;
+    WeaponId weaponId;
+    const char* iconPath;
+};
+
+[[nodiscard]] std::vector<KitWeapon> getKitsWeapons(const UtlMap<std::uint64_t, AlternateIconData>& alternateIcons)
+{
+    std::vector<KitWeapon> kitsWeapons;
+    kitsWeapons.reserve(alternateIcons.numElements);
+
+    for (const auto& node : alternateIcons) {
+        // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
+        if (const auto encoded = node.key; (encoded & 3) == 0)
+            kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
+    }
+    std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
+    return kitsWeapons;
+}
+
+}
+
+void Items::getSkinsAndGloves(game_items::Storage& storage)
+{
+    const auto kitsWeapons = getKitsWeapons(itemSchema.alternateIcons);
+
+    for (const auto& node : itemSchema.paintKits) {
+        const auto paintKit = node.value;
+
+        if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
+            continue;
+
+        const auto paintKitName = interfaces->localize->findSafe(paintKit->itemName.data());
+        storage.addPaintKit(paintKit->id, game_items::ItemName{ toUtf8.convertUnicodeToAnsi(paintKitName), toUpperConverter.toUpper(paintKitName) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
+
+        const auto isGlove = (paintKit->id >= 10000);
+        for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
+            const auto itemDef = itemSchema.getItemDefinitionInterface(it->weaponId);
+            if (!itemDef)
+                continue;
+
+            if (isGlove) {
+                storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, it->iconPath);
+            } else {
+                storage.addSkinWithLastPaintKit(static_cast<EconRarity>(std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6)), it->weaponId, it->iconPath);
+            }
+        }
+    }
+}
+
 }

@@ -15,6 +15,7 @@ public:
 
     void getMusicKits(game_items::Storage& storage);
     void getStickers(game_items::Storage& storage);
+    void getSkinsAndGloves(game_items::Storage& storage);
 
 private:
     ItemSchema& itemSchema;
