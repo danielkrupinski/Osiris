@@ -2,7 +2,7 @@
 
 #include <variant>
 
-#include <InventoryChanger/Backend/BackendSimulator.h>
+#include <InventoryChanger/Backend/ItemIDMap.h>
 #include "ResponseTypes.h"
 
 namespace inventory_changer::backend
@@ -10,20 +10,20 @@ namespace inventory_changer::backend
 
 template <typename GameInventory>
 struct ResponseHandler {
-    explicit ResponseHandler(BackendSimulator& backend, GameInventory& gameInventory) : backend{ backend }, gameInventory{ gameInventory } {}
+    explicit ResponseHandler(ItemIDMap& itemIDMap, GameInventory& gameInventory) : itemIDMap{ itemIDMap }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
 
     void operator()(const response::ItemAdded& response) const
     {
         const auto itemID = gameInventory.createSOCItem(*response.item, response.asUnacknowledged);
-        backend.assignItemID(response.item, itemID);
+        itemIDMap.add(itemID, response.item);
     }
 
     void operator()(const response::ItemMovedToFront& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value())
-            backend.updateItemID(*itemID, gameInventory.assingNewItemID(*itemID));
+            itemIDMap.update(*itemID, gameInventory.assingNewItemID(*itemID));
     }
 
     void operator()(const response::ItemUpdated& response) const
@@ -139,10 +139,10 @@ struct ResponseHandler {
 private:
     [[nodiscard]] auto getItemID(ItemConstIterator item) const
     {
-        return backend.getItemID(item);
+        return itemIDMap.getItemID(item);
     }
 
-    BackendSimulator& backend;
+    ItemIDMap& itemIDMap;
     GameInventory& gameInventory;
 };
 

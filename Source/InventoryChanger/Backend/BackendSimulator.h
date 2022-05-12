@@ -133,7 +133,7 @@ public:
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ *this, gameInventory }, delay);
+        responseQueue.visit(ResponseHandler{ itemIDMap, gameInventory }, delay);
     }
 
 private:
