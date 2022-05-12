@@ -16,6 +16,7 @@
 #include "../SDK/Localize.h"
 #include <StringPool.h>
 #include "GameItems/Lookup.h"
+#include "GameIntegration/Items.h"
 
 using StaticData::TournamentMap;
 
@@ -160,18 +161,6 @@ private:
                 const auto paintName = interfaces->localize->findSafe(stickerKit->itemName.data());
                 storage.addGraffiti(stickerKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(paintName), toUpperConverter.toUpper(paintName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data());
             }
-        }
-    }
-
-    void initMusicData(ItemSchema* itemSchema, game_items::Storage& storage, ToUtf8Converter<>& converter, Helpers::ToUpperConverter& toUpperConverter) noexcept
-    {
-        for (const auto& node : itemSchema->musicKits) {
-            const auto musicKit = node.value;
-            if (musicKit->id == 1 || musicKit->id == 2)
-                continue;
-
-            const auto musicName = interfaces->localize->findSafe(musicKit->nameLocalized);
-            storage.addMusic(musicKit->id, game_items::ItemName{ converter.convertUnicodeToAnsi(musicName), toUpperConverter.toUpper(musicName) }, musicKit->inventoryImage);
         }
     }
 
@@ -324,7 +313,8 @@ private:
 
         initSkinData(itemSchema, storage, converter, toUpperConverter);
         initStickerData(itemSchema, storage, converter, toUpperConverter);
-        initMusicData(itemSchema, storage, converter, toUpperConverter);
+        inventory_changer::game_integration::Items items{ *itemSchema, *interfaces->localize };
+        items.getMusicKits(storage);
         std::vector<int> lootListIndices;
         initItemData(itemSchema, storage, lootListIndices);
         storage.compress();
