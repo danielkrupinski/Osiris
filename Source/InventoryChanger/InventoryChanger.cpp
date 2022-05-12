@@ -1049,16 +1049,18 @@ static std::uint64_t stringToUint64(const char* str) noexcept
 
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params) noexcept
 {
+    auto& requestBuilder = inventory_changer::BackendRequestBuilder::instance();
+
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        inventory_changer::BackendRequestBuilder::instance().setToolItemID(stringToUint64(string));
+        requestBuilder.setToolItemID(stringToUint64(string));
     } else if (returnAddress == memory->useToolGetArg2AsStringReturnAddress) {
-        inventory_changer::BackendRequestBuilder::instance().useToolOn(stringToUint64(string));
+        requestBuilder.useToolOn(stringToUint64(string));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        inventory_changer::BackendRequestBuilder::instance().wearStickerOf(stringToUint64(string));
+        requestBuilder.wearStickerOf(stringToUint64(string));
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        inventory_changer::BackendRequestBuilder::instance().setNameTag(string);
+        requestBuilder.setNameTag(string);
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        inventory_changer::BackendRequestBuilder::instance().removeNameTagFrom(stringToUint64(string));
+        requestBuilder.removeNameTagFrom(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         auto& backend = inventory_changer::backend::BackendSimulator::instance();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
@@ -1066,9 +1068,9 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         InventoryChanger::acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem1(stringToUint64(string));
+        requestBuilder.setStatTrakSwapItem1(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-        inventory_changer::BackendRequestBuilder::instance().setStatTrakSwapItem2(stringToUint64(string));
+        requestBuilder.setStatTrakSwapItem2(stringToUint64(string));
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
         auto& backend = inventory_changer::backend::BackendSimulator::instance();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
