@@ -108,7 +108,6 @@ public:
     void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
-    std::uintptr_t wearItemStickerGetArgAsNumberReturnAddress;
     std::uintptr_t wearItemStickerGetArgAsStringReturnAddress;
     std::uintptr_t setNameToolStringGetArgAsStringReturnAddress;
     std::uintptr_t clearCustomNameGetArgAsStringReturnAddress;
