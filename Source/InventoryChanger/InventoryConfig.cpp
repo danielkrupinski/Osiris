@@ -265,5 +265,5 @@ void InventoryChanger::resetConfig() noexcept
     auto& backend = inventory_changer::backend::BackendSimulator::instance();
     backend.clearInventory();
     static inventory_changer::game_integration::Inventory gameInventory{};
-    backend.run(inventory_changer::BackendResponseHandler{ backend, gameInventory }, std::chrono::milliseconds{ 0 });
+    backend.run(inventory_changer::backend::ResponseHandler{ backend, gameInventory }, std::chrono::milliseconds{ 0 });
 }
