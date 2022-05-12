@@ -13,6 +13,8 @@ class Items {
 public:
     Items(ItemSchema& itemSchema, Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
 
+    void getMusicKits(game_items::Storage& storage);
+
 private:
     ItemSchema& itemSchema;
     ToUtf8Converter<> toUtf8;
