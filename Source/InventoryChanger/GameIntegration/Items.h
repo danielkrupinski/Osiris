@@ -1,1 +1,22 @@
 #pragma once
+
+#include <Helpers.h>
+#include <InventoryChanger/GameItems/Storage.h>
+#include <SDK/Localize.h>
+
+class ItemSchema;
+
+namespace inventory_changer::game_integration
+{
+
+class Items {
+public:
+    Items(ItemSchema& itemSchema, Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
+
+private:
+    ItemSchema& itemSchema;
+    ToUtf8Converter<> toUtf8;
+    Helpers::ToUpperConverter toUpperConverter;
+};
+
+}
