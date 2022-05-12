@@ -3,7 +3,6 @@ target_sources(OsirisOBJ PRIVATE
   InventoryConfig.cpp
   ItemGenerator.cpp
   StaticData.cpp
-  BackendResponseHandler.cpp
   TournamentMatches.cpp
   GameIntegration/Inventory.cpp
 )
