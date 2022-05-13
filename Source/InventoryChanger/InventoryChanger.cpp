@@ -1090,6 +1090,16 @@ void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddre
         inventory_changer::BackendRequestBuilder::instance().setStickerSlot(static_cast<std::uint8_t>(number));
 }
 
+void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
+{
+    if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
+        return;
+
+    if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
+        return;
+
+}
+
 struct Icon {
     Texture texture;
     int lastReferencedFrame = 0;
