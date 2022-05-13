@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
+#include "PickEm.h"
 #include "RequestHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseHandler.h"
@@ -24,6 +25,11 @@ public:
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
         return loadout;
+    }
+
+    [[nodiscard]] const PickEm& getPickEm() const noexcept
+    {
+        return pickEm;
     }
 
     [[nodiscard]] const ItemList& getInventory() const noexcept
@@ -150,6 +156,7 @@ private:
     ResponseQueue<> responseQueue;
     ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
+    PickEm pickEm;
 };
 
 }
