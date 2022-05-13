@@ -33,6 +33,7 @@ struct ItemInResponse {
     bool operator()(const response::GraffitiUnsealed& response) const { return response.graffitiItem == item; }
     bool operator()(const response::StatTrakSwapped& response) const { return response.itemWithHigherStatTrakAfterSwap == item; }
     bool operator()(const response::TeamGraffitiSelected& response) const { return response.tournamentCoin == item; }
+    bool operator()(const response::PickEmUpdated&) const { return false; }
 
 private:
     ItemConstIterator item;

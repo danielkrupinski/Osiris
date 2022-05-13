@@ -136,6 +136,11 @@ struct ResponseHandler {
             gameInventory.selectTeamGraffiti(*itemID, response.graffitiID);
     }
 
+    void operator()(const response::PickEmUpdated&) const
+    {
+        gameInventory.pickEmUpdated();
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemConstIterator item) const
     {
