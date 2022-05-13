@@ -43,7 +43,7 @@
 #include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
-
+#include <SDK/PanoramaMarshallHelper.h>
 #include "../Helpers.h"
 
 #include "StaticData.h"
@@ -1081,6 +1081,15 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
                 backend.request<inventory_changer::backend::request::SelectTeamGraffiti>(*itOptional, static_cast<std::uint16_t>(graffitiID));
             }
         }
+    } else if (returnAddress == memory->getMyPredictionTeamIDGetArgAsStringReturnAddress) {
+        if (std::strcmp(string, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+            return;
+
+        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
+        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
+
+        const auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam(groupId, pickInGroupIndex)));
     }
 }
 
@@ -1092,12 +1101,27 @@ void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddre
 
 void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
 {
-    if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
-        return;
-
     if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
         return;
 
+    if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
+        return;
+
+    const char* tournament = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 0);
+    if (!tournament || std::strcmp(tournament, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+        return;
+
+    auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    for (unsigned i = 1; i < numberOfArgs; i += 3) {
+        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i);
+        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i + 1);
+        const char* stickerItemID = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, i + 2);
+
+        if (!stickerItemID)
+            continue;
+
+        backend.request<inventory_changer::backend::request::PickStickerPickEm>(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+    }
 }
 
 struct Icon {
