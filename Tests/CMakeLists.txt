@@ -16,4 +16,4 @@ add_subdirectory(InventoryChanger)
 target_link_libraries(Tests gtest_main gmock Threads::Threads OsirisOBJ)
 
 include(GoogleTest)
-gtest_discover_tests(Tests)
+gtest_discover_tests(Tests DISCOVERY_TIMEOUT 10)
