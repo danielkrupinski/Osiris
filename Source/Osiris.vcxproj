@@ -284,6 +284,7 @@
     <ClInclude Include="SDK\NetworkStringTable.h" />
     <ClInclude Include="SDK\Pad.h" />
     <ClInclude Include="SDK\Panorama.h" />
+    <ClInclude Include="SDK\PanoramaMarshallHelper.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\PlantedC4.h" />
     <ClInclude Include="SDK\Platform.h" />
