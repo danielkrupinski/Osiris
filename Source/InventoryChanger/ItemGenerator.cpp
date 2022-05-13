@@ -857,12 +857,13 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-inventory::Item ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
     const auto& caseData = StaticData::getCase(caseItem.gameItem());
-    assert(caseData.hasLoot());
+    if (!caseData.hasLoot())
+        return std::nullopt;
 
     const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.gameItem().getWeaponID(), caseData);
 

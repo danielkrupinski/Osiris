@@ -65,14 +65,17 @@ Response RequestHandler::operator()(const request::OpenContainer& request) const
     if (!request.container->gameItem().isCase())
         return {};
 
+    auto generatedItem = ItemGenerator::generateItemFromContainer(*request.container);
+    if (!generatedItem.has_value())
+        return {};
+
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
             backend.removeItem(keyItem);
     }
 
-    auto generatedItem = ItemGenerator::generateItemFromContainer(*request.container);
     backend.removeItem(request.container);
-    const auto receivedItem = backend.addItemUnacknowledged(std::move(generatedItem));
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
     return response::ContainerOpened{ receivedItem };
 }
 

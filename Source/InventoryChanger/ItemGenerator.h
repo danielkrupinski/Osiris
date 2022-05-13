@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <ctime>
+#include <optional>
 #include <utility>
 
 #include "StaticData.h"
@@ -10,7 +11,7 @@
 
 namespace ItemGenerator
 {
-    inventory::Item generateItemFromContainer(const inventory::Item& caseItem) noexcept;
+    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const inventory::Item& caseItem) noexcept;
     inventory::ItemData createDefaultDynamicData(const game_items::Item& item) noexcept;
 }
 
