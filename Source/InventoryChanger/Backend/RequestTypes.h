@@ -103,4 +103,13 @@ struct SelectTeamGraffiti {
     std::uint16_t graffitiID;
 };
 
+struct PickStickerPickEm {
+    PickStickerPickEm(std::uint16_t group, std::uint8_t indexInGroup, int stickerId)
+        : group{ group }, indexInGroup{ indexInGroup }, stickerId{ stickerId } {}
+
+    std::uint16_t group;
+    std::uint8_t indexInGroup;
+    int stickerId;
+};
+
 }
