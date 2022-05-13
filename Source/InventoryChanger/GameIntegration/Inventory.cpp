@@ -455,4 +455,13 @@ void Inventory::markItemUpdated(std::uint64_t itemID)
     }
 }
 
+void Inventory::pickEmUpdated()
+{
+    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
+        const char* dummy;
+        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
+            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
+    }
+}
+
 }
