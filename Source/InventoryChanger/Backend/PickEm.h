@@ -12,21 +12,24 @@ class PickEm {
 public:
     void pick(std::uint16_t group, std::uint8_t indexInGroup, TournamentTeam team)
     {
-        groups[group][indexInGroup] = team;
+        tournaments[19][group][indexInGroup] = team;
     }
 
     [[nodiscard]] TournamentTeam getPickedTeam(std::uint16_t group, std::uint8_t indexInGroup) const
     {
-        if (const auto groupIt = groups.find(group); groupIt != groups.end()) {
-            if (const auto pickIt = groupIt->second.find(indexInGroup); pickIt != groupIt->second.end())
-                return pickIt->second;
+        if (const auto tournamentIt = tournaments.find(19); tournamentIt != tournaments.end()) {
+            if (const auto groupIt = tournamentIt->second.find(group); groupIt != tournamentIt->second.end()) {
+                if (const auto pickIt = groupIt->second.find(indexInGroup); pickIt != groupIt->second.end())
+                    return pickIt->second;
+            }
         }
         return TournamentTeam::None;
     }
 
 private:
     using PicksInGroup = std::unordered_map<std::uint8_t, TournamentTeam>;
-    std::unordered_map<std::uint16_t, PicksInGroup> groups;
+    using GroupsInTournament = std::unordered_map<std::uint16_t, PicksInGroup>;
+    std::unordered_map<std::uint8_t, GroupsInTournament> tournaments;
 };
 
 }
