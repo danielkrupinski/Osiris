@@ -37,7 +37,8 @@ constexpr auto CONFIG_VERSION = 4;
 
         json stickerConfig;
         stickerConfig["Sticker ID"] = sticker.stickerID;
-        stickerConfig["Wear"] = sticker.wear;
+        if (sticker.wear != 0.0f)
+            stickerConfig["Wear"] = sticker.wear;
         stickerConfig["Slot"] = i;
         stickers.push_back(std::move(stickerConfig));
     }
