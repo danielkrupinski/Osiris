@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <unordered_map>
+#include <map>
 
 #include <SDK/ItemSchema.h>
 
@@ -10,26 +10,38 @@ namespace inventory_changer::backend
 
 class PickEm {
 public:
+    struct PickPosition {
+        std::uint8_t tournament;
+        std::uint16_t group;
+        std::uint8_t indexInGroup;
+
+        friend auto operator<=>(const PickPosition&, const PickPosition&) = default;
+    };
+
     void pick(std::uint16_t group, std::uint8_t indexInGroup, TournamentTeam team)
     {
-        tournaments[19][group][indexInGroup] = team;
+        PickPosition position;
+        position.tournament = 19;
+        position.group = group;
+        position.indexInGroup = indexInGroup;
+
+        picks[position] = team;
     }
 
     [[nodiscard]] TournamentTeam getPickedTeam(std::uint16_t group, std::uint8_t indexInGroup) const
     {
-        if (const auto tournamentIt = tournaments.find(19); tournamentIt != tournaments.end()) {
-            if (const auto groupIt = tournamentIt->second.find(group); groupIt != tournamentIt->second.end()) {
-                if (const auto pickIt = groupIt->second.find(indexInGroup); pickIt != groupIt->second.end())
-                    return pickIt->second;
-            }
-        }
+        PickPosition position;
+        position.tournament = 19;
+        position.group = group;
+        position.indexInGroup = indexInGroup;
+        
+        if (const auto pick = picks.find(position); pick != picks.end())
+            return pick->second;
         return TournamentTeam::None;
     }
 
 private:
-    using PicksInGroup = std::unordered_map<std::uint8_t, TournamentTeam>;
-    using GroupsInTournament = std::unordered_map<std::uint16_t, PicksInGroup>;
-    std::unordered_map<std::uint8_t, GroupsInTournament> tournaments;
+    std::map<PickPosition, TournamentTeam> picks;
 };
 
 }
