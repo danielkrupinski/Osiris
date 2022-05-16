@@ -18,13 +18,8 @@ public:
         friend auto operator<=>(const PickPosition&, const PickPosition&) = default;
     };
 
-    void pick(std::uint16_t group, std::uint8_t indexInGroup, TournamentTeam team)
+    void pick(PickPosition position, TournamentTeam team)
     {
-        PickPosition position;
-        position.tournament = 19;
-        position.group = group;
-        position.indexInGroup = indexInGroup;
-
         picks[position] = team;
     }
 
