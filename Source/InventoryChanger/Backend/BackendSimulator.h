@@ -37,6 +37,11 @@ public:
         return inventory;
     }
 
+    [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
+    {
+        return gameItemLookup;
+    }
+
     void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
