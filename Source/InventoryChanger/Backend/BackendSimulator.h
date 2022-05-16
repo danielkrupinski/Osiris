@@ -87,6 +87,12 @@ public:
             it = removeItem(it);
     }
 
+    void clearPickEm()
+    {
+        pickEm.clear();
+        responseQueue.add(response::PickEmUpdated{});
+    }
+
     ItemConstIterator addItemUnacknowledged(inventory::Item item)
     {
         return addItem(std::move(item), true);
