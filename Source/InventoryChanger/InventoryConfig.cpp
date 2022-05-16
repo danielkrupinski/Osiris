@@ -52,6 +52,20 @@ constexpr auto CONFIG_VERSION = 4;
     return j;
 }
 
+[[nodiscard]] json toJson(const inventory_changer::backend::PickEm& pickEm)
+{
+    json picks;
+
+    for (const auto& [position, pick] : pickEm.getPicks()) {
+        picks.push_back(json{ { "Tournament", position.tournament },
+                              { "Group", position.group },
+                              { "Index", position.indexInGroup },
+                              { "Team", pick } });
+    }
+
+    return json{ { "Picks", std::move(picks) } };
+}
+
 json InventoryChanger::toJson() noexcept
 {
     json j;
@@ -145,6 +159,7 @@ json InventoryChanger::toJson() noexcept
         items.push_back(std::move(itemConfig));
     }
 
+    j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
     return j;
 }
 
@@ -230,8 +245,60 @@ struct EquippedState {
     return static_cast<std::uint8_t>(-1);
 }
 
+[[nodiscard]] std::optional<inventory_changer::backend::PickEm::PickPosition> pickPositionFromJson(const json& j)
+{
+    const auto tournament = j.find("Tournament");
+    if (tournament == j.end() || !tournament->is_number_unsigned())
+        return {};
+
+    const auto group = j.find("Group");
+    if (group == j.end() || !group->is_number_unsigned())
+        return {};
+
+    const auto indexInGroup = j.find("Index");
+    if (indexInGroup == j.end() || !indexInGroup->is_number_unsigned())
+        return {};
+
+    return inventory_changer::backend::PickEm::PickPosition{ tournament->get<std::uint8_t>(), group->get<std::uint16_t>(), indexInGroup->get<std::uint8_t>() };
+}
+
+[[nodiscard]] TournamentTeam pickTeamFromJson(const json& j)
+{
+    if (const auto team = j.find("Team"); team != j.end() && team->is_number_unsigned())
+        return team->get<TournamentTeam>();
+    return TournamentTeam::None;
+}
+
+void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator& backend)
+{
+    const auto pickEm = j.find("Pick'Em");
+    if (pickEm == j.end() || !pickEm->is_object())
+        return;
+
+    const auto picks = pickEm->find("Picks");
+    if (picks == pickEm->end() || !picks->is_array())
+        return;
+
+    for (const auto& pick : *picks) {
+        const auto position = pickPositionFromJson(pick);
+        if (!position.has_value())
+            continue;
+
+        const auto team = pickTeamFromJson(pick);
+        if (team == TournamentTeam::None)
+            continue;
+
+        backend.request<inventory_changer::backend::request::PickStickerPickEm>(position->group, position->indexInGroup, team);
+    }
+
+}
+
 void InventoryChanger::fromJson(const json& j) noexcept
 {
+    auto& backend = inventory_changer::backend::BackendSimulator::instance();
+
+    pickEmFromJson(j, backend);
+
     if (!j.contains("Items"))
         return;
 
@@ -239,7 +306,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
     if (!items.is_array())
         return;
 
-    auto& backend = inventory_changer::backend::BackendSimulator::instance();
     for (const auto& jsonItem : items) {
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
         if (!itemOptional.has_value())
