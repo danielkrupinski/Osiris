@@ -217,13 +217,7 @@ Response RequestHandler::operator()(const request::MarkItemUpdated& request) con
 
 Response RequestHandler::operator()(const request::PickStickerPickEm& request) const
 {
-    const auto sticker = gameItemLookup.findSticker(request.stickerId);
-    if (!sticker || !sticker->get().isSticker())
-        return {};
-
-    const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-    pickEm.pick(request.group, request.indexInGroup, tournamentTeam);
-
+    pickEm.pick(request.group, request.indexInGroup, request.team);
     return response::PickEmUpdated{};
 }
 

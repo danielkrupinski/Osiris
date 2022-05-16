@@ -104,12 +104,12 @@ struct SelectTeamGraffiti {
 };
 
 struct PickStickerPickEm {
-    PickStickerPickEm(std::uint16_t group, std::uint8_t indexInGroup, int stickerId)
-        : group{ group }, indexInGroup{ indexInGroup }, stickerId{ stickerId } {}
+    PickStickerPickEm(std::uint16_t group, std::uint8_t indexInGroup, TournamentTeam team)
+        : group{ group }, indexInGroup{ indexInGroup }, team{ team } {}
 
     std::uint16_t group;
     std::uint8_t indexInGroup;
-    int stickerId;
+    TournamentTeam team;
 };
 
 }
