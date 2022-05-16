@@ -40,6 +40,11 @@ public:
         return picks;
     }
 
+    void clear() noexcept
+    {
+        picks.clear();
+    }
+
 private:
     std::map<PickPosition, TournamentTeam> picks;
 };
