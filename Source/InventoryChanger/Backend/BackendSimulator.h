@@ -103,16 +103,6 @@ public:
         responseQueue.add(response::ItemMovedToFront{ it });
     }
 
-    void assignItemID(ItemConstIterator it, std::uint64_t itemID)
-    {
-        itemIDMap.add(itemID, it);
-    }
-
-    void updateItemID(std::uint64_t oldItemID, std::uint64_t newItemID)
-    {
-        itemIDMap.update(oldItemID, newItemID);
-    }
-
     [[nodiscard]] std::optional<ItemConstIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
