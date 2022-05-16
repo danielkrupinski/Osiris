@@ -81,7 +81,7 @@ public:
             return;
 
         const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-        backend.request<backend::request::PickStickerPickEm>(group, indexInGroup, tournamentTeam);
+        backend.request<backend::request::PickStickerPickEm>(backend::PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
     }
 
     [[nodiscard]] static BackendRequestBuilder& instance()

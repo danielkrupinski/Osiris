@@ -217,7 +217,7 @@ Response RequestHandler::operator()(const request::MarkItemUpdated& request) con
 
 Response RequestHandler::operator()(const request::PickStickerPickEm& request) const
 {
-    pickEm.pick({ 19, request.group, request.indexInGroup }, request.team);
+    pickEm.pick(request.position, request.team);
     return response::PickEmUpdated{};
 }
 
