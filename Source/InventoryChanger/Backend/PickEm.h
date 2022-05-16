@@ -40,6 +40,11 @@ public:
         return TournamentTeam::None;
     }
 
+    [[nodiscard]] const auto& getPicks() const noexcept
+    {
+        return picks;
+    }
+
 private:
     std::map<PickPosition, TournamentTeam> picks;
 };
