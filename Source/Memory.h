@@ -113,7 +113,6 @@ public:
     std::uintptr_t clearCustomNameGetArgAsStringReturnAddress;
     std::uintptr_t deleteItemGetArgAsStringReturnAddress;
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress1;
-    std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress2;
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
     std::uintptr_t setItemAttributeValueAsyncGetArgAsStringReturnAddress;
 
