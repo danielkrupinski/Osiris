@@ -1069,9 +1069,12 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         InventoryChanger::acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        requestBuilder.setStatTrakSwapItem1(stringToUint64(string));
-    } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress2) {
-        requestBuilder.setStatTrakSwapItem2(stringToUint64(string));
+        const auto swapItem1 = stringToUint64(string);
+        const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+        if (swapItem2String) {
+            requestBuilder.setStatTrakSwapItem1(swapItem1);
+            requestBuilder.setStatTrakSwapItem2(stringToUint64(swapItem2String));
+        }
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
         auto& backend = inventory_changer::backend::BackendSimulator::instance();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
