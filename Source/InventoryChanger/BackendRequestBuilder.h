@@ -22,14 +22,10 @@ public:
         stickerSlot = slot;
     }
 
-    void setStatTrakSwapItem1(std::uint64_t itemID) noexcept
+    void setStatTrakSwapItems(std::uint64_t itemId1, std::uint64_t itemId2) noexcept
     {
-        statTrakSwapItemID1 = itemID;
-    }
-
-    void setStatTrakSwapItem2(std::uint64_t itemID) noexcept
-    {
-        statTrakSwapItemID2 = itemID;
+        statTrakSwapItemID1 = itemId1;
+        statTrakSwapItemID2 = itemId2;
     }
 
     void setNameTag(std::string_view newName)

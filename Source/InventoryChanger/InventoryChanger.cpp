@@ -1072,8 +1072,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto swapItem1 = stringToUint64(string);
         const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (swapItem2String) {
-            requestBuilder.setStatTrakSwapItem1(swapItem1);
-            requestBuilder.setStatTrakSwapItem2(stringToUint64(swapItem2String));
+            requestBuilder.setStatTrakSwapItems(swapItem1, stringToUint64(swapItem2String));
         }
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
         auto& backend = inventory_changer::backend::BackendSimulator::instance();
