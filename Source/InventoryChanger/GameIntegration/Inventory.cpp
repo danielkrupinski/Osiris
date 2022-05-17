@@ -238,6 +238,11 @@ std::uint64_t Inventory::assingNewItemID(std::uint64_t itemID)
     if (const auto newView = memory->findOrCreateEconItemViewForItemID(newItemID))
         newView->clearInventoryImageRGBA();
 
+    if (const auto inventoryComponent = *memory->uiComponentInventory) {
+        memory->setItemSessionPropertyValue(inventoryComponent, newItemID, "recent", "0");
+        memory->setItemSessionPropertyValue(inventoryComponent, newItemID, "updated", "0");
+    }
+
     return newItemID;
 }
 
