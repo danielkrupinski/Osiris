@@ -1216,15 +1216,15 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
         }
     case WeaponId::Falchion:
         switch (sequence) {
-        case SEQUENCE_DEFAULT_IDLE2:
-            return SEQUENCE_FALCHION_IDLE1;
+        case SEQUENCE_DEFAULT_DRAW:
+        case SEQUENCE_DEFAULT_IDLE1:
+        case SEQUENCE_DEFAULT_HEAVY_HIT1:
+        case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
+            return sequence;
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
             return Helpers::random(SEQUENCE_FALCHION_HEAVY_MISS1, SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP);
         case SEQUENCE_DEFAULT_LOOKAT01:
             return Helpers::random(SEQUENCE_FALCHION_LOOKAT01, SEQUENCE_FALCHION_LOOKAT02);
-        case SEQUENCE_DEFAULT_DRAW:
-        case SEQUENCE_DEFAULT_IDLE1:
-            return sequence;
         default:
             return sequence - 1;
         }
