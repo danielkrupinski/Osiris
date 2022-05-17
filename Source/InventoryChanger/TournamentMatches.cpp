@@ -1042,6 +1042,7 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Ancient, GroupStage, TeamSpirit, CopenhagenFlames },
     { TournamentMap::Ancient, GroupStage, NatusVincere, NinjasInPyjamas },
     { TournamentMap::Ancient, GroupStage, CopenhagenFlames, FaZeClan },
+    { TournamentMap::Ancient, GroupStage, G2Esports, FURIA },
     { TournamentMap::Dust2, ChallengersStage, BadNewsEagles, EternalFire },
     { TournamentMap::Dust2, ChallengersStage, ImperialEsports, TeamSpirit },
     { TournamentMap::Dust2, ChallengersStage, MIBR, Outsiders },
@@ -1067,6 +1068,9 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Inferno, GroupStage, CopenhagenFlames, FaZeClan },
     { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, FURIA },
     { TournamentMap::Inferno, GroupStage, G2Esports, Outsiders },
+    { TournamentMap::Inferno, GroupStage, Heroic, Vitality },
+    { TournamentMap::Inferno, GroupStage, G2Esports, FURIA },
+    { TournamentMap::Inferno, GroupStage, CopenhagenFlames, ImperialEsports },
     { TournamentMap::Mirage, ChallengersStage, ENCE, _9ZTeam },
     { TournamentMap::Mirage, ChallengersStage, Astralis, Vitality },
     { TournamentMap::Mirage, ChallengersStage, Vitality, forZeESports },
@@ -1087,6 +1091,7 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Mirage, GroupStage, ENCE, Heroic },
     { TournamentMap::Mirage, GroupStage, BIG, Vitality },
     { TournamentMap::Mirage, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Mirage, GroupStage, Heroic, Vitality },
     { TournamentMap::Nuke, ChallengersStage, forZeESports, Renegades },
     { TournamentMap::Nuke, ChallengersStage, Astralis, IHCEsports },
     { TournamentMap::Nuke, ChallengersStage, ComplexityGaming_, IHCEsports },
@@ -1112,6 +1117,7 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, Vitality },
     { TournamentMap::Overpass, GroupStage, ENCE, Heroic },
     { TournamentMap::Overpass, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Overpass, GroupStage, Heroic, Vitality },
     { TournamentMap::Vertigo, ChallengersStage, EternalFire, Renegades },
     { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders },
     { TournamentMap::Vertigo, ChallengersStage, BadNewsEagles, ImperialEsports },
@@ -1125,7 +1131,9 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Vertigo, GroupStage, BIG, FURIA },
     { TournamentMap::Vertigo, GroupStage, BIG, Vitality },
     { TournamentMap::Vertigo, GroupStage, G2Esports, Outsiders },
-    { TournamentMap::Vertigo, GroupStage, Cloud9, ImperialEsports }
+    { TournamentMap::Vertigo, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Vertigo, GroupStage, G2Esports, FURIA },
+    { TournamentMap::Vertigo, GroupStage, CopenhagenFlames, ImperialEsports }
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &MatchWithoutMVPs::map));
 
