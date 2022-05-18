@@ -495,6 +495,13 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     return result;
 }
 
+static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
+    InventoryChanger::getNumArgsHook(result, RETURN_ADDRESS(), params);
+    return result;
+}
+
 static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
 {
     InventoryChanger::onItemEquip(team, slot, itemID);
@@ -600,6 +607,7 @@ void Hooks::install() noexcept
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+    panoramaMarshallHelper.hookAt(1, &getNumArgs);
     panoramaMarshallHelper.hookAt(5, &getArgAsNumber);
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
 

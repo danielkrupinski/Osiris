@@ -120,4 +120,6 @@ struct TeamGraffitiSelected {
     std::uint16_t graffitiID;
 };
 
+struct PickEmUpdated {};
+
 }

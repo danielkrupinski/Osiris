@@ -724,6 +724,12 @@
     <ClInclude Include="InventoryChanger\GameIntegration\Items.h">
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\PickEm.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PanoramaMarshallHelper.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

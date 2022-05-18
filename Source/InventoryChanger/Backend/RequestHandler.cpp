@@ -215,4 +215,10 @@ Response RequestHandler::operator()(const request::MarkItemUpdated& request) con
     return response::ItemUpdated{ request.item };
 }
 
+Response RequestHandler::operator()(const request::PickStickerPickEm& request) const
+{
+    pickEm.pick(request.position, request.team);
+    return response::PickEmUpdated{};
+}
+
 }

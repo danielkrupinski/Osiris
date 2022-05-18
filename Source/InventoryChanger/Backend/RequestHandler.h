@@ -12,9 +12,11 @@ namespace inventory_changer::backend
 {
 
 class BackendSimulator;
+class PickEm;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, const game_items::Lookup& gameItemLookup, ItemConstRemover constRemover) : backend{ backend }, gameItemLookup{ gameItemLookup }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, const game_items::Lookup& gameItemLookup, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, gameItemLookup{ gameItemLookup }, constRemover{ constRemover } {}
 
     Response operator()(const request::ApplySticker& request) const;
     Response operator()(const request::WearSticker& request) const;
@@ -31,9 +33,11 @@ struct RequestHandler {
     Response operator()(const request::UpdateStatTrak& request) const;
     Response operator()(const request::SelectTeamGraffiti& request) const;
     Response operator()(const request::MarkItemUpdated& request) const;
+    Response operator()(const request::PickStickerPickEm& request) const;
 
 private:
     BackendSimulator& backend;
+    PickEm& pickEm;
     const game_items::Lookup& gameItemLookup;
     ItemConstRemover constRemover;
 };

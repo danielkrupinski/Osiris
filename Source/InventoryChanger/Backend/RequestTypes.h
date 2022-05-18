@@ -103,4 +103,12 @@ struct SelectTeamGraffiti {
     std::uint16_t graffitiID;
 };
 
+struct PickStickerPickEm {
+    PickStickerPickEm(PickEm::PickPosition position, TournamentTeam team)
+        : position{ position }, team{ team } {}
+
+    PickEm::PickPosition position;
+    TournamentTeam team;
+};
+
 }
