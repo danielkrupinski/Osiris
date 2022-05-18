@@ -2,8 +2,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../../../Osiris/InventoryChanger/GameItems/Item.h"
-#include "../../../Osiris/SDK/ItemSchema.h"
+#include <InventoryChanger/GameItems/Item.h>
+#include <SDK/ItemSchema.h>
 
 namespace game_items
 {
@@ -85,10 +85,6 @@ TEST_P(TypeTest, CreatedItemIsGraffiti) {
     ASSERT_EQ(createItemOfType(GetParam()).isGraffiti(), GetParam() == Item::Type::Graffiti);
 }
 
-TEST_P(TypeTest, CreatedItemIsSealedGraffiti) {
-    ASSERT_EQ(createItemOfType(GetParam()).isSealedGraffiti(), GetParam() == Item::Type::SealedGraffiti);
-}
-
 TEST_P(TypeTest, CreatedItemIsAgent) {
     ASSERT_EQ(createItemOfType(GetParam()).isAgent(), GetParam() == Item::Type::Agent);
 }
@@ -133,7 +129,6 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, TypeTest,
         Item::Type::Sticker,
         Item::Type::Music,
         Item::Type::Graffiti,
-        Item::Type::SealedGraffiti,
         Item::Type::Collectible,
         Item::Type::NameTag,
         Item::Type::Agent,

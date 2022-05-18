@@ -5,9 +5,9 @@
 
 #include <gtest/gtest.h>
 
-#include "../../Osiris/InventoryChanger/GameItems/Item.h"
-#include "../../Osiris/InventoryChanger/StaticData.h"
-#include "../../Osiris/SDK/ItemSchema.h"
+#include <InventoryChanger/GameItems/Item.h>
+#include <InventoryChanger/StaticData.h>
+#include <SDK/ItemSchema.h>
 
 class EconRaritiesTest : public testing::TestWithParam<EconRarity> {};
 
