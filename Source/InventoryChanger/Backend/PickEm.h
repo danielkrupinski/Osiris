@@ -23,13 +23,8 @@ public:
         picks[position] = team;
     }
 
-    [[nodiscard]] TournamentTeam getPickedTeam(std::uint16_t group, std::uint8_t indexInGroup) const
+    [[nodiscard]] TournamentTeam getPickedTeam(PickPosition position) const
     {
-        PickPosition position;
-        position.tournament = 19;
-        position.group = group;
-        position.indexInGroup = indexInGroup;
-        
         if (const auto pick = picks.find(position); pick != picks.end())
             return pick->second;
         return TournamentTeam::None;
