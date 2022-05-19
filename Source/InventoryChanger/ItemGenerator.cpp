@@ -857,7 +857,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
@@ -873,18 +873,18 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const in
         return inventory::Item{ unlockedItem, dynamicData };
     } else if (unlockedItem.isSkin()) {
         inventory::Skin dynamicData;
-        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(unlockedItem);
+        const auto& staticData = gameItemStorage.getPaintKit(unlockedItem);
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
         if (StaticData::isSouvenirPackage(caseItem.gameItem())) {
-            dynamicData.tournamentID = StaticData::lookup().getStorage().getTournamentEventID(caseItem.gameItem());
+            dynamicData.tournamentID = gameItemStorage.getTournamentEventID(caseItem.gameItem());
             const auto& souvenir = *caseItem.get<inventory::SouvenirPackage>();
             dynamicData.tournamentStage = souvenir.tournamentStage;
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
             dynamicData.proPlayer = souvenir.proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), StaticData::lookup().getStorage().getTournamentEventID(caseItem.gameItem()), caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
