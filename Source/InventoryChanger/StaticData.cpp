@@ -194,11 +194,6 @@ private:
     std::vector<std::reference_wrapper<const game_items::Item>> _caseLoot;
 };
 
-[[nodiscard]] std::size_t StaticData::getGameItemsCount() noexcept
-{
-    return StaticDataImpl::gameItems().size();
-}
-
 std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLoot(const StaticData::Case& crate) noexcept
 {
     if (!crate.hasLoot())

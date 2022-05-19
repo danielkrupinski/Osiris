@@ -87,7 +87,6 @@ namespace StaticData
         bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
     };
 
-    [[nodiscard]] std::size_t getGameItemsCount() noexcept;
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
     [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLootOfRarity(const Case& crate, EconRarity rarity) noexcept;
 
