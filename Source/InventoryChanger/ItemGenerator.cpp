@@ -35,7 +35,7 @@ static float generateWear() noexcept
 
 using StaticData::TournamentMap;
 
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
@@ -884,7 +884,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
             dynamicData.proPlayer = souvenir.proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), caseData.tournamentMap, dynamicData.tournamentStage, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), caseData.tournamentMap, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
@@ -1001,7 +1001,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
     return 0;
 }
 
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentStage stage, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<inventory::Skin::Sticker, 5> stickers;
 
