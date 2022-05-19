@@ -81,7 +81,6 @@ namespace StaticData
         bool willProduceStatTrak = false;
         EconRarities rarities{};
         TournamentMap tournamentMap = TournamentMap::None;
-        std::uint32_t souvenirPackageTournamentID = 0;
         std::size_t lootBeginIdx;
         std::size_t lootEndIdx;
 

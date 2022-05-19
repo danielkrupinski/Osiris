@@ -29,7 +29,7 @@ public:
     void addSkinWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addNameTag(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addAgent(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
-    void addCase(EconRarity rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath);
+    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, std::string_view iconPath);
     void addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
@@ -95,14 +95,20 @@ public:
 
     [[nodiscard]] std::uint8_t getTournamentEventID(const Item& item) const noexcept
     {
-        assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin());
-        return static_cast<std::uint8_t>(item.getDataIndex());
+        assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin() || item.isCase());
+        return static_cast<std::uint8_t>(item.getDataIndex() & 0xFF);
     }
 
     [[nodiscard]] std::uint16_t getDefaultTournamentGraffitiID(const Item& item) const noexcept
     {
         assert(item.isTournamentCoin());
         return static_cast<std::uint16_t>(item.getDataIndex() >> 8);
+    }
+
+    [[nodiscard]] std::uint16_t getCrateSeries(const Item& crate) const noexcept
+    {
+        assert(crate.isCase());
+        return static_cast<std::uint16_t>(crate.getDataIndex() >> 8);
     }
 
     [[nodiscard]] bool hasPaintKit(const Item& item) const noexcept

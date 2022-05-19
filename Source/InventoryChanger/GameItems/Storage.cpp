@@ -78,9 +78,9 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
     addItem(Item::Type::Agent, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath)
+void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, std::string_view iconPath)
 {
-    addItem(Item::Type::Case, rarity, weaponID, descriptorIndex, pooled(iconPath));
+    addItem(Item::Type::Case, rarity, weaponID, (static_cast<std::size_t>(crateSeries) << 8) | tournamentID, pooled(iconPath));
 }
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)

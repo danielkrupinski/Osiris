@@ -65,7 +65,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addAgent(rarity, weaponID, iconPath);
         break;
     case ItemType::Case:
-        storage.addCase(rarity, weaponID, 0, iconPath);
+        storage.addCase(rarity, weaponID, 0, 0, iconPath);
         break;
     case ItemType::CaseKey:
         storage.addCaseKey(rarity, weaponID, iconPath);

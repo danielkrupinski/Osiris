@@ -88,7 +88,7 @@ public:
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
-    void initItemData(ItemSchema* itemSchema, game_items::Storage& storage, std::vector<int>& lootListIndices) noexcept
+    void initItemData(ItemSchema* itemSchema, game_items::Storage& storage) noexcept
     {
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
@@ -117,15 +117,7 @@ private:
             } else if (item->isPatchable()) {
                 storage.addAgent(rarity, weaponID, inventoryImage);
             } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
-                const auto lootListIdx = itemSchema->revolvingLootLists.find(item->getCrateSeriesNumber());
-                if (lootListIdx == -1)
-                    continue;
-
-                lootListIndices.push_back(lootListIdx);
-                StaticData::Case caseData;
-                caseData.souvenirPackageTournamentID = item->getTournamentEventID();
-                _cases.push_back(std::move(caseData));
-                storage.addCase(rarity, weaponID, _cases.size() - 1, inventoryImage);
+                storage.addCase(rarity, weaponID, static_cast<std::uint16_t>(item->getCrateSeriesNumber()), static_cast<std::uint8_t>(item->getTournamentEventID()), inventoryImage);
             } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
                 storage.addCaseKey(rarity, weaponID, inventoryImage);
             } else if (const auto tool = item->getEconTool()) {
@@ -192,28 +184,26 @@ private:
         }
     }
 
-    void buildLootLists(ItemSchema* itemSchema, const std::vector<int>& lootListIndices) noexcept
+    void buildLootLists(ItemSchema* itemSchema) noexcept
     {
-        assert(lootListIndices.size() == _cases.size());
+        for (const auto& revolvingLootList : itemSchema->revolvingLootLists) {
+            const auto lootListName = revolvingLootList.value;
 
-        for (std::size_t i = 0; i < lootListIndices.size(); ++i) {
-            const auto lootListName = itemSchema->revolvingLootLists.memory[lootListIndices[i]].value;
-
-            _cases[i].lootBeginIdx = _caseLoot.size();
+            _cases[revolvingLootList.key].lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(lootListName))
-                fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[i].willProduceStatTrak);
+                fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[revolvingLootList.key].willProduceStatTrak);
             else
-                rebuildMissingLootList(itemSchema, itemSchema->revolvingLootLists.memory[lootListIndices[i]].key, _caseLoot);
-            _cases[i].lootEndIdx = _caseLoot.size();
+                rebuildMissingLootList(itemSchema, revolvingLootList.key, _caseLoot);
+            _cases[revolvingLootList.key].lootEndIdx = _caseLoot.size();
 
-            if (_cases[i].souvenirPackageTournamentID != 0)
-                _cases[i].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
+            // if (_cases[i].souvenirPackageTournamentID != 0)
+                _cases[revolvingLootList.key].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
         }
     }
 
     void computeRarities() noexcept
     {
-        for (auto& crate : _cases) {
+        for (auto& [crateSeries, crate] : _cases) {
             for (auto it = _caseLoot.begin() + crate.lootBeginIdx; it != _caseLoot.begin() + crate.lootEndIdx; ++it)
                 crate.rarities.set(it->get().getRarity());
         }
@@ -221,7 +211,7 @@ private:
 
     void sortLoot() noexcept
     {
-        for (const auto& crate : _cases) {
+        for (const auto& [crateSeries, crate] : _cases) {
             std::ranges::sort(_caseLoot.begin() + crate.lootBeginIdx, _caseLoot.begin() + crate.lootEndIdx, {}, [](const game_items::Item& item) { return item.getRarity(); });
         }
     }
@@ -237,21 +227,19 @@ private:
         items.getStickers(storage);
         items.getMusicKits(storage);
         items.getSkinsAndGloves(storage);
-        std::vector<int> lootListIndices;
-        initItemData(itemSchema, storage, lootListIndices);
+        initItemData(itemSchema, storage);
         storage.compress();
         container = game_items::Lookup{ std::move(storage) };
 
-        buildLootLists(itemSchema, lootListIndices);
+        buildLootLists(itemSchema);
         computeRarities();
         sortLoot();
 
-        _cases.shrink_to_fit();
         _caseLoot.shrink_to_fit();
     }
 
     game_items::Lookup container;
-    std::vector<StaticData::Case> _cases;
+    std::unordered_map<std::uint16_t, StaticData::Case> _cases;
     std::vector<std::reference_wrapper<const game_items::Item>> _caseLoot;
 };
 
@@ -276,15 +264,14 @@ std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getC
 const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
 {
     assert(item.isCase());
-    return StaticDataImpl::cases()[item.getDataIndex()];
+    return StaticDataImpl::cases().at(lookup().getStorage().getCrateSeries(item));
 }
 
 bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
 {
-    const auto& crateData = getCase(crate);
-    if (crateData.souvenirPackageTournamentID == 0)
+    if (lookup().getStorage().getTournamentEventID(crate) == 0)
         return false;
-    const auto loot = getCrateLoot(crateData);
+    const auto loot = getCrateLoot(getCase(crate));
     return !loot.empty() && loot[0].get().isSkin();
 }
 
