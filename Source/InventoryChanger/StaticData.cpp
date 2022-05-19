@@ -88,55 +88,6 @@ public:
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
-    void initItemData(ItemSchema* itemSchema, game_items::Storage& storage) noexcept
-    {
-        for (const auto& node : itemSchema->itemsSorted) {
-            const auto item = node.value;
-            const auto itemTypeName = std::string_view{ item->getItemTypeName() };
-            const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
-            const auto isOriginal = (item->getQuality() == 1);
- 
-            const auto inventoryImage = item->getInventoryImage();
-            if (!inventoryImage)
-                continue;
-
-            const auto rarity = EconRarity{ item->getRarity() };
-
-            if (const auto weaponID = item->getWeaponId(); itemTypeName == "#CSGO_Type_Knife" && rarity == EconRarity::Red) {
-                storage.addVanillaKnife(weaponID, inventoryImage);
-            } else if (isCollectible) {
-                if (item->isServiceMedal()) {
-                    storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, inventoryImage);
-                } else if (item->isTournamentCoin()) {
-                    storage.addTournamentCoin(rarity, weaponID, static_cast<std::uint8_t>(item->getTournamentEventID()), static_cast<std::uint16_t>(item->getStickerID()), inventoryImage);
-                } else {
-                    storage.addCollectible(rarity, weaponID, isOriginal, inventoryImage);
-                }
-            } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
-                storage.addNameTag(rarity, weaponID, inventoryImage);
-            } else if (item->isPatchable()) {
-                storage.addAgent(rarity, weaponID, inventoryImage);
-            } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
-                storage.addCase(rarity, weaponID, static_cast<std::uint16_t>(item->getCrateSeriesNumber()), static_cast<std::uint8_t>(item->getTournamentEventID()), inventoryImage);
-            } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
-                storage.addCaseKey(rarity, weaponID, inventoryImage);
-            } else if (const auto tool = item->getEconTool()) {
-                if (std::strcmp(tool->typeName, "season_pass") == 0)
-                    storage.addOperationPass(rarity, weaponID, inventoryImage);
-                else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
-                    storage.addStatTrakSwapTool(rarity, weaponID, inventoryImage);
-                else if (std::strcmp(tool->typeName, "fantoken") == 0) {
-                    if (Helpers::isSouvenirToken(weaponID))
-                        storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
-                    else
-                        storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
-                }
-            } else if (item->isPaintable()) {
-                storage.addVanillaSkin(weaponID, inventoryImage);
-            }
-        }
-    }
-
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::reference_wrapper<const game_items::Item>>& loot, bool* willProduceStatTrak = nullptr) const noexcept
     {
         if (willProduceStatTrak)
@@ -227,7 +178,7 @@ private:
         items.getStickers(storage);
         items.getMusicKits(storage);
         items.getSkinsAndGloves(storage);
-        initItemData(itemSchema, storage);
+        items.getOtherItems(storage);
         storage.compress();
         container = game_items::Lookup{ std::move(storage) };
 
