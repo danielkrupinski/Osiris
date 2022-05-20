@@ -355,7 +355,7 @@ static void applyPlayerAgent() noexcept
         ragdoll->setModelIndex(idx);
 }
 
-static void applyMedal() noexcept
+static void applyMedal(const inventory_changer::backend::Loadout& loadout) noexcept
 {
     if (!localPlayer)
         return;
@@ -364,7 +364,7 @@ static void applyMedal() noexcept
     if (!pr)
         return;
 
-    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(55);
+    const auto optionalItem = loadout.getItemInSlotNoTeam(55);
     if (!optionalItem.has_value())
         return;
 
@@ -431,16 +431,18 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     using namespace inventory_changer::backend;
 
+    auto& backend = BackendSimulator::instance();
+
     if (localPlayer)
-        applyGloves(BackendSimulator::instance(), *localInventory, localPlayer.get());
+        applyGloves(backend, *localInventory, localPlayer.get());
 
     applyMusicKit();
     applyPlayerAgent();
-    applyMedal();
+    applyMedal(backend.getLoadout());
 
     processEquipRequests();
     static inventory_changer::game_integration::Inventory gameInventory{};
-    BackendSimulator::instance().run(gameInventory, std::chrono::milliseconds{ 300 });
+    backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
