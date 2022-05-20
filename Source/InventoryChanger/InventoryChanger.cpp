@@ -151,16 +151,16 @@ static void applyGloves(const inventory_changer::backend::BackendSimulator& back
     }
 }
 
-static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyKnife(const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto localXuid = local->getSteamId();
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), local->getTeamNumber(), 0);
+    const auto optionalItem = getItemFromLoadout(backend.getLoadout(), local->getTeamNumber(), 0);
     if (!optionalItem.has_value())
         return;
 
     const auto& item = *optionalItem;
-    const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+    const auto itemID = backend.getItemID(item);
     if (!itemID.has_value())
         return;
 
@@ -268,7 +268,7 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!localInventory)
         return;
 
-    applyKnife(*localInventory, local);
+    applyKnife(inventory_changer::backend::BackendSimulator::instance(), *localInventory, local);
     applyWeapons(*localInventory, local);
 }
 
