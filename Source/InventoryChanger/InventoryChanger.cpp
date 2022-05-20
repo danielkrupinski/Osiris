@@ -91,14 +91,14 @@ static std::optional<std::list<inventory::Item>::const_iterator> getItemFromLoad
     }
 }
 
-static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyGloves(const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 41);
+    const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 41);
     if (!optionalItem.has_value())
         return;
 
     const auto& item = *optionalItem;
-    const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+    const auto itemID = backend.getItemID(item);
     if (!itemID.has_value())
         return;
 
@@ -429,14 +429,14 @@ void InventoryChanger::run(FrameStage stage) noexcept
     if (!localInventory)
         return;
 
+    using namespace inventory_changer::backend;
+
     if (localPlayer)
-        applyGloves(*localInventory, localPlayer.get());
+        applyGloves(BackendSimulator::instance(), *localInventory, localPlayer.get());
 
     applyMusicKit();
     applyPlayerAgent();
     applyMedal();
-
-    using namespace inventory_changer::backend;
 
     processEquipRequests();
     static inventory_changer::game_integration::Inventory gameInventory{};
