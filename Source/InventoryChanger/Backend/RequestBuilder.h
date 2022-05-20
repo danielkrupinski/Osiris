@@ -12,11 +12,6 @@ class RequestBuilder {
 public:
     explicit RequestBuilder(BackendSimulator& backend) : backend{ backend } {}
 
-    void setToolItemID(std::uint64_t itemID) noexcept
-    {
-        toolItemID = itemID;
-    }
-
     void setStickerSlot(std::uint8_t slot) noexcept
     {
         stickerSlot = slot;
@@ -33,7 +28,7 @@ public:
         nameTag = newName;
     }
 
-    void useToolOn(std::uint64_t destItemID)
+    void useToolOn(std::uint64_t toolItemID, std::uint64_t destItemID)
     {
         const auto toolItem = backend.itemFromID(toolItemID);
         const auto destItem = backend.itemFromID(destItemID);
@@ -126,7 +121,6 @@ private:
     }
 
     BackendSimulator& backend;
-    std::uint64_t toolItemID = 0;
     std::uint8_t stickerSlot = 0;
     std::uint64_t statTrakSwapItemID1 = 0;
     std::uint64_t statTrakSwapItemID2 = 0;

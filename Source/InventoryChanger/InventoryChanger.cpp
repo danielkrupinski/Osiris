@@ -1054,10 +1054,10 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     auto& requestBuilder = inventory_changer::backend::RequestBuilder::instance();
 
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        requestBuilder.setToolItemID(stringToUint64(string));
+        const auto toolItemID = stringToUint64(string);
         const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (destItemIdString)
-            requestBuilder.useToolOn(stringToUint64(destItemIdString));
+            requestBuilder.useToolOn(toolItemID, stringToUint64(destItemIdString));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
         const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         requestBuilder.wearStickerOf(stringToUint64(string), slot);
