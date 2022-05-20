@@ -712,9 +712,6 @@
     <ClInclude Include="InventoryChanger\GameItems\ItemSorter.h">
       <Filter>InventoryChanger\GameItems</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\BackendRequestBuilder.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h">
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClInclude>
@@ -729,6 +726,9 @@
     </ClInclude>
     <ClInclude Include="SDK\PanoramaMarshallHelper.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\RequestBuilder.h">
+      <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

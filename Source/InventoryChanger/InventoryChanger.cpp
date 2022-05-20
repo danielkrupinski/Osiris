@@ -56,7 +56,7 @@
 #include "ItemGenerator.h"
 
 #include "Backend/Response/ResponseHandler.h"
-#include "BackendRequestBuilder.h"
+#include "Backend/RequestBuilder.h"
 #include "GameIntegration/Inventory.h"
 #include "../Hooks.h"
 
