@@ -300,7 +300,7 @@ void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
     }
 }
 
-static void applyMusicKit() noexcept
+static void applyMusicKit(const inventory_changer::backend::BackendSimulator& backend) noexcept
 {
     if (!localPlayer)
         return;
@@ -309,7 +309,7 @@ static void applyMusicKit() noexcept
     if (pr == nullptr)
         return;
 
-    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(54);
+    const auto optionalItem = backend.getLoadout().getItemInSlotNoTeam(54);
     if (!optionalItem.has_value())
         return;
 
@@ -317,7 +317,7 @@ static void applyMusicKit() noexcept
     if (!item->gameItem().isMusic())
         return;
 
-    pr->musicID()[localPlayer->index()] = StaticData::lookup().getStorage().getMusicKit(item->gameItem()).id;
+    pr->musicID()[localPlayer->index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
 static void applyPlayerAgent() noexcept
@@ -436,7 +436,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
     if (localPlayer)
         applyGloves(backend, *localInventory, localPlayer.get());
 
-    applyMusicKit();
+    applyMusicKit(backend);
     applyPlayerAgent();
     applyMedal(backend.getLoadout());
 
