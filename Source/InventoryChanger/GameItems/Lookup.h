@@ -109,13 +109,13 @@ public:
 
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, int paintKit) const noexcept
     {
-        const auto range = ranges::equal_range(itemsWithPaintKit, weaponID, {}, &Item::getWeaponID);
+        const auto range = ranges::equal_range(itemsWithPaintKit, weaponID, {}, [](const Item& item) { return item.getWeaponID(); });
         return find(range, paintKit, [this](const Item& item) { return storage.getPaintKit(item).id; });
     }
 
     [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID) const noexcept
     {
-        return find(otherItems, weaponID, &Item::getWeaponID);
+        return find(otherItems, weaponID, [](const Item& item) { return item.getWeaponID(); });
     }
 
     [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
