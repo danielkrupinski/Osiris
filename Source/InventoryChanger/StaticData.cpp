@@ -140,15 +140,17 @@ private:
         for (const auto& revolvingLootList : itemSchema->revolvingLootLists) {
             const auto lootListName = revolvingLootList.value;
 
-            _cases[revolvingLootList.key].lootBeginIdx = _caseLoot.size();
+            StaticData::Case crate;
+            crate.lootBeginIdx = _caseLoot.size();
             if (const auto lootList = itemSchema->getLootList(lootListName))
-                fillLootFromLootList(itemSchema, lootList, _caseLoot, &_cases[revolvingLootList.key].willProduceStatTrak);
+                fillLootFromLootList(itemSchema, lootList, _caseLoot, &crate.willProduceStatTrak);
             else
                 rebuildMissingLootList(itemSchema, revolvingLootList.key, _caseLoot);
-            _cases[revolvingLootList.key].lootEndIdx = _caseLoot.size();
+            crate.lootEndIdx = _caseLoot.size();
 
             // if (_cases[i].souvenirPackageTournamentID != 0)
-                _cases[revolvingLootList.key].tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
+            crate.tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
+            _cases.try_emplace(revolvingLootList.key, crate);
         }
     }
 
