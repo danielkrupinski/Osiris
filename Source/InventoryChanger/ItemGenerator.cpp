@@ -913,12 +913,12 @@ constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
         dynamicData.tournamentTeam1 = randomMatch.team1;
         dynamicData.tournamentTeam2 = randomMatch.team2;
 
-        if constexpr (std::is_same_v<decltype(randomMatch), const Match&>) {
+        if constexpr (std::is_same_v<decltype(randomMatch), const item_generator::Match&>) {
             dynamicData.proPlayer = randomMatch.getRandomMVP();
         }
 
         return dynamicData;
-    }, getTournamentMatchesOnMap(tournamentID, tournamentMap));
+    }, item_generator::getTournamentMatchesOnMap(tournamentID, tournamentMap));
 }
 
 [[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept

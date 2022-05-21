@@ -2,6 +2,9 @@
 
 #include "TournamentMatches.h"
 
+namespace item_generator
+{
+
 struct Tournament {
     std::uint32_t tournamentID;
     std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> matches;
@@ -1188,4 +1191,6 @@ std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTourn
     return std::visit([map](auto&& a) {
         return std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>>{ filterMatchesToMap(a, map) };
     }, getTournamentMatches(tournamentID));
+}
+
 }

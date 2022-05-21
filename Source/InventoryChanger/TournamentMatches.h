@@ -8,6 +8,9 @@
 
 using StaticData::TournamentMap;
 
+namespace item_generator
+{
+
 struct Match {
     TournamentMap map;
     TournamentStage stage;
@@ -32,3 +35,5 @@ struct MatchWithoutMVPs {
 };
 
 [[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept;
+
+}
