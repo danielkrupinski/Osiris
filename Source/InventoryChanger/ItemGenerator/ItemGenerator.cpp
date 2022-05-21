@@ -12,7 +12,7 @@
 #include "ItemGenerator.h"
 
 #include <SDK/ItemSchema.h>
-#include <InventoryChanger/TournamentMatches.h>
+#include "TournamentMatches.h"
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>

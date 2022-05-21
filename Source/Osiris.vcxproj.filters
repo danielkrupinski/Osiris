@@ -272,9 +272,6 @@
     <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp">
       <Filter>InventoryChanger\Backend</Filter>
     </ClCompile>
-    <ClCompile Include="InventoryChanger\TournamentMatches.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
     <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp">
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClCompile>
@@ -282,6 +279,9 @@
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClCompile>
     <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp">
       <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClCompile>
   </ItemGroup>
@@ -577,9 +577,6 @@
     <ClInclude Include="InventoryChanger\InventoryConfig.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\TournamentMatches.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\KeyValuesSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -731,6 +728,9 @@
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h">
       <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClInclude>
   </ItemGroup>

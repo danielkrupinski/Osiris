@@ -3,8 +3,8 @@
 #include <span>
 #include <variant>
 
-#include "StaticData.h"
-#include "../SDK/ItemSchema.h"
+#include <InventoryChanger/StaticData.h>
+#include <SDK/ItemSchema.h>
 
 using StaticData::TournamentMap;
 

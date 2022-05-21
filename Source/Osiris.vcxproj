@@ -137,8 +137,8 @@
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp" />
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp" />
     <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp" />
+    <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp" />
     <ClCompile Include="InventoryChanger\StaticData.cpp" />
-    <ClCompile Include="InventoryChanger\TournamentMatches.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -233,8 +233,8 @@
     <ClInclude Include="InventoryChanger\Inventory\Structs.h" />
     <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h" />
+    <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h" />
     <ClInclude Include="InventoryChanger\StaticData.h" />
-    <ClInclude Include="InventoryChanger\TournamentMatches.h" />
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
