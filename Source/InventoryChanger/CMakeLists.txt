@@ -1,7 +1,7 @@
 target_sources(OsirisOBJ PRIVATE
   InventoryChanger.cpp
   InventoryConfig.cpp
-  ItemGenerator.cpp
+  ItemGenerator/ItemGenerator.cpp
   StaticData.cpp
   TournamentMatches.cpp
   GameIntegration/Inventory.cpp

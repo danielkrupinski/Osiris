@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <InventoryChanger/ItemGenerator.h>
+#include <InventoryChanger/ItemGenerator/ItemGenerator.h>
 
 struct TimeParam {
     std::uint16_t year;

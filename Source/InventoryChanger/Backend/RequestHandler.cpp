@@ -2,7 +2,7 @@
 #include "RequestHandler.h"
 
 #include <InventoryChanger/GameItems/Lookup.h>
-#include <InventoryChanger/ItemGenerator.h>
+#include <InventoryChanger/ItemGenerator/ItemGenerator.h>
 
 namespace inventory_changer::backend
 {

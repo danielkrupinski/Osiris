@@ -8,14 +8,14 @@
 
 #include <range/v3/algorithm/equal_range.hpp>
 
-#include "../Helpers.h"
+#include <Helpers.h>
 #include "ItemGenerator.h"
 
-#include "../SDK/ItemSchema.h"
-#include "TournamentMatches.h"
-#include "GameItems/Lookup.h"
-#include "Inventory/Item.h"
-#include "Inventory/Structs.h"
+#include <SDK/ItemSchema.h>
+#include <InventoryChanger/TournamentMatches.h>
+#include <InventoryChanger/GameItems/Lookup.h>
+#include <InventoryChanger/Inventory/Item.h>
+#include <InventoryChanger/Inventory/Structs.h>
 
 static float generateWear() noexcept
 {

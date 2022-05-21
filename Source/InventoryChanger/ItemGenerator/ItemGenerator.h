@@ -5,10 +5,8 @@
 #include <optional>
 #include <utility>
 
-#include "StaticData.h"
-
-#include "GameItems/Storage.h"
-#include "Inventory/Item.h"
+#include <InventoryChanger/GameItems/Storage.h>
+#include <InventoryChanger/Inventory/Item.h>
 
 namespace ItemGenerator
 {

@@ -57,6 +57,9 @@
     <Filter Include="InventoryChanger\GameIntegration">
       <UniqueIdentifier>{2bf8116d-2e4c-473a-a00e-a32ac7e88ad0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\ItemGenerator">
+      <UniqueIdentifier>{8a9faacf-088e-412b-b6b2-e72f4237c282}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -166,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="SDK\EconItemView.cpp">
       <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\ItemGenerator.cpp">
-      <Filter>InventoryChanger</Filter>
     </ClCompile>
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
       <Filter>InventoryChanger</Filter>
@@ -280,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp">
       <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -571,9 +574,6 @@
     <ClInclude Include="SDK\UtlString.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\InventoryConfig.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
@@ -729,6 +729,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\RequestBuilder.h">
       <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

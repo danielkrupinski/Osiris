@@ -53,8 +53,7 @@
 #include "Inventory/Structs.h"
 #include "Backend/Loadout.h"
 #include "Backend/BackendSimulator.h"
-#include "ItemGenerator.h"
-
+#include "ItemGenerator/ItemGenerator.h"
 #include "Backend/Response/ResponseHandler.h"
 #include "Backend/RequestBuilder.h"
 #include "GameIntegration/Inventory.h"
