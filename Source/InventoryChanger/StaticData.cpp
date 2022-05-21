@@ -127,7 +127,7 @@ private:
             if (const auto idx = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); idx.has_value())
                 loot.push_back(*idx);
         } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
-            constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
+            static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
             for (const auto collection : dreamHack2013Collections) {
                 if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
                     fillLootFromLootList(itemSchema, lootList, loot);
