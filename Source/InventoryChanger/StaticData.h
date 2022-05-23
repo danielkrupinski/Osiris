@@ -13,6 +13,8 @@
 #include "../SDK/ItemSchema.h"
 #include "../SDK/WeaponId.h"
 
+#include "GameItems/Enums.h"
+
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
@@ -24,19 +26,7 @@ namespace game_items
 
 namespace StaticData
 {
-    enum class TournamentMap : std::uint8_t {
-        None = 0,
-        Ancient,
-        Cache,
-        Cobblestone,
-        Dust2,
-        Inferno,
-        Mirage,
-        Nuke,
-        Overpass,
-        Train,
-        Vertigo
-    };
+    using game_items::TournamentMap;
 
     class EconRarities {
     public:
