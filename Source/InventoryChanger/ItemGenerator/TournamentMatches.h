@@ -6,13 +6,11 @@
 #include <InventoryChanger/StaticData.h>
 #include <SDK/ItemSchema.h>
 
-using StaticData::TournamentMap;
-
 namespace item_generator
 {
 
 struct Match {
-    TournamentMap map;
+    game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
@@ -28,12 +26,12 @@ struct Match {
 };
 
 struct MatchWithoutMVPs {
-    TournamentMap map;
+    game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
 };
 
-[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept;
+[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, game_items::TournamentMap map) noexcept;
 
 }

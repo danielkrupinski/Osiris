@@ -34,9 +34,7 @@ static float generateWear() noexcept
     return wear;
 }
 
-using StaticData::TournamentMap;
-
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
@@ -896,12 +894,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
     return inventory::Item{ unlockedItem };
 }
 
-constexpr auto operator<=>(TournamentMap a, TournamentMap b) noexcept
-{
-    return static_cast<std::underlying_type_t<TournamentMap>>(a) <=> static_cast<std::underlying_type_t<TournamentMap>>(b);
-}
-
-[[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, TournamentMap tournamentMap) noexcept
+[[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, game_items::TournamentMap tournamentMap) noexcept
 {
     return std::visit([](auto&& matches) {
         inventory::SouvenirPackage dynamicData;
@@ -1002,7 +995,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
     return 0;
 }
 
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<inventory::Skin::Sticker, 5> stickers;
 

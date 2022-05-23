@@ -26,7 +26,6 @@ namespace game_items
 
 namespace StaticData
 {
-    using game_items::TournamentMap;
 
     class EconRarities {
     public:
@@ -70,7 +69,7 @@ namespace StaticData
     struct Case {
         bool willProduceStatTrak = false;
         EconRarities rarities{};
-        TournamentMap tournamentMap = TournamentMap::None;
+        game_items::TournamentMap tournamentMap = game_items::TournamentMap::None;
         std::size_t lootBeginIdx;
         std::size_t lootEndIdx;
 

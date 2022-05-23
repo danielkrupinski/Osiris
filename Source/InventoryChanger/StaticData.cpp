@@ -19,8 +19,6 @@
 #include "GameIntegration/Items.h"
 #include "GameIntegration/Misc.h"
 
-using StaticData::TournamentMap;
-
 constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 {
     return static_cast<std::underlying_type_t<WeaponId>>(a) <=> static_cast<std::underlying_type_t<WeaponId>>(b);
