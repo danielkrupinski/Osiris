@@ -33,4 +33,18 @@ namespace inventory_changer::game_integration
         return TournamentMap::None;
     }
 
+    constexpr int getTournamentMapGoldStickerID(TournamentMap map) noexcept
+    {
+        switch (map) {
+        case TournamentMap::Ancient: return 1689;
+        case TournamentMap::Dust2: return 1690;
+        case TournamentMap::Inferno: return 1691;
+        case TournamentMap::Mirage: return 1692;
+        case TournamentMap::Nuke: return 1693;
+        case TournamentMap::Overpass: return 1694;
+        case TournamentMap::Vertigo: return 1695;
+        default: return 0;
+        }
+    }
+
 }

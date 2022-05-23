@@ -16,6 +16,7 @@
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
+#include <InventoryChanger/GameIntegration/Misc.h>
 
 static float generateWear() noexcept
 {
@@ -1014,7 +1015,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
         if (player)
             stickers[3].stickerID = StaticData::lookup().findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
         else if (tournamentID >= 18) // starting with PGL Stockholm 2021
-            stickers[3].stickerID = StaticData::getTournamentMapGoldStickerID(map);
+            stickers[3].stickerID = inventory_changer::game_integration::getTournamentMapGoldStickerID(map);
     }
 
     std::mt19937 gen{ std::random_device{}() };

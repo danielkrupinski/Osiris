@@ -87,6 +87,4 @@ namespace StaticData
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
     [[nodiscard]] const game_items::Lookup& lookup() noexcept;
-
-    int getTournamentMapGoldStickerID(TournamentMap map) noexcept;
 }
