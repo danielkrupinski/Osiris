@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Item.h>
 #include <InventoryChanger/StaticData.h>
 #include <SDK/ItemSchema.h>
@@ -38,7 +39,7 @@ struct TournamentMapTestParam {
 class GetTournamentMapOfSouvenirPackageTest : public testing::TestWithParam<TournamentMapTestParam> {};
 
 TEST_P(GetTournamentMapOfSouvenirPackageTest, ReturnsExpectedValue) {
-    ASSERT_EQ(static_cast<std::uint32_t>(StaticData::getTournamentMapOfSouvenirPackage(GetParam().lootListName)),
+    ASSERT_EQ(static_cast<std::uint32_t>(inventory_changer::game_integration::getTournamentMapOfSouvenirPackage(GetParam().lootListName)),
               static_cast<std::uint32_t>(GetParam().expectedMap));
 }
 

@@ -17,6 +17,7 @@
 #include <StringPool.h>
 #include "GameItems/Lookup.h"
 #include "GameIntegration/Items.h"
+#include "GameIntegration/Misc.h"
 
 using StaticData::TournamentMap;
 
@@ -149,7 +150,7 @@ private:
             crate.lootEndIdx = _caseLoot.size();
 
             // if (_cases[i].souvenirPackageTournamentID != 0)
-            crate.tournamentMap = StaticData::getTournamentMapOfSouvenirPackage(lootListName);
+            crate.tournamentMap = inventory_changer::game_integration::getTournamentMapOfSouvenirPackage(lootListName);
             _cases.try_emplace(revolvingLootList.key, crate);
         }
     }
