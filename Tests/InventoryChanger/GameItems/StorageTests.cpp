@@ -315,5 +315,16 @@ TEST_P(InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest, Added
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest,
     testing::Values(0, 5555, (std::numeric_limits<std::uint16_t>::max)()));
 
+class InventoryChanger_GameItems_Storage_CrateSeriesTest : public testing::TestWithParam<std::uint16_t> {};
+
+TEST_P(InventoryChanger_GameItems_Storage_CrateSeriesTest, AddedCrateHasCorrectSeriesNumber) {
+    Storage storage;
+    storage.addCase(EconRarity::Blue, WeaponId::None, GetParam(), 0, {});
+    ASSERT_EQ(storage.getCrateSeries(storage.getItems().back()), GetParam());
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_CrateSeriesTest,
+    testing::Values(0, 300, (std::numeric_limits<std::uint16_t>::max)()));
+
 }
 }
