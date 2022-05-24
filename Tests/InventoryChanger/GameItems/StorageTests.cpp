@@ -3,6 +3,7 @@
 
 #include <gtest/gtest.h>
 
+#include <InventoryChanger/GameItems/Enums.h>
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
@@ -325,6 +326,17 @@ TEST_P(InventoryChanger_GameItems_Storage_CrateSeriesTest, AddedCrateHasCorrectS
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_CrateSeriesTest,
     testing::Values(0, 300, (std::numeric_limits<std::uint16_t>::max)()));
+
+class InventoryChanger_GameItems_Storage_TournamentMapTest : public testing::TestWithParam<TournamentMap> {};
+
+TEST_P(InventoryChanger_GameItems_Storage_TournamentMapTest, AddedCrateHasCorrectTournamentMap) {
+    Storage storage;
+    storage.addCase(EconRarity::Blue, WeaponId::None, 0, 0, GetParam(), {});
+    ASSERT_EQ(storage.getTournamentMap(storage.getItems().back()), GetParam());
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_TournamentMapTest,
+    testing::Values(TournamentMap::None, TournamentMap::Mirage, static_cast<TournamentMap>((std::numeric_limits<std::uint8_t>::max)())));
 
 }
 }
