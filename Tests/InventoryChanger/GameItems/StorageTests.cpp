@@ -304,5 +304,16 @@ INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_TournamentIdTest,
     testing::Combine(testing::Values(ItemType::Case, ItemType::ViewerPass, ItemType::SouvenirToken, ItemType::TournamentCoin),
                      testing::Values(0, 19, (std::numeric_limits<std::uint8_t>::max)())));
 
+class InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest : public testing::TestWithParam<std::uint16_t> {};
+
+TEST_P(InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest, AddedTournamentCoinHasCorrectDefaultTournamentGraffitiId) {
+    Storage storage;
+    storage.addTournamentCoin(EconRarity::Red, WeaponId::None, 0, GetParam(), {});
+    ASSERT_EQ(storage.getDefaultTournamentGraffitiID(storage.getItems().back()), GetParam());
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest,
+    testing::Values(0, 5555, (std::numeric_limits<std::uint16_t>::max)()));
+
 }
 }
