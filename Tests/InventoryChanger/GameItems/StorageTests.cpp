@@ -66,7 +66,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addAgent(rarity, weaponID, iconPath);
         break;
     case ItemType::Case:
-        storage.addCase(rarity, weaponID, 0, 0, iconPath);
+        storage.addCase(rarity, weaponID, 0, 0, {}, iconPath);
         break;
     case ItemType::CaseKey:
         storage.addCaseKey(rarity, weaponID, iconPath);
@@ -274,7 +274,7 @@ Item& addTournamentItem(Storage& storage, ItemType type, std::uint8_t tournament
 {
     switch (type) {
     case ItemType::Case:
-        storage.addCase(EconRarity::Blue, WeaponId::None, 0, tournamentID, {});
+        storage.addCase(EconRarity::Blue, WeaponId::None, 0, tournamentID, {}, {});
         break;
     case ItemType::ViewerPass:
         storage.addViewerPass(EconRarity::Blue, WeaponId::None, tournamentID, {});
@@ -319,7 +319,7 @@ class InventoryChanger_GameItems_Storage_CrateSeriesTest : public testing::TestW
 
 TEST_P(InventoryChanger_GameItems_Storage_CrateSeriesTest, AddedCrateHasCorrectSeriesNumber) {
     Storage storage;
-    storage.addCase(EconRarity::Blue, WeaponId::None, GetParam(), 0, {});
+    storage.addCase(EconRarity::Blue, WeaponId::None, GetParam(), 0, {}, {});
     ASSERT_EQ(storage.getCrateSeries(storage.getItems().back()), GetParam());
 }
 
