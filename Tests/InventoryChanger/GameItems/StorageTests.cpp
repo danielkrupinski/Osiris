@@ -1,3 +1,4 @@
+#include <limits>
 #include <string_view>
 
 #include <gtest/gtest.h>
@@ -268,6 +269,40 @@ TEST(InventoryChanger_GameItems_StorageTest, FirstAddedItemIsFirstInItemList) {
     storage.addAgent(EconRarity::Pink, WeaponId::None, {});
     ASSERT_TRUE(storage.getItems()[0].isNameTag());
 }
+
+Item& addTournamentItem(Storage& storage, ItemType type, std::uint8_t tournamentID)
+{
+    switch (type) {
+    case ItemType::Case:
+        storage.addCase(EconRarity::Blue, WeaponId::None, 0, tournamentID, {});
+        break;
+    case ItemType::ViewerPass:
+        storage.addViewerPass(EconRarity::Blue, WeaponId::None, tournamentID, {});
+        break;
+    case ItemType::SouvenirToken:
+        storage.addSouvenirToken(EconRarity::Blue, WeaponId::None, tournamentID, {});
+        break;
+    case ItemType::TournamentCoin:
+        storage.addTournamentCoin(EconRarity::Blue, WeaponId::None, tournamentID, 0, {});
+        break;
+    default:
+        throw "Unhandled item type!";
+    }
+    return storage.getItems().back();
+}
+
+class InventoryChanger_GameItems_Storage_TournamentIdTest : public testing::TestWithParam<std::tuple<ItemType, std::uint8_t>> {};
+
+TEST_P(InventoryChanger_GameItems_Storage_TournamentIdTest, AddedItemHasCorrectTournamentID) {
+    Storage storage;
+    const auto [itemType, tournamentID] = GetParam();
+    const auto& item = addTournamentItem(storage, itemType, tournamentID);
+    ASSERT_EQ(storage.getTournamentEventID(item), tournamentID);
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_TournamentIdTest,
+    testing::Combine(testing::Values(ItemType::Case, ItemType::ViewerPass, ItemType::SouvenirToken, ItemType::TournamentCoin),
+                     testing::Values(0, 19, (std::numeric_limits<std::uint8_t>::max)())));
 
 }
 }
