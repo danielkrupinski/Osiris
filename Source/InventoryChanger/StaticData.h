@@ -69,7 +69,6 @@ namespace StaticData
     struct Case {
         bool willProduceStatTrak = false;
         EconRarities rarities{};
-        game_items::TournamentMap tournamentMap = game_items::TournamentMap::None;
         std::size_t lootBeginIdx;
         std::size_t lootEndIdx;
 

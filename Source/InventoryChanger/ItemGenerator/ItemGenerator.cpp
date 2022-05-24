@@ -883,7 +883,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
             dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
             dynamicData.proPlayer = souvenir.proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), caseData.tournamentMap, dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), gameItemStorage.getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
@@ -977,8 +977,8 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
         dynamicData.seed = Helpers::random(1, 1000);
         return dynamicData;
     } else if (item.isCase()) {
-        if (const auto& staticData = StaticData::getCase(item); StaticData::isSouvenirPackage(item))
-            return generateSouvenirPackageData(StaticData::lookup().getStorage().getTournamentEventID(item), staticData.tournamentMap);
+        if (StaticData::isSouvenirPackage(item))
+            return generateSouvenirPackageData(StaticData::lookup().getStorage().getTournamentEventID(item), StaticData::lookup().getStorage().getTournamentMap(item));
     } else if (item.isServiceMedal()) {
         inventory::ServiceMedal dynamicData;
         dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::lookup().getStorage().getServiceMedalYear(item));

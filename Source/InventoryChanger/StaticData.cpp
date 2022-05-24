@@ -147,8 +147,6 @@ private:
                 rebuildMissingLootList(itemSchema, revolvingLootList.key, _caseLoot);
             crate.lootEndIdx = _caseLoot.size();
 
-            // if (_cases[i].souvenirPackageTournamentID != 0)
-            crate.tournamentMap = inventory_changer::game_integration::getTournamentMapOfSouvenirPackage(lootListName);
             _cases.try_emplace(revolvingLootList.key, crate);
         }
     }
