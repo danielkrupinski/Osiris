@@ -876,13 +876,12 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (StaticData::isSouvenirPackage(caseItem.gameItem())) {
+        if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
             dynamicData.tournamentID = gameItemStorage.getTournamentEventID(caseItem.gameItem());
-            const auto& souvenir = *caseItem.get<inventory::SouvenirPackage>();
-            dynamicData.tournamentStage = souvenir.tournamentStage;
-            dynamicData.tournamentTeam1 = souvenir.tournamentTeam1;
-            dynamicData.tournamentTeam2 = souvenir.tournamentTeam2;
-            dynamicData.proPlayer = souvenir.proPlayer;
+            dynamicData.tournamentStage = souvenirPackage->tournamentStage;
+            dynamicData.tournamentTeam1 = souvenirPackage->tournamentTeam1;
+            dynamicData.tournamentTeam2 = souvenirPackage->tournamentTeam2;
+            dynamicData.proPlayer = souvenirPackage->proPlayer;
             dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), gameItemStorage.getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
