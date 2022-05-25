@@ -31,6 +31,13 @@ public:
         lootLists.emplace_back(crateSeries, items.size());
     }
 
+    void nextLootListFromPrevious(std::uint16_t crateSeries)
+    {
+        assert(std::ranges::find(lootLists, crateSeries, &LootList::crateSeries) == lootLists.end());
+        assert(!lootLists.empty());
+        lootLists.emplace_back(lootLists.back()).crateSeries = crateSeries;
+    }
+
     void addItem(std::reference_wrapper<const Item> item)
     {
         assert(!lootLists.empty());
