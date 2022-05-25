@@ -15,6 +15,9 @@ struct Item;
 class CrateLoot {
 public:
     struct LootList {
+        LootList(std::uint16_t crateSeries, std::size_t lootBeginIdx)
+            : crateSeries{ crateSeries }, lootBeginIdx{ lootBeginIdx }, lootEndIdx{ lootBeginIdx } {}
+
         std::uint16_t crateSeries = 0;
         bool willProduceStatTrak = false;
         StaticData::EconRarities rarities{};
@@ -25,7 +28,7 @@ public:
     void nextLootList(std::uint16_t crateSeries)
     {
         assert(std::ranges::find(lootLists, crateSeries, &LootList::crateSeries) == lootLists.end());
-        lootLists.emplace_back(crateSeries);
+        lootLists.emplace_back(crateSeries, items.size());
     }
 
     void addItem(std::reference_wrapper<const Item> item)
