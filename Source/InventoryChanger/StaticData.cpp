@@ -89,6 +89,17 @@ public:
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
+    [[nodiscard]] game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const
+    {
+        switch (weaponID) {
+        case WeaponId::Sticker: return container.findSticker(stickerKit);
+        case WeaponId::Patch: return container.findPatch(stickerKit);
+        case WeaponId::SealedGraffiti: return container.findGraffiti(stickerKit);
+        default:
+            return {};
+        }
+    }
+
     void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, game_items::CrateLoot& crateLoot) const noexcept
     {
         if (lootList->willProduceStatTrak())
@@ -97,12 +108,8 @@ private:
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
-                if (auto idx = container.findSticker(contents[j].stickerKit); idx != std::nullopt)
-                    crateLoot.addItem(*idx);
-                else if ((idx = container.findGraffiti(contents[j].stickerKit)) != std::nullopt)
-                    crateLoot.addItem(*idx);
-                else if ((idx = container.findPatch(contents[j].stickerKit)) != std::nullopt)
-                    crateLoot.addItem(*idx);
+                if (const auto item = findStickerlikeItem(contents[j].weaponId(), contents[j].stickerKit); item.has_value())
+                    crateLoot.addItem(*item);
             } else if (contents[j].musicKit != 0) {
                 if (const auto idx = container.findMusic(contents[j].musicKit); idx.has_value())
                     crateLoot.addItem(*idx);
