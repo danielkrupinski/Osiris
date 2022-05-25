@@ -19,6 +19,9 @@
 #include "GameIntegration/Items.h"
 #include "GameIntegration/Misc.h"
 
+#include "GameItems/CrateLoot.h"
+#include "GameItems/CrateLootLookup.h"
+
 constexpr auto operator<=>(WeaponId a, WeaponId b) noexcept
 {
     return static_cast<std::underlying_type_t<WeaponId>>(a) <=> static_cast<std::underlying_type_t<WeaponId>>(b);
@@ -81,88 +84,69 @@ public:
 
     static std::span<const game_items::Item> gameItems() noexcept { return instance().container.getStorage().getItems(); }
     static const auto& container_() noexcept { return instance().container; }
-    static const auto& cases() noexcept { return instance()._cases; }
-    static const auto& caseLoot() noexcept { return instance()._caseLoot; }
+    static const auto& crateLoot() noexcept { return instance().crateLootLookup; }
 
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, std::vector<std::reference_wrapper<const game_items::Item>>& loot, bool* willProduceStatTrak = nullptr) const noexcept
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, game_items::CrateLoot& crateLoot) const noexcept
     {
-        if (willProduceStatTrak)
-            *willProduceStatTrak = *willProduceStatTrak || lootList->willProduceStatTrak();
+        if (lootList->willProduceStatTrak())
+            crateLoot.setWillProduceStatTrak();
 
         const auto& contents = lootList->getLootListContents();
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].stickerKit != 0) {
                 if (auto idx = container.findSticker(contents[j].stickerKit); idx != std::nullopt)
-                    loot.push_back(*idx);
+                    crateLoot.addItem(*idx);
                 else if ((idx = container.findGraffiti(contents[j].stickerKit)) != std::nullopt)
-                    loot.push_back(*idx);
+                    crateLoot.addItem(*idx);
                 else if ((idx = container.findPatch(contents[j].stickerKit)) != std::nullopt)
-                    loot.push_back(*idx);
+                    crateLoot.addItem(*idx);
             } else if (contents[j].musicKit != 0) {
                 if (const auto idx = container.findMusic(contents[j].musicKit); idx.has_value())
-                    loot.push_back(*idx);
+                    crateLoot.addItem(*idx);
             } else if (contents[j].isNestedList) {
                 if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
-                    fillLootFromLootList(itemSchema, nestedLootList, loot, willProduceStatTrak);
+                    fillLootFromLootList(itemSchema, nestedLootList, crateLoot);
             } else if (contents[j].itemDef != 0) {
                 if (contents[j].paintKit != 0) {
                     if (const auto idx = container.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
-                        loot.push_back(*idx);
+                        crateLoot.addItem(*idx);
                 } else {
                     if (const auto idx = container.findItem(contents[j].weaponId()); idx.has_value())
-                        loot.push_back(*idx);
+                        crateLoot.addItem(*idx);
                 }
             }
         }
     }
 
     // a few loot lists aren't present in client item schema, so we need to provide them ourselves
-    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, std::vector<std::reference_wrapper<const game_items::Item>>& loot) const noexcept
+    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, game_items::CrateLoot& crateLoot) const noexcept
     {
         if (lootListID == 292) { // crate_xray_p250_lootlist
-            if (const auto idx = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); idx.has_value())
-                loot.push_back(*idx);
+            if (const auto p250XRay = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
+                crateLoot.addItem(*p250XRay);
         } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
             static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
             for (const auto collection : dreamHack2013Collections) {
                 if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
-                    fillLootFromLootList(itemSchema, lootList, loot);
+                    fillLootFromLootList(itemSchema, lootList, crateLoot);
             }
         }
     }
 
-    void buildLootLists(ItemSchema* itemSchema) noexcept
+    void buildLootLists(ItemSchema* itemSchema, game_items::CrateLoot& crateLoot) noexcept
     {
         for (const auto& revolvingLootList : itemSchema->revolvingLootLists) {
             const auto lootListName = revolvingLootList.value;
 
-            StaticData::Case crate;
-            crate.lootBeginIdx = _caseLoot.size();
+            crateLoot.nextLootList(revolvingLootList.key);
+
             if (const auto lootList = itemSchema->getLootList(lootListName))
-                fillLootFromLootList(itemSchema, lootList, _caseLoot, &crate.willProduceStatTrak);
+                fillLootFromLootList(itemSchema, lootList, crateLoot);
             else
-                rebuildMissingLootList(itemSchema, revolvingLootList.key, _caseLoot);
-            crate.lootEndIdx = _caseLoot.size();
-
-            _cases.try_emplace(revolvingLootList.key, crate);
-        }
-    }
-
-    void computeRarities() noexcept
-    {
-        for (auto& [crateSeries, crate] : _cases) {
-            for (auto it = _caseLoot.begin() + crate.lootBeginIdx; it != _caseLoot.begin() + crate.lootEndIdx; ++it)
-                crate.rarities.set(it->get().getRarity());
-        }
-    }
-
-    void sortLoot() noexcept
-    {
-        for (const auto& [crateSeries, crate] : _cases) {
-            std::ranges::sort(_caseLoot.begin() + crate.lootBeginIdx, _caseLoot.begin() + crate.lootEndIdx, {}, [](const game_items::Item& item) { return item.getRarity(); });
+                rebuildMissingLootList(itemSchema, revolvingLootList.key, crateLoot);
         }
     }
 
@@ -181,42 +165,21 @@ private:
         storage.compress();
         container = game_items::Lookup{ std::move(storage) };
 
-        buildLootLists(itemSchema);
-        computeRarities();
-        sortLoot();
-
-        _caseLoot.shrink_to_fit();
+        game_items::CrateLoot crateLoot;
+        buildLootLists(itemSchema, crateLoot);
+        crateLoot.compress();
+        crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
     }
 
     game_items::Lookup container;
-    std::unordered_map<std::uint16_t, StaticData::Case> _cases;
-    std::vector<std::reference_wrapper<const game_items::Item>> _caseLoot;
+    game_items::CrateLootLookup crateLootLookup;
 };
-
-std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLoot(const StaticData::Case& crate) noexcept
-{
-    if (!crate.hasLoot())
-        return {};
-
-    return { StaticDataImpl::caseLoot().begin() + crate.lootBeginIdx, StaticDataImpl::caseLoot().begin() + crate.lootEndIdx };
-}
-
-std::span<const std::reference_wrapper<const game_items::Item>> StaticData::getCrateLootOfRarity(const StaticData::Case& crate, EconRarity rarity) noexcept
-{
-    return ranges::equal_range(getCrateLoot(crate), rarity, {}, &game_items::Item::getRarity);
-}
-
-const StaticData::Case& StaticData::getCase(const game_items::Item& item) noexcept
-{
-    assert(item.isCase());
-    return StaticDataImpl::cases().at(lookup().getStorage().getCrateSeries(item));
-}
 
 bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
 {
     if (lookup().getStorage().getTournamentEventID(crate) == 0)
         return false;
-    const auto loot = getCrateLoot(getCase(crate));
+    const auto loot = crateLoot().getLoot(lookup().getStorage().getCrateSeries(crate));
     return !loot.empty() && loot[0].get().isSkin();
 }
 
@@ -233,4 +196,9 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 const game_items::Lookup& StaticData::lookup() noexcept
 {
     return StaticDataImpl::container_();
+}
+
+const game_items::CrateLootLookup& StaticData::crateLoot() noexcept
+{
+    return StaticDataImpl::crateLoot();
 }

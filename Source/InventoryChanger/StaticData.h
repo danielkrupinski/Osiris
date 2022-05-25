@@ -22,6 +22,7 @@ namespace game_items
 {
     struct Item;
     class Lookup;
+    class CrateLootLookup;
 }
 
 namespace StaticData
@@ -66,23 +67,11 @@ namespace StaticData
         std::byte bits{ 0 };
     };
 
-    struct Case {
-        bool willProduceStatTrak = false;
-        EconRarities rarities{};
-        std::size_t lootBeginIdx;
-        std::size_t lootEndIdx;
-
-        bool hasLoot() const noexcept { return lootEndIdx > lootBeginIdx; }
-    };
-
-    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLoot(const Case& crate) noexcept;
-    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getCrateLootOfRarity(const Case& crate, EconRarity rarity) noexcept;
-
-    [[nodiscard]] const Case& getCase(const game_items::Item& item) noexcept;
     [[nodiscard]] bool isSouvenirPackage(const game_items::Item& crate) noexcept;
 
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
     [[nodiscard]] const game_items::Lookup& lookup() noexcept;
+    [[nodiscard]] const game_items::CrateLootLookup& crateLoot() noexcept;
 }

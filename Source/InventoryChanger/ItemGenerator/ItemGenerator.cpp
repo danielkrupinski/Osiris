@@ -14,6 +14,7 @@
 #include <SDK/ItemSchema.h>
 #include "TournamentMatches.h"
 #include <InventoryChanger/GameItems/Lookup.h>
+#include <InventoryChanger/GameItems/CrateLootLookup.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 #include <InventoryChanger/GameIntegration/Misc.h>
@@ -830,12 +831,10 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const StaticData::Case& container) noexcept
+[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
 {
-    assert(container.hasLoot());
-
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
-    auto rarities = container.rarities;
+    auto rarities = lootList.rarities;
 
     if (!rareSpecialItems.empty())
         rarities.set(EconRarity::Gold);
@@ -846,12 +845,12 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
             if (const auto item = StaticData::lookup().findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
                 return *item;
         } else {
-            const auto loot = StaticData::getCrateLootOfRarity(container, rarity);
+            const auto loot = game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
             return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
         }
     }
 
-    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::getCrateLoot(container);
+    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
     assert(!loot.empty());
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
@@ -860,13 +859,14 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
 {
     assert(caseItem.gameItem().isCase());
 
-    const auto& caseData = StaticData::getCase(caseItem.gameItem());
-    if (!caseData.hasLoot())
+    const auto crateSeries = gameItemStorage.getCrateSeries(caseItem.gameItem());
+    const auto lootList = StaticData::crateLoot().findLootList(crateSeries);
+    if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.gameItem().getWeaponID(), caseData);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.gameItem().getWeaponID(), *lootList);
 
-    if (caseData.willProduceStatTrak && unlockedItem.isMusic()) {
+    if (lootList->willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
         dynamicData.statTrak = 0;
         return inventory::Item{ unlockedItem, dynamicData };
