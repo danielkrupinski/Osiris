@@ -54,7 +54,7 @@ private:
 
 [[nodiscard]] inline std::span<const std::reference_wrapper<const Item>> getLootOfRarity(const CrateLootLookup& lootLookup, std::uint16_t crateSeries, EconRarity rarity)
 {
-    return ranges::equal_range(lootLookup.getLoot(crateSeries), rarity, {}, &Item::getRarity);
+    return ranges::equal_range(lootLookup.getLoot(crateSeries), rarity, {}, [](const Item& item) { return item.getRarity(); });
 }
 
 }
