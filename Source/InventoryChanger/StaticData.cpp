@@ -127,18 +127,25 @@ private:
         if (lootListID == 292) { // crate_xray_p250_lootlist
             if (const auto p250XRay = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
                 crateLoot.addItem(*p250XRay);
-        } else if (lootListID == 6 || lootListID == 13) { // crate_dhw13_promo and crate_ems14_promo
-            static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
-            for (const auto collection : dreamHack2013Collections) {
-                if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
-                    fillLootFromLootList(itemSchema, lootList, crateLoot);
-            }
         }
     }
 
     void buildLootLists(ItemSchema* itemSchema, game_items::CrateLoot& crateLoot) noexcept
     {
+        crateLoot.nextLootList(6);
+
+        static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
+        for (const auto collection : dreamHack2013Collections) {
+            if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
+                fillLootFromLootList(itemSchema, lootList, crateLoot);
+        }
+
+        crateLoot.nextLootListFromPrevious(13);
+
         for (const auto& revolvingLootList : itemSchema->revolvingLootLists) {
+            if (revolvingLootList.key == 6 || revolvingLootList.key == 13)
+                continue;
+
             const auto lootListName = revolvingLootList.value;
 
             crateLoot.nextLootList(revolvingLootList.key);
