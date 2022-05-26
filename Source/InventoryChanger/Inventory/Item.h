@@ -27,10 +27,10 @@ using ItemData = SmallVariant<32,
 
 class Item {
 public:
-    explicit Item(const game_items::Item& item, ItemData data) noexcept : item{ item }, data{ std::move(data) } {}
-    explicit Item(const game_items::Item& item) noexcept : item{ item } {}
+    explicit Item(const inventory_changer::game_items::Item& item, ItemData data) noexcept : item{ item }, data{ std::move(data) } {}
+    explicit Item(const inventory_changer::game_items::Item& item) noexcept : item{ item } {}
 
-    [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
+    [[nodiscard]] const inventory_changer::game_items::Item& gameItem() const noexcept { return item; }
 
     template <typename T>
     [[nodiscard]] T* get() { return data.get<T>(); }
@@ -48,7 +48,7 @@ public:
     }
 
 private:
-    std::reference_wrapper<const game_items::Item> item;
+    std::reference_wrapper<const inventory_changer::game_items::Item> item;
     ItemData data;
 };
 

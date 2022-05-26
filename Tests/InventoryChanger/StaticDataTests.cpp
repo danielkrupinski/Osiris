@@ -10,6 +10,11 @@
 #include <InventoryChanger/EconRarities.h>
 #include <SDK/ItemSchema.h>
 
+namespace inventory_changer
+{
+namespace
+{
+
 class EconRaritiesTest : public testing::TestWithParam<EconRarity> {};
 
 TEST(EconRarities, DefaultConstructedHasNoRarity) {
@@ -64,3 +69,6 @@ INSTANTIATE_TEST_SUITE_P(
         TournamentMapTestParams("de_train", TournamentMap::Train),
         TournamentMapTestParams("de_vertigo", TournamentMap::Vertigo)
 ));
+
+}
+}

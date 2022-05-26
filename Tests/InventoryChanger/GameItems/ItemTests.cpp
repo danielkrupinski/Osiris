@@ -5,7 +5,7 @@
 #include <InventoryChanger/GameItems/Item.h>
 #include <SDK/ItemSchema.h>
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 namespace
 {

@@ -7,7 +7,7 @@
 
 #include <InventoryChanger/EconRarities.h>
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 struct Item;
@@ -20,7 +20,7 @@ public:
 
         std::uint16_t crateSeries = 0;
         bool willProduceStatTrak = false;
-        inventory_changer::EconRarities rarities{};
+        EconRarities rarities{};
         std::size_t lootBeginIdx = 0;
         std::size_t lootEndIdx = 0;
     };

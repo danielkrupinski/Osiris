@@ -3,7 +3,7 @@
 #include "RequestTypes.h"
 #include "Response/Response.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
     class Lookup;
 }

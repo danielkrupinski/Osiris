@@ -10,8 +10,8 @@
 
 namespace ItemGenerator
 {
-    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept;
-    inventory::ItemData createDefaultDynamicData(const game_items::Item& item) noexcept;
+    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const inventory_changer::game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept;
+    inventory::ItemData createDefaultDynamicData(const inventory_changer::game_items::Item& item) noexcept;
 }
 
 [[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept;

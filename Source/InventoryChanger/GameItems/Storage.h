@@ -10,7 +10,7 @@
 #include "Item.h"
 #include "Structs.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 enum class TournamentMap : std::uint8_t;

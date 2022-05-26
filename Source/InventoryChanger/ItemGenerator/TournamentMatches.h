@@ -10,7 +10,7 @@ namespace item_generator
 {
 
 struct Match {
-    game_items::TournamentMap map;
+    inventory_changer::game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
@@ -26,12 +26,12 @@ struct Match {
 };
 
 struct MatchWithoutMVPs {
-    game_items::TournamentMap map;
+    inventory_changer::game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
 };
 
-[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, game_items::TournamentMap map) noexcept;
+[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map) noexcept;
 
 }

@@ -169,7 +169,7 @@ json InventoryChanger::toJson() noexcept
     return dynamicData;
 }
 
-[[nodiscard]] game_items::Lookup::OptionalItemReference gameItemFromJson(const game_items::Lookup& lookup, const json& j)
+[[nodiscard]] inventory_changer::game_items::Lookup::OptionalItemReference gameItemFromJson(const inventory_changer::game_items::Lookup& lookup, const json& j)
 {
     if (const auto stickerID = j.find("Sticker ID"); stickerID != j.end() && stickerID->is_number_integer())
         return lookup.findSticker(stickerID->get<int>());
@@ -190,7 +190,7 @@ json InventoryChanger::toJson() noexcept
     return lookup.findItem(weaponID->get<WeaponId>());
 }
 
-[[nodiscard]] inventory::ItemData itemFromJson(const game_items::Storage& gameItemStorage, const game_items::Item& gameItem, const json& j)
+[[nodiscard]] inventory::ItemData itemFromJson(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& gameItem, const json& j)
 {
     if (gameItem.isSkin())
         return inventory::skinFromJson(j);
@@ -306,11 +306,11 @@ void InventoryChanger::fromJson(const json& j) noexcept
         return;
 
     for (const auto& jsonItem : items) {
-        std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
+        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
         if (!itemOptional.has_value())
             continue;
 
-        const game_items::Item& item = itemOptional->get();
+        const inventory_changer::game_items::Item& item = itemOptional->get();
         const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(StaticData::lookup().getStorage(), item, jsonItem) });
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {

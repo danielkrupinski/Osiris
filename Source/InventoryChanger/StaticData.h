@@ -18,7 +18,7 @@
 enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
-namespace game_items
+namespace inventory_changer::game_items
 {
     struct Item;
     class Lookup;
@@ -30,6 +30,6 @@ namespace StaticData
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 
-    [[nodiscard]] const game_items::Lookup& lookup() noexcept;
-    [[nodiscard]] const game_items::CrateLootLookup& crateLoot() noexcept;
+    [[nodiscard]] const inventory_changer::game_items::Lookup& lookup() noexcept;
+    [[nodiscard]] const inventory_changer::game_items::CrateLootLookup& crateLoot() noexcept;
 }

@@ -4,7 +4,7 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 namespace
 {

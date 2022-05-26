@@ -1,6 +1,6 @@
 #include "Storage.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 void Storage::addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath)

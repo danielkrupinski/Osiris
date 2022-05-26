@@ -35,7 +35,7 @@ static float generateWear() noexcept
     return wear;
 }
 
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
@@ -831,7 +831,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
+[[nodiscard]] const inventory_changer::game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const inventory_changer::game_items::CrateLoot::LootList& lootList) noexcept
 {
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
     auto rarities = lootList.rarities;
@@ -845,17 +845,17 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
             if (const auto item = StaticData::lookup().findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
                 return *item;
         } else {
-            const auto loot = game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
+            const auto loot = inventory_changer::game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
             return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
         }
     }
 
-    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
+    std::span<const std::reference_wrapper<const inventory_changer::game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
     assert(!loot.empty());
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const inventory_changer::game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
@@ -893,7 +893,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
     return inventory::Item{ unlockedItem };
 }
 
-[[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, game_items::TournamentMap tournamentMap) noexcept
+[[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, inventory_changer::game_items::TournamentMap tournamentMap) noexcept
 {
     return std::visit([](auto&& matches) {
         inventory::SouvenirPackage dynamicData;
@@ -957,7 +957,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const ga
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::Item& item) noexcept
+inventory::ItemData ItemGenerator::createDefaultDynamicData(const inventory_changer::game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
         const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
@@ -994,7 +994,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
     return 0;
 }
 
-[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
+[[nodiscard]] static std::array<inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<inventory::Skin::Sticker, 5> stickers;
 

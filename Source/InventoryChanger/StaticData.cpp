@@ -82,14 +82,14 @@ public:
         return staticData;
     }
 
-    static std::span<const game_items::Item> gameItems() noexcept { return instance().container.getStorage().getItems(); }
+    static std::span<const inventory_changer::game_items::Item> gameItems() noexcept { return instance().container.getStorage().getItems(); }
     static const auto& container_() noexcept { return instance().container; }
     static const auto& crateLoot() noexcept { return instance().crateLootLookup; }
 
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
-    [[nodiscard]] game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const
+    [[nodiscard]] inventory_changer::game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const
     {
         switch (weaponID) {
         case WeaponId::Sticker: return container.findSticker(stickerKit);
@@ -100,7 +100,7 @@ private:
         }
     }
 
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, game_items::CrateLoot& crateLoot) const noexcept
+    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, inventory_changer::game_items::CrateLoot& crateLoot) const noexcept
     {
         if (lootList->willProduceStatTrak())
             crateLoot.setWillProduceStatTrak();
@@ -129,7 +129,7 @@ private:
     }
 
     // a few loot lists aren't present in client item schema, so we need to provide them ourselves
-    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, game_items::CrateLoot& crateLoot) const noexcept
+    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, inventory_changer::game_items::CrateLoot& crateLoot) const noexcept
     {
         if (lootListID == 292) { // crate_xray_p250_lootlist
             if (const auto p250XRay = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
@@ -137,7 +137,7 @@ private:
         }
     }
 
-    void buildLootLists(ItemSchema* itemSchema, game_items::CrateLoot& crateLoot) noexcept
+    void buildLootLists(ItemSchema* itemSchema, inventory_changer::game_items::CrateLoot& crateLoot) noexcept
     {
         crateLoot.nextLootList(6);
 
@@ -169,7 +169,7 @@ private:
         assert(memory && interfaces);
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
-        game_items::Storage storage;
+        inventory_changer::game_items::Storage storage;
 
         inventory_changer::game_integration::Items items{ *itemSchema, *interfaces->localize };
         items.getStickers(storage);
@@ -177,16 +177,16 @@ private:
         items.getSkinsAndGloves(storage);
         items.getOtherItems(storage);
         storage.compress();
-        container = game_items::Lookup{ std::move(storage) };
+        container = inventory_changer::game_items::Lookup{ std::move(storage) };
 
-        game_items::CrateLoot crateLoot;
+        inventory_changer::game_items::CrateLoot crateLoot;
         buildLootLists(itemSchema, crateLoot);
         crateLoot.compress();
-        crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
+        crateLootLookup = inventory_changer::game_items::CrateLootLookup{ std::move(crateLoot) };
     }
 
-    game_items::Lookup container;
-    game_items::CrateLootLookup crateLootLookup;
+    inventory_changer::game_items::Lookup container;
+    inventory_changer::game_items::CrateLootLookup crateLootLookup;
 };
 
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
@@ -199,12 +199,12 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
     return getWeaponNamesInstance().getWeaponName(weaponID);
 }
 
-const game_items::Lookup& StaticData::lookup() noexcept
+const inventory_changer::game_items::Lookup& StaticData::lookup() noexcept
 {
     return StaticDataImpl::container_();
 }
 
-const game_items::CrateLootLookup& StaticData::crateLoot() noexcept
+const inventory_changer::game_items::CrateLootLookup& StaticData::crateLoot() noexcept
 {
     return StaticDataImpl::crateLoot();
 }

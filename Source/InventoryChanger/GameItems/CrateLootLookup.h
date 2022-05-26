@@ -8,7 +8,7 @@
 #include "CrateLoot.h"
 #include "Item.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 class CrateLootLookup {

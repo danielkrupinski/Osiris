@@ -546,7 +546,7 @@ void InventoryChanger::tabItem() noexcept
 
 static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
-[[nodiscard]] const game_items::ItemName& getItemName(const game_items::Item& item)
+[[nodiscard]] const inventory_changer::game_items::ItemName& getItemName(const inventory_changer::game_items::Item& item)
 {
     const auto& storage = StaticData::lookup().getStorage();
 
@@ -561,13 +561,13 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
     if (item.isPatch())
         return storage.getPatch(item).name;
 
-    static constexpr game_items::ItemName fallback{ "", L"" };
+    static constexpr inventory_changer::game_items::ItemName fallback{ "", L"" };
     return fallback;
 }
 
 namespace ImGui
 {
-    static bool SkinSelectable(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
+    static bool SkinSelectable(const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -696,7 +696,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -852,11 +852,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            static std::vector<std::reference_wrapper<const game_items::Item>> itemIndices{ StaticData::lookup().getStorage().getItems().begin(), StaticData::lookup().getStorage().getItems().end() };
+            static std::vector<std::reference_wrapper<const inventory_changer::game_items::Item>> itemIndices{ StaticData::lookup().getStorage().getItems().begin(), StaticData::lookup().getStorage().getItems().end() };
             static std::vector<int> toAddCount(itemIndices.size(), 1);
 
             if (static bool sorted = false; !sorted) {
-                std::ranges::sort(itemIndices, [](const game_items::Item& a, const game_items::Item& b) {
+                std::ranges::sort(itemIndices, [](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
                     if (a.getWeaponID() == b.getWeaponID())
                         return getItemName(a).forSearch < getItemName(b).forSearch;
                     const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
