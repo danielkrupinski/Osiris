@@ -31,7 +31,7 @@ public:
     void addSkinWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addNameTag(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addAgent(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
-    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, std::string_view iconPath);
+    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath);
     void addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
@@ -116,7 +116,13 @@ public:
     [[nodiscard]] TournamentMap getTournamentMap(const Item& crate) const noexcept
     {
         assert(crate.isCase());
-        return static_cast<TournamentMap>(crate.getDataIndex() >> 24);
+        return static_cast<TournamentMap>((crate.getDataIndex() >> 24) & 0x7F);
+    }
+
+    [[nodiscard]] bool isSouvenirPackage(const Item& crate) const noexcept
+    {
+        assert(crate.isCase());
+        return ((crate.getDataIndex() >> 31) & 1) != 0;
     }
 
     [[nodiscard]] bool hasPaintKit(const Item& item) const noexcept
