@@ -5,7 +5,7 @@
 #include <span>
 #include <vector>
 
-#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/EconRarities.h>
 
 namespace game_items
 {
@@ -20,7 +20,7 @@ public:
 
         std::uint16_t crateSeries = 0;
         bool willProduceStatTrak = false;
-        StaticData::EconRarities rarities{};
+        inventory_changer::EconRarities rarities{};
         std::size_t lootBeginIdx = 0;
         std::size_t lootEndIdx = 0;
     };

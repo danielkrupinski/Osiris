@@ -51,7 +51,7 @@ public:
     static constexpr auto MaxDistinctRarities = 6; // in Cobblestone souvenir package, gray to red
     using T = std::uint16_t;
 
-    constexpr DropRate(StaticData::EconRarities rarities, const std::array<float, MaxDistinctRarities>& chances)
+    constexpr DropRate(inventory_changer::EconRarities rarities, const std::array<float, MaxDistinctRarities>& chances)
         : rarities{ rarities }, chances{ normalizedFloatsToIntegers<T>(chances) } {}
 
     [[nodiscard]] constexpr EconRarity mapToRarity(T number) const
@@ -64,7 +64,7 @@ public:
         return rarities.getNthRarity(0);
     }
 
-    StaticData::EconRarities rarities;
+    inventory_changer::EconRarities rarities;
     std::array<T, MaxDistinctRarities> chances{};
 };
 
@@ -822,7 +822,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return {};
 }
 
-[[nodiscard]] static EconRarity getRandomRarity(StaticData::EconRarities rarities)
+[[nodiscard]] static EconRarity getRandomRarity(inventory_changer::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
         const auto rolledNumber = Helpers::random((std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)());

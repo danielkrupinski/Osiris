@@ -7,17 +7,17 @@
 
 #include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Item.h>
-#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/EconRarities.h>
 #include <SDK/ItemSchema.h>
 
 class EconRaritiesTest : public testing::TestWithParam<EconRarity> {};
 
 TEST(EconRarities, DefaultConstructedHasNoRarity) {
-    ASSERT_EQ(StaticData::EconRarities{}.count(), 0);
+    ASSERT_EQ(inventory_changer::EconRarities{}.count(), 0);
 }
 
 TEST_P(EconRaritiesTest, SettingUnsetRarityIncrementsCount) {
-    StaticData::EconRarities rarities;
+    inventory_changer::EconRarities rarities;
     rarities.set(GetParam());
     ASSERT_EQ(rarities.count(), 1);
 }
