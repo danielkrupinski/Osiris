@@ -976,7 +976,7 @@ inventory::ItemData ItemGenerator::createDefaultDynamicData(const game_items::It
         dynamicData.seed = Helpers::random(1, 1000);
         return dynamicData;
     } else if (item.isCase()) {
-        if (StaticData::isSouvenirPackage(item))
+        if (StaticData::lookup().getStorage().isSouvenirPackage(item))
             return generateSouvenirPackageData(StaticData::lookup().getStorage().getTournamentEventID(item), StaticData::lookup().getStorage().getTournamentMap(item));
     } else if (item.isServiceMedal()) {
         inventory::ServiceMedal dynamicData;
