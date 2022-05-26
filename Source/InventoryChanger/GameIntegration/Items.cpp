@@ -128,7 +128,8 @@ void Items::getOtherItems(game_items::Storage& storage)
         } else if (item->isPatchable()) {
             storage.addAgent(rarity, weaponID, inventoryImage);
         } else if (itemTypeName == "#CSGO_Type_WeaponCase" && item->hasCrateSeries()) {
-            storage.addCase(rarity, weaponID, static_cast<std::uint16_t>(item->getCrateSeriesNumber()), static_cast<std::uint8_t>(item->getTournamentEventID()), getTournamentMapOfSouvenirPackage(item->getItemBaseName()), false, inventoryImage);
+            const auto baseName = std::string_view{ item->getItemBaseName() };
+            storage.addCase(rarity, weaponID, static_cast<std::uint16_t>(item->getCrateSeriesNumber()), static_cast<std::uint8_t>(item->getTournamentEventID()), getTournamentMapOfSouvenirPackage(baseName), baseName.find("promo") != std::string_view::npos, inventoryImage);
         } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
             storage.addCaseKey(rarity, weaponID, inventoryImage);
         } else if (const auto tool = item->getEconTool()) {
