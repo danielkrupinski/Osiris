@@ -67,8 +67,6 @@ namespace StaticData
         std::byte bits{ 0 };
     };
 
-    [[nodiscard]] bool isSouvenirPackage(const game_items::Item& crate) noexcept;
-
     std::wstring_view getWeaponNameUpper(WeaponId weaponID) noexcept;
     std::string_view getWeaponName(WeaponId weaponID) noexcept;
 

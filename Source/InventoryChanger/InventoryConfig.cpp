@@ -147,13 +147,11 @@ json InventoryChanger::toJson() noexcept
             if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
         } else if (gameItem.isCase()) {
-            if (StaticData::isSouvenirPackage(gameItem)) {
-                if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
-                    itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
-                    itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
-                    itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
-                    itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
-                }
+            if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+                itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
+                itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
+                itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
+                itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
             }
         }
 
@@ -192,7 +190,7 @@ json InventoryChanger::toJson() noexcept
     return lookup.findItem(weaponID->get<WeaponId>());
 }
 
-[[nodiscard]] inventory::ItemData itemFromJson(const game_items::Item& gameItem, const json& j)
+[[nodiscard]] inventory::ItemData itemFromJson(const game_items::Storage& gameItemStorage, const game_items::Item& gameItem, const json& j)
 {
     if (gameItem.isSkin())
         return inventory::skinFromJson(j);
@@ -204,7 +202,7 @@ json InventoryChanger::toJson() noexcept
         return loadDynamicAgentDataFromJson(j);
     if (gameItem.isServiceMedal())
         return inventory::serviceMedalFromJson(j);
-    if (gameItem.isCase() && StaticData::isSouvenirPackage(gameItem))
+    if (gameItem.isCase() && gameItemStorage.isSouvenirPackage(gameItem))
         return inventory::souvenirPackageFromJson(j);
     if (gameItem.isGraffiti())
         return inventory::graffitiFromJson(j);
@@ -313,7 +311,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             continue;
 
         const game_items::Item& item = itemOptional->get();
-        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(item, jsonItem) });
+        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(StaticData::lookup().getStorage(), item, jsonItem) });
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);

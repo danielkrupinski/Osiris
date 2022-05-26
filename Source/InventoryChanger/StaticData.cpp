@@ -189,14 +189,6 @@ private:
     game_items::CrateLootLookup crateLootLookup;
 };
 
-bool StaticData::isSouvenirPackage(const game_items::Item& crate) noexcept
-{
-    if (lookup().getStorage().getTournamentEventID(crate) == 0)
-        return false;
-    const auto loot = crateLoot().getLoot(lookup().getStorage().getCrateSeries(crate));
-    return !loot.empty() && loot[0].get().isSkin();
-}
-
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return getWeaponNamesInstance().getWeaponNameUpper(weaponID);
