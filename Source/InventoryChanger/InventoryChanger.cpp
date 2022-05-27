@@ -857,7 +857,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, ItemGenerator::createDefaultDynamicData(gameItem) });
+                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, ItemGenerator::createDefaultDynamicData(StaticData::lookup().getStorage(), gameItem) });
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();

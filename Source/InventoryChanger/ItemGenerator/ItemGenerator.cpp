@@ -957,30 +957,30 @@ std::optional<inventory_changer::inventory::Item> ItemGenerator::generateItemFro
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-inventory_changer::inventory::ItemData ItemGenerator::createDefaultDynamicData(const inventory_changer::game_items::Item& item) noexcept
+inventory_changer::inventory::ItemData ItemGenerator::createDefaultDynamicData(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
-        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
+        const auto& staticData = gameItemStorage.getPaintKit(item);
         inventory_changer::inventory::Skin dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
 
-        if (Helpers::isMP5LabRats(item.getWeaponID(), StaticData::lookup().getStorage().getPaintKit(item).id))
+        if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
             dynamicData.stickers[3].stickerID = 28;
 
         return dynamicData;
     } else if (item.isGloves()) {
-        const auto& staticData = StaticData::lookup().getStorage().getPaintKit(item);
+        const auto& staticData = gameItemStorage.getPaintKit(item);
         inventory_changer::inventory::Glove dynamicData;
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
         dynamicData.seed = Helpers::random(1, 1000);
         return dynamicData;
     } else if (item.isCase()) {
-        if (StaticData::lookup().getStorage().isSouvenirPackage(item))
-            return generateSouvenirPackageData(StaticData::lookup().getStorage().getTournamentEventID(item), StaticData::lookup().getStorage().getTournamentMap(item));
+        if (gameItemStorage.isSouvenirPackage(item))
+            return generateSouvenirPackageData(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
     } else if (item.isServiceMedal()) {
         inventory_changer::inventory::ServiceMedal dynamicData;
-        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(StaticData::lookup().getStorage().getServiceMedalYear(item));
+        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item));
         return dynamicData;
     }
 
