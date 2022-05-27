@@ -15,7 +15,6 @@
 
 #include "GameItems/Enums.h"
 
-enum TournamentTeam : std::uint8_t;
 enum class EconRarity : std::uint8_t;
 
 namespace inventory_changer::game_items
