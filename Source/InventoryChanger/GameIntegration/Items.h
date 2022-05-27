@@ -24,4 +24,7 @@ private:
     Helpers::ToUpperConverter toUpperConverter;
 };
 
+
+[[nodiscard]] game_items::Storage createGameItemStorage(Items& items);
+
 }

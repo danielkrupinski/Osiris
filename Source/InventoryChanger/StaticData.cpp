@@ -169,13 +169,8 @@ private:
         assert(memory && interfaces);
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
-        inventory_changer::game_items::Storage storage;
-
         inventory_changer::game_integration::Items items{ *itemSchema, *interfaces->localize };
-        items.getStickers(storage);
-        items.getMusicKits(storage);
-        items.getSkinsAndGloves(storage);
-        items.getOtherItems(storage);
+        auto storage = inventory_changer::game_integration::createGameItemStorage(items);
         storage.compress();
         container = inventory_changer::game_items::Lookup{ std::move(storage) };
 

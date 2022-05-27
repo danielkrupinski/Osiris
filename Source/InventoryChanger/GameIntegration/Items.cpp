@@ -149,4 +149,14 @@ void Items::getOtherItems(game_items::Storage& storage)
     }
 }
 
+game_items::Storage createGameItemStorage(Items& items)
+{
+    game_items::Storage storage;
+    items.getStickers(storage);
+    items.getMusicKits(storage);
+    items.getSkinsAndGloves(storage);
+    items.getOtherItems(storage);
+    return storage;
+}
+
 }
