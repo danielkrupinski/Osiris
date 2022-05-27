@@ -400,7 +400,8 @@
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -443,7 +444,8 @@
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
