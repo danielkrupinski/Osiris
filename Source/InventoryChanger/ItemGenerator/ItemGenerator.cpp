@@ -855,7 +855,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
 
-std::optional<inventory_changer::inventory::Item> ItemGenerator::generateItemFromContainer(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::inventory::Item& caseItem) noexcept
+std::optional<inventory_changer::inventory::Item> item_generator::generateItemFromContainer(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
@@ -957,7 +957,7 @@ std::optional<inventory_changer::inventory::Item> ItemGenerator::generateItemFro
     return static_cast<std::uint32_t>(Helpers::random(min, max));
 }
 
-inventory_changer::inventory::ItemData ItemGenerator::createDefaultDynamicData(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& item) noexcept
+inventory_changer::inventory::ItemData item_generator::createDefaultDynamicData(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
         const auto& staticData = gameItemStorage.getPaintKit(item);
