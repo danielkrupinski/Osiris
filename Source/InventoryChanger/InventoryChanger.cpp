@@ -546,20 +546,18 @@ void InventoryChanger::tabItem() noexcept
 
 static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
-[[nodiscard]] const inventory_changer::game_items::ItemName& getItemName(const inventory_changer::game_items::Item& item)
+[[nodiscard]] const inventory_changer::game_items::ItemName& getItemName(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& item)
 {
-    const auto& storage = StaticData::lookup().getStorage();
-
     if (item.isSkin() || item.isGloves())
-        return storage.getPaintKit(item).name;
+        return gameItemStorage.getPaintKit(item).name;
     if (item.isMusic())
-        return storage.getMusicKit(item).name;
+        return gameItemStorage.getMusicKit(item).name;
     if (item.isSticker())
-        return storage.getStickerKit(item).name;
+        return gameItemStorage.getStickerKit(item).name;
     if (item.isGraffiti())
-        return storage.getGraffitiKit(item).name;
+        return gameItemStorage.getGraffitiKit(item).name;
     if (item.isPatch())
-        return storage.getPatch(item).name;
+        return gameItemStorage.getPatch(item).name;
 
     static constexpr inventory_changer::game_items::ItemName fallback{ "", L"" };
     return fallback;
@@ -579,7 +577,7 @@ namespace ImGui
         const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(item).forDisplay.data();
+        const auto paintKitName = getItemName(StaticData::lookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -708,7 +706,7 @@ namespace ImGui
         const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(item).forDisplay.data();
+        const auto paintKitName = getItemName(StaticData::lookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -858,7 +856,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             if (static bool sorted = false; !sorted) {
                 std::ranges::sort(itemIndices, [](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
                     if (a.getWeaponID() == b.getWeaponID())
-                        return getItemName(a).forSearch < getItemName(b).forSearch;
+                        return getItemName(StaticData::lookup().getStorage(), a).forSearch < getItemName(StaticData::lookup().getStorage(), b).forSearch;
                     const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
                     if (comp == 0)
                         return a.getWeaponID() < b.getWeaponID();
@@ -870,7 +868,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
                 const auto& gameItem = itemIndices[i].get();
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(gameItem).forSearch), filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(StaticData::lookup().getStorage(), gameItem).forSearch), filterWide)))
                     continue;
                 ImGui::PushID(i);
 
