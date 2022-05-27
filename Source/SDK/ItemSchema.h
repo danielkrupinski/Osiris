@@ -287,6 +287,9 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+namespace tournament_team
+{
+
 enum TournamentTeam : std::uint8_t {
     None = 0,
     NinjasInPyjamas = 1,
@@ -386,6 +389,10 @@ enum TournamentTeam : std::uint8_t {
     ImperialEsports = 113,
     BadNewsEagles = 114
 };
+
+}
+
+using tournament_team::TournamentTeam;
 
 enum TournamentStage : std::uint8_t {
     GroupStage = 2,

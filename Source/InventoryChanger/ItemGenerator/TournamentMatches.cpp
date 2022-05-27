@@ -11,6 +11,7 @@ struct Tournament {
 };
 
 using inventory_changer::game_items::TournamentMap;
+using namespace tournament_team;
 
 constexpr auto dreamHack2013Matches = std::to_array<MatchWithoutMVPs>({
     // Group A
