@@ -35,7 +35,7 @@ static float generateWear() noexcept
     return wear;
 }
 
-[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
+[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept;
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
@@ -949,7 +949,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Stora
             dynamicData.tournamentTeam1 = souvenirPackage->tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenirPackage->tournamentTeam2;
             dynamicData.proPlayer = souvenirPackage->proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), gameItemStorage.getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(StaticData::lookup(), unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), gameItemStorage.getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }
@@ -999,18 +999,18 @@ inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItem
     return 0;
 }
 
-[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
+[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map, TournamentTeam team1, TournamentTeam team2, ProPlayer player) noexcept
 {
     std::array<inventory_changer::inventory::Skin::Sticker, 5> stickers;
 
-    stickers[0].stickerID = StaticData::lookup().findTournamentEventStickerID(tournamentID);
+    stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournamentID);
 
     if (tournamentID != 1) {
-        stickers[1].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team1);
-        stickers[2].stickerID = StaticData::lookup().findTournamentTeamGoldStickerID(tournamentID, team2);
+        stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team1);
+        stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team2);
 
         if (player)
-            stickers[3].stickerID = StaticData::lookup().findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
+            stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
         else if (tournamentID >= 18) // starting with PGL Stockholm 2021
             stickers[3].stickerID = inventory_changer::game_integration::getTournamentMapGoldStickerID(map);
     }
