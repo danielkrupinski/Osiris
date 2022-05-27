@@ -396,6 +396,9 @@ enum TournamentStage : std::uint8_t {
     ChallengersStage = 27
 };
 
+namespace pro_player
+{
+
 enum ProPlayer {
     f0rest = 93724,
     allu = 1345246,
@@ -630,6 +633,10 @@ enum ProPlayer {
     sergej = 67574097,
     Aerial = 2445180
 };
+
+}
+
+using pro_player::ProPlayer;
 
 class EconItemAttributeSetter {
 public:
