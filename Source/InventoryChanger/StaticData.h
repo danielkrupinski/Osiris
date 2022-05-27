@@ -1,25 +1,11 @@
 #pragma once
 
-#include <bit>
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <functional>
-#include <optional>
-#include <span>
-#include <string>
 #include <string_view>
-#include <vector>
-#include "../SDK/ItemSchema.h"
+
 #include "../SDK/WeaponId.h"
-
-#include "GameItems/Enums.h"
-
-enum class EconRarity : std::uint8_t;
 
 namespace inventory_changer::game_items
 {
-    struct Item;
     class Lookup;
     class CrateLootLookup;
 }

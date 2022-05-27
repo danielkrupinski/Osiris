@@ -6,6 +6,11 @@
 #include <InventoryChanger/StaticData.h>
 #include <SDK/ItemSchema.h>
 
+namespace inventory_changer::game_items
+{
+    enum class TournamentMap : std::uint8_t;
+}
+
 namespace inventory_changer::item_generator
 {
 

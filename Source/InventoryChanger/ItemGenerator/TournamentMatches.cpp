@@ -2,6 +2,8 @@
 
 #include "TournamentMatches.h"
 
+#include <InventoryChanger/GameItems/Enums.h>
+
 namespace inventory_changer::item_generator
 {
 
