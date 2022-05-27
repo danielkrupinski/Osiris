@@ -6,11 +6,11 @@
 #include <InventoryChanger/StaticData.h>
 #include <SDK/ItemSchema.h>
 
-namespace item_generator
+namespace inventory_changer::item_generator
 {
 
 struct Match {
-    inventory_changer::game_items::TournamentMap map;
+    game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
@@ -26,12 +26,12 @@ struct Match {
 };
 
 struct MatchWithoutMVPs {
-    inventory_changer::game_items::TournamentMap map;
+    game_items::TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
 };
 
-[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, inventory_changer::game_items::TournamentMap map) noexcept;
+[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, game_items::TournamentMap map) noexcept;
 
 }

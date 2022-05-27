@@ -2,7 +2,7 @@
 
 #include "TournamentMatches.h"
 
-namespace item_generator
+namespace inventory_changer::item_generator
 {
 
 struct Tournament {
