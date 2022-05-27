@@ -14,6 +14,8 @@ namespace inventory_changer::backend
 template <typename Clock = std::chrono::steady_clock>
 class ResponseQueue {
 public:
+    static_assert(Clock::is_steady);
+
     void add(const Response& response)
     {
         responses.emplace_back(Clock::now(), response);
