@@ -80,7 +80,7 @@ static Entity* createGlove(int entry, int serial) noexcept
     return nullptr;
 }
 
-static std::optional<std::list<inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
+static std::optional<std::list<inventory_changer::inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
 {
     switch (team) {
     case Team::None: return loadout.getItemInSlotNoTeam(slot);
@@ -340,7 +340,7 @@ static void applyPlayerAgent() noexcept
     if (!model)
         return;
 
-    if (const auto agent = item->get<inventory::Agent>()) {
+    if (const auto agent = item->get<inventory_changer::inventory::Agent>()) {
         for (std::size_t i = 0; i < agent->patches.size(); ++i) {
             if (const auto& patch = agent->patches[i]; patch.patchID != 0)
                 localPlayer->playerPatchIndices()[i] = patch.patchID;
@@ -492,7 +492,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     const auto item = *optionalItem;
-    const auto skin = item->get<inventory::Skin>();
+    const auto skin = item->get<inventory_changer::inventory::Skin>();
     if (!skin)
         return;
 
@@ -515,7 +515,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
         return;
 
     const auto& item = *optionalItem;
-    const auto music = item->get<inventory::Music>();
+    const auto music = item->get<inventory_changer::inventory::Music>();
     if (!music)
         return;
 
@@ -876,7 +876,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory::Item{ gameItem, ItemGenerator::createDefaultDynamicData(gameItem) });
+                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, ItemGenerator::createDefaultDynamicData(gameItem) });
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();

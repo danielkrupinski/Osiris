@@ -3,7 +3,7 @@
 
 #include <InventoryChanger/Inventory/StructsFromJson.h>
 
-namespace inventory
+namespace inventory_changer::inventory
 {
 namespace
 {

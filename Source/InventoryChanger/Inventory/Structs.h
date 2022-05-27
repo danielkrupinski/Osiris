@@ -6,7 +6,7 @@
 
 #include <SDK/ItemSchema.h>
 
-namespace inventory
+namespace inventory_changer::inventory
 {
 
 struct Skin {

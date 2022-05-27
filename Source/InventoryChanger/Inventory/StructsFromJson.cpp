@@ -3,7 +3,7 @@
 #include "Structs.h"
 #include "StructsFromJson.h"
 
-namespace inventory
+namespace inventory_changer::inventory
 {
 
 Glove gloveFromJson(const json& j)

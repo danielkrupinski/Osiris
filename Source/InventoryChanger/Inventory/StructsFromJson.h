@@ -6,7 +6,7 @@
 
 #include "Structs.h"
 
-namespace inventory
+namespace inventory_changer::inventory
 {
 
 [[nodiscard]] Glove gloveFromJson(const json& j);
