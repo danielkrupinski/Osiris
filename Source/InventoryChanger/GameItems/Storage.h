@@ -154,4 +154,6 @@ private:
     std::vector<Item> items;
 };
 
+[[nodiscard]] const ItemName& getItemName(const Storage& gameItemStorage, const Item& item);
+
 }

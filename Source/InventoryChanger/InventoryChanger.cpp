@@ -546,23 +546,6 @@ void InventoryChanger::tabItem() noexcept
 
 static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
 
-[[nodiscard]] const inventory_changer::game_items::ItemName& getItemName(const inventory_changer::game_items::Storage& gameItemStorage, const inventory_changer::game_items::Item& item)
-{
-    if (item.isSkin() || item.isGloves())
-        return gameItemStorage.getPaintKit(item).name;
-    if (item.isMusic())
-        return gameItemStorage.getMusicKit(item).name;
-    if (item.isSticker())
-        return gameItemStorage.getStickerKit(item).name;
-    if (item.isGraffiti())
-        return gameItemStorage.getGraffitiKit(item).name;
-    if (item.isPatch())
-        return gameItemStorage.getPatch(item).name;
-
-    static constexpr inventory_changer::game_items::ItemName fallback{ "", L"" };
-    return fallback;
-}
-
 namespace ImGui
 {
     static bool SkinSelectable(const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept

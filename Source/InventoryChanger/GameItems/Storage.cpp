@@ -129,4 +129,21 @@ ItemName Storage::pooled(const ItemName& name)
     return ItemName{ stringPool.add(name.forDisplay), stringPoolWide.add(name.forSearch) };
 }
 
+const ItemName& getItemName(const Storage& gameItemStorage, const Item& item)
+{
+    if (item.isSkin() || item.isGloves())
+        return gameItemStorage.getPaintKit(item).name;
+    if (item.isMusic())
+        return gameItemStorage.getMusicKit(item).name;
+    if (item.isSticker())
+        return gameItemStorage.getStickerKit(item).name;
+    if (item.isGraffiti())
+        return gameItemStorage.getGraffitiKit(item).name;
+    if (item.isPatch())
+        return gameItemStorage.getPatch(item).name;
+
+    static constexpr ItemName fallback{ "", L"" };
+    return fallback;
+}
+
 }
