@@ -831,7 +831,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-[[nodiscard]] const inventory_changer::game_items::Item& getRandomItemIndexFromContainer(WeaponId weaponID, const inventory_changer::game_items::CrateLoot::LootList& lootList) noexcept
+[[nodiscard]] const inventory_changer::game_items::Item& getRandomItemIndexFromContainer(const inventory_changer::game_items::Lookup& lookup, WeaponId weaponID, const inventory_changer::game_items::CrateLoot::LootList& lootList) noexcept
 {
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
     auto rarities = lootList.rarities;
@@ -842,7 +842,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     if (const auto rarity = getRandomRarity(rarities); rarity != EconRarity::Default) {
         if (rarity == EconRarity::Gold) {
             const auto& randomRareSpecialItem = rareSpecialItems[Helpers::random<std::size_t>(0u, rareSpecialItems.size() - 1u)];
-            if (const auto item = StaticData::lookup().findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
+            if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
                 return *item;
         } else {
             const auto loot = inventory_changer::game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
@@ -931,7 +931,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Stora
     if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(caseItem.gameItem().getWeaponID(), *lootList);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(StaticData::lookup(), caseItem.gameItem().getWeaponID(), *lootList);
 
     if (lootList->willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
