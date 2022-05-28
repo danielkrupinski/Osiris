@@ -15,8 +15,8 @@ class BackendSimulator;
 class PickEm;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, const game_items::Lookup& gameItemLookup, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, gameItemLookup{ gameItemLookup }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, constRemover{ constRemover } {}
 
     Response operator()(const request::ApplySticker& request) const;
     Response operator()(const request::WearSticker& request) const;
@@ -38,7 +38,6 @@ struct RequestHandler {
 private:
     BackendSimulator& backend;
     PickEm& pickEm;
-    const game_items::Lookup& gameItemLookup;
     ItemConstRemover constRemover;
 };
 
