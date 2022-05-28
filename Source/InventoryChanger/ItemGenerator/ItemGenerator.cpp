@@ -927,16 +927,16 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
-std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
     const auto crateSeries = gameItemLookup.getStorage().getCrateSeries(caseItem.gameItem());
-    const auto lootList = StaticData::crateLoot().findLootList(crateSeries);
+    const auto lootList = crateLootLookup.findLootList(crateSeries);
     if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, StaticData::crateLoot(), caseItem.gameItem().getWeaponID(), *lootList);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
 
     if (lootList->willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;

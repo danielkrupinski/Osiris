@@ -21,7 +21,8 @@ namespace inventory_changer::backend
 
 class BackendSimulator {
 public:
-    explicit BackendSimulator(const game_items::Lookup& gameItemLookup) : gameItemLookup{ gameItemLookup } {}
+    explicit BackendSimulator(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup)
+        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup } {}
 
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
@@ -41,6 +42,11 @@ public:
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
         return gameItemLookup;
+    }
+
+    [[nodiscard]] const game_items::CrateLootLookup& getCrateLootLookup() const noexcept
+    {
+        return crateLootLookup;
     }
 
     void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
@@ -152,6 +158,7 @@ private:
     ResponseQueue<> responseQueue;
     ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
+    const game_items::CrateLootLookup& crateLootLookup;
     PickEm pickEm;
 };
 
