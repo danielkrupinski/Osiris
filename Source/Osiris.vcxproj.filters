@@ -748,6 +748,9 @@
     <ClInclude Include="InventoryChanger\EconRarities.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h">
+      <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
