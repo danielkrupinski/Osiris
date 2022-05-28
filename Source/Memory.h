@@ -158,6 +158,8 @@ public:
     std::uintptr_t keyValuesAllocClient;
 
     std::uintptr_t jmpEbxGadgetInClient;
+
+    std::uintptr_t shouldDrawFogReturnAddress;
 #endif
 
 private:
