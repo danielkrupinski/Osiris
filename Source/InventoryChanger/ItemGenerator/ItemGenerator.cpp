@@ -834,7 +834,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
 namespace inventory_changer::item_generator
 {
 
-[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const game_items::Lookup& lookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
+[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const game_items::Lookup& lookup, const game_items::CrateLootLookup& crateLootLookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
 {
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
     auto rarities = lootList.rarities;
@@ -848,12 +848,12 @@ namespace inventory_changer::item_generator
             if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
                 return *item;
         } else {
-            const auto loot = game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
+            const auto loot = game_items::getLootOfRarity(crateLootLookup, lootList.crateSeries, rarity);
             return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
         }
     }
 
-    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
+    std::span<const std::reference_wrapper<const game_items::Item>> loot = crateLootLookup.getLoot(lootList.crateSeries);
     assert(!loot.empty());
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
 }
@@ -936,7 +936,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, caseItem.gameItem().getWeaponID(), *lootList);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, StaticData::crateLoot(), caseItem.gameItem().getWeaponID(), *lootList);
 
     if (lootList->willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
