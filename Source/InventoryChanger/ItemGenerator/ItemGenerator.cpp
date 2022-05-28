@@ -831,7 +831,10 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-[[nodiscard]] const inventory_changer::game_items::Item& getRandomItemIndexFromContainer(const inventory_changer::game_items::Lookup& lookup, WeaponId weaponID, const inventory_changer::game_items::CrateLoot::LootList& lootList) noexcept
+namespace inventory_changer::item_generator
+{
+
+[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const game_items::Lookup& lookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
 {
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
     auto rarities = lootList.rarities;
@@ -845,14 +848,16 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
             if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
                 return *item;
         } else {
-            const auto loot = inventory_changer::game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
+            const auto loot = game_items::getLootOfRarity(StaticData::crateLoot(), lootList.crateSeries, rarity);
             return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
         }
     }
 
-    std::span<const std::reference_wrapper<const inventory_changer::game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
+    std::span<const std::reference_wrapper<const game_items::Item>> loot = StaticData::crateLoot().getLoot(lootList.crateSeries);
     assert(!loot.empty());
     return loot[Helpers::random<std::size_t>(0u, loot.size() - 1u)];
+}
+
 }
 
 [[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, inventory_changer::game_items::TournamentMap tournamentMap) noexcept
