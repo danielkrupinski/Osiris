@@ -76,6 +76,7 @@ json InventoryChanger::toJson() noexcept
     j["Version"] = CONFIG_VERSION;
 
     const auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
+    const auto& gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
     auto& items = j["Items"];
@@ -101,9 +102,9 @@ json InventoryChanger::toJson() noexcept
         itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
-            itemConfig["Sticker ID"] = StaticData::lookup().getStorage().getStickerKit(gameItem).id;
+            itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
         } else if (gameItem.isGloves()) {
-            const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
+            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
@@ -112,7 +113,7 @@ json InventoryChanger::toJson() noexcept
                 itemConfig["Seed"] = glove->seed;
             }
         } else if (gameItem.isSkin()) {
-            const auto& staticData = StaticData::lookup().getStorage().getPaintKit(gameItem);
+            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
@@ -120,13 +121,13 @@ json InventoryChanger::toJson() noexcept
                 itemConfig.update(::toJson(*skin));
 
         } else if (gameItem.isMusic()) {
-            itemConfig["Music ID"] = StaticData::lookup().getStorage().getMusicKit(gameItem).id;
+            itemConfig["Music ID"] = gameItemStorage.getMusicKit(gameItem).id;
             if (const auto music = item.get<inventory_changer::inventory::Music>(); music && music->statTrak > -1)
                 itemConfig["StatTrak"] = music->statTrak;
         } else if (gameItem.isPatch()) {
-            itemConfig["Patch ID"] = StaticData::lookup().getStorage().getPatch(gameItem).id;
+            itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
-            itemConfig["Graffiti ID"] = StaticData::lookup().getStorage().getGraffitiKit(gameItem).id;
+            itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
             if (const auto graffiti = item.get<inventory_changer::inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
                 itemConfig["Uses Left"] = graffiti->usesLeft;
                 itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
@@ -302,6 +303,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
+    const auto& lookup = inventory_changer::InventoryChanger::instance().getGameItemLookup();
 
     pickEmFromJson(j, backend);
 
@@ -313,12 +315,12 @@ void InventoryChanger::fromJson(const json& j) noexcept
         return;
 
     for (const auto& jsonItem : items) {
-        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = gameItemFromJson(StaticData::lookup(), jsonItem);
+        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = gameItemFromJson(lookup, jsonItem);
         if (!itemOptional.has_value())
             continue;
 
         const inventory_changer::game_items::Item& item = itemOptional->get();
-        const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(StaticData::lookup().getStorage(), item, jsonItem) });
+        const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(lookup.getStorage(), item, jsonItem) });
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);
