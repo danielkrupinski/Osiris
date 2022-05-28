@@ -39,6 +39,11 @@ public:
         return backend;
     }
 
+    [[nodiscard]] backend::BackendSimulator& getBackend() noexcept
+    {
+        return backend;
+    }
+
 private:
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;

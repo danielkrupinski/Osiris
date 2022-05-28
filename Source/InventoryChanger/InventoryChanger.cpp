@@ -241,7 +241,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         const auto loadoutSlot = def->getLoadoutSlot(localTeam);
-        const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localTeam, loadoutSlot);
+        const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localTeam, loadoutSlot);
         if (!optionalItem.has_value())
             continue;
         
@@ -249,7 +249,7 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
         if (definitionIndex != item->gameItem().getWeaponID())
             continue;
 
-        const auto itemID = inventory_changer::backend::BackendSimulator::instance().getItemID(item);
+        const auto itemID = inventory_changer::InventoryChanger::instance().getBackend().getItemID(item);
         if (!itemID.has_value())
             continue;
 
@@ -269,7 +269,7 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!localInventory)
         return;
 
-    applyKnife(inventory_changer::backend::BackendSimulator::instance(), *localInventory, local);
+    applyKnife(inventory_changer::InventoryChanger::instance().getBackend(), *localInventory, local);
     applyWeapons(*localInventory, local);
 }
 
@@ -286,7 +286,7 @@ static void updateHud() noexcept
 
 void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
 {
-    if (!inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID).has_value())
+    if (!inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID).has_value())
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();
@@ -326,7 +326,7 @@ static void applyPlayerAgent() noexcept
     if (!localPlayer)
         return;
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 38);
+    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 38);
     if (!optionalItem.has_value())
         return;
 
@@ -432,7 +432,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     using namespace inventory_changer::backend;
 
-    auto& backend = BackendSimulator::instance();
+    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
 
     if (localPlayer)
         applyGloves(backend, *localInventory, localPlayer.get());
@@ -463,7 +463,7 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
         return;
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0);
     if (!optionalItem.has_value())
         return;
 
@@ -489,7 +489,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
 
     const auto itemID = weapon->itemID();
 
-    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID);
+    const auto optionalItem = inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID);
     if (!optionalItem.has_value())
         return;
 
@@ -499,7 +499,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     if (skin->statTrak > -1)
-        inventory_changer::backend::BackendSimulator::instance().request<inventory_changer::backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
+        inventory_changer::InventoryChanger::instance().getBackend().request<inventory_changer::backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
 }
 
 [[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
@@ -512,7 +512,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
     if (!isLocalPlayerMVP(event))
         return;
 
-    const auto optionalItem = inventory_changer::backend::BackendSimulator::instance().getLoadout().getItemInSlotNoTeam(54);
+    const auto optionalItem = inventory_changer::InventoryChanger::instance().getBackend().getLoadout().getItemInSlotNoTeam(54);
     if (!optionalItem.has_value())
         return;
 
@@ -523,7 +523,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
 
     if (music->statTrak > -1) {
         event.setInt("musickitmvps", music->statTrak + 1);
-        inventory_changer::backend::BackendSimulator::instance().request<inventory_changer::backend::request::UpdateStatTrak>(item, music->statTrak + 1);
+        inventory_changer::InventoryChanger::instance().getBackend().request<inventory_changer::backend::request::UpdateStatTrak>(item, music->statTrak + 1);
     }
 }
 
@@ -859,7 +859,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        inventory_changer::backend::BackendSimulator::instance().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(StaticData::lookup().getStorage(), gameItem) });
+                        inventory_changer::InventoryChanger::instance().getBackend().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(StaticData::lookup().getStorage(), gameItem) });
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();
@@ -868,14 +868,14 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::EndChild();
     } else {
         if (ImGui::BeginChild("##scrollarea2", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            const auto& inventory = inventory_changer::backend::BackendSimulator::instance().getInventory();
+            const auto& inventory = inventory_changer::InventoryChanger::instance().getBackend().getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
                 ImGui::PushID(i);
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
-                    it = std::make_reverse_iterator(inventory_changer::backend::BackendSimulator::instance().removeItem(std::next(it).base()));
+                    it = std::make_reverse_iterator(inventory_changer::InventoryChanger::instance().getBackend().removeItem(std::next(it).base()));
                 } else {
                     ++it;
                 }
@@ -897,12 +897,12 @@ void InventoryChanger::clearInventory() noexcept
 
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept
 {
-    if (const auto itemOptional = inventory_changer::backend::BackendSimulator::instance().itemFromID(itemID); itemOptional.has_value()) {
+    if (const auto itemOptional = inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID); itemOptional.has_value()) {
         const auto& itemIterator = *itemOptional;
 
         if (slot != 0xFFFF) {
             using inventory_changer::backend::Loadout;
-            if (auto& backendSimulator = inventory_changer::backend::BackendSimulator::instance(); team == Team::CT) {
+            if (auto& backendSimulator = inventory_changer::InventoryChanger::instance().getBackend(); team == Team::CT) {
                 backendSimulator.markItemEquippedCT(itemIterator, static_cast<Loadout::Slot>(slot));
             } else if (team == Team::TT) {
                 backendSimulator.markItemEquippedTT(itemIterator, static_cast<Loadout::Slot>(slot));
@@ -960,7 +960,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
     if (!localPlayer)
         return;
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0);
+    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0);
     if (!optionalItem.has_value())
         return;
 
@@ -1048,7 +1048,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
         requestBuilder.removeNameTagFrom(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
-        auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
             backend.removeItem(*itOptional);
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
@@ -1060,7 +1060,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
             requestBuilder.setStatTrakSwapItems(swapItem1, stringToUint64(swapItem2String));
         }
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
-        auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
             const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
             if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
@@ -1075,7 +1075,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
 
-        const auto& backend = inventory_changer::backend::BackendSimulator::instance();
+        const auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
         memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
     }
 }
@@ -1313,7 +1313,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex()))
         return;
 
-    if (const auto optionalItem = getItemFromLoadout(inventory_changer::backend::BackendSimulator::instance().getLoadout(), localPlayer->getTeamNumber(), 0); !optionalItem.has_value())
+    if (const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0); !optionalItem.has_value())
         return;
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);

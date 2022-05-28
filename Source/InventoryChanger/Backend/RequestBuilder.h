@@ -77,7 +77,7 @@ public:
 
     [[nodiscard]] static RequestBuilder& instance()
     {
-        static RequestBuilder builder{ BackendSimulator::instance() };
+        static RequestBuilder builder{ inventory_changer::InventoryChanger::instance().getBackend() };
         return builder;
     }
 

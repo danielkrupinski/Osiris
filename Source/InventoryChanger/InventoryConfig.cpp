@@ -12,6 +12,8 @@
 #include "Backend/Response/ResponseHandler.h"
 #include "GameIntegration/Inventory.h"
 
+#include "InventoryChanger.h"
+
 constexpr auto CONFIG_VERSION = 4;
 
 [[nodiscard]] json toJson(const inventory_changer::inventory::Skin& skin)
@@ -73,7 +75,7 @@ json InventoryChanger::toJson() noexcept
 
     j["Version"] = CONFIG_VERSION;
 
-    const auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    const auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
     auto& items = j["Items"];
@@ -299,7 +301,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 
 void InventoryChanger::fromJson(const json& j) noexcept
 {
-    auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
 
     pickEmFromJson(j, backend);
 
@@ -333,7 +335,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
 void InventoryChanger::resetConfig() noexcept
 {
-    auto& backend = inventory_changer::backend::BackendSimulator::instance();
+    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
     backend.clearInventory();
     backend.clearPickEm();
     static inventory_changer::game_integration::Inventory gameInventory{};

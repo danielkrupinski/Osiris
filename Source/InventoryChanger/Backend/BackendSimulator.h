@@ -75,12 +75,6 @@ public:
         loadout.equipItemNoTeam(itemIterator, slot);
     }
 
-    [[nodiscard]] static BackendSimulator& instance()
-    {
-        static BackendSimulator backendSimulator{ StaticData::lookup() };
-        return backendSimulator;
-    }
-
     void clearInventory()
     {
         for (auto it = inventory.cbegin(); it != inventory.cend();)
