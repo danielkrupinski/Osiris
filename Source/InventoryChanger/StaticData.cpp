@@ -75,42 +75,6 @@ private:
     return storage;
 }
 
-class StaticDataImpl {
-public:
-    static const StaticDataImpl& instance() noexcept
-    {
-        static const StaticDataImpl staticData;
-        return staticData;
-    }
-
-    static std::span<const inventory_changer::game_items::Item> gameItems() noexcept { return instance().container.getStorage().getItems(); }
-    static const auto& container_() noexcept { return instance().container; }
-    static const auto& crateLoot() noexcept { return instance().crateLootLookup; }
-
-private:
-    StaticDataImpl(const StaticDataImpl&) = delete;
-
-    StaticDataImpl()
-    {
-        assert(memory && interfaces);
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        inventory_changer::game_integration::Items items{ *itemSchema, *interfaces->localize };
-        auto storage = inventory_changer::game_integration::createGameItemStorage(items);
-        storage.compress();
-        container = inventory_changer::game_items::Lookup{ std::move(storage) };
-
-        inventory_changer::game_integration::CrateLoot gameLoot{ *itemSchema, container };
-        inventory_changer::game_items::CrateLoot crateLoot;
-        gameLoot.getLoot(crateLoot);
-        crateLoot.compress();
-        crateLootLookup = inventory_changer::game_items::CrateLootLookup{ std::move(crateLoot) };
-    }
-
-    inventory_changer::game_items::Lookup container;
-    inventory_changer::game_items::CrateLootLookup crateLootLookup;
-};
-
 std::wstring_view StaticData::getWeaponNameUpper(WeaponId weaponID) noexcept
 {
     return getWeaponNamesInstance().getWeaponNameUpper(weaponID);
