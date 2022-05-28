@@ -927,16 +927,16 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
-std::optional<inventory::Item> generateItemFromContainer(const game_items::Storage& gameItemStorage, const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const inventory::Item& caseItem) noexcept
 {
     assert(caseItem.gameItem().isCase());
 
-    const auto crateSeries = gameItemStorage.getCrateSeries(caseItem.gameItem());
+    const auto crateSeries = gameItemLookup.getStorage().getCrateSeries(caseItem.gameItem());
     const auto lootList = StaticData::crateLoot().findLootList(crateSeries);
     if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(StaticData::lookup(), caseItem.gameItem().getWeaponID(), *lootList);
+    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, caseItem.gameItem().getWeaponID(), *lootList);
 
     if (lootList->willProduceStatTrak && unlockedItem.isMusic()) {
         inventory::Music dynamicData;
@@ -944,17 +944,17 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Stora
         return inventory::Item{ unlockedItem, dynamicData };
     } else if (unlockedItem.isSkin()) {
         inventory::Skin dynamicData;
-        const auto& staticData = gameItemStorage.getPaintKit(unlockedItem);
+        const auto& staticData = gameItemLookup.getStorage().getPaintKit(unlockedItem);
         dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, generateWear());
         dynamicData.seed = Helpers::random(1, 1000);
 
         if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
-            dynamicData.tournamentID = gameItemStorage.getTournamentEventID(caseItem.gameItem());
+            dynamicData.tournamentID = gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem());
             dynamicData.tournamentStage = souvenirPackage->tournamentStage;
             dynamicData.tournamentTeam1 = souvenirPackage->tournamentTeam1;
             dynamicData.tournamentTeam2 = souvenirPackage->tournamentTeam2;
             dynamicData.proPlayer = souvenirPackage->proPlayer;
-            dynamicData.stickers = generateSouvenirStickers(StaticData::lookup(), unlockedItem.getWeaponID(), gameItemStorage.getTournamentEventID(caseItem.gameItem()), gameItemStorage.getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
+            dynamicData.stickers = generateSouvenirStickers(gameItemLookup, unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), dynamicData.tournamentTeam1, dynamicData.tournamentTeam2, dynamicData.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             dynamicData.statTrak = 0;
         }

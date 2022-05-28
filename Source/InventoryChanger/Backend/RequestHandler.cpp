@@ -65,7 +65,7 @@ Response RequestHandler::operator()(const request::OpenContainer& request) const
     if (!request.container->gameItem().isCase())
         return {};
 
-    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup.getStorage(), *request.container);
+    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, *request.container);
     if (!generatedItem.has_value())
         return {};
 
