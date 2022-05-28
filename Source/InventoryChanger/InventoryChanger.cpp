@@ -56,7 +56,9 @@
 #include "ItemGenerator/ItemGenerator.h"
 #include "Backend/Response/ResponseHandler.h"
 #include "Backend/RequestBuilder.h"
+#include "GameIntegration/CrateLoot.h"
 #include "GameIntegration/Inventory.h"
+#include "GameIntegration/Items.h"
 #include "../Hooks.h"
 
 static Entity* createGlove(int entry, int serial) noexcept
@@ -1315,4 +1317,34 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
         return;
 
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
+}
+
+namespace inventory_changer
+{
+
+InventoryChanger createInventoryChanger()
+{
+    assert(memory && interfaces);
+
+    const auto itemSchema = memory->itemSystem()->getItemSchema();
+    game_integration::Items items{ *itemSchema, *interfaces->localize };
+    auto storage = game_integration::createGameItemStorage(items);
+    storage.compress();
+    auto gameItemLookup = game_items::Lookup{ std::move(storage) };
+
+    game_integration::CrateLoot gameLoot{ *itemSchema, gameItemLookup };
+    game_items::CrateLoot crateLoot;
+    gameLoot.getLoot(crateLoot);
+    crateLoot.compress();
+    auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
+
+    return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup) };
+}
+
+InventoryChanger& InventoryChanger::instance()
+{
+    static InventoryChanger inventoryChanger{ createInventoryChanger() };
+    return inventoryChanger;
+}
+
 }

@@ -4,11 +4,48 @@
 
 #include "InventoryConfig.h"
 
+#include "Backend/BackendSimulator.h"
+#include "GameItems/Lookup.h"
+#include "GameItems/CrateLootLookup.h"
+
 enum class FrameStage;
 enum class Team;
 class Entity;
 class GameEvent;
 class SharedObject;
+
+namespace inventory_changer
+{
+
+class InventoryChanger {
+public:
+    InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup } {}
+
+    static InventoryChanger& instance();
+
+    [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
+    {
+        return gameItemLookup;
+    }
+
+    [[nodiscard]] const game_items::CrateLootLookup& getCrateLootLookup() const noexcept
+    {
+        return crateLootLookup;
+    }
+
+    [[nodiscard]] const backend::BackendSimulator& getBackend() const noexcept
+    {
+        return backend;
+    }
+
+private:
+    game_items::Lookup gameItemLookup;
+    game_items::CrateLootLookup crateLootLookup;
+    backend::BackendSimulator backend;
+};
+
+}
 
 namespace InventoryChanger
 {
