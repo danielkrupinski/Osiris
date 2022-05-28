@@ -16,6 +16,7 @@
 #include "../SDK/Localize.h"
 #include <StringPool.h>
 #include "GameItems/Lookup.h"
+#include "GameIntegration/CrateLoot.h"
 #include "GameIntegration/Items.h"
 #include "GameIntegration/Misc.h"
 
@@ -89,81 +90,6 @@ public:
 private:
     StaticDataImpl(const StaticDataImpl&) = delete;
 
-    [[nodiscard]] inventory_changer::game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const
-    {
-        switch (weaponID) {
-        case WeaponId::Sticker: return container.findSticker(stickerKit);
-        case WeaponId::Patch: return container.findPatch(stickerKit);
-        case WeaponId::SealedGraffiti: return container.findGraffiti(stickerKit);
-        default:
-            return {};
-        }
-    }
-
-    void fillLootFromLootList(ItemSchema* itemSchema, EconLootListDefinition* lootList, inventory_changer::game_items::CrateLoot& crateLoot) const noexcept
-    {
-        if (lootList->willProduceStatTrak())
-            crateLoot.setWillProduceStatTrak();
-
-        const auto& contents = lootList->getLootListContents();
-        for (int j = 0; j < contents.size; ++j) {
-            if (contents[j].stickerKit != 0) {
-                if (const auto item = findStickerlikeItem(contents[j].weaponId(), contents[j].stickerKit); item.has_value())
-                    crateLoot.addItem(*item);
-            } else if (contents[j].musicKit != 0) {
-                if (const auto idx = container.findMusic(contents[j].musicKit); idx.has_value())
-                    crateLoot.addItem(*idx);
-            } else if (contents[j].isNestedList) {
-                if (const auto nestedLootList = itemSchema->getLootList(contents[j].itemDef))
-                    fillLootFromLootList(itemSchema, nestedLootList, crateLoot);
-            } else if (contents[j].itemDef != 0) {
-                if (contents[j].paintKit != 0) {
-                    if (const auto idx = container.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
-                        crateLoot.addItem(*idx);
-                } else {
-                    if (const auto idx = container.findItem(contents[j].weaponId()); idx.has_value())
-                        crateLoot.addItem(*idx);
-                }
-            }
-        }
-    }
-
-    // a few loot lists aren't present in client item schema, so we need to provide them ourselves
-    void rebuildMissingLootList(ItemSchema* itemSchema, int lootListID, inventory_changer::game_items::CrateLoot& crateLoot) const noexcept
-    {
-        if (lootListID == 292) { // crate_xray_p250_lootlist
-            if (const auto p250XRay = container.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
-                crateLoot.addItem(*p250XRay);
-        }
-    }
-
-    void buildLootLists(ItemSchema* itemSchema, inventory_changer::game_items::CrateLoot& crateLoot) noexcept
-    {
-        crateLoot.nextLootList(6);
-
-        static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
-        for (const auto collection : dreamHack2013Collections) {
-            if (const auto lootList = itemSchema->getLootList(collection)) [[likely]]
-                fillLootFromLootList(itemSchema, lootList, crateLoot);
-        }
-
-        crateLoot.nextLootListFromPrevious(13);
-
-        for (const auto& revolvingLootList : itemSchema->revolvingLootLists) {
-            if (revolvingLootList.key == 6 || revolvingLootList.key == 13)
-                continue;
-
-            const auto lootListName = revolvingLootList.value;
-
-            crateLoot.nextLootList(revolvingLootList.key);
-
-            if (const auto lootList = itemSchema->getLootList(lootListName))
-                fillLootFromLootList(itemSchema, lootList, crateLoot);
-            else
-                rebuildMissingLootList(itemSchema, revolvingLootList.key, crateLoot);
-        }
-    }
-
     StaticDataImpl()
     {
         assert(memory && interfaces);
@@ -174,8 +100,9 @@ private:
         storage.compress();
         container = inventory_changer::game_items::Lookup{ std::move(storage) };
 
+        inventory_changer::game_integration::CrateLoot gameLoot{ *itemSchema, container };
         inventory_changer::game_items::CrateLoot crateLoot;
-        buildLootLists(itemSchema, crateLoot);
+        gameLoot.getLoot(crateLoot);
         crateLoot.compress();
         crateLootLookup = inventory_changer::game_items::CrateLootLookup{ std::move(crateLoot) };
     }
