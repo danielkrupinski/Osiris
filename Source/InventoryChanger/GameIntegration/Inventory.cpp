@@ -64,11 +64,11 @@ void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
 
 }
 
-void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) noexcept
+void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
-    const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.gameItem()).id;
+    const auto paintKit = gameItemStorage.getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
 
     const auto skin = inventoryItem.get<inventory::Skin>();
@@ -159,7 +159,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
             econItem->quality = 9;
         }
     } else if (item.isSkin()) {
-        initSkinEconItem(inventoryItem, *econItem);
+        initSkinEconItem(gameItemStorage, inventoryItem, *econItem);
     } else if (item.isGloves()) {
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(gameItemStorage.getPaintKit(item).id));
