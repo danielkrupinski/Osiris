@@ -130,6 +130,7 @@
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp" />
+    <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp" />
     <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp" />
     <ClCompile Include="InventoryChanger\GameItems\Storage.cpp" />

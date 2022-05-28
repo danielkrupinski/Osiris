@@ -284,6 +284,9 @@
     <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp">
       <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp">
+      <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
