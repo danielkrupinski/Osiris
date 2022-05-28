@@ -50,6 +50,8 @@ public:
         return backendRequestBuilder;
     }
 
+    void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
+
 private:
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;
@@ -85,6 +87,5 @@ namespace InventoryChanger
     void onSoUpdated(SharedObject* object) noexcept;
     void onUserTextMsg(const void*& data, int& size) noexcept;
     void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params) noexcept;
-    void getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept;
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept;
 }

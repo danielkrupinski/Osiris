@@ -1080,12 +1080,6 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
     }
 }
 
-void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept
-{
-    if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
-        inventory_changer::InventoryChanger::instance().getBackendRequestBuilder().setStickerSlot(static_cast<std::uint8_t>(number));
-}
-
 void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
 {
     if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
@@ -1345,6 +1339,12 @@ InventoryChanger& InventoryChanger::instance()
 {
     static InventoryChanger inventoryChanger{ createInventoryChanger() };
     return inventoryChanger;
+}
+
+void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress)
+{
+    if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
+        backendRequestBuilder.setStickerSlot(static_cast<std::uint8_t>(number));
 }
 
 }

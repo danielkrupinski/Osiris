@@ -481,7 +481,7 @@ static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool upda
 static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    InventoryChanger::getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
+    inventory_changer::InventoryChanger::instance().getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
