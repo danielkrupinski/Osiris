@@ -120,8 +120,3 @@ std::string_view StaticData::getWeaponName(WeaponId weaponID) noexcept
 {
     return getWeaponNamesInstance().getWeaponName(weaponID);
 }
-
-const inventory_changer::game_items::CrateLootLookup& StaticData::crateLoot() noexcept
-{
-    return StaticDataImpl::crateLoot();
-}
