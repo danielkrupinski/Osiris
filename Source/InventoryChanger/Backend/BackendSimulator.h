@@ -14,6 +14,7 @@
 #include "Response/ResponseQueue.h"
 
 #include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend
 {
@@ -134,7 +135,7 @@ public:
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ itemIDMap, gameInventory }, delay);
+        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
     }
 
 private:

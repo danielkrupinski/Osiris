@@ -118,7 +118,7 @@ void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) 
     }
 }
 
-std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged)
+std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)
@@ -139,22 +139,20 @@ std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, boo
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
 
-    const auto& storage = StaticData::lookup().getStorage();
-
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
     if (item.isSticker()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getStickerKit(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getStickerKit(item).id);
     } else if (item.isPatch()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getPatch(item).id);
     } else if (item.isGraffiti()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getGraffitiKit(item).id);
         if (const auto graffiti = inventoryItem.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
             econItem->weaponId = WeaponId::Graffiti;
             attributeSetter.setSpraysRemaining(*econItem, graffiti->usesLeft);
         }
     } else if (item.isMusic()) {
-        attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
+        attributeSetter.setMusicID(*econItem, gameItemStorage.getMusicKit(item).id);
         if (const auto music = inventoryItem.get<inventory::Music>(); music && music->statTrak > -1) {
             attributeSetter.setStatTrak(*econItem, music->statTrak);
             attributeSetter.setStatTrakType(*econItem, 1);
@@ -164,14 +162,14 @@ std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, boo
         initSkinEconItem(inventoryItem, *econItem);
     } else if (item.isGloves()) {
         econItem->quality = 3;
-        attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
+        attributeSetter.setPaintKit(*econItem, static_cast<float>(gameItemStorage.getPaintKit(item).id));
 
         if (const auto glove = inventoryItem.get<inventory::Glove>()) {
             attributeSetter.setWear(*econItem, glove->wear);
             attributeSetter.setSeed(*econItem, static_cast<float>(glove->seed));
         }
     } else if (item.isCollectible()) {
-        if (storage.isCollectibleGenuine(item))
+        if (gameItemStorage.isCollectibleGenuine(item))
             econItem->quality = 1;
     } else if (item.isAgent()) {
         if (const auto agent = inventoryItem.get<inventory::Agent>()) {
@@ -190,7 +188,7 @@ std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, boo
         if (const auto tournamentCoin = inventoryItem.get<inventory::TournamentCoin>())
             attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
-        attributeSetter.setStickerID(*econItem, 0, storage.getDefaultTournamentGraffitiID(item));
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getDefaultTournamentGraffitiID(item));
         attributeSetter.setCampaignCompletion(*econItem, 1);
     } else if (item.isCase()) {
         if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {

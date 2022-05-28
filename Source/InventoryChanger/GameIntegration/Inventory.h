@@ -1,5 +1,6 @@
 #pragma once
 
+#include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/Inventory/Item.h>
 
 namespace inventory_changer::game_integration
@@ -7,7 +8,7 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    std::uint64_t createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged);
+    std::uint64_t createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] std::uint64_t assingNewItemID(std::uint64_t itemID);
     void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot);
     void removeSticker(std::uint64_t itemID, std::uint8_t slot);
