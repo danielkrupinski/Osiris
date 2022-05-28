@@ -5,6 +5,8 @@
 
 #include "BackendSimulator.h"
 
+#include <InventoryChanger/GameItems/Lookup.h>
+
 namespace inventory_changer::backend
 {
 
@@ -73,12 +75,6 @@ public:
 
         const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
         backend.request<request::PickStickerPickEm>(PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
-    }
-
-    [[nodiscard]] static RequestBuilder& instance()
-    {
-        static RequestBuilder builder{ inventory_changer::InventoryChanger::instance().getBackend() };
-        return builder;
     }
 
 private:

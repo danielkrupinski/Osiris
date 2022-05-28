@@ -5,6 +5,7 @@
 #include "InventoryConfig.h"
 
 #include "Backend/BackendSimulator.h"
+#include "Backend/RequestBuilder.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 
@@ -20,7 +21,7 @@ namespace inventory_changer
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
-        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup } {}
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup }, backendRequestBuilder{ backend } {}
 
     static InventoryChanger& instance();
 
@@ -44,10 +45,16 @@ public:
         return backend;
     }
 
+    [[nodiscard]] backend::RequestBuilder& getBackendRequestBuilder() noexcept
+    {
+        return backendRequestBuilder;
+    }
+
 private:
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;
+    backend::RequestBuilder backendRequestBuilder;
 };
 
 }

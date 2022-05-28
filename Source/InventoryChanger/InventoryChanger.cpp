@@ -1033,7 +1033,7 @@ static std::uint64_t stringToUint64(const char* str) noexcept
 
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params) noexcept
 {
-    auto& requestBuilder = inventory_changer::backend::RequestBuilder::instance();
+    auto& requestBuilder = inventory_changer::InventoryChanger::instance().getBackendRequestBuilder();
 
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
         const auto toolItemID = stringToUint64(string);
@@ -1083,7 +1083,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
 void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress) noexcept
 {
     if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
-        inventory_changer::backend::RequestBuilder::instance().setStickerSlot(static_cast<std::uint8_t>(number));
+        inventory_changer::InventoryChanger::instance().getBackendRequestBuilder().setStickerSlot(static_cast<std::uint8_t>(number));
 }
 
 void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
@@ -1106,7 +1106,7 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
         if (!stickerItemID)
             continue;
 
-        inventory_changer::backend::RequestBuilder::instance().placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+        inventory_changer::InventoryChanger::instance().getBackendRequestBuilder().placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
 }
 
