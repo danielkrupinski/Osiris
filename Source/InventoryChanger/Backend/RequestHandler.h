@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RequestTypes.h"
+#include "Request/RequestTypes.h"
 #include "Response/Response.h"
 
 namespace inventory_changer::backend

@@ -682,9 +682,6 @@
     <ClInclude Include="InventoryChanger\Backend\Item.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\RequestTypes.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\RequestHandler.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
@@ -755,6 +752,9 @@
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h">
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
   </ItemGroup>

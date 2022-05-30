@@ -214,8 +214,8 @@
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
     <ClInclude Include="InventoryChanger\Backend\RequestHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\RequestTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h" />
