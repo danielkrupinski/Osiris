@@ -3,8 +3,7 @@
 #include <cstdint>
 #include <string_view>
 
-#include "BackendSimulator.h"
-
+#include <InventoryChanger/Backend/BackendSimulator.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend

@@ -5,7 +5,7 @@
 #include "InventoryConfig.h"
 
 #include "Backend/BackendSimulator.h"
-#include "Backend/RequestBuilder.h"
+#include "Backend/Request/RequestBuilder.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 

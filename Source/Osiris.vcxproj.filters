@@ -60,6 +60,9 @@
     <Filter Include="InventoryChanger\ItemGenerator">
       <UniqueIdentifier>{8a9faacf-088e-412b-b6b2-e72f4237c282}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InventoryChanger\Backend\Request">
+      <UniqueIdentifier>{f7214d3f-4cd4-4d69-8c0d-b3b579db52d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -727,9 +730,6 @@
     <ClInclude Include="SDK\PanoramaMarshallHelper.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\RequestBuilder.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h">
       <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClInclude>
@@ -753,6 +753,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h">
       <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

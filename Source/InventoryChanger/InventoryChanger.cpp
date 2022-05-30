@@ -55,7 +55,7 @@
 #include "Backend/BackendSimulator.h"
 #include "ItemGenerator/ItemGenerator.h"
 #include "Backend/Response/ResponseHandler.h"
-#include "Backend/RequestBuilder.h"
+#include "Backend/Request/RequestBuilder.h"
 #include "GameIntegration/CrateLoot.h"
 #include "GameIntegration/Inventory.h"
 #include "GameIntegration/Items.h"
