@@ -8,7 +8,7 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
-#include "RequestHandler.h"
+#include "Request/RequestHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseHandler.h"
 #include "Response/ResponseQueue.h"

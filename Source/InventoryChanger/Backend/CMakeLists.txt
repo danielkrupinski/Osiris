@@ -1,3 +1,3 @@
 target_sources(OsirisOBJ PRIVATE
-  RequestHandler.cpp
+  Request/RequestHandler.cpp
 )

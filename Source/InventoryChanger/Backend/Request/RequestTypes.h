@@ -4,7 +4,8 @@
 #include <optional>
 #include <string_view>
 
-#include "Item.h"
+#include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/Backend/PickEm.h>
 
 namespace inventory_changer::backend::request
 {

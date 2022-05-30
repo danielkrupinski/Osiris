@@ -129,7 +129,7 @@
     <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="InputUtil.cpp" />
-    <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp" />
+    <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp" />
     <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp" />
     <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp" />
     <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp" />
@@ -213,8 +213,8 @@
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
-    <ClInclude Include="InventoryChanger\Backend\RequestHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />

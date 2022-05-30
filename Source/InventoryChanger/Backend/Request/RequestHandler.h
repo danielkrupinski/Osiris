@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Request/RequestTypes.h"
-#include "Response/Response.h"
+#include "RequestTypes.h"
+#include <InventoryChanger/Backend/Response/Response.h>
 
 namespace inventory_changer::backend
 {

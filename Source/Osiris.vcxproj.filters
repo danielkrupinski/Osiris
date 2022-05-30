@@ -272,9 +272,6 @@
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp">
       <Filter>InventoryChanger\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClCompile>
     <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp">
       <Filter>InventoryChanger\GameIntegration</Filter>
     </ClCompile>
@@ -289,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp">
       <Filter>InventoryChanger\GameIntegration</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp">
+      <Filter>InventoryChanger\Backend\Request</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -682,9 +682,6 @@
     <ClInclude Include="InventoryChanger\Backend\Item.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\RequestHandler.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Constants\ClassId.h">
       <Filter>SDK\Constants</Filter>
     </ClInclude>
@@ -755,6 +752,9 @@
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
     <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h">
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
   </ItemGroup>
