@@ -54,6 +54,7 @@ public:
     void onRoundMVP(GameEvent& event);
     void updateStatTrak(GameEvent& event);
     void clearInventory();
+    void overrideHudIcon(GameEvent& event);
 
 private:
     game_items::Lookup gameItemLookup;
@@ -73,7 +74,6 @@ namespace InventoryChanger
 
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
-    void overrideHudIcon(GameEvent& event) noexcept;
 
     void acknowledgeItem(std::uint64_t itemID) noexcept;
 

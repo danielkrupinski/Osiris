@@ -452,29 +452,6 @@ void InventoryChanger::scheduleHudUpdate() noexcept
     hudUpdateRequired = true;
 }
 
-void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    if (event.getInt("attacker") != localPlayer->getUserId())
-        return;
-
-    if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
-        return;
-
-    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0);
-    if (!optionalItem.has_value())
-        return;
-
-    const auto& item = *optionalItem;
-
-    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-        if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
-            event.setString("weapon", defName + 7);
-    }
-}
-
 [[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
 {
     return localPlayer && localPlayer->getUserId() == event.getInt("userid");
@@ -1345,6 +1322,29 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
 void InventoryChanger::clearInventory()
 {
     ::InventoryChanger::resetConfig();
+}
+
+void InventoryChanger::overrideHudIcon(GameEvent& event)
+{
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("attacker") != localPlayer->getUserId())
+        return;
+
+    if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
+        return;
+
+    const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 0);
+    if (!optionalItem.has_value())
+        return;
+
+    const auto& item = *optionalItem;
+
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
+        if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
+            event.setString("weapon", defName + 7);
+    }
 }
 
 }
