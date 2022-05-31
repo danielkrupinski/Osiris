@@ -41,7 +41,7 @@ namespace
                 Misc::voteRevealer(*event);
                 break;
             case fnv::hash("round_mvp"):
-                InventoryChanger::onRoundMVP(*event);
+                inventory_changer::InventoryChanger::instance().onRoundMVP(*event);
                 break;
             }
         }

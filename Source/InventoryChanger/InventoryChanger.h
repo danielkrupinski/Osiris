@@ -51,6 +51,7 @@ public:
     }
 
     void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
+    void onRoundMVP(GameEvent& event);
 
 private:
     game_items::Lookup gameItemLookup;
@@ -72,7 +73,6 @@ namespace InventoryChanger
     void scheduleHudUpdate() noexcept;
     void overrideHudIcon(GameEvent& event) noexcept;
     void updateStatTrak(GameEvent& event) noexcept;
-    void onRoundMVP(GameEvent& event) noexcept;
 
     void acknowledgeItem(std::uint64_t itemID) noexcept;
 

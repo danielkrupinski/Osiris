@@ -507,26 +507,6 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
     return localPlayer && localPlayer->getUserId() == event.getInt("userid");
 }
 
-void InventoryChanger::onRoundMVP(GameEvent& event) noexcept
-{
-    if (!isLocalPlayerMVP(event))
-        return;
-
-    const auto optionalItem = inventory_changer::InventoryChanger::instance().getBackend().getLoadout().getItemInSlotNoTeam(54);
-    if (!optionalItem.has_value())
-        return;
-
-    const auto& item = *optionalItem;
-    const auto music = item->get<inventory_changer::inventory::Music>();
-    if (!music)
-        return;
-
-    if (music->statTrak > -1) {
-        event.setInt("musickitmvps", music->statTrak + 1);
-        inventory_changer::InventoryChanger::instance().getBackend().request<inventory_changer::backend::request::UpdateStatTrak>(item, music->statTrak + 1);
-    }
-}
-
 static bool windowOpen = false;
 
 void InventoryChanger::menuBarItem() noexcept
@@ -1345,6 +1325,26 @@ void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddre
 {
     if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
         backendRequestBuilder.setStickerSlot(static_cast<std::uint8_t>(number));
+}
+
+void InventoryChanger::onRoundMVP(GameEvent& event)
+{
+    if (!isLocalPlayerMVP(event))
+        return;
+
+    const auto optionalItem = backend.getLoadout().getItemInSlotNoTeam(54);
+    if (!optionalItem.has_value())
+        return;
+
+    const auto& item = *optionalItem;
+    const auto music = item->get<inventory_changer::inventory::Music>();
+    if (!music)
+        return;
+
+    if (music->statTrak > -1) {
+        event.setInt("musickitmvps", music->statTrak + 1);
+        backend.request<backend::request::UpdateStatTrak>(item, music->statTrak + 1);
+    }
 }
 
 }
