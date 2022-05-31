@@ -27,7 +27,7 @@ namespace
                 Misc::purchaseList(event);
                 break;
             case fnv::hash("player_death"):
-                InventoryChanger::updateStatTrak(*event);
+                inventory_changer::InventoryChanger::instance().updateStatTrak(*event);
                 InventoryChanger::overrideHudIcon(*event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);

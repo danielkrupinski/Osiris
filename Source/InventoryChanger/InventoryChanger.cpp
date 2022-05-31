@@ -475,33 +475,6 @@ void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
     }
 }
 
-void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
-        return;
-
-    const auto weapon = localPlayer->getActiveWeapon();
-    if (!weapon)
-        return;
-
-    const auto itemID = weapon->itemID();
-
-    const auto optionalItem = inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID);
-    if (!optionalItem.has_value())
-        return;
-
-    const auto item = *optionalItem;
-    const auto skin = item->get<inventory_changer::inventory::Skin>();
-    if (!skin)
-        return;
-
-    if (skin->statTrak > -1)
-        inventory_changer::InventoryChanger::instance().getBackend().request<inventory_changer::backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
-}
-
 [[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
 {
     return localPlayer && localPlayer->getUserId() == event.getInt("userid");
@@ -1345,6 +1318,33 @@ void InventoryChanger::onRoundMVP(GameEvent& event)
         event.setInt("musickitmvps", music->statTrak + 1);
         backend.request<backend::request::UpdateStatTrak>(item, music->statTrak + 1);
     }
+}
+
+void InventoryChanger::updateStatTrak(GameEvent& event)
+{
+    if (!localPlayer)
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    const auto weapon = localPlayer->getActiveWeapon();
+    if (!weapon)
+        return;
+
+    const auto itemID = weapon->itemID();
+
+    const auto optionalItem = backend.itemFromID(itemID);
+    if (!optionalItem.has_value())
+        return;
+
+    const auto item = *optionalItem;
+    const auto skin = item->get<inventory::Skin>();
+    if (!skin)
+        return;
+
+    if (skin->statTrak > -1)
+        backend.request<backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
 }
 
 }
