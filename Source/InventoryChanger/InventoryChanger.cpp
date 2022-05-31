@@ -820,30 +820,6 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept
-{
-    if (const auto itemOptional = inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID); itemOptional.has_value()) {
-        const auto& itemIterator = *itemOptional;
-
-        if (slot != 0xFFFF) {
-            using inventory_changer::backend::Loadout;
-            if (auto& backendSimulator = inventory_changer::InventoryChanger::instance().getBackend(); team == Team::CT) {
-                backendSimulator.markItemEquippedCT(itemIterator, static_cast<Loadout::Slot>(slot));
-            } else if (team == Team::TT) {
-                backendSimulator.markItemEquippedTT(itemIterator, static_cast<Loadout::Slot>(slot));
-            } else if (team == Team::None) {
-                backendSimulator.markItemEquippedNoTeam(itemIterator, static_cast<Loadout::Slot>(slot));
-            }
-
-            equipRequests.push_back({ std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID() });
-        } else {
-           // unequip
-        }
-
-        itemID = (std::uint64_t(0xF) << 60) | static_cast<short>(itemIterator->gameItem().getWeaponID());
-    }
-}
-
 void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
 {
     if (object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
@@ -1339,6 +1315,29 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
         buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
         data = buffer.data();
         size = static_cast<int>(buffer.size());
+    }
+}
+
+void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID)
+{
+    if (const auto itemOptional = backend.itemFromID(itemID); itemOptional.has_value()) {
+        const auto& itemIterator = *itemOptional;
+
+        if (slot != 0xFFFF) {
+            if (team == Team::CT) {
+                backend.markItemEquippedCT(itemIterator, static_cast<backend::Loadout::Slot>(slot));
+            } else if (team == Team::TT) {
+                backend.markItemEquippedTT(itemIterator, static_cast<backend::Loadout::Slot>(slot));
+            } else if (team == Team::None) {
+                backend.markItemEquippedNoTeam(itemIterator, static_cast<backend::Loadout::Slot>(slot));
+            }
+
+            equipRequests.push_back({ std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID() });
+        } else {
+            // unequip
+        }
+
+        itemID = (std::uint64_t(0xF) << 60) | static_cast<short>(itemIterator->gameItem().getWeaponID());
     }
 }
 

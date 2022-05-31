@@ -496,7 +496,7 @@ static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params
 
 static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
 {
-    InventoryChanger::onItemEquip(team, slot, itemID);
+    inventory_changer::InventoryChanger::instance().onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 

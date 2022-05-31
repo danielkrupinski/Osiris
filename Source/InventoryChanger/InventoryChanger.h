@@ -58,6 +58,7 @@ public:
     void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params);
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     void onUserTextMsg(const void*& data, int& size);
+    void onItemEquip(Team team, int slot, std::uint64_t& itemID);
 
 private:
     game_items::Lookup gameItemLookup;
@@ -85,6 +86,5 @@ namespace InventoryChanger
 
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
-    void onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
 }
