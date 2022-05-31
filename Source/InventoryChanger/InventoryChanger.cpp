@@ -956,30 +956,6 @@ static std::uint64_t stringToUint64(const char* str) noexcept
     return result;
 }
 
-void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
-{
-    if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
-        return;
-
-    if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
-        return;
-
-    const char* tournament = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 0);
-    if (!tournament || std::strcmp(tournament, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
-        return;
-
-    for (unsigned i = 1; i < numberOfArgs; i += 3) {
-        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i);
-        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i + 1);
-        const char* stickerItemID = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, i + 2);
-
-        if (!stickerItemID)
-            continue;
-
-        inventory_changer::InventoryChanger::instance().getBackendRequestBuilder().placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
-    }
-}
-
 struct Icon {
     Texture texture;
     int lastReferencedFrame = 0;
@@ -1339,6 +1315,30 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
 
         memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
+    }
+}
+
+void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
+{
+    if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
+        return;
+
+    if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
+        return;
+
+    const char* tournament = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 0);
+    if (!tournament || std::strcmp(tournament, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+        return;
+
+    for (unsigned i = 1; i < numberOfArgs; i += 3) {
+        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i);
+        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, i + 1);
+        const char* stickerItemID = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, i + 2);
+
+        if (!stickerItemID)
+            continue;
+
+       backendRequestBuilder.placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
 }
 

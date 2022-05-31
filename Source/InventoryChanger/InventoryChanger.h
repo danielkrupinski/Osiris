@@ -56,6 +56,7 @@ public:
     void clearInventory();
     void overrideHudIcon(GameEvent& event);
     void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params);
+    void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
 
 private:
     game_items::Lookup gameItemLookup;
@@ -86,5 +87,4 @@ namespace InventoryChanger
     void onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
     void onUserTextMsg(const void*& data, int& size) noexcept;
-    void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept;
 }

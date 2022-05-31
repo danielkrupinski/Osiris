@@ -490,7 +490,7 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
 static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    InventoryChanger::getNumArgsHook(result, RETURN_ADDRESS(), params);
+    inventory_changer::InventoryChanger::instance().getNumArgsHook(result, RETURN_ADDRESS(), params);
     return result;
 }
 
