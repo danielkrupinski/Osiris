@@ -687,7 +687,7 @@ void Hooks::uninstall() noexcept
     Netvars::restore();
 
     Glow::clearCustomObjects();
-    InventoryChanger::clearInventory();
+    inventory_changer::InventoryChanger::instance().clearInventory();
 
 #ifdef _WIN32
     keyValuesSystem.restore();

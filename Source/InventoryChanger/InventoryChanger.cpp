@@ -843,11 +843,6 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-void InventoryChanger::clearInventory() noexcept
-{
-    resetConfig();
-}
-
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept
 {
     if (const auto itemOptional = inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID); itemOptional.has_value()) {
@@ -1345,6 +1340,11 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
 
     if (skin->statTrak > -1)
         backend.request<backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
+}
+
+void InventoryChanger::clearInventory()
+{
+    ::InventoryChanger::resetConfig();
 }
 
 }

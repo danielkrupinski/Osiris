@@ -53,6 +53,7 @@ public:
     void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
     void onRoundMVP(GameEvent& event);
     void updateStatTrak(GameEvent& event);
+    void clearInventory();
 
 private:
     game_items::Lookup gameItemLookup;
@@ -80,8 +81,6 @@ namespace InventoryChanger
     void clearUnusedItemIconTextures() noexcept;
 
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
-
-    void clearInventory() noexcept;
 
     void onItemEquip(Team team, int slot, std::uint64_t& itemID) noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
