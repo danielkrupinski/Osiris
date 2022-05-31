@@ -956,55 +956,6 @@ static std::uint64_t stringToUint64(const char* str) noexcept
     return result;
 }
 
-void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params) noexcept
-{
-    auto& requestBuilder = inventory_changer::InventoryChanger::instance().getBackendRequestBuilder();
-
-    if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
-        const auto toolItemID = stringToUint64(string);
-        const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
-        if (destItemIdString)
-            requestBuilder.useToolOn(toolItemID, stringToUint64(destItemIdString));
-    } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
-        const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
-        requestBuilder.wearStickerOf(stringToUint64(string), slot);
-    } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        requestBuilder.setNameTag(string);
-    } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        requestBuilder.removeNameTagFrom(stringToUint64(string));
-    } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
-        auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
-            backend.removeItem(*itOptional);
-    } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
-        InventoryChanger::acknowledgeItem(stringToUint64(string));
-    } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        const auto swapItem1 = stringToUint64(string);
-        const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
-        if (swapItem2String) {
-            requestBuilder.setStatTrakSwapItems(swapItem1, stringToUint64(swapItem2String));
-        }
-    } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
-        auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
-            const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
-            if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
-                const auto graffitiID = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
-                backend.request<inventory_changer::backend::request::SelectTeamGraffiti>(*itOptional, static_cast<std::uint16_t>(graffitiID));
-            }
-        }
-    } else if (returnAddress == memory->getMyPredictionTeamIDGetArgAsStringReturnAddress) {
-        if (std::strcmp(string, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
-            return;
-
-        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
-        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
-
-        const auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
-    }
-}
-
 void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params) noexcept
 {
     if (returnAddress != memory->setMyPredictionUsingItemIdGetNumArgsReturnAddress)
@@ -1344,6 +1295,50 @@ void InventoryChanger::overrideHudIcon(GameEvent& event)
     if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
         if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
             event.setString("weapon", defName + 7);
+    }
+}
+
+void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params)
+{
+    if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
+        const auto toolItemID = stringToUint64(string);
+        const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+        if (destItemIdString)
+            backendRequestBuilder.useToolOn(toolItemID, stringToUint64(destItemIdString));
+    } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
+        const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
+        backendRequestBuilder.wearStickerOf(stringToUint64(string), slot);
+    } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
+        backendRequestBuilder.setNameTag(string);
+    } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
+        backendRequestBuilder.removeNameTagFrom(stringToUint64(string));
+    } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
+        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
+            backend.removeItem(*itOptional);
+    } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
+        ::InventoryChanger::acknowledgeItem(stringToUint64(string));
+    } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
+        const auto swapItem1 = stringToUint64(string);
+        const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+        if (swapItem2String) {
+            backendRequestBuilder.setStatTrakSwapItems(swapItem1, stringToUint64(swapItem2String));
+        }
+    } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
+        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
+            const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+            if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
+                const auto graffitiID = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
+                backend.request<backend::request::SelectTeamGraffiti>(*itOptional, static_cast<std::uint16_t>(graffitiID));
+            }
+        }
+    } else if (returnAddress == memory->getMyPredictionTeamIDGetArgAsStringReturnAddress) {
+        if (std::strcmp(string, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+            return;
+
+        const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
+        const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
+
+        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
     }
 }
 
