@@ -284,23 +284,6 @@ static void updateHud() noexcept
     hudUpdateRequired = false;
 }
 
-void InventoryChanger::acknowledgeItem(std::uint64_t itemID) noexcept
-{
-    if (!inventory_changer::InventoryChanger::instance().getBackend().itemFromID(itemID).has_value())
-        return;
-
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
-        if (const auto soc = memory->getSOCData(view)) {
-            soc->inventory = localInventory->getHighestIDs().second;
-            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
-        }
-    }
-}
-
 static void applyMusicKit(const inventory_changer::backend::BackendSimulator& backend) noexcept
 {
     if (!localPlayer)
@@ -1199,7 +1182,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
             backend.removeItem(*itOptional);
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
-        ::InventoryChanger::acknowledgeItem(stringToUint64(string));
+        acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
         const auto swapItem1 = stringToUint64(string);
         const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
@@ -1338,6 +1321,23 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID)
         }
 
         itemID = (std::uint64_t(0xF) << 60) | static_cast<short>(itemIterator->gameItem().getWeaponID());
+    }
+}
+
+void InventoryChanger::acknowledgeItem(std::uint64_t itemID)
+{
+    if (!backend.itemFromID(itemID).has_value())
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
+        if (const auto soc = memory->getSOCData(view)) {
+            soc->inventory = localInventory->getHighestIDs().second;
+            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+        }
     }
 }
 

@@ -59,6 +59,7 @@ public:
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     void onUserTextMsg(const void*& data, int& size);
     void onItemEquip(Team team, int slot, std::uint64_t& itemID);
+    void acknowledgeItem(std::uint64_t itemID);
 
 private:
     game_items::Lookup gameItemLookup;
@@ -78,8 +79,6 @@ namespace InventoryChanger
 
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
-
-    void acknowledgeItem(std::uint64_t itemID) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
