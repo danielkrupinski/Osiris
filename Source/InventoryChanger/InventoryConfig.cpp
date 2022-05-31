@@ -165,13 +165,6 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
-[[nodiscard]] inventory_changer::inventory::Agent loadDynamicAgentDataFromJson(const json& j) noexcept
-{
-    inventory_changer::inventory::Agent dynamicData;
-    dynamicData.patches = inventory_changer::inventory::agentPatchesFromJson(j);
-    return dynamicData;
-}
-
 namespace inventory_changer
 {
 
@@ -205,7 +198,7 @@ namespace inventory_changer
     if (gameItem.isMusic())
         return inventory::musicFromJson(j);
     if (gameItem.isAgent())
-        return loadDynamicAgentDataFromJson(j);
+        return inventory::agentFromJson(j);
     if (gameItem.isServiceMedal())
         return inventory::serviceMedalFromJson(j);
     if (gameItem.isCase() && gameItemStorage.isSouvenirPackage(gameItem))

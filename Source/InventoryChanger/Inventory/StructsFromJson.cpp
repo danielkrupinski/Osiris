@@ -204,4 +204,11 @@ std::array<Agent::Patch, 5> agentPatchesFromJson(const json& j)
     return agentPatches;
 }
 
+Agent agentFromJson(const json& j)
+{
+    Agent dynamicData;
+    dynamicData.patches = agentPatchesFromJson(j);
+    return dynamicData;
+}
+
 }
