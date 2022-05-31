@@ -509,7 +509,7 @@ static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, Share
 static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
     if (type == UserMessageType::Text)
-        InventoryChanger::onUserTextMsg(data, size);
+        inventory_changer::InventoryChanger::instance().onUserTextMsg(data, size);
     else if (type == UserMessageType::VoteStart)
         Misc::onVoteStart(data, size);
     else if (type == UserMessageType::VotePass)

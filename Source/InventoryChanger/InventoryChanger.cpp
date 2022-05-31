@@ -880,75 +880,6 @@ static void appendProtobufString(std::string_view string, std::vector<char>& buf
     return buffer;
 }
 
-void InventoryChanger::onUserTextMsg(const void*& data, int& size) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0);
-    if (!optionalItem.has_value())
-        return;
-
-    const auto& item = *optionalItem;
-
-    constexpr auto HUD_PRINTTALK = 3;
-    constexpr auto HUD_PRINTCENTER = 4;
-    // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
-
-    const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
-    
-    if (reader.readInt32(1) == HUD_PRINTCENTER) {
-        const auto strings = reader.readRepeatedString(3);
-        if (strings.size() < 2)
-            return;
-
-        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
-            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
-            return;
-
-        if (!isDefaultKnifeNameLocalizationString(strings[1]))
-            return;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        if (!itemSchema)
-            return;
-
-        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
-        if (!def)
-            return;
-
-        static std::vector<char> buffer;
-        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
-        data = buffer.data();
-        size = static_cast<int>(buffer.size());
-    } else if (reader.readInt32(1) == HUD_PRINTTALK) {
-        const auto strings = reader.readRepeatedString(3);
-        if (strings.size() < 3)
-            return;
-
-        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
-            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
-            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
-            return;
-
-        if (!isDefaultKnifeNameLocalizationString(strings[2]))
-            return;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        if (!itemSchema)
-            return;
-
-        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
-        if (!def)
-            return;
-
-        static std::vector<char> buffer;
-        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
-        data = buffer.data();
-        size = static_cast<int>(buffer.size());
-    }
-}
-
 static std::uint64_t stringToUint64(const char* str) noexcept
 {
     std::uint64_t result = 0;
@@ -1339,6 +1270,75 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
             continue;
 
        backendRequestBuilder.placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+    }
+}
+
+void InventoryChanger::onUserTextMsg(const void*& data, int& size)
+{
+    if (!localPlayer)
+        return;
+
+    const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 0);
+    if (!optionalItem.has_value())
+        return;
+
+    const auto& item = *optionalItem;
+
+    constexpr auto HUD_PRINTTALK = 3;
+    constexpr auto HUD_PRINTCENTER = 4;
+    // https://github.com/SteamDatabase/Protobufs/blob/017f1710737b7026cdd6d7e602f96a66dddb7b2e/csgo/cstrike15_usermessages.proto#L128-L131
+
+    const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
+
+    if (reader.readInt32(1) == HUD_PRINTCENTER) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 2)
+            return;
+
+        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
+            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
+            return;
+
+        if (!isDefaultKnifeNameLocalizationString(strings[1]))
+            return;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
+
+        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
+        if (!def)
+            return;
+
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
+    } else if (reader.readInt32(1) == HUD_PRINTTALK) {
+        const auto strings = reader.readRepeatedString(3);
+        if (strings.size() < 3)
+            return;
+
+        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
+            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
+            return;
+
+        if (!isDefaultKnifeNameLocalizationString(strings[2]))
+            return;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        if (!itemSchema)
+            return;
+
+        const auto def = itemSchema->getItemDefinitionInterface(item->gameItem().getWeaponID());
+        if (!def)
+            return;
+
+        static std::vector<char> buffer;
+        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
+        data = buffer.data();
+        size = static_cast<int>(buffer.size());
     }
 }
 
