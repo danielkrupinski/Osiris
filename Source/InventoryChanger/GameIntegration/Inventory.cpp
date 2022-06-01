@@ -1,7 +1,6 @@
 #include "Inventory.h"
 
 #include <Interfaces.h>
-#include <InventoryChanger/StaticData.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <SDK/EconItemView.h>
 #include <SDK/Panorama.h>

@@ -3,7 +3,6 @@
 #include <span>
 #include <variant>
 
-#include <InventoryChanger/StaticData.h>
 #include <SDK/ItemSchema.h>
 
 namespace inventory_changer::game_items

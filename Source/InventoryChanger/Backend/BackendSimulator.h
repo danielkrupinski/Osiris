@@ -13,7 +13,7 @@
 #include "Response/ResponseHandler.h"
 #include "Response/ResponseQueue.h"
 
-#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/GameItems/CrateLootLookup.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend

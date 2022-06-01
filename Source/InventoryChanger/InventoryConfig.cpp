@@ -7,8 +7,6 @@
 
 #include "Backend/BackendSimulator.h"
 
-#include "StaticData.h"
-
 #include "Backend/Response/ResponseHandler.h"
 #include "GameIntegration/Inventory.h"
 
