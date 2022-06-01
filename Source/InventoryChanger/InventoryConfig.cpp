@@ -197,41 +197,6 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 
 }
 
-void InventoryChanger::fromJson(const json& j) noexcept
-{
-    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-    const auto& lookup = inventory_changer::InventoryChanger::instance().getGameItemLookup();
-
-    pickEmFromJson(j, backend);
-
-    if (!j.contains("Items"))
-        return;
-
-    const auto& items = j["Items"];
-    if (!items.is_array())
-        return;
-
-    for (const auto& jsonItem : items) {
-        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = inventory_changer::gameItemFromJson(lookup, jsonItem);
-        if (!itemOptional.has_value())
-            continue;
-
-        const inventory_changer::game_items::Item& item = itemOptional->get();
-        const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(lookup.getStorage(), item, jsonItem) });
-
-        if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
-            const auto equippedState = equippedFromJson(jsonItem);
-            if (equippedState.ct)
-                backend.equipItemCT(itemAdded, equippedSlot);
-            if (equippedState.tt)
-                backend.equipItemTT(itemAdded, equippedSlot);
-            if (equippedState.noTeam)
-                backend.equipItemNoTeam(itemAdded, equippedSlot);
-        }
-        
-    }
-}
-
 json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
 {
     json j;
@@ -326,4 +291,39 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
 
     j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
     return j;
+}
+
+void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChanger)
+{
+    auto& backend = inventoryChanger.getBackend();
+    const auto& lookup = backend.getGameItemLookup();
+
+    pickEmFromJson(j, backend);
+
+    if (!j.contains("Items"))
+        return;
+
+    const auto& items = j["Items"];
+    if (!items.is_array())
+        return;
+
+    for (const auto& jsonItem : items) {
+        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = inventory_changer::gameItemFromJson(lookup, jsonItem);
+        if (!itemOptional.has_value())
+            continue;
+
+        const inventory_changer::game_items::Item& item = itemOptional->get();
+        const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(lookup.getStorage(), item, jsonItem) });
+
+        if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
+            const auto equippedState = equippedFromJson(jsonItem);
+            if (equippedState.ct)
+                backend.equipItemCT(itemAdded, equippedSlot);
+            if (equippedState.tt)
+                backend.equipItemTT(itemAdded, equippedSlot);
+            if (equippedState.noTeam)
+                backend.equipItemNoTeam(itemAdded, equippedSlot);
+        }
+
+    }
 }

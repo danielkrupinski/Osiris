@@ -308,7 +308,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     Visuals::fromJson(j["Visuals"]);
-    InventoryChanger::fromJson(j["Inventory Changer"]);
+    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance());
     Sound::fromJson(j["Sound"]);
     Misc::fromJson(j["Misc"]);
 }
