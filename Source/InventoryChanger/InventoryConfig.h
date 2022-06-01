@@ -10,7 +10,6 @@ namespace inventory_changer
 namespace InventoryChanger
 {
     void fromJson(const json& j) noexcept;
-    void resetConfig() noexcept;
 }
 
 json toJson(const inventory_changer::InventoryChanger& inventoryChanger);

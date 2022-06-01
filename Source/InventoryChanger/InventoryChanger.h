@@ -53,13 +53,14 @@ public:
     void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
     void onRoundMVP(GameEvent& event);
     void updateStatTrak(GameEvent& event);
-    void clearInventory();
     void overrideHudIcon(GameEvent& event);
     void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params);
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     void onUserTextMsg(const void*& data, int& size);
     void onItemEquip(Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(std::uint64_t itemID);
+
+    void reset();
 
 private:
     game_items::Lookup gameItemLookup;

@@ -232,15 +232,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
     }
 }
 
-void InventoryChanger::resetConfig() noexcept
-{
-    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-    backend.clearInventory();
-    backend.clearPickEm();
-    static inventory_changer::game_integration::Inventory gameInventory{};
-    backend.run(gameInventory, std::chrono::milliseconds{ 0 });
-}
-
 json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
 {
     json j;

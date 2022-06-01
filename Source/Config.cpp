@@ -568,7 +568,7 @@ void Config::reset() noexcept
     Backtrack::resetConfig();
     Glow::resetConfig();
     Visuals::resetConfig();
-    InventoryChanger::resetConfig();
+    inventory_changer::InventoryChanger::instance().reset();
     Sound::resetConfig();
     Misc::resetConfig();
 }

@@ -1136,11 +1136,6 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
         backend.request<backend::request::UpdateStatTrak>(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::clearInventory()
-{
-    ::InventoryChanger::resetConfig();
-}
-
 void InventoryChanger::overrideHudIcon(GameEvent& event)
 {
     if (!localPlayer)
@@ -1339,6 +1334,14 @@ void InventoryChanger::acknowledgeItem(std::uint64_t itemID)
             localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
         }
     }
+}
+
+void InventoryChanger::reset()
+{
+    backend.clearInventory();
+    backend.clearPickEm();
+    static inventory_changer::game_integration::Inventory gameInventory{};
+    backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 
 }
