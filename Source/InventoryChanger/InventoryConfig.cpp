@@ -13,6 +13,7 @@
 #include "GameIntegration/Inventory.h"
 
 #include "InventoryChanger.h"
+#include "WeaponNames.h"
 
 constexpr auto CONFIG_VERSION = 4;
 
@@ -227,7 +228,7 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
         const auto& item = *itemIt;
         const auto& gameItem = item.gameItem();
         itemConfig["Weapon ID"] = gameItem.getWeaponID();
-        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
+        itemConfig["Item Name"] = inventory_changer::WeaponNames::instance().getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
             itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
@@ -258,7 +259,7 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
             itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
             if (const auto graffiti = item.get<inventory_changer::inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
                 itemConfig["Uses Left"] = graffiti->usesLeft;
-                itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
+                itemConfig["Item Name"] = inventory_changer::WeaponNames::instance().getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
             if (const auto agent = item.get<inventory_changer::inventory::Agent>()) {

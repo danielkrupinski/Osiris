@@ -60,6 +60,7 @@
 #include "GameIntegration/Inventory.h"
 #include "GameIntegration/Items.h"
 #include "../Hooks.h"
+#include "WeaponNames.h"
 
 static Entity* createGlove(int entry, int serial) noexcept
 {
@@ -472,7 +473,7 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
+        const auto itemName = inventory_changer::WeaponNames::instance().getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), item).forDisplay.data();
@@ -601,7 +602,7 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = StaticData::getWeaponName(item.getWeaponID()).data();
+        const auto itemName = inventory_changer::WeaponNames::instance().getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
         const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), item).forDisplay.data();
@@ -755,7 +756,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 std::ranges::sort(itemIndices, [](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
                     if (a.getWeaponID() == b.getWeaponID())
                         return getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), a).forSearch < getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), b).forSearch;
-                    const auto comp = StaticData::getWeaponNameUpper(a.getWeaponID()).compare(StaticData::getWeaponNameUpper(b.getWeaponID()));
+                    const auto comp = inventory_changer::WeaponNames::instance().getWeaponNameUpper(a.getWeaponID()).compare(inventory_changer::WeaponNames::instance().getWeaponNameUpper(b.getWeaponID()));
                     if (comp == 0)
                         return a.getWeaponID() < b.getWeaponID();
                     return comp < 0;
@@ -766,7 +767,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
             for (std::size_t i = 0; i < itemIndices.size(); ++i) {
                 const auto& gameItem = itemIndices[i].get();
-                if (!filter.empty() && !passesFilter(std::wstring(StaticData::getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem).forSearch), filterWide)))
+                if (!filter.empty() && !passesFilter(std::wstring(inventory_changer::WeaponNames::instance().getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem).forSearch), filterWide)))
                     continue;
                 ImGui::PushID(i);
 
