@@ -1,7 +1,6 @@
 target_sources(OsirisOBJ PRIVATE
   InventoryChanger.cpp
   InventoryConfig.cpp
-  StaticData.cpp
   WeaponNames.cpp
 )
 
