@@ -290,6 +290,9 @@
     <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp">
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\WeaponNames.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">

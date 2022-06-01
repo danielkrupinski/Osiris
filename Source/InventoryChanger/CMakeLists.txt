@@ -2,6 +2,7 @@ target_sources(OsirisOBJ PRIVATE
   InventoryChanger.cpp
   InventoryConfig.cpp
   StaticData.cpp
+  WeaponNames.cpp
 )
 
 add_subdirectory(Backend)
