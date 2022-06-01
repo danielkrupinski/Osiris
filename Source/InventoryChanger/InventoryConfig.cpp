@@ -69,102 +69,6 @@ constexpr auto CONFIG_VERSION = 4;
     return json{ { "Picks", std::move(picks) } };
 }
 
-json InventoryChanger::toJson() noexcept
-{
-    json j;
-
-    j["Version"] = CONFIG_VERSION;
-
-    const auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-    const auto& gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage();
-    const auto& loadout = backend.getLoadout();
-    const auto& inventory = backend.getInventory();
-    auto& items = j["Items"];
-    for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
-        json itemConfig;
-
-        if (const auto slotCT = loadout.getItemEquippedSlotCT(itemIt); slotCT.has_value()) {
-            itemConfig["Equipped Slot"] = *slotCT;
-            itemConfig["Equipped"].push_back("CT");
-        }
-        if (const auto slotTT = loadout.getItemEquippedSlotTT(itemIt); slotTT.has_value()) {
-            itemConfig["Equipped Slot"] = *slotTT;
-            itemConfig["Equipped"].push_back("TT");
-        }
-        if (const auto slotNoTeam = loadout.getItemEquippedSlotNoTeam(itemIt); slotNoTeam.has_value()) {
-            itemConfig["Equipped Slot"] = *slotNoTeam;
-            itemConfig["Equipped"].push_back("NOTEAM");
-        }
-
-        const auto& item = *itemIt;
-        const auto& gameItem = item.gameItem();
-        itemConfig["Weapon ID"] = gameItem.getWeaponID();
-        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
-
-        if (gameItem.isSticker()) {
-            itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
-        } else if (gameItem.isGloves()) {
-            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
-            itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
-
-            if (const auto glove = item.get<inventory_changer::inventory::Glove>()) {
-                itemConfig["Wear"] = glove->wear;
-                itemConfig["Seed"] = glove->seed;
-            }
-        } else if (gameItem.isSkin()) {
-            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
-            itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
-
-            if (const auto skin = item.get<inventory_changer::inventory::Skin>())
-                itemConfig.update(::toJson(*skin));
-
-        } else if (gameItem.isMusic()) {
-            itemConfig["Music ID"] = gameItemStorage.getMusicKit(gameItem).id;
-            if (const auto music = item.get<inventory_changer::inventory::Music>(); music && music->statTrak > -1)
-                itemConfig["StatTrak"] = music->statTrak;
-        } else if (gameItem.isPatch()) {
-            itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
-        } else if (gameItem.isGraffiti()) {
-            itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
-            if (const auto graffiti = item.get<inventory_changer::inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
-                itemConfig["Uses Left"] = graffiti->usesLeft;
-                itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
-            }
-        } else if (gameItem.isAgent()) {
-            if (const auto agent = item.get<inventory_changer::inventory::Agent>()) {
-                auto& stickers = itemConfig["Patches"];
-                for (std::size_t i = 0; i < agent->patches.size(); ++i) {
-                    const auto& patch = agent->patches[i];
-                    if (patch.patchID == 0)
-                        continue;
-
-                    json patchConfig;
-                    patchConfig["Patch ID"] = patch.patchID;
-                    patchConfig["Slot"] = i;
-                    stickers.push_back(std::move(patchConfig));
-                }
-            }
-        } else if (gameItem.isServiceMedal()) {
-            if (const auto serviceMedal = item.get<inventory_changer::inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
-                itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
-        } else if (gameItem.isCase()) {
-            if (const auto souvenirPackage = item.get<inventory_changer::inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
-                itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
-                itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
-                itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
-                itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
-            }
-        }
-
-        items.push_back(std::move(itemConfig));
-    }
-
-    j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
-    return j;
-}
-
 namespace inventory_changer
 {
 
@@ -335,4 +239,100 @@ void InventoryChanger::resetConfig() noexcept
     backend.clearPickEm();
     static inventory_changer::game_integration::Inventory gameInventory{};
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
+}
+
+json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
+{
+    json j;
+
+    j["Version"] = CONFIG_VERSION;
+
+    const auto& backend = inventoryChanger.getBackend();
+    const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
+    const auto& loadout = backend.getLoadout();
+    const auto& inventory = backend.getInventory();
+    auto& items = j["Items"];
+    for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
+        json itemConfig;
+
+        if (const auto slotCT = loadout.getItemEquippedSlotCT(itemIt); slotCT.has_value()) {
+            itemConfig["Equipped Slot"] = *slotCT;
+            itemConfig["Equipped"].push_back("CT");
+        }
+        if (const auto slotTT = loadout.getItemEquippedSlotTT(itemIt); slotTT.has_value()) {
+            itemConfig["Equipped Slot"] = *slotTT;
+            itemConfig["Equipped"].push_back("TT");
+        }
+        if (const auto slotNoTeam = loadout.getItemEquippedSlotNoTeam(itemIt); slotNoTeam.has_value()) {
+            itemConfig["Equipped Slot"] = *slotNoTeam;
+            itemConfig["Equipped"].push_back("NOTEAM");
+        }
+
+        const auto& item = *itemIt;
+        const auto& gameItem = item.gameItem();
+        itemConfig["Weapon ID"] = gameItem.getWeaponID();
+        itemConfig["Item Name"] = StaticData::getWeaponName(gameItem.getWeaponID());
+
+        if (gameItem.isSticker()) {
+            itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
+        } else if (gameItem.isGloves()) {
+            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
+            itemConfig["Paint Kit"] = staticData.id;
+            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
+
+            if (const auto glove = item.get<inventory_changer::inventory::Glove>()) {
+                itemConfig["Wear"] = glove->wear;
+                itemConfig["Seed"] = glove->seed;
+            }
+        } else if (gameItem.isSkin()) {
+            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
+            itemConfig["Paint Kit"] = staticData.id;
+            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
+
+            if (const auto skin = item.get<inventory_changer::inventory::Skin>())
+                itemConfig.update(::toJson(*skin));
+
+        } else if (gameItem.isMusic()) {
+            itemConfig["Music ID"] = gameItemStorage.getMusicKit(gameItem).id;
+            if (const auto music = item.get<inventory_changer::inventory::Music>(); music && music->statTrak > -1)
+                itemConfig["StatTrak"] = music->statTrak;
+        } else if (gameItem.isPatch()) {
+            itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
+        } else if (gameItem.isGraffiti()) {
+            itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
+            if (const auto graffiti = item.get<inventory_changer::inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
+                itemConfig["Uses Left"] = graffiti->usesLeft;
+                itemConfig["Item Name"] = StaticData::getWeaponName(WeaponId::Graffiti);
+            }
+        } else if (gameItem.isAgent()) {
+            if (const auto agent = item.get<inventory_changer::inventory::Agent>()) {
+                auto& stickers = itemConfig["Patches"];
+                for (std::size_t i = 0; i < agent->patches.size(); ++i) {
+                    const auto& patch = agent->patches[i];
+                    if (patch.patchID == 0)
+                        continue;
+
+                    json patchConfig;
+                    patchConfig["Patch ID"] = patch.patchID;
+                    patchConfig["Slot"] = i;
+                    stickers.push_back(std::move(patchConfig));
+                }
+            }
+        } else if (gameItem.isServiceMedal()) {
+            if (const auto serviceMedal = item.get<inventory_changer::inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
+                itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
+        } else if (gameItem.isCase()) {
+            if (const auto souvenirPackage = item.get<inventory_changer::inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+                itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
+                itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
+                itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
+                itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
+            }
+        }
+
+        items.push_back(std::move(itemConfig));
+    }
+
+    j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
+    return j;
 }

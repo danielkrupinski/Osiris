@@ -525,7 +525,7 @@ void Config::save(size_t id) const noexcept
     j["Visuals"] = Visuals::toJson();
     j["Misc"] = Misc::toJson();
     j["Style"] = style;
-    j["Inventory Changer"] = InventoryChanger::toJson();
+    j["Inventory Changer"] = toJson(inventory_changer::InventoryChanger::instance());
 
     removeEmptyObjects(j);
 
