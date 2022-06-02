@@ -792,7 +792,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
-        ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
+        const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
         constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
             constexpr auto delimiter = L" ";
@@ -806,14 +806,23 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             return true;
         };
 
+        static inventory_changer::GameItemList gameItemList{ inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage().getItems() };
+
+        if (filterChanged) {
+            const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
+
+            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(), &gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
+                return filterWide.empty() || passesFilter(std::wstring(weaponNames.getWeaponNameUpper(item.getWeaponID())), filterWide) || passesFilter(std::wstring(getItemName(gameItemStorage, item).forSearch), filterWide);
+            });
+        }
+
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            static std::vector<std::reference_wrapper<const inventory_changer::game_items::Item>> itemIndices{ inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage().getItems().begin(), inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage().getItems().end() };
-            static std::vector<int> toAddCount(itemIndices.size(), 1);
+            static std::vector<int> toAddCount(gameItemList.getItems().size(), 1);
 
             if (static bool sorted = false; !sorted) {
-                std::ranges::sort(itemIndices, [](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
+                gameItemList.sort([&storage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
                     if (a.getWeaponID() == b.getWeaponID())
-                        return getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), a).forSearch < getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), b).forSearch;
+                        return getItemName(storage, a).forSearch < getItemName(storage, b).forSearch;
                     const auto comp = inventory_changer::WeaponNames::instance().getWeaponNameUpper(a.getWeaponID()).compare(inventory_changer::WeaponNames::instance().getWeaponNameUpper(b.getWeaponID()));
                     if (comp == 0)
                         return a.getWeaponID() < b.getWeaponID();
@@ -822,10 +831,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 sorted = true;
             }
 
-            const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
-            for (std::size_t i = 0; i < itemIndices.size(); ++i) {
-                const auto& gameItem = itemIndices[i].get();
-                if (!filter.empty() && !passesFilter(std::wstring(inventory_changer::WeaponNames::instance().getWeaponNameUpper(gameItem.getWeaponID())), filterWide) && (!passesFilter(std::wstring(getItemName(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem).forSearch), filterWide)))
+            for (std::size_t i = 0; i < gameItemList.getItems().size(); ++i) {
+                const auto& gameItem = gameItemList.getItems()[i].get();
+                if (!gameItemList.itemPassesFilter(i))
                     continue;
                 ImGui::PushID(i);
 
