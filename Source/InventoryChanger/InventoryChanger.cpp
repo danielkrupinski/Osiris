@@ -10,7 +10,9 @@
 #include <utility>
 #include <vector>
 
+#include <range/v3/algorithm/search.hpp>
 #include <range/v3/algorithm/sort.hpp>
+#include <range/v3/view/split.hpp>
 #include <range/v3/view/zip.hpp>
 
 #define STBI_ONLY_PNG
@@ -794,14 +796,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextItemWidth(-1.0f);
         const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
-        constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
-            constexpr auto delimiter = L" ";
-            wchar_t* _;
-            wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
-            while (token) {
-                if (!std::wcsstr(str.c_str(), token))
+        constexpr auto passesFilter = [](std::wstring_view str, std::wstring_view filter) {
+            for (const auto filterWord : ranges::views::split(filter, L' ')) {
+                if (ranges::search(str, filterWord).empty())
                     return false;
-                token = std::wcstok(nullptr, delimiter, &_);
             }
             return true;
         };
@@ -812,7 +810,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
             gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(), &gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
-                return filterWide.empty() || passesFilter(std::wstring(weaponNames.getWeaponNameUpper(item.getWeaponID())), filterWide) || passesFilter(std::wstring(getItemName(gameItemStorage, item).forSearch), filterWide);
+                return filterWide.empty() || passesFilter(weaponNames.getWeaponNameUpper(item.getWeaponID()), filterWide) || passesFilter(getItemName(gameItemStorage, item).forSearch, filterWide);
             });
         }
 
