@@ -796,9 +796,9 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextItemWidth(-1.0f);
         const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
-        constexpr auto passesFilter = [](std::wstring_view str, std::wstring_view filter) {
+        constexpr auto passesFilter = []<typename... Strings>(std::wstring_view filter, Strings&&... strings) {
             for (const auto filterWord : ranges::views::split(filter, L' ')) {
-                if (ranges::search(str, filterWord).empty())
+                if ((ranges::search(strings, filterWord).empty() && ...))
                     return false;
             }
             return true;
@@ -810,7 +810,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
             gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(), &gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
-                return filterWide.empty() || passesFilter(weaponNames.getWeaponNameUpper(item.getWeaponID()), filterWide) || passesFilter(getItemName(gameItemStorage, item).forSearch, filterWide);
+                return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
 
