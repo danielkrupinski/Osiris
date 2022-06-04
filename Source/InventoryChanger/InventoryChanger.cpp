@@ -717,12 +717,12 @@ public:
             passesFilter[i] = predicate(items[i]);
     }
 
-    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getItems() noexcept
+    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getItems() const noexcept
     {
         return items;
     }
 
-    [[nodiscard]] bool itemPassesFilter(std::size_t itemIndex) noexcept
+    [[nodiscard]] bool itemPassesFilter(std::size_t itemIndex) const noexcept
     {
         return passesFilter[itemIndex];
     }
