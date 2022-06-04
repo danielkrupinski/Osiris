@@ -1278,6 +1278,11 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     }
 }
 
+[[nodiscard]] constexpr bool isWeaponDropNoticeString(std::string_view string) noexcept
+{
+    return string == "#SFUI_Notice_CannotDropWeapon" || string == "#SFUI_Notice_YouDroppedWeapon";
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size)
 {
     if (!localPlayer)
@@ -1300,8 +1305,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
         if (strings.size() < 2)
             return;
 
-        if (strings[0] != "#SFUI_Notice_CannotDropWeapon" &&
-            strings[0] != "#SFUI_Notice_YouDroppedWeapon")
+        if (!isWeaponDropNoticeString(strings[0]))
             return;
 
         if (!isDefaultKnifeNameLocalizationString(strings[1]))
