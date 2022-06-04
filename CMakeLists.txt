@@ -15,6 +15,10 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} --no-gnu-unique")
 endif()
 
+if (MSVC)
+  add_compile_options(/MP)
+endif()
+
 add_library(OsirisOBJ OBJECT "")
 set_target_properties(OsirisOBJ PROPERTIES CXX_VISIBILITY_PRESET hidden C_VISIBILITY_PRESET hidden)
 add_subdirectory(Dependencies)
