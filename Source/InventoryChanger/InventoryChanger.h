@@ -59,6 +59,7 @@ public:
     void onUserTextMsg(const void*& data, int& size);
     void onItemEquip(Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(std::uint64_t itemID);
+    void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence);
 
     void reset();
 
@@ -83,8 +84,6 @@ namespace InventoryChanger
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
-
-    void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
     void onSoUpdated(SharedObject* object) noexcept;
 }

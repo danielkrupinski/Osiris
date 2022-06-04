@@ -1106,20 +1106,6 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     }
 }
 
-void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex()))
-        return;
-
-    if (const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance().getBackend().getLoadout(), localPlayer->getTeamNumber(), 0); !optionalItem.has_value())
-        return;
-
-    sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
-}
-
 namespace inventory_changer
 {
 
@@ -1399,6 +1385,20 @@ void InventoryChanger::acknowledgeItem(std::uint64_t itemID)
             localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
         }
     }
+}
+
+void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence)
+{
+    if (!localPlayer)
+        return;
+
+    if (!Helpers::isKnife(viewModelWeapon->itemDefinitionIndex()))
+        return;
+
+    if (const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 0); !optionalItem.has_value())
+        return;
+
+    sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
 }
 
 void InventoryChanger::reset()
