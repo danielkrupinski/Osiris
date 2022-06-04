@@ -8,8 +8,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04]
-        compiler: [g++-10, g++-11, clang++-12]
+        compiler: [g++-10, g++-11, clang++-12, clang++-13]
         configuration: [Debug, Release]
+        exclude:
+          - os: ubuntu-20.04
+            compiler: clang++-13
     steps:
     - uses: actions/checkout@v2
     - name: Add toolchain PPA
