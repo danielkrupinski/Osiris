@@ -1283,6 +1283,13 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     return string == "#SFUI_Notice_CannotDropWeapon" || string == "#SFUI_Notice_YouDroppedWeapon";
 }
 
+[[nodiscard]] constexpr bool isKillAwardString(std::string_view string) noexcept
+{
+    return string == "#Player_Cash_Award_Killed_Enemy" ||
+           string == "#Player_Point_Award_Killed_Enemy" ||
+           string == "#Player_Point_Award_Killed_Enemy_Plural";
+}
+
 void InventoryChanger::onUserTextMsg(const void*& data, int& size)
 {
     if (!localPlayer)
@@ -1328,9 +1335,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
         if (strings.size() < 3)
             return;
 
-        if (strings[0] != "#Player_Cash_Award_Killed_Enemy" &&
-            strings[0] != "#Player_Point_Award_Killed_Enemy" &&
-            strings[0] != "#Player_Point_Award_Killed_Enemy_Plural")
+        if (!isKillAwardString(strings[0]))
             return;
 
         if (!isDefaultKnifeNameLocalizationString(strings[2]))
