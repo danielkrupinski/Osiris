@@ -8,28 +8,15 @@ namespace inventory_changer::game_integration
 
 void CrateLoot::getLoot(game_items::CrateLoot& crateLoot)
 {
-    crateLoot.nextLootList(6);
-
-    static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
-    for (const auto collection : dreamHack2013Collections) {
-        if (const auto lootList = itemSchema.getLootList(collection)) [[likely]]
-            fillLootFromLootList(*lootList, crateLoot);
-    }
-
-    crateLoot.nextLootListFromPrevious(13);
+    rebuildMissingLootList(crateLoot);
 
     for (const auto& revolvingLootList : itemSchema.revolvingLootLists) {
-        if (revolvingLootList.key == 6 || revolvingLootList.key == 13)
-            continue;
-
         const auto lootListName = revolvingLootList.value;
 
-        crateLoot.nextLootList(revolvingLootList.key);
-
-        if (const auto lootList = itemSchema.getLootList(lootListName))
+        if (const auto lootList = itemSchema.getLootList(lootListName)) {
+            crateLoot.nextLootList(revolvingLootList.key);
             fillLootFromLootList(*lootList, crateLoot);
-        else
-            rebuildMissingLootList(revolvingLootList.key, crateLoot);
+        }
     }
 }
 
@@ -73,12 +60,21 @@ void CrateLoot::fillLootFromLootList(EconLootListDefinition& lootList, game_item
 }
 
 // a few loot lists aren't present in client item schema, so we need to provide them ourselves
-void CrateLoot::rebuildMissingLootList(int lootListID, game_items::CrateLoot& crateLoot)
+void CrateLoot::rebuildMissingLootList(game_items::CrateLoot& crateLoot)
 {
-    if (lootListID == 292) { // crate_xray_p250_lootlist
-        if (const auto p250XRay = gameItemLookup.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
-            crateLoot.addItem(*p250XRay);
+    crateLoot.nextLootList(6); // crate_dhw13_promo
+
+    static constexpr auto dreamHack2013Collections = std::array{ "set_dust_2", "set_italy", "set_lake", "set_mirage", "set_safehouse", "set_train" }; // https://blog.counter-strike.net/index.php/2013/11/8199/
+    for (const auto collection : dreamHack2013Collections) {
+        if (const auto lootList = itemSchema.getLootList(collection)) [[likely]]
+            fillLootFromLootList(*lootList, crateLoot);
     }
+
+    crateLoot.nextLootListFromPrevious(13); // crate_ems14_promo
+
+    crateLoot.nextLootList(292); // crate_xray_p250_lootlist
+    if (const auto p250XRay = gameItemLookup.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
+        crateLoot.addItem(*p250XRay);
 }
 
 }

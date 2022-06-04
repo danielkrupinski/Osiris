@@ -22,7 +22,7 @@ public:
 private:
     [[nodiscard]] game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const;
     void fillLootFromLootList(EconLootListDefinition& lootList, game_items::CrateLoot& crateLoot);
-    void rebuildMissingLootList(int lootListID, game_items::CrateLoot& crateLoot);
+    void rebuildMissingLootList(game_items::CrateLoot& crateLoot);
 
     ItemSchema& itemSchema;
     const game_items::Lookup& gameItemLookup;
