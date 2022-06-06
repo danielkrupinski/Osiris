@@ -728,6 +728,11 @@ public:
         return passesFilter[itemIndex];
     }
 
+    [[nodiscard]] std::size_t totalItemCount() const noexcept
+    {
+        return items.size();
+    }
+
 private:
     // wrapper around bool to not use std::vector<bool>
     // which isn't compatible with ranges::sort()
@@ -816,7 +821,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            static std::vector<int> toAddCount(gameItemList.getItems().size(), 1);
+            static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
                 gameItemList.sort([&storage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
