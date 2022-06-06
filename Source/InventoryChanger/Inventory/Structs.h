@@ -24,7 +24,7 @@ struct Skin {
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
     TournamentTeam tournamentTeam2{};
-    ProPlayer proPlayer{};
+    csgo::ProPlayer proPlayer{};
 
     [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
@@ -50,7 +50,7 @@ struct SouvenirPackage {
     TournamentStage tournamentStage{};
     TournamentTeam tournamentTeam1{};
     TournamentTeam tournamentTeam2{};
-    ProPlayer proPlayer{};
+    csgo::ProPlayer proPlayer{};
 };
 
 struct ServiceMedal {

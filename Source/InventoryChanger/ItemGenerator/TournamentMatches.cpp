@@ -259,7 +259,7 @@ constexpr auto eslOneKatowice2015Matches = std::to_array<MatchWithoutMVPs>({
 });
 static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &MatchWithoutMVPs::map));
 
-using namespace pro_player;
+using namespace csgo::pro_player;
 
 constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, NinjasInPyjamas, TeamSoloMid, { f0rest, GeT_RiGhT, Xyp9x, karrigan, device, dupreeh } },

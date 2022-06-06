@@ -98,7 +98,7 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
             attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));
             attributeSetter.setTournamentTeam1(econItem, static_cast<int>(dynamicData.tournamentTeam1));
             attributeSetter.setTournamentTeam2(econItem, static_cast<int>(dynamicData.tournamentTeam2));
-            if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
+            if (dynamicData.proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(econItem, static_cast<int>(dynamicData.proPlayer));
         }
     }
@@ -194,7 +194,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
             attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(souvenirPackage->tournamentTeam1));
             attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(souvenirPackage->tournamentTeam2));
-            if (souvenirPackage->proPlayer != static_cast<ProPlayer>(0))
+            if (souvenirPackage->proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
     }

@@ -403,7 +403,7 @@ enum TournamentStage : std::uint8_t {
     ChallengersStage = 27
 };
 
-namespace pro_player
+namespace csgo::pro_player
 {
 
 enum ProPlayer {
@@ -643,7 +643,12 @@ enum ProPlayer {
 
 }
 
+namespace csgo
+{
+
 using pro_player::ProPlayer;
+
+}
 
 class EconItemAttributeSetter {
 public:
