@@ -697,9 +697,10 @@ namespace ImGui
 namespace inventory_changer
 {
 
+template <typename ItemType>
 class GameItemList {
 public:
-    explicit GameItemList(std::span<const game_items::Item> items)
+    explicit GameItemList(std::span<const ItemType> items)
         : items{ items.begin(), items.end() }, passesFilter(items.size(), true) {}
 
     template <typename Predicate>
@@ -717,7 +718,7 @@ public:
             passesFilter[i] = predicate(items[i]);
     }
 
-    [[nodiscard]] std::span<const std::reference_wrapper<const game_items::Item>> getItems() const noexcept
+    [[nodiscard]] std::span<const std::reference_wrapper<const ItemType>> getItems() const noexcept
     {
         return items;
     }
@@ -742,7 +743,7 @@ private:
         bool b;
     };
 
-    std::vector<std::reference_wrapper<const game_items::Item>> items;
+    std::vector<std::reference_wrapper<const ItemType>> items;
     std::vector<Boolean> passesFilter;
 };
 
