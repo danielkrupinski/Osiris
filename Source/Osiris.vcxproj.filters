@@ -757,6 +757,9 @@
     <ClInclude Include="InventoryChanger\WeaponNames.h">
       <Filter>InventoryChanger</Filter>
     </ClInclude>
+    <ClInclude Include="SortFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
