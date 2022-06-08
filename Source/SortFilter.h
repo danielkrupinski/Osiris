@@ -30,7 +30,7 @@ public:
         assert(items.size() == passesFilter.size());
 
         for (std::size_t i = 0; i < items.size(); ++i)
-            passesFilter[i] = predicate(items[i]);
+            passesFilter[i] = predicate(items[i].get());
     }
 
     [[nodiscard]] auto getItems() const noexcept
