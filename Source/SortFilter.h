@@ -20,7 +20,7 @@ public:
     template <typename Predicate>
     void sort(Predicate&& predicate)
     {
-        ranges::sort(ranges::views::zip(items, passesFilter), std::forward<Predicate>(predicate), [](const auto& pair) { return std::get<0>(pair); });
+        ranges::sort(ranges::views::zip(items, passesFilter), std::forward<Predicate>(predicate), [](const auto& pair) { return std::get<0>(pair).get(); });
     }
 
     template <typename Predicate>
