@@ -9,6 +9,7 @@
 #include <range/v3/algorithm/sort.hpp>
 #include <range/v3/view/enumerate.hpp>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/transform.hpp>
 #include <range/v3/view/zip.hpp>
 
 template <typename ItemType>
@@ -34,7 +35,9 @@ public:
 
     [[nodiscard]] auto getItems() const noexcept
     {
-        return ranges::views::enumerate(items) | ranges::views::filter([this](const auto& pair) { return passesFilter[std::get<0>(pair)]; });
+        return ranges::views::transform(items, [](const auto& item) -> decltype(auto) { return item.get(); }) |
+               ranges::views::enumerate |
+               ranges::views::filter([this](const auto& pair) { return passesFilter[std::get<0>(pair)]; });
     }
 
     [[nodiscard]] std::size_t totalItemCount() const noexcept
