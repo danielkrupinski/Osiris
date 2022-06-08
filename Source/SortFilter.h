@@ -7,6 +7,8 @@
 #include <vector>
 
 #include <range/v3/algorithm/sort.hpp>
+#include <range/v3/view/enumerate.hpp>
+#include <range/v3/view/filter.hpp>
 #include <range/v3/view/zip.hpp>
 
 template <typename ItemType>
@@ -30,14 +32,9 @@ public:
             passesFilter[i] = predicate(items[i]);
     }
 
-    [[nodiscard]] std::span<const std::reference_wrapper<const ItemType>> getItems() const noexcept
+    [[nodiscard]] auto getItems() const noexcept
     {
-        return items;
-    }
-
-    [[nodiscard]] bool itemPassesFilter(std::size_t itemIndex) const noexcept
-    {
-        return passesFilter[itemIndex];
+        return ranges::views::enumerate(items) | ranges::views::filter([this](const auto& pair) { return passesFilter[std::get<0>(pair)]; });
     }
 
     [[nodiscard]] std::size_t totalItemCount() const noexcept

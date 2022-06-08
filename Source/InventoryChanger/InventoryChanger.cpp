@@ -777,10 +777,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 sorted = true;
             }
 
-            for (std::size_t i = 0; i < gameItemList.getItems().size(); ++i) {
-                const auto& gameItem = gameItemList.getItems()[i].get();
-                if (!gameItemList.itemPassesFilter(i))
-                    continue;
+            for (const auto& [i, item] : gameItemList.getItems()) {
+                const auto& gameItem = item.get();
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
