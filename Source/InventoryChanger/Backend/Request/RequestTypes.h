@@ -4,7 +4,8 @@
 #include <optional>
 #include <string_view>
 
-#include "Item.h"
+#include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/Backend/PickEm.h>
 
 namespace inventory_changer::backend::request
 {
@@ -101,6 +102,14 @@ struct SelectTeamGraffiti {
 
     ItemConstIterator tournamentCoin;
     std::uint16_t graffitiID;
+};
+
+struct PickStickerPickEm {
+    PickStickerPickEm(PickEm::PickPosition position, TournamentTeam team)
+        : position{ position }, team{ team } {}
+
+    PickEm::PickPosition position;
+    TournamentTeam team;
 };
 
 }

@@ -3,6 +3,8 @@
 #include <variant>
 
 #include <InventoryChanger/Backend/ItemIDMap.h>
+#include <InventoryChanger/GameItems/Storage.h>
+
 #include "ResponseTypes.h"
 
 namespace inventory_changer::backend
@@ -10,13 +12,14 @@ namespace inventory_changer::backend
 
 template <typename GameInventory>
 struct ResponseHandler {
-    explicit ResponseHandler(ItemIDMap& itemIDMap, GameInventory& gameInventory) : itemIDMap{ itemIDMap }, gameInventory{ gameInventory } {}
+    explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, GameInventory& gameInventory)
+        : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
 
     void operator()(const response::ItemAdded& response) const
     {
-        const auto itemID = gameInventory.createSOCItem(*response.item, response.asUnacknowledged);
+        const auto itemID = gameInventory.createSOCItem(gameItemStorage, *response.item, response.asUnacknowledged);
         itemIDMap.add(itemID, response.item);
     }
 
@@ -136,12 +139,18 @@ struct ResponseHandler {
             gameInventory.selectTeamGraffiti(*itemID, response.graffitiID);
     }
 
+    void operator()(const response::PickEmUpdated&) const
+    {
+        gameInventory.pickEmUpdated();
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemConstIterator item) const
     {
         return itemIDMap.getItemID(item);
     }
 
+    const game_items::Storage& gameItemStorage;
     ItemIDMap& itemIDMap;
     GameInventory& gameInventory;
 };

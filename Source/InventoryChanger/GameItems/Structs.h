@@ -4,7 +4,7 @@
 
 #include "../../SDK/ItemSchema.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 struct ItemName {

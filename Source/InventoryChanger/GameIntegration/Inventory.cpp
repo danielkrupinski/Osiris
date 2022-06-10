@@ -1,7 +1,6 @@
 #include "Inventory.h"
 
 #include <Interfaces.h>
-#include <InventoryChanger/StaticData.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <SDK/EconItemView.h>
 #include <SDK/Panorama.h>
@@ -64,11 +63,11 @@ void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
 
 }
 
-void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) noexcept
+void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
-    const auto paintKit = StaticData::lookup().getStorage().getPaintKit(inventoryItem.gameItem()).id;
+    const auto paintKit = gameItemStorage.getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
 
     const auto skin = inventoryItem.get<inventory::Skin>();
@@ -99,7 +98,7 @@ void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) 
             attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));
             attributeSetter.setTournamentTeam1(econItem, static_cast<int>(dynamicData.tournamentTeam1));
             attributeSetter.setTournamentTeam2(econItem, static_cast<int>(dynamicData.tournamentTeam2));
-            if (dynamicData.proPlayer != static_cast<ProPlayer>(0))
+            if (dynamicData.proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(econItem, static_cast<int>(dynamicData.proPlayer));
         }
     }
@@ -118,7 +117,7 @@ void initSkinEconItem(const inventory::Item& inventoryItem, EconItem& econItem) 
     }
 }
 
-std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, bool asUnacknowledged)
+std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
     const auto localInventory = memory->inventoryManager->getLocalInventory();
     if (!localInventory)
@@ -139,39 +138,37 @@ std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, boo
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
 
-    const auto& storage = StaticData::lookup().getStorage();
-
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
     if (item.isSticker()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getStickerKit(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getStickerKit(item).id);
     } else if (item.isPatch()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getPatch(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getPatch(item).id);
     } else if (item.isGraffiti()) {
-        attributeSetter.setStickerID(*econItem, 0, storage.getGraffitiKit(item).id);
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getGraffitiKit(item).id);
         if (const auto graffiti = inventoryItem.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
             econItem->weaponId = WeaponId::Graffiti;
             attributeSetter.setSpraysRemaining(*econItem, graffiti->usesLeft);
         }
     } else if (item.isMusic()) {
-        attributeSetter.setMusicID(*econItem, storage.getMusicKit(item).id);
+        attributeSetter.setMusicID(*econItem, gameItemStorage.getMusicKit(item).id);
         if (const auto music = inventoryItem.get<inventory::Music>(); music && music->statTrak > -1) {
             attributeSetter.setStatTrak(*econItem, music->statTrak);
             attributeSetter.setStatTrakType(*econItem, 1);
             econItem->quality = 9;
         }
     } else if (item.isSkin()) {
-        initSkinEconItem(inventoryItem, *econItem);
+        initSkinEconItem(gameItemStorage, inventoryItem, *econItem);
     } else if (item.isGloves()) {
         econItem->quality = 3;
-        attributeSetter.setPaintKit(*econItem, static_cast<float>(storage.getPaintKit(item).id));
+        attributeSetter.setPaintKit(*econItem, static_cast<float>(gameItemStorage.getPaintKit(item).id));
 
         if (const auto glove = inventoryItem.get<inventory::Glove>()) {
             attributeSetter.setWear(*econItem, glove->wear);
             attributeSetter.setSeed(*econItem, static_cast<float>(glove->seed));
         }
     } else if (item.isCollectible()) {
-        if (storage.isCollectibleGenuine(item))
+        if (gameItemStorage.isCollectibleGenuine(item))
             econItem->quality = 1;
     } else if (item.isAgent()) {
         if (const auto agent = inventoryItem.get<inventory::Agent>()) {
@@ -190,14 +187,14 @@ std::uint64_t Inventory::createSOCItem(const inventory::Item& inventoryItem, boo
         if (const auto tournamentCoin = inventoryItem.get<inventory::TournamentCoin>())
             attributeSetter.setDropsAwarded(*econItem, tournamentCoin->dropsAwarded);
         attributeSetter.setDropsRedeemed(*econItem, 0);
-        attributeSetter.setStickerID(*econItem, 0, storage.getDefaultTournamentGraffitiID(item));
+        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getDefaultTournamentGraffitiID(item));
         attributeSetter.setCampaignCompletion(*econItem, 1);
-    } else if (item.isCase() && StaticData::isSouvenirPackage(item)) {
+    } else if (item.isCase()) {
         if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
             attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(souvenirPackage->tournamentTeam1));
             attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(souvenirPackage->tournamentTeam2));
-            if (souvenirPackage->proPlayer != static_cast<ProPlayer>(0))
+            if (souvenirPackage->proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
     }
@@ -457,6 +454,15 @@ void Inventory::markItemUpdated(std::uint64_t itemID)
     if (const auto inventoryComponent = *memory->uiComponentInventory) {
         memory->setItemSessionPropertyValue(inventoryComponent, itemID, "recent", "0");
         memory->setItemSessionPropertyValue(inventoryComponent, itemID, "updated", "1");
+    }
+}
+
+void Inventory::pickEmUpdated()
+{
+    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
+        const char* dummy;
+        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
+            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
     }
 }
 

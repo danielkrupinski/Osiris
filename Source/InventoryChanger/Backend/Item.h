@@ -29,6 +29,6 @@ template <>
 struct std::hash<inventory_changer::backend::ItemConstIterator> {
     [[nodiscard]] std::size_t operator()(inventory_changer::backend::ItemConstIterator iterator) const noexcept
     {
-        return std::hash<const inventory::Item*>{}(std::to_address(iterator));
+        return std::hash<const inventory_changer::inventory::Item*>{}(std::to_address(iterator));
     }
 };

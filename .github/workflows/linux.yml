@@ -4,11 +4,17 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        compiler: [g++-10, g++-11, clang++-12]
+        os: [ubuntu-20.04, ubuntu-22.04]
+        compiler: [g++-10, g++-11, clang++-12, clang++-13, clang++-14]
         configuration: [Debug, Release]
+        exclude:
+          - os: ubuntu-20.04
+            compiler: clang++-13
+          - os: ubuntu-20.04
+            compiler: clang++-14
     steps:
     - uses: actions/checkout@v2
     - name: Add toolchain PPA

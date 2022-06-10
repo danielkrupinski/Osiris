@@ -7,28 +7,46 @@
 #include "Item.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
-#include "RequestHandler.h"
+#include "PickEm.h"
+#include "Request/RequestHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseHandler.h"
 #include "Response/ResponseQueue.h"
 
-#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/GameItems/CrateLootLookup.h>
+#include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend
 {
 
 class BackendSimulator {
 public:
-    explicit BackendSimulator(const game_items::Lookup& gameItemLookup) : gameItemLookup{ gameItemLookup } {}
+    explicit BackendSimulator(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup)
+        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup } {}
 
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
         return loadout;
     }
 
+    [[nodiscard]] const PickEm& getPickEm() const noexcept
+    {
+        return pickEm;
+    }
+
     [[nodiscard]] const ItemList& getInventory() const noexcept
     {
         return inventory;
+    }
+
+    [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
+    {
+        return gameItemLookup;
+    }
+
+    [[nodiscard]] const game_items::CrateLootLookup& getCrateLootLookup() const noexcept
+    {
+        return crateLootLookup;
     }
 
     void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
@@ -64,16 +82,16 @@ public:
         loadout.equipItemNoTeam(itemIterator, slot);
     }
 
-    [[nodiscard]] static BackendSimulator& instance()
-    {
-        static BackendSimulator backendSimulator{ StaticData::lookup() };
-        return backendSimulator;
-    }
-
     void clearInventory()
     {
         for (auto it = inventory.cbegin(); it != inventory.cend();)
             it = removeItem(it);
+    }
+
+    void clearPickEm()
+    {
+        pickEm.clear();
+        responseQueue.add(response::PickEmUpdated{});
     }
 
     ItemConstIterator addItemUnacknowledged(inventory::Item item)
@@ -116,14 +134,14 @@ public:
     template <typename Request, typename... Args>
     void request(Args&&... args)
     {
-        if (const auto response = RequestHandler{ *this, gameItemLookup, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
+        if (const auto response = RequestHandler{ *this, pickEm, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
             responseQueue.add(response);
     }
 
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ itemIDMap, gameInventory }, delay);
+        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
     }
 
 private:
@@ -140,6 +158,8 @@ private:
     ResponseQueue<> responseQueue;
     ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
+    const game_items::CrateLootLookup& crateLootLookup;
+    PickEm pickEm;
 };
 
 }

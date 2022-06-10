@@ -115,11 +115,12 @@ public:
     std::uintptr_t setStatTrakSwapToolItemsGetArgAsStringReturnAddress1;
     std::uintptr_t acknowledgeNewItemByItemIDGetArgAsStringReturnAddress;
     std::uintptr_t setItemAttributeValueAsyncGetArgAsStringReturnAddress;
+    std::uintptr_t setMyPredictionUsingItemIdGetNumArgsReturnAddress;
+    std::uintptr_t getMyPredictionTeamIDGetArgAsStringReturnAddress;
 
     std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(THISCALL_CONV* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
     std::uintptr_t useToolGetArgAsStringReturnAddress;
-    std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     void(THISCALL_CONV* setCustomName)(EconItem* thisptr, const char* name);
     SharedObjectTypeCache<EconItem>*(THISCALL_CONV* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
@@ -157,6 +158,8 @@ public:
     std::uintptr_t keyValuesAllocClient;
 
     std::uintptr_t jmpEbxGadgetInClient;
+
+    std::uintptr_t shouldDrawFogReturnAddress;
 #endif
 
 private:

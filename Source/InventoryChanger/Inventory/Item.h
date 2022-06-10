@@ -10,7 +10,7 @@
 #include <InventoryChanger/GameItems/Item.h>
 #include "Structs.h"
 
-namespace inventory
+namespace inventory_changer::inventory
 {
 
 using ItemData = SmallVariant<32,

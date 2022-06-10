@@ -3,7 +3,7 @@
 #include "Item.h"
 #include "Storage.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 struct ItemSorter {

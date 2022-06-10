@@ -42,7 +42,7 @@ static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, v
             if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            InventoryChanger::fixKnifeAnimation(weapon, data.value._int);
+            inventory_changer::InventoryChanger::instance().fixKnifeAnimation(weapon, data.value._int);
         }
     }
     constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };

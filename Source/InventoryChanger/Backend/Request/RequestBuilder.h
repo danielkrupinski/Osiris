@@ -3,19 +3,15 @@
 #include <cstdint>
 #include <string_view>
 
-#include "Backend/BackendSimulator.h"
+#include <InventoryChanger/Backend/BackendSimulator.h>
+#include <InventoryChanger/GameItems/Lookup.h>
 
-namespace inventory_changer
+namespace inventory_changer::backend
 {
 
-class BackendRequestBuilder {
+class RequestBuilder {
 public:
-    explicit BackendRequestBuilder(backend::BackendSimulator& backend) : backend{ backend } {}
-
-    void setToolItemID(std::uint64_t itemID) noexcept
-    {
-        toolItemID = itemID;
-    }
+    explicit RequestBuilder(BackendSimulator& backend) : backend{ backend } {}
 
     void setStickerSlot(std::uint8_t slot) noexcept
     {
@@ -33,7 +29,7 @@ public:
         nameTag = newName;
     }
 
-    void useToolOn(std::uint64_t destItemID)
+    void useToolOn(std::uint64_t toolItemID, std::uint64_t destItemID)
     {
         const auto toolItem = backend.itemFromID(toolItemID);
         const auto destItem = backend.itemFromID(destItemID);
@@ -54,9 +50,9 @@ public:
             return;
 
         if (const auto gameItem = (*item)->gameItem(); gameItem.isSkin())
-            backend.request<backend::request::WearSticker>(*item, slot);
+            backend.request<request::WearSticker>(*item, slot);
         else if (gameItem.isAgent())
-            backend.request<backend::request::RemovePatch>(*item, slot);
+            backend.request<request::RemovePatch>(*item, slot);
     }
 
     void removeNameTagFrom(std::uint64_t itemID)
@@ -65,26 +61,32 @@ public:
         if (!item.has_value())
             return;
 
-        backend.request<backend::request::RemoveNameTag>(*item);
+        backend.request<request::RemoveNameTag>(*item);
     }
 
-    [[nodiscard]] static BackendRequestBuilder& instance()
+    void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
     {
-        static BackendRequestBuilder builder{ backend::BackendSimulator::instance() };
-        return builder;
+        const auto& gameItemLookup = backend.getGameItemLookup();
+
+        const auto sticker = gameItemLookup.findSticker(stickerID);
+        if (!sticker || !sticker->get().isSticker())
+            return;
+
+        const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
+        backend.request<request::PickStickerPickEm>(PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
     }
 
 private:
     void useToolOnItem(backend::ItemConstIterator tool, backend::ItemConstIterator destItem)
     {
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
-            backend.request<backend::request::ApplySticker>(destItem, tool, stickerSlot);
+            backend.request<request::ApplySticker>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
-            backend.request<backend::request::OpenContainer>(destItem, tool);
+            backend.request<request::OpenContainer>(destItem, tool);
         } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
-            backend.request<backend::request::ApplyPatch>(destItem, tool, stickerSlot);
+            backend.request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
-            backend.request<backend::request::AddNameTag>(destItem, tool, nameTag);
+            backend.request<request::AddNameTag>(destItem, tool, nameTag);
         }
     }
 
@@ -95,26 +97,25 @@ private:
             const auto statTrakSwapItem2 = backend.itemFromID(statTrakSwapItemID2);
 
             if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
-                backend.request<backend::request::SwapStatTrak>(*statTrakSwapItem1, *statTrakSwapItem2, tool);
+                backend.request<request::SwapStatTrak>(*statTrakSwapItem1, *statTrakSwapItem2, tool);
         } else if (tool->gameItem().isOperationPass()) {
-            backend.request<backend::request::ActivateOperationPass>(tool);
+            backend.request<request::ActivateOperationPass>(tool);
         } else if (tool->gameItem().isViewerPass()) {
-            backend.request<backend::request::ActivateViewerPass>(tool);
+            backend.request<request::ActivateViewerPass>(tool);
         } else if (tool->gameItem().isSouvenirToken()) {
-            backend.request<backend::request::ActivateSouvenirToken>(tool);
+            backend.request<request::ActivateSouvenirToken>(tool);
         } else if (tool->gameItem().isGraffiti()) {
-            backend.request<backend::request::UnsealGraffiti>(tool);
+            backend.request<request::UnsealGraffiti>(tool);
         }
     }
 
     void useItem(backend::ItemConstIterator item)
     {
         if (item->gameItem().isCase())
-            backend.request<backend::request::OpenContainer>(item);
+            backend.request<request::OpenContainer>(item);
     }
 
-    backend::BackendSimulator& backend;
-    std::uint64_t toolItemID = 0;
+    BackendSimulator& backend;
     std::uint8_t stickerSlot = 0;
     std::uint64_t statTrakSwapItemID1 = 0;
     std::uint64_t statTrakSwapItemID2 = 0;

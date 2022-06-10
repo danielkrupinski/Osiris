@@ -339,16 +339,8 @@ static bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
-#ifdef _DEBUG
-    // Check if we always get the same return address
-    if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x6274C084) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-#endif
-
-    if (*static_cast<std::uint32_t*>(_ReturnAddress()) != 0x6274C084)
-        return hooks->clientMode.callOriginal<bool, 17>();
+        if (RETURN_ADDRESS() != memory->shouldDrawFogReturnAddress)
+            return hooks->clientMode.callOriginal<bool, 17>();
     }
 #endif
     
@@ -481,7 +473,7 @@ static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool upda
 static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    InventoryChanger::getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
+    inventory_changer::InventoryChanger::instance().getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
@@ -490,14 +482,21 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        InventoryChanger::getArgAsStringHook(result, RETURN_ADDRESS(), params);
+        inventory_changer::InventoryChanger::instance().getArgAsStringHook(result, RETURN_ADDRESS(), params);
 
+    return result;
+}
+
+static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
+    inventory_changer::InventoryChanger::instance().getNumArgsHook(result, RETURN_ADDRESS(), params);
     return result;
 }
 
 static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
 {
-    InventoryChanger::onItemEquip(team, slot, itemID);
+    inventory_changer::InventoryChanger::instance().onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
@@ -510,7 +509,7 @@ static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, Share
 static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
     if (type == UserMessageType::Text)
-        InventoryChanger::onUserTextMsg(data, size);
+        inventory_changer::InventoryChanger::instance().onUserTextMsg(data, size);
     else if (type == UserMessageType::VoteStart)
         Misc::onVoteStart(data, size);
     else if (type == UserMessageType::VotePass)
@@ -600,6 +599,7 @@ void Hooks::install() noexcept
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+    panoramaMarshallHelper.hookAt(1, &getNumArgs);
     panoramaMarshallHelper.hookAt(5, &getArgAsNumber);
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
 
@@ -687,7 +687,7 @@ void Hooks::uninstall() noexcept
     Netvars::restore();
 
     Glow::clearCustomObjects();
-    InventoryChanger::clearInventory();
+    inventory_changer::InventoryChanger::instance().reset();
 
 #ifdef _WIN32
     keyValuesSystem.restore();

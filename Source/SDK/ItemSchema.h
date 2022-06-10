@@ -287,6 +287,9 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+namespace tournament_team
+{
+
 enum TournamentTeam : std::uint8_t {
     None = 0,
     NinjasInPyjamas = 1,
@@ -387,6 +390,10 @@ enum TournamentTeam : std::uint8_t {
     BadNewsEagles = 114
 };
 
+}
+
+using tournament_team::TournamentTeam;
+
 enum TournamentStage : std::uint8_t {
     GroupStage = 2,
     Quarterfinal = 5,
@@ -395,6 +402,9 @@ enum TournamentStage : std::uint8_t {
     AllStar = 14,
     ChallengersStage = 27
 };
+
+namespace csgo::pro_player
+{
 
 enum ProPlayer {
     f0rest = 93724,
@@ -630,6 +640,15 @@ enum ProPlayer {
     sergej = 67574097,
     Aerial = 2445180
 };
+
+}
+
+namespace csgo
+{
+
+using pro_player::ProPlayer;
+
+}
 
 class EconItemAttributeSetter {
 public:
