@@ -741,8 +741,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
 
         ImGui::SameLine();
-        ImGui::SetNextItemWidth(-1.0f);
+        ImGui::SetNextItemWidth(-85.0f);
         const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
+        ImGui::SameLine();
+        const bool addingAll = ImGui::Button("Add all in list");
 
         constexpr auto passesFilter = []<typename... Strings>(std::wstring_view filter, Strings&&... strings) {
             for (const auto filterWord : ranges::views::split(filter, L' ')) {
@@ -778,6 +780,10 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             }
 
             for (const auto& [i, gameItem] : gameItemList.getItems()) {
+                if (addingAll) {
+                    inventory_changer::InventoryChanger::instance().getBackend().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) });
+                }
+
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
