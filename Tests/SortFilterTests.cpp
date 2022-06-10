@@ -37,6 +37,14 @@ TEST(SortFilterTest, FilteringExcludesItemsNotSatisfyingPredicate) {
     ASSERT_THAT(items, testing::ElementsAre(1, 3));
 }
 
+TEST(SortFilterTest, FilterIsPreservedAfterSorting) {
+    SortFilter<int> sortFilter{ numbers };
+    sortFilter.filter([](int number) { return number % 2 == 0; });
+    sortFilter.sort(std::less{});
+    const std::vector<int> values = ranges::views::values(sortFilter.getItems()) | ranges::to<std::vector>();
+    ASSERT_THAT(values, testing::ElementsAre(2, 4, 8));
+}
+
 struct NonCopyableNonMovable {
     constexpr NonCopyableNonMovable(int value) : value{ value } {}
 
