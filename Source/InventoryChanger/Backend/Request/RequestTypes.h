@@ -112,4 +112,10 @@ struct PickStickerPickEm {
     TournamentTeam team;
 };
 
+struct PerformXRayScan {
+    explicit PerformXRayScan(ItemConstIterator crate) : crate{ crate } {}
+
+    ItemConstIterator crate;
+};
+
 }
