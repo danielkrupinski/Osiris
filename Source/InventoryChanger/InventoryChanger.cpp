@@ -1196,6 +1196,8 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
 
         memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
+    } else if (returnAddress == memory->setInventorySortAndFiltersGetArgAsStringReturnAddress) {
+        panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
     }
 }
 

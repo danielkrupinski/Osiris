@@ -69,6 +69,7 @@ private:
     game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;
     backend::RequestBuilder backendRequestBuilder;
+    bool panoramaCodeInXrayScanner = false;
 };
 
 }
