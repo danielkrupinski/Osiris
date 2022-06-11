@@ -138,6 +138,9 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
 
+    if (inventoryItem.isHidden())
+        econItem->flags |= 16;
+
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
     if (item.isSticker()) {
