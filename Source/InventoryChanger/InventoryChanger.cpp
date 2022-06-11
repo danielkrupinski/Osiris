@@ -1223,6 +1223,11 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     }
 }
 
+int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, void* params, int result)
+{
+    return result;
+}
+
 [[nodiscard]] constexpr bool isWeaponDropNoticeString(std::string_view string) noexcept
 {
     return string == "#SFUI_Notice_CannotDropWeapon" || string == "#SFUI_Notice_YouDroppedWeapon";

@@ -56,6 +56,7 @@ public:
     void overrideHudIcon(GameEvent& event);
     void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params);
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
+    int setResultIntHook(std::uintptr_t returnAddress, void* params, int result);
     void onUserTextMsg(const void*& data, int& size);
     void onItemEquip(Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(std::uint64_t itemID);
