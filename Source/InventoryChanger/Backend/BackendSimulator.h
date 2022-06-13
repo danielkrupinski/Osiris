@@ -136,7 +136,7 @@ public:
     template <typename Request, typename... Args>
     void request(Args&&... args)
     {
-        if (const auto response = RequestHandler{ *this, pickEm, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
+        if (const auto response = RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
             responseQueue.add(response);
     }
 
