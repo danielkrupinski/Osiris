@@ -252,4 +252,23 @@ Response RequestHandler::operator()(const request::PerformXRayScan& request) con
     return response::XRayScannerUsed{ receivedItem };
 }
 
+Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request) const
+{
+    const auto scannerItems = xRayScanner.getItems();
+    if (!scannerItems.has_value())
+        return {};
+
+    if (request.container != scannerItems->crate)
+        return {};
+
+    if (request.key.has_value()) {
+        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
+            backend.removeItem(keyItem);
+    }
+
+    backend.removeItem(request.container);
+    backend.request<request::UnhideItem>(scannerItems->reward);
+    return response::XRayItemClaimed{ scannerItems->reward };
+}
+
 }

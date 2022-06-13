@@ -33,6 +33,7 @@ struct RequestHandler {
     Response operator()(const request::HideItem& request) const;
     Response operator()(const request::UnhideItem& request) const;
     Response operator()(const request::PerformXRayScan& request) const;
+    Response operator()(const request::ClaimXRayScannedItem& request) const;
 
 private:
     BackendSimulator& backend;
