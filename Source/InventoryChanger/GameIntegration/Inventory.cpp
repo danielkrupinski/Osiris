@@ -496,4 +496,9 @@ void Inventory::hideItem(std::uint64_t itemID)
     setItemHiddenFlag(itemID, true);
 }
 
+void Inventory::xRayItemRevealed(std::uint64_t itemID)
+{
+   initItemCustomizationNotification("xray_item_reveal", itemID);
+}
+
 }

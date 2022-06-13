@@ -29,6 +29,7 @@ public:
     void markItemUpdated(std::uint64_t itemID);
     void pickEmUpdated();
     void hideItem(std::uint64_t itemID);
+    void xRayItemRevealed(std::uint64_t itemID);
 };
 
 }
