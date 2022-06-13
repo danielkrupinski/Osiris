@@ -120,4 +120,13 @@ struct PerformXRayScan {
     ItemConstIterator crate;
 };
 
+struct ClaimXRayScannedItem {
+    explicit ClaimXRayScannedItem(ItemConstIterator container) : container{ container } {}
+    ClaimXRayScannedItem(ItemConstIterator container, ItemConstIterator key)
+        : container{ container }, key{ key } {}
+
+    ItemConstIterator container;
+    std::optional<ItemConstIterator> key;
+};
+
 }
