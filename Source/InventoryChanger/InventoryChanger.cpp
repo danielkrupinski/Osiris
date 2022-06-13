@@ -794,6 +794,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const auto& inventory = inventory_changer::InventoryChanger::instance().getBackend().getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
+                if (it->isHidden()) {
+                    ++it;
+                    continue;
+                }
+
                 ImGui::PushID(i);
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
