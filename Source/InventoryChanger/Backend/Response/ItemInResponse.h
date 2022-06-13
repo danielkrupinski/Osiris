@@ -18,6 +18,7 @@ struct ItemInResponse {
     bool operator()(const response::ItemMovedToFront& response) const { return response.item == item; }
     bool operator()(const response::ItemUpdated& response) const { return response.item == item; }
     bool operator()(const response::ItemHidden& response) const { return response.item == item; }
+    bool operator()(const response::ItemUnhidden& response) const { return response.item == item; }
     bool operator()(const response::ItemEquipped& response) const { return response.item == item; }
     bool operator()(const response::ItemRemoved&) const { return false; }
     bool operator()(const response::StickerApplied& response) const { return response.skinItem == item; }

@@ -41,6 +41,11 @@ struct ResponseHandler {
             gameInventory.hideItem(*itemID);
     }
 
+    void operator()(const response::ItemUnhidden& response) const
+    {
+
+    }
+
     void operator()(const response::ItemEquipped& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value())
