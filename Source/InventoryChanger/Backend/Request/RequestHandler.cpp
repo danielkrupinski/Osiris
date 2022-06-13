@@ -227,6 +227,12 @@ Response RequestHandler::operator()(const request::HideItem& request) const
     return response::ItemHidden{ request.item };
 }
 
+Response RequestHandler::operator()(const request::UnhideItem& request) const
+{
+    constRemover.removeConstness(request.item)->unhide();
+    return response::ItemUnhidden{ request.item };
+}
+
 Response RequestHandler::operator()(const request::PerformXRayScan& request) const
 {
     if (!request.crate->gameItem().isCase())
