@@ -8,6 +8,7 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
+#include "XRayScanner.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseHandler.h"
@@ -109,6 +110,7 @@ public:
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);
         responseQueue.removeResponsesReferencingItem(it);
+        xRayScanner.onItemRemoval(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
             responseQueue.add(response::ItemRemoved{ *itemID });
@@ -160,6 +162,7 @@ private:
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
     PickEm pickEm;
+    XRayScanner xRayScanner;
 };
 
 }
