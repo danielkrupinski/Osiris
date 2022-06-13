@@ -82,7 +82,10 @@ private:
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
             backend.request<request::ApplySticker>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
-            backend.request<request::OpenContainer>(destItem, tool);
+            if (!destItem->isHidden())
+                backend.request<request::OpenContainer>(destItem, tool);
+            else
+                backend.request<request::ClaimXRayScannedItem>(destItem, tool);
         } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
             backend.request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
@@ -113,8 +116,12 @@ private:
 
     void useItem(backend::ItemConstIterator item)
     {
-        if (item->gameItem().isCase())
-            backend.request<request::OpenContainer>(item);
+        if (item->gameItem().isCase()) {
+            if (!item->isHidden())
+                backend.request<request::OpenContainer>(item);
+            else
+                backend.request<request::ClaimXRayScannedItem>(item);
+        }
     }
 
     BackendSimulator& backend;
