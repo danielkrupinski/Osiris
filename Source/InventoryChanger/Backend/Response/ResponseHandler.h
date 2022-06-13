@@ -150,9 +150,10 @@ struct ResponseHandler {
         gameInventory.pickEmUpdated();
     }
 
-    void operator()(const response::XRayScannerUsed&) const
+    void operator()(const response::XRayScannerUsed& response) const
     {
-
+        if (const auto itemID = getItemID(response.receivedItem); itemID.has_value())
+            gameInventory.xRayItemRevealed(*itemID);
     }
 
 private:
