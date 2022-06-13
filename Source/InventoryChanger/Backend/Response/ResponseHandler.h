@@ -162,9 +162,10 @@ struct ResponseHandler {
             gameInventory.xRayItemRevealed(*itemID);
     }
 
-    void operator()(const response::XRayItemClaimed&) const
+    void operator()(const response::XRayItemClaimed& response) const
     {
-
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.xRayItemClaimed(*itemID);
     }
 
 private:
