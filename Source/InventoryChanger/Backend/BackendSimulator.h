@@ -146,6 +146,11 @@ public:
         responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
     }
 
+    [[nodiscard]] bool isInXRayScan() const noexcept
+    {
+        return xRayScanner.getItems().has_value();
+    }
+
 private:
     ItemConstIterator addItem(inventory::Item item, bool asUnacknowledged)
     {
