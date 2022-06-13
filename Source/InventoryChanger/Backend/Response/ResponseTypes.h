@@ -128,4 +128,10 @@ struct TeamGraffitiSelected {
 
 struct PickEmUpdated {};
 
+struct XRayScannerUsed {
+    explicit XRayScannerUsed(ItemConstIterator receivedItem) : receivedItem{ receivedItem } {}
+
+    ItemConstIterator receivedItem;
+};
+
 }

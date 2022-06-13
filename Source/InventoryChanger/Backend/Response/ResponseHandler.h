@@ -150,6 +150,11 @@ struct ResponseHandler {
         gameInventory.pickEmUpdated();
     }
 
+    void operator()(const response::XRayScannerUsed&) const
+    {
+
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemConstIterator item) const
     {
