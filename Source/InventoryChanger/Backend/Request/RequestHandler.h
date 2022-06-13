@@ -29,6 +29,7 @@ struct RequestHandler {
     Response operator()(const request::SelectTeamGraffiti& request) const;
     Response operator()(const request::MarkItemUpdated& request) const;
     Response operator()(const request::PickStickerPickEm& request) const;
+    Response operator()(const request::HideItem& request) const;
 
 private:
     BackendSimulator& backend;

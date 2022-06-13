@@ -221,4 +221,10 @@ Response RequestHandler::operator()(const request::PickStickerPickEm& request) c
     return response::PickEmUpdated{};
 }
 
+Response RequestHandler::operator()(const request::HideItem& request) const
+{
+    constRemover.removeConstness(request.item)->hide();
+    return response::ItemHidden{ request.item };
+}
+
 }
