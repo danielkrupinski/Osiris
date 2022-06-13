@@ -87,6 +87,8 @@ private:
             backend.request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
             backend.request<request::AddNameTag>(destItem, tool, nameTag);
+        } else if (tool->gameItem().isCase() && tool == destItem) {
+            backend.request<request::PerformXRayScan>(tool);
         }
     }
 
