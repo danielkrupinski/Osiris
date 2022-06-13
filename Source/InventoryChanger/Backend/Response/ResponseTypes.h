@@ -28,6 +28,12 @@ struct ItemUpdated {
     ItemConstIterator item;
 };
 
+struct ItemHidden {
+    explicit ItemHidden(ItemConstIterator item) : item{ item } {}
+
+    ItemConstIterator item;
+};
+
 struct ItemEquipped {
     ItemEquipped(ItemConstIterator item, std::uint8_t slot, Team team) : item{ item }, slot{ slot }, team{ team } {}
 

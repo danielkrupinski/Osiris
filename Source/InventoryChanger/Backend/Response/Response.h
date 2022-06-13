@@ -14,6 +14,7 @@ using Response = std::variant<
     response::ItemAdded,
     response::ItemMovedToFront,
     response::ItemUpdated,
+    response::ItemHidden,
     response::ItemEquipped,
     response::ItemRemoved,
     response::StickerApplied,

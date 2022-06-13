@@ -35,6 +35,11 @@ struct ResponseHandler {
             gameInventory.markItemUpdated(*itemID);
     }
 
+    void operator()(const response::ItemHidden&) const
+    {
+
+    }
+
     void operator()(const response::ItemEquipped& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value())
