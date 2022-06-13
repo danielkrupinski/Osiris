@@ -760,6 +760,9 @@
     <ClInclude Include="SortFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\XRayScanner.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
