@@ -227,4 +227,23 @@ Response RequestHandler::operator()(const request::HideItem& request) const
     return response::ItemHidden{ request.item };
 }
 
+Response RequestHandler::operator()(const request::PerformXRayScan& request) const
+{
+    if (!request.crate->gameItem().isCase())
+        return {};
+
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate);
+    if (!generatedItem.has_value())
+        return {};
+
+    constRemover.removeConstness(request.crate)->hide();
+    backend.request<request::HideItem>(request.crate);
+
+    generatedItem->hide();
+
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
+    xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
+    return response::XRayScannerUsed{ receivedItem };
+}
+
 }
