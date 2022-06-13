@@ -140,4 +140,10 @@ struct XRayScannerUsed {
     ItemConstIterator receivedItem;
 };
 
+struct XRayItemClaimed {
+    explicit XRayItemClaimed(ItemConstIterator item) : item{ item } {}
+
+    ItemConstIterator item;
+};
+
 }

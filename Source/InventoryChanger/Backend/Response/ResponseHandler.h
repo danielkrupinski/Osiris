@@ -162,6 +162,11 @@ struct ResponseHandler {
             gameInventory.xRayItemRevealed(*itemID);
     }
 
+    void operator()(const response::XRayItemClaimed&) const
+    {
+
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemConstIterator item) const
     {

@@ -33,7 +33,8 @@ using Response = std::variant<
     response::StatTrakSwapped,
     response::TeamGraffitiSelected,
     response::PickEmUpdated,
-    response::XRayScannerUsed
+    response::XRayScannerUsed,
+    response::XRayItemClaimed
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept
