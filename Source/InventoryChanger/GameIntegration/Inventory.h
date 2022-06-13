@@ -31,6 +31,7 @@ public:
     void hideItem(std::uint64_t itemID);
     void unhideItem(std::uint64_t itemID);
     void xRayItemRevealed(std::uint64_t itemID);
+    void xRayItemClaimed(std::uint64_t itemID);
 };
 
 }

@@ -506,4 +506,9 @@ void Inventory::xRayItemRevealed(std::uint64_t itemID)
    initItemCustomizationNotification("xray_item_reveal", itemID);
 }
 
+void Inventory::xRayItemClaimed(std::uint64_t itemID)
+{
+    initItemCustomizationNotification("xray_item_claim", itemID);
+}
+
 }
