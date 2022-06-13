@@ -1225,8 +1225,11 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     }
 }
 
-int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, void* params, int result)
+int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
 {
+    if (returnAddress == memory->getInventoryCountSetResultIntReturnAddress && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
+        return 0;
+    }
     return result;
 }
 
