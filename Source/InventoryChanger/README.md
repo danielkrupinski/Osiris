@@ -1,6 +1,7 @@
 # Inventory Changer
 
 ## What's new
+* **14 June 2022** - X-Ray Scanner can be used to open weapons cases from the Inventory Changer
 * **11 June 2022** - Added "Add all in list" button to GUI which adds all items satisfying filter condition to the inventory.
 Example: searching for "glock-18" and pressing "Add all in list" will add all weapon skins for Glock-18.
 * **18 May 2022** - Pick'Em is now usable when having a tournament coin from the Inventory Changer
