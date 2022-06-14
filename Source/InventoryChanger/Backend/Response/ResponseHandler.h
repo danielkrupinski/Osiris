@@ -35,6 +35,18 @@ struct ResponseHandler {
             gameInventory.markItemUpdated(*itemID);
     }
 
+    void operator()(const response::ItemHidden& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.hideItem(*itemID);
+    }
+
+    void operator()(const response::ItemUnhidden& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.unhideItem(*itemID);
+    }
+
     void operator()(const response::ItemEquipped& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value())
@@ -142,6 +154,18 @@ struct ResponseHandler {
     void operator()(const response::PickEmUpdated&) const
     {
         gameInventory.pickEmUpdated();
+    }
+
+    void operator()(const response::XRayScannerUsed& response) const
+    {
+        if (const auto itemID = getItemID(response.receivedItem); itemID.has_value())
+            gameInventory.xRayItemRevealed(*itemID);
+    }
+
+    void operator()(const response::XRayItemClaimed& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.xRayItemClaimed(*itemID);
     }
 
 private:

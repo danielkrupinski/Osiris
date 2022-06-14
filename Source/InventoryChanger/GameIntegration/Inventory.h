@@ -28,6 +28,10 @@ public:
     void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot);
     void markItemUpdated(std::uint64_t itemID);
     void pickEmUpdated();
+    void hideItem(std::uint64_t itemID);
+    void unhideItem(std::uint64_t itemID);
+    void xRayItemRevealed(std::uint64_t itemID);
+    void xRayItemClaimed(std::uint64_t itemID);
 };
 
 }

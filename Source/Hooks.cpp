@@ -487,6 +487,12 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     return result;
 }
 
+static void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
+{
+    result = inventory_changer::InventoryChanger::instance().setResultIntHook(RETURN_ADDRESS(), params, result);
+    hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
+}
+
 static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
@@ -602,6 +608,7 @@ void Hooks::install() noexcept
     panoramaMarshallHelper.hookAt(1, &getNumArgs);
     panoramaMarshallHelper.hookAt(5, &getArgAsNumber);
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
+    panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
 
     sound.init(interfaces->sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);

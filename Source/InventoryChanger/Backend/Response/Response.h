@@ -14,6 +14,8 @@ using Response = std::variant<
     response::ItemAdded,
     response::ItemMovedToFront,
     response::ItemUpdated,
+    response::ItemHidden,
+    response::ItemUnhidden,
     response::ItemEquipped,
     response::ItemRemoved,
     response::StickerApplied,
@@ -30,7 +32,9 @@ using Response = std::variant<
     response::GraffitiUnsealed,
     response::StatTrakSwapped,
     response::TeamGraffitiSelected,
-    response::PickEmUpdated
+    response::PickEmUpdated,
+    response::XRayScannerUsed,
+    response::XRayItemClaimed
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept

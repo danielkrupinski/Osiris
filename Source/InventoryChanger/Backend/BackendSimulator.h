@@ -8,6 +8,7 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
+#include "XRayScanner.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseHandler.h"
@@ -109,6 +110,7 @@ public:
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);
         responseQueue.removeResponsesReferencingItem(it);
+        xRayScanner.onItemRemoval(it);
         const auto newIterator = inventory.erase(it);
         if (itemID.has_value())
             responseQueue.add(response::ItemRemoved{ *itemID });
@@ -134,7 +136,7 @@ public:
     template <typename Request, typename... Args>
     void request(Args&&... args)
     {
-        if (const auto response = RequestHandler{ *this, pickEm, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
+        if (const auto response = RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
             responseQueue.add(response);
     }
 
@@ -142,6 +144,11 @@ public:
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
         responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
+    }
+
+    [[nodiscard]] bool isInXRayScan() const noexcept
+    {
+        return xRayScanner.getItems().has_value();
     }
 
 private:
@@ -160,6 +167,7 @@ private:
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
     PickEm pickEm;
+    XRayScanner xRayScanner;
 };
 
 }

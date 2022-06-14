@@ -208,6 +208,9 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
     const auto& inventory = backend.getInventory();
     auto& items = j["Items"];
     for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
+        if (itemIt->isHidden())
+            continue;
+
         json itemConfig;
 
         if (const auto slotCT = loadout.getItemEquippedSlotCT(itemIt); slotCT.has_value()) {

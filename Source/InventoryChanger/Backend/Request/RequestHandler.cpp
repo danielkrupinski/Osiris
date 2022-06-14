@@ -221,4 +221,54 @@ Response RequestHandler::operator()(const request::PickStickerPickEm& request) c
     return response::PickEmUpdated{};
 }
 
+Response RequestHandler::operator()(const request::HideItem& request) const
+{
+    constRemover.removeConstness(request.item)->hide();
+    return response::ItemHidden{ request.item };
+}
+
+Response RequestHandler::operator()(const request::UnhideItem& request) const
+{
+    constRemover.removeConstness(request.item)->unhide();
+    return response::ItemUnhidden{ request.item };
+}
+
+Response RequestHandler::operator()(const request::PerformXRayScan& request) const
+{
+    if (!request.crate->gameItem().isCase())
+        return {};
+
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate);
+    if (!generatedItem.has_value())
+        return {};
+
+    constRemover.removeConstness(request.crate)->hide();
+    backend.request<request::HideItem>(request.crate);
+
+    generatedItem->hide();
+
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
+    xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
+    return response::XRayScannerUsed{ receivedItem };
+}
+
+Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request) const
+{
+    const auto scannerItems = xRayScanner.getItems();
+    if (!scannerItems.has_value())
+        return {};
+
+    if (request.container != scannerItems->crate)
+        return {};
+
+    if (request.key.has_value()) {
+        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
+            backend.removeItem(keyItem);
+    }
+
+    backend.removeItem(request.container);
+    backend.request<request::UnhideItem>(scannerItems->reward);
+    return response::XRayItemClaimed{ scannerItems->reward };
+}
+
 }

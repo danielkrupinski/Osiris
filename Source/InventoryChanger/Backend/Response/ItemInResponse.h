@@ -17,6 +17,8 @@ struct ItemInResponse {
     bool operator()(const response::ItemAdded& response) const { return response.item == item; }
     bool operator()(const response::ItemMovedToFront& response) const { return response.item == item; }
     bool operator()(const response::ItemUpdated& response) const { return response.item == item; }
+    bool operator()(const response::ItemHidden& response) const { return response.item == item; }
+    bool operator()(const response::ItemUnhidden& response) const { return response.item == item; }
     bool operator()(const response::ItemEquipped& response) const { return response.item == item; }
     bool operator()(const response::ItemRemoved&) const { return false; }
     bool operator()(const response::StickerApplied& response) const { return response.skinItem == item; }
@@ -34,6 +36,8 @@ struct ItemInResponse {
     bool operator()(const response::StatTrakSwapped& response) const { return response.itemWithHigherStatTrakAfterSwap == item; }
     bool operator()(const response::TeamGraffitiSelected& response) const { return response.tournamentCoin == item; }
     bool operator()(const response::PickEmUpdated&) const { return false; }
+    bool operator()(const response::XRayScannerUsed& response) const { return response.receivedItem == item; }
+    bool operator()(const response::XRayItemClaimed& response) const { return response.item == item; }
 
 private:
     ItemConstIterator item;

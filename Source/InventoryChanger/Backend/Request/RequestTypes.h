@@ -78,6 +78,8 @@ using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
 using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
 using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
 using MarkItemUpdated = ModifyItem<struct MarkItemUpdatedTag>;
+using HideItem = ModifyItem<struct HideItemTag>;
+using UnhideItem = ModifyItem<struct UnhideItemTag>;
 
 struct AddNameTag {
     AddNameTag(ItemConstIterator item, ItemConstIterator nameTagItem, std::string_view nameTag)
@@ -110,6 +112,21 @@ struct PickStickerPickEm {
 
     PickEm::PickPosition position;
     TournamentTeam team;
+};
+
+struct PerformXRayScan {
+    explicit PerformXRayScan(ItemConstIterator crate) : crate{ crate } {}
+
+    ItemConstIterator crate;
+};
+
+struct ClaimXRayScannedItem {
+    explicit ClaimXRayScannedItem(ItemConstIterator container) : container{ container } {}
+    ClaimXRayScannedItem(ItemConstIterator container, ItemConstIterator key)
+        : container{ container }, key{ key } {}
+
+    ItemConstIterator container;
+    std::optional<ItemConstIterator> key;
 };
 
 }

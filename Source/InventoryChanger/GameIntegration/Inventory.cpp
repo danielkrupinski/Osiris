@@ -61,6 +61,28 @@ void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void setItemHiddenFlag(std::uint64_t itemID, bool hide)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    if (hide)
+        econItem->flags |= 16;
+    else
+        econItem->flags &= ~16;
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 }
 
 void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
@@ -137,6 +159,9 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
     econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
+
+    if (inventoryItem.isHidden())
+        econItem->flags |= 16;
 
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
@@ -464,6 +489,26 @@ void Inventory::pickEmUpdated()
         if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
             interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
     }
+}
+
+void Inventory::hideItem(std::uint64_t itemID)
+{
+    setItemHiddenFlag(itemID, true);
+}
+
+void Inventory::unhideItem(std::uint64_t itemID)
+{
+    setItemHiddenFlag(itemID, false);
+}
+
+void Inventory::xRayItemRevealed(std::uint64_t itemID)
+{
+   initItemCustomizationNotification("xray_item_reveal", itemID);
+}
+
+void Inventory::xRayItemClaimed(std::uint64_t itemID)
+{
+    initItemCustomizationNotification("xray_item_claim", itemID);
 }
 
 }

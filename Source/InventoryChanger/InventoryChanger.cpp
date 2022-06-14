@@ -800,6 +800,11 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const auto& inventory = inventory_changer::InventoryChanger::instance().getBackend().getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
+                if (it->isHidden()) {
+                    ++it;
+                    continue;
+                }
+
                 ImGui::PushID(i);
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
@@ -1202,6 +1207,8 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
 
         memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
+    } else if (returnAddress == memory->setInventorySortAndFiltersGetArgAsStringReturnAddress) {
+        panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
     }
 }
 
@@ -1227,6 +1234,14 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
 
        backendRequestBuilder.placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
+}
+
+int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
+{
+    if (returnAddress == memory->getInventoryCountSetResultIntReturnAddress && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
+        return 0;
+    }
+    return result;
 }
 
 [[nodiscard]] constexpr bool isWeaponDropNoticeString(std::string_view string) noexcept

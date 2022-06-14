@@ -8,10 +8,11 @@ namespace inventory_changer::backend
 
 class BackendSimulator;
 class PickEm;
+class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, XRayScanner& xRayScanner, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, xRayScanner{ xRayScanner }, constRemover{ constRemover } {}
 
     Response operator()(const request::ApplySticker& request) const;
     Response operator()(const request::WearSticker& request) const;
@@ -29,10 +30,15 @@ struct RequestHandler {
     Response operator()(const request::SelectTeamGraffiti& request) const;
     Response operator()(const request::MarkItemUpdated& request) const;
     Response operator()(const request::PickStickerPickEm& request) const;
+    Response operator()(const request::HideItem& request) const;
+    Response operator()(const request::UnhideItem& request) const;
+    Response operator()(const request::PerformXRayScan& request) const;
+    Response operator()(const request::ClaimXRayScannedItem& request) const;
 
 private:
     BackendSimulator& backend;
     PickEm& pickEm;
+    XRayScanner& xRayScanner;
     ItemConstRemover constRemover;
 };
 
