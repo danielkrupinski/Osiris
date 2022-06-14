@@ -49,6 +49,8 @@ template <typename ResponseType>
         return response::TeamGraffitiSelected{ item, 0 };
     else if constexpr (std::is_same_v<ResponseType, response::StatTrakSwapped>)
         return response::StatTrakSwapped{ item };
+    else if constexpr (std::is_same_v<ResponseType, response::StatTrakUpdated>)
+        return response::StatTrakUpdated{ item, 123 };
     else if constexpr (std::is_same_v<ResponseType, response::ItemHidden>)
         return response::ItemHidden{ item };
     else if constexpr (std::is_same_v<ResponseType, response::ItemUnhidden>)
@@ -93,14 +95,6 @@ TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContai
     ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ 0 }, item1));
 }
 
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, StatTrakUpdatedResponseNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(response::StatTrakUpdated{ 0, 1 }));
-}
-
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForStatTrakUpdated) {
-    ASSERT_FALSE(responseContainsItem(response::StatTrakUpdated{ 0, 1 }, item1));
-}
-
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, PickEmUpdatedResponseNeverContainsItem) {
     ASSERT_FALSE(ItemInResponse{ item1 }(response::PickEmUpdated{}));
 }
@@ -127,6 +121,7 @@ using ResponseTypes = testing::Types<
     response::PatchRemoved,
     response::SouvenirTokenActivated,
     response::StatTrakSwapped,
+    response::StatTrakUpdated,
     response::StickerApplied,
     response::StickerRemoved,
     response::StickerScraped,

@@ -198,9 +198,7 @@ Response RequestHandler::operator()(const request::UpdateStatTrak& request) cons
         return {};
 
     *statTrak = request.newStatTrak;
-    if (const auto itemID = backend.getItemID(request.item); itemID.has_value())
-        return response::StatTrakUpdated{ *itemID, request.newStatTrak };
-    return {};
+    return response::StatTrakUpdated{ request.item, request.newStatTrak };
 }
 
 Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) const

@@ -55,9 +55,9 @@ using StickerScraped = StickerModified<struct StickerScrapedTag>;
 using StickerRemoved = StickerModified<struct StickerRemovedTag>;
 
 struct StatTrakUpdated {
-    StatTrakUpdated(std::uint64_t itemID, int newStatTrakValue) : itemID{ itemID }, newStatTrakValue{ newStatTrakValue } {}
+    StatTrakUpdated(ItemConstIterator item, int newStatTrakValue) : item{ item }, newStatTrakValue{ newStatTrakValue } {}
 
-    std::uint64_t itemID;
+    ItemConstIterator item;
     int newStatTrakValue;
 };
 

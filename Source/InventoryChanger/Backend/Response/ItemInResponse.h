@@ -24,7 +24,7 @@ struct ItemInResponse {
     bool operator()(const response::StickerApplied& response) const { return response.skinItem == item; }
     bool operator()(const response::StickerScraped& response) const { return response.skinItem == item; }
     bool operator()(const response::StickerRemoved& response) const { return response.skinItem == item; }
-    bool operator()(const response::StatTrakUpdated&) const { return false; }
+    bool operator()(const response::StatTrakUpdated& response) const { return response.item == item; }
     bool operator()(const response::ViewerPassActivated& response) const { return response.createdEventCoin == item; }
     bool operator()(const response::NameTagAdded& response) const { return response.skinItem == item; }
     bool operator()(const response::NameTagRemoved& response) const { return response.skinItem == item; }

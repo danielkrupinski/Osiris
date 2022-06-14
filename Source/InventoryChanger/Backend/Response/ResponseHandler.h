@@ -82,7 +82,8 @@ struct ResponseHandler {
 
     void operator()(const response::StatTrakUpdated& response) const
     {
-        gameInventory.updateStatTrak(response.itemID, response.newStatTrakValue);
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.updateStatTrak(*itemID, response.newStatTrakValue);
     }
 
     void operator()(const response::ViewerPassActivated& response) const
