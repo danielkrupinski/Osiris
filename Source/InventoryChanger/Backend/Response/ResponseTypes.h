@@ -16,29 +16,17 @@ struct ItemAdded {
     bool asUnacknowledged;
 };
 
-struct ItemMovedToFront {
-    explicit ItemMovedToFront(ItemConstIterator item) : item{ item } {}
+template <typename Tag>
+struct ItemModified {
+    explicit ItemModified(ItemConstIterator item) : item{ item } {}
 
     ItemConstIterator item;
 };
 
-struct ItemUpdated {
-    explicit ItemUpdated(ItemConstIterator item) : item{ item } {}
-
-    ItemConstIterator item;
-};
-
-struct ItemHidden {
-    explicit ItemHidden(ItemConstIterator item) : item{ item } {}
-
-    ItemConstIterator item;
-};
-
-struct ItemUnhidden {
-    explicit ItemUnhidden(ItemConstIterator item) : item{ item } {}
-
-    ItemConstIterator item;
-};
+using ItemMovedToFront = ItemModified<struct ItemMovedToFrontTag>;
+using ItemUpdated = ItemModified<struct ItemUpdatedTag>;
+using ItemHidden = ItemModified<struct ItemHiddenTag>;
+using ItemUnhidden = ItemModified<struct ItemUnhiddenTag>;
 
 struct ItemEquipped {
     ItemEquipped(ItemConstIterator item, std::uint8_t slot, Team team) : item{ item }, slot{ slot }, team{ team } {}
