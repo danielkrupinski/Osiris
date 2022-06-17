@@ -9,13 +9,13 @@
 namespace inventory_changer::backend
 {
     using ItemList = std::list<inventory::Item>;
-    using ItemIterator = ItemList::iterator;
+    using ItemMutableIterator = ItemList::iterator;
     using ItemConstIterator = ItemList::const_iterator;
 
     struct ItemConstRemover {
         explicit ItemConstRemover(ItemList& itemList) : itemList{ itemList } {}
 
-        [[nodiscard]] ItemIterator removeConstness(ItemConstIterator it) const noexcept
+        [[nodiscard]] ItemMutableIterator removeConstness(ItemConstIterator it) const noexcept
         {
             return itemList.erase(it, it);
         }
