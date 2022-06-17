@@ -50,35 +50,35 @@ public:
         return crateLootLookup;
     }
 
-    void equipItemCT(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
         responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::CT });
     }
 
-    void markItemEquippedCT(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void markItemEquippedCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
     }
 
-    void equipItemTT(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void equipItemTT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemTT(itemIterator, slot);
         responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::TT });
     }
 
-    void markItemEquippedTT(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void markItemEquippedTT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemTT(itemIterator, slot);
     }
 
-    void equipItemNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void equipItemNoTeam(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemNoTeam(itemIterator, slot);
         responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::None });
     }
 
-    void markItemEquippedNoTeam(ItemConstIterator itemIterator, Loadout::Slot slot)
+    void markItemEquippedNoTeam(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemNoTeam(itemIterator, slot);
     }
@@ -95,17 +95,17 @@ public:
         responseQueue.add(response::PickEmUpdated{});
     }
 
-    ItemConstIterator addItemUnacknowledged(inventory::Item item)
+    ItemIterator addItemUnacknowledged(inventory::Item item)
     {
         return addItem(std::move(item), true);
     }
 
-    ItemConstIterator addItemAcknowledged(inventory::Item item)
+    ItemIterator addItemAcknowledged(inventory::Item item)
     {
         return addItem(std::move(item), false);
     }
 
-    ItemConstIterator removeItem(ItemConstIterator it)
+    ItemIterator removeItem(ItemIterator it)
     {
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);
@@ -117,18 +117,18 @@ public:
         return newIterator;
     }
 
-    void moveToFront(ItemConstIterator it)
+    void moveToFront(ItemIterator it)
     {
         inventory.splice(inventory.end(), inventory, it);
         responseQueue.add(response::ItemMovedToFront{ it });
     }
 
-    [[nodiscard]] std::optional<ItemConstIterator> itemFromID(std::uint64_t itemID) const
+    [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemConstIterator it) const
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemIterator it) const
     {
         return itemIDMap.getItemID(it);
     }
@@ -152,7 +152,7 @@ public:
     }
 
 private:
-    ItemConstIterator addItem(inventory::Item item, bool asUnacknowledged)
+    ItemIterator addItem(inventory::Item item, bool asUnacknowledged)
     {
         inventory.push_back(std::move(item));
         const auto added = std::prev(inventory.end());

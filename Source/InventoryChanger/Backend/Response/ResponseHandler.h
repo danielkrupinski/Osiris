@@ -170,7 +170,7 @@ struct ResponseHandler {
     }
 
 private:
-    [[nodiscard]] auto getItemID(ItemConstIterator item) const
+    [[nodiscard]] auto getItemID(ItemIterator item) const
     {
         return itemIDMap.getItemID(item);
     }

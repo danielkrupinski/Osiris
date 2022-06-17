@@ -18,16 +18,16 @@ protected:
             itemList.emplace_back(item);
     }
 
-    [[nodiscard]] ItemConstIterator getReward() const { return getItem(0); }
-    [[nodiscard]] ItemConstIterator getAlternateReward() const { return getItem(1); }
-    [[nodiscard]] ItemConstIterator getCrate() const { return getItem(2); }
-    [[nodiscard]] ItemConstIterator getAlternateCrate() const { return getItem(3); }
-    [[nodiscard]] ItemConstIterator getItemNotInScanner() const { return getItem(4); }
+    [[nodiscard]] ItemIterator getReward() const { return getItem(0); }
+    [[nodiscard]] ItemIterator getAlternateReward() const { return getItem(1); }
+    [[nodiscard]] ItemIterator getCrate() const { return getItem(2); }
+    [[nodiscard]] ItemIterator getAlternateCrate() const { return getItem(3); }
+    [[nodiscard]] ItemIterator getItemNotInScanner() const { return getItem(4); }
 
     XRayScanner scanner;
 
 private:
-    [[nodiscard]] ItemConstIterator getItem(std::size_t n) const
+    [[nodiscard]] ItemIterator getItem(std::size_t n) const
     {
         return std::next(itemList.begin(), n);
     }

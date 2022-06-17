@@ -10,17 +10,17 @@ namespace inventory_changer::backend::response
 {
 
 struct ItemAdded {
-    ItemAdded(ItemConstIterator item, bool asUnacknowledged) : item{ item }, asUnacknowledged{ asUnacknowledged } {}
+    ItemAdded(ItemIterator item, bool asUnacknowledged) : item{ item }, asUnacknowledged{ asUnacknowledged } {}
 
-    ItemConstIterator item;
+    ItemIterator item;
     bool asUnacknowledged;
 };
 
 template <typename Tag>
 struct ItemModified {
-    explicit ItemModified(ItemConstIterator item) : item{ item } {}
+    explicit ItemModified(ItemIterator item) : item{ item } {}
 
-    ItemConstIterator item;
+    ItemIterator item;
 };
 
 using ItemMovedToFront = ItemModified<struct ItemMovedToFrontTag>;
@@ -29,9 +29,9 @@ using ItemHidden = ItemModified<struct ItemHiddenTag>;
 using ItemUnhidden = ItemModified<struct ItemUnhiddenTag>;
 
 struct ItemEquipped {
-    ItemEquipped(ItemConstIterator item, std::uint8_t slot, Team team) : item{ item }, slot{ slot }, team{ team } {}
+    ItemEquipped(ItemIterator item, std::uint8_t slot, Team team) : item{ item }, slot{ slot }, team{ team } {}
 
-    ItemConstIterator item;
+    ItemIterator item;
     std::uint8_t slot;
     Team team;
 };
@@ -44,9 +44,9 @@ struct ItemRemoved {
 
 template <typename Tag>
 struct StickerModified {
-    StickerModified(ItemConstIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
+    StickerModified(ItemIterator skinItem, std::uint8_t stickerSlot) : skinItem{ skinItem }, stickerSlot{ stickerSlot } {}
 
-    ItemConstIterator skinItem;
+    ItemIterator skinItem;
     std::uint8_t stickerSlot;
 };
 
@@ -55,39 +55,39 @@ using StickerScraped = StickerModified<struct StickerScrapedTag>;
 using StickerRemoved = StickerModified<struct StickerRemovedTag>;
 
 struct StatTrakUpdated {
-    StatTrakUpdated(ItemConstIterator item, int newStatTrakValue) : item{ item }, newStatTrakValue{ newStatTrakValue } {}
+    StatTrakUpdated(ItemIterator item, int newStatTrakValue) : item{ item }, newStatTrakValue{ newStatTrakValue } {}
 
-    ItemConstIterator item;
+    ItemIterator item;
     int newStatTrakValue;
 };
 
 struct ViewerPassActivated {
-    explicit ViewerPassActivated(ItemConstIterator createdEventCoin) : createdEventCoin{ createdEventCoin } {}
+    explicit ViewerPassActivated(ItemIterator createdEventCoin) : createdEventCoin{ createdEventCoin } {}
 
-    ItemConstIterator createdEventCoin;
+    ItemIterator createdEventCoin;
 };
 
 template <typename Tag>
 struct NameTagModified {
-    explicit NameTagModified(ItemConstIterator skinItem) : skinItem{ skinItem } {}
+    explicit NameTagModified(ItemIterator skinItem) : skinItem{ skinItem } {}
 
-    ItemConstIterator skinItem;
+    ItemIterator skinItem;
 };
 
 using NameTagAdded = NameTagModified<struct NameTagAddedTag>;
 using NameTagRemoved = NameTagModified<struct NameTagRemovedTag>;
 
 struct ContainerOpened {
-    explicit ContainerOpened(ItemConstIterator receivedItem) : receivedItem{ receivedItem } {}
+    explicit ContainerOpened(ItemIterator receivedItem) : receivedItem{ receivedItem } {}
 
-    ItemConstIterator receivedItem;
+    ItemIterator receivedItem;
 };
 
 template <typename Tag>
 struct PatchModified {
-    PatchModified(ItemConstIterator agentItem, std::uint8_t patchSlot) : agentItem{ agentItem }, patchSlot{ patchSlot } {}
+    PatchModified(ItemIterator agentItem, std::uint8_t patchSlot) : agentItem{ agentItem }, patchSlot{ patchSlot } {}
 
-    ItemConstIterator agentItem;
+    ItemIterator agentItem;
     std::uint8_t patchSlot;
 };
 
@@ -95,43 +95,43 @@ using PatchApplied = PatchModified<struct PatchAppliedTag>;
 using PatchRemoved = PatchModified<struct PatchRemovedTag>;
 
 struct SouvenirTokenActivated {
-    explicit SouvenirTokenActivated(ItemConstIterator tournamentCoin) : tournamentCoin{ tournamentCoin } {}
+    explicit SouvenirTokenActivated(ItemIterator tournamentCoin) : tournamentCoin{ tournamentCoin } {}
 
-    ItemConstIterator tournamentCoin;
+    ItemIterator tournamentCoin;
 };
 
 struct GraffitiUnsealed {
-    explicit GraffitiUnsealed(ItemConstIterator graffitiItem) : graffitiItem{ graffitiItem } {}
+    explicit GraffitiUnsealed(ItemIterator graffitiItem) : graffitiItem{ graffitiItem } {}
 
-    ItemConstIterator graffitiItem;
+    ItemIterator graffitiItem;
 };
 
 struct StatTrakSwapped {
-    explicit StatTrakSwapped(ItemConstIterator itemWithHigherStatTrakAfterSwap)
+    explicit StatTrakSwapped(ItemIterator itemWithHigherStatTrakAfterSwap)
         : itemWithHigherStatTrakAfterSwap{ itemWithHigherStatTrakAfterSwap } {}
 
-    ItemConstIterator itemWithHigherStatTrakAfterSwap;
+    ItemIterator itemWithHigherStatTrakAfterSwap;
 };
 
 struct TeamGraffitiSelected {
-    TeamGraffitiSelected(ItemConstIterator tournamentCoin, std::uint16_t graffitiID) : tournamentCoin{ tournamentCoin }, graffitiID{ graffitiID } {}
+    TeamGraffitiSelected(ItemIterator tournamentCoin, std::uint16_t graffitiID) : tournamentCoin{ tournamentCoin }, graffitiID{ graffitiID } {}
 
-    ItemConstIterator tournamentCoin;
+    ItemIterator tournamentCoin;
     std::uint16_t graffitiID;
 };
 
 struct PickEmUpdated {};
 
 struct XRayScannerUsed {
-    explicit XRayScannerUsed(ItemConstIterator receivedItem) : receivedItem{ receivedItem } {}
+    explicit XRayScannerUsed(ItemIterator receivedItem) : receivedItem{ receivedItem } {}
 
-    ItemConstIterator receivedItem;
+    ItemIterator receivedItem;
 };
 
 struct XRayItemClaimed {
-    explicit XRayItemClaimed(ItemConstIterator item) : item{ item } {}
+    explicit XRayItemClaimed(ItemIterator item) : item{ item } {}
 
-    ItemConstIterator item;
+    ItemIterator item;
 };
 
 }

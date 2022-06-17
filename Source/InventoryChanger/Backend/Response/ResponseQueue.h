@@ -21,7 +21,7 @@ public:
         responses.emplace_back(Clock::now(), response);
     }
 
-    void removeResponsesReferencingItem(ItemConstIterator item)
+    void removeResponsesReferencingItem(ItemIterator item)
     {
         std::erase_if(responses, [item](const std::pair<typename Clock::time_point, Response>& pair) { return responseContainsItem(pair.second, item); });
     }

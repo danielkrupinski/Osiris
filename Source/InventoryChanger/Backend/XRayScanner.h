@@ -10,8 +10,8 @@ namespace inventory_changer::backend
 class XRayScanner {
 public:
     struct Items {
-        ItemConstIterator reward;
-        ItemConstIterator crate;
+        ItemIterator reward;
+        ItemIterator crate;
     };
 
     void storeItems(Items newItems)
@@ -19,7 +19,7 @@ public:
         items = newItems;
     }
 
-    void onItemRemoval(ItemConstIterator item) noexcept
+    void onItemRemoval(ItemIterator item) noexcept
     {
         if (items.has_value() && (item == items->reward || item == items->crate))
             items.reset();

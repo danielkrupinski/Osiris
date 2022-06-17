@@ -77,7 +77,7 @@ public:
     }
 
 private:
-    void useToolOnItem(backend::ItemConstIterator tool, backend::ItemConstIterator destItem)
+    void useToolOnItem(backend::ItemIterator tool, backend::ItemIterator destItem)
     {
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
             backend.request<request::ApplySticker>(destItem, tool, stickerSlot);
@@ -95,7 +95,7 @@ private:
         }
     }
 
-    void useTool(backend::ItemConstIterator tool)
+    void useTool(backend::ItemIterator tool)
     {
         if (tool->gameItem().isStatTrakSwapTool()) {
             const auto statTrakSwapItem1 = backend.itemFromID(statTrakSwapItemID1);
@@ -114,7 +114,7 @@ private:
         }
     }
 
-    void useItem(backend::ItemConstIterator item)
+    void useItem(backend::ItemIterator item)
     {
         if (item->gameItem().isCase()) {
             if (!item->isHidden())

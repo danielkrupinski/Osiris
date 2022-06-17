@@ -11,7 +11,7 @@ namespace inventory_changer::backend
 {
 
 struct ItemInResponse {
-    explicit ItemInResponse(ItemConstIterator item) : item{ item } {}
+    explicit ItemInResponse(ItemIterator item) : item{ item } {}
 
     template <typename Tag>
     bool operator()(const response::ItemModified<Tag>& response) const { return response.item == item; }
@@ -42,10 +42,10 @@ struct ItemInResponse {
     bool operator()(const response::XRayScannerUsed& response) const { return response.receivedItem == item; }
 
 private:
-    ItemConstIterator item;
+    ItemIterator item;
 };
 
-inline bool responseContainsItem(const Response& response, ItemConstIterator item)
+inline bool responseContainsItem(const Response& response, ItemIterator item)
 {
     return std::visit(ItemInResponse{ item }, response);
 }

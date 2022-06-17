@@ -13,7 +13,7 @@ namespace
 {
 
 template <typename ResponseType>
-[[nodiscard]] ResponseType makeResponse(ItemConstIterator item)
+[[nodiscard]] ResponseType makeResponse(ItemIterator item)
 {
     if constexpr (std::is_same_v<ResponseType, response::ItemAdded>)
         return response::ItemAdded{ item, false };
@@ -75,9 +75,9 @@ constexpr game_items::Item gameItem{ game_items::Item::Type::Agent, EconRarity::
 }
 
 const ItemList itemList{ createItemList() };
-const ItemConstIterator item1{ itemList.begin() };
-const ItemConstIterator item2{ std::next(item1) };
-const ItemConstIterator item3{ std::next(item2) };
+const ItemIterator item1{ itemList.begin() };
+const ItemIterator item2{ std::next(item1) };
+const ItemIterator item3{ std::next(item2) };
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, MonostateNeverContainsItem) {
     ASSERT_FALSE(ItemInResponse{ item1 }(std::monostate{}));
