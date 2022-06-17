@@ -45,11 +45,6 @@ public:
         return backend;
     }
 
-    [[nodiscard]] backend::RequestBuilder& getBackendRequestBuilder() noexcept
-    {
-        return backendRequestBuilder;
-    }
-
     void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
     void onRoundMVP(GameEvent& event);
     void updateStatTrak(GameEvent& event);
