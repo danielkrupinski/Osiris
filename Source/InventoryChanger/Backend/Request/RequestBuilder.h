@@ -9,9 +9,10 @@
 namespace inventory_changer::backend
 {
 
+template <typename Requestor>
 class RequestBuilder {
 public:
-    explicit RequestBuilder(BackendSimulator& backend) : backend{ backend } {}
+    explicit RequestBuilder(BackendSimulator& backend, Requestor requestor) : backend{ backend }, requestor{ requestor } {}
 
     void setStickerSlot(std::uint8_t slot) noexcept
     {
@@ -127,10 +128,11 @@ private:
     template <typename RequestType, typename... Args>
     void request(Args&&... args)
     {
-        backend.getRequestor().request<RequestType>(std::forward<Args>(args)...);
+        requestor.request<RequestType>(std::forward<Args>(args)...);
     }
 
     BackendSimulator& backend;
+    Requestor requestor;
     std::uint8_t stickerSlot = 0;
     std::uint64_t statTrakSwapItemID1 = 0;
     std::uint64_t statTrakSwapItemID2 = 0;
