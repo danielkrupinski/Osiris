@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace inventory_changer::game_items
+namespace inventory_changer
 {
 
 enum class TournamentMap : std::uint8_t {

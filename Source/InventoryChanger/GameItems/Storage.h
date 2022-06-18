@@ -10,10 +10,13 @@
 #include "Item.h"
 #include "Structs.h"
 
+namespace inventory_changer
+{
+    enum class TournamentMap : std::uint8_t;
+}
+
 namespace inventory_changer::game_items
 {
-
-enum class TournamentMap : std::uint8_t;
 
 class Storage {
 public:

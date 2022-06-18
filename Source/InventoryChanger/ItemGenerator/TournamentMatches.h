@@ -5,7 +5,7 @@
 
 #include <SDK/ItemSchema.h>
 
-namespace inventory_changer::game_items
+namespace inventory_changer
 {
     enum class TournamentMap : std::uint8_t;
 }
@@ -14,7 +14,7 @@ namespace inventory_changer::item_generator
 {
 
 struct Match {
-    game_items::TournamentMap map;
+    TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
@@ -30,12 +30,12 @@ struct Match {
 };
 
 struct MatchWithoutMVPs {
-    game_items::TournamentMap map;
+    TournamentMap map;
     TournamentStage stage;
     TournamentTeam team1;
     TournamentTeam team2;
 };
 
-[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, game_items::TournamentMap map) noexcept;
+[[nodiscard]] std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept;
 
 }

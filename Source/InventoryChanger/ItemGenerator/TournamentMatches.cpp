@@ -12,7 +12,6 @@ struct Tournament {
     std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> matches;
 };
 
-using inventory_changer::game_items::TournamentMap;
 using namespace tournament_team;
 
 constexpr auto dreamHack2013Matches = std::to_array<MatchWithoutMVPs>({

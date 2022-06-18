@@ -6,10 +6,8 @@
 
 namespace inventory_changer::game_integration
 {
-    constexpr game_items::TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
+    constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {
-        using game_items::TournamentMap;
-
         if (lootListName.ends_with("de_dust2"))
             return TournamentMap::Dust2;
         if (lootListName.ends_with("de_mirage"))
@@ -33,10 +31,8 @@ namespace inventory_changer::game_integration
         return TournamentMap::None;
     }
 
-    constexpr int getTournamentMapGoldStickerID(game_items::TournamentMap map) noexcept
+    constexpr int getTournamentMapGoldStickerID(TournamentMap map) noexcept
     {
-        using game_items::TournamentMap;
-
         switch (map) {
         case TournamentMap::Ancient: return 1689;
         case TournamentMap::Dust2: return 1690;

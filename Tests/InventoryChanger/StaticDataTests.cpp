@@ -29,8 +29,6 @@ TEST_P(EconRaritiesTest, SettingUnsetRarityIncrementsCount) {
 
 INSTANTIATE_TEST_SUITE_P(, EconRaritiesTest, testing::Values(EconRarity::Default, EconRarity::Purple, EconRarity::Gold));
 
-using game_items::TournamentMap;
-
 struct TournamentMapTestParam {
     std::string_view lootListName;
     TournamentMap expectedMap;
