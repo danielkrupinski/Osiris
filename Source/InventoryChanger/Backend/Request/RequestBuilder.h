@@ -128,7 +128,7 @@ private:
     template <typename RequestType, typename... Args>
     void request(Args&&... args)
     {
-        requestor.request<RequestType>(std::forward<Args>(args)...);
+        requestor.template request<RequestType>(std::forward<Args>(args)...);
     }
 
     BackendSimulator& backend;
