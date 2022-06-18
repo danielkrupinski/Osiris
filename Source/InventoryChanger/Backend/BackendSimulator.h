@@ -134,7 +134,9 @@ public:
         return itemIDMap.getItemID(it);
     }
 
-    [[nodiscard]] auto getRequestor()
+    using RequestorType = Requestor<RequestHandler, ResponseQueue<>>;
+
+    [[nodiscard]] RequestorType getRequestor()
     {
         return Requestor{ RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
     }
