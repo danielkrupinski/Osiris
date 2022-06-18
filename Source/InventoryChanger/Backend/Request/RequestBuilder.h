@@ -50,9 +50,9 @@ public:
             return;
 
         if (const auto gameItem = (*item)->gameItem(); gameItem.isSkin())
-            backend.request<request::WearSticker>(*item, slot);
+            request<request::WearSticker>(*item, slot);
         else if (gameItem.isAgent())
-            backend.request<request::RemovePatch>(*item, slot);
+            request<request::RemovePatch>(*item, slot);
     }
 
     void removeNameTagFrom(std::uint64_t itemID)
@@ -61,7 +61,7 @@ public:
         if (!item.has_value())
             return;
 
-        backend.request<request::RemoveNameTag>(*item);
+        request<request::RemoveNameTag>(*item);
     }
 
     void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
@@ -73,25 +73,25 @@ public:
             return;
 
         const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-        backend.request<request::PickStickerPickEm>(PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
+        request<request::PickStickerPickEm>(PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
     }
 
 private:
     void useToolOnItem(backend::ItemIterator tool, backend::ItemIterator destItem)
     {
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
-            backend.request<request::ApplySticker>(destItem, tool, stickerSlot);
+            request<request::ApplySticker>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
             if (!destItem->isHidden())
-                backend.request<request::OpenContainer>(destItem, tool);
+                request<request::OpenContainer>(destItem, tool);
             else
-                backend.request<request::ClaimXRayScannedItem>(destItem, tool);
+                request<request::ClaimXRayScannedItem>(destItem, tool);
         } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
-            backend.request<request::ApplyPatch>(destItem, tool, stickerSlot);
+            request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
-            backend.request<request::AddNameTag>(destItem, tool, nameTag);
+            request<request::AddNameTag>(destItem, tool, nameTag);
         } else if (tool->gameItem().isCase() && tool == destItem) {
-            backend.request<request::PerformXRayScan>(tool);
+            request<request::PerformXRayScan>(tool);
         }
     }
 
@@ -102,15 +102,15 @@ private:
             const auto statTrakSwapItem2 = backend.itemFromID(statTrakSwapItemID2);
 
             if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
-                backend.request<request::SwapStatTrak>(*statTrakSwapItem1, *statTrakSwapItem2, tool);
+                request<request::SwapStatTrak>(*statTrakSwapItem1, *statTrakSwapItem2, tool);
         } else if (tool->gameItem().isOperationPass()) {
-            backend.request<request::ActivateOperationPass>(tool);
+            request<request::ActivateOperationPass>(tool);
         } else if (tool->gameItem().isViewerPass()) {
-            backend.request<request::ActivateViewerPass>(tool);
+            request<request::ActivateViewerPass>(tool);
         } else if (tool->gameItem().isSouvenirToken()) {
-            backend.request<request::ActivateSouvenirToken>(tool);
+            request<request::ActivateSouvenirToken>(tool);
         } else if (tool->gameItem().isGraffiti()) {
-            backend.request<request::UnsealGraffiti>(tool);
+            request<request::UnsealGraffiti>(tool);
         }
     }
 
@@ -118,10 +118,16 @@ private:
     {
         if (item->gameItem().isCase()) {
             if (!item->isHidden())
-                backend.request<request::OpenContainer>(item);
+                request<request::OpenContainer>(item);
             else
-                backend.request<request::ClaimXRayScannedItem>(item);
+                request<request::ClaimXRayScannedItem>(item);
         }
+    }
+
+    template <typename RequestType, typename... Args>
+    void request(Args&&... args)
+    {
+        backend.request<RequestType>(std::forward<Args>(args)...);
     }
 
     BackendSimulator& backend;
