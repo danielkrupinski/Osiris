@@ -1292,10 +1292,9 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
         if (!def)
             return;
 
-        static std::vector<char> buffer;
-        buffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
-        data = buffer.data();
-        size = static_cast<int>(buffer.size());
+        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
+        data = userTextMsgBuffer.data();
+        size = static_cast<int>(userTextMsgBuffer.size());
     } else if (reader.readInt32(1) == HUD_PRINTTALK) {
         const auto strings = reader.readRepeatedString(3);
         if (strings.size() < 3)
@@ -1315,10 +1314,9 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
         if (!def)
             return;
 
-        static std::vector<char> buffer;
-        buffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
-        data = buffer.data();
-        size = static_cast<int>(buffer.size());
+        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
+        data = userTextMsgBuffer.data();
+        size = static_cast<int>(userTextMsgBuffer.size());
     }
 }
 

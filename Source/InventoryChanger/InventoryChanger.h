@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include "InventoryConfig.h"
 
@@ -65,6 +66,7 @@ private:
     backend::BackendSimulator backend;
     backend::RequestBuilder backendRequestBuilder;
     bool panoramaCodeInXrayScanner = false;
+    std::vector<char> userTextMsgBuffer;
 };
 
 }
