@@ -1354,7 +1354,7 @@ void InventoryChanger::acknowledgeItem(std::uint64_t itemID)
 
     if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory->getSOCData(view)) {
-            soc->inventory = localInventory->getHighestIDs().second;
+            soc->inventory = localInventory->getHighestIDs().second + 1;
             localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
         }
     }
