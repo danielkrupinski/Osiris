@@ -52,11 +52,11 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
         return {};
 
     backend.removeItem(request.statTrakSwapTool);
-    backend.request<request::UpdateStatTrak>(request.itemFrom, *statTrakTo);
-    backend.request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
+    backend.getRequestor().request<request::UpdateStatTrak>(request.itemFrom, *statTrakTo);
+    backend.getRequestor().request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
-    backend.request<request::MarkItemUpdated>(*statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo);
+    backend.getRequestor().request<request::MarkItemUpdated>(*statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo);
     return response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo };
 }
 
@@ -241,7 +241,7 @@ Response RequestHandler::operator()(const request::PerformXRayScan& request) con
         return {};
 
     constRemover.removeConstness(request.crate)->hide();
-    backend.request<request::HideItem>(request.crate);
+    backend.getRequestor().request<request::HideItem>(request.crate);
 
     generatedItem->hide();
 
@@ -265,7 +265,7 @@ Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request
     }
 
     backend.removeItem(request.container);
-    backend.request<request::UnhideItem>(scannerItems->reward);
+    backend.getRequestor().request<request::UnhideItem>(scannerItems->reward);
     return response::XRayItemClaimed{ scannerItems->reward };
 }
 

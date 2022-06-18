@@ -191,7 +191,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
         if (team == TournamentTeam::None)
             continue;
 
-        backend.request<inventory_changer::backend::request::PickStickerPickEm>(*position, team);
+        backend.getRequestor().request<inventory_changer::backend::request::PickStickerPickEm>(*position, team);
     }
 
 }

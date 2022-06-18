@@ -8,6 +8,7 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
+#include "Requestor.h"
 #include "XRayScanner.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
@@ -133,11 +134,9 @@ public:
         return itemIDMap.getItemID(it);
     }
 
-    template <typename Request, typename... Args>
-    void request(Args&&... args)
+    [[nodiscard]] auto getRequestor()
     {
-        if (const auto response = RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }(Request{ std::forward<Args>(args)... }); !isEmptyResponse(response))
-            responseQueue.add(response);
+        return Requestor{ RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
     }
 
     template <typename GameInventory>
