@@ -51,6 +51,11 @@ public:
         return crateLootLookup;
     }
 
+    [[nodiscard]] const ItemIDMap& getItemIDMap() const noexcept
+    {
+        return itemIDMap;
+    }
+
     void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
