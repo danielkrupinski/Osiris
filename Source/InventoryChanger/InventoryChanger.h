@@ -22,7 +22,7 @@ namespace inventory_changer
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
-        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup }, backendRequestBuilder{ backend, backend.getRequestor() } {}
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup }, backendRequestBuilder{ backend.getItemIDMap(), backend.getRequestor() } {}
 
     static InventoryChanger& instance();
 
