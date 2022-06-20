@@ -1232,7 +1232,7 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
         if (!stickerItemID)
             continue;
 
-       backendRequestBuilder.placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+        placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
 }
 
@@ -1380,6 +1380,18 @@ void InventoryChanger::reset()
     backend.clearPickEm();
     static inventory_changer::game_integration::Inventory gameInventory{};
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
+}
+
+void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
+{
+    const auto& gameItemLookup = backend.getGameItemLookup();
+
+    const auto sticker = gameItemLookup.findSticker(stickerID);
+    if (!sticker || !sticker->get().isSticker())
+        return;
+
+    const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
+    backend.getRequestor().request<backend::request::PickStickerPickEm>(backend::PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
 }
 
 }

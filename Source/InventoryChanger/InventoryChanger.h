@@ -61,6 +61,8 @@ public:
     void reset();
 
 private:
+    void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID);
+
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;

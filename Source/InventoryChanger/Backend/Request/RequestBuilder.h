@@ -65,18 +65,6 @@ public:
         request<request::RemoveNameTag>(*item);
     }
 
-    void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
-    {
-        const auto& gameItemLookup = backend.getGameItemLookup();
-
-        const auto sticker = gameItemLookup.findSticker(stickerID);
-        if (!sticker || !sticker->get().isSticker())
-            return;
-
-        const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-        request<request::PickStickerPickEm>(PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
-    }
-
 private:
     void useToolOnItem(backend::ItemIterator tool, backend::ItemIterator destItem)
     {
