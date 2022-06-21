@@ -6,6 +6,8 @@
 #include <InventoryChanger/Backend/ItemIDMap.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
+#include "RequestTypes.h"
+
 namespace inventory_changer::backend
 {
 
