@@ -47,7 +47,7 @@ protected:
     using ItemType = game_items::Item::Type;
 
     template <ItemType type>
-    [[nodiscard]] ItemIterator createDummyItem()
+    [[nodiscard]] ItemMutableIterator createDummyItem()
     {
         static constexpr game_items::Item dummyGameItem{ type, EconRarity::Red, WeaponId::None, 0, {} };
         itemList.emplace_back(dummyGameItem);
@@ -58,19 +58,20 @@ protected:
     ItemIDMap itemIDMap;
     RequestBuilder<MockRequestorWrapper> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor } };
 
+    static constexpr auto nonexistentItemID = 1234;
+    static constexpr auto dummyItemID = 123;
+
 private:
     ItemList itemList;
 };
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NameTagRemovalIsNotRequestedWhenItemIdIsInvalid) {
-    constexpr auto nonexistentItemID = 1234;
     requestBuilder.removeNameTagFrom(nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NameTagRemovalRequestedWhenItemIdIsValid) {
     const auto dummyItem = createDummyItem<ItemType::Skin>();
-    constexpr auto dummyItemID = 123;
-
+    
     EXPECT_CALL(requestor, request(testing::Matcher<const request::RemoveNameTag&>(testing::FieldsAre(dummyItem))));
     itemIDMap.add(dummyItemID, dummyItem);
 
@@ -78,7 +79,6 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NameTagRemovalRequestedWhenI
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIdOfItemToWearStickerOfIsInvalid) {
-    constexpr auto nonexistentItemID = 1234;
     requestBuilder.wearStickerOf(nonexistentItemID, 0);
 }
 
@@ -88,7 +88,6 @@ class InventoryChanger_Backend_RequestBuilder_WearStickerTest
 
 TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, WearingStickerIsRequestedWhenItemIsSkin) {
     const auto skin = createDummyItem<ItemType::Skin>();
-    constexpr auto dummyItemID = 123;
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::WearSticker&>(testing::FieldsAre(skin, GetParam()))));
     itemIDMap.add(dummyItemID, skin);
@@ -98,7 +97,6 @@ TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, WearingStickerIs
 
 TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, RemovingPatchIsRequestedWhenItemIsAgent) {
     const auto agent = createDummyItem<ItemType::Agent>();
-    constexpr auto dummyItemID = 123;
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::RemovePatch&>(testing::FieldsAre(agent, GetParam()))));
     itemIDMap.add(dummyItemID, agent);
@@ -109,19 +107,62 @@ TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, RemovingPatchIsR
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_RequestBuilder_WearStickerTest, testing::Values(0, 1));
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIDsOfItemsAreInvalid) {
-    constexpr auto nonexistentItemID = 1234;
     requestBuilder.useToolOn(nonexistentItemID, nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Case>();
-    constexpr auto dummyItemID = 123;
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, std::nullopt))));
     itemIDMap.add(dummyItemID, crate);
 
-    constexpr auto nonexistentItemID = 1234;
     requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromKeylessContainerCanBeRequested) {
+    const auto crate = createDummyItem<ItemType::Case>();
+    crate->hide();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, std::nullopt))));
+    itemIDMap.add(dummyItemID, crate);
+
+    requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingOperationPassCanBeRequested) {
+    const auto operationPass = createDummyItem<ItemType::OperationPass>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateOperationPass&>(testing::FieldsAre(operationPass))));
+    itemIDMap.add(dummyItemID, operationPass);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingViewerPassCanBeRequested) {
+    const auto viewerPass = createDummyItem<ItemType::ViewerPass>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateViewerPass&>(testing::FieldsAre(viewerPass))));
+    itemIDMap.add(dummyItemID, viewerPass);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingSouvenirTokenCanBeRequested) {
+    const auto souvenirToken = createDummyItem<ItemType::SouvenirToken>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateSouvenirToken&>(testing::FieldsAre(souvenirToken))));
+    itemIDMap.add(dummyItemID, souvenirToken);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UnsealingGraffitiCanBeRequested) {
+    const auto graffiti = createDummyItem<ItemType::Graffiti>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::UnsealGraffiti&>(testing::FieldsAre(graffiti))));
+    itemIDMap.add(dummyItemID, graffiti);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
 }
 
 }
