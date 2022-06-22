@@ -4,9 +4,6 @@
 #include <ctime>
 #include <random>
 #include <span>
-#include <vector>
-
-#include <range/v3/algorithm/equal_range.hpp>
 
 #include <Helpers.h>
 #include "ItemGenerator.h"

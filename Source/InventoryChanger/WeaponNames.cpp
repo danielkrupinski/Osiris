@@ -3,6 +3,7 @@
 #include <SDK/ItemSchema.h>
 #include <SDK/Localize.h>
 
+#include <Helpers.h>
 #include <Interfaces.h>
 
 namespace inventory_changer

@@ -1,7 +1,20 @@
 #pragma once
 
-#include <InventoryChanger/GameItems/Storage.h>
-#include <InventoryChanger/Inventory/Item.h>
+#include <cstdint>
+
+namespace inventory_changer
+{
+namespace game_items
+{
+    class Storage;
+}
+namespace inventory
+{
+    class Item;
+}
+}
+
+enum class Team;
 
 namespace inventory_changer::game_integration
 {

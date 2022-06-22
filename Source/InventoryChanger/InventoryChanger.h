@@ -1,9 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include <utility>
 #include <vector>
-
-#include "InventoryConfig.h"
 
 #include "Backend/BackendSimulator.h"
 #include "Backend/Request/RequestBuilder.h"
