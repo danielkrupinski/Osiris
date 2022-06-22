@@ -60,6 +60,8 @@ protected:
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemID = 123;
+    static constexpr auto dummyItemID2 = 256;
+    static constexpr auto dummyItemID3 = 1024;
 
 private:
     ItemList itemList;
@@ -161,6 +163,41 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UnsealingGraffitiCanBeReques
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::UnsealGraffiti&>(testing::FieldsAre(graffiti))));
     itemIDMap.add(dummyItemID, graffiti);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithoutSettingItemsDoesNotProduceRequest) {
+    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
+
+    EXPECT_CALL(requestor, request(testing::An<const request::SwapStatTrak&>())).Times(0);
+    itemIDMap.add(dummyItemID, statTrakSwapTool);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithOneItemSetDoesNotProduceRequest) {
+    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
+    const auto skin1 = createDummyItem<ItemType::Skin>();
+
+    EXPECT_CALL(requestor, request(testing::An<const request::SwapStatTrak&>())).Times(0);
+    itemIDMap.add(dummyItemID, statTrakSwapTool);
+    itemIDMap.add(dummyItemID2, skin1);
+    requestBuilder.setStatTrakSwapItems(dummyItemID2, nonexistentItemID);
+
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBothItemsSetProducesRequest) {
+    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
+    const auto skin1 = createDummyItem<ItemType::Skin>();
+    const auto skin2 = createDummyItem<ItemType::Skin>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::SwapStatTrak&>(testing::FieldsAre(skin1, skin2, statTrakSwapTool))));
+    itemIDMap.add(dummyItemID, statTrakSwapTool);
+    itemIDMap.add(dummyItemID2, skin1);
+    itemIDMap.add(dummyItemID3, skin2);
+    requestBuilder.setStatTrakSwapItems(dummyItemID2, dummyItemID3);
 
     requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
 }
