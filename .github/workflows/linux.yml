@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.continue-on-error }}
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04]
@@ -15,6 +16,11 @@ jobs:
             compiler: clang++-13
           - os: ubuntu-20.04
             compiler: clang++-14
+        include:
+          - os: ubuntu-22.04
+            continue-on-error: true
+          - os: ubuntu-20.04
+            continue-on-error: false
     steps:
     - uses: actions/checkout@v2
     - name: Add toolchain PPA
