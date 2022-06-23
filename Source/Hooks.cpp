@@ -544,7 +544,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
     interfaces = std::make_unique<const Interfaces>();
-    memory = std::make_unique<const Memory>();
+    memory.emplace(Memory{});
 
     window = FindWindowW(L"Valve001", nullptr);
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));

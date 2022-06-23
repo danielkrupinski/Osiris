@@ -2,7 +2,7 @@
 
 #include <array>
 #include <cstdint>
-#include <memory>
+#include <optional>
 #include <type_traits>
 
 #include "SDK/Platform.h"
@@ -171,4 +171,4 @@ private:
     std::uintptr_t setDynamicAttributeValueFn;
 };
 
-inline std::unique_ptr<const Memory> memory;
+inline std::optional<const Memory> memory;
