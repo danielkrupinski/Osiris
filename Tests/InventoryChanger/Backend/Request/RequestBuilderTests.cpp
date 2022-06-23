@@ -1,4 +1,4 @@
-#include <list>
+#include <array>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -47,10 +47,12 @@ protected:
     using ItemType = game_items::Item::Type;
 
     template <ItemType type>
-    [[nodiscard]] ItemMutableIterator createDummyItem()
+    ItemMutableIterator createDummyItem()
     {
         static constexpr game_items::Item dummyGameItem{ type, EconRarity::Red, WeaponId::None, 0, {} };
         itemList.emplace_back(dummyGameItem);
+        const auto dummyItem = std::prev(itemList.end());
+        itemIDMap.add(dummyItemIDs.at(itemList.size() - 1), dummyItem);
         return std::prev(itemList.end());
     }
 
@@ -59,9 +61,7 @@ protected:
     RequestBuilder<MockRequestorWrapper> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor } };
 
     static constexpr auto nonexistentItemID = 1234;
-    static constexpr auto dummyItemID = 123;
-    static constexpr auto dummyItemID2 = 256;
-    static constexpr auto dummyItemID3 = 1024;
+    static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
 
 private:
     ItemList itemList;
@@ -73,11 +73,9 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NameTagRemovalIsNotRequested
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NameTagRemovalRequestedWhenItemIdIsValid) {
     const auto dummyItem = createDummyItem<ItemType::Skin>();
-    
     EXPECT_CALL(requestor, request(testing::Matcher<const request::RemoveNameTag&>(testing::FieldsAre(dummyItem))));
-    itemIDMap.add(dummyItemID, dummyItem);
 
-    requestBuilder.removeNameTagFrom(dummyItemID);
+    requestBuilder.removeNameTagFrom(dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIdOfItemToWearStickerOfIsInvalid) {
@@ -90,20 +88,16 @@ class InventoryChanger_Backend_RequestBuilder_WearStickerTest
 
 TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, WearingStickerIsRequestedWhenItemIsSkin) {
     const auto skin = createDummyItem<ItemType::Skin>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::WearSticker&>(testing::FieldsAre(skin, GetParam()))));
-    itemIDMap.add(dummyItemID, skin);
 
-    requestBuilder.wearStickerOf(dummyItemID, GetParam());
+    requestBuilder.wearStickerOf(dummyItemIDs[0], GetParam());
 }
 
 TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, RemovingPatchIsRequestedWhenItemIsAgent) {
     const auto agent = createDummyItem<ItemType::Agent>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::RemovePatch&>(testing::FieldsAre(agent, GetParam()))));
-    itemIDMap.add(dummyItemID, agent);
 
-    requestBuilder.wearStickerOf(dummyItemID, GetParam());
+    requestBuilder.wearStickerOf(dummyItemIDs[0], GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_RequestBuilder_WearStickerTest, testing::Values(0, 1));
@@ -113,24 +107,20 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIDsOfI
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenDestItemIsNotHandled) {
-    const auto dummyItem = createDummyItem<ItemType::Music>();
-    itemIDMap.add(dummyItemID, dummyItem);
-    requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+    createDummyItem<ItemType::Music>();
+    requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenToolItemIsNotHandled) {
-    const auto dummyTool = createDummyItem<ItemType::Music>();
-    itemIDMap.add(dummyItemID, dummyTool);
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    createDummyItem<ItemType::Music>();
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Case>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, std::nullopt))));
-    itemIDMap.add(dummyItemID, crate);
 
-    requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+    requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromKeylessContainerCanBeRequested) {
@@ -138,80 +128,63 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromK
     crate->hide();
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, std::nullopt))));
-    itemIDMap.add(dummyItemID, crate);
 
-    requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+    requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingOperationPassCanBeRequested) {
     const auto operationPass = createDummyItem<ItemType::OperationPass>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateOperationPass&>(testing::FieldsAre(operationPass))));
-    itemIDMap.add(dummyItemID, operationPass);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingViewerPassCanBeRequested) {
     const auto viewerPass = createDummyItem<ItemType::ViewerPass>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateViewerPass&>(testing::FieldsAre(viewerPass))));
-    itemIDMap.add(dummyItemID, viewerPass);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingSouvenirTokenCanBeRequested) {
     const auto souvenirToken = createDummyItem<ItemType::SouvenirToken>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateSouvenirToken&>(testing::FieldsAre(souvenirToken))));
-    itemIDMap.add(dummyItemID, souvenirToken);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UnsealingGraffitiCanBeRequested) {
     const auto graffiti = createDummyItem<ItemType::Graffiti>();
-
     EXPECT_CALL(requestor, request(testing::Matcher<const request::UnsealGraffiti&>(testing::FieldsAre(graffiti))));
-    itemIDMap.add(dummyItemID, graffiti);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithoutSettingItemsDoesNotProduceRequest) {
     const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
-
     EXPECT_CALL(requestor, request(testing::An<const request::SwapStatTrak&>())).Times(0);
-    itemIDMap.add(dummyItemID, statTrakSwapTool);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithOneItemSetDoesNotProduceRequest) {
-    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
-    const auto skin1 = createDummyItem<ItemType::Skin>();
-
+    createDummyItem<ItemType::Skin>();
+    createDummyItem<ItemType::StatTrakSwapTool>();
     EXPECT_CALL(requestor, request(testing::An<const request::SwapStatTrak&>())).Times(0);
-    itemIDMap.add(dummyItemID, statTrakSwapTool);
-    itemIDMap.add(dummyItemID2, skin1);
-    requestBuilder.setStatTrakSwapItems(dummyItemID2, nonexistentItemID);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.setStatTrakSwapItems(dummyItemIDs[0], nonexistentItemID);
+    requestBuilder.useToolOn(dummyItemIDs[1], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBothItemsSetProducesRequest) {
-    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
     const auto skin1 = createDummyItem<ItemType::Skin>();
     const auto skin2 = createDummyItem<ItemType::Skin>();
+    const auto statTrakSwapTool = createDummyItem<ItemType::StatTrakSwapTool>();
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::SwapStatTrak&>(testing::FieldsAre(skin1, skin2, statTrakSwapTool))));
-    itemIDMap.add(dummyItemID, statTrakSwapTool);
-    itemIDMap.add(dummyItemID2, skin1);
-    itemIDMap.add(dummyItemID3, skin2);
-    requestBuilder.setStatTrakSwapItems(dummyItemID2, dummyItemID3);
 
-    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+    requestBuilder.setStatTrakSwapItems(dummyItemIDs[0], dummyItemIDs[1]);
+    requestBuilder.useToolOn(dummyItemIDs[2], nonexistentItemID);
 }
 
 }
