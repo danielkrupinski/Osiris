@@ -750,7 +750,7 @@ static int pollEvent(SDL_Event* event) noexcept
 Hooks::Hooks() noexcept
 {
     interfaces = std::make_unique<const Interfaces>();
-    memory = std::make_unique<const Memory>();
+    memory.emplace(Memory{});
 
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(memory->pollEvent) = ::pollEvent;
