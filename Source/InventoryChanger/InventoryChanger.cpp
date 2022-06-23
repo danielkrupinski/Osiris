@@ -699,6 +699,30 @@ namespace ImGui
     }
 }
 
+namespace inventory_changer
+{
+
+struct NameComparator {
+    NameComparator(const game_items::Storage& gameItemStorage, const WeaponNames& weaponNames)
+        : gameItemStorage{ gameItemStorage }, weaponNames{ weaponNames } {}
+
+    [[nodiscard]] bool operator()(const game_items::Item& a, const game_items::Item& b) const
+    {
+         if (a.getWeaponID() == b.getWeaponID())
+            return getItemName(gameItemStorage, a).forSearch < getItemName(gameItemStorage, b).forSearch;
+        const auto comp = weaponNames.getWeaponNameUpper(a.getWeaponID()).compare(weaponNames.getWeaponNameUpper(b.getWeaponID()));
+        if (comp == 0)
+            return a.getWeaponID() < b.getWeaponID();
+        return comp < 0;
+    }
+
+private:
+    const game_items::Storage& gameItemStorage;
+    const WeaponNames& weaponNames;
+};
+
+}
+
 void InventoryChanger::drawGUI(bool contentOnly) noexcept
 {
     if (!contentOnly) {
@@ -771,14 +795,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
-                gameItemList.sort([&storage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& a, const inventory_changer::game_items::Item& b) {
-                    if (a.getWeaponID() == b.getWeaponID())
-                        return getItemName(storage, a).forSearch < getItemName(storage, b).forSearch;
-                    const auto comp = inventory_changer::WeaponNames::instance().getWeaponNameUpper(a.getWeaponID()).compare(inventory_changer::WeaponNames::instance().getWeaponNameUpper(b.getWeaponID()));
-                    if (comp == 0)
-                        return a.getWeaponID() < b.getWeaponID();
-                    return comp < 0;
-                });
+                gameItemList.sort(inventory_changer::NameComparator{ inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance() });
                 sorted = true;
             }
 
