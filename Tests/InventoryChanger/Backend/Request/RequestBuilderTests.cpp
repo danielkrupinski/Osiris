@@ -112,6 +112,18 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIDsOfI
     requestBuilder.useToolOn(nonexistentItemID, nonexistentItemID);
 }
 
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenDestItemIsNotHandled) {
+    const auto dummyItem = createDummyItem<ItemType::Music>();
+    itemIDMap.add(dummyItemID, dummyItem);
+    requestBuilder.useToolOn(nonexistentItemID, dummyItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenToolItemIsNotHandled) {
+    const auto dummyTool = createDummyItem<ItemType::Music>();
+    itemIDMap.add(dummyItemID, dummyTool);
+    requestBuilder.useToolOn(dummyItemID, nonexistentItemID);
+}
+
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Case>();
 
