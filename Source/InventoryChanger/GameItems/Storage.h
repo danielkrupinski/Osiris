@@ -40,6 +40,7 @@ public:
     void addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath);
     void addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath);
+    void addStorageUnit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
 
     [[nodiscard]] const auto& getStickerKit(const Item& item) const
     {

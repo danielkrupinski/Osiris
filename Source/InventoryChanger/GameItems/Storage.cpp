@@ -109,6 +109,11 @@ void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint8_t t
     addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
 }
 
+void Storage::addStorageUnit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
+{
+    addItem(Item::Type::StorageUnit, rarity, weaponID, 0, pooled(iconPath));
+}
+
 void Storage::compress()
 {
     paintKits.shrink_to_fit();
