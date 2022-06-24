@@ -543,7 +543,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 #endif
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
-    interfaces = std::make_unique<const Interfaces>();
+    interfaces.emplace(Interfaces{});
     memory.emplace(Memory{});
 
     window = FindWindowW(L"Valve001", nullptr);
@@ -749,7 +749,7 @@ static int pollEvent(SDL_Event* event) noexcept
 
 Hooks::Hooks() noexcept
 {
-    interfaces = std::make_unique<const Interfaces>();
+    interfaces.emplace(Interfaces{});
     memory.emplace(Memory{});
 
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent);
