@@ -532,7 +532,7 @@ static void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int s
 {
     if (const auto returnAddress = RETURN_ADDRESS(); returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
         return nullptr;
-    return hooks->keyValuesSystem.callOriginal<void*, 1>(size);
+    return hooks->keyValuesSystem.callOriginal<void*, 2>(size);
 }
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
@@ -591,7 +591,7 @@ void Hooks::install() noexcept
     engine.hookAt(101, &getScreenAspectRatio);
 #ifdef _WIN32
     keyValuesSystem.init(memory->keyValuesSystem);
-    keyValuesSystem.hookAt(1, &allocKeyValuesMemory);
+    keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
 #endif
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
