@@ -82,25 +82,45 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIdOfIt
     requestBuilder.wearStickerOf(nonexistentItemID, 0);
 }
 
-class InventoryChanger_Backend_RequestBuilder_WearStickerTest
+class InventoryChanger_Backend_RequestBuilder_StickerTest
     : public InventoryChanger_Backend_RequestBuilderTest,
       public testing::WithParamInterface<std::uint8_t> {};
 
-TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, WearingStickerIsRequestedWhenItemIsSkin) {
+TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, WearingStickerIsRequestedWhenItemIsSkin) {
     const auto skin = createDummyItem<ItemType::Skin>();
     EXPECT_CALL(requestor, request(testing::Matcher<const request::WearSticker&>(testing::FieldsAre(skin, GetParam()))));
 
     requestBuilder.wearStickerOf(dummyItemIDs[0], GetParam());
 }
 
-TEST_P(InventoryChanger_Backend_RequestBuilder_WearStickerTest, RemovingPatchIsRequestedWhenItemIsAgent) {
+TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, RemovingPatchIsRequestedWhenItemIsAgent) {
     const auto agent = createDummyItem<ItemType::Agent>();
     EXPECT_CALL(requestor, request(testing::Matcher<const request::RemovePatch&>(testing::FieldsAre(agent, GetParam()))));
 
     requestBuilder.wearStickerOf(dummyItemIDs[0], GetParam());
 }
 
-INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_RequestBuilder_WearStickerTest, testing::Values(0, 1));
+TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, StickerIsAppliedToTheCorrectSlot) {
+    const auto sticker = createDummyItem<ItemType::Sticker>();
+    const auto skin = createDummyItem<ItemType::Skin>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ApplySticker&>(testing::FieldsAre(skin, sticker, GetParam()))));
+
+    requestBuilder.setStickerSlot(GetParam());
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, PatchIsAppliedToTheCorrectSlot) {
+    const auto patch = createDummyItem<ItemType::Patch>();
+    const auto agent = createDummyItem<ItemType::Agent>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ApplyPatch&>(testing::FieldsAre(agent, patch, GetParam()))));
+
+    requestBuilder.setStickerSlot(GetParam());
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Backend_RequestBuilder_StickerTest, testing::Values(0, 1, 5));
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenIDsOfItemsAreInvalid) {
     requestBuilder.useToolOn(nonexistentItemID, nonexistentItemID);
@@ -114,6 +134,11 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenDestIt
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenToolItemIsNotHandled) {
     createDummyItem<ItemType::Music>();
     requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenItemsAreNotHandled) {
+    createDummyItem<ItemType::Music>();
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
@@ -185,6 +210,30 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBot
 
     requestBuilder.setStatTrakSwapItems(dummyItemIDs[0], dummyItemIDs[1]);
     requestBuilder.useToolOn(dummyItemIDs[2], nonexistentItemID);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStickerNotOnSkinDoesNotProduceRequest) {
+    createDummyItem<ItemType::Sticker>();
+    createDummyItem<ItemType::Music>();
+    EXPECT_CALL(requestor, request(testing::An<const request::ApplySticker&>())).Times(0);
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingPatchNotOnAgentDoesNotProduceRequest) {
+    createDummyItem<ItemType::Patch>();
+    createDummyItem<ItemType::Music>();
+    EXPECT_CALL(requestor, request(testing::An<const request::ApplyPatch&>())).Times(0);
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingNameTagNotOnSkinDoesNotProduceRequest) {
+    createDummyItem<ItemType::NameTag>();
+    createDummyItem<ItemType::Music>();
+    EXPECT_CALL(requestor, request(testing::An<const request::AddNameTag&>())).Times(0);
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
 
 }
