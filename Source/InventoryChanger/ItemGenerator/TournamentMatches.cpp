@@ -9,12 +9,12 @@ namespace inventory_changer::item_generator
 
 struct Tournament {
     std::uint32_t tournamentID;
-    std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> matches;
+    std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> matches;
 };
 
 using namespace tournament_team;
 
-constexpr auto dreamHack2013Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto dreamHack2013Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic },
     { TournamentMap::Dust2, GroupStage, ClanMystik, LGBEsports },
@@ -74,7 +74,7 @@ constexpr auto dreamHack2013Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Train, GrandFinal, NinjasInPyjamas, Fnatic },
     });
 
-constexpr auto emsOneKatowice2014Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto emsOneKatowice2014Matches = std::to_array<Match>({
     // Group A
     { TournamentMap::Dust2, GroupStage, Titan, Mousesports },
     { TournamentMap::Mirage, GroupStage, VirtusPro, HellRaisers },
@@ -133,7 +133,7 @@ constexpr auto emsOneKatowice2014Matches = std::to_array<MatchWithoutMVPs>({
 
 // Starting with ESL One Cologne 2014 souvenir packages are bound to a certain map. Matches of those tournaments must be sorted by map.
 
-constexpr auto eslOneCologne2014Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto eslOneCologne2014Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, CopenhagenWolves, LondonConspiracy },
     { TournamentMap::Cache, GroupStage, VirtusPro, IBUYPOWER },
     { TournamentMap::Cache, GrandFinal, Fnatic, NinjasInPyjamas },
@@ -173,9 +173,9 @@ constexpr auto eslOneCologne2014Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Overpass, GroupStage, VirtusPro, Fnatic },
     { TournamentMap::Overpass, Semifinal, TeamDignitas, Fnatic },
 });
-static_assert(std::ranges::is_sorted(eslOneCologne2014Matches, {}, &MatchWithoutMVPs::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2014Matches, {}, &Match::map));
 
-constexpr auto dreamHack2014Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto dreamHack2014Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, BravadoGaming, Cloud9 },
     { TournamentMap::Cache, GroupStage, NinjasInPyjamas, ESCGaming },
     { TournamentMap::Cache, Quarterfinal, VirtusPro, PENTASports },
@@ -214,9 +214,9 @@ constexpr auto dreamHack2014Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Overpass, Quarterfinal, TeamLDLC, Fnatic },
     { TournamentMap::Overpass, GrandFinal, TeamLDLC, NinjasInPyjamas },
 });
-static_assert(std::ranges::is_sorted(dreamHack2014Matches, {}, &MatchWithoutMVPs::map));
+static_assert(std::ranges::is_sorted(dreamHack2014Matches, {}, &Match::map));
 
-constexpr auto eslOneKatowice2015Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto eslOneKatowice2015Matches = std::to_array<Match>({
     { TournamentMap::Cache, GroupStage, TeamEnVyUs, LGBEsports },
     { TournamentMap::Cache, GroupStage, PENTASports, Titan },
     { TournamentMap::Cache, GroupStage, VoxEminor, Flipsid3Tactics },
@@ -256,7 +256,7 @@ constexpr auto eslOneKatowice2015Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Overpass, GroupStage, TeamSoloMidKinguin, Cloud9G2A },
     { TournamentMap::Overpass, Quarterfinal, KeydStars, VirtusPro },
 });
-static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &MatchWithoutMVPs::map));
+static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &Match::map));
 
 using namespace csgo::pro_player;
 
@@ -907,7 +907,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Inferno, GrandFinal, ENCE, Astralis, { xseveN, sergej, Aerial } },
     });
 
-constexpr auto pglStockholm2021Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto pglStockholm2021Matches = std::to_array<Match>({
     { TournamentMap::Ancient, ChallengersStage, VirtusPro, FaZeClan },
     { TournamentMap::Ancient, ChallengersStage, paiNGaming, SharksEsports },
     { TournamentMap::Ancient, ChallengersStage, VirtusPro, TeamSpirit },
@@ -1034,9 +1034,9 @@ constexpr auto pglStockholm2021Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Vertigo, GroupStage, Astralis, Vitality },
     { TournamentMap::Vertigo, GroupStage, VirtusPro, MOUZ }
 });
-static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &MatchWithoutMVPs::map));
+static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &Match::map));
 
-constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
+constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
     { TournamentMap::Ancient, ChallengersStage, TeamLiquid, _9ZTeam },
     { TournamentMap::Ancient, ChallengersStage, ENCE, G2Esports },
     { TournamentMap::Ancient, ChallengersStage, Astralis, TeamSpirit },
@@ -1160,7 +1160,7 @@ constexpr auto pglAntwerp2022Matches = std::to_array<MatchWithoutMVPs>({
     { TournamentMap::Vertigo, Quarterfinal, TeamSpirit, FURIA },
     { TournamentMap::Vertigo, Quarterfinal, ENCE, CopenhagenFlames }
 });
-static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &MatchWithoutMVPs::map));
+static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
@@ -1181,7 +1181,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
 });
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
-[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> getTournamentMatches(std::uint32_t tournamentID) noexcept
+[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
     if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
         return it->matches;
@@ -1198,10 +1198,10 @@ template <typename MatchType>
     return ranges::equal_range(matches, map, {}, &MatchType::map);
 }
 
-std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
+std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
 {
     return std::visit([map](auto&& a) {
-        return std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>>{ filterMatchesToMap(a, map) };
+        return std::variant<std::span<const MatchWithMVPs>, std::span<const Match>>{ filterMatchesToMap(a, map) };
     }, getTournamentMatches(tournamentID));
 }
 
