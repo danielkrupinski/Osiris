@@ -9,7 +9,7 @@ namespace inventory_changer::item_generator
 
 struct Tournament {
     std::uint32_t tournamentID;
-    std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> matches;
+    std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> matches;
 };
 
 using namespace tournament_team;
@@ -260,7 +260,7 @@ static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &MatchWithou
 
 using namespace csgo::pro_player;
 
-constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
+constexpr auto eslOneCologne2015Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, NinjasInPyjamas, TeamSoloMid, { f0rest, GeT_RiGhT, Xyp9x, karrigan, device, dupreeh } },
     { TournamentMap::Cache, Semifinal, TeamSoloMid, TeamEnVyUs, { device, cajunb, Xyp9x, dupreeh, karrigan, NBK, kioShiMa, Happy, kennyS, apEX } },
     { TournamentMap::Cobblestone, GroupStage, TeamEnVyUs, LuminosityGaming, { kennyS, Happy, apEX, NBK, kioShiMa, FalleN, coldzera, fer, steel, boltz } },
@@ -298,9 +298,9 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Train, Quarterfinal, NinjasInPyjamas, VirtusPro, { allu, f0rest, GeT_RiGhT, Xizt, friberg, TaZ, Snax, NEO, byali, pashaBiceps } },
     { TournamentMap::Train, Quarterfinal, Fnatic, LuminosityGaming, { flusha, olofmeister, JW, pronax, KRIMZ, coldzera, fer, boltz, steel } },
     });
-static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
+constexpr auto dreamHackClujNapoka2015Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, TeamSoloMid, { WorldEdit, B1ad3, DavCost, dupreeh, Xyp9x, karrigan, device, cajunb } },
     { TournamentMap::Cache, GroupStage, G2Esports, Mousesports, { Maikelele, jkaem, fox, dennis, rain, NiKo, chrisJ, denis } },
     { TournamentMap::Cache, GroupStage, Titan, NinjasInPyjamas, { shox, RpK, ScreaM, Ex6TenZ, SmithZz, f0rest, allu, Xizt, friberg, GeT_RiGhT } },
@@ -344,9 +344,9 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, NinjasInPyjamas, NatusVincere, { allu, GeT_RiGhT, flamie, GuardiaN, Zeus, Edward, seized } },
     { TournamentMap::Train, GrandFinal, TeamEnVyUs, NatusVincere, { kennyS, Happy, apEX, kioShiMa, NBK, seized, GuardiaN, flamie, Zeus, Edward } },
     });
-static_assert(std::ranges::is_sorted(dreamHackClujNapoka2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(dreamHackClujNapoka2015Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
+constexpr auto mlgColumbus2016Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { bondik, Shara, B1ad3, WorldEdit, markeloff, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
     { TournamentMap::Cache, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
     { TournamentMap::Cache, GroupStage, FaZeClan, TeamLiquid, { rain, aizy, Maikelele, fox, jkaem, nitr0, adreN, EliGE, Hiko, s1mple } },
@@ -391,9 +391,9 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, G2Esports, VirtusPro, { RpK, byali, Snax, NEO, TaZ, pashaBiceps } },
     { TournamentMap::Train, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, shox, ScreaM, RpK } },
     });
-static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
+constexpr auto eslOneCologne2016Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { wayLander, markeloff, WorldEdit, Shara, B1ad3, pyth, friberg } },
     { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, { kioShiMa, rain, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
@@ -437,9 +437,9 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Train, Quarterfinal, GambitEsports, Fnatic, { spaze, mou, hooch, AdreN, KRIMZ, flusha, olofmeister, dennis, JW } },
     { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, { jdm64, Hiko, nitr0, s1mple, coldzera, TACO, fnx, FalleN, fer } },
     });
-static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
+constexpr auto eleagueAtlanta2017Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, G2Esports, Fnatic, { RpK, bodyy, shox, ScreaM, SmithZz, KRIMZ, olofmeister, dennis, discodoplan } },
     { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, { EliGE, Pimp, Hiko, jdm64, nitr0, NBK, apEX, kennyS, SIXER, Happy } },
     { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, { chrisJ, denis, loWel, NiKo, Spiidi, DeadFox, ANGE1, bondik, STYKO, Zero } },
@@ -493,9 +493,9 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, { NEO, Snax, pashaBiceps, TaZ, byali, fox, fer, FalleN, coldzera, TACO } },
     { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
     });
-static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto pglKrakow2017Matches = std::to_array<Match>({
+constexpr auto pglKrakow2017Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, G2Esports, GambitEsports, { NBK, kennyS, apEX, bodyy, AdreN, Zeus, mou, Hobbit, Dosia } },
     { TournamentMap::Cache, GroupStage, VirtusPro, Fnatic, { TaZ, Snax, pashaBiceps, byali, NEO, JW, olofmeister, KRIMZ, dennis } },
     { TournamentMap::Cache, Quarterfinal, Astralis, SKGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, fer, coldzera, felps, FalleN, TACO } },
@@ -547,9 +547,9 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, GambitEsports, Astralis, { Zeus, mou, Hobbit, Dosia, AdreN, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
     { TournamentMap::Train, GrandFinal, GambitEsports, Immortals, { Zeus, mou, Hobbit, Dosia, AdreN, steel, kNgV, LUCAS1, boltz, HEN1 } },
     });
-static_assert(std::ranges::is_sorted(pglKrakow2017Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(pglKrakow2017Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
+constexpr auto eleagueBoston2018Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, ChallengersStage, Cloud9, TeamEnVyUs, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, ScreaM, RpK, Happy, SIXER } },
     { TournamentMap::Cache, ChallengersStage, TeamEnVyUs, Renegades, { xms, RpK, Happy, SIXER, AZR, Nifty, NAF, USTILO, jks } },
     { TournamentMap::Cache, ChallengersStage, MisfitsGaming, Avangar, { devoduvek, AmaNEk, ShahZaM, SicK, seangares, qikert, buster, Jame, dimasick, KrizzeN } },
@@ -636,9 +636,9 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, Mousesports, QuantumBellatorFire, { chrisJ, oskar, ropz, STYKO, Boombl4, waterfaLLZ, jmqa, Kvik, balblna } },
     { TournamentMap::Train, GroupStage, Astralis, Cloud9, { device, Xyp9x, dupreeh, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
     });
-static_assert(std::ranges::is_sorted(eleagueBoston2018Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eleagueBoston2018Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto faceitLondon2018Matches = std::to_array<Match>({
+constexpr auto faceitLondon2018Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, { EliGE, nitr0, Twistzz, NAF, TACO, jR, hutji, crush, chopper, tonyblack } },
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, { shox, kennyS, bodyy, Ex6TenZ, SmithZz, ANDROID, yay, dephh, ShahZaM, stanislaw } },
     { TournamentMap::Cache, GroupStage, Fnatic, HellRaisers, { KRIMZ, JW, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
@@ -729,9 +729,9 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, { FalleN, coldzera, fer, Stewie2K, tarik, f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Train, Quarterfinal, ComplexityGaming, MIBR, { ANDROID, yay, dephh, stanislaw, FalleN, coldzera, fer, Stewie2K, tarik } },
     });
-static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto iemKatowice2019Matches = std::to_array<Match>({
+constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     // Challengers Stage
 
     // Round 1
@@ -1181,7 +1181,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
 });
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
-[[nodiscard]] static std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatches(std::uint32_t tournamentID) noexcept
+[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
     if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
         return it->matches;
@@ -1198,10 +1198,10 @@ template <typename MatchType>
     return ranges::equal_range(matches, map, {}, &MatchType::map);
 }
 
-std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
+std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
 {
     return std::visit([map](auto&& a) {
-        return std::variant<std::span<const Match>, std::span<const MatchWithoutMVPs>>{ filterMatchesToMap(a, map) };
+        return std::variant<std::span<const MatchWithMVPs>, std::span<const MatchWithoutMVPs>>{ filterMatchesToMap(a, map) };
     }, getTournamentMatches(tournamentID));
 }
 

@@ -870,7 +870,7 @@ namespace inventory_changer::item_generator
         dynamicData.tournamentTeam1 = randomMatch.team1;
         dynamicData.tournamentTeam2 = randomMatch.team2;
 
-        if constexpr (std::is_same_v<decltype(randomMatch), const inventory_changer::item_generator::Match&>) {
+        if constexpr (std::is_same_v<decltype(randomMatch), const inventory_changer::item_generator::MatchWithMVPs&>) {
             dynamicData.proPlayer = randomMatch.getRandomMVP();
         }
 
