@@ -234,8 +234,8 @@ Memory::Memory() noexcept
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 
     keyValuesSystem = reinterpret_cast<KeyValuesSystem* (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
-    keyValuesAllocEngine = findPattern(ENGINE_DLL, "\xFF\x52\x04\x85\xC0\x74\x0C\x56") + 3;
-    keyValuesAllocClient = findPattern(CLIENT_DLL, "\xFF\x52\x04\x85\xC0\x74\x0C\x56") + 3;
+    keyValuesAllocEngine = relativeToAbsolute<std::uintptr_t>(findPattern(ENGINE_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10\xFF\x75\x0C") + 1) + 0x4A;
+    keyValuesAllocClient = relativeToAbsolute<std::uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10") + 1) + 0x3E;
 
     jmpEbxGadgetInClient = findPattern(CLIENT_DLL, "\x1B\xFF\x23\xF8\xF6\x87") + 1;
 
