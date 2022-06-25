@@ -512,4 +512,27 @@ void Inventory::xRayItemClaimed(std::uint64_t itemID)
     initItemCustomizationNotification("xray_item_claim", itemID);
 }
 
+void Inventory::nameStorageUnit(std::uint64_t itemID, const char* newName, std::uint32_t modificationDate)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    memory->setCustomName(econItem, newName);
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setModificationDate(*econItem, modificationDate);
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    initItemCustomizationNotification("nametag_add", itemID);
+}
+
 }
