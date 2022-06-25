@@ -134,4 +134,10 @@ struct XRayItemClaimed {
     ItemIterator item;
 };
 
+struct StorageUnitNamed {
+    explicit StorageUnitNamed(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 }
