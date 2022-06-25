@@ -22,7 +22,8 @@ using ItemData = SmallVariant<32,
     Graffiti,
     ServiceMedal,
     SouvenirPackage,
-    TournamentCoin
+    TournamentCoin,
+    StorageUnit
 >;
 
 class Item {
