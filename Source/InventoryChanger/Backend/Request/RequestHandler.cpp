@@ -269,4 +269,17 @@ Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request
     return response::XRayItemClaimed{ scannerItems->reward };
 }
 
+Response RequestHandler::operator()(const request::NameStorageUnit& request) const
+{
+    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
+    if (!storageUnit)
+        return {};
+
+    storageUnit->name = request.name;
+    storageUnit->modificationDateTimestamp = static_cast<std::uint32_t>(std::time(nullptr));
+    backend.moveToFront(request.storageUnit);
+
+    return response::StorageUnitNamed{ request.storageUnit };
+}
+
 }
