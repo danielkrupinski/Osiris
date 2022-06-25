@@ -142,6 +142,8 @@ void Items::getOtherItems(game_items::Storage& storage)
                     storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
                 else
                     storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+            } else if (std::strcmp(tool->typeName, "casket") == 0) {
+                storage.addStorageUnit(rarity, weaponID, inventoryImage);
             }
         } else if (item->isPaintable()) {
             storage.addVanillaSkin(weaponID, inventoryImage);
