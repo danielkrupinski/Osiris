@@ -119,6 +119,7 @@ public:
     std::uintptr_t getMyPredictionTeamIDGetArgAsStringReturnAddress;
     std::uintptr_t setInventorySortAndFiltersGetArgAsStringReturnAddress;
     std::uintptr_t getInventoryCountSetResultIntReturnAddress;
+    std::uintptr_t performItemCasketTransactionGetArgAsStringReturnAddress;
 
     std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(THISCALL_CONV* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
