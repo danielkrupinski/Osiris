@@ -169,9 +169,12 @@ struct ResponseHandler {
             gameInventory.xRayItemClaimed(*itemID);
     }
 
-    void operator()(const response::StorageUnitNamed&) const
+    void operator()(const response::StorageUnitNamed& response) const
     {
-
+        if (const auto itemID = getItemID(response.storageUnit); itemID.has_value()) {
+            if (const auto storageUnit = response.storageUnit->get<inventory::StorageUnit>())
+                gameInventory.nameStorageUnit(*itemID, storageUnit->name.c_str(), storageUnit->modificationDateTimestamp);
+        }
     }
 
 private:
