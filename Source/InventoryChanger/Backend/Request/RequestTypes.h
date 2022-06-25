@@ -90,6 +90,14 @@ struct AddNameTag {
     std::string_view nameTag;
 };
 
+struct NameStorageUnit {
+    NameStorageUnit(ItemIterator storageUnit, std::string_view name)
+        : storageUnit{ storageUnit }, name{ name } {}
+
+    ItemIterator storageUnit;
+    std::string_view name;
+};
+
 struct UpdateStatTrak {
     UpdateStatTrak(ItemIterator item, int newStatTrak)
         : item{ item }, newStatTrak{ newStatTrak } {}
