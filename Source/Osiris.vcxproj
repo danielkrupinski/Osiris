@@ -129,14 +129,17 @@
     <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="InputUtil.cpp" />
-    <ClCompile Include="InventoryChanger\BackendResponseHandler.cpp" />
-    <ClCompile Include="InventoryChanger\Backend\RequestHandler.cpp" />
+    <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp" />
+    <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp" />
+    <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp" />
+    <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp" />
     <ClCompile Include="InventoryChanger\GameItems\Storage.cpp" />
     <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
     <ClCompile Include="InventoryChanger\InventoryConfig.cpp" />
     <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp" />
-    <ClCompile Include="InventoryChanger\ItemGenerator.cpp" />
-    <ClCompile Include="InventoryChanger\StaticData.cpp" />
+    <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp" />
+    <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp" />
+    <ClCompile Include="InventoryChanger\WeaponNames.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -205,17 +208,29 @@
     <ClInclude Include="Hooks\VmtSwap.h" />
     <ClInclude Include="imguiCustom.h" />
     <ClInclude Include="InputUtil.h" />
-    <ClInclude Include="InventoryChanger\BackendResponseHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
-    <ClInclude Include="InventoryChanger\Backend\RequestHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\RequestTypes.h" />
+    <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
+    <ClInclude Include="InventoryChanger\Backend\Requestor.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
+    <ClInclude Include="InventoryChanger\Backend\XRayScanner.h" />
+    <ClInclude Include="InventoryChanger\EconRarities.h" />
+    <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h" />
+    <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h" />
+    <ClInclude Include="InventoryChanger\GameIntegration\Items.h" />
+    <ClInclude Include="InventoryChanger\GameIntegration\Misc.h" />
+    <ClInclude Include="InventoryChanger\GameItems\CrateLoot.h" />
+    <ClInclude Include="InventoryChanger\GameItems\CrateLootLookup.h" />
+    <ClInclude Include="InventoryChanger\GameItems\Enums.h" />
     <ClInclude Include="InventoryChanger\GameItems\Item.h" />
     <ClInclude Include="InventoryChanger\GameItems\ItemSorter.h" />
     <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
@@ -226,9 +241,9 @@
     <ClInclude Include="InventoryChanger\Inventory\Item.h" />
     <ClInclude Include="InventoryChanger\Inventory\Structs.h" />
     <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator.h" />
-    <ClInclude Include="InventoryChanger\StaticData.h" />
-    <ClInclude Include="InventoryChanger\TournamentMatches.h" />
+    <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h" />
+    <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h" />
+    <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
@@ -278,6 +293,7 @@
     <ClInclude Include="SDK\NetworkStringTable.h" />
     <ClInclude Include="SDK\Pad.h" />
     <ClInclude Include="SDK\Panorama.h" />
+    <ClInclude Include="SDK\PanoramaMarshallHelper.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\PlantedC4.h" />
     <ClInclude Include="SDK\Platform.h" />
@@ -306,6 +322,7 @@
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
     <ClInclude Include="SmallVariant.h" />
+    <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -388,7 +405,8 @@
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -431,7 +449,8 @@
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>lib /NOLOGO /OUT:"$(OutDir)$(TargetName).lib" "$(ProjectDir)$(IntDir)*.obj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

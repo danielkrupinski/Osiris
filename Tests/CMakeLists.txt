@@ -11,9 +11,9 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests HelpersTests.cpp)
+add_executable(Tests HelpersTests.cpp SortFilterTests.cpp)
 add_subdirectory(InventoryChanger)
 target_link_libraries(Tests gtest_main gmock Threads::Threads OsirisOBJ)
 
 include(GoogleTest)
-gtest_discover_tests(Tests)
+gtest_discover_tests(Tests DISCOVERY_TIMEOUT 60)

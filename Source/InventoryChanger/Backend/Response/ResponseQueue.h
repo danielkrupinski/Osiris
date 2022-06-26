@@ -14,12 +14,14 @@ namespace inventory_changer::backend
 template <typename Clock = std::chrono::steady_clock>
 class ResponseQueue {
 public:
+    static_assert(Clock::is_steady);
+
     void add(const Response& response)
     {
         responses.emplace_back(Clock::now(), response);
     }
 
-    void removeResponsesReferencingItem(ItemConstIterator item)
+    void removeResponsesReferencingItem(ItemIterator item)
     {
         std::erase_if(responses, [item](const std::pair<typename Clock::time_point, Response>& pair) { return responseContainsItem(pair.second, item); });
     }

@@ -4,7 +4,7 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 namespace
 {
@@ -64,7 +64,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addAgent(rarity, weaponID, iconPath);
         break;
     case ItemType::Case:
-        storage.addCase(rarity, weaponID, 0, iconPath);
+        storage.addCase(rarity, weaponID, 0, 0, {}, false, iconPath);
         break;
     case ItemType::CaseKey:
         storage.addCaseKey(rarity, weaponID, iconPath);
@@ -99,6 +99,95 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
     return storage.getItems().back();
 }
 
+class InventoryChanger_GameItems_ItemSorter_StickerPartitionTest : public testing::TestWithParam<ItemType> {
+protected:
+    InventoryChanger_GameItems_ItemSorter_StickerPartitionTest()
+    {
+        storage.addSticker(2022, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::CS20Case, 0, {});
+    }
+
+    [[nodiscard]] const Item& sticker() const noexcept { return storage.getItems()[0]; }
+    [[nodiscard]] const Item& otherItem() const noexcept { return storage.getItems()[1]; }
+
+    Storage storage;
+};
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_StickerPartitionTest, StickerComesBeforeOtherItems) {
+    ASSERT_TRUE(ItemSorter{ storage }(sticker(), otherItem()));
+}
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_StickerPartitionTest, OtherItemsDoNotComeBeforeSticker) {
+    ASSERT_FALSE(ItemSorter{ storage }(otherItem(), sticker()));
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_StickerPartitionTest,
+    testing::Values(
+        ItemType::Gloves,
+        ItemType::Skin,
+        ItemType::Patch,
+        ItemType::Music,
+        ItemType::Graffiti,
+        ItemType::Collectible,
+        ItemType::NameTag,
+        ItemType::Agent,
+        ItemType::Case,
+        ItemType::CaseKey,
+        ItemType::OperationPass,
+        ItemType::StatTrakSwapTool,
+        ItemType::ViewerPass,
+        ItemType::ServiceMedal,
+        ItemType::SouvenirToken,
+        ItemType::TournamentCoin,
+        ItemType::VanillaKnife,
+        ItemType::VanillaSkin
+    )
+);
+
+class InventoryChanger_GameItems_ItemSorter_MusicPartitionTest : public testing::TestWithParam<ItemType> {
+protected:
+    InventoryChanger_GameItems_ItemSorter_MusicPartitionTest()
+    {
+        storage.addMusic(77, {}, {});
+        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::CS20Case, 0, {});
+    }
+
+    [[nodiscard]] const Item& music() const noexcept { return storage.getItems()[0]; }
+    [[nodiscard]] const Item& otherItem() const noexcept { return storage.getItems()[1]; }
+
+    Storage storage;
+};
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_MusicPartitionTest, MusicComesBeforeOtherItems) {
+    ASSERT_TRUE(ItemSorter{ storage }(music(), otherItem()));
+}
+
+TEST_P(InventoryChanger_GameItems_ItemSorter_MusicPartitionTest, OtherItemsDoNotComeBeforeMusic) {
+    ASSERT_FALSE(ItemSorter{ storage }(otherItem(), music()));
+}
+
+INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_MusicPartitionTest,
+    testing::Values(
+        ItemType::Gloves,
+        ItemType::Skin,
+        ItemType::Patch,
+        ItemType::Graffiti,
+        ItemType::Collectible,
+        ItemType::NameTag,
+        ItemType::Agent,
+        ItemType::Case,
+        ItemType::CaseKey,
+        ItemType::OperationPass,
+        ItemType::StatTrakSwapTool,
+        ItemType::ViewerPass,
+        ItemType::ServiceMedal,
+        ItemType::SouvenirToken,
+        ItemType::TournamentCoin,
+        ItemType::VanillaKnife,
+        ItemType::VanillaSkin
+    )
+);
+
 class InventoryChanger_GameItems_ItemSorter_GraffitiPartitionTest : public testing::TestWithParam<ItemType> {
 protected:
     InventoryChanger_GameItems_ItemSorter_GraffitiPartitionTest()
@@ -126,8 +215,6 @@ INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_GraffitiPartiti
         ItemType::Gloves,
         ItemType::Skin,
         ItemType::Patch,
-        ItemType::Sticker,
-        ItemType::Music,
         ItemType::Collectible,
         ItemType::NameTag,
         ItemType::Agent,
@@ -170,8 +257,6 @@ INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_PatchPartitionT
     testing::Values(
         ItemType::Gloves,
         ItemType::Skin,
-        ItemType::Sticker,
-        ItemType::Music,
         ItemType::Collectible,
         ItemType::NameTag,
         ItemType::Agent,
@@ -223,8 +308,6 @@ TEST_P(InventoryChanger_GameItems_ItemSorter_PartitionTest, ItemsNotHavingPaintK
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_ItemSorter_PartitionTest,
     testing::Values(
-        ItemType::Sticker,
-        ItemType::Music,
         ItemType::Collectible,
         ItemType::NameTag,
         ItemType::Agent,
@@ -334,6 +417,48 @@ TEST(InventoryChanger_GameItems_ItemSorter_GraffitiTest, ReturnsFalseForEqualGra
     Storage storage;
     storage.addGraffiti(1024, {}, EconRarity::Blue, {});
     storage.addGraffiti(1024, {}, EconRarity::Blue, {});
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_MusicTest, MusicWithSmallerIdComesFirst) {
+    Storage storage;
+    storage.addMusic(570, {}, {});
+    storage.addMusic(1024, {}, {});
+    ASSERT_TRUE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_MusicTest, MusicWithGreaterIdComesSecond) {
+    Storage storage;
+    storage.addMusic(570, {}, {});
+    storage.addMusic(1024, {}, {});
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[1], storage.getItems()[0]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_MusicTest, ReturnsFalseForEqualMusicId) {
+    Storage storage;
+    storage.addMusic(1024, {}, {});
+    storage.addMusic(1024, {}, {});
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, StickerWithSmallerIdComesFirst) {
+    Storage storage;
+    storage.addSticker(570, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+    ASSERT_TRUE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, StickerWithGreaterIdComesSecond) {
+    Storage storage;
+    storage.addSticker(570, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+    ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[1], storage.getItems()[0]));
+}
+
+TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, ReturnsFalseForEqualStickerId) {
+    Storage storage;
+    storage.addSticker(1024, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, 0, TournamentTeam{}, 0, false);
     ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
 }
 

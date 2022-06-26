@@ -2,9 +2,10 @@
 
 #include "../JsonForward.h"
 
-namespace InventoryChanger
+namespace inventory_changer
 {
-    json toJson() noexcept;
-    void fromJson(const json& j) noexcept;
-    void resetConfig() noexcept;
+    class InventoryChanger;
 }
+
+json toJson(const inventory_changer::InventoryChanger& inventoryChanger);
+void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChanger);

@@ -9,13 +9,13 @@
 namespace inventory_changer::backend
 {
     using ItemList = std::list<inventory::Item>;
-    using ItemIterator = ItemList::iterator;
-    using ItemConstIterator = ItemList::const_iterator;
+    using ItemMutableIterator = ItemList::iterator;
+    using ItemIterator = ItemList::const_iterator;
 
     struct ItemConstRemover {
         explicit ItemConstRemover(ItemList& itemList) : itemList{ itemList } {}
 
-        [[nodiscard]] ItemIterator removeConstness(ItemConstIterator it) const noexcept
+        [[nodiscard]] ItemMutableIterator removeConstness(ItemIterator it) const noexcept
         {
             return itemList.erase(it, it);
         }
@@ -26,9 +26,9 @@ namespace inventory_changer::backend
 }
 
 template <>
-struct std::hash<inventory_changer::backend::ItemConstIterator> {
-    [[nodiscard]] std::size_t operator()(inventory_changer::backend::ItemConstIterator iterator) const noexcept
+struct std::hash<inventory_changer::backend::ItemIterator> {
+    [[nodiscard]] std::size_t operator()(inventory_changer::backend::ItemIterator iterator) const noexcept
     {
-        return std::hash<const inventory::Item*>{}(std::to_address(iterator));
+        return std::hash<const inventory_changer::inventory::Item*>{}(std::to_address(iterator));
     }
 };

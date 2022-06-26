@@ -11,25 +11,30 @@ namespace inventory_changer::backend
 
 using Response = std::variant<
     std::monostate,
+    response::ContainerOpened,
+    response::GraffitiUnsealed,
     response::ItemAdded,
-    response::ItemMovedToFront,
-    response::ItemUpdated,
     response::ItemEquipped,
+    response::ItemHidden,
+    response::ItemMovedToFront,
     response::ItemRemoved,
-    response::StickerApplied,
-    response::StickerScraped,
-    response::StickerRemoved,
-    response::StatTrakUpdated,
-    response::ViewerPassActivated,
+    response::ItemUnhidden,
+    response::ItemUpdated,
     response::NameTagAdded,
     response::NameTagRemoved,
-    response::ContainerOpened,
     response::PatchApplied,
     response::PatchRemoved,
+    response::PickEmUpdated,
     response::SouvenirTokenActivated,
-    response::GraffitiUnsealed,
     response::StatTrakSwapped,
-    response::TeamGraffitiSelected
+    response::StatTrakUpdated,
+    response::StickerApplied,
+    response::StickerRemoved,
+    response::StickerScraped,
+    response::TeamGraffitiSelected,
+    response::ViewerPassActivated,
+    response::XRayItemClaimed,
+    response::XRayScannerUsed
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept

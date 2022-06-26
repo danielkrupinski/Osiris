@@ -14,19 +14,19 @@ namespace inventory_changer::backend
 
 class ItemIDMap {
 public:
-    [[nodiscard]] std::optional<ItemConstIterator> get(std::uint64_t itemID) const
+    [[nodiscard]] std::optional<ItemIterator> get(std::uint64_t itemID) const
     {
         const auto it = itemIDsIterators.find(itemID);
         return it != itemIDsIterators.end() ? std::make_optional(it->second) : std::nullopt;
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemConstIterator iterator) const
+    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemIterator iterator) const
     {
         const auto it = iteratorsItemIDs.find(iterator);
         return it != iteratorsItemIDs.end() ? std::make_optional(it->second) : std::nullopt;
     }
 
-    void add(std::uint64_t itemID, ItemConstIterator iterator)
+    void add(std::uint64_t itemID, ItemIterator iterator)
     {
         if (const bool inserted = iteratorsItemIDs.try_emplace(iterator, itemID).second)
             itemIDsIterators.try_emplace(itemID, iterator);
@@ -44,7 +44,7 @@ public:
         }
     }
 
-    std::optional<std::uint64_t> remove(ItemConstIterator iterator)
+    std::optional<std::uint64_t> remove(ItemIterator iterator)
     {
         if (const auto it = iteratorsItemIDs.find(iterator); it != iteratorsItemIDs.end()) {
             const auto itemID = it->second;
@@ -56,8 +56,8 @@ public:
     }
 
 private:
-    std::unordered_map<std::uint64_t, ItemConstIterator> itemIDsIterators;
-    std::unordered_map<ItemConstIterator, std::uint64_t> iteratorsItemIDs;
+    std::unordered_map<std::uint64_t, ItemIterator> itemIDsIterators;
+    std::unordered_map<ItemIterator, std::uint64_t> iteratorsItemIDs;
 };
 
 }

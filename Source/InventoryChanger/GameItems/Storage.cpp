@@ -1,6 +1,6 @@
 #include "Storage.h"
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 void Storage::addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath)
@@ -78,9 +78,10 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
     addItem(Item::Type::Agent, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::size_t descriptorIndex, std::string_view iconPath)
+void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
 {
-    addItem(Item::Type::Case, rarity, weaponID, descriptorIndex, pooled(iconPath));
+    assert((static_cast<std::uint8_t>(map) & 0x80) == 0);
+    addItem(Item::Type::Case, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournamentID, pooled(iconPath));
 }
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
@@ -126,6 +127,23 @@ std::string_view Storage::pooled(std::string_view string)
 ItemName Storage::pooled(const ItemName& name)
 {
     return ItemName{ stringPool.add(name.forDisplay), stringPoolWide.add(name.forSearch) };
+}
+
+const ItemName& getItemName(const Storage& gameItemStorage, const Item& item)
+{
+    if (item.isSkin() || item.isGloves())
+        return gameItemStorage.getPaintKit(item).name;
+    if (item.isMusic())
+        return gameItemStorage.getMusicKit(item).name;
+    if (item.isSticker())
+        return gameItemStorage.getStickerKit(item).name;
+    if (item.isGraffiti())
+        return gameItemStorage.getGraffitiKit(item).name;
+    if (item.isPatch())
+        return gameItemStorage.getPatch(item).name;
+
+    static constexpr ItemName fallback{ "", L"" };
+    return fallback;
 }
 
 }

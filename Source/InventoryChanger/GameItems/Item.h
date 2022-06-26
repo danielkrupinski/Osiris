@@ -6,7 +6,7 @@
 enum class WeaponId : short;
 enum class EconRarity : std::uint8_t;
 
-namespace game_items
+namespace inventory_changer::game_items
 {
 
 struct Item {

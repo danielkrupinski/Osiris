@@ -1,279 +1,266 @@
-#pragma once
+#include <range/v3/algorithm/equal_range.hpp>
 
-#include <span>
+#include "TournamentMatches.h"
 
-#include "StaticData.h"
-#include "../SDK/ItemSchema.h"
-#include "../Helpers.h"
+#include <InventoryChanger/GameItems/Enums.h>
 
-using StaticData::TournamentMap;
-
-struct Match {
-    TournamentMap map;
-    TournamentStage stage;
-    TournamentTeam team1;
-    TournamentTeam team2;
-    std::array<ProPlayer, 10> mvpPlayers;
-
-    [[nodiscard]] bool hasMVPs() const noexcept { return std::ranges::find(mvpPlayers, ProPlayer{}) != mvpPlayers.begin(); }
-    [[nodiscard]] ProPlayer getRandomMVP() const noexcept
-    {
-        if (!hasMVPs())
-            return ProPlayer{};
-        return mvpPlayers[Helpers::random(static_cast<std::size_t>(0), static_cast<std::size_t>(std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, ProPlayer{}))) - 1)];
-    }
-};
+namespace inventory_changer::item_generator
+{
 
 struct Tournament {
     std::uint32_t tournamentID;
-    std::span<const Match> matches;
+    std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> matches;
 };
+
+using namespace tournament_team;
 
 constexpr auto dreamHack2013Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic, {} },
-    { TournamentMap::Dust2, GroupStage, ClanMystik, LGBEsports, {} },
-    { TournamentMap::Mirage, GroupStage, LGBEsports, NatusVincere, {} },
-    { TournamentMap::Inferno, GroupStage, ClanMystik, Fnatic, {} },
-    { TournamentMap::Inferno, GroupStage, ClanMystik,LGBEsports, {} },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Fnatic },
+    { TournamentMap::Dust2, GroupStage, ClanMystik, LGBEsports },
+    { TournamentMap::Mirage, GroupStage, LGBEsports, NatusVincere },
+    { TournamentMap::Inferno, GroupStage, ClanMystik, Fnatic },
+    { TournamentMap::Inferno, GroupStage, ClanMystik,LGBEsports },
 
     // Group B
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, RecursiveEsports, {} },
-    { TournamentMap::Dust2, GroupStage, UniversalSoldiers, IBUYPOWER, {} },
-    { TournamentMap::Inferno, GroupStage, RecursiveEsports, IBUYPOWER, {} },
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, UniversalSoldiers, {} },
-    { TournamentMap::Inferno, GroupStage, RecursiveEsports, UniversalSoldiers, {} },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, RecursiveEsports },
+    { TournamentMap::Dust2, GroupStage, UniversalSoldiers, IBUYPOWER },
+    { TournamentMap::Inferno, GroupStage, RecursiveEsports, IBUYPOWER },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, UniversalSoldiers },
+    { TournamentMap::Inferno, GroupStage, RecursiveEsports, UniversalSoldiers },
 
     // Group C
-    { TournamentMap::Inferno, GroupStage, VeryGames, Xapso, {} },
-    { TournamentMap::Inferno, GroupStage, NFaculty, ComplexityGaming, {} },
-    { TournamentMap::Train, GroupStage, NFaculty, Xapso, {} },
-    { TournamentMap::Inferno, GroupStage, ComplexityGaming, VeryGames, {} },
-    { TournamentMap::Dust2, GroupStage, NFaculty, VeryGames, {} },
+    { TournamentMap::Inferno, GroupStage, VeryGames, Xapso },
+    { TournamentMap::Inferno, GroupStage, NFaculty, ComplexityGaming },
+    { TournamentMap::Train, GroupStage, NFaculty, Xapso },
+    { TournamentMap::Inferno, GroupStage, ComplexityGaming, VeryGames },
+    { TournamentMap::Dust2, GroupStage, NFaculty, VeryGames },
 
     // Group D
-    { TournamentMap::Inferno, GroupStage, AstanaDragons, _ReasonGaming, {} },
-    { TournamentMap::Inferno, GroupStage, CopenhagenWolves, SKGaming, {} },
-    { TournamentMap::Inferno, GroupStage, SKGaming, _ReasonGaming, {} },
-    { TournamentMap::Nuke, GroupStage, AstanaDragons, CopenhagenWolves, {} },
-    { TournamentMap::Nuke, GroupStage, AstanaDragons, _ReasonGaming, {} },
+    { TournamentMap::Inferno, GroupStage, AstanaDragons, _ReasonGaming },
+    { TournamentMap::Inferno, GroupStage, CopenhagenWolves, SKGaming },
+    { TournamentMap::Inferno, GroupStage, SKGaming, _ReasonGaming },
+    { TournamentMap::Nuke, GroupStage, AstanaDragons, CopenhagenWolves },
+    { TournamentMap::Nuke, GroupStage, AstanaDragons, _ReasonGaming },
 
     // Quarterfinals
-    { TournamentMap::Dust2, Quarterfinal, LGBEsports, NinjasInPyjamas, {} },
-    { TournamentMap::Train, Quarterfinal, LGBEsports, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, Quarterfinal, LGBEsports, NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, Quarterfinal, LGBEsports, NinjasInPyjamas },
+    { TournamentMap::Train, Quarterfinal, LGBEsports, NinjasInPyjamas },
+    { TournamentMap::Mirage, Quarterfinal, LGBEsports, NinjasInPyjamas },
 
-    { TournamentMap::Dust2, Quarterfinal, CopenhagenWolves, VeryGames, {} },
-    { TournamentMap::Inferno, Quarterfinal, CopenhagenWolves, VeryGames, {} },
-    { TournamentMap::Mirage, Quarterfinal, CopenhagenWolves, VeryGames, {} },
+    { TournamentMap::Dust2, Quarterfinal, CopenhagenWolves, VeryGames },
+    { TournamentMap::Inferno, Quarterfinal, CopenhagenWolves, VeryGames },
+    { TournamentMap::Mirage, Quarterfinal, CopenhagenWolves, VeryGames },
 
-    { TournamentMap::Inferno, Quarterfinal, Fnatic, RecursiveEsports, {} },
-    { TournamentMap::Dust2, Quarterfinal, Fnatic, RecursiveEsports, {} },
-    { TournamentMap::Train, Quarterfinal, Fnatic, RecursiveEsports, {} },
+    { TournamentMap::Inferno, Quarterfinal, Fnatic, RecursiveEsports },
+    { TournamentMap::Dust2, Quarterfinal, Fnatic, RecursiveEsports },
+    { TournamentMap::Train, Quarterfinal, Fnatic, RecursiveEsports },
 
-    { TournamentMap::Nuke, Quarterfinal, AstanaDragons, ComplexityGaming, {} },
-    { TournamentMap::Dust2, Quarterfinal, AstanaDragons, ComplexityGaming, {} },
-    { TournamentMap::Inferno, Quarterfinal, AstanaDragons, ComplexityGaming, {} },
+    { TournamentMap::Nuke, Quarterfinal, AstanaDragons, ComplexityGaming },
+    { TournamentMap::Dust2, Quarterfinal, AstanaDragons, ComplexityGaming },
+    { TournamentMap::Inferno, Quarterfinal, AstanaDragons, ComplexityGaming },
 
     // Semifinals
-    { TournamentMap::Dust2, Semifinal, NinjasInPyjamas, VeryGames, {} },
-    { TournamentMap::Inferno, Semifinal, NinjasInPyjamas, VeryGames, {} },
-    { TournamentMap::Nuke, Semifinal, NinjasInPyjamas, VeryGames, {} },
+    { TournamentMap::Dust2, Semifinal, NinjasInPyjamas, VeryGames },
+    { TournamentMap::Inferno, Semifinal, NinjasInPyjamas, VeryGames },
+    { TournamentMap::Nuke, Semifinal, NinjasInPyjamas, VeryGames },
 
-    { TournamentMap::Train, Semifinal, Fnatic, ComplexityGaming, {} },
-    { TournamentMap::Mirage, Semifinal, Fnatic, ComplexityGaming, {} },
+    { TournamentMap::Train, Semifinal, Fnatic, ComplexityGaming },
+    { TournamentMap::Mirage, Semifinal, Fnatic, ComplexityGaming },
 
     // Grand Final
-    { TournamentMap::Dust2, GrandFinal, NinjasInPyjamas, Fnatic, {} },
-    { TournamentMap::Inferno, GrandFinal, NinjasInPyjamas, Fnatic, {} },
-    { TournamentMap::Train, GrandFinal, NinjasInPyjamas, Fnatic, {} },
+    { TournamentMap::Dust2, GrandFinal, NinjasInPyjamas, Fnatic },
+    { TournamentMap::Inferno, GrandFinal, NinjasInPyjamas, Fnatic },
+    { TournamentMap::Train, GrandFinal, NinjasInPyjamas, Fnatic },
     });
 
 constexpr auto emsOneKatowice2014Matches = std::to_array<Match>({
     // Group A
-    { TournamentMap::Dust2, GroupStage, Titan, Mousesports, {} },
-    { TournamentMap::Mirage, GroupStage, VirtusPro, HellRaisers, {} },
-    { TournamentMap::Mirage, GroupStage, Titan, VirtusPro, {} },
-    { TournamentMap::Dust2, GroupStage, Mousesports, HellRaisers, {} },
-    { TournamentMap::Inferno, GroupStage, Titan, HellRaisers, {} },
+    { TournamentMap::Dust2, GroupStage, Titan, Mousesports },
+    { TournamentMap::Mirage, GroupStage, VirtusPro, HellRaisers },
+    { TournamentMap::Mirage, GroupStage, Titan, VirtusPro },
+    { TournamentMap::Dust2, GroupStage, Mousesports, HellRaisers },
+    { TournamentMap::Inferno, GroupStage, Titan, HellRaisers },
 
     // Group B
-    { TournamentMap::Dust2, GroupStage, NinjasInPyjamas, _3DMax, {} },
-    { TournamentMap::Inferno, GroupStage, TeamLDLC, VoxEminor, {} },
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, TeamLDLC, {} },
-    { TournamentMap::Inferno, GroupStage, _3DMax, VoxEminor, {} },
-    { TournamentMap::Inferno, GroupStage, TeamLDLC, _3DMax, {} },
+    { TournamentMap::Dust2, GroupStage, NinjasInPyjamas, _3DMax },
+    { TournamentMap::Inferno, GroupStage, TeamLDLC, VoxEminor },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, TeamLDLC },
+    { TournamentMap::Inferno, GroupStage, _3DMax, VoxEminor },
+    { TournamentMap::Inferno, GroupStage, TeamLDLC, _3DMax },
 
     // Group C
-    { TournamentMap::Inferno, GroupStage, Fnatic, ReasonGaming, {} },
-    { TournamentMap::Nuke, GroupStage, TeamDignitas, IBUYPOWER, {} },
-    { TournamentMap::Inferno, GroupStage, ReasonGaming, TeamDignitas, {} },
-    { TournamentMap::Inferno, GroupStage, Fnatic, IBUYPOWER, {} },
-    { TournamentMap::Inferno, GroupStage, Fnatic, ReasonGaming, {} },
+    { TournamentMap::Inferno, GroupStage, Fnatic, ReasonGaming },
+    { TournamentMap::Nuke, GroupStage, TeamDignitas, IBUYPOWER },
+    { TournamentMap::Inferno, GroupStage, ReasonGaming, TeamDignitas },
+    { TournamentMap::Inferno, GroupStage, Fnatic, IBUYPOWER },
+    { TournamentMap::Inferno, GroupStage, Fnatic, ReasonGaming },
 
     // Group D
-    { TournamentMap::Inferno, GroupStage, ComplexityGaming, ClanMystik, {} },
-    { TournamentMap::Inferno, GroupStage, LGBEsports, NatusVincere, {} },
-    { TournamentMap::Dust2, GroupStage, LGBEsports, ComplexityGaming, {} },
-    { TournamentMap::Dust2, GroupStage, NatusVincere, ClanMystik, {} },
-    { TournamentMap::Nuke, GroupStage, ComplexityGaming, ClanMystik, {} },
+    { TournamentMap::Inferno, GroupStage, ComplexityGaming, ClanMystik },
+    { TournamentMap::Inferno, GroupStage, LGBEsports, NatusVincere },
+    { TournamentMap::Dust2, GroupStage, LGBEsports, ComplexityGaming },
+    { TournamentMap::Dust2, GroupStage, NatusVincere, ClanMystik },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, ClanMystik },
 
     // Quarterfinals
-    { TournamentMap::Dust2, Quarterfinal, ComplexityGaming, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, Quarterfinal, ComplexityGaming, NinjasInPyjamas, {} },
-    { TournamentMap::Train, Quarterfinal, ComplexityGaming, NinjasInPyjamas, {} },
+    { TournamentMap::Dust2, Quarterfinal, ComplexityGaming, NinjasInPyjamas },
+    { TournamentMap::Nuke, Quarterfinal, ComplexityGaming, NinjasInPyjamas },
+    { TournamentMap::Train, Quarterfinal, ComplexityGaming, NinjasInPyjamas },
 
-    { TournamentMap::Dust2, Quarterfinal, TeamDignitas, HellRaisers, {} },
-    { TournamentMap::Mirage, Quarterfinal, TeamDignitas, HellRaisers, {} },
+    { TournamentMap::Dust2, Quarterfinal, TeamDignitas, HellRaisers },
+    { TournamentMap::Mirage, Quarterfinal, TeamDignitas, HellRaisers },
 
-    { TournamentMap::Mirage, Quarterfinal, VirtusPro, TeamLDLC, {} },
-    { TournamentMap::Inferno, Quarterfinal, VirtusPro, TeamLDLC, {} },
+    { TournamentMap::Mirage, Quarterfinal, VirtusPro, TeamLDLC },
+    { TournamentMap::Inferno, Quarterfinal, VirtusPro, TeamLDLC },
 
-    { TournamentMap::Inferno, Quarterfinal, Fnatic, LGBEsports, {} },
-    { TournamentMap::Mirage, Quarterfinal, Fnatic, LGBEsports, {} },
-    { TournamentMap::Train, Quarterfinal, Fnatic, LGBEsports, {} },
+    { TournamentMap::Inferno, Quarterfinal, Fnatic, LGBEsports },
+    { TournamentMap::Mirage, Quarterfinal, Fnatic, LGBEsports },
+    { TournamentMap::Train, Quarterfinal, Fnatic, LGBEsports },
 
     // Semifinals
-    { TournamentMap::Inferno, Semifinal, TeamDignitas, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, Semifinal, TeamDignitas, NinjasInPyjamas, {} },
+    { TournamentMap::Inferno, Semifinal, TeamDignitas, NinjasInPyjamas },
+    { TournamentMap::Nuke, Semifinal, TeamDignitas, NinjasInPyjamas },
 
-    { TournamentMap::Inferno, Semifinal, LGBEsports, VirtusPro, {} },
-    { TournamentMap::Mirage, Semifinal, LGBEsports, VirtusPro, {} },
-    { TournamentMap::Train, Semifinal, LGBEsports, VirtusPro, {} },
+    { TournamentMap::Inferno, Semifinal, LGBEsports, VirtusPro },
+    { TournamentMap::Mirage, Semifinal, LGBEsports, VirtusPro },
+    { TournamentMap::Train, Semifinal, LGBEsports, VirtusPro },
 
     // Grand Final
-    { TournamentMap::Mirage, GrandFinal, NinjasInPyjamas, VirtusPro, {} },
-    { TournamentMap::Inferno, GrandFinal, NinjasInPyjamas, VirtusPro, {} },
-    });
+    { TournamentMap::Mirage, GrandFinal, NinjasInPyjamas, VirtusPro },
+    { TournamentMap::Inferno, GrandFinal, NinjasInPyjamas, VirtusPro },
+});
 
 // Starting with ESL One Cologne 2014 souvenir packages are bound to a certain map. Matches of those tournaments must be sorted by map.
 
 constexpr auto eslOneCologne2014Matches = std::to_array<Match>({
-    { TournamentMap::Cache, GroupStage, CopenhagenWolves, LondonConspiracy, {} },
-    { TournamentMap::Cache, GroupStage, VirtusPro, IBUYPOWER, {} },
-    { TournamentMap::Cache, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Cobblestone, GroupStage, NinjasInPyjamas, EpsilonEsports, {} },
-    { TournamentMap::Cobblestone, GroupStage, IBUYPOWER, Fnatic, {} },
-    { TournamentMap::Cobblestone, GroupStage, IBUYPOWER, DATTeam, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, Cloud9, NinjasInPyjamas, {} },
-    { TournamentMap::Cobblestone, Semifinal, TeamLDLC, NinjasInPyjamas, {} },
-    { TournamentMap::Cobblestone, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, GroupStage, TeamWolf, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, GroupStage, NatusVincere, CopenhagenWolves, {} },
-    { TournamentMap::Dust2, GroupStage, TeamDignitas, VoxEminor, {} },
-    { TournamentMap::Dust2, GroupStage, Cloud9, Titan, {} },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Fnatic, {} },
-    { TournamentMap::Dust2, Quarterfinal, EpsilonEsports, TeamDignitas, {} },
-    { TournamentMap::Dust2, Quarterfinal, VirtusPro, TeamLDLC, {} },
-    { TournamentMap::Dust2, Quarterfinal, Cloud9, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, Semifinal,  TeamDignitas, Fnatic, {} },
-    { TournamentMap::Inferno, GroupStage, EpsilonEsports, HellRaisers, {} },
-    { TournamentMap::Inferno, GroupStage, NatusVincere, CopenhagenWolves, {} },
-    { TournamentMap::Inferno, GroupStage, TeamLDLC, NatusVincere, {} },
-    { TournamentMap::Inferno, Quarterfinal, NatusVincere, Fnatic, {} },
-    { TournamentMap::Inferno, Quarterfinal, EpsilonEsports, TeamDignitas, {} },
-    { TournamentMap::Inferno, Semifinal, TeamLDLC, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, GroupStage, HellRaisers, TeamWolf, {} },
-    { TournamentMap::Mirage, GroupStage, TeamDignitas, Cloud9, {} },
-    { TournamentMap::Mirage, Quarterfinal, VirtusPro, TeamLDLC, {} },
-    { TournamentMap::Nuke, GroupStage, TeamLDLC, LondonConspiracy, {} },
-    { TournamentMap::Nuke, GroupStage, Titan, VoxEminor, {} },
-    { TournamentMap::Nuke, GroupStage, Titan, TeamDignitas, {} },
-    { TournamentMap::Nuke, Semifinal, TeamLDLC, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, Quarterfinal, Cloud9, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, Quarterfinal, NatusVincere, Fnatic, {} },
-    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers, {} },
-    { TournamentMap::Overpass, GroupStage, VirtusPro, DATTeam, {} },
-    { TournamentMap::Overpass, GroupStage, VirtusPro, Fnatic, {} },
-    { TournamentMap::Overpass, Semifinal, TeamDignitas, Fnatic, {} },
-    });
-static_assert(std::ranges::is_sorted(eslOneCologne2014Matches, {}, & Match::map));
+    { TournamentMap::Cache, GroupStage, CopenhagenWolves, LondonConspiracy },
+    { TournamentMap::Cache, GroupStage, VirtusPro, IBUYPOWER },
+    { TournamentMap::Cache, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Cobblestone, GroupStage, NinjasInPyjamas, EpsilonEsports },
+    { TournamentMap::Cobblestone, GroupStage, IBUYPOWER, Fnatic },
+    { TournamentMap::Cobblestone, GroupStage, IBUYPOWER, DATTeam },
+    { TournamentMap::Cobblestone, Quarterfinal, Cloud9, NinjasInPyjamas },
+    { TournamentMap::Cobblestone, Semifinal, TeamLDLC, NinjasInPyjamas },
+    { TournamentMap::Cobblestone, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Dust2, GroupStage, TeamWolf, NinjasInPyjamas },
+    { TournamentMap::Dust2, GroupStage, NatusVincere, CopenhagenWolves },
+    { TournamentMap::Dust2, GroupStage, TeamDignitas, VoxEminor },
+    { TournamentMap::Dust2, GroupStage, Cloud9, Titan },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Fnatic },
+    { TournamentMap::Dust2, Quarterfinal, EpsilonEsports, TeamDignitas },
+    { TournamentMap::Dust2, Quarterfinal, VirtusPro, TeamLDLC },
+    { TournamentMap::Dust2, Quarterfinal, Cloud9, NinjasInPyjamas },
+    { TournamentMap::Dust2, Semifinal,  TeamDignitas, Fnatic },
+    { TournamentMap::Inferno, GroupStage, EpsilonEsports, HellRaisers },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, CopenhagenWolves },
+    { TournamentMap::Inferno, GroupStage, TeamLDLC, NatusVincere },
+    { TournamentMap::Inferno, Quarterfinal, NatusVincere, Fnatic },
+    { TournamentMap::Inferno, Quarterfinal, EpsilonEsports, TeamDignitas },
+    { TournamentMap::Inferno, Semifinal, TeamLDLC, NinjasInPyjamas },
+    { TournamentMap::Inferno, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Mirage, GroupStage, HellRaisers, TeamWolf },
+    { TournamentMap::Mirage, GroupStage, TeamDignitas, Cloud9 },
+    { TournamentMap::Mirage, Quarterfinal, VirtusPro, TeamLDLC },
+    { TournamentMap::Nuke, GroupStage, TeamLDLC, LondonConspiracy },
+    { TournamentMap::Nuke, GroupStage, Titan, VoxEminor },
+    { TournamentMap::Nuke, GroupStage, Titan, TeamDignitas },
+    { TournamentMap::Nuke, Semifinal, TeamLDLC, NinjasInPyjamas },
+    { TournamentMap::Nuke, Quarterfinal, Cloud9, NinjasInPyjamas },
+    { TournamentMap::Nuke, Quarterfinal, NatusVincere, Fnatic },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers },
+    { TournamentMap::Overpass, GroupStage, VirtusPro, DATTeam },
+    { TournamentMap::Overpass, GroupStage, VirtusPro, Fnatic },
+    { TournamentMap::Overpass, Semifinal, TeamDignitas, Fnatic },
+});
+static_assert(std::ranges::is_sorted(eslOneCologne2014Matches, {}, &Match::map));
 
 constexpr auto dreamHack2014Matches = std::to_array<Match>({
-    { TournamentMap::Cache, GroupStage, BravadoGaming, Cloud9, {} },
-    { TournamentMap::Cache, GroupStage, NinjasInPyjamas, ESCGaming, {} },
-    { TournamentMap::Cache, Quarterfinal, VirtusPro, PENTASports, {} },
-    { TournamentMap::Cache, Quarterfinal, TeamLDLC, Fnatic, {} },
-    { TournamentMap::Cache, Semifinal, NinjasInPyjamas, VirtusPro, {} },
-    { TournamentMap::Cobblestone, GroupStage, TeamLDLC, ESCGaming, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, NatusVincere, TeamDignitas, {} },
-    { TournamentMap::Dust2, GroupStage, Fnatic, Cloud9, {} },
-    { TournamentMap::Dust2, GroupStage, PENTASports, CopenhagenWolves, {} },
-    { TournamentMap::Dust2, Quarterfinal, HellRaisers, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, Quarterfinal, TeamLDLC, Fnatic, {} },
-    { TournamentMap::Dust2, Semifinal, NatusVincere, TeamLDLC, {} },
-    { TournamentMap::Dust2, GrandFinal, TeamLDLC, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, {} },
-    { TournamentMap::Inferno, GroupStage, IBUYPOWER, PENTASports, {} },
-    { TournamentMap::Inferno, GroupStage, VirtusPro, MyXMG, {} },
-    { TournamentMap::Inferno, Quarterfinal, HellRaisers, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, Semifinal, NinjasInPyjamas, VirtusPro, {} },
-    { TournamentMap::Inferno, Semifinal, NatusVincere, TeamLDLC, {} },
-    { TournamentMap::Inferno, GrandFinal, TeamLDLC, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, GroupStage, Fnatic, BravadoGaming, {} },
-    { TournamentMap::Mirage, GroupStage, Fnatic, HellRaisers, {} },
-    { TournamentMap::Mirage, GroupStage, ESCGaming, PlanetkeyDynamics, {} },
-    { TournamentMap::Mirage, GroupStage, NatusVincere, Flipsid3Tactics, {} },
-    { TournamentMap::Mirage, GroupStage, MyXMG, Flipsid3Tactics, {} },
-    { TournamentMap::Mirage, Quarterfinal, VirtusPro, PENTASports, {} },
-    { TournamentMap::Mirage, Quarterfinal, NatusVincere, TeamDignitas, {} },
-    { TournamentMap::Nuke, GroupStage, TeamDignitas, PENTASports, {} },
-    { TournamentMap::Nuke, GroupStage, IBUYPOWER, CopenhagenWolves, {} },
-    { TournamentMap::Nuke, GroupStage, TeamDignitas, IBUYPOWER, {} },
-    { TournamentMap::Nuke, GroupStage, VirtusPro, NatusVincere, {} },
-    { TournamentMap::Nuke, Semifinal, NinjasInPyjamas, VirtusPro, {} },
-    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, PlanetkeyDynamics, {} },
-    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, TeamLDLC, {} },
-    { TournamentMap::Overpass, GroupStage, Flipsid3Tactics, NatusVincere, {} },
-    { TournamentMap::Overpass, Quarterfinal, TeamLDLC, Fnatic, {} },
-    { TournamentMap::Overpass, GrandFinal, TeamLDLC, NinjasInPyjamas, {} },
-    });
-static_assert(std::ranges::is_sorted(dreamHack2014Matches, {}, & Match::map));
+    { TournamentMap::Cache, GroupStage, BravadoGaming, Cloud9 },
+    { TournamentMap::Cache, GroupStage, NinjasInPyjamas, ESCGaming },
+    { TournamentMap::Cache, Quarterfinal, VirtusPro, PENTASports },
+    { TournamentMap::Cache, Quarterfinal, TeamLDLC, Fnatic },
+    { TournamentMap::Cache, Semifinal, NinjasInPyjamas, VirtusPro },
+    { TournamentMap::Cobblestone, GroupStage, TeamLDLC, ESCGaming },
+    { TournamentMap::Cobblestone, Quarterfinal, NatusVincere, TeamDignitas },
+    { TournamentMap::Dust2, GroupStage, Fnatic, Cloud9 },
+    { TournamentMap::Dust2, GroupStage, PENTASports, CopenhagenWolves },
+    { TournamentMap::Dust2, Quarterfinal, HellRaisers, NinjasInPyjamas },
+    { TournamentMap::Dust2, Quarterfinal, TeamLDLC, Fnatic },
+    { TournamentMap::Dust2, Semifinal, NatusVincere, TeamLDLC },
+    { TournamentMap::Dust2, GrandFinal, TeamLDLC, NinjasInPyjamas },
+    { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers },
+    { TournamentMap::Inferno, GroupStage, IBUYPOWER, PENTASports },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, MyXMG },
+    { TournamentMap::Inferno, Quarterfinal, HellRaisers, NinjasInPyjamas },
+    { TournamentMap::Inferno, Semifinal, NinjasInPyjamas, VirtusPro },
+    { TournamentMap::Inferno, Semifinal, NatusVincere, TeamLDLC },
+    { TournamentMap::Inferno, GrandFinal, TeamLDLC, NinjasInPyjamas },
+    { TournamentMap::Mirage, GroupStage, Fnatic, BravadoGaming },
+    { TournamentMap::Mirage, GroupStage, Fnatic, HellRaisers },
+    { TournamentMap::Mirage, GroupStage, ESCGaming, PlanetkeyDynamics },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Flipsid3Tactics },
+    { TournamentMap::Mirage, GroupStage, MyXMG, Flipsid3Tactics },
+    { TournamentMap::Mirage, Quarterfinal, VirtusPro, PENTASports },
+    { TournamentMap::Mirage, Quarterfinal, NatusVincere, TeamDignitas },
+    { TournamentMap::Nuke, GroupStage, TeamDignitas, PENTASports },
+    { TournamentMap::Nuke, GroupStage, IBUYPOWER, CopenhagenWolves },
+    { TournamentMap::Nuke, GroupStage, TeamDignitas, IBUYPOWER },
+    { TournamentMap::Nuke, GroupStage, VirtusPro, NatusVincere },
+    { TournamentMap::Nuke, Semifinal, NinjasInPyjamas, VirtusPro },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, PlanetkeyDynamics },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, TeamLDLC },
+    { TournamentMap::Overpass, GroupStage, Flipsid3Tactics, NatusVincere },
+    { TournamentMap::Overpass, Quarterfinal, TeamLDLC, Fnatic },
+    { TournamentMap::Overpass, GrandFinal, TeamLDLC, NinjasInPyjamas },
+});
+static_assert(std::ranges::is_sorted(dreamHack2014Matches, {}, &Match::map));
 
 constexpr auto eslOneKatowice2015Matches = std::to_array<Match>({
-    { TournamentMap::Cache, GroupStage, TeamEnVyUs, LGBEsports, {} },
-    { TournamentMap::Cache, GroupStage, PENTASports, Titan, {} },
-    { TournamentMap::Cache, GroupStage, VoxEminor, Flipsid3Tactics, {} },
-    { TournamentMap::Cache, Quarterfinal, Fnatic, PENTASports, {} },
-    { TournamentMap::Cache, Quarterfinal, TeamEnVyUs, NatusVincere, {} },
-    { TournamentMap::Cache, Semifinal, TeamEnVyUs, NinjasInPyjamas, {} },
-    { TournamentMap::Cache, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Cobblestone, GroupStage, NatusVincere, Fnatic, {} },
-    { TournamentMap::Cobblestone, GroupStage, TeamEnVyUs, Titan, {} },
-    { TournamentMap::Cobblestone, Quarterfinal, TeamEnVyUs, NatusVincere, {} },
-    { TournamentMap::Cobblestone, Semifinal, VirtusPro, Fnatic, {} },
-    { TournamentMap::Dust2, GroupStage, PENTASports, LGBEsports, {} },
-    { TournamentMap::Dust2, GroupStage, PENTASports, LGBEsports, {} },
-    { TournamentMap::Dust2, GroupStage, CounterLogicGaming, KeydStars, {} },
-    { TournamentMap::Dust2, Quarterfinal, TeamEnVyUs, NatusVincere, {} },
-    { TournamentMap::Dust2, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, Semifinal, TeamEnVyUs, NinjasInPyjamas, {} },
-    { TournamentMap::Dust2, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, GroupStage, Fnatic, VoxEminor, {} },
-    { TournamentMap::Inferno, GroupStage, VoxEminor, NatusVincere, {} },
-    { TournamentMap::Inferno, GroupStage, KeydStars, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, GroupStage, HellRaisers, KeydStars, {} },
-    { TournamentMap::Inferno, GroupStage, VirtusPro, Cloud9G2A, {} },
-    { TournamentMap::Inferno, Quarterfinal, Fnatic, PENTASports, {} },
-    { TournamentMap::Inferno, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, GrandFinal, Fnatic, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, GroupStage, NatusVincere, Flipsid3Tactics, {} },
-    { TournamentMap::Mirage, GroupStage, CounterLogicGaming, NinjasInPyjamas, {} },
-    { TournamentMap::Mirage, Quarterfinal, KeydStars, VirtusPro, {} },
-    { TournamentMap::Mirage, Semifinal, VirtusPro, Fnatic, {} },
-    { TournamentMap::Nuke, GroupStage, CounterLogicGaming, HellRaisers, {} },
-    { TournamentMap::Nuke, GroupStage, Cloud9G2A, TeamSoloMidKinguin, {} },
-    { TournamentMap::Nuke, GroupStage, TeamSoloMidKinguin, _3DMax, {} },
-    { TournamentMap::Nuke, Quarterfinal, KeydStars, VirtusPro, {} },
-    { TournamentMap::Nuke, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas, {} },
-    { TournamentMap::Overpass, GroupStage, VirtusPro, _3DMax, {} },
-    { TournamentMap::Overpass, GroupStage, TeamSoloMidKinguin, Cloud9G2A, {} },
-    { TournamentMap::Overpass, Quarterfinal, KeydStars, VirtusPro, {} },
-    });
-static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, & Match::map));
+    { TournamentMap::Cache, GroupStage, TeamEnVyUs, LGBEsports },
+    { TournamentMap::Cache, GroupStage, PENTASports, Titan },
+    { TournamentMap::Cache, GroupStage, VoxEminor, Flipsid3Tactics },
+    { TournamentMap::Cache, Quarterfinal, Fnatic, PENTASports },
+    { TournamentMap::Cache, Quarterfinal, TeamEnVyUs, NatusVincere },
+    { TournamentMap::Cache, Semifinal, TeamEnVyUs, NinjasInPyjamas },
+    { TournamentMap::Cache, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Cobblestone, GroupStage, NatusVincere, Fnatic },
+    { TournamentMap::Cobblestone, GroupStage, TeamEnVyUs, Titan },
+    { TournamentMap::Cobblestone, Quarterfinal, TeamEnVyUs, NatusVincere },
+    { TournamentMap::Cobblestone, Semifinal, VirtusPro, Fnatic },
+    { TournamentMap::Dust2, GroupStage, PENTASports, LGBEsports },
+    { TournamentMap::Dust2, GroupStage, PENTASports, LGBEsports },
+    { TournamentMap::Dust2, GroupStage, CounterLogicGaming, KeydStars },
+    { TournamentMap::Dust2, Quarterfinal, TeamEnVyUs, NatusVincere },
+    { TournamentMap::Dust2, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas },
+    { TournamentMap::Dust2, Semifinal, TeamEnVyUs, NinjasInPyjamas },
+    { TournamentMap::Dust2, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Inferno, GroupStage, Fnatic, VoxEminor },
+    { TournamentMap::Inferno, GroupStage, VoxEminor, NatusVincere },
+    { TournamentMap::Inferno, GroupStage, KeydStars, NinjasInPyjamas },
+    { TournamentMap::Inferno, GroupStage, HellRaisers, KeydStars },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, Cloud9G2A },
+    { TournamentMap::Inferno, Quarterfinal, Fnatic, PENTASports },
+    { TournamentMap::Inferno, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas },
+    { TournamentMap::Inferno, GrandFinal, Fnatic, NinjasInPyjamas },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, Flipsid3Tactics },
+    { TournamentMap::Mirage, GroupStage, CounterLogicGaming, NinjasInPyjamas },
+    { TournamentMap::Mirage, Quarterfinal, KeydStars, VirtusPro },
+    { TournamentMap::Mirage, Semifinal, VirtusPro, Fnatic },
+    { TournamentMap::Nuke, GroupStage, CounterLogicGaming, HellRaisers },
+    { TournamentMap::Nuke, GroupStage, Cloud9G2A, TeamSoloMidKinguin },
+    { TournamentMap::Nuke, GroupStage, TeamSoloMidKinguin, _3DMax },
+    { TournamentMap::Nuke, Quarterfinal, KeydStars, VirtusPro },
+    { TournamentMap::Nuke, Quarterfinal, TeamSoloMidKinguin, NinjasInPyjamas },
+    { TournamentMap::Overpass, GroupStage, VirtusPro, _3DMax },
+    { TournamentMap::Overpass, GroupStage, TeamSoloMidKinguin, Cloud9G2A },
+    { TournamentMap::Overpass, Quarterfinal, KeydStars, VirtusPro },
+});
+static_assert(std::ranges::is_sorted(eslOneKatowice2015Matches, {}, &Match::map));
 
-constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
+using namespace csgo::pro_player;
+
+constexpr auto eslOneCologne2015Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, NinjasInPyjamas, TeamSoloMid, { f0rest, GeT_RiGhT, Xyp9x, karrigan, device, dupreeh } },
     { TournamentMap::Cache, Semifinal, TeamSoloMid, TeamEnVyUs, { device, cajunb, Xyp9x, dupreeh, karrigan, NBK, kioShiMa, Happy, kennyS, apEX } },
     { TournamentMap::Cobblestone, GroupStage, TeamEnVyUs, LuminosityGaming, { kennyS, Happy, apEX, NBK, kioShiMa, FalleN, coldzera, fer, steel, boltz } },
@@ -311,9 +298,9 @@ constexpr auto eslOneCologne2015Matches = std::to_array<Match>({
     { TournamentMap::Train, Quarterfinal, NinjasInPyjamas, VirtusPro, { allu, f0rest, GeT_RiGhT, Xizt, friberg, TaZ, Snax, NEO, byali, pashaBiceps } },
     { TournamentMap::Train, Quarterfinal, Fnatic, LuminosityGaming, { flusha, olofmeister, JW, pronax, KRIMZ, coldzera, fer, boltz, steel } },
     });
-static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2015Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
+constexpr auto dreamHackClujNapoka2015Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, TeamSoloMid, { WorldEdit, B1ad3, DavCost, dupreeh, Xyp9x, karrigan, device, cajunb } },
     { TournamentMap::Cache, GroupStage, G2Esports, Mousesports, { Maikelele, jkaem, fox, dennis, rain, NiKo, chrisJ, denis } },
     { TournamentMap::Cache, GroupStage, Titan, NinjasInPyjamas, { shox, RpK, ScreaM, Ex6TenZ, SmithZz, f0rest, allu, Xizt, friberg, GeT_RiGhT } },
@@ -357,9 +344,9 @@ constexpr auto dreamHackClujNapoka2015Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, NinjasInPyjamas, NatusVincere, { allu, GeT_RiGhT, flamie, GuardiaN, Zeus, Edward, seized } },
     { TournamentMap::Train, GrandFinal, TeamEnVyUs, NatusVincere, { kennyS, Happy, apEX, kioShiMa, NBK, seized, GuardiaN, flamie, Zeus, Edward } },
     });
-static_assert(std::ranges::is_sorted(dreamHackClujNapoka2015Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(dreamHackClujNapoka2015Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
+constexpr auto mlgColumbus2016Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { bondik, Shara, B1ad3, WorldEdit, markeloff, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
     { TournamentMap::Cache, GroupStage, Mousesports, NinjasInPyjamas, { chrisJ, NiKo, Spiidi, denis, nex, f0rest, GeT_RiGhT, friberg, Xizt, THREAT } },
     { TournamentMap::Cache, GroupStage, FaZeClan, TeamLiquid, { rain, aizy, Maikelele, fox, jkaem, nitr0, adreN, EliGE, Hiko, s1mple } },
@@ -404,9 +391,9 @@ constexpr auto mlgColumbus2016Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, G2Esports, VirtusPro, { RpK, byali, Snax, NEO, TaZ, pashaBiceps } },
     { TournamentMap::Train, GroupStage, VirtusPro, G2Esports, { byali, Snax, NEO, TaZ, pashaBiceps, SmithZz, Ex6TenZ, shox, ScreaM, RpK } },
     });
-static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(mlgColumbus2016Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
+constexpr auto eslOneCologne2016Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, TeamDignitas, Astralis, { k0nfig, RUBINO, MSL, tenzki, cajunb, karrigan, Xyp9x, device, gla1ve } },
     { TournamentMap::Cache, GroupStage, Flipsid3Tactics, NinjasInPyjamas, { wayLander, markeloff, WorldEdit, Shara, B1ad3, pyth, friberg } },
     { TournamentMap::Cache, GroupStage, FaZeClan, Fnatic, { kioShiMa, rain, aizy, jkaem, KRIMZ, dennis, flusha, olofmeister, JW } },
@@ -450,9 +437,9 @@ constexpr auto eslOneCologne2016Matches = std::to_array<Match>({
     { TournamentMap::Train, Quarterfinal, GambitEsports, Fnatic, { spaze, mou, hooch, AdreN, KRIMZ, flusha, olofmeister, dennis, JW } },
     { TournamentMap::Train, GrandFinal, TeamLiquid, SKGaming, { jdm64, Hiko, nitr0, s1mple, coldzera, TACO, fnx, FalleN, fer } },
     });
-static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eslOneCologne2016Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
+constexpr auto eleagueAtlanta2017Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, G2Esports, Fnatic, { RpK, bodyy, shox, ScreaM, SmithZz, KRIMZ, olofmeister, dennis, discodoplan } },
     { TournamentMap::Cache, GroupStage, TeamLiquid, TeamEnVyUs, { EliGE, Pimp, Hiko, jdm64, nitr0, NBK, apEX, kennyS, SIXER, Happy } },
     { TournamentMap::Cache, GroupStage, Mousesports, HellRaisers, { chrisJ, denis, loWel, NiKo, Spiidi, DeadFox, ANGE1, bondik, STYKO, Zero } },
@@ -506,9 +493,9 @@ constexpr auto eleagueAtlanta2017Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, VirtusPro, SKGaming, { NEO, Snax, pashaBiceps, TaZ, byali, fox, fer, FalleN, coldzera, TACO } },
     { TournamentMap::Train, GrandFinal, Astralis, VirtusPro, { Kjaerbye, dupreeh, Xyp9x, gla1ve, NEO, Snax, pashaBiceps, TaZ, byali } },
     });
-static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eleagueAtlanta2017Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto pglKrakow2017Matches = std::to_array<Match>({
+constexpr auto pglKrakow2017Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, GroupStage, G2Esports, GambitEsports, { NBK, kennyS, apEX, bodyy, AdreN, Zeus, mou, Hobbit, Dosia } },
     { TournamentMap::Cache, GroupStage, VirtusPro, Fnatic, { TaZ, Snax, pashaBiceps, byali, NEO, JW, olofmeister, KRIMZ, dennis } },
     { TournamentMap::Cache, Quarterfinal, Astralis, SKGaming, { device, gla1ve, Kjaerbye, Xyp9x, dupreeh, fer, coldzera, felps, FalleN, TACO } },
@@ -560,9 +547,9 @@ constexpr auto pglKrakow2017Matches = std::to_array<Match>({
     { TournamentMap::Train, Semifinal, GambitEsports, Astralis, { Zeus, mou, Hobbit, Dosia, AdreN, device, gla1ve, Kjaerbye, Xyp9x, dupreeh } },
     { TournamentMap::Train, GrandFinal, GambitEsports, Immortals, { Zeus, mou, Hobbit, Dosia, AdreN, steel, kNgV, LUCAS1, boltz, HEN1 } },
     });
-static_assert(std::ranges::is_sorted(pglKrakow2017Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(pglKrakow2017Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
+constexpr auto eleagueBoston2018Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, ChallengersStage, Cloud9, TeamEnVyUs, { Skadoodle, tarik, autimatic, Stewie2K, RUSH, ScreaM, RpK, Happy, SIXER } },
     { TournamentMap::Cache, ChallengersStage, TeamEnVyUs, Renegades, { xms, RpK, Happy, SIXER, AZR, Nifty, NAF, USTILO, jks } },
     { TournamentMap::Cache, ChallengersStage, MisfitsGaming, Avangar, { devoduvek, AmaNEk, ShahZaM, SicK, seangares, qikert, buster, Jame, dimasick, KrizzeN } },
@@ -649,9 +636,9 @@ constexpr auto eleagueBoston2018Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, Mousesports, QuantumBellatorFire, { chrisJ, oskar, ropz, STYKO, Boombl4, waterfaLLZ, jmqa, Kvik, balblna } },
     { TournamentMap::Train, GroupStage, Astralis, Cloud9, { device, Xyp9x, dupreeh, Skadoodle, tarik, autimatic, Stewie2K, RUSH } },
     });
-static_assert(std::ranges::is_sorted(eleagueBoston2018Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(eleagueBoston2018Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto faceitLondon2018Matches = std::to_array<Match>({
+constexpr auto faceitLondon2018Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, ChallengersStage, TeamLiquid, VegaSquadron, { EliGE, nitr0, Twistzz, NAF, TACO, jR, hutji, crush, chopper, tonyblack } },
     { TournamentMap::Cache, GroupStage, G2Esports, ComplexityGaming, { shox, kennyS, bodyy, Ex6TenZ, SmithZz, ANDROID, yay, dephh, ShahZaM, stanislaw } },
     { TournamentMap::Cache, GroupStage, Fnatic, HellRaisers, { KRIMZ, JW, ISSAA, woxic, DeadFox, bondik, ANGE1 } },
@@ -742,9 +729,9 @@ constexpr auto faceitLondon2018Matches = std::to_array<Match>({
     { TournamentMap::Train, GroupStage, MIBR, NinjasInPyjamas, { FalleN, coldzera, fer, Stewie2K, tarik, f0rest, dennis, Lekr0, GeT_RiGhT, REZ } },
     { TournamentMap::Train, Quarterfinal, ComplexityGaming, MIBR, { ANDROID, yay, dephh, stanislaw, FalleN, coldzera, fer, Stewie2K, tarik } },
     });
-static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, & Match::map));
+static_assert(std::ranges::is_sorted(faceitLondon2018Matches, {}, & MatchWithMVPs::map));
 
-constexpr auto iemKatowice2019Matches = std::to_array<Match>({
+constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     // Challengers Stage
 
     // Round 1
@@ -921,133 +908,259 @@ constexpr auto iemKatowice2019Matches = std::to_array<Match>({
     });
 
 constexpr auto pglStockholm2021Matches = std::to_array<Match>({
-    { TournamentMap::Ancient, ChallengersStage, VirtusPro, FaZeClan, {} },
-    { TournamentMap::Ancient, ChallengersStage, paiNGaming, SharksEsports, {} },
-    { TournamentMap::Ancient, ChallengersStage, VirtusPro, TeamSpirit, {} },
-    { TournamentMap::Ancient, ChallengersStage, Heroic, Entropiq, {} },
-    { TournamentMap::Ancient, ChallengersStage, Astralis, paiNGaming, {} },
-    { TournamentMap::Ancient, GroupStage, G2Esports, CopenhagenFlames, {} },
-    { TournamentMap::Ancient, GroupStage, NatusVincere, Heroic, {} },
-    { TournamentMap::Ancient, GroupStage, FaZeClan, CopenhagenFlames, {} },
-    { TournamentMap::Ancient, GroupStage, Astralis, Heroic, {} },
-    { TournamentMap::Ancient, GroupStage, Entropiq, FURIA, {} },
-    { TournamentMap::Ancient, GroupStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Ancient, GroupStage, VirtusPro, MOUZ, {} },
-    { TournamentMap::Ancient, GroupStage, VirtusPro, FaZeClan, {} },
-    { TournamentMap::Ancient, GroupStage, CopenhagenFlames, NinjasInPyjamas, {} },
-    { TournamentMap::Ancient, Quarterfinal, Heroic, VirtusPro, {} },
-    { TournamentMap::Ancient, GrandFinal, NatusVincere, G2Esports, {} },
-    { TournamentMap::Dust2, ChallengersStage, Astralis, Entropiq, {} },
-    { TournamentMap::Dust2, ChallengersStage, ENCE, FaZeClan, {} },
-    { TournamentMap::Dust2, ChallengersStage, BIG, ENCE, {} },
-    { TournamentMap::Dust2, ChallengersStage, BIG, MOUZ, {} },
-    { TournamentMap::Dust2, ChallengersStage, TeamSpirit, Astralis, {} },
-    { TournamentMap::Dust2, GroupStage, EvilGeniuses, FaZeClan, {} },
-    { TournamentMap::Dust2, GroupStage, TeamLiquid, ENCE, {} },
-    { TournamentMap::Dust2, GroupStage, G2Esports, Entropiq, {} },
-    { TournamentMap::Dust2, GroupStage, Vitality, EvilGeniuses, {} },
-    { TournamentMap::Dust2, GroupStage, Astralis, Vitality, {} },
-    { TournamentMap::Dust2, GroupStage, NinjasInPyjamas, GambitEsports, {} },
-    { TournamentMap::Dust2, GroupStage, Entropiq, Vitality, {} },
-    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Vitality, {} },
-    { TournamentMap::Inferno, ChallengersStage, paiNGaming, VirtusPro, {} },
-    { TournamentMap::Inferno, ChallengersStage, Heroic, Tyloo, {} },
-    { TournamentMap::Inferno, ChallengersStage, MOUZ, SharksEsports, {} },
-    { TournamentMap::Inferno, ChallengersStage, BIG, Renegades, {} },
-    { TournamentMap::Inferno, ChallengersStage, VirtusPro, TeamSpirit, {} },
-    { TournamentMap::Inferno, ChallengersStage, MovistarRiders, Tyloo, {} },
-    { TournamentMap::Inferno, ChallengersStage, MOUZ, Renegades, {} },
-    { TournamentMap::Inferno, ChallengersStage, Heroic, MovistarRiders, {} },
-    { TournamentMap::Inferno, ChallengersStage, BIG, MOUZ, {} },
-    { TournamentMap::Inferno, ChallengersStage, TeamSpirit, Astralis, {} },
-    { TournamentMap::Inferno, GroupStage, Vitality, VirtusPro, {} },
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MOUZ, {} },
-    { TournamentMap::Inferno, GroupStage, FURIA, Astralis, {} },
-    { TournamentMap::Inferno, GroupStage, FURIA, MOUZ, {} },
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, Astralis, {} },
-    { TournamentMap::Inferno, GroupStage, TeamLiquid, FURIA, {} },
-    { TournamentMap::Inferno, GroupStage, Vitality, EvilGeniuses, {} },
-    { TournamentMap::Inferno, GroupStage, FaZeClan, TeamLiquid, {} },
-    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, GambitEsports, {} },
-    { TournamentMap::Inferno, GroupStage, VirtusPro, MOUZ, {} },
-    { TournamentMap::Inferno, GroupStage, VirtusPro, FaZeClan, {} },
-    { TournamentMap::Inferno, GroupStage, CopenhagenFlames, NinjasInPyjamas, {} },
-    { TournamentMap::Inferno, Quarterfinal, Heroic, VirtusPro, {} },
-    { TournamentMap::Inferno, Quarterfinal, NinjasInPyjamas, G2Esports, {} },
-    { TournamentMap::Inferno, Quarterfinal, FURIA, GambitEsports, {} },
-    { TournamentMap::Inferno, Semifinal, Heroic, G2Esports, {} },
-    { TournamentMap::Mirage, ChallengersStage, Tyloo, SharksEsports, {} },
-    { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Entropiq, {} },
-    { TournamentMap::Mirage, ChallengersStage, VirtusPro, FaZeClan, {} },
-    { TournamentMap::Mirage, ChallengersStage, Heroic, Entropiq, {} },
-    { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Tyloo, {} },
-    { TournamentMap::Mirage, ChallengersStage, BIG, ENCE, {} },
-    { TournamentMap::Mirage, ChallengersStage, MOUZ, Renegades, {} },
-    { TournamentMap::Mirage, GroupStage, G2Esports, FaZeClan, {} },
-    { TournamentMap::Mirage, GroupStage, G2Esports, Entropiq, {} },
-    { TournamentMap::Mirage, GroupStage, MOUZ, ENCE, {} },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, TeamLiquid, {} },
-    { TournamentMap::Mirage, GroupStage, Entropiq, Vitality, {} },
-    { TournamentMap::Mirage, Quarterfinal, Heroic, VirtusPro, {} },
-    { TournamentMap::Mirage, Quarterfinal, NinjasInPyjamas, G2Esports, {} },
-    { TournamentMap::Mirage, Semifinal, Heroic, G2Esports, {} },
-    { TournamentMap::Mirage, Semifinal, NatusVincere, GambitEsports, {} },
-    { TournamentMap::Nuke, ChallengersStage, ENCE, GODSENT, {} },
-    { TournamentMap::Nuke, ChallengersStage, BIG, Entropiq, {} },
-    { TournamentMap::Nuke, ChallengersStage, MovistarRiders, Renegades, {} },
-    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, GODSENT, {} },
-    { TournamentMap::Nuke, ChallengersStage, paiNGaming, Renegades, {} },
-    { TournamentMap::Nuke, ChallengersStage, BIG, CopenhagenFlames, {} },
-    { TournamentMap::Nuke, ChallengersStage, Heroic, MOUZ, {} },
-    { TournamentMap::Nuke, ChallengersStage, ENCE, MOUZ, {} },
-    { TournamentMap::Nuke, ChallengersStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Nuke, ChallengersStage, Astralis, GODSENT, {} },
-    { TournamentMap::Nuke, ChallengersStage, paiNGaming, SharksEsports, {} },
-    { TournamentMap::Nuke, ChallengersStage, Heroic, Entropiq, {} },
-    { TournamentMap::Nuke, ChallengersStage, BIG, ENCE, {} },
-    { TournamentMap::Nuke, ChallengersStage, Astralis, paiNGaming, {} },
-    { TournamentMap::Nuke, ChallengersStage, BIG, MOUZ, {} },
-    { TournamentMap::Nuke, GroupStage, EvilGeniuses, CopenhagenFlames, {} },
-    { TournamentMap::Nuke, GroupStage, NatusVincere, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, GroupStage, Entropiq, FURIA, {} },
-    { TournamentMap::Nuke, GroupStage, Astralis, Vitality, {} },
-    { TournamentMap::Nuke, GroupStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Nuke, GroupStage, CopenhagenFlames, NinjasInPyjamas, {} },
-    { TournamentMap::Nuke, Quarterfinal, NatusVincere, Vitality, {} },
-    { TournamentMap::Nuke, Semifinal, Heroic, G2Esports, {} },
-    { TournamentMap::Nuke, GrandFinal, NatusVincere, G2Esports, {} },
-    { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames, {} },
-    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan, {} },
-    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Tyloo, {} },
-    { TournamentMap::Overpass, ChallengersStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Overpass, ChallengersStage, VirtusPro, TeamSpirit, {} },
-    { TournamentMap::Overpass, ChallengersStage, Heroic, MovistarRiders, {} },
-    { TournamentMap::Overpass, GroupStage, GambitEsports, ENCE, {} },
-    { TournamentMap::Overpass, GroupStage, Vitality, Heroic, {} },
-    { TournamentMap::Overpass, GroupStage, NatusVincere, VirtusPro, {} },
-    { TournamentMap::Overpass, GroupStage, NatusVincere, NinjasInPyjamas, {} },
-    { TournamentMap::Overpass, GroupStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Overpass, GroupStage, Entropiq, Vitality, {} },
-    { TournamentMap::Overpass, GroupStage, VirtusPro, FaZeClan, {} },
-    { TournamentMap::Overpass, Quarterfinal, FURIA, GambitEsports, {} },
-    { TournamentMap::Overpass, Semifinal, NatusVincere, GambitEsports, {} },
-    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, VirtusPro, {} },
-    { TournamentMap::Vertigo, ChallengersStage, Heroic, CopenhagenFlames, {} },
-    { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports, {} },
-    { TournamentMap::Vertigo, ChallengersStage, Astralis, GODSENT, {} },
-    { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports, {} },
-    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, Tyloo, {} },
-    { TournamentMap::Vertigo, ChallengersStage, MOUZ, Renegades, {} },
-    { TournamentMap::Vertigo, GroupStage, TeamLiquid, Entropiq, {} },
-    { TournamentMap::Vertigo, GroupStage, GambitEsports, Entropiq, {} },
-    { TournamentMap::Vertigo, GroupStage, GambitEsports, VirtusPro, {} },
-    { TournamentMap::Vertigo, GroupStage, Vitality, EvilGeniuses, {} },
-    { TournamentMap::Vertigo, GroupStage, MOUZ, ENCE, {} },
-    { TournamentMap::Vertigo, GroupStage, Entropiq, FURIA, {} },
-    { TournamentMap::Vertigo, GroupStage, Astralis, Vitality, {} },
-    { TournamentMap::Vertigo, GroupStage, VirtusPro, MOUZ, {} }
-    });
-static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, & Match::map));
+    { TournamentMap::Ancient, ChallengersStage, VirtusPro, FaZeClan },
+    { TournamentMap::Ancient, ChallengersStage, paiNGaming, SharksEsports },
+    { TournamentMap::Ancient, ChallengersStage, VirtusPro, TeamSpirit },
+    { TournamentMap::Ancient, ChallengersStage, Heroic, Entropiq },
+    { TournamentMap::Ancient, ChallengersStage, Astralis, paiNGaming },
+    { TournamentMap::Ancient, GroupStage, G2Esports, CopenhagenFlames },
+    { TournamentMap::Ancient, GroupStage, NatusVincere, Heroic },
+    { TournamentMap::Ancient, GroupStage, FaZeClan, CopenhagenFlames },
+    { TournamentMap::Ancient, GroupStage, Astralis, Heroic },
+    { TournamentMap::Ancient, GroupStage, Entropiq, FURIA },
+    { TournamentMap::Ancient, GroupStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Ancient, GroupStage, VirtusPro, MOUZ },
+    { TournamentMap::Ancient, GroupStage, VirtusPro, FaZeClan },
+    { TournamentMap::Ancient, GroupStage, CopenhagenFlames, NinjasInPyjamas },
+    { TournamentMap::Ancient, Quarterfinal, Heroic, VirtusPro },
+    { TournamentMap::Ancient, GrandFinal, NatusVincere, G2Esports },
+    { TournamentMap::Dust2, ChallengersStage, Astralis, Entropiq },
+    { TournamentMap::Dust2, ChallengersStage, ENCE, FaZeClan },
+    { TournamentMap::Dust2, ChallengersStage, BIG, ENCE },
+    { TournamentMap::Dust2, ChallengersStage, BIG, MOUZ },
+    { TournamentMap::Dust2, ChallengersStage, TeamSpirit, Astralis },
+    { TournamentMap::Dust2, GroupStage, EvilGeniuses, FaZeClan },
+    { TournamentMap::Dust2, GroupStage, TeamLiquid, ENCE },
+    { TournamentMap::Dust2, GroupStage, G2Esports, Entropiq },
+    { TournamentMap::Dust2, GroupStage, Vitality, EvilGeniuses },
+    { TournamentMap::Dust2, GroupStage, Astralis, Vitality },
+    { TournamentMap::Dust2, GroupStage, NinjasInPyjamas, GambitEsports },
+    { TournamentMap::Dust2, GroupStage, Entropiq, Vitality },
+    { TournamentMap::Dust2, Quarterfinal, NatusVincere, Vitality },
+    { TournamentMap::Inferno, ChallengersStage, paiNGaming, VirtusPro },
+    { TournamentMap::Inferno, ChallengersStage, Heroic, Tyloo },
+    { TournamentMap::Inferno, ChallengersStage, MOUZ, SharksEsports },
+    { TournamentMap::Inferno, ChallengersStage, BIG, Renegades },
+    { TournamentMap::Inferno, ChallengersStage, VirtusPro, TeamSpirit },
+    { TournamentMap::Inferno, ChallengersStage, MovistarRiders, Tyloo },
+    { TournamentMap::Inferno, ChallengersStage, MOUZ, Renegades },
+    { TournamentMap::Inferno, ChallengersStage, Heroic, MovistarRiders },
+    { TournamentMap::Inferno, ChallengersStage, BIG, MOUZ },
+    { TournamentMap::Inferno, ChallengersStage, TeamSpirit, Astralis },
+    { TournamentMap::Inferno, GroupStage, Vitality, VirtusPro },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, MOUZ },
+    { TournamentMap::Inferno, GroupStage, FURIA, Astralis },
+    { TournamentMap::Inferno, GroupStage, FURIA, MOUZ },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, Astralis },
+    { TournamentMap::Inferno, GroupStage, TeamLiquid, FURIA },
+    { TournamentMap::Inferno, GroupStage, Vitality, EvilGeniuses },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, TeamLiquid },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, GambitEsports },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, MOUZ },
+    { TournamentMap::Inferno, GroupStage, VirtusPro, FaZeClan },
+    { TournamentMap::Inferno, GroupStage, CopenhagenFlames, NinjasInPyjamas },
+    { TournamentMap::Inferno, Quarterfinal, Heroic, VirtusPro },
+    { TournamentMap::Inferno, Quarterfinal, NinjasInPyjamas, G2Esports },
+    { TournamentMap::Inferno, Quarterfinal, FURIA, GambitEsports },
+    { TournamentMap::Inferno, Semifinal, Heroic, G2Esports },
+    { TournamentMap::Mirage, ChallengersStage, Tyloo, SharksEsports },
+    { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Entropiq },
+    { TournamentMap::Mirage, ChallengersStage, VirtusPro, FaZeClan },
+    { TournamentMap::Mirage, ChallengersStage, Heroic, Entropiq },
+    { TournamentMap::Mirage, ChallengersStage, MovistarRiders, Tyloo },
+    { TournamentMap::Mirage, ChallengersStage, BIG, ENCE },
+    { TournamentMap::Mirage, ChallengersStage, MOUZ, Renegades },
+    { TournamentMap::Mirage, GroupStage, G2Esports, FaZeClan },
+    { TournamentMap::Mirage, GroupStage, G2Esports, Entropiq },
+    { TournamentMap::Mirage, GroupStage, MOUZ, ENCE },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, TeamLiquid },
+    { TournamentMap::Mirage, GroupStage, Entropiq, Vitality },
+    { TournamentMap::Mirage, Quarterfinal, Heroic, VirtusPro },
+    { TournamentMap::Mirage, Quarterfinal, NinjasInPyjamas, G2Esports },
+    { TournamentMap::Mirage, Semifinal, Heroic, G2Esports },
+    { TournamentMap::Mirage, Semifinal, NatusVincere, GambitEsports },
+    { TournamentMap::Nuke, ChallengersStage, ENCE, GODSENT },
+    { TournamentMap::Nuke, ChallengersStage, BIG, Entropiq },
+    { TournamentMap::Nuke, ChallengersStage, MovistarRiders, Renegades },
+    { TournamentMap::Nuke, ChallengersStage, TeamSpirit, GODSENT },
+    { TournamentMap::Nuke, ChallengersStage, paiNGaming, Renegades },
+    { TournamentMap::Nuke, ChallengersStage, BIG, CopenhagenFlames },
+    { TournamentMap::Nuke, ChallengersStage, Heroic, MOUZ },
+    { TournamentMap::Nuke, ChallengersStage, ENCE, MOUZ },
+    { TournamentMap::Nuke, ChallengersStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Nuke, ChallengersStage, Astralis, GODSENT },
+    { TournamentMap::Nuke, ChallengersStage, paiNGaming, SharksEsports },
+    { TournamentMap::Nuke, ChallengersStage, Heroic, Entropiq },
+    { TournamentMap::Nuke, ChallengersStage, BIG, ENCE },
+    { TournamentMap::Nuke, ChallengersStage, Astralis, paiNGaming },
+    { TournamentMap::Nuke, ChallengersStage, BIG, MOUZ },
+    { TournamentMap::Nuke, GroupStage, EvilGeniuses, CopenhagenFlames },
+    { TournamentMap::Nuke, GroupStage, NatusVincere, NinjasInPyjamas },
+    { TournamentMap::Nuke, GroupStage, Entropiq, FURIA },
+    { TournamentMap::Nuke, GroupStage, Astralis, Vitality },
+    { TournamentMap::Nuke, GroupStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Nuke, GroupStage, CopenhagenFlames, NinjasInPyjamas },
+    { TournamentMap::Nuke, Quarterfinal, NatusVincere, Vitality },
+    { TournamentMap::Nuke, Semifinal, Heroic, G2Esports },
+    { TournamentMap::Nuke, GrandFinal, NatusVincere, G2Esports },
+    { TournamentMap::Overpass, ChallengersStage, Astralis, CopenhagenFlames },
+    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, FaZeClan },
+    { TournamentMap::Overpass, ChallengersStage, TeamSpirit, Tyloo },
+    { TournamentMap::Overpass, ChallengersStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Overpass, ChallengersStage, VirtusPro, TeamSpirit },
+    { TournamentMap::Overpass, ChallengersStage, Heroic, MovistarRiders },
+    { TournamentMap::Overpass, GroupStage, GambitEsports, ENCE },
+    { TournamentMap::Overpass, GroupStage, Vitality, Heroic },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, VirtusPro },
+    { TournamentMap::Overpass, GroupStage, NatusVincere, NinjasInPyjamas },
+    { TournamentMap::Overpass, GroupStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Overpass, GroupStage, Entropiq, Vitality },
+    { TournamentMap::Overpass, GroupStage, VirtusPro, FaZeClan },
+    { TournamentMap::Overpass, Quarterfinal, FURIA, GambitEsports },
+    { TournamentMap::Overpass, Semifinal, NatusVincere, GambitEsports },
+    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, VirtusPro },
+    { TournamentMap::Vertigo, ChallengersStage, Heroic, CopenhagenFlames },
+    { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports },
+    { TournamentMap::Vertigo, ChallengersStage, Astralis, GODSENT },
+    { TournamentMap::Vertigo, ChallengersStage, paiNGaming, SharksEsports },
+    { TournamentMap::Vertigo, ChallengersStage, MovistarRiders, Tyloo },
+    { TournamentMap::Vertigo, ChallengersStage, MOUZ, Renegades },
+    { TournamentMap::Vertigo, GroupStage, TeamLiquid, Entropiq },
+    { TournamentMap::Vertigo, GroupStage, GambitEsports, Entropiq },
+    { TournamentMap::Vertigo, GroupStage, GambitEsports, VirtusPro },
+    { TournamentMap::Vertigo, GroupStage, Vitality, EvilGeniuses },
+    { TournamentMap::Vertigo, GroupStage, MOUZ, ENCE },
+    { TournamentMap::Vertigo, GroupStage, Entropiq, FURIA },
+    { TournamentMap::Vertigo, GroupStage, Astralis, Vitality },
+    { TournamentMap::Vertigo, GroupStage, VirtusPro, MOUZ }
+});
+static_assert(std::ranges::is_sorted(pglStockholm2021Matches, {}, &Match::map));
+
+constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
+    { TournamentMap::Ancient, ChallengersStage, TeamLiquid, _9ZTeam },
+    { TournamentMap::Ancient, ChallengersStage, ENCE, G2Esports },
+    { TournamentMap::Ancient, ChallengersStage, Astralis, TeamSpirit },
+    { TournamentMap::Ancient, ChallengersStage, ComplexityGaming_, TeamLiquid },
+    { TournamentMap::Ancient, ChallengersStage, Astralis, TeamLiquid },
+    { TournamentMap::Ancient, ChallengersStage, BadNewsEagles, MIBR },
+    { TournamentMap::Ancient, GroupStage, CopenhagenFlames, BadNewsEagles },
+    { TournamentMap::Ancient, GroupStage, CopenhagenFlames, ENCE },
+    { TournamentMap::Ancient, GroupStage, BIG, NatusVincere },
+    { TournamentMap::Ancient, GroupStage, FaZeClan, BadNewsEagles },
+    { TournamentMap::Ancient, GroupStage, FURIA, TeamLiquid },
+    { TournamentMap::Ancient, GroupStage, TeamSpirit, CopenhagenFlames },
+    { TournamentMap::Ancient, GroupStage, NatusVincere, NinjasInPyjamas },
+    { TournamentMap::Ancient, GroupStage, CopenhagenFlames, FaZeClan },
+    { TournamentMap::Ancient, GroupStage, G2Esports, FURIA },
+    { TournamentMap::Ancient, Quarterfinal, TeamSpirit, FURIA },
+    { TournamentMap::Ancient, Quarterfinal, Heroic, NatusVincere },
+    { TournamentMap::Dust2, ChallengersStage, BadNewsEagles, EternalFire },
+    { TournamentMap::Dust2, ChallengersStage, ImperialEsports, TeamSpirit },
+    { TournamentMap::Dust2, ChallengersStage, MIBR, Outsiders },
+    { TournamentMap::Dust2, ChallengersStage, G2Esports, TeamSpirit },
+    { TournamentMap::Dust2, ChallengersStage, TeamSpirit, EternalFire },
+    { TournamentMap::Dust2, ChallengersStage, Renegades, IHCEsports },
+    { TournamentMap::Dust2, ChallengersStage, Vitality, forZeESports },
+    { TournamentMap::Dust2, ChallengersStage, ENCE, G2Esports },
+    { TournamentMap::Dust2, ChallengersStage, forZeESports, Outsiders },
+    { TournamentMap::Dust2, ChallengersStage, ENCE, BadNewsEagles },
+    { TournamentMap::Dust2, GroupStage, Vitality, TeamLiquid },
+    { TournamentMap::Dust2, GroupStage, G2Esports, Outsiders },
+    { TournamentMap::Dust2, Semifinal, TeamSpirit, FaZeClan },
+    { TournamentMap::Dust2, Semifinal, ENCE, NatusVincere },
+    { TournamentMap::Inferno, ChallengersStage, Vitality, ComplexityGaming_ },
+    { TournamentMap::Inferno, ChallengersStage, G2Esports, TeamLiquid },
+    { TournamentMap::Inferno, ChallengersStage, forZeESports, BadNewsEagles },
+    { TournamentMap::Inferno, ChallengersStage, ImperialEsports, TeamLiquid },
+    { TournamentMap::Inferno, ChallengersStage, Renegades, IHCEsports },
+    { TournamentMap::Inferno, ChallengersStage, forZeESports, Outsiders },
+    { TournamentMap::Inferno, ChallengersStage, ImperialEsports, IHCEsports },
+    { TournamentMap::Inferno, GroupStage, Cloud9, NinjasInPyjamas },
+    { TournamentMap::Inferno, GroupStage, NatusVincere, NinjasInPyjamas },
+    { TournamentMap::Inferno, GroupStage, BadNewsEagles, ImperialEsports },
+    { TournamentMap::Inferno, GroupStage, CopenhagenFlames, FaZeClan },
+    { TournamentMap::Inferno, GroupStage, NinjasInPyjamas, FURIA },
+    { TournamentMap::Inferno, GroupStage, G2Esports, Outsiders },
+    { TournamentMap::Inferno, GroupStage, Heroic, Vitality },
+    { TournamentMap::Inferno, GroupStage, G2Esports, FURIA },
+    { TournamentMap::Inferno, GroupStage, CopenhagenFlames, ImperialEsports },
+    { TournamentMap::Inferno, Quarterfinal, FaZeClan, NinjasInPyjamas },
+    { TournamentMap::Inferno, Quarterfinal, Heroic, NatusVincere },
+    { TournamentMap::Inferno, GrandFinal, FaZeClan, NatusVincere },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, _9ZTeam },
+    { TournamentMap::Mirage, ChallengersStage, Astralis, Vitality },
+    { TournamentMap::Mirage, ChallengersStage, Vitality, forZeESports },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, G2Esports },
+    { TournamentMap::Mirage, ChallengersStage, forZeESports, Outsiders },
+    { TournamentMap::Mirage, ChallengersStage, ImperialEsports, IHCEsports },
+    { TournamentMap::Mirage, ChallengersStage, forZeESports, ImperialEsports },
+    { TournamentMap::Mirage, GroupStage, Cloud9, Outsiders },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ENCE },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, G2Esports },
+    { TournamentMap::Mirage, GroupStage, Vitality, Outsiders },
+    { TournamentMap::Mirage, GroupStage, G2Esports, ImperialEsports },
+    { TournamentMap::Mirage, GroupStage, TeamSpirit, CopenhagenFlames },
+    { TournamentMap::Mirage, GroupStage, NatusVincere, NinjasInPyjamas },
+    { TournamentMap::Mirage, GroupStage, Vitality, TeamLiquid },
+    { TournamentMap::Mirage, GroupStage, BadNewsEagles, ImperialEsports },
+    { TournamentMap::Mirage, GroupStage, ENCE, Outsiders },
+    { TournamentMap::Mirage, GroupStage, ENCE, Heroic },
+    { TournamentMap::Mirage, GroupStage, BIG, Vitality },
+    { TournamentMap::Mirage, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Mirage, GroupStage, Heroic, Vitality },
+    { TournamentMap::Mirage, Semifinal, TeamSpirit, FaZeClan },
+    { TournamentMap::Nuke, ChallengersStage, forZeESports, Renegades },
+    { TournamentMap::Nuke, ChallengersStage, Astralis, IHCEsports },
+    { TournamentMap::Nuke, ChallengersStage, ComplexityGaming_, IHCEsports },
+    { TournamentMap::Nuke, ChallengersStage, Vitality, forZeESports },
+    { TournamentMap::Nuke, ChallengersStage, ENCE, BadNewsEagles },
+    { TournamentMap::Nuke, ChallengersStage, MIBR, EternalFire },
+    { TournamentMap::Nuke, ChallengersStage, BadNewsEagles, MIBR },
+    { TournamentMap::Nuke, GroupStage, FURIA, TeamSpirit },
+    { TournamentMap::Nuke, GroupStage, BIG, ImperialEsports },
+    { TournamentMap::Nuke, GroupStage, Heroic, TeamSpirit },
+    { TournamentMap::Nuke, GroupStage, Cloud9, FaZeClan },
+    { TournamentMap::Nuke, GroupStage, CopenhagenFlames, FaZeClan },
+    { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, FURIA },
+    { TournamentMap::Nuke, GroupStage, ENCE, Heroic },
+    { TournamentMap::Nuke, GroupStage, BIG, Vitality },
+    { TournamentMap::Nuke, Quarterfinal, FaZeClan, NinjasInPyjamas },
+    { TournamentMap::Nuke, Quarterfinal, ENCE, CopenhagenFlames },
+    { TournamentMap::Nuke, Quarterfinal, Heroic, NatusVincere },
+    { TournamentMap::Nuke, Semifinal, ENCE, NatusVincere },
+    { TournamentMap::Nuke, GrandFinal, FaZeClan, NatusVincere },
+    { TournamentMap::Overpass, ChallengersStage, MIBR, _9ZTeam },
+    { TournamentMap::Overpass, ChallengersStage, Astralis, MIBR },
+    { TournamentMap::Overpass, ChallengersStage, ComplexityGaming_, Outsiders },
+    { TournamentMap::Overpass, ChallengersStage, TeamLiquid, _9ZTeam },
+    { TournamentMap::Overpass, ChallengersStage, Astralis, TeamSpirit },
+    { TournamentMap::Overpass, ChallengersStage, ImperialEsports, IHCEsports },
+    { TournamentMap::Overpass, ChallengersStage, forZeESports, ImperialEsports },
+    { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, Vitality },
+    { TournamentMap::Overpass, GroupStage, ENCE, Heroic },
+    { TournamentMap::Overpass, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Overpass, GroupStage, Heroic, Vitality },
+    { TournamentMap::Overpass, Quarterfinal, FaZeClan, NinjasInPyjamas },
+    { TournamentMap::Vertigo, ChallengersStage, EternalFire, Renegades },
+    { TournamentMap::Vertigo, ChallengersStage, ENCE, Outsiders },
+    { TournamentMap::Vertigo, ChallengersStage, BadNewsEagles, ImperialEsports },
+    { TournamentMap::Vertigo, ChallengersStage, ComplexityGaming_, TeamLiquid },
+    { TournamentMap::Vertigo, ChallengersStage, MIBR, EternalFire },
+    { TournamentMap::Vertigo, ChallengersStage, Astralis, TeamLiquid },
+    { TournamentMap::Vertigo, ChallengersStage, BadNewsEagles, MIBR },
+    { TournamentMap::Vertigo, GroupStage, Heroic, TeamLiquid },
+    { TournamentMap::Vertigo, GroupStage, TeamSpirit, CopenhagenFlames },
+    { TournamentMap::Vertigo, GroupStage, Heroic, G2Esports },
+    { TournamentMap::Vertigo, GroupStage, BIG, FURIA },
+    { TournamentMap::Vertigo, GroupStage, BIG, Vitality },
+    { TournamentMap::Vertigo, GroupStage, G2Esports, Outsiders },
+    { TournamentMap::Vertigo, GroupStage, Cloud9, ImperialEsports },
+    { TournamentMap::Vertigo, GroupStage, G2Esports, FURIA },
+    { TournamentMap::Vertigo, GroupStage, CopenhagenFlames, ImperialEsports },
+    { TournamentMap::Vertigo, Quarterfinal, TeamSpirit, FURIA },
+    { TournamentMap::Vertigo, Quarterfinal, ENCE, CopenhagenFlames }
+});
+static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
 constexpr auto tournaments = std::to_array<Tournament>({
     { 1, dreamHack2013Matches },
@@ -1064,6 +1177,32 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 13, eleagueBoston2018Matches },
     { 14, faceitLondon2018Matches },
     { 18, pglStockholm2021Matches },
+    { 19, pglAntwerp2022Matches }
 });
+static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
 
-static_assert(std::ranges::is_sorted(tournaments, {}, & Tournament::tournamentID));
+[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatches(std::uint32_t tournamentID) noexcept
+{
+    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
+        return it->matches;
+    return {};
+}
+
+template <typename MatchType>
+[[nodiscard]] static std::span<const MatchType> filterMatchesToMap(std::span<const MatchType> matches, TournamentMap map) noexcept
+{
+    if (map == TournamentMap::None)
+        return matches;
+
+    assert(std::ranges::is_sorted(matches, {}, &MatchType::map));
+    return ranges::equal_range(matches, map, {}, &MatchType::map);
+}
+
+std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
+{
+    return std::visit([map](auto&& a) {
+        return std::variant<std::span<const MatchWithMVPs>, std::span<const Match>>{ filterMatchesToMap(a, map) };
+    }, getTournamentMatches(tournamentID));
+}
+
+}

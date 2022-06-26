@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <optional>
 #include <string>
 #include <type_traits>
 
@@ -87,4 +87,4 @@ private:
     }
 };
 
-inline std::unique_ptr<const Interfaces> interfaces;
+inline std::optional<const Interfaces> interfaces;

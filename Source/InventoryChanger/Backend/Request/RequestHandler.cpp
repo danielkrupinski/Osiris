@@ -1,8 +1,8 @@
-#include "BackendSimulator.h"
 #include "RequestHandler.h"
 
+#include <InventoryChanger/Backend/BackendSimulator.h>
 #include <InventoryChanger/GameItems/Lookup.h>
-#include <InventoryChanger/ItemGenerator.h>
+#include <InventoryChanger/ItemGenerator/ItemGenerator.h>
 
 namespace inventory_changer::backend
 {
@@ -13,7 +13,7 @@ Response RequestHandler::operator()(const request::ApplySticker& request) const
     if (!skin)
         return {};
 
-    skin->stickers[request.slot].stickerID = gameItemLookup.getStorage().getStickerKit(request.sticker->gameItem()).id;
+    skin->stickers[request.slot].stickerID = backend.getGameItemLookup().getStorage().getStickerKit(request.sticker->gameItem()).id;
     skin->stickers[request.slot].wear = 0.0f;
 
     backend.moveToFront(request.item);
@@ -43,19 +43,21 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
     if (!request.statTrakSwapTool->gameItem().isStatTrakSwapTool())
         return {};
 
-    const auto statTrakFrom = inventory::getStatTrak(*constRemover.removeConstness(request.itemFrom));
+    const auto statTrakFrom = inventory::getStatTrak(*request.itemFrom);
     if (!statTrakFrom)
         return {};
 
-    const auto statTrakTo = inventory::getStatTrak(*constRemover.removeConstness(request.itemTo));
+    const auto statTrakTo = inventory::getStatTrak(*request.itemTo);
     if (!statTrakTo)
         return {};
 
-    std::swap(*statTrakFrom, *statTrakTo);
     backend.removeItem(request.statTrakSwapTool);
+    backend.getRequestor().request<request::UpdateStatTrak>(request.itemFrom, *statTrakTo);
+    backend.getRequestor().request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
-    return response::StatTrakSwapped{ request.itemFrom, request.itemTo };
+    backend.getRequestor().request<request::MarkItemUpdated>(*statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo);
+    return response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo };
 }
 
 Response RequestHandler::operator()(const request::OpenContainer& request) const
@@ -63,14 +65,17 @@ Response RequestHandler::operator()(const request::OpenContainer& request) const
     if (!request.container->gameItem().isCase())
         return {};
 
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.container);
+    if (!generatedItem.has_value())
+        return {};
+
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
             backend.removeItem(keyItem);
     }
 
-    auto generatedItem = ItemGenerator::generateItemFromContainer(*request.container);
     backend.removeItem(request.container);
-    const auto receivedItem = backend.addItemUnacknowledged(std::move(generatedItem));
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
     return response::ContainerOpened{ receivedItem };
 }
 
@@ -80,7 +85,7 @@ Response RequestHandler::operator()(const request::ApplyPatch& request) const
     if (!agent)
         return {};
 
-    agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
+    agent->patches[request.slot].patchID = backend.getGameItemLookup().getStorage().getPatch(request.patch->gameItem()).id;
     backend.moveToFront(request.item);
     backend.removeItem(request.patch);
     return response::PatchApplied{ request.item, request.slot };
@@ -104,7 +109,7 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
         return {};
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
-    if (const auto operationCoin = gameItemLookup.findItem(coinID); operationCoin.has_value()) {
+    if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID); operationCoin.has_value()) {
         backend.addItemUnacknowledged(inventory::Item{ *operationCoin });
         backend.removeItem(request.operationPass);
     }
@@ -113,7 +118,7 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
 
 Response RequestHandler::operator()(const request::ActivateViewerPass& request) const
 {
-    const auto& gameItem = request.viewerPass->gameItem();
+    const auto& gameItem = request.item->gameItem();
     if (!gameItem.isViewerPass())
         return {};
 
@@ -121,9 +126,9 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request) 
     if (coinID == WeaponId::None)
         return {};
 
-    if (const auto eventCoin = gameItemLookup.findItem(coinID); eventCoin.has_value()) {
+    if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID); eventCoin.has_value()) {
         const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) } });
-        backend.removeItem(request.viewerPass);
+        backend.removeItem(request.item);
         return response::ViewerPassActivated{ addedEventCoin };
     }
     return {};
@@ -153,12 +158,12 @@ Response RequestHandler::operator()(const request::RemoveNameTag& request) const
 
 Response RequestHandler::operator()(const request::ActivateSouvenirToken& request) const
 {
-    if (!request.souvenirToken->gameItem().isSouvenirToken())
+    if (!request.item->gameItem().isSouvenirToken())
         return {};
 
-    const auto tournamentEventID = gameItemLookup.getStorage().getTournamentEventID(request.souvenirToken->gameItem());
+    const auto tournamentEventID = backend.getGameItemLookup().getStorage().getTournamentEventID(request.item->gameItem());
     const auto& inventory = backend.getInventory();
-    const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && gameItemLookup.getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
+    const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && backend.getGameItemLookup().getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
     if (tournamentCoin == inventory.end())
         return {};
 
@@ -167,7 +172,7 @@ Response RequestHandler::operator()(const request::ActivateSouvenirToken& reques
         return {};
 
     ++tournamentCoinData->dropsAwarded;
-    backend.removeItem(request.souvenirToken);
+    backend.removeItem(request.item);
     return response::SouvenirTokenActivated{ tournamentCoin };
 }
 
@@ -193,9 +198,7 @@ Response RequestHandler::operator()(const request::UpdateStatTrak& request) cons
         return {};
 
     *statTrak = request.newStatTrak;
-    if (const auto itemID = backend.getItemID(request.item); itemID.has_value())
-        return response::StatTrakUpdated{ *itemID, request.newStatTrak };
-    return {};
+    return response::StatTrakUpdated{ request.item, request.newStatTrak };
 }
 
 Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) const
@@ -203,6 +206,67 @@ Response RequestHandler::operator()(const request::SelectTeamGraffiti& request) 
     if (request.tournamentCoin->gameItem().isTournamentCoin())
         return response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID };
     return {};
+}
+
+Response RequestHandler::operator()(const request::MarkItemUpdated& request) const
+{
+    return response::ItemUpdated{ request.item };
+}
+
+Response RequestHandler::operator()(const request::PickStickerPickEm& request) const
+{
+    pickEm.pick(request.position, request.team);
+    return response::PickEmUpdated{};
+}
+
+Response RequestHandler::operator()(const request::HideItem& request) const
+{
+    constRemover.removeConstness(request.item)->hide();
+    return response::ItemHidden{ request.item };
+}
+
+Response RequestHandler::operator()(const request::UnhideItem& request) const
+{
+    constRemover.removeConstness(request.item)->unhide();
+    return response::ItemUnhidden{ request.item };
+}
+
+Response RequestHandler::operator()(const request::PerformXRayScan& request) const
+{
+    if (!request.crate->gameItem().isCase())
+        return {};
+
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate);
+    if (!generatedItem.has_value())
+        return {};
+
+    constRemover.removeConstness(request.crate)->hide();
+    backend.getRequestor().request<request::HideItem>(request.crate);
+
+    generatedItem->hide();
+
+    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
+    xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
+    return response::XRayScannerUsed{ receivedItem };
+}
+
+Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request) const
+{
+    const auto scannerItems = xRayScanner.getItems();
+    if (!scannerItems.has_value())
+        return {};
+
+    if (request.container != scannerItems->crate)
+        return {};
+
+    if (request.key.has_value()) {
+        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
+            backend.removeItem(keyItem);
+    }
+
+    backend.removeItem(request.container);
+    backend.getRequestor().request<request::UnhideItem>(scannerItems->reward);
+    return response::XRayItemClaimed{ scannerItems->reward };
 }
 
 }

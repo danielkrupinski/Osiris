@@ -26,12 +26,14 @@ namespace
             case fnv::hash("round_freeze_end"):
                 Misc::purchaseList(event);
                 break;
-            case fnv::hash("player_death"):
-                InventoryChanger::updateStatTrak(*event);
-                InventoryChanger::overrideHudIcon(*event);
+            case fnv::hash("player_death"): {
+                auto& inventoryChanger = inventory_changer::InventoryChanger::instance();
+                inventoryChanger.updateStatTrak(*event);
+                inventoryChanger.overrideHudIcon(*event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);
                 break;
+            }
             case fnv::hash("player_hurt"):
                 Misc::playHitSound(*event);
                 Visuals::hitEffect(event);
@@ -41,7 +43,7 @@ namespace
                 Misc::voteRevealer(*event);
                 break;
             case fnv::hash("round_mvp"):
-                InventoryChanger::onRoundMVP(*event);
+                inventory_changer::InventoryChanger::instance().onRoundMVP(*event);
                 break;
             }
         }

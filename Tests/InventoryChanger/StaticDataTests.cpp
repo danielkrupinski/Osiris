@@ -5,25 +5,29 @@
 
 #include <gtest/gtest.h>
 
+#include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Item.h>
-#include <InventoryChanger/StaticData.h>
+#include <InventoryChanger/EconRarities.h>
 #include <SDK/ItemSchema.h>
+
+namespace inventory_changer
+{
+namespace
+{
 
 class EconRaritiesTest : public testing::TestWithParam<EconRarity> {};
 
 TEST(EconRarities, DefaultConstructedHasNoRarity) {
-    ASSERT_EQ(StaticData::EconRarities{}.count(), 0);
+    ASSERT_EQ(inventory_changer::EconRarities{}.count(), 0);
 }
 
 TEST_P(EconRaritiesTest, SettingUnsetRarityIncrementsCount) {
-    StaticData::EconRarities rarities;
+    inventory_changer::EconRarities rarities;
     rarities.set(GetParam());
     ASSERT_EQ(rarities.count(), 1);
 }
 
 INSTANTIATE_TEST_SUITE_P(, EconRaritiesTest, testing::Values(EconRarity::Default, EconRarity::Purple, EconRarity::Gold));
-
-using StaticData::TournamentMap;
 
 struct TournamentMapTestParam {
     std::string_view lootListName;
@@ -38,7 +42,7 @@ struct TournamentMapTestParam {
 class GetTournamentMapOfSouvenirPackageTest : public testing::TestWithParam<TournamentMapTestParam> {};
 
 TEST_P(GetTournamentMapOfSouvenirPackageTest, ReturnsExpectedValue) {
-    ASSERT_EQ(static_cast<std::uint32_t>(StaticData::getTournamentMapOfSouvenirPackage(GetParam().lootListName)),
+    ASSERT_EQ(static_cast<std::uint32_t>(inventory_changer::game_integration::getTournamentMapOfSouvenirPackage(GetParam().lootListName)),
               static_cast<std::uint32_t>(GetParam().expectedMap));
 }
 
@@ -63,3 +67,6 @@ INSTANTIATE_TEST_SUITE_P(
         TournamentMapTestParams("de_train", TournamentMap::Train),
         TournamentMapTestParams("de_vertigo", TournamentMap::Vertigo)
 ));
+
+}
+}
