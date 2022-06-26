@@ -100,7 +100,7 @@ static void from_json(const json& j, ColorToggleRounding& ctr)
     read(j, "Rounding", ctr.rounding);
 }
 
-static void from_json(const json& j, Font& f)
+static void from_json(const json& j, FontEx& f)
 {
     read<value_t::string>(j, "Name", f.name);
 
@@ -326,7 +326,7 @@ static void to_json(json& j, const ColorToggleThicknessRounding& o, const ColorT
     WRITE("Thickness", thickness);
 }
 
-static void to_json(json& j, const Font& o, const Font& dummy = {})
+static void to_json(json& j, const FontEx& o, const FontEx& dummy = {})
 {
     WRITE("Name", name);
 }
