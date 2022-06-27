@@ -42,7 +42,7 @@ public:
         } else if (toolItem.has_value()) {
             useTool(*toolItem);
         } else if (destItem.has_value()) {
-            useItem(*destItem);
+            useItem(*destItem, toolItemID);
         }
     }
 
@@ -105,13 +105,17 @@ private:
         }
     }
 
-    void useItem(backend::ItemIterator item)
+    void useItem(backend::ItemIterator item, std::uint64_t toolItemID)
     {
+        constexpr std::uint64_t fauxNameTagItemID = (std::uint64_t{ 0xF } << 60) | static_cast<std::uint16_t>(WeaponId::NameTag);
+
         if (item->gameItem().isCase()) {
             if (!item->isHidden())
                 request<request::OpenContainer>(item);
             else
                 request<request::ClaimXRayScannedItem>(item);
+        } else if (item->gameItem().isStorageUnit() && toolItemID == fauxNameTagItemID) {
+            request<request::NameStorageUnit>(item, nameTag);
         }
     }
 
