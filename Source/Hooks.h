@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <type_traits>
 
 #ifdef _WIN32
@@ -72,4 +73,4 @@ private:
 #endif
 };
 
-inline std::unique_ptr<Hooks> hooks;
+inline std::optional<Hooks> hooks;
