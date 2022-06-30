@@ -212,6 +212,25 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBot
     requestBuilder.useToolOn(dummyItemIDs[2], nonexistentItemID);
 }
 
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProducesRequest) {
+    const auto key = createDummyItem<ItemType::CaseKey>();
+    const auto crate = createDummyItem<ItemType::Case>();
+
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, key))));
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCrateProducesXRayClaimRequest) {
+    const auto key = createDummyItem<ItemType::CaseKey>();
+    const auto crate = createDummyItem<ItemType::Case>();
+    crate->hide();
+    
+    EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, key))));
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStickerNotOnSkinDoesNotProduceRequest) {
     createDummyItem<ItemType::Sticker>();
     createDummyItem<ItemType::Music>();
