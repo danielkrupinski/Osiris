@@ -225,7 +225,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCratePr
     const auto key = createDummyItem<ItemType::CaseKey>();
     const auto crate = createDummyItem<ItemType::Case>();
     crate->hide();
-    
+
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, key))));
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
@@ -251,6 +251,16 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingNameTagNotOnSkinDoesNot
     createDummyItem<ItemType::NameTag>();
     createDummyItem<ItemType::Music>();
     EXPECT_CALL(requestor, request(testing::An<const request::AddNameTag&>())).Times(0);
+
+    requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
+}
+
+TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyNotOnCrateDoesNotProduceRequest) {
+    createDummyItem<ItemType::CaseKey>();
+    createDummyItem<ItemType::Music>();
+
+    EXPECT_CALL(requestor, request(testing::An<const request::OpenContainer&>())).Times(0);
+    EXPECT_CALL(requestor, request(testing::An<const request::ClaimXRayScannedItem&>())).Times(0);
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
