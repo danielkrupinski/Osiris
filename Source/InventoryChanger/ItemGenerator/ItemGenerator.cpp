@@ -809,7 +809,8 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     { WeaponId::OperationBrokenFangCase, operationBrokenFangGloves },
     { WeaponId::SnakebiteCase, operationBrokenFangGloves },
     { WeaponId::OperationRiptideCase, operationRiptideKnives },
-    { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives }
+    { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives },
+    { WeaponId::RecoilCase, operationBrokenFangGloves }
 });
 
 [[nodiscard]] constexpr std::span<const RareSpecialItem> getRareSpecialItems(WeaponId crateWeaponID)
