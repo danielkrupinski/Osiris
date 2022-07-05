@@ -140,4 +140,12 @@ struct StorageUnitNamed {
     ItemIterator storageUnit;
 };
 
+struct ItemAddedToStorageUnit {
+    ItemAddedToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit { storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
 }
