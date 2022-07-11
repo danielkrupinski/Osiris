@@ -535,4 +535,25 @@ void Inventory::nameStorageUnit(std::uint64_t itemID, const char* newName, std::
     initItemCustomizationNotification("nametag_add", itemID);
 }
 
+void Inventory::storageUnitModified(std::uint64_t itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setModificationDate(*econItem, modificationDate);
+    attributeSetter.setItemsCount(*econItem, itemCount);
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 }
