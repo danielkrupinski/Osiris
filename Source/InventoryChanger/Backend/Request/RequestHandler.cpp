@@ -282,4 +282,15 @@ Response RequestHandler::operator()(const request::NameStorageUnit& request) con
     return response::StorageUnitNamed{ request.storageUnit };
 }
 
+Response RequestHandler::operator()(const request::MarkStorageUnitModified& request) const
+{
+    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
+    if (!storageUnit)
+        return {};
+
+    storageUnit->modificationDateTimestamp = static_cast<std::uint32_t>(std::time(nullptr));
+
+    return response::StorageUnitModified{ request.storageUnit };
+}
+
 }
