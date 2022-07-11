@@ -140,6 +140,12 @@ struct StorageUnitNamed {
     ItemIterator storageUnit;
 };
 
+struct StorageUnitModified {
+    explicit StorageUnitModified(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 struct ItemAddedToStorageUnit {
     ItemAddedToStorageUnit(ItemIterator item, ItemIterator storageUnit)
         : item{ item }, storageUnit { storageUnit } {}
