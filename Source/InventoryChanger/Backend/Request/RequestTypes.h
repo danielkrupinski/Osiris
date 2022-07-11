@@ -145,4 +145,11 @@ struct AddToStorageUnit {
     ItemIterator storageUnit;
 };
 
+struct MarkStorageUnitModified {
+    explicit MarkStorageUnitModified(ItemIterator storageUnit)
+        : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 }
