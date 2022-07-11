@@ -67,6 +67,7 @@ struct Graffiti {
 
 struct StorageUnit {
     std::uint32_t modificationDateTimestamp = 0;
+    std::uint32_t itemCount = 0;
     std::string name;
 };
 
