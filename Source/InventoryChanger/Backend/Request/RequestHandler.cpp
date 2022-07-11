@@ -276,7 +276,7 @@ Response RequestHandler::operator()(const request::NameStorageUnit& request) con
         return {};
 
     storageUnit->name = request.name;
-    storageUnit->modificationDateTimestamp = static_cast<std::uint32_t>(std::time(nullptr));
+    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
     backend.moveToFront(request.storageUnit);
 
     return response::StorageUnitNamed{ request.storageUnit };
