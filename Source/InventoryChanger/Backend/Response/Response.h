@@ -35,7 +35,8 @@ using Response = std::variant<
     response::ViewerPassActivated,
     response::XRayItemClaimed,
     response::XRayScannerUsed,
-    response::StorageUnitNamed
+    response::StorageUnitNamed,
+    response::StorageUnitModified
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept
