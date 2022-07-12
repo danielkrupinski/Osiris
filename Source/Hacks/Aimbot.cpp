@@ -97,7 +97,8 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
 
     Vector start{ localPlayer->getEyePosition() };
     Vector direction{ destination - start };
-    direction /= direction.length();
+    float distance{ direction.length() };
+    direction /= distance;
 
     int hitsLeft = 4;
 
@@ -112,7 +113,7 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
             break;
 
         if (trace.entity == entity && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
-            damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
+            damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, distance / 500.0f);
 
             if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
                 damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
