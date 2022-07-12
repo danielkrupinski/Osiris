@@ -538,4 +538,26 @@ void Inventory::storageUnitModified(std::uint64_t itemID, std::uint32_t modifica
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
+void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setCasketItemIdLow(*econItem, static_cast<std::uint32_t>(storageUnitItemID & 0xFFFFFFFF));
+    attributeSetter.setCasketItemIdHigh(*econItem, static_cast<std::uint32_t>((storageUnitItemID >> 32) & 0xFFFFFFFF));
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    initItemCustomizationNotification("casket_added", itemID);
+}
+
 }
