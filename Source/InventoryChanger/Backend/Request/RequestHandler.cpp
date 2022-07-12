@@ -293,4 +293,19 @@ Response RequestHandler::operator()(const request::MarkStorageUnitModified& requ
     return response::StorageUnitModified{ request.storageUnit };
 }
 
+Response RequestHandler::operator()(const request::AddToStorageUnit& request) const
+{
+    if (!request.storageUnit->gameItem().isStorageUnit())
+        return {};
+
+    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
+    if (!storageUnit)
+        return {};
+
+    ++storageUnit->itemCount;
+    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+
+    return response::ItemAddedToStorageUnit{ request.item, request.storageUnit };
+}
+
 }
