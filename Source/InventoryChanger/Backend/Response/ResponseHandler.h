@@ -185,6 +185,14 @@ struct ResponseHandler {
         }
     }
 
+    void operator()(const response::ItemAddedToStorageUnit& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value()) {
+            if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value())
+                gameInventory.addItemToStorageUnit(*itemID, *storageUnitItemID);
+        }
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemIterator item) const
     {
