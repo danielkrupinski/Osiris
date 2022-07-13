@@ -67,6 +67,17 @@ public:
         request<request::RemoveNameTag>(*item);
     }
 
+    void addToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
+    {
+        const auto item = itemIDMap.get(itemID);
+        const auto storageUnit = itemIDMap.get(storageUnitItemID);
+
+        if (!item.has_value() || !storageUnit.has_value() || !(*storageUnit)->gameItem().isStorageUnit())
+            return;
+
+        request<request::AddToStorageUnit>(*item, *storageUnit);
+    }
+
 private:
     void useToolOnItem(backend::ItemIterator tool, backend::ItemIterator destItem)
     {
