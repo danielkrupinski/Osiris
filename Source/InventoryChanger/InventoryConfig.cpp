@@ -108,6 +108,8 @@ namespace inventory_changer
         return inventory::souvenirPackageFromJson(j);
     if (gameItem.isGraffiti())
         return inventory::graffitiFromJson(j);
+    if (gameItem.isStorageUnit())
+        return inventory::storageUnitFromJson(j);
     return {};
 }
 
