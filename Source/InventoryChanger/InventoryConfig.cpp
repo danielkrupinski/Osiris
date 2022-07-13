@@ -286,6 +286,11 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
                 itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
                 itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
             }
+        } else if (gameItem.isStorageUnit()) {
+            if (const auto storageUnit = item.get<inventory_changer::inventory::StorageUnit>(); storageUnit->modificationDateTimestamp != 0) {
+                itemConfig["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
+                itemConfig["Name"] = storageUnit->name;
+            }
         }
 
         items.push_back(std::move(itemConfig));
