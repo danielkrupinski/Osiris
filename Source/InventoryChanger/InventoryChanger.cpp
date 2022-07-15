@@ -1229,6 +1229,15 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
     } else if (returnAddress == memory->setInventorySortAndFiltersGetArgAsStringReturnAddress) {
         panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
+    } else if (returnAddress == memory->performItemCasketTransactionGetArgAsStringReturnAddress) {
+        const auto operation = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 0);
+        const auto storageUnitItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
+
+        if (operation == 1) {
+            backendRequestBuilder.addToStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
+        } else if (operation == -1) {
+            // remove from storage unit
+        }
     }
 }
 
