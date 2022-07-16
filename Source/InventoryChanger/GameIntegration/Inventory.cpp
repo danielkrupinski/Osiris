@@ -158,6 +158,8 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
 
     const auto& item = inventoryItem.gameItem();
     econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
+    constexpr auto foundInCrateOrigin = 8;
+    econItem->origin = foundInCrateOrigin;
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
 
