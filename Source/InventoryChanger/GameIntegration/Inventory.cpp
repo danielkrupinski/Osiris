@@ -565,7 +565,7 @@ void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storage
     econItem->flags |= inStorageUnitFlag;
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("casket_added", itemID);
+    initItemCustomizationNotification("casket_added", storageUnitItemID);
 }
 
 }
