@@ -225,6 +225,9 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
             if (souvenirPackage->proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
+    } else if (item.isCaseKey()) {
+        constexpr auto nonEconomyFlag = 8;
+        econItem->flags |= nonEconomyFlag;
     }
 
     baseTypeCache->addObject(econItem);
