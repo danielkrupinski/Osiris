@@ -9,15 +9,18 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
 
 ## Features
 
-* Weapon skins, knives, gloves, agents
+* Weapon skins, knives
+  * StatTrak counts kills
+* Gloves, agents
 * Agent patches
-  * can be applied to agents
+  * can be applied to agents and removed from them
 * Stickers
   * can be applied to weapons and scraped
 * Weapon cases, sticker capsules, pins capsules, graffiti boxes, music kit boxes
   * can be opened
   * item drop rates resemble real drop rates
   * "special rare items" can be unboxed
+  * StatTrak items can be unboxed
 * Souvenir packages
   * can be opened
   * have real teams and MVP player from a random match
@@ -26,6 +29,16 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
 * Music kits
   * in main menu and in game
   * StatTrak counts round MVPs
+* Operation passes
+  * can be activated
+  * give bronze operation coin when activated
+* Tournament passes
+  * can be activated
+  * give bronze tournament coin when activated
+* Name tag
+  * can be used on skins and later removed
+* StatTrak swap tool
+  * can be used to swap StatTrak values between weapon skins
 
 and more...
 
