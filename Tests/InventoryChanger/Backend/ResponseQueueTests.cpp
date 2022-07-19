@@ -56,6 +56,7 @@ TEST_P(InventoryChanger_Backend_ResponseQueue_InstantResponseTest, ResponsesAreH
     queue.add(response::ItemAdded{ {}, false });
     queue.add(response::StickerApplied{ {}, 0 });
 
+    testing::InSequence _;
     testing::StrictMock<MockResponseHandler> mock;
     EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>())).Times(GetParam() <= 0ms);
     EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>())).Times(GetParam() <= 0ms);
@@ -79,6 +80,7 @@ TEST_P(InventoryChanger_Backend_ResponseQueue_ResponseTimeTest, ResponsesAreHand
 
     FakeClock::advance(GetParam().timePassed);
 
+    testing::InSequence _;
     testing::StrictMock<MockResponseHandler> mock;
     EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>())).Times(GetParam().timePassed >= GetParam().delay);
     EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>())).Times(GetParam().timePassed >= GetParam().delay);
@@ -97,10 +99,11 @@ TEST(InventoryChanger_Backend_ResponseQueueTest, ResponsesAreKeptInQueueWhenNotH
 
     queue.visit([](auto&&){}, 1ms);
 
+    testing::InSequence _;
     testing::StrictMock<MockResponseHandler> mock;
     EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>()));
     EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>()));
-    
+
     queue.visit(mock, 0ms);
 }
 
