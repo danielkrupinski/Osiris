@@ -565,4 +565,25 @@ void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storage
     initItemCustomizationNotification("casket_added", storageUnitItemID);
 }
 
+void Inventory::removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.removeCasketItemId(*econItem);
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    initItemCustomizationNotification("casket_removed", storageUnitItemID);
+}
+
 }
