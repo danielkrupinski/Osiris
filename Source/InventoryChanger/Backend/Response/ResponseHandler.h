@@ -193,6 +193,11 @@ struct ResponseHandler {
         }
     }
 
+    void operator()(const response::ItemRemovedFromStorageUnit&) const
+    {
+
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemIterator item) const
     {

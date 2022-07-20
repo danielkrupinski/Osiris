@@ -154,4 +154,12 @@ struct ItemAddedToStorageUnit {
     ItemIterator storageUnit;
 };
 
+struct ItemRemovedFromStorageUnit {
+    ItemRemovedFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit{ storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
 }
