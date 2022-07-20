@@ -675,6 +675,7 @@ public:
     void setModificationDate(EconItem& econItem, std::uint32_t date) noexcept { setAttributeValue(econItem, 271, &date); }
     void setCasketItemIdLow(EconItem& econItem, std::uint32_t itemIdLow) noexcept { setAttributeValue(econItem, 272, &itemIdLow); }
     void setCasketItemIdHigh(EconItem& econItem, std::uint32_t itemIdHigh) noexcept { setAttributeValue(econItem, 273, &itemIdHigh); }
+    void removeCasketItemId(EconItem& econItem) noexcept { removeAttribute(econItem, 272); removeAttribute(econItem, 273); }
 
     void setStickerID(EconItem& econItem, int slot, int stickerID) noexcept
     {
@@ -693,6 +694,12 @@ private:
     {
         if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
             memory->setDynamicAttributeValue(&econItem, attribute, value);
+    }
+
+    void removeAttribute(EconItem& econItem, int index) noexcept
+    {
+        if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
+            memory->removeDynamicAttribute(&econItem, attribute);
     }
 
     ItemSchema& itemSchema;
