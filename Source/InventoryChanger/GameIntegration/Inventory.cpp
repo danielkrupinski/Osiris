@@ -561,9 +561,6 @@ void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storage
     attributeSetter.setCasketItemIdLow(*econItem, static_cast<std::uint32_t>(storageUnitItemID & 0xFFFFFFFF));
     attributeSetter.setCasketItemIdHigh(*econItem, static_cast<std::uint32_t>((storageUnitItemID >> 32) & 0xFFFFFFFF));
 
-    constexpr auto inStorageUnitFlag = 32;
-    econItem->flags |= inStorageUnitFlag;
-
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification("casket_added", storageUnitItemID);
 }
