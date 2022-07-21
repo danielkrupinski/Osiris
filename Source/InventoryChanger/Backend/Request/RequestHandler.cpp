@@ -308,4 +308,19 @@ Response RequestHandler::operator()(const request::AddToStorageUnit& request) co
     return response::ItemAddedToStorageUnit{ request.item, request.storageUnit };
 }
 
+Response RequestHandler::operator()(const request::RemoveFromStorageUnit& request) const
+{
+    if (!request.storageUnit->gameItem().isStorageUnit())
+        return {};
+
+    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
+    if (!storageUnit)
+        return {};
+
+    --storageUnit->itemCount;
+    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+
+    return response::ItemRemovedFromStorageUnit{ request.item, request.storageUnit };
+}
+
 }
