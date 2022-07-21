@@ -293,7 +293,7 @@ Response RequestHandler::operator()(const request::MarkStorageUnitModified& requ
     return response::StorageUnitModified{ request.storageUnit };
 }
 
-Response RequestHandler::operator()(const request::AddToStorageUnit& request) const
+Response RequestHandler::operator()(const request::BindItemToStorageUnit& request) const
 {
     if (!request.storageUnit->gameItem().isStorageUnit())
         return {};

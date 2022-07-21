@@ -137,8 +137,8 @@ struct ClaimXRayScannedItem {
     std::optional<ItemIterator> key;
 };
 
-struct AddToStorageUnit {
-    explicit AddToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+struct BindItemToStorageUnit {
+    explicit BindItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
         : item{ item }, storageUnit{ storageUnit } {}
 
     ItemIterator item;
