@@ -38,7 +38,8 @@ using Response = std::variant<
     response::StorageUnitNamed,
     response::StorageUnitModified,
     response::ItemBoundToStorageUnit,
-    response::ItemRemovedFromStorageUnit
+    response::ItemRemovedFromStorageUnit,
+    response::ItemAddedToStorageUnit
 >;
 
 [[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept

@@ -193,6 +193,11 @@ struct ResponseHandler {
         }
     }
 
+    void operator()(const response::ItemAddedToStorageUnit&) const
+    {
+
+    }
+
     void operator()(const response::ItemRemovedFromStorageUnit& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value()) {

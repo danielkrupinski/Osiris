@@ -154,6 +154,12 @@ struct ItemBoundToStorageUnit {
     ItemIterator storageUnit;
 };
 
+struct ItemAddedToStorageUnit {
+    explicit ItemAddedToStorageUnit(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 struct ItemRemovedFromStorageUnit {
     ItemRemovedFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
         : item{ item }, storageUnit{ storageUnit } {}
