@@ -565,6 +565,11 @@ void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storage
     initItemCustomizationNotification("casket_added", storageUnitItemID);
 }
 
+void Inventory::itemAddedToStorageUnit(std::uint64_t storageUnitItemID)
+{
+    initItemCustomizationNotification("casket_added", storageUnitItemID);
+}
+
 void Inventory::removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
