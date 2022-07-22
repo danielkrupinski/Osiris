@@ -17,7 +17,7 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
 * Stickers
   * can be applied to weapons and scraped
 * Weapon cases, sticker capsules, pins capsules, graffiti boxes, music kit boxes
-  * can be opened
+  * can be opened (also with X-Ray Scanner)
   * item drop rates resemble real drop rates
   * "special rare items" can be unboxed
   * StatTrak items can be unboxed
@@ -35,6 +35,8 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
 * Tournament passes
   * can be activated
   * give bronze tournament coin when activated
+* Tournament coins
+  * team graffiti can be selected
 * Name tag
   * can be used on skins and later removed
 * StatTrak swap tool
