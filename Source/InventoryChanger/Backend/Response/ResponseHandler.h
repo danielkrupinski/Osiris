@@ -185,7 +185,7 @@ struct ResponseHandler {
         }
     }
 
-    void operator()(const response::ItemAddedToStorageUnit& response) const
+    void operator()(const response::ItemBoundToStorageUnit& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value()) {
             if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value())

@@ -146,8 +146,8 @@ struct StorageUnitModified {
     ItemIterator storageUnit;
 };
 
-struct ItemAddedToStorageUnit {
-    ItemAddedToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+struct ItemBoundToStorageUnit {
+    ItemBoundToStorageUnit(ItemIterator item, ItemIterator storageUnit)
         : item{ item }, storageUnit { storageUnit } {}
 
     ItemIterator item;

@@ -305,7 +305,7 @@ Response RequestHandler::operator()(const request::BindItemToStorageUnit& reques
     ++storageUnit->itemCount;
     backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
 
-    return response::ItemAddedToStorageUnit{ request.item, request.storageUnit };
+    return response::ItemBoundToStorageUnit{ request.item, request.storageUnit };
 }
 
 Response RequestHandler::operator()(const request::RemoveFromStorageUnit& request) const

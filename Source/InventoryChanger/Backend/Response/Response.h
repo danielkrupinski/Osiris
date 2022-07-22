@@ -37,7 +37,7 @@ using Response = std::variant<
     response::XRayScannerUsed,
     response::StorageUnitNamed,
     response::StorageUnitModified,
-    response::ItemAddedToStorageUnit,
+    response::ItemBoundToStorageUnit,
     response::ItemRemovedFromStorageUnit
 >;
 
