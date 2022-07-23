@@ -222,6 +222,7 @@
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
+    <ClInclude Include="InventoryChanger\Backend\StorageUnitManager.h" />
     <ClInclude Include="InventoryChanger\Backend\XRayScanner.h" />
     <ClInclude Include="InventoryChanger\EconRarities.h" />
     <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h" />
