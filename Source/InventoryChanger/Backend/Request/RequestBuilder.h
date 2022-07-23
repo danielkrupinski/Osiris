@@ -75,7 +75,7 @@ public:
         if (!item.has_value() || !storageUnit.has_value() || !(*storageUnit)->gameItem().isStorageUnit())
             return;
 
-        request<request::BindItemToStorageUnit>(*item, *storageUnit);
+        request<request::AddItemToStorageUnit>(*item, *storageUnit);
     }
 
     void removeFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
