@@ -38,6 +38,7 @@ struct RequestHandler {
     Response operator()(const request::NameStorageUnit& request) const;
     Response operator()(const request::MarkStorageUnitModified& request) const;
     Response operator()(const request::BindItemToStorageUnit& request) const;
+    Response operator()(const request::AddItemToStorageUnit& request) const;
     Response operator()(const request::RemoveFromStorageUnit& request) const;
 
 private:

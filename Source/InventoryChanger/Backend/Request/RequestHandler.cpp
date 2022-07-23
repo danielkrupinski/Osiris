@@ -308,6 +308,12 @@ Response RequestHandler::operator()(const request::BindItemToStorageUnit& reques
     return response::ItemBoundToStorageUnit{ request.item, request.storageUnit };
 }
 
+Response RequestHandler::operator()(const request::AddItemToStorageUnit& request) const
+{
+    backend.getRequestor().request<request::BindItemToStorageUnit>(request.item, request.storageUnit);
+    return response::ItemAddedToStorageUnit{ request.storageUnit };
+}
+
 Response RequestHandler::operator()(const request::RemoveFromStorageUnit& request) const
 {
     if (!request.storageUnit->gameItem().isStorageUnit())
