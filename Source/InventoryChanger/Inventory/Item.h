@@ -30,6 +30,12 @@ public:
     explicit Item(const game_items::Item& item, ItemData data) noexcept : item{ item }, data{ std::move(data) } {}
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
+    Item(Item&&) = default;
+    Item(const Item&) = default;
+
+    Item& operator=(const Item&) = delete;
+    Item& operator=(Item&&) = delete;
+
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
 
     [[nodiscard]] bool isHidden() const noexcept { return hidden; }
