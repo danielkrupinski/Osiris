@@ -15,6 +15,15 @@ public:
         itemsStorageUnits[item] = storageUnit;
     }
 
+    bool removeItemFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
+    { 
+        if (const auto it = itemsStorageUnits.find(item); it != itemsStorageUnits.end() && it->second == storageUnit) {
+            itemsStorageUnits.erase(it);
+            return true;
+        }
+        return false;
+    }
+
     template <typename StoredItemRemoved>
     [[nodiscard]] std::optional<ItemIterator> onItemRemoval(ItemIterator item, const StoredItemRemoved& storedItemRemoved)
     {
