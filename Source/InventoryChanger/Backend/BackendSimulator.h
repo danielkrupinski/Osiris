@@ -144,7 +144,7 @@ public:
 
     [[nodiscard]] RequestorType getRequestor()
     {
-        return Requestor{ RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
+        return Requestor{ RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
     }
 
     template <typename GameInventory>
