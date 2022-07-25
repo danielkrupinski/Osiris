@@ -41,6 +41,8 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
   * can be used on skins and later removed
 * StatTrak swap tool
   * can be used to swap StatTrak values between weapon skins
+* Service medals and collectible pins
+  * are displayed next to the avatar and on the in-game scoreboard when equipped
 
 and more...
 
