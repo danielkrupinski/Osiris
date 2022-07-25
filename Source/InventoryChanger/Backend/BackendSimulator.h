@@ -9,6 +9,7 @@
 #include "Loadout.h"
 #include "PickEm.h"
 #include "Requestor.h"
+#include "StorageUnitManager.h"
 #include "XRayScanner.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
@@ -174,6 +175,7 @@ private:
     const game_items::CrateLootLookup& crateLootLookup;
     PickEm pickEm;
     XRayScanner xRayScanner;
+    StorageUnitManager storageUnitManager;
 };
 
 }
