@@ -31,7 +31,6 @@ public:
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
     Item(Item&&) = default;
-    Item(const Item&) = default;
 
     Item& operator=(const Item&) = delete;
     Item& operator=(Item&&) = delete;
