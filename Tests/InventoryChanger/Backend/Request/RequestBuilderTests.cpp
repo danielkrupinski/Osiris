@@ -27,6 +27,7 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::ApplySticker&));
     MOCK_METHOD(void, request, (const request::ApplyPatch&));
     MOCK_METHOD(void, request, (const request::AddNameTag&));
+    MOCK_METHOD(void, request, (const request::NameStorageUnit&));
 };
 
 struct MockRequestorWrapper {
