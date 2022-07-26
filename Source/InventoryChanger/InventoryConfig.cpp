@@ -196,7 +196,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 
 }
 
-json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
+json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
 {
     json j;
 
@@ -229,7 +229,7 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
         const auto& item = *itemIt;
         const auto& gameItem = item.gameItem();
         itemConfig["Weapon ID"] = gameItem.getWeaponID();
-        itemConfig["Item Name"] = inventory_changer::WeaponNames::instance().getWeaponName(gameItem.getWeaponID());
+        itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
             itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
@@ -238,7 +238,7 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            if (const auto glove = item.get<inventory_changer::inventory::Glove>()) {
+            if (const auto glove = item.get<inventory::Glove>()) {
                 itemConfig["Wear"] = glove->wear;
                 itemConfig["Seed"] = glove->seed;
             }
@@ -247,23 +247,23 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            if (const auto skin = item.get<inventory_changer::inventory::Skin>())
+            if (const auto skin = item.get<inventory::Skin>())
                 itemConfig.update(::toJson(*skin));
 
         } else if (gameItem.isMusic()) {
             itemConfig["Music ID"] = gameItemStorage.getMusicKit(gameItem).id;
-            if (const auto music = item.get<inventory_changer::inventory::Music>(); music && music->statTrak > -1)
+            if (const auto music = item.get<inventory::Music>(); music && music->statTrak > -1)
                 itemConfig["StatTrak"] = music->statTrak;
         } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
-            if (const auto graffiti = item.get<inventory_changer::inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
+            if (const auto graffiti = item.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
                 itemConfig["Uses Left"] = graffiti->usesLeft;
-                itemConfig["Item Name"] = inventory_changer::WeaponNames::instance().getWeaponName(WeaponId::Graffiti);
+                itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
-            if (const auto agent = item.get<inventory_changer::inventory::Agent>()) {
+            if (const auto agent = item.get<inventory::Agent>()) {
                 auto& stickers = itemConfig["Patches"];
                 for (std::size_t i = 0; i < agent->patches.size(); ++i) {
                     const auto& patch = agent->patches[i];
@@ -277,10 +277,10 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
                 }
             }
         } else if (gameItem.isServiceMedal()) {
-            if (const auto serviceMedal = item.get<inventory_changer::inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
+            if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
         } else if (gameItem.isCase()) {
-            if (const auto souvenirPackage = item.get<inventory_changer::inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+            if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
                 itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
                 itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
                 itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
@@ -295,7 +295,7 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
     return j;
 }
 
-void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChanger)
+void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChanger)
 {
     auto& backend = inventoryChanger.getBackend();
     const auto& lookup = backend.getGameItemLookup();
@@ -310,12 +310,12 @@ void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChang
         return;
 
     for (const auto& jsonItem : items) {
-        std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = inventory_changer::gameItemFromJson(lookup, jsonItem);
+        std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(lookup, jsonItem);
         if (!itemOptional.has_value())
             continue;
 
-        const inventory_changer::game_items::Item& item = itemOptional->get();
-        const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(lookup.getStorage(), item, jsonItem) });
+        const game_items::Item& item = itemOptional->get();
+        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(lookup.getStorage(), item, jsonItem) });
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);

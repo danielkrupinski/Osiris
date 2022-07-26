@@ -5,7 +5,7 @@
 namespace inventory_changer
 {
     class InventoryChanger;
-}
 
-json toJson(const inventory_changer::InventoryChanger& inventoryChanger);
-void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChanger);
+    json toJson(const InventoryChanger& inventoryChanger);
+    void fromJson(const json& j, InventoryChanger& inventoryChanger);
+}
