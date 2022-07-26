@@ -114,14 +114,16 @@ public:
 
     ItemIterator removeItem(ItemIterator it)
     {
-        const auto itemID = itemIDMap.remove(it);
-        loadout.unequipItem(it);
-        responseQueue.removeResponsesReferencingItem(it);
-        xRayScanner.onItemRemoval(it);
-        const auto newIterator = inventory.erase(it);
-        if (itemID.has_value())
-            responseQueue.add(response::ItemRemoved{ *itemID });
-        return newIterator;
+        const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(it, [this, it](const auto& storedItem) {
+            if (storedItem != it)
+                removeItemInternal(storedItem);
+        });
+
+        if (removedFromStorageUnit.has_value()) {
+            getRequestor().request<request::RemoveFromStorageUnit>(it, *removedFromStorageUnit);
+        }
+
+        return removeItemInternal(it);
     }
 
     void moveToFront(ItemIterator it)
@@ -159,6 +161,18 @@ public:
     }
 
 private:
+    ItemIterator removeItemInternal(ItemIterator it)
+    {
+        const auto itemID = itemIDMap.remove(it);
+        loadout.unequipItem(it);
+        responseQueue.removeResponsesReferencingItem(it);
+        xRayScanner.onItemRemoval(it);
+        const auto newIterator = inventory.erase(it);
+        if (itemID.has_value())
+            responseQueue.add(response::ItemRemoved{ *itemID });
+        return newIterator;
+    }
+
     ItemIterator addItem(inventory::Item item, bool asUnacknowledged)
     {
         inventory.push_back(std::move(item));
