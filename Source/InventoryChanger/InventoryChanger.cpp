@@ -1236,7 +1236,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         if (operation == 1) {
             backendRequestBuilder.addToStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
         } else if (operation == -1) {
-            // remove from storage unit
+            backendRequestBuilder.removeFromStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
         }
     }
 }
