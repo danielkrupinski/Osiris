@@ -24,6 +24,15 @@ public:
         return false;
     }
 
+    template <typename Function>
+    void forEachItemInStorageUnit(ItemIterator storageUnit, Function function) const
+    {
+        for (const auto& [item, storageUnitContainingItem] : itemsStorageUnits) {
+            if (storageUnitContainingItem == storageUnit)
+                function(item);
+        }
+    }
+
     template <typename StoredItemRemoved>
     [[nodiscard]] std::optional<ItemIterator> onItemRemoval(ItemIterator item, const StoredItemRemoved& storedItemRemoved)
     {
