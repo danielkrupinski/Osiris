@@ -152,7 +152,7 @@ public:
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
+        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, storageUnitManager, gameInventory }, delay);
     }
 
     [[nodiscard]] bool isInXRayScan() const noexcept

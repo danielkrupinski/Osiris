@@ -3,6 +3,7 @@
 #include <variant>
 
 #include <InventoryChanger/Backend/ItemIDMap.h>
+#include <InventoryChanger/Backend/StorageUnitManager.h>
 #include <InventoryChanger/GameItems/Storage.h>
 
 #include "ResponseTypes.h"
@@ -12,8 +13,8 @@ namespace inventory_changer::backend
 
 template <typename GameInventory>
 struct ResponseHandler {
-    explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, GameInventory& gameInventory)
-        : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, gameInventory{ gameInventory } {}
+    explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, StorageUnitManager& storageUnitManager, GameInventory& gameInventory)
+        : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, storageUnitManager{ storageUnitManager }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
 
@@ -216,6 +217,7 @@ private:
 
     const game_items::Storage& gameItemStorage;
     ItemIDMap& itemIDMap;
+    StorageUnitManager& storageUnitManager;
     GameInventory& gameInventory;
 };
 
