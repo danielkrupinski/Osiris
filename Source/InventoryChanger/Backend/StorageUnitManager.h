@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <optional>
 #include <unordered_map>
 
@@ -22,6 +23,24 @@ public:
             return true;
         }
         return false;
+    }
+
+    [[nodiscard]] std::unordered_map<ItemIterator, std::uint32_t> getStorageUnitIDs() const
+    {
+        std::unordered_map<ItemIterator, std::uint32_t> itemsStorageUnitIDs;
+
+        std::uint32_t highestStorageUnitID = 0;
+        for (const auto& [item, storageUnitContainingItem] : itemsStorageUnits) {
+            if (const auto it = itemsStorageUnitIDs.find(storageUnitContainingItem); it != itemsStorageUnitIDs.end()) {
+                itemsStorageUnitIDs.emplace(item, it->second);
+            } else {
+                ++highestStorageUnitID;
+                itemsStorageUnitIDs.emplace(storageUnitContainingItem, highestStorageUnitID);
+                itemsStorageUnitIDs.emplace(item, highestStorageUnitID);
+            }
+        }
+
+        return itemsStorageUnitIDs;
     }
 
     template <typename Function>
