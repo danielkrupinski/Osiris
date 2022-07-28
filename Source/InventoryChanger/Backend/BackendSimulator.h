@@ -57,6 +57,11 @@ public:
         return itemIDMap;
     }
 
+    [[nodiscard]] const StorageUnitManager& getStorageUnitManager() const noexcept
+    {
+        return storageUnitManager;
+    }
+
     void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
