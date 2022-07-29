@@ -208,6 +208,8 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
+    const auto& storageUnitIDs = backend.getStorageUnitManager().getStorageUnitIDs();
+
     auto& items = j["Items"];
     for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
         if (itemIt->isHidden())
@@ -289,11 +291,14 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
                 itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
             }
         } else if (gameItem.isStorageUnit()) {
-            if (const auto storageUnit = item.get<inventory_changer::inventory::StorageUnit>(); storageUnit->modificationDateTimestamp != 0) {
+            if (const auto storageUnit = item.get<inventory_changer::inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
                 itemConfig["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
                 itemConfig["Name"] = storageUnit->name;
             }
         }
+
+        if (const auto storageUnitID = storageUnitIDs.find(itemIt); storageUnitID != storageUnitIDs.end())
+            itemConfig["Storage Unit ID"] = storageUnitID->second;
 
         items.push_back(std::move(itemConfig));
     }
