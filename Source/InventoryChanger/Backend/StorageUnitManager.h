@@ -57,13 +57,15 @@ public:
     {
         for (auto it = itemsStorageUnits.begin(); it != itemsStorageUnits.end();) {
             if (it->first == item) {
+                const auto storageUnit = it->second;
                 itemsStorageUnits.erase(it);
-                return it->second;
+                return storageUnit;
             }
 
             if (it->second == item) {
-                storedItemRemoved(it->first);
+                const auto storedItem = it->first;
                 it = itemsStorageUnits.erase(it);
+                storedItemRemoved(storedItem);
             } else {
                 ++it;
             }
