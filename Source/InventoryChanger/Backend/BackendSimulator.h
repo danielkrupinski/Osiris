@@ -62,6 +62,11 @@ public:
         return storageUnitManager;
     }
 
+    [[nodiscard]] const XRayScanner& getXRayScanner() const noexcept
+    {
+        return xRayScanner;
+    }
+
     void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
