@@ -768,7 +768,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
 
         ImGui::SameLine();
-        ImGui::SetNextItemWidth(-85.0f);
+        ImGui::SetNextItemWidth(550.0f);
         const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
         ImGui::SameLine();
         const bool addingAll = ImGui::Button("Add all in list");

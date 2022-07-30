@@ -809,7 +809,8 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     { WeaponId::OperationBrokenFangCase, operationBrokenFangGloves },
     { WeaponId::SnakebiteCase, operationBrokenFangGloves },
     { WeaponId::OperationRiptideCase, operationRiptideKnives },
-    { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives }
+    { WeaponId::DreamsAndNightmaresCase, operationRiptideKnives },
+    { WeaponId::RecoilCase, operationBrokenFangGloves }
 });
 
 [[nodiscard]] constexpr std::span<const RareSpecialItem> getRareSpecialItems(WeaponId crateWeaponID)
@@ -957,6 +958,12 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
         }
 
         return inventory::Item{ unlockedItem, dynamicData };
+    } else if (unlockedItem.isGloves()) {
+        inventory::Glove gloves;
+        const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
+        gloves.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear());
+        gloves.seed = Helpers::random(1, 1000);
+        return inventory::Item{ unlockedItem, gloves };
     }
 
     return inventory::Item{ unlockedItem };

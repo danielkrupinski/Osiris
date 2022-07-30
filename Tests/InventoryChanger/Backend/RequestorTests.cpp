@@ -36,7 +36,7 @@ TEST_P(InventoryChanger_Backend_RequestorTest, NonEmptyResponseReturnedFromHandl
     MockResponseQueue responseQueue;
 
     EXPECT_CALL(requestHandler, handleApplyStickerRequest(testing::_)).WillOnce(testing::Return(GetParam()));
-    EXPECT_CALL(responseQueue, add(testing::_)).Times(isEmptyResponse(GetParam()) ? 0 : 1);
+    EXPECT_CALL(responseQueue, add(testing::VariantWith<response::StickerApplied>(testing::_))).Times(isEmptyResponse(GetParam()) ? 0 : 1);
 
     Requestor{ std::cref(requestHandler), responseQueue }.request<request::ApplySticker>(ItemIterator{}, ItemIterator{}, static_cast<std::uint8_t>(0));
 }

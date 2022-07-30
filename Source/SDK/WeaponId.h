@@ -139,6 +139,7 @@ enum class WeaponId : short {
     Antwerp2022BronzeCoin = 4826,
     Antwerp2022ViewerPassWith3Tokens = 4830,
     Antwerp2022SouvenirToken = 4831,
+    RecoilCase = 4846,
     GloveStuddedBloodhound = 5027,
     GloveT,
     GloveCT,

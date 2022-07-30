@@ -158,6 +158,8 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
 
     const auto& item = inventoryItem.gameItem();
     econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
+    constexpr auto foundInCrateOrigin = 8;
+    econItem->origin = foundInCrateOrigin;
     econItem->quality = 4;
     econItem->weaponId = item.getWeaponID();
 
@@ -223,6 +225,9 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
             if (souvenirPackage->proPlayer != static_cast<csgo::ProPlayer>(0))
                 attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
+    } else if (item.isCaseKey()) {
+        constexpr auto nonEconomyFlag = 8;
+        econItem->flags |= nonEconomyFlag;
     } else if (item.isStorageUnit()) {
         if (const auto storageUnit = inventoryItem.get<inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
             attributeSetter.setModificationDate(*econItem, storageUnit->modificationDateTimestamp);
