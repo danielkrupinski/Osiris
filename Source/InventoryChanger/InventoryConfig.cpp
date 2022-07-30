@@ -198,6 +198,12 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 
 }
 
+[[nodiscard]] bool isInXRayScanner(const inventory_changer::backend::XRayScanner& xrayScanner, inventory_changer::backend::ItemIterator item) noexcept
+{
+    const auto items = xrayScanner.getItems();
+    return items.has_value() && (items->crate == item || items->reward == item);
+}
+
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
 {
     json j;
@@ -209,10 +215,11 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
     const auto& storageUnitIDs = backend.getStorageUnitManager().getStorageUnitIDs();
+    const auto& xrayScanner = backend.getXRayScanner();
 
     auto& items = j["Items"];
     for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
-        if (itemIt->isHidden())
+        if (isInXRayScanner(xrayScanner, itemIt))
             continue;
 
         json itemConfig;
