@@ -307,6 +307,13 @@ json toJson(const inventory_changer::InventoryChanger& inventoryChanger)
     return j;
 }
 
+std::optional<std::uint32_t> storageUnitIdFromJson(const json& j)
+{
+    if (const auto it = j.find("Storage Unit ID"); it != j.end() && it->is_number_unsigned())
+        return it->get<std::uint32_t>();
+    return {};
+}
+
 void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChanger)
 {
     auto& backend = inventoryChanger.getBackend();
@@ -321,6 +328,9 @@ void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChang
     if (!items.is_array())
         return;
 
+    std::unordered_map<std::uint32_t, inventory_changer::backend::ItemIterator> storageUnits;
+    std::vector<std::pair<inventory_changer::backend::ItemIterator, std::uint32_t>> itemsToBindToStorageUnits;
+
     for (const auto& jsonItem : items) {
         std::optional<std::reference_wrapper<const inventory_changer::game_items::Item>> itemOptional = inventory_changer::gameItemFromJson(lookup, jsonItem);
         if (!itemOptional.has_value())
@@ -328,6 +338,14 @@ void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChang
 
         const inventory_changer::game_items::Item& item = itemOptional->get();
         const auto itemAdded = backend.addItemAcknowledged(inventory_changer::inventory::Item{ item, inventory_changer::itemFromJson(lookup.getStorage(), item, jsonItem) });
+
+        if (const auto storageUnitID = storageUnitIdFromJson(jsonItem); storageUnitID.has_value()) {
+            if (!item.isStorageUnit()) {
+                itemsToBindToStorageUnits.emplace_back(itemAdded, *storageUnitID);
+            } else {
+                storageUnits.emplace(*storageUnitID, itemAdded);
+            }
+        }
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);
@@ -339,5 +357,11 @@ void fromJson(const json& j, inventory_changer::InventoryChanger& inventoryChang
                 backend.equipItemNoTeam(itemAdded, equippedSlot);
         }
 
+    }
+
+    for (auto [item, storageUnitID] : itemsToBindToStorageUnits) {
+        if (const auto storageUnit = storageUnits.find(storageUnitID); storageUnit != storageUnits.end()) {
+            backend.getRequestor().request<inventory_changer::backend::request::BindItemToStorageUnit>(item, storageUnit->second);
+        }
     }
 }
