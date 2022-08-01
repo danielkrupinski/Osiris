@@ -2,6 +2,7 @@
 
 ## What's new
 
+* **1 August 2022** - Storage Units can be used to store items from the Inventory Changer
 * **14 June 2022** - X-Ray Scanner can be used to open weapons cases from the Inventory Changer
 * **11 June 2022** - Added "Add all in list" button to GUI which adds all items satisfying filter condition to the inventory.
 Example: searching for "glock-18" and pressing "Add all in list" will add all weapon skins for Glock-18.
@@ -43,6 +44,9 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
   * can be used to swap StatTrak values between weapon skins
 * Service medals and collectible pins
   * are displayed next to the avatar and on the in-game scoreboard when equipped
+* Storage unit
+  * can be renamed
+  * items can be stored/retrieved
 
 and more...
 
