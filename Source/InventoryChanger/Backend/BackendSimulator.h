@@ -9,6 +9,7 @@
 #include "Loadout.h"
 #include "PickEm.h"
 #include "Requestor.h"
+#include "StorageUnitManager.h"
 #include "XRayScanner.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
@@ -54,6 +55,16 @@ public:
     [[nodiscard]] const ItemIDMap& getItemIDMap() const noexcept
     {
         return itemIDMap;
+    }
+
+    [[nodiscard]] const StorageUnitManager& getStorageUnitManager() const noexcept
+    {
+        return storageUnitManager;
+    }
+
+    [[nodiscard]] const XRayScanner& getXRayScanner() const noexcept
+    {
+        return xRayScanner;
     }
 
     void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
@@ -113,14 +124,16 @@ public:
 
     ItemIterator removeItem(ItemIterator it)
     {
-        const auto itemID = itemIDMap.remove(it);
-        loadout.unequipItem(it);
-        responseQueue.removeResponsesReferencingItem(it);
-        xRayScanner.onItemRemoval(it);
-        const auto newIterator = inventory.erase(it);
-        if (itemID.has_value())
-            responseQueue.add(response::ItemRemoved{ *itemID });
-        return newIterator;
+        const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(it, [this, it](const auto& storedItem) {
+            if (storedItem != it)
+                removeItemInternal(storedItem);
+        });
+
+        if (removedFromStorageUnit.has_value()) {
+            getRequestor().request<request::RemoveFromStorageUnit>(it, *removedFromStorageUnit);
+        }
+
+        return removeItemInternal(it);
     }
 
     void moveToFront(ItemIterator it)
@@ -143,13 +156,13 @@ public:
 
     [[nodiscard]] RequestorType getRequestor()
     {
-        return Requestor{ RequestHandler{ *this, pickEm, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
+        return Requestor{ RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, ItemConstRemover{ inventory } }, responseQueue };
     }
 
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, gameInventory }, delay);
+        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, storageUnitManager, gameInventory }, delay);
     }
 
     [[nodiscard]] bool isInXRayScan() const noexcept
@@ -158,6 +171,18 @@ public:
     }
 
 private:
+    ItemIterator removeItemInternal(ItemIterator it)
+    {
+        const auto itemID = itemIDMap.remove(it);
+        loadout.unequipItem(it);
+        responseQueue.removeResponsesReferencingItem(it);
+        xRayScanner.onItemRemoval(it);
+        const auto newIterator = inventory.erase(it);
+        if (itemID.has_value())
+            responseQueue.add(response::ItemRemoved{ *itemID });
+        return newIterator;
+    }
+
     ItemIterator addItem(inventory::Item item, bool asUnacknowledged)
     {
         inventory.push_back(std::move(item));
@@ -174,6 +199,7 @@ private:
     const game_items::CrateLootLookup& crateLootLookup;
     PickEm pickEm;
     XRayScanner xRayScanner;
+    StorageUnitManager storageUnitManager;
 };
 
 }

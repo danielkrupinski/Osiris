@@ -220,6 +220,7 @@ Memory::Memory() noexcept
     getMyPredictionTeamIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8") - 20;
     setInventorySortAndFiltersGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x80\x7D\xFF?\x8B\xF8\x74\x27");
     getInventoryCountSetResultIntReturnAddress = findPattern(CLIENT_DLL, "\xB9????\xE8????\xB9????\xE8????\xC2\x08") - 10;
+    performItemCasketTransactionGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24");
 
     findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
     getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") + 1);
@@ -230,6 +231,7 @@ Memory::Memory() noexcept
     createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") + 1);
     uiComponentInventory = *reinterpret_cast<void***>(findPattern(CLIENT_DLL, "\xC6\x44\x24??\x83\x3D") + 7);
     setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") + 1);
+    removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8"));
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 
@@ -328,6 +330,8 @@ Memory::Memory() noexcept
     getMyPredictionTeamIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF") - 20;
     setInventorySortAndFiltersGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x8B\x4D\xCC\x49\x89\xC5\x84\xC9");
     getInventoryCountSetResultIntReturnAddress = findPattern(CLIENT_DLL, "\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02") + 19;
+    performItemCasketTransactionGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x0F\x84????\x48\x89\xC7\xE8????\x48\x89\xC7\xE8????\x48\x85\xC0\x49\x89\xC6\x0F\x84????\xF2\x0F\x10\x85");
+    removeDynamicAttribute = relativeToAbsolute<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") + 1);
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif

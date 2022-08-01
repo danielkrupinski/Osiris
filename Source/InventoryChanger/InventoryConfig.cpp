@@ -108,6 +108,8 @@ namespace inventory_changer
         return inventory::souvenirPackageFromJson(j);
     if (gameItem.isGraffiti())
         return inventory::graffitiFromJson(j);
+    if (gameItem.isStorageUnit())
+        return inventory::storageUnitFromJson(j);
     return {};
 }
 
@@ -196,6 +198,12 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
 
 }
 
+[[nodiscard]] bool isInXRayScanner(const inventory_changer::backend::XRayScanner& xrayScanner, inventory_changer::backend::ItemIterator item) noexcept
+{
+    const auto items = xrayScanner.getItems();
+    return items.has_value() && (items->crate == item || items->reward == item);
+}
+
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
 {
     json j;
@@ -206,9 +214,12 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
+    const auto& storageUnitIDs = backend.getStorageUnitManager().getStorageUnitIDs();
+    const auto& xrayScanner = backend.getXRayScanner();
+
     auto& items = j["Items"];
     for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
-        if (itemIt->isHidden())
+        if (isInXRayScanner(xrayScanner, itemIt))
             continue;
 
         json itemConfig;
@@ -286,13 +297,28 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
                 itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;
                 itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
             }
+        } else if (gameItem.isStorageUnit()) {
+            if (const auto storageUnit = item.get<inventory_changer::inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
+                itemConfig["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
+                itemConfig["Name"] = storageUnit->name;
+            }
         }
+
+        if (const auto storageUnitID = storageUnitIDs.find(itemIt); storageUnitID != storageUnitIDs.end())
+            itemConfig["Storage Unit ID"] = storageUnitID->second;
 
         items.push_back(std::move(itemConfig));
     }
 
     j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
     return j;
+}
+
+std::optional<std::uint32_t> storageUnitIdFromJson(const json& j)
+{
+    if (const auto it = j.find("Storage Unit ID"); it != j.end() && it->is_number_unsigned())
+        return it->get<std::uint32_t>();
+    return {};
 }
 
 void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChanger)
@@ -309,6 +335,9 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
     if (!items.is_array())
         return;
 
+    std::unordered_map<std::uint32_t, inventory_changer::backend::ItemIterator> storageUnits;
+    std::vector<std::pair<inventory_changer::backend::ItemIterator, std::uint32_t>> itemsToBindToStorageUnits;
+
     for (const auto& jsonItem : items) {
         std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(lookup, jsonItem);
         if (!itemOptional.has_value())
@@ -316,6 +345,14 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
 
         const game_items::Item& item = itemOptional->get();
         const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(lookup.getStorage(), item, jsonItem) });
+
+        if (const auto storageUnitID = storageUnitIdFromJson(jsonItem); storageUnitID.has_value()) {
+            if (!item.isStorageUnit()) {
+                itemsToBindToStorageUnits.emplace_back(itemAdded, *storageUnitID);
+            } else {
+                storageUnits.emplace(*storageUnitID, itemAdded);
+            }
+        }
 
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);
@@ -327,5 +364,11 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
                 backend.equipItemNoTeam(itemAdded, equippedSlot);
         }
 
+    }
+
+    for (auto [item, storageUnitID] : itemsToBindToStorageUnits) {
+        if (const auto storageUnit = storageUnits.find(storageUnitID); storageUnit != storageUnits.end()) {
+            backend.getRequestor().request<inventory_changer::backend::request::BindItemToStorageUnit>(item, storageUnit->second);
+        }
     }
 }

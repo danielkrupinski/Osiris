@@ -45,6 +45,11 @@ public:
     void unhideItem(std::uint64_t itemID);
     void xRayItemRevealed(std::uint64_t itemID);
     void xRayItemClaimed(std::uint64_t itemID);
+    void nameStorageUnit(std::uint64_t itemID, const char* newName);
+    void storageUnitModified(std::uint64_t itemID, std::uint32_t modificationDate, std::uint32_t itemCount);
+    void addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID);
+    void itemAddedToStorageUnit(std::uint64_t storageUnitItemID);
+    void removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID);
 };
 
 }

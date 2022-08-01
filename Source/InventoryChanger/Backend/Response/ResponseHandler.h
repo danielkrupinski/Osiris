@@ -3,6 +3,7 @@
 #include <variant>
 
 #include <InventoryChanger/Backend/ItemIDMap.h>
+#include <InventoryChanger/Backend/StorageUnitManager.h>
 #include <InventoryChanger/GameItems/Storage.h>
 
 #include "ResponseTypes.h"
@@ -12,8 +13,8 @@ namespace inventory_changer::backend
 
 template <typename GameInventory>
 struct ResponseHandler {
-    explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, GameInventory& gameInventory)
-        : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, gameInventory{ gameInventory } {}
+    explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, StorageUnitManager& storageUnitManager, GameInventory& gameInventory)
+        : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, storageUnitManager{ storageUnitManager }, gameInventory{ gameInventory } {}
 
     void operator()(std::monostate) const { /* Empty response, this should never be called */ }
 
@@ -25,8 +26,15 @@ struct ResponseHandler {
 
     void operator()(const response::ItemMovedToFront& response) const
     {
-        if (const auto itemID = getItemID(response.item); itemID.has_value())
-            itemIDMap.update(*itemID, gameInventory.assingNewItemID(*itemID));
+        if (const auto itemID = getItemID(response.item); itemID.has_value()) {
+            const auto newItemID = gameInventory.assingNewItemID(*itemID);
+            itemIDMap.update(*itemID, newItemID);
+
+            storageUnitManager.forEachItemInStorageUnit(response.item, [this, storageUnitItemID = newItemID](auto itemInStorageUnit) {
+                if (const auto itemIdInStorageUnit = getItemID(itemInStorageUnit); itemIdInStorageUnit.has_value())
+                    gameInventory.addItemToStorageUnit(*itemIdInStorageUnit, storageUnitItemID);
+            });
+        }
     }
 
     void operator()(const response::ItemUpdated& response) const
@@ -169,6 +177,45 @@ struct ResponseHandler {
             gameInventory.xRayItemClaimed(*itemID);
     }
 
+    void operator()(const response::StorageUnitNamed& response) const
+    {
+        if (const auto itemID = getItemID(response.storageUnit); itemID.has_value()) {
+            if (const auto storageUnit = response.storageUnit->get<inventory::StorageUnit>())
+                gameInventory.nameStorageUnit(*itemID, storageUnit->name.c_str());
+        }
+    }
+
+    void operator()(const response::StorageUnitModified& response) const
+    {
+        if (const auto itemID = getItemID(response.storageUnit); itemID.has_value()) {
+            if (const auto storageUnit = response.storageUnit->get<inventory::StorageUnit>())
+                gameInventory.storageUnitModified(*itemID, storageUnit->modificationDateTimestamp, storageUnit->itemCount);
+        }
+    }
+
+    void operator()(const response::ItemBoundToStorageUnit& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value()) {
+            if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value())
+                gameInventory.addItemToStorageUnit(*itemID, *storageUnitItemID);
+        }
+    }
+
+    void operator()(const response::ItemAddedToStorageUnit& response) const
+    {
+        if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value()) {
+            gameInventory.itemAddedToStorageUnit(*storageUnitItemID);
+        }
+    }
+
+    void operator()(const response::ItemRemovedFromStorageUnit& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value()) {
+            if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value())
+                gameInventory.removeItemFromStorageUnit(*itemID, *storageUnitItemID);
+        }
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemIterator item) const
     {
@@ -177,6 +224,7 @@ private:
 
     const game_items::Storage& gameItemStorage;
     ItemIDMap& itemIDMap;
+    StorageUnitManager& storageUnitManager;
     GameInventory& gameInventory;
 };
 

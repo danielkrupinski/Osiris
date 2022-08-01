@@ -90,6 +90,14 @@ struct AddNameTag {
     std::string_view nameTag;
 };
 
+struct NameStorageUnit {
+    NameStorageUnit(ItemIterator storageUnit, std::string_view name)
+        : storageUnit{ storageUnit }, name{ name } {}
+
+    ItemIterator storageUnit;
+    std::string_view name;
+};
+
 struct UpdateStatTrak {
     UpdateStatTrak(ItemIterator item, int newStatTrak)
         : item{ item }, newStatTrak{ newStatTrak } {}
@@ -127,6 +135,44 @@ struct ClaimXRayScannedItem {
 
     ItemIterator container;
     std::optional<ItemIterator> key;
+};
+
+struct BindItemToStorageUnit {
+    explicit BindItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit{ storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
+struct AddItemToStorageUnit {
+    explicit AddItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit{ storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
+struct RemoveFromStorageUnit {
+    explicit RemoveFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit{ storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
+struct MarkStorageUnitModified {
+    explicit MarkStorageUnitModified(ItemIterator storageUnit)
+        : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
+struct UpdateStorageUnitAttributes {
+    explicit UpdateStorageUnitAttributes(ItemIterator storageUnit)
+        : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
 };
 
 }

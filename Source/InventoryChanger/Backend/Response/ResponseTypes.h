@@ -134,4 +134,38 @@ struct XRayItemClaimed {
     ItemIterator item;
 };
 
+struct StorageUnitNamed {
+    explicit StorageUnitNamed(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
+struct StorageUnitModified {
+    explicit StorageUnitModified(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
+struct ItemBoundToStorageUnit {
+    ItemBoundToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit { storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
+struct ItemAddedToStorageUnit {
+    explicit ItemAddedToStorageUnit(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
+struct ItemRemovedFromStorageUnit {
+    ItemRemovedFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
+        : item{ item }, storageUnit{ storageUnit } {}
+
+    ItemIterator item;
+    ItemIterator storageUnit;
+};
+
 }

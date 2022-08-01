@@ -9,11 +9,12 @@ namespace inventory_changer::backend
 
 class BackendSimulator;
 class PickEm;
+class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, XRayScanner& xRayScanner, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, xRayScanner{ xRayScanner }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, constRemover{ constRemover } {}
 
     Response operator()(const request::ApplySticker& request) const;
     Response operator()(const request::WearSticker& request) const;
@@ -35,10 +36,17 @@ struct RequestHandler {
     Response operator()(const request::UnhideItem& request) const;
     Response operator()(const request::PerformXRayScan& request) const;
     Response operator()(const request::ClaimXRayScannedItem& request) const;
+    Response operator()(const request::NameStorageUnit& request) const;
+    Response operator()(const request::MarkStorageUnitModified& request) const;
+    Response operator()(const request::BindItemToStorageUnit& request) const;
+    Response operator()(const request::AddItemToStorageUnit& request) const;
+    Response operator()(const request::RemoveFromStorageUnit& request) const;
+    Response operator()(const request::UpdateStorageUnitAttributes& request) const;
 
 private:
     BackendSimulator& backend;
     PickEm& pickEm;
+    StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ItemConstRemover constRemover;
 };

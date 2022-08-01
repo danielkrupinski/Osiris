@@ -40,6 +40,11 @@ struct ItemInResponse {
     bool operator()(const response::ViewerPassActivated& response) const { return response.createdEventCoin == item; }
     bool operator()(const response::XRayItemClaimed& response) const { return response.item == item; }
     bool operator()(const response::XRayScannerUsed& response) const { return response.receivedItem == item; }
+    bool operator()(const response::StorageUnitNamed& response) const { return response.storageUnit == item; }
+    bool operator()(const response::StorageUnitModified& response) const { return response.storageUnit == item; }
+    bool operator()(const response::ItemBoundToStorageUnit& response) const { return response.item == item || response.storageUnit == item; }
+    bool operator()(const response::ItemAddedToStorageUnit& response) const { return response.storageUnit == item; }
+    bool operator()(const response::ItemRemovedFromStorageUnit& response) const { return response.item == item || response.storageUnit == item; }
 
 private:
     ItemIterator item;

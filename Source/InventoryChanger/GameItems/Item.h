@@ -33,6 +33,7 @@ public:
     [[nodiscard]] constexpr bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
     [[nodiscard]] constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
     [[nodiscard]] constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
+    [[nodiscard]] constexpr bool isStorageUnit() const noexcept { return type == Type::StorageUnit; }
 
     enum class Type : std::uint8_t {
         Gloves,
@@ -51,7 +52,8 @@ public:
         ViewerPass,
         ServiceMedal,
         SouvenirToken,
-        TournamentCoin
+        TournamentCoin,
+        StorageUnit
     };
 
     [[nodiscard]] constexpr Item(Type type, EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept

@@ -211,4 +211,17 @@ Agent agentFromJson(const json& j)
     return dynamicData;
 }
 
+StorageUnit storageUnitFromJson(const json& j)
+{
+    StorageUnit storageUnit;
+
+    if (const auto modificationDateTimestamp = j.find("Modification Date Timestamp"); modificationDateTimestamp != j.end() && modificationDateTimestamp->is_number_integer())
+        storageUnit.modificationDateTimestamp = modificationDateTimestamp->get<std::uint32_t>();
+    
+    if (const auto name = j.find("Name"); name != j.end() && name->is_string())
+        storageUnit.name = name->get<std::string>();
+    
+    return storageUnit;
+}
+
 }
