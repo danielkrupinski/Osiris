@@ -40,7 +40,8 @@ public:
 
     enum class State : std::uint8_t {
         Default = 0,
-        InXrayScanner
+        InXrayScanner,
+        InStorageUnit
     };
 
     [[nodiscard]] State getState() const noexcept { return state; }

@@ -304,6 +304,7 @@ Response RequestHandler::operator()(const request::BindItemToStorageUnit& reques
 
     ++storageUnit->itemCount;
     storageUnitManager.addItemToStorageUnit(request.item, request.storageUnit);
+    constRemover.removeConstness(request.item)->setState(inventory::Item::State::InStorageUnit);
     backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
 
     return response::ItemBoundToStorageUnit{ request.item, request.storageUnit };
@@ -326,6 +327,7 @@ Response RequestHandler::operator()(const request::RemoveFromStorageUnit& reques
 
     --storageUnit->itemCount;
     storageUnitManager.removeItemFromStorageUnit(request.item, request.storageUnit);
+    constRemover.removeConstness(request.item)->setState(inventory::Item::State::Default);
     backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
 
     return response::ItemRemovedFromStorageUnit{ request.item, request.storageUnit };
