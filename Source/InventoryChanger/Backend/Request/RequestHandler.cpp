@@ -305,7 +305,7 @@ Response RequestHandler::operator()(const request::BindItemToStorageUnit& reques
     ++storageUnit->itemCount;
     storageUnitManager.addItemToStorageUnit(request.item, request.storageUnit);
     constRemover.removeConstness(request.item)->setState(inventory::Item::State::InStorageUnit);
-    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+    backend.getRequestor().request<request::UpdateStorageUnitAttributes>(request.storageUnit);
 
     return response::ItemBoundToStorageUnit{ request.item, request.storageUnit };
 }
@@ -313,6 +313,7 @@ Response RequestHandler::operator()(const request::BindItemToStorageUnit& reques
 Response RequestHandler::operator()(const request::AddItemToStorageUnit& request) const
 {
     backend.getRequestor().request<request::BindItemToStorageUnit>(request.item, request.storageUnit);
+    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
     return response::ItemAddedToStorageUnit{ request.storageUnit };
 }
 
@@ -331,6 +332,14 @@ Response RequestHandler::operator()(const request::RemoveFromStorageUnit& reques
     backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
 
     return response::ItemRemovedFromStorageUnit{ request.item, request.storageUnit };
+}
+
+Response RequestHandler::operator()(const request::UpdateStorageUnitAttributes& request) const
+{
+    if (!request.storageUnit->gameItem().isStorageUnit())
+        return {};
+
+    return response::StorageUnitModified{ request.storageUnit };
 }
 
 }

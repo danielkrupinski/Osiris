@@ -41,6 +41,7 @@ struct RequestHandler {
     Response operator()(const request::BindItemToStorageUnit& request) const;
     Response operator()(const request::AddItemToStorageUnit& request) const;
     Response operator()(const request::RemoveFromStorageUnit& request) const;
+    Response operator()(const request::UpdateStorageUnitAttributes& request) const;
 
 private:
     BackendSimulator& backend;

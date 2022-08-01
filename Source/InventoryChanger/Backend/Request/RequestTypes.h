@@ -168,4 +168,11 @@ struct MarkStorageUnitModified {
     ItemIterator storageUnit;
 };
 
+struct UpdateStorageUnitAttributes {
+    explicit UpdateStorageUnitAttributes(ItemIterator storageUnit)
+        : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 }
