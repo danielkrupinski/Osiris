@@ -820,7 +820,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             const auto& inventory = inventory_changer::InventoryChanger::instance().getBackend().getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
-                if (it->isHidden()) {
+                if (it->getState() != inventory_changer::inventory::Item::State::Default) {
                     ++it;
                     continue;
                 }

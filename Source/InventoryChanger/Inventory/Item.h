@@ -38,10 +38,13 @@ public:
 
     [[nodiscard]] const game_items::Item& gameItem() const noexcept { return item; }
 
-    [[nodiscard]] bool isHidden() const noexcept { return hidden; }
+    enum class State : std::uint8_t {
+        Default = 0,
+        InXrayScanner
+    };
 
-    void hide() noexcept { hidden = true; }
-    void unhide() noexcept { hidden = false; }
+    [[nodiscard]] State getState() const noexcept { return state; }
+    void setState(State newState) noexcept { state = newState; }
 
     template <typename T>
     [[nodiscard]] T* get() { return data.get<T>(); }
@@ -61,7 +64,7 @@ public:
 private:
     std::reference_wrapper<const game_items::Item> item;
     ItemData data;
-    bool hidden = false;
+    State state = State::Default;
 };
 
 [[nodiscard]] inline int* getStatTrak(Item& item)

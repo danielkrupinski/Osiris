@@ -221,13 +221,13 @@ Response RequestHandler::operator()(const request::PickStickerPickEm& request) c
 
 Response RequestHandler::operator()(const request::HideItem& request) const
 {
-    constRemover.removeConstness(request.item)->hide();
+    constRemover.removeConstness(request.item)->setState(inventory::Item::State::InXrayScanner);
     return response::ItemHidden{ request.item };
 }
 
 Response RequestHandler::operator()(const request::UnhideItem& request) const
 {
-    constRemover.removeConstness(request.item)->unhide();
+    constRemover.removeConstness(request.item)->setState(inventory::Item::State::Default);
     return response::ItemUnhidden{ request.item };
 }
 
@@ -240,10 +240,10 @@ Response RequestHandler::operator()(const request::PerformXRayScan& request) con
     if (!generatedItem.has_value())
         return {};
 
-    constRemover.removeConstness(request.crate)->hide();
+    constRemover.removeConstness(request.crate)->setState(inventory::Item::State::InXrayScanner);
     backend.getRequestor().request<request::HideItem>(request.crate);
 
-    generatedItem->hide();
+    generatedItem->setState(inventory::Item::State::InXrayScanner);
 
     const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
     xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });

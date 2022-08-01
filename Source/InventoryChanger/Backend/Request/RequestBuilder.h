@@ -90,12 +90,12 @@ public:
     }
 
 private:
-    void useToolOnItem(backend::ItemIterator tool, backend::ItemIterator destItem)
+    void useToolOnItem(ItemIterator tool, ItemIterator destItem)
     {
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
             request<request::ApplySticker>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
-            if (!destItem->isHidden())
+            if (destItem->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(destItem, tool);
             else
                 request<request::ClaimXRayScannedItem>(destItem, tool);
@@ -108,7 +108,7 @@ private:
         }
     }
 
-    void useTool(backend::ItemIterator tool)
+    void useTool(ItemIterator tool)
     {
         if (tool->gameItem().isStatTrakSwapTool()) {
             const auto statTrakSwapItem1 = itemIDMap.get(statTrakSwapItemID1);
@@ -127,12 +127,12 @@ private:
         }
     }
 
-    void useItem(backend::ItemIterator item, std::uint64_t toolItemID)
+    void useItem(ItemIterator item, std::uint64_t toolItemID)
     {
         constexpr std::uint64_t fauxNameTagItemID = (std::uint64_t{ 0xF } << 60) | static_cast<std::uint16_t>(WeaponId::NameTag);
 
         if (item->gameItem().isCase()) {
-            if (!item->isHidden())
+            if (item->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(item);
             else
                 request<request::ClaimXRayScannedItem>(item);
