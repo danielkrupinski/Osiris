@@ -640,7 +640,12 @@ enum ProPlayer {
     sergej = 67574097,
     Aerial = 2445180,
     JaCkz = 11977189,
-    Lucky = 71624387
+    Lucky = 71624387,
+    VINI = 36104456,
+    KSCERATO = 98234764,
+    arT = 83503844,
+    ableJ = 82940700,
+    yuurih = 204704832
 };
 
 }
