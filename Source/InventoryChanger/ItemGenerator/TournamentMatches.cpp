@@ -742,7 +742,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Nuke, ChallengersStage, TeamSpirit, ENCE, { S0tF1k, COLDYY1, DavCost, sdy, Dima, xseveN, Aleksib, sergej, allu, Aerial } },
     { TournamentMap::Cache, ChallengersStage, G2Esports, VegaSquadron, { kennyS, bodyy, JaCkz, shox, Lucky, crush, jR, hutji } },
     { TournamentMap::Mirage, ChallengersStage, FURIA, NinjasInPyjamas, { VINI, KSCERATO, arT, ableJ, REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
-    { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, {} },
+    { TournamentMap::Nuke, ChallengersStage, WinstrikeTeam, NRG, { Boombl4, WorldEdit, n0rb3r7, wayLander, Kvik } },
 
     // Round 2
     { TournamentMap::Overpass, ChallengersStage, Tyloo, Cloud9, { Summer, BnTeT, Attacker, somebody, xccurate, flusha, RUSH } },
@@ -752,7 +752,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Mirage, ChallengersStage, VegaSquadron, TeamSpirit, { jR, hutji, chopper, crush, tonyblack, S0tF1k, COLDYY1, DavCost, sdy } },
     { TournamentMap::Nuke, ChallengersStage, GrayhoundGaming, Vitality, { dexter, malta, erkaSt, sterling, DickStacy, NBK, RpK, apEX, ZywOo, ALEX } },
     { TournamentMap::Mirage, ChallengersStage, FURIA, Avangar, { VINI, KSCERATO, arT, ableJ, yuurih, Jame, KrizzeN, buster, fitch, qikert } },
-    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, { KRIMZ, Xizt, JW, Brollan } },
+    { TournamentMap::Train, ChallengersStage, WinstrikeTeam, Fnatic, { Boombl4, WorldEdit, wayLander, Kvik, KRIMZ, Xizt, JW, Brollan } },
 
     // Round 3
     { TournamentMap::Nuke, ChallengersStage, Renegades, ENCE, { AZR, Gratisfaction, jkaem, jks, Liazz, xseveN, Aleksib, sergej, allu } },
@@ -764,7 +764,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Overpass, ChallengersStage, G2Esports, Avangar, { shox, Lucky, kennyS, JaCkz, bodyy, Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Overpass, ChallengersStage, Vitality, VegaSquadron, { NBK, RpK, apEX, ZywOo, ALEX, crush } },
     { TournamentMap::Inferno, ChallengersStage, Cloud9, ViCiGaming, { kioShiMa, flusha, RUSH, advent, aumaN, Kaze, Freeman } },
-    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, { Lekr0, GeT_RiGhT, f0rest, dennis } },
+    { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, WinstrikeTeam, { Lekr0, GeT_RiGhT, f0rest, dennis, Boombl4, WorldEdit, wayLander, Kvik } },
 
     { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, Fnatic, { dexter, malta, erkaSt, sterling, DickStacy, KRIMZ, twist, Xizt, Brollan } },
     { TournamentMap::Overpass, ChallengersStage, Fnatic, GrayhoundGaming, { KRIMZ, twist, Xizt, JW, Brollan, dexter, malta, erkaSt, sterling, DickStacy } },
@@ -779,9 +779,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Cache, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
     { TournamentMap::Inferno, ChallengersStage, Avangar, Tyloo, { Jame, KrizzeN, buster, fitch, qikert, Summer, BnTeT, Attacker, somebody, xccurate } },
 
-    { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, allu, Aerial } },
-    { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, { Aleksib, sergej } },
-    { TournamentMap::Train, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Dust2, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, allu, Aerial, Boombl4, WorldEdit, n0rb3r7, wayLander, Kvik } },
+    { TournamentMap::Mirage, ChallengersStage, ENCE, WinstrikeTeam, { Aleksib, sergej, Boombl4, WorldEdit, wayLander, Kvik } },
+    { TournamentMap::Train, ChallengersStage, ENCE, WinstrikeTeam, { xseveN, Aleksib, sergej, allu, Aerial, Boombl4, WorldEdit, n0rb3r7, wayLander } },
 
     { TournamentMap::Overpass, ChallengersStage, NinjasInPyjamas, VegaSquadron, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis, jR, hutji, chopper, crush, tonyblack } },
     { TournamentMap::Train, ChallengersStage, NinjasInPyjamas, VegaSquadron, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis, jR, hutji, chopper, crush, tonyblack } },
@@ -804,8 +804,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, ChallengersStage, G2Esports, Tyloo, { shox, Lucky, kennyS, JaCkz, bodyy, somebody, xccurate } },
     { TournamentMap::Cache, ChallengersStage, G2Esports, Tyloo, { shox, Lucky, kennyS, JaCkz, bodyy, Summer, BnTeT, Attacker, somebody } },
 
-    { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, { kioShiMa, flusha, autimatic, RUSH } },
-    { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Nuke, ChallengersStage, Cloud9, WinstrikeTeam, { kioShiMa, flusha, autimatic, RUSH, Boombl4, WorldEdit, n0rb3r7, wayLander, Kvik } },
+    { TournamentMap::Overpass, ChallengersStage, WinstrikeTeam, Cloud9, { Boombl4, WorldEdit, n0rb3r7, wayLander, Kvik, kioShiMa, flusha, autimatic, RUSH } },
 
     // Group Stage
 

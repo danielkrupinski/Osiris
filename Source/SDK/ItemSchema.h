@@ -645,7 +645,8 @@ enum ProPlayer {
     KSCERATO = 98234764,
     arT = 83503844,
     ableJ = 82940700,
-    yuurih = 204704832
+    yuurih = 204704832,
+    n0rb3r7 = 262176776
 };
 
 }
