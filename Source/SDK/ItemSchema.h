@@ -638,7 +638,9 @@ enum ProPlayer {
     xseveN = 52906775,
     Aleksib = 52977598,
     sergej = 67574097,
-    Aerial = 2445180
+    Aerial = 2445180,
+    JaCkz = 11977189,
+    Lucky = 71624387
 };
 
 }
