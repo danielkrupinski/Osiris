@@ -646,7 +646,10 @@ enum ProPlayer {
     arT = 83503844,
     ableJ = 82940700,
     yuurih = 204704832,
-    n0rb3r7 = 262176776
+    n0rb3r7 = 262176776,
+    Ethan = 169177802,
+    CeRq = 196088155,
+    Brehze = 94595411
 };
 
 }
