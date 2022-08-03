@@ -811,7 +811,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
 
     // Round 1
     { TournamentMap::Inferno, GroupStage, ENCE, Renegades, { xseveN, Aleksib, sergej, allu, Aerial, AZR, Gratisfaction, jkaem, jks, Liazz } },
-    { TournamentMap::Mirage, GroupStage, BIG, Vitality, { NBK, RpK, apEX, ZywOo, ALEX } },
+    { TournamentMap::Mirage, GroupStage, BIG, Vitality, { tabseN, nex, gobb, tiziaN, XANTARES, NBK, RpK, apEX, ZywOo, ALEX } },
     { TournamentMap::Inferno, GroupStage, NatusVincere, G2Esports, { shox, Lucky, kennyS, bodyy } },
     { TournamentMap::Train, GroupStage, FaZeClan, HellRaisers, {} },
     { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, { REZ, Lekr0, f0rest, Ethan, CeRq, Brehze, FugLy, daps } },
@@ -825,7 +825,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Overpass, GroupStage, TeamLiquid, NinjasInPyjamas, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
     { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
     { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, { xseveN, Aleksib, sergej, allu } },
-    { TournamentMap::Mirage, GroupStage, BIG, G2Esports, { shox, Lucky, kennyS, JaCkz, bodyy } },
+    { TournamentMap::Mirage, GroupStage, BIG, G2Esports, { tabseN, nex, gobb, tiziaN, XANTARES, shox, Lucky, kennyS, JaCkz, bodyy } },
     { TournamentMap::Overpass, GroupStage, NRG, Avangar, { Ethan, CeRq, Brehze, FugLy, daps, Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, {} },
 
@@ -842,9 +842,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Mirage, GroupStage, Vitality, Cloud9, { RpK, apEX, ZywOo, ALEX, kioShiMa, flusha, autimatic, RUSH } },
     { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
 
-    { TournamentMap::Dust2, GroupStage, ENCE, BIG, { xseveN, sergej, Aerial } },
-    { TournamentMap::Train, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial } },
-    { TournamentMap::Overpass, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Dust2, GroupStage, ENCE, BIG, { xseveN, sergej, Aerial, tabseN, nex, gobb, tiziaN, XANTARES } },
+    { TournamentMap::Train, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial, tabseN, nex, gobb, tiziaN, XANTARES } },
+    { TournamentMap::Overpass, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial, tabseN, nex, tiziaN, XANTARES } },
 
     { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, { Ethan, CeRq, Brehze, FugLy, daps } },
     { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, { Ethan, CeRq, Brehze, FugLy, daps } },
