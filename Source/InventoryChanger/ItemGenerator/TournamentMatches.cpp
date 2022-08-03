@@ -813,7 +813,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Inferno, GroupStage, ENCE, Renegades, { xseveN, Aleksib, sergej, allu, Aerial, AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Mirage, GroupStage, BIG, Vitality, { tabseN, nex, gobb, tiziaN, XANTARES, NBK, RpK, apEX, ZywOo, ALEX } },
     { TournamentMap::Inferno, GroupStage, NatusVincere, G2Esports, { Edward, s1mple, electronic, Zeus, shox, Lucky, kennyS, bodyy } },
-    { TournamentMap::Train, GroupStage, FaZeClan, HellRaisers, {} },
+    { TournamentMap::Train, GroupStage, FaZeClan, HellRaisers, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
     { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, { REZ, Lekr0, f0rest, Ethan, CeRq, Brehze, FugLy, daps } },
     { TournamentMap::Overpass, GroupStage, Avangar, TeamLiquid, { Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Inferno, GroupStage, MIBR, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
@@ -821,7 +821,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
 
     // Round 2
     { TournamentMap::Mirage, GroupStage, NatusVincere, Vitality, { flamie, s1mple, electronic, Zeus, Edward, NBK, RpK, apEX, ZywOo, ALEX } },
-    { TournamentMap::Inferno, GroupStage, FaZeClan, Renegades, { AZR, Gratisfaction, jkaem, jks, Liazz } },
+    { TournamentMap::Inferno, GroupStage, FaZeClan, Renegades, {  NiKo, GuardiaN, rain, AdreN, olofmeister, AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Overpass, GroupStage, TeamLiquid, NinjasInPyjamas, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
     { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
     { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, { xseveN, Aleksib, sergej, allu } },
@@ -838,7 +838,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, GroupStage, TeamLiquid, NatusVincere, { flamie, s1mple, electronic, Edward } },
 
     { TournamentMap::Inferno, GroupStage, MIBR, G2Esports, { shox, Lucky, kennyS, JaCkz, bodyy } },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, Avangar, { Jame, KrizzeN, buster, fitch, qikert } },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, Avangar, { NiKo, GuardiaN, AdreN, olofmeister, Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Mirage, GroupStage, Vitality, Cloud9, { RpK, apEX, ZywOo, ALEX, kioShiMa, flusha, autimatic, RUSH } },
     { TournamentMap::Overpass, GroupStage, NinjasInPyjamas, HellRaisers, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
 
@@ -863,9 +863,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, GroupStage, ENCE, G2Esports, { xseveN, Aleksib, sergej, allu, Aerial, shox, Lucky, kennyS, JaCkz, bodyy } },
     { TournamentMap::Mirage, GroupStage, G2Esports, ENCE, { shox, Lucky, kennyS, JaCkz, bodyy, xseveN, Aleksib, sergej, allu, Aerial } },
 
-    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, {} },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, {} },
-    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, {} },
+    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
 
     { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, { kioShiMa, flusha, autimatic, RUSH } },
     { TournamentMap::Cache, GroupStage, HellRaisers, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
@@ -878,12 +878,12 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Overpass, GroupStage, Vitality, NinjasInPyjamas, { NBK, RpK, apEX, ZywOo, ALEX, GeT_RiGhT, REZ } },
     { TournamentMap::Mirage, GroupStage, Vitality, NinjasInPyjamas, { NBK, RpK, apEX, ZywOo, ALEX, REZ, Lekr0, GeT_RiGhT, dennis } },
 
-    { TournamentMap::Cache, GroupStage, FaZeClan, Cloud9, { kioShiMa, flusha, autimatic, RUSH } },
-    { TournamentMap::Dust2, GroupStage, Cloud9, FaZeClan, { kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Cache, GroupStage, FaZeClan, Cloud9, { NiKo, GuardiaN, rain, AdreN, olofmeister, kioShiMa, flusha, autimatic, RUSH } },
+    { TournamentMap::Dust2, GroupStage, Cloud9, FaZeClan, { kioShiMa, flusha, autimatic, RUSH, NiKo, GuardiaN, rain, AdreN, olofmeister } },
 
     // Quarterfinals
-    { TournamentMap::Inferno, Quarterfinal, NatusVincere, FaZeClan, { flamie, s1mple, electronic, Zeus, Edward } },
-    { TournamentMap::Mirage, Quarterfinal, FaZeClan, NatusVincere, { flamie, s1mple, electronic, Zeus, Edward } },
+    { TournamentMap::Inferno, Quarterfinal, NatusVincere, FaZeClan, { flamie, s1mple, electronic, Zeus, Edward, NiKo, GuardiaN, rain, AdreN, olofmeister } },
+    { TournamentMap::Mirage, Quarterfinal, FaZeClan, NatusVincere, { NiKo, GuardiaN, rain, AdreN, olofmeister, flamie, s1mple, electronic, Zeus, Edward } },
 
     { TournamentMap::Mirage, Quarterfinal, TeamLiquid, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
     { TournamentMap::Inferno, Quarterfinal, ENCE, TeamLiquid, { xseveN, Aleksib, sergej, allu, Aerial } },
