@@ -817,22 +817,22 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, { REZ, Lekr0, f0rest, Ethan, CeRq, Brehze, FugLy, daps } },
     { TournamentMap::Overpass, GroupStage, Avangar, TeamLiquid, { Jame, KrizzeN, buster, fitch, qikert, Twistzz, NAF, Stewie2K, EliGE, nitr0 } },
     { TournamentMap::Inferno, GroupStage, MIBR, Cloud9, { fer, FalleN, kioShiMa, flusha, autimatic, RUSH } },
-    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, { stanislaw, ShahZaM, dephh, n0thing } },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, { stanislaw, ShahZaM, dephh, n0thing, Xyp9x, gla1ve, dupreeh, device, Magisk } },
 
     // Round 2
     { TournamentMap::Mirage, GroupStage, NatusVincere, Vitality, { flamie, s1mple, electronic, Zeus, Edward, NBK, RpK, apEX, ZywOo, ALEX } },
     { TournamentMap::Inferno, GroupStage, FaZeClan, Renegades, {  NiKo, GuardiaN, rain, AdreN, olofmeister, AZR, Gratisfaction, jkaem, jks, Liazz } },
     { TournamentMap::Overpass, GroupStage, TeamLiquid, NinjasInPyjamas, { Twistzz, NAF, Stewie2K, EliGE, nitr0, REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
-    { TournamentMap::Train, GroupStage, Astralis, Cloud9, {} },
+    { TournamentMap::Train, GroupStage, Astralis, Cloud9, { Xyp9x, gla1ve, dupreeh, device, Magisk } },
     { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, { xseveN, Aleksib, sergej, allu, Hobbit, ISSAA, woxic, DeadFox, ANGE1 } },
     { TournamentMap::Mirage, GroupStage, BIG, G2Esports, { tabseN, nex, gobb, tiziaN, XANTARES, shox, Lucky, kennyS, JaCkz, bodyy } },
     { TournamentMap::Overpass, GroupStage, NRG, Avangar, { Ethan, CeRq, Brehze, FugLy, daps, Jame, KrizzeN, buster, fitch, qikert } },
     { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, { felps, TACO, coldzera, FalleN, fer, stanislaw, ShahZaM, n0thing, Rickeh } },
 
     // Round 3
-    { TournamentMap::Mirage, GroupStage, Renegades, Astralis, { AZR, Gratisfaction, jkaem, jks, Liazz } },
-    { TournamentMap::Nuke, GroupStage, Renegades, Astralis, { Gratisfaction, jkaem, jks, Liazz } },
-    { TournamentMap::Inferno, GroupStage, Astralis, Renegades, { jkaem, Liazz } },
+    { TournamentMap::Mirage, GroupStage, Renegades, Astralis, { AZR, Gratisfaction, jkaem, jks, Liazz, Xyp9x, gla1ve, dupreeh, device } },
+    { TournamentMap::Nuke, GroupStage, Renegades, Astralis, { Gratisfaction, jkaem, jks, Liazz, Xyp9x, gla1ve, dupreeh, device, Magisk } },
+    { TournamentMap::Inferno, GroupStage, Astralis, Renegades, { Xyp9x, gla1ve, dupreeh, device, Magisk, jkaem, Liazz } },
 
     { TournamentMap::Mirage, GroupStage, TeamLiquid, NatusVincere, { Twistzz, NAF, Stewie2K, EliGE, nitr0, flamie, s1mple, Zeus, Edward } },
     { TournamentMap::Dust2, GroupStage, TeamLiquid, NatusVincere, { Twistzz, NAF, Stewie2K, EliGE, nitr0, flamie, s1mple, electronic, Edward } },
@@ -891,20 +891,20 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, Quarterfinal, MIBR, Renegades, { felps, TACO, coldzera, FalleN, fer, jks, Gratisfaction } },
     { TournamentMap::Train, Quarterfinal, Renegades, MIBR, { AZR, Gratisfaction, jkaem, Liazz, felps, TACO, coldzera, FalleN, fer } },
 
-    { TournamentMap::Mirage, Quarterfinal, Astralis, NinjasInPyjamas, { REZ, f0rest } },
-    { TournamentMap::Dust2, Quarterfinal, NinjasInPyjamas, Astralis, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis } },
+    { TournamentMap::Mirage, Quarterfinal, Astralis, NinjasInPyjamas, { Xyp9x, gla1ve, dupreeh, device, Magisk, REZ, f0rest } },
+    { TournamentMap::Dust2, Quarterfinal, NinjasInPyjamas, Astralis, { REZ, Lekr0, GeT_RiGhT, f0rest, dennis, Xyp9x, gla1ve, dupreeh, device, Magisk } },
 
     // Semifinals
     { TournamentMap::Train, Semifinal, NatusVincere, ENCE, { s1mple, electronic, Zeus, Edward, xseveN, Aleksib, sergej, allu, Aerial } },
     { TournamentMap::Dust2, Semifinal, NatusVincere, ENCE, { flamie, s1mple, electronic, Zeus, Edward, xseveN, sergej, Aerial } },
     { TournamentMap::Mirage, Semifinal, NatusVincere, ENCE, { flamie, s1mple, electronic, Zeus, Edward, xseveN, Aleksib, sergej, allu, Aerial } },
 
-    { TournamentMap::Overpass, Semifinal, Astralis, MIBR, { TACO, coldzera, FalleN, fer } },
-    { TournamentMap::Inferno, Semifinal, MIBR, Astralis, { felps, coldzera, fer } },
+    { TournamentMap::Overpass, Semifinal, Astralis, MIBR, { gla1ve, dupreeh, device, Magisk, TACO, coldzera, FalleN, fer } },
+    { TournamentMap::Inferno, Semifinal, MIBR, Astralis, { felps, coldzera, fer, Xyp9x, dupreeh, device, Magisk } },
 
     // Grand Final
-    { TournamentMap::Train, GrandFinal, Astralis, ENCE, { xseveN, Aleksib, sergej, allu, Aerial } },
-    { TournamentMap::Inferno, GrandFinal, ENCE, Astralis, { xseveN, sergej, Aerial } },
+    { TournamentMap::Train, GrandFinal, Astralis, ENCE, { Xyp9x, gla1ve, dupreeh, device, Magisk, xseveN, Aleksib, sergej, allu, Aerial } },
+    { TournamentMap::Inferno, GrandFinal, ENCE, Astralis, { xseveN, sergej, Aerial, Xyp9x, gla1ve, dupreeh, device, Magisk } },
     });
 
 constexpr auto pglStockholm2021Matches = std::to_array<Match>({
