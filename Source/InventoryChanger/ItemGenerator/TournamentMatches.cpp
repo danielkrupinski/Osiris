@@ -1122,6 +1122,7 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { 12, pglKrakow2017Matches },
     { 13, eleagueBoston2018Matches },
     { 14, faceitLondon2018Matches },
+    { 15, iemKatowice2019Matches },
     { 18, pglStockholm2021Matches },
     { 19, pglAntwerp2022Matches }
 });
