@@ -26,7 +26,7 @@ Example: searching for "glock-18" and pressing "Add all in list" will add all we
   * can be opened
   * have real teams and MVP player from a random match
   * unboxed skins get gold stickers and teams / MVP in their description
-    * excluding **IEM Katowice 2019** and **StarLadder Berlin 2019** tournaments, which are yet to be implemented
+    * excluding **StarLadder Berlin 2019** tournament, which is yet to be implemented
 * Music kits
   * in main menu and in game
   * StatTrak counts round MVPs
