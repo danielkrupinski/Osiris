@@ -817,7 +817,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Nuke, GroupStage, NinjasInPyjamas, NRG, { REZ, Lekr0, f0rest, Ethan, CeRq, Brehze, FugLy, daps } },
     { TournamentMap::Overpass, GroupStage, Avangar, TeamLiquid, { Jame, KrizzeN, buster, fitch, qikert, Twistzz, NAF, Stewie2K, EliGE, nitr0 } },
     { TournamentMap::Inferno, GroupStage, MIBR, Cloud9, { fer, FalleN, kioShiMa, flusha, autimatic, RUSH } },
-    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, {} },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, Astralis, { stanislaw, ShahZaM, dephh, n0thing } },
 
     // Round 2
     { TournamentMap::Mirage, GroupStage, NatusVincere, Vitality, { flamie, s1mple, electronic, Zeus, Edward, NBK, RpK, apEX, ZywOo, ALEX } },
@@ -827,7 +827,7 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, GroupStage, ENCE, HellRaisers, { xseveN, Aleksib, sergej, allu, Hobbit, ISSAA, woxic, DeadFox, ANGE1 } },
     { TournamentMap::Mirage, GroupStage, BIG, G2Esports, { tabseN, nex, gobb, tiziaN, XANTARES, shox, Lucky, kennyS, JaCkz, bodyy } },
     { TournamentMap::Overpass, GroupStage, NRG, Avangar, { Ethan, CeRq, Brehze, FugLy, daps, Jame, KrizzeN, buster, fitch, qikert } },
-    { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, { felps, TACO, coldzera, FalleN, fer } },
+    { TournamentMap::Mirage, GroupStage, MIBR, ComplexityGaming, { felps, TACO, coldzera, FalleN, fer, stanislaw, ShahZaM, n0thing, Rickeh } },
 
     // Round 3
     { TournamentMap::Mirage, GroupStage, Renegades, Astralis, { AZR, Gratisfaction, jkaem, jks, Liazz } },
@@ -846,8 +846,8 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Train, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial, tabseN, nex, gobb, tiziaN, XANTARES } },
     { TournamentMap::Overpass, GroupStage, ENCE, BIG, { xseveN, Aleksib, sergej, allu, Aerial, tabseN, nex, tiziaN, XANTARES } },
 
-    { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, { Ethan, CeRq, Brehze, FugLy, daps } },
-    { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, { Ethan, CeRq, Brehze, FugLy, daps } },
+    { TournamentMap::Nuke, GroupStage, ComplexityGaming, NRG, { stanislaw, ShahZaM, dephh, n0thing, Rickeh, Ethan, CeRq, Brehze, FugLy, daps } },
+    { TournamentMap::Cache, GroupStage, ComplexityGaming, NRG, { stanislaw, ShahZaM, dephh, n0thing, Rickeh, Ethan, CeRq, Brehze, FugLy, daps } },
 
     // Round 4
     { TournamentMap::Dust2, GroupStage, Vitality, Renegades, { NBK, RpK, ZywOo, AZR, Gratisfaction, jkaem, jks, Liazz } },
@@ -863,9 +863,9 @@ constexpr auto iemKatowice2019Matches = std::to_array<MatchWithMVPs>({
     { TournamentMap::Dust2, GroupStage, ENCE, G2Esports, { xseveN, Aleksib, sergej, allu, Aerial, shox, Lucky, kennyS, JaCkz, bodyy } },
     { TournamentMap::Mirage, GroupStage, G2Esports, ENCE, { shox, Lucky, kennyS, JaCkz, bodyy, xseveN, Aleksib, sergej, allu, Aerial } },
 
-    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
-    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
-    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister } },
+    { TournamentMap::Cache, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister, stanislaw, ShahZaM, dephh, n0thing, Rickeh } },
+    { TournamentMap::Mirage, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister, stanislaw, ShahZaM, n0thing, Rickeh } },
+    { TournamentMap::Dust2, GroupStage, FaZeClan, ComplexityGaming, { NiKo, GuardiaN, rain, AdreN, olofmeister, stanislaw, ShahZaM, dephh, n0thing, Rickeh } },
 
     { TournamentMap::Inferno, GroupStage, Cloud9, HellRaisers, { kioShiMa, flusha, autimatic, RUSH, Hobbit, ISSAA, woxic, ANGE1 } },
     { TournamentMap::Cache, GroupStage, HellRaisers, Cloud9, { Hobbit, ISSAA, woxic, DeadFox, kioShiMa, flusha, autimatic, RUSH } },
