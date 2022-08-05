@@ -16,20 +16,32 @@
 #include <InventoryChanger/Inventory/Structs.h>
 #include <InventoryChanger/GameIntegration/Misc.h>
 
-static float generateWear() noexcept
+enum SkinCondition {
+    FactoryNew = 1,
+    MinimalWear,
+    FieldTested,
+    WellWorn,
+    BattleScarred
+};
+
+static SkinCondition randomSkinCondition()
 {
-    float wear;
     if (const auto condition = Helpers::random(1, 10000); condition <= 1471)
-        wear = Helpers::random(0.0f, 0.07f);
+        return FactoryNew;
     else if (condition <= 3939)
-        wear = Helpers::random(0.07f, 0.15f);
+        return MinimalWear;
     else if (condition <= 8257)
-        wear = Helpers::random(0.15f, 0.38f);
+        return FieldTested;
     else if (condition <= 9049)
-        wear = Helpers::random(0.38f, 0.45f);
-    else
-        wear = Helpers::random(0.45f, 1.0f);
-    return wear;
+        return WellWorn;
+    return BattleScarred;
+}
+
+static float generateWear()
+{
+    static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
+    const auto condition = randomSkinCondition();
+    return Helpers::random(wearRanges[condition - 1], wearRanges[condition]);
 }
 
 [[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
