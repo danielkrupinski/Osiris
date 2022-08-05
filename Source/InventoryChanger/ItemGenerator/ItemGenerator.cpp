@@ -969,18 +969,24 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     return inventory::Item{ unlockedItem };
 }
 
+[[nodiscard]] inventory::Skin createSkin(const game_items::Item& item, const game_items::Storage& gameItemStorage)
+{
+    const auto& paintKit = gameItemStorage.getPaintKit(item);
+
+    inventory::Skin skin;
+    skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, Helpers::random(0.0f, 0.07f));
+    skin.seed = Helpers::random(1, 1000);
+
+    if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
+        skin.stickers[3].stickerID = 28;
+
+    return skin;
+}
+
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
-        const auto& staticData = gameItemStorage.getPaintKit(item);
-        inventory::Skin dynamicData;
-        dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
-        dynamicData.seed = Helpers::random(1, 1000);
-
-        if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
-            dynamicData.stickers[3].stickerID = 28;
-
-        return dynamicData;
+        return createSkin(item, gameItemStorage);
     } else if (item.isGloves()) {
         const auto& staticData = gameItemStorage.getPaintKit(item);
         inventory::Glove dynamicData;
