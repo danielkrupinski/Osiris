@@ -2,6 +2,7 @@
 
 ## What's new
 
+* **4 August 2022** - IEM Katowice 2019 souvenirs now receive teams / MVP gold stickers
 * **1 August 2022** - Storage Units can be used to store items from the Inventory Changer
 * **14 June 2022** - X-Ray Scanner can be used to open weapons cases from the Inventory Changer
 * **11 June 2022** - Added "Add all in list" button to GUI which adds all items satisfying filter condition to the inventory.
