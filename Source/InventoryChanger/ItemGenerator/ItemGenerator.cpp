@@ -983,16 +983,21 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     return skin;
 }
 
+[[nodiscard]] inventory::Glove createGloves(const game_items::Item& item, const game_items::Storage& gameItemStorage)
+{
+    const auto& paintKit = gameItemStorage.getPaintKit(item);
+    return inventory::Glove{
+        .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, Helpers::random(0.0f, 0.07f)),
+        .seed = Helpers::random(1, 1000)
+    };
+}
+
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
         return createSkin(item, gameItemStorage);
     } else if (item.isGloves()) {
-        const auto& staticData = gameItemStorage.getPaintKit(item);
-        inventory::Glove dynamicData;
-        dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, Helpers::random(0.0f, 0.07f));
-        dynamicData.seed = Helpers::random(1, 1000);
-        return dynamicData;
+        return createGloves(item, gameItemStorage);
     } else if (item.isCase()) {
         if (gameItemStorage.isSouvenirPackage(item))
             return generateSouvenirPackageData(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
