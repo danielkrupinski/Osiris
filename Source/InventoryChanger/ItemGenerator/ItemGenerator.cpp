@@ -992,6 +992,13 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     };
 }
 
+[[nodiscard]] inventory::ServiceMedal createServiceMedal(const game_items::Item& item, const game_items::Storage& gameItemStorage)
+{
+    return inventory::ServiceMedal{
+        .issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item))
+    };
+}
+
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
@@ -1002,9 +1009,7 @@ inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItem
         if (gameItemStorage.isSouvenirPackage(item))
             return generateSouvenirPackageData(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
     } else if (item.isServiceMedal()) {
-        inventory::ServiceMedal dynamicData;
-        dynamicData.issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item));
-        return dynamicData;
+        return createServiceMedal(item, gameItemStorage);
     }
 
     return {};
