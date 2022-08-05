@@ -37,11 +37,15 @@ static SkinCondition randomSkinCondition()
     return BattleScarred;
 }
 
-static float generateWear()
+static float generateWear(SkinCondition condition)
 {
     static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
-    const auto condition = randomSkinCondition();
     return Helpers::random(wearRanges[condition - 1], wearRanges[condition]);
+}
+
+static float generateWear()
+{
+    return generateWear(randomSkinCondition());
 }
 
 [[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
@@ -986,7 +990,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     const auto& paintKit = gameItemStorage.getPaintKit(item);
 
     inventory::Skin skin;
-    skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, Helpers::random(0.0f, 0.07f));
+    skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew));
     skin.seed = Helpers::random(1, 1000);
 
     if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
@@ -999,7 +1003,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
 {
     const auto& paintKit = gameItemStorage.getPaintKit(item);
     return inventory::Glove{
-        .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, Helpers::random(0.0f, 0.07f)),
+        .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew)),
         .seed = Helpers::random(1, 1000)
     };
 }
