@@ -874,27 +874,6 @@ namespace inventory_changer::item_generator
 
 }
 
-[[nodiscard]] static auto generateSouvenirPackageData(std::uint8_t tournamentID, inventory_changer::TournamentMap tournamentMap) noexcept
-{
-    return std::visit([](auto&& matches) {
-        inventory_changer::inventory::SouvenirPackage dynamicData;
-
-        if (matches.empty())
-            return dynamicData;
-
-        const auto& randomMatch = matches[Helpers::random(static_cast<std::size_t>(0), matches.size() - 1)];
-        dynamicData.tournamentStage = randomMatch.stage;
-        dynamicData.tournamentTeam1 = randomMatch.team1;
-        dynamicData.tournamentTeam2 = randomMatch.team2;
-
-        if constexpr (std::is_same_v<decltype(randomMatch), const inventory_changer::item_generator::MatchWithMVPs&>) {
-            dynamicData.proPlayer = randomMatch.getRandomMVP();
-        }
-
-        return dynamicData;
-    }, inventory_changer::item_generator::getTournamentMatchesOnMap(tournamentID, tournamentMap));
-}
-
 [[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
 {
 #ifdef _WIN32
@@ -1026,6 +1005,27 @@ public:
         };
     }
 
+    [[nodiscard]] inventory::SouvenirPackage createSouvenirPackage(const game_items::Item& item) const
+    {
+        return std::visit([](const auto& matches) {
+            inventory::SouvenirPackage dynamicData;
+
+            if (matches.empty())
+                return dynamicData;
+
+            const auto& randomMatch = matches[Helpers::random(static_cast<std::size_t>(0), matches.size() - 1)];
+            dynamicData.tournamentStage = randomMatch.stage;
+            dynamicData.tournamentTeam1 = randomMatch.team1;
+            dynamicData.tournamentTeam2 = randomMatch.team2;
+
+            if constexpr (std::is_same_v<decltype(randomMatch), const MatchWithMVPs&>) {
+                dynamicData.proPlayer = randomMatch.getRandomMVP();
+            }
+
+            return dynamicData;
+        }, getTournamentMatchesOnMap(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item)));
+    }
+
 private:
     const game_items::Storage& gameItemStorage;
 };
@@ -1038,7 +1038,7 @@ inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItem
         return DefaultGenerator{ gameItemStorage }.createGloves(item);
     } else if (item.isCase()) {
         if (gameItemStorage.isSouvenirPackage(item))
-            return generateSouvenirPackageData(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
+            return DefaultGenerator{ gameItemStorage }.createSouvenirPackage(item);
     } else if (item.isServiceMedal()) {
         return DefaultGenerator{ gameItemStorage }.createServiceMedal(item);
     }
