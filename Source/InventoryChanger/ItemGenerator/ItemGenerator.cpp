@@ -987,47 +987,55 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     return inventory::Item{ unlockedItem, generateItemData(gameItemLookup, unlockedItem, caseItem, lootList->willProduceStatTrak) };
 }
 
-[[nodiscard]] inventory::Skin createSkin(const game_items::Item& item, const game_items::Storage& gameItemStorage)
-{
-    const auto& paintKit = gameItemStorage.getPaintKit(item);
+class DefaultGenerator {
+public:
+    explicit DefaultGenerator(const game_items::Storage& gameItemStorage) : gameItemStorage{ gameItemStorage } {}
 
-    inventory::Skin skin;
-    skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew));
-    skin.seed = Helpers::random(1, 1000);
+    [[nodiscard]] inventory::Skin createSkin(const game_items::Item& item) const
+    {
+        const auto& paintKit = gameItemStorage.getPaintKit(item);
 
-    if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
-        skin.stickers[3].stickerID = 28;
+        inventory::Skin skin;
+        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew));
+        skin.seed = Helpers::random(1, 1000);
 
-    return skin;
-}
+        if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
+            skin.stickers[3].stickerID = 28;
 
-[[nodiscard]] inventory::Glove createGloves(const game_items::Item& item, const game_items::Storage& gameItemStorage)
-{
-    const auto& paintKit = gameItemStorage.getPaintKit(item);
-    return inventory::Glove{
-        .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew)),
-        .seed = Helpers::random(1, 1000)
-    };
-}
+        return skin;
+    }
 
-[[nodiscard]] inventory::ServiceMedal createServiceMedal(const game_items::Item& item, const game_items::Storage& gameItemStorage)
-{
-    return inventory::ServiceMedal{
-        .issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item))
-    };
-}
+    [[nodiscard]] inventory::Glove createGloves(const game_items::Item& item) const
+    {
+        const auto& paintKit = gameItemStorage.getPaintKit(item);
+        return inventory::Glove{
+            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew)),
+            .seed = Helpers::random(1, 1000)
+        };
+    }
+
+    [[nodiscard]] inventory::ServiceMedal createServiceMedal(const game_items::Item& item) const
+    {
+        return inventory::ServiceMedal{
+            .issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item))
+        };
+    }
+
+private:
+    const game_items::Storage& gameItemStorage;
+};
 
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
     if (item.isSkin()) {
-        return createSkin(item, gameItemStorage);
+        return DefaultGenerator{ gameItemStorage }.createSkin(item);
     } else if (item.isGloves()) {
-        return createGloves(item, gameItemStorage);
+        return DefaultGenerator{ gameItemStorage }.createGloves(item);
     } else if (item.isCase()) {
         if (gameItemStorage.isSouvenirPackage(item))
             return generateSouvenirPackageData(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
     } else if (item.isServiceMedal()) {
-        return createServiceMedal(item, gameItemStorage);
+        return DefaultGenerator{ gameItemStorage }.createServiceMedal(item);
     }
 
     return {};
