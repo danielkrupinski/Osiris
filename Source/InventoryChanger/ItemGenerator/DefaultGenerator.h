@@ -14,6 +14,23 @@ class DefaultGenerator {
 public:
     explicit DefaultGenerator(const game_items::Storage& gameItemStorage) : gameItemStorage{ gameItemStorage } {}
 
+    [[nodiscard]] inventory::ItemData createItemData(const game_items::Item& item) const
+    {
+        if (item.isSkin()) {
+            return createSkin(item);
+        } else if (item.isGloves()) {
+            return createGloves(item);
+        } else if (item.isCase()) {
+            if (gameItemStorage.isSouvenirPackage(item))
+                return createSouvenirPackage(item);
+        } else if (item.isServiceMedal()) {
+            return createServiceMedal(item);
+        }
+
+        return {};
+    }
+
+private:
     [[nodiscard]] inventory::Skin createSkin(const game_items::Item& item) const
     {
         const auto& paintKit = gameItemStorage.getPaintKit(item);
@@ -65,23 +82,6 @@ public:
         }, getTournamentMatchesOnMap(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item)));
     }
 
-    [[nodiscard]] inventory::ItemData createItemData(const game_items::Item& item) const
-    {
-        if (item.isSkin()) {
-            return createSkin(item);
-        } else if (item.isGloves()) {
-            return createGloves(item);
-        } else if (item.isCase()) {
-            if (gameItemStorage.isSouvenirPackage(item))
-                return createSouvenirPackage(item);
-        } else if (item.isServiceMedal()) {
-            return createServiceMedal(item);
-        }
-
-        return {};
-    }
-
-private:
     const game_items::Storage& gameItemStorage;
 };
 
