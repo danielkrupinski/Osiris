@@ -879,28 +879,33 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
+[[nodiscard]] inventory::Skin generateSkin(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem, const inventory::Item& caseItem)
+{
+    inventory::Skin skin;
+    const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
+    skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear());
+    skin.seed = randomSeed();
+
+    if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
+        skin.tournamentID = gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem());
+        skin.tournamentStage = souvenirPackage->tournamentStage;
+        skin.tournamentTeam1 = souvenirPackage->tournamentTeam1;
+        skin.tournamentTeam2 = souvenirPackage->tournamentTeam2;
+        skin.proPlayer = souvenirPackage->proPlayer;
+        skin.stickers = generateSouvenirStickers(gameItemLookup, unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
+    } else if (Helpers::random(0, 9) == 0) {
+        skin.statTrak = 0;
+    }
+
+    return skin;
+}
+
 [[nodiscard]] inventory::ItemData generateItemData(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak)
 {
     if (willProduceStatTrak && unlockedItem.isMusic()) {
         return inventory::Music{ .statTrak = 0 };
     } else if (unlockedItem.isSkin()) {
-        inventory::Skin skin;
-        const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
-        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear());
-        skin.seed = randomSeed();
-
-        if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
-            skin.tournamentID = gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem());
-            skin.tournamentStage = souvenirPackage->tournamentStage;
-            skin.tournamentTeam1 = souvenirPackage->tournamentTeam1;
-            skin.tournamentTeam2 = souvenirPackage->tournamentTeam2;
-            skin.proPlayer = souvenirPackage->proPlayer;
-            skin.stickers = generateSouvenirStickers(gameItemLookup, unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
-        } else if (Helpers::random(0, 9) == 0) {
-            skin.statTrak = 0;
-        }
-
-        return skin;
+        return generateSkin(gameItemLookup, unlockedItem, caseItem);
     } else if (unlockedItem.isGloves()) {
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
 
