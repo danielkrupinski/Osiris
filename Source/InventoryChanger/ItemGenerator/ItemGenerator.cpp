@@ -16,37 +16,7 @@
 #include <InventoryChanger/Inventory/Structs.h>
 #include <InventoryChanger/GameIntegration/Misc.h>
 
-enum SkinCondition {
-    FactoryNew = 1,
-    MinimalWear,
-    FieldTested,
-    WellWorn,
-    BattleScarred
-};
-
-static SkinCondition randomSkinCondition()
-{
-    if (const auto condition = Helpers::random(1, 10000); condition <= 1471)
-        return FactoryNew;
-    else if (condition <= 3939)
-        return MinimalWear;
-    else if (condition <= 8257)
-        return FieldTested;
-    else if (condition <= 9049)
-        return WellWorn;
-    return BattleScarred;
-}
-
-static float generateWear(SkinCondition condition)
-{
-    static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
-    return Helpers::random(wearRanges[condition - 1], wearRanges[condition]);
-}
-
-static float generateWear()
-{
-    return generateWear(randomSkinCondition());
-}
+#include "Utils.h"
 
 [[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
 
@@ -905,25 +875,8 @@ namespace inventory_changer::item_generator
     return tmToUTCTimestamp(tm);
 }
 
-[[nodiscard]] static std::pair<std::time_t, std::time_t> clampTimespanToNow(std::time_t min, std::time_t max) noexcept
-{
-    const auto now = std::time(nullptr);
-    return std::make_pair((std::min)(min, now), (std::min)(max, now));
-}
-
-[[nodiscard]] static std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) noexcept
-{
-    const auto [min, max] = clampTimespanToNow(getStartOfYearTimestamp(year), getEndOfYearTimestamp(year));
-    return static_cast<std::uint32_t>(Helpers::random(min, max));
-}
-
 namespace inventory_changer::item_generator
 {
-
-[[nodiscard]] int randomSeed()
-{
-    return Helpers::random(1, 1000);
-}
 
 [[nodiscard]] inventory::ItemData generateItemData(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak)
 {
