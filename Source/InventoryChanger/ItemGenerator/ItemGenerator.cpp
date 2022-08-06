@@ -941,6 +941,11 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
+[[nodiscard]] int randomSeed()
+{
+    return Helpers::random(1, 1000);
+}
+
 [[nodiscard]] inventory::ItemData generateItemData(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak)
 {
     if (willProduceStatTrak && unlockedItem.isMusic()) {
@@ -949,7 +954,7 @@ namespace inventory_changer::item_generator
         inventory::Skin skin;
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
         skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear());
-        skin.seed = Helpers::random(1, 1000);
+        skin.seed = randomSeed();
 
         if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
             skin.tournamentID = gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem());
@@ -968,7 +973,7 @@ namespace inventory_changer::item_generator
 
         return inventory::Glove{
             .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear()),
-            .seed = Helpers::random(1, 1000)
+            .seed = randomSeed()
         };
     }
     return {};
@@ -997,7 +1002,7 @@ public:
 
         inventory::Skin skin;
         skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew));
-        skin.seed = Helpers::random(1, 1000);
+        skin.seed = randomSeed();
 
         if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
             skin.stickers[3].stickerID = 28;
@@ -1010,7 +1015,7 @@ public:
         const auto& paintKit = gameItemStorage.getPaintKit(item);
         return inventory::Glove{
             .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew)),
-            .seed = Helpers::random(1, 1000)
+            .seed = randomSeed()
         };
     }
 
