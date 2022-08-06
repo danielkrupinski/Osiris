@@ -1026,24 +1026,29 @@ public:
         }, getTournamentMatchesOnMap(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item)));
     }
 
+    [[nodiscard]] inventory::ItemData createItemData(const game_items::Item& item) const
+    {
+        if (item.isSkin()) {
+            return createSkin(item);
+        } else if (item.isGloves()) {
+            return createGloves(item);
+        } else if (item.isCase()) {
+            if (gameItemStorage.isSouvenirPackage(item))
+                return createSouvenirPackage(item);
+        } else if (item.isServiceMedal()) {
+            return createServiceMedal(item);
+        }
+
+        return {};
+    }
+
 private:
     const game_items::Storage& gameItemStorage;
 };
 
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
-    if (item.isSkin()) {
-        return DefaultGenerator{ gameItemStorage }.createSkin(item);
-    } else if (item.isGloves()) {
-        return DefaultGenerator{ gameItemStorage }.createGloves(item);
-    } else if (item.isCase()) {
-        if (gameItemStorage.isSouvenirPackage(item))
-            return DefaultGenerator{ gameItemStorage }.createSouvenirPackage(item);
-    } else if (item.isServiceMedal()) {
-        return DefaultGenerator{ gameItemStorage }.createServiceMedal(item);
-    }
-
-    return {};
+    return DefaultGenerator{ gameItemStorage }.createItemData(item);
 }
 
 }
