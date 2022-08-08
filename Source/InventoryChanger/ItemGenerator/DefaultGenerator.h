@@ -59,7 +59,7 @@ private:
     [[nodiscard]] inventory::ServiceMedal createServiceMedal(const game_items::Item& item) const
     {
         return inventory::ServiceMedal{
-            .issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item))
+            .issueDateTimestamp = attributeGenerator.generateServiceMedalIssueDate(gameItemStorage.getServiceMedalYear(item))
         };
     }
 
