@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 
+#include <SDK/Constants/ProPlayer.h>
 #include <SDK/ItemSchema.h>
 
 namespace inventory_changer::inventory
