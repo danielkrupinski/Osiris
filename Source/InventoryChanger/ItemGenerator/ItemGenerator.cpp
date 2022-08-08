@@ -16,6 +16,7 @@
 #include <InventoryChanger/Inventory/Structs.h>
 #include <InventoryChanger/GameIntegration/Misc.h>
 
+#include "AttributeGenerator.h"
 #include "DefaultGenerator.h"
 #include "Utils.h"
 
@@ -937,7 +938,8 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
 
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
-    return DefaultGenerator{ gameItemStorage }.createItemData(item);
+    Helpers::RandomGenerator_ randomGenerator{};
+    return DefaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } }.createItemData(item);
 }
 
 }

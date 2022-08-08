@@ -10,9 +10,11 @@
 namespace inventory_changer::item_generator
 {
 
+template <typename AttributeGenerator>
 class DefaultGenerator {
 public:
-    explicit DefaultGenerator(const game_items::Storage& gameItemStorage) : gameItemStorage{ gameItemStorage } {}
+    explicit DefaultGenerator(const game_items::Storage& gameItemStorage, AttributeGenerator attributeGenerator)
+        : gameItemStorage{ gameItemStorage }, attributeGenerator{ attributeGenerator } {}
 
     [[nodiscard]] inventory::ItemData createItemData(const game_items::Item& item) const
     {
@@ -36,8 +38,8 @@ private:
         const auto& paintKit = gameItemStorage.getPaintKit(item);
 
         inventory::Skin skin;
-        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew));
-        skin.seed = randomSeed();
+        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(FactoryNew));
+        skin.seed = attributeGenerator.generatePaintKitSeed();
 
         if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
             skin.stickers[3].stickerID = 28;
@@ -49,8 +51,8 @@ private:
     {
         const auto& paintKit = gameItemStorage.getPaintKit(item);
         return inventory::Glove{
-            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear(FactoryNew)),
-            .seed = randomSeed()
+            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(FactoryNew)),
+            .seed = attributeGenerator.generatePaintKitSeed()
         };
     }
 
@@ -83,6 +85,7 @@ private:
     }
 
     const game_items::Storage& gameItemStorage;
+    AttributeGenerator attributeGenerator;
 };
 
 }
