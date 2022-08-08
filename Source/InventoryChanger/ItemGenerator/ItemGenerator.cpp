@@ -900,6 +900,16 @@ namespace inventory_changer::item_generator
     return skin;
 }
 
+[[nodiscard]] inventory::Glove generateGloves(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem)
+{
+    const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
+
+    return inventory::Glove{
+        .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear()),
+        .seed = randomSeed()
+    };
+}
+
 [[nodiscard]] inventory::ItemData generateItemData(const game_items::Lookup& gameItemLookup, const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak)
 {
     if (willProduceStatTrak && unlockedItem.isMusic()) {
@@ -907,12 +917,7 @@ namespace inventory_changer::item_generator
     } else if (unlockedItem.isSkin()) {
         return generateSkin(gameItemLookup, unlockedItem, caseItem);
     } else if (unlockedItem.isGloves()) {
-        const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
-
-        return inventory::Glove{
-            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, generateWear()),
-            .seed = randomSeed()
-        };
+        return generateGloves(gameItemLookup, unlockedItem);
     }
     return {};
 }
