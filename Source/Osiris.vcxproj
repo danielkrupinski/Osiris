@@ -242,6 +242,7 @@
     <ClInclude Include="InventoryChanger\Inventory\Item.h" />
     <ClInclude Include="InventoryChanger\Inventory\Structs.h" />
     <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h" />
+    <ClInclude Include="InventoryChanger\ItemGenerator\AttributeGenerator.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\DefaultGenerator.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h" />
