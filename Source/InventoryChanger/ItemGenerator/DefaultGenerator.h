@@ -4,7 +4,6 @@
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
-#include "TournamentMatches.h"
 #include "Utils.h"
 
 namespace inventory_changer::item_generator
@@ -65,23 +64,7 @@ private:
 
     [[nodiscard]] inventory::SouvenirPackage createSouvenirPackage(const game_items::Item& item) const
     {
-        return std::visit([](const auto& matches) {
-            inventory::SouvenirPackage dynamicData;
-
-            if (matches.empty())
-                return dynamicData;
-
-            const auto& randomMatch = matches[Helpers::random(static_cast<std::size_t>(0), matches.size() - 1)];
-            dynamicData.tournamentStage = randomMatch.stage;
-            dynamicData.tournamentTeam1 = randomMatch.team1;
-            dynamicData.tournamentTeam2 = randomMatch.team2;
-
-            if constexpr (std::is_same_v<decltype(randomMatch), const MatchWithMVPs&>) {
-                dynamicData.proPlayer = randomMatch.getRandomMVP();
-            }
-
-            return dynamicData;
-        }, getTournamentMatchesOnMap(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item)));
+        return attributeGenerator.generateSouvenirPackage(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
     }
 
     const game_items::Storage& gameItemStorage;
