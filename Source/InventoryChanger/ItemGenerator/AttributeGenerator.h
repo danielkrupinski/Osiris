@@ -5,6 +5,7 @@
 #include <random>
 
 #include "ItemGenerator.h"
+#include "TournamentMatches.h"
 #include "Utils.h"
 
 namespace inventory_changer::item_generator
@@ -42,6 +43,27 @@ public:
     [[nodiscard]] std::uint32_t generateServiceMedalIssueDate(std::uint16_t year) const
     {
         return getRandomDateTimestampOfYear(year);
+    }
+
+    [[nodiscard]] inventory::SouvenirPackage generateSouvenirPackage(std::uint32_t tournamentID, TournamentMap map) const
+    {
+        return std::visit([this](const auto& matches) {
+            inventory::SouvenirPackage souvenirPackage;
+
+            if (matches.empty())
+                return souvenirPackage;
+
+            const auto& randomMatch = matches[randomEngine.random<std::size_t>(0, matches.size() - 1)];
+            souvenirPackage.tournamentStage = randomMatch.stage;
+            souvenirPackage.tournamentTeam1 = randomMatch.team1;
+            souvenirPackage.tournamentTeam2 = randomMatch.team2;
+
+            if constexpr (std::is_same_v<decltype(randomMatch), const MatchWithMVPs&>) {
+                souvenirPackage.proPlayer = randomMatch.getRandomMVP();
+            }
+
+            return souvenirPackage;
+        }, getTournamentMatchesOnMap(tournamentID, map));
     }
 
 private:
