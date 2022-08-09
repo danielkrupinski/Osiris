@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <span>
 #include <variant>
 
@@ -22,7 +23,7 @@ struct MatchWithMVPs {
     TournamentTeam team2;
     std::array<csgo::ProPlayer, 10> mvpPlayers;
 
-    [[nodiscard]] bool hasMVPs() const noexcept { return std::ranges::find(mvpPlayers, csgo::ProPlayer{}) != mvpPlayers.begin(); }
+    [[nodiscard]] bool hasMVPs() const noexcept { return mvpPlayers[0] != csgo::ProPlayer{}; }
     [[nodiscard]] csgo::ProPlayer getRandomMVP() const noexcept
     {
         if (!hasMVPs())
