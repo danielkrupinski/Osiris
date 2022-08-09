@@ -944,13 +944,13 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
         return std::nullopt;
 
     const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
-    Helpers::RandomGenerator_ randomGenerator{};
+    Helpers::RandomGenerator randomGenerator{};
     return inventory::Item{ unlockedItem, DropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator } }.generateItemData(unlockedItem, caseItem, lootList->willProduceStatTrak) };
 }
 
 inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
-    Helpers::RandomGenerator_ randomGenerator{};
+    Helpers::RandomGenerator randomGenerator{};
     return DefaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } }.createItemData(item);
 }
 
