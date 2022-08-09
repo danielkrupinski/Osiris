@@ -53,7 +53,7 @@ public:
             if (matches.empty())
                 return souvenirPackage;
 
-            const auto& randomMatch = matches[randomEngine.random<std::size_t>(0, matches.size() - 1)];
+            const auto& randomMatch = matches[randomEngine.random(std::size_t{ 0 }, matches.size() - 1)];
             souvenirPackage.tournamentStage = randomMatch.stage;
             souvenirPackage.tournamentTeam1 = randomMatch.team1;
             souvenirPackage.tournamentTeam2 = randomMatch.team2;
