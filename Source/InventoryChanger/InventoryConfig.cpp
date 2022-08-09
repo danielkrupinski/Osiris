@@ -97,7 +97,7 @@ namespace inventory_changer
     if (gameItem.isSkin())
         return inventory::skinFromJson(j);
     if (gameItem.isGloves())
-        return inventory::gloveFromJson(j);
+        return inventory::glovesFromJson(j);
     if (gameItem.isMusic())
         return inventory::musicFromJson(j);
     if (gameItem.isAgent())

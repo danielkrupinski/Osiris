@@ -6,7 +6,7 @@
 namespace inventory_changer::inventory
 {
 
-Gloves gloveFromJson(const json& j)
+Gloves glovesFromJson(const json& j)
 {
     Gloves glove;
 
