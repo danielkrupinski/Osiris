@@ -5,7 +5,7 @@
 namespace inventory_changer::item_generator
 {
 
-enum SkinCondition {
+enum PaintKitCondition {
     FactoryNew = 1,
     MinimalWear,
     FieldTested,

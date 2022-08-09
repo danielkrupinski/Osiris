@@ -15,7 +15,7 @@ class AttributeGenerator {
 public:
     explicit AttributeGenerator(RandomEngine& randomEngine) : randomEngine{ randomEngine } {}
 
-    [[nodiscard]] SkinCondition generateSkinCondition() const
+    [[nodiscard]] PaintKitCondition generateSkinCondition() const
     {
         if (const auto condition = randomEngine.random(1, 10'000); condition <= 1471)
             return FactoryNew;
@@ -28,7 +28,7 @@ public:
         return BattleScarred;
     }
 
-    [[nodiscard]] float generatePaintKitWear(SkinCondition condition) const
+    [[nodiscard]] float generatePaintKitWear(PaintKitCondition condition) const
     {
         static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
         return randomEngine.random(wearRanges[condition - 1], wearRanges[condition]);
