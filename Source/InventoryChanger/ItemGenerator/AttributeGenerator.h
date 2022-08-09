@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <chrono>
 #include <random>
 
 #include "ItemGenerator.h"
@@ -46,7 +47,7 @@ public:
 private:
     [[nodiscard]] static std::pair<std::time_t, std::time_t> clampTimespanToNow(std::time_t min, std::time_t max) noexcept
     {
-        const auto now = std::time(nullptr);
+        const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         return std::make_pair((std::min)(min, now), (std::min)(max, now));
     }
 
