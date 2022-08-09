@@ -15,7 +15,7 @@ class AttributeGenerator {
 public:
     explicit AttributeGenerator(RandomEngine& randomEngine) : randomEngine{ randomEngine } {}
 
-    [[nodiscard]] PaintKitCondition generateSkinCondition() const
+    [[nodiscard]] PaintKitCondition generatePaintKitCondition() const
     {
         if (const auto condition = randomEngine.random(1, 10'000); condition <= 1471)
             return FactoryNew;

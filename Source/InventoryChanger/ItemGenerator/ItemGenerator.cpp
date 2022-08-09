@@ -903,7 +903,7 @@ private:
     {
         inventory::Skin skin;
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
-        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generateSkinCondition()));
+        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generatePaintKitCondition()));
         skin.seed = attributeGenerator.generatePaintKitSeed();
 
         if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
@@ -925,7 +925,7 @@ private:
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
 
         return inventory::Gloves{
-            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generateSkinCondition())),
+            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generatePaintKitCondition())),
             .seed = attributeGenerator.generatePaintKitSeed()
         };
     }
