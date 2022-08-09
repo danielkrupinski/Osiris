@@ -6,9 +6,9 @@
 namespace inventory_changer::inventory
 {
 
-Glove gloveFromJson(const json& j)
+Gloves gloveFromJson(const json& j)
 {
-    Glove glove;
+    Gloves glove;
 
     if (const auto wear = j.find("Wear"); wear != j.end() && wear->is_number_float())
         glove.wear = wear->get<float>();

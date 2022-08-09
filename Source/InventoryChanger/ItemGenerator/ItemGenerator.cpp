@@ -920,11 +920,11 @@ private:
         return skin;
     }
 
-    [[nodiscard]] inventory::Glove generateGloves(const game_items::Item& unlockedItem) const
+    [[nodiscard]] inventory::Gloves generateGloves(const game_items::Item& unlockedItem) const
     {
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
 
-        return inventory::Glove{
+        return inventory::Gloves{
             .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generateSkinCondition())),
             .seed = attributeGenerator.generatePaintKitSeed()
         };

@@ -38,7 +38,7 @@ struct Agent {
     std::array<Patch, 5> patches;
 };
 
-struct Glove {
+struct Gloves {
     float wear = 0.0f;
     int seed = 1;
 };

@@ -8,18 +8,18 @@ namespace inventory_changer::inventory
 namespace
 {
 
-TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromEmptyJsonHasDefaultWear) {
-    ASSERT_FLOAT_EQ(gloveFromJson({}).wear, Glove{}.wear);
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GlovesFromEmptyJsonHaveDefaultWear) {
+    ASSERT_FLOAT_EQ(gloveFromJson({}).wear, Gloves{}.wear);
 }
 
-TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromJsonWithoutWearHasDefaultWear) {
-    ASSERT_FLOAT_EQ(gloveFromJson({ { "key", "value" } }).wear, Glove{}.wear);
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GlovesFromJsonWithoutWearHaveDefaultWear) {
+    ASSERT_FLOAT_EQ(gloveFromJson({ { "key", "value" } }).wear, Gloves{}.wear);
 }
 
 class InventoryChanger_Inventory_GloveFromJsonWearTypeTest : public testing::TestWithParam<json::value_t> {};
 
-TEST_P(InventoryChanger_Inventory_GloveFromJsonWearTypeTest, GloveFromJsonWithWearNotAsFloatHasDefaultWear) {
-    ASSERT_FLOAT_EQ(gloveFromJson({ { "Wear", GetParam() } }).wear, Glove{}.wear);
+TEST_P(InventoryChanger_Inventory_GloveFromJsonWearTypeTest, GlovesFromJsonWithWearNotAsFloatHaveDefaultWear) {
+    ASSERT_FLOAT_EQ(gloveFromJson({ { "Wear", GetParam() } }).wear, Gloves{}.wear);
 }
 
 INSTANTIATE_TEST_SUITE_P(,
@@ -43,18 +43,18 @@ TEST_P(InventoryChanger_Inventory_GloveFromJsonWearTest, GloveFromJsonHasCorrect
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_Inventory_GloveFromJsonWearTest, testing::Values(0.0f, 0.123f, 1.0f));
 
-TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromEmptyJsonHasDefaultSeed) {
-    ASSERT_EQ(gloveFromJson({}).seed, Glove{}.seed);
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GlovesFromEmptyJsonHaveDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({}).seed, Gloves{}.seed);
 }
 
-TEST(InventoryChanger_Inventory_GloveFromJsonTests, GloveFromJsonWithoutSeedHasDefaultSeed) {
-    ASSERT_EQ(gloveFromJson({ { "key", "value" } }).seed, Glove{}.seed);
+TEST(InventoryChanger_Inventory_GloveFromJsonTests, GlovesFromJsonWithoutSeedHaveDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({ { "key", "value" } }).seed, Gloves{}.seed);
 }
 
 class InventoryChanger_Inventory_GloveFromJsonSeedTypeTest : public testing::TestWithParam<json::value_t> {};
 
-TEST_P(InventoryChanger_Inventory_GloveFromJsonSeedTypeTest, GloveFromJsonWithSeedNotAsIntegerHasDefaultSeed) {
-    ASSERT_EQ(gloveFromJson({ { "Seed", GetParam() } }).seed, Glove{}.seed);
+TEST_P(InventoryChanger_Inventory_GloveFromJsonSeedTypeTest, GlovesFromJsonWithSeedNotAsIntegerHaveDefaultSeed) {
+    ASSERT_EQ(gloveFromJson({ { "Seed", GetParam() } }).seed, Gloves{}.seed);
 }
 
 INSTANTIATE_TEST_SUITE_P(,

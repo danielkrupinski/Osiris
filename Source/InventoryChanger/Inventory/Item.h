@@ -16,7 +16,7 @@ namespace inventory_changer::inventory
 using ItemData = SmallVariant<32,
     std::monostate,
     Skin,
-    Glove,
+    Gloves,
     Agent,
     Music,
     Graffiti,

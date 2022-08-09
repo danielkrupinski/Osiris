@@ -191,7 +191,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(gameItemStorage.getPaintKit(item).id));
 
-        if (const auto glove = inventoryItem.get<inventory::Glove>()) {
+        if (const auto glove = inventoryItem.get<inventory::Gloves>()) {
             attributeSetter.setWear(*econItem, glove->wear);
             attributeSetter.setSeed(*econItem, static_cast<float>(glove->seed));
         }

@@ -9,7 +9,7 @@
 namespace inventory_changer::inventory
 {
 
-[[nodiscard]] Glove gloveFromJson(const json& j);
+[[nodiscard]] Gloves gloveFromJson(const json& j);
 [[nodiscard]] SouvenirPackage souvenirPackageFromJson(const json& j);
 [[nodiscard]] Music musicFromJson(const json& j);
 [[nodiscard]] ServiceMedal serviceMedalFromJson(const json& j);

@@ -249,7 +249,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            if (const auto glove = item.get<inventory::Glove>()) {
+            if (const auto glove = item.get<inventory::Gloves>()) {
                 itemConfig["Wear"] = glove->wear;
                 itemConfig["Seed"] = glove->seed;
             }
