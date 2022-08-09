@@ -2,6 +2,7 @@
 
 #include <InventoryChanger/GameItems/Lookup.h>
 
+class EconLootListDefinition;
 class ItemSchema;
 
 namespace inventory_changer::game_items

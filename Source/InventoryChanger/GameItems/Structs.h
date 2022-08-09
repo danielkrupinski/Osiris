@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "../../SDK/ItemSchema.h"
+#include <SDK/Constants/TournamentTeam.h>
 
 namespace inventory_changer::game_items
 {

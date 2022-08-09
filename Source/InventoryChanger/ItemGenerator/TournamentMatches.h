@@ -4,6 +4,7 @@
 #include <variant>
 
 #include <SDK/Constants/ProPlayer.h>
+#include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
 namespace inventory_changer

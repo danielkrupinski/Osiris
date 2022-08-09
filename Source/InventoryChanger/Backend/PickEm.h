@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <map>
 
-#include <SDK/ItemSchema.h>
+#include <SDK/Constants/TournamentTeam.h>
 
 namespace inventory_changer::backend
 {

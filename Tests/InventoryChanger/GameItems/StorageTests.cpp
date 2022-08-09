@@ -7,6 +7,8 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
+#include <SDK/ItemSchema.h>
+
 namespace inventory_changer::game_items
 {
 namespace

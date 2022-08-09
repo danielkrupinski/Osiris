@@ -1,5 +1,8 @@
 #include "Storage.h"
 
+#include <SDK/ItemSchema.h>
+#include <SDK/WeaponId.h>
+
 namespace inventory_changer::game_items
 {
 

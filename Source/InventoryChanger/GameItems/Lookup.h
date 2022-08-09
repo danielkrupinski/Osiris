@@ -8,6 +8,7 @@
 
 #include "ItemSorter.h"
 #include "Storage.h"
+#include <Helpers.h>
 
 namespace inventory_changer::game_items
 {

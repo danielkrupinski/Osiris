@@ -2,6 +2,7 @@
 #include "Misc.h"
 
 #include <Interfaces.h>
+#include <SDK/ItemSchema.h>
 
 namespace inventory_changer::game_integration
 {
