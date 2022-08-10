@@ -62,7 +62,7 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
 
 Response RequestHandler::operator()(const request::OpenContainer& request) const
 {
-    if (!request.container->gameItem().isCase())
+    if (!request.container->gameItem().isCrate())
         return {};
 
     auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.container);
@@ -233,7 +233,7 @@ Response RequestHandler::operator()(const request::UnhideItem& request) const
 
 Response RequestHandler::operator()(const request::PerformXRayScan& request) const
 {
-    if (!request.crate->gameItem().isCase())
+    if (!request.crate->gameItem().isCrate())
         return {};
 
     auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate);

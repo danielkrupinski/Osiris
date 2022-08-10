@@ -21,7 +21,7 @@ public:
             return createSkin(item);
         } else if (item.isGloves()) {
             return createGloves(item);
-        } else if (item.isCase()) {
+        } else if (item.isCrate()) {
             if (gameItemStorage.isSouvenirPackage(item))
                 return createSouvenirPackage(item);
         } else if (item.isServiceMedal()) {

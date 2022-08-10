@@ -961,7 +961,7 @@ private:
 
 std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem) noexcept
 {
-    assert(caseItem.gameItem().isCase());
+    assert(caseItem.gameItem().isCrate());
 
     const auto crateSeries = gameItemLookup.getStorage().getCrateSeries(caseItem.gameItem());
     const auto lootList = crateLootLookup.findLootList(crateSeries);

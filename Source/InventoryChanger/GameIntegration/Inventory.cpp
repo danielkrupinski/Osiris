@@ -217,7 +217,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
         attributeSetter.setDropsRedeemed(*econItem, 0);
         attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getDefaultTournamentGraffitiID(item));
         attributeSetter.setCampaignCompletion(*econItem, 1);
-    } else if (item.isCase()) {
+    } else if (item.isCrate()) {
         if (const auto souvenirPackage = inventoryItem.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
             attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(souvenirPackage->tournamentTeam1));

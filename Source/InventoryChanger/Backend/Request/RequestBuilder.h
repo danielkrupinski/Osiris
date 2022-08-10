@@ -94,7 +94,7 @@ private:
     {
         if (tool->gameItem().isSticker() && destItem->gameItem().isSkin()) {
             request<request::ApplySticker>(destItem, tool, stickerSlot);
-        } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCase()) {
+        } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCrate()) {
             if (destItem->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(destItem, tool);
             else
@@ -103,7 +103,7 @@ private:
             request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
             request<request::AddNameTag>(destItem, tool, nameTag);
-        } else if (tool->gameItem().isCase() && tool == destItem) {
+        } else if (tool->gameItem().isCrate() && tool == destItem) {
             request<request::PerformXRayScan>(tool);
         }
     }
@@ -131,7 +131,7 @@ private:
     {
         constexpr std::uint64_t fauxNameTagItemID = (std::uint64_t{ 0xF } << 60) | static_cast<std::uint16_t>(WeaponId::NameTag);
 
-        if (item->gameItem().isCase()) {
+        if (item->gameItem().isCrate()) {
             if (item->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(item);
             else

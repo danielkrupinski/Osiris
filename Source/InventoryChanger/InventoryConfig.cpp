@@ -104,7 +104,7 @@ namespace inventory_changer
         return inventory::agentFromJson(j);
     if (gameItem.isServiceMedal())
         return inventory::serviceMedalFromJson(j);
-    if (gameItem.isCase() && gameItemStorage.isSouvenirPackage(gameItem))
+    if (gameItem.isCrate() && gameItemStorage.isSouvenirPackage(gameItem))
         return inventory::souvenirPackageFromJson(j);
     if (gameItem.isGraffiti())
         return inventory::graffitiFromJson(j);
@@ -290,7 +290,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
         } else if (gameItem.isServiceMedal()) {
             if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
-        } else if (gameItem.isCase()) {
+        } else if (gameItem.isCrate()) {
             if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
                 itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
                 itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;

@@ -101,7 +101,7 @@ public:
 
     [[nodiscard]] std::uint8_t getTournamentEventID(const Item& item) const noexcept
     {
-        assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin() || item.isCase());
+        assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin() || item.isCrate());
         return static_cast<std::uint8_t>(item.getDataIndex() & 0xFF);
     }
 
@@ -113,19 +113,19 @@ public:
 
     [[nodiscard]] std::uint16_t getCrateSeries(const Item& crate) const noexcept
     {
-        assert(crate.isCase());
+        assert(crate.isCrate());
         return static_cast<std::uint16_t>(crate.getDataIndex() >> 8);
     }
 
     [[nodiscard]] TournamentMap getTournamentMap(const Item& crate) const noexcept
     {
-        assert(crate.isCase());
+        assert(crate.isCrate());
         return static_cast<TournamentMap>((crate.getDataIndex() >> 24) & 0x7F);
     }
 
     [[nodiscard]] bool isSouvenirPackage(const Item& crate) const noexcept
     {
-        assert(crate.isCase());
+        assert(crate.isCrate());
         return ((crate.getDataIndex() >> 31) & 1) != 0;
     }
 

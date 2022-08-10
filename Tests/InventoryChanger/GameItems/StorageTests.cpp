@@ -117,7 +117,7 @@ constexpr bool validateItemType(const Item& item, ItemType desiredType) noexcept
     case ItemType::Collectible: return item.isCollectible();
     case ItemType::NameTag: return item.isNameTag();
     case ItemType::Agent: return item.isAgent();
-    case ItemType::Case: return item.isCase();
+    case ItemType::Case: return item.isCrate();
     case ItemType::CaseKey: return item.isCaseKey();
     case ItemType::OperationPass: return item.isOperationPass();
     case ItemType::StatTrakSwapTool: return item.isStatTrakSwapTool();
