@@ -1,6 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
+#include <cstddef>
+#include <iterator>
 #include <span>
 #include <variant>
 
@@ -31,6 +34,11 @@ struct MatchWithMVPs {
         return mvpPlayers[Helpers::random(static_cast<std::size_t>(0), static_cast<std::size_t>(std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, csgo::ProPlayer{}))) - 1)];
     }
 };
+
+[[nodiscard]] constexpr std::size_t countMVPs(const MatchWithMVPs& matchWithMVPs)
+{
+    return static_cast<std::size_t>(std::distance(matchWithMVPs.mvpPlayers.begin(), std::ranges::find(matchWithMVPs.mvpPlayers, csgo::ProPlayer{})));
+}
 
 struct Match {
     TournamentMap map;
