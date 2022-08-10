@@ -941,9 +941,7 @@ private:
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }
 
-        std::mt19937 gen{ std::random_device{}() };
-        std::shuffle(stickers.begin(), stickers.begin() + getNumberOfSupportedStickerSlots(weaponID), gen);
-
+        attributeGenerator.shuffleStickers(getNumberOfSupportedStickerSlots(weaponID), stickers);
         return stickers;
     }
 
