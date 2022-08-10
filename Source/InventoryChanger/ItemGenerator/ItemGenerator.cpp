@@ -20,8 +20,6 @@
 #include "DefaultGenerator.h"
 #include "Utils.h"
 
-[[nodiscard]] static inventory_changer::inventory::SkinStickers generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
-
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
 {
@@ -880,6 +878,13 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
+[[nodiscard]] static std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
+{
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
+        return static_cast<std::uint8_t>(std::clamp(def->getNumberOfSupportedStickerSlots(), 0, 5));
+    return 0;
+}
+
 template <typename AttributeGenerator>
 class DropGenerator {
 public:
@@ -912,12 +917,34 @@ private:
             skin.tournamentTeam1 = souvenirPackage->tournamentTeam1;
             skin.tournamentTeam2 = souvenirPackage->tournamentTeam2;
             skin.proPlayer = souvenirPackage->proPlayer;
-            skin.stickers = generateSouvenirStickers(gameItemLookup, unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
+            skin.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
         } else if (Helpers::random(0, 9) == 0) {
             skin.statTrak = 0;
         }
 
         return skin;
+    }
+
+    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) const
+    {
+        inventory::SkinStickers stickers;
+
+        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournamentID);
+
+        if (tournamentID != 1) {
+            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team1);
+            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team2);
+
+            if (player)
+                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
+            else if (tournamentID >= 18) // starting with PGL Stockholm 2021
+                stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
+        }
+
+        std::mt19937 gen{ std::random_device{}() };
+        std::shuffle(stickers.begin(), stickers.begin() + getNumberOfSupportedStickerSlots(weaponID), gen);
+
+        return stickers;
     }
 
     [[nodiscard]] inventory::Gloves generateGloves(const game_items::Item& unlockedItem) const
@@ -954,33 +981,4 @@ inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItem
     return DefaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } }.createItemData(item);
 }
 
-}
-
-[[nodiscard]] static std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
-{
-    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
-        return static_cast<std::uint8_t>(std::clamp(def->getNumberOfSupportedStickerSlots(), 0, 5));
-    return 0;
-}
-
-[[nodiscard]] static inventory_changer::inventory::SkinStickers generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept
-{
-    inventory_changer::inventory::SkinStickers stickers;
-
-    stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournamentID);
-
-    if (tournamentID != 1) {
-        stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team1);
-        stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team2);
-
-        if (player)
-            stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
-        else if (tournamentID >= 18) // starting with PGL Stockholm 2021
-            stickers[3].stickerID = inventory_changer::game_integration::getTournamentMapGoldStickerID(map);
-    }
-
-    std::mt19937 gen{ std::random_device{}() };
-    std::shuffle(stickers.begin(), stickers.begin() + getNumberOfSupportedStickerSlots(weaponID), gen);
-
-    return stickers;
 }
