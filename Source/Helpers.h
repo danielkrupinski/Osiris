@@ -104,11 +104,11 @@ namespace Helpers
         return weaponID == WeaponId::Mp5sd && paintKit == 800;
     }
 
-    class RandomGenerator_ {
+    class RandomGenerator {
     public:
         using GeneratorType = std::mt19937;
         using result_type = GeneratorType::result_type;
-        
+
         static constexpr auto min()
         {
             return GeneratorType::min();
@@ -118,29 +118,24 @@ namespace Helpers
         {
             return GeneratorType::max();
         }
-        
+
         auto operator()() const
         {
             std::scoped_lock lock{ mutex };
             return gen();
         }
 
-    private:
-        inline static GeneratorType gen{ std::random_device{}() };
-        inline static std::mutex mutex;
-    };
-
-    class RandomGenerator {
-    public:
         template <std::integral T>
         [[nodiscard]] static T random(T min, T max) noexcept
         {
+            std::scoped_lock lock{ mutex };
             return std::uniform_int_distribution{ min, max }(gen);
         }
 
         template <std::floating_point T>
         [[nodiscard]] static T random(T min, T max) noexcept
         {
+            std::scoped_lock lock{ mutex };
             return std::uniform_real_distribution{ min, max }(gen);
         }
 
@@ -151,7 +146,8 @@ namespace Helpers
         }
 
     private:
-        inline static RandomGenerator_ gen;
+        inline static GeneratorType gen{ std::random_device{}() };
+        inline static std::mutex mutex;
     };
 
     template <typename T>
