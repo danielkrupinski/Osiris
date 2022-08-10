@@ -35,8 +35,8 @@ private:
     static constexpr auto dummyItems = std::to_array<game_items::Item>({
         { game_items::Item::Type::Skin, EconRarity::Red, WeaponId::Ak47, 0, {} },
         { game_items::Item::Type::Sticker, EconRarity::Red, WeaponId::Sticker, 0, {} },
-        { game_items::Item::Type::Case, EconRarity::Gray, WeaponId::OperationBravoCase, 0, {} },
-        { game_items::Item::Type::Case, EconRarity::Gray, WeaponId::OperationVanguardCase, 0, {} },
+        { game_items::Item::Type::Crate, EconRarity::Gray, WeaponId::OperationBravoCase, 0, {} },
+        { game_items::Item::Type::Crate, EconRarity::Gray, WeaponId::OperationVanguardCase, 0, {} },
         { game_items::Item::Type::Gloves, EconRarity::Red, WeaponId::GloveStuddedBrokenfang, 0, {} }
     });
 

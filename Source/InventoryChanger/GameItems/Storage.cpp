@@ -84,7 +84,7 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
 void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
 {
     assert((static_cast<std::uint8_t>(map) & 0x80) == 0);
-    addItem(Item::Type::Case, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournamentID, pooled(iconPath));
+    addItem(Item::Type::Crate, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournamentID, pooled(iconPath));
 }
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)

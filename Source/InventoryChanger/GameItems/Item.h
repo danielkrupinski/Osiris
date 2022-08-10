@@ -25,7 +25,7 @@ public:
     [[nodiscard]] constexpr bool isPatch() const noexcept { return type == Type::Patch; }
     [[nodiscard]] constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
     [[nodiscard]] constexpr bool isAgent() const noexcept { return type == Type::Agent; }
-    [[nodiscard]] constexpr bool isCase() const noexcept { return type == Type::Case; }
+    [[nodiscard]] constexpr bool isCase() const noexcept { return type == Type::Crate; }
     [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
     [[nodiscard]] constexpr bool isOperationPass() const noexcept { return type == Type::OperationPass; }
     [[nodiscard]] constexpr bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
@@ -45,7 +45,7 @@ public:
         Collectible,
         NameTag,
         Agent,
-        Case,
+        Crate,
         CaseKey,
         OperationPass,
         StatTrakSwapTool,

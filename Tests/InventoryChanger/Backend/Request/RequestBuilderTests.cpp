@@ -143,14 +143,14 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenItemsA
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
-    const auto crate = createDummyItem<ItemType::Case>();
+    const auto crate = createDummyItem<ItemType::Crate>();
     EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, std::nullopt))));
 
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromKeylessContainerCanBeRequested) {
-    const auto crate = createDummyItem<ItemType::Case>();
+    const auto crate = createDummyItem<ItemType::Crate>();
     crate->setState(inventory::Item::State::InXrayScanner);
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, std::nullopt))));
@@ -215,7 +215,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBot
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProducesRequest) {
     const auto key = createDummyItem<ItemType::CaseKey>();
-    const auto crate = createDummyItem<ItemType::Case>();
+    const auto crate = createDummyItem<ItemType::Crate>();
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, key))));
 
@@ -224,7 +224,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProduces
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCrateProducesXRayClaimRequest) {
     const auto key = createDummyItem<ItemType::CaseKey>();
-    const auto crate = createDummyItem<ItemType::Case>();
+    const auto crate = createDummyItem<ItemType::Crate>();
     crate->setState(inventory::Item::State::InXrayScanner);
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, key))));
