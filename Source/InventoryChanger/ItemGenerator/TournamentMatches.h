@@ -25,14 +25,6 @@ struct MatchWithMVPs {
     TournamentTeam team1;
     TournamentTeam team2;
     std::array<csgo::ProPlayer, 10> mvpPlayers;
-
-    [[nodiscard]] bool hasMVPs() const noexcept { return mvpPlayers[0] != csgo::ProPlayer{}; }
-    [[nodiscard]] csgo::ProPlayer getRandomMVP() const noexcept
-    {
-        if (!hasMVPs())
-            return csgo::ProPlayer{};
-        return mvpPlayers[Helpers::random(static_cast<std::size_t>(0), static_cast<std::size_t>(std::distance(mvpPlayers.begin(), std::ranges::find(mvpPlayers, csgo::ProPlayer{}))) - 1)];
-    }
 };
 
 [[nodiscard]] constexpr std::size_t countMVPs(const MatchWithMVPs& matchWithMVPs)
