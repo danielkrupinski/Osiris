@@ -1,8 +1,12 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
+#include <cassert>
 #include <chrono>
 #include <random>
+
+#include <InventoryChanger/Inventory/Structs.h>
 
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"
@@ -65,6 +69,12 @@ public:
 
             return souvenirPackage;
         }, getTournamentMatchesOnMap(tournamentID, map));
+    }
+
+    void shuffleStickers(std::uint8_t numberOfSlots, inventory::SkinStickers& stickers) const
+    {
+        assert(numberOfSlots <= stickers.size());
+        std::shuffle(stickers.begin(), stickers.begin() + numberOfSlots, randomEngine);
     }
 
 private:
