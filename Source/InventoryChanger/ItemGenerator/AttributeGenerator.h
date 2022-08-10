@@ -59,7 +59,8 @@ public:
             souvenirPackage.tournamentTeam2 = randomMatch.team2;
 
             if constexpr (std::is_same_v<decltype(randomMatch), const MatchWithMVPs&>) {
-                souvenirPackage.proPlayer = randomMatch.getRandomMVP();
+                if (const auto numberOfMVPs = countMVPs(randomMatch); numberOfMVPs > 0)
+                    souvenirPackage.proPlayer = randomMatch.mvpPlayers[randomEngine.random(std::size_t{ 0 }, numberOfMVPs - 1)];
             }
 
             return souvenirPackage;
