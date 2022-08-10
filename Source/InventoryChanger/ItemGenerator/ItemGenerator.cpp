@@ -918,7 +918,7 @@ private:
             skin.tournamentTeam2 = souvenirPackage->tournamentTeam2;
             skin.proPlayer = souvenirPackage->proPlayer;
             skin.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
-        } else if (Helpers::random(0, 9) == 0) {
+        } else if (attributeGenerator.generateStatTrak()) {
             skin.statTrak = 0;
         }
 

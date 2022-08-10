@@ -77,6 +77,11 @@ public:
         std::shuffle(stickers.begin(), stickers.begin() + numberOfSlots, randomEngine);
     }
 
+    [[nodiscard]] bool generateStatTrak() const
+    {
+        return randomEngine.random(0, 9) == 0;
+    }
+
 private:
     [[nodiscard]] static std::pair<std::time_t, std::time_t> clampTimespanToNow(std::time_t min, std::time_t max) noexcept
     {
