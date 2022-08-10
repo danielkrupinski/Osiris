@@ -31,6 +31,8 @@ struct Skin {
     [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
 };
 
+using SkinStickers = decltype(Skin::stickers);
+
 struct Agent {
     struct Patch {
         int patchID = 0;

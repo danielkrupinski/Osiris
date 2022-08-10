@@ -20,7 +20,7 @@
 #include "DefaultGenerator.h"
 #include "Utils.h"
 
-[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
+[[nodiscard]] static inventory_changer::inventory::SkinStickers generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept;
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept
@@ -963,9 +963,9 @@ inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItem
     return 0;
 }
 
-[[nodiscard]] static std::array<inventory_changer::inventory::Skin::Sticker, 5> generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept
+[[nodiscard]] static inventory_changer::inventory::SkinStickers generateSouvenirStickers(const inventory_changer::game_items::Lookup& gameItemLookup, WeaponId weaponID, std::uint32_t tournamentID, inventory_changer::TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) noexcept
 {
-    std::array<inventory_changer::inventory::Skin::Sticker, 5> stickers;
+    inventory_changer::inventory::SkinStickers stickers;
 
     stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournamentID);
 
