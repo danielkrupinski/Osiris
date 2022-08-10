@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <ctime>
 #include <random>
@@ -864,15 +865,8 @@ namespace inventory_changer::item_generator
 
 [[nodiscard]] std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
 {
-    assert(year >= 1900);
-    std::tm tm{};
-    tm.tm_sec = 59;
-    tm.tm_min = 59;
-    tm.tm_hour = 23;
-    tm.tm_mday = 31;
-    tm.tm_mon = 12 - 1;
-    tm.tm_year = year - 1900;
-    return tmToUTCTimestamp(tm);
+    using namespace std::chrono;
+    return system_clock::to_time_t(sys_days(31d / December / year) + 23h + 59min + 59s);
 }
 
 namespace inventory_changer::item_generator
