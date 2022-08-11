@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "Items.h"
 #include "Misc.h"
 

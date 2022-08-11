@@ -1,3 +1,5 @@
+#include <nlohmann/json.hpp>
+
 #include "InventoryConfig.h"
 
 #include "GameItems/Lookup.h"
