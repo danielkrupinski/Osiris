@@ -856,11 +856,8 @@ namespace inventory_changer::item_generator
 
 [[nodiscard]] std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
 {
-    assert(year >= 1900);
-    std::tm tm{};
-    tm.tm_mday = 1;
-    tm.tm_year = year - 1900;
-    return tmToUTCTimestamp(tm);
+    using namespace std::chrono;
+    return system_clock::to_time_t(sys_days(1d / January / year));
 }
 
 [[nodiscard]] std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept
