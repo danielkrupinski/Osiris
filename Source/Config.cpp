@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iterator>
 #include <system_error>
+#include <tuple>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -596,7 +597,7 @@ void Config::openConfigDir() const noexcept
 #ifdef _WIN32
     ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
-    int ret = std::system(("xdg-open " + path.string()).c_str());
+    std::ignore = std::system(("xdg-open " + path.string() + " &").c_str());
 #endif
 }
 
