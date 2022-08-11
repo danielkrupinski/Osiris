@@ -25,17 +25,12 @@ jobs:
             continue-on-error: false
     steps:
     - uses: actions/checkout@v2
-    - name: Add toolchain PPA
-      if: matrix.compiler == 'g++-11'
-      run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    - name: Install g++-11 for minimal required libstdc++
+      run: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt-get update && sudo apt-get install -y g++-11
     - name: install
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev ${{ matrix.compiler }}
-    - name: install clang++ 12.0.1
-      if: ${{ (matrix.compiler == 'clang++-12') && (matrix.os == 'ubuntu-20.04') }}
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 12
     - name: configure
       run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -D BUILD_TESTS=1 -S . -B ${{ matrix.configuration }}
     - name: build
