@@ -845,15 +845,6 @@ namespace inventory_changer::item_generator
 
 }
 
-[[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept
-{
-#ifdef _WIN32
-    return _mkgmtime(&tm);
-#else
-    return timegm(&tm);
-#endif
-}
-
 [[nodiscard]] std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept
 {
     using namespace std::chrono;

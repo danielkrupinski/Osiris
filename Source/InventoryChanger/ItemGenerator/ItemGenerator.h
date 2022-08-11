@@ -16,6 +16,5 @@ namespace inventory_changer::item_generator
     inventory::ItemData createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept;
 }
 
-[[nodiscard]] std::time_t tmToUTCTimestamp(std::tm& tm) noexcept;
 [[nodiscard]] std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept;
 [[nodiscard]] std::time_t getEndOfYearTimestamp(std::uint16_t year) noexcept;
