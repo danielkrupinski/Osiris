@@ -1413,8 +1413,6 @@ void InventoryChanger::reset()
 
 void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
 {
-    const auto& gameItemLookup = backend.getGameItemLookup();
-
     const auto sticker = gameItemLookup.findSticker(stickerID);
     if (!sticker || !sticker->get().isSticker())
         return;
