@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -125,4 +126,4 @@ private:
     std::vector<std::u8string> configs;
 };
 
-inline std::unique_ptr<Config> config;
+inline std::optional<Config> config;
