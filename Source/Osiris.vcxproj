@@ -262,6 +262,7 @@
     <ClInclude Include="SDK\Constants\ClassId.h" />
     <ClInclude Include="SDK\Constants\FrameStage.h" />
     <ClInclude Include="SDK\Constants\ProPlayer.h" />
+    <ClInclude Include="SDK\Constants\Tournament.h" />
     <ClInclude Include="SDK\Constants\TournamentTeam.h" />
     <ClInclude Include="SDK\Constants\UserMessages.h" />
     <ClInclude Include="SDK\ConVar.h" />

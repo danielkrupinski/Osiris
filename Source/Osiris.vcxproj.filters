@@ -787,6 +787,9 @@
     <ClInclude Include="InventoryChanger\ItemGenerator\DropGenerator.h">
       <Filter>InventoryChanger\ItemGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Constants\Tournament.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
