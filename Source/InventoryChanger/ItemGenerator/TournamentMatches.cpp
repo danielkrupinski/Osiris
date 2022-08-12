@@ -3,12 +3,13 @@
 #include "TournamentMatches.h"
 
 #include <InventoryChanger/GameItems/Enums.h>
+#include <SDK/Constants/Tournament.h>
 
 namespace inventory_changer::item_generator
 {
 
 struct Tournament {
-    std::uint32_t tournamentID;
+    csgo::Tournament tournament;
     std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> matches;
 };
 
@@ -1108,29 +1109,30 @@ constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
+using namespace csgo::tournament;
 constexpr auto tournaments = std::to_array<Tournament>({
-    { 1, dreamHack2013Matches },
-    { 3, emsOneKatowice2014Matches },
-    { 4, eslOneCologne2014Matches },
-    { 5, dreamHack2014Matches },
-    { 6, eslOneKatowice2015Matches },
-    { 7, eslOneCologne2015Matches },
-    { 8, dreamHackClujNapoka2015Matches },
-    { 9, mlgColumbus2016Matches },
-    { 10, eslOneCologne2016Matches },
-    { 11, eleagueAtlanta2017Matches },
-    { 12, pglKrakow2017Matches },
-    { 13, eleagueBoston2018Matches },
-    { 14, faceitLondon2018Matches },
-    { 15, iemKatowice2019Matches },
-    { 18, pglStockholm2021Matches },
-    { 19, pglAntwerp2022Matches }
+    { DreamHack2013, dreamHack2013Matches },
+    { EmsOneKatowice2014, emsOneKatowice2014Matches},
+    { EslOneCologne2014, eslOneCologne2014Matches },
+    { DreamHack2014, dreamHack2014Matches },
+    { EslOneKatowice2015, eslOneKatowice2015Matches },
+    { EslOneCologne2015, eslOneCologne2015Matches },
+    { DreamHackClujNapoka2015, dreamHackClujNapoka2015Matches },
+    { MlgColumbus2016, mlgColumbus2016Matches },
+    { EslOneCologne2016, eslOneCologne2016Matches },
+    { EleagueAtlanta2017, eleagueAtlanta2017Matches },
+    { PglKrakow2017, pglKrakow2017Matches },
+    { EleagueBoston2018, eleagueBoston2018Matches },
+    { FaceitLondon2018, faceitLondon2018Matches },
+    { IemKatowice2019, iemKatowice2019Matches },
+    { PglStockholm2021, pglStockholm2021Matches },
+    { PglAntwerp2022, pglAntwerp2022Matches }
 });
-static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournamentID));
+static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournament));
 
 [[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatches(std::uint32_t tournamentID) noexcept
 {
-    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournamentID); it != tournaments.end() && it->tournamentID == tournamentID)
+    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournament); it != tournaments.end() && it->tournament == tournamentID)
         return it->matches;
     return {};
 }
