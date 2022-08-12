@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <optional>
 
 struct ImFont;
 
@@ -38,4 +38,4 @@ private:
     float timeToNextConfigRefresh = 0.1f;
 };
 
-inline std::unique_ptr<GUI> gui;
+inline std::optional<GUI> gui;
