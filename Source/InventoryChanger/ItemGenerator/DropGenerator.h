@@ -26,7 +26,7 @@ public:
     explicit DropGenerator(const game_items::Lookup& gameItemLookup, AttributeGenerator attributeGenerator)
         : gameItemLookup{ gameItemLookup }, attributeGenerator{ attributeGenerator } {}
 
-    [[nodiscard]] inventory::ItemData generateItemData(const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak) const
+    [[nodiscard]] inventory::Item::VariantProperties generateItemData(const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak) const
     {
         if (willProduceStatTrak && unlockedItem.isMusic()) {
             return inventory::Music{ .statTrak = 0 };

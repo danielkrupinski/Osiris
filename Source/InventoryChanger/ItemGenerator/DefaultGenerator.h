@@ -15,7 +15,7 @@ public:
     explicit DefaultGenerator(const game_items::Storage& gameItemStorage, AttributeGenerator attributeGenerator)
         : gameItemStorage{ gameItemStorage }, attributeGenerator{ attributeGenerator } {}
 
-    [[nodiscard]] inventory::ItemData createItemData(const game_items::Item& item) const
+    [[nodiscard]] inventory::Item::VariantProperties createItemData(const game_items::Item& item) const
     {
         if (item.isSkin()) {
             return createSkin(item);

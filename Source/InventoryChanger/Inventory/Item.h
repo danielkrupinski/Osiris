@@ -13,22 +13,22 @@
 namespace inventory_changer::inventory
 {
 
-using ItemData = SmallVariant<32,
-    std::monostate,
-    Skin,
-    Gloves,
-    Agent,
-    Music,
-    Graffiti,
-    ServiceMedal,
-    SouvenirPackage,
-    TournamentCoin,
-    StorageUnit
->;
-
 class Item {
 public:
-    explicit Item(const game_items::Item& item, ItemData data) noexcept : item{ item }, data{ std::move(data) } {}
+    using VariantProperties = SmallVariant<32,
+        std::monostate,
+        Skin,
+        Gloves,
+        Agent,
+        Music,
+        Graffiti,
+        ServiceMedal,
+        SouvenirPackage,
+        TournamentCoin,
+        StorageUnit
+    >;
+
+    explicit Item(const game_items::Item& item, VariantProperties data) noexcept : item{ item }, data{ std::move(data) } {}
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
     Item(Item&&) = default;
@@ -64,7 +64,7 @@ public:
 
 private:
     std::reference_wrapper<const game_items::Item> item;
-    ItemData data;
+    VariantProperties data;
     State state = State::Default;
 };
 

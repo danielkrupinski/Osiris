@@ -94,7 +94,7 @@ namespace inventory_changer
     return lookup.findItem(weaponID->get<WeaponId>());
 }
 
-[[nodiscard]] inventory::ItemData itemFromJson(const game_items::Storage& gameItemStorage, const game_items::Item& gameItem, const json& j)
+[[nodiscard]] inventory::Item::VariantProperties itemFromJson(const game_items::Storage& gameItemStorage, const game_items::Item& gameItem, const json& j)
 {
     if (gameItem.isSkin())
         return inventory::skinFromJson(j);
