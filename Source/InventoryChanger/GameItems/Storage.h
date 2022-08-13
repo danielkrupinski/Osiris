@@ -7,6 +7,8 @@
 
 #include <StringPool.h>
 
+#include <SDK/Constants/Tournament.h>
+
 #include "Item.h"
 #include "Structs.h"
 
@@ -22,7 +24,7 @@ class Storage {
 public:
     void addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath);
     void addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view iconPath);
-    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker);
+    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker);
     void addMusic(int musicID, ItemName name, std::string_view iconPath);
     void addVanillaKnife(WeaponId weaponID, std::string_view iconPath);
     void addCollectible(EconRarity rarity, WeaponId weaponID, bool isOriginal, std::string_view iconPath);
@@ -34,7 +36,7 @@ public:
     void addSkinWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addNameTag(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addAgent(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
-    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath);
+    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath);
     void addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
@@ -99,10 +101,10 @@ public:
         return static_cast<bool>(collectible.getDataIndex());
     }
 
-    [[nodiscard]] std::uint8_t getTournamentEventID(const Item& item) const noexcept
+    [[nodiscard]] csgo::Tournament getTournamentEventID(const Item& item) const noexcept
     {
         assert(item.isSouvenirToken() || item.isViewerPass() || item.isTournamentCoin() || item.isCrate());
-        return static_cast<std::uint8_t>(item.getDataIndex() & 0xFF);
+        return static_cast<csgo::Tournament>(item.getDataIndex() & 0xFF);
     }
 
     [[nodiscard]] std::uint16_t getDefaultTournamentGraffitiID(const Item& item) const noexcept

@@ -19,9 +19,9 @@ void Storage::addGraffiti(int id, ItemName name, EconRarity rarity, std::string_
     addItem(Item::Type::Graffiti, rarity, WeaponId::SealedGraffiti, index, pooled(iconPath));
 }
 
-void Storage::addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+void Storage::addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
 {
-    stickerKits.emplace_back(id, pooled(name), tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
+    stickerKits.emplace_back(id, pooled(name), tournament, tournamentTeam, tournamentPlayerID, isGoldenSticker);
     addItem(Item::Type::Sticker, rarity, WeaponId::Sticker, stickerKits.size() - 1, pooled(iconPath));
 }
 
@@ -81,10 +81,10 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
     addItem(Item::Type::Agent, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
+void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
 {
     assert((static_cast<std::uint8_t>(map) & 0x80) == 0);
-    addItem(Item::Type::Crate, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournamentID, pooled(iconPath));
+    addItem(Item::Type::Crate, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournament, pooled(iconPath));
 }
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
