@@ -252,6 +252,14 @@ void agentToJson(const inventory::Item& item, json& j)
     }
 }
 
+void storageUnitToJson(const inventory::Item& item, json& j)
+{
+    if (const auto storageUnit = item.get<inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
+        j["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
+        j["Name"] = storageUnit->name;
+    }
+}
+
 }
 
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
@@ -327,10 +335,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
                 itemConfig["Tournament Player"] = souvenirPackage->proPlayer;
             }
         } else if (gameItem.isStorageUnit()) {
-            if (const auto storageUnit = item.get<inventory_changer::inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
-                itemConfig["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
-                itemConfig["Name"] = storageUnit->name;
-            }
+            storageUnitToJson(item, itemConfig);
         }
 
         if (const auto storageUnitID = storageUnitIDs.find(itemIt); storageUnitID != storageUnitIDs.end())
