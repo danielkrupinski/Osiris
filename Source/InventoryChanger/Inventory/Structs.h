@@ -5,6 +5,7 @@
 #include <string>
 
 #include <SDK/Constants/ProPlayer.h>
+#include <SDK/Constants/Tournament.h>
 #include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
@@ -20,7 +21,7 @@ struct Skin {
     float wear = 0.0f;
     int seed = 1;
     int statTrak = -1;
-    std::uint32_t tournamentID = 0;
+    csgo::Tournament tournamentID{};
     std::array<Sticker, 5> stickers;
     std::string nameTag;
     TournamentStage tournamentStage{};
