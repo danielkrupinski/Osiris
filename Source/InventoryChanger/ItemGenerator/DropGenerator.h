@@ -63,14 +63,14 @@ private:
     {
         inventory::SkinStickers stickers;
 
-        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournamentID);
+        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(static_cast<csgo::Tournament>(tournamentID));
 
         if (tournamentID != 1) {
-            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team1);
-            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournamentID, team2);
+            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(static_cast<csgo::Tournament>(tournamentID), team1);
+            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(static_cast<csgo::Tournament>(tournamentID), team2);
 
             if (player)
-                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournamentID, static_cast<int>(player));
+                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(static_cast<csgo::Tournament>(tournamentID), static_cast<int>(player));
             else if (tournamentID >= 18) // starting with PGL Stockholm 2021
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }
