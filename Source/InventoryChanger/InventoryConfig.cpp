@@ -226,6 +226,13 @@ void glovesToJson(const inventory::Item& gloves, const game_items::Storage& game
     }
 }
 
+void musicToJson(const inventory::Item& item, const game_items::Storage& gameItemStorage, json& j)
+{
+    j["Music ID"] = gameItemStorage.getMusicKit(item.gameItem()).id;
+    if (const auto music = item.get<inventory::Music>(); music && music->statTrak > -1)
+        j["StatTrak"] = music->statTrak;
+}
+
 }
 
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
@@ -279,9 +286,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
                 itemConfig.update(::toJson(*skin));
 
         } else if (gameItem.isMusic()) {
-            itemConfig["Music ID"] = gameItemStorage.getMusicKit(gameItem).id;
-            if (const auto music = item.get<inventory::Music>(); music && music->statTrak > -1)
-                itemConfig["StatTrak"] = music->statTrak;
+            musicToJson(item, gameItemStorage, itemConfig);
         } else if (gameItem.isPatch()) {
             itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
