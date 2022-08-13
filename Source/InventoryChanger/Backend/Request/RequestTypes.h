@@ -115,11 +115,11 @@ struct SelectTeamGraffiti {
 };
 
 struct PickStickerPickEm {
-    PickStickerPickEm(PickEm::PickPosition position, TournamentTeam team)
+    PickStickerPickEm(PickEm::PickPosition position, csgo::TournamentTeam team)
         : position{ position }, team{ team } {}
 
     PickEm::PickPosition position;
-    TournamentTeam team;
+    csgo::TournamentTeam team;
 };
 
 struct PerformXRayScan {

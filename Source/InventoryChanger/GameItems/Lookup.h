@@ -79,14 +79,14 @@ public:
         return storage.getStickerKit(*it).tournament == tournament ? storage.getStickerKit(*it).id : 0;
     }
 
-    int findTournamentTeamGoldStickerID(csgo::Tournament tournament, TournamentTeam team) const noexcept
+    int findTournamentTeamGoldStickerID(csgo::Tournament tournament, csgo::TournamentTeam team) const noexcept
     {
-        if (tournament == csgo::Tournament{} || team == TournamentTeam::None)
+        if (tournament == csgo::Tournament{} || team == csgo::TournamentTeam::None)
             return 0;
 
-        if (team == TournamentTeam::AllStarTeamAmerica)
+        if (team == csgo::TournamentTeam::AllStarTeamAmerica)
             return 1315;
-        if (team == TournamentTeam::AllStarTeamEurope)
+        if (team == csgo::TournamentTeam::AllStarTeamEurope)
             return 1316;
 
         const auto range = findTournamentStickers(tournament);

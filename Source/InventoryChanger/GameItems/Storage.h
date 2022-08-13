@@ -8,6 +8,7 @@
 #include <StringPool.h>
 
 #include <SDK/Constants/Tournament.h>
+#include <SDK/Constants/TournamentTeam.h>
 
 #include "Item.h"
 #include "Structs.h"
@@ -24,7 +25,7 @@ class Storage {
 public:
     void addPatch(int id, ItemName name, EconRarity rarity, std::string_view iconPath);
     void addGraffiti(int id, ItemName name, EconRarity rarity, std::string_view iconPath);
-    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker);
+    void addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, csgo::TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker);
     void addMusic(int musicID, ItemName name, std::string_view iconPath);
     void addVanillaKnife(WeaponId weaponID, std::string_view iconPath);
     void addCollectible(EconRarity rarity, WeaponId weaponID, bool isOriginal, std::string_view iconPath);

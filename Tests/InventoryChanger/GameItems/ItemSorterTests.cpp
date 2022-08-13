@@ -105,7 +105,7 @@ class InventoryChanger_GameItems_ItemSorter_StickerPartitionTest : public testin
 protected:
     InventoryChanger_GameItems_ItemSorter_StickerPartitionTest()
     {
-        storage.addSticker(2022, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
+        storage.addSticker(2022, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
         addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::CS20Case, 0, {});
     }
 
@@ -445,22 +445,22 @@ TEST(InventoryChanger_GameItems_ItemSorter_MusicTest, ReturnsFalseForEqualMusicI
 
 TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, StickerWithSmallerIdComesFirst) {
     Storage storage;
-    storage.addSticker(570, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
-    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
+    storage.addSticker(570, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
     ASSERT_TRUE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
 }
 
 TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, StickerWithGreaterIdComesSecond) {
     Storage storage;
-    storage.addSticker(570, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
-    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
+    storage.addSticker(570, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
     ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[1], storage.getItems()[0]));
 }
 
 TEST(InventoryChanger_GameItems_ItemSorter_StickerTest, ReturnsFalseForEqualStickerId) {
     Storage storage;
-    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
-    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
+    storage.addSticker(1024, {}, EconRarity::Red, {}, csgo::Tournament{}, csgo::TournamentTeam{}, 0, false);
     ASSERT_FALSE(ItemSorter{ storage }(storage.getItems()[0], storage.getItems()[1]));
 }
 

@@ -35,13 +35,13 @@ struct Patch {
 };
 
 struct StickerKit {
-    StickerKit(int id, ItemName name, csgo::Tournament tournament, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+    StickerKit(int id, ItemName name, csgo::Tournament tournament, csgo::TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
         : id{ id }, name{ name }, tournament{ tournament }, tournamentTeam{ tournamentTeam }, isGoldenSticker{ isGoldenSticker }, tournamentPlayerID{ tournamentPlayerID } {}
 
     int id;
     ItemName name;
     csgo::Tournament tournament{};
-    TournamentTeam tournamentTeam{};
+    csgo::TournamentTeam tournamentTeam{};
     bool isGoldenSticker = false;
     int tournamentPlayerID = 0;
 };

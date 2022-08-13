@@ -22,8 +22,8 @@ namespace inventory_changer::item_generator
 struct MatchWithMVPs {
     TournamentMap map;
     TournamentStage stage;
-    TournamentTeam team1;
-    TournamentTeam team2;
+    csgo::TournamentTeam team1;
+    csgo::TournamentTeam team2;
     std::array<csgo::ProPlayer, 10> mvpPlayers;
 };
 
@@ -35,8 +35,8 @@ struct MatchWithMVPs {
 struct Match {
     TournamentMap map;
     TournamentStage stage;
-    TournamentTeam team1;
-    TournamentTeam team2;
+    csgo::TournamentTeam team1;
+    csgo::TournamentTeam team2;
 };
 
 [[nodiscard]] std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept;

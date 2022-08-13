@@ -169,11 +169,11 @@ struct EquippedState {
     return inventory_changer::backend::PickEm::PickPosition{ tournament->get<std::uint8_t>(), group->get<std::uint16_t>(), indexInGroup->get<std::uint8_t>() };
 }
 
-[[nodiscard]] TournamentTeam pickTeamFromJson(const json& j)
+[[nodiscard]] csgo::TournamentTeam pickTeamFromJson(const json& j)
 {
     if (const auto team = j.find("Team"); team != j.end() && team->is_number_unsigned())
-        return team->get<TournamentTeam>();
-    return TournamentTeam::None;
+        return team->get<csgo::TournamentTeam>();
+    return csgo::TournamentTeam::None;
 }
 
 void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator& backend)
@@ -192,7 +192,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
             continue;
 
         const auto team = pickTeamFromJson(pick);
-        if (team == TournamentTeam::None)
+        if (team == csgo::TournamentTeam::None)
             continue;
 
         backend.getRequestor().request<inventory_changer::backend::request::PickStickerPickEm>(*position, team);

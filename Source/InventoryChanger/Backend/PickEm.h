@@ -18,16 +18,16 @@ public:
         friend auto operator<=>(const PickPosition&, const PickPosition&) = default;
     };
 
-    void pick(PickPosition position, TournamentTeam team)
+    void pick(PickPosition position, csgo::TournamentTeam team)
     {
         picks[position] = team;
     }
 
-    [[nodiscard]] TournamentTeam getPickedTeam(PickPosition position) const
+    [[nodiscard]] csgo::TournamentTeam getPickedTeam(PickPosition position) const
     {
         if (const auto pick = picks.find(position); pick != picks.end())
             return pick->second;
-        return TournamentTeam::None;
+        return csgo::TournamentTeam::None;
     }
 
     [[nodiscard]] const auto& getPicks() const noexcept
@@ -41,7 +41,7 @@ public:
     }
 
 private:
-    std::map<PickPosition, TournamentTeam> picks;
+    std::map<PickPosition, csgo::TournamentTeam> picks;
 };
 
 }

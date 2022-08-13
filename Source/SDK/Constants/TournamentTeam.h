@@ -2,6 +2,9 @@
 
 #include <cstdint>
 
+namespace csgo
+{
+
 namespace tournament_team
 {
 
@@ -108,3 +111,5 @@ enum TournamentTeam : std::uint8_t {
 }
 
 using tournament_team::TournamentTeam;
+
+}

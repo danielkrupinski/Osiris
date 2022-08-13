@@ -60,7 +60,7 @@ private:
         return skin;
     }
 
-    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, csgo::Tournament tournament, TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) const
+    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, csgo::Tournament tournament, TournamentMap map, csgo::TournamentTeam team1, csgo::TournamentTeam team2, csgo::ProPlayer player) const
     {
         inventory::SkinStickers stickers;
 
