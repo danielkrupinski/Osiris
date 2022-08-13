@@ -260,22 +260,15 @@ void storageUnitToJson(const inventory::Item& item, json& j)
     }
 }
 
-}
-
-json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
+[[nodiscard]] json itemsToJson(const backend::BackendSimulator& backend)
 {
-    json j;
-
-    j["Version"] = CONFIG_VERSION;
-
-    const auto& backend = inventoryChanger.getBackend();
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
     const auto& inventory = backend.getInventory();
     const auto& storageUnitIDs = backend.getStorageUnitManager().getStorageUnitIDs();
     const auto& xrayScanner = backend.getXRayScanner();
 
-    auto& items = j["Items"];
+    json items;
     for (auto itemIt = inventory.begin(); itemIt != inventory.end(); ++itemIt) {
         if (isInXRayScanner(xrayScanner, itemIt))
             continue;
@@ -344,6 +337,20 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
         items.push_back(std::move(itemConfig));
     }
 
+    return items;
+}
+
+}
+
+json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
+{
+    json j;
+
+    j["Version"] = CONFIG_VERSION;
+
+    const auto& backend = inventoryChanger.getBackend();
+
+    j.emplace("Items", itemsToJson(backend));
     j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
     return j;
 }
