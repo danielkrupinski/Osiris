@@ -206,6 +206,16 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
     return items.has_value() && (items->crate == item || items->reward == item);
 }
 
+namespace inventory_changer
+{
+
+void stickerToJson(const game_items::Item& sticker, const game_items::Storage& gameItemStorage, json& j)
+{
+    j["Sticker ID"] = gameItemStorage.getStickerKit(sticker).id;
+}
+
+}
+
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
 {
     json j;
@@ -245,7 +255,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
         itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(gameItem.getWeaponID());
 
         if (gameItem.isSticker()) {
-            itemConfig["Sticker ID"] = gameItemStorage.getStickerKit(gameItem).id;
+            stickerToJson(gameItem, gameItemStorage, itemConfig);
         } else if (gameItem.isGloves()) {
             const auto& staticData = gameItemStorage.getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
