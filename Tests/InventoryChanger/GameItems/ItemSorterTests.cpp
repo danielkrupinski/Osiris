@@ -48,7 +48,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addPatch(0, {}, rarity, iconPath);
         break;
     case ItemType::Sticker:
-        storage.addSticker(0, {}, rarity, iconPath, csgo::Tournament{}, {}, 0, false);
+        storage.addSticker(0, {}, rarity, iconPath, {}, {}, 0, false);
         break;
     case ItemType::Music:
         storage.addMusic(0, {}, iconPath);
@@ -66,7 +66,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addAgent(rarity, weaponID, iconPath);
         break;
     case ItemType::Case:
-        storage.addCase(rarity, weaponID, 0, csgo::Tournament{}, {}, false, iconPath);
+        storage.addCase(rarity, weaponID, 0, {}, {}, false, iconPath);
         break;
     case ItemType::CaseKey:
         storage.addCaseKey(rarity, weaponID, iconPath);
@@ -78,16 +78,16 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addStatTrakSwapTool(rarity, weaponID, iconPath);
         break;
     case ItemType::ViewerPass:
-        storage.addViewerPass(rarity, weaponID, 0, iconPath);
+        storage.addViewerPass(rarity, weaponID, {}, iconPath);
         break;
     case ItemType::ServiceMedal:
         storage.addServiceMedal(rarity, 0, weaponID, iconPath);
         break;
     case ItemType::SouvenirToken:
-        storage.addSouvenirToken(rarity, weaponID, 0, iconPath);
+        storage.addSouvenirToken(rarity, weaponID, {}, iconPath);
         break;
     case ItemType::TournamentCoin:
-        storage.addTournamentCoin(rarity, weaponID, 0, 0, iconPath);
+        storage.addTournamentCoin(rarity, weaponID, {}, 0, iconPath);
         break;
     case ItemType::VanillaKnife:
         storage.addVanillaKnife(weaponID, iconPath);

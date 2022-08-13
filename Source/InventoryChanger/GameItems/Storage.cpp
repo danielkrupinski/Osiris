@@ -51,9 +51,9 @@ void Storage::addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId we
     addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), pooled(iconPath));
 }
 
-void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::uint16_t defaultGraffitiID, std::string_view iconPath)
+void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::uint16_t defaultGraffitiID, std::string_view iconPath)
 {
-    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournamentEventID | defaultGraffitiID << 8), pooled(iconPath));
+    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournament | defaultGraffitiID << 8), pooled(iconPath));
 }
 
 void Storage::addPaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax)
@@ -102,14 +102,14 @@ void Storage::addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::str
     addItem(Item::Type::StatTrakSwapTool, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
+void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::string_view iconPath)
 {
-    addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
+    addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournament), pooled(iconPath));
 }
 
-void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
+void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::string_view iconPath)
 {
-    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
+    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournament), pooled(iconPath));
 }
 
 void Storage::addStorageUnit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)

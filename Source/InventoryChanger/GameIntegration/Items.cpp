@@ -122,7 +122,7 @@ void Items::getOtherItems(game_items::Storage& storage)
             if (item->isServiceMedal()) {
                 storage.addServiceMedal(rarity, item->getServiceMedalYear(), weaponID, inventoryImage);
             } else if (item->isTournamentCoin()) {
-                storage.addTournamentCoin(rarity, weaponID, static_cast<std::uint8_t>(item->getTournamentEventID()), static_cast<std::uint16_t>(item->getStickerID()), inventoryImage);
+                storage.addTournamentCoin(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), static_cast<std::uint16_t>(item->getStickerID()), inventoryImage);
             } else {
                 storage.addCollectible(rarity, weaponID, isOriginal, inventoryImage);
             }
@@ -142,9 +142,9 @@ void Items::getOtherItems(game_items::Storage& storage)
                 storage.addStatTrakSwapTool(rarity, weaponID, inventoryImage);
             else if (std::strcmp(tool->typeName, "fantoken") == 0) {
                 if (Helpers::isSouvenirToken(weaponID))
-                    storage.addSouvenirToken(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    storage.addSouvenirToken(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), inventoryImage);
                 else
-                    storage.addViewerPass(rarity, weaponID, item->getTournamentEventID(), inventoryImage);
+                    storage.addViewerPass(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), inventoryImage);
             } else if (std::strcmp(tool->typeName, "casket") == 0) {
                 storage.addStorageUnit(rarity, weaponID, inventoryImage);
             }
