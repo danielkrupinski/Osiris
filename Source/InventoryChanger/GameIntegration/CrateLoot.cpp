@@ -20,7 +20,7 @@ void CrateLoot::getLoot(game_items::CrateLoot& crateLoot)
     }
 }
 
-game_items::Lookup::OptionalItemReference CrateLoot::findStickerlikeItem(WeaponId weaponID, int stickerKit) const
+const game_items::Item* CrateLoot::findStickerlikeItem(WeaponId weaponID, int stickerKit) const
 {
     switch (weaponID) {
     case WeaponId::Sticker: return gameItemLookup.findSticker(stickerKit);
@@ -39,20 +39,20 @@ void CrateLoot::fillLootFromLootList(EconLootListDefinition& lootList, game_item
     const auto& contents = lootList.getLootListContents();
     for (int j = 0; j < contents.size; ++j) {
         if (contents[j].stickerKit != 0) {
-            if (const auto item = findStickerlikeItem(contents[j].weaponId(), contents[j].stickerKit); item.has_value())
+            if (const auto item = findStickerlikeItem(contents[j].weaponId(), contents[j].stickerKit))
                 crateLoot.addItem(*item);
         } else if (contents[j].musicKit != 0) {
-            if (const auto idx = gameItemLookup.findMusic(contents[j].musicKit); idx.has_value())
+            if (const auto idx = gameItemLookup.findMusic(contents[j].musicKit))
                 crateLoot.addItem(*idx);
         } else if (contents[j].isNestedList) {
             if (const auto nestedLootList = itemSchema.getLootList(contents[j].itemDef))
                 fillLootFromLootList(*nestedLootList, crateLoot);
         } else if (contents[j].itemDef != 0) {
             if (contents[j].paintKit != 0) {
-                if (const auto idx = gameItemLookup.findItem(contents[j].weaponId(), contents[j].paintKit); idx.has_value())
+                if (const auto idx = gameItemLookup.findItem(contents[j].weaponId(), contents[j].paintKit))
                     crateLoot.addItem(*idx);
             } else {
-                if (const auto idx = gameItemLookup.findItem(contents[j].weaponId()); idx.has_value())
+                if (const auto idx = gameItemLookup.findItem(contents[j].weaponId()))
                     crateLoot.addItem(*idx);
             }
         }
@@ -73,7 +73,7 @@ void CrateLoot::rebuildMissingLootList(game_items::CrateLoot& crateLoot)
     crateLoot.nextLootListFromPrevious(13); // crate_ems14_promo
 
     crateLoot.nextLootList(292); // crate_xray_p250_lootlist
-    if (const auto p250XRay = gameItemLookup.findItem(WeaponId::P250, 125 /* cu_xray_p250 */); p250XRay.has_value())
+    if (const auto p250XRay = gameItemLookup.findItem(WeaponId::P250, 125 /* cu_xray_p250 */))
         crateLoot.addItem(*p250XRay);
 }
 

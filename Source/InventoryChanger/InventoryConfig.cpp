@@ -73,7 +73,7 @@ constexpr auto CONFIG_VERSION = 4;
 namespace inventory_changer
 {
 
-[[nodiscard]] game_items::Lookup::OptionalItemReference gameItemFromJson(const game_items::Lookup& lookup, const json& j)
+[[nodiscard]] const game_items::Item* gameItemFromJson(const game_items::Lookup& lookup, const json& j)
 {
     if (const auto stickerID = j.find("Sticker ID"); stickerID != j.end() && stickerID->is_number_integer())
         return lookup.findSticker(stickerID->get<int>());
@@ -341,15 +341,14 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
     std::vector<std::pair<inventory_changer::backend::ItemIterator, std::uint32_t>> itemsToBindToStorageUnits;
 
     for (const auto& jsonItem : items) {
-        std::optional<std::reference_wrapper<const game_items::Item>> itemOptional = gameItemFromJson(lookup, jsonItem);
-        if (!itemOptional.has_value())
+        const auto item = gameItemFromJson(lookup, jsonItem);
+        if (!item)
             continue;
 
-        const game_items::Item& item = itemOptional->get();
-        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ item, itemFromJson(lookup.getStorage(), item, jsonItem) });
+        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ *item, itemFromJson(lookup.getStorage(), *item, jsonItem) });
 
         if (const auto storageUnitID = storageUnitIdFromJson(jsonItem); storageUnitID.has_value()) {
-            if (!item.isStorageUnit()) {
+            if (!item->isStorageUnit()) {
                 itemsToBindToStorageUnits.emplace_back(itemAdded, *storageUnitID);
             } else {
                 storageUnits.emplace(*storageUnitID, itemAdded);

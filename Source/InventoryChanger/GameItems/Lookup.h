@@ -9,7 +9,6 @@
 #include "ItemSorter.h"
 #include "Storage.h"
 #include <Helpers.h>
-
 #include <SDK/Constants/Tournament.h>
 
 namespace inventory_changer::game_items
@@ -107,47 +106,44 @@ public:
         return (it != range.end() ? storage.getStickerKit(*it).id : 0);
     }
 
-    using ItemReference = std::reference_wrapper<const Item>;
-    using OptionalItemReference = std::optional<ItemReference>;
-
-    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID, int paintKit) const noexcept
+    [[nodiscard]] const Item* findItem(WeaponId weaponID, int paintKit) const noexcept
     {
         const auto range = ranges::equal_range(itemsWithPaintKit, weaponID, {}, [](const Item& item) { return item.getWeaponID(); });
         return find(range, paintKit, [this](const Item& item) { return storage.getPaintKit(item).id; });
     }
 
-    [[nodiscard]] OptionalItemReference findItem(WeaponId weaponID) const noexcept
+    [[nodiscard]] const Item* findItem(WeaponId weaponID) const noexcept
     {
         return find(otherItems, weaponID, [](const Item& item) { return item.getWeaponID(); });
     }
 
-    [[nodiscard]] OptionalItemReference findMusic(int musicKit) const noexcept
+    [[nodiscard]] const Item* findMusic(int musicKit) const noexcept
     {
         return find(music, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
-    [[nodiscard]] OptionalItemReference findSticker(int stickerKit) const noexcept
+    [[nodiscard]] const Item* findSticker(int stickerKit) const noexcept
     {
         return find(stickers, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
-    [[nodiscard]] OptionalItemReference findGraffiti(int graffitiID) const noexcept
+    [[nodiscard]] const Item* findGraffiti(int graffitiID) const noexcept
     {
         return find(graffiti, graffitiID, [this](const Item& item) { return storage.getGraffitiKit(item).id; });
     }
 
-    [[nodiscard]] OptionalItemReference findPatch(int patchID) const noexcept
+    [[nodiscard]] const Item* findPatch(int patchID) const noexcept
     {
         return find(patches, patchID, [this](const Item& item) { return storage.getPatch(item).id; });
     }
 
 private:
     template <typename Container, typename T, typename Projection>
-    [[nodiscard]] static OptionalItemReference find(const Container& container, const T& value, Projection projection)
+    [[nodiscard]] static const Item* find(const Container& container, const T& value, Projection projection)
     {
         if (const auto it = std::ranges::lower_bound(container, value, {}, projection); it != std::end(container) && std::invoke(projection, *it) == value)
-            return *it;
-        return {};
+            return std::to_address(it);
+        return nullptr;
     }
 
     [[nodiscard]] static Storage sorted(Storage storage)
@@ -163,7 +159,7 @@ private:
     std::span<const Item> patches;
     std::span<const Item> itemsWithPaintKit;
     std::span<const Item> otherItems;
-    std::vector<ItemReference> tournamentStickersSorted;
+    std::vector<std::reference_wrapper<const Item>> tournamentStickersSorted;
 };
 
 }

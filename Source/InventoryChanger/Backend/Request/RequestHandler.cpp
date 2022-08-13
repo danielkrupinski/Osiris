@@ -109,7 +109,7 @@ Response RequestHandler::operator()(const request::ActivateOperationPass& reques
         return {};
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
-    if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID); operationCoin.has_value()) {
+    if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID)) {
         backend.addItemUnacknowledged(inventory::Item{ *operationCoin });
         backend.removeItem(request.operationPass);
     }
@@ -126,7 +126,7 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request) 
     if (coinID == WeaponId::None)
         return {};
 
-    if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID); eventCoin.has_value()) {
+    if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID)) {
         const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) } });
         backend.removeItem(request.item);
         return response::ViewerPassActivated{ addedEventCoin };

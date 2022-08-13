@@ -21,7 +21,7 @@ public:
     void getLoot(game_items::CrateLoot& crateLoot);
 
 private:
-    [[nodiscard]] game_items::Lookup::OptionalItemReference findStickerlikeItem(WeaponId weaponID, int stickerKit) const;
+    [[nodiscard]] const game_items::Item* findStickerlikeItem(WeaponId weaponID, int stickerKit) const;
     void fillLootFromLootList(EconLootListDefinition& lootList, game_items::CrateLoot& crateLoot);
     void rebuildMissingLootList(game_items::CrateLoot& crateLoot);
 

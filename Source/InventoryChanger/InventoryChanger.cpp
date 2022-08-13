@@ -1414,7 +1414,7 @@ void InventoryChanger::reset()
 void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
 {
     const auto sticker = gameItemLookup.findSticker(stickerID);
-    if (!sticker || !sticker->get().isSticker())
+    if (!sticker || !sticker->isSticker())
         return;
 
     const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;

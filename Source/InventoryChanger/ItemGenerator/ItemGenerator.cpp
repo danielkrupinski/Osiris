@@ -831,7 +831,7 @@ namespace inventory_changer::item_generator
     if (const auto rarity = getRandomRarity(rarities); rarity != EconRarity::Default) {
         if (rarity == EconRarity::Gold) {
             const auto& randomRareSpecialItem = rareSpecialItems[Helpers::random<std::size_t>(0u, rareSpecialItems.size() - 1u)];
-            if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit); item.has_value())
+            if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit))
                 return *item;
         } else {
             const auto loot = game_items::getLootOfRarity(crateLootLookup, lootList.crateSeries, rarity);
