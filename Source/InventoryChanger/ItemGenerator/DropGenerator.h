@@ -7,6 +7,7 @@
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
+#include <SDK/Constants/Tournament.h>
 #include <SDK/ItemSchema.h>
 
 namespace inventory_changer::item_generator
@@ -59,19 +60,19 @@ private:
         return skin;
     }
 
-    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, std::uint32_t tournamentID, TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) const
+    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, csgo::Tournament tournament, TournamentMap map, TournamentTeam team1, TournamentTeam team2, csgo::ProPlayer player) const
     {
         inventory::SkinStickers stickers;
 
-        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(static_cast<csgo::Tournament>(tournamentID));
+        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournament);
 
-        if (tournamentID != 1) {
-            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(static_cast<csgo::Tournament>(tournamentID), team1);
-            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(static_cast<csgo::Tournament>(tournamentID), team2);
+        if (tournament >= csgo::Tournament::EmsOneKatowice2014) {
+            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team1);
+            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team2);
 
             if (player)
-                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(static_cast<csgo::Tournament>(tournamentID), static_cast<int>(player));
-            else if (tournamentID >= 18) // starting with PGL Stockholm 2021
+                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournament, static_cast<int>(player));
+            else if (tournament >= csgo::Tournament::PglStockholm2021)
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }
 
