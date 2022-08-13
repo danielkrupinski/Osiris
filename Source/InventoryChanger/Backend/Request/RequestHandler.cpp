@@ -9,7 +9,7 @@ namespace inventory_changer::backend
 
 Response RequestHandler::operator()(const request::ApplySticker& request) const
 {
-    const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>();
+    const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.item));
     if (!skin)
         return {};
 
@@ -23,7 +23,7 @@ Response RequestHandler::operator()(const request::ApplySticker& request) const
 
 Response RequestHandler::operator()(const request::WearSticker& request) const
 {
-    const auto skin = constRemover.removeConstness(request.skin)->get<inventory::Skin>();
+    const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.skin));
     if (!skin)
         return {};
 
@@ -93,7 +93,7 @@ Response RequestHandler::operator()(const request::ApplyPatch& request) const
 
 Response RequestHandler::operator()(const request::RemovePatch& request) const
 {
-    const auto agent = constRemover.removeConstness(request.item)->get<inventory::Agent>();
+    const auto agent = get<inventory::Agent>(*constRemover.removeConstness(request.item));
     if (!agent)
         return {};
 
@@ -136,7 +136,7 @@ Response RequestHandler::operator()(const request::ActivateViewerPass& request) 
 
 Response RequestHandler::operator()(const request::AddNameTag& request) const
 {
-    const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>();
+    const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.item));
     if (!skin)
         return {};
 
@@ -148,7 +148,7 @@ Response RequestHandler::operator()(const request::AddNameTag& request) const
 
 Response RequestHandler::operator()(const request::RemoveNameTag& request) const
 {
-    if (const auto skin = constRemover.removeConstness(request.item)->get<inventory::Skin>()) {
+    if (const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.item))) {
         skin->nameTag.clear();
         backend.moveToFront(request.item);
         return response::NameTagRemoved{ request.item };

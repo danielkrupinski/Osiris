@@ -54,8 +54,10 @@ public:
     [[nodiscard]] State getState() const noexcept { return state; }
     void setState(State newState) noexcept { state = newState; }
 
-    template <typename T>
-    [[nodiscard]] T* get() { return properties.variant.get<T>(); }
+    [[nodiscard]] Properties& getProperties() noexcept
+    {
+        return properties;
+    }
 
     template <typename T>
     [[nodiscard]] const T* get() const { return properties.variant.get<T>(); }
@@ -75,12 +77,18 @@ private:
     State state = State::Default;
 };
 
+template <typename T>
+[[nodiscard]] T* get(Item& item)
+{
+    return item.getProperties().variant.get<T>();
+}
+
 [[nodiscard]] inline int* getStatTrak(Item& item)
 {
-    if (const auto skin = item.get<Skin>())
+    if (const auto skin = get<Skin>(item))
         return &skin->statTrak;
 
-    if (const auto music = item.get<Music>())
+    if (const auto music = get<Music>(item))
         return &music->statTrak;
 
     return nullptr;
