@@ -233,6 +233,25 @@ void musicToJson(const inventory::Item& item, const game_items::Storage& gameIte
         j["StatTrak"] = music->statTrak;
 }
 
+void agentToJson(const inventory::Item& item, json& j)
+{
+    const auto agent = item.get<inventory::Agent>();
+    if (!agent)
+        return;
+
+    auto& stickers = j["Patches"];
+    for (std::size_t i = 0; i < agent->patches.size(); ++i) {
+        const auto& patch = agent->patches[i];
+        if (patch.patchID == 0)
+            continue;
+
+        json patchConfig;
+        patchConfig["Patch ID"] = patch.patchID;
+        patchConfig["Slot"] = i;
+        stickers.push_back(std::move(patchConfig));
+    }
+}
+
 }
 
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
@@ -296,19 +315,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
                 itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
-            if (const auto agent = item.get<inventory::Agent>()) {
-                auto& stickers = itemConfig["Patches"];
-                for (std::size_t i = 0; i < agent->patches.size(); ++i) {
-                    const auto& patch = agent->patches[i];
-                    if (patch.patchID == 0)
-                        continue;
-
-                    json patchConfig;
-                    patchConfig["Patch ID"] = patch.patchID;
-                    patchConfig["Slot"] = i;
-                    stickers.push_back(std::move(patchConfig));
-                }
-            }
+            agentToJson(item, itemConfig);
         } else if (gameItem.isServiceMedal()) {
             if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
