@@ -39,8 +39,8 @@ public:
 
             const auto& paintKitA = storage.getStickerKit(itemA);
             const auto& paintKitB = storage.getStickerKit(itemB);
-            if (paintKitA.tournamentID != paintKitB.tournamentID)
-                return paintKitA.tournamentID < paintKitB.tournamentID;
+            if (paintKitA.tournament != paintKitB.tournament)
+                return paintKitA.tournament < paintKitB.tournament;
             if (paintKitA.tournamentTeam != paintKitB.tournamentTeam)
                 return paintKitA.tournamentTeam < paintKitB.tournamentTeam;
             if (paintKitA.tournamentPlayerID != paintKitB.tournamentPlayerID)
@@ -59,7 +59,7 @@ public:
 private:
     auto findTournamentStickers(std::uint32_t tournamentID) const noexcept
     {
-        return ranges::equal_range(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournamentID; });
+        return ranges::equal_range(tournamentStickersSorted, tournamentID, {}, [this](const Item& item) { return storage.getStickerKit(item).tournament; });
     }
 
 public:
@@ -75,7 +75,7 @@ public:
         const auto it = findTournamentStickers(tournamentID).begin();
         if (it == tournamentStickersSorted.end())
             return 0;
-        return storage.getStickerKit(*it).tournamentID == tournamentID ? storage.getStickerKit(*it).id : 0;
+        return storage.getStickerKit(*it).tournament == tournamentID ? storage.getStickerKit(*it).id : 0;
     }
 
     int findTournamentTeamGoldStickerID(std::uint32_t tournamentID, TournamentTeam team) const noexcept
