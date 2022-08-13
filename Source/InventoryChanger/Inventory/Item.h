@@ -15,6 +15,8 @@ namespace inventory_changer::inventory
 
 class Item {
 public:
+    struct CommonProperties {};
+
     using VariantProperties = SmallVariant<32,
         std::monostate,
         Skin,
@@ -28,7 +30,12 @@ public:
         StorageUnit
     >;
 
-    explicit Item(const game_items::Item& item, VariantProperties data) noexcept : item{ item }, data{ std::move(data) } {}
+    struct Properties {
+        CommonProperties common;
+        VariantProperties variant;
+    };
+
+    explicit Item(const game_items::Item& item, VariantProperties data) noexcept : item{ item }, properties{ {}, std::move(data) } {}
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
     Item(Item&&) = default;
@@ -48,23 +55,23 @@ public:
     void setState(State newState) noexcept { state = newState; }
 
     template <typename T>
-    [[nodiscard]] T* get() { return data.get<T>(); }
+    [[nodiscard]] T* get() { return properties.variant.get<T>(); }
 
     template <typename T>
-    [[nodiscard]] const T* get() const { return data.get<T>(); }
+    [[nodiscard]] const T* get() const { return properties.variant.get<T>(); }
 
     template <typename T>
     [[nodiscard]] T* getOrCreate()
     {
-        if (const auto got = data.get<T>())
+        if (const auto got = properties.variant.get<T>())
             return got;
-        data = T{};
-        return data.get<T>();
+        properties.variant = T{};
+        return properties.variant.get<T>();
     }
 
 private:
     std::reference_wrapper<const game_items::Item> item;
-    VariantProperties data;
+    Properties properties;
     State state = State::Default;
 };
 
