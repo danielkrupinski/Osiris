@@ -214,6 +214,18 @@ void stickerToJson(const game_items::Item& sticker, const game_items::Storage& g
     j["Sticker ID"] = gameItemStorage.getStickerKit(sticker).id;
 }
 
+void glovesToJson(const inventory::Item& gloves, const game_items::Storage& gameItemStorage, json& j)
+{
+    const auto& paintKit = gameItemStorage.getPaintKit(gloves.gameItem());
+    j["Paint Kit"] = paintKit.id;
+    j["Paint Kit Name"] = paintKit.name.forDisplay;
+
+    if (const auto glove = gloves.get<inventory::Gloves>()) {
+        j["Wear"] = glove->wear;
+        j["Seed"] = glove->seed;
+    }
+}
+
 }
 
 json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
@@ -257,14 +269,7 @@ json inventory_changer::toJson(const InventoryChanger& inventoryChanger)
         if (gameItem.isSticker()) {
             stickerToJson(gameItem, gameItemStorage, itemConfig);
         } else if (gameItem.isGloves()) {
-            const auto& staticData = gameItemStorage.getPaintKit(gameItem);
-            itemConfig["Paint Kit"] = staticData.id;
-            itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
-
-            if (const auto glove = item.get<inventory::Gloves>()) {
-                itemConfig["Wear"] = glove->wear;
-                itemConfig["Seed"] = glove->seed;
-            }
+            glovesToJson(item, gameItemStorage, itemConfig);
         } else if (gameItem.isSkin()) {
             const auto& staticData = gameItemStorage.getPaintKit(gameItem);
             itemConfig["Paint Kit"] = staticData.id;
