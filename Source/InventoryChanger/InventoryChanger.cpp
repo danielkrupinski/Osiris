@@ -1226,7 +1226,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
 
-        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ 19, groupId, pickInGroupIndex })));
+        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ csgo::Tournament::PglAntwerp2022, groupId, pickInGroupIndex })));
     } else if (returnAddress == memory->setInventorySortAndFiltersGetArgAsStringReturnAddress) {
         panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
     } else if (returnAddress == memory->performItemCasketTransactionGetArgAsStringReturnAddress) {
@@ -1418,7 +1418,7 @@ void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexIn
         return;
 
     const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-    backend.getRequestor().request<backend::request::PickStickerPickEm>(backend::PickEm::PickPosition{ 19, group, indexInGroup }, tournamentTeam);
+    backend.getRequestor().request<backend::request::PickStickerPickEm>(backend::PickEm::PickPosition{ csgo::Tournament::PglAntwerp2022, group, indexInGroup }, tournamentTeam);
 }
 
 }

@@ -166,7 +166,7 @@ struct EquippedState {
     if (indexInGroup == j.end() || !indexInGroup->is_number_unsigned())
         return {};
 
-    return inventory_changer::backend::PickEm::PickPosition{ tournament->get<std::uint8_t>(), group->get<std::uint16_t>(), indexInGroup->get<std::uint8_t>() };
+    return inventory_changer::backend::PickEm::PickPosition{ static_cast<csgo::Tournament>(tournament->get<std::uint8_t>()), group->get<std::uint16_t>(), indexInGroup->get<std::uint8_t>() };
 }
 
 [[nodiscard]] csgo::TournamentTeam pickTeamFromJson(const json& j)

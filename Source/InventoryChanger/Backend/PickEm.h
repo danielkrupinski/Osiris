@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <map>
 
+#include <SDK/Constants/Tournament.h>
 #include <SDK/Constants/TournamentTeam.h>
 
 namespace inventory_changer::backend
@@ -11,7 +12,7 @@ namespace inventory_changer::backend
 class PickEm {
 public:
     struct PickPosition {
-        std::uint8_t tournament;
+        csgo::Tournament tournament;
         std::uint16_t group;
         std::uint8_t indexInGroup;
 
