@@ -36,6 +36,7 @@ public:
     };
 
     explicit Item(const game_items::Item& item, VariantProperties data) noexcept : item{ item }, properties{ {}, std::move(data) } {}
+    explicit Item(const game_items::Item& item, Properties properties) noexcept : item{ item }, properties{ std::move(properties) } {}
     explicit Item(const game_items::Item& item) noexcept : item{ item } {}
 
     Item(Item&&) = default;
