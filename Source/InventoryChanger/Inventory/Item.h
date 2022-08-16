@@ -15,7 +15,9 @@ namespace inventory_changer::inventory
 
 class Item {
 public:
-    struct CommonProperties {};
+    struct CommonProperties {
+        std::uint32_t tradableAfterDate = 0;
+    };
 
     using VariantProperties = SmallVariant<32,
         std::monostate,
