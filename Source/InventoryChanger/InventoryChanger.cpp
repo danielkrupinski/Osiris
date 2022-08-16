@@ -337,7 +337,7 @@ static void applyPlayerAgent() noexcept
     if (!model)
         return;
 
-    if (const auto agent = item->get<inventory_changer::inventory::Agent>()) {
+    if (const auto agent = get<inventory_changer::inventory::Agent>(*item)) {
         for (std::size_t i = 0; i < agent->patches.size(); ++i) {
             if (const auto& patch = agent->patches[i]; patch.patchID != 0)
                 localPlayer->playerPatchIndices()[i] = patch.patchID;
@@ -1126,7 +1126,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event)
         return;
 
     const auto& item = *optionalItem;
-    const auto music = item->get<inventory_changer::inventory::Music>();
+    const auto music = get<inventory_changer::inventory::Music>(*item);
     if (!music)
         return;
 
@@ -1155,7 +1155,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
         return;
 
     const auto item = *optionalItem;
-    const auto skin = item->get<inventory::Skin>();
+    const auto skin = get<inventory::Skin>(*item);
     if (!skin)
         return;
 

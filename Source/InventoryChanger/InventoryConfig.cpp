@@ -220,7 +220,7 @@ void glovesToJson(const inventory::Item& gloves, const game_items::Storage& game
     j["Paint Kit"] = paintKit.id;
     j["Paint Kit Name"] = paintKit.name.forDisplay;
 
-    if (const auto glove = gloves.get<inventory::Gloves>()) {
+    if (const auto glove = get<inventory::Gloves>(gloves)) {
         j["Wear"] = glove->wear;
         j["Seed"] = glove->seed;
     }
@@ -229,13 +229,13 @@ void glovesToJson(const inventory::Item& gloves, const game_items::Storage& game
 void musicToJson(const inventory::Item& item, const game_items::Storage& gameItemStorage, json& j)
 {
     j["Music ID"] = gameItemStorage.getMusicKit(item.gameItem()).id;
-    if (const auto music = item.get<inventory::Music>(); music && music->statTrak > -1)
+    if (const auto music = get<inventory::Music>(item); music && music->statTrak > -1)
         j["StatTrak"] = music->statTrak;
 }
 
 void agentToJson(const inventory::Item& item, json& j)
 {
-    const auto agent = item.get<inventory::Agent>();
+    const auto agent = get<inventory::Agent>(item);
     if (!agent)
         return;
 
@@ -254,7 +254,7 @@ void agentToJson(const inventory::Item& item, json& j)
 
 void storageUnitToJson(const inventory::Item& item, json& j)
 {
-    if (const auto storageUnit = item.get<inventory::StorageUnit>(); storageUnit && storageUnit->modificationDateTimestamp != 0) {
+    if (const auto storageUnit = get<inventory::StorageUnit>(item); storageUnit && storageUnit->modificationDateTimestamp != 0) {
         j["Modification Date Timestamp"] = storageUnit->modificationDateTimestamp;
         j["Name"] = storageUnit->name;
     }
@@ -302,7 +302,7 @@ void storageUnitToJson(const inventory::Item& item, json& j)
             itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Paint Kit Name"] = staticData.name.forDisplay;
 
-            if (const auto skin = item.get<inventory::Skin>())
+            if (const auto skin = get<inventory::Skin>(item))
                 itemConfig.update(::toJson(*skin));
 
         } else if (gameItem.isMusic()) {
@@ -311,17 +311,17 @@ void storageUnitToJson(const inventory::Item& item, json& j)
             itemConfig["Patch ID"] = gameItemStorage.getPatch(gameItem).id;
         } else if (gameItem.isGraffiti()) {
             itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
-            if (const auto graffiti = item.get<inventory::Graffiti>(); graffiti && graffiti->usesLeft >= 0) {
+            if (const auto graffiti = get<inventory::Graffiti>(item); graffiti && graffiti->usesLeft >= 0) {
                 itemConfig["Uses Left"] = graffiti->usesLeft;
                 itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
             agentToJson(item, itemConfig);
         } else if (gameItem.isServiceMedal()) {
-            if (const auto serviceMedal = item.get<inventory::ServiceMedal>(); serviceMedal && serviceMedal->issueDateTimestamp != 0)
+            if (const auto serviceMedal = get<inventory::ServiceMedal>(item); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
         } else if (gameItem.isCrate()) {
-            if (const auto souvenirPackage = item.get<inventory::SouvenirPackage>(); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+            if (const auto souvenirPackage = get<inventory::SouvenirPackage>(item); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
                 itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
                 itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
                 itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;

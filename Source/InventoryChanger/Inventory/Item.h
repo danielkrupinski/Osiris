@@ -59,8 +59,10 @@ public:
         return properties;
     }
 
-    template <typename T>
-    [[nodiscard]] const T* get() const { return properties.variant.get<T>(); }
+    [[nodiscard]] const Properties& getProperties() const noexcept
+    {
+        return properties;
+    }
 
     template <typename T>
     [[nodiscard]] T* getOrCreate()
@@ -83,6 +85,12 @@ template <typename T>
     return item.getProperties().variant.get<T>();
 }
 
+template <typename T>
+[[nodiscard]] const T* get(const Item& item)
+{
+    return item.getProperties().variant.get<T>();
+}
+
 [[nodiscard]] inline int* getStatTrak(Item& item)
 {
     if (const auto skin = get<Skin>(item))
@@ -96,10 +104,10 @@ template <typename T>
 
 [[nodiscard]] inline std::optional<int> getStatTrak(const Item& item)
 {
-    if (const auto skin = item.get<Skin>())
+    if (const auto skin = get<Skin>(item))
         return skin->statTrak;
 
-    if (const auto music = item.get<Music>())
+    if (const auto music = get<Music>(item))
         return music->statTrak;
 
     return std::nullopt;

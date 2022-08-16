@@ -46,7 +46,7 @@ private:
         skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(attributeGenerator.generatePaintKitCondition()));
         skin.seed = attributeGenerator.generatePaintKitSeed();
 
-        if (const auto souvenirPackage = caseItem.get<inventory::SouvenirPackage>()) {
+        if (const auto souvenirPackage = get<inventory::SouvenirPackage>(caseItem)) {
             skin.tournamentID = gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem());
             skin.tournamentStage = souvenirPackage->tournamentStage;
             skin.tournamentTeam1 = souvenirPackage->tournamentTeam1;
