@@ -879,7 +879,7 @@ inventory::Item::Properties createDefaultDynamicData(const game_items::Storage& 
 {
     Helpers::RandomGenerator randomGenerator{};
     DefaultGenerator defaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } };
-    return { defaultGenerator.createCommonProperties(item), defaultGenerator.createItemData(item) };
+    return { defaultGenerator.createCommonProperties(item), defaultGenerator.createVariantProperties(item) };
 }
 
 }
