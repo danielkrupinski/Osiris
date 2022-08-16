@@ -31,6 +31,11 @@ public:
         return {};
     }
 
+    [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const game_items::Item& item) const
+    {
+        return {};
+    }
+
 private:
     [[nodiscard]] inventory::Skin createSkin(const game_items::Item& item) const
     {
