@@ -38,6 +38,11 @@ public:
         return {};
     }
 
+    [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const inventory::Item* crateKey) const
+    {
+        return {};
+    }
+
 private:
     [[nodiscard]] inventory::Skin generateSkin(const game_items::Item& unlockedItem, const inventory::Item& caseItem) const
     {
