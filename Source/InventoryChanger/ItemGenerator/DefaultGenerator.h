@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
@@ -33,6 +35,8 @@ public:
 
     [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const game_items::Item& item) const
     {
+        if (item.isCaseKey())
+            return { .tradableAfterDate = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(getTradableAfterWeekDate())) };
         return {};
     }
 
@@ -70,6 +74,15 @@ private:
     [[nodiscard]] inventory::SouvenirPackage createSouvenirPackage(const game_items::Item& item) const
     {
         return attributeGenerator.generateSouvenirPackage(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
+    }
+
+    [[nodiscard]] std::chrono::system_clock::time_point getTradableAfterWeekDate() const
+    {
+        using namespace std::chrono;
+        constexpr auto hourWhenItemsBecomeTradable = 7h;
+        constexpr auto tradablePenalty = days{ 7 } + hourWhenItemsBecomeTradable;
+
+        return ceil<days>(system_clock::now() - hourWhenItemsBecomeTradable) + tradablePenalty;
     }
 
     const game_items::Storage& gameItemStorage;
