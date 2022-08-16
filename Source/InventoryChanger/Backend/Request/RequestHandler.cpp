@@ -1,3 +1,6 @@
+#include <memory>
+#include <optional>
+
 #include "RequestHandler.h"
 
 #include <InventoryChanger/Backend/BackendSimulator.h>
@@ -60,12 +63,20 @@ Response RequestHandler::operator()(const request::SwapStatTrak& request) const
     return response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo };
 }
 
+[[nodiscard]] const inventory::Item* toPointer(const std::optional<ItemIterator>& item)
+{
+    if (item.has_value())
+        return std::to_address(*item);
+    else
+        return nullptr;
+}
+
 Response RequestHandler::operator()(const request::OpenContainer& request) const
 {
     if (!request.container->gameItem().isCrate())
         return {};
 
-    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.container);
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.container, toPointer(request.key));
     if (!generatedItem.has_value())
         return {};
 
@@ -236,7 +247,7 @@ Response RequestHandler::operator()(const request::PerformXRayScan& request) con
     if (!request.crate->gameItem().isCrate())
         return {};
 
-    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate);
+    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate, nullptr);
     if (!generatedItem.has_value())
         return {};
 

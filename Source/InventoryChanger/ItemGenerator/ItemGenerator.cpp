@@ -861,7 +861,7 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
-std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem) noexcept
+std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept
 {
     assert(caseItem.gameItem().isCrate());
 
