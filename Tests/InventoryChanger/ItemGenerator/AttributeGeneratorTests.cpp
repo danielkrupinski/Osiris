@@ -1,5 +1,7 @@
 #include <cstdint>
+#include <limits>
 #include <random>
+#include <type_traits>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -28,7 +30,11 @@ public:
 MATCHER_P(LessThanByN, n, "") {
     const auto first = std::get<0>(arg);
     const auto second = std::get<1>(arg);
-    return second - first == n;
+    static_assert(std::is_same_v<decltype(first), decltype(second)>);
+
+    const auto overflow = (first > 0 && second < std::numeric_limits<decltype(first)>::min() + first) ||
+                          (first < 0 && second > std::numeric_limits<decltype(first)>::max() + first);
+    return !overflow && second - first == n;
 }
 
 class InventoryChanger_ItemGenerator_AttributeGeneratorTest : public testing::Test {
