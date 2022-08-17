@@ -512,15 +512,15 @@ static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, Share
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
-static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
+static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
-    if (type == UserMessageType::Text)
+    if (type == csgo::UserMessageType::Text)
         inventory_changer::InventoryChanger::instance().onUserTextMsg(data, size);
-    else if (type == UserMessageType::VoteStart)
+    else if (type == csgo::UserMessageType::VoteStart)
         Misc::onVoteStart(data, size);
-    else if (type == UserMessageType::VotePass)
+    else if (type == csgo::UserMessageType::VotePass)
         Misc::onVotePass();
-    else if (type == UserMessageType::VoteFailed)
+    else if (type == csgo::UserMessageType::VoteFailed)
         Misc::onVoteFailed();
     
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
