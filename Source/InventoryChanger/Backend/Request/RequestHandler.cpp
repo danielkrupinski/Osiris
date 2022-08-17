@@ -271,8 +271,10 @@ Response RequestHandler::operator()(const request::ClaimXRayScannedItem& request
         return {};
 
     if (request.key.has_value()) {
-        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
+        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey()) {
+            constRemover.removeConstness(scannerItems->reward)->getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
             backend.removeItem(keyItem);
+        }
     }
 
     backend.removeItem(request.container);

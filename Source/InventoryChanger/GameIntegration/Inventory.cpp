@@ -521,8 +521,24 @@ void Inventory::xRayItemRevealed(std::uint64_t itemID)
    initItemCustomizationNotification("xray_item_reveal", itemID);
 }
 
-void Inventory::xRayItemClaimed(std::uint64_t itemID)
+void Inventory::xRayItemClaimed(std::uint64_t itemID, std::uint32_t tradableAfterDate)
 {
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+
     initItemCustomizationNotification("xray_item_claim", itemID);
 }
 
