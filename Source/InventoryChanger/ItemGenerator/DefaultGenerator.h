@@ -11,7 +11,7 @@
 namespace inventory_changer::item_generator
 {
 
-template <typename AttributeGenerator>
+template <typename AttributeGenerator, typename SystemClock = std::chrono::system_clock>
 class DefaultGenerator {
 public:
     explicit DefaultGenerator(const game_items::Storage& gameItemStorage, AttributeGenerator attributeGenerator)
@@ -36,7 +36,7 @@ public:
     [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const game_items::Item& item) const
     {
         if (item.isCaseKey())
-            return { .tradableAfterDate = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(getTradableAfterWeekDate())) };
+            return { .tradableAfterDate = static_cast<std::uint32_t>(SystemClock::to_time_t(getTradableAfterWeekDate())) };
         return {};
     }
 
@@ -76,13 +76,13 @@ private:
         return attributeGenerator.generateSouvenirPackage(gameItemStorage.getTournamentEventID(item), gameItemStorage.getTournamentMap(item));
     }
 
-    [[nodiscard]] std::chrono::system_clock::time_point getTradableAfterWeekDate() const
+    [[nodiscard]] typename SystemClock::time_point getTradableAfterWeekDate() const
     {
         using namespace std::chrono;
         constexpr auto hourWhenItemsBecomeTradable = 7h;
         constexpr auto tradablePenalty = days{ 7 } + hourWhenItemsBecomeTradable;
 
-        return ceil<days>(system_clock::now() - hourWhenItemsBecomeTradable) + tradablePenalty;
+        return ceil<days>(SystemClock::now() - hourWhenItemsBecomeTradable) + tradablePenalty;
     }
 
     const game_items::Storage& gameItemStorage;
