@@ -362,6 +362,21 @@ std::optional<std::uint32_t> storageUnitIdFromJson(const json& j)
     return {};
 }
 
+namespace inventory_changer
+{
+
+[[nodiscard]] inventory::Item::CommonProperties commonPropertiesFromJson(const json& j)
+{
+    inventory::Item::CommonProperties properties;
+
+    if (const auto it = j.find("Tradable After Date"); it != j.end() && it->is_number_unsigned())
+        properties.tradableAfterDate = it->get<std::uint32_t>();
+
+    return properties;
+}
+
+}
+
 void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChanger)
 {
     auto& backend = inventoryChanger.getBackend();
@@ -384,7 +399,7 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
         if (!item)
             continue;
 
-        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ *item, itemFromJson(lookup.getStorage(), *item, jsonItem) });
+        const auto itemAdded = backend.addItemAcknowledged(inventory::Item{ *item, { commonPropertiesFromJson(jsonItem), itemFromJson(lookup.getStorage(), *item, jsonItem) } });
 
         if (const auto storageUnitID = storageUnitIdFromJson(jsonItem); storageUnitID.has_value()) {
             if (!item->isStorageUnit()) {
