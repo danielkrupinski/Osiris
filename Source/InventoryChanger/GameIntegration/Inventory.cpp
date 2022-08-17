@@ -168,6 +168,10 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
 
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
 
+    if (const auto tradableAfterDate = inventoryItem.getProperties().common.tradableAfterDate; tradableAfterDate != 0) {
+        attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
+    }
+
     if (item.isSticker()) {
         attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getStickerKit(item).id);
     } else if (item.isPatch()) {
