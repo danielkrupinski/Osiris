@@ -9,7 +9,7 @@
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 
-enum class FrameStage;
+namespace csgo { enum class FrameStage; }
 enum class Team;
 class Entity;
 class GameEvent;
@@ -79,7 +79,7 @@ namespace InventoryChanger
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
 
-    void run(FrameStage) noexcept;
+    void run(csgo::FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
 
     void clearItemIconTextures() noexcept;

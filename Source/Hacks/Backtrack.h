@@ -8,14 +8,14 @@
 #include "../SDK/matrix3x4.h"
 #include "../SDK/Vector.h"
 
-enum class FrameStage;
+namespace csgo { enum class FrameStage; }
 struct UserCmd;
 
 #define OSIRIS_BACKTRACK() true
 
 namespace Backtrack
 {
-    void update(FrameStage) noexcept;
+    void update(csgo::FrameStage) noexcept;
     void run(UserCmd*) noexcept;
 
     struct Record {

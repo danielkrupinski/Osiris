@@ -405,20 +405,20 @@ static void processEquipRequests()
     }
 }
 
-void InventoryChanger::run(FrameStage stage) noexcept
+void InventoryChanger::run(csgo::FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
 
     if (localPlayer)
         localPlayerHandle = localPlayer->handle();
 
-    if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
+    if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
         onPostDataUpdateStart(localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
             updateHud();
     }
 
-    if (stage != FrameStage::RENDER_START)
+    if (stage != csgo::FrameStage::RENDER_START)
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();

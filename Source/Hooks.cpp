@@ -292,17 +292,17 @@ static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
 }
 
-static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
+static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
-    if (stage == FrameStage::START)
+    if (stage == csgo::FrameStage::START)
         GameData::update();
 
-    if (stage == FrameStage::RENDER_START) {
+    if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();

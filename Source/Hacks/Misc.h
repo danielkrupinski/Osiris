@@ -2,7 +2,8 @@
 
 #include "../JsonForward.h"
 
-enum class FrameStage;
+namespace csgo { enum class FrameStage; }
+
 class GameEvent;
 struct ImDrawList;
 struct UserCmd;
@@ -40,7 +41,7 @@ namespace Misc
     void killMessage(GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(UserCmd* cmd) noexcept;
-    void fixAnimationLOD(FrameStage stage) noexcept;
+    void fixAnimationLOD(csgo::FrameStage stage) noexcept;
     void autoPistol(UserCmd* cmd) noexcept;
     void chokePackets(bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
@@ -51,7 +52,7 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
-    void oppositeHandKnife(FrameStage stage) noexcept;
+    void oppositeHandKnife(csgo::FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;

@@ -1,5 +1,8 @@
 #pragma once
 
+namespace csgo
+{
+
 enum class FrameStage {
     UNDEFINED = -1,
     START,
@@ -10,3 +13,5 @@ enum class FrameStage {
     RENDER_START,
     RENDER_END
 };
+
+}

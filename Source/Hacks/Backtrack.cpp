@@ -45,9 +45,9 @@ static auto timeToTicks(float time) noexcept
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
 }
 
-void Backtrack::update(FrameStage stage) noexcept
+void Backtrack::update(csgo::FrameStage stage) noexcept
 {
-    if (stage == FrameStage::RENDER_START) {
+    if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
                 record.clear();

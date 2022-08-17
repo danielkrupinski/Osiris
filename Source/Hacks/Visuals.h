@@ -2,7 +2,7 @@
 
 #include "../JsonForward.h"
 
-enum class FrameStage;
+namespace csgo { enum class FrameStage; }
 class GameEvent;
 struct ImDrawList;
 
@@ -22,24 +22,24 @@ namespace Visuals
     void performColorCorrection() noexcept;
     void inverseRagdollGravity() noexcept;
     void colorWorld() noexcept;
-    void modifySmoke(FrameStage stage) noexcept;
+    void modifySmoke(csgo::FrameStage stage) noexcept;
     void thirdperson() noexcept;
-    void removeVisualRecoil(FrameStage stage) noexcept;
-    void removeBlur(FrameStage stage) noexcept;
+    void removeVisualRecoil(csgo::FrameStage stage) noexcept;
+    void removeBlur(csgo::FrameStage stage) noexcept;
     void updateBrightness() noexcept;
-    void removeGrass(FrameStage stage) noexcept;
+    void removeGrass(csgo::FrameStage stage) noexcept;
     void remove3dSky() noexcept;
     void removeShadows() noexcept;
-    void applyZoom(FrameStage stage) noexcept;
+    void applyZoom(csgo::FrameStage stage) noexcept;
     void applyScreenEffects() noexcept;
     void hitEffect(GameEvent* event = nullptr) noexcept;
     void hitMarker(GameEvent* event, ImDrawList* drawList = nullptr) noexcept;
-    void disablePostProcessing(FrameStage stage) noexcept;
+    void disablePostProcessing(csgo::FrameStage stage) noexcept;
     void reduceFlashEffect() noexcept;
     bool removeHands(const char* modelName) noexcept;
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
-    void skybox(FrameStage stage) noexcept;
+    void skybox(csgo::FrameStage stage) noexcept;
     void bulletTracer(GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 

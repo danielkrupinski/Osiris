@@ -300,9 +300,9 @@ void Visuals::colorWorld() noexcept
     }
 }
 
-void Visuals::modifySmoke(FrameStage stage) noexcept
+void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
 {
-    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
     constexpr std::array smokeMaterials{
@@ -314,8 +314,8 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
 
     for (const auto mat : smokeMaterials) {
         const auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && visualsConfig.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START && visualsConfig.wireframeSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == csgo::FrameStage::RENDER_START && visualsConfig.wireframeSmoke);
     }
 }
 
@@ -328,7 +328,7 @@ void Visuals::thirdperson() noexcept
     memory->input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance); 
 }
 
-void Visuals::removeVisualRecoil(FrameStage stage) noexcept
+void Visuals::removeVisualRecoil(csgo::FrameStage stage) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -336,7 +336,7 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
     static Vector aimPunch;
     static Vector viewPunch;
 
-    if (stage == FrameStage::RENDER_START) {
+    if (stage == csgo::FrameStage::RENDER_START) {
         aimPunch = localPlayer->aimPunchAngle();
         viewPunch = localPlayer->viewPunchAngle();
 
@@ -346,19 +346,19 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
         if (visualsConfig.noViewPunch)
             localPlayer->viewPunchAngle() = Vector{ };
 
-    } else if (stage == FrameStage::RENDER_END) {
+    } else if (stage == csgo::FrameStage::RENDER_END) {
         localPlayer->aimPunchAngle() = aimPunch;
         localPlayer->viewPunchAngle() = viewPunch;
     }
 }
 
-void Visuals::removeBlur(FrameStage stage) noexcept
+void Visuals::removeBlur(csgo::FrameStage stage) noexcept
 {
-    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
     static auto blur = interfaces->materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && visualsConfig.noBlur);
+    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
@@ -367,9 +367,9 @@ void Visuals::updateBrightness() noexcept
     brightness->setValue(visualsConfig.brightness);
 }
 
-void Visuals::removeGrass(FrameStage stage) noexcept
+void Visuals::removeGrass(csgo::FrameStage stage) noexcept
 {
-    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
     constexpr auto getGrassMaterialName = []() noexcept -> const char* {
@@ -385,7 +385,7 @@ void Visuals::removeGrass(FrameStage stage) noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && visualsConfig.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
@@ -400,10 +400,10 @@ void Visuals::removeShadows() noexcept
     shadows->setValue(!visualsConfig.noShadows);
 }
 
-void Visuals::applyZoom(FrameStage stage) noexcept
+void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 {
     if (visualsConfig.zoom && localPlayer) {
-        if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
+        if (stage == csgo::FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             if (visualsConfig.zoomKey.isToggled()) {
                 localPlayer->fov() = 40;
                 localPlayer->fovStart() = 40;
@@ -533,12 +533,12 @@ void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
     }
 }
 
-void Visuals::disablePostProcessing(FrameStage stage) noexcept
+void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
 {
-    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    *memory->disablePostProcessing = stage == FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
+    *memory->disablePostProcessing = stage == csgo::FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept
@@ -564,12 +564,12 @@ bool Visuals::removeWeapons(const char* modelName) noexcept
         && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
 }
 
-void Visuals::skybox(FrameStage stage) noexcept
+void Visuals::skybox(csgo::FrameStage stage) noexcept
 {
-    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    if (stage == FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
+    if (stage == csgo::FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
         memory->loadSky(skyboxList[visualsConfig.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
