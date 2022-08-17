@@ -260,6 +260,12 @@ void storageUnitToJson(const inventory::Item& item, json& j)
     }
 }
 
+void commonPropertiesToJson(const inventory::Item::CommonProperties& properties, json& j)
+{
+    if (properties.tradableAfterDate != 0)
+        j.emplace("Tradable After Date", properties.tradableAfterDate);
+}
+
 [[nodiscard]] json itemsToJson(const backend::BackendSimulator& backend)
 {
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
@@ -292,6 +298,8 @@ void storageUnitToJson(const inventory::Item& item, json& j)
         const auto& gameItem = item.gameItem();
         itemConfig["Weapon ID"] = gameItem.getWeaponID();
         itemConfig["Item Name"] = WeaponNames::instance().getWeaponName(gameItem.getWeaponID());
+
+        commonPropertiesToJson(item.getProperties().common, itemConfig);
 
         if (gameItem.isSticker()) {
             stickerToJson(gameItem, gameItemStorage, itemConfig);
