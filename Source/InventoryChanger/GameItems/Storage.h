@@ -37,7 +37,7 @@ public:
     void addSkinWithLastPaintKit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addNameTag(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addAgent(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
-    void addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath);
+    void addCrate(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath);
     void addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);
     void addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::string_view iconPath);

@@ -81,7 +81,7 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
     addItem(Item::Type::Agent, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
+void Storage::addCrate(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
 {
     assert((static_cast<std::uint8_t>(map) & 0x80) == 0);
     addItem(Item::Type::Crate, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournament, pooled(iconPath));
