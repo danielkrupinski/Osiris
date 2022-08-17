@@ -214,7 +214,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBot
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProducesRequest) {
-    const auto key = createDummyItem<ItemType::CaseKey>();
+    const auto key = createDummyItem<ItemType::CrateKey>();
     const auto crate = createDummyItem<ItemType::Crate>();
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, key))));
@@ -223,7 +223,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProduces
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCrateProducesXRayClaimRequest) {
-    const auto key = createDummyItem<ItemType::CaseKey>();
+    const auto key = createDummyItem<ItemType::CrateKey>();
     const auto crate = createDummyItem<ItemType::Crate>();
     crate->setState(inventory::Item::State::InXrayScanner);
 
@@ -257,7 +257,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingNameTagNotOnSkinDoesNot
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyNotOnCrateDoesNotProduceRequest) {
-    createDummyItem<ItemType::CaseKey>();
+    createDummyItem<ItemType::CrateKey>();
     createDummyItem<ItemType::Music>();
 
     EXPECT_CALL(requestor, request(testing::An<const request::OpenContainer&>())).Times(0);

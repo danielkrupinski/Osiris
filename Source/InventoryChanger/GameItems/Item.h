@@ -26,7 +26,7 @@ public:
     [[nodiscard]] constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
     [[nodiscard]] constexpr bool isAgent() const noexcept { return type == Type::Agent; }
     [[nodiscard]] constexpr bool isCrate() const noexcept { return type == Type::Crate; }
-    [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
+    [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CrateKey; }
     [[nodiscard]] constexpr bool isOperationPass() const noexcept { return type == Type::OperationPass; }
     [[nodiscard]] constexpr bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
     [[nodiscard]] constexpr bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
@@ -46,7 +46,7 @@ public:
         NameTag,
         Agent,
         Crate,
-        CaseKey,
+        CrateKey,
         OperationPass,
         StatTrakSwapTool,
         ViewerPass,

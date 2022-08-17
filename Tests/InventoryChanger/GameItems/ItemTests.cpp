@@ -94,7 +94,7 @@ TEST_P(TypeTest, CreatedItemIsCrate) {
 }
 
 TEST_P(TypeTest, CreatedItemIsCaseKey) {
-    ASSERT_EQ(createItemOfType(GetParam()).isCaseKey(), GetParam() == Item::Type::CaseKey);
+    ASSERT_EQ(createItemOfType(GetParam()).isCaseKey(), GetParam() == Item::Type::CrateKey);
 }
 
 TEST_P(TypeTest, CreatedItemIsOperationPass) {
@@ -133,7 +133,7 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, TypeTest,
         Item::Type::NameTag,
         Item::Type::Agent,
         Item::Type::Crate,
-        Item::Type::CaseKey,
+        Item::Type::CrateKey,
         Item::Type::OperationPass,
         Item::Type::StatTrakSwapTool,
         Item::Type::ViewerPass,

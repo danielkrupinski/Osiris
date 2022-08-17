@@ -89,7 +89,7 @@ void Storage::addCrate(EconRarity rarity, WeaponId weaponID, std::uint16_t crate
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
 {
-    addItem(Item::Type::CaseKey, rarity, weaponID, 0, pooled(iconPath));
+    addItem(Item::Type::CrateKey, rarity, weaponID, 0, pooled(iconPath));
 }
 
 void Storage::addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
