@@ -40,6 +40,8 @@ public:
 
     [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const inventory::Item* crateKey) const
     {
+        if (crateKey)
+            return { .tradableAfterDate = crateKey->getProperties().common.tradableAfterDate };
         return {};
     }
 
