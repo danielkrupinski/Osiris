@@ -16,8 +16,7 @@ public:
     template <typename RequestType, typename... Args>
     void request(Args&&... args)
     {
-        if (const auto response = requestHandler(RequestType{ std::forward<Args>(args)... }); !isEmptyResponse(response))
-            responseQueue.add(response);
+        requestHandler(RequestType{ std::forward<Args>(args)... });
     }
 
 private:
