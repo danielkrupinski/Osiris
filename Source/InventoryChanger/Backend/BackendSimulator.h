@@ -8,7 +8,6 @@
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
-#include "Requestor.h"
 #include "StorageUnitManager.h"
 #include "XRayScanner.h"
 #include "Request/RequestHandler.h"
