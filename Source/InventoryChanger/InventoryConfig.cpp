@@ -195,7 +195,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
         if (team == csgo::TournamentTeam::None)
             continue;
 
-        backend.getRequestor().request<inventory_changer::backend::request::PickStickerPickEm>(*position, team);
+        backend.getRequestHandler()(inventory_changer::backend::request::PickStickerPickEm{ *position, team });
     }
 
 }
@@ -431,7 +431,7 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
 
     for (auto [item, storageUnitID] : itemsToBindToStorageUnits) {
         if (const auto storageUnit = storageUnits.find(storageUnitID); storageUnit != storageUnits.end()) {
-            backend.getRequestor().request<inventory_changer::backend::request::BindItemToStorageUnit>(item, storageUnit->second);
+            backend.getRequestHandler()(inventory_changer::backend::request::BindItemToStorageUnit{ item, storageUnit->second });
         }
     }
 }

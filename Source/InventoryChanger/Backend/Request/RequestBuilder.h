@@ -144,7 +144,7 @@ private:
     template <typename RequestType, typename... Args>
     void request(Args&&... args)
     {
-        requestor.template request<RequestType>(std::forward<Args>(args)...);
+        requestor(RequestType{ std::forward<Args>(args)... });
     }
 
     const ItemIDMap& itemIDMap;

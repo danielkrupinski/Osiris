@@ -33,10 +33,10 @@ struct MockRequestor {
 struct MockRequestorWrapper {
     MockRequestorWrapper(MockRequestor& requestor) : requestor{ requestor } {}
 
-    template <typename RequestType, typename... Args>
-    void request(Args&&... args)
+    template <typename RequestType>
+    void operator()(const RequestType& request)
     {
-        requestor.request(RequestType{ std::forward<Args>(args)... });
+        requestor.request(request);
     }
 
 private:
