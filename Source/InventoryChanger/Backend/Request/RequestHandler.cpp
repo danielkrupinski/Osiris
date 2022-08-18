@@ -55,11 +55,11 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
         return;
 
     backend.removeItem(request.statTrakSwapTool);
-    backend.getRequestor().request<request::UpdateStatTrak>(request.itemFrom, *statTrakTo);
-    backend.getRequestor().request<request::UpdateStatTrak>(request.itemTo, *statTrakFrom);
+    operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
+    operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
     backend.moveToFront(request.itemFrom);
     backend.moveToFront(request.itemTo);
-    backend.getRequestor().request<request::MarkItemUpdated>(*statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo);
+    operator()(request::MarkItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
     responseQueue.add(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
 
@@ -248,7 +248,7 @@ void RequestHandler::operator()(const request::PerformXRayScan& request) const
         return;
 
     constRemover.removeConstness(request.crate)->setState(inventory::Item::State::InXrayScanner);
-    backend.getRequestor().request<request::HideItem>(request.crate);
+    operator()(request::HideItem{ request.crate });
 
     generatedItem->setState(inventory::Item::State::InXrayScanner);
 
@@ -274,7 +274,7 @@ void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) co
     }
 
     backend.removeItem(request.container);
-    backend.getRequestor().request<request::UnhideItem>(scannerItems->reward);
+    operator()(request::UnhideItem{ scannerItems->reward });
     responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
 }
 
@@ -285,7 +285,7 @@ void RequestHandler::operator()(const request::NameStorageUnit& request) const
         return;
 
     storageUnit->name = request.name;
-    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+    operator()(request::MarkStorageUnitModified{ request.storageUnit });
     backend.moveToFront(request.storageUnit);
 
     responseQueue.add(response::StorageUnitNamed{ request.storageUnit });
@@ -314,15 +314,15 @@ void RequestHandler::operator()(const request::BindItemToStorageUnit& request) c
     ++storageUnit->itemCount;
     storageUnitManager.addItemToStorageUnit(request.item, request.storageUnit);
     constRemover.removeConstness(request.item)->setState(inventory::Item::State::InStorageUnit);
-    backend.getRequestor().request<request::UpdateStorageUnitAttributes>(request.storageUnit);
+    operator()(request::UpdateStorageUnitAttributes{ request.storageUnit });
 
     responseQueue.add(response::ItemBoundToStorageUnit{ request.item, request.storageUnit });
 }
 
 void RequestHandler::operator()(const request::AddItemToStorageUnit& request) const
 {
-    backend.getRequestor().request<request::BindItemToStorageUnit>(request.item, request.storageUnit);
-    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+    operator()(request::BindItemToStorageUnit{ request.item, request.storageUnit });
+    operator()(request::MarkStorageUnitModified{ request.storageUnit });
     responseQueue.add(response::ItemAddedToStorageUnit{ request.storageUnit });
 }
 
@@ -338,7 +338,7 @@ void RequestHandler::operator()(const request::RemoveFromStorageUnit& request) c
     --storageUnit->itemCount;
     storageUnitManager.removeItemFromStorageUnit(request.item, request.storageUnit);
     constRemover.removeConstness(request.item)->setState(inventory::Item::State::Default);
-    backend.getRequestor().request<request::MarkStorageUnitModified>(request.storageUnit);
+    operator()(request::MarkStorageUnitModified{ request.storageUnit });
 
     responseQueue.add(response::ItemRemovedFromStorageUnit{ request.item, request.storageUnit });
 }
