@@ -81,6 +81,7 @@ using MarkItemUpdated = ModifyItem<struct MarkItemUpdatedTag>;
 using HideItem = ModifyItem<struct HideItemTag>;
 using UnhideItem = ModifyItem<struct UnhideItemTag>;
 using MoveItemToFront = ModifyItem<struct MoveItemToFrontTag>;
+using RemoveItem = ModifyItem<struct RemoveItemTag>;
 
 struct AddNameTag {
     AddNameTag(ItemIterator item, ItemIterator nameTagItem, std::string_view nameTag)

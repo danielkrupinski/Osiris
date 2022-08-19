@@ -818,7 +818,7 @@ void InventoryChanger::drawGUI(bool contentOnly)
             const auto& inventory = backend.getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
-                if (it->getState() != inventory_changer::inventory::Item::State::Default) {
+                if (it->getState() != inventory::Item::State::Default) {
                     ++it;
                     continue;
                 }
@@ -827,7 +827,7 @@ void InventoryChanger::drawGUI(bool contentOnly)
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
-                    it = std::make_reverse_iterator(backend.removeItem(std::next(it).base()));
+                    it = std::make_reverse_iterator(backend.getRequestHandler()(backend::request::RemoveItem{ std::next(it).base() }));
                 } else {
                     ++it;
                 }
@@ -1202,7 +1202,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         backendRequestBuilder.removeNameTagFrom(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
-            backend.removeItem(*itOptional);
+            backend.getRequestHandler()(backend::request::RemoveItem{ *itOptional });
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {

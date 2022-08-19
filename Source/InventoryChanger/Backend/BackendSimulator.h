@@ -102,27 +102,13 @@ public:
     void clearInventory()
     {
         for (auto it = inventory.cbegin(); it != inventory.cend();)
-            it = removeItem(it);
+            it = getRequestHandler()(request::RemoveItem{ it });
     }
 
     void clearPickEm()
     {
         pickEm.clear();
         responseQueue.add(response::PickEmUpdated{});
-    }
-
-    ItemIterator removeItem(ItemIterator it)
-    {
-        const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(it, [this, it](const auto& storedItem) {
-            if (storedItem != it)
-                removeItemInternal(storedItem);
-        });
-
-        if (removedFromStorageUnit.has_value()) {
-            getRequestHandler()(request::RemoveFromStorageUnit{ it, *removedFromStorageUnit });
-        }
-
-        return removeItemInternal(it);
     }
 
     [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
@@ -137,7 +123,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, ItemConstRemover{ inventory } };
+        return RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, ItemConstRemover{ inventory } };
     }
 
     template <typename GameInventory>
@@ -152,18 +138,6 @@ public:
     }
 
 private:
-    ItemIterator removeItemInternal(ItemIterator it)
-    {
-        const auto itemID = itemIDMap.remove(it);
-        loadout.unequipItem(it);
-        responseQueue.removeResponsesReferencingItem(it);
-        xRayScanner.onItemRemoval(it);
-        const auto newIterator = inventory.erase(it);
-        if (itemID.has_value())
-            responseQueue.add(response::ItemRemoved{ *itemID });
-        return newIterator;
-    }
-
     ItemList inventory;
     Loadout loadout;
     ResponseQueue<> responseQueue;

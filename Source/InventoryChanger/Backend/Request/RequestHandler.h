@@ -9,13 +9,15 @@ namespace inventory_changer::backend
 {
 
 class BackendSimulator;
+class ItemIDMap;
+class Loadout;
 class PickEm;
 class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, constRemover{ constRemover }, itemIDMap{ itemIDMap } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -45,14 +47,19 @@ struct RequestHandler {
     void operator()(const request::UpdateStorageUnitAttributes& request) const;
     void operator()(const request::MoveItemToFront& request) const;
     ItemIterator operator()(request::AddItem request) const;
+    ItemIterator operator()(const request::RemoveItem& request) const;
 
 private:
+    ItemIterator removeItemInternal(ItemIterator it) const;
+
     BackendSimulator& backend;
     PickEm& pickEm;
     StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ResponseQueue<>& responseQueue;
     ItemList& inventory;
+    Loadout& loadout;
+    ItemIDMap& itemIDMap;
     ItemConstRemover constRemover;
 };
 

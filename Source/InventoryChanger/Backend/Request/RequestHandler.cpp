@@ -20,7 +20,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     skin->stickers[request.slot].wear = 0.0f;
 
     operator()(request::MoveItemToFront{ request.item });
-    backend.removeItem(request.sticker);
+    operator()(request::RemoveItem{ request.sticker });
     responseQueue.add(response::StickerApplied{ request.item, request.slot });
 }
 
@@ -54,7 +54,7 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     if (!statTrakTo)
         return;
 
-    backend.removeItem(request.statTrakSwapTool);
+    operator()(request::RemoveItem{ request.statTrakSwapTool });
     operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
     operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
     operator()(request::MoveItemToFront{ request.itemFrom });
@@ -82,10 +82,10 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
 
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
-            backend.removeItem(keyItem);
+            operator()(request::RemoveItem{ keyItem });
     }
 
-    backend.removeItem(request.container);
+    operator()(request::RemoveItem{ request.container });
     const auto receivedItem = operator()(request::AddItem{ std::move(*generatedItem), true });
     responseQueue.add(response::ContainerOpened{ receivedItem });
 }
@@ -98,7 +98,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
 
     agent->patches[request.slot].patchID = backend.getGameItemLookup().getStorage().getPatch(request.patch->gameItem()).id;
     operator()(request::MoveItemToFront{ request.item });
-    backend.removeItem(request.patch);
+    operator()(request::RemoveItem{ request.patch });
     responseQueue.add(response::PatchApplied{ request.item, request.slot });
 }
 
@@ -122,7 +122,7 @@ void RequestHandler::operator()(const request::ActivateOperationPass& request) c
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
     if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID)) {
         operator()(request::AddItem{ inventory::Item{ *operationCoin }, true });
-        backend.removeItem(request.operationPass);
+        operator()(request::RemoveItem{ request.operationPass });
     }
 }
 
@@ -138,7 +138,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
 
     if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID)) {
         const auto addedEventCoin = operator()(request::AddItem{ inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true });
-        backend.removeItem(request.item);
+        operator()(request::RemoveItem{ request.item });
         responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
     }
 }
@@ -150,7 +150,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
         return;
 
     skin->nameTag = request.nameTag;
-    backend.removeItem(request.nameTagItem);
+    operator()(request::RemoveItem{ request.nameTagItem });
     operator()(request::MoveItemToFront{ request.item });
     responseQueue.add(response::NameTagAdded{ request.item });
 }
@@ -269,11 +269,11 @@ void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) co
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey()) {
             constRemover.removeConstness(scannerItems->reward)->getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
-            backend.removeItem(keyItem);
+            operator()(request::RemoveItem{ keyItem });
         }
     }
 
-    backend.removeItem(request.container);
+    operator()(request::RemoveItem{ request.container });
     operator()(request::UnhideItem{ scannerItems->reward });
     responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
 }
@@ -363,6 +363,32 @@ ItemIterator RequestHandler::operator()(request::AddItem request) const
     const auto added = std::prev(inventory.end());
     responseQueue.add(response::ItemAdded{ added, request.asUnacknowledged });
     return added;
+}
+
+ItemIterator RequestHandler::operator()(const request::RemoveItem& request) const
+{
+    const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(request.item, [this, it = request.item](const auto& storedItem) {
+        if (storedItem != it)
+            removeItemInternal(storedItem);
+    });
+
+    if (removedFromStorageUnit.has_value()) {
+        operator()(request::RemoveFromStorageUnit{ request.item, *removedFromStorageUnit });
+    }
+
+    return removeItemInternal(request.item);
+}
+
+ItemIterator RequestHandler::removeItemInternal(ItemIterator it) const
+{
+    const auto itemID = itemIDMap.remove(it);
+    loadout.unequipItem(it);
+    responseQueue.removeResponsesReferencingItem(it);
+    xRayScanner.onItemRemoval(it);
+    const auto newIterator = inventory.erase(it);
+    if (itemID.has_value())
+        responseQueue.add(response::ItemRemoved{ *itemID });
+    return newIterator;
 }
 
 }
