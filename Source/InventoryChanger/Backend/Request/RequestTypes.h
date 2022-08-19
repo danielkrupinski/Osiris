@@ -176,4 +176,12 @@ struct UpdateStorageUnitAttributes {
     ItemIterator storageUnit;
 };
 
+struct AddItem {
+    explicit AddItem(inventory::Item item, bool asUnacknowledged)
+        : item{ std::move(item) }, asUnacknowledged{ asUnacknowledged } {}
+
+    inventory::Item item;
+    bool asUnacknowledged;
+};
+
 }

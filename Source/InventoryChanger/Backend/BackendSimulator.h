@@ -111,16 +111,6 @@ public:
         responseQueue.add(response::PickEmUpdated{});
     }
 
-    ItemIterator addItemUnacknowledged(inventory::Item item)
-    {
-        return addItem(std::move(item), true);
-    }
-
-    ItemIterator addItemAcknowledged(inventory::Item item)
-    {
-        return addItem(std::move(item), false);
-    }
-
     ItemIterator removeItem(ItemIterator it)
     {
         const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(it, [this, it](const auto& storedItem) {
@@ -172,14 +162,6 @@ private:
         if (itemID.has_value())
             responseQueue.add(response::ItemRemoved{ *itemID });
         return newIterator;
-    }
-
-    ItemIterator addItem(inventory::Item item, bool asUnacknowledged)
-    {
-        inventory.push_back(std::move(item));
-        const auto added = std::prev(inventory.end());
-        responseQueue.add(response::ItemAdded{ added, asUnacknowledged });
-        return added;
     }
 
     ItemList inventory;

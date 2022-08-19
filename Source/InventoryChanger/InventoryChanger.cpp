@@ -801,14 +801,14 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
             for (const auto& [i, gameItem] : gameItemList.getItems()) {
                 if (addingAll) {
-                    inventory_changer::InventoryChanger::instance().getBackend().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) });
+                    inventory_changer::InventoryChanger::instance().getBackend().getRequestHandler()(inventory_changer::backend::request::AddItem{ inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) }, true });
                 }
 
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        inventory_changer::InventoryChanger::instance().getBackend().addItemUnacknowledged(inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) });
+                        inventory_changer::InventoryChanger::instance().getBackend().getRequestHandler()(inventory_changer::backend::request::AddItem{ inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) }, true });
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();

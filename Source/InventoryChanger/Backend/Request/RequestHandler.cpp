@@ -86,7 +86,7 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
     }
 
     backend.removeItem(request.container);
-    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
+    const auto receivedItem = operator()(request::AddItem{ std::move(*generatedItem), true });
     responseQueue.add(response::ContainerOpened{ receivedItem });
 }
 
@@ -121,7 +121,7 @@ void RequestHandler::operator()(const request::ActivateOperationPass& request) c
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
     if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID)) {
-        backend.addItemUnacknowledged(inventory::Item{ *operationCoin });
+        operator()(request::AddItem{ inventory::Item{ *operationCoin }, true });
         backend.removeItem(request.operationPass);
     }
 }
@@ -137,7 +137,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
         return;
 
     if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID)) {
-        const auto addedEventCoin = backend.addItemUnacknowledged(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) } });
+        const auto addedEventCoin = operator()(request::AddItem{ inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true });
         backend.removeItem(request.item);
         responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
     }
@@ -252,7 +252,7 @@ void RequestHandler::operator()(const request::PerformXRayScan& request) const
 
     generatedItem->setState(inventory::Item::State::InXrayScanner);
 
-    const auto receivedItem = backend.addItemUnacknowledged(std::move(*generatedItem));
+    const auto receivedItem = operator()(request::AddItem{ std::move(*generatedItem), true });
     xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
     responseQueue.add(response::XRayScannerUsed{ receivedItem });
 }
@@ -355,6 +355,14 @@ void RequestHandler::operator()(const request::MoveItemToFront& request) const
 {
     inventory.splice(inventory.end(), inventory, request.item);
     responseQueue.add(response::ItemMovedToFront{ request.item });
+}
+
+ItemIterator RequestHandler::operator()(request::AddItem request) const
+{
+    inventory.push_back(std::move(request.item));
+    const auto added = std::prev(inventory.end());
+    responseQueue.add(response::ItemAdded{ added, request.asUnacknowledged });
+    return added;
 }
 
 }

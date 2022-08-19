@@ -44,6 +44,7 @@ struct RequestHandler {
     void operator()(const request::RemoveFromStorageUnit& request) const;
     void operator()(const request::UpdateStorageUnitAttributes& request) const;
     void operator()(const request::MoveItemToFront& request) const;
+    ItemIterator operator()(request::AddItem request) const;
 
 private:
     BackendSimulator& backend;
