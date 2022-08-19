@@ -19,7 +19,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     skin->stickers[request.slot].stickerID = backend.getGameItemLookup().getStorage().getStickerKit(request.sticker->gameItem()).id;
     skin->stickers[request.slot].wear = 0.0f;
 
-    backend.moveToFront(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     backend.removeItem(request.sticker);
     responseQueue.add(response::StickerApplied{ request.item, request.slot });
 }
@@ -57,8 +57,8 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     backend.removeItem(request.statTrakSwapTool);
     operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
     operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
-    backend.moveToFront(request.itemFrom);
-    backend.moveToFront(request.itemTo);
+    operator()(request::MoveItemToFront{ request.itemFrom });
+    operator()(request::MoveItemToFront{ request.itemTo });
     operator()(request::MarkItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
     responseQueue.add(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
@@ -97,7 +97,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
         return;
 
     agent->patches[request.slot].patchID = backend.getGameItemLookup().getStorage().getPatch(request.patch->gameItem()).id;
-    backend.moveToFront(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     backend.removeItem(request.patch);
     responseQueue.add(response::PatchApplied{ request.item, request.slot });
 }
@@ -109,7 +109,7 @@ void RequestHandler::operator()(const request::RemovePatch& request) const
         return;
 
     agent->patches[request.slot].patchID = 0;
-    backend.moveToFront(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     responseQueue.add(response::PatchRemoved{ request.item, request.slot });
 }
 
@@ -151,7 +151,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
 
     skin->nameTag = request.nameTag;
     backend.removeItem(request.nameTagItem);
-    backend.moveToFront(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     responseQueue.add(response::NameTagAdded{ request.item });
 }
 
@@ -159,7 +159,7 @@ void RequestHandler::operator()(const request::RemoveNameTag& request) const
 {
     if (const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.item))) {
         skin->nameTag.clear();
-        backend.moveToFront(request.item);
+        operator()(request::MoveItemToFront{ request.item });
         responseQueue.add(response::NameTagRemoved{ request.item });
     }
 }
@@ -180,7 +180,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
         return;
 
     ++tournamentCoinData->dropsAwarded;
-    backend.removeItem(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     responseQueue.add(response::SouvenirTokenActivated{ tournamentCoin });
 }
 
@@ -195,7 +195,7 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
 
     graffiti->usesLeft = 50;
 
-    backend.moveToFront(request.item);
+    operator()(request::MoveItemToFront{ request.item });
     responseQueue.add(response::GraffitiUnsealed{ request.item });
 }
 
@@ -286,7 +286,7 @@ void RequestHandler::operator()(const request::NameStorageUnit& request) const
 
     storageUnit->name = request.name;
     operator()(request::MarkStorageUnitModified{ request.storageUnit });
-    backend.moveToFront(request.storageUnit);
+    operator()(request::MoveItemToFront{ request.storageUnit });
 
     responseQueue.add(response::StorageUnitNamed{ request.storageUnit });
 }
@@ -349,6 +349,12 @@ void RequestHandler::operator()(const request::UpdateStorageUnitAttributes& requ
         return;
 
     responseQueue.add(response::StorageUnitModified{ request.storageUnit });
+}
+
+void RequestHandler::operator()(const request::MoveItemToFront& request) const
+{
+    inventory.splice(inventory.end(), inventory, request.item);
+    responseQueue.add(response::ItemMovedToFront{ request.item });
 }
 
 }

@@ -135,12 +135,6 @@ public:
         return removeItemInternal(it);
     }
 
-    void moveToFront(ItemIterator it)
-    {
-        inventory.splice(inventory.end(), inventory, it);
-        responseQueue.add(response::ItemMovedToFront{ it });
-    }
-
     [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);
@@ -153,7 +147,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, responseQueue, ItemConstRemover{ inventory } };
+        return RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, ItemConstRemover{ inventory } };
     }
 
     template <typename GameInventory>

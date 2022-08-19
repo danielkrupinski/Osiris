@@ -80,6 +80,7 @@ using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
 using MarkItemUpdated = ModifyItem<struct MarkItemUpdatedTag>;
 using HideItem = ModifyItem<struct HideItemTag>;
 using UnhideItem = ModifyItem<struct UnhideItemTag>;
+using MoveItemToFront = ModifyItem<struct MoveItemToFrontTag>;
 
 struct AddNameTag {
     AddNameTag(ItemIterator item, ItemIterator nameTagItem, std::string_view nameTag)

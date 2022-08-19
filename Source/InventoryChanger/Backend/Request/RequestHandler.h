@@ -14,8 +14,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, constRemover{ constRemover } {}
+    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, ItemConstRemover constRemover)
+        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -43,6 +43,7 @@ struct RequestHandler {
     void operator()(const request::AddItemToStorageUnit& request) const;
     void operator()(const request::RemoveFromStorageUnit& request) const;
     void operator()(const request::UpdateStorageUnitAttributes& request) const;
+    void operator()(const request::MoveItemToFront& request) const;
 
 private:
     BackendSimulator& backend;
@@ -50,6 +51,7 @@ private:
     StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ResponseQueue<>& responseQueue;
+    ItemList& inventory;
     ItemConstRemover constRemover;
 };
 
