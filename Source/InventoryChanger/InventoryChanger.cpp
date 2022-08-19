@@ -466,7 +466,7 @@ void InventoryChanger::menuBarItem() noexcept
 void InventoryChanger::tabItem() noexcept
 {
     if (ImGui::BeginTabItem("Inventory Changer")) {
-        drawGUI(true);
+        inventory_changer::InventoryChanger::instance().drawGUI(true);
         ImGui::EndTabItem();
     }
 }
@@ -721,9 +721,7 @@ private:
     const WeaponNames& weaponNames;
 };
 
-}
-
-void InventoryChanger::drawGUI(bool contentOnly) noexcept
+void InventoryChanger::drawGUI(bool contentOnly)
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -745,7 +743,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
     if (!isInAddMode) {
         ImGui::SameLine();
         if (ImGui::Button("Force Update"))
-            InventoryChanger::scheduleHudUpdate();
+            ::InventoryChanger::scheduleHudUpdate();
     }
 
     constexpr auto rarityColor = [](EconRarity rarity) noexcept {
@@ -781,12 +779,12 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             return true;
         };
 
-        static SortFilter gameItemList{ inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage().getItems() };
+        static SortFilter gameItemList{ gameItemLookup.getStorage().getItems() };
 
         if (filterChanged) {
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
-            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(), &gameItemStorage = inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
+            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(), &gameItemStorage = gameItemLookup.getStorage()](const inventory_changer::game_items::Item& item) {
                 return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
@@ -801,14 +799,14 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
             for (const auto& [i, gameItem] : gameItemList.getItems()) {
                 if (addingAll) {
-                    inventory_changer::InventoryChanger::instance().getBackend().getRequestHandler()(inventory_changer::backend::request::AddItem{ inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) }, true });
+                    backend.getRequestHandler()(backend::request::AddItem{ inventory::Item{ gameItem, item_generator::createDefaultDynamicData(gameItemLookup.getStorage(), gameItem) }, true });
                 }
 
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        inventory_changer::InventoryChanger::instance().getBackend().getRequestHandler()(inventory_changer::backend::request::AddItem{ inventory_changer::inventory::Item{ gameItem, inventory_changer::item_generator::createDefaultDynamicData(inventory_changer::InventoryChanger::instance().getGameItemLookup().getStorage(), gameItem) }, true });
+                        backend.getRequestHandler()(backend::request::AddItem{ inventory::Item{ gameItem, item_generator::createDefaultDynamicData(gameItemLookup.getStorage(), gameItem) }, true });
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();
@@ -817,7 +815,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         ImGui::EndChild();
     } else {
         if (ImGui::BeginChild("##scrollarea2", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            const auto& inventory = inventory_changer::InventoryChanger::instance().getBackend().getInventory();
+            const auto& inventory = backend.getInventory();
             std::size_t i = 0;
             for (auto it = inventory.rbegin(); it != inventory.rend();) {
                 if (it->getState() != inventory_changer::inventory::Item::State::Default) {
@@ -829,7 +827,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 bool shouldDelete = false;
                 ImGui::SkinItem(it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
-                    it = std::make_reverse_iterator(inventory_changer::InventoryChanger::instance().getBackend().removeItem(std::next(it).base()));
+                    it = std::make_reverse_iterator(backend.removeItem(std::next(it).base()));
                 } else {
                     ++it;
                 }
@@ -842,6 +840,8 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
 
     if (!contentOnly)
         ImGui::End();
+}
+
 }
 
 void InventoryChanger::onSoUpdated(SharedObject* object) noexcept

@@ -104,7 +104,7 @@ void GUI::render() noexcept
         renderChamsWindow();
         StreamProofESP::drawGUI(false);
         Visuals::drawGUI(false);
-        InventoryChanger::drawGUI(false);
+        inventory_changer::InventoryChanger::instance().drawGUI(false);
         Sound::drawGUI(false);
         renderStyleWindow();
         Misc::drawGUI(false);

@@ -59,6 +59,8 @@ public:
 
     void reset();
 
+    void drawGUI(bool contentOnly);
+
 private:
     void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID);
 
@@ -77,7 +79,6 @@ namespace InventoryChanger
     // GUI
     void menuBarItem() noexcept;
     void tabItem() noexcept;
-    void drawGUI(bool contentOnly) noexcept;
 
     void run(csgo::FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
