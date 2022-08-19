@@ -4,11 +4,12 @@
 #include <InventoryChanger/Backend/Item.h>
 #include <InventoryChanger/Backend/Response/Response.h>
 #include <InventoryChanger/Backend/Response/ResponseQueue.h>
+#include <InventoryChanger/GameItems/CrateLootLookup.h>
+#include <InventoryChanger/GameItems/Lookup.h>
 
 namespace inventory_changer::backend
 {
 
-class BackendSimulator;
 class ItemIDMap;
 class Loadout;
 class PickEm;
@@ -16,8 +17,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(BackendSimulator& backend, PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, ItemConstRemover constRemover)
-        : backend{ backend }, pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, constRemover{ constRemover }, itemIDMap{ itemIDMap } {}
+    RequestHandler(PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -52,7 +53,6 @@ struct RequestHandler {
 private:
     ItemIterator removeItemInternal(ItemIterator it) const;
 
-    BackendSimulator& backend;
     PickEm& pickEm;
     StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
@@ -60,6 +60,8 @@ private:
     ItemList& inventory;
     Loadout& loadout;
     ItemIDMap& itemIDMap;
+    const game_items::Lookup& gameItemLookup;
+    const game_items::CrateLootLookup& crateLootLookup;
     ItemConstRemover constRemover;
 };
 

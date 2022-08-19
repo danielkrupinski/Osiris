@@ -16,7 +16,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     if (!skin)
         return;
 
-    skin->stickers[request.slot].stickerID = backend.getGameItemLookup().getStorage().getStickerKit(request.sticker->gameItem()).id;
+    skin->stickers[request.slot].stickerID = gameItemLookup.getStorage().getStickerKit(request.sticker->gameItem()).id;
     skin->stickers[request.slot].wear = 0.0f;
 
     operator()(request::MoveItemToFront{ request.item });
@@ -76,7 +76,7 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
     if (!request.container->gameItem().isCrate())
         return;
 
-    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.container, toPointer(request.key));
+    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *request.container, toPointer(request.key));
     if (!generatedItem.has_value())
         return;
 
@@ -96,7 +96,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
     if (!agent)
         return;
 
-    agent->patches[request.slot].patchID = backend.getGameItemLookup().getStorage().getPatch(request.patch->gameItem()).id;
+    agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
     operator()(request::MoveItemToFront{ request.item });
     operator()(request::RemoveItem{ request.patch });
     responseQueue.add(response::PatchApplied{ request.item, request.slot });
@@ -120,7 +120,7 @@ void RequestHandler::operator()(const request::ActivateOperationPass& request) c
         return;
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
-    if (const auto operationCoin = backend.getGameItemLookup().findItem(coinID)) {
+    if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
         operator()(request::AddItem{ inventory::Item{ *operationCoin }, true });
         operator()(request::RemoveItem{ request.operationPass });
     }
@@ -136,7 +136,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
     if (coinID == WeaponId::None)
         return;
 
-    if (const auto eventCoin = backend.getGameItemLookup().findItem(coinID)) {
+    if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
         const auto addedEventCoin = operator()(request::AddItem{ inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true });
         operator()(request::RemoveItem{ request.item });
         responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
@@ -169,9 +169,8 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
     if (!request.item->gameItem().isSouvenirToken())
         return;
 
-    const auto tournamentEventID = backend.getGameItemLookup().getStorage().getTournamentEventID(request.item->gameItem());
-    const auto& inventory = backend.getInventory();
-    const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && backend.getGameItemLookup().getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
+    const auto tournamentEventID = gameItemLookup.getStorage().getTournamentEventID(request.item->gameItem());
+    const auto tournamentCoin = std::ranges::find_if(inventory, [this, tournamentEventID](const auto& item) { return item.gameItem().isTournamentCoin() && gameItemLookup.getStorage().getTournamentEventID(item.gameItem()) == tournamentEventID; });
     if (tournamentCoin == inventory.end())
         return;
 
@@ -243,7 +242,7 @@ void RequestHandler::operator()(const request::PerformXRayScan& request) const
     if (!request.crate->gameItem().isCrate())
         return;
 
-    auto generatedItem = item_generator::generateItemFromContainer(backend.getGameItemLookup(), backend.getCrateLootLookup(), *request.crate, nullptr);
+    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *request.crate, nullptr);
     if (!generatedItem.has_value())
         return;
 

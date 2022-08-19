@@ -123,7 +123,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ *this, pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, ItemConstRemover{ inventory } };
+        return RequestHandler{ pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
     template <typename GameInventory>
