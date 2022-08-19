@@ -1405,7 +1405,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 
 void InventoryChanger::reset()
 {
-    backend.clearInventory();
+    clearInventory(backend);
     backend.clearPickEm();
     static inventory_changer::game_integration::Inventory gameInventory{};
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });

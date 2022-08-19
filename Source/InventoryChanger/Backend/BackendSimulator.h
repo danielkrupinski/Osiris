@@ -99,12 +99,6 @@ public:
         loadout.equipItemNoTeam(itemIterator, slot);
     }
 
-    void clearInventory()
-    {
-        for (auto it = inventory.cbegin(); it != inventory.cend();)
-            it = getRequestHandler()(request::RemoveItem{ it });
-    }
-
     void clearPickEm()
     {
         pickEm.clear();
@@ -148,5 +142,14 @@ private:
     XRayScanner xRayScanner;
     StorageUnitManager storageUnitManager;
 };
+
+inline void clearInventory(BackendSimulator& backend)
+{
+    const auto& inventory = backend.getInventory();
+    const auto requestHandler = backend.getRequestHandler();
+
+    for (auto it = inventory.cbegin(); it != inventory.cend();)
+        it = requestHandler(request::RemoveItem{ it });
+}
 
 }
