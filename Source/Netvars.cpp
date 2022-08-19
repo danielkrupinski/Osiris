@@ -33,7 +33,7 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* arg2, void* arg3) 
         Entity* entity = (Entity *)arg2;
         int localPlayerIndex = interfaces->engine->getLocalPlayer();
 
-        entity->spottedByMask() = 1 << (localPlayerIndex - 1);
+        entity->spottedByMask() |= 1 << (localPlayerIndex - 1);
     }
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
