@@ -16,6 +16,7 @@
 #include "SDK/Constants/ClassId.h"
 #include "SDK/Client.h"
 #include "SDK/ClientClass.h"
+#include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/LocalPlayer.h"
@@ -26,8 +27,14 @@ static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxi
 
 static void CDECL_CONV spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (Misc::isRadarHackOn())
+    if (Misc::isRadarHackOn()) {
         data.value._int = 1;
+
+        Entity* entity = (Entity *)arg2;
+        int localPlayerIndex = interfaces->engine->getLocalPlayer();
+
+        entity->spottedByMask() = 1 << (localPlayerIndex - 1);
+    }
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
     proxies[hash].first(data, arg2, arg3);
