@@ -16,7 +16,6 @@
 #include "SDK/Constants/ClassId.h"
 #include "SDK/Client.h"
 #include "SDK/ClientClass.h"
-#include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/LocalPlayer.h"
@@ -31,9 +30,8 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* arg2, void* arg3) 
         data.value._int = 1;
 
         Entity* entity = (Entity *)arg2;
-        int localPlayerIndex = interfaces->engine->getLocalPlayer();
 
-        entity->spottedByMask() |= 1 << (localPlayerIndex - 1);
+        entity->spottedByMask() |= 1 << (localPlayer->index() - 1);
     }
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
