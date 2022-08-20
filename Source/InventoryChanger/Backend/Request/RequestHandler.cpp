@@ -179,7 +179,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
         return;
 
     ++tournamentCoinData->dropsAwarded;
-    operator()(request::MoveItemToFront{ request.item });
+    operator()(request::RemoveItem{ request.item });
     responseQueue.add(response::SouvenirTokenActivated{ tournamentCoin });
 }
 
