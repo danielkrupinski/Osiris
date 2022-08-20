@@ -86,6 +86,11 @@ public:
         return PickEmHandler{ pickEm, responseQueue };
     }
 
+    [[nodiscard]] LoadoutHandler getLoadoutHandler()
+    {
+        return LoadoutHandler{ loadout, responseQueue };
+    }
+
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {

@@ -361,42 +361,6 @@ ItemIterator RequestHandler::operator()(const request::RemoveItem& request) cons
     return removeItemInternal(request.item);
 }
 
-void RequestHandler::operator()(const request::EquipItem& request) const
-{
-    switch (request.team) {
-    case Team::None:
-        loadout.equipItemNoTeam(request.item, request.slot);
-        break;
-    case Team::TT:
-        loadout.equipItemTT(request.item, request.slot);
-        break;
-    case Team::CT:
-        loadout.equipItemCT(request.item, request.slot);
-        break;
-    default:
-        return;
-    }
-
-    responseQueue.add(response::ItemEquipped{ request.item, request.slot, request.team });
-}
-
-void RequestHandler::operator()(const request::MarkItemEquipped& request) const
-{
-    switch (request.team) {
-    case Team::None:
-        loadout.equipItemNoTeam(request.item, request.slot);
-        break;
-    case Team::TT:
-        loadout.equipItemTT(request.item, request.slot);
-        break;
-    case Team::CT:
-        loadout.equipItemCT(request.item, request.slot);
-        break;
-    default:
-        break;
-    }
-}
-
 ItemIterator RequestHandler::removeItemInternal(ItemIterator it) const
 {
     const auto itemID = itemIDMap.remove(it);

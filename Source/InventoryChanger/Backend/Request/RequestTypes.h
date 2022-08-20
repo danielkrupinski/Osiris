@@ -176,22 +176,4 @@ struct AddItem {
     bool asUnacknowledged;
 };
 
-struct EquipItem {
-    EquipItem(ItemIterator item, Loadout::Slot slot, Team team)
-        : item{ item }, slot{ slot }, team{ team } {}
-
-    ItemIterator item;
-    Loadout::Slot slot;
-    Team team;
-};
-
-struct MarkItemEquipped {
-    MarkItemEquipped(ItemIterator item, Loadout::Slot slot, Team team)
-        : item{ item }, slot{ slot }, team{ team } {}
-
-    ItemIterator item;
-    Loadout::Slot slot;
-    Team team;
-};
-
 }
