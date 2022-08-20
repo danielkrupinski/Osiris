@@ -66,21 +66,6 @@ public:
         return xRayScanner;
     }
 
-    void markItemEquippedCT(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemCT(itemIterator, slot);
-    }
-
-    void markItemEquippedTT(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemTT(itemIterator, slot);
-    }
-
-    void markItemEquippedNoTeam(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemNoTeam(itemIterator, slot);
-    }
-
     [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);

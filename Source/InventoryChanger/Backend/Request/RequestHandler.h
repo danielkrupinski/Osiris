@@ -51,6 +51,7 @@ struct RequestHandler {
     ItemIterator operator()(const request::RemoveItem& request) const;
     void operator()(const request::ClearPickEm& request) const;
     void operator()(const request::EquipItem& request) const;
+    void operator()(const request::MarkItemEquipped& request) const;
 
 private:
     ItemIterator removeItemInternal(ItemIterator it) const;

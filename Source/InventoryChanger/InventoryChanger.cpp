@@ -1355,14 +1355,7 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID)
         const auto& itemIterator = *itemOptional;
 
         if (slot != 0xFFFF) {
-            if (team == Team::CT) {
-                backend.markItemEquippedCT(itemIterator, static_cast<backend::Loadout::Slot>(slot));
-            } else if (team == Team::TT) {
-                backend.markItemEquippedTT(itemIterator, static_cast<backend::Loadout::Slot>(slot));
-            } else if (team == Team::None) {
-                backend.markItemEquippedNoTeam(itemIterator, static_cast<backend::Loadout::Slot>(slot));
-            }
-
+            backend.getRequestHandler()(backend::request::MarkItemEquipped{ itemIterator, static_cast<backend::Loadout::Slot>(slot), team });
             equipRequests.push_back({ std::chrono::steady_clock::now(), itemID, itemIterator->gameItem().getWeaponID() });
         } else {
             // unequip
