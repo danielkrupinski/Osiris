@@ -66,32 +66,14 @@ public:
         return xRayScanner;
     }
 
-    void equipItemCT(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemCT(itemIterator, slot);
-        responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::CT });
-    }
-
     void markItemEquippedCT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemCT(itemIterator, slot);
     }
 
-    void equipItemTT(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemTT(itemIterator, slot);
-        responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::TT });
-    }
-
     void markItemEquippedTT(ItemIterator itemIterator, Loadout::Slot slot)
     {
         loadout.equipItemTT(itemIterator, slot);
-    }
-
-    void equipItemNoTeam(ItemIterator itemIterator, Loadout::Slot slot)
-    {
-        loadout.equipItemNoTeam(itemIterator, slot);
-        responseQueue.add(response::ItemEquipped{ itemIterator, slot, Team::None });
     }
 
     void markItemEquippedNoTeam(ItemIterator itemIterator, Loadout::Slot slot)

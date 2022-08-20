@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/Backend/Loadout.h>
 #include <InventoryChanger/Backend/PickEm.h>
 
 namespace inventory_changer::backend::request
@@ -186,5 +187,14 @@ struct AddItem {
 };
 
 struct ClearPickEm {};
+
+struct EquipItem {
+    EquipItem(ItemIterator item, Loadout::Slot slot, Team team)
+        : item{ item }, slot{ slot }, team{ team } {}
+
+    ItemIterator item;
+    Loadout::Slot slot;
+    Team team;
+};
 
 }
