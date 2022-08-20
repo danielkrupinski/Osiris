@@ -195,7 +195,7 @@ void pickEmFromJson(const json& j, inventory_changer::backend::BackendSimulator&
         if (team == csgo::TournamentTeam::None)
             continue;
 
-        backend.getRequestHandler()(inventory_changer::backend::request::PickStickerPickEm{ *position, team });
+        backend.getPickEmHandler().pickSticker(*position, team);
     }
 
 }

@@ -117,14 +117,6 @@ struct SelectTeamGraffiti {
     std::uint16_t graffitiID;
 };
 
-struct PickStickerPickEm {
-    PickStickerPickEm(PickEm::PickPosition position, csgo::TournamentTeam team)
-        : position{ position }, team{ team } {}
-
-    PickEm::PickPosition position;
-    csgo::TournamentTeam team;
-};
-
 struct PerformXRayScan {
     explicit PerformXRayScan(ItemIterator crate) : crate{ crate } {}
 
@@ -185,8 +177,6 @@ struct AddItem {
     inventory::Item item;
     bool asUnacknowledged;
 };
-
-struct ClearPickEm {};
 
 struct EquipItem {
     EquipItem(ItemIterator item, Loadout::Slot slot, Team team)

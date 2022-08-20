@@ -16,9 +16,31 @@ class PickEm;
 class StorageUnitManager;
 class XRayScanner;
 
+class PickEmHandler {
+public:
+    PickEmHandler(PickEm& pickEm, ResponseQueue<>& responseQueue)
+        : pickEm{ pickEm }, responseQueue{ responseQueue } {}
+
+    void pickSticker(PickEm::PickPosition position, csgo::TournamentTeam team) const
+    {
+        pickEm.pick(position, team);
+        responseQueue.add(response::PickEmUpdated{});
+    }
+
+    void clearPicks() const
+    {
+        pickEm.clear();
+        responseQueue.add(response::PickEmUpdated{});
+    }
+
+private:
+    PickEm& pickEm;
+    ResponseQueue<>& responseQueue;
+};
+
 struct RequestHandler {
-    RequestHandler(PickEm& pickEm, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
-        : pickEm{ pickEm }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
+    RequestHandler(StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -35,7 +57,6 @@ struct RequestHandler {
     void operator()(const request::UpdateStatTrak& request) const;
     void operator()(const request::SelectTeamGraffiti& request) const;
     void operator()(const request::MarkItemUpdated& request) const;
-    void operator()(const request::PickStickerPickEm& request) const;
     void operator()(const request::HideItem& request) const;
     void operator()(const request::UnhideItem& request) const;
     void operator()(const request::PerformXRayScan& request) const;
@@ -49,14 +70,12 @@ struct RequestHandler {
     void operator()(const request::MoveItemToFront& request) const;
     ItemIterator operator()(request::AddItem request) const;
     ItemIterator operator()(const request::RemoveItem& request) const;
-    void operator()(const request::ClearPickEm& request) const;
     void operator()(const request::EquipItem& request) const;
     void operator()(const request::MarkItemEquipped& request) const;
 
 private:
     ItemIterator removeItemInternal(ItemIterator it) const;
 
-    PickEm& pickEm;
     StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ResponseQueue<>& responseQueue;

@@ -1399,7 +1399,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 void InventoryChanger::reset()
 {
     clearInventory(backend);
-    backend.getRequestHandler()(backend::request::ClearPickEm{});
+    backend.getPickEmHandler().clearPicks();
     static inventory_changer::game_integration::Inventory gameInventory{};
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
@@ -1411,7 +1411,7 @@ void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexIn
         return;
 
     const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-    backend.getRequestHandler()(backend::request::PickStickerPickEm{ backend::PickEm::PickPosition{ csgo::Tournament::PglAntwerp2022, group, indexInGroup }, tournamentTeam });
+    backend.getPickEmHandler().pickSticker(backend::PickEm::PickPosition{ csgo::Tournament::PglAntwerp2022, group, indexInGroup }, tournamentTeam);
 }
 
 }

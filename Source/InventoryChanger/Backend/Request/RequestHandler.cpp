@@ -219,12 +219,6 @@ void RequestHandler::operator()(const request::MarkItemUpdated& request) const
     responseQueue.add(response::ItemUpdated{ request.item });
 }
 
-void RequestHandler::operator()(const request::PickStickerPickEm& request) const
-{
-    pickEm.pick(request.position, request.team);
-    responseQueue.add(response::PickEmUpdated{});
-}
-
 void RequestHandler::operator()(const request::HideItem& request) const
 {
     constRemover.removeConstness(request.item)->setState(inventory::Item::State::InXrayScanner);
@@ -376,12 +370,6 @@ ItemIterator RequestHandler::operator()(const request::RemoveItem& request) cons
     }
 
     return removeItemInternal(request.item);
-}
-
-void RequestHandler::operator()(const request::ClearPickEm&) const
-{
-    pickEm.clear();
-    responseQueue.add(response::PickEmUpdated{});
 }
 
 void RequestHandler::operator()(const request::EquipItem& request) const

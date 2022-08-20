@@ -78,7 +78,12 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ pickEm, storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+    }
+
+    [[nodiscard]] PickEmHandler getPickEmHandler()
+    {
+        return PickEmHandler{ pickEm, responseQueue };
     }
 
     template <typename GameInventory>
