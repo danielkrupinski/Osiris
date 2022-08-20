@@ -78,7 +78,6 @@ using ActivateViewerPass = ModifyItem<struct ActivateViewerPassTag>;
 using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
 using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
 using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
-using MarkItemUpdated = ModifyItem<struct MarkItemUpdatedTag>;
 using MoveItemToFront = ModifyItem<struct MoveItemToFrontTag>;
 using RemoveItem = ModifyItem<struct RemoveItemTag>;
 

@@ -59,7 +59,7 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
     operator()(request::MoveItemToFront{ request.itemFrom });
     operator()(request::MoveItemToFront{ request.itemTo });
-    operator()(request::MarkItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
+    responseQueue.add(response::ItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
     responseQueue.add(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
 
@@ -212,11 +212,6 @@ void RequestHandler::operator()(const request::SelectTeamGraffiti& request) cons
 {
     if (request.tournamentCoin->gameItem().isTournamentCoin())
         responseQueue.add(response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID });
-}
-
-void RequestHandler::operator()(const request::MarkItemUpdated& request) const
-{
-    responseQueue.add(response::ItemUpdated{ request.item });
 }
 
 void RequestHandler::operator()(const request::PerformXRayScan& request) const
