@@ -57,8 +57,6 @@ struct RequestHandler {
     void operator()(const request::UpdateStatTrak& request) const;
     void operator()(const request::SelectTeamGraffiti& request) const;
     void operator()(const request::MarkItemUpdated& request) const;
-    void operator()(const request::HideItem& request) const;
-    void operator()(const request::UnhideItem& request) const;
     void operator()(const request::PerformXRayScan& request) const;
     void operator()(const request::ClaimXRayScannedItem& request) const;
     void operator()(const request::NameStorageUnit& request) const;

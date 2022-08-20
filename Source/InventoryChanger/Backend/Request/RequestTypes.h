@@ -79,8 +79,6 @@ using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
 using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
 using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
 using MarkItemUpdated = ModifyItem<struct MarkItemUpdatedTag>;
-using HideItem = ModifyItem<struct HideItemTag>;
-using UnhideItem = ModifyItem<struct UnhideItemTag>;
 using MoveItemToFront = ModifyItem<struct MoveItemToFrontTag>;
 using RemoveItem = ModifyItem<struct RemoveItemTag>;
 

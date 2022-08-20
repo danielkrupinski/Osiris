@@ -219,18 +219,6 @@ void RequestHandler::operator()(const request::MarkItemUpdated& request) const
     responseQueue.add(response::ItemUpdated{ request.item });
 }
 
-void RequestHandler::operator()(const request::HideItem& request) const
-{
-    constRemover.removeConstness(request.item)->setState(inventory::Item::State::InXrayScanner);
-    responseQueue.add(response::ItemHidden{ request.item });
-}
-
-void RequestHandler::operator()(const request::UnhideItem& request) const
-{
-    constRemover.removeConstness(request.item)->setState(inventory::Item::State::Default);
-    responseQueue.add(response::ItemUnhidden{ request.item });
-}
-
 void RequestHandler::operator()(const request::PerformXRayScan& request) const
 {
     if (!request.crate->gameItem().isCrate())
@@ -241,7 +229,7 @@ void RequestHandler::operator()(const request::PerformXRayScan& request) const
         return;
 
     constRemover.removeConstness(request.crate)->setState(inventory::Item::State::InXrayScanner);
-    operator()(request::HideItem{ request.crate });
+    responseQueue.add(response::ItemHidden{ request.crate });
 
     generatedItem->setState(inventory::Item::State::InXrayScanner);
 
@@ -267,7 +255,8 @@ void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) co
     }
 
     operator()(request::RemoveItem{ request.container });
-    operator()(request::UnhideItem{ scannerItems->reward });
+    constRemover.removeConstness(scannerItems->reward)->setState(inventory::Item::State::Default);
+    responseQueue.add(response::ItemUnhidden{ scannerItems->reward });
     responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
 }
 
