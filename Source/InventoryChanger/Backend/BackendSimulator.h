@@ -99,12 +99,6 @@ public:
         loadout.equipItemNoTeam(itemIterator, slot);
     }
 
-    void clearPickEm()
-    {
-        pickEm.clear();
-        responseQueue.add(response::PickEmUpdated{});
-    }
-
     [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
     {
         return itemIDMap.get(itemID);

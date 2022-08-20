@@ -49,6 +49,7 @@ struct RequestHandler {
     void operator()(const request::MoveItemToFront& request) const;
     ItemIterator operator()(request::AddItem request) const;
     ItemIterator operator()(const request::RemoveItem& request) const;
+    void operator()(const request::ClearPickEm& request) const;
 
 private:
     ItemIterator removeItemInternal(ItemIterator it) const;

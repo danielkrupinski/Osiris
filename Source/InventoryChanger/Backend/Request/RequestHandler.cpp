@@ -378,6 +378,12 @@ ItemIterator RequestHandler::operator()(const request::RemoveItem& request) cons
     return removeItemInternal(request.item);
 }
 
+void RequestHandler::operator()(const request::ClearPickEm&) const
+{
+    pickEm.clear();
+    responseQueue.add(response::PickEmUpdated{});
+}
+
 ItemIterator RequestHandler::removeItemInternal(ItemIterator it) const
 {
     const auto itemID = itemIDMap.remove(it);

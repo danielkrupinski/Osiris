@@ -185,4 +185,6 @@ struct AddItem {
     bool asUnacknowledged;
 };
 
+struct ClearPickEm {};
+
 }
