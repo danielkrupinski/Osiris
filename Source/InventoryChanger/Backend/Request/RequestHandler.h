@@ -16,52 +16,6 @@ class PickEm;
 class StorageUnitManager;
 class XRayScanner;
 
-class LoadoutHandler {
-public:
-    LoadoutHandler(Loadout& loadout, ResponseQueue<>& responseQueue)
-        : loadout{ loadout }, responseQueue{ responseQueue } {}
-
-    void equipItem(ItemIterator item, Loadout::Slot slot, Team team) const
-    {
-        switch (team) {
-        case Team::None:
-            loadout.equipItemNoTeam(item, slot);
-            break;
-        case Team::TT:
-            loadout.equipItemTT(item, slot);
-            break;
-        case Team::CT:
-            loadout.equipItemCT(item, slot);
-            break;
-        default:
-            return;
-        }
-
-        responseQueue.add(response::ItemEquipped{ item, slot, team });
-    }
-
-    void markItemEquipped(ItemIterator item, Loadout::Slot slot, Team team) const
-    {
-        switch (team) {
-        case Team::None:
-            loadout.equipItemNoTeam(item, slot);
-            break;
-        case Team::TT:
-            loadout.equipItemTT(item, slot);
-            break;
-        case Team::CT:
-            loadout.equipItemCT(item, slot);
-            break;
-        default:
-            break;
-        }
-    }
-
-private:
-    Loadout& loadout;
-    ResponseQueue<>& responseQueue;
-};
-
 struct RequestHandler {
     RequestHandler(StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
         : storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}

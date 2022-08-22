@@ -10,6 +10,7 @@
 #include "PickEm.h"
 #include "StorageUnitManager.h"
 #include "XRayScanner.h"
+#include "Request/LoadoutHandler.h"
 #include "Request/PickEmHandler.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"

@@ -790,6 +790,9 @@
     <ClInclude Include="InventoryChanger\Backend\Request\PickEmHandler.h">
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\LoadoutHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
