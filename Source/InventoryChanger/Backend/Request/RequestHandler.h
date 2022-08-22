@@ -16,28 +16,6 @@ class PickEm;
 class StorageUnitManager;
 class XRayScanner;
 
-class PickEmHandler {
-public:
-    PickEmHandler(PickEm& pickEm, ResponseQueue<>& responseQueue)
-        : pickEm{ pickEm }, responseQueue{ responseQueue } {}
-
-    void pickSticker(PickEm::PickPosition position, csgo::TournamentTeam team) const
-    {
-        pickEm.pick(position, team);
-        responseQueue.add(response::PickEmUpdated{});
-    }
-
-    void clearPicks() const
-    {
-        pickEm.clear();
-        responseQueue.add(response::PickEmUpdated{});
-    }
-
-private:
-    PickEm& pickEm;
-    ResponseQueue<>& responseQueue;
-};
-
 class LoadoutHandler {
 public:
     LoadoutHandler(Loadout& loadout, ResponseQueue<>& responseQueue)
