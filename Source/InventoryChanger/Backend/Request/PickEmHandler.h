@@ -8,26 +8,27 @@
 namespace inventory_changer::backend
 {
 
+template <typename ResponseAccumulator>
 class PickEmHandler {
 public:
-    PickEmHandler(PickEm& pickEm, ResponseQueue<>& responseQueue)
-        : pickEm{ pickEm }, responseQueue{ responseQueue } {}
+    PickEmHandler(PickEm& pickEm, ResponseAccumulator responseAccumulator)
+        : pickEm{ pickEm }, responseAccumulator{ responseAccumulator } {}
 
     void pickSticker(PickEm::PickPosition position, csgo::TournamentTeam team) const
     {
         pickEm.pick(position, team);
-        responseQueue.add(response::PickEmUpdated{});
+        responseAccumulator(response::PickEmUpdated{});
     }
 
     void clearPicks() const
     {
         pickEm.clear();
-        responseQueue.add(response::PickEmUpdated{});
+        responseAccumulator(response::PickEmUpdated{});
     }
 
 private:
     PickEm& pickEm;
-    ResponseQueue<>& responseQueue;
+    ResponseAccumulator responseAccumulator;
 };
 
 }

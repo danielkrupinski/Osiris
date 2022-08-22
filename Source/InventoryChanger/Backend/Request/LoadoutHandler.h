@@ -9,15 +9,16 @@
 namespace inventory_changer::backend
 {
 
+template <typename ResponseAccumulator>
 class LoadoutHandler {
 public:
-    LoadoutHandler(Loadout& loadout, ResponseQueue<>& responseQueue)
-        : loadout{ loadout }, responseQueue{ responseQueue } {}
+    LoadoutHandler(Loadout& loadout, ResponseAccumulator responseAccumulator)
+        : loadout{ loadout }, responseAccumulator{ responseAccumulator } {}
 
     void equipItem(ItemIterator item, Loadout::Slot slot, Team team) const
     {
         if (markItemEquipped(item, slot, team))
-            responseQueue.add(response::ItemEquipped{ item, slot, team });
+            responseAccumulator(response::ItemEquipped{ item, slot, team });
     }
 
     bool markItemEquipped(ItemIterator item, Loadout::Slot slot, Team team) const
@@ -39,7 +40,7 @@ public:
 
 private:
     Loadout& loadout;
-    ResponseQueue<>& responseQueue;
+    ResponseAccumulator responseAccumulator;
 };
 
 }

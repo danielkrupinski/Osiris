@@ -14,6 +14,7 @@
 #include "Request/PickEmHandler.h"
 #include "Request/RequestHandler.h"
 #include "Response/Response.h"
+#include "Response/ResponseAccumulator.h"
 #include "Response/ResponseHandler.h"
 #include "Response/ResponseQueue.h"
 
@@ -83,14 +84,14 @@ public:
         return RequestHandler{ storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
-    [[nodiscard]] PickEmHandler getPickEmHandler()
+    [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
     {
-        return PickEmHandler{ pickEm, responseQueue };
+        return PickEmHandler{ pickEm, ResponseAccumulator{ responseQueue } };
     }
 
-    [[nodiscard]] LoadoutHandler getLoadoutHandler()
+    [[nodiscard]] LoadoutHandler<ResponseAccumulator> getLoadoutHandler()
     {
-        return LoadoutHandler{ loadout, responseQueue };
+        return LoadoutHandler{ loadout, ResponseAccumulator{ responseQueue } };
     }
 
     template <typename GameInventory>
