@@ -1,8 +1,10 @@
 #pragma once
 
+#include "InventoryHandler.h"
 #include "RequestTypes.h"
 #include <InventoryChanger/Backend/Item.h>
 #include <InventoryChanger/Backend/Response/Response.h>
+#include <InventoryChanger/Backend/Response/ResponseAccumulator.h>
 #include <InventoryChanger/Backend/Response/ResponseQueue.h>
 #include <InventoryChanger/GameItems/CrateLootLookup.h>
 #include <InventoryChanger/GameItems/Lookup.h>
@@ -17,8 +19,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
-        : storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
+    RequestHandler(InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : inventoryHandler{ inventoryHandler }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -42,13 +44,12 @@ struct RequestHandler {
     void operator()(const request::AddItemToStorageUnit& request) const;
     void operator()(const request::RemoveFromStorageUnit& request) const;
     void operator()(const request::UpdateStorageUnitAttributes& request) const;
-    void operator()(const request::MoveItemToFront& request) const;
-    ItemIterator operator()(request::AddItem request) const;
     ItemIterator operator()(const request::RemoveItem& request) const;
 
 private:
     ItemIterator removeItemInternal(ItemIterator it) const;
 
+    InventoryHandler<ResponseAccumulator> inventoryHandler;
     StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ResponseQueue<>& responseQueue;

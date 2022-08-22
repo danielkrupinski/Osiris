@@ -19,7 +19,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     skin->stickers[request.slot].stickerID = gameItemLookup.getStorage().getStickerKit(request.sticker->gameItem()).id;
     skin->stickers[request.slot].wear = 0.0f;
 
-    operator()(request::MoveItemToFront{ request.item });
+    inventoryHandler.moveItemToFront(request.item);
     operator()(request::RemoveItem{ request.sticker });
     responseQueue.add(response::StickerApplied{ request.item, request.slot });
 }
@@ -57,8 +57,8 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     operator()(request::RemoveItem{ request.statTrakSwapTool });
     operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
     operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
-    operator()(request::MoveItemToFront{ request.itemFrom });
-    operator()(request::MoveItemToFront{ request.itemTo });
+    inventoryHandler.moveItemToFront(request.itemFrom);
+    inventoryHandler.moveItemToFront(request.itemTo);
     responseQueue.add(response::ItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
     responseQueue.add(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
@@ -86,7 +86,7 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
     }
 
     operator()(request::RemoveItem{ request.container });
-    const auto receivedItem = operator()(request::AddItem{ std::move(*generatedItem), true });
+    const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
     responseQueue.add(response::ContainerOpened{ receivedItem });
 }
 
@@ -97,7 +97,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
         return;
 
     agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
-    operator()(request::MoveItemToFront{ request.item });
+    inventoryHandler.moveItemToFront(request.item);
     operator()(request::RemoveItem{ request.patch });
     responseQueue.add(response::PatchApplied{ request.item, request.slot });
 }
@@ -109,7 +109,7 @@ void RequestHandler::operator()(const request::RemovePatch& request) const
         return;
 
     agent->patches[request.slot].patchID = 0;
-    operator()(request::MoveItemToFront{ request.item });
+    inventoryHandler.moveItemToFront(request.item);
     responseQueue.add(response::PatchRemoved{ request.item, request.slot });
 }
 
@@ -121,7 +121,7 @@ void RequestHandler::operator()(const request::ActivateOperationPass& request) c
 
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
     if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
-        operator()(request::AddItem{ inventory::Item{ *operationCoin }, true });
+        inventoryHandler.addItem(inventory::Item{ *operationCoin }, true);
         operator()(request::RemoveItem{ request.operationPass });
     }
 }
@@ -137,7 +137,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
         return;
 
     if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
-        const auto addedEventCoin = operator()(request::AddItem{ inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true });
+        const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
         operator()(request::RemoveItem{ request.item });
         responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
     }
@@ -151,7 +151,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
 
     skin->nameTag = request.nameTag;
     operator()(request::RemoveItem{ request.nameTagItem });
-    operator()(request::MoveItemToFront{ request.item });
+    inventoryHandler.moveItemToFront(request.item);
     responseQueue.add(response::NameTagAdded{ request.item });
 }
 
@@ -159,7 +159,7 @@ void RequestHandler::operator()(const request::RemoveNameTag& request) const
 {
     if (const auto skin = get<inventory::Skin>(*constRemover.removeConstness(request.item))) {
         skin->nameTag.clear();
-        operator()(request::MoveItemToFront{ request.item });
+        inventoryHandler.moveItemToFront(request.item);
         responseQueue.add(response::NameTagRemoved{ request.item });
     }
 }
@@ -194,7 +194,7 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
 
     graffiti->usesLeft = 50;
 
-    operator()(request::MoveItemToFront{ request.item });
+    inventoryHandler.moveItemToFront(request.item);
     responseQueue.add(response::GraffitiUnsealed{ request.item });
 }
 
@@ -228,7 +228,7 @@ void RequestHandler::operator()(const request::PerformXRayScan& request) const
 
     generatedItem->setState(inventory::Item::State::InXrayScanner);
 
-    const auto receivedItem = operator()(request::AddItem{ std::move(*generatedItem), true });
+    const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
     xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
     responseQueue.add(response::XRayScannerUsed{ receivedItem });
 }
@@ -263,7 +263,7 @@ void RequestHandler::operator()(const request::NameStorageUnit& request) const
 
     storageUnit->name = request.name;
     operator()(request::MarkStorageUnitModified{ request.storageUnit });
-    operator()(request::MoveItemToFront{ request.storageUnit });
+    inventoryHandler.moveItemToFront(request.storageUnit);
 
     responseQueue.add(response::StorageUnitNamed{ request.storageUnit });
 }
@@ -326,20 +326,6 @@ void RequestHandler::operator()(const request::UpdateStorageUnitAttributes& requ
         return;
 
     responseQueue.add(response::StorageUnitModified{ request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::MoveItemToFront& request) const
-{
-    inventory.splice(inventory.end(), inventory, request.item);
-    responseQueue.add(response::ItemMovedToFront{ request.item });
-}
-
-ItemIterator RequestHandler::operator()(request::AddItem request) const
-{
-    inventory.push_back(std::move(request.item));
-    const auto added = std::prev(inventory.end());
-    responseQueue.add(response::ItemAdded{ added, request.asUnacknowledged });
-    return added;
 }
 
 ItemIterator RequestHandler::operator()(const request::RemoveItem& request) const

@@ -407,7 +407,7 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
         if (!item)
             continue;
 
-        const auto itemAdded = backend.getRequestHandler()(backend::request::AddItem{ inventory::Item{ *item, { commonPropertiesFromJson(jsonItem), itemFromJson(lookup.getStorage(), *item, jsonItem) } }, false });
+        const auto itemAdded = backend.getInventoryHandler().addItem(inventory::Item{ *item, { commonPropertiesFromJson(jsonItem), itemFromJson(lookup.getStorage(), *item, jsonItem) } }, false);
 
         if (const auto storageUnitID = storageUnitIdFromJson(jsonItem); storageUnitID.has_value()) {
             if (!item->isStorageUnit()) {
