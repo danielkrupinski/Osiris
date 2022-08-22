@@ -16,37 +16,24 @@ public:
 
     void equipItem(ItemIterator item, Loadout::Slot slot, Team team) const
     {
-        switch (team) {
-        case Team::None:
-            loadout.equipItemNoTeam(item, slot);
-            break;
-        case Team::TT:
-            loadout.equipItemTT(item, slot);
-            break;
-        case Team::CT:
-            loadout.equipItemCT(item, slot);
-            break;
-        default:
-            return;
-        }
-
-        responseQueue.add(response::ItemEquipped{ item, slot, team });
+        if (markItemEquipped(item, slot, team))
+            responseQueue.add(response::ItemEquipped{ item, slot, team });
     }
 
-    void markItemEquipped(ItemIterator item, Loadout::Slot slot, Team team) const
+    bool markItemEquipped(ItemIterator item, Loadout::Slot slot, Team team) const
     {
         switch (team) {
         case Team::None:
             loadout.equipItemNoTeam(item, slot);
-            break;
+            return true;
         case Team::TT:
             loadout.equipItemTT(item, slot);
-            break;
+            return true;
         case Team::CT:
             loadout.equipItemCT(item, slot);
-            break;
+            return true;
         default:
-            break;
+            return false;
         }
     }
 
