@@ -3,6 +3,5 @@ target_sources(Tests PRIVATE
   Request/RequestBuilderTests.cpp
   ResponseQueueTests.cpp
   Response/ItemInResponseTests.cpp
-  Response/ResponseTests.cpp
   XRayScannerTests.cpp
 )

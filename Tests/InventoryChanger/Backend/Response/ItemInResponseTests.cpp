@@ -79,14 +79,6 @@ const ItemIterator item1{ itemList.begin() };
 const ItemIterator item2{ std::next(item1) };
 const ItemIterator item3{ std::next(item2) };
 
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, MonostateNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(std::monostate{}));
-}
-
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForMonostate) {
-    ASSERT_FALSE(responseContainsItem(std::monostate{}, item1));
-}
-
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ItemRemovedResponseNeverContainsItem) {
     ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ 0 }));
 }

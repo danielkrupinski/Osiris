@@ -10,7 +10,6 @@ namespace inventory_changer::backend
 {
 
 using Response = std::variant<
-    std::monostate,
     response::ContainerOpened,
     response::GraffitiUnsealed,
     response::ItemAdded,
@@ -41,10 +40,5 @@ using Response = std::variant<
     response::ItemRemovedFromStorageUnit,
     response::ItemAddedToStorageUnit
 >;
-
-[[nodiscard]] constexpr bool isEmptyResponse(const Response& response) noexcept
-{
-    return std::holds_alternative<std::monostate>(response);
-}
 
 }

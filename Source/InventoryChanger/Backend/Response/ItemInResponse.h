@@ -25,7 +25,6 @@ struct ItemInResponse {
     template <typename Tag>
     bool operator()(const response::StickerModified<Tag>& response) const { return response.skinItem == item; }
 
-    bool operator()(std::monostate) const { return false; }
     bool operator()(const response::ItemRemoved&) const { return false; }
     bool operator()(const response::PickEmUpdated&) const { return false; }
 

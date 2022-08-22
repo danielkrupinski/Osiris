@@ -16,8 +16,6 @@ struct ResponseHandler {
     explicit ResponseHandler(const game_items::Storage& gameItemStorage, ItemIDMap& itemIDMap, StorageUnitManager& storageUnitManager, GameInventory& gameInventory)
         : gameItemStorage{ gameItemStorage }, itemIDMap{ itemIDMap }, storageUnitManager{ storageUnitManager }, gameInventory{ gameInventory } {}
 
-    void operator()(std::monostate) const { /* Empty response, this should never be called */ }
-
     void operator()(const response::ItemAdded& response) const
     {
         const auto itemID = gameInventory.createSOCItem(gameItemStorage, *response.item, response.asUnacknowledged);
