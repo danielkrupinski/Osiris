@@ -6,6 +6,7 @@
 
 #include "Backend/BackendSimulator.h"
 #include "Backend/Request/RequestBuilder.h"
+#include "Backend/Request/XRayScannerHandler.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 
@@ -21,7 +22,7 @@ namespace inventory_changer
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
-        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup }, backendRequestBuilder{ backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler() } {}
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup }, backendRequestBuilder{ backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler(), backend.getXRayScannerHandler() } {}
 
     static InventoryChanger& instance();
 
@@ -67,7 +68,7 @@ private:
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;
-    backend::RequestBuilder<backend::RequestHandler, backend::StorageUnitHandler<backend::ResponseAccumulator>> backendRequestBuilder;
+    backend::RequestBuilder<backend::RequestHandler, backend::StorageUnitHandler<backend::ResponseAccumulator>, backend::XRayScannerHandler<backend::ResponseAccumulator>> backendRequestBuilder;
     bool panoramaCodeInXrayScanner = false;
     std::vector<char> userTextMsgBuffer;
 };

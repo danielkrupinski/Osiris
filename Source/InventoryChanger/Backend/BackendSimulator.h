@@ -14,6 +14,7 @@
 #include "Request/PickEmHandler.h"
 #include "Request/RequestHandler.h"
 #include "Request/StorageUnitHandler.h"
+#include "Request/XRayScannerHandler.h"
 #include "Response/Response.h"
 #include "Response/ResponseAccumulator.h"
 #include "Response/ResponseHandler.h"
@@ -108,6 +109,11 @@ public:
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()
     {
         return StorageUnitHandler{ storageUnitManager, ItemConstRemover{ inventory }, getInventoryHandler(), ResponseAccumulator{ responseQueue } };
+    }
+
+    [[nodiscard]] XRayScannerHandler<ResponseAccumulator> getXRayScannerHandler()
+    {
+        return XRayScannerHandler{ gameItemLookup, crateLootLookup, xRayScanner, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue }, ItemConstRemover{ inventory } };
     }
 
     template <typename GameInventory>

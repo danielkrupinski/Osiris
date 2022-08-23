@@ -214,45 +214,4 @@ void RequestHandler::operator()(const request::SelectTeamGraffiti& request) cons
         responseQueue.add(response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID });
 }
 
-void RequestHandler::operator()(const request::PerformXRayScan& request) const
-{
-    if (!request.crate->gameItem().isCrate())
-        return;
-
-    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *request.crate, nullptr);
-    if (!generatedItem.has_value())
-        return;
-
-    constRemover.removeConstness(request.crate)->setState(inventory::Item::State::InXrayScanner);
-    responseQueue.add(response::ItemHidden{ request.crate });
-
-    generatedItem->setState(inventory::Item::State::InXrayScanner);
-
-    const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
-    xRayScanner.storeItems(XRayScanner::Items{ receivedItem, request.crate });
-    responseQueue.add(response::XRayScannerUsed{ receivedItem });
-}
-
-void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) const
-{
-    const auto scannerItems = xRayScanner.getItems();
-    if (!scannerItems.has_value())
-        return;
-
-    if (request.container != scannerItems->crate)
-        return;
-
-    if (request.key.has_value()) {
-        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey()) {
-            constRemover.removeConstness(scannerItems->reward)->getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
-            itemRemovalHandler.removeItem(keyItem);
-        }
-    }
-
-    itemRemovalHandler.removeItem(request.container);
-    constRemover.removeConstness(scannerItems->reward)->setState(inventory::Item::State::Default);
-    responseQueue.add(response::ItemUnhidden{ scannerItems->reward });
-    responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
-}
-
 }

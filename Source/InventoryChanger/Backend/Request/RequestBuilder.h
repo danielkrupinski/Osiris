@@ -13,11 +13,11 @@
 namespace inventory_changer::backend
 {
 
-template <typename Requestor, typename StorageUnitHandler>
+template <typename Requestor, typename StorageUnitHandler, typename XRayScannerHandler>
 class RequestBuilder {
 public:
-    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler)
-        : itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler } {}
+    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler, XRayScannerHandler xRayScannerHandler)
+        : itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler }, xRayScannerHandler{ xRayScannerHandler } {}
 
     void setStickerSlot(std::uint8_t slot) noexcept
     {
@@ -101,13 +101,13 @@ private:
             if (destItem->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(destItem, tool);
             else
-                request<request::ClaimXRayScannedItem>(destItem, tool);
+                xRayScannerHandler.claimXRayScannedItem(destItem, tool);
         } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
             request<request::ApplyPatch>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isNameTag() && destItem->gameItem().isSkin()) {
             request<request::AddNameTag>(destItem, tool, nameTag);
         } else if (tool->gameItem().isCrate() && tool == destItem) {
-            request<request::PerformXRayScan>(tool);
+            xRayScannerHandler.performXRayScan(tool);
         }
     }
 
@@ -138,7 +138,7 @@ private:
             if (item->getState() != inventory::Item::State::InXrayScanner)
                 request<request::OpenContainer>(item);
             else
-                request<request::ClaimXRayScannedItem>(item);
+                xRayScannerHandler.claimXRayScannedItem(item, std::nullopt);
         } else if (item->gameItem().isStorageUnit() && toolItemID == fauxNameTagItemID) {
             storageUnitHandler.nameStorageUnit(item, nameTag);
         }
@@ -157,6 +157,7 @@ private:
     std::uint64_t statTrakSwapItemID2 = 0;
     std::string nameTag;
     StorageUnitHandler storageUnitHandler;
+    XRayScannerHandler xRayScannerHandler;
 };
 
 }
