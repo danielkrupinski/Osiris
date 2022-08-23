@@ -82,7 +82,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getInventoryHandler(), getStorageUnitHandler(), storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
@@ -98,6 +98,11 @@ public:
     [[nodiscard]] InventoryHandler<ResponseAccumulator> getInventoryHandler()
     {
         return InventoryHandler{ inventory, ResponseAccumulator{ responseQueue } };
+    }
+
+    [[nodiscard]] ItemRemovalHandler<ResponseAccumulator> getItemRemovalHandler()
+    {
+        return ItemRemovalHandler{ storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, getStorageUnitHandler() };
     }
 
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()
@@ -131,10 +136,10 @@ private:
 inline void clearInventory(BackendSimulator& backend)
 {
     const auto& inventory = backend.getInventory();
-    const auto requestHandler = backend.getRequestHandler();
+    const auto itemRemovalHandler = backend.getItemRemovalHandler();
 
     for (auto it = inventory.cbegin(); it != inventory.cend();)
-        it = requestHandler(request::RemoveItem{ it });
+        it = itemRemovalHandler.removeItem(it);
 }
 
 }

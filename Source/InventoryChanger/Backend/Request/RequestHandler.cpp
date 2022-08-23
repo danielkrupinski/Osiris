@@ -20,7 +20,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     skin->stickers[request.slot].wear = 0.0f;
 
     inventoryHandler.moveItemToFront(request.item);
-    operator()(request::RemoveItem{ request.sticker });
+    itemRemovalHandler.removeItem(request.sticker);
     responseQueue.add(response::StickerApplied{ request.item, request.slot });
 }
 
@@ -54,7 +54,7 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     if (!statTrakTo)
         return;
 
-    operator()(request::RemoveItem{ request.statTrakSwapTool });
+    itemRemovalHandler.removeItem(request.statTrakSwapTool);
     operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
     operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
     inventoryHandler.moveItemToFront(request.itemFrom);
@@ -82,10 +82,10 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
 
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
-            operator()(request::RemoveItem{ keyItem });
+            itemRemovalHandler.removeItem(keyItem);
     }
 
-    operator()(request::RemoveItem{ request.container });
+    itemRemovalHandler.removeItem(request.container);
     const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
     responseQueue.add(response::ContainerOpened{ receivedItem });
 }
@@ -98,7 +98,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
 
     agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
     inventoryHandler.moveItemToFront(request.item);
-    operator()(request::RemoveItem{ request.patch });
+    itemRemovalHandler.removeItem(request.patch);
     responseQueue.add(response::PatchApplied{ request.item, request.slot });
 }
 
@@ -122,7 +122,7 @@ void RequestHandler::operator()(const request::ActivateOperationPass& request) c
     const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
     if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
         inventoryHandler.addItem(inventory::Item{ *operationCoin }, true);
-        operator()(request::RemoveItem{ request.operationPass });
+        itemRemovalHandler.removeItem(request.operationPass);
     }
 }
 
@@ -138,7 +138,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
 
     if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
         const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
-        operator()(request::RemoveItem{ request.item });
+        itemRemovalHandler.removeItem(request.item);
         responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
     }
 }
@@ -150,7 +150,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
         return;
 
     skin->nameTag = request.nameTag;
-    operator()(request::RemoveItem{ request.nameTagItem });
+    itemRemovalHandler.removeItem(request.nameTagItem);
     inventoryHandler.moveItemToFront(request.item);
     responseQueue.add(response::NameTagAdded{ request.item });
 }
@@ -179,7 +179,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
         return;
 
     ++tournamentCoinData->dropsAwarded;
-    operator()(request::RemoveItem{ request.item });
+    itemRemovalHandler.removeItem(request.item);
     responseQueue.add(response::SouvenirTokenActivated{ tournamentCoin });
 }
 
@@ -245,40 +245,14 @@ void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) co
     if (request.key.has_value()) {
         if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey()) {
             constRemover.removeConstness(scannerItems->reward)->getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
-            operator()(request::RemoveItem{ keyItem });
+            itemRemovalHandler.removeItem(keyItem);
         }
     }
 
-    operator()(request::RemoveItem{ request.container });
+    itemRemovalHandler.removeItem(request.container);
     constRemover.removeConstness(scannerItems->reward)->setState(inventory::Item::State::Default);
     responseQueue.add(response::ItemUnhidden{ scannerItems->reward });
     responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
-}
-
-ItemIterator RequestHandler::operator()(const request::RemoveItem& request) const
-{
-    const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(request.item, [this, it = request.item](const auto& storedItem) {
-        if (storedItem != it)
-            removeItemInternal(storedItem);
-    });
-
-    if (removedFromStorageUnit.has_value()) {
-        storageUnitHandler.removeFromStorageUnit(request.item, *removedFromStorageUnit);
-    }
-
-    return removeItemInternal(request.item);
-}
-
-ItemIterator RequestHandler::removeItemInternal(ItemIterator it) const
-{
-    const auto itemID = itemIDMap.remove(it);
-    loadout.unequipItem(it);
-    responseQueue.removeResponsesReferencingItem(it);
-    xRayScanner.onItemRemoval(it);
-    const auto newIterator = inventory.erase(it);
-    if (itemID.has_value())
-        responseQueue.add(response::ItemRemoved{ *itemID });
-    return newIterator;
 }
 
 }
