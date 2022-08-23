@@ -221,6 +221,7 @@
     <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\StorageUnitHandler.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\XRayScannerHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseAccumulator.h" />
