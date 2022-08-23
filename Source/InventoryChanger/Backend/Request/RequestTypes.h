@@ -78,8 +78,6 @@ using ActivateViewerPass = ModifyItem<struct ActivateViewerPassTag>;
 using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
 using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
 using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
-using MoveItemToFront = ModifyItem<struct MoveItemToFrontTag>;
-using RemoveItem = ModifyItem<struct RemoveItemTag>;
 
 struct AddNameTag {
     AddNameTag(ItemIterator item, ItemIterator nameTagItem, std::string_view nameTag)
@@ -88,14 +86,6 @@ struct AddNameTag {
     ItemIterator item;
     ItemIterator nameTagItem;
     std::string_view nameTag;
-};
-
-struct NameStorageUnit {
-    NameStorageUnit(ItemIterator storageUnit, std::string_view name)
-        : storageUnit{ storageUnit }, name{ name } {}
-
-    ItemIterator storageUnit;
-    std::string_view name;
 };
 
 struct UpdateStatTrak {
@@ -127,52 +117,6 @@ struct ClaimXRayScannedItem {
 
     ItemIterator container;
     std::optional<ItemIterator> key;
-};
-
-struct BindItemToStorageUnit {
-    explicit BindItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
-        : item{ item }, storageUnit{ storageUnit } {}
-
-    ItemIterator item;
-    ItemIterator storageUnit;
-};
-
-struct AddItemToStorageUnit {
-    explicit AddItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
-        : item{ item }, storageUnit{ storageUnit } {}
-
-    ItemIterator item;
-    ItemIterator storageUnit;
-};
-
-struct RemoveFromStorageUnit {
-    explicit RemoveFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
-        : item{ item }, storageUnit{ storageUnit } {}
-
-    ItemIterator item;
-    ItemIterator storageUnit;
-};
-
-struct MarkStorageUnitModified {
-    explicit MarkStorageUnitModified(ItemIterator storageUnit)
-        : storageUnit{ storageUnit } {}
-
-    ItemIterator storageUnit;
-};
-
-struct UpdateStorageUnitAttributes {
-    explicit UpdateStorageUnitAttributes(ItemIterator storageUnit)
-        : storageUnit{ storageUnit } {}
-
-    ItemIterator storageUnit;
-};
-
-struct AddItem {
-    explicit AddItem(inventory::Item item, bool asUnacknowledged)
-        : item{ std::move(item) }, asUnacknowledged{ asUnacknowledged } {}
-
-    inventory::Item item;
-    bool asUnacknowledged;
 };
 
 }
