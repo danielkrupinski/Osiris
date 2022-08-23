@@ -43,6 +43,15 @@ private:
     MockRequestor& requestor;
 };
 
+struct DummyStorageUnitHandler {
+    void nameStorageUnit(ItemIterator, std::string_view) const {}
+    void markStorageUnitModified(ItemIterator) const {}
+    void bindItemToStorageUnit(ItemIterator, ItemIterator) const {}
+    void addItemToStorageUnit(ItemIterator, ItemIterator) const {}
+    void removeFromStorageUnit(ItemIterator, ItemIterator) const {}
+    void updateStorageUnitAttributes(ItemIterator) const {}
+};
+
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
 protected:
     using ItemType = game_items::Item::Type;
@@ -59,7 +68,7 @@ protected:
 
     testing::StrictMock<MockRequestor> requestor;
     ItemIDMap itemIDMap;
-    RequestBuilder<MockRequestorWrapper> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor } };
+    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{} };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });

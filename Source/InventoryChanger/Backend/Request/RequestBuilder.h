@@ -4,17 +4,20 @@
 #include <string_view>
 
 #include <InventoryChanger/Backend/ItemIDMap.h>
+#include <InventoryChanger/Backend/Response/ResponseAccumulator.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
 #include "RequestTypes.h"
+#include "StorageUnitHandler.h"
 
 namespace inventory_changer::backend
 {
 
-template <typename Requestor>
+template <typename Requestor, typename StorageUnitHandler>
 class RequestBuilder {
 public:
-    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor) : itemIDMap{ itemIDMap }, requestor{ requestor } {}
+    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler)
+        : itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler } {}
 
     void setStickerSlot(std::uint8_t slot) noexcept
     {
@@ -75,7 +78,7 @@ public:
         if (!item.has_value() || !storageUnit.has_value() || !(*storageUnit)->gameItem().isStorageUnit())
             return;
 
-        request<request::AddItemToStorageUnit>(*item, *storageUnit);
+        storageUnitHandler.addItemToStorageUnit(*item, *storageUnit);
     }
 
     void removeFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
@@ -86,7 +89,7 @@ public:
         if (!item.has_value() || !storageUnit.has_value() || !(*storageUnit)->gameItem().isStorageUnit())
             return;
 
-        request<request::RemoveFromStorageUnit>(*item, *storageUnit);
+        storageUnitHandler.removeFromStorageUnit(*item, *storageUnit);
     }
 
 private:
@@ -137,7 +140,7 @@ private:
             else
                 request<request::ClaimXRayScannedItem>(item);
         } else if (item->gameItem().isStorageUnit() && toolItemID == fauxNameTagItemID) {
-            request<request::NameStorageUnit>(item, nameTag);
+            storageUnitHandler.nameStorageUnit(item, nameTag);
         }
     }
 
@@ -153,6 +156,7 @@ private:
     std::uint64_t statTrakSwapItemID1 = 0;
     std::uint64_t statTrakSwapItemID2 = 0;
     std::string nameTag;
+    StorageUnitHandler storageUnitHandler;
 };
 
 }

@@ -431,7 +431,7 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
 
     for (auto [item, storageUnitID] : itemsToBindToStorageUnits) {
         if (const auto storageUnit = storageUnits.find(storageUnitID); storageUnit != storageUnits.end()) {
-            backend.getRequestHandler()(inventory_changer::backend::request::BindItemToStorageUnit{ item, storageUnit->second });
+            backend.getStorageUnitHandler().bindItemToStorageUnit(item, storageUnit->second);
         }
     }
 }

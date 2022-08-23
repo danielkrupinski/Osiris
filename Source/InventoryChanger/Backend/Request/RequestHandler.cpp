@@ -255,79 +255,6 @@ void RequestHandler::operator()(const request::ClaimXRayScannedItem& request) co
     responseQueue.add(response::XRayItemClaimed{ scannerItems->reward });
 }
 
-void RequestHandler::operator()(const request::NameStorageUnit& request) const
-{
-    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
-    if (!storageUnit)
-        return;
-
-    storageUnit->name = request.name;
-    operator()(request::MarkStorageUnitModified{ request.storageUnit });
-    inventoryHandler.moveItemToFront(request.storageUnit);
-
-    responseQueue.add(response::StorageUnitNamed{ request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::MarkStorageUnitModified& request) const
-{
-    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
-    if (!storageUnit)
-        return;
-
-    storageUnit->modificationDateTimestamp = static_cast<std::uint32_t>(std::time(nullptr));
-
-    responseQueue.add(response::StorageUnitModified{ request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::BindItemToStorageUnit& request) const
-{
-    if (!request.storageUnit->gameItem().isStorageUnit())
-        return;
-
-    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
-    if (!storageUnit)
-        return;
-
-    ++storageUnit->itemCount;
-    storageUnitManager.addItemToStorageUnit(request.item, request.storageUnit);
-    constRemover.removeConstness(request.item)->setState(inventory::Item::State::InStorageUnit);
-    operator()(request::UpdateStorageUnitAttributes{ request.storageUnit });
-
-    responseQueue.add(response::ItemBoundToStorageUnit{ request.item, request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::AddItemToStorageUnit& request) const
-{
-    operator()(request::BindItemToStorageUnit{ request.item, request.storageUnit });
-    operator()(request::MarkStorageUnitModified{ request.storageUnit });
-    responseQueue.add(response::ItemAddedToStorageUnit{ request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::RemoveFromStorageUnit& request) const
-{
-    if (!request.storageUnit->gameItem().isStorageUnit())
-        return;
-
-    const auto storageUnit = constRemover.removeConstness(request.storageUnit)->getOrCreate<inventory::StorageUnit>();
-    if (!storageUnit)
-        return;
-
-    --storageUnit->itemCount;
-    storageUnitManager.removeItemFromStorageUnit(request.item, request.storageUnit);
-    constRemover.removeConstness(request.item)->setState(inventory::Item::State::Default);
-    operator()(request::MarkStorageUnitModified{ request.storageUnit });
-
-    responseQueue.add(response::ItemRemovedFromStorageUnit{ request.item, request.storageUnit });
-}
-
-void RequestHandler::operator()(const request::UpdateStorageUnitAttributes& request) const
-{
-    if (!request.storageUnit->gameItem().isStorageUnit())
-        return;
-
-    responseQueue.add(response::StorageUnitModified{ request.storageUnit });
-}
-
 ItemIterator RequestHandler::operator()(const request::RemoveItem& request) const
 {
     const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(request.item, [this, it = request.item](const auto& storedItem) {
@@ -336,7 +263,7 @@ ItemIterator RequestHandler::operator()(const request::RemoveItem& request) cons
     });
 
     if (removedFromStorageUnit.has_value()) {
-        operator()(request::RemoveFromStorageUnit{ request.item, *removedFromStorageUnit });
+        storageUnitHandler.removeFromStorageUnit(request.item, *removedFromStorageUnit);
     }
 
     return removeItemInternal(request.item);
