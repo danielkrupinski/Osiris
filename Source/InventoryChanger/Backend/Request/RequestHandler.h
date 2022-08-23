@@ -21,8 +21,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
-        : itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
+    RequestHandler(ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -45,12 +45,10 @@ private:
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     InventoryHandler<ResponseAccumulator> inventoryHandler;
     StorageUnitHandler<ResponseAccumulator> storageUnitHandler;
-    StorageUnitManager& storageUnitManager;
     XRayScanner& xRayScanner;
     ResponseQueue<>& responseQueue;
     ItemList& inventory;
     Loadout& loadout;
-    ItemIDMap& itemIDMap;
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
     ItemConstRemover constRemover;
