@@ -17,8 +17,6 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::WearSticker&));
     MOCK_METHOD(void, request, (const request::RemovePatch&));
     MOCK_METHOD(void, request, (const request::OpenContainer&));
-    MOCK_METHOD(void, request, (const request::PerformXRayScan&));
-    MOCK_METHOD(void, request, (const request::ClaimXRayScannedItem&));
     MOCK_METHOD(void, request, (const request::SwapStatTrak&));
     MOCK_METHOD(void, request, (const request::ActivateOperationPass&));
     MOCK_METHOD(void, request, (const request::ActivateViewerPass&));
@@ -27,7 +25,6 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::ApplySticker&));
     MOCK_METHOD(void, request, (const request::ApplyPatch&));
     MOCK_METHOD(void, request, (const request::AddNameTag&));
-    MOCK_METHOD(void, request, (const request::NameStorageUnit&));
 };
 
 struct MockRequestorWrapper {
@@ -52,6 +49,11 @@ struct DummyStorageUnitHandler {
     void updateStorageUnitAttributes(ItemIterator) const {}
 };
 
+struct DummyXRayScannerHandler {
+    void performXRayScan(ItemIterator) const {}
+    void claimXRayScannedItem(ItemIterator, std::optional<ItemIterator>) const {}
+};
+
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
 protected:
     using ItemType = game_items::Item::Type;
@@ -68,7 +70,7 @@ protected:
 
     testing::StrictMock<MockRequestor> requestor;
     ItemIDMap itemIDMap;
-    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{} };
+    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, DummyXRayScannerHandler> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, DummyXRayScannerHandler{} };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
@@ -158,6 +160,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBe
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
 
+/*
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Crate>();
     crate->setState(inventory::Item::State::InXrayScanner);
@@ -165,7 +168,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromK
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, std::nullopt))));
 
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
-}
+}*/
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingOperationPassCanBeRequested) {
     const auto operationPass = createDummyItem<ItemType::OperationPass>();
@@ -231,6 +234,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProduces
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
 
+/*
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCrateProducesXRayClaimRequest) {
     const auto key = createDummyItem<ItemType::CrateKey>();
     const auto crate = createDummyItem<ItemType::Crate>();
@@ -239,7 +243,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnHiddenCratePr
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ClaimXRayScannedItem&>(testing::FieldsAre(crate, key))));
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
-}
+}*/
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStickerNotOnSkinDoesNotProduceRequest) {
     createDummyItem<ItemType::Sticker>();
@@ -270,7 +274,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyNotOnCrateDoesN
     createDummyItem<ItemType::Music>();
 
     EXPECT_CALL(requestor, request(testing::An<const request::OpenContainer&>())).Times(0);
-    EXPECT_CALL(requestor, request(testing::An<const request::ClaimXRayScannedItem&>())).Times(0);
+    // EXPECT_CALL(requestor, request(testing::An<const request::ClaimXRayScannedItem&>())).Times(0);
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
