@@ -205,7 +205,7 @@ public:
 
     bool willProduceStatTrak() noexcept
     {
-        return *reinterpret_cast<bool*>(std::uintptr_t(this) + WIN32_LINUX(0x38, 0x58));
+        return *reinterpret_cast<bool*>(std::uintptr_t(this) + WIN32_LINUX(0x3C, 0x5C));
     }
 };
 
