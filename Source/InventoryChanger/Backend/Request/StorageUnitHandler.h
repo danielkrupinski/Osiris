@@ -18,7 +18,7 @@ public:
 
     void nameStorageUnit(ItemIterator storageUnitIterator, std::string_view name) const
     {
-        const auto storageUnit = constRemover.removeConstness(storageUnitIterator)->getOrCreate<inventory::StorageUnit>();
+        const auto storageUnit = constRemover.removeConstness(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
 
@@ -31,7 +31,7 @@ public:
 
     void markStorageUnitModified(ItemIterator storageUnitIterator) const
     {
-        const auto storageUnit = constRemover.removeConstness(storageUnitIterator)->getOrCreate<inventory::StorageUnit>();
+        const auto storageUnit = constRemover.removeConstness(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
 
@@ -45,13 +45,13 @@ public:
         if (!storageUnitIterator->gameItem().isStorageUnit())
             return;
 
-        const auto storageUnit = constRemover.removeConstness(storageUnitIterator)->getOrCreate<inventory::StorageUnit>();
+        const auto storageUnit = constRemover.removeConstness(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
 
         ++storageUnit->itemCount;
         storageUnitManager.addItemToStorageUnit(item, storageUnitIterator);
-        constRemover.removeConstness(item)->setState(inventory::Item::State::InStorageUnit);
+        constRemover.removeConstness(item).setState(inventory::Item::State::InStorageUnit);
         updateStorageUnitAttributes(storageUnitIterator);
 
         responseAccumulator(response::ItemBoundToStorageUnit{ item, storageUnitIterator });
@@ -69,13 +69,13 @@ public:
         if (!storageUnitIterator->gameItem().isStorageUnit())
             return;
 
-        const auto storageUnit = constRemover.removeConstness(storageUnitIterator)->getOrCreate<inventory::StorageUnit>();
+        const auto storageUnit = constRemover.removeConstness(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
 
         --storageUnit->itemCount;
         storageUnitManager.removeItemFromStorageUnit(item, storageUnitIterator);
-        constRemover.removeConstness(item)->setState(inventory::Item::State::Default);
+        constRemover.removeConstness(item).setState(inventory::Item::State::Default);
         markStorageUnitModified(storageUnitIterator);
 
         responseAccumulator(response::ItemRemovedFromStorageUnit{ item, storageUnitIterator });
