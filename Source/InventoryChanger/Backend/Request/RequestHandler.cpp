@@ -12,7 +12,7 @@ namespace inventory_changer::backend
 
 void RequestHandler::operator()(const request::ApplySticker& request) const
 {
-    const auto skin = get<inventory::Skin>(constRemover.removeConstness(request.item));
+    const auto skin = get<inventory::Skin>(constRemover(request.item));
     if (!skin)
         return;
 
@@ -26,7 +26,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
 
 void RequestHandler::operator()(const request::WearSticker& request) const
 {
-    const auto skin = get<inventory::Skin>(constRemover.removeConstness(request.skin));
+    const auto skin = get<inventory::Skin>(constRemover(request.skin));
     if (!skin)
         return;
 
@@ -92,7 +92,7 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
 
 void RequestHandler::operator()(const request::ApplyPatch& request) const
 {
-    const auto agent = constRemover.removeConstness(request.item).getOrCreate<inventory::Agent>();
+    const auto agent = constRemover(request.item).getOrCreate<inventory::Agent>();
     if (!agent)
         return;
 
@@ -104,7 +104,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
 
 void RequestHandler::operator()(const request::RemovePatch& request) const
 {
-    const auto agent = get<inventory::Agent>(constRemover.removeConstness(request.item));
+    const auto agent = get<inventory::Agent>(constRemover(request.item));
     if (!agent)
         return;
 
@@ -145,7 +145,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
 
 void RequestHandler::operator()(const request::AddNameTag& request) const
 {
-    const auto skin = get<inventory::Skin>(constRemover.removeConstness(request.item));
+    const auto skin = get<inventory::Skin>(constRemover(request.item));
     if (!skin)
         return;
 
@@ -157,7 +157,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
 
 void RequestHandler::operator()(const request::RemoveNameTag& request) const
 {
-    if (const auto skin = get<inventory::Skin>(constRemover.removeConstness(request.item))) {
+    if (const auto skin = get<inventory::Skin>(constRemover(request.item))) {
         skin->nameTag.clear();
         inventoryHandler.moveItemToFront(request.item);
         responseQueue.add(response::NameTagRemoved{ request.item });
@@ -174,7 +174,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
     if (tournamentCoin == inventory.end())
         return;
 
-    const auto tournamentCoinData = constRemover.removeConstness(tournamentCoin).getOrCreate<inventory::TournamentCoin>();
+    const auto tournamentCoinData = constRemover(tournamentCoin).getOrCreate<inventory::TournamentCoin>();
     if (!tournamentCoinData)
         return;
 
@@ -188,7 +188,7 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
     if (!request.item->gameItem().isGraffiti())
         return;
 
-    const auto graffiti = constRemover.removeConstness(request.item).getOrCreate<inventory::Graffiti>();
+    const auto graffiti = constRemover(request.item).getOrCreate<inventory::Graffiti>();
     if (!graffiti)
         return;
 
@@ -200,7 +200,7 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
 
 void RequestHandler::operator()(const request::UpdateStatTrak& request) const
 {
-    const auto statTrak = inventory::getStatTrak(constRemover.removeConstness(request.item));
+    const auto statTrak = inventory::getStatTrak(constRemover(request.item));
     if (!statTrak)
         return;
 

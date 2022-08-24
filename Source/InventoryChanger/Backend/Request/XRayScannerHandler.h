@@ -21,7 +21,7 @@ public:
         if (!generatedItem.has_value())
             return;
 
-        constRemover.removeConstness(crate).setState(inventory::Item::State::InXrayScanner);
+        constRemover(crate).setState(inventory::Item::State::InXrayScanner);
         responseAccumulator(response::ItemHidden{ crate });
 
         generatedItem->setState(inventory::Item::State::InXrayScanner);
@@ -42,13 +42,13 @@ public:
 
         if (key.has_value()) {
             if (const auto& keyItem = *key; keyItem->gameItem().isCaseKey()) {
-                constRemover.removeConstness(scannerItems->reward).getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
+                constRemover(scannerItems->reward).getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
                 itemRemovalHandler.removeItem(keyItem);
             }
         }
 
         itemRemovalHandler.removeItem(crate);
-        constRemover.removeConstness(scannerItems->reward).setState(inventory::Item::State::Default);
+        constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
         responseAccumulator(response::ItemUnhidden{ scannerItems->reward });
         responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
     }

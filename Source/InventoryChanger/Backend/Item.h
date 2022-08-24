@@ -15,7 +15,7 @@ namespace inventory_changer::backend
     struct ItemConstRemover {
         explicit ItemConstRemover(ItemList& itemList) : itemList{ itemList } {}
 
-        [[nodiscard]] inventory::Item& removeConstness(ItemIterator it) const noexcept
+        [[nodiscard]] inventory::Item& operator()(ItemIterator it) const noexcept
         {
             return *itemList.erase(it, it);
         }
