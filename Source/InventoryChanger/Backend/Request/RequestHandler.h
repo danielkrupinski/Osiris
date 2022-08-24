@@ -22,8 +22,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(ItemModificationHandler<ResponseAccumulator> itemModificationHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
-        : itemModificationHandler{ itemModificationHandler }, itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
+    RequestHandler(ItemModificationHandler<ResponseAccumulator> itemModificationHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, XRayScanner& xRayScanner, ResponseAccumulator responseAccumulator, ItemList& inventory, Loadout& loadout, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : itemModificationHandler{ itemModificationHandler }, itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, xRayScanner{ xRayScanner }, responseAccumulator{ responseAccumulator }, inventory{ inventory }, loadout{ loadout }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -44,7 +44,7 @@ private:
     InventoryHandler<ResponseAccumulator> inventoryHandler;
     StorageUnitHandler<ResponseAccumulator> storageUnitHandler;
     XRayScanner& xRayScanner;
-    ResponseQueue<>& responseQueue;
+    ResponseAccumulator responseAccumulator;
     ItemList& inventory;
     Loadout& loadout;
     const game_items::Lookup& gameItemLookup;

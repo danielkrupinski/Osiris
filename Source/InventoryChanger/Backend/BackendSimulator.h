@@ -84,7 +84,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, responseQueue, inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, ResponseAccumulator{ responseQueue }, inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()

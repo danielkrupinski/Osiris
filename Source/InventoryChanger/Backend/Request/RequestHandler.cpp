@@ -21,7 +21,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
 
     inventoryHandler.moveItemToFront(request.item);
     itemRemovalHandler.removeItem(request.sticker);
-    responseQueue.add(response::StickerApplied{ request.item, request.slot });
+    responseAccumulator(response::StickerApplied{ request.item, request.slot });
 }
 
 void RequestHandler::operator()(const request::WearSticker& request) const
@@ -35,10 +35,10 @@ void RequestHandler::operator()(const request::WearSticker& request) const
 
     if (const auto shouldRemove = (newWear >= 1.0f + wearStep)) {
         skin->stickers[request.slot] = {};
-        responseQueue.add(response::StickerRemoved{ request.skin, request.slot });
+        responseAccumulator(response::StickerRemoved{ request.skin, request.slot });
     }
 
-    responseQueue.add(response::StickerScraped{ request.skin, request.slot });
+    responseAccumulator(response::StickerScraped{ request.skin, request.slot });
 }
 
 void RequestHandler::operator()(const request::SwapStatTrak& request) const
@@ -59,8 +59,8 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     itemModificationHandler.updateStatTrak(request.itemTo, *statTrakFrom);
     inventoryHandler.moveItemToFront(request.itemFrom);
     inventoryHandler.moveItemToFront(request.itemTo);
-    responseQueue.add(response::ItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
-    responseQueue.add(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
+    responseAccumulator(response::ItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
+    responseAccumulator(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
 
 [[nodiscard]] const inventory::Item* toPointer(const std::optional<ItemIterator>& item)
@@ -87,7 +87,7 @@ void RequestHandler::operator()(const request::OpenContainer& request) const
 
     itemRemovalHandler.removeItem(request.container);
     const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
-    responseQueue.add(response::ContainerOpened{ receivedItem });
+    responseAccumulator(response::ContainerOpened{ receivedItem });
 }
 
 void RequestHandler::operator()(const request::ApplyPatch& request) const
@@ -99,7 +99,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
     agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
     inventoryHandler.moveItemToFront(request.item);
     itemRemovalHandler.removeItem(request.patch);
-    responseQueue.add(response::PatchApplied{ request.item, request.slot });
+    responseAccumulator(response::PatchApplied{ request.item, request.slot });
 }
 
 void RequestHandler::operator()(const request::RemovePatch& request) const
@@ -110,7 +110,7 @@ void RequestHandler::operator()(const request::RemovePatch& request) const
 
     agent->patches[request.slot].patchID = 0;
     inventoryHandler.moveItemToFront(request.item);
-    responseQueue.add(response::PatchRemoved{ request.item, request.slot });
+    responseAccumulator(response::PatchRemoved{ request.item, request.slot });
 }
 
 void RequestHandler::operator()(const request::ActivateOperationPass& request) const
@@ -139,7 +139,7 @@ void RequestHandler::operator()(const request::ActivateViewerPass& request) cons
     if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
         const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
         itemRemovalHandler.removeItem(request.item);
-        responseQueue.add(response::ViewerPassActivated{ addedEventCoin });
+        responseAccumulator(response::ViewerPassActivated{ addedEventCoin });
     }
 }
 
@@ -152,7 +152,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
     skin->nameTag = request.nameTag;
     itemRemovalHandler.removeItem(request.nameTagItem);
     inventoryHandler.moveItemToFront(request.item);
-    responseQueue.add(response::NameTagAdded{ request.item });
+    responseAccumulator(response::NameTagAdded{ request.item });
 }
 
 void RequestHandler::operator()(const request::RemoveNameTag& request) const
@@ -160,7 +160,7 @@ void RequestHandler::operator()(const request::RemoveNameTag& request) const
     if (const auto skin = get<inventory::Skin>(constRemover(request.item))) {
         skin->nameTag.clear();
         inventoryHandler.moveItemToFront(request.item);
-        responseQueue.add(response::NameTagRemoved{ request.item });
+        responseAccumulator(response::NameTagRemoved{ request.item });
     }
 }
 
@@ -180,7 +180,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
 
     ++tournamentCoinData->dropsAwarded;
     itemRemovalHandler.removeItem(request.item);
-    responseQueue.add(response::SouvenirTokenActivated{ tournamentCoin });
+    responseAccumulator(response::SouvenirTokenActivated{ tournamentCoin });
 }
 
 void RequestHandler::operator()(const request::UnsealGraffiti& request) const
@@ -195,7 +195,7 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
     graffiti->usesLeft = 50;
 
     inventoryHandler.moveItemToFront(request.item);
-    responseQueue.add(response::GraffitiUnsealed{ request.item });
+    responseAccumulator(response::GraffitiUnsealed{ request.item });
 }
 
 }
