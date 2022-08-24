@@ -214,6 +214,7 @@
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\InventoryHandler.h" />
+    <ClInclude Include="InventoryChanger\Backend\Request\ItemModificationHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\ItemRemovalHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\LoadoutHandler.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\PickEmHandler.h" />
