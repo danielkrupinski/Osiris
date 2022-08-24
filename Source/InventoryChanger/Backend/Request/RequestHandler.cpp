@@ -55,8 +55,8 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
         return;
 
     itemRemovalHandler.removeItem(request.statTrakSwapTool);
-    operator()(request::UpdateStatTrak{ request.itemFrom, *statTrakTo });
-    operator()(request::UpdateStatTrak{ request.itemTo, *statTrakFrom });
+    itemModificationHandler.updateStatTrak(request.itemFrom, *statTrakTo);
+    itemModificationHandler.updateStatTrak(request.itemTo, *statTrakFrom);
     inventoryHandler.moveItemToFront(request.itemFrom);
     inventoryHandler.moveItemToFront(request.itemTo);
     responseQueue.add(response::ItemUpdated{ *statTrakFrom >= *statTrakTo ? request.itemFrom : request.itemTo });
@@ -196,22 +196,6 @@ void RequestHandler::operator()(const request::UnsealGraffiti& request) const
 
     inventoryHandler.moveItemToFront(request.item);
     responseQueue.add(response::GraffitiUnsealed{ request.item });
-}
-
-void RequestHandler::operator()(const request::UpdateStatTrak& request) const
-{
-    const auto statTrak = inventory::getStatTrak(constRemover(request.item));
-    if (!statTrak)
-        return;
-
-    *statTrak = request.newStatTrak;
-    responseQueue.add(response::StatTrakUpdated{ request.item, request.newStatTrak });
-}
-
-void RequestHandler::operator()(const request::SelectTeamGraffiti& request) const
-{
-    if (request.tournamentCoin->gameItem().isTournamentCoin())
-        responseQueue.add(response::TeamGraffitiSelected{ request.tournamentCoin, request.graffitiID });
 }
 
 }

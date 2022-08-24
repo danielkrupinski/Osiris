@@ -1132,7 +1132,7 @@ void InventoryChanger::onRoundMVP(GameEvent& event)
 
     if (music->statTrak > -1) {
         event.setInt("musickitmvps", music->statTrak + 1);
-        backend.getRequestHandler()(backend::request::UpdateStatTrak{ item, music->statTrak + 1 });
+        backend.getItemModificationHandler().updateStatTrak(item, music->statTrak + 1);
     }
 }
 
@@ -1160,7 +1160,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
         return;
 
     if (skin->statTrak > -1)
-        backend.getRequestHandler()(backend::request::UpdateStatTrak{ item, skin->statTrak + 1 });
+        backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
 void InventoryChanger::overrideHudIcon(GameEvent& event)
@@ -1216,7 +1216,7 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
             const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
             if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
                 const auto graffitiID = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
-                backend.getRequestHandler()(backend::request::SelectTeamGraffiti{ *itOptional, static_cast<std::uint16_t>(graffitiID) });
+                backend.getItemModificationHandler().selectTeamGraffiti(*itOptional, static_cast<std::uint16_t>(graffitiID));
             }
         }
     } else if (returnAddress == memory->getMyPredictionTeamIDGetArgAsStringReturnAddress) {

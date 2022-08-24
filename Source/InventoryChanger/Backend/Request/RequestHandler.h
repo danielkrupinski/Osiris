@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InventoryHandler.h"
+#include "ItemModificationHandler.h"
 #include "ItemRemovalHandler.h"
 #include "RequestTypes.h"
 #include "StorageUnitHandler.h"
@@ -21,8 +22,8 @@ class StorageUnitManager;
 class XRayScanner;
 
 struct RequestHandler {
-    RequestHandler(ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
-        : itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
+    RequestHandler(ItemModificationHandler<ResponseAccumulator> itemModificationHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, InventoryHandler<ResponseAccumulator> inventoryHandler, StorageUnitHandler<ResponseAccumulator> storageUnitHandler, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemConstRemover constRemover)
+        : itemModificationHandler{ itemModificationHandler }, itemRemovalHandler{ itemRemovalHandler }, inventoryHandler{ inventoryHandler }, storageUnitHandler{ storageUnitHandler }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, constRemover{ constRemover } {}
 
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
@@ -36,10 +37,9 @@ struct RequestHandler {
     void operator()(const request::RemoveNameTag& request) const;
     void operator()(const request::ActivateSouvenirToken& request) const;
     void operator()(const request::UnsealGraffiti& request) const;
-    void operator()(const request::UpdateStatTrak& request) const;
-    void operator()(const request::SelectTeamGraffiti& request) const;
 
 private:
+    ItemModificationHandler<ResponseAccumulator> itemModificationHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     InventoryHandler<ResponseAccumulator> inventoryHandler;
     StorageUnitHandler<ResponseAccumulator> storageUnitHandler;

@@ -10,6 +10,7 @@
 #include "PickEm.h"
 #include "StorageUnitManager.h"
 #include "XRayScanner.h"
+#include "Request/ItemModificationHandler.h"
 #include "Request/LoadoutHandler.h"
 #include "Request/PickEmHandler.h"
 #include "Request/RequestHandler.h"
@@ -83,7 +84,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, responseQueue, inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, responseQueue, inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
@@ -114,6 +115,11 @@ public:
     [[nodiscard]] XRayScannerHandler<ResponseAccumulator> getXRayScannerHandler()
     {
         return XRayScannerHandler{ gameItemLookup, crateLootLookup, xRayScanner, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue }, ItemConstRemover{ inventory } };
+    }
+
+    [[nodiscard]] ItemModificationHandler<ResponseAccumulator> getItemModificationHandler()
+    {
+        return ItemModificationHandler{ ItemConstRemover{ inventory }, ResponseAccumulator{ responseQueue } };
     }
 
     template <typename GameInventory>
