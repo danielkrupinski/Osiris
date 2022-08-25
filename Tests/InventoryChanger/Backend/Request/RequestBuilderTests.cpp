@@ -54,7 +54,8 @@ struct MockXRayScannerHandler {
 struct MockItemActivationHandler {
     MOCK_METHOD(void, activateOperationPass, (ItemIterator operationPass), (const));
     MOCK_METHOD(void, activateViewerPass, (ItemIterator viewerPass), (const));
-    MOCK_METHOD(void, openContainer, (ItemIterator container, std::optional<ItemIterator> key), (const));
+    MOCK_METHOD(void, openContainer, (ItemIterator container, ItemIterator key), (const));
+    MOCK_METHOD(void, openKeylessContainer, (ItemIterator container), (const));
 };
 
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
@@ -160,7 +161,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenItemsA
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Crate>();
-    EXPECT_CALL(itemActivationHandler, openContainer(testing::Eq(crate), testing::Eq(std::nullopt)));
+    EXPECT_CALL(itemActivationHandler, openKeylessContainer(testing::Eq(crate)));
 
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }

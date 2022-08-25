@@ -50,19 +50,31 @@ public:
         }
     }
 
-    void openContainer(ItemIterator container, std::optional<ItemIterator> key) const
+    void openContainer(ItemIterator container, ItemIterator key) const
     {
         if (!container->gameItem().isCrate())
             return;
 
-        auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, toPointer(key));
+        auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, std::to_address(key));
         if (!generatedItem.has_value())
             return;
 
-        if (key.has_value()) {
-            if (const auto& keyItem = *key; keyItem->gameItem().isCaseKey())
-                itemRemovalHandler.removeItem(keyItem);
-        }
+        if (key->gameItem().isCaseKey())
+            itemRemovalHandler.removeItem(key);
+
+        itemRemovalHandler.removeItem(container);
+        const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
+        responseAccumulator(response::ContainerOpened{ receivedItem });
+    }
+
+    void openKeylessContainer(ItemIterator container) const
+    {
+        if (!container->gameItem().isCrate())
+            return;
+
+        auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, nullptr);
+        if (!generatedItem.has_value())
+            return;
 
         itemRemovalHandler.removeItem(container);
         const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
@@ -70,14 +82,6 @@ public:
     }
 
 private:
-    [[nodiscard]] static const inventory::Item* toPointer(const std::optional<ItemIterator>& item)
-    {
-        if (item.has_value())
-            return std::to_address(*item);
-        else
-            return nullptr;
-    }
-
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
     InventoryHandler<ResponseAccumulator> inventoryHandler;
