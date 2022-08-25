@@ -125,7 +125,7 @@ public:
 
     [[nodiscard]] ItemActivationHandler<ResponseAccumulator> getItemActivationHandler()
     {
-        return ItemActivationHandler{ gameItemLookup, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue } };
+        return ItemActivationHandler{ gameItemLookup, crateLootLookup, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue } };
     }
 
     template <typename GameInventory>

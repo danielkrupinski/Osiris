@@ -99,7 +99,7 @@ private:
             request<request::ApplySticker>(destItem, tool, stickerSlot);
         } else if (tool->gameItem().isCaseKey() && destItem->gameItem().isCrate()) {
             if (destItem->getState() != inventory::Item::State::InXrayScanner)
-                request<request::OpenContainer>(destItem, tool);
+                itemActivationHandler.openContainer(destItem, tool);
             else
                 xRayScannerHandler.claimXRayScannedItem(destItem, tool);
         } else if (tool->gameItem().isPatch() && destItem->gameItem().isAgent()) {
@@ -136,7 +136,7 @@ private:
 
         if (item->gameItem().isCrate()) {
             if (item->getState() != inventory::Item::State::InXrayScanner)
-                request<request::OpenContainer>(item);
+                itemActivationHandler.openContainer(item, std::nullopt);
             else
                 xRayScannerHandler.claimXRayScannedItem(item, std::nullopt);
         } else if (item->gameItem().isStorageUnit() && toolItemID == fauxNameTagItemID) {

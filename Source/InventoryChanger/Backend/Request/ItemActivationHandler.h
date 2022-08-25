@@ -1,7 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <optional>
+
 #include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/GameItems/CrateLootLookup.h>
 #include <InventoryChanger/GameItems/Lookup.h>
+#include <InventoryChanger/ItemGenerator/ItemGenerator.h>
 
 #include "InventoryHandler.h"
 #include "ItemRemovalHandler.h"
@@ -12,8 +17,8 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class ItemActivationHandler {
 public:
-    ItemActivationHandler(const game_items::Lookup& gameItemLookup, InventoryHandler<ResponseAccumulator> inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
-        : gameItemLookup{ gameItemLookup }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator } {}
+    ItemActivationHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, InventoryHandler<ResponseAccumulator> inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
+        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator } {}
 
     void activateOperationPass(ItemIterator operationPass) const
     {
@@ -45,8 +50,36 @@ public:
         }
     }
 
+    void openContainer(ItemIterator container, std::optional<ItemIterator> key) const
+    {
+        if (!container->gameItem().isCrate())
+            return;
+
+        auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, toPointer(key));
+        if (!generatedItem.has_value())
+            return;
+
+        if (key.has_value()) {
+            if (const auto& keyItem = *key; keyItem->gameItem().isCaseKey())
+                itemRemovalHandler.removeItem(keyItem);
+        }
+
+        itemRemovalHandler.removeItem(container);
+        const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
+        responseAccumulator(response::ContainerOpened{ receivedItem });
+    }
+
 private:
+    [[nodiscard]] static const inventory::Item* toPointer(const std::optional<ItemIterator>& item)
+    {
+        if (item.has_value())
+            return std::to_address(*item);
+        else
+            return nullptr;
+    }
+
     const game_items::Lookup& gameItemLookup;
+    const game_items::CrateLootLookup& crateLootLookup;
     InventoryHandler<ResponseAccumulator> inventoryHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     ResponseAccumulator responseAccumulator;

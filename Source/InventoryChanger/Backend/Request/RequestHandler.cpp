@@ -63,33 +63,6 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     responseAccumulator(response::StatTrakSwapped{ *statTrakFrom < *statTrakTo ? request.itemFrom : request.itemTo });
 }
 
-[[nodiscard]] const inventory::Item* toPointer(const std::optional<ItemIterator>& item)
-{
-    if (item.has_value())
-        return std::to_address(*item);
-    else
-        return nullptr;
-}
-
-void RequestHandler::operator()(const request::OpenContainer& request) const
-{
-    if (!request.container->gameItem().isCrate())
-        return;
-
-    auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *request.container, toPointer(request.key));
-    if (!generatedItem.has_value())
-        return;
-
-    if (request.key.has_value()) {
-        if (const auto& keyItem = *request.key; keyItem->gameItem().isCaseKey())
-            itemRemovalHandler.removeItem(keyItem);
-    }
-
-    itemRemovalHandler.removeItem(request.container);
-    const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
-    responseAccumulator(response::ContainerOpened{ receivedItem });
-}
-
 void RequestHandler::operator()(const request::ApplyPatch& request) const
 {
     const auto agent = constRemover(request.item).getOrCreate<inventory::Agent>();

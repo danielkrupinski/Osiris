@@ -3,6 +3,7 @@
 #include "../../Memory.h"
 #include <SDK/WeaponId.h>
 
+#include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>

@@ -28,7 +28,6 @@ struct RequestHandler {
     void operator()(const request::ApplySticker& request) const;
     void operator()(const request::WearSticker& request) const;
     void operator()(const request::SwapStatTrak& request) const;
-    void operator()(const request::OpenContainer& request) const;
     void operator()(const request::ApplyPatch& request) const;
     void operator()(const request::RemovePatch& request) const;
     void operator()(const request::AddNameTag& request) const;

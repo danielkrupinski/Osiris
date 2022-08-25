@@ -16,7 +16,6 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::RemoveNameTag&));
     MOCK_METHOD(void, request, (const request::WearSticker&));
     MOCK_METHOD(void, request, (const request::RemovePatch&));
-    MOCK_METHOD(void, request, (const request::OpenContainer&));
     MOCK_METHOD(void, request, (const request::SwapStatTrak&));
     MOCK_METHOD(void, request, (const request::ActivateSouvenirToken&));
     MOCK_METHOD(void, request, (const request::UnsealGraffiti&));
@@ -55,6 +54,7 @@ struct MockXRayScannerHandler {
 struct MockItemActivationHandler {
     MOCK_METHOD(void, activateOperationPass, (ItemIterator operationPass), (const));
     MOCK_METHOD(void, activateViewerPass, (ItemIterator viewerPass), (const));
+    MOCK_METHOD(void, openContainer, (ItemIterator container, std::optional<ItemIterator> key), (const));
 };
 
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
@@ -160,7 +160,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, NothingIsRequestedWhenItemsA
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, OpeningKeylessContainerCanBeRequested) {
     const auto crate = createDummyItem<ItemType::Crate>();
-    EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, std::nullopt))));
+    EXPECT_CALL(itemActivationHandler, openContainer(testing::Eq(crate), testing::Eq(std::nullopt)));
 
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }
@@ -233,7 +233,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyOnCrateProduces
     const auto key = createDummyItem<ItemType::CrateKey>();
     const auto crate = createDummyItem<ItemType::Crate>();
 
-    EXPECT_CALL(requestor, request(testing::Matcher<const request::OpenContainer&>(testing::FieldsAre(crate, key))));
+    EXPECT_CALL(itemActivationHandler, openContainer(testing::Eq(crate), testing::Eq(key)));
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
@@ -276,7 +276,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingCrateKeyNotOnCrateDoesN
     createDummyItem<ItemType::CrateKey>();
     createDummyItem<ItemType::Music>();
 
-    EXPECT_CALL(requestor, request(testing::An<const request::OpenContainer&>())).Times(0);
+    EXPECT_CALL(itemActivationHandler, openContainer(testing::_, testing::_)).Times(0);
     // EXPECT_CALL(requestor, request(testing::An<const request::ClaimXRayScannedItem&>())).Times(0);
 
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
