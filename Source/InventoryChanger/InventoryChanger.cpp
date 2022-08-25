@@ -1113,7 +1113,7 @@ InventoryChanger& InventoryChanger::instance()
 void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress)
 {
     if (returnAddress == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
-        backendRequestBuilder.setStickerSlot(static_cast<std::uint8_t>(number));
+        requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
 void InventoryChanger::onRoundMVP(GameEvent& event)
@@ -1192,14 +1192,14 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto toolItemID = stringToUint64(string);
         const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (destItemIdString)
-            backendRequestBuilder.useToolOn(toolItemID, stringToUint64(destItemIdString));
+            getRequestBuilder().useToolOn(toolItemID, stringToUint64(destItemIdString));
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
         const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
-        backendRequestBuilder.wearStickerOf(stringToUint64(string), slot);
+        getRequestBuilder().wearStickerOf(stringToUint64(string), slot);
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
-        backendRequestBuilder.setNameTag(string);
+        requestBuilderParams.nameTag = string;
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        backendRequestBuilder.removeNameTagFrom(stringToUint64(string));
+        getRequestBuilder().removeNameTagFrom(stringToUint64(string));
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
             backend.getItemRemovalHandler().removeItem(*itOptional);
@@ -1209,7 +1209,8 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto swapItem1 = stringToUint64(string);
         const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (swapItem2String) {
-            backendRequestBuilder.setStatTrakSwapItems(swapItem1, stringToUint64(swapItem2String));
+            requestBuilderParams.statTrakSwapItemID1 = swapItem1;
+            requestBuilderParams.statTrakSwapItemID2 = stringToUint64(swapItem2String);
         }
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
         if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
@@ -1234,9 +1235,9 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto storageUnitItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
 
         if (operation == 1) {
-            backendRequestBuilder.addToStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
+            getRequestBuilder().addToStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
         } else if (operation == -1) {
-            backendRequestBuilder.removeFromStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
+            getRequestBuilder().removeFromStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace inventory_changer
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
-        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup }, backendRequestBuilder{ backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler(), backend.getXRayScannerHandler(), backend.getItemActivationHandler() } {}
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup } {}
 
     static InventoryChanger& instance();
 
@@ -66,10 +66,15 @@ public:
 private:
     void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID);
 
+    [[nodiscard]] auto getRequestBuilder()
+    {
+        return backend::RequestBuilder{ requestBuilderParams, backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler(), backend.getXRayScannerHandler(), backend.getItemActivationHandler() };
+    }
+
     game_items::Lookup gameItemLookup;
     game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;
-    backend::RequestBuilder<backend::RequestHandler, backend::StorageUnitHandler<backend::ResponseAccumulator>, backend::XRayScannerHandler<backend::ResponseAccumulator>, backend::ItemActivationHandler<backend::ResponseAccumulator>> backendRequestBuilder;
+    backend::RequestBuilderParams requestBuilderParams;
     bool panoramaCodeInXrayScanner = false;
     std::vector<char> userTextMsgBuffer;
 };

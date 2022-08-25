@@ -76,7 +76,8 @@ protected:
     ItemIDMap itemIDMap;
     MockXRayScannerHandler xRayScannerHandler;
     MockItemActivationHandler itemActivationHandler;
-    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
+    RequestBuilderParams requestBuilderParams;
+    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
@@ -124,7 +125,7 @@ TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, StickerIsAppliedToTh
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ApplySticker&>(testing::FieldsAre(skin, sticker, GetParam()))));
 
-    requestBuilder.setStickerSlot(GetParam());
+    requestBuilderParams.stickerSlot = GetParam();
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
 
@@ -134,7 +135,7 @@ TEST_P(InventoryChanger_Backend_RequestBuilder_StickerTest, PatchIsAppliedToTheC
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::ApplyPatch&>(testing::FieldsAre(agent, patch, GetParam()))));
 
-    requestBuilder.setStickerSlot(GetParam());
+    requestBuilderParams.stickerSlot = GetParam();
     requestBuilder.useToolOn(dummyItemIDs[0], dummyItemIDs[1]);
 }
 
@@ -215,7 +216,8 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithOne
     createDummyItem<ItemType::StatTrakSwapTool>();
     EXPECT_CALL(requestor, request(testing::An<const request::SwapStatTrak&>())).Times(0);
 
-    requestBuilder.setStatTrakSwapItems(dummyItemIDs[0], nonexistentItemID);
+    requestBuilderParams.statTrakSwapItemID1 = dummyItemIDs[0];
+    requestBuilderParams.statTrakSwapItemID2 = nonexistentItemID;
     requestBuilder.useToolOn(dummyItemIDs[1], nonexistentItemID);
 }
 
@@ -226,7 +228,8 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, UsingStatTrakSwapToolWithBot
 
     EXPECT_CALL(requestor, request(testing::Matcher<const request::SwapStatTrak&>(testing::FieldsAre(skin1, skin2, statTrakSwapTool))));
 
-    requestBuilder.setStatTrakSwapItems(dummyItemIDs[0], dummyItemIDs[1]);
+    requestBuilderParams.statTrakSwapItemID1 = dummyItemIDs[0];
+    requestBuilderParams.statTrakSwapItemID2 = dummyItemIDs[1];
     requestBuilder.useToolOn(dummyItemIDs[2], nonexistentItemID);
 }
 
