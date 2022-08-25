@@ -10,6 +10,7 @@
 #include "PickEm.h"
 #include "StorageUnitManager.h"
 #include "XRayScanner.h"
+#include "Request/ItemActivationHandler.h"
 #include "Request/ItemModificationHandler.h"
 #include "Request/LoadoutHandler.h"
 #include "Request/PickEmHandler.h"
@@ -120,6 +121,11 @@ public:
     [[nodiscard]] ItemModificationHandler<ResponseAccumulator> getItemModificationHandler()
     {
         return ItemModificationHandler{ ItemConstRemover{ inventory }, ResponseAccumulator{ responseQueue } };
+    }
+
+    [[nodiscard]] ItemActivationHandler<ResponseAccumulator> getItemActivationHandler()
+    {
+        return ItemActivationHandler{ gameItemLookup, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue } };
     }
 
     template <typename GameInventory>

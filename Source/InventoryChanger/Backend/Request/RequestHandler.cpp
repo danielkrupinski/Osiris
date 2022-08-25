@@ -113,36 +113,6 @@ void RequestHandler::operator()(const request::RemovePatch& request) const
     responseAccumulator(response::PatchRemoved{ request.item, request.slot });
 }
 
-void RequestHandler::operator()(const request::ActivateOperationPass& request) const
-{
-    const auto& gameItem = request.operationPass->gameItem();
-    if (!gameItem.isOperationPass())
-        return;
-
-    const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
-    if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
-        inventoryHandler.addItem(inventory::Item{ *operationCoin }, true);
-        itemRemovalHandler.removeItem(request.operationPass);
-    }
-}
-
-void RequestHandler::operator()(const request::ActivateViewerPass& request) const
-{
-    const auto& gameItem = request.item->gameItem();
-    if (!gameItem.isViewerPass())
-        return;
-
-    const auto coinID = Helpers::bronzeEventCoinFromViewerPass(gameItem.getWeaponID());
-    if (coinID == WeaponId::None)
-        return;
-
-    if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
-        const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
-        itemRemovalHandler.removeItem(request.item);
-        responseAccumulator(response::ViewerPassActivated{ addedEventCoin });
-    }
-}
-
 void RequestHandler::operator()(const request::AddNameTag& request) const
 {
     const auto skin = get<inventory::Skin>(constRemover(request.item));

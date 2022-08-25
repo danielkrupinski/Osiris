@@ -31,8 +31,6 @@ struct RequestHandler {
     void operator()(const request::OpenContainer& request) const;
     void operator()(const request::ApplyPatch& request) const;
     void operator()(const request::RemovePatch& request) const;
-    void operator()(const request::ActivateOperationPass& request) const;
-    void operator()(const request::ActivateViewerPass& request) const;
     void operator()(const request::AddNameTag& request) const;
     void operator()(const request::RemoveNameTag& request) const;
     void operator()(const request::ActivateSouvenirToken& request) const;

@@ -54,6 +54,11 @@ struct MockXRayScannerHandler {
     MOCK_METHOD(void, claimXRayScannedItem, (ItemIterator crate, std::optional<ItemIterator> key), (const));
 };
 
+struct DummyItemActivationHandler {
+    void activateOperationPass(ItemIterator operationPass) const {}
+    void activateViewerPass(ItemIterator viewerPass) const {}
+};
+
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
 protected:
     using ItemType = game_items::Item::Type;
@@ -71,7 +76,7 @@ protected:
     testing::StrictMock<MockRequestor> requestor;
     ItemIDMap itemIDMap;
     MockXRayScannerHandler xRayScannerHandler;
-    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler };
+    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, DummyItemActivationHandler> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, DummyItemActivationHandler{} };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });

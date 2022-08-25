@@ -13,11 +13,11 @@
 namespace inventory_changer::backend
 {
 
-template <typename Requestor, typename StorageUnitHandler, typename XRayScannerHandler>
+template <typename Requestor, typename StorageUnitHandler, typename XRayScannerHandler, typename ItemActivationHandler>
 class RequestBuilder {
 public:
-    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler, XRayScannerHandler xRayScannerHandler)
-        : itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler }, xRayScannerHandler{ xRayScannerHandler } {}
+    explicit RequestBuilder(const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler, XRayScannerHandler xRayScannerHandler, ItemActivationHandler itemActivationHandler)
+        : itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler }, xRayScannerHandler{ xRayScannerHandler }, itemActivationHandler{ itemActivationHandler } {}
 
     void setStickerSlot(std::uint8_t slot) noexcept
     {
@@ -120,9 +120,9 @@ private:
             if (statTrakSwapItem1.has_value() && statTrakSwapItem2.has_value())
                 request<request::SwapStatTrak>(*statTrakSwapItem1, *statTrakSwapItem2, tool);
         } else if (tool->gameItem().isOperationPass()) {
-            request<request::ActivateOperationPass>(tool);
+            itemActivationHandler.activateOperationPass(tool);
         } else if (tool->gameItem().isViewerPass()) {
-            request<request::ActivateViewerPass>(tool);
+            itemActivationHandler.activateViewerPass(tool);
         } else if (tool->gameItem().isSouvenirToken()) {
             request<request::ActivateSouvenirToken>(tool);
         } else if (tool->gameItem().isGraffiti()) {
@@ -158,6 +158,7 @@ private:
     std::string nameTag;
     StorageUnitHandler storageUnitHandler;
     XRayScannerHandler xRayScannerHandler;
+    ItemActivationHandler itemActivationHandler;
 };
 
 }
