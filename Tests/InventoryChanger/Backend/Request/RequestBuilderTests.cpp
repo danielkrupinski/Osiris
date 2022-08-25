@@ -18,8 +18,6 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::RemovePatch&));
     MOCK_METHOD(void, request, (const request::OpenContainer&));
     MOCK_METHOD(void, request, (const request::SwapStatTrak&));
-    MOCK_METHOD(void, request, (const request::ActivateOperationPass&));
-    MOCK_METHOD(void, request, (const request::ActivateViewerPass&));
     MOCK_METHOD(void, request, (const request::ActivateSouvenirToken&));
     MOCK_METHOD(void, request, (const request::UnsealGraffiti&));
     MOCK_METHOD(void, request, (const request::ApplySticker&));
@@ -54,9 +52,9 @@ struct MockXRayScannerHandler {
     MOCK_METHOD(void, claimXRayScannedItem, (ItemIterator crate, std::optional<ItemIterator> key), (const));
 };
 
-struct DummyItemActivationHandler {
-    void activateOperationPass(ItemIterator operationPass) const {}
-    void activateViewerPass(ItemIterator viewerPass) const {}
+struct MockItemActivationHandler {
+    MOCK_METHOD(void, activateOperationPass, (ItemIterator operationPass), (const));
+    MOCK_METHOD(void, activateViewerPass, (ItemIterator viewerPass), (const));
 };
 
 class InventoryChanger_Backend_RequestBuilderTest : public testing::Test {
@@ -76,7 +74,8 @@ protected:
     testing::StrictMock<MockRequestor> requestor;
     ItemIDMap itemIDMap;
     MockXRayScannerHandler xRayScannerHandler;
-    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, DummyItemActivationHandler> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, DummyItemActivationHandler{} };
+    MockItemActivationHandler itemActivationHandler;
+    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
@@ -177,14 +176,14 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromK
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingOperationPassCanBeRequested) {
     const auto operationPass = createDummyItem<ItemType::OperationPass>();
-    EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateOperationPass&>(testing::FieldsAre(operationPass))));
+    EXPECT_CALL(itemActivationHandler, activateOperationPass(testing::Eq(operationPass)));
 
     requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
 
 TEST_F(InventoryChanger_Backend_RequestBuilderTest, ActivatingViewerPassCanBeRequested) {
     const auto viewerPass = createDummyItem<ItemType::ViewerPass>();
-    EXPECT_CALL(requestor, request(testing::Matcher<const request::ActivateViewerPass&>(testing::FieldsAre(viewerPass))));
+    EXPECT_CALL(itemActivationHandler, activateViewerPass(testing::Eq(viewerPass)));
 
     requestBuilder.useToolOn(dummyItemIDs[0], nonexistentItemID);
 }
