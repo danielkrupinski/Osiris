@@ -36,15 +36,6 @@ struct SwapStatTrak {
     ItemIterator statTrakSwapTool;
 };
 
-struct OpenContainer {
-    explicit OpenContainer(ItemIterator container) : container{ container } {}
-    OpenContainer(ItemIterator container, ItemIterator key)
-        : container{ container }, key{ key } {}
-
-    ItemIterator container;
-    std::optional<ItemIterator> key;
-};
-
 struct ApplyPatch {
     ApplyPatch(ItemIterator item, ItemIterator patch, std::uint8_t slot)
         : item{ item }, patch{ patch }, slot{ slot } {}
@@ -61,12 +52,6 @@ struct RemovePatch {
     std::uint8_t slot;
 };
 
-struct ActivateOperationPass {
-    explicit ActivateOperationPass(ItemIterator operationPass) : operationPass{ operationPass } {}
-
-    ItemIterator operationPass;
-};
-
 template <typename Tag>
 struct ModifyItem {
     explicit ModifyItem(ItemIterator item) : item{ item } {}
@@ -74,7 +59,6 @@ struct ModifyItem {
     ItemIterator item;
 };
 
-using ActivateViewerPass = ModifyItem<struct ActivateViewerPassTag>;
 using ActivateSouvenirToken = ModifyItem<struct ActivateSouvenirTokenTag>;
 using RemoveNameTag = ModifyItem<struct RemoveNameTagTag>;
 using UnsealGraffiti = ModifyItem<struct UnsealGraffitiTag>;
@@ -86,37 +70,6 @@ struct AddNameTag {
     ItemIterator item;
     ItemIterator nameTagItem;
     std::string_view nameTag;
-};
-
-struct UpdateStatTrak {
-    UpdateStatTrak(ItemIterator item, int newStatTrak)
-        : item{ item }, newStatTrak{ newStatTrak } {}
-
-    ItemIterator item;
-    int newStatTrak;
-};
-
-struct SelectTeamGraffiti {
-    SelectTeamGraffiti(ItemIterator tournamentCoin, std::uint16_t graffitiID)
-        : tournamentCoin{ tournamentCoin }, graffitiID{ graffitiID } {}
-
-    ItemIterator tournamentCoin;
-    std::uint16_t graffitiID;
-};
-
-struct PerformXRayScan {
-    explicit PerformXRayScan(ItemIterator crate) : crate{ crate } {}
-
-    ItemIterator crate;
-};
-
-struct ClaimXRayScannedItem {
-    explicit ClaimXRayScannedItem(ItemIterator container) : container{ container } {}
-    ClaimXRayScannedItem(ItemIterator container, ItemIterator key)
-        : container{ container }, key{ key } {}
-
-    ItemIterator container;
-    std::optional<ItemIterator> key;
 };
 
 }
