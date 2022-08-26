@@ -9,6 +9,7 @@
 #include "ItemSorter.h"
 #include "Storage.h"
 #include <Helpers.h>
+#include <SDK/Constants/ProPlayer.h>
 #include <SDK/Constants/Tournament.h>
 
 namespace inventory_changer::game_items
@@ -99,10 +100,10 @@ public:
         return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
     }
 
-    int findTournamentPlayerGoldStickerID(csgo::Tournament tournament, int tournamentPlayerID) const noexcept
+    int findTournamentPlayerGoldStickerID(csgo::Tournament tournament, csgo::ProPlayer player) const noexcept
     {
         const auto range = findTournamentStickers(tournament);
-        const auto it = std::ranges::find(range, tournamentPlayerID, [this](const Item& item) { return storage.getStickerKit(item).tournamentPlayerID; });
+        const auto it = std::ranges::find(range, static_cast<int>(player), [this](const Item& item) { return storage.getStickerKit(item).tournamentPlayerID; });
         return (it != range.end() ? storage.getStickerKit(*it).id : 0);
     }
 

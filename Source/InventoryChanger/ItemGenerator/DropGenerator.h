@@ -78,8 +78,8 @@ private:
             stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team1);
             stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team2);
 
-            if (player)
-                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournament, static_cast<int>(player));
+            if (player != csgo::ProPlayer{})
+                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournament, player);
             else if (tournament >= csgo::Tournament::PglStockholm2021)
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }

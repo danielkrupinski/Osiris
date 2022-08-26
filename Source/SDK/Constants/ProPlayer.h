@@ -1,9 +1,9 @@
 #pragma once
 
-namespace csgo::pro_player
+namespace csgo
 {
 
-enum ProPlayer {
+enum class ProPlayer {
     f0rest = 93724,
     allu = 1345246,
     friberg = 24295201,
@@ -249,9 +249,4 @@ enum ProPlayer {
     Brehze = 94595411
 };
 
-}
-
-namespace csgo
-{
-    using pro_player::ProPlayer;
 }
