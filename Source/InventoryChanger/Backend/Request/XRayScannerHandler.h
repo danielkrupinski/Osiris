@@ -42,10 +42,10 @@ public:
 
         if (key->gameItem().isCaseKey()) {
             constRemover(scannerItems->reward).getProperties().common.tradableAfterDate = key->getProperties().common.tradableAfterDate;
-            itemRemovalHandler.removeItem(key);
+            itemRemovalHandler(key);
         }
 
-        itemRemovalHandler.removeItem(crate);
+        itemRemovalHandler(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
         responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
     }
@@ -59,7 +59,7 @@ public:
         if (crate != scannerItems->crate)
             return;
 
-        itemRemovalHandler.removeItem(crate);
+        itemRemovalHandler(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
         responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
     }

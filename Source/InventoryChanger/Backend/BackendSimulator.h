@@ -157,7 +157,7 @@ inline void clearInventory(BackendSimulator& backend)
     const auto itemRemovalHandler = backend.getItemRemovalHandler();
 
     for (auto it = inventory.cbegin(); it != inventory.cend();)
-        it = itemRemovalHandler.removeItem(it);
+        it = itemRemovalHandler(it);
 }
 
 }

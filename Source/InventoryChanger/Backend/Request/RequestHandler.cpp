@@ -20,7 +20,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     skin->stickers[request.slot].wear = 0.0f;
 
     inventoryHandler.moveItemToFront(request.item);
-    itemRemovalHandler.removeItem(request.sticker);
+    itemRemovalHandler(request.sticker);
     responseAccumulator(response::StickerApplied{ request.item, request.slot });
 }
 
@@ -54,7 +54,7 @@ void RequestHandler::operator()(const request::SwapStatTrak& request) const
     if (!statTrakTo)
         return;
 
-    itemRemovalHandler.removeItem(request.statTrakSwapTool);
+    itemRemovalHandler(request.statTrakSwapTool);
     itemModificationHandler.updateStatTrak(request.itemFrom, *statTrakTo);
     itemModificationHandler.updateStatTrak(request.itemTo, *statTrakFrom);
     inventoryHandler.moveItemToFront(request.itemFrom);
@@ -71,7 +71,7 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
 
     agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
     inventoryHandler.moveItemToFront(request.item);
-    itemRemovalHandler.removeItem(request.patch);
+    itemRemovalHandler(request.patch);
     responseAccumulator(response::PatchApplied{ request.item, request.slot });
 }
 
@@ -93,7 +93,7 @@ void RequestHandler::operator()(const request::AddNameTag& request) const
         return;
 
     skin->nameTag = request.nameTag;
-    itemRemovalHandler.removeItem(request.nameTagItem);
+    itemRemovalHandler(request.nameTagItem);
     inventoryHandler.moveItemToFront(request.item);
     responseAccumulator(response::NameTagAdded{ request.item });
 }
@@ -122,7 +122,7 @@ void RequestHandler::operator()(const request::ActivateSouvenirToken& request) c
         return;
 
     ++tournamentCoinData->dropsAwarded;
-    itemRemovalHandler.removeItem(request.item);
+    itemRemovalHandler(request.item);
     responseAccumulator(response::SouvenirTokenActivated{ tournamentCoin });
 }
 

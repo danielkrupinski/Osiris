@@ -17,22 +17,22 @@ public:
     ItemRemovalHandler(StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, StorageUnitHandler<ResponseAccumulator> storageUnitHandler)
         : storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, storageUnitHandler{ storageUnitHandler } {}
 
-    ItemIterator removeItem(ItemIterator item) const
+    ItemIterator operator()(ItemIterator item) const
     {
         const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(item, [this, item](const auto& storedItem) {
             if (storedItem != item)
-                removeItemInternal(storedItem);
+                removeItem(storedItem);
         });
 
         if (removedFromStorageUnit.has_value()) {
             storageUnitHandler.removeFromStorageUnit(item, *removedFromStorageUnit);
         }
 
-        return removeItemInternal(item);
+        return removeItem(item);
     }
 
 private:
-    ItemIterator removeItemInternal(ItemIterator it) const
+    ItemIterator removeItem(ItemIterator it) const
     {
         const auto itemID = itemIDMap.remove(it);
         loadout.unequipItem(it);

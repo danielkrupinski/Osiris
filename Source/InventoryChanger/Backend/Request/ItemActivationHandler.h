@@ -29,7 +29,7 @@ public:
         const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
         if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
             inventoryHandler.addItem(inventory::Item{ *operationCoin }, true);
-            itemRemovalHandler.removeItem(operationPass);
+            itemRemovalHandler(operationPass);
         }
     }
 
@@ -45,7 +45,7 @@ public:
 
         if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
             const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
-            itemRemovalHandler.removeItem(viewerPass);
+            itemRemovalHandler(viewerPass);
             responseAccumulator(response::ViewerPassActivated{ addedEventCoin });
         }
     }
@@ -60,9 +60,9 @@ public:
             return;
 
         if (key->gameItem().isCaseKey())
-            itemRemovalHandler.removeItem(key);
+            itemRemovalHandler(key);
 
-        itemRemovalHandler.removeItem(container);
+        itemRemovalHandler(container);
         const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
         responseAccumulator(response::ContainerOpened{ receivedItem });
     }
@@ -76,7 +76,7 @@ public:
         if (!generatedItem.has_value())
             return;
 
-        itemRemovalHandler.removeItem(container);
+        itemRemovalHandler(container);
         const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
         responseAccumulator(response::ContainerOpened{ receivedItem });
     }
