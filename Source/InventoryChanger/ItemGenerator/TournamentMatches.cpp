@@ -13,7 +13,7 @@ struct Tournament {
     std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> matches;
 };
 
-using namespace csgo::tournament_team;
+using enum csgo::TournamentTeam;
 
 constexpr auto dreamHack2013Matches = std::to_array<Match>({
     // Group A

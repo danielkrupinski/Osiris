@@ -5,10 +5,7 @@
 namespace csgo
 {
 
-namespace tournament_team
-{
-
-enum TournamentTeam : std::uint8_t {
+enum class TournamentTeam : std::uint8_t {
     None = 0,
     NinjasInPyjamas = 1,
     AstanaDragons = 2,
@@ -107,9 +104,5 @@ enum TournamentTeam : std::uint8_t {
     ImperialEsports = 113,
     BadNewsEagles = 114
 };
-
-}
-
-using tournament_team::TournamentTeam;
 
 }
