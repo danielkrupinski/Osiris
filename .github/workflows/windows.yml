@@ -10,7 +10,9 @@ jobs:
         os: [windows-2019, windows-2022]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
-
+        exclude:
+          - os: windows-2019
+            toolset: ClangCL
     steps:
     - uses: actions/checkout@v2
     - name: Add msbuild to PATH
@@ -29,7 +31,9 @@ jobs:
         os: [windows-2019, windows-2022]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
-
+        exclude:
+          - os: windows-2019
+            toolset: ClangCL
     steps:
     - uses: actions/checkout@v2
     - name: Set toolset
