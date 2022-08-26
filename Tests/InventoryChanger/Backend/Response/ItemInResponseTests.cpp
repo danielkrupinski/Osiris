@@ -53,8 +53,6 @@ template <typename ResponseType>
         return response::StatTrakUpdated{ item, 123 };
     else if constexpr (std::is_same_v<ResponseType, response::ItemHidden>)
         return response::ItemHidden{ item };
-    else if constexpr (std::is_same_v<ResponseType, response::ItemUnhidden>)
-        return response::ItemUnhidden{ item };
     else if constexpr (std::is_same_v<ResponseType, response::XRayItemClaimed>)
         return response::XRayItemClaimed{ item };
     else if constexpr (std::is_same_v<ResponseType, response::XRayScannerUsed>)
@@ -105,7 +103,6 @@ using ResponseTypes = testing::Types<
     response::ItemEquipped,
     response::ItemHidden,
     response::ItemMovedToFront,
-    response::ItemUnhidden,
     response::ItemUpdated,
     response::NameTagAdded,
     response::NameTagRemoved,

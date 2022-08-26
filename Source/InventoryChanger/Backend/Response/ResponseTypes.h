@@ -26,7 +26,6 @@ struct ItemModified {
 using ItemMovedToFront = ItemModified<struct ItemMovedToFrontTag>;
 using ItemUpdated = ItemModified<struct ItemUpdatedTag>;
 using ItemHidden = ItemModified<struct ItemHiddenTag>;
-using ItemUnhidden = ItemModified<struct ItemUnhiddenTag>;
 
 struct ItemEquipped {
     ItemEquipped(ItemIterator item, std::uint8_t slot, csgo::Team team) : item{ item }, slot{ slot }, team{ team } {}

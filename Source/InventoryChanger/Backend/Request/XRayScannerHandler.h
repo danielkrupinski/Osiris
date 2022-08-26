@@ -47,7 +47,6 @@ public:
 
         itemRemovalHandler.removeItem(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
-        responseAccumulator(response::ItemUnhidden{ scannerItems->reward });
         responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
     }
 
@@ -62,7 +61,6 @@ public:
 
         itemRemovalHandler.removeItem(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
-        responseAccumulator(response::ItemUnhidden{ scannerItems->reward });
         responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
     }
 

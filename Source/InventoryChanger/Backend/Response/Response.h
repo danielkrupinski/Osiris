@@ -17,7 +17,6 @@ using Response = std::variant<
     response::ItemHidden,
     response::ItemMovedToFront,
     response::ItemRemoved,
-    response::ItemUnhidden,
     response::ItemUpdated,
     response::NameTagAdded,
     response::NameTagRemoved,

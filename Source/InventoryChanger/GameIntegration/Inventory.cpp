@@ -535,6 +535,8 @@ void Inventory::xRayItemClaimed(std::uint64_t itemID, std::uint32_t tradableAfte
     if (!localInventory)
         return;
 
+    econItem->flags &= ~16;
+
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
     attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
