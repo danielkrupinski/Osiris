@@ -114,8 +114,8 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
     if (isMP5LabRats) {
         attributeSetter.setSpecialEventID(econItem, 1);
     } else {
-        if (dynamicData.tournamentID != 0)
-            attributeSetter.setTournamentID(econItem, dynamicData.tournamentID);
+        if (dynamicData.tournamentID != csgo::Tournament{})
+            attributeSetter.setTournamentID(econItem, static_cast<int>(dynamicData.tournamentID));
 
         if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
             attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));

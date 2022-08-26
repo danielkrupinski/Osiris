@@ -1,12 +1,11 @@
 #pragma once
 
+#include <cstdint>
+
 namespace csgo
 {
 
-namespace tournament
-{
-
-enum Tournament : std::uint8_t {
+enum class Tournament : std::uint8_t {
     DreamHack2013 = 1,
     EmsOneKatowice2014 = 3,
     EslOneCologne2014,
@@ -24,9 +23,5 @@ enum Tournament : std::uint8_t {
     PglStockholm2021 = 18,
     PglAntwerp2022
 };
-
-}
-
-using tournament::Tournament;
 
 }

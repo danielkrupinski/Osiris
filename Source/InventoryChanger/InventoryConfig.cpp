@@ -21,7 +21,7 @@ constexpr auto CONFIG_VERSION = 4;
 {
     json j;
 
-    if (skin.tournamentID != 0)
+    if (skin.tournamentID != csgo::Tournament{})
         j["Tournament ID"] = skin.tournamentID;
 
     j["Wear"] = skin.wear;

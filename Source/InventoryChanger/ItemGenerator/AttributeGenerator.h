@@ -49,7 +49,7 @@ public:
         return getRandomDateTimestampOfYear(year);
     }
 
-    [[nodiscard]] inventory::SouvenirPackage generateSouvenirPackage(std::uint32_t tournamentID, TournamentMap map) const
+    [[nodiscard]] inventory::SouvenirPackage generateSouvenirPackage(csgo::Tournament tournament, TournamentMap map) const
     {
         return std::visit([this](const auto& matches) {
             inventory::SouvenirPackage souvenirPackage;
@@ -68,7 +68,7 @@ public:
             }
 
             return souvenirPackage;
-        }, getTournamentMatchesOnMap(tournamentID, map));
+        }, getTournamentMatchesOnMap(tournament, map));
     }
 
     void shuffleStickers(std::uint8_t numberOfSlots, inventory::SkinStickers& stickers) const

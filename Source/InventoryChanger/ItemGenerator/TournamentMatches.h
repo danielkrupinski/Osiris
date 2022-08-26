@@ -11,6 +11,8 @@
 #include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
+namespace csgo { enum class Tournament : std::uint8_t; }
+
 namespace inventory_changer
 {
     enum class TournamentMap : std::uint8_t;
@@ -39,6 +41,6 @@ struct Match {
     csgo::TournamentTeam team2;
 };
 
-[[nodiscard]] std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept;
+[[nodiscard]] std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(csgo::Tournament tournament, TournamentMap map) noexcept;
 
 }

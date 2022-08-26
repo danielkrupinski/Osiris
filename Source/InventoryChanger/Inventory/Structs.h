@@ -29,7 +29,7 @@ struct Skin {
     csgo::TournamentTeam tournamentTeam2{};
     csgo::ProPlayer proPlayer{};
 
-    [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != 0; }
+    [[nodiscard]] bool isSouvenir() const noexcept { return tournamentID != csgo::Tournament{}; }
 };
 
 using SkinStickers = decltype(Skin::stickers);

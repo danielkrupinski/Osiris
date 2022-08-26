@@ -1109,7 +1109,7 @@ constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
-using namespace csgo::tournament;
+using enum csgo::Tournament;
 constexpr auto tournaments = std::to_array<Tournament>({
     { DreamHack2013, dreamHack2013Matches },
     { EmsOneKatowice2014, emsOneKatowice2014Matches},
@@ -1130,9 +1130,9 @@ constexpr auto tournaments = std::to_array<Tournament>({
 });
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournament));
 
-[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatches(std::uint32_t tournamentID) noexcept
+[[nodiscard]] static std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatches(csgo::Tournament tournament) noexcept
 {
-    if (const auto it = std::ranges::lower_bound(tournaments, tournamentID, {}, &Tournament::tournament); it != tournaments.end() && it->tournament == tournamentID)
+    if (const auto it = std::ranges::lower_bound(tournaments, tournament, {}, &Tournament::tournament); it != tournaments.end() && it->tournament == tournament)
         return it->matches;
     return {};
 }
@@ -1147,11 +1147,11 @@ template <typename MatchType>
     return ranges::equal_range(matches, map, {}, &MatchType::map);
 }
 
-std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(std::uint32_t tournamentID, TournamentMap map) noexcept
+std::variant<std::span<const MatchWithMVPs>, std::span<const Match>> getTournamentMatchesOnMap(csgo::Tournament tournament, TournamentMap map) noexcept
 {
     return std::visit([map](auto&& a) {
         return std::variant<std::span<const MatchWithMVPs>, std::span<const Match>>{ filterMatchesToMap(a, map) };
-    }, getTournamentMatches(tournamentID));
+    }, getTournamentMatches(tournament));
 }
 
 }
