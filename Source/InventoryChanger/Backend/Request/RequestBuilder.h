@@ -129,7 +129,7 @@ private:
             if (item->getState() != inventory::Item::State::InXrayScanner)
                 itemActivationHandler.openKeylessContainer(item);
             else
-                xRayScannerHandler.claimXRayScannedItem(item, std::nullopt);
+                xRayScannerHandler.claimXRayScannedItemWithoutKey(item);
         } else if (item->gameItem().isStorageUnit() && toolItemID == fauxNameTagItemID) {
             storageUnitHandler.nameStorageUnit(item, params.nameTag);
         }

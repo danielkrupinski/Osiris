@@ -48,7 +48,8 @@ struct DummyStorageUnitHandler {
 
 struct MockXRayScannerHandler {
     MOCK_METHOD(void, performXRayScan, (ItemIterator crate), (const));
-    MOCK_METHOD(void, claimXRayScannedItem, (ItemIterator crate, std::optional<ItemIterator> key), (const));
+    MOCK_METHOD(void, claimXRayScannedItem, (ItemIterator crate, ItemIterator key), (const));
+    MOCK_METHOD(void, claimXRayScannedItemWithoutKey, (ItemIterator crate), (const));
 };
 
 struct MockItemActivationHandler {
@@ -171,7 +172,7 @@ TEST_F(InventoryChanger_Backend_RequestBuilderTest, ClaimingXRayScannedItemFromK
     const auto crate = createDummyItem<ItemType::Crate>();
     crate->setState(inventory::Item::State::InXrayScanner);
 
-    EXPECT_CALL(xRayScannerHandler, claimXRayScannedItem(testing::Eq(crate), testing::Eq(std::nullopt)));
+    EXPECT_CALL(xRayScannerHandler, claimXRayScannedItemWithoutKey(testing::Eq(crate)));
 
     requestBuilder.useToolOn(nonexistentItemID, dummyItemIDs[0]);
 }

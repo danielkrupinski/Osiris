@@ -31,7 +31,7 @@ public:
         responseAccumulator(response::XRayScannerUsed{ receivedItem });
     }
 
-    void claimXRayScannedItem(ItemIterator crate, std::optional<ItemIterator> key) const
+    void claimXRayScannedItem(ItemIterator crate, ItemIterator key) const
     {
         const auto scannerItems = xRayScanner.getItems();
         if (!scannerItems.has_value())
@@ -40,12 +40,25 @@ public:
         if (crate != scannerItems->crate)
             return;
 
-        if (key.has_value()) {
-            if (const auto& keyItem = *key; keyItem->gameItem().isCaseKey()) {
-                constRemover(scannerItems->reward).getProperties().common.tradableAfterDate = keyItem->getProperties().common.tradableAfterDate;
-                itemRemovalHandler.removeItem(keyItem);
-            }
+        if (key->gameItem().isCaseKey()) {
+            constRemover(scannerItems->reward).getProperties().common.tradableAfterDate = key->getProperties().common.tradableAfterDate;
+            itemRemovalHandler.removeItem(key);
         }
+
+        itemRemovalHandler.removeItem(crate);
+        constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
+        responseAccumulator(response::ItemUnhidden{ scannerItems->reward });
+        responseAccumulator(response::XRayItemClaimed{ scannerItems->reward });
+    }
+
+    void claimXRayScannedItemWithoutKey(ItemIterator crate) const
+    {
+        const auto scannerItems = xRayScanner.getItems();
+        if (!scannerItems.has_value())
+            return;
+
+        if (crate != scannerItems->crate)
+            return;
 
         itemRemovalHandler.removeItem(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);
