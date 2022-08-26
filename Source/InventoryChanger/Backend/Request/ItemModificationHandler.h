@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include <InventoryChanger/Backend/Item.h>
 #include <InventoryChanger/Backend/Response/ResponseTypes.h>
 #include <InventoryChanger/Inventory/Item.h>
@@ -25,8 +27,8 @@ public:
 
     void selectTeamGraffiti(ItemIterator tournamentCoin, std::uint16_t graffitiID) const
     {
-        if (tournamentCoin->gameItem().isTournamentCoin())
-            responseAccumulator(response::TeamGraffitiSelected{ tournamentCoin, graffitiID });
+        assert(tournamentCoin->gameItem().isTournamentCoin());
+        responseAccumulator(response::TeamGraffitiSelected{ tournamentCoin, graffitiID });
     }
 
 private:
