@@ -420,11 +420,11 @@ void inventory_changer::fromJson(const json& j, InventoryChanger& inventoryChang
         if (const auto equippedSlot = equippedSlotFromJson(jsonItem); equippedSlot != static_cast<std::uint8_t>(-1)) {
             const auto equippedState = equippedFromJson(jsonItem);
             if (equippedState.ct)
-                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, Team::CT);
+                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, csgo::Team::CT);
             if (equippedState.tt)
-                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, Team::TT);
+                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, csgo::Team::TT);
             if (equippedState.noTeam)
-                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, Team::None);
+                backend.getLoadoutHandler().equipItem(itemAdded, equippedSlot, csgo::Team::None);
         }
 
     }

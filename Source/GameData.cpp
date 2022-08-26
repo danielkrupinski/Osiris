@@ -535,7 +535,7 @@ ImTextureID PlayerData::getAvatarTexture() const noexcept
 {
     const auto it = std::as_const(playerAvatars).find(handle);
     if (it == playerAvatars.cend())
-        return team == Team::TT ? avatarTT.getTexture() : avatarCT.getTexture();
+        return team == csgo::Team::TT ? avatarTT.getTexture() : avatarCT.getTexture();
 
     const auto& avatar = it->second;
     if (!avatar.texture.get())

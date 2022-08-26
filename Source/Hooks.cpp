@@ -500,7 +500,7 @@ static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params
     return result;
 }
 
-static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap) noexcept
+static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap) noexcept
 {
     inventory_changer::InventoryChanger::instance().onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);

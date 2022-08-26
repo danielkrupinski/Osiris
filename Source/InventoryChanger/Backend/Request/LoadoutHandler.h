@@ -15,22 +15,22 @@ public:
     LoadoutHandler(Loadout& loadout, ResponseAccumulator responseAccumulator)
         : loadout{ loadout }, responseAccumulator{ responseAccumulator } {}
 
-    void equipItem(ItemIterator item, Loadout::Slot slot, Team team) const
+    void equipItem(ItemIterator item, Loadout::Slot slot, csgo::Team team) const
     {
         if (markItemEquipped(item, slot, team))
             responseAccumulator(response::ItemEquipped{ item, slot, team });
     }
 
-    bool markItemEquipped(ItemIterator item, Loadout::Slot slot, Team team) const
+    bool markItemEquipped(ItemIterator item, Loadout::Slot slot, csgo::Team team) const
     {
         switch (team) {
-        case Team::None:
+        case csgo::Team::None:
             loadout.equipItemNoTeam(item, slot);
             return true;
-        case Team::TT:
+        case csgo::Team::TT:
             loadout.equipItemTT(item, slot);
             return true;
-        case Team::CT:
+        case csgo::Team::CT:
             loadout.equipItemCT(item, slot);
             return true;
         default:

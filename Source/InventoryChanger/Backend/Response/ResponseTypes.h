@@ -29,11 +29,11 @@ using ItemHidden = ItemModified<struct ItemHiddenTag>;
 using ItemUnhidden = ItemModified<struct ItemUnhiddenTag>;
 
 struct ItemEquipped {
-    ItemEquipped(ItemIterator item, std::uint8_t slot, Team team) : item{ item }, slot{ slot }, team{ team } {}
+    ItemEquipped(ItemIterator item, std::uint8_t slot, csgo::Team team) : item{ item }, slot{ slot }, team{ team } {}
 
     ItemIterator item;
     std::uint8_t slot;
-    Team team;
+    csgo::Team team;
 };
 
 struct ItemRemoved {

@@ -484,7 +484,7 @@ void Inventory::statTrakSwapped(std::uint64_t itemID)
     initItemCustomizationNotification("stattrack_swap", itemID);
 }
 
-void Inventory::equipItem(std::uint64_t itemID, Team team, std::uint8_t slot)
+void Inventory::equipItem(std::uint64_t itemID, csgo::Team team, std::uint8_t slot)
 {
     memory->inventoryManager->equipItemInSlot(team, slot, itemID);
 }

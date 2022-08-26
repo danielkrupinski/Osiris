@@ -94,12 +94,12 @@ static Entity* createGlove(int entry, int serial) noexcept
     return nullptr;
 }
 
-static std::optional<std::list<inventory_changer::inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, Team team, std::uint8_t slot)
+static std::optional<std::list<inventory_changer::inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, csgo::Team team, std::uint8_t slot)
 {
     switch (team) {
-    case Team::None: return loadout.getItemInSlotNoTeam(slot);
-    case Team::CT: return loadout.getItemInSlotCT(slot);
-    case Team::TT: return loadout.getItemInSlotTT(slot);
+    case csgo::Team::None: return loadout.getItemInSlotNoTeam(slot);
+    case csgo::Team::CT: return loadout.getItemInSlotCT(slot);
+    case csgo::Team::TT: return loadout.getItemInSlotTT(slot);
     default: return {};
     }
 }
@@ -1350,7 +1350,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
     }
 }
 
-void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t& itemID)
+void InventoryChanger::onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID)
 {
     if (const auto itemOptional = backend.itemFromID(itemID); itemOptional.has_value()) {
         const auto& itemIterator = *itemOptional;

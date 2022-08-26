@@ -171,9 +171,9 @@ public:
         return *reinterpret_cast<EconTool**>(std::uintptr_t(this) + WIN32_LINUX(0x140, 0x1E8));
     }
 
-    int getLoadoutSlot(Team team) noexcept
+    int getLoadoutSlot(csgo::Team team) noexcept
     {
-        if (team >= Team::None && team <= Team::CT)
+        if (team >= csgo::Team::None && team <= csgo::Team::CT)
             return reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x28C, 0x3F4))[static_cast<int>(team)];
         return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x268, 0x3BC));
     }
@@ -434,7 +434,7 @@ public:
     VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
-    VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
+    VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (this, team, slot))
     VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
 
     auto getSOC() noexcept
@@ -489,7 +489,7 @@ class InventoryManager {
 public:
     INCONSTRUCTIBLE(InventoryManager)
 
-    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (Team team, int slot, std::uint64_t itemID, bool swap = false), (this, team, slot, itemID, swap))
+    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, std::uint64_t itemID, bool swap = false), (this, team, slot, itemID, swap))
     VIRTUAL_METHOD_V(CSPlayerInventory*, getLocalInventory, 23, (), (this))
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, std::uint64_t itemID, Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
 };

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "SDK/matrix3x4.h"
+#include "SDK/Entity.h"
 #include "SDK/Vector.h"
 
 #include "Texture.h"
@@ -131,7 +132,7 @@ struct PlayerData : BaseData {
     float lastContactTime = 0.0f;
     int health;
     int handle;
-    Team team;
+    csgo::Team team;
     std::string name;
     Vector headMins, headMaxs;
     Vector origin;

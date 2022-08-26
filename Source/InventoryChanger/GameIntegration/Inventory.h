@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace csgo{ enum class Team; }
+
 namespace inventory_changer
 {
 namespace game_items
@@ -38,7 +40,7 @@ public:
     void unsealGraffiti(std::uint64_t itemID);
     void selectTeamGraffiti(std::uint64_t itemID, std::uint16_t graffitiID);
     void statTrakSwapped(std::uint64_t itemID);
-    void equipItem(std::uint64_t itemID, Team team, std::uint8_t slot);
+    void equipItem(std::uint64_t itemID, csgo::Team team, std::uint8_t slot);
     void markItemUpdated(std::uint64_t itemID);
     void pickEmUpdated();
     void hideItem(std::uint64_t itemID);

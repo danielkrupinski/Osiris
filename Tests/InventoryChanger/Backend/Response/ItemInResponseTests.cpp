@@ -22,7 +22,7 @@ template <typename ResponseType>
     else if constexpr (std::is_same_v<ResponseType, response::ItemUpdated>)
         return response::ItemUpdated{ item };
     else if constexpr (std::is_same_v<ResponseType, response::ItemEquipped>)
-        return response::ItemEquipped{ item, 0, Team::None };
+        return response::ItemEquipped{ item, 0, csgo::Team::None };
     else if constexpr (std::is_same_v<ResponseType, response::StickerApplied>)
         return response::StickerApplied{ item, 0 };
     else if constexpr (std::is_same_v<ResponseType, response::StickerScraped>)

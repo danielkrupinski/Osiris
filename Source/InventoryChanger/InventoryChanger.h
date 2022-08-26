@@ -55,7 +55,7 @@ public:
     void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     int setResultIntHook(std::uintptr_t returnAddress, void* params, int result);
     void onUserTextMsg(const void*& data, int& size);
-    void onItemEquip(Team team, int slot, std::uint64_t& itemID);
+    void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(std::uint64_t itemID);
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence);
 
