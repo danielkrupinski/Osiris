@@ -85,22 +85,22 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, ResponseAccumulator{ responseQueue }, inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, getResponseAccumulator(), inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
     {
-        return PickEmHandler{ pickEm, ResponseAccumulator{ responseQueue } };
+        return PickEmHandler{ pickEm, getResponseAccumulator() };
     }
 
     [[nodiscard]] LoadoutHandler<ResponseAccumulator> getLoadoutHandler()
     {
-        return LoadoutHandler{ loadout, ResponseAccumulator{ responseQueue } };
+        return LoadoutHandler{ loadout, getResponseAccumulator() };
     }
 
     [[nodiscard]] InventoryHandler<ResponseAccumulator> getInventoryHandler()
     {
-        return InventoryHandler{ inventory, ResponseAccumulator{ responseQueue } };
+        return InventoryHandler{ inventory, getResponseAccumulator() };
     }
 
     [[nodiscard]] ItemRemovalHandler<ResponseAccumulator> getItemRemovalHandler()
@@ -110,12 +110,12 @@ public:
 
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()
     {
-        return StorageUnitHandler{ storageUnitManager, ItemConstRemover{ inventory }, getInventoryHandler(), ResponseAccumulator{ responseQueue } };
+        return StorageUnitHandler{ storageUnitManager, ItemConstRemover{ inventory }, getInventoryHandler(), getResponseAccumulator() };
     }
 
     [[nodiscard]] XRayScannerHandler<ResponseAccumulator> getXRayScannerHandler()
     {
-        return XRayScannerHandler{ gameItemLookup, crateLootLookup, xRayScanner, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue }, ItemConstRemover{ inventory } };
+        return XRayScannerHandler{ gameItemLookup, crateLootLookup, xRayScanner, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator(), ItemConstRemover{ inventory } };
     }
 
     [[nodiscard]] ItemModificationHandler<ResponseAccumulator> getItemModificationHandler()
@@ -125,7 +125,7 @@ public:
 
     [[nodiscard]] ItemActivationHandler<ResponseAccumulator> getItemActivationHandler()
     {
-        return ItemActivationHandler{ gameItemLookup, crateLootLookup, getInventoryHandler(), getItemRemovalHandler(), ResponseAccumulator{ responseQueue } };
+        return ItemActivationHandler{ gameItemLookup, crateLootLookup, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator() };
     }
 
     template <typename GameInventory>
@@ -140,6 +140,11 @@ public:
     }
 
 private:
+    [[nodiscard]] ResponseAccumulator getResponseAccumulator()
+    {
+        return ResponseAccumulator{ responseQueue };
+    }
+
     ItemList inventory;
     Loadout loadout;
     ResponseQueue<> responseQueue;
