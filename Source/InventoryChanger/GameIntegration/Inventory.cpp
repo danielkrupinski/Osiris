@@ -12,6 +12,13 @@ namespace inventory_changer::game_integration
 namespace
 {
 
+[[nodiscard]] EconItem* getEconItem(std::uint64_t itemID)
+{
+    if (const auto view = memory->findOrCreateEconItemViewForItemID(itemID))
+        return memory->getSOCData(view);
+    return nullptr;
+}
+
 void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t itemID)
 {
     const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
@@ -27,11 +34,7 @@ void initItemCustomizationNotification(std::string_view typeStr, std::uint64_t i
 
 void updateNameTag(std::uint64_t itemID, const char* newNameTag)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -45,11 +48,7 @@ void updateNameTag(std::uint64_t itemID, const char* newNameTag)
 
 void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -64,11 +63,7 @@ void updatePatch(std::uint64_t itemID, int patchID, std::uint8_t slot)
 
 void setItemHiddenFlag(std::uint64_t itemID, bool hide)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -255,11 +250,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
 
 std::uint64_t Inventory::assingNewItemID(std::uint64_t itemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return itemID;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return itemID;
 
@@ -285,11 +276,7 @@ std::uint64_t Inventory::assingNewItemID(std::uint64_t itemID)
 
 void Inventory::applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -307,11 +294,7 @@ void Inventory::applySticker(std::uint64_t itemID, int stickerID, std::uint8_t s
 
 void Inventory::removeSticker(std::uint64_t itemID, std::uint8_t slot)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -328,11 +311,7 @@ void Inventory::removeSticker(std::uint64_t itemID, std::uint8_t slot)
 
 void Inventory::updateStickerWear(std::uint64_t itemID, std::uint8_t slot, float newWear)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -363,11 +342,7 @@ void Inventory::removeNameTag(std::uint64_t itemID)
 
 void Inventory::deleteItem(std::uint64_t itemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -385,11 +360,7 @@ void Inventory::deleteItem(std::uint64_t itemID)
 
 void Inventory::updateStatTrak(std::uint64_t itemID, int newStatTrakValue)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -421,11 +392,7 @@ void Inventory::removePatch(std::uint64_t itemID, std::uint8_t slot)
 
 void Inventory::souvenirTokenActivated(std::uint64_t itemID, std::uint32_t dropsAwarded)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -441,11 +408,7 @@ void Inventory::souvenirTokenActivated(std::uint64_t itemID, std::uint32_t drops
 
 void Inventory::unsealGraffiti(std::uint64_t itemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem || econItem->weaponId != WeaponId::SealedGraffiti)
         return;
 
@@ -462,11 +425,7 @@ void Inventory::unsealGraffiti(std::uint64_t itemID)
 
 void Inventory::selectTeamGraffiti(std::uint64_t itemID, std::uint16_t graffitiID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -523,11 +482,7 @@ void Inventory::xRayItemRevealed(std::uint64_t itemID)
 
 void Inventory::xRayItemClaimed(std::uint64_t itemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -549,11 +504,7 @@ void Inventory::nameStorageUnit(std::uint64_t itemID, const char* newName)
 
 void Inventory::storageUnitModified(std::uint64_t itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -570,11 +521,7 @@ void Inventory::storageUnitModified(std::uint64_t itemID, std::uint32_t modifica
 
 void Inventory::addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -596,11 +543,7 @@ void Inventory::itemAddedToStorageUnit(std::uint64_t storageUnitItemID)
 
 void Inventory::removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
@@ -617,11 +560,7 @@ void Inventory::removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t st
 
 void Inventory::updateTradableAfterDate(std::uint64_t itemID, std::uint32_t tradableAfterDate)
 {
-    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
-    if (!view)
-        return;
-
-    const auto econItem = memory->getSOCData(view);
+    const auto econItem = getEconItem(itemID);
     if (!econItem)
         return;
 
