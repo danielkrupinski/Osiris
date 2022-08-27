@@ -106,7 +106,7 @@ public:
 
     [[nodiscard]] ItemRemovalHandler<ResponseAccumulator> getItemRemovalHandler()
     {
-        return ItemRemovalHandler{ items.storageUnitManager, items.xRayScanner, items.responseQueue, items.inventory, items.loadout, items.itemIDMap, getStorageUnitHandler() };
+        return ItemRemovalHandler{ items, getStorageUnitHandler() };
     }
 
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()

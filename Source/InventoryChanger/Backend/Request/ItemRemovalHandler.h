@@ -1,6 +1,7 @@
 #pragma once
 
 #include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/Backend/Items.h>
 #include <InventoryChanger/Backend/ItemIDMap.h>
 #include <InventoryChanger/Backend/Loadout.h>
 #include <InventoryChanger/Backend/Request/StorageUnitHandler.h>
@@ -14,12 +15,12 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class ItemRemovalHandler {
 public:
-    ItemRemovalHandler(StorageUnitManager& storageUnitManager, XRayScanner& xRayScanner, ResponseQueue<>& responseQueue, ItemList& inventory, Loadout& loadout, ItemIDMap& itemIDMap, StorageUnitHandler<ResponseAccumulator> storageUnitHandler)
-        : storageUnitManager{ storageUnitManager }, xRayScanner{ xRayScanner }, responseQueue{ responseQueue }, inventory{ inventory }, loadout{ loadout }, itemIDMap{ itemIDMap }, storageUnitHandler{ storageUnitHandler } {}
+    ItemRemovalHandler(Items& items, StorageUnitHandler<ResponseAccumulator> storageUnitHandler)
+        : items{ items }, storageUnitHandler{ storageUnitHandler } {}
 
     ItemIterator operator()(ItemIterator item) const
     {
-        const auto removedFromStorageUnit = storageUnitManager.onItemRemoval(item, [this, item](const auto& storedItem) {
+        const auto removedFromStorageUnit = items.storageUnitManager.onItemRemoval(item, [this, item](const auto& storedItem) {
             if (storedItem != item)
                 removeItem(storedItem);
         });
@@ -34,22 +35,17 @@ public:
 private:
     ItemIterator removeItem(ItemIterator it) const
     {
-        const auto itemID = itemIDMap.remove(it);
-        loadout.unequipItem(it);
-        responseQueue.removeResponsesReferencingItem(it);
-        xRayScanner.onItemRemoval(it);
-        const auto newIterator = inventory.erase(it);
+        const auto itemID = items.itemIDMap.remove(it);
+        items.loadout.unequipItem(it);
+        items.responseQueue.removeResponsesReferencingItem(it);
+        items.xRayScanner.onItemRemoval(it);
+        const auto newIterator = items.inventory.erase(it);
         if (itemID.has_value())
-            responseQueue.add(response::ItemRemoved{ *itemID });
+            items.responseQueue.add(response::ItemRemoved{ *itemID });
         return newIterator;
     }
 
-    StorageUnitManager& storageUnitManager;
-    XRayScanner& xRayScanner;
-    ResponseQueue<>& responseQueue;
-    ItemList& inventory;
-    Loadout& loadout;
-    ItemIDMap& itemIDMap;
+    Items& items;
     StorageUnitHandler<ResponseAccumulator> storageUnitHandler;
 };
 
