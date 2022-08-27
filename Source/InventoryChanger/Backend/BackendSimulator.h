@@ -5,6 +5,7 @@
 #include <variant>
 
 #include "Item.h"
+#include "Items.h"
 #include "ItemIDMap.h"
 #include "Loadout.h"
 #include "PickEm.h"
@@ -35,7 +36,7 @@ public:
 
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
-        return loadout;
+        return items.loadout;
     }
 
     [[nodiscard]] const PickEm& getPickEm() const noexcept
@@ -45,7 +46,7 @@ public:
 
     [[nodiscard]] const ItemList& getInventory() const noexcept
     {
-        return inventory;
+        return items.inventory;
     }
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
@@ -60,32 +61,32 @@ public:
 
     [[nodiscard]] const ItemIDMap& getItemIDMap() const noexcept
     {
-        return itemIDMap;
+        return items.itemIDMap;
     }
 
     [[nodiscard]] const StorageUnitManager& getStorageUnitManager() const noexcept
     {
-        return storageUnitManager;
+        return items.storageUnitManager;
     }
 
     [[nodiscard]] const XRayScanner& getXRayScanner() const noexcept
     {
-        return xRayScanner;
+        return items.xRayScanner;
     }
 
     [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
     {
-        return itemIDMap.get(itemID);
+        return items.itemIDMap.get(itemID);
     }
 
     [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemIterator it) const
     {
-        return itemIDMap.getItemID(it);
+        return items.itemIDMap.getItemID(it);
     }
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), xRayScanner, getResponseAccumulator(), inventory, loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ inventory } };
+        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), items.xRayScanner, getResponseAccumulator(), items.inventory, items.loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ items.inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
@@ -95,32 +96,32 @@ public:
 
     [[nodiscard]] LoadoutHandler<ResponseAccumulator> getLoadoutHandler()
     {
-        return LoadoutHandler{ loadout, getResponseAccumulator() };
+        return LoadoutHandler{ items.loadout, getResponseAccumulator() };
     }
 
     [[nodiscard]] InventoryHandler<ResponseAccumulator> getInventoryHandler()
     {
-        return InventoryHandler{ inventory, getResponseAccumulator() };
+        return InventoryHandler{ items.inventory, getResponseAccumulator() };
     }
 
     [[nodiscard]] ItemRemovalHandler<ResponseAccumulator> getItemRemovalHandler()
     {
-        return ItemRemovalHandler{ storageUnitManager, xRayScanner, responseQueue, inventory, loadout, itemIDMap, getStorageUnitHandler() };
+        return ItemRemovalHandler{ items.storageUnitManager, items.xRayScanner, items.responseQueue, items.inventory, items.loadout, items.itemIDMap, getStorageUnitHandler() };
     }
 
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()
     {
-        return StorageUnitHandler{ storageUnitManager, ItemConstRemover{ inventory }, getInventoryHandler(), getResponseAccumulator() };
+        return StorageUnitHandler{ items.storageUnitManager, ItemConstRemover{ items.inventory }, getInventoryHandler(), getResponseAccumulator() };
     }
 
     [[nodiscard]] XRayScannerHandler<ResponseAccumulator> getXRayScannerHandler()
     {
-        return XRayScannerHandler{ gameItemLookup, crateLootLookup, xRayScanner, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator(), ItemConstRemover{ inventory } };
+        return XRayScannerHandler{ gameItemLookup, crateLootLookup, items.xRayScanner, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator(), ItemConstRemover{ items.inventory } };
     }
 
     [[nodiscard]] ItemModificationHandler<ResponseAccumulator> getItemModificationHandler()
     {
-        return ItemModificationHandler{ ItemConstRemover{ inventory }, ResponseAccumulator{ responseQueue } };
+        return ItemModificationHandler{ ItemConstRemover{ items.inventory }, getResponseAccumulator() };
     }
 
     [[nodiscard]] ItemActivationHandler<ResponseAccumulator> getItemActivationHandler()
@@ -131,29 +132,24 @@ public:
     template <typename GameInventory>
     void run(GameInventory& gameInventory, std::chrono::milliseconds delay)
     {
-        responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), itemIDMap, storageUnitManager, gameInventory }, delay);
+        items.responseQueue.visit(ResponseHandler{ gameItemLookup.getStorage(), items.itemIDMap, items.storageUnitManager, gameInventory }, delay);
     }
 
     [[nodiscard]] bool isInXRayScan() const noexcept
     {
-        return xRayScanner.getItems().has_value();
+        return items.xRayScanner.getItems().has_value();
     }
 
 private:
     [[nodiscard]] ResponseAccumulator getResponseAccumulator()
     {
-        return ResponseAccumulator{ responseQueue };
+        return ResponseAccumulator{ items.responseQueue };
     }
 
-    ItemList inventory;
-    Loadout loadout;
-    ResponseQueue<> responseQueue;
-    ItemIDMap itemIDMap;
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
+    Items items;
     PickEm pickEm;
-    XRayScanner xRayScanner;
-    StorageUnitManager storageUnitManager;
 };
 
 inline void clearInventory(BackendSimulator& backend)
