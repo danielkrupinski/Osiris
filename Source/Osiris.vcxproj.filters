@@ -814,6 +814,9 @@
     <ClInclude Include="InventoryChanger\Backend\Request\ItemActivationHandler.h">
       <Filter>InventoryChanger\Backend\Request</Filter>
     </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Items.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

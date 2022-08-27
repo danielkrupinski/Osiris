@@ -211,6 +211,7 @@
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
+    <ClInclude Include="InventoryChanger\Backend\Items.h" />
     <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
     <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
     <ClInclude Include="InventoryChanger\Backend\Request\InventoryHandler.h" />
