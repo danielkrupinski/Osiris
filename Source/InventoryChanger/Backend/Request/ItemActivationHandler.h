@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <memory>
 #include <optional>
 
@@ -23,8 +24,7 @@ public:
     void activateOperationPass(ItemIterator operationPass) const
     {
         const auto& gameItem = operationPass->gameItem();
-        if (!gameItem.isOperationPass())
-            return;
+        assert(gameItem.isOperationPass());
 
         const auto coinID = gameItem.getWeaponID() != WeaponId::OperationHydraPass ? static_cast<WeaponId>(static_cast<int>(gameItem.getWeaponID()) + 1) : WeaponId::BronzeOperationHydraCoin;
         if (const auto operationCoin = gameItemLookup.findItem(coinID)) {
@@ -36,8 +36,7 @@ public:
     void activateViewerPass(ItemIterator viewerPass) const
     {
         const auto& gameItem = viewerPass->gameItem();
-        if (!gameItem.isViewerPass())
-            return;
+        assert(gameItem.isViewerPass());
 
         const auto coinID = Helpers::bronzeEventCoinFromViewerPass(gameItem.getWeaponID());
         if (coinID == WeaponId::None)
@@ -52,16 +51,13 @@ public:
 
     void openContainer(ItemIterator container, ItemIterator key) const
     {
-        if (!container->gameItem().isCrate())
-            return;
+        assert(container->gameItem().isCrate() && key->gameItem().isCaseKey());
 
         auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, std::to_address(key));
         if (!generatedItem.has_value())
             return;
 
-        if (key->gameItem().isCaseKey())
-            itemRemovalHandler(key);
-
+        itemRemovalHandler(key);
         itemRemovalHandler(container);
         const auto receivedItem = inventoryHandler.addItem(std::move(*generatedItem), true);
         responseAccumulator(response::ContainerOpened{ receivedItem });
@@ -69,8 +65,7 @@ public:
 
     void openKeylessContainer(ItemIterator container) const
     {
-        if (!container->gameItem().isCrate())
-            return;
+        assert(container->gameItem().isCrate());
 
         auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *container, nullptr);
         if (!generatedItem.has_value())
