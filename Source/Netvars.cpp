@@ -31,7 +31,9 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
     if (Misc::isRadarHackOn()) {
         data.value._int = 1;
 
-        entity->spottedByMask() |= 1 << (localPlayer->index() - 1);
+        if (localPlayer)
+            if (const auto index = localPlayer->index(); index > 0 && index <= 32)
+                entity->spottedByMask() |= 1 << (index - 1);
     }
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
