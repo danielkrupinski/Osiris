@@ -106,7 +106,7 @@ public:
 
     [[nodiscard]] ItemRemovalHandler<ResponseAccumulator> getItemRemovalHandler()
     {
-        return ItemRemovalHandler{ items, getStorageUnitHandler() };
+        return ItemRemovalHandler<ResponseAccumulator>{ items };
     }
 
     [[nodiscard]] StorageUnitHandler<ResponseAccumulator> getStorageUnitHandler()

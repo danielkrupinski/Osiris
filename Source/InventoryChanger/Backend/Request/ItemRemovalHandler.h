@@ -15,8 +15,7 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class ItemRemovalHandler {
 public:
-    ItemRemovalHandler(Items& items, StorageUnitHandler<ResponseAccumulator> storageUnitHandler)
-        : items{ items }, storageUnitHandler{ storageUnitHandler } {}
+    explicit ItemRemovalHandler(Items& items) : items{ items } {}
 
     ItemIterator operator()(ItemIterator item) const
     {
@@ -26,6 +25,8 @@ public:
         });
 
         if (removedFromStorageUnit.has_value()) {
+            StorageUnitHandler<ResponseAccumulator> storageUnitHandler{ items.storageUnitManager, ItemConstRemover{ items.inventory }, InventoryHandler{ items.inventory, ResponseAccumulator{ items.responseQueue } }, ResponseAccumulator{ items.responseQueue } };
+
             storageUnitHandler.removeFromStorageUnit(item, *removedFromStorageUnit);
         }
 
@@ -46,7 +47,6 @@ private:
     }
 
     Items& items;
-    StorageUnitHandler<ResponseAccumulator> storageUnitHandler;
 };
 
 }
