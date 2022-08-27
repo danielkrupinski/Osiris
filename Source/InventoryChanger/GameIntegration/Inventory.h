@@ -52,6 +52,7 @@ public:
     void addItemToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID);
     void itemAddedToStorageUnit(std::uint64_t storageUnitItemID);
     void removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID);
+    void updateTradableAfterDate(std::uint64_t itemID, std::uint32_t tradableAfterDate);
 };
 
 }

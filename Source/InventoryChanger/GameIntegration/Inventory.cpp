@@ -617,4 +617,24 @@ void Inventory::removeItemFromStorageUnit(std::uint64_t itemID, std::uint64_t st
     initItemCustomizationNotification("casket_removed", storageUnitItemID);
 }
 
+void Inventory::updateTradableAfterDate(std::uint64_t itemID, std::uint32_t tradableAfterDate)
+{
+    const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
+    if (!view)
+        return;
+
+    const auto econItem = memory->getSOCData(view);
+    if (!econItem)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
+
+    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+}
+
 }
