@@ -208,6 +208,12 @@ struct ResponseHandler {
         }
     }
 
+    void operator()(const response::TradabilityUpdated& response) const
+    {
+        if (const auto itemID = getItemID(response.item); itemID.has_value())
+            gameInventory.updateTradableAfterDate(*itemID, response.item->getProperties().common.tradableAfterDate);
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemIterator item) const
     {
