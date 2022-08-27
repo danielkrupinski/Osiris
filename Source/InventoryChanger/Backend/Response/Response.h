@@ -37,7 +37,8 @@ using Response = std::variant<
     response::StorageUnitModified,
     response::ItemBoundToStorageUnit,
     response::ItemRemovedFromStorageUnit,
-    response::ItemAddedToStorageUnit
+    response::ItemAddedToStorageUnit,
+    response::TradabilityUpdated
 >;
 
 }
