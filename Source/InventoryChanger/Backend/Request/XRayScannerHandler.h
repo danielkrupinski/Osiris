@@ -44,6 +44,7 @@ public:
             return;
 
         constRemover(scannerItems->reward).getProperties().common.tradableAfterDate = key->getProperties().common.tradableAfterDate;
+        responseAccumulator(response::TradabilityUpdated{ scannerItems->reward });
         itemRemovalHandler(key);
         itemRemovalHandler(crate);
         constRemover(scannerItems->reward).setState(inventory::Item::State::Default);

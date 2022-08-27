@@ -166,7 +166,7 @@ struct ResponseHandler {
     void operator()(const response::XRayItemClaimed& response) const
     {
         if (const auto itemID = getItemID(response.item); itemID.has_value())
-            gameInventory.xRayItemClaimed(*itemID, response.item->getProperties().common.tradableAfterDate);
+            gameInventory.xRayItemClaimed(*itemID);
     }
 
     void operator()(const response::StorageUnitNamed& response) const

@@ -521,7 +521,7 @@ void Inventory::xRayItemRevealed(std::uint64_t itemID)
    initItemCustomizationNotification("xray_item_reveal", itemID);
 }
 
-void Inventory::xRayItemClaimed(std::uint64_t itemID, std::uint32_t tradableAfterDate)
+void Inventory::xRayItemClaimed(std::uint64_t itemID)
 {
     const auto view = memory->findOrCreateEconItemViewForItemID(itemID);
     if (!view)
@@ -537,8 +537,6 @@ void Inventory::xRayItemClaimed(std::uint64_t itemID, std::uint32_t tradableAfte
 
     econItem->flags &= ~16;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-    attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
     initItemCustomizationNotification("xray_item_claim", itemID);
