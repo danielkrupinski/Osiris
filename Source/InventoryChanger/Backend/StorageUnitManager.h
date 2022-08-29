@@ -12,10 +12,10 @@ namespace inventory_changer::backend
 
 class StorageUnitManager {
 public:
-    void addItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
+    bool addItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
     {
         assert(!item->gameItem().isStorageUnit() && storageUnit->gameItem().isStorageUnit());
-        itemsStorageUnits.try_emplace(item, storageUnit);
+        return itemsStorageUnits.try_emplace(item, storageUnit).second;
     }
 
     bool removeItemFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
