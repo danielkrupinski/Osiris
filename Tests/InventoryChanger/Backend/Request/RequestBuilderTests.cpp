@@ -22,19 +22,12 @@ struct MockRequestor {
     MOCK_METHOD(void, request, (const request::ApplySticker&));
     MOCK_METHOD(void, request, (const request::ApplyPatch&));
     MOCK_METHOD(void, request, (const request::AddNameTag&));
-};
-
-struct MockRequestorWrapper {
-    MockRequestorWrapper(MockRequestor& requestor) : requestor{ requestor } {}
 
     template <typename RequestType>
-    void operator()(const RequestType& request)
+    void operator()(const RequestType& requestObject)
     {
-        requestor.request(request);
+        request(requestObject);
     }
-
-private:
-    MockRequestor& requestor;
 };
 
 struct DummyStorageUnitHandler {
@@ -78,7 +71,7 @@ protected:
     MockXRayScannerHandler xRayScannerHandler;
     MockItemActivationHandler itemActivationHandler;
     RequestBuilderParams requestBuilderParams;
-    RequestBuilder<MockRequestorWrapper, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, MockRequestorWrapper{ requestor }, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
+    RequestBuilder<MockRequestor&, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, requestor, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
