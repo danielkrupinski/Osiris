@@ -30,13 +30,13 @@ struct MockRequestor {
     }
 };
 
-struct DummyStorageUnitHandler {
-    void nameStorageUnit(ItemIterator, std::string_view) const {}
-    void markStorageUnitModified(ItemIterator) const {}
-    void bindItemToStorageUnit(ItemIterator, ItemIterator) const {}
-    void addItemToStorageUnit(ItemIterator, ItemIterator) const {}
-    void removeFromStorageUnit(ItemIterator, ItemIterator) const {}
-    void updateStorageUnitAttributes(ItemIterator) const {}
+struct MockStorageUnitHandler {
+    MOCK_METHOD(void, nameStorageUnit, (ItemIterator storageUnitIterator, std::string_view name), (const));
+    MOCK_METHOD(void, markStorageUnitModified, (ItemIterator storageUnitIterator), (const));
+    MOCK_METHOD(void, bindItemToStorageUnit, (ItemIterator item, ItemIterator storageUnitIterator), (const));
+    MOCK_METHOD(void, addItemToStorageUnit, (ItemIterator item, ItemIterator storageUnitIterator), (const));
+    MOCK_METHOD(void, removeFromStorageUnit, (ItemIterator item, ItemIterator storageUnitIterator), (const));
+    MOCK_METHOD(void, updateStorageUnitAttributes, (ItemIterator storageUnit), (const));
 };
 
 struct MockXRayScannerHandler {
@@ -70,8 +70,9 @@ protected:
     ItemIDMap itemIDMap;
     MockXRayScannerHandler xRayScannerHandler;
     MockItemActivationHandler itemActivationHandler;
+    MockStorageUnitHandler storageUnitHandler;
     RequestBuilderParams requestBuilderParams;
-    RequestBuilder<MockRequestor&, DummyStorageUnitHandler, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, requestor, DummyStorageUnitHandler{}, xRayScannerHandler, itemActivationHandler };
+    RequestBuilder<MockRequestor&, const MockStorageUnitHandler&, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, requestor, storageUnitHandler, xRayScannerHandler, itemActivationHandler };
 
     static constexpr auto nonexistentItemID = 1234;
     static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
