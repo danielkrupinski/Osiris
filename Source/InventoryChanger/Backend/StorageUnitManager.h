@@ -15,7 +15,7 @@ public:
     void addItemToStorageUnit(ItemIterator item, ItemIterator storageUnit)
     {
         assert(!item->gameItem().isStorageUnit() && storageUnit->gameItem().isStorageUnit());
-        itemsStorageUnits[item] = storageUnit;
+        itemsStorageUnits.try_emplace(item, storageUnit);
     }
 
     bool removeItemFromStorageUnit(ItemIterator item, ItemIterator storageUnit)
