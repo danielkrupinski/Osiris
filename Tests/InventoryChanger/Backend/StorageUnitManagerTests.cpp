@@ -34,6 +34,18 @@ private:
     ItemList itemList;
 };
 
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToAddStorageUnitToStorageUnitResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.addItemToStorageUnit(createDummyStorageUnit(), createDummyStorageUnit()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToAddItemToItemResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.addItemToStorageUnit(createDummyItem(), createDummyItem()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToAddStorageUnitToItemResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.addItemToStorageUnit(createDummyStorageUnit(), createDummyItem()), "");
+}
+
 TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, NewItemCanBeAddedToNewStorageUnit) {
     EXPECT_TRUE(storageUnitManager.addItemToStorageUnit(createDummyItem(), createDummyStorageUnit()));
 }
@@ -55,6 +67,18 @@ TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, SameItemCannotBeAddedToT
     const auto storageUnit = createDummyStorageUnit();
     storageUnitManager.addItemToStorageUnit(item, storageUnit);
     EXPECT_FALSE(storageUnitManager.addItemToStorageUnit(item, storageUnit));
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToRemoveStorageUnitFromStorageUnitResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.removeItemFromStorageUnit(createDummyStorageUnit(), createDummyStorageUnit()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToRemoveItemFromItemResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.removeItemFromStorageUnit(createDummyItem(), createDummyItem()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToRemoveStorageUnitFromItemResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.removeItemFromStorageUnit(createDummyStorageUnit(), createDummyItem()), "");
 }
 
 TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ItemIsNotRemovedIfNotInStorageUnit) {
