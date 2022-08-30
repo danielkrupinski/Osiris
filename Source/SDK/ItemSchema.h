@@ -439,7 +439,7 @@ public:
 
     auto getSOC() noexcept
     {
-        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, 0xC8));
+        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0xB4, 0xF8));
     }
 
     SharedObjectTypeCache<EconItem>* getItemBaseTypeCache() noexcept
