@@ -29,6 +29,18 @@ public:
         return false;
     }
 
+    std::optional<ItemIterator> removeItemFromStorageUnit(ItemIterator item)
+    {
+        assert(!item->gameItem().isStorageUnit());
+
+        if (const auto it = itemsStorageUnits.find(item); it != itemsStorageUnits.end()) {
+            const auto storageUnit = it->second;
+            itemsStorageUnits.erase(it);
+            return storageUnit;
+        }
+        return std::nullopt;
+    }
+
     [[nodiscard]] std::unordered_map<ItemIterator, std::uint32_t> getStorageUnitIDs() const
     {
         std::unordered_map<ItemIterator, std::uint32_t> itemsStorageUnitIDs;
