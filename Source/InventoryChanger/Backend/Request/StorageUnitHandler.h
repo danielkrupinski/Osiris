@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <ctime>
 
 #include <InventoryChanger/Backend/Item.h>
@@ -18,6 +19,8 @@ public:
 
     void nameStorageUnit(ItemIterator storageUnitIterator, std::string_view name) const
     {
+        assert(storageUnitIterator->gameItem().isStorageUnit());
+
         const auto storageUnit = constRemover(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
@@ -31,6 +34,8 @@ public:
 
     void markStorageUnitModified(ItemIterator storageUnitIterator) const
     {
+        assert(storageUnitIterator->gameItem().isStorageUnit());
+
         const auto storageUnit = constRemover(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
             return;
@@ -42,8 +47,7 @@ public:
 
     void bindItemToStorageUnit(ItemIterator item, ItemIterator storageUnitIterator) const
     {
-        if (!storageUnitIterator->gameItem().isStorageUnit())
-            return;
+        assert(!item->gameItem().isStorageUnit() && storageUnitIterator->gameItem().isStorageUnit());
 
         const auto storageUnit = constRemover(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
@@ -59,6 +63,8 @@ public:
 
     void addItemToStorageUnit(ItemIterator item, ItemIterator storageUnitIterator) const
     {
+        assert(!item->gameItem().isStorageUnit() && storageUnitIterator->gameItem().isStorageUnit());
+
         bindItemToStorageUnit(item, storageUnitIterator);
         markStorageUnitModified(storageUnitIterator);
         responseAccumulator(response::ItemAddedToStorageUnit{ storageUnitIterator });
@@ -66,8 +72,7 @@ public:
 
     void removeFromStorageUnit(ItemIterator item, ItemIterator storageUnitIterator) const
     {
-        if (!storageUnitIterator->gameItem().isStorageUnit())
-            return;
+        assert(!item->gameItem().isStorageUnit() && storageUnitIterator->gameItem().isStorageUnit());
 
         const auto storageUnit = constRemover(storageUnitIterator).getOrCreate<inventory::StorageUnit>();
         if (!storageUnit)
@@ -83,9 +88,7 @@ public:
 
     void updateStorageUnitAttributes(ItemIterator storageUnit) const
     {
-        if (!storageUnit->gameItem().isStorageUnit())
-            return;
-
+        assert(storageUnit->gameItem().isStorageUnit());
         responseAccumulator(response::StorageUnitModified{ storageUnit });
     }
 
