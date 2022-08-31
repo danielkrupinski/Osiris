@@ -122,6 +122,21 @@ TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ItemCanBeRemovedFromStor
     EXPECT_TRUE(storageUnitManager.removeItemFromStorageUnit(item, storageUnit));
 }
 
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToRemoveStorageUnitFromAnyStorageUnitResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.removeItemFromStorageUnit(createDummyStorageUnit()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ItemIsNotRemovedIfNotInAnyStorageUnit) {
+    EXPECT_EQ(storageUnitManager.removeItemFromStorageUnit(createDummyItem()), std::nullopt);
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, StorageUnitWhichContainedTheItemIsReturnedWhenRemovingTheItem) {
+    const auto item = createDummyItem();
+    const auto storageUnit = createDummyStorageUnit();
+    storageUnitManager.addItemToStorageUnit(item, storageUnit);
+    EXPECT_EQ(storageUnitManager.removeItemFromStorageUnit(item), storageUnit);
+}
+
 struct StorageUnitIdProjection {
     explicit StorageUnitIdProjection(const std::unordered_map<ItemIterator, std::uint32_t>& storageUnitIDs)
         : storageUnitIDs{ storageUnitIDs } {}
