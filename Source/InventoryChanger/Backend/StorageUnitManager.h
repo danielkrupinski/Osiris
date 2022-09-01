@@ -41,6 +41,12 @@ public:
         return std::nullopt;
     }
 
+    void removeStorageUnit(ItemIterator storageUnit)
+    {
+        assert(storageUnit->gameItem().isStorageUnit());
+        std::erase_if(itemsStorageUnits, [storageUnit](const auto& pair) { return pair.second == storageUnit; });
+    }
+
     [[nodiscard]] std::unordered_map<ItemIterator, std::uint32_t> getStorageUnitIDs() const
     {
         std::unordered_map<ItemIterator, std::uint32_t> itemsStorageUnitIDs;
