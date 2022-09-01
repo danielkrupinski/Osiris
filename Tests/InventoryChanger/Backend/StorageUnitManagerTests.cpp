@@ -219,5 +219,34 @@ TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ForEachFunctorIsNotCalle
     storageUnitManager.forEachItemInStorageUnit(storageUnitWithItems.storageUnit, std::ref(mockFunctor));
 }
 
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, TryingToRemoveItemAsStorageUnitResultsInDebugAssertion) {
+    EXPECT_DEBUG_DEATH(storageUnitManager.removeStorageUnit(createDummyItem()), "");
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ItemsInStorageUnitAreRemovedWhenRemovingTheStorageUnit) {
+    const auto storageUnitWithItems = createStorageUnitWithItems<2>();
+
+    storageUnitManager.removeStorageUnit(storageUnitWithItems.storageUnit);
+
+    testing::StrictMock<MockForEachItemFunctor> mockFunctor;
+    EXPECT_CALL(mockFunctor, call(storageUnitWithItems.items[0])).Times(0);
+    EXPECT_CALL(mockFunctor, call(storageUnitWithItems.items[1])).Times(0);
+
+    storageUnitManager.forEachItemInStorageUnit(storageUnitWithItems.storageUnit, std::ref(mockFunctor));
+}
+
+TEST_F(InventoryChanger_Backend_StorageUnitManagerTest, ItemsInStorageUnitAreNotRemovedWhenRemovingOtherStorageUnit) {
+    const auto storageUnitWithItems = createStorageUnitWithItems<2>();
+    const auto storageUnitWithItems1 = createStorageUnitWithItems<2>();
+
+    storageUnitManager.removeStorageUnit(storageUnitWithItems.storageUnit);
+
+    testing::StrictMock<MockForEachItemFunctor> mockFunctor;
+    EXPECT_CALL(mockFunctor, call(storageUnitWithItems1.items[0]));
+    EXPECT_CALL(mockFunctor, call(storageUnitWithItems1.items[1]));
+
+    storageUnitManager.forEachItemInStorageUnit(storageUnitWithItems1.storageUnit, std::ref(mockFunctor));
+}
+
 }
 }
