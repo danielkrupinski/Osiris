@@ -184,6 +184,7 @@ public:
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
     NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
+    NETVAR(spottedByMask, "CBaseEntity", "m_bSpottedByMask", std::uint32_t)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
