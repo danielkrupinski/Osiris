@@ -28,10 +28,12 @@ struct ResponseHandler {
             const auto newItemID = gameInventory.assingNewItemID(*itemID);
             itemIDMap.update(*itemID, newItemID);
 
-            storageUnitManager.forEachItemInStorageUnit(response.item, [this, storageUnitItemID = newItemID](auto itemInStorageUnit) {
-                if (const auto itemIdInStorageUnit = getItemID(itemInStorageUnit); itemIdInStorageUnit.has_value())
-                    gameInventory.addItemToStorageUnit(*itemIdInStorageUnit, storageUnitItemID);
-            });
+            if (response.item->gameItem().isStorageUnit()) {
+                storageUnitManager.forEachItemInStorageUnit(response.item, [this, storageUnitItemID = newItemID](auto itemInStorageUnit) {
+                    if (const auto itemIdInStorageUnit = getItemID(itemInStorageUnit); itemIdInStorageUnit.has_value())
+                        gameInventory.addItemToStorageUnit(*itemIdInStorageUnit, storageUnitItemID);
+                });
+            }
         }
     }
 
