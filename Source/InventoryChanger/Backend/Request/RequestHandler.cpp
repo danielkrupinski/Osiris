@@ -80,6 +80,15 @@ void RequestHandler::operator()(const request::ApplyPatch& request) const
 
     agent->patches[request.slot].patchID = gameItemLookup.getStorage().getPatch(request.patch->gameItem()).id;
     inventoryHandler.moveItemToFront(request.item);
+
+    const auto patchTradableAfter = request.patch->getProperties().common.tradableAfterDate;
+    auto& agentTradableAfter = constRemover(request.item).getProperties().common.tradableAfterDate;
+
+    if (patchTradableAfter > agentTradableAfter) {
+        agentTradableAfter = patchTradableAfter;
+        responseAccumulator(response::TradabilityUpdated{ request.item });
+    }
+
     itemRemovalHandler(request.patch);
     responseAccumulator(response::PatchApplied{ request.item, request.slot });
 }
