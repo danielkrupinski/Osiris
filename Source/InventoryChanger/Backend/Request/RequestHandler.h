@@ -36,6 +36,8 @@ struct RequestHandler {
     void operator()(const request::UnsealGraffiti& request) const;
 
 private:
+    void copyTradability(ItemIterator source, ItemIterator destination) const;
+
     ItemModificationHandler<ResponseAccumulator> itemModificationHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     InventoryHandler<ResponseAccumulator> inventoryHandler;
