@@ -543,7 +543,7 @@ void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
 
 void Visuals::reduceFlashEffect() noexcept
 {
-    if (localPlayer)
+    if (localPlayer && visualsConfig.flashReduction != 0)
         localPlayer->flashMaxAlpha() = 255.0f - visualsConfig.flashReduction * 2.55f;
 }
 
