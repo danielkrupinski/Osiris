@@ -7,6 +7,7 @@
 #include <random>
 
 #include <InventoryChanger/Inventory/Structs.h>
+#include <SDK/Constants/PaintkitConditionChances.h>
 
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"
@@ -20,23 +21,14 @@ class AttributeGenerator {
 public:
     explicit AttributeGenerator(RandomEngine& randomEngine) : randomEngine{ randomEngine } {}
 
-    [[nodiscard]] PaintKitCondition generatePaintKitCondition() const
+    [[nodiscard]] float generatePaintKitWear() const
     {
-        if (const auto condition = randomEngine(std::uniform_int_distribution<>{ 1, 10'000 }); condition <= 1471)
-            return FactoryNew;
-        else if (condition <= 3939)
-            return MinimalWear;
-        else if (condition <= 8257)
-            return FieldTested;
-        else if (condition <= 9049)
-            return WellWorn;
-        return BattleScarred;
-    }
+        using namespace csgo::paintkit_condition_chances;
 
-    [[nodiscard]] float generatePaintKitWear(PaintKitCondition condition) const
-    {
         static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
-        return randomEngine(std::uniform_real_distribution<float>{ wearRanges[condition - 1], wearRanges[condition] });
+        static constexpr auto conditionChances = std::to_array<float>({ factoryNewChance, minimalWearChance, fieldTestedChance, wellWornChance, battleScarredChance });
+
+        return randomEngine(std::piecewise_constant_distribution<float>{ wearRanges.begin(), wearRanges.end(), conditionChances.begin() });
     }
 
     [[nodiscard]] float generateFactoryNewPaintKitWear() const
