@@ -39,6 +39,11 @@ public:
         return randomEngine(std::uniform_real_distribution<float>{ wearRanges[condition - 1], wearRanges[condition] });
     }
 
+    [[nodiscard]] float generateFactoryNewPaintKitWear() const
+    {
+        return randomEngine(std::uniform_real_distribution<float>{ 0.0f, 0.07f });
+    }
+
     [[nodiscard]] int generatePaintKitSeed() const
     {
         return randomEngine(std::uniform_int_distribution<>{ 1, 1000 });

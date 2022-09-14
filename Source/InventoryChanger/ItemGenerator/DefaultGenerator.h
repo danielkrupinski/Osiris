@@ -46,7 +46,7 @@ private:
         const auto& paintKit = gameItemStorage.getPaintKit(item);
 
         inventory::Skin skin;
-        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(FactoryNew));
+        skin.wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generateFactoryNewPaintKitWear());
         skin.seed = attributeGenerator.generatePaintKitSeed();
 
         if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
@@ -59,7 +59,7 @@ private:
     {
         const auto& paintKit = gameItemStorage.getPaintKit(item);
         return inventory::Gloves{
-            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generatePaintKitWear(FactoryNew)),
+            .wear = std::lerp(paintKit.wearRemapMin, paintKit.wearRemapMax, attributeGenerator.generateFactoryNewPaintKitWear()),
             .seed = attributeGenerator.generatePaintKitSeed()
         };
     }
