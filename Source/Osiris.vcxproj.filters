@@ -817,6 +817,9 @@
     <ClInclude Include="InventoryChanger\Backend\Items.h">
       <Filter>InventoryChanger\Backend</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Constants\PaintkitConditionChances.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
