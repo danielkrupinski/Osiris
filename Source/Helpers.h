@@ -126,6 +126,13 @@ namespace Helpers
             return gen();
         }
 
+        template <typename Distribution>
+        auto operator()(Distribution&& distribution) const
+        {
+            std::scoped_lock lock{ mutex };
+            return distribution(gen);
+        }
+
         template <std::integral T>
         [[nodiscard]] static T random(T min, T max) noexcept
         {
