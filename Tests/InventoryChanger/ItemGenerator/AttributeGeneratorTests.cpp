@@ -15,15 +15,12 @@ namespace
 
 class MockRandomGenerator {
 public:
-    MOCK_METHOD(int, randomInt, (int min, int max));
+    MOCK_METHOD(int, randomFromDistribution, (const std::uniform_int_distribution<int>& dist));
 
-    template <typename T>
-    auto random(T min, T max)
+    template <typename Distribution>
+    auto operator()(Distribution&& distribution)
     {
-        if constexpr (std::is_same_v<T, int>)
-            return randomInt(min, max); 
-        else
-            static_assert(!std::is_same_v<T, T>, "Unsupported type!");
+        return randomFromDistribution(distribution);
     }
 };
 
@@ -51,8 +48,8 @@ protected:
 };
 
 TEST_F(InventoryChanger_ItemGenerator_AttributeGeneratorTest, DifferentPaintKitSeedsAreGeneratedForDifferentRandomNumbers) {
-    EXPECT_CALL(randomGenerator, randomInt(testing::_, testing::_)).With(LessThanByN(999)).WillOnce(testing::ReturnArg<0>())
-                                                                                          .WillOnce(testing::ReturnArg<1>());
+    EXPECT_CALL(randomGenerator, randomFromDistribution(std::uniform_int_distribution<int>{ 1, 1000 })).WillOnce(testing::Return(1))
+                                                                                                       .WillOnce(testing::Return(1000));
     EXPECT_NE(generatePaintKitSeed(), generatePaintKitSeed());
 }
 
