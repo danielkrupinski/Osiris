@@ -10,6 +10,7 @@
 #include "Storage.h"
 #include <Helpers.h>
 #include <SDK/Constants/ProPlayer.h>
+#include <SDK/Constants/StickerId.h>
 #include <SDK/Constants/Tournament.h>
 
 namespace inventory_changer::game_items
@@ -67,28 +68,32 @@ private:
 public:
     int findTournamentEventStickerID(csgo::Tournament tournament) const noexcept
     {
+        using enum csgo::StickerId;
+
         if (tournament == csgo::Tournament::DreamHack2013)
-            return Helpers::RandomGenerator::random(1, 12);
+            return static_cast<int>(Helpers::RandomGenerator::random(Shooter, FrostyTheHitmanFoil));
         else if (tournament == csgo::Tournament::EmsOneKatowice2014)
-            return Helpers::RandomGenerator::random(99, 100); // EMS Wolf / Skull
+            return static_cast<int>(Helpers::RandomGenerator::random(GoldEslWolfFoilKatowice2014, GoldEslSkullFoilKatowice2014));
         else if (tournament == csgo::Tournament::EslOneCologne2014)
-            return 172;
+            return static_cast<int>(EslOneCologne2014Gold);
 
         const auto it = findTournamentStickers(tournament).begin();
         if (it == tournamentStickersSorted.end())
-            return 0;
-        return storage.getStickerKit(*it).tournament == tournament ? storage.getStickerKit(*it).id : 0;
+            return static_cast<int>(Default);
+        return storage.getStickerKit(*it).tournament == tournament ? storage.getStickerKit(*it).id : static_cast<int>(Default);
     }
 
     int findTournamentTeamGoldStickerID(csgo::Tournament tournament, csgo::TournamentTeam team) const noexcept
     {
+        using enum csgo::StickerId;
+
         if (tournament == csgo::Tournament{} || team == csgo::TournamentTeam::None)
             return 0;
 
         if (team == csgo::TournamentTeam::AllStarTeamAmerica)
-            return 1315;
+            return static_cast<int>(AllStarsOrangeHolo);
         if (team == csgo::TournamentTeam::AllStarTeamEurope)
-            return 1316;
+            return static_cast<int>(AllStarsBlueHolo);
 
         const auto range = findTournamentStickers(tournament);
 
@@ -96,8 +101,8 @@ public:
             return storage.getStickerKit(item).tournamentTeam;
         });
         if (it == range.end())
-            return 0;
-        return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : 0;
+            return static_cast<int>(Default);
+        return storage.getStickerKit(*it).tournamentTeam == team ? storage.getStickerKit(*it).id : static_cast<int>(Default);
     }
 
     int findTournamentPlayerGoldStickerID(csgo::Tournament tournament, csgo::ProPlayer player) const noexcept

@@ -6,6 +6,8 @@
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
+#include <SDK/Constants/StickerId.h>
+
 #include "ItemGenerator.h"
 
 namespace inventory_changer::item_generator
@@ -50,7 +52,7 @@ private:
         skin.seed = attributeGenerator.generatePaintKitSeed();
 
         if (Helpers::isMP5LabRats(item.getWeaponID(), gameItemStorage.getPaintKit(item).id))
-            skin.stickers[3].stickerID = 28;
+            skin.stickers[3].stickerID = static_cast<int>(csgo::StickerId::BlacksiteFoil);
 
         return skin;
     }

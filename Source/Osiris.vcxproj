@@ -272,6 +272,7 @@
     <ClInclude Include="SDK\Constants\PaintkitConditionChances.h" />
     <ClInclude Include="SDK\Constants\PaintkitWear.h" />
     <ClInclude Include="SDK\Constants\ProPlayer.h" />
+    <ClInclude Include="SDK\Constants\StickerId.h" />
     <ClInclude Include="SDK\Constants\Tournament.h" />
     <ClInclude Include="SDK\Constants\TournamentTeam.h" />
     <ClInclude Include="SDK\Constants\UserMessages.h" />
