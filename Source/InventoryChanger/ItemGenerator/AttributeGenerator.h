@@ -8,6 +8,7 @@
 
 #include <InventoryChanger/Inventory/Structs.h>
 #include <SDK/Constants/PaintkitConditionChances.h>
+#include <SDK/Constants/PaintkitWear.h>
 
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"
@@ -23,9 +24,10 @@ public:
 
     [[nodiscard]] float generatePaintKitWear() const
     {
-        using namespace csgo::paintkit_condition_chances;
+        using namespace csgo::paintkit_wear;
+        static constexpr auto wearRanges = std::to_array<float>({ factoryNew, minimalWear, fieldTested, wellWorn, battleScarred, maxWear });
 
-        static constexpr auto wearRanges = std::to_array<float>({ 0.0f, 0.07f, 0.15f, 0.38f, 0.45f, 1.0f });
+        using namespace csgo::paintkit_condition_chances;
         static constexpr auto conditionChances = std::to_array<float>({ factoryNewChance, minimalWearChance, fieldTestedChance, wellWornChance, battleScarredChance });
 
         return randomEngine(std::piecewise_constant_distribution<float>{ wearRanges.begin(), wearRanges.end(), conditionChances.begin() });
@@ -33,7 +35,8 @@ public:
 
     [[nodiscard]] float generateFactoryNewPaintKitWear() const
     {
-        return randomEngine(std::uniform_real_distribution<float>{ 0.0f, 0.07f });
+        using namespace csgo::paintkit_wear;
+        return randomEngine(std::uniform_real_distribution<float>{ factoryNew, minimalWear });
     }
 
     [[nodiscard]] int generatePaintKitSeed() const
