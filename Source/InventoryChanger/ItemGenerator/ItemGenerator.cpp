@@ -20,7 +20,6 @@
 #include "AttributeGenerator.h"
 #include "DefaultGenerator.h"
 #include "DropGenerator.h"
-#include "Utils.h"
 
 template <typename Integral, std::size_t N>
 [[nodiscard]] constexpr auto normalizedFloatsToIntegers(const std::array<float, N>& floats) noexcept

@@ -12,7 +12,6 @@
 
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"
-#include "Utils.h"
 
 namespace inventory_changer::item_generator
 {

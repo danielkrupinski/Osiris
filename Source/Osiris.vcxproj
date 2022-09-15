@@ -256,7 +256,6 @@
     <ClInclude Include="InventoryChanger\ItemGenerator\DropGenerator.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h" />
     <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\Utils.h" />
     <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="Netvars.h" />
