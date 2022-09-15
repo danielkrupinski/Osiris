@@ -158,12 +158,6 @@ namespace Helpers
         inline static std::mutex mutex;
     };
 
-    template <typename T>
-    [[nodiscard]] T random(T min, T max) noexcept
-    {
-        return RandomGenerator::random(min, max);
-    }
-
     class ToUpperConverter {
     public:
         std::wstring_view toUpper(std::wstring_view string)

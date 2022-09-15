@@ -1005,9 +1005,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     case WeaponId::Butterfly:
         switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
-            return Helpers::random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+            return Helpers::RandomGenerator::random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(SEQUENCE_BUTTERFLY_LOOKAT01, SEQUENCE_BUTTERFLY_LOOKAT03);
+            return Helpers::RandomGenerator::random(SEQUENCE_BUTTERFLY_LOOKAT01, SEQUENCE_BUTTERFLY_LOOKAT03);
         default:
             return sequence + 1;
         }
@@ -1019,9 +1019,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
         case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
             return sequence;
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
-            return Helpers::random(SEQUENCE_FALCHION_HEAVY_MISS1, SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP);
+            return Helpers::RandomGenerator::random(SEQUENCE_FALCHION_HEAVY_MISS1, SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP);
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(SEQUENCE_FALCHION_LOOKAT01, SEQUENCE_FALCHION_LOOKAT02);
+            return Helpers::RandomGenerator::random(SEQUENCE_FALCHION_LOOKAT01, SEQUENCE_FALCHION_LOOKAT02);
         default:
             return sequence - 1;
         }
@@ -1031,9 +1031,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
             return SEQUENCE_DAGGERS_IDLE1;
         case SEQUENCE_DEFAULT_LIGHT_MISS1:
         case SEQUENCE_DEFAULT_LIGHT_MISS2:
-            return Helpers::random(SEQUENCE_DAGGERS_LIGHT_MISS1, SEQUENCE_DAGGERS_LIGHT_MISS5);
+            return Helpers::RandomGenerator::random(SEQUENCE_DAGGERS_LIGHT_MISS1, SEQUENCE_DAGGERS_LIGHT_MISS5);
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
-            return Helpers::random(SEQUENCE_DAGGERS_HEAVY_MISS2, SEQUENCE_DAGGERS_HEAVY_MISS1);
+            return Helpers::RandomGenerator::random(SEQUENCE_DAGGERS_HEAVY_MISS2, SEQUENCE_DAGGERS_HEAVY_MISS1);
         case SEQUENCE_DEFAULT_HEAVY_HIT1:
         case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
         case SEQUENCE_DEFAULT_LOOKAT01:
@@ -1061,21 +1061,21 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     case WeaponId::SurvivalKnife:
         switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
-            return Helpers::random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+            return Helpers::RandomGenerator::random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(SEQUENCE_BUTTERFLY_LOOKAT01, Sequence(14));
+            return Helpers::RandomGenerator::random(SEQUENCE_BUTTERFLY_LOOKAT01, Sequence(14));
         default:
             return sequence + 1;
         }
     case WeaponId::Stiletto:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(12, 13);
+            return Helpers::RandomGenerator::random(12, 13);
         }
     case WeaponId::Talon:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::random(14, 15);
+            return Helpers::RandomGenerator::random(14, 15);
         }
     default:
         return sequence;

@@ -68,9 +68,9 @@ public:
     int findTournamentEventStickerID(csgo::Tournament tournament) const noexcept
     {
         if (tournament == csgo::Tournament::DreamHack2013)
-            return Helpers::random(1, 12);
+            return Helpers::RandomGenerator::random(1, 12);
         else if (tournament == csgo::Tournament::EmsOneKatowice2014)
-            return Helpers::random(99, 100); // EMS Wolf / Skull
+            return Helpers::RandomGenerator::random(99, 100); // EMS Wolf / Skull
         else if (tournament == csgo::Tournament::EslOneCologne2014)
             return 172;
 
