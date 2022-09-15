@@ -6,6 +6,8 @@
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
+#include "ItemGenerator.h"
+
 namespace inventory_changer::item_generator
 {
 
