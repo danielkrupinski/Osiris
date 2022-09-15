@@ -44,9 +44,10 @@ public:
         return randomEngine(std::uniform_int_distribution<>{ 1, 1000 });
     }
 
-    [[nodiscard]] std::uint32_t generateServiceMedalIssueDate(std::uint16_t year) const
+    [[nodiscard]] std::uint32_t generateTimestamp(std::uint32_t minTimestamp, std::uint32_t maxTimestamp) const
     {
-        return getRandomDateTimestampOfYear(year);
+        assert(maxTimestamp >= minTimestamp);
+        return randomEngine(std::uniform_int_distribution<std::uint32_t>{ minTimestamp, maxTimestamp });
     }
 
     [[nodiscard]] inventory::SouvenirPackage generateSouvenirPackage(csgo::Tournament tournament, TournamentMap map) const
@@ -83,18 +84,6 @@ public:
     }
 
 private:
-    [[nodiscard]] static std::pair<std::time_t, std::time_t> clampTimespanToNow(std::time_t min, std::time_t max) noexcept
-    {
-        const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        return std::make_pair((std::min)(min, now), (std::min)(max, now));
-    }
-
-    [[nodiscard]] std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) const noexcept
-    {
-        const auto [min, max] = clampTimespanToNow(getStartOfYearTimestamp(year), getEndOfYearTimestamp(year));
-        return static_cast<std::uint32_t>(randomEngine(std::uniform_int_distribution<long long>{ min, max }));
-    }
-
     RandomEngine& randomEngine;
 };
 

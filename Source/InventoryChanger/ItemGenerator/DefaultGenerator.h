@@ -67,7 +67,7 @@ private:
     [[nodiscard]] inventory::ServiceMedal createServiceMedal(const game_items::Item& item) const
     {
         return inventory::ServiceMedal{
-            .issueDateTimestamp = attributeGenerator.generateServiceMedalIssueDate(gameItemStorage.getServiceMedalYear(item))
+            .issueDateTimestamp = getRandomDateTimestampOfYear(gameItemStorage.getServiceMedalYear(item))
         };
     }
 
@@ -83,6 +83,18 @@ private:
         constexpr auto tradablePenalty = days{ 7 } + hourWhenItemsBecomeTradable;
 
         return ceil<days>(SystemClock::now() - hourWhenItemsBecomeTradable) + tradablePenalty;
+    }
+
+    [[nodiscard]] static std::pair<std::time_t, std::time_t> clampTimespanToNow(std::time_t min, std::time_t max) noexcept
+    {
+        const auto now = SystemClock::to_time_t(SystemClock::now());
+        return std::make_pair((std::min)(min, now), (std::min)(max, now));
+    }
+
+    [[nodiscard]] std::uint32_t getRandomDateTimestampOfYear(std::uint16_t year) const noexcept
+    {
+        const auto [min, max] = clampTimespanToNow(getStartOfYearTimestamp(year), getEndOfYearTimestamp(year));
+        return attributeGenerator.generateTimestamp(static_cast<std::uint32_t>(min), static_cast<std::uint32_t>(max));
     }
 
     const game_items::Storage& gameItemStorage;
