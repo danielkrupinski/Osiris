@@ -22,7 +22,17 @@
 #include "SDK/Platform.h"
 #include "SDK/Recv.h"
 
-static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxies;
+struct ProxyHook {
+    recvProxy originalProxy = nullptr;
+    recvProxy* addressOfOriginalProxy = nullptr;
+};
+
+struct ProxyHooks {
+    ProxyHook spotted;
+    ProxyHook viewModelSequence;
+};
+
+static ProxyHooks proxyHooks;
 
 static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
@@ -31,13 +41,13 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
     if (Misc::isRadarHackOn()) {
         data.value._int = 1;
 
-        if (localPlayer)
+        if (localPlayer) {
             if (const auto index = localPlayer->index(); index > 0 && index <= 32)
                 entity->spottedByMask() |= 1 << (index - 1);
+        }
     }
 
-    constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
-    proxies[hash].first(data, outStruct, arg3);
+    proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
 static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
@@ -52,8 +62,8 @@ static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, v
             inventory_changer::InventoryChanger::instance().fixKnifeAnimation(weapon, data.value._int);
         }
     }
-    constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
-    proxies[hash].first(data, outStruct, arg3);
+
+    proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
@@ -76,29 +86,24 @@ static void walkTable(const char* networkName, RecvTable* recvTable, const std::
 
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
-        constexpr auto getHook{ [](std::uint32_t hash) noexcept -> recvProxy {
-             switch (hash) {
-             case fnv::hash("CBaseEntity->m_bSpotted"):
-                 return spottedHook;
-             case fnv::hash("CBaseViewModel->m_nSequence"):
-                 return viewModelSequence;
-             default:
-                 return nullptr;
-             }
-        } };
+        switch (hash) {
+        case fnv::hash("CBaseEntity->m_bSpotted"):
+            if (proxyHooks.spotted.addressOfOriginalProxy == nullptr) {
+                proxyHooks.spotted.addressOfOriginalProxy = &prop.proxy;
+                proxyHooks.spotted.originalProxy = prop.proxy;
+                prop.proxy = spottedHook;
+            }
+            break;
+        case fnv::hash("CBaseViewModel->m_nSequence"):
+            if (proxyHooks.viewModelSequence.addressOfOriginalProxy == nullptr) {
+                proxyHooks.viewModelSequence.addressOfOriginalProxy = &prop.proxy;
+                proxyHooks.viewModelSequence.originalProxy = prop.proxy;
+                prop.proxy = viewModelSequence;
+            }
+            break;
+        }
 
         offsets.emplace_back(hash, offset + prop.offset);
-
-        constexpr auto hookProperty{ [](std::uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
-            if (originalProxy != proxy) {
-                proxies[hash].first = originalProxy;
-                proxies[hash].second = &originalProxy;
-                originalProxy = proxy;
-            }
-        } };
-
-        if (auto hook{ getHook(hash) })
-            hookProperty(hash, prop.proxy, hook);
     }
 }
 
@@ -113,10 +118,12 @@ void Netvars::init() noexcept
 
 void Netvars::restore() noexcept
 {
-    for (const auto& [hash, proxyPair] : proxies)
-        *proxyPair.second = proxyPair.first;
+    if (proxyHooks.spotted.addressOfOriginalProxy != nullptr)
+        *proxyHooks.spotted.addressOfOriginalProxy = proxyHooks.spotted.originalProxy;
 
-    proxies.clear();
+    if (proxyHooks.viewModelSequence.addressOfOriginalProxy != nullptr)
+        *proxyHooks.viewModelSequence.addressOfOriginalProxy = proxyHooks.viewModelSequence.originalProxy;
+
     offsets.clear();
 }
 
