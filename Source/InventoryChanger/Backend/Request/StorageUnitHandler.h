@@ -14,7 +14,7 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class StorageUnitHandler {
 public:
-    StorageUnitHandler(StorageUnitManager& storageUnitManager, ItemConstRemover constRemover, InventoryHandler<ResponseAccumulator> inventoryHandler, ResponseAccumulator responseAccumulator)
+    StorageUnitHandler(StorageUnitManager& storageUnitManager, ItemConstRemover constRemover, InventoryHandler inventoryHandler, ResponseAccumulator responseAccumulator)
         : storageUnitManager{ storageUnitManager }, constRemover{ constRemover }, inventoryHandler{ inventoryHandler }, responseAccumulator{ responseAccumulator } {}
 
     void nameStorageUnit(ItemIterator storageUnitIterator, std::string_view name) const
@@ -95,7 +95,7 @@ public:
 private:
     StorageUnitManager& storageUnitManager;
     ItemConstRemover constRemover;
-    InventoryHandler<ResponseAccumulator> inventoryHandler;
+    InventoryHandler inventoryHandler;
     ResponseAccumulator responseAccumulator;
 };
 

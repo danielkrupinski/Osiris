@@ -2,11 +2,11 @@
 
 #include <InventoryChanger/Backend/Item.h>
 #include <InventoryChanger/Backend/Response/ResponseTypes.h>
+#include <InventoryChanger/Backend/Response/ResponseAccumulator.h>
 
 namespace inventory_changer::backend
 {
 
-template <typename ResponseAccumulator>
 class InventoryHandler {
 public:
     InventoryHandler(ItemList& inventory, ResponseAccumulator responseAccumulator)

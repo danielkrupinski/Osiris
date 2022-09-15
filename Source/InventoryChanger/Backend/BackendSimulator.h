@@ -99,7 +99,7 @@ public:
         return LoadoutHandler{ items.loadout, getResponseAccumulator() };
     }
 
-    [[nodiscard]] InventoryHandler<ResponseAccumulator> getInventoryHandler()
+    [[nodiscard]] InventoryHandler getInventoryHandler()
     {
         return InventoryHandler{ items.inventory, getResponseAccumulator() };
     }
