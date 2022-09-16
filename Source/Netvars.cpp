@@ -73,9 +73,6 @@ static void walkTable(const char* networkName, RecvTable* recvTable, const std::
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
 
-        if (std::isdigit(prop.name[0]))
-            continue;
-
         if (fnv::hashRuntime(prop.name) == fnv::hash("baseclass"))
             continue;
 
