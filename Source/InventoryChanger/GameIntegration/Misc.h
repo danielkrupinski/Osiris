@@ -4,6 +4,8 @@
 
 #include <InventoryChanger/GameItems/Enums.h>
 
+#include <SDK/Constants/StickerId.h>
+
 namespace inventory_changer::game_integration
 {
     constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
@@ -31,17 +33,19 @@ namespace inventory_changer::game_integration
         return TournamentMap::None;
     }
 
-    constexpr int getTournamentMapGoldStickerID(TournamentMap map) noexcept
+    [[nodiscard]] constexpr csgo::StickerId getTournamentMapGoldStickerID(TournamentMap map) noexcept
     {
         switch (map) {
-        case TournamentMap::Ancient: return 1689;
-        case TournamentMap::Dust2: return 1690;
-        case TournamentMap::Inferno: return 1691;
-        case TournamentMap::Mirage: return 1692;
-        case TournamentMap::Nuke: return 1693;
-        case TournamentMap::Overpass: return 1694;
-        case TournamentMap::Vertigo: return 1695;
-        default: return 0;
+        using enum TournamentMap;
+        using enum csgo::StickerId;
+        case Ancient: return AncientGold;
+        case Dust2: return Dust2Gold;
+        case Inferno: return InfernoGold;
+        case Mirage: return MirageGold;
+        case Nuke: return NukeGold;
+        case Overpass: return OverpassGold;
+        case Vertigo: return VertigoGold;
+        default: return Default;
         }
     }
 

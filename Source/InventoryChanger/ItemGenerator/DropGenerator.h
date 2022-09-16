@@ -81,7 +81,7 @@ private:
             if (player != csgo::ProPlayer{})
                 stickers[3].stickerID = static_cast<int>(gameItemLookup.findTournamentPlayerGoldStickerID(tournament, player));
             else if (tournament >= csgo::Tournament::PglStockholm2021)
-                stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
+                stickers[3].stickerID = static_cast<int>(game_integration::getTournamentMapGoldStickerID(map));
         }
 
         attributeGenerator.shuffleStickers(getNumberOfSupportedStickerSlots(weaponID), stickers);
