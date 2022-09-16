@@ -9,12 +9,14 @@
 #include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
+namespace csgo { enum class StickerId : int; }
+
 namespace inventory_changer::inventory
 {
 
 struct Skin {
     struct Sticker {
-        int stickerID = 0;
+        csgo::StickerId stickerID{};
         float wear = 0.0f;
     };
 

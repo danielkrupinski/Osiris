@@ -16,7 +16,7 @@ void RequestHandler::operator()(const request::ApplySticker& request) const
     if (!skin)
         return;
 
-    skin->stickers[request.slot].stickerID = gameItemLookup.getStorage().getStickerKit(request.sticker->gameItem()).id;
+    skin->stickers[request.slot].stickerID = static_cast<csgo::StickerId>(gameItemLookup.getStorage().getStickerKit(request.sticker->gameItem()).id);
     skin->stickers[request.slot].wear = 0.0f;
 
     inventoryHandler.moveItemToFront(request.item);

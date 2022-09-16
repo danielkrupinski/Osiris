@@ -35,7 +35,7 @@ constexpr auto CONFIG_VERSION = 4;
     auto& stickers = j["Stickers"];
     for (std::size_t i = 0; i < skin.stickers.size(); ++i) {
         const auto& sticker = skin.stickers[i];
-        if (sticker.stickerID == 0)
+        if (sticker.stickerID == csgo::StickerId::Default)
             continue;
 
         json stickerConfig;

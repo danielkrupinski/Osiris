@@ -111,7 +111,7 @@ std::array<Skin::Sticker, 5> skinStickersFromJson(const json& j)
         if (slot >= skinStickers.size())
             continue;
 
-        skinStickers[slot].stickerID = stickerID;
+        skinStickers[slot].stickerID = static_cast<csgo::StickerId>(stickerID);
 
         if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
             skinStickers[slot].wear = sticker["Wear"];

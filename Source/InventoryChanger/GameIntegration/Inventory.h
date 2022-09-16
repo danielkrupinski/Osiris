@@ -2,7 +2,11 @@
 
 #include <cstdint>
 
-namespace csgo{ enum class Team; }
+namespace csgo
+{
+    enum class StickerId : int;
+    enum class Team;
+}
 
 namespace inventory_changer
 {
@@ -25,7 +29,7 @@ class Inventory {
 public:
     std::uint64_t createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] std::uint64_t assingNewItemID(std::uint64_t itemID);
-    void applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot);
+    void applySticker(std::uint64_t itemID, csgo::StickerId stickerID, std::uint8_t slot);
     void removeSticker(std::uint64_t itemID, std::uint8_t slot);
     void updateStickerWear(std::uint64_t itemID, std::uint8_t slot, float newWear);
     void viewerPassActivated(std::uint64_t tournamentCoinItemID);

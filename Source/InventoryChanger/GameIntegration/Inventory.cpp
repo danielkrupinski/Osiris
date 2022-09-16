@@ -127,10 +127,10 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
 
     for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
         const auto& sticker = dynamicData.stickers[j];
-        if (sticker.stickerID == 0)
+        if (sticker.stickerID == csgo::StickerId::Default)
             continue;
 
-        attributeSetter.setStickerID(econItem, j, sticker.stickerID);
+        attributeSetter.setStickerID(econItem, j, static_cast<int>(sticker.stickerID));
         attributeSetter.setStickerWear(econItem, j, sticker.wear);
     }
 }
@@ -274,7 +274,7 @@ std::uint64_t Inventory::assingNewItemID(std::uint64_t itemID)
     return newItemID;
 }
 
-void Inventory::applySticker(std::uint64_t itemID, int stickerID, std::uint8_t slot)
+void Inventory::applySticker(std::uint64_t itemID, csgo::StickerId stickerID, std::uint8_t slot)
 {
     const auto econItem = getEconItem(itemID);
     if (!econItem)
@@ -285,7 +285,7 @@ void Inventory::applySticker(std::uint64_t itemID, int stickerID, std::uint8_t s
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
-    attributeSetter.setStickerID(*econItem, slot, stickerID);
+    attributeSetter.setStickerID(*econItem, slot, static_cast<int>(stickerID));
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
