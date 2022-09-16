@@ -72,14 +72,14 @@ private:
     {
         inventory::SkinStickers stickers;
 
-        stickers[0].stickerID = gameItemLookup.findTournamentEventStickerID(tournament);
+        stickers[0].stickerID = static_cast<int>(gameItemLookup.findTournamentEventStickerID(tournament));
 
         if (tournament >= csgo::Tournament::EmsOneKatowice2014) {
-            stickers[1].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team1);
-            stickers[2].stickerID = gameItemLookup.findTournamentTeamGoldStickerID(tournament, team2);
+            stickers[1].stickerID = static_cast<int>(gameItemLookup.findTournamentTeamGoldStickerID(tournament, team1));
+            stickers[2].stickerID = static_cast<int>(gameItemLookup.findTournamentTeamGoldStickerID(tournament, team2));
 
             if (player != csgo::ProPlayer{})
-                stickers[3].stickerID = gameItemLookup.findTournamentPlayerGoldStickerID(tournament, player);
+                stickers[3].stickerID = static_cast<int>(gameItemLookup.findTournamentPlayerGoldStickerID(tournament, player));
             else if (tournament >= csgo::Tournament::PglStockholm2021)
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }
