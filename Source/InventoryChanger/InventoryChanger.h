@@ -64,7 +64,7 @@ public:
     void drawGUI(bool contentOnly);
 
 private:
-    void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID);
+    void placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID);
 
     [[nodiscard]] auto getRequestBuilder()
     {

@@ -168,7 +168,7 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
     }
 
     if (item.isSticker()) {
-        attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getStickerKit(item).id);
+        attributeSetter.setStickerID(*econItem, 0, static_cast<int>(gameItemStorage.getStickerKit(item).id));
     } else if (item.isPatch()) {
         attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getPatch(item).id);
     } else if (item.isGraffiti()) {

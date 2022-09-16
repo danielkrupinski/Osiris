@@ -19,7 +19,7 @@ void Storage::addGraffiti(int id, ItemName name, EconRarity rarity, std::string_
     addItem(Item::Type::Graffiti, rarity, WeaponId::SealedGraffiti, index, pooled(iconPath));
 }
 
-void Storage::addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, csgo::TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+void Storage::addSticker(csgo::StickerId id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, csgo::TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
 {
     stickerKits.emplace_back(id, pooled(name), tournament, tournamentTeam, tournamentPlayerID, isGoldenSticker);
     addItem(Item::Type::Sticker, rarity, WeaponId::Sticker, stickerKits.size() - 1, pooled(iconPath));

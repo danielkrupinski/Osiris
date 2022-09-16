@@ -23,7 +23,7 @@ void CrateLoot::getLoot(game_items::CrateLoot& crateLoot)
 const game_items::Item* CrateLoot::findStickerlikeItem(WeaponId weaponID, int stickerKit) const
 {
     switch (weaponID) {
-    case WeaponId::Sticker: return gameItemLookup.findSticker(stickerKit);
+    case WeaponId::Sticker: return gameItemLookup.findSticker(static_cast<csgo::StickerId>(stickerKit));
     case WeaponId::Patch: return gameItemLookup.findPatch(stickerKit);
     case WeaponId::SealedGraffiti: return gameItemLookup.findGraffiti(stickerKit);
     default:

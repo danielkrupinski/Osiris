@@ -1262,7 +1262,7 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
         if (!stickerItemID)
             continue;
 
-        placePickEmPick(groupId, pickInGroupIndex, static_cast<int>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+        placePickEmPick(groupId, pickInGroupIndex, static_cast<csgo::StickerId>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
 }
 
@@ -1405,7 +1405,7 @@ void InventoryChanger::reset()
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 
-void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, int stickerID)
+void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID)
 {
     const auto sticker = gameItemLookup.findSticker(stickerID);
     if (!sticker || !sticker->isSticker())

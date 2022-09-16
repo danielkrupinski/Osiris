@@ -119,9 +119,9 @@ public:
         return find(music, musicKit, [this](const Item& item) { return storage.getMusicKit(item).id; });
     }
 
-    [[nodiscard]] const Item* findSticker(int stickerKit) const noexcept
+    [[nodiscard]] const Item* findSticker(csgo::StickerId stickerId) const noexcept
     {
-        return find(stickers, stickerKit, [this](const Item& item) { return storage.getStickerKit(item).id; });
+        return find(stickers, stickerId, [this](const Item& item) { return storage.getStickerKit(item).id; });
     }
 
     [[nodiscard]] const Item* findGraffiti(int graffitiID) const noexcept

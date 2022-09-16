@@ -28,7 +28,7 @@ TEST_F(InventoryChanger_GameItems_Lookup_EmptyStorageTest, MusicIsNotFound) {
 }
 
 TEST_F(InventoryChanger_GameItems_Lookup_EmptyStorageTest, StickerIsNotFound) {
-    ASSERT_FALSE(lookup.findSticker(3) != nullptr);
+    ASSERT_FALSE(lookup.findSticker(csgo::StickerId::BlacksiteFoil) != nullptr);
 }
 
 TEST_F(InventoryChanger_GameItems_Lookup_EmptyStorageTest, GraffitiIsNotFound) {
@@ -50,7 +50,7 @@ TEST(InventoryChanger_GameItems_LookupTest, ItemWithStickerAsWeaponIdIsNotAssume
     Storage storage;
     storage.addServiceMedal(EconRarity::Red, 0, WeaponId::Sticker, {});
     Lookup lookup{ std::move(storage) };
-    ASSERT_FALSE(lookup.findSticker(0) != nullptr);
+    ASSERT_FALSE(lookup.findSticker(csgo::StickerId::Default) != nullptr);
 }
 
 TEST(InventoryChanger_GameItems_LookupTest, ItemWithMusicKitAsWeaponIdIsNotAssumedToBeMusic) {

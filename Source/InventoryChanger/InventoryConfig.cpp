@@ -76,7 +76,7 @@ namespace inventory_changer
 [[nodiscard]] const game_items::Item* gameItemFromJson(const game_items::Lookup& lookup, const json& j)
 {
     if (const auto stickerID = j.find("Sticker ID"); stickerID != j.end() && stickerID->is_number_integer())
-        return lookup.findSticker(stickerID->get<int>());
+        return lookup.findSticker(stickerID->get<csgo::StickerId>());
     if (const auto musicID = j.find("Music ID"); musicID != j.end() && musicID->is_number_integer())
         return lookup.findMusic(musicID->get<int>());
     if (const auto patchID = j.find("Patch ID"); patchID != j.end() && patchID->is_number_integer())

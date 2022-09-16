@@ -51,7 +51,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addPatch(0, {}, rarity, iconPath);
         break;
     case ItemType::Sticker:
-        storage.addSticker(0, {}, rarity, iconPath, csgo::Tournament{}, {}, 0, false);
+        storage.addSticker(csgo::StickerId::Default, {}, rarity, iconPath, csgo::Tournament{}, {}, 0, false);
         break;
     case ItemType::Music:
         storage.addMusic(0, {}, iconPath);
