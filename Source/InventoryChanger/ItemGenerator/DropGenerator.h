@@ -90,15 +90,18 @@ private:
 
     [[nodiscard]] csgo::StickerId generateTournamentEventStickerID(csgo::Tournament tournament) const
     {
+        switch (tournament) {
         using enum csgo::StickerId;
         using enum csgo::Tournament;
-        if (tournament == DreamHack2013)
-            return Helpers::RandomGenerator::random(Shooter, FrostyTheHitmanFoil);
-        else if (tournament == EmsOneKatowice2014)
-            return Helpers::RandomGenerator::random(GoldEslWolfFoilKatowice2014, GoldEslSkullFoilKatowice2014);
-        else if (tournament == EslOneCologne2014)
+        case DreamHack2013:
+            return attributeGenerator.randomStickerId(Shooter, FrostyTheHitmanFoil);
+        case EmsOneKatowice2014:
+            return attributeGenerator.randomStickerId(GoldEslWolfFoilKatowice2014, GoldEslSkullFoilKatowice2014);
+        case EslOneCologne2014:
             return EslOneCologne2014Gold;
-        return gameItemLookup.findTournamentEventStickerID(tournament);
+        default:
+            return gameItemLookup.findTournamentEventStickerID(tournament);
+        }        
     }
 
     [[nodiscard]] inventory::Gloves generateGloves(const game_items::Item& unlockedItem) const

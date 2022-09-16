@@ -13,6 +13,8 @@
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"
 
+namespace csgo { enum class StickerId : int; }
+
 namespace inventory_changer::item_generator
 {
 
@@ -80,6 +82,12 @@ public:
     [[nodiscard]] bool generateStatTrak() const
     {
         return randomEngine(std::uniform_int_distribution<>{ 0, 9 }) == 0;
+    }
+
+    [[nodiscard]] csgo::StickerId randomStickerId(csgo::StickerId min, csgo::StickerId max) const
+    {
+        assert(max >= min);
+        return static_cast<csgo::StickerId>(randomEngine(std::uniform_int_distribution<>{ static_cast<int>(min), static_cast<int>(max) }));
     }
 
 private:
