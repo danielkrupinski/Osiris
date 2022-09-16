@@ -72,7 +72,7 @@ private:
     {
         inventory::SkinStickers stickers;
 
-        stickers[0].stickerID = static_cast<int>(gameItemLookup.findTournamentEventStickerID(tournament));
+        stickers[0].stickerID = static_cast<int>(generateTournamentEventStickerID(tournament));
 
         if (tournament >= csgo::Tournament::EmsOneKatowice2014) {
             stickers[1].stickerID = static_cast<int>(gameItemLookup.findTournamentTeamGoldStickerID(tournament, team1));
@@ -86,6 +86,19 @@ private:
 
         attributeGenerator.shuffleStickers(getNumberOfSupportedStickerSlots(weaponID), stickers);
         return stickers;
+    }
+
+    [[nodiscard]] csgo::StickerId generateTournamentEventStickerID(csgo::Tournament tournament) const
+    {
+        using enum csgo::StickerId;
+        using enum csgo::Tournament;
+        if (tournament == DreamHack2013)
+            return Helpers::RandomGenerator::random(Shooter, FrostyTheHitmanFoil);
+        else if (tournament == EmsOneKatowice2014)
+            return Helpers::RandomGenerator::random(GoldEslWolfFoilKatowice2014, GoldEslSkullFoilKatowice2014);
+        else if (tournament == EslOneCologne2014)
+            return EslOneCologne2014Gold;
+        return gameItemLookup.findTournamentEventStickerID(tournament);
     }
 
     [[nodiscard]] inventory::Gloves generateGloves(const game_items::Item& unlockedItem) const

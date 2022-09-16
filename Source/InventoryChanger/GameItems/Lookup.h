@@ -68,19 +68,10 @@ private:
 public:
     csgo::StickerId findTournamentEventStickerID(csgo::Tournament tournament) const noexcept
     {
-        using enum csgo::StickerId;
-
-        if (tournament == csgo::Tournament::DreamHack2013)
-            return Helpers::RandomGenerator::random(Shooter, FrostyTheHitmanFoil);
-        else if (tournament == csgo::Tournament::EmsOneKatowice2014)
-            return Helpers::RandomGenerator::random(GoldEslWolfFoilKatowice2014, GoldEslSkullFoilKatowice2014);
-        else if (tournament == csgo::Tournament::EslOneCologne2014)
-            return EslOneCologne2014Gold;
-
-        const auto it = findTournamentStickers(tournament).begin();
-        if (it == tournamentStickersSorted.end())
-            return Default;
-        return storage.getStickerKit(*it).tournament == tournament ? static_cast<csgo::StickerId>(storage.getStickerKit(*it).id) : Default;
+        if (const auto it = findTournamentStickers(tournament).begin(); it != tournamentStickersSorted.end() && storage.getStickerKit(*it).tournament == tournament) {
+            return static_cast<csgo::StickerId>(storage.getStickerKit(*it).id);
+        }
+        return csgo::StickerId::Default;
     }
 
     csgo::StickerId findTournamentTeamGoldStickerID(csgo::Tournament tournament, csgo::TournamentTeam team) const noexcept
