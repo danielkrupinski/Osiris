@@ -141,7 +141,9 @@ void Items::getOtherItems(game_items::Storage& storage)
             else if (std::strcmp(tool->typeName, "stattrak_swap") == 0)
                 storage.addStatTrakSwapTool(rarity, weaponID, inventoryImage);
             else if (std::strcmp(tool->typeName, "fantoken") == 0) {
-                if (Helpers::isSouvenirToken(weaponID))
+                const auto baseName = std::string_view{ item->getItemBaseName() };
+
+                if (baseName.ends_with("charge"))
                     storage.addSouvenirToken(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), inventoryImage);
                 else
                     storage.addViewerPass(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), inventoryImage);
