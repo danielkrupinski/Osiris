@@ -880,10 +880,10 @@ static void appendProtobufString(std::string_view string, std::vector<char>& buf
     return buffer;
 }
 
-static std::uint64_t stringToUint64(const char* str) noexcept
+static std::uint64_t stringToUint64(std::string_view str) noexcept
 {
     std::uint64_t result = 0;
-    std::from_chars(str, str + std::strlen(str), result);
+    std::from_chars(str.data(), str.data() + str.size(), result);
     return result;
 }
 
