@@ -81,7 +81,7 @@ Item& addToStorage(Storage& storage, ItemType type, EconRarity rarity, WeaponId 
         storage.addStatTrakSwapTool(rarity, weaponID, iconPath);
         break;
     case ItemType::ViewerPass:
-        storage.addViewerPass(rarity, weaponID, {}, iconPath);
+        storage.addViewerPass(rarity, weaponID, {}, false, iconPath);
         break;
     case ItemType::ServiceMedal:
         storage.addServiceMedal(rarity, 0, weaponID, iconPath);
@@ -280,7 +280,7 @@ Item& addTournamentItem(Storage& storage, ItemType type, csgo::Tournament tourna
         storage.addCrate(EconRarity::Blue, WeaponId::None, 0, tournament, {}, false, {});
         break;
     case ItemType::ViewerPass:
-        storage.addViewerPass(EconRarity::Blue, WeaponId::None, tournament, {});
+        storage.addViewerPass(EconRarity::Blue, WeaponId::None, tournament, false, {});
         break;
     case ItemType::SouvenirToken:
         storage.addSouvenirToken(EconRarity::Blue, WeaponId::None, tournament, {});

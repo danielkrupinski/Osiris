@@ -107,9 +107,9 @@ void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, csgo::Tourn
     addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournament), pooled(iconPath));
 }
 
-void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::string_view iconPath)
+void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, bool hasExtraTokens, std::string_view iconPath)
 {
-    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournament), pooled(iconPath));
+    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournament) | (static_cast<std::size_t>(hasExtraTokens) << 8), pooled(iconPath));
 }
 
 void Storage::addStorageUnit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)

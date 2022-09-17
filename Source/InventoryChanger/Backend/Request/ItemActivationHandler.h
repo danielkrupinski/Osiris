@@ -43,7 +43,7 @@ public:
             return;
 
         if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
-            const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ Helpers::numberOfTokensWithViewerPass(gameItem.getWeaponID()) }, }, true);
+            const auto addedEventCoin = inventoryHandler.addItem(inventory::Item{ *eventCoin, inventory::TournamentCoin{ gameItemLookup.getStorage().hasExtraSouvenirTokens(gameItem) } }, true);
             itemRemovalHandler(viewerPass);
             responseAccumulator(response::ViewerPassActivated{ addedEventCoin });
         }
