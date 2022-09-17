@@ -11,7 +11,11 @@
 #include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
-namespace csgo { enum class Tournament : std::uint8_t; }
+namespace csgo
+{
+    enum class Tournament : std::uint8_t;
+    enum class TournamentStage : std::uint8_t;
+}
 
 namespace inventory_changer
 {

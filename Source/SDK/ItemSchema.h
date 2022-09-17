@@ -287,20 +287,6 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
-namespace csgo
-{
-
-enum class TournamentStage : std::uint8_t {
-    GroupStage = 2,
-    Quarterfinal = 5,
-    Semifinal = 8,
-    GrandFinal = 11,
-    AllStar = 14,
-    ChallengersStage = 27
-};
-
-}
-
 class EconItemAttributeSetter {
 public:
     explicit EconItemAttributeSetter(ItemSchema& itemSchema) : itemSchema{ itemSchema } {}

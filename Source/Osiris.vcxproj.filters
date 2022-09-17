@@ -823,6 +823,9 @@
     <ClInclude Include="SDK\Constants\StickerId.h">
       <Filter>SDK\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Constants\TournamentStage.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -4,6 +4,7 @@
 
 #include <InventoryChanger/GameItems/Enums.h>
 #include <SDK/Constants/Tournament.h>
+#include <SDK/Constants/TournamentStage.h>
 
 namespace inventory_changer::item_generator
 {

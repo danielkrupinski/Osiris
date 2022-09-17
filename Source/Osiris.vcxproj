@@ -274,6 +274,7 @@
     <ClInclude Include="SDK\Constants\ProPlayer.h" />
     <ClInclude Include="SDK\Constants\StickerId.h" />
     <ClInclude Include="SDK\Constants\Tournament.h" />
+    <ClInclude Include="SDK\Constants\TournamentStage.h" />
     <ClInclude Include="SDK\Constants\TournamentTeam.h" />
     <ClInclude Include="SDK\Constants\UserMessages.h" />
     <ClInclude Include="SDK\ConVar.h" />

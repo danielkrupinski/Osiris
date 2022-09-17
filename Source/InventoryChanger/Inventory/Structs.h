@@ -9,7 +9,11 @@
 #include <SDK/Constants/TournamentTeam.h>
 #include <SDK/ItemSchema.h>
 
-namespace csgo { enum class StickerId : int; }
+namespace csgo
+{
+    enum class StickerId : int;
+    enum class TournamentStage : std::uint8_t;
+}
 
 namespace inventory_changer::inventory
 {
