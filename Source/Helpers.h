@@ -147,12 +147,6 @@ namespace Helpers
             return std::uniform_real_distribution{ min, max }(gen);
         }
 
-        template <typename T>
-        [[nodiscard]] static std::enable_if_t<std::is_enum_v<T>, T> random(T min, T max) noexcept
-        {
-            return static_cast<T>(random(static_cast<std::underlying_type_t<T>>(min), static_cast<std::underlying_type_t<T>>(max)));
-        }
-
     private:
         inline static GeneratorType gen{ std::random_device{}() };
         inline static std::mutex mutex;
