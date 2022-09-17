@@ -146,7 +146,7 @@ void Items::getOtherItems(game_items::Storage& storage)
                 if (baseName.ends_with("charge"))
                     storage.addSouvenirToken(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), inventoryImage);
                 else
-                    storage.addViewerPass(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), Helpers::numberOfTokensWithViewerPass(weaponID) == 3, inventoryImage);
+                    storage.addViewerPass(rarity, weaponID, static_cast<csgo::Tournament>(item->getTournamentEventID()), baseName.ends_with("pack"), inventoryImage);
             } else if (std::strcmp(tool->typeName, "casket") == 0) {
                 storage.addStorageUnit(rarity, weaponID, inventoryImage);
             }
