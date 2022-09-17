@@ -15,8 +15,8 @@ namespace inventory_changer::backend
 
 struct RequestBuilderParams {
     std::uint8_t stickerSlot = 0;
-    std::uint64_t statTrakSwapItemID1 = 0;
-    std::uint64_t statTrakSwapItemID2 = 0;
+    ItemId statTrakSwapItemID1{};
+    ItemId statTrakSwapItemID2{};
     std::string nameTag;
 };
 
@@ -26,7 +26,7 @@ public:
     explicit RequestBuilder(const RequestBuilderParams& params, const ItemIDMap& itemIDMap, Requestor requestor, StorageUnitHandler storageUnitHandler, XRayScannerHandler xRayScannerHandler, ItemActivationHandler itemActivationHandler)
         : params{ params }, itemIDMap{ itemIDMap }, requestor{ requestor }, storageUnitHandler{ storageUnitHandler }, xRayScannerHandler{ xRayScannerHandler }, itemActivationHandler{ itemActivationHandler } {}
 
-    void useToolOn(std::uint64_t toolItemID, std::uint64_t destItemID)
+    void useToolOn(ItemId toolItemID, ItemId destItemID)
     {
         const auto toolItem = itemIDMap.get(toolItemID);
         const auto destItem = itemIDMap.get(destItemID);
@@ -40,7 +40,7 @@ public:
         }
     }
 
-    void wearStickerOf(std::uint64_t itemID, std::uint8_t slot)
+    void wearStickerOf(ItemId itemID, std::uint8_t slot)
     {
         const auto item = itemIDMap.get(itemID);
         if (!item.has_value())
@@ -52,7 +52,7 @@ public:
             request<request::RemovePatch>(*item, slot);
     }
 
-    void removeNameTagFrom(std::uint64_t itemID)
+    void removeNameTagFrom(ItemId itemID)
     {
         const auto item = itemIDMap.get(itemID);
         if (!item.has_value())
@@ -61,7 +61,7 @@ public:
         request<request::RemoveNameTag>(*item);
     }
 
-    void addToStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
+    void addToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
     {
         const auto item = itemIDMap.get(itemID);
         const auto storageUnit = itemIDMap.get(storageUnitItemID);
@@ -72,7 +72,7 @@ public:
         storageUnitHandler.addItemToStorageUnit(*item, *storageUnit);
     }
 
-    void removeFromStorageUnit(std::uint64_t itemID, std::uint64_t storageUnitItemID)
+    void removeFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
     {
         const auto item = itemIDMap.get(itemID);
         const auto storageUnit = itemIDMap.get(storageUnitItemID);
@@ -121,9 +121,9 @@ private:
         }
     }
 
-    void useItem(ItemIterator item, std::uint64_t toolItemID)
+    void useItem(ItemIterator item, ItemId toolItemID)
     {
-        constexpr std::uint64_t fauxNameTagItemID = (std::uint64_t{ 0xF } << 60) | static_cast<std::uint16_t>(WeaponId::NameTag);
+        constexpr auto fauxNameTagItemID = ItemId{ (std::uint64_t{ 0xF } << 60) | static_cast<std::uint16_t>(WeaponId::NameTag) };
 
         if (item->gameItem().isCrate()) {
             if (item->getState() != inventory::Item::State::InXrayScanner)

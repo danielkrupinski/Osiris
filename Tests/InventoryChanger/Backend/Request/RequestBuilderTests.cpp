@@ -74,8 +74,8 @@ protected:
     RequestBuilderParams requestBuilderParams;
     RequestBuilder<MockRequestor&, const MockStorageUnitHandler&, const MockXRayScannerHandler&, const MockItemActivationHandler&> requestBuilder{ requestBuilderParams, itemIDMap, requestor, storageUnitHandler, xRayScannerHandler, itemActivationHandler };
 
-    static constexpr auto nonexistentItemID = 1234;
-    static constexpr auto dummyItemIDs = std::to_array<std::uint64_t>({ 123, 256, 1024 });
+    static constexpr auto nonexistentItemID = ItemId{ 1234 };
+    static constexpr auto dummyItemIDs = std::to_array<ItemId>({ ItemId{123}, ItemId{256}, ItemId{1024} });
 
 private:
     ItemList itemList;

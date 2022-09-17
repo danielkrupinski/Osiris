@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <InventoryChanger/Backend/Item.h>
+#include <InventoryChanger/ItemId.h>
 
 enum class Team;
 
@@ -37,9 +38,9 @@ struct ItemEquipped {
 };
 
 struct ItemRemoved {
-    explicit ItemRemoved(std::uint64_t itemID) : itemID{ itemID } {}
+    explicit ItemRemoved(ItemId itemID) : itemID{ itemID } {}
 
-    std::uint64_t itemID;
+    ItemId itemID;
 };
 
 template <typename Tag>

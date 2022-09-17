@@ -74,12 +74,12 @@ public:
         return items.xRayScanner;
     }
 
-    [[nodiscard]] std::optional<ItemIterator> itemFromID(std::uint64_t itemID) const
+    [[nodiscard]] std::optional<ItemIterator> itemFromID(ItemId itemID) const
     {
         return items.itemIDMap.get(itemID);
     }
 
-    [[nodiscard]] std::optional<std::uint64_t> getItemID(ItemIterator it) const
+    [[nodiscard]] std::optional<ItemId> getItemID(ItemIterator it) const
     {
         return items.itemIDMap.getItemID(it);
     }

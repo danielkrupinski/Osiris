@@ -144,9 +144,9 @@ static void applyGloves(const inventory_changer::backend::BackendSimulator& back
         dataUpdated = true;
     }
 
-    if (glove->itemID() != *itemID) {
-        glove->itemIDHigh() = std::uint32_t(*itemID >> 32);
-        glove->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
+    if (glove->itemID() != static_cast<csgo::ItemId>(*itemID)) {
+        glove->itemIDHigh() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) >> 32);
+        glove->itemIDLow() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) & 0xFFFFFFFF);
         dataUpdated = true;
     }
 
@@ -193,8 +193,8 @@ static void applyKnife(const inventory_changer::backend::BackendSimulator& backe
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
-        weapon->itemIDHigh() = std::uint32_t(*itemID >> 32);
-        weapon->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
+        weapon->itemIDHigh() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) >> 32);
+        weapon->itemIDLow() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) & 0xFFFFFFFF);
         weapon->entityQuality() = 3;
 
         if (definitionIndex != item->gameItem().getWeaponID()) {
@@ -266,8 +266,8 @@ static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexc
             continue;
 
         weapon->accountID() = localInventory.getAccountID();
-        weapon->itemIDHigh() = std::uint32_t(*itemID >> 32);
-        weapon->itemIDLow() = std::uint32_t(*itemID & 0xFFFFFFFF);
+        weapon->itemIDHigh() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) >> 32);
+        weapon->itemIDLow() = std::uint32_t(static_cast<csgo::ItemId>(*itemID) & 0xFFFFFFFF);
     }
 }
 
@@ -1148,9 +1148,7 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
     if (!weapon)
         return;
 
-    const auto itemID = weapon->itemID();
-
-    const auto optionalItem = backend.itemFromID(itemID);
+    const auto optionalItem = backend.itemFromID(ItemId{ weapon->itemID() });
     if (!optionalItem.has_value())
         return;
 
@@ -1192,28 +1190,28 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto toolItemID = stringToUint64(string);
         const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (destItemIdString)
-            getRequestBuilder().useToolOn(toolItemID, stringToUint64(destItemIdString));
+            getRequestBuilder().useToolOn(ItemId{ toolItemID }, ItemId{ stringToUint64(destItemIdString) });
     } else if (returnAddress == memory->wearItemStickerGetArgAsStringReturnAddress) {
         const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
-        getRequestBuilder().wearStickerOf(stringToUint64(string), slot);
+        getRequestBuilder().wearStickerOf(ItemId{ stringToUint64(string) }, slot);
     } else if (returnAddress == memory->setNameToolStringGetArgAsStringReturnAddress) {
         requestBuilderParams.nameTag = string;
     } else if (returnAddress == memory->clearCustomNameGetArgAsStringReturnAddress) {
-        getRequestBuilder().removeNameTagFrom(stringToUint64(string));
+        getRequestBuilder().removeNameTagFrom(ItemId{ stringToUint64(string) });
     } else if (returnAddress == memory->deleteItemGetArgAsStringReturnAddress) {
-        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value())
+        if (const auto itOptional = backend.itemFromID(ItemId{ stringToUint64(string) }); itOptional.has_value())
             backend.getItemRemovalHandler()(*itOptional);
     } else if (returnAddress == memory->acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
         acknowledgeItem(stringToUint64(string));
     } else if (returnAddress == memory->setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
-        const auto swapItem1 = stringToUint64(string);
+        const auto swapItem1 = ItemId{ stringToUint64(string) };
         const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (swapItem2String) {
             requestBuilderParams.statTrakSwapItemID1 = swapItem1;
-            requestBuilderParams.statTrakSwapItemID2 = stringToUint64(swapItem2String);
+            requestBuilderParams.statTrakSwapItemID2 = ItemId{ stringToUint64(swapItem2String) };
         }
     } else if (returnAddress == memory->setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
-        if (const auto itOptional = backend.itemFromID(stringToUint64(string)); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
+        if (const auto itOptional = backend.itemFromID(ItemId{ stringToUint64(string) }); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
             const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
             if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
                 const auto graffitiID = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
@@ -1235,9 +1233,9 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
         const auto storageUnitItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
 
         if (operation == 1) {
-            getRequestBuilder().addToStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
+            getRequestBuilder().addToStorageUnit(ItemId{ stringToUint64(string) }, ItemId{ stringToUint64(storageUnitItemIdString) });
         } else if (operation == -1) {
-            getRequestBuilder().removeFromStorageUnit(stringToUint64(string), stringToUint64(storageUnitItemIdString));
+            getRequestBuilder().removeFromStorageUnit(ItemId{ stringToUint64(string) }, ItemId{ stringToUint64(storageUnitItemIdString) });
         }
     }
 }
@@ -1352,7 +1350,7 @@ void InventoryChanger::onUserTextMsg(const void*& data, int& size)
 
 void InventoryChanger::onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID)
 {
-    if (const auto itemOptional = backend.itemFromID(itemID); itemOptional.has_value()) {
+    if (const auto itemOptional = backend.itemFromID(ItemId{ itemID }); itemOptional.has_value()) {
         const auto& itemIterator = *itemOptional;
 
         if (slot != 0xFFFF) {
@@ -1368,7 +1366,7 @@ void InventoryChanger::onItemEquip(csgo::Team team, int slot, std::uint64_t& ite
 
 void InventoryChanger::acknowledgeItem(std::uint64_t itemID)
 {
-    if (!backend.itemFromID(itemID).has_value())
+    if (!backend.itemFromID(ItemId{ itemID }).has_value())
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();

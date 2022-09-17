@@ -78,11 +78,11 @@ const ItemIterator item2{ std::next(item1) };
 const ItemIterator item3{ std::next(item2) };
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ItemRemovedResponseNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ 0 }));
+    ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ ItemId{} }));
 }
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForItemRemoved) {
-    ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ 0 }, item1));
+    ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ ItemId{} }, item1));
 }
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, PickEmUpdatedResponseNeverContainsItem) {
