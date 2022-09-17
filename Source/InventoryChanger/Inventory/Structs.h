@@ -26,7 +26,7 @@ struct Skin {
     csgo::Tournament tournamentID{};
     std::array<Sticker, 5> stickers;
     std::string nameTag;
-    TournamentStage tournamentStage{};
+    csgo::TournamentStage tournamentStage{};
     csgo::TournamentTeam tournamentTeam1{};
     csgo::TournamentTeam tournamentTeam2{};
     csgo::ProPlayer proPlayer{};
@@ -54,7 +54,7 @@ struct Music {
 };
 
 struct SouvenirPackage {
-    TournamentStage tournamentStage{};
+    csgo::TournamentStage tournamentStage{};
     csgo::TournamentTeam tournamentTeam1{};
     csgo::TournamentTeam tournamentTeam2{};
     csgo::ProPlayer proPlayer{};

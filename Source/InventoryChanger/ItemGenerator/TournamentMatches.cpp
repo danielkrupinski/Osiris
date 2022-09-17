@@ -14,7 +14,7 @@ struct Tournament {
 };
 
 using enum csgo::TournamentTeam;
-using enum TournamentStage;
+using enum csgo::TournamentStage;
 
 constexpr auto dreamHack2013Matches = std::to_array<Match>({
     // Group A

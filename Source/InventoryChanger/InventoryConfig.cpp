@@ -46,7 +46,7 @@ constexpr auto CONFIG_VERSION = 4;
         stickers.push_back(std::move(stickerConfig));
     }
 
-    if (skin.tournamentStage != TournamentStage{}) {
+    if (skin.tournamentStage != csgo::TournamentStage{}) {
         j["Tournament Stage"] = skin.tournamentStage;
         j["Tournament Team 1"] = skin.tournamentTeam1;
         j["Tournament Team 2"] = skin.tournamentTeam2;
@@ -329,7 +329,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
             if (const auto serviceMedal = get<inventory::ServiceMedal>(item); serviceMedal && serviceMedal->issueDateTimestamp != 0)
                 itemConfig["Issue Date Timestamp"] = serviceMedal->issueDateTimestamp;
         } else if (gameItem.isCrate()) {
-            if (const auto souvenirPackage = get<inventory::SouvenirPackage>(item); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{}) {
+            if (const auto souvenirPackage = get<inventory::SouvenirPackage>(item); souvenirPackage && souvenirPackage->tournamentStage != csgo::TournamentStage{}) {
                 itemConfig["Tournament Stage"] = souvenirPackage->tournamentStage;
                 itemConfig["Tournament Team 1"] = souvenirPackage->tournamentTeam1;
                 itemConfig["Tournament Team 2"] = souvenirPackage->tournamentTeam2;

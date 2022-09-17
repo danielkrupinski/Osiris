@@ -112,11 +112,11 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
         if (dynamicData.tournamentID != csgo::Tournament{})
             attributeSetter.setTournamentID(econItem, static_cast<int>(dynamicData.tournamentID));
 
-        if (dynamicData.tournamentStage != TournamentStage{ 0 }) {
+        if (dynamicData.tournamentStage != csgo::TournamentStage{}) {
             attributeSetter.setTournamentStage(econItem, static_cast<int>(dynamicData.tournamentStage));
             attributeSetter.setTournamentTeam1(econItem, static_cast<int>(dynamicData.tournamentTeam1));
             attributeSetter.setTournamentTeam2(econItem, static_cast<int>(dynamicData.tournamentTeam2));
-            if (dynamicData.proPlayer != static_cast<csgo::ProPlayer>(0))
+            if (dynamicData.proPlayer != csgo::ProPlayer{})
                 attributeSetter.setTournamentPlayer(econItem, static_cast<int>(dynamicData.proPlayer));
         }
     }
@@ -217,11 +217,11 @@ std::uint64_t Inventory::createSOCItem(const game_items::Storage& gameItemStorag
         attributeSetter.setStickerID(*econItem, 0, gameItemStorage.getDefaultTournamentGraffitiID(item));
         attributeSetter.setCampaignCompletion(*econItem, 1);
     } else if (item.isCrate()) {
-        if (const auto souvenirPackage = get<inventory::SouvenirPackage>(inventoryItem); souvenirPackage && souvenirPackage->tournamentStage != TournamentStage{ 0 }) {
+        if (const auto souvenirPackage = get<inventory::SouvenirPackage>(inventoryItem); souvenirPackage && souvenirPackage->tournamentStage != csgo::TournamentStage{}) {
             attributeSetter.setTournamentStage(*econItem, static_cast<int>(souvenirPackage->tournamentStage));
             attributeSetter.setTournamentTeam1(*econItem, static_cast<int>(souvenirPackage->tournamentTeam1));
             attributeSetter.setTournamentTeam2(*econItem, static_cast<int>(souvenirPackage->tournamentTeam2));
-            if (souvenirPackage->proPlayer != static_cast<csgo::ProPlayer>(0))
+            if (souvenirPackage->proPlayer != csgo::ProPlayer{})
                 attributeSetter.setTournamentPlayer(*econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
     } else if (item.isCaseKey()) {
