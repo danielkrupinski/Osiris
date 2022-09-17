@@ -1141,7 +1141,7 @@ static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournament));
 template <typename MatchType>
 [[nodiscard]] static std::span<const MatchType> filterMatchesToMap(std::span<const MatchType> matches, TournamentMap map) noexcept
 {
-    if (map == TournamentMap::None)
+    if (map == TournamentMap{})
         return matches;
 
     assert(std::ranges::is_sorted(matches, {}, &MatchType::map));

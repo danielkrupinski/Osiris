@@ -338,7 +338,7 @@ TEST_P(InventoryChanger_GameItems_Storage_TournamentMapTest, AddedCrateHasCorrec
 }
 
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_TournamentMapTest,
-    testing::Values(TournamentMap::None, TournamentMap::Mirage, TournamentMap::Vertigo, static_cast<TournamentMap>(0x7F)));
+    testing::Values(TournamentMap{}, TournamentMap::Mirage, TournamentMap::Vertigo, static_cast<TournamentMap>(0x7F)));
 
 class InventoryChanger_GameItems_Storage_SouvenirPackageTest : public testing::TestWithParam<bool> {};
 

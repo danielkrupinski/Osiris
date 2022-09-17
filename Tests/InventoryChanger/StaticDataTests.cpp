@@ -48,14 +48,14 @@ TEST_P(GetTournamentMapOfSouvenirPackageTest, ReturnsExpectedValue) {
 
 #define TournamentMapTestParams(name, map) \
 TournamentMapTestParam{ name, map }, \
-TournamentMapTestParam{ name "_", TournamentMap::None }
+TournamentMapTestParam{ name "_", TournamentMap{} }
 
 INSTANTIATE_TEST_SUITE_P(
     GetTournamentMapOfSouvenirPackageTests,
     GetTournamentMapOfSouvenirPackageTest,
     ::testing::Values(
-        TournamentMapTestParam{ {}, TournamentMap::None },
-        TournamentMapTestParams("", TournamentMap::None),
+        TournamentMapTestParam{ {}, TournamentMap{} },
+        TournamentMapTestParams("", TournamentMap{}),
         TournamentMapTestParams("de_ancient", TournamentMap::Ancient),
         TournamentMapTestParams("de_cache", TournamentMap::Cache),
         TournamentMapTestParams("de_cbble", TournamentMap::Cobblestone),

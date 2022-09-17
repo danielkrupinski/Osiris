@@ -30,7 +30,7 @@ namespace inventory_changer::game_integration
             return TournamentMap::Vertigo;
         if (lootListName.ends_with("de_ancient"))
             return TournamentMap::Ancient;
-        return TournamentMap::None;
+        return TournamentMap{};
     }
 
     [[nodiscard]] constexpr csgo::StickerId getTournamentMapGoldStickerID(TournamentMap map) noexcept
