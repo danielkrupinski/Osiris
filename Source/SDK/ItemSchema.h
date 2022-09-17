@@ -13,6 +13,8 @@
 
 #include "../Memory.h"
 
+#include "Constants/ItemId.h"
+
 enum class WeaponId : short;
 
 enum class EconRarity : std::uint8_t {
@@ -355,8 +357,8 @@ public:
 
     PAD(2 * sizeof(std::uintptr_t))
 
-    std::uint64_t itemID;
-    std::uint64_t originalID;
+    csgo::ItemId itemID;
+    csgo::ItemId originalID;
     void* customDataOptimizedObject;
     std::uint32_t accountID;
     std::uint32_t inventory;
@@ -426,7 +428,7 @@ public:
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
     VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (this, team, slot))
-    VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
+    VIRTUAL_METHOD_V(void, removeItem, 15, (csgo::ItemId itemID), (this, itemID))
 
     auto getSOC() noexcept
     {
@@ -442,7 +444,7 @@ public:
         return soc->findBaseTypeCache(1);
     }
 
-    std::pair<std::uint64_t, std::uint32_t> getHighestIDs() noexcept
+    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs() noexcept
     {
         const auto soc = getSOC();
         if (!soc)
@@ -452,7 +454,7 @@ public:
         if (!baseTypeCache)
             return {};
 
-        std::uint64_t maxItemID = 0;
+        csgo::ItemId maxItemID = 0;
         std::uint32_t maxInventoryID = 0;
         for (int i = 0; i < baseTypeCache->objectCount; ++i) {
             const auto item = baseTypeCache->objects[i];
@@ -480,7 +482,7 @@ class InventoryManager {
 public:
     INCONSTRUCTIBLE(InventoryManager)
 
-    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, std::uint64_t itemID, bool swap = false), (this, team, slot, itemID, swap))
+    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (this, team, slot, itemID, swap))
     VIRTUAL_METHOD_V(CSPlayerInventory*, getLocalInventory, 23, (), (this))
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
 };
