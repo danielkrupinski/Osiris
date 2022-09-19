@@ -819,7 +819,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
 namespace inventory_changer::item_generator
 {
 
-[[nodiscard]] const game_items::Item& getRandomItemIndexFromContainer(const game_items::Lookup& lookup, const game_items::CrateLootLookup& crateLootLookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
+[[nodiscard]] const game_items::Item& getRandomItemFromContainer(const game_items::Lookup& lookup, const game_items::CrateLootLookup& crateLootLookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
 {
     const auto rareSpecialItems = getRareSpecialItems(weaponID);
     auto rarities = lootList.rarities;
@@ -869,7 +869,7 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     if (!lootList)
         return std::nullopt;
 
-    const auto& unlockedItem = getRandomItemIndexFromContainer(gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
+    const auto& unlockedItem = getRandomItemFromContainer(gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
     Helpers::RandomGenerator randomGenerator{};
     DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator } };
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(crateKey), dropGenerator.generateItemData(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
