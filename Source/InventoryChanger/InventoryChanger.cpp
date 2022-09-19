@@ -1184,6 +1184,21 @@ void InventoryChanger::overrideHudIcon(GameEvent& event)
     }
 }
 
+[[nodiscard]] constexpr std::string_view removePrefix(std::string_view str, std::string_view prefix)
+{
+    assert(str.starts_with(prefix));
+    str.remove_prefix(prefix.length());
+    return str;
+}
+
+[[nodiscard]] csgo::Tournament extractTournamentFromString(std::string_view s)
+{
+    if (!s.starts_with("tournament:"))
+        return csgo::Tournament{};
+
+    return static_cast<csgo::Tournament>(stringToUint64(removePrefix(s, "tournament:")));
+}
+
 void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params)
 {
     if (returnAddress == memory->useToolGetArgAsStringReturnAddress) {
@@ -1219,13 +1234,13 @@ void InventoryChanger::getArgAsStringHook(const char* string, std::uintptr_t ret
             }
         }
     } else if (returnAddress == memory->getMyPredictionTeamIDGetArgAsStringReturnAddress) {
-        if (std::strcmp(string, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+        const auto tournament = extractTournamentFromString(string);
+        if (tournament == csgo::Tournament{})
             return;
 
         const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
-
-        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ csgo::Tournament::PglAntwerp2022, groupId, pickInGroupIndex })));
+        memory->panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ tournament, groupId, pickInGroupIndex })));
     } else if (returnAddress == memory->setInventorySortAndFiltersGetArgAsStringReturnAddress) {
         panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
     } else if (returnAddress == memory->performItemCasketTransactionGetArgAsStringReturnAddress) {
@@ -1248,8 +1263,12 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
         return;
 
-    const char* tournament = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 0);
-    if (!tournament || std::strcmp(tournament, "tournament:19") != 0) // PGL Antwerp 2022, TODO: Support other tournaments
+    const char* tournamentStr = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 0);
+    if (!tournamentStr)
+        return;
+
+    const auto tournament = extractTournamentFromString(tournamentStr);
+    if (tournament == csgo::Tournament{})
         return;
 
     for (unsigned i = 1; i < numberOfArgs; i += 3) {
@@ -1260,7 +1279,7 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
         if (!stickerItemID)
             continue;
 
-        placePickEmPick(groupId, pickInGroupIndex, static_cast<csgo::StickerId>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
+        placePickEmPick(tournament, groupId, pickInGroupIndex, static_cast<csgo::StickerId>((stringToUint64(stickerItemID) >> 16) & 0xFFFF));
     }
 }
 
@@ -1403,14 +1422,14 @@ void InventoryChanger::reset()
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 
-void InventoryChanger::placePickEmPick(std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID)
+void InventoryChanger::placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID)
 {
     const auto sticker = gameItemLookup.findSticker(stickerID);
     if (!sticker || !sticker->isSticker())
         return;
 
     const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
-    backend.getPickEmHandler().pickSticker(backend::PickEm::PickPosition{ csgo::Tournament::PglAntwerp2022, group, indexInGroup }, tournamentTeam);
+    backend.getPickEmHandler().pickSticker(backend::PickEm::PickPosition{ tournament, group, indexInGroup }, tournamentTeam);
 }
 
 }
