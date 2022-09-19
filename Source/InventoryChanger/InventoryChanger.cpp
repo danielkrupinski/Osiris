@@ -405,42 +405,6 @@ static void processEquipRequests()
     }
 }
 
-void InventoryChanger::run(csgo::FrameStage stage) noexcept
-{
-    static int localPlayerHandle = -1;
-
-    if (localPlayer)
-        localPlayerHandle = localPlayer->handle();
-
-    if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(localPlayerHandle);
-        if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
-            updateHud();
-    }
-
-    if (stage != csgo::FrameStage::RENDER_START)
-        return;
-
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    using namespace inventory_changer::backend;
-
-    auto& backend = inventory_changer::InventoryChanger::instance().getBackend();
-
-    if (localPlayer)
-        applyGloves(backend, *localInventory, localPlayer.get());
-
-    applyMusicKit(backend);
-    applyPlayerAgent();
-    applyMedal(backend.getLoadout());
-
-    processEquipRequests();
-    static inventory_changer::game_integration::Inventory gameInventory{};
-    backend.run(gameInventory, std::chrono::milliseconds{ 300 });
-}
-
 void InventoryChanger::scheduleHudUpdate() noexcept
 {
     interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
@@ -1085,6 +1049,38 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
 
 namespace inventory_changer
 {
+
+void InventoryChanger::run(csgo::FrameStage stage) noexcept
+{
+    static int localPlayerHandle = -1;
+
+    if (localPlayer)
+        localPlayerHandle = localPlayer->handle();
+
+    if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
+        onPostDataUpdateStart(localPlayerHandle);
+        if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
+            updateHud();
+    }
+
+    if (stage != csgo::FrameStage::RENDER_START)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    if (localPlayer)
+        applyGloves(backend, *localInventory, localPlayer.get());
+
+    applyMusicKit(backend);
+    applyPlayerAgent();
+    applyMedal(backend.getLoadout());
+
+    processEquipRequests();
+    static game_integration::Inventory gameInventory{};
+    backend.run(gameInventory, std::chrono::milliseconds{ 300 });
+}
 
 InventoryChanger createInventoryChanger()
 {

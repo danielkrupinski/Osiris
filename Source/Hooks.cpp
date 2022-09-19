@@ -321,7 +321,7 @@ static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::Frame
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
     }
-    InventoryChanger::run(stage);
+    inventory_changer::InventoryChanger::instance().run(stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
