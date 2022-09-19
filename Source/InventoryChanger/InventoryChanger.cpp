@@ -809,17 +809,6 @@ void InventoryChanger::drawGUI(bool contentOnly)
 
 }
 
-void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
-{
-    if (object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
-        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C));
-        if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
-            ++it->counter;
-            weaponID = WeaponId::None;
-        }
-    }
-}
-
 [[nodiscard]] static bool isDefaultKnifeNameLocalizationString(std::string_view string) noexcept
 {
     return string == "#SFUI_WPNHUD_Knife" || string == "#SFUI_WPNHUD_Knife_T";
@@ -1049,6 +1038,17 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
 
 namespace inventory_changer
 {
+
+void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
+{
+    if (object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
+        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C));
+        if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
+            ++it->counter;
+            weaponID = WeaponId::None;
+        }
+    }
+}
 
 void InventoryChanger::run(csgo::FrameStage stage) noexcept
 {

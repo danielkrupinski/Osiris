@@ -508,7 +508,7 @@ static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, 
 
 static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
 {
-    InventoryChanger::onSoUpdated(object);
+    inventory_changer::InventoryChanger::instance().onSoUpdated(object);
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 

@@ -65,6 +65,7 @@ public:
 
     void run(csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate() noexcept;
+    void onSoUpdated(SharedObject* object) noexcept;
 
 private:
     void placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID);
@@ -92,6 +93,4 @@ namespace InventoryChanger
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
-
-    void onSoUpdated(SharedObject* object) noexcept;
 }
