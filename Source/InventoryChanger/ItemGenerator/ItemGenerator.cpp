@@ -860,7 +860,7 @@ namespace inventory_changer::item_generator
 namespace inventory_changer::item_generator
 {
 
-std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept
+std::optional<inventory::Item> generateItemFromContainer(Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept
 {
     assert(caseItem.gameItem().isCrate());
 
@@ -869,7 +869,6 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     if (!lootList)
         return std::nullopt;
 
-    Helpers::RandomGenerator randomGenerator{};
     const auto& unlockedItem = getRandomItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
     DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator } };
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };

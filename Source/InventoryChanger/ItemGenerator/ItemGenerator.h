@@ -12,7 +12,7 @@
 
 namespace inventory_changer::item_generator
 {
-    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept;
+    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept;
     inventory::Item::Properties createDefaultItemProperties(Helpers::RandomGenerator& randomGenerator, const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept;
 }
 

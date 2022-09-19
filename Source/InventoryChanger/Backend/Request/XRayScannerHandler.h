@@ -18,7 +18,8 @@ public:
     {
         assert(crate->gameItem().isCrate());
 
-        auto generatedItem = item_generator::generateItemFromContainer(gameItemLookup, crateLootLookup, *crate, nullptr);
+        Helpers::RandomGenerator randomGenerator;
+        auto generatedItem = item_generator::generateItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, *crate, nullptr);
         if (!generatedItem.has_value())
             return;
 
