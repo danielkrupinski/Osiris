@@ -800,14 +800,14 @@ void InventoryChanger::drawGUI(bool contentOnly)
             Helpers::RandomGenerator randomGenerator;
             for (const auto& [i, gameItem] : gameItemList.getItems()) {
                 if (addingAll) {
-                    backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultDynamicData(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
+                    backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
                 }
 
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultDynamicData(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
+                        backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();
