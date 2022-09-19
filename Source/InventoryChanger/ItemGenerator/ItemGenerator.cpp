@@ -875,9 +875,8 @@ std::optional<inventory::Item> generateItemFromContainer(const game_items::Looku
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(crateKey), dropGenerator.generateItemData(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
 }
 
-inventory::Item::Properties createDefaultDynamicData(const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
+inventory::Item::Properties createDefaultDynamicData(Helpers::RandomGenerator& randomGenerator, const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
 {
-    Helpers::RandomGenerator randomGenerator{};
     DefaultGenerator defaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } };
     return { defaultGenerator.createCommonProperties(item), defaultGenerator.createVariantProperties(item) };
 }
