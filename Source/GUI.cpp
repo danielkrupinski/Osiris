@@ -582,7 +582,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config->reset(); updateColors(); Misc::updateClanTag(true); InventoryChanger::scheduleHudUpdate(); break;
+                    case 0: config->reset(); updateColors(); Misc::updateClanTag(true); inventory_changer::InventoryChanger::instance().scheduleHudUpdate(); break;
                     case 1: config->aimbot = { }; break;
                     case 2: config->triggerbot = { }; break;
                     case 3: Backtrack::resetConfig(); break;
@@ -591,7 +591,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 6: config->chams = { }; break;
                     case 7: config->streamProofESP = { }; break;
                     case 8: Visuals::resetConfig(); break;
-                    case 9: inventory_changer::InventoryChanger::instance().reset(); InventoryChanger::scheduleHudUpdate(); break;
+                    case 9: inventory_changer::InventoryChanger::instance().reset(); inventory_changer::InventoryChanger::instance().scheduleHudUpdate(); break;
                     case 10: Sound::resetConfig(); break;
                     case 11: config->style = { }; updateColors(); break;
                     case 12: Misc::resetConfig(); Misc::updateClanTag(true); break;
@@ -604,7 +604,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config->load(currentConfig, incrementalLoad);
                 updateColors();
-                InventoryChanger::scheduleHudUpdate();
+                inventory_changer::InventoryChanger::instance().scheduleHudUpdate();
                 Misc::updateClanTag(true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))

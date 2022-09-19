@@ -64,6 +64,7 @@ public:
     void drawGUI(bool contentOnly);
 
     void run(csgo::FrameStage frameStage) noexcept;
+    void scheduleHudUpdate() noexcept;
 
 private:
     void placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID);
@@ -88,8 +89,6 @@ namespace InventoryChanger
     // GUI
     void menuBarItem() noexcept;
     void tabItem() noexcept;
-
-    void scheduleHudUpdate() noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;

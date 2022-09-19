@@ -405,12 +405,6 @@ static void processEquipRequests()
     }
 }
 
-void InventoryChanger::scheduleHudUpdate() noexcept
-{
-    interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
-    hudUpdateRequired = true;
-}
-
 [[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
 {
     return localPlayer && localPlayer->getUserId() == event.getInt("userid");
@@ -685,6 +679,12 @@ private:
     const WeaponNames& weaponNames;
 };
 
+void InventoryChanger::scheduleHudUpdate() noexcept
+{
+    interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
+    hudUpdateRequired = true;
+}
+
 void InventoryChanger::drawGUI(bool contentOnly)
 {
     if (!contentOnly) {
@@ -707,7 +707,7 @@ void InventoryChanger::drawGUI(bool contentOnly)
     if (!isInAddMode) {
         ImGui::SameLine();
         if (ImGui::Button("Force Update"))
-            ::InventoryChanger::scheduleHudUpdate();
+            scheduleHudUpdate();
     }
 
     constexpr auto rarityColor = [](EconRarity rarity) noexcept {
