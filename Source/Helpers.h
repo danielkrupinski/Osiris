@@ -111,20 +111,6 @@ namespace Helpers
             return distribution(gen);
         }
 
-        template <std::integral T>
-        [[nodiscard]] static T random(T min, T max) noexcept
-        {
-            std::scoped_lock lock{ mutex };
-            return std::uniform_int_distribution{ min, max }(gen);
-        }
-
-        template <std::floating_point T>
-        [[nodiscard]] static T random(T min, T max) noexcept
-        {
-            std::scoped_lock lock{ mutex };
-            return std::uniform_real_distribution{ min, max }(gen);
-        }
-
     private:
         inline static GeneratorType gen{ std::random_device{}() };
         inline static std::mutex mutex;

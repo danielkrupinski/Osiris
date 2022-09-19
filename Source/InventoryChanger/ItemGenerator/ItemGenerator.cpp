@@ -810,7 +810,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
 [[nodiscard]] static EconRarity getRandomRarity(inventory_changer::EconRarities rarities)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
-        const auto rolledNumber = Helpers::RandomGenerator::random((std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)());
+        const auto rolledNumber = Helpers::RandomGenerator{}(std::uniform_int_distribution<DropRate::T>{(std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)()});
         return rate->mapToRarity(rolledNumber);
     }
     return EconRarity::Default;
@@ -829,18 +829,18 @@ namespace inventory_changer::item_generator
 
     if (const auto rarity = getRandomRarity(rarities); rarity != EconRarity::Default) {
         if (rarity == EconRarity::Gold) {
-            const auto& randomRareSpecialItem = rareSpecialItems[Helpers::RandomGenerator::random<std::size_t>(0u, rareSpecialItems.size() - 1u)];
+            const auto& randomRareSpecialItem = rareSpecialItems[Helpers::RandomGenerator{}(std::uniform_int_distribution<std::size_t>{0u, rareSpecialItems.size() - 1u})];
             if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit))
                 return *item;
         } else {
             const auto loot = game_items::getLootOfRarity(crateLootLookup, lootList.crateSeries, rarity);
-            return loot[Helpers::RandomGenerator::random<std::size_t>(0u, loot.size() - 1u)];
+            return loot[Helpers::RandomGenerator{}(std::uniform_int_distribution<std::size_t>{0u, loot.size() - 1u})];
         }
     }
 
     std::span<const std::reference_wrapper<const game_items::Item>> loot = crateLootLookup.getLoot(lootList.crateSeries);
     assert(!loot.empty());
-    return loot[Helpers::RandomGenerator::random<std::size_t>(0u, loot.size() - 1u)];
+    return loot[Helpers::RandomGenerator{}(std::uniform_int_distribution<std::size_t>{0u, loot.size() - 1u})];
 }
 
 }

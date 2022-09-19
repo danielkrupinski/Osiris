@@ -1070,12 +1070,12 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     case WeaponId::Stiletto:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator::random(12, 13);
+            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ 12, 13 });
         }
     case WeaponId::Talon:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator::random(14, 15);
+            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ 14, 15 });
         }
     default:
         return sequence;
