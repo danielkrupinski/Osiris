@@ -10,13 +10,13 @@ class matrix3x4;
 
 class Chams {
 public:
-    bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
-    static void updateInput() noexcept;
+    bool render(Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    static void updateInput(Config& config) noexcept;
 private:
-    void renderPlayer(Entity* player) noexcept;
-    void renderWeapons() noexcept;
-    void renderHands() noexcept;
-    void renderSleeves() noexcept;
+    void renderPlayer(Config& config, Entity* player) noexcept;
+    void renderWeapons(Config& config) noexcept;
+    void renderHands(Config& config) noexcept;
+    void renderSleeves(Config& config) noexcept;
 
     bool appliedChams;
     void* ctx;

@@ -12,7 +12,7 @@
 
 static bool keyPressed;
 
-void Triggerbot::run(UserCmd* cmd) noexcept
+void Triggerbot::run(const Config& config, UserCmd* cmd) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
@@ -28,13 +28,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!weaponIndex)
         return;
 
-    if (!config->triggerbot[weaponIndex].enabled)
+    if (!config.triggerbot[weaponIndex].enabled)
         weaponIndex = getWeaponClass(activeWeapon->itemDefinitionIndex());
 
-    if (!config->triggerbot[weaponIndex].enabled)
+    if (!config.triggerbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    const auto& cfg = config->triggerbot[weaponIndex];
+    const auto& cfg = config.triggerbot[weaponIndex];
 
     if (!cfg.enabled)
         return;
@@ -44,7 +44,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
     const auto now = memory->globalVars->realtime;
 
-    if (now - lastContact < config->triggerbot[weaponIndex].burstTime) {
+    if (now - lastContact < config.triggerbot[weaponIndex].burstTime) {
         cmd->buttons |= UserCmd::IN_ATTACK;
         return;
     }
@@ -101,7 +101,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     }
 }
 
-void Triggerbot::updateInput() noexcept
+void Triggerbot::updateInput(const Config& config) noexcept
 {
-    keyPressed = !config->triggerbotHoldKey.isSet() || config->triggerbotHoldKey.isDown();
+    keyPressed = !config.triggerbotHoldKey.isSet() || config.triggerbotHoldKey.isDown();
 }

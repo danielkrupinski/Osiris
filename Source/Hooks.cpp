@@ -125,7 +125,7 @@ static void swapWindow(SDL_Window * window) noexcept
     ImGui::NewFrame();
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        StreamProofESP::render();
+        StreamProofESP::render(*config);
         Misc::purchaseList();
         Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
@@ -136,18 +136,18 @@ static void swapWindow(SDL_Window * window) noexcept
         Visuals::drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark();
 
-        Aimbot::updateInput();
+        Aimbot::updateInput(*config);
         Visuals::updateInput();
-        StreamProofESP::updateInput();
+        StreamProofESP::updateInput(*config);
         Misc::updateInput();
-        Triggerbot::updateInput();
-        Chams::updateInput();
+        Triggerbot::updateInput(*config);
+        Chams::updateInput(*config);
         Glow::updateInput();
 
         gui->handleToggle();
 
         if (gui->isOpen())
-            gui->render();
+            gui->render(*config);
     }
 
     ImGui::EndFrame();
@@ -213,8 +213,8 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
 
     EnginePrediction::run(cmd);
 
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
+    Aimbot::run(*config, cmd);
+    Triggerbot::run(*config, cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
@@ -278,7 +278,7 @@ static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, 
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(*config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);

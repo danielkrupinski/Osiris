@@ -247,9 +247,9 @@ static void drawSnapline(const Snapline& config, const ImVec2& min, const ImVec2
 }
 
 struct FontPush {
-    FontPush(const std::string& name, float distance)
+    FontPush(const Config& config, const std::string& name, float distance)
     {
-        if (const auto it = config->getFonts().find(name); it != config->getFonts().end()) {
+        if (const auto it = config.getFonts().find(name); it != config.getFonts().end()) {
             distance *= GameData::local().fov / 90.0f;
 
             ImGui::PushFont([](const Config::Font& font, float dist) {
@@ -303,7 +303,7 @@ static void drawHealthBar(const HealthBar& config, const ImVec2& pos, float heig
     drawList->PopClipRect();
 }
 
-static void renderPlayerBox(const PlayerData& playerData, const Player& config) noexcept
+static void renderPlayerBox(const Config& configGlobal, const PlayerData& playerData, const Player& config) noexcept
 {
     const BoundingBox bbox{ playerData, config.box.scale };
 
@@ -316,7 +316,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
 
     drawHealthBar(config.healthBar, bbox.min - ImVec2{ 5.0f, 0.0f }, (bbox.max.y - bbox.min.y), playerData.health);
 
-    FontPush font{ config.font.name, playerData.distanceToLocal };
+    FontPush font{ configGlobal, config.font.name, playerData.distanceToLocal };
 
     if (config.name.enabled) {
         const auto nameSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.name.asColor4(), playerData.name.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
@@ -347,7 +347,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
 
 }
 
-static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) noexcept
+static void renderWeaponBox(const Config& configGlobal, const WeaponData& weaponData, const Weapon& config) noexcept
 {
     const BoundingBox bbox{ weaponData, config.box.scale };
 
@@ -357,7 +357,7 @@ static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) 
     renderBox(bbox, config.box);
     drawSnapline(config.snapline, bbox.min, bbox.max);
 
-    FontPush font{ config.font.name, weaponData.distanceToLocal };
+    FontPush font{ configGlobal, config.font.name, weaponData.distanceToLocal };
 
     if (config.name.enabled && !weaponData.displayName.empty()) {
         renderText(weaponData.distanceToLocal, config.textCullDistance, config.name.asColor4(), weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
@@ -369,7 +369,7 @@ static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) 
     }
 }
 
-static void renderEntityBox(const BaseData& entityData, const char* name, const Shared& config) noexcept
+static void renderEntityBox(const Config& configGlobal, const BaseData& entityData, const char* name, const Shared& config) noexcept
 {
     const BoundingBox bbox{ entityData, config.box.scale };
 
@@ -379,7 +379,7 @@ static void renderEntityBox(const BaseData& entityData, const char* name, const 
     renderBox(bbox, config.box);
     drawSnapline(config.snapline, bbox.min, bbox.max);
 
-    FontPush font{ config.font.name, entityData.distanceToLocal };
+    FontPush font{ configGlobal, config.font.name, entityData.distanceToLocal };
 
     if (config.name.enabled)
         renderText(entityData.distanceToLocal, config.textCullDistance, config.name.asColor4(), name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
@@ -442,7 +442,7 @@ static void drawPlayerSkeleton(const ColorToggleThickness& config, const std::ve
         drawList->AddLine(bonePoint, parentPoint, color, config.thickness);
 }
 
-static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerConfig) noexcept
+static bool renderPlayerEsp(const Config& config, const PlayerData& playerData, const Player& playerConfig) noexcept
 {
     if (!playerConfig.enabled)
         return false;
@@ -456,7 +456,7 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
 
     Helpers::setAlphaFactor(Helpers::getAlphaFactor() * playerData.fadingAlpha());
 
-    renderPlayerBox(playerData, playerConfig);
+    renderPlayerBox(config, playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
 
     if (const BoundingBox headBbox{ playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale })
@@ -467,30 +467,30 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
     return true;
 }
 
-static void renderWeaponEsp(const WeaponData& weaponData, const Weapon& parentConfig, const Weapon& itemConfig) noexcept
+static void renderWeaponEsp(Config& configGlobal, const WeaponData& weaponData, const Weapon& parentConfig, const Weapon& itemConfig) noexcept
 {
-    const auto& config = itemConfig.enabled ? itemConfig : (parentConfig.enabled ? parentConfig : ::config->streamProofESP.weapons["All"]);
+    const auto& config = itemConfig.enabled ? itemConfig : (parentConfig.enabled ? parentConfig : configGlobal.streamProofESP.weapons["All"]);
     if (config.enabled) {
-        renderWeaponBox(weaponData, config);
+        renderWeaponBox(configGlobal, weaponData, config);
     }
 }
 
-static void renderEntityEsp(const BaseData& entityData, const std::unordered_map<std::string, Shared>& map, const char* name) noexcept
+static void renderEntityEsp(const Config& configGlobal, const BaseData& entityData, const std::unordered_map<std::string, Shared>& map, const char* name) noexcept
 {
     if (const auto cfg = map.find(name); cfg != map.cend() && cfg->second.enabled) {
-        renderEntityBox(entityData, name, cfg->second);
+        renderEntityBox(configGlobal, entityData, name, cfg->second);
     } else if (const auto cfg = map.find("All"); cfg != map.cend() && cfg->second.enabled) {
-        renderEntityBox(entityData, name, cfg->second);
+        renderEntityBox(configGlobal ,entityData, name, cfg->second);
     }
 }
 
-static void renderProjectileEsp(const ProjectileData& projectileData, const Projectile& parentConfig, const Projectile& itemConfig, const char* name) noexcept
+static void renderProjectileEsp(const Config& configGlobal, const ProjectileData& projectileData, const Projectile& parentConfig, const Projectile& itemConfig, const char* name) noexcept
 {
     const auto& config = itemConfig.enabled ? itemConfig : parentConfig;
 
     if (config.enabled) {
         if (!projectileData.exploded)
-            renderEntityBox(projectileData, name, config);
+            renderEntityBox(configGlobal, projectileData, name, config);
 
         if (config.trails.enabled) {
             if (projectileData.thrownByLocalPlayer)
@@ -503,12 +503,12 @@ static void renderProjectileEsp(const ProjectileData& projectileData, const Proj
     }
 }
 
-void StreamProofESP::render() noexcept
+void StreamProofESP::render(Config& config) noexcept
 {
-    if (config->streamProofESP.toggleKey.isSet()) {
-        if (!config->streamProofESP.toggleKey.isToggled() && !config->streamProofESP.holdKey.isDown())
+    if (config.streamProofESP.toggleKey.isSet()) {
+        if (!config.streamProofESP.toggleKey.isToggled() && !config.streamProofESP.holdKey.isDown())
             return;
-    } else if (config->streamProofESP.holdKey.isSet() && !config->streamProofESP.holdKey.isDown()) {
+    } else if (config.streamProofESP.holdKey.isSet() && !config.streamProofESP.holdKey.isDown()) {
         return;
     }
 
@@ -517,33 +517,33 @@ void StreamProofESP::render() noexcept
     GameData::Lock lock;
 
     for (const auto& weapon : GameData::weapons())
-        renderWeaponEsp(weapon, config->streamProofESP.weapons[weapon.group], config->streamProofESP.weapons[weapon.name]);
+        renderWeaponEsp(config, weapon, config.streamProofESP.weapons[weapon.group], config.streamProofESP.weapons[weapon.name]);
 
     for (const auto& entity : GameData::entities())
-        renderEntityEsp(entity, config->streamProofESP.otherEntities, entity.name);
+        renderEntityEsp(config, entity, config.streamProofESP.otherEntities, entity.name);
 
     for (const auto& lootCrate : GameData::lootCrates()) {
         if (lootCrate.name)
-            renderEntityEsp(lootCrate, config->streamProofESP.lootCrates, lootCrate.name);
+            renderEntityEsp(config, lootCrate, config.streamProofESP.lootCrates, lootCrate.name);
     }
 
     for (const auto& projectile : GameData::projectiles())
-        renderProjectileEsp(projectile, config->streamProofESP.projectiles["All"], config->streamProofESP.projectiles[projectile.name], projectile.name);
+        renderProjectileEsp(config, projectile, config.streamProofESP.projectiles["All"], config.streamProofESP.projectiles[projectile.name], projectile.name);
 
     for (const auto& player : GameData::players()) {
         if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.inViewFrustum)
             continue;
 
-        auto& playerConfig = player.enemy ? config->streamProofESP.enemies : config->streamProofESP.allies;
+        auto& playerConfig = player.enemy ? config.streamProofESP.enemies : config.streamProofESP.allies;
 
-        if (!renderPlayerEsp(player, playerConfig["All"]))
-            renderPlayerEsp(player, playerConfig[player.visible ? "Visible" : "Occluded"]);
+        if (!renderPlayerEsp(config, player, playerConfig["All"]))
+            renderPlayerEsp(config, player, playerConfig[player.visible ? "Visible" : "Occluded"]);
     }
 }
 
-void StreamProofESP::updateInput() noexcept
+void StreamProofESP::updateInput(Config& config) noexcept
 {
-    config->streamProofESP.toggleKey.handleToggle();
+    config.streamProofESP.toggleKey.handleToggle();
 }
 
 static bool windowOpen = false;
@@ -557,15 +557,15 @@ void StreamProofESP::menuBarItem() noexcept
     }
 }
 
-void StreamProofESP::tabItem() noexcept
+void StreamProofESP::tabItem(Config& config) noexcept
 {
     if (ImGui::BeginTabItem("ESP")) {
-        drawGUI(true);
+        drawGUI(config, true);
         ImGui::EndTabItem();
     }
 }
 
-void StreamProofESP::drawGUI(bool contentOnly) noexcept
+void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -574,28 +574,28 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
         ImGui::Begin("ESP", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
 
-    ImGui::hotkey("Toggle Key", config->streamProofESP.toggleKey, 80.0f);
-    ImGui::hotkey("Hold Key", config->streamProofESP.holdKey, 80.0f);
+    ImGui::hotkey("Toggle Key", config.streamProofESP.toggleKey, 80.0f);
+    ImGui::hotkey("Hold Key", config.streamProofESP.holdKey, 80.0f);
     ImGui::Separator();
 
     static std::size_t currentCategory;
     static auto currentItem = "All";
 
-    constexpr auto getConfigShared = [](std::size_t category, const char* item) noexcept -> Shared& {
+    const auto getConfigShared = [&config](std::size_t category, const char* item) noexcept -> Shared& {
         switch (category) {
-        case 0: default: return config->streamProofESP.enemies[item];
-        case 1: return config->streamProofESP.allies[item];
-        case 2: return config->streamProofESP.weapons[item];
-        case 3: return config->streamProofESP.projectiles[item];
-        case 4: return config->streamProofESP.lootCrates[item];
-        case 5: return config->streamProofESP.otherEntities[item];
+        case 0: default: return config.streamProofESP.enemies[item];
+        case 1: return config.streamProofESP.allies[item];
+        case 2: return config.streamProofESP.weapons[item];
+        case 3: return config.streamProofESP.projectiles[item];
+        case 4: return config.streamProofESP.lootCrates[item];
+        case 5: return config.streamProofESP.otherEntities[item];
         }
     };
 
-    constexpr auto getConfigPlayer = [](std::size_t category, const char* item) noexcept -> Player& {
+    const auto getConfigPlayer = [&config](std::size_t category, const char* item) noexcept -> Player& {
         switch (category) {
-        case 0: default: return config->streamProofESP.enemies[item];
-        case 1: return config->streamProofESP.allies[item];
+        case 0: default: return config.streamProofESP.enemies[item];
+        case 1: return config.streamProofESP.allies[item];
         }
     };
 
@@ -611,8 +611,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
             if (ImGui::BeginDragDropSource()) {
                 switch (i) {
                 case 0: case 1: ImGui::SetDragDropPayload("Player", &getConfigPlayer(i, "All"), sizeof(Player), ImGuiCond_Once); break;
-                case 2: ImGui::SetDragDropPayload("Weapon", &config->streamProofESP.weapons["All"], sizeof(Weapon), ImGuiCond_Once); break;
-                case 3: ImGui::SetDragDropPayload("Projectile", &config->streamProofESP.projectiles["All"], sizeof(Projectile), ImGuiCond_Once); break;
+                case 2: ImGui::SetDragDropPayload("Weapon", &config.streamProofESP.weapons["All"], sizeof(Weapon), ImGuiCond_Once); break;
+                case 3: ImGui::SetDragDropPayload("Projectile", &config.streamProofESP.projectiles["All"], sizeof(Projectile), ImGuiCond_Once); break;
                 default: ImGui::SetDragDropPayload("Entity", &getConfigShared(i, "All"), sizeof(Shared), ImGuiCond_Once); break;
                 }
                 ImGui::EndDragDropSource();
@@ -624,8 +624,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                     switch (i) {
                     case 0: case 1: getConfigPlayer(i, "All") = data; break;
-                    case 2: config->streamProofESP.weapons["All"] = data; break;
-                    case 3: config->streamProofESP.projectiles["All"] = data; break;
+                    case 2: config.streamProofESP.weapons["All"] = data; break;
+                    case 3: config.streamProofESP.projectiles["All"] = data; break;
                     default: getConfigShared(i, "All") = data; break;
                     }
                 }
@@ -635,8 +635,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                     switch (i) {
                     case 0: case 1: getConfigPlayer(i, "All") = data; break;
-                    case 2: config->streamProofESP.weapons["All"] = data; break;
-                    case 3: config->streamProofESP.projectiles["All"] = data; break;
+                    case 2: config.streamProofESP.weapons["All"] = data; break;
+                    case 3: config.streamProofESP.projectiles["All"] = data; break;
                     default: getConfigShared(i, "All") = data; break;
                     }
                 }
@@ -646,8 +646,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                     switch (i) {
                     case 0: case 1: getConfigPlayer(i, "All") = data; break;
-                    case 2: config->streamProofESP.weapons["All"] = data; break;
-                    case 3: config->streamProofESP.projectiles["All"] = data; break;
+                    case 2: config.streamProofESP.weapons["All"] = data; break;
+                    case 3: config.streamProofESP.projectiles["All"] = data; break;
                     default: getConfigShared(i, "All") = data; break;
                     }
                 }
@@ -657,8 +657,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                     switch (i) {
                     case 0: case 1: getConfigPlayer(i, "All") = data; break;
-                    case 2: config->streamProofESP.weapons["All"] = data; break;
-                    case 3: config->streamProofESP.projectiles["All"] = data; break;
+                    case 2: config.streamProofESP.weapons["All"] = data; break;
+                    case 3: config.streamProofESP.projectiles["All"] = data; break;
                     default: getConfigShared(i, "All") = data; break;
                     }
                 }
@@ -694,8 +694,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
                     if (ImGui::BeginDragDropSource()) {
                         switch (i) {
                         case 0: case 1: ImGui::SetDragDropPayload("Player", &getConfigPlayer(i, items[j]), sizeof(Player), ImGuiCond_Once); break;
-                        case 2: ImGui::SetDragDropPayload("Weapon", &config->streamProofESP.weapons[items[j]], sizeof(Weapon), ImGuiCond_Once); break;
-                        case 3: ImGui::SetDragDropPayload("Projectile", &config->streamProofESP.projectiles[items[j]], sizeof(Projectile), ImGuiCond_Once); break;
+                        case 2: ImGui::SetDragDropPayload("Weapon", &config.streamProofESP.weapons[items[j]], sizeof(Weapon), ImGuiCond_Once); break;
+                        case 3: ImGui::SetDragDropPayload("Projectile", &config.streamProofESP.projectiles[items[j]], sizeof(Projectile), ImGuiCond_Once); break;
                         default: ImGui::SetDragDropPayload("Entity", &getConfigShared(i, items[j]), sizeof(Shared), ImGuiCond_Once); break;
                         }
                         ImGui::EndDragDropSource();
@@ -707,8 +707,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                             switch (i) {
                             case 0: case 1: getConfigPlayer(i, items[j]) = data; break;
-                            case 2: config->streamProofESP.weapons[items[j]] = data; break;
-                            case 3: config->streamProofESP.projectiles[items[j]] = data; break;
+                            case 2: config.streamProofESP.weapons[items[j]] = data; break;
+                            case 3: config.streamProofESP.projectiles[items[j]] = data; break;
                             default: getConfigShared(i, items[j]) = data; break;
                             }
                         }
@@ -718,8 +718,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                             switch (i) {
                             case 0: case 1: getConfigPlayer(i, items[j]) = data; break;
-                            case 2: config->streamProofESP.weapons[items[j]] = data; break;
-                            case 3: config->streamProofESP.projectiles[items[j]] = data; break;
+                            case 2: config.streamProofESP.weapons[items[j]] = data; break;
+                            case 3: config.streamProofESP.projectiles[items[j]] = data; break;
                             default: getConfigShared(i, items[j]) = data; break;
                             }
                         }
@@ -729,8 +729,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                             switch (i) {
                             case 0: case 1: getConfigPlayer(i, items[j]) = data; break;
-                            case 2: config->streamProofESP.weapons[items[j]] = data; break;
-                            case 3: config->streamProofESP.projectiles[items[j]] = data; break;
+                            case 2: config.streamProofESP.weapons[items[j]] = data; break;
+                            case 3: config.streamProofESP.projectiles[items[j]] = data; break;
                             default: getConfigShared(i, items[j]) = data; break;
                             }
                         }
@@ -740,8 +740,8 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
                             switch (i) {
                             case 0: case 1: getConfigPlayer(i, items[j]) = data; break;
-                            case 2: config->streamProofESP.weapons[items[j]] = data; break;
-                            case 3: config->streamProofESP.projectiles[items[j]] = data; break;
+                            case 2: config.streamProofESP.weapons[items[j]] = data; break;
+                            case 3: config.streamProofESP.projectiles[items[j]] = data; break;
                             default: getConfigShared(i, items[j]) = data; break;
                             }
                         }
@@ -772,7 +772,7 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
                 const auto itemEnabled = getConfigShared(i, items[j]).enabled;
 
                 for (const auto subItem : subItems) {
-                    auto& subItemConfig = config->streamProofESP.weapons[subItem];
+                    auto& subItemConfig = config.streamProofESP.weapons[subItem];
                     if ((categoryEnabled || itemEnabled) && !subItemConfig.enabled)
                         continue;
 
@@ -827,13 +827,13 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
         ImGui::Checkbox("Enabled", &sharedConfig.enabled);
         ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 260.0f);
         ImGui::SetNextItemWidth(220.0f);
-        if (ImGui::BeginCombo("Font", config->getSystemFonts()[sharedConfig.font.index].c_str())) {
-            for (size_t i = 0; i < config->getSystemFonts().size(); i++) {
-                bool isSelected = config->getSystemFonts()[i] == sharedConfig.font.name;
-                if (ImGui::Selectable(config->getSystemFonts()[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
+        if (ImGui::BeginCombo("Font", config.getSystemFonts()[sharedConfig.font.index].c_str())) {
+            for (size_t i = 0; i < config.getSystemFonts().size(); i++) {
+                bool isSelected = config.getSystemFonts()[i] == sharedConfig.font.name;
+                if (ImGui::Selectable(config.getSystemFonts()[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
                     sharedConfig.font.index = i;
-                    sharedConfig.font.name = config->getSystemFonts()[i];
-                    config->scheduleFontLoad(sharedConfig.font.name);
+                    sharedConfig.font.name = config.getSystemFonts()[i];
+                    config.scheduleFontLoad(sharedConfig.font.name);
                 }
                 if (isSelected)
                     ImGui::SetItemDefaultFocus();
@@ -922,10 +922,10 @@ void StreamProofESP::drawGUI(bool contentOnly) noexcept
 
             ImGui::PopID();
         } else if (currentCategory == 2) {
-            auto& weaponConfig = config->streamProofESP.weapons[currentItem];
+            auto& weaponConfig = config.streamProofESP.weapons[currentItem];
             ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
         } else if (currentCategory == 3) {
-            auto& trails = config->streamProofESP.projectiles[currentItem].trails;
+            auto& trails = config.streamProofESP.projectiles[currentItem].trails;
 
             ImGui::Checkbox("Trails", &trails.enabled);
             ImGui::SameLine(spacing + 77.0f);

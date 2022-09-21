@@ -103,15 +103,15 @@ static void from_json(const json& j, ColorToggleRounding& ctr)
     read(j, "Rounding", ctr.rounding);
 }
 
-static void from_json(const json& j, Font& f)
+static void from_json(Config& config, const json& j, Font& f)
 {
     read<value_t::string>(j, "Name", f.name);
 
     if (!f.name.empty())
-        config->scheduleFontLoad(f.name);
+        config.scheduleFontLoad(f.name);
 
-    if (const auto it = std::ranges::find(config->getSystemFonts(), f.name); it != config->getSystemFonts().end())
-        f.index = std::distance(config->getSystemFonts().begin(), it);
+    if (const auto it = std::ranges::find(config.getSystemFonts(), f.name); it != config.getSystemFonts().end())
+        f.index = std::distance(config.getSystemFonts().begin(), it);
     else
         f.index = 0;
 }
@@ -132,19 +132,24 @@ static void from_json(const json& j, Box& b)
     read<value_t::object>(j, "Fill", b.fill);
 }
 
-static void from_json(const json& j, Shared& s)
+static void from_json(Config& config, const json& j, Shared& s)
 {
     read(j, "Enabled", s.enabled);
-    read<value_t::object>(j, "Font", s.font);
+
+    if (j.contains("Font")) {
+        if (const auto& val = j["Font"]; val.type() == value_t::object)
+            from_json(config, val, s.font);
+    }
+
     read<value_t::object>(j, "Snapline", s.snapline);
     read<value_t::object>(j, "Box", s.box);
     read<value_t::object>(j, "Name", s.name);
     read(j, "Text Cull Distance", s.textCullDistance);
 }
 
-static void from_json(const json& j, Weapon& w)
+static void from_json(Config& config, const json& j, Weapon& w)
 {
-    from_json(j, static_cast<Shared&>(w));
+    from_json(config, j, static_cast<Shared&>(w));
 
     read<value_t::object>(j, "Ammo", w.ammo);
 }
@@ -165,16 +170,16 @@ static void from_json(const json& j, Trails& t)
     read<value_t::object>(j, "Enemies", t.enemies);
 }
 
-static void from_json(const json& j, Projectile& p)
+static void from_json(Config& config, const json& j, Projectile& p)
 {
-    from_json(j, static_cast<Shared&>(p));
+    from_json(config, j, static_cast<Shared&>(p));
 
     read<value_t::object>(j, "Trails", p.trails);
 }
 
-static void from_json(const json& j, Player& p)
+static void from_json(Config& config, const json& j, Player& p)
 {
-    from_json(j, static_cast<Shared&>(p));
+    from_json(config, j, static_cast<Shared&>(p));
 
     read<value_t::object>(j, "Weapon", p.weapon);
     read<value_t::object>(j, "Flash Duration", p.flashDuration);
@@ -239,16 +244,25 @@ static void from_json(const json& j, Config::Chams& c)
     read_array_opt(j, "Materials", c.materials);
 }
 
-static void from_json(const json& j, Config::StreamProofESP& e)
+template <typename T>
+void read(Config& config, const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+{
+    if (j.contains(key) && j[key].is_object()) {
+        for (auto& element : j[key].items())
+            from_json(config, element.value(), o[element.key()]);
+    }
+}
+
+static void from_json(Config& config, const json& j, Config::StreamProofESP& e)
 {
     read(j, "Toggle Key", e.toggleKey);
     read(j, "Hold Key", e.holdKey);
-    read(j, "Allies", e.allies);
-    read(j, "Enemies", e.enemies);
-    read(j, "Weapons", e.weapons);
-    read(j, "Projectiles", e.projectiles);
-    read(j, "Loot Crates", e.lootCrates);
-    read(j, "Other Entities", e.otherEntities);
+    read(config, j, "Allies", e.allies);
+    read(config, j, "Enemies", e.enemies);
+    read(config, j, "Weapons", e.weapons);
+    read(config, j, "Projectiles", e.projectiles);
+    read(config, j, "Loot Crates", e.lootCrates);
+    read(config, j, "Other Entities", e.otherEntities);
 }
 
 static void from_json(const json& j, Config::Style& s)
@@ -305,7 +319,12 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Chams", chams);
     read(j["Chams"], "Toggle Key", chamsToggleKey);
     read(j["Chams"], "Hold Key", chamsHoldKey);
-    read<value_t::object>(j, "ESP", streamProofESP);
+
+    if (j.contains("ESP")) {
+        if (const auto& val = j["ESP"]; val.type() == value_t::object)
+            from_json(*this, val, streamProofESP);
+    }
+
     read<value_t::object>(j, "Style", style);
 
     AntiAim::fromJson(j["Anti aim"]);
