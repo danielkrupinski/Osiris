@@ -5,6 +5,7 @@
 #include "Hacks/Aimbot.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
+#include "Hacks/Chams.h"
 #include "Hacks/EnginePrediction.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
@@ -16,6 +17,8 @@
 #include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/LocalPlayer.h"
+#include "SDK/ModelRender.h"
+#include "SDK/StudioRender.h"
 #include "SDK/UserCmd.h"
 
 #include "Interfaces.h"
@@ -116,4 +119,18 @@ float GlobalContext::getViewModelFovHook()
     }
 
     return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
+}
+
+void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
+{
+    if (interfaces->studioRender->isForcedMaterialOverride())
+        return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+
+    if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
+        return;
+
+    if (static Chams chams; !chams.render(*memory, *config, ctx, state, info, customBoneToWorld))
+        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+
+    interfaces->studioRender->forcedMaterialOverride(nullptr);
 }

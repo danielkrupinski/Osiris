@@ -190,16 +190,7 @@ static float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 
 static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces->studioRender->isForcedMaterialOverride())
-        return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-
-    if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
-        return;
-
-    if (static Chams chams; !chams.render(*memory, *config, ctx, state, info, customBoneToWorld))
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-
-    interfaces->studioRender->forcedMaterialOverride(nullptr);
+    globalContext.drawModelExecuteHook(ctx, state, info, customBoneToWorld);
 }
 
 static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
