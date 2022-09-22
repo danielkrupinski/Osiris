@@ -134,3 +134,11 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
+
+bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress)
+{
+    if (returnAddress == memory->cameraThink && Visuals::isThirdpersonOn())
+        return true;
+
+    return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+}

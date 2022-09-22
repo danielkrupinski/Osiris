@@ -195,10 +195,7 @@ static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, 
 
 static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
 {
-    if (RETURN_ADDRESS() == memory->cameraThink && Visuals::isThirdpersonOn())
-        return true;
-
-    return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+    return globalContext.svCheatsGetBoolHook(_this, RETURN_ADDRESS());
 }
 
 static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept

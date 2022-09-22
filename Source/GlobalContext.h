@@ -10,6 +10,7 @@ public:
     void doPostScreenEffectsHook(void* param);
     float getViewModelFovHook();
     void drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld);
+    bool svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress);
 };
 
 inline GlobalContext globalContext;
