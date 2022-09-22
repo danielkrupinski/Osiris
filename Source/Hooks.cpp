@@ -180,15 +180,7 @@ static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSample
 
 static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
 {
-    if (interfaces->engine->isInGame()) {
-        Visuals::thirdperson(*memory);
-        Visuals::inverseRagdollGravity();
-        Visuals::reduceFlashEffect();
-        Visuals::updateBrightness();
-        Visuals::remove3dSky();
-        Glow::render(*memory);
-    }
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
+    globalContext.doPostScreenEffectsHook(param);
 }
 
 static float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept

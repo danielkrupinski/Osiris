@@ -6,11 +6,15 @@
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/EnginePrediction.h"
+#include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "SDK/Engine.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/UserCmd.h"
+
+#include "Interfaces.h"
 
 bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 {
@@ -84,4 +88,17 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     previousViewAngles = cmd->viewangles;
 
     return false;
+}
+
+void GlobalContext::doPostScreenEffectsHook(void* param)
+{
+    if (interfaces->engine->isInGame()) {
+        Visuals::thirdperson(*memory);
+        Visuals::inverseRagdollGravity();
+        Visuals::reduceFlashEffect();
+        Visuals::updateBrightness();
+        Visuals::remove3dSky();
+        Glow::render(*memory);
+    }
+    hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
