@@ -10,8 +10,12 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "SDK/ClientClass.h"
+#include "SDK/Constants/ClassId.h"
 #include "SDK/Engine.h"
+#include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/LocalPlayer.h"
 #include "SDK/UserCmd.h"
 
 #include "Interfaces.h"
@@ -101,4 +105,15 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         Glow::render(*memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
+}
+
+float GlobalContext::getViewModelFovHook()
+{
+    float additionalFov = Visuals::viewModelFov();
+    if (localPlayer) {
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+            additionalFov = 0.0f;
+    }
+
+    return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
 }

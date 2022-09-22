@@ -185,13 +185,7 @@ static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* pa
 
 static float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
-    float additionalFov = Visuals::viewModelFov();
-    if (localPlayer) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
-            additionalFov = 0.0f;
-    }
-
-    return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
+    return globalContext.getViewModelFovHook();
 }
 
 static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
