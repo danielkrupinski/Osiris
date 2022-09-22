@@ -68,6 +68,8 @@
 #include "SDK/UserCmd.h"
 #include "SDK/Constants/UserMessages.h"
 
+#include "GlobalContext.h"
+
 #ifdef _WIN32
 
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -173,76 +175,7 @@ static void swapWindow(SDL_Window * window) noexcept
 
 static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
-    auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
-
-    if (!cmd->commandNumber)
-        return result;
-
-#ifdef _WIN32
-    // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-    // since 19.02.2022 game update sendPacket is no longer on stack
-    bool sendPacket = true;
-#else
-    bool dummy;
-    bool& sendPacket = dummy;
-#endif
-
-    static auto previousViewAngles{ cmd->viewangles };
-    const auto currentViewAngles{ cmd->viewangles };
-
-    memory->globalVars->serverTime(cmd);
-    Misc::nadePredict();
-    Misc::antiAfkKick(cmd);
-    Misc::fastStop(cmd);
-    Misc::prepareRevolver(*memory, cmd);
-    Visuals::removeShadows();
-    Misc::runReportbot(*memory);
-    Misc::bunnyHop(cmd);
-    Misc::autoStrafe(cmd);
-    Misc::removeCrouchCooldown(cmd);
-    Misc::autoPistol(*memory, cmd);
-    Misc::autoReload(cmd);
-    Misc::updateClanTag(*memory);
-    Misc::fakeBan(*memory);
-    Misc::stealNames(*memory);
-    Misc::revealRanks(cmd);
-    Misc::quickReload(cmd);
-    Misc::fixTabletSignal();
-    Misc::slowwalk(cmd);
-
-    EnginePrediction::run(*memory, cmd);
-
-    Aimbot::run(*config, *memory, cmd);
-    Triggerbot::run(*memory, *config, cmd);
-    Backtrack::run(*memory, cmd);
-    Misc::edgejump(cmd);
-    Misc::moonwalk(cmd);
-    Misc::fastPlant(cmd);
-
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-    }
-
-    auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
-    viewAnglesDelta.normalize();
-    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-
-    cmd->viewangles = previousViewAngles + viewAnglesDelta;
-
-    cmd->viewangles.normalize();
-    Misc::fixMovement(cmd, currentViewAngles.y);
-
-    cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-    cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-    cmd->viewangles.z = 0.0f;
-    cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
-    cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
-
-    previousViewAngles = cmd->viewangles;
-
-    return false;
+    return globalContext.createMoveHook(inputSampleTime, cmd);
 }
 
 static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept

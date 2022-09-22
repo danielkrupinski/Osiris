@@ -290,6 +290,9 @@
     <ClCompile Include="InventoryChanger\WeaponNames.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -831,6 +834,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\ItemId.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
