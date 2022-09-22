@@ -40,12 +40,12 @@ struct Cvars {
 
 static Cvars cvars;
 
-static auto timeToTicks(float time) noexcept
+static auto timeToTicks(const Memory& memory, float time) noexcept
 {
-    return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
+    return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
 }
 
-void Backtrack::update(csgo::FrameStage stage) noexcept
+void Backtrack::update(const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
@@ -56,7 +56,7 @@ void Backtrack::update(csgo::FrameStage stage) noexcept
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
             }
@@ -68,14 +68,14 @@ void Backtrack::update(csgo::FrameStage stage) noexcept
             record.origin = entity->getAbsOrigin();
             record.simulationTime = entity->simulationTime();
 
-            entity->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
+            entity->setupBones(memory, record.matrix, 256, 0x7FF00, memory.globalVars->currenttime);
 
             records[i].push_front(record);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(memory, static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
+            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory](const Record & rec) { return !valid(memory, rec.simulationTime); }); invalid != std::cend(records[i]))
                 records[i].erase(invalid, std::cend(records[i]));
         }
     }
@@ -87,7 +87,7 @@ static float getLerp() noexcept
     return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
-void Backtrack::run(UserCmd* cmd) noexcept
+void Backtrack::run(const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
         return;
@@ -111,7 +111,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-            || !entity->isOtherEnemy(localPlayer.get()))
+            || !entity->isOtherEnemy(memory, localPlayer.get()))
             continue;
 
         const auto& origin = entity->getAbsOrigin();
@@ -127,14 +127,14 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!backtrackConfig.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!backtrackConfig.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
             const auto& record = records[bestTargetIndex][i];
-            if (!valid(record.simulationTime))
+            if (!valid(memory, record.simulationTime))
                 continue;
 
             auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
@@ -148,8 +148,8 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         const auto& record = records[bestTargetIndex][bestRecord];
-        memory->setAbsOrigin(bestTarget, record.origin);
-        cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
+        memory.setAbsOrigin(bestTarget, record.origin);
+        cmd->tickCount = timeToTicks(memory, record.simulationTime + getLerp());
     }
 }
 
@@ -160,13 +160,13 @@ const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) no
     return &records[index];
 }
 
-bool Backtrack::valid(float simtime) noexcept
+bool Backtrack::valid(const Memory& memory, float simtime) noexcept
 {
     const auto network = interfaces->engine->getNetworkChannel();
     if (!network)
         return false;
 
-    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
+    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->serverTime() - simtime);
     return std::abs(delta) <= 0.2f;
 }
 

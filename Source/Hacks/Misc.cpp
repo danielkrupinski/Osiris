@@ -247,7 +247,7 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::updateClanTag(bool tagChanged) noexcept
+void Misc::updateClanTag(const Memory& memory, bool tagChanged) noexcept
 {
     static std::string clanTag;
 
@@ -261,7 +261,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     static auto lastTime = 0.0f;
 
     if (miscConfig.clocktag) {
-        if (memory->globalVars->realtime - lastTime < 1.0f)
+        if (memory.globalVars->realtime - lastTime < 1.0f)
             return;
 
         const auto time = std::time(nullptr);
@@ -269,18 +269,18 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         char s[11];
         s[0] = '\0';
         snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(s, s);
+        lastTime = memory.globalVars->realtime;
+        memory.setClanTag(s, s);
     } else if (miscConfig.customClanTag) {
-        if (memory->globalVars->realtime - lastTime < 0.6f)
+        if (memory.globalVars->realtime - lastTime < 0.6f)
             return;
 
         if (miscConfig.animatedClanTag && !clanTag.empty()) {
             if (const auto offset = Helpers::utf8SeqLen(clanTag[0]); offset <= clanTag.length())
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+        lastTime = memory.globalVars->realtime;
+        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
     }
 }
 
@@ -362,7 +362,7 @@ static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) 
     drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
 }
 
-void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
+void Misc::noscopeCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
 {
     if (!miscConfig.noscopeCrosshair.asColorToggle().enabled)
         return;
@@ -373,10 +373,10 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
             return;
     }
 
-    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(memory, miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
+void Misc::recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
 {
     if (!miscConfig.recoilCrosshair.asColorToggle().enabled)
         return;
@@ -391,10 +391,10 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
         return;
 
     if (ImVec2 pos; Helpers::worldToScreenPixelAligned(localPlayerData.aimPunch, pos))
-        drawCrosshair(drawList, pos, Helpers::calculateColor(miscConfig.recoilCrosshair.asColorToggle().asColor4()));
+        drawCrosshair(drawList, pos, Helpers::calculateColor(memory, miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::watermark() noexcept
+void Misc::watermark(const Memory& memory) noexcept
 {
     if (!miscConfig.watermark.enabled)
         return;
@@ -407,23 +407,23 @@ void Misc::watermark() noexcept
     ImGui::Begin("Watermark", nullptr, windowFlags);
 
     static auto frameRate = 1.0f;
-    frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
+    frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
 
     ImGui::Text("Osiris | %d fps | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
     ImGui::End();
 }
 
-void Misc::prepareRevolver(UserCmd* cmd) noexcept
+void Misc::prepareRevolver(const Memory& memory, UserCmd* cmd) noexcept
 {
-    constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick); };
+    auto timeToTicks = [&memory](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
     if (miscConfig.prepareRevolver && localPlayer && (!miscConfig.prepareRevolverKey.isSet() || miscConfig.prepareRevolverKey.isDown())) {
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex() == WeaponId::Revolver) {
-            if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
-            auto ticksToReady = timeToTicks(readyTime - memory->globalVars->serverTime() - interfaces->engine->getNetworkChannel()->getLatency(0));
+            if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
+            auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces->engine->getNetworkChannel()->getLatency(0));
             if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))
                 cmd->buttons |= UserCmd::IN_ATTACK;
             else
@@ -486,7 +486,7 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     cmd->sidemove = negatedDirection.y;
 }
 
-void Misc::drawBombTimer() noexcept
+void Misc::drawBombTimer(const Memory& memory) noexcept
 {
     if (!miscConfig.bombTimer.enabled)
         return;
@@ -511,13 +511,13 @@ void Misc::drawBombTimer() noexcept
     ImGui::SetNextWindowSizeConstraints({ 0, -1 }, { FLT_MAX, -1 });
     ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar | (gui->isOpen() ? 0 : ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration));
 
-    std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
+    std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory.globalVars->currenttime, 0.0f) << " s";
 
     ImGui::textUnformattedCentered(ss.str().c_str());
 
-    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(miscConfig.bombTimer.asColor3()));
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(memory, miscConfig.bombTimer.asColor3()));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0.2f, 0.2f, 0.2f, 1.0f });
-    ImGui::progressBarFullWidth((plantedC4.blowTime - memory->globalVars->currenttime) / plantedC4.timerLength, 5.0f);
+    ImGui::progressBarFullWidth((plantedC4.blowTime - memory.globalVars->currenttime) / plantedC4.timerLength, 5.0f);
 
     if (plantedC4.defuserHandle != -1) {
         const bool canDefuse = plantedC4.blowTime >= plantedC4.defuseCountDown;
@@ -532,12 +532,12 @@ void Misc::drawBombTimer() noexcept
             }
             ImGui::PopStyleColor();
         } else if (const auto defusingPlayer = GameData::playerByHandle(plantedC4.defuserHandle)) {
-            std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
+            std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory.globalVars->currenttime, 0.0f) << " s";
 
             ImGui::textUnformattedCentered(ss.str().c_str());
 
             ImGui::PushStyleColor(ImGuiCol_PlotHistogram, canDefuse ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 0, 0, 255));
-            ImGui::progressBarFullWidth((plantedC4.defuseCountDown - memory->globalVars->currenttime) / plantedC4.defuseLength, 5.0f);
+            ImGui::progressBarFullWidth((plantedC4.defuseCountDown - memory.globalVars->currenttime) / plantedC4.defuseLength, 5.0f);
             ImGui::PopStyleColor();
         }
     }
@@ -548,7 +548,7 @@ void Misc::drawBombTimer() noexcept
     ImGui::End();
 }
 
-void Misc::stealNames() noexcept
+void Misc::stealNames(const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -558,7 +558,7 @@ void Misc::stealNames() noexcept
 
     static std::vector<int> stolenIds;
 
-    for (int i = 1; i <= memory->globalVars->maxClients; ++i) {
+    for (int i = 1; i <= memory.globalVars->maxClients; ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
 
         if (!entity || entity == localPlayer.get())
@@ -571,7 +571,7 @@ void Misc::stealNames() noexcept
         if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
-        if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
+        if (changeName(memory, false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
             stolenIds.push_back(playerInfo.userId);
 
         return;
@@ -621,7 +621,7 @@ void Misc::quickReload(UserCmd* cmd) noexcept
     }
 }
 
-bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
+bool Misc::changeName(const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
 {
     static auto exploitInitialized{ false };
 
@@ -642,9 +642,9 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
         }
     }
 
-    if (static auto nextChangeTime = 0.0f; nextChangeTime <= memory->globalVars->realtime) {
+    if (static auto nextChangeTime = 0.0f; nextChangeTime <= memory.globalVars->realtime) {
         name->setValue(newName);
-        nextChangeTime = memory->globalVars->realtime + delay;
+        nextChangeTime = memory.globalVars->realtime + delay;
         return true;
     }
     return false;
@@ -663,14 +663,14 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer->isOnGround();
 }
 
-void Misc::fakeBan(bool set) noexcept
+void Misc::fakeBan(const Memory& memory, bool set) noexcept
 {
     static bool shouldSet = false;
 
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && changeName(memory, false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
@@ -728,7 +728,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
         cmd->buttons |= 1 << 27;
 }
 
-void Misc::fixAnimationLOD(csgo::FrameStage stage) noexcept
+void Misc::fixAnimationLOD(const Memory& memory, csgo::FrameStage stage) noexcept
 {
 #ifdef _WIN32
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
@@ -739,17 +739,17 @@ void Misc::fixAnimationLOD(csgo::FrameStage stage) noexcept
             Entity* entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) continue;
             *reinterpret_cast<int*>(entity + 0xA28) = 0;
-            *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
+            *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
         }
     }
 #endif
 }
 
-void Misc::autoPistol(UserCmd* cmd) noexcept
+void Misc::autoPistol(const Memory& memory, UserCmd* cmd) noexcept
 {
     if (miscConfig.autoPistol && localPlayer) {
         const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime()) {
+        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime()) {
             if (activeWeapon->itemDefinitionIndex() == WeaponId::Revolver)
                 cmd->buttons &= ~UserCmd::IN_ATTACK2;
             else
@@ -852,7 +852,7 @@ void Misc::killSound(GameEvent& event) noexcept
         interfaces->engine->clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(GameEvent* event) noexcept
+void Misc::purchaseList(const Memory& memory, GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -871,10 +871,10 @@ void Misc::purchaseList(GameEvent* event) noexcept
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(player)) {
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+            if (const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
+                if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     auto& purchase = playerPurchases[player->handle()];
-                    if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
+                    if (const auto weaponInfo = memory.weaponSystem->getWeaponInfo(definition->getWeaponId())) {
                         purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
@@ -892,14 +892,14 @@ void Misc::purchaseList(GameEvent* event) noexcept
             totalCost = 0;
             break;
         case fnv::hash("round_freeze_end"):
-            freezeEnd = memory->globalVars->realtime;
+            freezeEnd = memory.globalVars->realtime;
             break;
         }
     } else {
         if (!miscConfig.purchaseList.enabled)
             return;
 
-        if (static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime"); (!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
+        if (static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime"); (!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory.globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
             return;
 
         ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
@@ -999,7 +999,7 @@ static int reportbotRound;
     return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
 }
 
-[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported()
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const Memory& memory)
 {
     std::vector<std::uint64_t> xuids;
 
@@ -1008,7 +1008,7 @@ static int reportbotRound;
         if (!entity || entity == localPlayer.get())
             continue;
 
-        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
+        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(memory, entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
             continue;
 
         if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(i, playerInfo) && !playerInfo.fakeplayer)
@@ -1018,7 +1018,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot() noexcept
+void Misc::runReportbot(const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1028,19 +1028,19 @@ void Misc::runReportbot() noexcept
 
     static auto lastReportTime = 0.0f;
 
-    if (lastReportTime + miscConfig.reportbot.delay > memory->globalVars->realtime)
+    if (lastReportTime + miscConfig.reportbot.delay > memory.globalVars->realtime)
         return;
 
     if (reportbotRound >= miscConfig.reportbot.rounds)
         return;
 
-    for (const auto& xuid : getXuidsOfCandidatesToBeReported()) {
+    for (const auto& xuid : getXuidsOfCandidatesToBeReported(memory)) {
         if (isPlayerReported(xuid))
             continue;
 
         if (const auto report = generateReportString(); !report.empty()) {
-            memory->submitReport(std::to_string(xuid).c_str(), report.c_str());
-            lastReportTime = memory->globalVars->realtime;
+            memory.submitReport(std::to_string(xuid).c_str(), report.c_str());
+            lastReportTime = memory.globalVars->realtime;
             reportedPlayers.push_back(xuid);
             return;
         }
@@ -1056,7 +1056,7 @@ void Misc::resetReportbot() noexcept
     reportedPlayers.clear();
 }
 
-void Misc::preserveKillfeed(bool roundStart) noexcept
+void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
 {
     if (!miscConfig.preserveKillfeed.enabled)
         return;
@@ -1064,16 +1064,16 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
     static auto nextUpdate = 0.0f;
 
     if (roundStart) {
-        nextUpdate = memory->globalVars->realtime + 10.0f;
+        nextUpdate = memory.globalVars->realtime + 10.0f;
         return;
     }
 
-    if (nextUpdate > memory->globalVars->realtime)
+    if (nextUpdate > memory.globalVars->realtime)
         return;
 
-    nextUpdate = memory->globalVars->realtime + 2.0f;
+    nextUpdate = memory.globalVars->realtime + 2.0f;
 
-    const auto deathNotice = std::uintptr_t(memory->findHudElement(memory->hud, "CCSGO_HudDeathNotice"));
+    const auto deathNotice = std::uintptr_t(memory.findHudElement(memory.hud, "CCSGO_HudDeathNotice"));
     if (!deathNotice)
         return;
 
@@ -1087,11 +1087,11 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
             continue;
 
         if (child->hasClass("DeathNotice_Killer") && (!miscConfig.preserveKillfeed.onlyHeadshots || child->hasClass("DeathNoticeHeadShot")))
-            child->setAttributeFloat("SpawnTime", memory->globalVars->currenttime);
+            child->setAttributeFloat("SpawnTime", memory.globalVars->currenttime);
     }
 }
 
-void Misc::voteRevealer(GameEvent& event) noexcept
+void Misc::voteRevealer(const Memory& memory, GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1104,10 +1104,10 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     const auto isLocal = localPlayer && entity == localPlayer.get();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName(memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const void* data, int size) noexcept
+void Misc::onVoteStart(const Memory& memory, const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1132,19 +1132,19 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     const auto isLocal = localPlayer && entity == localPlayer.get();
 
     const auto voteType = reader.readInt32(3);
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(voteType));
+    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName(memory).c_str(), voteName(voteType));
 }
 
-void Misc::onVotePass() noexcept
+void Misc::onVotePass(const Memory& memory) noexcept
 {
     if (miscConfig.revealVotes)
-        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
+        memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
 }
 
-void Misc::onVoteFailed() noexcept
+void Misc::onVoteFailed(const Memory& memory) noexcept
 {
     if (miscConfig.revealVotes)
-        memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
+        memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
@@ -1176,7 +1176,7 @@ static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_
     }
 }
 
-void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
+void Misc::drawOffscreenEnemies(const Memory& memory, ImDrawList* drawList) noexcept
 {
     if (!miscConfig.offscreenEnemies.enabled)
         return;
@@ -1185,7 +1185,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 
     GameData::Lock lock;
     for (auto& player : GameData::players()) {
-        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.enemy || player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha(memory) == 0.0f) || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;
@@ -1203,11 +1203,11 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
         const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + (miscConfig.offscreenEnemies.healthBar.enabled ? 5 : 3));
 
-        Helpers::setAlphaFactor(player.fadingAlpha());
+        Helpers::setAlphaFactor(player.fadingAlpha(memory));
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto background = Helpers::calculateColor(0, 0, 0, 80);
-        const auto color = Helpers::calculateColor(miscConfig.offscreenEnemies.asColor4());
-        const auto healthBarColor = miscConfig.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(miscConfig.offscreenEnemies.healthBar.asColor4());
+        const auto color = Helpers::calculateColor(memory, miscConfig.offscreenEnemies.asColor4());
+        const auto healthBarColor = miscConfig.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(memory, miscConfig.offscreenEnemies.healthBar.asColor4());
         Helpers::setAlphaFactor(1.0f);
 
         const ImVec2 trianglePoints[]{
@@ -1255,7 +1255,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     }
 }
 
-void Misc::autoAccept(const char* soundEntry) noexcept
+void Misc::autoAccept(const Memory& memory, const char* soundEntry) noexcept
 {
     if (!miscConfig.autoAccept)
         return;
@@ -1263,8 +1263,8 @@ void Misc::autoAccept(const char* soundEntry) noexcept
     if (std::strcmp(soundEntry, "UIPanorama.popup_accept_match_beep"))
         return;
 
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
+    if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
+        if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
             interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
     }
 
@@ -1276,14 +1276,18 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
-void Misc::updateEventListeners(bool forceRemove) noexcept
+void Misc::updateEventListeners(const Memory& memory, bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) override { purchaseList(event); }
+        explicit PurchaseEventListener(const Memory& memory) : memory{ memory } {}
+        void fireGameEvent(GameEvent* event) override { purchaseList(memory, event); }
+
+    private:
+        const Memory& memory;
     };
 
-    static PurchaseEventListener listener;
+    static PurchaseEventListener listener{ memory };
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {
@@ -1311,15 +1315,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem() noexcept
+void Misc::tabItem(const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(true);
+        drawGUI(memory, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(bool contentOnly) noexcept
+void Misc::drawGUI(const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -1404,7 +1408,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PushID(0);
 
     if (ImGui::InputText("", miscConfig.clanTag, sizeof(miscConfig.clanTag)))
-        Misc::updateClanTag(true);
+        Misc::updateClanTag(memory, true);
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &miscConfig.killMessage);
     ImGui::SameLine();
@@ -1423,7 +1427,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
-        Misc::fakeBan(true);
+        Misc::fakeBan(memory, true);
     ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
@@ -1521,7 +1525,7 @@ void Misc::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
-        hooks->uninstall();
+        hooks->uninstall(memory);
 
     ImGui::Columns(1);
     if (!contentOnly)

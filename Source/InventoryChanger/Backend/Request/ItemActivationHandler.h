@@ -54,7 +54,7 @@ public:
         assert(container->gameItem().isCrate() && key->gameItem().isCaseKey());
 
         Helpers::RandomGenerator randomGenerator;
-        auto generatedItem = item_generator::generateItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, *container, std::to_address(key));
+        auto generatedItem = item_generator::generateItemFromContainer(*memory, randomGenerator, gameItemLookup, crateLootLookup, *container, std::to_address(key));
         if (!generatedItem.has_value())
             return;
 
@@ -69,7 +69,7 @@ public:
         assert(container->gameItem().isCrate());
 
         Helpers::RandomGenerator randomGenerator;
-        auto generatedItem = item_generator::generateItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, *container, nullptr);
+        auto generatedItem = item_generator::generateItemFromContainer(*memory, randomGenerator, gameItemLookup, crateLootLookup, *container, nullptr);
         if (!generatedItem.has_value())
             return;
 

@@ -23,9 +23,9 @@ namespace inventory_changer
     return storage;
 }
 
-const WeaponNames& WeaponNames::instance()
+const WeaponNames& WeaponNames::instance(const Memory& memory)
 {
-    static const WeaponNames weaponNames{ createWeaponNamesStorage(memory->itemSystem()->getItemSchema()) };
+    static const WeaponNames weaponNames{ createWeaponNamesStorage(memory.itemSystem()->getItemSchema()) };
     return weaponNames;
 }
 

@@ -254,16 +254,16 @@ float Visuals::farZ() noexcept
     return static_cast<float>(visualsConfig.farZ);
 }
 
-void Visuals::performColorCorrection() noexcept
+void Visuals::performColorCorrection(const Memory& memory) noexcept
 {
     if (const auto& cfg = visualsConfig.colorCorrection; cfg.enabled) {
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x49C, 0x908)) = cfg.blue;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4A4, 0x918)) = cfg.red;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4AC, 0x928)) = cfg.mono;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4B4, 0x938)) = cfg.saturation;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4C4, 0x958)) = cfg.ghost;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4CC, 0x968)) = cfg.green;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + WIN32_LINUX(0x4D4, 0x978)) = cfg.yellow;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x49C, 0x908)) = cfg.blue;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4A4, 0x918)) = cfg.red;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4AC, 0x928)) = cfg.mono;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4B4, 0x938)) = cfg.saturation;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4C4, 0x958)) = cfg.ghost;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4CC, 0x968)) = cfg.green;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4D4, 0x978)) = cfg.yellow;
     }
 }
 
@@ -273,7 +273,7 @@ void Visuals::inverseRagdollGravity() noexcept
     ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
-void Visuals::colorWorld() noexcept
+void Visuals::colorWorld(const Memory& memory) noexcept
 {
     if (!visualsConfig.world.enabled && !visualsConfig.sky.enabled)
         return;
@@ -288,12 +288,12 @@ void Visuals::colorWorld() noexcept
 
         if (visualsConfig.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (visualsConfig.world.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.world.asColor3().rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory, visualsConfig.world.asColor3().rainbowSpeed));
             else
                 mat->colorModulate(visualsConfig.world.asColor3().color);
         } else if (visualsConfig.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (visualsConfig.sky.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(visualsConfig.sky.asColor3().rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory, visualsConfig.sky.asColor3().rainbowSpeed));
             else
                 mat->colorModulate(visualsConfig.sky.asColor3().color);
         }
@@ -319,13 +319,13 @@ void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
     }
 }
 
-void Visuals::thirdperson() noexcept
+void Visuals::thirdperson(const Memory& memory) noexcept
 {
     if (!visualsConfig.thirdperson)
         return;
 
-    memory->input->isCameraInThirdPerson = (!visualsConfig.thirdpersonKey.isSet() || visualsConfig.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
-    memory->input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance); 
+    memory.input->isCameraInThirdPerson = (!visualsConfig.thirdpersonKey.isSet() || visualsConfig.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
+    memory.input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance); 
 }
 
 void Visuals::removeVisualRecoil(csgo::FrameStage stage) noexcept
@@ -414,9 +414,9 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 
 #ifdef _WIN32
 #undef xor
-#define DRAW_SCREEN_EFFECT(material) \
+#define DRAW_SCREEN_EFFECT(material, memory) \
 { \
-    const auto drawFunction = memory->drawScreenEffectMaterial; \
+    const auto drawFunction = memory.drawScreenEffectMaterial; \
     int w, h; \
     interfaces->engine->getScreenSize(w, h); \
     __asm { \
@@ -431,15 +431,15 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 }
 
 #else
-#define DRAW_SCREEN_EFFECT(material) \
+#define DRAW_SCREEN_EFFECT(material, memory) \
 { \
     int w, h; \
     interfaces->engine->getScreenSize(w, h); \
-    reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
+    reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
 #endif
 
-void Visuals::applyScreenEffects() noexcept
+void Visuals::applyScreenEffects(const Memory& memory) noexcept
 {
     if (!visualsConfig.screenEffect)
         return;
@@ -464,20 +464,20 @@ void Visuals::applyScreenEffects() noexcept
     else if (visualsConfig.screenEffect >= 4)
         material->findVar("$c0_x")->setValue(1.0f);
 
-    DRAW_SCREEN_EFFECT(material)
+    DRAW_SCREEN_EFFECT(material, memory)
 }
 
-void Visuals::hitEffect(GameEvent* event) noexcept
+void Visuals::hitEffect(const Memory& memory, GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
         if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
-            lastHitTime = memory->globalVars->realtime;
+            lastHitTime = memory.globalVars->realtime;
             return;
         }
 
-        if (lastHitTime + visualsConfig.hitEffectTime >= memory->globalVars->realtime) {
+        if (lastHitTime + visualsConfig.hitEffectTime >= memory.globalVars->realtime) {
             constexpr auto getEffectMaterial = [] {
                 static constexpr const char* effects[]{
                 "effects/dronecam",
@@ -500,12 +500,12 @@ void Visuals::hitEffect(GameEvent* event) noexcept
             else if (visualsConfig.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
 
-            DRAW_SCREEN_EFFECT(material)
+            DRAW_SCREEN_EFFECT(material, memory)
         }
     }
 }
 
-void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -514,11 +514,11 @@ void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 
     if (event) {
         if (localPlayer && event->getInt("attacker") == localPlayer->getUserId())
-            lastHitTime = memory->globalVars->realtime;
+            lastHitTime = memory.globalVars->realtime;
         return;
     }
 
-    if (lastHitTime + visualsConfig.hitMarkerTime < memory->globalVars->realtime)
+    if (lastHitTime + visualsConfig.hitMarkerTime < memory.globalVars->realtime)
         return;
 
     switch (visualsConfig.hitMarker) {
@@ -533,12 +533,12 @@ void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
     }
 }
 
-void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
+void Visuals::disablePostProcessing(const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    *memory->disablePostProcessing = stage == csgo::FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
+    *memory.disablePostProcessing = stage == csgo::FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept
@@ -564,20 +564,20 @@ bool Visuals::removeWeapons(const char* modelName) noexcept
         && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
 }
 
-void Visuals::skybox(csgo::FrameStage stage) noexcept
+void Visuals::skybox(const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
     if (stage == csgo::FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
-        memory->loadSky(skyboxList[visualsConfig.skybox]);
+        memory.loadSky(skyboxList[visualsConfig.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
-        memory->loadSky(sv_skyname->string);
+        memory.loadSky(sv_skyname->string);
     }
 }
 
-void Visuals::bulletTracer(GameEvent& event) noexcept
+void Visuals::bulletTracer(const Memory& memory, GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -637,19 +637,19 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     beamInfo.flags = 0x40;
     beamInfo.fadeLength = 20.0f;
 
-    if (const auto beam = memory->viewRenderBeams->createBeamPoints(beamInfo)) {
+    if (const auto beam = memory.viewRenderBeams->createBeamPoints(beamInfo)) {
         constexpr auto FBEAM_FOREVER = 0x4000;
         beam->flags &= ~FBEAM_FOREVER;
-        beam->die = memory->globalVars->currenttime + 2.0f;
+        beam->die = memory.globalVars->currenttime + 2.0f;
     }
 }
 
-void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
+void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexcept
 {
     if (!visualsConfig.molotovHull.enabled)
         return;
 
-    const auto color = Helpers::calculateColor(visualsConfig.molotovHull.asColor4());
+    const auto color = Helpers::calculateColor(memory, visualsConfig.molotovHull.asColor4());
 
     GameData::Lock lock;
 
@@ -689,14 +689,18 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
-void Visuals::updateEventListeners(bool forceRemove) noexcept
+void Visuals::updateEventListeners(const Memory& memory, bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) override { bulletTracer(*event); }
+        ImpactEventListener(const Memory& memory) : memory{ memory } {}
+        void fireGameEvent(GameEvent* event) override { bulletTracer(memory, *event); }
+
+    private:
+        const Memory& memory;
     };
 
-    static ImpactEventListener listener;
+    static ImpactEventListener listener{ memory };
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {

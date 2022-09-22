@@ -12,62 +12,62 @@ namespace inventory_changer::game_integration
 namespace
 {
 
-[[nodiscard]] EconItem* getEconItem(ItemId itemID)
+[[nodiscard]] EconItem* getEconItem(const Memory& memory, ItemId itemID)
 {
-    if (const auto view = memory->findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)))
-        return memory->getSOCData(view);
+    if (const auto view = memory.findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)))
+        return memory.getSOCData(view);
     return nullptr;
 }
 
-void initItemCustomizationNotification(std::string_view typeStr, ItemId itemID)
+void initItemCustomizationNotification(const Memory& memory, std::string_view typeStr, ItemId itemID)
 {
-    const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
+    const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
     if (idx == -1)
         return;
 
     using namespace std::string_view_literals;
     std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
-    if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+    if (const auto event = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 }
 
-void updateNameTag(ItemId itemID, const char* newNameTag)
+void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    memory->setCustomName(econItem, newNameTag);
+    memory.setCustomName(econItem, newNameTag);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
-void updatePatch(ItemId itemID, int patchID, std::uint8_t slot)
+void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, patchID);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
-void setItemHiddenFlag(ItemId itemID, bool hide)
+void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
@@ -81,9 +81,9 @@ void setItemHiddenFlag(ItemId itemID, bool hide)
 
 }
 
-void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
+void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
 
     const auto paintKit = gameItemStorage.getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
@@ -123,7 +123,7 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
 
     attributeSetter.setWear(econItem, dynamicData.wear);
     attributeSetter.setSeed(econItem, static_cast<float>(dynamicData.seed));
-    memory->setCustomName(&econItem, dynamicData.nameTag.c_str());
+    memory.setCustomName(&econItem, dynamicData.nameTag.c_str());
 
     for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
         const auto& sticker = dynamicData.stickers[j];
@@ -137,19 +137,19 @@ void initSkinEconItem(const game_items::Storage& gameItemStorage, const inventor
 
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return {};
 
-    const auto baseTypeCache = localInventory->getItemBaseTypeCache();
+    const auto baseTypeCache = localInventory->getItemBaseTypeCache(memory);
     if (!baseTypeCache)
         return {};
 
-    const auto econItem = memory->createEconItemSharedObject();
-    econItem->itemID = localInventory->getHighestIDs().first + 1;
+    const auto econItem = memory.createEconItemSharedObject();
+    econItem->itemID = localInventory->getHighestIDs(memory).first + 1;
     econItem->originalID = 0;
     econItem->accountID = localInventory->getAccountID();
-    econItem->inventory = asUnacknowledged ? 0 : localInventory->getHighestIDs().second + 1;
+    econItem->inventory = asUnacknowledged ? 0 : localInventory->getHighestIDs(memory).second + 1;
 
     const auto& item = inventoryItem.gameItem();
     econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
@@ -161,7 +161,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     if (inventoryItem.getState() == inventory::Item::State::InXrayScanner)
         econItem->flags |= 16;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
 
     if (const auto tradableAfterDate = inventoryItem.getProperties().common.tradableAfterDate; tradableAfterDate != 0) {
         attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
@@ -185,7 +185,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
             econItem->quality = 9;
         }
     } else if (item.isSkin()) {
-        initSkinEconItem(gameItemStorage, inventoryItem, *econItem);
+        initSkinEconItem(memory, gameItemStorage, inventoryItem, *econItem);
     } else if (item.isGloves()) {
         econItem->quality = 3;
         attributeSetter.setPaintKit(*econItem, static_cast<float>(gameItemStorage.getPaintKit(item).id));
@@ -230,45 +230,45 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     } else if (item.isStorageUnit()) {
         if (const auto storageUnit = get<inventory::StorageUnit>(inventoryItem); storageUnit && storageUnit->modificationDateTimestamp != 0) {
             attributeSetter.setModificationDate(*econItem, storageUnit->modificationDateTimestamp);
-            memory->setCustomName(econItem, storageUnit->name.c_str());
+            memory.setCustomName(econItem, storageUnit->name.c_str());
         }
     }
 
     baseTypeCache->addObject(econItem);
     localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
-    if (const auto inventoryComponent = *memory->uiComponentInventory) {
-        memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
-        memory->setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
+    if (const auto inventoryComponent = *memory.uiComponentInventory) {
+        memory.setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
+        memory.setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "updated", "0");
     }
 
-    if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
-        view->clearInventoryImageRGBA();
+    if (const auto view = memory.findOrCreateEconItemViewForItemID(econItem->itemID))
+        view->clearInventoryImageRGBA(memory);
 
     return ItemId{ econItem->itemID };
 }
 
 ItemId Inventory::assingNewItemID(ItemId itemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return itemID;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return itemID;
 
     localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    const auto newItemID = localInventory->getHighestIDs().first + 1;
+    const auto newItemID = localInventory->getHighestIDs(memory).first + 1;
     econItem->itemID = newItemID;
     localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
-    if (const auto newView = memory->findOrCreateEconItemViewForItemID(newItemID))
-        newView->clearInventoryImageRGBA();
+    if (const auto newView = memory.findOrCreateEconItemViewForItemID(newItemID))
+        newView->clearInventoryImageRGBA(memory);
 
-    if (const auto inventoryComponent = *memory->uiComponentInventory) {
-        memory->setItemSessionPropertyValue(inventoryComponent, newItemID, "recent", "0");
-        memory->setItemSessionPropertyValue(inventoryComponent, newItemID, "updated", "0");
+    if (const auto inventoryComponent = *memory.uiComponentInventory) {
+        memory.setItemSessionPropertyValue(inventoryComponent, newItemID, "recent", "0");
+        memory.setItemSessionPropertyValue(inventoryComponent, newItemID, "updated", "0");
     }
 
     return ItemId{ newItemID };
@@ -276,83 +276,83 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
 
 void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint8_t slot)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, static_cast<int>(stickerID));
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("sticker_apply", itemID);
+    initItemCustomizationNotification(memory, "sticker_apply", itemID);
 }
 
 void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, 0);
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("sticker_remove", itemID);
+    initItemCustomizationNotification(memory, "sticker_remove", itemID);
 }
 
 void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWear)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerWear(*econItem, slot, newWear);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::viewerPassActivated(ItemId tournamentCoinItemID)
 {
-    initItemCustomizationNotification("ticket_activated", tournamentCoinItemID);
+    initItemCustomizationNotification(memory, "ticket_activated", tournamentCoinItemID);
 }
 
 void Inventory::addNameTag(ItemId itemID, const char* newNameTag)
 {
-    updateNameTag(itemID, newNameTag);
-    initItemCustomizationNotification("nametag_add", itemID);
+    updateNameTag(memory, itemID, newNameTag);
+    initItemCustomizationNotification(memory, "nametag_add", itemID);
 }
 
 void Inventory::removeNameTag(ItemId itemID)
 {
-    updateNameTag(itemID, "");
+    updateNameTag(memory, itemID, "");
 }
 
 void Inventory::deleteItem(ItemId itemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
     localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
-    if (const auto baseTypeCache = localInventory->getItemBaseTypeCache())
+    if (const auto baseTypeCache = localInventory->getItemBaseTypeCache(memory))
         baseTypeCache->removeObject(econItem);
 
     econItem->destructor();
@@ -360,133 +360,133 @@ void Inventory::deleteItem(ItemId itemID)
 
 void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStatTrak(*econItem, newStatTrakValue);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::containerOpened(ItemId unlockedItemID)
 {
-    initItemCustomizationNotification("crate_unlock", unlockedItemID);
+    initItemCustomizationNotification(memory, "crate_unlock", unlockedItemID);
 }
 
 void Inventory::applyPatch(ItemId itemID, int patchID, std::uint8_t slot)
 {
-    updatePatch(itemID, patchID, slot);
-    initItemCustomizationNotification("patch_apply", itemID);
+    updatePatch(memory, itemID, patchID, slot);
+    initItemCustomizationNotification(memory, "patch_apply", itemID);
 }
 
 void Inventory::removePatch(ItemId itemID, std::uint8_t slot)
 {
-    updatePatch(itemID, 0, slot);
-    initItemCustomizationNotification("patch_remove", itemID);
+    updatePatch(memory, itemID, 0, slot);
+    initItemCustomizationNotification(memory, "patch_remove", itemID);
 }
 
 void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setDropsAwarded(*econItem, dropsAwarded);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("ticket_activated", itemID);
+    initItemCustomizationNotification(memory, "ticket_activated", itemID);
 }
 
 void Inventory::unsealGraffiti(ItemId itemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem || econItem->weaponId != WeaponId::SealedGraffiti)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setSpraysRemaining(*econItem, 50);
     econItem->weaponId = WeaponId::Graffiti;
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("graffity_unseal", itemID);
+    initItemCustomizationNotification(memory, "graffity_unseal", itemID);
 }
 
 void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, 0, graffitiID);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::statTrakSwapped(ItemId itemID)
 {
-    initItemCustomizationNotification("stattrack_swap", itemID);
+    initItemCustomizationNotification(memory, "stattrack_swap", itemID);
 }
 
 void Inventory::equipItem(ItemId itemID, csgo::Team team, std::uint8_t slot)
 {
-    memory->inventoryManager->equipItemInSlot(team, slot, static_cast<csgo::ItemId>(itemID));
+    memory.inventoryManager->equipItemInSlot(team, slot, static_cast<csgo::ItemId>(itemID));
 }
 
 void Inventory::markItemUpdated(ItemId itemID)
 {
-    if (const auto inventoryComponent = *memory->uiComponentInventory) {
-        memory->setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "recent", "0");
-        memory->setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "updated", "1");
+    if (const auto inventoryComponent = *memory.uiComponentInventory) {
+        memory.setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "recent", "0");
+        memory.setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "updated", "1");
     }
 }
 
 void Inventory::pickEmUpdated()
 {
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
+    if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
         const char* dummy;
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
+        if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
             interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
     }
 }
 
 void Inventory::hideItem(ItemId itemID)
 {
-    setItemHiddenFlag(itemID, true);
+    setItemHiddenFlag(memory, itemID, true);
 }
 
 void Inventory::unhideItem(ItemId itemID)
 {
-    setItemHiddenFlag(itemID, false);
+    setItemHiddenFlag(memory, itemID, false);
 }
 
 void Inventory::xRayItemRevealed(ItemId itemID)
 {
-   initItemCustomizationNotification("xray_item_reveal", itemID);
+   initItemCustomizationNotification(memory, "xray_item_reveal", itemID);
 }
 
 void Inventory::xRayItemClaimed(ItemId itemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
@@ -494,7 +494,7 @@ void Inventory::xRayItemClaimed(ItemId itemID)
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
-    initItemCustomizationNotification("xray_item_claim", itemID);
+    initItemCustomizationNotification(memory, "xray_item_claim", itemID);
 }
 
 void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
@@ -504,15 +504,15 @@ void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
 
 void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setModificationDate(*econItem, modificationDate);
     attributeSetter.setItemsCount(*econItem, itemCount);
 
@@ -521,15 +521,15 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
 
 void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setCasketItemIdLow(*econItem, static_cast<std::uint32_t>(static_cast<csgo::ItemId>(storageUnitItemID) & 0xFFFFFFFF));
     attributeSetter.setCasketItemIdHigh(*econItem, static_cast<std::uint32_t>((static_cast<csgo::ItemId>(storageUnitItemID) >> 32) & 0xFFFFFFFF));
 
@@ -538,37 +538,37 @@ void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 
 void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
 {
-    initItemCustomizationNotification("casket_added", storageUnitItemID);
+    initItemCustomizationNotification(memory, "casket_added", storageUnitItemID);
 }
 
 void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.removeCasketItemId(*econItem);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification("casket_removed", storageUnitItemID);
+    initItemCustomizationNotification(memory, "casket_removed", storageUnitItemID);
 }
 
 void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate)
 {
-    const auto econItem = getEconItem(itemID);
+    const auto econItem = getEconItem(memory, itemID);
     if (!econItem)
         return;
 
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    const auto localInventory = memory.inventoryManager->getLocalInventory();
     if (!localInventory)
         return;
 
-    EconItemAttributeSetter attributeSetter{ *memory->itemSystem()->getItemSchema() };
+    EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);

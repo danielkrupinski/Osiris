@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Config.h>
+#include "../Memory.h"
 
 namespace StreamProofESP
 {
-    void render(Config& config) noexcept;
+    void render(const Memory& memory, Config& config) noexcept;
     void updateInput(Config& config) noexcept;
 
     // GUI

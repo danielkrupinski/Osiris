@@ -15,14 +15,16 @@
 
 #include "SDK/WeaponId.h"
 
+#include "Memory.h"
+
 struct Color3;
 struct Color4;
 struct Vector;
 
 namespace Helpers
 {
-    unsigned int calculateColor(Color4 color) noexcept;
-    unsigned int calculateColor(Color3 color) noexcept;
+    unsigned int calculateColor(const Memory& memory, Color4 color) noexcept;
+    unsigned int calculateColor(const Memory& memory, Color3 color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
     void setAlphaFactor(float newAlphaFactor) noexcept;
     float getAlphaFactor() noexcept;

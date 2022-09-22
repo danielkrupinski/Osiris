@@ -27,11 +27,11 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
-static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
 #if defined(_WIN32) && (!defined(__clang__) || !defined(_DEBUG))
-    const auto traceToExitFn = memory->traceToExit;
+    const auto traceToExitFn = memory.traceToExit;
     __asm {
         push 0
         push 0
@@ -55,12 +55,12 @@ static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vect
     return result;
 }
 
-static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+static float handleBulletPenetration(const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
 
-    if (!traceToExit(enterTrace, enterTrace.endpos, direction, end, exitTrace))
+    if (!traceToExit(memory, enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
     SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
@@ -88,7 +88,7 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     return damage;
 }
 
-static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const Memory& memory, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
@@ -105,7 +105,7 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
         Trace trace;
         interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
 
-        if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(trace.entity))
+        if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(memory, trace.entity))
             return false;
 
         if (trace.fraction == 1.0f)
@@ -124,7 +124,7 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
         if (surfaceData->penetrationmodifier < 0.1f)
             break;
 
-        damage = handleBulletPenetration(surfaceData, trace, direction, start, weaponData->penetration, damage);
+        damage = handleBulletPenetration(memory, surfaceData, trace, direction, start, weaponData->penetration, damage);
         hitsLeft--;
     }
     return false;
@@ -140,9 +140,9 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const Config& config, UserCmd* cmd) noexcept
+void Aimbot::run(const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
-    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
+    if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
@@ -163,7 +163,7 @@ void Aimbot::run(const Config& config, UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
+    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
     if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
@@ -186,21 +186,21 @@ void Aimbot::run(const Config& config, UserCmd* cmd) noexcept
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-                || !entity->isOtherEnemy(localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
+                || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
             for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
-                const auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
+                const auto bonePosition = entity->getBonePosition(memory, config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
                 const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 
                 const auto fov = std::hypot(angle.x, angle.y);
                 if (fov > bestFov)
                     continue;
 
-                if (!config.aimbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
+                if (!config.aimbot[weaponIndex].ignoreSmoke && memory.lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
+                if (!entity->isVisible(memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(memory, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {
@@ -233,10 +233,10 @@ void Aimbot::run(const Config& config, UserCmd* cmd) noexcept
             if (!config.aimbot[weaponIndex].silent)
                 interfaces->engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped)

@@ -6,6 +6,8 @@
 
 #include <StringPool.h>
 
+#include "../Memory.h"
+
 enum class WeaponId : short;
 
 namespace inventory_changer
@@ -32,7 +34,7 @@ public:
         names.emplace(weaponID, std::make_pair(pool.add(name), poolWide.add(nameUpperCase)));
     }
 
-    static const WeaponNames& instance();
+    static const WeaponNames& instance(const Memory& memory);
 
 private:
     StringPool<char> pool;

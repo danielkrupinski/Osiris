@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Config.h>
+#include "../Memory.h"
 
 struct UserCmd;
 struct Vector;
@@ -8,7 +9,7 @@ struct Vector;
 namespace Aimbot
 {
     Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept;
-    void run(const Config& config, UserCmd*) noexcept;
+    void run(const Config& config, const Memory& memory, UserCmd*) noexcept;
 
     void updateInput(const Config& config) noexcept;
 }

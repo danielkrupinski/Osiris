@@ -53,13 +53,12 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
 static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
     const auto viewModel = reinterpret_cast<Entity*>(outStruct);
-
     if (localPlayer && interfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
         if (const auto weapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
             if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            inventory_changer::InventoryChanger::instance().fixKnifeAnimation(weapon, data.value._int);
+            inventory_changer::InventoryChanger::instance(*memory).fixKnifeAnimation(weapon, data.value._int);
         }
     }
 

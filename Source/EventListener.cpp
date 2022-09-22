@@ -16,47 +16,52 @@ namespace
 {
     class EventListenerImpl : public GameEventListener {
     public:
+        EventListenerImpl(const Memory& memory) : memory{ memory } {}
+
         void fireGameEvent(GameEvent* event) override
         {
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("round_start"):
                 GameData::clearProjectileList();
-                Misc::preserveKillfeed(true);
+                Misc::preserveKillfeed(memory, true);
                 [[fallthrough]];
             case fnv::hash("round_freeze_end"):
-                Misc::purchaseList(event);
+                Misc::purchaseList(memory, event);
                 break;
             case fnv::hash("player_death"): {
-                auto& inventoryChanger = inventory_changer::InventoryChanger::instance();
+                auto& inventoryChanger = inventory_changer::InventoryChanger::instance(memory);
                 inventoryChanger.updateStatTrak(*event);
-                inventoryChanger.overrideHudIcon(*event);
+                inventoryChanger.overrideHudIcon(memory, *event);
                 Misc::killMessage(*event);
                 Misc::killSound(*event);
                 break;
             }
             case fnv::hash("player_hurt"):
                 Misc::playHitSound(*event);
-                Visuals::hitEffect(event);
-                Visuals::hitMarker(event);
+                Visuals::hitEffect(memory, event);
+                Visuals::hitMarker(memory, event);
                 break;
             case fnv::hash("vote_cast"):
-                Misc::voteRevealer(*event);
+                Misc::voteRevealer(memory, *event);
                 break;
             case fnv::hash("round_mvp"):
-                inventory_changer::InventoryChanger::instance().onRoundMVP(*event);
+                inventory_changer::InventoryChanger::instance(memory).onRoundMVP(*event);
                 break;
             }
         }
 
-        static EventListenerImpl& instance() noexcept
+        static EventListenerImpl& instance(const Memory& memory) noexcept
         {
-            static EventListenerImpl impl;
+            static EventListenerImpl impl{ memory };
             return impl;
         }
+
+    private:
+        const Memory& memory;
     };
 }
 
-void EventListener::init() noexcept
+void EventListener::init(const Memory& memory) noexcept
 {
     assert(interfaces);
 
@@ -64,29 +69,29 @@ void EventListener::init() noexcept
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
     const auto gameEventManager = interfaces->gameEventManager;
-    gameEventManager->addListener(&EventListenerImpl::instance(), "round_start");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "round_freeze_end");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "player_hurt");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "player_death");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "vote_cast");
-    gameEventManager->addListener(&EventListenerImpl::instance(), "round_mvp");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "round_start");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "round_freeze_end");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "player_hurt");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "player_death");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "vote_cast");
+    gameEventManager->addListener(&EventListenerImpl::instance(memory), "round_mvp");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
-    if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
+    if (const auto desc = memory.getEventDescriptor(gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);
 
     // Move our round_mvp listener to the first position to override event data (InventoryChanger::onRoundMVP()) before HUD gets them
-    if (const auto desc = memory->getEventDescriptor(gameEventManager, "round_mvp", nullptr))
+    if (const auto desc = memory.getEventDescriptor(gameEventManager, "round_mvp", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);
 }
 
-void EventListener::remove() noexcept
+void EventListener::remove(const Memory& memory) noexcept
 {
     assert(interfaces);
 
-    interfaces->gameEventManager->removeListener(&EventListenerImpl::instance());
+    interfaces->gameEventManager->removeListener(&EventListenerImpl::instance(memory));
 }

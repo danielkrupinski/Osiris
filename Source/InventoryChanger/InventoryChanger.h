@@ -25,7 +25,7 @@ public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
         : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup } {}
 
-    static InventoryChanger& instance();
+    static InventoryChanger& instance(const Memory& memory);
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
@@ -47,23 +47,23 @@ public:
         return backend;
     }
 
-    void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
+    void getArgAsNumberHook(const Memory& memory, int number, std::uintptr_t returnAddress);
     void onRoundMVP(GameEvent& event);
     void updateStatTrak(GameEvent& event);
-    void overrideHudIcon(GameEvent& event);
-    void getArgAsStringHook(const char* string, std::uintptr_t returnAddress, void* params);
-    void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
-    int setResultIntHook(std::uintptr_t returnAddress, void* params, int result);
-    void onUserTextMsg(const void*& data, int& size);
+    void overrideHudIcon(const Memory& memory, GameEvent& event);
+    void getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
+    void getNumArgsHook(const Memory& memory, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
+    int setResultIntHook(const Memory& memory, std::uintptr_t returnAddress, void* params, int result);
+    void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
-    void acknowledgeItem(std::uint64_t itemID);
+    void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence);
 
-    void reset();
+    void reset(const Memory& memory);
 
-    void drawGUI(bool contentOnly);
+    void drawGUI(const Memory& memory, bool contentOnly);
 
-    void run(csgo::FrameStage frameStage) noexcept;
+    void run(const Memory& memory, csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate() noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
 
@@ -89,7 +89,7 @@ namespace InventoryChanger
 {
     // GUI
     void menuBarItem() noexcept;
-    void tabItem() noexcept;
+    void tabItem(const Memory& memory) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;

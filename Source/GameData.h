@@ -12,6 +12,8 @@
 
 #include "Texture.h"
 
+#include "Memory.h"
+
 struct LocalPlayerData;
 
 struct PlayerData;
@@ -27,7 +29,7 @@ struct Matrix4x4;
 
 namespace GameData
 {
-    void update() noexcept;
+    void update(const Memory& memory) noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
     void clearUnusedAvatars() noexcept;
@@ -90,9 +92,9 @@ struct EntityData final : BaseData {
 };
 
 struct ProjectileData : BaseData {
-    ProjectileData(Entity* projectile) noexcept;
+    ProjectileData(const Memory& memory, Entity* projectile) noexcept;
 
-    void update(Entity* projectile) noexcept;
+    void update(const Memory& memory, Entity* projectile) noexcept;
 
     constexpr auto operator==(int otherHandle) const noexcept
     {
@@ -110,15 +112,15 @@ struct ProjectileData : BaseData {
 enum class Team;
 
 struct PlayerData : BaseData {
-    PlayerData(Entity* entity) noexcept;
+    PlayerData(const Memory& memory, Entity* entity) noexcept;
     PlayerData(const PlayerData&) = delete;
     PlayerData& operator=(const PlayerData&) = delete;
     PlayerData(PlayerData&&) = default;
     PlayerData& operator=(PlayerData&&) = default;
 
-    void update(Entity* entity) noexcept;
+    void update(const Memory& memory, Entity* entity) noexcept;
     [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
-    [[nodiscard]] float fadingAlpha() const noexcept;
+    [[nodiscard]] float fadingAlpha(const Memory& memory) const noexcept;
 
     bool dormant;
     bool enemy = false;
@@ -165,7 +167,7 @@ struct ObserverData {
 };
 
 struct BombData {
-    void update() noexcept;
+    void update(const Memory& memory) noexcept;
 
     float blowTime;
     float timerLength;

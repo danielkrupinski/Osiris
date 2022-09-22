@@ -70,17 +70,17 @@ static void updateNetLatency() noexcept
 constexpr auto playerVisibilityUpdateDelay = 0.1f;
 static float nextPlayerVisibilityUpdateTime = 0.0f;
 
-static bool shouldUpdatePlayerVisibility() noexcept
+static bool shouldUpdatePlayerVisibility(const Memory& memory) noexcept
 {
-    return nextPlayerVisibilityUpdateTime <= memory->globalVars->realtime;
+    return nextPlayerVisibilityUpdateTime <= memory.globalVars->realtime;
 }
 
-void GameData::update() noexcept
+void GameData::update(const Memory& memory) noexcept
 {
     static int lastFrame;
-    if (lastFrame == memory->globalVars->framecount)
+    if (lastFrame == memory.globalVars->framecount)
         return;
-    lastFrame = memory->globalVars->framecount;
+    lastFrame = memory.globalVars->framecount;
 
     updateNetLatency();
 
@@ -92,7 +92,7 @@ void GameData::update() noexcept
     infernoData.clear();
 
     localPlayerData.update();
-    bombData.update();
+    bombData.update(memory);
 
     if (!localPlayer) {
         playerData.clear();
@@ -115,9 +115,9 @@ void GameData::update() noexcept
                 continue;
 
             if (const auto player = playerByHandleWritable(entity->handle())) {
-                player->update(entity);
+                player->update(memory, entity);
             } else {
-                playerData.emplace_back(entity);
+                playerData.emplace_back(memory, entity);
             }
 
             if (!entity->isDormant() && !entity->isAlive()) {
@@ -148,9 +148,9 @@ void GameData::update() noexcept
                 case ClassId::SmokeGrenadeProjectile:
                 case ClassId::SnowballProjectile:
                     if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
-                        it->update(entity);
+                        it->update(memory, entity);
                     else
-                        projectileData.emplace_front(entity);
+                        projectileData.emplace_front(memory, entity);
                     break;
                 case ClassId::DynamicProp:
                     if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
@@ -190,13 +190,13 @@ void GameData::update() noexcept
             projectile.exploded = true;
     });
 
-    std::erase_if(projectileData, [](const auto& projectile) { return interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr
-        && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory->globalVars->realtime); });
+    std::erase_if(projectileData, [&memory](const auto& projectile) { return interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr
+        && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory.globalVars->realtime); });
 
     std::erase_if(playerData, [](const auto& player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
 
-    if (shouldUpdatePlayerVisibility())
-        nextPlayerVisibilityUpdateTime = memory->globalVars->realtime + playerVisibilityUpdateDelay;
+    if (shouldUpdatePlayerVisibility(memory))
+        nextPlayerVisibilityUpdateTime = memory.globalVars->realtime + playerVisibilityUpdateDelay;
 }
 
 void GameData::clearProjectileList() noexcept
@@ -353,7 +353,7 @@ EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
     }(entity);
 }
 
-ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData { projectile }
+ProjectileData::ProjectileData(const Memory& memory, Entity* projectile) noexcept : BaseData { projectile }
 {
     name = [](Entity* projectile) {
         switch (projectile->getClientClass()->classId) {
@@ -377,21 +377,21 @@ ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData { project
         if (thrower == localPlayer.get())
             thrownByLocalPlayer = true;
         else
-            thrownByEnemy = localPlayer->isOtherEnemy(thrower);
+            thrownByEnemy = localPlayer->isOtherEnemy(memory, thrower);
     }
 
     handle = projectile->handle();
 }
 
-void ProjectileData::update(Entity* projectile) noexcept
+void ProjectileData::update(const Memory& memory, Entity* projectile) noexcept
 {
     static_cast<BaseData&>(*this) = { projectile };
 
     if (const auto& pos = projectile->getAbsOrigin(); trajectory.size() < 1 || trajectory[trajectory.size() - 1].second != pos)
-        trajectory.emplace_back(memory->globalVars->realtime, pos);
+        trajectory.emplace_back(memory.globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
+PlayerData::PlayerData(const Memory& memory, Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
 {
     if (const auto steamID = entity->getSteamId()) {
         const auto ctx = interfaces->engine->getSteamAPIContext();
@@ -404,12 +404,12 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ en
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
-    update(entity);
+    update(memory, entity);
 }
 
-void PlayerData::update(Entity* entity) noexcept
+void PlayerData::update(const Memory& memory, Entity* entity) noexcept
 {
-    name = entity->getPlayerName();
+    name = entity->getPlayerName(memory);
 
     dormant = entity->isDormant();
     if (dormant)
@@ -420,20 +420,20 @@ void PlayerData::update(Entity* entity) noexcept
     origin = entity->getAbsOrigin();
     inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
     alive = entity->isAlive();
-    lastContactTime = alive ? memory->globalVars->realtime : 0.0f;
+    lastContactTime = alive ? memory.globalVars->realtime : 0.0f;
 
     if (localPlayer) {
-        enemy = localPlayer->isOtherEnemy(entity);
+        enemy = localPlayer->isOtherEnemy(memory, entity);
 
         if (!inViewFrustum || !alive)
             visible = false;
-        else if (shouldUpdatePlayerVisibility())
-            visible = entity->visibleTo(localPlayer.get());
+        else if (shouldUpdatePlayerVisibility(memory))
+            visible = entity->visibleTo(memory, localPlayer.get());
     }
 
-    constexpr auto isEntityAudible = [](int entityIndex) noexcept {
-        for (int i = 0; i < memory->activeChannels->count; ++i)
-            if (memory->channels[memory->activeChannels->list[i]].soundSource == entityIndex)
+    auto isEntityAudible = [&memory](int entityIndex) noexcept {
+        for (int i = 0; i < memory.activeChannels->count; ++i)
+            if (memory.channels[memory.activeChannels->list[i]].soundSource == entityIndex)
                 return true;
         return false;
     };
@@ -462,7 +462,7 @@ void PlayerData::update(Entity* entity) noexcept
         return;
 
     matrix3x4 boneMatrices[MAXSTUDIOBONES];
-    if (!entity->setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
+    if (!entity->setupBones(memory, boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
         return;
 
     bones.clear();
@@ -543,10 +543,10 @@ ImTextureID PlayerData::getAvatarTexture() const noexcept
     return avatar.texture.get();
 }
 
-float PlayerData::fadingAlpha() const noexcept
+float PlayerData::fadingAlpha(const Memory& memory) const noexcept
 {
     constexpr float fadeTime = 1.50f;
-    return std::clamp(1.0f - (memory->globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
+    return std::clamp(1.0f - (memory.globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
 }
 
 WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
@@ -670,10 +670,10 @@ LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
 
 ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept : playerHandle{ entity->handle() }, targetHandle{ obs->handle() }, targetIsLocalPlayer{ targetIsLocalPlayer } {}
 
-void BombData::update() noexcept
+void BombData::update(const Memory& memory) noexcept
 {
-    if (memory->plantedC4s->size > 0 && (!*memory->gameRules || (*memory->gameRules)->mapHasBombTarget())) {
-        if (const auto bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
+    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || (*memory.gameRules)->mapHasBombTarget())) {
+        if (const auto bomb = (*memory.plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
             timerLength = bomb->c4TimerLength();
             defuserHandle = bomb->c4Defuser();
@@ -682,9 +682,9 @@ void BombData::update() noexcept
                 defuseLength = bomb->c4DefuseLength();
             }
 
-            if (*memory->playerResource) {
+            if (*memory.playerResource) {
                 const auto& bombOrigin = bomb->origin();
-                bombsite = bombOrigin.distTo((*memory->playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory->playerResource)->bombsiteCenterB());
+                bombsite = bombOrigin.distTo((*memory.playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory.playerResource)->bombsiteCenterB());
             }
             return;
         }

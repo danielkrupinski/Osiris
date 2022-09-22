@@ -134,11 +134,11 @@ public:
         return false;
     }
 
-    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
-    Vector getBonePosition(int bone) noexcept;
+    bool setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
+    Vector getBonePosition(const Memory& memory, int bone) noexcept;
 
-    bool isVisible(const Vector& position = { }) noexcept;
-    bool isOtherEnemy(Entity* other) noexcept;
+    bool isVisible(const Memory& memory, const Vector& position = { }) noexcept;
+    bool isOtherEnemy(const Memory& memory, Entity* other) noexcept;
 
     VarMap& getVarMap() noexcept
     {
@@ -164,16 +164,16 @@ public:
     int getUserId() noexcept;
     std::uint64_t getSteamId() noexcept;
 
-    void getPlayerName(char(&out)[128]) noexcept;
-    [[nodiscard]] std::string getPlayerName() noexcept
+    void getPlayerName(const Memory& memory, char(&out)[128]) noexcept;
+    [[nodiscard]] std::string getPlayerName(const Memory& memory) noexcept
     {
         char name[128];
-        getPlayerName(name);
+        getPlayerName(memory, name);
         return name;
     }
 
-    bool canSee(Entity* other, const Vector& pos) noexcept;
-    bool visibleTo(Entity* other) noexcept;
+    bool canSee(const Memory& memory, Entity* other, const Vector& pos) noexcept;
+    bool visibleTo(const Memory& memory, Entity* other) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)

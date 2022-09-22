@@ -291,7 +291,8 @@ public:
 
 class EconItemAttributeSetter {
 public:
-    explicit EconItemAttributeSetter(ItemSchema& itemSchema) : itemSchema{ itemSchema } {}
+    explicit EconItemAttributeSetter(ItemSchema& itemSchema, const Memory& memory)
+        : itemSchema{ itemSchema }, memory{ memory } {}
 
     void setPaintKit(EconItem& econItem, float paintKit) noexcept { setAttributeValue(econItem, 6, &paintKit); }
     void setSeed(EconItem& econItem, float seed) noexcept { setAttributeValue(econItem, 7, &seed); }
@@ -333,16 +334,17 @@ private:
     void setAttributeValue(EconItem& econItem, int index, void* value) noexcept
     {
         if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
-            memory->setDynamicAttributeValue(&econItem, attribute, value);
+            memory.setDynamicAttributeValue(&econItem, attribute, value);
     }
 
     void removeAttribute(EconItem& econItem, int index) noexcept
     {
         if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
-            memory->removeDynamicAttribute(&econItem, attribute);
+            memory.removeDynamicAttribute(&econItem, attribute);
     }
 
     ItemSchema& itemSchema;
+    const Memory& memory;
 };
 
 class EconItem {
@@ -406,9 +408,9 @@ public:
     PAD(16)
     UtlVector<SharedObjectTypeCache<T>*> sharedObjectTypeCaches;
 
-    SharedObjectTypeCache<T>* findBaseTypeCache(int classID) noexcept
+    SharedObjectTypeCache<T>* findBaseTypeCache(const Memory& memory, int classID) noexcept
     {
-        return memory->createBaseTypeCache(this, classID);
+        return memory.createBaseTypeCache(this, classID);
     }
 };
 
@@ -435,22 +437,22 @@ public:
         return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0xB4, 0xF8));
     }
 
-    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache() noexcept
+    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache(const Memory& memory) noexcept
     {
         const auto soc = getSOC();
         if (!soc)
             return nullptr;
 
-        return soc->findBaseTypeCache(1);
+        return soc->findBaseTypeCache(memory, 1);
     }
 
-    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs() noexcept
+    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) noexcept
     {
         const auto soc = getSOC();
         if (!soc)
             return {};
 
-        const auto baseTypeCache = soc->findBaseTypeCache(1);
+        const auto baseTypeCache = soc->findBaseTypeCache(memory, 1);
         if (!baseTypeCache)
             return {};
 

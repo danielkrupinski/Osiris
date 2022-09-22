@@ -4,6 +4,8 @@
 
 #include <SDK/Constants/ItemId.h>
 
+#include "../../Memory.h"
+
 namespace csgo
 {
     enum class StickerId : int;
@@ -30,6 +32,8 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
+    Inventory(const Memory& memory) : memory{ memory } {}
+
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] ItemId assingNewItemID(ItemId itemID);
     void applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint8_t slot);
@@ -60,6 +64,9 @@ public:
     void itemAddedToStorageUnit(ItemId storageUnitItemID);
     void removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID);
     void updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate);
+
+private:
+    const Memory& memory;
 };
 
 }

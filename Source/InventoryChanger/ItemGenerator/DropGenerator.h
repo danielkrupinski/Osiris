@@ -14,9 +14,9 @@
 namespace inventory_changer::item_generator
 {
 
-[[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(WeaponId weaponID) noexcept
+[[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(const Memory& memory, WeaponId weaponID) noexcept
 {
-    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
+    if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(weaponID))
         return static_cast<std::uint8_t>(std::clamp(def->getNumberOfSupportedStickerSlots(), 0, 5));
     return 0;
 }
@@ -27,12 +27,12 @@ public:
     explicit DropGenerator(const game_items::Lookup& gameItemLookup, AttributeGenerator attributeGenerator)
         : gameItemLookup{ gameItemLookup }, attributeGenerator{ attributeGenerator } {}
 
-    [[nodiscard]] inventory::Item::VariantProperties createVariantProperties(const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak) const
+    [[nodiscard]] inventory::Item::VariantProperties createVariantProperties(const Memory& memory, const game_items::Item& unlockedItem, const inventory::Item& caseItem, bool willProduceStatTrak) const
     {
         if (willProduceStatTrak && unlockedItem.isMusic()) {
             return inventory::Music{ .statTrak = 0 };
         } else if (unlockedItem.isSkin()) {
-            return generateSkin(unlockedItem, caseItem);
+            return generateSkin(memory, unlockedItem, caseItem);
         } else if (unlockedItem.isGloves()) {
             return generateGloves(unlockedItem);
         }
@@ -47,7 +47,7 @@ public:
     }
 
 private:
-    [[nodiscard]] inventory::Skin generateSkin(const game_items::Item& unlockedItem, const inventory::Item& caseItem) const
+    [[nodiscard]] inventory::Skin generateSkin(const Memory& memory, const game_items::Item& unlockedItem, const inventory::Item& caseItem) const
     {
         inventory::Skin skin;
         const auto& paintKit = gameItemLookup.getStorage().getPaintKit(unlockedItem);
@@ -60,7 +60,7 @@ private:
             skin.tournamentTeam1 = souvenirPackage->tournamentTeam1;
             skin.tournamentTeam2 = souvenirPackage->tournamentTeam2;
             skin.proPlayer = souvenirPackage->proPlayer;
-            skin.stickers = generateSouvenirStickers(unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
+            skin.stickers = generateSouvenirStickers(memory, unlockedItem.getWeaponID(), gameItemLookup.getStorage().getTournamentEventID(caseItem.gameItem()), gameItemLookup.getStorage().getTournamentMap(caseItem.gameItem()), skin.tournamentTeam1, skin.tournamentTeam2, skin.proPlayer);
         } else if (attributeGenerator.generateStatTrak()) {
             skin.statTrak = 0;
         }
@@ -68,7 +68,7 @@ private:
         return skin;
     }
 
-    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(WeaponId weaponID, csgo::Tournament tournament, TournamentMap map, csgo::TournamentTeam team1, csgo::TournamentTeam team2, csgo::ProPlayer player) const
+    [[nodiscard]] inventory::SkinStickers generateSouvenirStickers(const Memory& memory, WeaponId weaponID, csgo::Tournament tournament, TournamentMap map, csgo::TournamentTeam team1, csgo::TournamentTeam team2, csgo::ProPlayer player) const
     {
         inventory::SkinStickers stickers;
 
@@ -84,7 +84,7 @@ private:
                 stickers[3].stickerID = game_integration::getTournamentMapGoldStickerID(map);
         }
 
-        attributeGenerator.shuffleStickers(getNumberOfSupportedStickerSlots(weaponID), stickers);
+        attributeGenerator.shuffleStickers(getNumberOfSupportedStickerSlots(memory, weaponID), stickers);
         return stickers;
     }
 

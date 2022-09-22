@@ -5,6 +5,8 @@
 #include "Inconstructible.h"
 #include "Platform.h"
 
+#include "../Memory.h"
+
 template <typename T> class UtlVector;
 
 class EconItemView {
@@ -26,5 +28,5 @@ public:
         return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, 0x2D8));
     }
 
-    void clearInventoryImageRGBA() noexcept;
+    void clearInventoryImageRGBA(const Memory& memory) noexcept;
 };
