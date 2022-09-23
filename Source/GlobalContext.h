@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 class matrix3x4;
 struct ModelRenderInfo;
 struct UserCmd;
