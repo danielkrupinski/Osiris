@@ -72,32 +72,9 @@
 
 #ifdef _WIN32
 
-LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (globalContext.state == GlobalContext::State::Initialized) {
-        ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
-        interfaces->inputSystem->enableInput(!gui->isOpen());
-    } else if (globalContext.state == GlobalContext::State::NotInitialized) {
-        globalContext.state = GlobalContext::State::Initializing;
-
-        interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *interfaces->client });
-
-        Netvars::init(*interfaces);
-        EventListener::init(*interfaces, *memory);
-
-        ImGui::CreateContext();
-        ImGui_ImplWin32_Init(window);
-        config.emplace(Config{ *interfaces, *memory });
-        gui.emplace(GUI{});
-        hooks->install(*interfaces, *memory);
-
-        globalContext.state = GlobalContext::State::Initialized;
-    }
-
-    return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
+    return globalContext.wndProcHook(window, msg, wParam, lParam);
 }
 
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept

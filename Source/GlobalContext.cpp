@@ -1,6 +1,12 @@
 #include "GlobalContext.h"
 
+#ifdef _WIN32
+#include <imgui/imgui_impl_win32.h>
+#endif
+
+#include "EventListener.h"
 #include "GameData.h"
+#include "GUI.h"
 #include "Hooks.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Memory.h"
@@ -19,6 +25,7 @@
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/InputSystem.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelRender.h"
 #include "SDK/StudioRender.h"
@@ -177,3 +184,33 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 
     hooks->client.callOriginal<void, 37>(stage);
 }
+
+#ifdef _WIN32
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (state == GlobalContext::State::Initialized) {
+        ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+        interfaces->inputSystem->enableInput(!gui->isOpen());
+    } else if (state == GlobalContext::State::NotInitialized) {
+        state = GlobalContext::State::Initializing;
+
+        interfaces.emplace(Interfaces{});
+        memory.emplace(Memory{ *interfaces->client });
+
+        Netvars::init(*interfaces);
+        EventListener::init(*interfaces, *memory);
+
+        ImGui::CreateContext();
+        ImGui_ImplWin32_Init(window);
+        config.emplace(Config{ *interfaces, *memory });
+        gui.emplace(GUI{});
+        hooks->install(*interfaces, *memory);
+
+        state = GlobalContext::State::Initialized;
+    }
+
+    return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
+}
+#endif

@@ -2,6 +2,10 @@
 
 #include <cstdint>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 class matrix3x4;
 struct ModelRenderInfo;
 struct UserCmd;
@@ -17,6 +21,11 @@ public:
     bool svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
 
+#ifdef _WIN32
+    LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
+
+private:
     enum class State {
         NotInitialized,
         Initializing,
