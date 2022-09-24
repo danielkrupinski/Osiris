@@ -146,15 +146,15 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
     return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
 
-Memory::Memory(const Interfaces& interfaces) noexcept
+Memory::Memory(Client& clientInterface) noexcept
 {
 #ifdef _WIN32
     present = findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF0\x85\xFF") + 2;
     reset = findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xD8") + 9;
 
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 5);
+    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 1);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[11] + 10);
     glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern(CLIENT_DLL, "\x0F\x11\x05????\x83\xC8\x01") + 3);
     disablePostProcessing = *reinterpret_cast<bool**>(findPattern(CLIENT_DLL, "\x83\xEC\x4C\x80\x3D") + 5);
     loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\x2D\xA1") + 1);
@@ -253,7 +253,7 @@ Memory::Memory(const Interfaces& interfaces) noexcept
     swapWindow = relativeToAbsolute<uintptr_t>(uintptr_t(dlsym(libSDL, "SDL_GL_SwapWindow")) + 2);
     dlclose(libSDL);
 
-    globalVars = *relativeToAbsolute<GlobalVars**>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[11] + 16);
+    globalVars = *relativeToAbsolute<GlobalVars**>((*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16);
     itemSystem = relativeToAbsolute<decltype(itemSystem)>(findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") + 1);
     weaponSystem = *relativeToAbsolute<WeaponSystem**>(findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") + 12);
 
@@ -267,8 +267,8 @@ Memory::Memory(const Interfaces& interfaces) noexcept
     disablePostProcessing = relativeToAbsolute<decltype(disablePostProcessing)>(findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") + 2);
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58");
     loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") + 1);
-    clientMode = *relativeToAbsolute<decltype(clientMode)*>(relativeToAbsolute<uintptr_t>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 12) + 4);
-    input = **relativeToAbsolute<Input***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 3);
+    clientMode = *relativeToAbsolute<decltype(clientMode)*>(relativeToAbsolute<uintptr_t>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 12) + 4);
+    input = **relativeToAbsolute<Input***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 3);
     playerResource = relativeToAbsolute<PlayerResource**>(findPattern(CLIENT_DLL, "\x74\x38\x48\x8B\x3D????\x89\xDE") + 5);
 
     glowObjectManager = relativeToAbsolute<decltype(glowObjectManager)>(relativeToAbsolute<uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE7\x8B\x70\x20") + 1) + 12);

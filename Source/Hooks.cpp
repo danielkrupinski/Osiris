@@ -449,7 +449,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
     interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{ *interfaces });
+    memory.emplace(Memory{ *interfaces->client });
 
     window = FindWindowW(L"Valve001", nullptr);
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
@@ -654,7 +654,7 @@ static int pollEvent(SDL_Event* event) noexcept
 Hooks::Hooks() noexcept
 {
     interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{ *interfaces });
+    memory.emplace(Memory{ *interfaces->client });
 
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(memory->pollEvent) = ::pollEvent;

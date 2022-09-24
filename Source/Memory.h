@@ -45,7 +45,7 @@ struct Vector;
 
 class Memory {
 public:
-    Memory(const Interfaces& interfaces) noexcept;
+    Memory(Client& clientInterface) noexcept;
 
 #ifdef _WIN32
     std::uintptr_t present;
