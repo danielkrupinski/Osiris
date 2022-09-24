@@ -200,35 +200,7 @@ static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
 
 static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept
 {
-    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(*interfaces), false);
-    if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
-        Misc::changeName(*interfaces, *memory, true, nullptr, 0.0f);
-
-    if (stage == csgo::FrameStage::START)
-        GameData::update(*interfaces, *memory);
-
-    if (stage == csgo::FrameStage::RENDER_START) {
-        Misc::preserveKillfeed(*memory);
-        Misc::disablePanoramablur(*interfaces);
-        Visuals::colorWorld(*interfaces, *memory);
-        Misc::updateEventListeners(*interfaces, *memory);
-        Visuals::updateEventListeners(*interfaces, *memory);
-    }
-    if (interfaces->engine->isInGame()) {
-        Visuals::skybox(*interfaces, *memory, stage);
-        Visuals::removeBlur(*interfaces, stage);
-        Misc::oppositeHandKnife(*interfaces, stage);
-        Visuals::removeGrass(*interfaces, stage);
-        Visuals::modifySmoke(*interfaces, stage);
-        Visuals::disablePostProcessing(*memory, stage);
-        Visuals::removeVisualRecoil(stage);
-        Visuals::applyZoom(stage);
-        Misc::fixAnimationLOD(*interfaces, *memory, stage);
-        Backtrack::update(*interfaces, *memory, stage);
-    }
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*interfaces, *memory, stage);
-
-    hooks->client.callOriginal<void, 37>(stage);
+    globalContext.frameStageNotifyHook(stage);
 }
 
 static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept

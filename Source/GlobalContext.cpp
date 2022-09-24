@@ -1,6 +1,8 @@
 #include "GlobalContext.h"
 
+#include "GameData.h"
 #include "Hooks.h"
+#include "InventoryChanger/InventoryChanger.h"
 #include "Memory.h"
 #include "Hacks/Aimbot.h"
 #include "Hacks/AntiAim.h"
@@ -13,6 +15,7 @@
 #include "Hacks/Visuals.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Constants/ClassId.h"
+#include "SDK/Constants/FrameStage.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
@@ -140,4 +143,37 @@ bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddres
         return true;
 
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+}
+
+void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
+{
+    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(*interfaces), false);
+    if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
+        Misc::changeName(*interfaces, *memory, true, nullptr, 0.0f);
+
+    if (stage == csgo::FrameStage::START)
+        GameData::update(*interfaces, *memory);
+
+    if (stage == csgo::FrameStage::RENDER_START) {
+        Misc::preserveKillfeed(*memory);
+        Misc::disablePanoramablur(*interfaces);
+        Visuals::colorWorld(*interfaces, *memory);
+        Misc::updateEventListeners(*interfaces, *memory);
+        Visuals::updateEventListeners(*interfaces, *memory);
+    }
+    if (interfaces->engine->isInGame()) {
+        Visuals::skybox(*interfaces, *memory, stage);
+        Visuals::removeBlur(*interfaces, stage);
+        Misc::oppositeHandKnife(*interfaces, stage);
+        Visuals::removeGrass(*interfaces, stage);
+        Visuals::modifySmoke(*interfaces, stage);
+        Visuals::disablePostProcessing(*memory, stage);
+        Visuals::removeVisualRecoil(stage);
+        Visuals::applyZoom(stage);
+        Misc::fixAnimationLOD(*interfaces, *memory, stage);
+        Backtrack::update(*interfaces, *memory, stage);
+    }
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*interfaces, *memory, stage);
+
+    hooks->client.callOriginal<void, 37>(stage);
 }
