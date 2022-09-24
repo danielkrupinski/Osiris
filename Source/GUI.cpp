@@ -92,7 +92,7 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(const Memory& memory, Config& config) noexcept
+void GUI::render(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
         renderMenuBar();
@@ -104,13 +104,13 @@ void GUI::render(const Memory& memory, Config& config) noexcept
         renderChamsWindow(config);
         StreamProofESP::drawGUI(config, false);
         Visuals::drawGUI(false);
-        inventory_changer::InventoryChanger::instance(memory).drawGUI(memory, false);
+        inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        Misc::drawGUI(memory, false);
-        renderConfigWindow(memory, config);
+        Misc::drawGUI(interfaces, memory, false);
+        renderConfigWindow(interfaces, memory, config);
     } else {
-        renderGuiStyle2(memory, config);
+        renderGuiStyle2(interfaces, memory, config);
     }
 }
 
@@ -123,12 +123,12 @@ void GUI::updateColors(Config& config) const noexcept
     }
 }
 
-void GUI::handleToggle() noexcept
+void GUI::handleToggle(const Interfaces& interfaces) noexcept
 {
     if (Misc::isMenuKeyPressed()) {
         open = !open;
         if (!open)
-            interfaces->inputSystem->resetInputState();
+            interfaces.inputSystem->resetInputState();
 #ifndef _WIN32
         ImGui::GetIO().MouseDrawCursor = gui->open;
 #endif
@@ -513,7 +513,7 @@ void GUI::renderStyleWindow(Config& config, bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentOnly) noexcept
+void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!window.config)
@@ -570,7 +570,7 @@ void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentO
             config.openConfigDir();
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
-            config.add(memory, buffer.c_str());
+            config.add(interfaces, memory, buffer.c_str());
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Config to reset");
@@ -582,7 +582,7 @@ void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentO
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(memory); updateColors(config); Misc::updateClanTag(memory, true); inventory_changer::InventoryChanger::instance(memory).scheduleHudUpdate(); break;
+                    case 0: config.reset(interfaces, memory); updateColors(config); Misc::updateClanTag(memory, true); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: Backtrack::resetConfig(); break;
@@ -591,7 +591,7 @@ void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentO
                     case 6: config.chams = { }; break;
                     case 7: config.streamProofESP = { }; break;
                     case 8: Visuals::resetConfig(); break;
-                    case 9: inventory_changer::InventoryChanger::instance(memory).reset(memory); inventory_changer::InventoryChanger::instance(memory).scheduleHudUpdate(); break;
+                    case 9: inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
                     case 10: Sound::resetConfig(); break;
                     case 11: config.style = { }; updateColors(config); break;
                     case 12: Misc::resetConfig(); Misc::updateClanTag(memory, true); break;
@@ -602,13 +602,13 @@ void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentO
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config.load(memory, currentConfig, incrementalLoad);
+                config.load(interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
-                inventory_changer::InventoryChanger::instance(memory).scheduleHudUpdate();
+                inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces);
                 Misc::updateClanTag(memory, true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config.save(memory, currentConfig);
+                config.save(interfaces, memory, currentConfig);
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config.remove(currentConfig);
 
@@ -623,7 +623,7 @@ void GUI::renderConfigWindow(const Memory& memory, Config& config, bool contentO
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -645,15 +645,15 @@ void GUI::renderGuiStyle2(const Memory& memory, Config& config) noexcept
         }
         StreamProofESP::tabItem(config);
         Visuals::tabItem();
-        InventoryChanger::tabItem(memory);
+        InventoryChanger::tabItem(interfaces, memory);
         Sound::tabItem();
         if (ImGui::BeginTabItem("Style")) {
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        Misc::tabItem(memory);
+        Misc::tabItem(interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
-            renderConfigWindow(memory, config, true);
+            renderConfigWindow(interfaces, memory, config, true);
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

@@ -3,6 +3,7 @@
 #include <optional>
 
 #include "Config.h"
+#include "Interfaces.h"
 #include "Memory.h"
 
 struct ImFont;
@@ -10,8 +11,8 @@ struct ImFont;
 class GUI {
 public:
     GUI() noexcept;
-    void render(const Memory& memory, Config& config) noexcept;
-    void handleToggle() noexcept;
+    void render(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void handleToggle(const Interfaces& interfaces) noexcept;
     [[nodiscard]] bool isOpen() const noexcept { return open; }
 private:
     bool open = true;
@@ -22,8 +23,8 @@ private:
     void renderTriggerbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderChamsWindow(Config& config, bool contentOnly = false) noexcept;
     void renderStyleWindow(Config& config, bool contentOnly = false) noexcept;
-    void renderConfigWindow(const Memory& memory, Config& config, bool contentOnly = false) noexcept;
-    void renderGuiStyle2(const Memory& memory, Config& config) noexcept;
+    void renderConfigWindow(const Interfaces& interfaces, const Memory& memory, Config& config, bool contentOnly = false) noexcept;
+    void renderGuiStyle2(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept;
 
     struct {
         bool aimbot = false;

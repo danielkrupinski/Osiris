@@ -19,7 +19,7 @@ namespace
     return nullptr;
 }
 
-void initItemCustomizationNotification(const Memory& memory, std::string_view typeStr, ItemId itemID)
+void initItemCustomizationNotification(const Interfaces& interfaces, const Memory& memory, std::string_view typeStr, ItemId itemID)
 {
     const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
     if (idx == -1)
@@ -29,7 +29,7 @@ void initItemCustomizationNotification(const Memory& memory, std::string_view ty
     std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
     if (const auto event = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
-        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+        interfaces.panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 }
 
 void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
@@ -289,7 +289,7 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification(memory, "sticker_apply", itemID);
+    initItemCustomizationNotification(interfaces, memory, "sticker_apply", itemID);
 }
 
 void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
@@ -306,7 +306,7 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
     attributeSetter.setStickerID(*econItem, slot, 0);
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification(memory, "sticker_remove", itemID);
+    initItemCustomizationNotification(interfaces, memory, "sticker_remove", itemID);
 }
 
 void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWear)
@@ -326,13 +326,13 @@ void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWea
 
 void Inventory::viewerPassActivated(ItemId tournamentCoinItemID)
 {
-    initItemCustomizationNotification(memory, "ticket_activated", tournamentCoinItemID);
+    initItemCustomizationNotification(interfaces, memory, "ticket_activated", tournamentCoinItemID);
 }
 
 void Inventory::addNameTag(ItemId itemID, const char* newNameTag)
 {
     updateNameTag(memory, itemID, newNameTag);
-    initItemCustomizationNotification(memory, "nametag_add", itemID);
+    initItemCustomizationNotification(interfaces, memory, "nametag_add", itemID);
 }
 
 void Inventory::removeNameTag(ItemId itemID)
@@ -375,19 +375,19 @@ void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
 
 void Inventory::containerOpened(ItemId unlockedItemID)
 {
-    initItemCustomizationNotification(memory, "crate_unlock", unlockedItemID);
+    initItemCustomizationNotification(interfaces, memory, "crate_unlock", unlockedItemID);
 }
 
 void Inventory::applyPatch(ItemId itemID, int patchID, std::uint8_t slot)
 {
     updatePatch(memory, itemID, patchID, slot);
-    initItemCustomizationNotification(memory, "patch_apply", itemID);
+    initItemCustomizationNotification(interfaces, memory, "patch_apply", itemID);
 }
 
 void Inventory::removePatch(ItemId itemID, std::uint8_t slot)
 {
     updatePatch(memory, itemID, 0, slot);
-    initItemCustomizationNotification(memory, "patch_remove", itemID);
+    initItemCustomizationNotification(interfaces, memory, "patch_remove", itemID);
 }
 
 void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded)
@@ -403,7 +403,7 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setDropsAwarded(*econItem, dropsAwarded);
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification(memory, "ticket_activated", itemID);
+    initItemCustomizationNotification(interfaces, memory, "ticket_activated", itemID);
 }
 
 void Inventory::unsealGraffiti(ItemId itemID)
@@ -420,7 +420,7 @@ void Inventory::unsealGraffiti(ItemId itemID)
     attributeSetter.setSpraysRemaining(*econItem, 50);
     econItem->weaponId = WeaponId::Graffiti;
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification(memory, "graffity_unseal", itemID);
+    initItemCustomizationNotification(interfaces, memory, "graffity_unseal", itemID);
 }
 
 void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
@@ -440,7 +440,7 @@ void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
 
 void Inventory::statTrakSwapped(ItemId itemID)
 {
-    initItemCustomizationNotification(memory, "stattrack_swap", itemID);
+    initItemCustomizationNotification(interfaces, memory, "stattrack_swap", itemID);
 }
 
 void Inventory::equipItem(ItemId itemID, csgo::Team team, std::uint8_t slot)
@@ -461,7 +461,7 @@ void Inventory::pickEmUpdated()
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
         const char* dummy;
         if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
+            interfaces.panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
     }
 }
 
@@ -477,7 +477,7 @@ void Inventory::unhideItem(ItemId itemID)
 
 void Inventory::xRayItemRevealed(ItemId itemID)
 {
-   initItemCustomizationNotification(memory, "xray_item_reveal", itemID);
+   initItemCustomizationNotification(interfaces, memory, "xray_item_reveal", itemID);
 }
 
 void Inventory::xRayItemClaimed(ItemId itemID)
@@ -494,7 +494,7 @@ void Inventory::xRayItemClaimed(ItemId itemID)
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
 
-    initItemCustomizationNotification(memory, "xray_item_claim", itemID);
+    initItemCustomizationNotification(interfaces, memory, "xray_item_claim", itemID);
 }
 
 void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
@@ -538,7 +538,7 @@ void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 
 void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
 {
-    initItemCustomizationNotification(memory, "casket_added", storageUnitItemID);
+    initItemCustomizationNotification(interfaces, memory, "casket_added", storageUnitItemID);
 }
 
 void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
@@ -555,7 +555,7 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
     attributeSetter.removeCasketItemId(*econItem);
 
     localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    initItemCustomizationNotification(memory, "casket_removed", storageUnitItemID);
+    initItemCustomizationNotification(interfaces, memory, "casket_removed", storageUnitItemID);
 }
 
 void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate)

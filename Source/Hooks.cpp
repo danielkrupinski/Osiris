@@ -77,14 +77,14 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     [[maybe_unused]] static const auto once = [](HWND window) noexcept {
-        Netvars::init();
-        EventListener::init(*memory);
+        Netvars::init(*interfaces);
+        EventListener::init(*interfaces, *memory);
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        config.emplace(Config{ *memory });
+        config.emplace(Config{ *interfaces, *memory });
         gui.emplace(GUI{});
-        hooks->install(*memory);
+        hooks->install(*interfaces, *memory);
 
         return true;
     }(window);
@@ -127,13 +127,13 @@ static void swapWindow(SDL_Window * window) noexcept
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(*memory);
+        Misc::purchaseList(*interfaces, *memory);
         Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::drawOffscreenEnemies(*memory, ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer(*memory);
         Misc::spectatorList();
-        Visuals::hitMarker(*memory, nullptr, ImGui::GetBackgroundDrawList());
+        Visuals::hitMarker(*interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
         Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
@@ -145,10 +145,10 @@ static void swapWindow(SDL_Window * window) noexcept
         Chams::updateInput(*config);
         Glow::updateInput();
 
-        gui->handleToggle();
+        gui->handleToggle(*interfaces);
 
         if (gui->isOpen())
-            gui->render(*memory, *config);
+            gui->render(*interfaces, *memory, *config);
     }
 
     ImGui::EndFrame();
@@ -200,42 +200,41 @@ static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
 
 static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept
 {
-    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
-
+    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(*interfaces), false);
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
-        Misc::changeName(*memory, true, nullptr, 0.0f);
+        Misc::changeName(*interfaces, *memory, true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
-        GameData::update(*memory);
+        GameData::update(*interfaces, *memory);
 
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
-        Misc::disablePanoramablur();
-        Visuals::colorWorld(*memory);
-        Misc::updateEventListeners(*memory);
-        Visuals::updateEventListeners(*memory);
+        Misc::disablePanoramablur(*interfaces);
+        Visuals::colorWorld(*interfaces, *memory);
+        Misc::updateEventListeners(*interfaces, *memory);
+        Visuals::updateEventListeners(*interfaces, *memory);
     }
     if (interfaces->engine->isInGame()) {
-        Visuals::skybox(*memory, stage);
-        Visuals::removeBlur(stage);
-        Misc::oppositeHandKnife(stage);
-        Visuals::removeGrass(stage);
-        Visuals::modifySmoke(stage);
+        Visuals::skybox(*interfaces, *memory, stage);
+        Visuals::removeBlur(*interfaces, stage);
+        Misc::oppositeHandKnife(*interfaces, stage);
+        Visuals::removeGrass(*interfaces, stage);
+        Visuals::modifySmoke(*interfaces, stage);
         Visuals::disablePostProcessing(*memory, stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
-        Misc::fixAnimationLOD(*memory, stage);
-        Backtrack::update(*memory, stage);
+        Misc::fixAnimationLOD(*interfaces, *memory, stage);
+        Backtrack::update(*interfaces, *memory, stage);
     }
-    inventory_changer::InventoryChanger::instance(*memory).run(*memory, stage);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*interfaces, *memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
 
 static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    Sound::modulateSound(*memory, soundEntry, entityIndex, volume);
-    Misc::autoAccept(*memory, soundEntry);
+    Sound::modulateSound(*interfaces, *memory, soundEntry, entityIndex, volume);
+    Misc::autoAccept(*interfaces, *memory, soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
     return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
@@ -317,7 +316,7 @@ static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector
 static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        Sound::modulateSound(*memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+        Sound::modulateSound(*interfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
         soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     }
     return hooks->originalDispatchSound(soundInfo);
@@ -325,8 +324,8 @@ static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
 
 static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
 {
-    Visuals::applyScreenEffects(*memory);
-    Visuals::hitEffect(*memory);
+    Visuals::applyScreenEffects(*interfaces, *memory);
+    Visuals::hitEffect(*interfaces, *memory);
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
@@ -379,7 +378,7 @@ static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool upda
 static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventory_changer::InventoryChanger::instance(*memory).getArgAsNumberHook(*memory, static_cast<int>(result), RETURN_ADDRESS());
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(*memory, static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
@@ -388,42 +387,42 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        inventory_changer::InventoryChanger::instance(*memory).getArgAsStringHook(*memory, result, RETURN_ADDRESS(), params);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(*memory, result, RETURN_ADDRESS(), params);
 
     return result;
 }
 
 static void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
 {
-    result = inventory_changer::InventoryChanger::instance(*memory).setResultIntHook(*memory, RETURN_ADDRESS(), params, result);
+    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(*memory, RETURN_ADDRESS(), params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
 static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventory_changer::InventoryChanger::instance(*memory).getNumArgsHook(*memory, result, RETURN_ADDRESS(), params);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(*memory, result, RETURN_ADDRESS(), params);
     return result;
 }
 
 static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap) noexcept
 {
-    inventory_changer::InventoryChanger::instance(*memory).onItemEquip(team, slot, itemID);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
 static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
 {
-    inventory_changer::InventoryChanger::instance(*memory).onSoUpdated(object);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(object);
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
 static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
     if (type == csgo::UserMessageType::Text)
-        inventory_changer::InventoryChanger::instance(*memory).onUserTextMsg(*memory, data, size);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
-        Misc::onVoteStart(*memory, data, size);
+        Misc::onVoteStart(*interfaces, *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
         Misc::onVotePass(*memory);
     else if (type == csgo::UserMessageType::VoteFailed)
@@ -450,7 +449,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
     interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{});
+    memory.emplace(Memory{ *interfaces });
 
     window = FindWindowW(L"Valve001", nullptr);
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
@@ -458,7 +457,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(const Memory& memory) noexcept
+void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
 {
 #ifdef _WIN32
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -476,10 +475,10 @@ void Hooks::install(const Memory& memory) noexcept
 
 #endif
     
-    bspQuery.init(interfaces->engine->getBSPTreeQuery());
+    bspQuery.init(interfaces.engine->getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(interfaces->client);
+    client.init(interfaces.client);
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 
@@ -492,7 +491,7 @@ void Hooks::install(const Memory& memory) noexcept
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(interfaces->engine);
+    engine.init(interfaces.engine);
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #ifdef _WIN32
@@ -507,7 +506,7 @@ void Hooks::install(const Memory& memory) noexcept
     inventoryManager.init(memory.inventoryManager);
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
-    modelRender.init(interfaces->modelRender);
+    modelRender.init(interfaces.modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory.panoramaMarshallHelper);
@@ -516,13 +515,13 @@ void Hooks::install(const Memory& memory) noexcept
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
     panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
 
-    sound.init(interfaces->sound);
+    sound.init(interfaces.sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
 
-    surface.init(interfaces->surface);
+    surface.init(interfaces.surface);
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    svCheats.init(interfaces.cvar->findVar("sv_cheats"));
     svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetBool);
 
     viewRender.init(memory.viewRender);
@@ -559,7 +558,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
     Sleep(100);
 
     interfaces->inputSystem->enableInput(true);
-    EventListener::remove(*memory);
+    EventListener::remove(*interfaces, *memory);
 
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
@@ -572,10 +571,10 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 #endif
 
-void Hooks::uninstall(const Memory& memory) noexcept
+void Hooks::uninstall(const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    Misc::updateEventListeners(memory, true);
-    Visuals::updateEventListeners(memory, true);
+    Misc::updateEventListeners(interfaces, memory, true);
+    Visuals::updateEventListeners(interfaces, memory, true);
 
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
@@ -600,7 +599,7 @@ void Hooks::uninstall(const Memory& memory) noexcept
     Netvars::restore();
 
     Glow::clearCustomObjects(memory);
-    inventory_changer::InventoryChanger::instance(memory).reset(memory);
+    inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
 
 #ifdef _WIN32
     keyValuesSystem.restore();
@@ -632,14 +631,14 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
 static int pollEvent(SDL_Event* event) noexcept
 {
     [[maybe_unused]] static const auto once = []() noexcept {
-        Netvars::init();
-        EventListener::init(*memory);
+        Netvars::init(*interfaces);
+        EventListener::init(*interfaces, *memory);
 
         ImGui::CreateContext();
-        config.emplace(Config{ *memory });
+        config.emplace(Config{ *interfaces, *memory });
 
         gui.emplace(GUI{});
-        hooks->install(*memory);
+        hooks->install(*interfaces, *memory);
 
         return true;
     }();
@@ -655,7 +654,7 @@ static int pollEvent(SDL_Event* event) noexcept
 Hooks::Hooks() noexcept
 {
     interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{});
+    memory.emplace(Memory{ *interfaces });
 
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(memory->pollEvent) = ::pollEvent;

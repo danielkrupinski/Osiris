@@ -38,41 +38,40 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     bool dummy;
     bool& sendPacket = dummy;
 #endif
-
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 
     memory->globalVars->serverTime(cmd);
-    Misc::nadePredict();
+    Misc::nadePredict(*interfaces);
     Misc::antiAfkKick(cmd);
     Misc::fastStop(cmd);
-    Misc::prepareRevolver(*memory, cmd);
-    Visuals::removeShadows();
-    Misc::runReportbot(*memory);
+    Misc::prepareRevolver(*interfaces, *memory, cmd);
+    Visuals::removeShadows(*interfaces);
+    Misc::runReportbot(*interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
     Misc::autoPistol(*memory, cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag(*memory);
-    Misc::fakeBan(*memory);
-    Misc::stealNames(*memory);
-    Misc::revealRanks(cmd);
-    Misc::quickReload(cmd);
+    Misc::fakeBan(*interfaces, *memory);
+    Misc::stealNames(*interfaces, *memory);
+    Misc::revealRanks(*interfaces, cmd);
+    Misc::quickReload(*interfaces, cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
-    EnginePrediction::run(*memory, cmd);
+    EnginePrediction::run(*interfaces, *memory, cmd);
 
-    Aimbot::run(*config, *memory, cmd);
-    Triggerbot::run(*memory, *config, cmd);
-    Backtrack::run(*memory, cmd);
+    Aimbot::run(*interfaces, *config, *memory, cmd);
+    Triggerbot::run(*interfaces, *memory, *config, cmd);
+    Backtrack::run(*interfaces, *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
-    Misc::fastPlant(cmd);
+    Misc::fastPlant(*interfaces, cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
+        Misc::chokePackets(*interfaces, sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
 
@@ -101,11 +100,11 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson(*memory);
-        Visuals::inverseRagdollGravity();
+        Visuals::inverseRagdollGravity(*interfaces);
         Visuals::reduceFlashEffect();
-        Visuals::updateBrightness();
-        Visuals::remove3dSky();
-        Glow::render(*memory);
+        Visuals::updateBrightness(*interfaces);
+        Visuals::remove3dSky(*interfaces);
+        Glow::render(*interfaces, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
@@ -129,7 +128,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(*memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(*interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);

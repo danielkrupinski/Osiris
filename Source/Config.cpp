@@ -78,11 +78,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(memory, u8"default.json", false);
+    load(interfaces, memory, u8"default.json", false);
 
 #ifdef _WIN32
     LOGFONTW logfont;
@@ -288,12 +288,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(memory, configs[id].c_str(), incremental);
+    load(interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -306,7 +306,7 @@ void Config::load(const Memory& memory, const char8_t* name, bool incremental) n
     }
 
     if (!incremental)
-        reset(memory);
+        reset(interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -331,7 +331,7 @@ void Config::load(const Memory& memory, const char8_t* name, bool incremental) n
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     Visuals::fromJson(j["Visuals"]);
-    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(memory));
+    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
     Sound::fromJson(j["Sound"]);
     Misc::fromJson(j["Misc"]);
 }
@@ -525,7 +525,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(const Memory& memory, size_t id) const noexcept
+void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -548,7 +548,7 @@ void Config::save(const Memory& memory, size_t id) const noexcept
     j["Visuals"] = Visuals::toJson();
     j["Misc"] = Misc::toJson();
     j["Style"] = style;
-    j["Inventory Changer"] = toJson(memory, inventory_changer::InventoryChanger::instance(memory));
+    j["Inventory Changer"] = toJson(interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory));
 
     removeEmptyObjects(j);
 
@@ -557,11 +557,11 @@ void Config::save(const Memory& memory, size_t id) const noexcept
         out << std::setw(2) << j;
 }
 
-void Config::add(const Memory& memory, const char8_t* name) noexcept
+void Config::add(const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(memory, configs.size() - 1);
+        save(interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -579,7 +579,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(const Memory& memory) noexcept
+void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -591,7 +591,7 @@ void Config::reset(const Memory& memory) noexcept
     Backtrack::resetConfig();
     Glow::resetConfig();
     Visuals::resetConfig();
-    inventory_changer::InventoryChanger::instance(memory).reset(memory);
+    inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
     Sound::resetConfig();
     Misc::resetConfig();
 }

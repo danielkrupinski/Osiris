@@ -73,11 +73,11 @@
 
 #include <SortFilter.h>
 
-static Entity* createGlove(int entry, int serial) noexcept
+static Entity* createGlove(const Interfaces& interfaces, int entry, int serial) noexcept
 {
-    static const auto createWearable = []{
+    static const auto createWearable = [&interfaces]{
         std::add_pointer_t<Entity* CDECL_CONV(int, int)> createWearableFn = nullptr;
-        for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+        for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next) {
             if (clientClass->classId == ClassId::EconWearable) {
                 createWearableFn = clientClass->createFunction;
                 break;
@@ -104,7 +104,7 @@ static std::optional<std::list<inventory_changer::inventory::Item>::const_iterat
     }
 }
 
-static void applyGloves(const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyGloves(const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 41);
     if (!optionalItem.has_value())
@@ -118,13 +118,13 @@ static void applyGloves(const Memory& memory, const inventory_changer::backend::
     const auto wearables = local->wearables();
     static int gloveHandle = 0;
 
-    auto glove = interfaces->entityList->getEntityFromHandle(wearables[0]);
+    auto glove = interfaces.entityList->getEntityFromHandle(wearables[0]);
     if (!glove)
-        glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
+        glove = interfaces.entityList->getEntityFromHandle(gloveHandle);
 
     constexpr auto NUM_ENT_ENTRIES = 8192;
     if (!glove)
-        glove = createGlove(NUM_ENT_ENTRIES - 1, -1);
+        glove = createGlove(interfaces, NUM_ENT_ENTRIES - 1, -1);
 
     if (!glove)
         return;
@@ -139,7 +139,7 @@ static void applyGloves(const Memory& memory, const inventory_changer::backend::
         definitionIndex = item->gameItem().getWeaponID();
 
         if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID()))
-            glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
+            glove->setModelIndex(interfaces.modelInfo->getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
     }
@@ -164,9 +164,9 @@ static void applyGloves(const Memory& memory, const inventory_changer::backend::
     }
 }
 
-static void applyKnife(const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyKnife(const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localXuid = local->getSteamId();
+    const auto localXuid = local->getSteamId(interfaces);
 
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), local->getTeamNumber(), 0);
     if (!optionalItem.has_value())
@@ -181,7 +181,7 @@ static void applyKnife(const Memory& memory, const inventory_changer::backend::B
         if (weaponHandle == -1)
             break;
 
-        const auto weapon = interfaces->entityList->getEntityFromHandle(weaponHandle);
+        const auto weapon = interfaces.entityList->getEntityFromHandle(weaponHandle);
         if (!weapon)
             continue;
 
@@ -201,17 +201,17 @@ static void applyKnife(const Memory& memory, const inventory_changer::backend::B
             definitionIndex = item->gameItem().getWeaponID();
 
             if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-                weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
+                weapon->setModelIndex(interfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
         }
     }
 
-    const auto viewModel = interfaces->entityList->getEntityFromHandle(local->viewModel());
+    const auto viewModel = interfaces.entityList->getEntityFromHandle(local->viewModel());
     if (!viewModel)
         return;
 
-    const auto viewModelWeapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon());
+    const auto viewModelWeapon = interfaces.entityList->getEntityFromHandle(viewModel->weapon());
     if (!viewModelWeapon)
         return;
 
@@ -219,24 +219,24 @@ static void applyKnife(const Memory& memory, const inventory_changer::backend::B
     if (!def)
         return;
 
-    viewModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel());
+    viewModel->modelIndex() = interfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel());
 
-    const auto worldModel = interfaces->entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
+    const auto worldModel = interfaces.entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
     if (!worldModel)
         return;
 
-    worldModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
+    worldModel->modelIndex() = interfaces.modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyWeapons(const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto localTeam = local->getTeamNumber();
-    const auto localXuid = local->getSteamId();
+    const auto localXuid = local->getSteamId(interfaces);
     const auto itemSchema = memory.itemSystem()->getItemSchema();
 
-    const auto highestEntityIndex = interfaces->entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = interfaces.entityList->getHighestEntityIndex();
     for (int i = memory.globalVars->maxClients + 1; i <= highestEntityIndex; ++i) {
-        const auto entity = interfaces->entityList->getEntity(i);
+        const auto entity = interfaces.entityList->getEntity(i);
         if (!entity || !entity->isWeapon())
             continue;
 
@@ -253,7 +253,7 @@ static void applyWeapons(const Memory& memory, CSPlayerInventory& localInventory
             continue;
 
         const auto loadoutSlot = def->getLoadoutSlot(localTeam);
-        const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(memory).getBackend().getLoadout(), localTeam, loadoutSlot);
+        const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getLoadout(), localTeam, loadoutSlot);
         if (!optionalItem.has_value())
             continue;
         
@@ -261,7 +261,7 @@ static void applyWeapons(const Memory& memory, CSPlayerInventory& localInventory
         if (definitionIndex != item->gameItem().getWeaponID())
             continue;
 
-        const auto itemID = inventory_changer::InventoryChanger::instance(memory).getBackend().getItemID(item);
+        const auto itemID = inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getItemID(item);
         if (!itemID.has_value())
             continue;
 
@@ -271,9 +271,9 @@ static void applyWeapons(const Memory& memory, CSPlayerInventory& localInventory
     }
 }
 
-static void onPostDataUpdateStart(const Memory& memory, int localHandle) noexcept
+static void onPostDataUpdateStart(const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
-    const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
+    const auto local = interfaces.entityList->getEntityFromHandle(localHandle);
     if (!local)
         return;
 
@@ -281,8 +281,8 @@ static void onPostDataUpdateStart(const Memory& memory, int localHandle) noexcep
     if (!localInventory)
         return;
 
-    applyKnife(memory, inventory_changer::InventoryChanger::instance(memory).getBackend(), *localInventory, local);
-    applyWeapons(memory, *localInventory, local);
+    applyKnife(interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), *localInventory, local);
+    applyWeapons(interfaces, memory, *localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -316,12 +316,12 @@ static void applyMusicKit(const Memory& memory, const inventory_changer::backend
     pr->musicID()[localPlayer->index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
-static void applyPlayerAgent(const Memory& memory) noexcept
+static void applyPlayerAgent(const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(memory).getBackend().getLoadout(), localPlayer->getTeamNumber(), 38);
+    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getLoadout(), localPlayer->getTeamNumber(), 38);
     if (!optionalItem.has_value())
         return;
 
@@ -344,10 +344,10 @@ static void applyPlayerAgent(const Memory& memory) noexcept
         }
     }
 
-    const auto idx = interfaces->modelInfo->getModelIndex(model);
+    const auto idx = interfaces.modelInfo->getModelIndex(model);
     localPlayer->setModelIndex(idx);
 
-    if (const auto ragdoll = interfaces->entityList->getEntityFromHandle(localPlayer->ragdoll()))
+    if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
         ragdoll->setModelIndex(idx);
 }
 
@@ -405,9 +405,9 @@ static void processEquipRequests(const Memory& memory)
     }
 }
 
-[[nodiscard]] static bool isLocalPlayerMVP(GameEvent& event)
+[[nodiscard]] static bool isLocalPlayerMVP(const Interfaces& interfaces, GameEvent& event)
 {
-    return localPlayer && localPlayer->getUserId() == event.getInt("userid");
+    return localPlayer && localPlayer->getUserId(interfaces) == event.getInt("userid");
 }
 
 static bool windowOpen = false;
@@ -421,19 +421,19 @@ void InventoryChanger::menuBarItem() noexcept
     }
 }
 
-void InventoryChanger::tabItem(const Memory& memory) noexcept
+void InventoryChanger::tabItem(const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Inventory Changer")) {
-        inventory_changer::InventoryChanger::instance(memory).drawGUI(memory, true);
+        inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
 
-static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept;
+static ImTextureID getItemIconTexture(const Interfaces& interfaces, std::string_view iconpath) noexcept;
 
 namespace ImGui
 {
-    static bool SkinSelectable(const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
+    static bool SkinSelectable(const Interfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -442,10 +442,10 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = inventory_changer::WeaponNames::instance(memory).getWeaponName(item.getWeaponID()).data();
+        const auto itemName = inventory_changer::WeaponNames::instance(interfaces, memory).getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(memory).getGameItemLookup().getStorage(), item).forDisplay.data();
+        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(interfaces, memory).getGameItemLookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -513,7 +513,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.getIconPath())) {
+        if (const auto icon = getItemIconTexture(interfaces, item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -562,7 +562,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const Interfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -571,10 +571,10 @@ namespace ImGui
         const ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const auto itemName = inventory_changer::WeaponNames::instance(memory).getWeaponName(item.getWeaponID()).data();
+        const auto itemName = inventory_changer::WeaponNames::instance(interfaces, memory).getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(memory).getGameItemLookup().getStorage(), item).forDisplay.data();
+        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(interfaces, memory).getGameItemLookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -626,7 +626,7 @@ namespace ImGui
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        if (const auto icon = getItemIconTexture(item.getIconPath())) {
+        if (const auto icon = getItemIconTexture(interfaces, item.getIconPath())) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -679,13 +679,13 @@ private:
     const WeaponNames& weaponNames;
 };
 
-void InventoryChanger::scheduleHudUpdate() noexcept
+void InventoryChanger::scheduleHudUpdate(const Interfaces& interfaces) noexcept
 {
-    interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
+    interfaces.cvar->findVar("cl_fullupdate")->changeCallback();
     hudUpdateRequired = true;
 }
 
-void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
+void InventoryChanger::drawGUI(const Interfaces& interfaces, const Memory& memory, bool contentOnly)
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -707,7 +707,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
     if (!isInAddMode) {
         ImGui::SameLine();
         if (ImGui::Button("Force Update"))
-            scheduleHudUpdate();
+            scheduleHudUpdate(interfaces);
     }
 
     constexpr auto rarityColor = [](EconRarity rarity) noexcept {
@@ -748,7 +748,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
         if (filterChanged) {
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
-            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(memory), &gameItemStorage = gameItemLookup.getStorage()](const inventory_changer::game_items::Item& item) {
+            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(interfaces, memory), &gameItemStorage = gameItemLookup.getStorage()](const inventory_changer::game_items::Item& item) {
                 return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
@@ -757,7 +757,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
             static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
-                gameItemList.sort(inventory_changer::NameComparator{ gameItemLookup.getStorage(), inventory_changer::WeaponNames::instance(memory) });
+                gameItemList.sort(inventory_changer::NameComparator{ gameItemLookup.getStorage(), inventory_changer::WeaponNames::instance(interfaces, memory) });
                 sorted = true;
             }
 
@@ -769,7 +769,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 
                 ImGui::PushID(i);
 
-                if (ImGui::SkinSelectable(memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
+                if (ImGui::SkinSelectable(interfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
                         backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
                     toAddCount[i] = 1;
@@ -790,7 +790,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
+                ImGui::SkinItem(interfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
                     it = std::make_reverse_iterator(backend.getItemRemovalHandler()(std::next(it).base()));
                 } else {
@@ -848,7 +848,7 @@ struct Icon {
 
 static std::unordered_map<std::string, Icon> iconTextures;
 
-static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept
+static ImTextureID getItemIconTexture(const Interfaces& interfaces, std::string_view iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
@@ -873,15 +873,15 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept
 
         const auto start = std::chrono::steady_clock::now();
 
-        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
+        auto handle = interfaces.baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
-            handle = interfaces->baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
+            handle = interfaces.baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
 
         assert(handle);
         if (handle) {
-            if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
+            if (const auto size = interfaces.baseFileSystem->size(handle); size > 0) {
                 const auto buffer = std::make_unique<std::uint8_t[]>(size);
-                if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
+                if (interfaces.baseFileSystem->read(buffer.get(), size, handle) > 0) {
                     int width, height;
                     stbi_set_flip_vertically_on_load_thread(false);
 
@@ -893,7 +893,7 @@ static ImTextureID getItemIconTexture(std::string_view iconpath) noexcept
                     }
                 }
             }
-            interfaces->baseFileSystem->close(handle);
+            interfaces.baseFileSystem->close(handle);
         }
 
         const auto end = std::chrono::steady_clock::now();
@@ -1050,7 +1050,7 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     }
 }
 
-void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcept
+void InventoryChanger::run(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
 
@@ -1058,7 +1058,7 @@ void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcep
         localPlayerHandle = localPlayer->handle();
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(memory, localPlayerHandle);
+        onPostDataUpdateStart(interfaces, memory, localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
             updateHud(memory);
     }
@@ -1071,24 +1071,22 @@ void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcep
         return;
 
     if (localPlayer)
-        applyGloves(memory, backend, *localInventory, localPlayer.get());
+        applyGloves(interfaces, memory, backend, *localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(memory);
+    applyPlayerAgent(interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory);
-    static game_integration::Inventory gameInventory{ memory };
+    static game_integration::Inventory gameInventory{ interfaces, memory };
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
-InventoryChanger createInventoryChanger(const Memory& memory)
+InventoryChanger createInventoryChanger(const Interfaces& interfaces, const Memory& memory)
 {
-    assert(interfaces);
-
     const auto itemSchema = memory.itemSystem()->getItemSchema();
-    game_integration::Items items{ *itemSchema, *interfaces->localize };
-    auto storage = game_integration::createGameItemStorage(items);
+    game_integration::Items items{ *itemSchema, *interfaces.localize };
+    auto storage = game_integration::createGameItemStorage(interfaces, items);
     storage.compress();
     auto gameItemLookup = game_items::Lookup{ std::move(storage) };
 
@@ -1101,9 +1099,9 @@ InventoryChanger createInventoryChanger(const Memory& memory)
     return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup) };
 }
 
-InventoryChanger& InventoryChanger::instance(const Memory& memory)
+InventoryChanger& InventoryChanger::instance(const Interfaces& interfaces, const Memory& memory)
 {
-    static InventoryChanger inventoryChanger{ createInventoryChanger(memory) };
+    static InventoryChanger inventoryChanger{ createInventoryChanger(interfaces, memory) };
     return inventoryChanger;
 }
 
@@ -1113,9 +1111,9 @@ void InventoryChanger::getArgAsNumberHook(const Memory& memory, int number, std:
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
-void InventoryChanger::onRoundMVP(GameEvent& event)
+void InventoryChanger::onRoundMVP(const Interfaces& interfaces, GameEvent& event)
 {
-    if (!isLocalPlayerMVP(event))
+    if (!isLocalPlayerMVP(interfaces, event))
         return;
 
     const auto optionalItem = backend.getLoadout().getItemInSlotNoTeam(54);
@@ -1133,12 +1131,12 @@ void InventoryChanger::onRoundMVP(GameEvent& event)
     }
 }
 
-void InventoryChanger::updateStatTrak(GameEvent& event)
+void InventoryChanger::updateStatTrak(const Interfaces& interfaces, GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer->getUserId(interfaces); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     const auto weapon = localPlayer->getActiveWeapon();
@@ -1158,12 +1156,12 @@ void InventoryChanger::updateStatTrak(GameEvent& event)
         backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::overrideHudIcon(const Memory& memory, GameEvent& event)
+void InventoryChanger::overrideHudIcon(const Interfaces& interfaces, const Memory& memory, GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (event.getInt("attacker") != localPlayer->getUserId())
+    if (event.getInt("attacker") != localPlayer->getUserId(interfaces))
         return;
 
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
@@ -1411,11 +1409,11 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex(), sequence);
 }
 
-void InventoryChanger::reset(const Memory& memory)
+void InventoryChanger::reset(const Interfaces& interfaces, const Memory& memory)
 {
     clearInventory(backend);
     backend.getPickEmHandler().clearPicks();
-    static inventory_changer::game_integration::Inventory gameInventory{ memory };
+    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory };
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Helpers.h>
+#include <Interfaces.h>
 #include <InventoryChanger/GameItems/Storage.h>
 #include <SDK/Localize.h>
 
@@ -13,9 +14,9 @@ class Items {
 public:
     Items(ItemSchema& itemSchema, Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
 
-    void getMusicKits(game_items::Storage& storage);
-    void getStickers(game_items::Storage& storage);
-    void getSkinsAndGloves(game_items::Storage& storage);
+    void getMusicKits(const Interfaces& interfaces, game_items::Storage& storage);
+    void getStickers(const Interfaces& interfaces, game_items::Storage& storage);
+    void getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage& storage);
     void getOtherItems(game_items::Storage& storage);
 
 private:
@@ -25,6 +26,6 @@ private:
 };
 
 
-[[nodiscard]] game_items::Storage createGameItemStorage(Items& items);
+[[nodiscard]] game_items::Storage createGameItemStorage(const Interfaces& interfaces, Items& items);
 
 }

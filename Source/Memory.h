@@ -7,6 +7,8 @@
 
 #include "SDK/Platform.h"
 
+#include "Interfaces.h"
+
 class ClientMode;
 template <typename T> class ClientSharedObjectCache;
 class CSPlayerInventory;
@@ -43,7 +45,7 @@ struct Vector;
 
 class Memory {
 public:
-    Memory() noexcept;
+    Memory(const Interfaces& interfaces) noexcept;
 
 #ifdef _WIN32
     std::uintptr_t present;

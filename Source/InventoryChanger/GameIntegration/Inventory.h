@@ -32,7 +32,8 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(const Memory& memory) : memory{ memory } {}
+    Inventory(const Interfaces& interfaces, const Memory& memory)
+        : interfaces{ interfaces }, memory{ memory } {}
 
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] ItemId assingNewItemID(ItemId itemID);
@@ -66,6 +67,7 @@ public:
     void updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate);
 
 private:
+    const Interfaces& interfaces;
     const Memory& memory;
 };
 

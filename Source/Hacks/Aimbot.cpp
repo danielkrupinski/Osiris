@@ -55,7 +55,7 @@ static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vec
     return result;
 }
 
-static float handleBulletPenetration(const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+static float handleBulletPenetration(const Interfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
@@ -63,7 +63,7 @@ static float handleBulletPenetration(const Memory& memory, SurfaceData* enterSur
     if (!traceToExit(memory, enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
-    SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
+    SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
 
     float damageModifier = 0.16f;
     float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
@@ -88,7 +88,7 @@ static float handleBulletPenetration(const Memory& memory, SurfaceData* enterSur
     return damage;
 }
 
-static bool canScan(const Memory& memory, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const Interfaces& interfaces, const Memory& memory, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
@@ -103,7 +103,7 @@ static bool canScan(const Memory& memory, Entity* entity, const Vector& destinat
 
     while (damage >= 1.0f && hitsLeft) {
         Trace trace;
-        interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
+        interfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
 
         if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(memory, trace.entity))
             return false;
@@ -119,12 +119,12 @@ static bool canScan(const Memory& memory, Entity* entity, const Vector& destinat
 
             return damage >= minDamage;
         }
-        const auto surfaceData = interfaces->physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+        const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
 
         if (surfaceData->penetrationmodifier < 0.1f)
             break;
 
-        damage = handleBulletPenetration(memory, surfaceData, trace, direction, start, weaponData->penetration, damage);
+        damage = handleBulletPenetration(interfaces, memory, surfaceData, trace, direction, start, weaponData->penetration, damage);
         hitsLeft--;
     }
     return false;
@@ -140,7 +140,7 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
@@ -183,8 +183,8 @@ void Aimbot::run(const Config& config, const Memory& memory, UserCmd* cmd) noexc
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
-        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            auto entity = interfaces->entityList->getEntity(i);
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
                 || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
@@ -200,7 +200,7 @@ void Aimbot::run(const Config& config, const Memory& memory, UserCmd* cmd) noexc
                 if (!config.aimbot[weaponIndex].ignoreSmoke && memory.lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity->isVisible(memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(memory, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
+                if (!entity->isVisible(interfaces, memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(interfaces, memory, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {
@@ -231,7 +231,7 @@ void Aimbot::run(const Config& config, const Memory& memory, UserCmd* cmd) noexc
             angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot[weaponIndex].silent)
-                interfaces->engine->setViewAngles(cmd->viewangles);
+                interfaces.engine->setViewAngles(cmd->viewangles);
 
             if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;

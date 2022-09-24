@@ -45,7 +45,7 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
     return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
 }
 
-void Backtrack::update(const Memory& memory, csgo::FrameStage stage) noexcept
+void Backtrack::update(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
@@ -54,8 +54,8 @@ void Backtrack::update(const Memory& memory, csgo::FrameStage stage) noexcept
             return;
         }
 
-        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            auto entity = interfaces->entityList->getEntity(i);
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
@@ -75,7 +75,7 @@ void Backtrack::update(const Memory& memory, csgo::FrameStage stage) noexcept
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(memory, static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory](const Record & rec) { return !valid(memory, rec.simulationTime); }); invalid != std::cend(records[i]))
+            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory, &interfaces](const Record & rec) { return !valid(interfaces, memory, rec.simulationTime); }); invalid != std::cend(records[i]))
                 records[i].erase(invalid, std::cend(records[i]));
         }
     }
@@ -87,7 +87,7 @@ static float getLerp() noexcept
     return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
-void Backtrack::run(const Memory& memory, UserCmd* cmd) noexcept
+void Backtrack::run(const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
         return;
@@ -108,8 +108,8 @@ void Backtrack::run(const Memory& memory, UserCmd* cmd) noexcept
 
     const auto aimPunch = localPlayer->getAimPunch();
 
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-        auto entity = interfaces->entityList->getEntity(i);
+    for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+        auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isOtherEnemy(memory, localPlayer.get()))
             continue;
@@ -134,7 +134,7 @@ void Backtrack::run(const Memory& memory, UserCmd* cmd) noexcept
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
             const auto& record = records[bestTargetIndex][i];
-            if (!valid(memory, record.simulationTime))
+            if (!valid(interfaces, memory, record.simulationTime))
                 continue;
 
             auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
@@ -160,9 +160,9 @@ const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) no
     return &records[index];
 }
 
-bool Backtrack::valid(const Memory& memory, float simtime) noexcept
+bool Backtrack::valid(const Interfaces& interfaces, const Memory& memory, float simtime) noexcept
 {
-    const auto network = interfaces->engine->getNetworkChannel();
+    const auto network = interfaces.engine->getNetworkChannel();
     if (!network)
         return false;
 
@@ -170,15 +170,15 @@ bool Backtrack::valid(const Memory& memory, float simtime) noexcept
     return std::abs(delta) <= 0.2f;
 }
 
-void Backtrack::init() noexcept
+void Backtrack::init(const Interfaces& interfaces) noexcept
 {
-    cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
-    cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
-    cvars.interp = interfaces->cvar->findVar("cl_interp");
-    cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
-    cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
-    cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
-    cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
+    cvars.updateRate = interfaces.cvar->findVar("cl_updaterate");
+    cvars.maxUpdateRate = interfaces.cvar->findVar("sv_maxupdaterate");
+    cvars.interp = interfaces.cvar->findVar("cl_interp");
+    cvars.interpRatio = interfaces.cvar->findVar("cl_interp_ratio");
+    cvars.minInterpRatio = interfaces.cvar->findVar("sv_client_min_interp_ratio");
+    cvars.maxInterpRatio = interfaces.cvar->findVar("sv_client_max_interp_ratio");
+    cvars.maxUnlag = interfaces.cvar->findVar("sv_maxunlag");
 }
 
 static bool backtrackWindowOpen = false;

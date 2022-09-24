@@ -58,7 +58,7 @@ static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, v
             if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            inventory_changer::InventoryChanger::instance(*memory).fixKnifeAnimation(weapon, data.value._int);
+            inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);
         }
     }
 
@@ -103,9 +103,9 @@ static void walkTable(const char* networkName, RecvTable* recvTable, const std::
     }
 }
 
-void Netvars::init() noexcept
+void Netvars::init(const Interfaces& interfaces) noexcept
 {
-    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
+    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(clientClass->networkName, clientClass->recvTable);
 
     std::ranges::sort(offsets, {}, &std::pair<std::uint32_t, std::uint32_t>::first);

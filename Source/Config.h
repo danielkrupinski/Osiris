@@ -19,14 +19,14 @@ struct ImFont;
 
 class Config {
 public:
-    Config(const Memory& memory) noexcept;
-    void load(const Memory& memory, std::size_t, bool incremental) noexcept;
-    void load(const Memory& memory, const char8_t* name, bool incremental) noexcept;
-    void save(const Memory& memory, std::size_t) const noexcept;
-    void add(const Memory& memory, const char8_t*) noexcept;
+    Config(const Interfaces& interfaces, const Memory& memory) noexcept;
+    void load(const Interfaces& interfaces, const Memory& memory, std::size_t, bool incremental) noexcept;
+    void load(const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept;
+    void save(const Interfaces& interfaces, const Memory& memory, std::size_t) const noexcept;
+    void add(const Interfaces& interfaces, const Memory& memory, const char8_t*) noexcept;
     void remove(std::size_t) noexcept;
     void rename(std::size_t, std::u8string_view newName) noexcept;
-    void reset(const Memory& memory) noexcept;
+    void reset(const Interfaces& interfaces, const Memory& memory) noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;
     void openConfigDir() const noexcept;

@@ -17,8 +17,8 @@ struct UserCmd;
 
 namespace Backtrack
 {
-    void update(const Memory& memory, csgo::FrameStage) noexcept;
-    void run(const Memory& memory, UserCmd*) noexcept;
+    void update(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
+    void run(const Interfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
 
     struct Record {
         Vector origin;
@@ -27,8 +27,8 @@ namespace Backtrack
     };
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept;
-    bool valid(const Memory& memory, float simtime) noexcept;
-    void init() noexcept;
+    bool valid(const Interfaces& interfaces, const Memory& memory, float simtime) noexcept;
+    void init(const Interfaces& interfaces) noexcept;
 
     // GUI
     void menuBarItem() noexcept;

@@ -7,7 +7,7 @@
 
 namespace Netvars
 {
-    void init() noexcept;
+    void init(const Interfaces& interfaces) noexcept;
     void restore() noexcept;
     std::uint32_t get(std::uint32_t hash) noexcept;
 }

@@ -62,37 +62,37 @@ static constexpr auto dispatchMaterial(int id) noexcept
     }
 }
 
-static void initializeMaterials(const Memory& memory) noexcept
+static void initializeMaterials(const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
-    flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
-    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
-    glow = interfaces->materialSystem->createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
-    pearlescent = interfaces->materialSystem->createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
-    metallic = interfaces->materialSystem->createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
+    normal = interfaces.materialSystem->createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
+    flat = interfaces.materialSystem->createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
+    chrome = interfaces.materialSystem->createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
+    glow = interfaces.materialSystem->createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+    pearlescent = interfaces.materialSystem->createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
+    metallic = interfaces.materialSystem->createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
         kv->setString(memory, "$envmaptint", "[.7 .7 .7]");
-        animated = interfaces->materialSystem->createMaterial("animated", kv);
+        animated = interfaces.materialSystem->createMaterial("animated", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture models/player/ct_fbi/ct_fbi_glass $envmap env_cubemap");
         kv->setString(memory, "$envmaptint", "[.4 .6 .7]");
-        platinum = interfaces->materialSystem->createMaterial("platinum", kv);
+        platinum = interfaces.materialSystem->createMaterial("platinum", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
         kv->setString(memory, "$color", "[.05 .05 .05]");
-        glass = interfaces->materialSystem->createMaterial("glass", kv);
+        glass = interfaces.materialSystem->createMaterial("glass", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
         kv->setString(memory, "$phongtint", "[.2 .35 .6]");
-        crystal = interfaces->materialSystem->createMaterial("crystal", kv);
+        crystal = interfaces.materialSystem->createMaterial("crystal", kv);
     }
 
     {
@@ -101,7 +101,7 @@ static void initializeMaterials(const Memory& memory) noexcept
         kv->setString(memory, "$envmaptint", "[.2 .2 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        silver = interfaces->materialSystem->createMaterial("silver", kv);
+        silver = interfaces.materialSystem->createMaterial("silver", kv);
     }
 
     {
@@ -110,14 +110,14 @@ static void initializeMaterials(const Memory& memory) noexcept
         kv->setString(memory, "$envmaptint", "[.6 .5 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.6 .5 .2]");
-        gold = interfaces->materialSystem->createMaterial("gold", kv);
+        gold = interfaces.materialSystem->createMaterial("gold", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
         kv->setString(memory, "$phongfresnelranges", "[.1 .4 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        plastic = interfaces->materialSystem->createMaterial("plastic", kv);
+        plastic = interfaces.materialSystem->createMaterial("plastic", kv);
     }
 }
 
@@ -126,7 +126,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -137,7 +137,7 @@ bool Chams::render(const Memory& memory, Config& config, void* ctx, void* state,
 
     static bool materialsInitialized = false;
     if (!materialsInitialized) {
-        initializeMaterials(memory);
+        initializeMaterials(interfaces, memory);
         materialsInitialized = true;
     }
 
@@ -150,23 +150,23 @@ bool Chams::render(const Memory& memory, Config& config, void* ctx, void* state,
     if (std::string_view{ info.model->name }.starts_with("models/weapons/v_")) {
         // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
         if (std::strstr(info.model->name + 17, "sleeve"))
-            renderSleeves(memory, config);
+            renderSleeves(interfaces,memory, config);
         else if (std::strstr(info.model->name + 17, "arms"))
-            renderHands(memory, config);
+            renderHands(interfaces,memory, config);
         else if (!std::strstr(info.model->name + 17, "tablet")
             && !std::strstr(info.model->name + 17, "parachute")
             && !std::strstr(info.model->name + 17, "fists"))
-            renderWeapons(memory, config);
+            renderWeapons(interfaces,memory, config);
     } else {
-        const auto entity = interfaces->entityList->getEntity(info.entityIndex);
+        const auto entity = interfaces.entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
-            renderPlayer(memory, config, entity);
+            renderPlayer(interfaces, memory, config, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(const Memory& memory, Config& config, Entity* player) noexcept
+void Chams::renderPlayer(const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
 {
     if (!localPlayer)
         return;
@@ -174,51 +174,51 @@ void Chams::renderPlayer(const Memory& memory, Config& config, Entity* player) n
     const auto health = player->health();
 
     if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(memory, config.chams["Planting"].materials, health);
+        applyChams(interfaces, memory, config.chams["Planting"].materials, health);
     } else if (player->isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(memory, config.chams["Defusing"].materials, health);
+        applyChams(interfaces, memory, config.chams["Defusing"].materials, health);
     } else if (player == localPlayer.get()) {
-        applyChams(memory, config.chams["Local player"].materials, health);
+        applyChams(interfaces, memory, config.chams["Local player"].materials, health);
     } else if (localPlayer->isOtherEnemy(memory, player)) {
-        applyChams(memory, config.chams["Enemies"].materials, health);
+        applyChams(interfaces, memory, config.chams["Enemies"].materials, health);
 
         const auto records = Backtrack::getRecords(player->index());
-        if (records && !records->empty() && Backtrack::valid(memory, records->front().simulationTime)) {
+        if (records && !records->empty() && Backtrack::valid(interfaces, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-            applyChams(memory, config.chams["Backtrack"].materials, health, records->back().matrix);
-            interfaces->studioRender->forcedMaterialOverride(nullptr);
+            applyChams(interfaces, memory, config.chams["Backtrack"].materials, health, records->back().matrix);
+            interfaces.studioRender->forcedMaterialOverride(nullptr);
         }
     } else {
-        applyChams(memory, config.chams["Allies"].materials, health);
+        applyChams(interfaces, memory, config.chams["Allies"].materials, health);
     }
 }
 
-void Chams::renderWeapons(const Memory& memory, Config& config) noexcept
+void Chams::renderWeapons(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
         return;
 
-    applyChams(memory, config.chams["Weapons"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Weapons"].materials, localPlayer->health());
 }
 
-void Chams::renderHands(const Memory& memory, Config& config) noexcept
+void Chams::renderHands(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    applyChams(memory, config.chams["Hands"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Hands"].materials, localPlayer->health());
 }
 
-void Chams::renderSleeves(const Memory& memory, Config& config) noexcept
+void Chams::renderSleeves(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    applyChams(memory, config.chams["Sleeves"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Sleeves"].materials, localPlayer->health());
 }
 
-void Chams::applyChams(const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)
@@ -253,9 +253,9 @@ void Chams::applyChams(const Memory& memory, const std::array<Config::Chams::Mat
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces->studioRender->forcedMaterialOverride(material);
+        interfaces.studioRender->forcedMaterialOverride(material);
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-        interfaces->studioRender->forcedMaterialOverride(nullptr);
+        interfaces.studioRender->forcedMaterialOverride(nullptr);
     }
 
     for (const auto& cham : chams) {
@@ -294,7 +294,7 @@ void Chams::applyChams(const Memory& memory, const std::array<Config::Chams::Mat
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces->studioRender->forcedMaterialOverride(material);
+        interfaces.studioRender->forcedMaterialOverride(material);
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }

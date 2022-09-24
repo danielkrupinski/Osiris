@@ -266,7 +266,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
         j.emplace("Tradable After Date", properties.tradableAfterDate);
 }
 
-[[nodiscard]] json itemsToJson(const Memory& memory, const backend::BackendSimulator& backend)
+[[nodiscard]] json itemsToJson(const Interfaces& interfaces, const Memory& memory, const backend::BackendSimulator& backend)
 {
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
@@ -297,7 +297,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
         const auto& item = *itemIt;
         const auto& gameItem = item.gameItem();
         itemConfig["Weapon ID"] = gameItem.getWeaponID();
-        itemConfig["Item Name"] = WeaponNames::instance(memory).getWeaponName(gameItem.getWeaponID());
+        itemConfig["Item Name"] = WeaponNames::instance(interfaces, memory).getWeaponName(gameItem.getWeaponID());
 
         commonPropertiesToJson(item.getProperties().common, itemConfig);
 
@@ -321,7 +321,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
             itemConfig["Graffiti ID"] = gameItemStorage.getGraffitiKit(gameItem).id;
             if (const auto graffiti = get<inventory::Graffiti>(item); graffiti && graffiti->usesLeft >= 0) {
                 itemConfig["Uses Left"] = graffiti->usesLeft;
-                itemConfig["Item Name"] = WeaponNames::instance(memory).getWeaponName(WeaponId::Graffiti);
+                itemConfig["Item Name"] = WeaponNames::instance(interfaces, memory).getWeaponName(WeaponId::Graffiti);
             }
         } else if (gameItem.isAgent()) {
             agentToJson(item, itemConfig);
@@ -350,7 +350,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
 
 }
 
-json inventory_changer::toJson(const Memory& memory, const InventoryChanger& inventoryChanger)
+json inventory_changer::toJson(const Interfaces& interfaces, const Memory& memory, const InventoryChanger& inventoryChanger)
 {
     json j;
 
@@ -358,7 +358,7 @@ json inventory_changer::toJson(const Memory& memory, const InventoryChanger& inv
 
     const auto& backend = inventoryChanger.getBackend();
 
-    j.emplace("Items", itemsToJson(memory, backend));
+    j.emplace("Items", itemsToJson(interfaces, memory, backend));
     j.emplace("Pick'Em", ::toJson(backend.getPickEm()));
     return j;
 }
