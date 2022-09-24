@@ -288,12 +288,12 @@ void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noe
 
         if (visualsConfig.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (visualsConfig.world.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(memory, visualsConfig.world.asColor3().rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.world.asColor3().rainbowSpeed));
             else
                 mat->colorModulate(visualsConfig.world.asColor3().color);
         } else if (visualsConfig.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (visualsConfig.sky.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(memory, visualsConfig.sky.asColor3().rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.sky.asColor3().rainbowSpeed));
             else
                 mat->colorModulate(visualsConfig.sky.asColor3().color);
         }

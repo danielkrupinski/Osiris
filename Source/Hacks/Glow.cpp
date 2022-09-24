@@ -20,6 +20,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/Utils.h"
@@ -108,7 +109,7 @@ void Glow::render(const Interfaces& interfaces, const Memory& memory) noexcept
                 if (glow.healthBased && health) {
                     Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), glowobject.glowColor.x, glowobject.glowColor.y, glowobject.glowColor.z);
                 } else if (glow.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory, glow.rainbowSpeed) };
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, glow.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
                 } else {
                     glowobject.glowColor = { glow.color[0], glow.color[1], glow.color[2] };
