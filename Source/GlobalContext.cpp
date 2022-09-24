@@ -200,7 +200,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         memory.emplace(Memory{ *interfaces->client });
 
         Netvars::init(*interfaces);
-        EventListener::init(*interfaces, *memory);
+        gameEventListener.emplace(*memory, *interfaces);
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
@@ -225,7 +225,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         Netvars::init(*interfaces);
-        EventListener::init(*interfaces, *memory);
+        gameEventListener.emplace(*memory, *interfaces);
 
         ImGui::CreateContext();
         config.emplace(Config{ *interfaces, *memory });

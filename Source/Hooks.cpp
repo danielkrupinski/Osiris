@@ -508,7 +508,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
     Sleep(100);
 
     interfaces->inputSystem->enableInput(true);
-    EventListener::remove(*interfaces, *memory);
+    globalContext.gameEventListener->remove();
 
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();

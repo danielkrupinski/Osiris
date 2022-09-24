@@ -8,6 +8,8 @@
 #include <SDL2/SDL.h>
 #endif
 
+#include "EventListener.h"
+
 class matrix3x4;
 struct ModelRenderInfo;
 struct UserCmd;
@@ -28,6 +30,8 @@ public:
 #else
     int pollEventHook(SDL_Event* event);
 #endif
+
+    std::optional<EventListener> gameEventListener;
 
 private:
     enum class State {

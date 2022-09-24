@@ -12,69 +12,19 @@
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
 
-namespace
-{
-    class EventListenerImpl : public GameEventListener {
-    public:
-        EventListenerImpl(const Memory& memory, const Interfaces& interfaces)
-            : memory{ memory }, interfaces{ interfaces } {}
-
-        void fireGameEvent(GameEvent* event) override
-        {
-            switch (fnv::hashRuntime(event->getName())) {
-            case fnv::hash("round_start"):
-                GameData::clearProjectileList();
-                Misc::preserveKillfeed(memory, true);
-                [[fallthrough]];
-            case fnv::hash("round_freeze_end"):
-                Misc::purchaseList(interfaces, memory, event);
-                break;
-            case fnv::hash("player_death"): {
-                auto& inventoryChanger = inventory_changer::InventoryChanger::instance(interfaces, memory);
-                inventoryChanger.updateStatTrak(interfaces, *event);
-                inventoryChanger.overrideHudIcon(interfaces, memory, *event);
-                Misc::killMessage(interfaces, *event);
-                Misc::killSound(interfaces, *event);
-                break;
-            }
-            case fnv::hash("player_hurt"):
-                Misc::playHitSound(interfaces, *event);
-                Visuals::hitEffect(interfaces, memory, event);
-                Visuals::hitMarker(interfaces, memory, event);
-                break;
-            case fnv::hash("vote_cast"):
-                Misc::voteRevealer(interfaces, memory, *event);
-                break;
-            case fnv::hash("round_mvp"):
-                inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(interfaces, *event);
-                break;
-            }
-        }
-
-        static EventListenerImpl& instance(const Memory& memory, const Interfaces& interfaces) noexcept
-        {
-            static EventListenerImpl impl{ memory, interfaces };
-            return impl;
-        }
-
-    private:
-        const Memory& memory;
-        const Interfaces& interfaces;
-    };
-}
-
-void EventListener::init(const Interfaces& interfaces, const Memory& memory) noexcept
+EventListener::EventListener(const Memory& memory, const Interfaces& interfaces)
+    : memory{ memory }, interfaces{ interfaces }
 {
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
     const auto gameEventManager = interfaces.gameEventManager;
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "round_start");
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "round_freeze_end");
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "player_hurt");
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "player_death");
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "vote_cast");
-    gameEventManager->addListener(&EventListenerImpl::instance(memory, interfaces), "round_mvp");
+    gameEventManager->addListener(this, "round_start");
+    gameEventManager->addListener(this, "round_freeze_end");
+    gameEventManager->addListener(this, "player_hurt");
+    gameEventManager->addListener(this, "player_death");
+    gameEventManager->addListener(this, "vote_cast");
+    gameEventManager->addListener(this, "round_mvp");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
     if (const auto desc = memory.getEventDescriptor(gameEventManager, "player_death", nullptr))
@@ -89,7 +39,39 @@ void EventListener::init(const Interfaces& interfaces, const Memory& memory) noe
         assert(false);
 }
 
-void EventListener::remove(const Interfaces& interfaces, const Memory& memory) noexcept
+void EventListener::fireGameEvent(GameEvent* event)
 {
-    interfaces.gameEventManager->removeListener(&EventListenerImpl::instance(memory, interfaces));
+    switch (fnv::hashRuntime(event->getName())) {
+    case fnv::hash("round_start"):
+        GameData::clearProjectileList();
+        Misc::preserveKillfeed(memory, true);
+        [[fallthrough]];
+    case fnv::hash("round_freeze_end"):
+        Misc::purchaseList(interfaces, memory, event);
+        break;
+    case fnv::hash("player_death"): {
+        auto& inventoryChanger = inventory_changer::InventoryChanger::instance(interfaces, memory);
+        inventoryChanger.updateStatTrak(interfaces, *event);
+        inventoryChanger.overrideHudIcon(interfaces, memory, *event);
+        Misc::killMessage(interfaces, *event);
+        Misc::killSound(interfaces, *event);
+        break;
+    }
+    case fnv::hash("player_hurt"):
+        Misc::playHitSound(interfaces, *event);
+        Visuals::hitEffect(interfaces, memory, event);
+        Visuals::hitMarker(interfaces, memory, event);
+        break;
+    case fnv::hash("vote_cast"):
+        Misc::voteRevealer(interfaces, memory, *event);
+        break;
+    case fnv::hash("round_mvp"):
+        inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(interfaces, *event);
+        break;
+    }
+}
+
+void EventListener::remove()
+{
+    interfaces.gameEventManager->removeListener(this);
 }

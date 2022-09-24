@@ -3,8 +3,16 @@
 #include "Interfaces.h"
 #include "Memory.h"
 
-namespace EventListener
-{
-    void init(const Interfaces& interfaces, const Memory& memory) noexcept;
-    void remove(const Interfaces& interfaces, const Memory& memory) noexcept;
-}
+#include <SDK/GameEvent.h>
+
+class EventListener : public GameEventListener {
+public:
+    EventListener(const Memory& memory, const Interfaces& interfaces);
+
+    void fireGameEvent(GameEvent* event) override;
+    void remove();
+
+private:
+    const Memory& memory;
+    const Interfaces& interfaces;
+};
