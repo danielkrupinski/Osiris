@@ -4,6 +4,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#else
+#include <SDL2/SDL.h>
 #endif
 
 class matrix3x4;
@@ -23,6 +25,8 @@ public:
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+#else
+    int pollEventHook(SDL_Event* event);
 #endif
 
 private:

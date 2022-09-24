@@ -580,25 +580,7 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
 
 static int pollEvent(SDL_Event* event) noexcept
 {
-    [[maybe_unused]] static const auto once = []() noexcept {
-        Netvars::init(*interfaces);
-        EventListener::init(*interfaces, *memory);
-
-        ImGui::CreateContext();
-        config.emplace(Config{ *interfaces, *memory });
-
-        gui.emplace(GUI{});
-        hooks->install(*interfaces, *memory);
-
-        return true;
-    }();
-
-    const auto result = hooks->pollEvent(event);
-
-    if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->isOpen())
-        event->type = 0;
-
-    return result;
+    return globalContext.pollEventHook(event);
 }
 
 Hooks::Hooks() noexcept

@@ -213,4 +213,29 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
+#else
+int GlobalContext::pollEventHook(SDL_Event* event)
+{
+    const auto result = hooks->pollEvent(event);
+
+    if (state == GlobalContext::State::Initialized) {
+        if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->isOpen())
+            event->type = 0;
+    } else if (state == GlobalContext::State::NotInitialized) {
+        state = GlobalContext::State::Initializing;
+
+        Netvars::init(*interfaces);
+        EventListener::init(*interfaces, *memory);
+
+        ImGui::CreateContext();
+        config.emplace(Config{ *interfaces, *memory });
+
+        gui.emplace(GUI{});
+        hooks->install(*interfaces, *memory);
+
+        state = GlobalContext::State::Initialized;
+    }
+    
+    return result;
+}
 #endif
