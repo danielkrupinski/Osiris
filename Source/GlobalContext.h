@@ -16,6 +16,14 @@ public:
     void drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld);
     bool svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
+
+    enum class State {
+        NotInitialized,
+        Initializing,
+        Initialized
+    };
+
+    State state = State::NotInitialized;
 };
 
 inline GlobalContext globalContext;

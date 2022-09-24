@@ -76,7 +76,15 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    [[maybe_unused]] static const auto once = [](HWND window) noexcept {
+    if (globalContext.state == GlobalContext::State::Initialized) {
+        ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+        interfaces->inputSystem->enableInput(!gui->isOpen());
+    } else if (globalContext.state == GlobalContext::State::NotInitialized) {
+        globalContext.state = GlobalContext::State::Initializing;
+
+        interfaces.emplace(Interfaces{});
+        memory.emplace(Memory{ *interfaces->client });
+
         Netvars::init(*interfaces);
         EventListener::init(*interfaces, *memory);
 
@@ -86,11 +94,8 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         gui.emplace(GUI{});
         hooks->install(*interfaces, *memory);
 
-        return true;
-    }(window);
-
-    ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
-    interfaces->inputSystem->enableInput(!gui->isOpen());
+        globalContext.state = GlobalContext::State::Initialized;
+    }
 
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
@@ -418,10 +423,6 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 #endif
-
-    // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
-    interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{ *interfaces->client });
 
     window = FindWindowW(L"Valve001", nullptr);
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
