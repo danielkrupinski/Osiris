@@ -592,9 +592,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
         if (reloadedWeapon) {
             for (auto weaponHandle : localPlayer->weapons()) {
-                if (weaponHandle == -1)
-                    break;
-
                 if (interfaces->entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
                     cmd->weaponselect = reloadedWeapon->index();
                     cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
@@ -608,9 +605,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
             reloadedWeapon = activeWeapon;
 
             for (auto weaponHandle : localPlayer->weapons()) {
-                if (weaponHandle == -1)
-                    break;
-
                 if (auto weapon{ interfaces->entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
                     cmd->weaponselect = weapon->index();
                     cmd->weaponsubtype = weapon->getWeaponSubType();
