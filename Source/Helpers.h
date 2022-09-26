@@ -90,14 +90,14 @@ namespace Helpers
         using GeneratorType = std::mt19937;
         using result_type = GeneratorType::result_type;
 
-        static constexpr auto min()
+        static constexpr auto (min)()
         {
-            return GeneratorType::min();
+            return (GeneratorType::min)();
         }
 
-        static constexpr auto max()
+        static constexpr auto (max)()
         {
-            return GeneratorType::max();
+            return (GeneratorType::max)();
         }
 
         auto operator()() const
