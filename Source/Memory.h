@@ -43,6 +43,9 @@ struct GlowObjectManager;
 struct PanoramaEventRegistration;
 struct Vector;
 
+template <bool ReportNotFound = true>
+std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept;
+
 class Memory {
 public:
     Memory(Client& clientInterface) noexcept;

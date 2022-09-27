@@ -140,8 +140,8 @@ static std::uintptr_t findPattern(ModuleInfo moduleInfo, std::string_view patter
     return 0;
 }
 
-template <bool ReportNotFound = true>
-static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
+template <bool ReportNotFound>
+std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
 {
     return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
