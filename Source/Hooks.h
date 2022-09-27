@@ -19,6 +19,7 @@ union SDL_Event;
 #include "SDK/Platform.h"
 
 #include "Interfaces.h"
+#include "Memory.h"
 
 class matrix3x4;
 struct ModelRenderInfo;

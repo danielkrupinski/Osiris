@@ -293,6 +293,9 @@
     <ClCompile Include="GlobalContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RetSpoofGadgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -836,6 +839,9 @@
       <Filter>InventoryChanger</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoofGadgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
