@@ -8,4 +8,6 @@ struct RetSpoofGadgets {
     std::uintptr_t jmpEbxInClient = 0;
 };
 
+#ifdef _WIN32
 inline RetSpoofGadgets retSpoofGadgets;
+#endif

@@ -14,6 +14,10 @@ target_sources(OsirisOBJ PRIVATE
   Texture.cpp
 )
 
+if (WIN32)
+  target_sources(OsirisOBJ PRIVATE RetSpoofGadgets.cpp)
+endif()
+
 add_subdirectory(Hacks)
 add_subdirectory(Hooks)
 add_subdirectory(InventoryChanger)
