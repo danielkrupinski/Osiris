@@ -115,8 +115,8 @@ static void renderBox(const Memory& memory, const BoundingBox& bbox, const Box& 
     if (!config.enabled)
         return;
 
-    const ImU32 color = Helpers::calculateColor(memory, config.asColor4());
-    const ImU32 fillColor = Helpers::calculateColor(memory, config.fill.asColor4());
+    const ImU32 color = Helpers::calculateColor(memory.globalVars->realtime, config.asColor4());
+    const ImU32 fillColor = Helpers::calculateColor(memory.globalVars->realtime, config.fill.asColor4());
 
     switch (config.type) {
     case Box::_2d:
@@ -208,7 +208,7 @@ static ImVec2 renderText(const Memory& memory, float distance, float cullDistanc
     const auto horizontalOffset = centered ? textSize.x / 2 : 0.0f;
     const auto verticalOffset = adjustHeight ? textSize.y : 0.0f;
 
-    const auto color = Helpers::calculateColor(memory, textCfg);
+    const auto color = Helpers::calculateColor(memory.globalVars->realtime, textCfg);
     drawList->AddText({ pos.x - horizontalOffset + 1.0f, pos.y - verticalOffset + 1.0f }, color & IM_COL32_A_MASK, text);
     drawList->AddText({ pos.x - horizontalOffset, pos.y - verticalOffset }, color, text);
 
@@ -243,7 +243,7 @@ static void drawSnapline(const Memory& memory, const Snapline& config, const ImV
         return;
     }
 
-    drawList->AddLine(p1, p2, Helpers::calculateColor(memory, config.asColorToggle().asColor4()), config.thickness);
+    drawList->AddLine(p1, p2, Helpers::calculateColor(memory.globalVars->realtime, config.asColorToggle().asColor4()), config.thickness);
 }
 
 struct FontPush {
@@ -295,7 +295,7 @@ static void drawHealthBar(const Memory& memory, const HealthBar& config, const I
         max.y += height / 2.0f;
         drawList->AddRectFilledMultiColor(ImFloor(min), ImFloor(max), yellow, yellow, red, red);
     } else {
-        const auto color = config.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(memory, config.asColor4());
+        const auto color = config.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(memory.globalVars->realtime, config.asColor4());
         drawList->AddRectFilled(pos + ImVec2{ 1.0f, 1.0f }, pos + ImVec2{ width + 1.0f, height + 1.0f }, color & IM_COL32_A_MASK);
         drawList->AddRectFilled(pos, pos + ImVec2{ width, height }, color);
     }
@@ -327,7 +327,7 @@ static void renderPlayerBox(const Memory& memory, const Config& configGlobal, co
         const auto radius = (std::max)(5.0f - playerData.distanceToLocal / 600.0f, 1.0f);
         ImVec2 flashDurationPos{ (bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f };
 
-        const auto color = Helpers::calculateColor(memory, config.flashDuration.asColor4());
+        const auto color = Helpers::calculateColor(memory.globalVars->realtime, config.flashDuration.asColor4());
         constexpr float pi = std::numbers::pi_v<float>;
         drawList->PathArcTo(flashDurationPos + ImVec2{ 1.0f, 1.0f }, radius, pi / 2 - (playerData.flashDuration / 255.0f * pi), pi / 2 + (playerData.flashDuration / 255.0f * pi), 40);
         drawList->PathStroke(color & IM_COL32_A_MASK, false, 0.9f + radius * 0.1f);
@@ -392,7 +392,7 @@ static void drawProjectileTrajectory(const Memory& memory, const Trail& config, 
 
     std::vector<ImVec2> points, shadowPoints;
 
-    const auto color = Helpers::calculateColor(memory, config.asColorToggle().asColor4());
+    const auto color = Helpers::calculateColor(memory.globalVars->realtime, config.asColorToggle().asColor4());
 
     for (const auto& [time, point] : trajectory) {
         if (ImVec2 pos; time + config.time >= memory.globalVars->realtime && Helpers::worldToScreen(point, pos)) {
@@ -418,7 +418,7 @@ static void drawPlayerSkeleton(const Memory& memory, const ColorToggleThickness&
     if (!config.asColorToggle().enabled)
         return;
 
-    const auto color = Helpers::calculateColor(memory, config.asColorToggle().asColor4());
+    const auto color = Helpers::calculateColor(memory.globalVars->realtime, config.asColorToggle().asColor4());
 
     std::vector<std::pair<ImVec2, ImVec2>> points, shadowPoints;
 

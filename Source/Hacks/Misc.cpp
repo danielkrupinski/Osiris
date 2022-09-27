@@ -373,7 +373,7 @@ void Misc::noscopeCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
             return;
     }
 
-    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(memory, miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
 }
 
 void Misc::recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
@@ -391,7 +391,7 @@ void Misc::recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
         return;
 
     if (ImVec2 pos; Helpers::worldToScreenPixelAligned(localPlayerData.aimPunch, pos))
-        drawCrosshair(drawList, pos, Helpers::calculateColor(memory, miscConfig.recoilCrosshair.asColorToggle().asColor4()));
+        drawCrosshair(drawList, pos, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
 void Misc::watermark(const Memory& memory) noexcept
@@ -515,7 +515,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
 
     ImGui::textUnformattedCentered(ss.str().c_str());
 
-    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(memory, miscConfig.bombTimer.asColor3()));
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.bombTimer.asColor3()));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0.2f, 0.2f, 0.2f, 1.0f });
     ImGui::progressBarFullWidth((plantedC4.blowTime - memory.globalVars->currenttime) / plantedC4.timerLength, 5.0f);
 
@@ -1206,8 +1206,8 @@ void Misc::drawOffscreenEnemies(const Interfaces& interfaces, const Memory& memo
         Helpers::setAlphaFactor(player.fadingAlpha(memory));
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto background = Helpers::calculateColor(0, 0, 0, 80);
-        const auto color = Helpers::calculateColor(memory, miscConfig.offscreenEnemies.asColor4());
-        const auto healthBarColor = miscConfig.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(memory, miscConfig.offscreenEnemies.healthBar.asColor4());
+        const auto color = Helpers::calculateColor(memory.globalVars->realtime, miscConfig.offscreenEnemies.asColor4());
+        const auto healthBarColor = miscConfig.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(memory.globalVars->realtime, miscConfig.offscreenEnemies.healthBar.asColor4());
         Helpers::setAlphaFactor(1.0f);
 
         const ImVec2 trianglePoints[]{

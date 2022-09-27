@@ -23,8 +23,8 @@ struct Vector;
 
 namespace Helpers
 {
-    unsigned int calculateColor(const Memory& memory, Color4 color) noexcept;
-    unsigned int calculateColor(const Memory& memory, Color3 color) noexcept;
+    unsigned int calculateColor(float time, Color4 color) noexcept;
+    unsigned int calculateColor(float time, Color3 color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
     void setAlphaFactor(float newAlphaFactor) noexcept;
     float getAlphaFactor() noexcept;

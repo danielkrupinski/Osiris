@@ -649,7 +649,7 @@ void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexce
     if (!visualsConfig.molotovHull.enabled)
         return;
 
-    const auto color = Helpers::calculateColor(memory, visualsConfig.molotovHull.asColor4());
+    const auto color = Helpers::calculateColor(memory.globalVars->realtime, visualsConfig.molotovHull.asColor4());
 
     GameData::Lock lock;
 
