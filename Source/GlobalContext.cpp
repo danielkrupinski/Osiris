@@ -226,6 +226,9 @@ int GlobalContext::pollEventHook(SDL_Event* event)
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
+        interfaces.emplace(Interfaces{});
+        memory.emplace(Memory{ *interfaces->client });
+
         Netvars::init(*interfaces);
         gameEventListener.emplace(*memory, *interfaces);
 

@@ -586,9 +586,6 @@ static int pollEvent(SDL_Event* event) noexcept
 Hooks::Hooks() noexcept
     : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" } }
 {
-    interfaces.emplace(Interfaces{});
-    memory.emplace(Memory{ *interfaces->client });
-
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
 }
