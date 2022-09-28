@@ -26,7 +26,7 @@ public:
     constexpr auto callOriginal(Args... args) const noexcept
     {
 #ifdef _WIN32
-        return x86RetSpoof::invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], retSpoofGadgets.jmpEbxInClient, args...);
+        return retSpoofGadgets.jmpEbxInClient.invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], args...);
 #else
         return getOriginal<T, Idx>(args...)(base, args...);
 #endif

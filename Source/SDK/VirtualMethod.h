@@ -15,7 +15,7 @@ namespace VirtualMethod
     constexpr T call(void* classBase, Args... args) noexcept
     {
 #ifdef _WIN32
-        return x86RetSpoof::invokeThiscall<T, Args...>(std::uintptr_t(classBase), (*reinterpret_cast<std::uintptr_t**>(classBase))[Idx], retSpoofGadgets.jmpEbxInClient, args...);
+        return retSpoofGadgets.jmpEbxInClient.invokeThiscall<T, Args...>(std::uintptr_t(classBase), (*reinterpret_cast<std::uintptr_t**>(classBase))[Idx], args...);
 #else
         return (*reinterpret_cast<T(THISCALL_CONV***)(void*, Args...)>(classBase))[Idx](classBase, args...);
 #endif
