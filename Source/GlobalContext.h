@@ -43,4 +43,4 @@ private:
     State state = State::NotInitialized;
 };
 
-inline GlobalContext globalContext;
+inline std::optional<GlobalContext> globalContext;
