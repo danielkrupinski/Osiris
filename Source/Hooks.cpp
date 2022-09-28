@@ -420,8 +420,8 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
 #else
     ImGui_ImplOpenGL3_Init();
 
-    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory.swapWindow);
-    *reinterpret_cast<decltype(::swapWindow)**>(memory.swapWindow) = ::swapWindow;
+    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow);
+    *reinterpret_cast<decltype(::swapWindow)**>(sdlFunctions.swapWindow) = ::swapWindow;
 
 #endif
     
@@ -566,8 +566,8 @@ void Hooks::uninstall(const Interfaces& interfaces, const Memory& memory) noexce
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
         CloseHandle(thread);
 #else
-    *reinterpret_cast<decltype(pollEvent)*>(memory.pollEvent) = pollEvent;
-    *reinterpret_cast<decltype(swapWindow)*>(memory.swapWindow) = swapWindow;
+    *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent) = pollEvent;
+    *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow) = swapWindow;
 #endif
 }
 
@@ -584,12 +584,13 @@ static int pollEvent(SDL_Event* event) noexcept
 }
 
 Hooks::Hooks() noexcept
+    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" } }
 {
     interfaces.emplace(Interfaces{});
     memory.emplace(Memory{ *interfaces->client });
 
-    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent);
-    *reinterpret_cast<decltype(::pollEvent)**>(memory->pollEvent) = ::pollEvent;
+    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
+    *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
 }
 
 #endif

@@ -53,9 +53,6 @@ public:
 #ifdef _WIN32
     std::uintptr_t present;
     std::uintptr_t reset;
-#else
-    std::uintptr_t pollEvent;
-    std::uintptr_t swapWindow;
 #endif
 
     ClientMode* clientMode;
