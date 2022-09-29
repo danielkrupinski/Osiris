@@ -5,9 +5,9 @@
 
 #ifdef _WIN32
 #include <x86RetSpoof.h>
+#include "../RetSpoofGadgets.h"
 #endif
 
-#include "../RetSpoofGadgets.h"
 #include "../SDK/Platform.h"
 
 class MinHook {
