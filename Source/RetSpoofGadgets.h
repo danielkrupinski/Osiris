@@ -10,6 +10,4 @@ struct RetSpoofGadgets {
     RetSpoofInvoker jmpEbxInClient;
 };
 
-#ifdef _WIN32
 inline RetSpoofGadgets retSpoofGadgets;
-#endif

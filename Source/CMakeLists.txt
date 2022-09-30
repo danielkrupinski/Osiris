@@ -11,12 +11,9 @@ target_sources(OsirisOBJ PRIVATE
   InputUtil.cpp
   Memory.cpp
   Netvars.cpp
+  RetSpoofGadgets.cpp
   Texture.cpp
 )
-
-if (WIN32)
-  target_sources(OsirisOBJ PRIVATE RetSpoofGadgets.cpp)
-endif()
 
 add_subdirectory(Hacks)
 add_subdirectory(Hooks)
