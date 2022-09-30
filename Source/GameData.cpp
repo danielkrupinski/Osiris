@@ -483,8 +483,8 @@ void PlayerData::update(const Interfaces& interfaces, const Memory& memory, Enti
 
     const auto headBox = set->getHitbox(0);
 
-    headMins = headBox->bbMin.transform(boneMatrices[headBox->bone]);
-    headMaxs = headBox->bbMax.transform(boneMatrices[headBox->bone]);
+    headMins = transform(headBox->bbMin, boneMatrices[headBox->bone]);
+    headMaxs = transform(headBox->bbMax, boneMatrices[headBox->bone]);
 
     if (headBox->capsuleRadius > 0.0f) {
         headMins -= headBox->capsuleRadius;

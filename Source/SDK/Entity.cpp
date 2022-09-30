@@ -11,6 +11,8 @@
 #include "EngineTrace.h"
 #include "LocalPlayer.h"
 
+#include "matrix3x4.h"
+
 bool Entity::setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
 {
 #ifdef _WIN32

@@ -47,7 +47,7 @@ public:
                                 i & 2 ? scaledMaxs.y : scaledMins.y,
                                 i & 4 ? scaledMaxs.z : scaledMins.z };
 
-            if (!Helpers::worldToScreenPixelAligned(matrix ? point.transform(*matrix) : point, vertices[i])) {
+            if (!Helpers::worldToScreenPixelAligned(matrix ? transform(point, *matrix) : point, vertices[i])) {
                 valid = false;
                 return;
             }
