@@ -844,7 +844,7 @@
     <ClInclude Include="RetSpoofGadgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RetSpoofInvoker.h">
+    <ClInclude Include="Platform\RetSpoofInvoker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

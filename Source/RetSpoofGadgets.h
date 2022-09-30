@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "RetSpoofInvoker.h"
+#include "Platform/Windows/RetSpoofInvoker.h"
 
 struct RetSpoofGadgets {
     RetSpoofGadgets();
