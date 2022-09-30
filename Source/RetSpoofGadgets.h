@@ -7,7 +7,7 @@
 struct RetSpoofGadgets {
     RetSpoofGadgets();
 
-    RetSpoofInvoker jmpEbxInClient;
+    windows_platform::RetSpoofInvoker jmpEbxInClient;
 };
 
 #ifdef _WIN32
