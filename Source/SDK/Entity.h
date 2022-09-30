@@ -13,6 +13,8 @@
 
 #include "../Netvars.h"
 
+class Memory;
+
 class EconItemView;
 
 class matrix3x4;

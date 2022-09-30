@@ -15,8 +15,6 @@
 
 #include "SDK/WeaponId.h"
 
-#include "Memory.h"
-
 struct Color3;
 struct Color4;
 struct Vector;

@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "fnv.h"
+#include "Interfaces.h"
 
 namespace Netvars
 {
