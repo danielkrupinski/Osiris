@@ -2,12 +2,12 @@
 
 #include <cstdint>
 
-#include "Platform/Windows/RetSpoofInvoker.h"
+#include "Platform/RetSpoofInvoker.h"
 
 struct RetSpoofGadgets {
     RetSpoofGadgets();
 
-    windows_platform::RetSpoofInvoker jmpEbxInClient;
+    RetSpoofInvoker jmpEbxInClient;
 };
 
 #ifdef _WIN32
