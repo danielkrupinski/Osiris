@@ -277,7 +277,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         state = GlobalContext::State::Initializing;
 
         interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *interfaces->client });
+        memory.emplace(Memory{ *interfaces->client, retSpoofGadgets });
 
         Netvars::init(*interfaces);
         gameEventListener.emplace(*memory, *interfaces);
@@ -331,7 +331,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *interfaces->client });
+        memory.emplace(Memory{ *interfaces->client, retSpoofGadgets });
 
         Netvars::init(*interfaces);
         gameEventListener.emplace(*memory, *interfaces);

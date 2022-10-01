@@ -6,8 +6,11 @@
 #include <type_traits>
 
 #include "SDK/Platform.h"
+#include "SDK/ViewRenderBeams.h"
 
 #include "Interfaces.h"
+
+#include "RetSpoofGadgets.h"
 
 class ClientMode;
 template <typename T> class ClientSharedObjectCache;
@@ -29,7 +32,6 @@ class PlantedC4;
 class PlayerResource;
 template <typename T> class SharedObjectTypeCache;
 class ViewRender;
-class ViewRenderBeams;
 class WeaponSystem;
 template <typename Key, typename Value>
 struct UtlMap;
@@ -48,7 +50,7 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 
 class Memory {
 public:
-    Memory(Client& clientInterface) noexcept;
+    Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #ifdef _WIN32
     std::uintptr_t present;
@@ -79,7 +81,7 @@ public:
     int* dispatchSound;
     std::uintptr_t traceToExit;
     ViewRender* viewRender;
-    ViewRenderBeams* viewRenderBeams;
+    ViewRenderBeams viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
