@@ -27,6 +27,7 @@ public:
     bool shouldDrawFogHook(std::uintptr_t returnAddress);
     bool shouldDrawViewModelHook();
     void lockCursorHook();
+    void setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

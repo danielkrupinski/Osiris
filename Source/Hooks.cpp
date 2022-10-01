@@ -211,9 +211,7 @@ static void STDCALL_CONV lockCursor() noexcept
 
 static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-    if (Visuals::shouldRemoveScopeOverlay() && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
-        a = 0;
-    hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
+    globalContext->setDrawColorHook(r, g, b, a, RETURN_ADDRESS());
 }
 
 struct ViewSetup {

@@ -214,6 +214,13 @@ void GlobalContext::lockCursorHook()
     return hooks->surface.callOriginal<void, 67>();
 }
 
+void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress)
+{
+    if (Visuals::shouldRemoveScopeOverlay() && (returnAddress == memory->scopeDust || returnAddress == memory->scopeArc))
+        a = 0;
+    hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
+}
+
 #ifdef _WIN32
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
