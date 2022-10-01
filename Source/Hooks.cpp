@@ -201,9 +201,7 @@ static bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 
 static bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
-        return false;
-    return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
+    return globalContext->shouldDrawViewModelHook();
 }
 
 static void STDCALL_CONV lockCursor() noexcept

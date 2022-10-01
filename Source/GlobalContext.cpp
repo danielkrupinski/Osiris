@@ -199,6 +199,13 @@ bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
     return !Visuals::shouldRemoveFog();
 }
 
+bool GlobalContext::shouldDrawViewModelHook()
+{
+    if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+        return false;
+    return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
+}
+
 #ifdef _WIN32
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

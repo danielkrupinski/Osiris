@@ -25,6 +25,7 @@ public:
     bool svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
     bool shouldDrawFogHook(std::uintptr_t returnAddress);
+    bool shouldDrawViewModelHook();
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
