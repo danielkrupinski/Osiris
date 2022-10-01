@@ -2,6 +2,8 @@
 
 #include <dlfcn.h>
 
+#include "DynamicLibraryView.h"
+
 namespace linux_platform
 {
 
@@ -24,6 +26,11 @@ public:
     [[nodiscard]] bool isValid() const noexcept
     {
         return handle != nullptr;
+    }
+
+    [[nodiscard]] DynamicLibraryView<DynamicLibraryWrapper> getView() const noexcept
+    {
+        return { dl, handle };
     }
 
     ~SharedObject() noexcept
