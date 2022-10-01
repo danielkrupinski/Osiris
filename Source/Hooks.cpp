@@ -66,6 +66,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/ViewSetup.h"
 #include "SDK/Constants/UserMessages.h"
 
 #include "GlobalContext.h"
@@ -213,14 +214,6 @@ static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, i
 {
     globalContext->setDrawColorHook(r, g, b, a, RETURN_ADDRESS());
 }
-
-struct ViewSetup {
-    PAD(172);
-    void* csm;
-    float fov;
-    PAD(32);
-    float farZ;
-};
 
 static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
