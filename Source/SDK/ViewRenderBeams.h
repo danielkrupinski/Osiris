@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "Inconstructible.h"
 #include "Pad.h"
 #include "Platform.h"
