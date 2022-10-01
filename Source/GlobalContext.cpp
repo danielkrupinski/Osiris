@@ -1,6 +1,7 @@
 #include "GlobalContext.h"
 
 #ifdef _WIN32
+#include <imgui/imgui_impl_dx9.h>
 #include <imgui/imgui_impl_win32.h>
 #else
 #include <imgui/imgui_impl_sdl.h>
@@ -20,6 +21,7 @@
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Sound.h"
+#include "Hacks/StreamProofESP.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
 #include "SDK/ClientClass.h"
@@ -291,6 +293,63 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
+
+HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
+{
+    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+
+    if (config->loadScheduledFonts())
+        ImGui_ImplDX9_DestroyFontsTexture();
+
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+
+    //
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        StreamProofESP::render(*memory, *config);
+        Misc::purchaseList(*interfaces, *memory);
+        Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
+        Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());
+        Misc::drawBombTimer(*memory);
+        Misc::spectatorList();
+        Visuals::hitMarker(*interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
+        Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
+        Misc::watermark(*memory);
+
+        Aimbot::updateInput(*config);
+        Visuals::updateInput();
+        StreamProofESP::updateInput(*config);
+        Misc::updateInput();
+        Triggerbot::updateInput(*config);
+        Chams::updateInput(*config);
+        Glow::updateInput();
+
+        gui->handleToggle(*interfaces);
+
+        if (gui->isOpen())
+            gui->render(*interfaces, *memory, *config);
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+    //
+
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
+
+    //
+    GameData::clearUnusedAvatars();
+    InventoryChanger::clearUnusedItemIconTextures();
+    //
+
+    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
+}
+
 #else
 int GlobalContext::pollEventHook(SDL_Event* event)
 {

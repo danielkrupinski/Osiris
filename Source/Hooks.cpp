@@ -86,18 +86,11 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return hooks->originalReset(device, params);
 }
 
-#endif
-
-#ifdef _WIN32
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
-    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+    return globalContext->presentHook(device, src, dest, windowOverride, dirtyRegion);
+}
 
-    if (config->loadScheduledFonts())
-        ImGui_ImplDX9_DestroyFontsTexture();
-
-    ImGui_ImplDX9_NewFrame();
-    ImGui_ImplWin32_NewFrame();
 #else
 static void swapWindow(SDL_Window * window) noexcept
 {
@@ -105,7 +98,7 @@ static void swapWindow(SDL_Window * window) noexcept
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(window);
-#endif
+
     ImGui::NewFrame();
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
@@ -137,24 +130,14 @@ static void swapWindow(SDL_Window * window) noexcept
     ImGui::EndFrame();
     ImGui::Render();
 
-#ifdef _WIN32
-    if (device->BeginScene() == D3D_OK) {
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-        device->EndScene();
-    }
-#else
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-#endif
 
     GameData::clearUnusedAvatars();
     InventoryChanger::clearUnusedItemIconTextures();
 
-#ifdef _WIN32
-    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
-#else
     hooks->swapWindow(window);
-#endif
 }
+#endif
 
 static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {

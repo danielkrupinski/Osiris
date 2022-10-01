@@ -38,6 +38,7 @@ public:
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+    HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
 #else
     int pollEventHook(SDL_Event* event);
 #endif
