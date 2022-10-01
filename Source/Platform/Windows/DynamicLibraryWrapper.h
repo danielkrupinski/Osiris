@@ -6,15 +6,15 @@ namespace windows_platform
 {
 
 struct DynamicLibraryWrapper {
-    FARPROC GetProcAddress(HMODULE module, LPCSTR procName) const noexcept
+    FARPROC GetProcAddress(HMODULE moduleHandle, LPCSTR procName) const noexcept
     {
-        return ::GetProcAddress(module, procName);
+        return ::GetProcAddress(moduleHandle, procName);
     }
 
     HMODULE GetModuleHandleA(LPCSTR moduleName) const noexcept
     {
         return ::GetModuleHandleA(moduleName);
     }
-);
+};
 
 }
