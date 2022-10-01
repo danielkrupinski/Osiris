@@ -246,11 +246,7 @@ static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector
 
 static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
 {
-    if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        Sound::modulateSound(*interfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
-        soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
-    }
-    return hooks->originalDispatchSound(soundInfo);
+    return globalContext->dispatchSoundHook(soundInfo);
 }
 
 static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept

@@ -12,6 +12,7 @@
 
 class matrix3x4;
 struct ModelRenderInfo;
+struct SoundInfo;
 struct UserCmd;
 struct ViewSetup;
 
@@ -30,6 +31,7 @@ public:
     void lockCursorHook();
     void setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress);
     void overrideViewHook(ViewSetup* setup);
+    int dispatchSoundHook(SoundInfo& soundInfo);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

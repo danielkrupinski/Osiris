@@ -19,6 +19,7 @@
 #include "Hacks/EnginePrediction.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
+#include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
 #include "SDK/ClientClass.h"
@@ -30,6 +31,8 @@
 #include "SDK/InputSystem.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelRender.h"
+#include "SDK/SoundEmitter.h"
+#include "SDK/SoundInfo.h"
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
@@ -228,6 +231,15 @@ void GlobalContext::overrideViewHook(ViewSetup* setup)
         setup->fov += Visuals::fov();
     setup->farZ += Visuals::farZ() * 10;
     hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
+}
+
+int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
+{
+    if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
+        Sound::modulateSound(*interfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+        soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
+    }
+    return hooks->originalDispatchSound(soundInfo);
 }
 
 #ifdef _WIN32
