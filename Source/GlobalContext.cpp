@@ -5,6 +5,7 @@
 #include <imgui/imgui_impl_win32.h>
 #else
 #include <imgui/imgui_impl_sdl.h>
+#include <imgui/imgui_impl_opengl3.h>
 #endif
 
 #include "EventListener.h"
