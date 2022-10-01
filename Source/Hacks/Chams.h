@@ -11,7 +11,7 @@ class matrix3x4;
 
 class Chams {
 public:
-    bool render(const Interfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    bool render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
 private:
     void renderPlayer(const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept;

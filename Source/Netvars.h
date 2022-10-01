@@ -8,7 +8,7 @@
 
 namespace Netvars
 {
-    void init(const Interfaces& interfaces) noexcept;
+    void init(Client& client) noexcept;
     void restore() noexcept;
     std::uint32_t get(std::uint32_t hash) noexcept;
 }

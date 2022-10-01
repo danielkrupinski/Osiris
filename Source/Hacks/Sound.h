@@ -10,7 +10,7 @@
 
 namespace Sound
 {
-    void modulateSound(const Interfaces& interfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept;
+    void modulateSound(const ClientInterfaces& clientInterfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept;
 
     // GUI
     void menuBarItem() noexcept;

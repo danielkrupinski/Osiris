@@ -30,7 +30,7 @@ struct Matrix4x4;
 
 namespace GameData
 {
-    void update(const Interfaces& interfaces, const Memory& memory) noexcept;
+    void update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
     void clearUnusedAvatars() noexcept;
@@ -93,7 +93,7 @@ struct EntityData final : BaseData {
 };
 
 struct ProjectileData : BaseData {
-    ProjectileData(const Interfaces& interfaces, const Memory& memory, Entity* projectile) noexcept;
+    ProjectileData(const ClientInterfaces& clientInterfaces, const Memory& memory, Entity* projectile) noexcept;
 
     void update(const Memory& memory, Entity* projectile) noexcept;
 

@@ -12,8 +12,8 @@
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
 
-EventListener::EventListener(const Memory& memory, const Interfaces& interfaces)
-    : memory{ memory }, interfaces{ interfaces }
+EventListener::EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces)
+    : memory{ memory }, clientInterfaces{ clientInterfaces }, interfaces{ interfaces }
 {
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
@@ -47,7 +47,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::preserveKillfeed(memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(interfaces, memory, event);
+        Misc::purchaseList(clientInterfaces, interfaces, memory, event);
         break;
     case fnv::hash("player_death"): {
         auto& inventoryChanger = inventory_changer::InventoryChanger::instance(interfaces, memory);
@@ -63,7 +63,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Visuals::hitMarker(interfaces, memory, event);
         break;
     case fnv::hash("vote_cast"):
-        Misc::voteRevealer(interfaces, memory, *event);
+        Misc::voteRevealer(clientInterfaces, interfaces, memory, *event);
         break;
     case fnv::hash("round_mvp"):
         inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(interfaces, *event);

@@ -137,7 +137,7 @@ static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::Frame
 
 static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    Sound::modulateSound(*interfaces, *memory, soundEntry, entityIndex, volume);
+    Sound::modulateSound(*globalContext->clientInterfaces, *memory, soundEntry, entityIndex, volume);
     Misc::autoAccept(*interfaces, *memory, soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
@@ -287,7 +287,7 @@ static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::U
     if (type == csgo::UserMessageType::Text)
         inventory_changer::InventoryChanger::instance(*interfaces, *memory).onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
-        Misc::onVoteStart(*interfaces, *memory, data, size);
+        Misc::onVoteStart(*globalContext->clientInterfaces, *interfaces, *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
         Misc::onVotePass(*memory);
     else if (type == csgo::UserMessageType::VoteFailed)
@@ -339,7 +339,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
     bspQuery.init(interfaces.engine->getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(interfaces.client);
+    client.init(globalContext->clientInterfaces->client);
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 
@@ -434,8 +434,8 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 void Hooks::uninstall(const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    Misc::updateEventListeners(interfaces, memory, true);
-    Visuals::updateEventListeners(interfaces, memory, true);
+    Misc::updateEventListeners(*globalContext->clientInterfaces, interfaces, memory, true);
+    Visuals::updateEventListeners(*globalContext->clientInterfaces, interfaces, memory, true);
 
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {

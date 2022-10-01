@@ -67,7 +67,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::fastStop(cmd);
     Misc::prepareRevolver(*interfaces, *memory, cmd);
     Visuals::removeShadows(*interfaces);
-    Misc::runReportbot(*interfaces, *memory);
+    Misc::runReportbot(*clientInterfaces, *interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
@@ -75,17 +75,17 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::autoReload(cmd);
     Misc::updateClanTag(*memory);
     Misc::fakeBan(*interfaces, *memory);
-    Misc::stealNames(*interfaces, *memory);
-    Misc::revealRanks(*interfaces, cmd);
-    Misc::quickReload(*interfaces, cmd);
+    Misc::stealNames(*clientInterfaces, *interfaces, *memory);
+    Misc::revealRanks(*clientInterfaces, cmd);
+    Misc::quickReload(*clientInterfaces, *interfaces, cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
-    EnginePrediction::run(*interfaces, *memory, cmd);
+    EnginePrediction::run(*clientInterfaces, *memory, cmd);
 
-    Aimbot::run(*interfaces, *config, *memory, cmd);
+    Aimbot::run(*clientInterfaces, *interfaces, *config, *memory, cmd);
     Triggerbot::run(*interfaces, *memory, *config, cmd);
-    Backtrack::run(*interfaces, *memory, cmd);
+    Backtrack::run(*clientInterfaces, *interfaces, *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(*interfaces, cmd);
@@ -124,7 +124,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness(*interfaces);
         Visuals::remove3dSky(*interfaces);
-        Glow::render(*interfaces, *memory);
+        Glow::render(*clientInterfaces, *interfaces, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
@@ -148,7 +148,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(*interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(*clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);
@@ -169,14 +169,14 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::changeName(*interfaces, *memory, true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
-        GameData::update(*interfaces, *memory);
+        GameData::update(*clientInterfaces, *interfaces, *memory);
 
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
         Misc::disablePanoramablur(*interfaces);
         Visuals::colorWorld(*interfaces, *memory);
-        Misc::updateEventListeners(*interfaces, *memory);
-        Visuals::updateEventListeners(*interfaces, *memory);
+        Misc::updateEventListeners(*clientInterfaces, *interfaces, *memory);
+        Visuals::updateEventListeners(*clientInterfaces, *interfaces, *memory);
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(*interfaces, *memory, stage);
@@ -187,10 +187,10 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Visuals::disablePostProcessing(*memory, stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
-        Misc::fixAnimationLOD(*interfaces, *memory, stage);
-        Backtrack::update(*interfaces, *memory, stage);
+        Misc::fixAnimationLOD(*clientInterfaces, *interfaces, *memory, stage);
+        Backtrack::update(*clientInterfaces, *interfaces, *memory, stage);
     }
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*interfaces, *memory, stage);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*clientInterfaces, *interfaces, *memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
@@ -239,7 +239,7 @@ void GlobalContext::overrideViewHook(ViewSetup* setup)
 int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 {
     if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        Sound::modulateSound(*interfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+        Sound::modulateSound(*clientInterfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
         soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     }
     return hooks->originalDispatchSound(soundInfo);
@@ -277,11 +277,13 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
+        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL } });
         interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *interfaces->client, retSpoofGadgets });
 
-        Netvars::init(*interfaces);
-        gameEventListener.emplace(*memory, *interfaces);
+        memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
+
+        Netvars::init(*clientInterfaces->client);
+        gameEventListener.emplace(*memory, *clientInterfaces, *interfaces);
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
@@ -331,6 +333,9 @@ int GlobalContext::pollEventHook(SDL_Event* event)
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
+        const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+        clientInterfaces.emplace(InterfaceFinder{ so.getView() });
+
         interfaces.emplace(Interfaces{});
         memory.emplace(Memory{ *interfaces->client, retSpoofGadgets });
 
@@ -374,7 +379,7 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(*interfaces, *memory);
+        Misc::purchaseList(*clientInterfaces, *interfaces, *memory);
         Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());

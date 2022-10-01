@@ -17,8 +17,8 @@ struct UserCmd;
 
 namespace Backtrack
 {
-    void update(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
-    void run(const Interfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
+    void update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
+    void run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
 
     struct Record {
         Vector origin;

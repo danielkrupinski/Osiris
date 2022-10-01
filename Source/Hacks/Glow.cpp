@@ -47,7 +47,7 @@ static KeyBind glowHoldKey;
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
-void Glow::render(const Interfaces& interfaces, const Memory& memory) noexcept
+void Glow::render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
@@ -63,9 +63,9 @@ void Glow::render(const Interfaces& interfaces, const Memory& memory) noexcept
         return;
     }
 
-    const auto highestEntityIndex = interfaces.entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
     for (int i = interfaces.engine->getMaxClients() + 1; i <= highestEntityIndex; ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity->isDormant())
             continue;
 

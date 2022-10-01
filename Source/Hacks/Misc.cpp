@@ -548,7 +548,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::stealNames(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -559,7 +559,7 @@ void Misc::stealNames(const Interfaces& interfaces, const Memory& memory) noexce
     static std::vector<int> stolenIds;
 
     for (int i = 1; i <= memory.globalVars->maxClients; ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.entityList->getEntity(i);
 
         if (!entity || entity == localPlayer.get())
             continue;
@@ -585,7 +585,7 @@ void Misc::disablePanoramablur(const Interfaces& interfaces) noexcept
     blur->setValue(miscConfig.disablePanoramablur);
 }
 
-void Misc::quickReload(const Interfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
         static Entity* reloadedWeapon{ nullptr };
@@ -595,7 +595,7 @@ void Misc::quickReload(const Interfaces& interfaces, UserCmd* cmd) noexcept
                 if (weaponHandle == -1)
                     break;
 
-                if (interfaces.entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
+                if (clientInterfaces.entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
                     cmd->weaponselect = reloadedWeapon->index();
                     cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
                     break;
@@ -611,7 +611,7 @@ void Misc::quickReload(const Interfaces& interfaces, UserCmd* cmd) noexcept
                 if (weaponHandle == -1)
                     break;
 
-                if (auto weapon{ interfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
+                if (auto weapon{ clientInterfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
                     cmd->weaponselect = weapon->index();
                     cmd->weaponsubtype = weapon->getWeaponSubType();
                     break;
@@ -728,7 +728,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
         cmd->buttons |= 1 << 27;
 }
 
-void Misc::fixAnimationLOD(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Misc::fixAnimationLOD(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
 #ifdef _WIN32
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
@@ -736,7 +736,7 @@ void Misc::fixAnimationLOD(const Interfaces& interfaces, const Memory& memory, c
             return;
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-            Entity* entity = interfaces.entityList->getEntity(i);
+            Entity* entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) continue;
             *reinterpret_cast<int*>(entity + 0xA28) = 0;
             *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
@@ -773,10 +773,10 @@ void Misc::autoReload(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::revealRanks(const Interfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::revealRanks(const ClientInterfaces& clientInterfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
-        interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
+        clientInterfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
 }
 
 void Misc::autoStrafe(UserCmd* cmd) noexcept
@@ -852,7 +852,7 @@ void Misc::killSound(const Interfaces& interfaces, GameEvent& event) noexcept
         interfaces.engine->clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Misc::purchaseList(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -871,7 +871,7 @@ void Misc::purchaseList(const Interfaces& interfaces, const Memory& memory, Game
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            if (const auto player = interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
+            if (const auto player = clientInterfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
                 if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     auto& purchase = playerPurchases[player->handle()];
                     if (const auto weaponInfo = memory.weaponSystem->getWeaponInfo(definition->getWeaponId())) {
@@ -999,12 +999,12 @@ static int reportbotRound;
     return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
 }
 
-[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const Interfaces& interfaces, const Memory& memory)
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory)
 {
     std::vector<std::uint64_t> xuids;
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer.get())
             continue;
 
@@ -1018,7 +1018,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::runReportbot(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1034,7 +1034,7 @@ void Misc::runReportbot(const Interfaces& interfaces, const Memory& memory) noex
     if (reportbotRound >= miscConfig.reportbot.rounds)
         return;
 
-    for (const auto& xuid : getXuidsOfCandidatesToBeReported(interfaces, memory)) {
+    for (const auto& xuid : getXuidsOfCandidatesToBeReported(clientInterfaces, interfaces, memory)) {
         if (isPlayerReported(xuid))
             continue;
 
@@ -1091,12 +1091,12 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
 
-    const auto entity = interfaces.entityList->getEntity(event.getInt("entityid"));
+    const auto entity = clientInterfaces.entityList->getEntity(event.getInt("entityid"));
     if (!entity || !entity->isPlayer())
         return;
     
@@ -1107,7 +1107,7 @@ void Misc::voteRevealer(const Interfaces& interfaces, const Memory& memory, Game
     memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
+void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1125,7 +1125,7 @@ void Misc::onVoteStart(const Interfaces& interfaces, const Memory& memory, const
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
     const auto entityIndex = reader.readInt32(2);
 
-    const auto entity = interfaces.entityList->getEntity(entityIndex);
+    const auto entity = clientInterfaces.entityList->getEntity(entityIndex);
     if (!entity || !entity->isPlayer())
         return;
 
@@ -1276,20 +1276,21 @@ void Misc::autoAccept(const Interfaces& interfaces, const Memory& memory, const 
 #endif
 }
 
-void Misc::updateEventListeners(const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
+void Misc::updateEventListeners(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        explicit PurchaseEventListener(const Interfaces& interfaces, const Memory& memory)
-            : interfaces{ interfaces}, memory{ memory } {}
-        void fireGameEvent(GameEvent* event) override { purchaseList(interfaces, memory, event); }
+        explicit PurchaseEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const Memory& memory)
+            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, memory{ memory } {}
+        void fireGameEvent(GameEvent* event) override { purchaseList(clientInterfaces, interfaces, memory, event); }
 
     private:
         const Interfaces& interfaces;
+        const ClientInterfaces& clientInterfaces;
         const Memory& memory;
     };
 
-    static PurchaseEventListener listener{ interfaces, memory };
+    static PurchaseEventListener listener{ interfaces, clientInterfaces, memory };
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {

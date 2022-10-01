@@ -126,7 +126,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -158,7 +158,7 @@ bool Chams::render(const Interfaces& interfaces, const Memory& memory, Config& c
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons(interfaces,memory, config);
     } else {
-        const auto entity = interfaces.entityList->getEntity(info.entityIndex);
+        const auto entity = clientInterfaces.entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
             renderPlayer(interfaces, memory, config, entity);
     }

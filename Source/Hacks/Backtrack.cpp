@@ -45,7 +45,7 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
     return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
 }
 
-void Backtrack::update(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Backtrack::update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
@@ -55,7 +55,7 @@ void Backtrack::update(const Interfaces& interfaces, const Memory& memory, csgo:
         }
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-            auto entity = interfaces.entityList->getEntity(i);
+            auto entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
@@ -87,7 +87,7 @@ static float getLerp() noexcept
     return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
-void Backtrack::run(const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
+void Backtrack::run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
         return;
@@ -109,7 +109,7 @@ void Backtrack::run(const Interfaces& interfaces, const Memory& memory, UserCmd*
     const auto aimPunch = localPlayer->getAimPunch();
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-        auto entity = interfaces.entityList->getEntity(i);
+        auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isOtherEnemy(memory, localPlayer.get()))
             continue;

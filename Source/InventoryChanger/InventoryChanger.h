@@ -63,7 +63,7 @@ public:
 
     void drawGUI(const Interfaces& interfaces, const Memory& memory, bool contentOnly);
 
-    void run(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
+    void run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate(const Interfaces& interfaces) noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
 

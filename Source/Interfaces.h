@@ -67,20 +67,33 @@ private:
     DynamicLibraryView<DynamicLibraryWrapper> library;
 };
 
+class ClientInterfaces {
+public:
+    template <typename DynamicLibraryWrapper>
+    explicit ClientInterfaces(InterfaceFinder<DynamicLibraryWrapper> clientInterfaceFinder)
+        : client{ static_cast<Client*>(clientInterfaceFinder("VClient018")) },
+          entityList{ static_cast<EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
+          gameMovement{ static_cast<GameMovement*>(clientInterfaceFinder("GameMovement001")) },
+          prediction{ static_cast<Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
+    {
+    }
+
+    Client* client;
+    EntityList* entityList;
+    GameMovement* gameMovement;
+    Prediction* prediction;
+};
+
 class Interfaces {
 public:
 #define GAME_INTERFACE(type, name, moduleName, version) \
 type* name = reinterpret_cast<type*>(find(moduleName, version));
 
     GAME_INTERFACE(BaseFileSystem, baseFileSystem, FILESYSTEM_DLL, "VBaseFileSystem011")
-    GAME_INTERFACE(Client, client, CLIENT_DLL, "VClient018")
     GAME_INTERFACE(Cvar, cvar, VSTDLIB_DLL, "VEngineCvar007")
     GAME_INTERFACE(Engine, engine, ENGINE_DLL, "VEngineClient014")
     GAME_INTERFACE(EngineTrace, engineTrace, ENGINE_DLL, "EngineTraceClient004")
-    GAME_INTERFACE(EntityList, entityList, CLIENT_DLL, "VClientEntityList003")
     GAME_INTERFACE(GameEventManager, gameEventManager, ENGINE_DLL, "GAMEEVENTSMANAGER002")
-    GAME_INTERFACE(GameMovement, gameMovement, CLIENT_DLL, "GameMovement001")
-    // GAME_INTERFACE(GameUI, gameUI, CLIENT_DLL, "GameUI011") // you may enable it to use GameUI::createCommandMsgBox()
     GAME_INTERFACE(InputSystem, inputSystem, INPUTSYSTEM_DLL, "InputSystemVersion001")
     GAME_INTERFACE(Localize, localize, LOCALIZE_DLL, "Localize_001")
     GAME_INTERFACE(MaterialSystem, materialSystem, MATERIALSYSTEM_DLL, "VMaterialSystem080")
@@ -89,7 +102,6 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
     GAME_INTERFACE(NetworkStringTableContainer, networkStringTableContainer, ENGINE_DLL, "VEngineClientStringTable001")
     GAME_INTERFACE(PanoramaUIEngine, panoramaUIEngine, PANORAMA_DLL, "PanoramaUIEngine001")
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, VPHYSICS_DLL, "VPhysicsSurfaceProps001")
-    GAME_INTERFACE(Prediction, prediction, CLIENT_DLL, "VClientPrediction001")
     GAME_INTERFACE(RenderView, renderView, ENGINE_DLL, "VEngineRenderView014")
     GAME_INTERFACE(Surface, surface, VGUIMATSURFACE_DLL, "VGUI_Surface031")
     GAME_INTERFACE(EngineSound, sound, ENGINE_DLL, "IEngineSoundClient003")

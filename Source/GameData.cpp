@@ -75,7 +75,7 @@ static bool shouldUpdatePlayerVisibility(const Memory& memory) noexcept
     return nextPlayerVisibilityUpdateTime <= memory.globalVars->realtime;
 }
 
-void GameData::update(const Interfaces& interfaces, const Memory& memory) noexcept
+void GameData::update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     static int lastFrame;
     if (lastFrame == memory.globalVars->framecount)
@@ -104,9 +104,9 @@ void GameData::update(const Interfaces& interfaces, const Memory& memory) noexce
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
-    const auto highestEntityIndex = interfaces.entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity)
             continue;
 
@@ -150,7 +150,7 @@ void GameData::update(const Interfaces& interfaces, const Memory& memory) noexce
                     if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                         it->update(memory, entity);
                     else
-                        projectileData.emplace_front(interfaces, memory, entity);
+                        projectileData.emplace_front(clientInterfaces, memory, entity);
                     break;
                 case ClassId::DynamicProp:
                     if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
@@ -185,15 +185,15 @@ void GameData::update(const Interfaces& interfaces, const Memory& memory) noexce
     std::sort(entityData.begin(), entityData.end());
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
-    std::ranges::for_each(projectileData, [&interfaces](auto& projectile) {
-        if (interfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr)
+    std::ranges::for_each(projectileData, [&clientInterfaces](auto& projectile) {
+        if (clientInterfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr)
             projectile.exploded = true;
     });
 
-    std::erase_if(projectileData, [&memory, &interfaces](const auto& projectile) { return interfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr
+    std::erase_if(projectileData, [&memory, &clientInterfaces](const auto& projectile) { return clientInterfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr
         && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory.globalVars->realtime); });
 
-    std::erase_if(playerData, [&interfaces](const auto& player) { return interfaces.entityList->getEntityFromHandle(player.handle) == nullptr; });
+    std::erase_if(playerData, [&clientInterfaces](const auto& player) { return clientInterfaces.entityList->getEntityFromHandle(player.handle) == nullptr; });
 
     if (shouldUpdatePlayerVisibility(memory))
         nextPlayerVisibilityUpdateTime = memory.globalVars->realtime + playerVisibilityUpdateDelay;
@@ -353,7 +353,7 @@ EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
     }(entity);
 }
 
-ProjectileData::ProjectileData(const Interfaces& interfaces, const Memory& memory, Entity* projectile) noexcept : BaseData { projectile }
+ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const Memory& memory, Entity* projectile) noexcept : BaseData { projectile }
 {
     name = [](Entity* projectile) {
         switch (projectile->getClientClass()->classId) {
@@ -373,7 +373,7 @@ ProjectileData::ProjectileData(const Interfaces& interfaces, const Memory& memor
         }
     }(projectile);
 
-    if (const auto thrower = interfaces.entityList->getEntityFromHandle(projectile->thrower()); thrower && localPlayer) {
+    if (const auto thrower = clientInterfaces.entityList->getEntityFromHandle(projectile->thrower()); thrower && localPlayer) {
         if (thrower == localPlayer.get())
             thrownByLocalPlayer = true;
         else

@@ -577,7 +577,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     }
 }
 
-void Visuals::bulletTracer(const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Visuals::bulletTracer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -595,14 +595,14 @@ void Visuals::bulletTracer(const Interfaces& interfaces, const Memory& memory, G
     BeamInfo beamInfo;
 
     if (!localPlayer->shouldDraw()) {
-        const auto viewModel = interfaces.entityList->getEntityFromHandle(localPlayer->viewModel());
+        const auto viewModel = clientInterfaces.entityList->getEntityFromHandle(localPlayer->viewModel());
         if (!viewModel)
             return;
 
         if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
             return;
     } else {
-        const auto worldModel = interfaces.entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        const auto worldModel = clientInterfaces.entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
         if (!worldModel)
             return;
 
@@ -689,20 +689,21 @@ void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexce
     }
 }
 
-void Visuals::updateEventListeners(const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
+void Visuals::updateEventListeners(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        ImpactEventListener(const Interfaces& interfaces, const Memory& memory)
-            : memory{ memory }, interfaces{ interfaces } {}
-        void fireGameEvent(GameEvent* event) override { bulletTracer(interfaces, memory, *event); }
+        ImpactEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const Memory& memory)
+            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, memory{ memory } {}
+        void fireGameEvent(GameEvent* event) override { bulletTracer(clientInterfaces, interfaces, memory, *event); }
 
     private:
         const Interfaces& interfaces;
+        const ClientInterfaces& clientInterfaces;
         const Memory& memory;
     };
 
-    static ImpactEventListener listener{ interfaces, memory };
+    static ImpactEventListener listener{ interfaces, clientInterfaces, memory };
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {
