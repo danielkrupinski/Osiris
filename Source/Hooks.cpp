@@ -217,10 +217,7 @@ static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, i
 
 static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
-    if (localPlayer && !localPlayer->isScoped())
-        setup->fov += Visuals::fov();
-    setup->farZ += Visuals::farZ() * 10;
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
+    globalContext->overrideViewHook(setup);
 }
 
 struct RenderableInfo {

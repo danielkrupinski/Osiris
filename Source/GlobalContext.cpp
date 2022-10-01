@@ -33,6 +33,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/ViewSetup.h"
 
 #include "Interfaces.h"
 
@@ -219,6 +220,14 @@ void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t 
     if (Visuals::shouldRemoveScopeOverlay() && (returnAddress == memory->scopeDust || returnAddress == memory->scopeArc))
         a = 0;
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
+}
+
+void GlobalContext::overrideViewHook(ViewSetup* setup)
+{
+    if (localPlayer && !localPlayer->isScoped())
+        setup->fov += Visuals::fov();
+    setup->farZ += Visuals::farZ() * 10;
+    hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
 }
 
 #ifdef _WIN32

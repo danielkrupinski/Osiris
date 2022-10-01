@@ -13,6 +13,7 @@
 class matrix3x4;
 struct ModelRenderInfo;
 struct UserCmd;
+struct ViewSetup;
 
 namespace csgo { enum class FrameStage; }
 
@@ -28,6 +29,7 @@ public:
     bool shouldDrawViewModelHook();
     void lockCursorHook();
     void setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress);
+    void overrideViewHook(ViewSetup* setup);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
