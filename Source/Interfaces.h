@@ -101,7 +101,7 @@ private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #ifdef _WIN32
-        const InterfaceFinder finder{ DynamicLibraryView{ windows_platform::DynamicLibraryWrapper{}, moduleName } };
+        const InterfaceFinder finder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName } };
 #else
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
         const InterfaceFinder finder{ so.getView() };
