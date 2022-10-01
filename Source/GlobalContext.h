@@ -7,7 +7,7 @@
 #else
 #include <SDL2/SDL.h>
 #endif
-
+#include "Config.h"
 #include "EventListener.h"
 
 struct DemoPlaybackParameters;
@@ -56,6 +56,8 @@ private:
     };
 
     State state = State::NotInitialized;
+
+    std::optional<Config> config;
 };
 
 inline std::optional<GlobalContext> globalContext;

@@ -127,5 +127,3 @@ private:
     std::filesystem::path path;
     std::vector<std::u8string> configs;
 };
-
-inline std::optional<Config> config;
