@@ -63,6 +63,12 @@
     <Filter Include="InventoryChanger\Backend\Request">
       <UniqueIdentifier>{f7214d3f-4cd4-4d69-8c0d-b3b579db52d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{5b374e7e-04e3-430e-bd54-02300b034b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{9d72c449-86f4-4c33-8e45-d88047d888eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -844,11 +850,20 @@
     <ClInclude Include="RetSpoofGadgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\RetSpoofInvoker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\ViewSetup.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\RetSpoofInvoker.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibraryView.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

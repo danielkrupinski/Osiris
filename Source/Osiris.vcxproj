@@ -265,6 +265,9 @@
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\RetSpoofInvoker.h" />
+    <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
+    <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h" />
+    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h" />
     <ClInclude Include="ProtobufReader.h" />
     <ClInclude Include="Resources\avatar_ct.h" />
     <ClInclude Include="Resources\avatar_tt.h" />
