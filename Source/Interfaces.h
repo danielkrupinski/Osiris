@@ -12,6 +12,7 @@
 #include <dlfcn.h>
 
 #include "Platform/Linux/DynamicLibraryWrapper.h"
+#include "Platform/Linux/SharedObject.h"
 #endif
 
 #include "SDK/Platform.h"
