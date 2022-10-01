@@ -32,6 +32,7 @@ public:
     void setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress);
     void overrideViewHook(ViewSetup* setup);
     int dispatchSoundHook(SoundInfo& soundInfo);
+    void render2dEffectsPreHudHook(void* viewSetup);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

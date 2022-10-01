@@ -242,6 +242,13 @@ int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
     return hooks->originalDispatchSound(soundInfo);
 }
 
+void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
+{
+    Visuals::applyScreenEffects(*interfaces, *memory);
+    Visuals::hitEffect(*interfaces, *memory);
+    hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
+}
+
 #ifdef _WIN32
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

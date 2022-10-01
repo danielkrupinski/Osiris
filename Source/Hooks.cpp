@@ -251,9 +251,7 @@ static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
 
 static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
 {
-    Visuals::applyScreenEffects(*interfaces, *memory);
-    Visuals::hitEffect(*interfaces, *memory);
-    hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
+    globalContext->render2dEffectsPreHudHook(viewSetup);
 }
 
 static const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
