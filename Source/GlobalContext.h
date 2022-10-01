@@ -26,6 +26,7 @@ public:
     void frameStageNotifyHook(csgo::FrameStage stage);
     bool shouldDrawFogHook(std::uintptr_t returnAddress);
     bool shouldDrawViewModelHook();
+    void lockCursorHook();
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -31,6 +31,7 @@
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelRender.h"
 #include "SDK/StudioRender.h"
+#include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
 #include "Interfaces.h"
@@ -204,6 +205,13 @@ bool GlobalContext::shouldDrawViewModelHook()
     if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
+}
+
+void GlobalContext::lockCursorHook()
+{
+    if (gui->isOpen())
+        return interfaces->surface->unlockCursor();
+    return hooks->surface.callOriginal<void, 67>();
 }
 
 #ifdef _WIN32

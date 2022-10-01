@@ -206,9 +206,7 @@ static bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 
 static void STDCALL_CONV lockCursor() noexcept
 {
-    if (gui->isOpen())
-        return interfaces->surface->unlockCursor();
-    return hooks->surface.callOriginal<void, 67>();
+    globalContext->lockCursorHook();
 }
 
 static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
