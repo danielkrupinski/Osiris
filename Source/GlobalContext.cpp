@@ -304,38 +304,7 @@ HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, co
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
 
-    //
-    ImGui::NewFrame();
-
-    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(*interfaces, *memory);
-        Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());
-        Misc::drawBombTimer(*memory);
-        Misc::spectatorList();
-        Visuals::hitMarker(*interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
-        Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
-        Misc::watermark(*memory);
-
-        Aimbot::updateInput(*config);
-        Visuals::updateInput();
-        StreamProofESP::updateInput(*config);
-        Misc::updateInput();
-        Triggerbot::updateInput(*config);
-        Chams::updateInput(*config);
-        Glow::updateInput();
-
-        gui->handleToggle(*interfaces);
-
-        if (gui->isOpen())
-            gui->render(*interfaces, *memory, *config);
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-    //
+    renderFrame();
 
     if (device->BeginScene() == D3D_OK) {
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
@@ -378,4 +347,56 @@ int GlobalContext::pollEventHook(SDL_Event* event)
     
     return result;
 }
+
+void GlobalContext::swapWindowHook(SDL_Window* window)
+{
+    [[maybe_unused]] static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+
+    renderFrame();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    GameData::clearUnusedAvatars();
+    InventoryChanger::clearUnusedItemIconTextures();
+
+    hooks->swapWindow(window);
+}
+
 #endif
+
+void GlobalContext::renderFrame()
+{
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        StreamProofESP::render(*memory, *config);
+        Misc::purchaseList(*interfaces, *memory);
+        Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
+        Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());
+        Misc::drawBombTimer(*memory);
+        Misc::spectatorList();
+        Visuals::hitMarker(*interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
+        Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
+        Misc::watermark(*memory);
+
+        Aimbot::updateInput(*config);
+        Visuals::updateInput();
+        StreamProofESP::updateInput(*config);
+        Misc::updateInput();
+        Triggerbot::updateInput(*config);
+        Chams::updateInput(*config);
+        Glow::updateInput();
+
+        gui->handleToggle(*interfaces);
+
+        if (gui->isOpen())
+            gui->render(*interfaces, *memory, *config);
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+}

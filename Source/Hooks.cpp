@@ -92,51 +92,17 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 }
 
 #else
-static void swapWindow(SDL_Window * window) noexcept
+
+static int pollEvent(SDL_Event* event) noexcept
 {
-    [[maybe_unused]] static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
-
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-
-    ImGui::NewFrame();
-
-    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(*interfaces, *memory);
-        Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::drawOffscreenEnemies(*interfaces, *memory, ImGui::GetBackgroundDrawList());
-        Misc::drawBombTimer(*memory);
-        Misc::spectatorList();
-        Visuals::hitMarker(*interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
-        Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
-        Misc::watermark(*memory);
-
-        Aimbot::updateInput(*config);
-        Visuals::updateInput();
-        StreamProofESP::updateInput(*config);
-        Misc::updateInput();
-        Triggerbot::updateInput(*config);
-        Chams::updateInput(*config);
-        Glow::updateInput();
-
-        gui->handleToggle(*interfaces);
-
-        if (gui->isOpen())
-            gui->render(*interfaces, *memory, *config);
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    GameData::clearUnusedAvatars();
-    InventoryChanger::clearUnusedItemIconTextures();
-
-    hooks->swapWindow(window);
+    return globalContext->pollEventHook(event);
 }
+
+static void swapWindow(SDL_Window* window) noexcept
+{
+    globalContext->swapWindowHook(window);
+}
+
 #endif
 
 static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
@@ -522,11 +488,6 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
 }
 
 #ifndef _WIN32
-
-static int pollEvent(SDL_Event* event) noexcept
-{
-    return globalContext->pollEventHook(event);
-}
 
 Hooks::Hooks() noexcept
     : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" } }

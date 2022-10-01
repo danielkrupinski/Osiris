@@ -41,11 +41,14 @@ public:
     HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
 #else
     int pollEventHook(SDL_Event* event);
+    void swapWindowHook(SDL_Window* window);
 #endif
 
     std::optional<EventListener> gameEventListener;
 
 private:
+    void renderFrame();
+
     enum class State {
         NotInitialized,
         Initializing,
