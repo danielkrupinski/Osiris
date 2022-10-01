@@ -6,11 +6,17 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+
+#include "Platform/Windows/DynamicLibraryWrapper.h"
 #else
 #include <dlfcn.h>
+
+#include "Platform/Linux/DynamicLibraryWrapper.h"
 #endif
 
 #include "SDK/Platform.h"
+
+#include "Platform/DynamicLibraryView.h"
 
 class BaseFileSystem;
 class Client;
@@ -35,6 +41,30 @@ class RenderView;
 class Surface;
 class SoundEmitter;
 class StudioRender;
+
+template <typename DynamicLibraryWrapper>
+struct InterfaceFinder {
+    explicit InterfaceFinder(DynamicLibraryView<DynamicLibraryWrapper> library)
+        : library{ library }
+    {
+    }
+
+    void* operator()(const char* name) const noexcept
+    {
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* CDECL_CONV(const char* name, int* returnCode)>>(library.getFunctionAddress("CreateInterface"))) {
+            if (void* foundInterface = createInterface(name, nullptr))
+                return foundInterface;
+        }
+
+#ifdef _WIN32
+        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
+#endif
+        std::exit(EXIT_FAILURE);
+    }
+
+private:
+    DynamicLibraryView<DynamicLibraryWrapper> library;
+};
 
 class Interfaces {
 public:
@@ -69,21 +99,13 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
 private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* CDECL_CONV(const char* name, int* returnCode)>>(
 #ifdef _WIN32
-            GetProcAddress(GetModuleHandleA(moduleName), "CreateInterface")
+        const InterfaceFinder finder{ DynamicLibraryView{ windows_platform::DynamicLibraryWrapper{}, moduleName } };
 #else
-            dlsym(dlopen(moduleName, RTLD_NOLOAD | RTLD_LAZY), "CreateInterface")
+        const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
+        const InterfaceFinder finder{ so.getView() };
 #endif
-            )) {
-            if (void* foundInterface = createInterface(name, nullptr))
-                return foundInterface;
-        }
-
-#ifdef _WIN32
-        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
-#endif
-        std::exit(EXIT_FAILURE);
+        return finder(name);
     }
 };
 
