@@ -18,6 +18,9 @@
 #include "SDK/Platform.h"
 
 #include "Platform/DynamicLibraryView.h"
+#include "Platform/RetSpoofInvoker.h"
+
+#include "RetSpoofGadgets.h"
 
 class BaseFileSystem;
 class Client;
@@ -45,15 +48,15 @@ class StudioRender;
 
 template <typename DynamicLibraryWrapper>
 struct InterfaceFinder {
-    explicit InterfaceFinder(DynamicLibraryView<DynamicLibraryWrapper> library)
-        : library{ library }
+    explicit InterfaceFinder(DynamicLibraryView<DynamicLibraryWrapper> library, RetSpoofInvoker invoker)
+        : library{ library }, invoker{ invoker }
     {
     }
 
     void* operator()(const char* name) const noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* CDECL_CONV(const char* name, int* returnCode)>>(library.getFunctionAddress("CreateInterface"))) {
-            if (void* foundInterface = createInterface(name, nullptr))
+        if (const auto createInterface = library.getFunctionAddress("CreateInterface")) {
+            if (void* foundInterface = invoker.invokeCdecl<void*>(std::uintptr_t(createInterface), name, nullptr))
                 return foundInterface;
         }
 
@@ -65,6 +68,7 @@ struct InterfaceFinder {
 
 private:
     DynamicLibraryView<DynamicLibraryWrapper> library;
+    RetSpoofInvoker invoker;
 };
 
 class ClientInterfaces {
@@ -113,10 +117,10 @@ private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #ifdef _WIN32
-        const InterfaceFinder finder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName } };
+        const InterfaceFinder finder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName }, retSpoofGadgets.jmpEbxInClient };
 #else
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
-        const InterfaceFinder finder{ so.getView() };
+        const InterfaceFinder finder{ so.getView(), retSpoofGadgets.jmpEbxInClient };
 #endif
         return finder(name);
     }

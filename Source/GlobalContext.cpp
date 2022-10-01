@@ -294,7 +294,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL } });
+        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient });
         interfaces.emplace(Interfaces{});
 
         memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
@@ -351,7 +351,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinder{ so.getView() });
+        clientInterfaces.emplace(InterfaceFinder{ so.getView(), retSpoofGadgets.jmpEbxInClient });
 
         interfaces.emplace(Interfaces{});
         memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
