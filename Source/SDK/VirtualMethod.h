@@ -9,6 +9,8 @@
 #include "../RetSpoofGadgets.h"
 #endif
 
+#include <Platform/RetSpoofInvoker.h>
+
 namespace VirtualMethod
 {
     template <typename T, std::size_t Idx, typename... Args>
@@ -20,6 +22,28 @@ namespace VirtualMethod
         return (*reinterpret_cast<T(THISCALL_CONV***)(void*, Args...)>(classBase))[Idx](classBase, args...);
 #endif
     }
+}
+
+class VirtualCallable {
+public:
+    VirtualCallable(RetSpoofInvoker invoker, std::uintptr_t thisptr)
+        : invoker{ invoker }, thisptr{ thisptr } {}
+
+    template <typename ReturnType, std::size_t Idx, typename... Args>
+    constexpr ReturnType call(Args... args) const noexcept
+    {
+        return invoker.invokeThiscall<ReturnType, Args...>(thisptr, (*reinterpret_cast<std::uintptr_t**>(thisptr))[Idx], args...);
+    }
+
+private:
+    RetSpoofInvoker invoker;
+    std::uintptr_t thisptr;
+};
+
+#define VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw) \
+returnType name args const noexcept \
+{ \
+    return call<returnType, idx>argsRaw; \
 }
 
 #define VIRTUAL_METHOD(returnType, name, idx, args, argsRaw) \
