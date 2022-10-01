@@ -24,18 +24,6 @@
 
 #include "GlobalContext.h"
 
-struct ProxyHook {
-    recvProxy originalProxy = nullptr;
-    recvProxy* addressOfOriginalProxy = nullptr;
-};
-
-struct ProxyHooks {
-    ProxyHook spotted;
-    ProxyHook viewModelSequence;
-};
-
-static ProxyHooks proxyHooks;
-
 static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
     const auto entity = reinterpret_cast<Entity*>(outStruct);
@@ -54,18 +42,7 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
 
 static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
-    const auto viewModel = reinterpret_cast<Entity*>(outStruct);
-
-    if (localPlayer && globalContext->clientInterfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
-        if (const auto weapon = globalContext->clientInterfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
-            if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
-                data.value._int = 8;
-
-            inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);
-        }
-    }
-
-    proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
+    globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
 }
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;

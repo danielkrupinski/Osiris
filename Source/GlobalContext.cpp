@@ -30,10 +30,12 @@
 #include "SDK/Constants/FrameStage.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
+#include "SDK/EntityList.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelRender.h"
+#include "SDK/Recv.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/StudioRender.h"
@@ -372,6 +374,22 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 }
 
 #endif
+
+void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
+{
+    const auto viewModel = reinterpret_cast<Entity*>(outStruct);
+
+    if (localPlayer && clientInterfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
+        if (const auto weapon = clientInterfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
+            if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+                data.value._int = 8;
+
+            inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);
+        }
+    }
+
+    proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
+}
 
 void GlobalContext::renderFrame()
 {

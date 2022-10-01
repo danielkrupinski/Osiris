@@ -6,6 +6,20 @@
 #include "fnv.h"
 #include "Interfaces.h"
 
+#include "SDK/Recv.h"
+
+struct ProxyHook {
+    recvProxy originalProxy = nullptr;
+    recvProxy* addressOfOriginalProxy = nullptr;
+};
+
+struct ProxyHooks {
+    ProxyHook spotted;
+    ProxyHook viewModelSequence;
+};
+
+inline ProxyHooks proxyHooks;
+
 namespace Netvars
 {
     void init(Client& client) noexcept;

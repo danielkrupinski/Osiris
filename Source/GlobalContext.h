@@ -13,6 +13,7 @@
 struct DemoPlaybackParameters;
 class matrix3x4;
 struct ModelRenderInfo;
+struct recvProxyData;
 struct SoundInfo;
 struct UserCmd;
 struct ViewSetup;
@@ -43,6 +44,8 @@ public:
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);
 #endif
+
+    void viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3);
 
     std::optional<EventListener> gameEventListener;
 
