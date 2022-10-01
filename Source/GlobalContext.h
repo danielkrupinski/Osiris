@@ -18,7 +18,11 @@ struct SoundInfo;
 struct UserCmd;
 struct ViewSetup;
 
-namespace csgo { enum class FrameStage; }
+namespace csgo
+{
+    enum class FrameStage;
+    enum class UserMessageType;
+}
 
 class GlobalContext {
 public:
@@ -36,6 +40,7 @@ public:
     int dispatchSoundHook(SoundInfo& soundInfo);
     void render2dEffectsPreHudHook(void* viewSetup);
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(std::uintptr_t returnAddress);
+    bool dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

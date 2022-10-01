@@ -284,16 +284,7 @@ static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, Share
 
 static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
-    if (type == csgo::UserMessageType::Text)
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onUserTextMsg(*memory, data, size);
-    else if (type == csgo::UserMessageType::VoteStart)
-        Misc::onVoteStart(*globalContext->clientInterfaces, *interfaces, *memory, data, size);
-    else if (type == csgo::UserMessageType::VotePass)
-        Misc::onVotePass(*memory);
-    else if (type == csgo::UserMessageType::VoteFailed)
-        Misc::onVoteFailed(*memory);
-    
-    return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
+    return globalContext->dispatchUserMessageHook(type, passthroughFlags, size, data);
 }
 
 #ifdef _WIN32

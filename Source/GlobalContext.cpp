@@ -28,6 +28,7 @@
 #include "SDK/ClientClass.h"
 #include "SDK/Constants/ClassId.h"
 #include "SDK/Constants/FrameStage.h"
+#include "SDK/Constants/UserMessages.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
@@ -266,6 +267,20 @@ const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(std::
     }
 
     return params;
+}
+
+bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data)
+{
+    if (type == csgo::UserMessageType::Text)
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onUserTextMsg(*memory, data, size);
+    else if (type == csgo::UserMessageType::VoteStart)
+        Misc::onVoteStart(*globalContext->clientInterfaces, *interfaces, *memory, data, size);
+    else if (type == csgo::UserMessageType::VotePass)
+        Misc::onVotePass(*memory);
+    else if (type == csgo::UserMessageType::VoteFailed)
+        Misc::onVoteFailed(*memory);
+
+    return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
 #ifdef _WIN32
