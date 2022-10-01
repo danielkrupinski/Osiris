@@ -249,6 +249,20 @@ void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
+const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(std::uintptr_t returnAddress)
+{
+    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
+
+    if (params && Misc::shouldRevealSuspect() && returnAddress != memory->demoFileEndReached) {
+        static DemoPlaybackParameters customParams;
+        customParams = *params;
+        customParams.anonymousPlayerIdentity = false;
+        return &customParams;
+    }
+
+    return params;
+}
+
 #ifdef _WIN32
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

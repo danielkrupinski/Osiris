@@ -256,16 +256,7 @@ static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* 
 
 static const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
-    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
-
-    if (params && Misc::shouldRevealSuspect() && RETURN_ADDRESS() != memory->demoFileEndReached) {
-        static DemoPlaybackParameters customParams;
-        customParams = *params;
-        customParams.anonymousPlayerIdentity = false;
-        return &customParams;
-    }
-
-    return params;
+    return globalContext->getDemoPlaybackParametersHook(RETURN_ADDRESS());
 }
 
 static bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept

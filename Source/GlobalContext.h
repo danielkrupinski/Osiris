@@ -10,6 +10,7 @@
 
 #include "EventListener.h"
 
+struct DemoPlaybackParameters;
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
@@ -33,6 +34,7 @@ public:
     void overrideViewHook(ViewSetup* setup);
     int dispatchSoundHook(SoundInfo& soundInfo);
     void render2dEffectsPreHudHook(void* viewSetup);
+    const DemoPlaybackParameters* getDemoPlaybackParametersHook(std::uintptr_t returnAddress);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
