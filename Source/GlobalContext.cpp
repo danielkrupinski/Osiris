@@ -354,10 +354,10 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         clientInterfaces.emplace(InterfaceFinder{ so.getView() });
 
         interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *interfaces->client, retSpoofGadgets });
+        memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
 
-        Netvars::init(*interfaces);
-        gameEventListener.emplace(*memory, *interfaces);
+        Netvars::init(*clientInterfaces->client);
+        gameEventListener.emplace(*memory, *clientInterfaces, *interfaces);
 
         ImGui::CreateContext();
         config.emplace(Config{ *interfaces, *memory });
