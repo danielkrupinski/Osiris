@@ -24,6 +24,7 @@ public:
     void drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld);
     bool svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
+    bool shouldDrawFogHook(std::uintptr_t returnAddress);
 
 #ifdef _WIN32
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

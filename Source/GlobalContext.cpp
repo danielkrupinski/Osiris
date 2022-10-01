@@ -187,6 +187,18 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     hooks->client.callOriginal<void, 37>(stage);
 }
 
+bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
+{
+#ifdef _WIN32
+    if constexpr (std::is_same_v<HookType, MinHook>) {
+        if (returnAddress != memory->shouldDrawFogReturnAddress)
+            return hooks->clientMode.callOriginal<bool, 17>();
+    }
+#endif
+
+    return !Visuals::shouldRemoveFog();
+}
+
 #ifdef _WIN32
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

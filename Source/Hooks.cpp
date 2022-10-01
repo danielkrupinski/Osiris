@@ -196,14 +196,7 @@ static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int e
 
 static bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
-#ifdef _WIN32
-    if constexpr (std::is_same_v<HookType, MinHook>) {
-        if (RETURN_ADDRESS() != memory->shouldDrawFogReturnAddress)
-            return hooks->clientMode.callOriginal<bool, 17>();
-    }
-#endif
-    
-    return !Visuals::shouldRemoveFog();
+    return globalContext->shouldDrawFogHook(RETURN_ADDRESS());
 }
 
 static bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
