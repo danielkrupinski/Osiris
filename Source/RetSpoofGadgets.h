@@ -8,6 +8,7 @@ struct RetSpoofGadgets {
     RetSpoofGadgets();
 
     RetSpoofInvoker jmpEbxInClient;
+    RetSpoofInvoker engine;
 };
 
 inline RetSpoofGadgets retSpoofGadgets;
