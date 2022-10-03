@@ -45,7 +45,7 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
     return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
 }
 
-void Backtrack::update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
@@ -54,7 +54,7 @@ void Backtrack::update(const ClientInterfaces& clientInterfaces, const Interface
             return;
         }
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
             auto entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
@@ -75,7 +75,7 @@ void Backtrack::update(const ClientInterfaces& clientInterfaces, const Interface
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(memory, static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory, &interfaces](const Record & rec) { return !valid(interfaces, memory, rec.simulationTime); }); invalid != std::cend(records[i]))
+            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory, &engineInterfaces](const Record & rec) { return !valid(*engineInterfaces.engine, memory, rec.simulationTime); }); invalid != std::cend(records[i]))
                 records[i].erase(invalid, std::cend(records[i]));
         }
     }
@@ -87,7 +87,7 @@ static float getLerp() noexcept
     return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
-void Backtrack::run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
+void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
         return;
@@ -108,7 +108,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const Interfaces& 
 
     const auto aimPunch = localPlayer->getAimPunch();
 
-    for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+    for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
         auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isOtherEnemy(memory, localPlayer.get()))
@@ -134,7 +134,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const Interfaces& 
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
             const auto& record = records[bestTargetIndex][i];
-            if (!valid(interfaces, memory, record.simulationTime))
+            if (!valid(*engineInterfaces.engine, memory, record.simulationTime))
                 continue;
 
             auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
@@ -160,9 +160,9 @@ const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) no
     return &records[index];
 }
 
-bool Backtrack::valid(const Interfaces& interfaces, const Memory& memory, float simtime) noexcept
+bool Backtrack::valid(Engine& engine, const Memory& memory, float simtime) noexcept
 {
-    const auto network = interfaces.engine->getNetworkChannel();
+    const auto network = engine.getNetworkChannel();
     if (!network)
         return false;
 

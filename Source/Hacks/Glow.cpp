@@ -47,7 +47,7 @@ static KeyBind glowHoldKey;
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
-void Glow::render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
@@ -64,7 +64,7 @@ void Glow::render(const ClientInterfaces& clientInterfaces, const Interfaces& in
     }
 
     const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
-    for (int i = interfaces.engine->getMaxClients() + 1; i <= highestEntityIndex; ++i) {
+    for (int i = engineInterfaces.engine->getMaxClients() + 1; i <= highestEntityIndex; ++i) {
         const auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity->isDormant())
             continue;
@@ -117,13 +117,13 @@ void Glow::render(const ClientInterfaces& clientInterfaces, const Interfaces& in
             }
         };
 
-        auto applyPlayerGlow = [applyGlow, &memory, &interfaces](const std::string& name, Entity* entity) noexcept {
+        auto applyPlayerGlow = [applyGlow, &memory, &engineInterfaces](const std::string& name, Entity* entity) noexcept {
             const auto& cfg = playerGlowConfig[name];
             if (cfg.all.enabled)
                 applyGlow(cfg.all, entity->health());
-            else if (cfg.visible.enabled && entity->visibleTo(interfaces, memory, localPlayer.get()))
+            else if (cfg.visible.enabled && entity->visibleTo(engineInterfaces, memory, localPlayer.get()))
                 applyGlow(cfg.visible, entity->health());
-            else if (cfg.occluded.enabled && !entity->visibleTo(interfaces, memory, localPlayer.get()))
+            else if (cfg.occluded.enabled && !entity->visibleTo(engineInterfaces, memory, localPlayer.get()))
                 applyGlow(cfg.occluded, entity->health());
         };
 

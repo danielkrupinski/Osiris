@@ -367,13 +367,13 @@ void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
     brightness->setValue(visualsConfig.brightness);
 }
 
-void Visuals::removeGrass(const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Visuals::removeGrass(Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    auto getGrassMaterialName = [&interfaces]() noexcept -> const char* {
-        switch (fnv::hashRuntime(interfaces.engine->getLevelName())) {
+    auto getGrassMaterialName = [&engine]() noexcept -> const char* {
+        switch (fnv::hashRuntime(engine.getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
         case fnv::hash("coop_autumn"): return "detail/autumn_detail_sprites";
@@ -414,11 +414,11 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 
 #ifdef _WIN32
 #undef xor
-#define DRAW_SCREEN_EFFECT(material, memory, interfaces) \
+#define DRAW_SCREEN_EFFECT(material, memory, engine) \
 { \
     const auto drawFunction = memory.drawScreenEffectMaterial; \
     int w, h; \
-    interfaces.engine->getScreenSize(w, h); \
+    engine.getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
@@ -431,15 +431,15 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 }
 
 #else
-#define DRAW_SCREEN_EFFECT(material, memory, interfaces) \
+#define DRAW_SCREEN_EFFECT(material, memory, engine) \
 { \
     int w, h; \
-    interfaces.engine->getScreenSize(w, h); \
+    engine.getScreenSize(w, h); \
     reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
 #endif
 
-void Visuals::applyScreenEffects(const Interfaces& interfaces, const Memory& memory) noexcept
+void Visuals::applyScreenEffects(Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!visualsConfig.screenEffect)
         return;
@@ -464,15 +464,15 @@ void Visuals::applyScreenEffects(const Interfaces& interfaces, const Memory& mem
     else if (visualsConfig.screenEffect >= 4)
         material->findVar("$c0_x")->setValue(1.0f);
 
-    DRAW_SCREEN_EFFECT(material, memory, interfaces)
+    DRAW_SCREEN_EFFECT(material, memory, engine)
 }
 
-void Visuals::hitEffect(const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Visuals::hitEffect(Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
-        if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
+        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
             lastHitTime = memory.globalVars->realtime;
             return;
         }
@@ -500,12 +500,12 @@ void Visuals::hitEffect(const Interfaces& interfaces, const Memory& memory, Game
             else if (visualsConfig.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
 
-            DRAW_SCREEN_EFFECT(material, memory, interfaces)
+            DRAW_SCREEN_EFFECT(material, memory, engine)
         }
     }
 }
 
-void Visuals::hitMarker(const Interfaces& interfaces, const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -513,7 +513,7 @@ void Visuals::hitMarker(const Interfaces& interfaces, const Memory& memory, Game
     static float lastHitTime = 0.0f;
 
     if (event) {
-        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId(interfaces))
+        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId(engine))
             lastHitTime = memory.globalVars->realtime;
         return;
     }
@@ -577,7 +577,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     }
 }
 
-void Visuals::bulletTracer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Visuals::bulletTracer(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -585,7 +585,7 @@ void Visuals::bulletTracer(const ClientInterfaces& clientInterfaces, const Inter
     if (!localPlayer)
         return;
 
-    if (event.getInt("userid") != localPlayer->getUserId(interfaces))
+    if (event.getInt("userid") != localPlayer->getUserId(engine))
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
@@ -689,28 +689,29 @@ void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexce
     }
 }
 
-void Visuals::updateEventListeners(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
+void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        ImpactEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const Memory& memory)
-            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, memory{ memory } {}
-        void fireGameEvent(GameEvent* event) override { bulletTracer(clientInterfaces, interfaces, memory, *event); }
+        ImpactEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Memory& memory)
+            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, memory{ memory } {}
+        void fireGameEvent(GameEvent* event) override { bulletTracer(*engineInterfaces.engine, clientInterfaces, interfaces, memory, *event); }
 
     private:
         const Interfaces& interfaces;
         const ClientInterfaces& clientInterfaces;
+        const EngineInterfaces& engineInterfaces;
         const Memory& memory;
     };
 
-    static ImpactEventListener listener{ interfaces, clientInterfaces, memory };
+    static ImpactEventListener listener{ interfaces, clientInterfaces, engineInterfaces, memory };
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {
-        interfaces.gameEventManager->addListener(&listener, "bullet_impact");
+        engineInterfaces.gameEventManager->addListener(&listener, "bullet_impact");
         listenerRegistered = true;
     } else if ((!visualsConfig.bulletTracers.enabled || forceRemove) && listenerRegistered) {
-        interfaces.gameEventManager->removeListener(&listener);
+        engineInterfaces.gameEventManager->removeListener(&listener);
         listenerRegistered = false;
     }
 }

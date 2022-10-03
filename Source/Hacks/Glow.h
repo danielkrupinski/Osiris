@@ -7,7 +7,7 @@
 
 namespace Glow
 {
-    void render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void clearCustomObjects(const Memory& memory) noexcept;
     void updateInput() noexcept;
 

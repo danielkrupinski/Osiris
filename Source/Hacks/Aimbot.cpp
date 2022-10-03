@@ -88,7 +88,7 @@ static float handleBulletPenetration(const Interfaces& interfaces, const Memory&
     return damage;
 }
 
-static bool canScan(const Interfaces& interfaces, const Memory& memory, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
@@ -103,7 +103,7 @@ static bool canScan(const Interfaces& interfaces, const Memory& memory, Entity* 
 
     while (damage >= 1.0f && hitsLeft) {
         Trace trace;
-        interfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
+        engineInterfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
 
         if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(memory, trace.entity))
             return false;
@@ -140,7 +140,7 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
@@ -183,7 +183,7 @@ void Aimbot::run(const ClientInterfaces& clientInterfaces, const Interfaces& int
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
             auto entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
                 || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
@@ -200,7 +200,7 @@ void Aimbot::run(const ClientInterfaces& clientInterfaces, const Interfaces& int
                 if (!config.aimbot[weaponIndex].ignoreSmoke && memory.lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity->isVisible(interfaces, memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(interfaces, memory, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
+                if (!entity->isVisible(*engineInterfaces.engineTrace, memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(engineInterfaces, interfaces, memory, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {
@@ -231,7 +231,7 @@ void Aimbot::run(const ClientInterfaces& clientInterfaces, const Interfaces& int
             angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot[weaponIndex].silent)
-                interfaces.engine->setViewAngles(cmd->viewangles);
+                engineInterfaces.engine->setViewAngles(cmd->viewangles);
 
             if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;

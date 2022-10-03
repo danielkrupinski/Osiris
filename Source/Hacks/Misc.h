@@ -28,50 +28,50 @@ namespace Misc
     void noscopeCrosshair(const Memory& memory, ImDrawList* drawlist) noexcept;
     void recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept;
     void watermark(const Memory& memory) noexcept;
-    void prepareRevolver(const Interfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
-    void fastPlant(const Interfaces& interfaces, UserCmd*) noexcept;
+    void prepareRevolver(Engine& engine, const Memory& memory, UserCmd*) noexcept;
+    void fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
     void drawBombTimer(const Memory& memory) noexcept;
-    void stealNames(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void stealNames(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void disablePanoramablur(const Interfaces& interfaces) noexcept;
     void quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd*) noexcept;
-    bool changeName(const Interfaces& interfaces, const Memory& memory, bool, const char*, float) noexcept;
+    bool changeName(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool, const char*, float) noexcept;
     void bunnyHop(UserCmd*) noexcept;
-    void fakeBan(const Interfaces& interfaces, const Memory& memory, bool = false) noexcept;
+    void fakeBan(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool = false) noexcept;
     void nadePredict(const Interfaces& interfaces) noexcept;
     void fixTabletSignal() noexcept;
-    void killMessage(const Interfaces& interfaces, GameEvent& event) noexcept;
+    void killMessage(Engine& engine, GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(UserCmd* cmd) noexcept;
-    void fixAnimationLOD(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept;
+    void fixAnimationLOD(Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept;
     void autoPistol(const Memory& memory, UserCmd* cmd) noexcept;
-    void chokePackets(const Interfaces& interfaces, bool& sendPacket) noexcept;
+    void chokePackets(Engine& engine, bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(const ClientInterfaces& clientInterfaces, UserCmd* cmd) noexcept;
     void autoStrafe(UserCmd* cmd) noexcept;
     void removeCrouchCooldown(UserCmd* cmd) noexcept;
     void moonwalk(UserCmd* cmd) noexcept;
-    void playHitSound(const Interfaces& interfaces, GameEvent& event) noexcept;
-    void killSound(const Interfaces& interfaces, GameEvent& event) noexcept;
-    void purchaseList(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event = nullptr) noexcept;
+    void playHitSound(Engine& engine, GameEvent& event) noexcept;
+    void killSound(Engine& engine, GameEvent& event) noexcept;
+    void purchaseList(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event = nullptr) noexcept;
     void oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
-    void runReportbot(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void runReportbot(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(const Memory& memory, bool roundStart = false) noexcept;
     void voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept;
     void onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept;
     void onVotePass(const Memory& memory) noexcept;
     void onVoteFailed(const Memory& memory) noexcept;
-    void drawOffscreenEnemies(const Interfaces& interfaces, const Memory& memory, ImDrawList* drawList) noexcept;
+    void drawOffscreenEnemies(Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept;
     void autoAccept(const Interfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
 
-    void updateEventListeners(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove = false) noexcept;
+    void updateEventListeners(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(const Interfaces& interfaces, const Memory& memory) noexcept;
-    void drawGUI(const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void drawGUI(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;

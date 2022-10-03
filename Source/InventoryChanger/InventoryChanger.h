@@ -48,9 +48,9 @@ public:
     }
 
     void getArgAsNumberHook(const Memory& memory, int number, std::uintptr_t returnAddress);
-    void onRoundMVP(const Interfaces& interfaces, GameEvent& event);
-    void updateStatTrak(const Interfaces& interfaces, GameEvent& event);
-    void overrideHudIcon(const Interfaces& interfaces, const Memory& memory, GameEvent& event);
+    void onRoundMVP(Engine& engine, GameEvent& event);
+    void updateStatTrak(Engine& engine, GameEvent& event);
+    void overrideHudIcon(Engine& engine, const Memory& memory, GameEvent& event);
     void getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
     void getNumArgsHook(const Memory& memory, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     int setResultIntHook(const Memory& memory, std::uintptr_t returnAddress, void* params, int result);
@@ -63,7 +63,7 @@ public:
 
     void drawGUI(const Interfaces& interfaces, const Memory& memory, bool contentOnly);
 
-    void run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
+    void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate(const Interfaces& interfaces) noexcept;
     void onSoUpdated(SharedObject* object) noexcept;
 

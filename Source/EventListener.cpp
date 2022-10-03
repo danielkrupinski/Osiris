@@ -12,13 +12,13 @@
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
 
-EventListener::EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces)
-    : memory{ memory }, clientInterfaces{ clientInterfaces }, interfaces{ interfaces }
+EventListener::EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces)
+    : memory{ memory }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }
 {
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
-    const auto gameEventManager = interfaces.gameEventManager;
+    const auto gameEventManager = engineInterfaces.gameEventManager;
     gameEventManager->addListener(this, "round_start");
     gameEventManager->addListener(this, "round_freeze_end");
     gameEventManager->addListener(this, "player_hurt");
@@ -47,31 +47,31 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::preserveKillfeed(memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(clientInterfaces, interfaces, memory, event);
+        Misc::purchaseList(*engineInterfaces.engine, clientInterfaces, interfaces, memory, event);
         break;
     case fnv::hash("player_death"): {
         auto& inventoryChanger = inventory_changer::InventoryChanger::instance(interfaces, memory);
-        inventoryChanger.updateStatTrak(interfaces, *event);
-        inventoryChanger.overrideHudIcon(interfaces, memory, *event);
-        Misc::killMessage(interfaces, *event);
-        Misc::killSound(interfaces, *event);
+        inventoryChanger.updateStatTrak(*engineInterfaces.engine, *event);
+        inventoryChanger.overrideHudIcon(*engineInterfaces.engine, memory, *event);
+        Misc::killMessage(*engineInterfaces.engine, *event);
+        Misc::killSound(*engineInterfaces.engine, *event);
         break;
     }
     case fnv::hash("player_hurt"):
-        Misc::playHitSound(interfaces, *event);
-        Visuals::hitEffect(interfaces, memory, event);
-        Visuals::hitMarker(interfaces, memory, event);
+        Misc::playHitSound(*engineInterfaces.engine, *event);
+        Visuals::hitEffect(*engineInterfaces.engine, interfaces, memory, event);
+        Visuals::hitMarker(*engineInterfaces.engine, interfaces, memory, event);
         break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(clientInterfaces, interfaces, memory, *event);
         break;
     case fnv::hash("round_mvp"):
-        inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(interfaces, *event);
+        inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(*engineInterfaces.engine, *event);
         break;
     }
 }
 
 void EventListener::remove()
 {
-    interfaces.gameEventManager->removeListener(this);
+    engineInterfaces.gameEventManager->removeListener(this);
 }

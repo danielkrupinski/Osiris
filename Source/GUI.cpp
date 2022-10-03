@@ -92,7 +92,7 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
         renderMenuBar();
@@ -107,10 +107,10 @@ void GUI::render(const Interfaces& interfaces, const Memory& memory, Config& con
         inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        Misc::drawGUI(interfaces, memory, false);
+        Misc::drawGUI(engine, interfaces, memory, false);
         renderConfigWindow(interfaces, memory, config);
     } else {
-        renderGuiStyle2(interfaces, memory, config);
+        renderGuiStyle2(engine, interfaces, memory, config);
     }
 }
 
@@ -623,7 +623,7 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -651,7 +651,7 @@ void GUI::renderGuiStyle2(const Interfaces& interfaces, const Memory& memory, Co
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        Misc::tabItem(interfaces, memory);
+        Misc::tabItem(engine, interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(interfaces, memory, config, true);
             ImGui::EndTabItem();

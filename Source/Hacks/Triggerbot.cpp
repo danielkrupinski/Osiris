@@ -12,7 +12,7 @@
 
 static bool keyPressed;
 
-void Triggerbot::run(const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
+void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory.globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
@@ -73,7 +73,7 @@ void Triggerbot::run(const Interfaces& interfaces, const Memory& memory, const C
         return;
 
     Trace trace;
-    interfaces.engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
 
     lastTime = now;
 

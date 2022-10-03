@@ -126,7 +126,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -160,13 +160,13 @@ bool Chams::render(const ClientInterfaces& clientInterfaces, const Interfaces& i
     } else {
         const auto entity = clientInterfaces.entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
-            renderPlayer(interfaces, memory, config, entity);
+            renderPlayer(engine, interfaces, memory, config, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
+void Chams::renderPlayer(Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
 {
     if (!localPlayer)
         return;
@@ -183,7 +183,7 @@ void Chams::renderPlayer(const Interfaces& interfaces, const Memory& memory, Con
         applyChams(interfaces, memory, config.chams["Enemies"].materials, health);
 
         const auto records = Backtrack::getRecords(player->index());
-        if (records && !records->empty() && Backtrack::valid(interfaces, memory, records->front().simulationTime)) {
+        if (records && !records->empty() && Backtrack::valid(engine, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
             applyChams(interfaces, memory, config.chams["Backtrack"].materials, health, records->back().matrix);

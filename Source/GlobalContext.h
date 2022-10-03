@@ -55,6 +55,7 @@ public:
     std::optional<EventListener> gameEventListener;
 
     std::optional<ClientInterfaces> clientInterfaces; // TODO: make private
+    std::optional<EngineInterfaces> engineInterfaces; // TODO: make private
 
 private:
     void renderFrame();

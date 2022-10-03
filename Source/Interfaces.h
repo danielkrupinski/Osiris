@@ -88,6 +88,31 @@ public:
     Prediction* prediction;
 };
 
+class EngineInterfaces {
+public:
+    template <typename DynamicLibraryWrapper>
+    explicit EngineInterfaces(InterfaceFinder<DynamicLibraryWrapper> engineInterfaceFinder)
+        : engine{ static_cast<Engine*>(engineInterfaceFinder("VEngineClient014")) },
+          engineTrace{ static_cast<EngineTrace*>(engineInterfaceFinder("EngineTraceClient004")) },
+          gameEventManager{ static_cast<GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
+          modelInfo{ static_cast<ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
+          modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
+          networkStringTableContainer{ static_cast<NetworkStringTableContainer*>(engineInterfaceFinder("VEngineClientStringTable001")) },
+          renderView{ static_cast<RenderView*>(engineInterfaceFinder("VEngineRenderView014")) },
+          sound{ static_cast<EngineSound*>(engineInterfaceFinder("IEngineSoundClient003")) }
+    {
+    }
+
+    Engine* engine;
+    EngineTrace* engineTrace;
+    GameEventManager* gameEventManager;
+    ModelInfo* modelInfo;
+    ModelRender* modelRender;
+    NetworkStringTableContainer* networkStringTableContainer;
+    RenderView* renderView;
+    EngineSound* sound;
+};
+
 class Interfaces {
 public:
 #define GAME_INTERFACE(type, name, moduleName, version) \
@@ -95,20 +120,12 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
 
     GAME_INTERFACE(BaseFileSystem, baseFileSystem, FILESYSTEM_DLL, "VBaseFileSystem011")
     GAME_INTERFACE(Cvar, cvar, VSTDLIB_DLL, "VEngineCvar007")
-    GAME_INTERFACE(Engine, engine, ENGINE_DLL, "VEngineClient014")
-    GAME_INTERFACE(EngineTrace, engineTrace, ENGINE_DLL, "EngineTraceClient004")
-    GAME_INTERFACE(GameEventManager, gameEventManager, ENGINE_DLL, "GAMEEVENTSMANAGER002")
     GAME_INTERFACE(InputSystem, inputSystem, INPUTSYSTEM_DLL, "InputSystemVersion001")
     GAME_INTERFACE(Localize, localize, LOCALIZE_DLL, "Localize_001")
     GAME_INTERFACE(MaterialSystem, materialSystem, MATERIALSYSTEM_DLL, "VMaterialSystem080")
-    GAME_INTERFACE(ModelInfo, modelInfo, ENGINE_DLL, "VModelInfoClient004")
-    GAME_INTERFACE(ModelRender, modelRender, ENGINE_DLL, "VEngineModel016")
-    GAME_INTERFACE(NetworkStringTableContainer, networkStringTableContainer, ENGINE_DLL, "VEngineClientStringTable001")
     GAME_INTERFACE(PanoramaUIEngine, panoramaUIEngine, PANORAMA_DLL, "PanoramaUIEngine001")
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, VPHYSICS_DLL, "VPhysicsSurfaceProps001")
-    GAME_INTERFACE(RenderView, renderView, ENGINE_DLL, "VEngineRenderView014")
     GAME_INTERFACE(Surface, surface, VGUIMATSURFACE_DLL, "VGUI_Surface031")
-    GAME_INTERFACE(EngineSound, sound, ENGINE_DLL, "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")
     GAME_INTERFACE(StudioRender, studioRender, STUDIORENDER_DLL, "VStudioRender026")
 

@@ -30,7 +30,7 @@ struct Matrix4x4;
 
 namespace GameData
 {
-    void update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
     void clearUnusedAvatars() noexcept;
@@ -61,7 +61,7 @@ namespace GameData
 }
 
 struct LocalPlayerData {
-    void update(const Interfaces& interfaces) noexcept;
+    void update(Engine& engine) noexcept;
 
     bool exists = false;
     bool alive = false;
@@ -113,13 +113,13 @@ struct ProjectileData : BaseData {
 enum class Team;
 
 struct PlayerData : BaseData {
-    PlayerData(const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept;
+    PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept;
     PlayerData(const PlayerData&) = delete;
     PlayerData& operator=(const PlayerData&) = delete;
     PlayerData(PlayerData&&) = default;
     PlayerData& operator=(PlayerData&&) = default;
 
-    void update(const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept;
+    void update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept;
     [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
     [[nodiscard]] float fadingAlpha(const Memory& memory) const noexcept;
 

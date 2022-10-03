@@ -104,7 +104,7 @@ static std::optional<std::list<inventory_changer::inventory::Item>::const_iterat
     }
 }
 
-static void applyGloves(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer->getTeamNumber(), 41);
     if (!optionalItem.has_value())
@@ -139,7 +139,7 @@ static void applyGloves(const ClientInterfaces& clientInterfaces, const Interfac
         definitionIndex = item->gameItem().getWeaponID();
 
         if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID()))
-            glove->setModelIndex(interfaces.modelInfo->getModelIndex(def->getWorldDisplayModel()));
+            glove->setModelIndex(engineInterfaces.modelInfo->getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
     }
@@ -164,9 +164,9 @@ static void applyGloves(const ClientInterfaces& clientInterfaces, const Interfac
     }
 }
 
-static void applyKnife(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localXuid = local->getSteamId(interfaces);
+    const auto localXuid = local->getSteamId(*engineInterfaces.engine);
 
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), local->getTeamNumber(), 0);
     if (!optionalItem.has_value())
@@ -201,7 +201,7 @@ static void applyKnife(const ClientInterfaces& clientInterfaces, const Interface
             definitionIndex = item->gameItem().getWeaponID();
 
             if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-                weapon->setModelIndex(interfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel()));
+                weapon->setModelIndex(engineInterfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
         }
@@ -219,19 +219,19 @@ static void applyKnife(const ClientInterfaces& clientInterfaces, const Interface
     if (!def)
         return;
 
-    viewModel->modelIndex() = interfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel());
+    viewModel->modelIndex() = engineInterfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel());
 
     const auto worldModel = clientInterfaces.entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
     if (!worldModel)
         return;
 
-    worldModel->modelIndex() = interfaces.modelInfo->getModelIndex(def->getWorldDisplayModel());
+    worldModel->modelIndex() = engineInterfaces.modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyWeapons(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto localTeam = local->getTeamNumber();
-    const auto localXuid = local->getSteamId(interfaces);
+    const auto localXuid = local->getSteamId(engine);
     const auto itemSchema = memory.itemSystem()->getItemSchema();
 
     const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
@@ -271,7 +271,7 @@ static void applyWeapons(const ClientInterfaces& clientInterfaces, const Interfa
     }
 }
 
-static void onPostDataUpdateStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
+static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
     const auto local = clientInterfaces.entityList->getEntityFromHandle(localHandle);
     if (!local)
@@ -281,8 +281,8 @@ static void onPostDataUpdateStart(const ClientInterfaces& clientInterfaces, cons
     if (!localInventory)
         return;
 
-    applyKnife(clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), *localInventory, local);
-    applyWeapons(clientInterfaces, interfaces, memory, *localInventory, local);
+    applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), *localInventory, local);
+    applyWeapons(*engineInterfaces.engine, clientInterfaces, interfaces, memory, *localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -316,7 +316,7 @@ static void applyMusicKit(const Memory& memory, const inventory_changer::backend
     pr->musicID()[localPlayer->index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
-static void applyPlayerAgent(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+static void applyPlayerAgent(ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
@@ -344,7 +344,7 @@ static void applyPlayerAgent(const ClientInterfaces& clientInterfaces, const Int
         }
     }
 
-    const auto idx = interfaces.modelInfo->getModelIndex(model);
+    const auto idx = modelInfo.getModelIndex(model);
     localPlayer->setModelIndex(idx);
 
     if (const auto ragdoll = clientInterfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
@@ -405,9 +405,9 @@ static void processEquipRequests(const Memory& memory)
     }
 }
 
-[[nodiscard]] static bool isLocalPlayerMVP(const Interfaces& interfaces, GameEvent& event)
+[[nodiscard]] static bool isLocalPlayerMVP(Engine& engine, GameEvent& event)
 {
-    return localPlayer && localPlayer->getUserId(interfaces) == event.getInt("userid");
+    return localPlayer && localPlayer->getUserId(engine) == event.getInt("userid");
 }
 
 static bool windowOpen = false;
@@ -1050,7 +1050,7 @@ void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
     }
 }
 
-void InventoryChanger::run(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
 
@@ -1058,7 +1058,7 @@ void InventoryChanger::run(const ClientInterfaces& clientInterfaces, const Inter
         localPlayerHandle = localPlayer->handle();
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(clientInterfaces, interfaces, memory, localPlayerHandle);
+        onPostDataUpdateStart(engineInterfaces, clientInterfaces, interfaces, memory, localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
             updateHud(memory);
     }
@@ -1071,10 +1071,10 @@ void InventoryChanger::run(const ClientInterfaces& clientInterfaces, const Inter
         return;
 
     if (localPlayer)
-        applyGloves(clientInterfaces, interfaces, memory, backend, *localInventory, localPlayer.get());
+        applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, *localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(clientInterfaces, interfaces, memory);
+    applyPlayerAgent(*engineInterfaces.modelInfo, clientInterfaces, interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory);
@@ -1111,9 +1111,9 @@ void InventoryChanger::getArgAsNumberHook(const Memory& memory, int number, std:
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
-void InventoryChanger::onRoundMVP(const Interfaces& interfaces, GameEvent& event)
+void InventoryChanger::onRoundMVP(Engine& engine, GameEvent& event)
 {
-    if (!isLocalPlayerMVP(interfaces, event))
+    if (!isLocalPlayerMVP(engine, event))
         return;
 
     const auto optionalItem = backend.getLoadout().getItemInSlotNoTeam(54);
@@ -1131,12 +1131,12 @@ void InventoryChanger::onRoundMVP(const Interfaces& interfaces, GameEvent& event
     }
 }
 
-void InventoryChanger::updateStatTrak(const Interfaces& interfaces, GameEvent& event)
+void InventoryChanger::updateStatTrak(Engine& engine, GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (const auto localUserId = localPlayer->getUserId(interfaces); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer->getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     const auto weapon = localPlayer->getActiveWeapon();
@@ -1156,12 +1156,12 @@ void InventoryChanger::updateStatTrak(const Interfaces& interfaces, GameEvent& e
         backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::overrideHudIcon(const Interfaces& interfaces, const Memory& memory, GameEvent& event)
+void InventoryChanger::overrideHudIcon(Engine& engine, const Memory& memory, GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (event.getInt("attacker") != localPlayer->getUserId(interfaces))
+    if (event.getInt("attacker") != localPlayer->getUserId(engine))
         return;
 
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")

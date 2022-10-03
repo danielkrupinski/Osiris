@@ -327,7 +327,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
 
 #endif
     
-    bspQuery.init(interfaces.engine->getBSPTreeQuery());
+    bspQuery.init(globalContext->engineInterfaces->engine->getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(globalContext->clientInterfaces->client);
@@ -343,7 +343,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(interfaces.engine);
+    engine.init(globalContext->engineInterfaces->engine);
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #ifdef _WIN32
@@ -358,7 +358,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
     inventoryManager.init(memory.inventoryManager);
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
-    modelRender.init(interfaces.modelRender);
+    modelRender.init(globalContext->engineInterfaces->modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory.panoramaMarshallHelper);
@@ -367,7 +367,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
     panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
 
-    sound.init(interfaces.sound);
+    sound.init(globalContext->engineInterfaces->sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
 
     surface.init(interfaces.surface);
@@ -425,8 +425,8 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 void Hooks::uninstall(const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    Misc::updateEventListeners(*globalContext->clientInterfaces, interfaces, memory, true);
-    Visuals::updateEventListeners(*globalContext->clientInterfaces, interfaces, memory, true);
+    Misc::updateEventListeners(*globalContext->clientInterfaces, *globalContext->engineInterfaces, interfaces, memory, true);
+    Visuals::updateEventListeners(*globalContext->engineInterfaces, *globalContext->clientInterfaces, interfaces, memory, true);
 
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {

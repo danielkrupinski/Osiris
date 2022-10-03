@@ -59,9 +59,9 @@ static auto playerByHandleWritable(int handle) noexcept
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
-static void updateNetLatency(const Interfaces& interfaces) noexcept
+static void updateNetLatency(Engine& engine) noexcept
 {
-    if (const auto networkChannel = interfaces.engine->getNetworkChannel())
+    if (const auto networkChannel = engine.getNetworkChannel())
         netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
     else
         netOutgoingLatency = 0;
@@ -75,14 +75,14 @@ static bool shouldUpdatePlayerVisibility(const Memory& memory) noexcept
     return nextPlayerVisibilityUpdateTime <= memory.globalVars->realtime;
 }
 
-void GameData::update(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     static int lastFrame;
     if (lastFrame == memory.globalVars->framecount)
         return;
     lastFrame = memory.globalVars->framecount;
 
-    updateNetLatency(interfaces);
+    updateNetLatency(*engineInterfaces.engine);
 
     Lock lock;
     observerData.clear();
@@ -91,7 +91,7 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const Interfaces
     lootCrateData.clear();
     infernoData.clear();
 
-    localPlayerData.update(interfaces);
+    localPlayerData.update(*engineInterfaces.engine);
     bombData.update(memory);
 
     if (!localPlayer) {
@@ -100,7 +100,7 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const Interfaces
         return;
     }
 
-    viewMatrix = interfaces.engine->worldToScreenMatrix();
+    viewMatrix = engineInterfaces.engine->worldToScreenMatrix();
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
@@ -115,9 +115,9 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const Interfaces
                 continue;
 
             if (const auto player = playerByHandleWritable(entity->handle())) {
-                player->update(interfaces, memory, entity);
+                player->update(engineInterfaces, interfaces, memory, entity);
             } else {
-                playerData.emplace_back(interfaces, memory, entity);
+                playerData.emplace_back(engineInterfaces, interfaces, memory, entity);
             }
 
             if (!entity->isDormant() && !entity->isAlive()) {
@@ -289,7 +289,7 @@ const std::vector<InfernoData>& GameData::infernos() noexcept
     return infernoData;
 }
 
-void LocalPlayerData::update(const Interfaces& interfaces) noexcept
+void LocalPlayerData::update(Engine& engine) noexcept
 {
     if (!localPlayer) {
         exists = false;
@@ -309,7 +309,7 @@ void LocalPlayerData::update(const Interfaces& interfaces) noexcept
     handle = localPlayer->handle();
     flashDuration = localPlayer->flashDuration();
 
-    aimPunch = localPlayer->getEyePosition() + Vector::fromAngle(interfaces.engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
+    aimPunch = localPlayer->getEyePosition() + Vector::fromAngle(engine.getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer->getObserverMode();
     if (const auto obs = localPlayer->getObserverTarget(); obs && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
@@ -391,10 +391,10 @@ void ProjectileData::update(const Memory& memory, Entity* projectile) noexcept
         trajectory.emplace_back(memory.globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
+PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
 {
-    if (const auto steamID = entity->getSteamId(interfaces)) {
-        const auto ctx = interfaces.engine->getSteamAPIContext();
+    if (const auto steamID = entity->getSteamId(*engineInterfaces.engine)) {
+        const auto ctx = engineInterfaces.engine->getSteamAPIContext();
         const auto avatar = ctx->steamFriends->getSmallFriendAvatar(steamID);
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
@@ -404,10 +404,10 @@ PlayerData::PlayerData(const Interfaces& interfaces, const Memory& memory, Entit
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
-    update(interfaces, memory, entity);
+    update(engineInterfaces, interfaces, memory, entity);
 }
 
-void PlayerData::update(const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept
+void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, Entity* entity) noexcept
 {
     name = entity->getPlayerName(interfaces, memory);
 
@@ -418,7 +418,7 @@ void PlayerData::update(const Interfaces& interfaces, const Memory& memory, Enti
     team = entity->getTeamNumber();
     static_cast<BaseData&>(*this) = { entity };
     origin = entity->getAbsOrigin();
-    inViewFrustum = !interfaces.engine->cullBox(obbMins + origin, obbMaxs + origin);
+    inViewFrustum = !engineInterfaces.engine->cullBox(obbMins + origin, obbMaxs + origin);
     alive = entity->isAlive();
     lastContactTime = alive ? memory.globalVars->realtime : 0.0f;
 
@@ -428,7 +428,7 @@ void PlayerData::update(const Interfaces& interfaces, const Memory& memory, Enti
         if (!inViewFrustum || !alive)
             visible = false;
         else if (shouldUpdatePlayerVisibility(memory))
-            visible = entity->visibleTo(interfaces, memory, localPlayer.get());
+            visible = entity->visibleTo(engineInterfaces, memory, localPlayer.get());
     }
 
     auto isEntityAudible = [&memory](int entityIndex) noexcept {
@@ -457,7 +457,7 @@ void PlayerData::update(const Interfaces& interfaces, const Memory& memory, Enti
     if (!model)
         return;
 
-    const auto studioModel = interfaces.modelInfo->getStudioModel(model);
+    const auto studioModel = engineInterfaces.modelInfo->getStudioModel(model);
     if (!studioModel)
         return;
 
