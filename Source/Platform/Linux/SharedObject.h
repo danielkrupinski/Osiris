@@ -18,11 +18,6 @@ public:
     SharedObject(SharedObject&&) = delete;
     SharedObject& operator=(SharedObject&&) = delete;
 
-    [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
-    {
-        return dl.dlsym(handle, functionName);
-    }
-
     [[nodiscard]] bool isValid() const noexcept
     {
         return handle != nullptr;
