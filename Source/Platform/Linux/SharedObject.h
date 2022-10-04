@@ -30,7 +30,8 @@ public:
 
     ~SharedObject() noexcept
     {
-        dl.dlclose(handle);
+        if (handle != nullptr)
+            dl.dlclose(handle);
     }
 
 private:
