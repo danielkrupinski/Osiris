@@ -481,7 +481,7 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
 #ifndef _WIN32
 
 Hooks::Hooks() noexcept
-    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" } }
+    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" }.getView() }
 {
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
