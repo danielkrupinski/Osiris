@@ -22,6 +22,8 @@
 #include "Memory.h"
 #include "SDK/LocalPlayer.h"
 
+#include "SafeAddress.h"
+
 template <typename T>
 static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
 {
@@ -156,96 +158,96 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
 #endif
 {
 #ifdef _WIN32
-    present = findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF0\x85\xFF") + 2;
-    reset = findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xD8") + 9;
+    present = SafeAddress{ findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF0\x85\xFF") }.add(2).get();
+    reset = SafeAddress{ findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xD8") }.add(9).get();
 
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 5);
     input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 1);
     globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[11] + 10);
-    glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern(CLIENT_DLL, "\x0F\x11\x05????\x83\xC8\x01") + 3);
-    disablePostProcessing = *reinterpret_cast<bool**>(findPattern(CLIENT_DLL, "\x83\xEC\x4C\x80\x3D") + 5);
-    loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\x2D\xA1") + 1);
+    glowObjectManager = reinterpret_cast<GlowObjectManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x0F\x11\x05????\x83\xC8\x01") }.add(3).deref<1>().get());
+    disablePostProcessing = reinterpret_cast<bool*>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xEC\x4C\x80\x3D") }.add(5).deref<1>().get());
+    loadSky = relativeToAbsolute<decltype(loadSky)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\x2D\xA1") }.add(1).get());
     setClanTag = reinterpret_cast<decltype(setClanTag)>(findPattern(ENGINE_DLL, "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15"));
-    lineGoesThroughSmoke = relativeToAbsolute<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x30\x33\xD2") + 1);
+    lineGoesThroughSmoke = relativeToAbsolute<decltype(lineGoesThroughSmoke)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x30\x33\xD2") }.add(1).get());
     cameraThink = findPattern(CLIENT_DLL, "\x85\xC0\x75\x30\x38\x86");
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
-    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern(CLIENT_DLL, "\x8B\xCE\xE8????\x02\xC0") + 3);
+    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xCE\xE8????\x02\xC0") }.add(3).get());
     auto temp = reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\xE8????\x8B\x5D\x08") + 1);
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<uintptr_t>(temp) + 5);
-    clearHudWeapon = relativeToAbsolute<decltype(clearHudWeapon)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xF0\xC6\x44\x24??\xC6\x44\x24") + 1);
-    itemSystem = relativeToAbsolute<decltype(itemSystem)>(findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") + 1);
-    setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") + 1);
-    insertIntoTree = findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") + 5;
-    dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x0B\xE8????\x8B\x3D") + 3);
+    clearHudWeapon = relativeToAbsolute<decltype(clearHudWeapon)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\xF0\xC6\x44\x24??\xC6\x44\x24") }.add(1).get());
+    itemSystem = relativeToAbsolute<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") }.add(1).get());
+    setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") }.add(1).get());
+    insertIntoTree = SafeAddress{ findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") }.add(5).get();
+    dispatchSound = reinterpret_cast<int*>(SafeAddress{ findPattern(ENGINE_DLL, "\x74\x0B\xE8????\x8B\x3D") }.add(3).get());
     traceToExit = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x4C\xF3\x0F\x10\x75");
-    viewRender = **reinterpret_cast<ViewRender***>(findPattern(CLIENT_DLL, "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08") + 2);
-    drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x0C\x8D\x4D\xF8") + 1);
+    viewRender = reinterpret_cast<ViewRender*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08") }.add(2).deref<2>().get());
+    drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x0C\x8D\x4D\xF8") }.add(1).get());
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08");
     const auto tier0 = GetModuleHandleW(L"tier0");
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
     conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
-    vignette = *reinterpret_cast<float**>(findPattern(CLIENT_DLL, "\x0F\x11\x05????\xF3\x0F\x7E\x87") + 3) + 1;
+    vignette = reinterpret_cast<float*>(SafeAddress{ findPattern(CLIENT_DLL, "\x0F\x11\x05????\xF3\x0F\x7E\x87") }.add(3).deref<1>().add(4).get());
     equipWearable = reinterpret_cast<decltype(equipWearable)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9"));
-    predictionRandomSeed = *reinterpret_cast<int**>(findPattern(CLIENT_DLL, "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04") + 2);
-    moveData = **reinterpret_cast<MoveData***>(findPattern(CLIENT_DLL, "\xA1????\xF3\x0F\x59\xCD") + 1);
-    moveHelper = **reinterpret_cast<MoveHelper***>(findPattern(CLIENT_DLL, "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01") + 2);
-    keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x04\x89\x45\xD8") + 1);
-    keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(findPattern(CLIENT_DLL, "\xE8????\xF7\x45") + 1);
-    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(findPattern(CLIENT_DLL, "\xE8????\x89\x77\x38") + 1);
-    weaponSystem = *reinterpret_cast<WeaponSystem**>(findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") + 2);
-    getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(findPattern(CLIENT_DLL, "\xE8????\x89\x87????\x6A") + 1);
-    getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(findPattern(ENGINE_DLL, "\xE8????\x8B\xD8\x85\xDB\x75\x27") + 1);
-    activeChannels = *reinterpret_cast<ActiveChannels**>(findPattern(ENGINE_DLL, "\x8B\x1D????\x89\x5C\x24\x48") + 2);
-    channels = *reinterpret_cast<Channel**>(findPattern(ENGINE_DLL, "\x81\xC2????\x8B\x72\x54") + 2);
-    playerResource = *reinterpret_cast<PlayerResource***>(findPattern(CLIENT_DLL, "\x74\x30\x8B\x35????\x85\xF6") + 4);
-    getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(CLIENT_DLL, "\xE8????\x66\x83\x3E") + 1);
-    scopeDust = findPattern(CLIENT_DLL, "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
+    predictionRandomSeed = reinterpret_cast<int*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04") }.add(2).deref<1>().get());
+    moveData = reinterpret_cast<MoveData*>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\xF3\x0F\x59\xCD") }.add(1).deref<2>().get());
+    moveHelper = reinterpret_cast<MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01") }.add(2).deref<2>().get());
+    keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x04\x89\x45\xD8") }.add(1).get());
+    keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xF7\x45") }.add(1).get());
+    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x89\x77\x38") }.add(1).get());
+    weaponSystem = reinterpret_cast<WeaponSystem*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref<1>().get());
+    getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x89\x87????\x6A") }.add(1).get());
+    getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x8B\xD8\x85\xDB\x75\x27") }.add(1).get());
+    activeChannels = reinterpret_cast<ActiveChannels*>(SafeAddress{ findPattern(ENGINE_DLL, "\x8B\x1D????\x89\x5C\x24\x48") }.add(2).deref<1>().get());
+    channels = reinterpret_cast<Channel*>(SafeAddress{ findPattern(ENGINE_DLL, "\x81\xC2????\x8B\x72\x54") }.add(2).deref<1>().get());
+    playerResource = reinterpret_cast<PlayerResource**>(SafeAddress{ findPattern(CLIENT_DLL, "\x74\x30\x8B\x35????\x85\xF6") }.add(4).deref<1>().get());
+    getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x66\x83\x3E") }.add(1).get());
+    scopeDust = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x3C\x8B\x4C\x24\x20") }.add(3).get();
     scopeArc = findPattern(CLIENT_DLL, "\x8B\x0D????\xFF\xB7????\x8B\x01\xFF\x90????\x8B\x7C\x24\x1C");
     demoOrHLTV = findPattern(CLIENT_DLL, "\x84\xC0\x75\x09\x38\x05");
     money = findPattern(CLIENT_DLL, "\x84\xC0\x75\x0C\x5B");
     demoFileEndReached = findPattern(CLIENT_DLL, "\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10");
-    plantedC4s = *reinterpret_cast<decltype(plantedC4s)*>(findPattern(CLIENT_DLL, "\x7E\x2C\x8B\x15") + 4);
-    gameRules = *reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") + 4);
-    registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(*reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xE8????\xA1????\xA8\x01\x75\x21") + 6) - 36);
-    makePanoramaSymbolFn = relativeToAbsolute<decltype(makePanoramaSymbolFn)>(findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\x0E\x8D\x4D\x0E") + 1);
-    inventoryManager = *reinterpret_cast<InventoryManager**>(findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") + 5);
-    createEconItemSharedObject = *reinterpret_cast<decltype(createEconItemSharedObject)*>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45") + 20);
-    addEconItem = relativeToAbsolute<decltype(addEconItem)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x74\xE7") + 1);
+    plantedC4s = reinterpret_cast<decltype(plantedC4s)>(SafeAddress{ findPattern(CLIENT_DLL, "\x7E\x2C\x8B\x15") }.add(4).deref<1>().get());
+    gameRules = reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") }.add(4).deref<1>().get());
+    registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xA1????\xA8\x01\x75\x21") }.add(6).deref<1>().add(-36).get());
+    makePanoramaSymbolFn = relativeToAbsolute<decltype(makePanoramaSymbolFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\x0E\x8D\x4D\x0E") }.add(1).get());
+    inventoryManager = reinterpret_cast<InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") }.add(5).deref<1>().get());
+    createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(SafeAddress{ findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45") }.add(20).deref<1>().get());
+    addEconItem = relativeToAbsolute<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x74\xE7") }.add(1).get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47"));
-    panoramaMarshallHelper = *reinterpret_cast<decltype(panoramaMarshallHelper)*>(findPattern(CLIENT_DLL, "\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3") + 1);
-    setStickerToolSlotGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") + 2;
-    wearItemStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF") - 80;
+    panoramaMarshallHelper = *reinterpret_cast<decltype(panoramaMarshallHelper)*>(SafeAddress{ findPattern(CLIENT_DLL, "\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3") }.add(1).get());
+    setStickerToolSlotGetArgAsNumberReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") }.add(2).get();
+    wearItemStickerGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF") }.add(-80).get();
     setNameToolStringGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x8B\xF8\xC6\x45\x08?\x33\xC0");
-    clearCustomNameGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21") + 3;
+    clearCustomNameGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21") }.add(3).get();
     deleteItemGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x74\x22\x51");
     setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 = findPattern(CLIENT_DLL, "\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37");
     acknowledgeNewItemByItemIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9");
-    setItemAttributeValueAsyncGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57") - 22;
+    setItemAttributeValueAsyncGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57") }.add(-22).get();
     setMyPredictionUsingItemIdGetNumArgsReturnAddress = findPattern(CLIENT_DLL, "\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01");
-    getMyPredictionTeamIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8") - 20;
+    getMyPredictionTeamIDGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8") }.add(-20).get();
     setInventorySortAndFiltersGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x80\x7D\xFF?\x8B\xF8\x74\x27");
-    getInventoryCountSetResultIntReturnAddress = findPattern(CLIENT_DLL, "\xB9????\xE8????\xB9????\xE8????\xC2\x08") - 10;
+    getInventoryCountSetResultIntReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xB9????\xE8????\xB9????\xE8????\xC2\x08") }.add(-10).get();
     performItemCasketTransactionGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24");
 
-    findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
-    getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") + 1);
+    findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") }.add(1).get());
+    getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") }.add(1).get());
     useToolGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37");
-    getSOCData = relativeToAbsolute<decltype(getSOCData)>(findPattern(CLIENT_DLL, "\xE8????\x32\xC9") + 1);
-    setCustomName = relativeToAbsolute<decltype(setCustomName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34") + 1);
+    getSOCData = relativeToAbsolute<decltype(getSOCData)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x32\xC9") }.add(1).get());
+    setCustomName = relativeToAbsolute<decltype(setCustomName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34") }.add(1).get());
     setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x3C\x53\x8B\x5D\x08\x56\x57\x6A");
-    createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") + 1);
-    uiComponentInventory = *reinterpret_cast<void***>(findPattern(CLIENT_DLL, "\xC6\x44\x24??\x83\x3D") + 7);
-    setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") + 1);
+    createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") }.add(1).get());
+    uiComponentInventory = reinterpret_cast<void**>(SafeAddress{ findPattern(CLIENT_DLL, "\xC6\x44\x24??\x83\x3D") }.add(7).deref<1>().get());
+    setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") }.add(1).get());
     removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8"));
 
-    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
+    localPlayer.init(reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") }.add(1).deref<1>().get()));
 
     keyValuesSystem = reinterpret_cast<KeyValuesSystem* (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
-    keyValuesAllocEngine = relativeToAbsolute<std::uintptr_t>(findPattern(ENGINE_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10\xFF\x75\x0C") + 1) + 0x4A;
-    keyValuesAllocClient = relativeToAbsolute<std::uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10") + 1) + 0x3E;
+    keyValuesAllocEngine = relativeToAbsolute<std::uintptr_t>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10\xFF\x75\x0C") }.add(1).get()) + 0x4A;
+    keyValuesAllocClient = relativeToAbsolute<std::uintptr_t>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10") }.add(1).get()) + 0x3E;
 
-    shouldDrawFogReturnAddress = relativeToAbsolute<std::uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x8B\x0D????\x0F\xB6\xD0") + 1) + 82;
+    shouldDrawFogReturnAddress = relativeToAbsolute<std::uintptr_t>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x0D????\x0F\xB6\xD0") }.add(1).get()) + 82;
 #else
     const auto tier0 = dlopen(TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
     debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));
@@ -253,84 +255,84 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     dlclose(tier0);
 
     globalVars = *relativeToAbsolute<GlobalVars**>((*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16);
-    itemSystem = relativeToAbsolute<decltype(itemSystem)>(findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") + 1);
-    weaponSystem = *relativeToAbsolute<WeaponSystem**>(findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") + 12);
+    itemSystem = relativeToAbsolute<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).get());
+    weaponSystem = *relativeToAbsolute<WeaponSystem**>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).get());
 
-    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") + 1);
+    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") }.add(1).get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0"));
-    getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x4C\x89\xF7") + 1);
+    getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x4C\x89\xF7") }.add(1).get());
 
-    hud = relativeToAbsolute<decltype(hud)>(findPattern(CLIENT_DLL, "\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8") + 4);
-    findHudElement = relativeToAbsolute<decltype(findHudElement)>(findPattern(CLIENT_DLL, "\xE8????\x48\x8D\x50\xE0") + 1);
+    hud = relativeToAbsolute<decltype(hud)>(SafeAddress{ findPattern(CLIENT_DLL, "\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8") }.add(4).get());
+    findHudElement = relativeToAbsolute<decltype(findHudElement)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x8D\x50\xE0") }.add(1).get());
 
-    disablePostProcessing = relativeToAbsolute<decltype(disablePostProcessing)>(findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") + 2);
+    disablePostProcessing = relativeToAbsolute<decltype(disablePostProcessing)>(SafeAddress{ findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") }.add(2).get());
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58");
-    loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") + 1);
+    loadSky = relativeToAbsolute<decltype(loadSky)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") }.add(1).get());
     clientMode = *relativeToAbsolute<decltype(clientMode)*>(relativeToAbsolute<uintptr_t>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 12) + 4);
     input = **relativeToAbsolute<Input***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 3);
-    playerResource = relativeToAbsolute<PlayerResource**>(findPattern(CLIENT_DLL, "\x74\x38\x48\x8B\x3D????\x89\xDE") + 5);
+    playerResource = relativeToAbsolute<PlayerResource**>(SafeAddress{ findPattern(CLIENT_DLL, "\x74\x38\x48\x8B\x3D????\x89\xDE") }.add(5).get());
 
-    glowObjectManager = relativeToAbsolute<decltype(glowObjectManager)>(relativeToAbsolute<uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE7\x8B\x70\x20") + 1) + 12);
-    setClanTag = relativeToAbsolute<decltype(setClanTag)>(findPattern(ENGINE_DLL, "\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0") + 1);
-    getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(findPattern(ENGINE_DLL, "\xE8????\x48\x85\xC0\x74\x62") + 1);
-    activeChannels = relativeToAbsolute<ActiveChannels*>(findPattern(ENGINE_DLL, "\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD") + 3);
-    channels = relativeToAbsolute<Channel*>(findPattern(ENGINE_DLL, "\x4C\x8D\x35????\x49\x83\xC4\x04") + 3);
-    cameraThink = findPattern(CLIENT_DLL, "\xFF\x90????\x85\xC0\x75\x64") + 6;
-    getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x78\x08\xBA") + 1);
-    keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDF\x48\x89\x45\xE0") + 1);
-    keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(findPattern(CLIENT_DLL, "\xE8????\x48\x85\xC0\x75\x24") + 1);
-    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03") + 1);
+    glowObjectManager = relativeToAbsolute<decltype(glowObjectManager)>(relativeToAbsolute<uintptr_t>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE7\x8B\x70\x20") }.add(1).get()) + 12);
+    setClanTag = relativeToAbsolute<decltype(setClanTag)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0") }.add(1).get());
+    getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x48\x85\xC0\x74\x62") }.add(1).get());
+    activeChannels = relativeToAbsolute<ActiveChannels*>(SafeAddress{ findPattern(ENGINE_DLL, "\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD") }.add(3).get());
+    channels = relativeToAbsolute<Channel*>(SafeAddress{ findPattern(ENGINE_DLL, "\x4C\x8D\x35????\x49\x83\xC4\x04") }.add(3).get());
+    cameraThink = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x90????\x85\xC0\x75\x64") }.add(6).get();
+    getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x78\x08\xBA") }.add(1).get());
+    keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDF\x48\x89\x45\xE0") }.add(1).get());
+    keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x85\xC0\x75\x24") }.add(1).get());
+    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03") }.add(1).get());
     drawScreenEffectMaterial = findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53");
-    vignette = relativeToAbsolute<float*>(findPattern(CLIENT_DLL, "\x48\x8B\x07\x0F\x2F\x05") + 6);
-    viewRender = **relativeToAbsolute<ViewRender***>(findPattern(CLIENT_DLL, "\x0F\x85????\x48\x8B\x05????\x45\x89\xF8") + 9);
+    vignette = relativeToAbsolute<float*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x07\x0F\x2F\x05") }.add(6).get());
+    viewRender = **relativeToAbsolute<ViewRender***>(SafeAddress{ findPattern(CLIENT_DLL, "\x0F\x85????\x48\x8B\x05????\x45\x89\xF8") }.add(9).get());
     scopeDust = findPattern(CLIENT_DLL, "\x8B\x85????\x43\x8D\x14\x2E");
     scopeArc = findPattern(CLIENT_DLL, "\x49\x8B\x3C\x24\x8B\xB3????\x48\x8B\x07\xFF\x90????\x49\x8B\x3C\x24\x4C\x89\xEA");
-    demoOrHLTV = findPattern(CLIENT_DLL, "\x0F\xB6\x10\x89\xD0") - 16;
+    demoOrHLTV = SafeAddress{ findPattern(CLIENT_DLL, "\x0F\xB6\x10\x89\xD0") }.add(-16).get();
     money = findPattern(CLIENT_DLL, "\x84\xC0\x75\x9E\xB8????\xEB\xB9");
     demoFileEndReached = findPattern(CLIENT_DLL, "\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F");
-    clearHudWeapon = relativeToAbsolute<decltype(clearHudWeapon)>(findPattern(CLIENT_DLL, "\xE8????\xC6\x45\xB8\x01") + 1);
+    clearHudWeapon = relativeToAbsolute<decltype(clearHudWeapon)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xC6\x45\xB8\x01") }.add(1).get());
     equipWearable = reinterpret_cast<decltype(equipWearable)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07"));
-    setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern(CLIENT_DLL, "\xE8????\x49\x8B\x07\x31\xF6") + 1);
-    plantedC4s = relativeToAbsolute<decltype(plantedC4s)>(findPattern(CLIENT_DLL, "\x48\x8D\x3D????\x42\xC6\x44\x28") + 3);
-    gameRules = *relativeToAbsolute<Entity***>(findPattern(CLIENT_DLL, "\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06") + 3);
-    dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x10\xE8????\x48\x8B\x35") + 3);
-    predictionRandomSeed = *relativeToAbsolute<int**>(findPattern(CLIENT_DLL, "\x41\x8D\x56\xFF\x31\xC9") - 14);
-    registeredPanoramaEvents = relativeToAbsolute<decltype(registeredPanoramaEvents)>(relativeToAbsolute<std::uintptr_t>(findPattern(CLIENT_DLL, "\xE8????\x8B\x50\x10\x49\x89\xC6") + 1) + 12);
-    makePanoramaSymbolFn = relativeToAbsolute<decltype(makePanoramaSymbolFn)>(findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\xA0\x31\xF6") + 1);
-    moveData = **relativeToAbsolute<MoveData***>(findPattern(CLIENT_DLL, "\x4C\x8B\x2D????\x0F\xB6\x93") + 3);
-    moveHelper = **relativeToAbsolute<MoveHelper***>(findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") + 3);
+    setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x49\x8B\x07\x31\xF6") }.add(1).get());
+    plantedC4s = relativeToAbsolute<decltype(plantedC4s)>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x3D????\x42\xC6\x44\x28") }.add(3).get());
+    gameRules = *relativeToAbsolute<Entity***>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06") }.add(3).get());
+    dispatchSound = reinterpret_cast<int*>(SafeAddress{ findPattern(ENGINE_DLL, "\x74\x10\xE8????\x48\x8B\x35") }.add(3).get());
+    predictionRandomSeed = *relativeToAbsolute<int**>(SafeAddress{ findPattern(CLIENT_DLL, "\x41\x8D\x56\xFF\x31\xC9") }.add(-14).get());
+    registeredPanoramaEvents = relativeToAbsolute<decltype(registeredPanoramaEvents)>(relativeToAbsolute<std::uintptr_t>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x50\x10\x49\x89\xC6") }.add(1).get()) + 12);
+    makePanoramaSymbolFn = relativeToAbsolute<decltype(makePanoramaSymbolFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\xA0\x31\xF6") }.add(1).get());
+    moveData = **relativeToAbsolute<MoveData***>(SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x8B\x2D????\x0F\xB6\x93") }.add(3).get());
+    moveHelper = **relativeToAbsolute<MoveHelper***>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") }.add(3).get());
 
-    inventoryManager = relativeToAbsolute<decltype(inventoryManager)>(findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") + 3);
-    createEconItemSharedObject = relativeToAbsolute<decltype(createEconItemSharedObject)>(findPattern(CLIENT_DLL, "\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D") + 50);
-    addEconItem = relativeToAbsolute<decltype(addEconItem)>(findPattern(CLIENT_DLL, "\xE8????\x45\x3B\x65\x28\x72\xD6") + 1);
-    clearInventoryImageRGBA = relativeToAbsolute<decltype(clearInventoryImageRGBA)>(findPattern(CLIENT_DLL, "\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50") + 1);
-    panoramaMarshallHelper = relativeToAbsolute<decltype(panoramaMarshallHelper)>(findPattern(CLIENT_DLL, "\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05") + 11);
+    inventoryManager = relativeToAbsolute<decltype(inventoryManager)>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") }.add(3).get());
+    createEconItemSharedObject = relativeToAbsolute<decltype(createEconItemSharedObject)>(SafeAddress{ findPattern(CLIENT_DLL, "\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D") }.add(50).get());
+    addEconItem = relativeToAbsolute<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x45\x3B\x65\x28\x72\xD6") }.add(1).get());
+    clearInventoryImageRGBA = relativeToAbsolute<decltype(clearInventoryImageRGBA)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50") }.add(1).get());
+    panoramaMarshallHelper = relativeToAbsolute<decltype(panoramaMarshallHelper)>(SafeAddress{ findPattern(CLIENT_DLL, "\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05") }.add(11).get());
     setStickerToolSlotGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF0\x45\x85\xF6\x78\x32");
-    findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xEF\x48\x89\x45\xC8") + 1);
-    getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x45\x84\xED\x49\x89\xC1") + 1);
-    getSOCData = relativeToAbsolute<decltype(getSOCData)>(findPattern(CLIENT_DLL, "\xE8????\x5B\x44\x89\xEE") + 1);
-    setCustomName = relativeToAbsolute<decltype(setCustomName)>(findPattern(CLIENT_DLL, "\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98") + 1);
+    findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xEF\x48\x89\x45\xC8") }.add(1).get());
+    getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x45\x84\xED\x49\x89\xC1") }.add(1).get());
+    getSOCData = relativeToAbsolute<decltype(getSOCData)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x5B\x44\x89\xEE") }.add(1).get());
+    setCustomName = relativeToAbsolute<decltype(setCustomName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98") }.add(1).get());
     useToolGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B");
-    wearItemStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE") - 57;
+    wearItemStickerGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE") }.add(-57).get();
     setNameToolStringGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4");
     clearCustomNameGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4");
     deleteItemGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDE\x48\x89\xC7\xE8????\x48\x89\xC3\xE8????\x48\x89\xDE");
-    setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") - 95;
-    createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDE\x5B\x48\x8B\x10") + 1);
-    insertIntoTree = findPattern(CLIENT_DLL, "\x74\x24\x4C\x8B\x10") + 31;
-    uiComponentInventory = relativeToAbsolute<decltype(uiComponentInventory)>(findPattern(CLIENT_DLL, "\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E") + 8);
-    setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x85????\x41\x83\xC4\x01") + 1);
+    setDynamicAttributeValueFn = SafeAddress{ findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") }.add(-95).get();
+    createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDE\x5B\x48\x8B\x10") }.add(1).get());
+    insertIntoTree = SafeAddress{ findPattern(CLIENT_DLL, "\x74\x24\x4C\x8B\x10") }.add(31).get();
+    uiComponentInventory = relativeToAbsolute<decltype(uiComponentInventory)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E") }.add(8).get());
+    setItemSessionPropertyValue = relativeToAbsolute<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x85????\x41\x83\xC4\x01") }.add(1).get());
 
-    setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 = findPattern(CLIENT_DLL, "\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0") - 86;
-    acknowledgeNewItemByItemIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B") - 5;
-    setItemAttributeValueAsyncGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xFF\x50\x38\x48\x85\xC0\x74\xC2") + 3;
+    setStatTrakSwapToolItemsGetArgAsStringReturnAddress1 = SafeAddress{ findPattern(CLIENT_DLL, "\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0") }.add(-86).get();
+    acknowledgeNewItemByItemIDGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B") }.add(-5).get();
+    setItemAttributeValueAsyncGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x38\x48\x85\xC0\x74\xC2") }.add(3).get();
     setMyPredictionUsingItemIdGetNumArgsReturnAddress = findPattern(CLIENT_DLL, "\x83\xF8\x01\x89\x85");
-    getMyPredictionTeamIDGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF") - 20;
+    getMyPredictionTeamIDGetArgAsStringReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF") }.add(-20).get();
     setInventorySortAndFiltersGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x8B\x4D\xCC\x49\x89\xC5\x84\xC9");
-    getInventoryCountSetResultIntReturnAddress = findPattern(CLIENT_DLL, "\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02") + 19;
+    getInventoryCountSetResultIntReturnAddress = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02") }.add(19).get();
     performItemCasketTransactionGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x0F\x84????\x48\x89\xC7\xE8????\x48\x89\xC7\xE8????\x48\x85\xC0\x49\x89\xC6\x0F\x84????\xF2\x0F\x10\x85");
-    removeDynamicAttribute = relativeToAbsolute<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") + 1);
+    removeDynamicAttribute = relativeToAbsolute<decltype(removeDynamicAttribute)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") }.add(1).get());
 
-    localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
+    localPlayer.init(relativeToAbsolute<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") }.add(6).get()));
 #endif
 }
