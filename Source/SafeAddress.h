@@ -29,6 +29,16 @@ public:
         return *this;
     }
 
+    SafeAddress& relativeToAbsolute() noexcept
+    {
+        if (address != 0) {
+            using OffsetType = std::int32_t;
+            const auto addressOfNextInstruction = address + sizeof(OffsetType);
+            address = addressOfNextInstruction + *reinterpret_cast<OffsetType*>(address);
+        }
+        return *this;
+    }
+
     [[nodiscard]] std::uintptr_t get() const noexcept
     {
         return address;

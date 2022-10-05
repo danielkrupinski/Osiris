@@ -59,4 +59,17 @@ TEST(SafeAddressTest, DereferenceStopsWhenReachedZeroAddress) {
     EXPECT_EQ(SafeAddress{ std::uintptr_t(ptr5) }.deref<10>().get(), 0);
 }
 
+TEST(SafeAddressTest, ConvertingZeroAddressToAbsoluteDoesNothing) {
+    EXPECT_EQ(SafeAddress{ 0 }.relativeToAbsolute().get(), 0);
+}
+
+class SafeAddress_RelativeToAbsoluteTest : public testing::TestWithParam<std::int32_t> {};
+
+TEST_P(SafeAddress_RelativeToAbsoluteTest, RelativeAddressIsCorrectlyConvertedToAbsolute) {
+    const std::int32_t relativeJumpOffset = GetParam();
+    EXPECT_EQ(SafeAddress{ std::uintptr_t(&relativeJumpOffset) }.relativeToAbsolute().get(), std::uintptr_t(&relativeJumpOffset) + sizeof(std::int32_t) + relativeJumpOffset);
+}
+
+INSTANTIATE_TEST_SUITE_P(, SafeAddress_RelativeToAbsoluteTest, testing::Values(-1000, 0, 1000));
+
 }
