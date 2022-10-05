@@ -29,6 +29,11 @@ public:
         return *this;
     }
 
+    SafeAddress& deref() noexcept
+    {
+        return deref<1>();
+    }
+
     SafeAddress& relativeToAbsolute() noexcept
     {
         if (address != 0) {

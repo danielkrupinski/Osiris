@@ -59,6 +59,14 @@ TEST(SafeAddressTest, DereferenceStopsWhenReachedZeroAddress) {
     EXPECT_EQ(SafeAddress{ std::uintptr_t(ptr5) }.deref<10>().get(), 0);
 }
 
+TEST(SafeAddressTest, NonTemplateDerefMethodDereferencesOnce) {
+    int* ptr1 = nullptr;
+    int** ptr2 = &ptr1;
+    int*** ptr3 = &ptr2;
+
+    EXPECT_EQ(SafeAddress{ std::uintptr_t(ptr3) }.deref().get(), std::uintptr_t(&ptr1));
+}
+
 TEST(SafeAddressTest, ConvertingZeroAddressToAbsoluteDoesNothing) {
     EXPECT_EQ(SafeAddress{ 0 }.relativeToAbsolute().get(), 0);
 }
