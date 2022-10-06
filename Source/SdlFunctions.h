@@ -5,16 +5,12 @@
 #include "Platform/Linux/DynamicLibraryWrapper.h"
 #include "Platform/Linux/DynamicLibraryView.h"
 
-template <typename T>
-constexpr auto relativeToAbsolute(std::uintptr_t address) noexcept
-{
-    return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
-}
+#include "SafeAddress.h"
 
 struct SdlFunctions {
     SdlFunctions(linux_platform::DynamicLibraryView<linux_platform::DynamicLibraryWrapper> libSDL)
-        : pollEvent{ relativeToAbsolute<std::uintptr_t>(std::uintptr_t(libSDL.getFunctionAddress("SDL_PollEvent")) + 2) },
-        swapWindow{ relativeToAbsolute<std::uintptr_t>(std::uintptr_t(libSDL.getFunctionAddress("SDL_GL_SwapWindow")) + 2) }
+        : pollEvent{ SafeAddress{ std::uintptr_t(libSDL.getFunctionAddress("SDL_PollEvent")) }.add(2).relativeToAbsolute().get() },
+          swapWindow{ SafeAddress{ std::uintptr_t(libSDL.getFunctionAddress("SDL_GL_SwapWindow")) }.add(2).relativeToAbsolute().get() }
     {
     }
 
