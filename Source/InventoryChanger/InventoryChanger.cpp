@@ -1105,9 +1105,9 @@ InventoryChanger& InventoryChanger::instance(const Interfaces& interfaces, const
     return inventoryChanger;
 }
 
-void InventoryChanger::getArgAsNumberHook(const Memory& memory, int number, std::uintptr_t returnAddress)
+void InventoryChanger::getArgAsNumberHook(const InventoryChangerReturnAddresses& returnAddresses, int number, std::uintptr_t returnAddress)
 {
-    if (returnAddress == memory.setStickerToolSlotGetArgAsNumberReturnAddress)
+    if (returnAddress == returnAddresses.setStickerToolSlotGetArgAsNumber)
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
@@ -1194,33 +1194,33 @@ void InventoryChanger::overrideHudIcon(Engine& engine, const Memory& memory, Gam
     return static_cast<csgo::Tournament>(stringToUint64(removePrefix(s, "tournament:")));
 }
 
-void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getArgAsStringHook(const InventoryChangerReturnAddresses& returnAddresses, const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params)
 {
-    if (returnAddress == memory.useToolGetArgAsStringReturnAddress) {
+    if (returnAddress == returnAddresses.useToolGetArgAsString) {
         const auto toolItemID = stringToUint64(string);
         const auto destItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (destItemIdString)
             getRequestBuilder().useToolOn(ItemId{ toolItemID }, ItemId{ stringToUint64(destItemIdString) });
-    } else if (returnAddress == memory.wearItemStickerGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.wearItemStickerGetArgAsString) {
         const auto slot = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         getRequestBuilder().wearStickerOf(ItemId{ stringToUint64(string) }, slot);
-    } else if (returnAddress == memory.setNameToolStringGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.setNameToolStringGetArgAsString) {
         requestBuilderParams.nameTag = string;
-    } else if (returnAddress == memory.clearCustomNameGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.clearCustomNameGetArgAsString) {
         getRequestBuilder().removeNameTagFrom(ItemId{ stringToUint64(string) });
-    } else if (returnAddress == memory.deleteItemGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.deleteItemGetArgAsString) {
         if (const auto itOptional = backend.itemFromID(ItemId{ stringToUint64(string) }); itOptional.has_value())
             backend.getItemRemovalHandler()(*itOptional);
-    } else if (returnAddress == memory.acknowledgeNewItemByItemIDGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.acknowledgeNewItemByItemIDGetArgAsString) {
         acknowledgeItem(memory, stringToUint64(string));
-    } else if (returnAddress == memory.setStatTrakSwapToolItemsGetArgAsStringReturnAddress1) {
+    } else if (returnAddress == returnAddresses.setStatTrakSwapToolItemsGetArgAsString) {
         const auto swapItem1 = ItemId{ stringToUint64(string) };
         const auto swapItem2String = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
         if (swapItem2String) {
             requestBuilderParams.statTrakSwapItemID1 = swapItem1;
             requestBuilderParams.statTrakSwapItemID2 = ItemId{ stringToUint64(swapItem2String) };
         }
-    } else if (returnAddress == memory.setItemAttributeValueAsyncGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.setItemAttributeValueAsyncGetArgAsString) {
         if (const auto itOptional = backend.itemFromID(ItemId{ stringToUint64(string) }); itOptional.has_value() && (*itOptional)->gameItem().isTournamentCoin()) {
             const auto attribute = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
             if (attribute && std::strcmp(attribute, "sticker slot 0 id") == 0) {
@@ -1228,7 +1228,7 @@ void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* stri
                 backend.getItemModificationHandler().selectTeamGraffiti(*itOptional, static_cast<std::uint16_t>(graffitiID));
             }
         }
-    } else if (returnAddress == memory.getMyPredictionTeamIDGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.getMyPredictionTeamIDGetArgAsString) {
         const auto tournament = extractTournamentFromString(string);
         if (tournament == csgo::Tournament{})
             return;
@@ -1236,9 +1236,9 @@ void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* stri
         const auto groupId = (std::uint16_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 1);
         const auto pickInGroupIndex = (std::uint8_t)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 2);
         memory.panoramaMarshallHelper->setResult(params, static_cast<int>(backend.getPickEm().getPickedTeam({ tournament, groupId, pickInGroupIndex })));
-    } else if (returnAddress == memory.setInventorySortAndFiltersGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.setInventorySortAndFiltersGetArgAsString) {
         panoramaCodeInXrayScanner = (std::strcmp(string, "xraymachine") == 0);
-    } else if (returnAddress == memory.performItemCasketTransactionGetArgAsStringReturnAddress) {
+    } else if (returnAddress == returnAddresses.performItemCasketTransactionGetArgAsString) {
         const auto operation = (int)hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, 0);
         const auto storageUnitItemIdString = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, 1);
 
@@ -1250,9 +1250,9 @@ void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* stri
     }
 }
 
-void InventoryChanger::getNumArgsHook(const Memory& memory, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getNumArgsHook(const InventoryChangerReturnAddresses& returnAddresses, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
 {
-    if (returnAddress != memory.setMyPredictionUsingItemIdGetNumArgsReturnAddress)
+    if (returnAddress != returnAddresses.setMyPredictionUsingItemIdGetNumArgs)
         return;
 
     if (numberOfArgs <= 1 || (numberOfArgs - 1) % 3 != 0)
@@ -1278,9 +1278,9 @@ void InventoryChanger::getNumArgsHook(const Memory& memory, unsigned numberOfArg
     }
 }
 
-int InventoryChanger::setResultIntHook(const Memory& memory, std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
+int InventoryChanger::setResultIntHook(const InventoryChangerReturnAddresses& returnAddresses, std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
 {
-    if (returnAddress == memory.getInventoryCountSetResultIntReturnAddress && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
+    if (returnAddress == returnAddresses.getInventoryCountSetResultInt && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
         return 0;
     }
     return result;

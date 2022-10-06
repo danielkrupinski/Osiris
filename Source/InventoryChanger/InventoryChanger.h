@@ -47,13 +47,13 @@ public:
         return backend;
     }
 
-    void getArgAsNumberHook(const Memory& memory, int number, std::uintptr_t returnAddress);
+    void getArgAsNumberHook(const InventoryChangerReturnAddresses& returnAddresses, int number, std::uintptr_t returnAddress);
     void onRoundMVP(Engine& engine, GameEvent& event);
     void updateStatTrak(Engine& engine, GameEvent& event);
     void overrideHudIcon(Engine& engine, const Memory& memory, GameEvent& event);
-    void getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
-    void getNumArgsHook(const Memory& memory, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
-    int setResultIntHook(const Memory& memory, std::uintptr_t returnAddress, void* params, int result);
+    void getArgAsStringHook(const InventoryChangerReturnAddresses& returnAddresses, const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
+    void getNumArgsHook(const InventoryChangerReturnAddresses& returnAddresses, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
+    int setResultIntHook(const InventoryChangerReturnAddresses& returnAddresses, std::uintptr_t returnAddress, void* params, int result);
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);

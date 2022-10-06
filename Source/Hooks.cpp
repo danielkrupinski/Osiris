@@ -243,7 +243,7 @@ static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool upda
 static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(*memory, static_cast<int>(result), RETURN_ADDRESS());
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(memory->inventoryChangerReturnAddresses, static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
@@ -252,21 +252,21 @@ static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* 
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(*memory, result, RETURN_ADDRESS(), params);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(memory->inventoryChangerReturnAddresses, *memory, result, RETURN_ADDRESS(), params);
 
     return result;
 }
 
 static void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
 {
-    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(*memory, RETURN_ADDRESS(), params, result);
+    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(memory->inventoryChangerReturnAddresses, RETURN_ADDRESS(), params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
 static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(*memory, result, RETURN_ADDRESS(), params);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(memory->inventoryChangerReturnAddresses, result, RETURN_ADDRESS(), params);
     return result;
 }
 
