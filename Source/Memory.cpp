@@ -30,17 +30,12 @@ static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
     return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
 }
 
-struct ModuleInfo {
-    void* base;
-    std::size_t size;
-};
-
-static ModuleInfo getModuleInformation(const char* name) noexcept
+static std::span<const std::byte> getModuleInformation(const char* name) noexcept
 {
 #ifdef _WIN32
     if (HMODULE handle = GetModuleHandleA(name)) {
         if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
-            return ModuleInfo{ moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage };
+            return { reinterpret_cast<const std::byte*>(moduleInfo.lpBaseOfDll), moduleInfo.SizeOfImage };
     }
     return {};
 #elif __linux__
@@ -87,7 +82,7 @@ static ModuleInfo getModuleInformation(const char* name) noexcept
         return 1;
     }, &moduleInfo);
 
-    return ModuleInfo{ moduleInfo.base, moduleInfo.size };
+    return { reinterpret_cast<const std::byte*>(moduleInfo.base), moduleInfo.size };
 #endif
 }
 
@@ -146,8 +141,7 @@ static std::uintptr_t findPattern(std::span<const std::byte> bytes, std::string_
 template <bool ReportNotFound>
 std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
 {
-    const auto moduleInfo = getModuleInformation(moduleName);
-    return findPattern<ReportNotFound>(std::span<const std::byte>{ reinterpret_cast<const std::byte*>(moduleInfo.base), moduleInfo.size }, pattern);
+    return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
 
 Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
