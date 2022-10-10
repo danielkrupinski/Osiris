@@ -55,7 +55,6 @@ public:
 
     std::optional<EventListener> gameEventListener;
 
-    std::optional<ClientInterfaces> clientInterfaces; // TODO: make private
     std::optional<EngineInterfaces> engineInterfaces; // TODO: make private
 
 private:
@@ -70,6 +69,8 @@ private:
     State state = State::NotInitialized;
 
     std::optional<Config> config;
+    std::optional<ClientInterfaces> clientInterfaces;
+
 };
 
 inline std::optional<GlobalContext> globalContext;

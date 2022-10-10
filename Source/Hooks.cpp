@@ -305,7 +305,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
 #ifdef _WIN32
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -326,7 +326,7 @@ void Hooks::install(const Interfaces& interfaces, const Memory& memory) noexcept
     bspQuery.init(globalContext->engineInterfaces->engine->getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(globalContext->clientInterfaces->client);
+    client.init(clientInterfaces.client);
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 
@@ -419,10 +419,10 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 #endif
 
-void Hooks::uninstall(const Interfaces& interfaces, const Memory& memory) noexcept
+void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    Misc::updateEventListeners(*globalContext->clientInterfaces, *globalContext->engineInterfaces, interfaces, memory, true);
-    Visuals::updateEventListeners(*globalContext->engineInterfaces, *globalContext->clientInterfaces, interfaces, memory, true);
+    Misc::updateEventListeners(clientInterfaces, *globalContext->engineInterfaces, interfaces, memory, true);
+    Visuals::updateEventListeners(*globalContext->engineInterfaces, clientInterfaces, interfaces, memory, true);
 
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {

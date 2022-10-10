@@ -50,8 +50,8 @@ public:
     std::add_pointer_t<void(SDL_Window*)> swapWindow;
 #endif
 
-    void install(const Interfaces& interfaces, const Memory& memory) noexcept;
-    void uninstall(const Interfaces& interfaces, const Memory& memory) noexcept;
+    void install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;

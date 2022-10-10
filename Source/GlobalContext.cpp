@@ -316,7 +316,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         ImGui_ImplWin32_Init(window);
         config.emplace(Config{ *interfaces, *memory });
         gui.emplace(GUI{});
-        hooks->install(*interfaces, *memory);
+        hooks->install(*clientInterfaces, *interfaces, *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -375,7 +375,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         config.emplace(Config{ *interfaces, *memory });
 
         gui.emplace(GUI{});
-        hooks->install(*interfaces, *memory);
+        hooks->install(*clientInterfaces, *interfaces, *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -445,7 +445,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(*interfaces);
 
         if (gui->isOpen())
-            gui->render(*engineInterfaces->engine, *interfaces, *memory, *config);
+            gui->render(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, *config);
     }
 
     ImGui::EndFrame();

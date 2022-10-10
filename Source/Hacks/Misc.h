@@ -70,8 +70,8 @@ namespace Misc
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept;
-    void drawGUI(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void drawGUI(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;

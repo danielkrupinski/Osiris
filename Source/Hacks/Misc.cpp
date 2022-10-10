@@ -1319,15 +1319,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(engine, interfaces, memory, true);
+        drawGUI(engine, clientInterfaces, interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -1529,7 +1529,7 @@ void Misc::drawGUI(Engine& engine, const Interfaces& interfaces, const Memory& m
     ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
-        hooks->uninstall(interfaces, memory);
+        hooks->uninstall(clientInterfaces, interfaces, memory);
 
     ImGui::Columns(1);
     if (!contentOnly)
