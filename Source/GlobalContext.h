@@ -53,6 +53,8 @@ public:
 
     void viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3);
 
+    void fireGameEventCallback(GameEvent* event);
+
     std::optional<EventListener> gameEventListener;
 
     std::optional<EngineInterfaces> engineInterfaces; // TODO: make private

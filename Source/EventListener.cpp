@@ -12,6 +12,8 @@
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"
 
+#include "GlobalContext.h"
+
 EventListener::EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces)
     : memory{ memory }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }
 {
@@ -41,34 +43,7 @@ EventListener::EventListener(const Memory& memory, const ClientInterfaces& clien
 
 void EventListener::fireGameEvent(GameEvent* event)
 {
-    switch (fnv::hashRuntime(event->getName())) {
-    case fnv::hash("round_start"):
-        GameData::clearProjectileList();
-        Misc::preserveKillfeed(memory, true);
-        [[fallthrough]];
-    case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(*engineInterfaces.engine, clientInterfaces, interfaces, memory, event);
-        break;
-    case fnv::hash("player_death"): {
-        auto& inventoryChanger = inventory_changer::InventoryChanger::instance(interfaces, memory);
-        inventoryChanger.updateStatTrak(*engineInterfaces.engine, *event);
-        inventoryChanger.overrideHudIcon(*engineInterfaces.engine, memory, *event);
-        Misc::killMessage(*engineInterfaces.engine, *event);
-        Misc::killSound(*engineInterfaces.engine, *event);
-        break;
-    }
-    case fnv::hash("player_hurt"):
-        Misc::playHitSound(*engineInterfaces.engine, *event);
-        Visuals::hitEffect(*engineInterfaces.engine, interfaces, memory, event);
-        Visuals::hitMarker(*engineInterfaces.engine, interfaces, memory, event);
-        break;
-    case fnv::hash("vote_cast"):
-        Misc::voteRevealer(clientInterfaces, interfaces, memory, *event);
-        break;
-    case fnv::hash("round_mvp"):
-        inventory_changer::InventoryChanger::instance(interfaces, memory).onRoundMVP(*engineInterfaces.engine, *event);
-        break;
-    }
+    globalContext->fireGameEventCallback(event);
 }
 
 void EventListener::remove()
