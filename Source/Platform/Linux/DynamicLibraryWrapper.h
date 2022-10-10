@@ -20,6 +20,11 @@ struct DynamicLibraryWrapper {
     {
         return ::dlclose(handle);
     }
+
+    int dlinfo(void* handle, int request, void* info) const noexcept
+    {
+        return ::dlinfo(handle, request, info);
+    }
 };
 
 }

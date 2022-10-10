@@ -47,12 +47,11 @@ static std::span<const std::byte> getModuleInformation(const char* name) noexcep
 
     moduleInfo.name = name;
 
-    dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
-        const auto moduleInfo = reinterpret_cast<ModuleInfo_*>(data);
-        if (!std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name))
-            return 0;
+    const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, name };
 
-        if (const auto fd = open(info->dlpi_name, O_RDONLY); fd >= 0) {
+    const auto linkMap = so.getView().getLinkMap();
+    if (linkMap) {
+        if (const auto fd = open(linkMap->l_name, O_RDONLY); fd >= 0) {
             if (struct stat st; fstat(fd, &st) == 0) {
                 if (const auto map = mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
                     const auto ehdr = (ElfW(Ehdr)*)map;
@@ -65,23 +64,18 @@ static std::span<const std::byte> getModuleInformation(const char* name) noexcep
                         if (std::strcmp(strTab + shdr->sh_name, ".text") != 0)
                             continue;
 
-                        moduleInfo->base = (void*)(info->dlpi_addr + shdr->sh_offset);
-                        moduleInfo->size = shdr->sh_size;
+                        moduleInfo.base = (void*)(linkMap->l_addr + shdr->sh_offset);
+                        moduleInfo.size = shdr->sh_size;
                         munmap(map, st.st_size);
                         close(fd);
-                        return 1;
+                        break;
                     }
                     munmap(map, st.st_size);
                 }
             }
             close(fd);
         }
-
-        moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
-        moduleInfo->size = info->dlpi_phdr[0].p_memsz;
-        return 1;
-    }, &moduleInfo);
-
+    }
     return { reinterpret_cast<const std::byte*>(moduleInfo.base), moduleInfo.size };
 #endif
 }

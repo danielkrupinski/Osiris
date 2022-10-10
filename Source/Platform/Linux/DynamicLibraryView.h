@@ -1,5 +1,9 @@
 #pragma once
 
+#include <dlfcn.h>
+
+struct link_map;
+
 namespace linux_platform
 {
 
@@ -14,6 +18,13 @@ public:
     [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
     {
         return dl.dlsym(handle, functionName);
+    }
+
+    [[nodiscard]] link_map* getLinkMap() const noexcept
+    {
+        link_map* map = nullptr;
+        dl.dlinfo(handle, RTLD_DI_LINKMAP, &map);
+        return map;
     }
 
 private:
