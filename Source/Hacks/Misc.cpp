@@ -874,7 +874,7 @@ void Misc::purchaseList(Engine& engine, const ClientInterfaces& clientInterfaces
             if (const auto player = clientInterfaces.entityList->getEntity(engine.getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
                 if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     auto& purchase = playerPurchases[player->handle()];
-                    if (const auto weaponInfo = memory.weaponSystem->getWeaponInfo(definition->getWeaponId())) {
+                    if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition->getWeaponId())) {
                         purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }

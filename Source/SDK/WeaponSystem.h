@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 enum class WeaponId : short;
 struct WeaponInfo;
 
-class WeaponSystem {
+class WeaponSystem : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(WeaponSystem)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(WeaponInfo*, getWeaponInfo, 2, (WeaponId weaponId), (this, weaponId))
+    VIRTUAL_METHOD2(WeaponInfo*, getWeaponInfo, 2, (WeaponId weaponId), (weaponId))
 };

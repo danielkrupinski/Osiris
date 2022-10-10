@@ -7,6 +7,7 @@
 
 #include "SDK/Platform.h"
 #include "SDK/ViewRenderBeams.h"
+#include "SDK/WeaponSystem.h"
 
 #include "Interfaces.h"
 
@@ -33,7 +34,6 @@ class PlantedC4;
 class PlayerResource;
 template <typename T> class SharedObjectTypeCache;
 class ViewRender;
-class WeaponSystem;
 template <typename Key, typename Value>
 struct UtlMap;
 template <typename T>
@@ -146,7 +146,7 @@ public:
     std::uintptr_t keyValuesFromString;
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
-    WeaponSystem* weaponSystem;
+    WeaponSystem weaponSystem;
     std::add_pointer_t<const char** FASTCALL_CONV(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
     GameEventDescriptor* (THISCALL_CONV* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
     ActiveChannels* activeChannels;

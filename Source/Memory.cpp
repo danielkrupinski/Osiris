@@ -11,6 +11,7 @@
 #include <Windows.h>
 #include <Psapi.h>
 #elif __linux__
+#include <dlfcn.h>
 #include <fcntl.h>
 #include <link.h>
 #include <sys/mman.h>
@@ -140,9 +141,11 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 
 Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #ifdef _WIN32
-    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) }
+    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
+      weaponSystem{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() }
 #else
-    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05") }.add(6).relativeToAbsolute().deref<2>().get() }
+    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05") }.add(6).relativeToAbsolute().deref<2>().get() },
+      weaponSystem{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get() }
 #endif
 {
 #ifdef _WIN32
@@ -183,7 +186,6 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     keyValuesFromString = SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x04\x89\x45\xD8") }.add(1).relativeToAbsolute().get();
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xF7\x45") }.add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x89\x77\x38") }.add(1).relativeToAbsolute().get());
-    weaponSystem = reinterpret_cast<WeaponSystem*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get());
     getPlayerViewmodelArmConfigForPlayerModel = reinterpret_cast<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x89\x87????\x6A") }.add(1).relativeToAbsolute().get());
     getEventDescriptor = reinterpret_cast<decltype(getEventDescriptor)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x8B\xD8\x85\xDB\x75\x27") }.add(1).relativeToAbsolute().get());
     activeChannels = reinterpret_cast<ActiveChannels*>(SafeAddress{ findPattern(ENGINE_DLL, "\x8B\x1D????\x89\x5C\x24\x48") }.add(2).deref().get());
@@ -230,7 +232,6 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
 
     globalVars = *relativeToAbsolute<GlobalVars**>((*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16);
     itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).relativeToAbsolute().get());
-    weaponSystem = reinterpret_cast<WeaponSystem*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get());
 
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") }.add(1).relativeToAbsolute().get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0"));
