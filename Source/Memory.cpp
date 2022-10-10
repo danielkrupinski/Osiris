@@ -204,20 +204,6 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     addEconItem = reinterpret_cast<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x74\xE7") }.add(1).relativeToAbsolute().get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47"));
     panoramaMarshallHelper = *reinterpret_cast<decltype(panoramaMarshallHelper)*>(SafeAddress{ findPattern(CLIENT_DLL, "\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3") }.add(1).get());
-    inventoryChangerReturnAddresses.setStickerToolSlotGetArgAsNumber = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") }.add(2).get();
-    inventoryChangerReturnAddresses.wearItemStickerGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF") }.add(-80).get();
-    inventoryChangerReturnAddresses.setNameToolStringGetArgAsString = findPattern(CLIENT_DLL, "\x8B\xF8\xC6\x45\x08?\x33\xC0");
-    inventoryChangerReturnAddresses.clearCustomNameGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21") }.add(3).get();
-    inventoryChangerReturnAddresses.deleteItemGetArgAsString = findPattern(CLIENT_DLL, "\x85\xC0\x74\x22\x51");
-    inventoryChangerReturnAddresses.setStatTrakSwapToolItemsGetArgAsString = findPattern(CLIENT_DLL, "\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37");
-    inventoryChangerReturnAddresses.acknowledgeNewItemByItemIDGetArgAsString = findPattern(CLIENT_DLL, "\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9");
-    inventoryChangerReturnAddresses.setItemAttributeValueAsyncGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57") }.add(-22).get();
-    inventoryChangerReturnAddresses.setMyPredictionUsingItemIdGetNumArgs = findPattern(CLIENT_DLL, "\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01");
-    inventoryChangerReturnAddresses.getMyPredictionTeamIDGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8") }.add(-20).get();
-    inventoryChangerReturnAddresses.setInventorySortAndFiltersGetArgAsString = findPattern(CLIENT_DLL, "\x80\x7D\xFF?\x8B\xF8\x74\x27");
-    inventoryChangerReturnAddresses.getInventoryCountSetResultInt = SafeAddress{ findPattern(CLIENT_DLL, "\xB9????\xE8????\xB9????\xE8????\xC2\x08") }.add(-10).get();
-    inventoryChangerReturnAddresses.performItemCasketTransactionGetArgAsString = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24");
-    inventoryChangerReturnAddresses.useToolGetArgAsString = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37");
 
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") }.add(1).relativeToAbsolute().get());
     getInventoryItemByItemID = reinterpret_cast<decltype(getInventoryItemByItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") }.add(1).relativeToAbsolute().get());
@@ -299,26 +285,12 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     getInventoryItemByItemID = reinterpret_cast<decltype(getInventoryItemByItemID)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x45\x84\xED\x49\x89\xC1") }.add(1).relativeToAbsolute().get());
     getSOCData = reinterpret_cast<decltype(getSOCData)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x5B\x44\x89\xEE") }.add(1).relativeToAbsolute().get());
     setCustomName = reinterpret_cast<decltype(setCustomName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98") }.add(1).relativeToAbsolute().get());
-    inventoryChangerReturnAddresses.setStickerToolSlotGetArgAsNumber = findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF0\x45\x85\xF6\x78\x32");
-    inventoryChangerReturnAddresses.useToolGetArgAsString = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B");
-    inventoryChangerReturnAddresses.wearItemStickerGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE") }.add(-57).get();
-    inventoryChangerReturnAddresses.setNameToolStringGetArgAsString = findPattern(CLIENT_DLL, "\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4");
-    inventoryChangerReturnAddresses.clearCustomNameGetArgAsString = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4");
-    inventoryChangerReturnAddresses.deleteItemGetArgAsString = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDE\x48\x89\xC7\xE8????\x48\x89\xC3\xE8????\x48\x89\xDE");
     setDynamicAttributeValueFn = SafeAddress{ findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") }.add(-95).get();
     createBaseTypeCache = reinterpret_cast<decltype(createBaseTypeCache)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDE\x5B\x48\x8B\x10") }.add(1).relativeToAbsolute().get());
     insertIntoTree = SafeAddress{ findPattern(CLIENT_DLL, "\x74\x24\x4C\x8B\x10") }.add(31).get();
     uiComponentInventory = reinterpret_cast<decltype(uiComponentInventory)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E") }.add(8).relativeToAbsolute().get());
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x85????\x41\x83\xC4\x01") }.add(1).relativeToAbsolute().get());
 
-    inventoryChangerReturnAddresses.setStatTrakSwapToolItemsGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0") }.add(-86).get();
-    inventoryChangerReturnAddresses.acknowledgeNewItemByItemIDGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B") }.add(-5).get();
-    inventoryChangerReturnAddresses.setItemAttributeValueAsyncGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x38\x48\x85\xC0\x74\xC2") }.add(3).get();
-    inventoryChangerReturnAddresses.setMyPredictionUsingItemIdGetNumArgs = findPattern(CLIENT_DLL, "\x83\xF8\x01\x89\x85");
-    inventoryChangerReturnAddresses.getMyPredictionTeamIDGetArgAsString = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF") }.add(-20).get();
-    inventoryChangerReturnAddresses.setInventorySortAndFiltersGetArgAsString = findPattern(CLIENT_DLL, "\x8B\x4D\xCC\x49\x89\xC5\x84\xC9");
-    inventoryChangerReturnAddresses.getInventoryCountSetResultInt = SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02") }.add(19).get();
-    inventoryChangerReturnAddresses.performItemCasketTransactionGetArgAsString = findPattern(CLIENT_DLL, "\x48\x85\xC0\x0F\x84????\x48\x89\xC7\xE8????\x48\x89\xC7\xE8????\x48\x85\xC0\x49\x89\xC6\x0F\x84????\xF2\x0F\x10\x85");
     removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") }.add(1).relativeToAbsolute().get());
 
     localPlayer.init(reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") }.add(6).relativeToAbsolute().get()));
