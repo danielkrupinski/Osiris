@@ -198,6 +198,15 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     hooks->client.callOriginal<void, 37>(stage);
 }
 
+int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
+{
+    Sound::modulateSound(*clientInterfaces, *memory, soundEntry, entityIndex, volume);
+    Misc::autoAccept(*interfaces, *memory, soundEntry);
+
+    volume = std::clamp(volume, 0.0f, 1.0f);
+    return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
+}
+
 bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
 {
 #ifdef _WIN32
