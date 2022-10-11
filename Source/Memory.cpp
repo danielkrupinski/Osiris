@@ -25,12 +25,6 @@
 
 #include "SafeAddress.h"
 
-template <typename T>
-static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
-{
-    return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
-}
-
 static std::span<const std::byte> getModuleInformation(const char* name) noexcept
 {
 #ifdef _WIN32
@@ -163,9 +157,9 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     cameraThink = findPattern(CLIENT_DLL, "\x85\xC0\x75\x30\x38\x86");
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xCE\xE8????\x02\xC0") }.add(3).relativeToAbsolute().get());
-    auto temp = reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\xE8????\x8B\x5D\x08") + 1);
-    hud = *temp;
-    findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<uintptr_t>(temp) + 5);
+    auto temp = SafeAddress{ findPattern(CLIENT_DLL, "\xB9????\xE8????\x8B\x5D\x08") }.add(1);
+    hud = SafeAddress{ temp }.deref().get();
+    findHudElement = reinterpret_cast<decltype(findHudElement)>(temp.add(5).relativeToAbsolute().get());
     clearHudWeapon = reinterpret_cast<decltype(clearHudWeapon)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\xF0\xC6\x44\x24??\xC6\x44\x24") }.add(1).relativeToAbsolute().get());
     itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") }.add(1).relativeToAbsolute().get());
     setAbsOrigin = reinterpret_cast<decltype(setAbsOrigin)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") }.add(1).relativeToAbsolute().get());
@@ -230,7 +224,7 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);
 
-    globalVars = *relativeToAbsolute<GlobalVars**>((*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16);
+    globalVars = reinterpret_cast<GlobalVars*>(SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16 }.relativeToAbsolute().deref().get());
     itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).relativeToAbsolute().get());
 
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") }.add(1).relativeToAbsolute().get());
@@ -243,8 +237,8 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     disablePostProcessing = reinterpret_cast<decltype(disablePostProcessing)>(SafeAddress{ findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") }.add(2).relativeToAbsolute().get());
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58");
     loadSky = reinterpret_cast<decltype(loadSky)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") }.add(1).relativeToAbsolute().get());
-    clientMode = *relativeToAbsolute<decltype(clientMode)*>(relativeToAbsolute<uintptr_t>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 12) + 4);
-    input = **relativeToAbsolute<Input***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 3);
+    clientMode = reinterpret_cast<decltype(clientMode)>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(&clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().get());
+    input = reinterpret_cast<Input*>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(&clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().get());
     playerResource = reinterpret_cast<PlayerResource**>(SafeAddress{ findPattern(CLIENT_DLL, "\x74\x38\x48\x8B\x3D????\x89\xDE") }.add(5).relativeToAbsolute().get());
 
     glowObjectManager = reinterpret_cast<decltype(glowObjectManager)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE7\x8B\x70\x20") }.add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
