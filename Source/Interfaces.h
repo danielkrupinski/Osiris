@@ -41,7 +41,6 @@ class NetworkStringTableContainer;
 class PanoramaUIEngine;
 class PhysicsSurfaceProps;
 class Prediction;
-class RenderView;
 class Surface;
 class SoundEmitter;
 class StudioRender;
@@ -98,7 +97,6 @@ public:
           gameEventManager{ std::uintptr_t(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ std::uintptr_t(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
-          renderView{ static_cast<RenderView*>(engineInterfaceFinder("VEngineRenderView014")) },
           sound{ static_cast<EngineSound*>(engineInterfaceFinder("IEngineSoundClient003")) }
     {
     }
@@ -136,7 +134,6 @@ private:
 public:
     EngineTrace engineTrace;
     ModelRender* modelRender;
-    RenderView* renderView;
     EngineSound* sound;
 };
 
