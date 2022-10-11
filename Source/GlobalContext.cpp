@@ -179,7 +179,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::disablePanoramablur(*interfaces);
         Visuals::colorWorld(*interfaces, *memory);
         Misc::updateEventListeners(*engineInterfaces);
-        Visuals::updateEventListeners(*engineInterfaces, *clientInterfaces, *interfaces, *memory);
+        Visuals::updateEventListeners(*engineInterfaces);
     }
     if (engineInterfaces->engine->isInGame()) {
         Visuals::skybox(*interfaces, *memory, stage);
@@ -449,6 +449,9 @@ void GlobalContext::fireGameEventCallback(GameEvent* event)
         break;
     case fnv::hash("item_purchase"):
         Misc::purchaseList(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, event);
+        break;
+    case fnv::hash("bullet_impact"):
+        Visuals::bulletTracer(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, *event);
         break;
     }
 }

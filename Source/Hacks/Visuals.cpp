@@ -31,6 +31,8 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ViewRenderBeams.h"
 
+#include "../GlobalContext.h"
+
 struct BulletTracers : ColorToggle {
     BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
 };
@@ -689,22 +691,14 @@ void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexce
     }
 }
 
-void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
+void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        ImpactEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Memory& memory)
-            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, memory{ memory } {}
-        void fireGameEvent(GameEvent* event) override { bulletTracer(*engineInterfaces.engine, clientInterfaces, interfaces, memory, *event); }
-
-    private:
-        const Interfaces& interfaces;
-        const ClientInterfaces& clientInterfaces;
-        const EngineInterfaces& engineInterfaces;
-        const Memory& memory;
+        void fireGameEvent(GameEvent* event) override { globalContext->fireGameEventCallback(event); }
     };
 
-    static ImpactEventListener listener{ interfaces, clientInterfaces, engineInterfaces, memory };
+    static ImpactEventListener listener;
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {

@@ -422,7 +422,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     Misc::updateEventListeners(*globalContext->engineInterfaces, true);
-    Visuals::updateEventListeners(*globalContext->engineInterfaces, clientInterfaces, interfaces, memory, true);
+    Visuals::updateEventListeners(*globalContext->engineInterfaces, true);
 
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
