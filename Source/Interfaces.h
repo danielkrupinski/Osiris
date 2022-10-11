@@ -15,6 +15,7 @@
 #include "Platform/Linux/SharedObject.h"
 #endif
 
+#include "SDK/EngineTrace.h"
 #include "SDK/Platform.h"
 
 #include "Platform/DynamicLibraryView.h"
@@ -27,7 +28,6 @@ class Client;
 class Cvar;
 class Engine;
 class EngineSound;
-class EngineTrace;
 class EntityList;
 class GameEventManager;
 class GameMovement;
@@ -91,9 +91,9 @@ public:
 class EngineInterfaces {
 public:
     template <typename DynamicLibraryWrapper>
-    explicit EngineInterfaces(InterfaceFinder<DynamicLibraryWrapper> engineInterfaceFinder)
+    explicit EngineInterfaces(InterfaceFinder<DynamicLibraryWrapper> engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : engine{ static_cast<Engine*>(engineInterfaceFinder("VEngineClient014")) },
-          engineTrace{ static_cast<EngineTrace*>(engineInterfaceFinder("EngineTraceClient004")) },
+          engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
           gameEventManager{ static_cast<GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ static_cast<ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
@@ -104,7 +104,7 @@ public:
     }
 
     Engine* engine;
-    EngineTrace* engineTrace;
+    EngineTrace engineTrace;
     GameEventManager* gameEventManager;
     ModelInfo* modelInfo;
     ModelRender* modelRender;

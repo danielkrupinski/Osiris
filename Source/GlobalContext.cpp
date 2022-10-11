@@ -87,11 +87,11 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     EnginePrediction::run(*clientInterfaces, *memory, cmd);
 
     Aimbot::run(*engineInterfaces, *clientInterfaces, *interfaces, *config, *memory, cmd);
-    Triggerbot::run(*engineInterfaces->engineTrace, *interfaces, *memory, *config, cmd);
+    Triggerbot::run(engineInterfaces->engineTrace, *interfaces, *memory, *config, cmd);
     Backtrack::run(*clientInterfaces, *engineInterfaces, *interfaces, *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
-    Misc::fastPlant(*engineInterfaces->engineTrace, *interfaces, cmd);
+    Misc::fastPlant(engineInterfaces->engineTrace, *interfaces, cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(*engineInterfaces->engine, sendPacket);
@@ -304,7 +304,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         state = GlobalContext::State::Initializing;
 
         clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient });
-        engineInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient });
+        engineInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
         interfaces.emplace(Interfaces{});
 
         memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
@@ -363,7 +363,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
         clientInterfaces.emplace(InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient });
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient });
+        engineInterfaces.emplace(InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
 
         interfaces.emplace(Interfaces{});
         memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });

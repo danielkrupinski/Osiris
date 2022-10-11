@@ -139,7 +139,7 @@ public:
     bool setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
     Vector getBonePosition(const Memory& memory, int bone) noexcept;
 
-    bool isVisible(EngineTrace& engineTrace, const Memory& memory, const Vector& position = { }) noexcept;
+    bool isVisible(const EngineTrace& engineTrace, const Memory& memory, const Vector& position = { }) noexcept;
     bool isOtherEnemy(const Memory& memory, Entity* other) noexcept;
 
     VarMap& getVarMap() noexcept
@@ -174,7 +174,7 @@ public:
         return name;
     }
 
-    bool canSee(EngineTrace& engineTrace, const Memory& memory, Entity* other, const Vector& pos) noexcept;
+    bool canSee(const EngineTrace& engineTrace, const Memory& memory, Entity* other, const Vector& pos) noexcept;
     bool visibleTo(const EngineInterfaces& engineInterfaces, const Memory& memory, Entity* other) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
