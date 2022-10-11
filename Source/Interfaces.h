@@ -17,6 +17,7 @@
 
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
+#include "SDK/GameEvent.h"
 #include "SDK/Platform.h"
 
 #include "Platform/DynamicLibraryView.h"
@@ -29,7 +30,6 @@ class Client;
 class Cvar;
 class EngineSound;
 class EntityList;
-class GameEventManager;
 class GameMovement;
 class GameUI;
 class InputSystem;
@@ -95,7 +95,7 @@ public:
         : retSpoofInvoker{ retSpoofInvoker },
           engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
-          gameEventManager{ static_cast<GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
+          gameEventManager{ std::uintptr_t(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ static_cast<ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
           networkStringTableContainer{ static_cast<NetworkStringTableContainer*>(engineInterfaceFinder("VEngineClientStringTable001")) },
@@ -114,12 +114,22 @@ public:
         return engine;
     }
 
+    [[nodiscard]] auto getGameEventManager() const noexcept
+    {
+        return GameEventManager{ retSpoofInvoker, gameEventManager };
+    }
+
+    [[nodiscard]] std::uintptr_t getGameEventManagerAddress() const noexcept
+    {
+        return gameEventManager;
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t engine;
+    std::uintptr_t gameEventManager;
 public:
     EngineTrace engineTrace;
-    GameEventManager* gameEventManager;
     ModelInfo* modelInfo;
     ModelRender* modelRender;
     NetworkStringTableContainer* networkStringTableContainer;

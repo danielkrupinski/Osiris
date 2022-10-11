@@ -702,10 +702,10 @@ void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, boo
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {
-        engineInterfaces.gameEventManager->addListener(&listener, "bullet_impact");
+        engineInterfaces.getGameEventManager().addListener(&listener, "bullet_impact");
         listenerRegistered = true;
     } else if ((!visualsConfig.bulletTracers.enabled || forceRemove) && listenerRegistered) {
-        engineInterfaces.gameEventManager->removeListener(&listener);
+        engineInterfaces.getGameEventManager().removeListener(&listener);
         listenerRegistered = false;
     }
 }

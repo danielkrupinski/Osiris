@@ -148,7 +148,7 @@ public:
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem weaponSystem;
     std::add_pointer_t<const char** FASTCALL_CONV(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
-    GameEventDescriptor* (THISCALL_CONV* getEventDescriptor)(GameEventManager* thisptr, const char* name, int* cookie);
+    GameEventDescriptor* (THISCALL_CONV* getEventDescriptor)(/* GameEventManager* */ std::uintptr_t thisptr, const char* name, int* cookie);
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;

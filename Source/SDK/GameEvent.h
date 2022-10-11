@@ -33,10 +33,10 @@ public:
     UtlVector<void*> listeners;
 };
 
-class GameEventManager {
+class GameEventManager : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(GameEventManager)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD_V(bool, addListener, 3, (GameEventListener* listener, const char* name), (this, listener, name, false))
-    VIRTUAL_METHOD_V(void, removeListener, 5, (GameEventListener* listener), (this, listener))
+    VIRTUAL_METHOD2_V(bool, addListener, 3, (GameEventListener* listener, const char* name), (listener, name, false))
+    VIRTUAL_METHOD2_V(void, removeListener, 5, (GameEventListener* listener), (listener))
 };

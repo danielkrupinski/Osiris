@@ -1288,10 +1288,10 @@ void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool f
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {
-        engineInterfaces.gameEventManager->addListener(&listener, "item_purchase");
+        engineInterfaces.getGameEventManager().addListener(&listener, "item_purchase");
         listenerRegistered = true;
     } else if ((!miscConfig.purchaseList.enabled || forceRemove) && listenerRegistered) {
-        engineInterfaces.gameEventManager->removeListener(&listener);
+        engineInterfaces.getGameEventManager().removeListener(&listener);
         listenerRegistered = false;
     }
 }
