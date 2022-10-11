@@ -496,9 +496,6 @@
     <ClInclude Include="SDK\WeaponSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\NetworkStringTable.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hooks\VmtSwap.h">
       <Filter>Hooks</Filter>
     </ClInclude>
