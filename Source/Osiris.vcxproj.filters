@@ -364,9 +364,6 @@
     <ClInclude Include="Hacks\Chams.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\RenderView.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Aimbot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
