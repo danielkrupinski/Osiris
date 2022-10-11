@@ -69,14 +69,14 @@ float Entity::getMaxDesyncAngle() noexcept
     return animState->velocitySubtractY * yawModifier;
 }
 
-int Entity::getUserId(Engine& engine) noexcept
+int Entity::getUserId(const Engine& engine) noexcept
 {
     if (PlayerInfo playerInfo; engine.getPlayerInfo(index(), playerInfo))
         return playerInfo.userId;
     return -1;
 }
 
-std::uint64_t Entity::getSteamId(Engine& engine) noexcept
+std::uint64_t Entity::getSteamId(const Engine& engine) noexcept
 {
     if (PlayerInfo playerInfo; engine.getPlayerInfo(index(), playerInfo))
         return playerInfo.xuid;

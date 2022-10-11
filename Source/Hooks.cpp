@@ -323,7 +323,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
 
 #endif
     
-    bspQuery.init(globalContext->engineInterfaces->engine->getBSPTreeQuery());
+    bspQuery.init(globalContext->engineInterfaces->getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(clientInterfaces.client);
@@ -339,7 +339,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(globalContext->engineInterfaces->engine);
+    engine.init((void*)globalContext->engineInterfaces->getEngineAddress());
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #ifdef _WIN32

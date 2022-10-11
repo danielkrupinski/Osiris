@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <functional>
 
-#include "Inconstructible.h"
 #include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
@@ -51,27 +50,27 @@ struct DemoPlaybackParameters {
 
 class NetworkChannel;
 
-class Engine {
+class Engine : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(Engine)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (this, std::ref(w), std::ref(h)))
-    VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (this, entityIndex, std::ref(playerInfo)))
-    VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (this, userId))
-    VIRTUAL_METHOD(void, getViewAngles, 18, (Vector& angles), (this, std::ref(angles)))
-    VIRTUAL_METHOD(void, setViewAngles, 19, (const Vector& angles), (this, std::cref(angles)))
-    VIRTUAL_METHOD(int, getMaxClients, 20, (), (this))
-    VIRTUAL_METHOD(bool, isInGame, 26, (), (this))
-    VIRTUAL_METHOD(bool, isConnected, 27, (), (this))
-    VIRTUAL_METHOD(bool, cullBox, 34, (const Vector& mins, const Vector& maxs), (this, std::cref(mins), std::cref(maxs)))
-    VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix, 37, (), (this))
-    VIRTUAL_METHOD(void*, getBSPTreeQuery, 43, (), (this))
-    VIRTUAL_METHOD(const char*, getLevelName, 53, (), (this))
-    VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
-    VIRTUAL_METHOD(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (this, cmd, fromConsoleOrKeybind))
-    VIRTUAL_METHOD_V(const SteamAPIContext*, getSteamAPIContext, 185, (), (this))
+    VIRTUAL_METHOD2(void, getScreenSize, 5, (int& w, int& h), (std::ref(w), std::ref(h)))
+    VIRTUAL_METHOD2(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, std::ref(playerInfo)))
+    VIRTUAL_METHOD2(int, getPlayerForUserID, 9, (int userId), (userId))
+    VIRTUAL_METHOD2(void, getViewAngles, 18, (Vector& angles), (std::ref(angles)))
+    VIRTUAL_METHOD2(void, setViewAngles, 19, (const Vector& angles), (std::cref(angles)))
+    VIRTUAL_METHOD2(int, getMaxClients, 20, (), ())
+    VIRTUAL_METHOD2(bool, isInGame, 26, (), ())
+    VIRTUAL_METHOD2(bool, isConnected, 27, (), ())
+    VIRTUAL_METHOD2(bool, cullBox, 34, (const Vector& mins, const Vector& maxs), (std::cref(mins), std::cref(maxs)))
+    VIRTUAL_METHOD2(const Matrix4x4&, worldToScreenMatrix, 37, (), ())
+    VIRTUAL_METHOD2(void*, getBSPTreeQuery, 43, (), ())
+    VIRTUAL_METHOD2(const char*, getLevelName, 53, (), ())
+    VIRTUAL_METHOD2(NetworkChannel*, getNetworkChannel, 78, (), ())
+    VIRTUAL_METHOD2(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (cmd, fromConsoleOrKeybind))
+    VIRTUAL_METHOD2_V(const SteamAPIContext*, getSteamAPIContext, 185, (), ())
 
-    auto getViewAngles() noexcept
+    auto getViewAngles() const noexcept
     {
         Vector ang;
         getViewAngles(ang);

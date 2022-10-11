@@ -183,7 +183,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
-        for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
             auto entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
                 || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
@@ -231,7 +231,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
             angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot[weaponIndex].silent)
-                engineInterfaces.engine->setViewAngles(cmd->viewangles);
+                engineInterfaces.getEngine().setViewAngles(cmd->viewangles);
 
             if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;

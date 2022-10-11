@@ -27,7 +27,7 @@ namespace Backtrack
     };
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept;
-    bool valid(Engine& engine, const Memory& memory, float simtime) noexcept;
+    bool valid(const Engine& engine, const Memory& memory, float simtime) noexcept;
     void init(const Interfaces& interfaces) noexcept;
 
     // GUI

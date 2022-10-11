@@ -11,10 +11,10 @@ class matrix3x4;
 
 class Chams {
 public:
-    bool render(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    bool render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
 private:
-    void renderPlayer(Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept;
+    void renderPlayer(const Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept;
     void renderWeapons(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept;
     void renderHands(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept;
     void renderSleeves(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept;

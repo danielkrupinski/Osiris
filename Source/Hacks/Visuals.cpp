@@ -369,7 +369,7 @@ void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
     brightness->setValue(visualsConfig.brightness);
 }
 
-void Visuals::removeGrass(Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
@@ -441,7 +441,7 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 }
 #endif
 
-void Visuals::applyScreenEffects(Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept
+void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!visualsConfig.screenEffect)
         return;
@@ -469,7 +469,7 @@ void Visuals::applyScreenEffects(Engine& engine, const Interfaces& interfaces, c
     DRAW_SCREEN_EFFECT(material, memory, engine)
 }
 
-void Visuals::hitEffect(Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
@@ -507,7 +507,7 @@ void Visuals::hitEffect(Engine& engine, const Interfaces& interfaces, const Memo
     }
 }
 
-void Visuals::hitMarker(Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -579,7 +579,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     }
 }
 
-void Visuals::bulletTracer(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;

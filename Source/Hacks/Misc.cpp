@@ -414,7 +414,7 @@ void Misc::watermark(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::prepareRevolver(Engine& engine, const Memory& memory, UserCmd* cmd) noexcept
+void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* cmd) noexcept
 {
     auto timeToTicks = [&memory](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
     constexpr float revolverPrepareTime{ 0.234375f };
@@ -549,7 +549,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -622,7 +622,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
     }
 }
 
-bool Misc::changeName(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
+bool Misc::changeName(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
 {
     static auto exploitInitialized{ false };
 
@@ -664,7 +664,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer->isOnGround();
 }
 
-void Misc::fakeBan(Engine& engine, const Interfaces& interfaces, const Memory& memory, bool set) noexcept
+void Misc::fakeBan(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool set) noexcept
 {
     static bool shouldSet = false;
 
@@ -691,7 +691,7 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
-void Misc::killMessage(Engine& engine, GameEvent& event) noexcept
+void Misc::killMessage(const Engine& engine, GameEvent& event) noexcept
 {
     if (!miscConfig.killMessage)
         return;
@@ -729,7 +729,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
         cmd->buttons |= 1 << 27;
 }
 
-void Misc::fixAnimationLOD(Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
 #ifdef _WIN32
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
@@ -759,7 +759,7 @@ void Misc::autoPistol(const Memory& memory, UserCmd* cmd) noexcept
     }
 }
 
-void Misc::chokePackets(Engine& engine, bool& sendPacket) noexcept
+void Misc::chokePackets(const Engine& engine, bool& sendPacket) noexcept
 {
     if (!miscConfig.chokedPacketsKey.isSet() || miscConfig.chokedPacketsKey.isDown())
         sendPacket = engine.getNetworkChannel()->chokedPackets >= miscConfig.chokedPackets;
@@ -805,7 +805,7 @@ void Misc::moonwalk(UserCmd* cmd) noexcept
         cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
 }
 
-void Misc::playHitSound(Engine& engine, GameEvent& event) noexcept
+void Misc::playHitSound(const Engine& engine, GameEvent& event) noexcept
 {
     if (!miscConfig.hitSound)
         return;
@@ -829,7 +829,7 @@ void Misc::playHitSound(Engine& engine, GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customHitSound).c_str());
 }
 
-void Misc::killSound(Engine& engine, GameEvent& event) noexcept
+void Misc::killSound(const Engine& engine, GameEvent& event) noexcept
 {
     if (!miscConfig.killSound)
         return;
@@ -853,7 +853,7 @@ void Misc::killSound(Engine& engine, GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -1000,7 +1000,7 @@ static int reportbotRound;
     return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
 }
 
-[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory)
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory)
 {
     std::vector<std::uint64_t> xuids;
 
@@ -1019,7 +1019,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1177,7 +1177,7 @@ static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_
     }
 }
 
-void Misc::drawOffscreenEnemies(Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept
+void Misc::drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept
 {
     if (!miscConfig.offscreenEnemies.enabled)
         return;
@@ -1312,7 +1312,7 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
         drawGUI(engine, clientInterfaces, interfaces, memory, true);
@@ -1320,7 +1320,7 @@ void Misc::tabItem(Engine& engine, const ClientInterfaces& clientInterfaces, con
     }
 }
 
-void Misc::drawGUI(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)

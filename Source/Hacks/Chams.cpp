@@ -126,7 +126,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -166,7 +166,7 @@ bool Chams::render(Engine& engine, const ClientInterfaces& clientInterfaces, con
     return appliedChams;
 }
 
-void Chams::renderPlayer(Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
+void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
 {
     if (!localPlayer)
         return;

@@ -166,7 +166,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
 
 static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localXuid = local->getSteamId(*engineInterfaces.engine);
+    const auto localXuid = local->getSteamId(engineInterfaces.getEngine());
 
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), local->getTeamNumber(), 0);
     if (!optionalItem.has_value())
@@ -228,7 +228,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     worldModel->modelIndex() = engineInterfaces.modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
+static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
 {
     const auto localTeam = local->getTeamNumber();
     const auto localXuid = local->getSteamId(engine);
@@ -282,7 +282,7 @@ static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, cons
         return;
 
     applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), *localInventory, local);
-    applyWeapons(*engineInterfaces.engine, clientInterfaces, interfaces, memory, *localInventory, local);
+    applyWeapons(engineInterfaces.getEngine(), clientInterfaces, interfaces, memory, *localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -405,7 +405,7 @@ static void processEquipRequests(const Memory& memory)
     }
 }
 
-[[nodiscard]] static bool isLocalPlayerMVP(Engine& engine, GameEvent& event)
+[[nodiscard]] static bool isLocalPlayerMVP(const Engine& engine, GameEvent& event)
 {
     return localPlayer && localPlayer->getUserId(engine) == event.getInt("userid");
 }
@@ -1111,7 +1111,7 @@ void InventoryChanger::getArgAsNumberHook(const InventoryChangerReturnAddresses&
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
-void InventoryChanger::onRoundMVP(Engine& engine, GameEvent& event)
+void InventoryChanger::onRoundMVP(const Engine& engine, GameEvent& event)
 {
     if (!isLocalPlayerMVP(engine, event))
         return;
@@ -1131,7 +1131,7 @@ void InventoryChanger::onRoundMVP(Engine& engine, GameEvent& event)
     }
 }
 
-void InventoryChanger::updateStatTrak(Engine& engine, GameEvent& event)
+void InventoryChanger::updateStatTrak(const Engine& engine, GameEvent& event)
 {
     if (!localPlayer)
         return;
@@ -1156,7 +1156,7 @@ void InventoryChanger::updateStatTrak(Engine& engine, GameEvent& event)
         backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::overrideHudIcon(Engine& engine, const Memory& memory, GameEvent& event)
+void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memory, GameEvent& event)
 {
     if (!localPlayer)
         return;

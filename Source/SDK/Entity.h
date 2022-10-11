@@ -163,8 +163,8 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + WIN32_LINUX(0x41, 0x45));
     }
 
-    int getUserId(Engine& engine) noexcept;
-    std::uint64_t getSteamId(Engine& engine) noexcept;
+    int getUserId(const Engine& engine) noexcept;
+    std::uint64_t getSteamId(const Engine& engine) noexcept;
 
     void getPlayerName(const Interfaces& interfaces, const Memory& memory, char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName(const Interfaces& interfaces, const Memory& memory) noexcept

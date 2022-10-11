@@ -15,6 +15,7 @@
 #include "Platform/Linux/SharedObject.h"
 #endif
 
+#include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/Platform.h"
 
@@ -26,7 +27,6 @@
 class BaseFileSystem;
 class Client;
 class Cvar;
-class Engine;
 class EngineSound;
 class EntityList;
 class GameEventManager;
@@ -92,7 +92,8 @@ class EngineInterfaces {
 public:
     template <typename DynamicLibraryWrapper>
     explicit EngineInterfaces(InterfaceFinder<DynamicLibraryWrapper> engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
-        : engine{ static_cast<Engine*>(engineInterfaceFinder("VEngineClient014")) },
+        : retSpoofInvoker{ retSpoofInvoker },
+          engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
           gameEventManager{ static_cast<GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ static_cast<ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
@@ -103,7 +104,20 @@ public:
     {
     }
 
-    Engine* engine;
+    [[nodiscard]] auto getEngine() const noexcept
+    {
+        return Engine{ retSpoofInvoker, engine };
+    }
+
+    [[nodiscard]] std::uintptr_t getEngineAddress() const noexcept
+    {
+        return engine;
+    }
+
+private:
+    RetSpoofInvoker retSpoofInvoker;
+    std::uintptr_t engine;
+public:
     EngineTrace engineTrace;
     GameEventManager* gameEventManager;
     ModelInfo* modelInfo;

@@ -61,7 +61,7 @@ namespace GameData
 }
 
 struct LocalPlayerData {
-    void update(Engine& engine) noexcept;
+    void update(const Engine& engine) noexcept;
 
     bool exists = false;
     bool alive = false;

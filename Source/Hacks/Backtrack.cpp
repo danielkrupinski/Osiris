@@ -54,7 +54,7 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
             return;
         }
 
-        for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
             auto entity = clientInterfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
@@ -75,7 +75,7 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(memory, static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory, &engineInterfaces](const Record & rec) { return !valid(*engineInterfaces.engine, memory, rec.simulationTime); }); invalid != std::cend(records[i]))
+            if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [&memory, &engineInterfaces](const Record & rec) { return !valid(engineInterfaces.getEngine(), memory, rec.simulationTime); }); invalid != std::cend(records[i]))
                 records[i].erase(invalid, std::cend(records[i]));
         }
     }
@@ -108,7 +108,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
 
     const auto aimPunch = localPlayer->getAimPunch();
 
-    for (int i = 1; i <= engineInterfaces.engine->getMaxClients(); i++) {
+    for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
         auto entity = clientInterfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isOtherEnemy(memory, localPlayer.get()))
@@ -134,7 +134,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
             const auto& record = records[bestTargetIndex][i];
-            if (!valid(*engineInterfaces.engine, memory, record.simulationTime))
+            if (!valid(engineInterfaces.getEngine(), memory, record.simulationTime))
                 continue;
 
             auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
@@ -160,7 +160,7 @@ const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) no
     return &records[index];
 }
 
-bool Backtrack::valid(Engine& engine, const Memory& memory, float simtime) noexcept
+bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime) noexcept
 {
     const auto network = engine.getNetworkChannel();
     if (!network)

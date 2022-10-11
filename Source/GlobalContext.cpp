@@ -68,17 +68,17 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::nadePredict(*interfaces);
     Misc::antiAfkKick(cmd);
     Misc::fastStop(cmd);
-    Misc::prepareRevolver(*engineInterfaces->engine, *memory, cmd);
+    Misc::prepareRevolver(engineInterfaces->getEngine(), *memory, cmd);
     Visuals::removeShadows(*interfaces);
-    Misc::runReportbot(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory);
+    Misc::runReportbot(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
     Misc::autoPistol(*memory, cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag(*memory);
-    Misc::fakeBan(*engineInterfaces->engine, *interfaces, *memory);
-    Misc::stealNames(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory);
+    Misc::fakeBan(engineInterfaces->getEngine(), *interfaces, *memory);
+    Misc::stealNames(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
     Misc::revealRanks(*clientInterfaces, cmd);
     Misc::quickReload(*clientInterfaces, *interfaces, cmd);
     Misc::fixTabletSignal();
@@ -94,7 +94,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::fastPlant(engineInterfaces->engineTrace, *interfaces, cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(*engineInterfaces->engine, sendPacket);
+        Misc::chokePackets(engineInterfaces->getEngine(), sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
 
@@ -121,7 +121,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 
 void GlobalContext::doPostScreenEffectsHook(void* param)
 {
-    if (engineInterfaces->engine->isInGame()) {
+    if (engineInterfaces->getEngine().isInGame()) {
         Visuals::thirdperson(*memory);
         Visuals::inverseRagdollGravity(*interfaces);
         Visuals::reduceFlashEffect();
@@ -151,7 +151,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->studioRender->forcedMaterialOverride(nullptr);
@@ -168,8 +168,8 @@ bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddres
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(*interfaces), false);
-    if (engineInterfaces->engine->isConnected() && !engineInterfaces->engine->isInGame())
-        Misc::changeName(*engineInterfaces->engine, *interfaces, *memory, true, nullptr, 0.0f);
+    if (engineInterfaces->getEngine().isConnected() && !engineInterfaces->getEngine().isInGame())
+        Misc::changeName(engineInterfaces->getEngine(), *interfaces, *memory, true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
         GameData::update(*clientInterfaces, *engineInterfaces, *interfaces, *memory);
@@ -181,16 +181,16 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::updateEventListeners(*engineInterfaces);
         Visuals::updateEventListeners(*engineInterfaces);
     }
-    if (engineInterfaces->engine->isInGame()) {
+    if (engineInterfaces->getEngine().isInGame()) {
         Visuals::skybox(*interfaces, *memory, stage);
         Visuals::removeBlur(*interfaces, stage);
         Misc::oppositeHandKnife(*interfaces, stage);
-        Visuals::removeGrass(*engineInterfaces->engine, *interfaces, stage);
+        Visuals::removeGrass(engineInterfaces->getEngine(), *interfaces, stage);
         Visuals::modifySmoke(*interfaces, stage);
         Visuals::disablePostProcessing(*memory, stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
-        Misc::fixAnimationLOD(*engineInterfaces->engine, *clientInterfaces, *memory, stage);
+        Misc::fixAnimationLOD(engineInterfaces->getEngine(), *clientInterfaces, *memory, stage);
         Backtrack::update(*engineInterfaces, *clientInterfaces, *interfaces, *memory, stage);
     }
     inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*engineInterfaces, *clientInterfaces, *interfaces, *memory, stage);
@@ -259,8 +259,8 @@ int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 
 void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 {
-    Visuals::applyScreenEffects(*engineInterfaces->engine, *interfaces, *memory);
-    Visuals::hitEffect(*engineInterfaces->engine, *interfaces, *memory);
+    Visuals::applyScreenEffects(engineInterfaces->getEngine(), *interfaces, *memory);
+    Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory);
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
@@ -426,32 +426,32 @@ void GlobalContext::fireGameEventCallback(GameEvent* event)
         Misc::preserveKillfeed(*memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, event);
+        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
         break;
     case fnv::hash("player_death"): {
         auto& inventoryChanger = inventory_changer::InventoryChanger::instance(*interfaces, *memory);
-        inventoryChanger.updateStatTrak(*engineInterfaces->engine, *event);
-        inventoryChanger.overrideHudIcon(*engineInterfaces->engine, *memory, *event);
-        Misc::killMessage(*engineInterfaces->engine, *event);
-        Misc::killSound(*engineInterfaces->engine, *event);
+        inventoryChanger.updateStatTrak(engineInterfaces->getEngine(), *event);
+        inventoryChanger.overrideHudIcon(engineInterfaces->getEngine(), *memory, *event);
+        Misc::killMessage(engineInterfaces->getEngine(), *event);
+        Misc::killSound(engineInterfaces->getEngine(), *event);
         break;
     }
     case fnv::hash("player_hurt"):
-        Misc::playHitSound(*engineInterfaces->engine, *event);
-        Visuals::hitEffect(*engineInterfaces->engine, *interfaces, *memory, event);
-        Visuals::hitMarker(*engineInterfaces->engine, *interfaces, *memory, event);
+        Misc::playHitSound(engineInterfaces->getEngine(), *event);
+        Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, event);
+        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, event);
         break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, *event);
         break;
     case fnv::hash("round_mvp"):
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(*engineInterfaces->engine, *event);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(engineInterfaces->getEngine(), *event);
         break;
     case fnv::hash("item_purchase"):
-        Misc::purchaseList(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, event);
+        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
         break;
     case fnv::hash("bullet_impact"):
-        Visuals::bulletTracer(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, *event);
+        Visuals::bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *event);
         break;
     }
 }
@@ -462,13 +462,13 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory);
+        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
         Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
-        Misc::drawOffscreenEnemies(*engineInterfaces->engine, *memory, ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(engineInterfaces->getEngine(), *memory, ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer(*memory);
         Misc::spectatorList();
-        Visuals::hitMarker(*engineInterfaces->engine, *interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
+        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
         Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
@@ -483,7 +483,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(*interfaces);
 
         if (gui->isOpen())
-            gui->render(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, *config);
+            gui->render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config);
     }
 
     ImGui::EndFrame();
