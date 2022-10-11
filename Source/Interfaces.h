@@ -98,7 +98,6 @@ public:
           gameEventManager{ std::uintptr_t(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ std::uintptr_t(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
-          networkStringTableContainer{ static_cast<NetworkStringTableContainer*>(engineInterfaceFinder("VEngineClientStringTable001")) },
           renderView{ static_cast<RenderView*>(engineInterfaceFinder("VEngineRenderView014")) },
           sound{ static_cast<EngineSound*>(engineInterfaceFinder("IEngineSoundClient003")) }
     {
@@ -137,7 +136,6 @@ private:
 public:
     EngineTrace engineTrace;
     ModelRender* modelRender;
-    NetworkStringTableContainer* networkStringTableContainer;
     RenderView* renderView;
     EngineSound* sound;
 };
