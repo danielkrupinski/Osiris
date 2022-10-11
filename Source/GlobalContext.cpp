@@ -178,7 +178,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::preserveKillfeed(*memory);
         Misc::disablePanoramablur(*interfaces);
         Visuals::colorWorld(*interfaces, *memory);
-        Misc::updateEventListeners(*clientInterfaces, *engineInterfaces, *interfaces, *memory);
+        Misc::updateEventListeners(*engineInterfaces);
         Visuals::updateEventListeners(*engineInterfaces, *clientInterfaces, *interfaces, *memory);
     }
     if (engineInterfaces->engine->isInGame()) {
@@ -446,6 +446,9 @@ void GlobalContext::fireGameEventCallback(GameEvent* event)
         break;
     case fnv::hash("round_mvp"):
         inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(*engineInterfaces->engine, *event);
+        break;
+    case fnv::hash("item_purchase"):
+        Misc::purchaseList(*engineInterfaces->engine, *clientInterfaces, *interfaces, *memory, event);
         break;
     }
 }

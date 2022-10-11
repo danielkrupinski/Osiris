@@ -51,6 +51,7 @@
 #include "../Helpers.h"
 #include "../Hooks.h"
 #include "../GameData.h"
+#include "../GlobalContext.h"
 
 #include "../imguiCustom.h"
 
@@ -1276,22 +1277,14 @@ void Misc::autoAccept(const Interfaces& interfaces, const Memory& memory, const 
 #endif
 }
 
-void Misc::updateEventListeners(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove) noexcept
+void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        explicit PurchaseEventListener(const Interfaces& interfaces, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Memory& memory)
-            : interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, memory{ memory } {}
-        void fireGameEvent(GameEvent* event) override { purchaseList(*engineInterfaces.engine, clientInterfaces, interfaces, memory, event); }
-
-    private:
-        const Interfaces& interfaces;
-        const ClientInterfaces& clientInterfaces;
-        const EngineInterfaces& engineInterfaces;
-        const Memory& memory;
+        void fireGameEvent(GameEvent* event) override { globalContext->fireGameEventCallback(event); }
     };
 
-    static PurchaseEventListener listener{ interfaces, clientInterfaces, engineInterfaces, memory };
+    static PurchaseEventListener listener;
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {

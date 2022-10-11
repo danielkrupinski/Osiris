@@ -65,7 +65,7 @@ namespace Misc
     void drawOffscreenEnemies(Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept;
     void autoAccept(const Interfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
 
-    void updateEventListeners(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, bool forceRemove = false) noexcept;
+    void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
     // GUI
