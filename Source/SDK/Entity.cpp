@@ -141,7 +141,7 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
     if (!model)
         return false;
 
-    const auto studioModel = engineInterfaces.modelInfo->getStudioModel(model);
+    const auto studioModel = engineInterfaces.getModelInfo().getStudioModel(model);
     if (!studioModel)
         return false;
 

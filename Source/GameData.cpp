@@ -457,7 +457,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     if (!model)
         return;
 
-    const auto studioModel = engineInterfaces.modelInfo->getStudioModel(model);
+    const auto studioModel = engineInterfaces.getModelInfo().getStudioModel(model);
     if (!studioModel)
         return;
 

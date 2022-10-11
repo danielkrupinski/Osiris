@@ -18,6 +18,7 @@
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/GameEvent.h"
+#include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
 
 #include "Platform/DynamicLibraryView.h"
@@ -35,7 +36,6 @@ class GameUI;
 class InputSystem;
 class Localize;
 class MaterialSystem;
-class ModelInfo;
 class ModelRender;
 class NetworkStringTableContainer;
 class PanoramaUIEngine;
@@ -96,7 +96,7 @@ public:
           engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
           gameEventManager{ std::uintptr_t(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
-          modelInfo{ static_cast<ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
+          modelInfo{ std::uintptr_t(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
           networkStringTableContainer{ static_cast<NetworkStringTableContainer*>(engineInterfaceFinder("VEngineClientStringTable001")) },
           renderView{ static_cast<RenderView*>(engineInterfaceFinder("VEngineRenderView014")) },
@@ -124,13 +124,18 @@ public:
         return gameEventManager;
     }
 
+    [[nodiscard]] auto getModelInfo() const noexcept
+    {
+        return ModelInfo{ retSpoofInvoker, modelInfo };
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t engine;
     std::uintptr_t gameEventManager;
+    std::uintptr_t modelInfo;
 public:
     EngineTrace engineTrace;
-    ModelInfo* modelInfo;
     ModelRender* modelRender;
     NetworkStringTableContainer* networkStringTableContainer;
     RenderView* renderView;

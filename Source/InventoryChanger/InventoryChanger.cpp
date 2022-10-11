@@ -139,7 +139,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
         definitionIndex = item->gameItem().getWeaponID();
 
         if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID()))
-            glove->setModelIndex(engineInterfaces.modelInfo->getModelIndex(def->getWorldDisplayModel()));
+            glove->setModelIndex(engineInterfaces.getModelInfo().getModelIndex(def->getWorldDisplayModel()));
 
         dataUpdated = true;
     }
@@ -201,7 +201,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
             definitionIndex = item->gameItem().getWeaponID();
 
             if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-                weapon->setModelIndex(engineInterfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel()));
+                weapon->setModelIndex(engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
         }
@@ -219,13 +219,13 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     if (!def)
         return;
 
-    viewModel->modelIndex() = engineInterfaces.modelInfo->getModelIndex(def->getPlayerDisplayModel());
+    viewModel->modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel());
 
     const auto worldModel = clientInterfaces.entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
     if (!worldModel)
         return;
 
-    worldModel->modelIndex() = engineInterfaces.modelInfo->getModelIndex(def->getWorldDisplayModel());
+    worldModel->modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getWorldDisplayModel());
 }
 
 static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, Entity* local) noexcept
@@ -316,7 +316,7 @@ static void applyMusicKit(const Memory& memory, const inventory_changer::backend
     pr->musicID()[localPlayer->index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
-static void applyPlayerAgent(ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
@@ -1074,7 +1074,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, *localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(*engineInterfaces.modelInfo, clientInterfaces, interfaces, memory);
+    applyPlayerAgent(engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory);

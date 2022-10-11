@@ -2,7 +2,6 @@
 
 #include <cstdint>
 
-#include "Inconstructible.h"
 #include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
@@ -111,10 +110,10 @@ struct StudioHdr {
 
 struct Model;
 
-class ModelInfo {
+class ModelInfo : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(ModelInfo)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (this, name))
-    VIRTUAL_METHOD(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (this, model))
+    VIRTUAL_METHOD2(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (name))
+    VIRTUAL_METHOD2(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (model))
 };
