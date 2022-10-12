@@ -153,7 +153,7 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
                         projectileData.emplace_front(clientInterfaces, memory, entity);
                     break;
                 case ClassId::DynamicProp:
-                    if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
+                    if (const auto model = entity->getRenderable().getModel(); !model || !std::strstr(model->name, "challenge_coin"))
                         break;
                     [[fallthrough]];
                 case ClassId::EconEntity:
@@ -326,12 +326,12 @@ BaseData::BaseData(Entity* entity) noexcept
         const auto collideable = entity->getCollideable();
         obbMins = collideable->obbMins();
         obbMaxs = collideable->obbMaxs();
-    } else if (const auto model = entity->getModel()) {
+    } else if (const auto model = entity->getRenderable().getModel()) {
         obbMins = model->mins;
         obbMaxs = model->maxs;
     }
 
-    coordinateFrame = entity->toWorldTransform();
+    coordinateFrame = entity->getRenderable().toWorldTransform();
 }
 
 EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
@@ -358,7 +358,7 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
     name = [](Entity* projectile) {
         switch (projectile->getNetworkable().getClientClass()->classId) {
         case ClassId::BaseCSGrenadeProjectile:
-            if (const auto model = projectile->getModel(); model && strstr(model->name, "flashbang"))
+            if (const auto model = projectile->getRenderable().getModel(); model && strstr(model->name, "flashbang"))
                 return "Flashbang";
             else
                 return "HE Grenade";
@@ -453,7 +453,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     if (!alive || !inViewFrustum)
         return;
 
-    const auto model = entity->getModel();
+    const auto model = entity->getRenderable().getModel();
     if (!model)
         return;
 
@@ -651,7 +651,7 @@ WeaponData::WeaponData(const Interfaces& interfaces, Entity* entity) noexcept : 
 
 LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
 {
-    const auto model = entity->getModel();
+    const auto model = entity->getRenderable().getModel();
     if (!model)
         return;
 

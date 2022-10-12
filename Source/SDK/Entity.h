@@ -73,6 +73,18 @@ public:
     VIRTUAL_METHOD2(void, setDestroyedOnRecreateEntities, 13, (), ())
 };
 
+class Renderable : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+
+#ifdef _WIN32
+    VIRTUAL_METHOD2(bool, shouldDraw, 3, (), ())
+#endif
+
+    VIRTUAL_METHOD2(const Model*, getModel, 8, (), ())
+    VIRTUAL_METHOD2(const matrix3x4&, toWorldTransform, 32, (), ())
+};
+
 class Entity {
 public:
     INCONSTRUCTIBLE(Entity)
@@ -82,9 +94,19 @@ public:
         return Networkable{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(this + sizeof(std::uintptr_t) * 2) };
     }
 
-    VIRTUAL_METHOD(bool, shouldDraw, WIN32_LINUX(3, 149), (), (this + WIN32_LINUX(sizeof(uintptr_t), 0)))
-    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
-    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
+    [[nodiscard]] auto getRenderable() const noexcept
+    {
+        return Renderable{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(this + sizeof(std::uintptr_t)) };
+    }
+
+    bool shouldDraw()
+    {
+#ifndef _WIN32
+        return VirtualMethod::call<bool, 149>(this);
+#else
+        return getRenderable().shouldDraw();
+#endif
+    }
 
     VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
     VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))

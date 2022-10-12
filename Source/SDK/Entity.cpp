@@ -137,7 +137,7 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
     if (other->canSee(engineInterfaces.engineTrace, memory, this, getEyePosition() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 
-    const auto model = getModel();
+    const auto model = getRenderable().getModel();
     if (!model)
         return false;
 
