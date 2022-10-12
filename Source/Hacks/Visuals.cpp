@@ -469,7 +469,7 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
     DRAW_SCREEN_EFFECT(material, memory, engine)
 }
 
-void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
@@ -507,7 +507,7 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
     }
 }
 
-void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, const Memory& memory, GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -579,7 +579,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     }
 }
 
-void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -695,7 +695,7 @@ void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, boo
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) override { globalContext->fireGameEventCallback(event); }
+        void fireGameEvent(GameEventPointer eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
     };
 
     static ImpactEventListener listener;

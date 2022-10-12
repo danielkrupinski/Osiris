@@ -1,25 +1,26 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
-class GameEvent {
-public:
-    INCONSTRUCTIBLE(GameEvent)
+using GameEventPointer = std::uintptr_t;
 
-    VIRTUAL_METHOD_V(const char*, getName, 1, (), (this))
-    VIRTUAL_METHOD_V(int, getInt, 6, (const char* keyName, int defaultValue = 0), (this, keyName, defaultValue))
-    VIRTUAL_METHOD_V(float, getFloat, 8, (const char* keyName, float defaultValue = 0.0f), (this, keyName, defaultValue))
-    VIRTUAL_METHOD_V(const char*, getString, 9, (const char* keyName, const char* defaultValue = ""), (this, keyName, defaultValue))
-    VIRTUAL_METHOD_V(void, setInt, 13, (const char* keyName, int value), (this, keyName, value))
-    VIRTUAL_METHOD_V(void, setString, 16, (const char* keyName, const char* value), (this, keyName, value))
+class GameEvent : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+
+    VIRTUAL_METHOD2_V(const char*, getName, 1, (), ())
+    VIRTUAL_METHOD2_V(int, getInt, 6, (const char* keyName, int defaultValue = 0), (keyName, defaultValue))
+    VIRTUAL_METHOD2_V(float, getFloat, 8, (const char* keyName, float defaultValue = 0.0f), (keyName, defaultValue))
+    VIRTUAL_METHOD2_V(const char*, getString, 9, (const char* keyName, const char* defaultValue = ""), (keyName, defaultValue))
+    VIRTUAL_METHOD2_V(void, setInt, 13, (const char* keyName, int value), (keyName, value))
+    VIRTUAL_METHOD2_V(void, setString, 16, (const char* keyName, const char* value), (keyName, value))
 };
 
 class GameEventListener {
 public:
-    virtual ~GameEventListener() {}
-    virtual void fireGameEvent(GameEvent* event) = 0;
+    virtual ~GameEventListener() = default;
+    virtual void fireGameEvent(GameEventPointer event) = 0;
     virtual int getEventDebugId() { return 42; }
 };
 

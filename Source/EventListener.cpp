@@ -41,7 +41,7 @@ EventListener::EventListener(const Memory& memory, const ClientInterfaces& clien
         assert(false);
 }
 
-void EventListener::fireGameEvent(GameEvent* event)
+void EventListener::fireGameEvent(GameEventPointer event)
 {
     globalContext->fireGameEventCallback(event);
 }

@@ -418,40 +418,42 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
     proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::fireGameEventCallback(GameEvent* event)
+void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
 {
-    switch (fnv::hashRuntime(event->getName())) {
+    const GameEvent event{ retSpoofGadgets.jmpEbxInClient, eventPointer };
+
+    switch (fnv::hashRuntime(event.getName())) {
     case fnv::hash("round_start"):
         GameData::clearProjectileList();
         Misc::preserveKillfeed(*memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
+        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
         break;
     case fnv::hash("player_death"): {
         auto& inventoryChanger = inventory_changer::InventoryChanger::instance(*interfaces, *memory);
-        inventoryChanger.updateStatTrak(engineInterfaces->getEngine(), *event);
-        inventoryChanger.overrideHudIcon(engineInterfaces->getEngine(), *memory, *event);
-        Misc::killMessage(engineInterfaces->getEngine(), *event);
-        Misc::killSound(engineInterfaces->getEngine(), *event);
+        inventoryChanger.updateStatTrak(engineInterfaces->getEngine(), event);
+        inventoryChanger.overrideHudIcon(engineInterfaces->getEngine(), *memory, event);
+        Misc::killMessage(engineInterfaces->getEngine(), event);
+        Misc::killSound(engineInterfaces->getEngine(), event);
         break;
     }
     case fnv::hash("player_hurt"):
-        Misc::playHitSound(engineInterfaces->getEngine(), *event);
-        Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, event);
-        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, event);
+        Misc::playHitSound(engineInterfaces->getEngine(), event);
+        Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, &event);
+        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, &event);
         break;
     case fnv::hash("vote_cast"):
-        Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, *event);
+        Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, event);
         break;
     case fnv::hash("round_mvp"):
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(engineInterfaces->getEngine(), *event);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(engineInterfaces->getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
-        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
+        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
-        Visuals::bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *event);
+        Visuals::bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
         break;
     }
 }

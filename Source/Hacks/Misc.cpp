@@ -691,7 +691,7 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
-void Misc::killMessage(const Engine& engine, GameEvent& event) noexcept
+void Misc::killMessage(const Engine& engine, const GameEvent& event) noexcept
 {
     if (!miscConfig.killMessage)
         return;
@@ -805,7 +805,7 @@ void Misc::moonwalk(UserCmd* cmd) noexcept
         cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
 }
 
-void Misc::playHitSound(const Engine& engine, GameEvent& event) noexcept
+void Misc::playHitSound(const Engine& engine, const GameEvent& event) noexcept
 {
     if (!miscConfig.hitSound)
         return;
@@ -829,7 +829,7 @@ void Misc::playHitSound(const Engine& engine, GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customHitSound).c_str());
 }
 
-void Misc::killSound(const Engine& engine, GameEvent& event) noexcept
+void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
 {
     if (!miscConfig.killSound)
         return;
@@ -853,7 +853,7 @@ void Misc::killSound(const Engine& engine, GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -1092,7 +1092,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept
+void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1281,7 +1281,7 @@ void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool f
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) override { globalContext->fireGameEventCallback(event); }
+        void fireGameEvent(GameEventPointer eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
     };
 
     static PurchaseEventListener listener;

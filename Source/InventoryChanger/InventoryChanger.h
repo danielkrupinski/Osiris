@@ -48,9 +48,9 @@ public:
     }
 
     void getArgAsNumberHook(const InventoryChangerReturnAddresses& returnAddresses, int number, std::uintptr_t returnAddress);
-    void onRoundMVP(const Engine& engine, GameEvent& event);
-    void updateStatTrak(const Engine& engine, GameEvent& event);
-    void overrideHudIcon(const Engine& engine, const Memory& memory, GameEvent& event);
+    void onRoundMVP(const Engine& engine, const GameEvent& event);
+    void updateStatTrak(const Engine& engine, const GameEvent& event);
+    void overrideHudIcon(const Engine& engine, const Memory& memory, const GameEvent& event);
     void getArgAsStringHook(const InventoryChangerReturnAddresses& returnAddresses, const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
     void getNumArgsHook(const InventoryChangerReturnAddresses& returnAddresses, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
     int setResultIntHook(const InventoryChangerReturnAddresses& returnAddresses, std::uintptr_t returnAddress, void* params, int result);

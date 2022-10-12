@@ -40,7 +40,7 @@ namespace Misc
     void fakeBan(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool = false) noexcept;
     void nadePredict(const Interfaces& interfaces) noexcept;
     void fixTabletSignal() noexcept;
-    void killMessage(const Engine& engine, GameEvent& event) noexcept;
+    void killMessage(const Engine& engine, const GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(UserCmd* cmd) noexcept;
     void fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept;
@@ -51,14 +51,14 @@ namespace Misc
     void autoStrafe(UserCmd* cmd) noexcept;
     void removeCrouchCooldown(UserCmd* cmd) noexcept;
     void moonwalk(UserCmd* cmd) noexcept;
-    void playHitSound(const Engine& engine, GameEvent& event) noexcept;
-    void killSound(const Engine& engine, GameEvent& event) noexcept;
-    void purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent* event = nullptr) noexcept;
+    void playHitSound(const Engine& engine, const GameEvent& event) noexcept;
+    void killSound(const Engine& engine, const GameEvent& event) noexcept;
+    void purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent* event = nullptr) noexcept;
     void oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
     void runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(const Memory& memory, bool roundStart = false) noexcept;
-    void voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, GameEvent& event) noexcept;
+    void voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept;
     void onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept;
     void onVotePass(const Memory& memory) noexcept;
     void onVoteFailed(const Memory& memory) noexcept;

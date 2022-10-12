@@ -405,7 +405,7 @@ static void processEquipRequests(const Memory& memory)
     }
 }
 
-[[nodiscard]] static bool isLocalPlayerMVP(const Engine& engine, GameEvent& event)
+[[nodiscard]] static bool isLocalPlayerMVP(const Engine& engine, const GameEvent& event)
 {
     return localPlayer && localPlayer->getUserId(engine) == event.getInt("userid");
 }
@@ -1111,7 +1111,7 @@ void InventoryChanger::getArgAsNumberHook(const InventoryChangerReturnAddresses&
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
-void InventoryChanger::onRoundMVP(const Engine& engine, GameEvent& event)
+void InventoryChanger::onRoundMVP(const Engine& engine, const GameEvent& event)
 {
     if (!isLocalPlayerMVP(engine, event))
         return;
@@ -1131,7 +1131,7 @@ void InventoryChanger::onRoundMVP(const Engine& engine, GameEvent& event)
     }
 }
 
-void InventoryChanger::updateStatTrak(const Engine& engine, GameEvent& event)
+void InventoryChanger::updateStatTrak(const Engine& engine, const GameEvent& event)
 {
     if (!localPlayer)
         return;
@@ -1156,7 +1156,7 @@ void InventoryChanger::updateStatTrak(const Engine& engine, GameEvent& event)
         backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memory, GameEvent& event)
+void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memory, const GameEvent& event)
 {
     if (!localPlayer)
         return;

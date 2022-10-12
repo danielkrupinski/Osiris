@@ -53,7 +53,7 @@ public:
 
     void viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3);
 
-    void fireGameEventCallback(GameEvent* event);
+    void fireGameEventCallback(GameEventPointer eventPointer);
 
     std::optional<EventListener> gameEventListener;
 
