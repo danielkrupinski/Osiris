@@ -25,16 +25,18 @@ struct PanoramaEventRegistration {
     PAD(WIN32_LINUX(24, 48))
 };
 
-class UIEngine {
-public:
-    INCONSTRUCTIBLE(UIEngine)
+using UIEnginePointer = std::uintptr_t;
 
-    VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (this, eventPtr))
+class UIEngine : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+
+    VIRTUAL_METHOD2_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
 };
 
 class PanoramaUIEngine {
 public:
     INCONSTRUCTIBLE(PanoramaUIEngine)
 
-    VIRTUAL_METHOD(UIEngine*, accessUIEngine, 11, (), (this))
+    VIRTUAL_METHOD(UIEnginePointer, accessUIEngine, 11, (), (this))
 };

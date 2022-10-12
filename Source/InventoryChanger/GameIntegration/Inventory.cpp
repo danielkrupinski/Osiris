@@ -29,7 +29,7 @@ void initItemCustomizationNotification(const Interfaces& interfaces, const Memor
     std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
     if (const auto event = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
-        interfaces.panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+        UIEngine{ retSpoofGadgets.jmpEbxInClient, interfaces.panoramaUIEngine->accessUIEngine() }.dispatchEvent(event);
 }
 
 void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
@@ -461,7 +461,7 @@ void Inventory::pickEmUpdated()
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
         const char* dummy;
         if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
-            interfaces.panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
+            UIEngine{ retSpoofGadgets.jmpEbxInClient, interfaces.panoramaUIEngine->accessUIEngine() }.dispatchEvent(eventPtr);
     }
 }
 
