@@ -30,9 +30,9 @@ void EnginePrediction::run(const ClientInterfaces& clientInterfaces, const Memor
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
     memory.moveHelper->setHost(localPlayer.get());
-    clientInterfaces.prediction->setupMove(localPlayer.get(), cmd, memory.moveHelper, memory.moveData);
+    clientInterfaces.getPrediction().setupMove(localPlayer.get(), cmd, memory.moveHelper, memory.moveData);
     clientInterfaces.getGameMovement().processMovement(localPlayer.get(), memory.moveData);
-    clientInterfaces.prediction->finishMove(localPlayer.get(), cmd, memory.moveData);
+    clientInterfaces.getPrediction().finishMove(localPlayer.get(), cmd, memory.moveData);
     memory.moveHelper->setHost(nullptr);
 
     *memory.predictionRandomSeed = -1;

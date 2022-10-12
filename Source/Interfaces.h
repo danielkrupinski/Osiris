@@ -23,6 +23,7 @@
 #include "SDK/GameMovement.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
+#include "SDK/Prediction.h"
 
 #include "Platform/DynamicLibraryView.h"
 #include "Platform/RetSpoofInvoker.h"
@@ -40,7 +41,6 @@ class ModelRender;
 class NetworkStringTableContainer;
 class PanoramaUIEngine;
 class PhysicsSurfaceProps;
-class Prediction;
 class Surface;
 class SoundEmitter;
 class StudioRender;
@@ -78,7 +78,7 @@ public:
           client{ std::uintptr_t(clientInterfaceFinder("VClient018")) },
           entityList{ std::uintptr_t(clientInterfaceFinder("VClientEntityList003")) },
           gameMovement{ std::uintptr_t(clientInterfaceFinder("GameMovement001")) },
-          prediction{ static_cast<Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
+          prediction{ std::uintptr_t(clientInterfaceFinder("VClientPrediction001")) }
     {
     }
 
@@ -102,13 +102,17 @@ public:
         return GameMovement{ retSpoofInvoker, gameMovement };
     }
 
+    [[nodiscard]] auto getPrediction() const noexcept
+    {
+        return Prediction{ retSpoofInvoker, prediction };
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t client;
     std::uintptr_t entityList;
     std::uintptr_t gameMovement;
-public:
-    Prediction* prediction;
+    std::uintptr_t prediction;
 };
 
 class EngineInterfaces {
