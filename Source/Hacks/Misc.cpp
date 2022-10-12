@@ -1078,17 +1078,18 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     if (!deathNotice)
         return;
 
-    const auto deathNoticePanel = (*(UIPanel**)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t)));
+    const auto deathNoticePanel = UIPanel{ retSpoofGadgets.jmpEbxInClient, (*(UIPanelPointer*)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t))) };
 
-    const auto childPanelCount = deathNoticePanel->getChildCount();
+    const auto childPanelCount = deathNoticePanel.getChildCount();
 
     for (int i = 0; i < childPanelCount; ++i) {
-        const auto child = deathNoticePanel->getChild(i);
-        if (!child)
+        const auto childPointer = deathNoticePanel.getChild(i);
+        if (!childPointer)
             continue;
 
-        if (child->hasClass("DeathNotice_Killer") && (!miscConfig.preserveKillfeed.onlyHeadshots || child->hasClass("DeathNoticeHeadShot")))
-            child->setAttributeFloat("SpawnTime", memory.globalVars->currenttime);
+        const UIPanel child{ retSpoofGadgets.jmpEbxInClient, childPointer };
+        if (child.hasClass("DeathNotice_Killer") && (!miscConfig.preserveKillfeed.onlyHeadshots || child.hasClass("DeathNoticeHeadShot")))
+            child.setAttributeFloat("SpawnTime", memory.globalVars->currenttime);
     }
 }
 
