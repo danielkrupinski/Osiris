@@ -303,13 +303,13 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient });
+        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.jmpEbxInClient);
         engineInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
         interfaces.emplace(Interfaces{});
 
-        memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
+        memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
-        Netvars::init(*clientInterfaces->client);
+        Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
 
         ImGui::CreateContext();
@@ -361,14 +361,14 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient });
+        clientInterfaces.emplace(InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.jmpEbxInClient);
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
         engineInterfaces.emplace(InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
 
         interfaces.emplace(Interfaces{});
-        memory.emplace(Memory{ *clientInterfaces->client, retSpoofGadgets });
+        memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
-        Netvars::init(*clientInterfaces->client);
+        Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
 
         ImGui::CreateContext();

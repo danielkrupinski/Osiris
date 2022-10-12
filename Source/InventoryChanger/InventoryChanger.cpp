@@ -77,7 +77,7 @@ static Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, 
 {
     static const auto createWearable = [&clientInterfaces]{
         std::add_pointer_t<Entity* CDECL_CONV(int, int)> createWearableFn = nullptr;
-        for (auto clientClass = clientInterfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+        for (auto clientClass = clientInterfaces.getClient().getAllClasses(); clientClass; clientClass = clientClass->next) {
             if (clientClass->classId == ClassId::EconWearable) {
                 createWearableFn = clientClass->createFunction;
                 break;

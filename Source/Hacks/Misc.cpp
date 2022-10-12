@@ -777,7 +777,7 @@ void Misc::autoReload(UserCmd* cmd) noexcept
 void Misc::revealRanks(const ClientInterfaces& clientInterfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
-        clientInterfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
+        clientInterfaces.getClient().dispatchUserMessage(50, 0, 0, nullptr);
 }
 
 void Misc::autoStrafe(UserCmd* cmd) noexcept

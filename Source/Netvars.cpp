@@ -83,7 +83,7 @@ static void walkTable(const char* networkName, RecvTable* recvTable, const std::
     }
 }
 
-void Netvars::init(Client& client) noexcept
+void Netvars::init(const Client& client) noexcept
 {
     for (auto clientClass = client.getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(clientClass->networkName, clientClass->recvTable);

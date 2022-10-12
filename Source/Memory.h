@@ -103,7 +103,7 @@ struct InventoryChangerReturnAddresses {
 
 class Memory {
 public:
-    Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #ifdef _WIN32
     std::uintptr_t present;

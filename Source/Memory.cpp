@@ -133,7 +133,7 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
     return findPattern<ReportNotFound>(getModuleInformation(moduleName), pattern);
 }
 
-Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
+Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #ifdef _WIN32
     : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
       weaponSystem{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() }
@@ -146,9 +146,9 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     present = SafeAddress{ findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF0\x85\xFF") }.add(2).get();
     reset = SafeAddress{ findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xD8") }.add(9).get();
 
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(&clientInterface))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(&clientInterface))[11] + 10);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
+    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
     glowObjectManager = reinterpret_cast<GlowObjectManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x0F\x11\x05????\x83\xC8\x01") }.add(3).deref().get());
     disablePostProcessing = reinterpret_cast<bool*>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xEC\x4C\x80\x3D") }.add(5).deref().get());
     loadSky = reinterpret_cast<decltype(loadSky)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\x2D\xA1") }.add(1).relativeToAbsolute().get());
@@ -224,7 +224,7 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);
 
-    globalVars = reinterpret_cast<GlobalVars*>(SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(&clientInterface))[11] + 16 }.relativeToAbsolute().deref().get());
+    globalVars = reinterpret_cast<GlobalVars*>(SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().get());
     itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).relativeToAbsolute().get());
 
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") }.add(1).relativeToAbsolute().get());
@@ -237,8 +237,8 @@ Memory::Memory(Client& clientInterface, const RetSpoofGadgets& retSpoofGadgets) 
     disablePostProcessing = reinterpret_cast<decltype(disablePostProcessing)>(SafeAddress{ findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") }.add(2).relativeToAbsolute().get());
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58");
     loadSky = reinterpret_cast<decltype(loadSky)>(SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") }.add(1).relativeToAbsolute().get());
-    clientMode = reinterpret_cast<decltype(clientMode)>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(&clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().get());
-    input = reinterpret_cast<Input*>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(&clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().get());
+    clientMode = reinterpret_cast<decltype(clientMode)>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().get());
+    input = reinterpret_cast<Input*>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().get());
     playerResource = reinterpret_cast<PlayerResource**>(SafeAddress{ findPattern(CLIENT_DLL, "\x74\x38\x48\x8B\x3D????\x89\xDE") }.add(5).relativeToAbsolute().get());
 
     glowObjectManager = reinterpret_cast<decltype(glowObjectManager)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE7\x8B\x70\x20") }.add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());

@@ -15,6 +15,7 @@
 #include "Platform/Linux/SharedObject.h"
 #endif
 
+#include "SDK/Client.h"
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/GameEvent.h"
@@ -27,7 +28,6 @@
 #include "RetSpoofGadgets.h"
 
 class BaseFileSystem;
-class Client;
 class Cvar;
 class EngineSound;
 class EntityList;
@@ -73,15 +73,29 @@ private:
 class ClientInterfaces {
 public:
     template <typename DynamicLibraryWrapper>
-    explicit ClientInterfaces(InterfaceFinder<DynamicLibraryWrapper> clientInterfaceFinder)
-        : client{ static_cast<Client*>(clientInterfaceFinder("VClient018")) },
+    explicit ClientInterfaces(InterfaceFinder<DynamicLibraryWrapper> clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
+        : retSpoofInvoker{ retSpoofInvoker },
+          client{ std::uintptr_t(clientInterfaceFinder("VClient018")) },
           entityList{ static_cast<EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
           gameMovement{ static_cast<GameMovement*>(clientInterfaceFinder("GameMovement001")) },
           prediction{ static_cast<Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
     {
     }
 
-    Client* client;
+    [[nodiscard]] auto getClient() const noexcept
+    {
+        return Client{ retSpoofInvoker, client };
+    }
+
+    [[nodiscard]] std::uintptr_t getClientAddress() const noexcept
+    {
+        return client;
+    }
+
+private:
+    RetSpoofInvoker retSpoofInvoker;
+    std::uintptr_t client;
+public:
     EntityList* entityList;
     GameMovement* gameMovement;
     Prediction* prediction;

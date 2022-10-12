@@ -326,7 +326,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     bspQuery.init(globalContext->engineInterfaces->getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(clientInterfaces.client);
+    client.init((void*)clientInterfaces.getClientAddress());
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 

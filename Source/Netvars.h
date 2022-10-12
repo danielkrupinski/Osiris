@@ -22,7 +22,7 @@ inline ProxyHooks proxyHooks;
 
 namespace Netvars
 {
-    void init(Client& client) noexcept;
+    void init(const Client& client) noexcept;
     void restore() noexcept;
     std::uint32_t get(std::uint32_t hash) noexcept;
 }
