@@ -118,9 +118,9 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     const auto wearables = local->wearables();
     static int gloveHandle = 0;
 
-    auto glove = clientInterfaces.entityList->getEntityFromHandle(wearables[0]);
+    auto glove = clientInterfaces.getEntityList().getEntityFromHandle(wearables[0]);
     if (!glove)
-        glove = clientInterfaces.entityList->getEntityFromHandle(gloveHandle);
+        glove = clientInterfaces.getEntityList().getEntityFromHandle(gloveHandle);
 
     constexpr auto NUM_ENT_ENTRIES = 8192;
     if (!glove)
@@ -181,7 +181,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
         if (weaponHandle == -1)
             break;
 
-        const auto weapon = clientInterfaces.entityList->getEntityFromHandle(weaponHandle);
+        const auto weapon = clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle);
         if (!weapon)
             continue;
 
@@ -207,11 +207,11 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
         }
     }
 
-    const auto viewModel = clientInterfaces.entityList->getEntityFromHandle(local->viewModel());
+    const auto viewModel = clientInterfaces.getEntityList().getEntityFromHandle(local->viewModel());
     if (!viewModel)
         return;
 
-    const auto viewModelWeapon = clientInterfaces.entityList->getEntityFromHandle(viewModel->weapon());
+    const auto viewModelWeapon = clientInterfaces.getEntityList().getEntityFromHandle(viewModel->weapon());
     if (!viewModelWeapon)
         return;
 
@@ -221,7 +221,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
 
     viewModel->modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel());
 
-    const auto worldModel = clientInterfaces.entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
+    const auto worldModel = clientInterfaces.getEntityList().getEntityFromHandle(viewModelWeapon->weaponWorldModel());
     if (!worldModel)
         return;
 
@@ -234,9 +234,9 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
     const auto localXuid = local->getSteamId(engine);
     const auto itemSchema = memory.itemSystem()->getItemSchema();
 
-    const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = memory.globalVars->maxClients + 1; i <= highestEntityIndex; ++i) {
-        const auto entity = clientInterfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.getEntityList().getEntity(i);
         if (!entity || !entity->isWeapon())
             continue;
 
@@ -273,7 +273,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
 
 static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
-    const auto local = clientInterfaces.entityList->getEntityFromHandle(localHandle);
+    const auto local = clientInterfaces.getEntityList().getEntityFromHandle(localHandle);
     if (!local)
         return;
 
@@ -347,7 +347,7 @@ static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces&
     const auto idx = modelInfo.getModelIndex(model);
     localPlayer->setModelIndex(idx);
 
-    if (const auto ragdoll = clientInterfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+    if (const auto ragdoll = clientInterfaces.getEntityList().getEntityFromHandle(localPlayer->ragdoll()))
         ragdoll->setModelIndex(idx);
 }
 

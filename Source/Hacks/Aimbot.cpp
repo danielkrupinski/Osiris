@@ -184,7 +184,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            auto entity = clientInterfaces.entityList->getEntity(i);
+            auto entity = clientInterfaces.getEntityList().getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
                 || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;

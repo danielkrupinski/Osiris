@@ -406,8 +406,8 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 {
     const auto viewModel = reinterpret_cast<Entity*>(outStruct);
 
-    if (localPlayer && clientInterfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
-        if (const auto weapon = clientInterfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
+    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
+        if (const auto weapon = clientInterfaces->getEntityList().getEntityFromHandle(viewModel->weapon())) {
             if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 

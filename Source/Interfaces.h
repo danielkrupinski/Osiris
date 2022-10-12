@@ -18,6 +18,7 @@
 #include "SDK/Client.h"
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
+#include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
@@ -30,7 +31,6 @@
 class BaseFileSystem;
 class Cvar;
 class EngineSound;
-class EntityList;
 class GameMovement;
 class GameUI;
 class InputSystem;
@@ -76,7 +76,7 @@ public:
     explicit ClientInterfaces(InterfaceFinder<DynamicLibraryWrapper> clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
           client{ std::uintptr_t(clientInterfaceFinder("VClient018")) },
-          entityList{ static_cast<EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
+          entityList{ std::uintptr_t(clientInterfaceFinder("VClientEntityList003")) },
           gameMovement{ static_cast<GameMovement*>(clientInterfaceFinder("GameMovement001")) },
           prediction{ static_cast<Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
     {
@@ -92,11 +92,16 @@ public:
         return client;
     }
 
+    [[nodiscard]] auto getEntityList() const noexcept
+    {
+        return EntityList{ retSpoofInvoker, entityList };
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t client;
+    std::uintptr_t entityList;
 public:
-    EntityList* entityList;
     GameMovement* gameMovement;
     Prediction* prediction;
 };

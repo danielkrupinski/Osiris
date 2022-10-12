@@ -560,7 +560,7 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
     static std::vector<int> stolenIds;
 
     for (int i = 1; i <= memory.globalVars->maxClients; ++i) {
-        const auto entity = clientInterfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.getEntityList().getEntity(i);
 
         if (!entity || entity == localPlayer.get())
             continue;
@@ -596,7 +596,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
                 if (weaponHandle == -1)
                     break;
 
-                if (clientInterfaces.entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
+                if (clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) == reloadedWeapon) {
                     cmd->weaponselect = reloadedWeapon->index();
                     cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
                     break;
@@ -612,7 +612,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
                 if (weaponHandle == -1)
                     break;
 
-                if (auto weapon{ clientInterfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
+                if (auto weapon{ clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
                     cmd->weaponselect = weapon->index();
                     cmd->weaponsubtype = weapon->getWeaponSubType();
                     break;
@@ -737,7 +737,7 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
             return;
 
         for (int i = 1; i <= engine.getMaxClients(); i++) {
-            Entity* entity = clientInterfaces.entityList->getEntity(i);
+            Entity* entity = clientInterfaces.getEntityList().getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) continue;
             *reinterpret_cast<int*>(entity + 0xA28) = 0;
             *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
@@ -872,7 +872,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            if (const auto player = clientInterfaces.entityList->getEntity(engine.getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
+            if (const auto player = clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
                 if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     auto& purchase = playerPurchases[player->handle()];
                     if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition->getWeaponId())) {
@@ -1005,7 +1005,7 @@ static int reportbotRound;
     std::vector<std::uint64_t> xuids;
 
     for (int i = 1; i <= engine.getMaxClients(); ++i) {
-        const auto entity = clientInterfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.getEntityList().getEntity(i);
         if (!entity || entity == localPlayer.get())
             continue;
 
@@ -1097,7 +1097,7 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfac
     if (!miscConfig.revealVotes)
         return;
 
-    const auto entity = clientInterfaces.entityList->getEntity(event.getInt("entityid"));
+    const auto entity = clientInterfaces.getEntityList().getEntity(event.getInt("entityid"));
     if (!entity || !entity->isPlayer())
         return;
     
@@ -1126,7 +1126,7 @@ void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interface
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
     const auto entityIndex = reader.readInt32(2);
 
-    const auto entity = clientInterfaces.entityList->getEntity(entityIndex);
+    const auto entity = clientInterfaces.getEntityList().getEntity(entityIndex);
     if (!entity || !entity->isPlayer())
         return;
 

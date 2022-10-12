@@ -104,9 +104,9 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
-    const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
-        const auto entity = clientInterfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.getEntityList().getEntity(i);
         if (!entity)
             continue;
 
@@ -186,14 +186,14 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
     std::ranges::for_each(projectileData, [&clientInterfaces](auto& projectile) {
-        if (clientInterfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr)
+        if (clientInterfaces.getEntityList().getEntityFromHandle(projectile.handle) == nullptr)
             projectile.exploded = true;
     });
 
-    std::erase_if(projectileData, [&memory, &clientInterfaces](const auto& projectile) { return clientInterfaces.entityList->getEntityFromHandle(projectile.handle) == nullptr
+    std::erase_if(projectileData, [&memory, &clientInterfaces](const auto& projectile) { return clientInterfaces.getEntityList().getEntityFromHandle(projectile.handle) == nullptr
         && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory.globalVars->realtime); });
 
-    std::erase_if(playerData, [&clientInterfaces](const auto& player) { return clientInterfaces.entityList->getEntityFromHandle(player.handle) == nullptr; });
+    std::erase_if(playerData, [&clientInterfaces](const auto& player) { return clientInterfaces.getEntityList().getEntityFromHandle(player.handle) == nullptr; });
 
     if (shouldUpdatePlayerVisibility(memory))
         nextPlayerVisibilityUpdateTime = memory.globalVars->realtime + playerVisibilityUpdateDelay;
@@ -373,7 +373,7 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         }
     }(projectile);
 
-    if (const auto thrower = clientInterfaces.entityList->getEntityFromHandle(projectile->thrower()); thrower && localPlayer) {
+    if (const auto thrower = clientInterfaces.getEntityList().getEntityFromHandle(projectile->thrower()); thrower && localPlayer) {
         if (thrower == localPlayer.get())
             thrownByLocalPlayer = true;
         else

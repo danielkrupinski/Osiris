@@ -1,19 +1,18 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class Entity;
 
-class EntityList {
+class EntityList : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(EntityList)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(Entity*, getEntity, 3, (int index), (this, index))
+    VIRTUAL_METHOD2(Entity*, getEntity, 3, (int index), (index))
 #ifdef _WIN32
-    VIRTUAL_METHOD(Entity*, getEntityFromHandle, 4, (int handle), (this, handle))
+    VIRTUAL_METHOD2(Entity*, getEntityFromHandle, 4, (int handle), (handle))
 #else
-    VIRTUAL_METHOD(Entity*, getEntityFromHandle, 4, (int handle), (this, &handle))
+    VIRTUAL_METHOD2(Entity*, getEntityFromHandle, 4, (int handle), (&handle))
 #endif
-    VIRTUAL_METHOD(int, getHighestEntityIndex, 6, (), (this))
+    VIRTUAL_METHOD2(int, getHighestEntityIndex, 6, (), ())
 };

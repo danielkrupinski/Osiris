@@ -158,7 +158,7 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons(interfaces,memory, config);
     } else {
-        const auto entity = clientInterfaces.entityList->getEntity(info.entityIndex);
+        const auto entity = clientInterfaces.getEntityList().getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
             renderPlayer(engine, interfaces, memory, config, entity);
     }

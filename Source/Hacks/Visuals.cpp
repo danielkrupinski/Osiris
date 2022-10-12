@@ -597,14 +597,14 @@ void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientI
     BeamInfo beamInfo;
 
     if (!localPlayer->shouldDraw()) {
-        const auto viewModel = clientInterfaces.entityList->getEntityFromHandle(localPlayer->viewModel());
+        const auto viewModel = clientInterfaces.getEntityList().getEntityFromHandle(localPlayer->viewModel());
         if (!viewModel)
             return;
 
         if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
             return;
     } else {
-        const auto worldModel = clientInterfaces.entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        const auto worldModel = clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon->weaponWorldModel());
         if (!worldModel)
             return;
 

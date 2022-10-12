@@ -55,7 +55,7 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
         }
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            auto entity = clientInterfaces.entityList->getEntity(i);
+            auto entity = clientInterfaces.getEntityList().getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
@@ -109,7 +109,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
     const auto aimPunch = localPlayer->getAimPunch();
 
     for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-        auto entity = clientInterfaces.entityList->getEntity(i);
+        auto entity = clientInterfaces.getEntityList().getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isOtherEnemy(memory, localPlayer.get()))
             continue;

@@ -63,9 +63,9 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         return;
     }
 
-    const auto highestEntityIndex = clientInterfaces.entityList->getHighestEntityIndex();
+    const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
-        const auto entity = clientInterfaces.entityList->getEntity(i);
+        const auto entity = clientInterfaces.getEntityList().getEntity(i);
         if (!entity || entity->isDormant())
             continue;
 
