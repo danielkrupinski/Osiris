@@ -14,7 +14,7 @@
 namespace VirtualMethod
 {
     template <typename T, std::size_t Idx, typename... Args>
-    constexpr T call(void* classBase, Args... args) noexcept
+    [[deprecated("Use VirtualCallable class instead")]] constexpr T call(void* classBase, Args... args) noexcept
     {
 #ifdef _WIN32
         return retSpoofGadgets.jmpEbxInClient.invokeThiscall<T, Args...>(std::uintptr_t(classBase), (*reinterpret_cast<std::uintptr_t**>(classBase))[Idx], args...);
