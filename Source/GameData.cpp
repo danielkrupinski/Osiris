@@ -120,19 +120,19 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
                 playerData.emplace_back(engineInterfaces, interfaces, memory, entity);
             }
 
-            if (!entity->isDormant() && !entity->isAlive()) {
+            if (!entity->getNetworkable().isDormant() && !entity->isAlive()) {
                 if (const auto obs = entity->getObserverTarget())
                     observerData.emplace_back(entity, obs, obs == localPlayer.get());
             }
         } else {
-            if (entity->isDormant())
+            if (entity->getNetworkable().isDormant())
                 continue;
 
             if (entity->isWeapon()) {
                 if (entity->ownerEntity() == -1)
                     weaponData.emplace_back(interfaces, entity);
             } else {
-                switch (entity->getClientClass()->classId) {
+                switch (entity->getNetworkable().getClientClass()->classId) {
                 case ClassId::BaseCSGrenadeProjectile:
                     if (!entity->shouldDraw()) {
                         if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
@@ -337,7 +337,7 @@ BaseData::BaseData(Entity* entity) noexcept
 EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
 {
     name = [](Entity* entity) {
-        switch (entity->getClientClass()->classId) {
+        switch (entity->getNetworkable().getClientClass()->classId) {
         case ClassId::EconEntity: return "Defuse Kit";
         case ClassId::Chicken: return "Chicken";
         case ClassId::PlantedC4: return "Planted C4";
@@ -356,7 +356,7 @@ EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
 ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const Memory& memory, Entity* projectile) noexcept : BaseData { projectile }
 {
     name = [](Entity* projectile) {
-        switch (projectile->getClientClass()->classId) {
+        switch (projectile->getNetworkable().getClientClass()->classId) {
         case ClassId::BaseCSGrenadeProjectile:
             if (const auto model = projectile->getModel(); model && strstr(model->name, "flashbang"))
                 return "Flashbang";
@@ -411,7 +411,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
 {
     name = entity->getPlayerName(interfaces, memory);
 
-    dormant = entity->isDormant();
+    dormant = entity->getNetworkable().isDormant();
     if (dormant)
         return;
 
@@ -438,14 +438,14 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
         return false;
     };
 
-    audible = isEntityAudible(entity->index());
+    audible = isEntityAudible(entity->getNetworkable().index());
     spotted = entity->spotted();
     health = entity->health();
     immune = entity->gunGameImmunity();
     flashDuration = entity->flashDuration();
 
     if (const auto weapon = entity->getActiveWeapon()) {
-        audible = audible || isEntityAudible(weapon->index());
+        audible = audible || isEntityAudible(weapon->getNetworkable().index());
         if (const auto weaponInfo = weapon->getWeaponData())
             activeWeapon = interfaces.localize->findAsUTF8(weaponInfo->name);
     }

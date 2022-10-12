@@ -32,7 +32,7 @@ void Sound::modulateSound(const ClientInterfaces& clientInterfaces, const Memory
 {
     auto modulateVolume = [&](int SoundConfig::Player::* proj) {
         if (const auto entity = clientInterfaces.getEntityList().getEntity(entityIndex); localPlayer && entity && entity->isPlayer()) {
-            if (entityIndex == localPlayer->index())
+            if (entityIndex == localPlayer->getNetworkable().index())
                 volume *= std::invoke(proj, soundConfig.players[0]) / 100.0f;
             else if (!entity->isOtherEnemy(memory, localPlayer.get()))
                 volume *= std::invoke(proj, soundConfig.players[1]) / 100.0f;

@@ -444,7 +444,7 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->isOnGround()))
         return;
 
-    if (const auto activeWeapon = localPlayer->getActiveWeapon(); !activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+    if (const auto activeWeapon = localPlayer->getActiveWeapon(); !activeWeapon || activeWeapon->getNetworkable().getClientClass()->classId != ClassId::C4)
         return;
 
     cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -456,7 +456,7 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
     engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
 
-    if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+    if (!trace.entity || trace.entity->getNetworkable().getClientClass()->classId != ClassId::PropDoorRotating)
         cmd->buttons &= ~UserCmd::IN_USE;
 }
 
@@ -566,7 +566,7 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
             continue;
 
         PlayerInfo playerInfo;
-        if (!engine.getPlayerInfo(entity->index(), playerInfo))
+        if (!engine.getPlayerInfo(entity->getNetworkable().index(), playerInfo))
             continue;
 
         if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
@@ -597,7 +597,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
                     break;
 
                 if (clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) == reloadedWeapon) {
-                    cmd->weaponselect = reloadedWeapon->index();
+                    cmd->weaponselect = reloadedWeapon->getNetworkable().index();
                     cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
                     break;
                 }
@@ -613,7 +613,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
                     break;
 
                 if (auto weapon{ clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
-                    cmd->weaponselect = weapon->index();
+                    cmd->weaponselect = weapon->getNetworkable().index();
                     cmd->weaponsubtype = weapon->getWeaponSubType();
                     break;
                 }
@@ -634,7 +634,7 @@ bool Misc::changeName(const Engine& engine, const Interfaces& interfaces, const 
     }
 
     if (!exploitInitialized && engine.isInGame()) {
-        if (PlayerInfo playerInfo; localPlayer && engine.getPlayerInfo(localPlayer->index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
+        if (PlayerInfo playerInfo; localPlayer && engine.getPlayerInfo(localPlayer->getNetworkable().index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
             exploitInitialized = true;
         } else {
             name->onChangeCallbacks.size = 0;
@@ -686,7 +686,7 @@ void Misc::nadePredict(const Interfaces& interfaces) noexcept
 void Misc::fixTabletSignal() noexcept
 {
     if (miscConfig.fixTabletSignal && localPlayer) {
-        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::Tablet)
             activeWeapon->tabletReceptionIsBlocked() = false;
     }
 }
@@ -738,7 +738,7 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
 
         for (int i = 1; i <= engine.getMaxClients(); i++) {
             Entity* entity = clientInterfaces.getEntityList().getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) continue;
+            if (!entity || entity == localPlayer.get() || entity->getNetworkable().isDormant() || !entity->isAlive()) continue;
             *reinterpret_cast<int*>(entity + 0xA28) = 0;
             *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
         }
@@ -968,7 +968,7 @@ void Misc::oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stag
         original = cl_righthand->getInt();
 
         if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
-            if (const auto classId = activeWeapon->getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
+            if (const auto classId = activeWeapon->getNetworkable().getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
                 cl_righthand->setValue(!original);
         }
     } else {

@@ -159,8 +159,8 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
         glove->econItemView().customMaterials().size = 0;
         //
 
-        glove->postDataUpdate(0);
-        glove->onDataChanged(0);
+        glove->getNetworkable().postDataUpdate(0);
+        glove->getNetworkable().onDataChanged(0);
     }
 }
 
@@ -202,7 +202,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
 
             if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
                 weapon->setModelIndex(engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel()));
-                weapon->preDataUpdate(0);
+                weapon->getNetworkable().preDataUpdate(0);
             }
         }
     }
@@ -313,7 +313,7 @@ static void applyMusicKit(const Memory& memory, const inventory_changer::backend
     if (!item->gameItem().isMusic())
         return;
 
-    pr->musicID()[localPlayer->index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
+    pr->musicID()[localPlayer->getNetworkable().index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
 static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
@@ -368,7 +368,7 @@ static void applyMedal(const Memory& memory, const inventory_changer::backend::L
     if (!item->gameItem().isCollectible() && !item->gameItem().isServiceMedal() && !item->gameItem().isTournamentCoin())
         return;
 
-    pr->activeCoinRank()[localPlayer->index()] = static_cast<int>(item->gameItem().getWeaponID());
+    pr->activeCoinRank()[localPlayer->getNetworkable().index()] = static_cast<int>(item->gameItem().getWeaponID());
 }
 
 struct EquipRequest {
@@ -1059,7 +1059,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
         onPostDataUpdateStart(engineInterfaces, clientInterfaces, interfaces, memory, localPlayerHandle);
-        if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
+        if (hudUpdateRequired && localPlayer && !localPlayer->getNetworkable().isDormant())
             updateHud(memory);
     }
 

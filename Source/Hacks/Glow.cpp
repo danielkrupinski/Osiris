@@ -66,10 +66,10 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
         const auto entity = clientInterfaces.getEntityList().getEntity(i);
-        if (!entity || entity->isDormant())
+        if (!entity || entity->getNetworkable().isDormant())
             continue;
 
-        switch (entity->getClientClass()->classId) {
+        switch (entity->getNetworkable().getClientClass()->classId) {
         case ClassId::EconEntity:
         case ClassId::BaseCSGrenadeProjectile:
         case ClassId::BreachChargeProjectile:
@@ -96,7 +96,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 
         auto entity = glowobject.entity;
 
-        if (glowobject.isUnused() || !entity || entity->isDormant())
+        if (glowobject.isUnused() || !entity || entity->getNetworkable().isDormant())
             continue;
 
         auto applyGlow = [&glowobject, &memory](const GlowItem& glow, int health = 0) noexcept
@@ -127,11 +127,11 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
                 applyGlow(cfg.occluded, entity->health());
         };
 
-        switch (entity->getClientClass()->classId) {
+        switch (entity->getNetworkable().getClientClass()->classId) {
         case ClassId::CSPlayer:
             if (!entity->isAlive())
                 break;
-            if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming())
+            if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming())
                 applyPlayerGlow("Planting", entity);
             else if (entity->isDefusing())
                 applyPlayerGlow("Defusing", entity);

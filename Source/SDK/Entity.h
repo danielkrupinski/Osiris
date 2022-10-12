@@ -59,18 +59,28 @@ public:
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
+class Networkable : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+
+    VIRTUAL_METHOD2(void, release, 1, (), ())
+    VIRTUAL_METHOD2(ClientClass*, getClientClass, 2, (), ())
+    VIRTUAL_METHOD2(void, onDataChanged, 5, (int updateType), (updateType))
+    VIRTUAL_METHOD2(void, preDataUpdate, 6, (int updateType), (updateType))
+    VIRTUAL_METHOD2(void, postDataUpdate, 7, (int updateType), (updateType))
+    VIRTUAL_METHOD2(bool, isDormant, 9, (), ())
+    VIRTUAL_METHOD2(int, index, 10, (), ())
+    VIRTUAL_METHOD2(void, setDestroyedOnRecreateEntities, 13, (), ())
+};
+
 class Entity {
 public:
     INCONSTRUCTIBLE(Entity)
 
-    VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
+    [[nodiscard]] auto getNetworkable() const noexcept
+    {
+        return Networkable{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(this + sizeof(std::uintptr_t) * 2) };
+    }
 
     VIRTUAL_METHOD(bool, shouldDraw, WIN32_LINUX(3, 149), (), (this + WIN32_LINUX(sizeof(uintptr_t), 0)))
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))

@@ -32,7 +32,7 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
         data.value._int = 1;
 
         if (localPlayer) {
-            if (const auto index = localPlayer->index(); index > 0 && index <= 32)
+            if (const auto index = localPlayer->getNetworkable().index(); index > 0 && index <= 32)
                 entity->spottedByMask() |= 1 << (index - 1);
         }
     }

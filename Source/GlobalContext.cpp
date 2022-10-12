@@ -136,7 +136,7 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
@@ -408,7 +408,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 
     if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
         if (const auto weapon = clientInterfaces->getEntityList().getEntityFromHandle(viewModel->weapon())) {
-            if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (Visuals::isDeagleSpinnerOn() && weapon->getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);

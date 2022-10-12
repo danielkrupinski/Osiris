@@ -71,14 +71,14 @@ float Entity::getMaxDesyncAngle() noexcept
 
 int Entity::getUserId(const Engine& engine) noexcept
 {
-    if (PlayerInfo playerInfo; engine.getPlayerInfo(index(), playerInfo))
+    if (PlayerInfo playerInfo; engine.getPlayerInfo(getNetworkable().index(), playerInfo))
         return playerInfo.userId;
     return -1;
 }
 
 std::uint64_t Entity::getSteamId(const Engine& engine) noexcept
 {
-    if (PlayerInfo playerInfo; engine.getPlayerInfo(index(), playerInfo))
+    if (PlayerInfo playerInfo; engine.getPlayerInfo(getNetworkable().index(), playerInfo))
         return playerInfo.xuid;
     return 0;
 }
@@ -106,7 +106,7 @@ void Entity::getPlayerName(const Interfaces& interfaces, const Memory& memory, c
     }
 
     wchar_t wide[128];
-    memory.getDecoratedPlayerName(*memory.playerResource, index(), wide, sizeof(wide), 4);
+    memory.getDecoratedPlayerName(*memory.playerResource, getNetworkable().index(), wide, sizeof(wide), 4);
 
     auto end = removeNewlineChars(wide, wide + wcslen(wide));
     end = removeColorMarkup(wide, end);

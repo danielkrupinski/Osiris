@@ -159,7 +159,7 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
             renderWeapons(interfaces,memory, config);
     } else {
         const auto entity = clientInterfaces.getEntityList().getEntity(info.entityIndex);
-        if (entity && !entity->isDormant() && entity->isPlayer())
+        if (entity && !entity->getNetworkable().isDormant() && entity->isPlayer())
             renderPlayer(engine, interfaces, memory, config, entity);
     }
 
@@ -173,7 +173,7 @@ void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, con
 
     const auto health = player->health();
 
-    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Planting"].materials, health);
     } else if (player->isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Defusing"].materials, health);
@@ -182,7 +182,7 @@ void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, con
     } else if (localPlayer->isOtherEnemy(memory, player)) {
         applyChams(interfaces, memory, config.chams["Enemies"].materials, health);
 
-        const auto records = Backtrack::getRecords(player->index());
+        const auto records = Backtrack::getRecords(player->getNetworkable().index());
         if (records && !records->empty() && Backtrack::valid(engine, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);

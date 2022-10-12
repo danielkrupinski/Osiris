@@ -474,7 +474,7 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
-        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
+        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer->getNetworkable().index()) {
             lastHitTime = memory.globalVars->realtime;
             return;
         }

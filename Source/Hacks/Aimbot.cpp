@@ -185,7 +185,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
             auto entity = clientInterfaces.getEntityList().getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
+            if (!entity || entity == localPlayer.get() || entity->getNetworkable().isDormant() || !entity->isAlive()
                 || !entity->isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
