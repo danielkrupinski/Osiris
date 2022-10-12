@@ -167,21 +167,31 @@ public:
 
 class Interfaces {
 public:
-#define GAME_INTERFACE(type, name, moduleName, version) \
-type* name = reinterpret_cast<type*>(find(moduleName, version));
+    Interfaces()
+        : baseFileSystem{ static_cast<BaseFileSystem*>(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
+          cvar{ static_cast<Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
+          inputSystem{ static_cast<InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
+          localize{ static_cast<Localize*>(find(LOCALIZE_DLL, "Localize_001")) },
+          materialSystem{ static_cast<MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
+          panoramaUIEngine{ static_cast<PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
+          physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
+          surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
+          soundEmitter{ static_cast<SoundEmitter*>(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
+          studioRender{ static_cast<StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) }
+    {
+    }
 
-    GAME_INTERFACE(BaseFileSystem, baseFileSystem, FILESYSTEM_DLL, "VBaseFileSystem011")
-    GAME_INTERFACE(Cvar, cvar, VSTDLIB_DLL, "VEngineCvar007")
-    GAME_INTERFACE(InputSystem, inputSystem, INPUTSYSTEM_DLL, "InputSystemVersion001")
-    GAME_INTERFACE(Localize, localize, LOCALIZE_DLL, "Localize_001")
-    GAME_INTERFACE(MaterialSystem, materialSystem, MATERIALSYSTEM_DLL, "VMaterialSystem080")
-    GAME_INTERFACE(PanoramaUIEngine, panoramaUIEngine, PANORAMA_DLL, "PanoramaUIEngine001")
-    GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, VPHYSICS_DLL, "VPhysicsSurfaceProps001")
-    GAME_INTERFACE(Surface, surface, VGUIMATSURFACE_DLL, "VGUI_Surface031")
-    GAME_INTERFACE(SoundEmitter, soundEmitter, SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")
-    GAME_INTERFACE(StudioRender, studioRender, STUDIORENDER_DLL, "VStudioRender026")
+    BaseFileSystem* baseFileSystem;
+    Cvar* cvar;
+    InputSystem* inputSystem;
+    Localize* localize;
+    MaterialSystem* materialSystem;
+    PanoramaUIEngine* panoramaUIEngine;
+    PhysicsSurfaceProps* physicsSurfaceProps;
+    Surface* surface;
+    SoundEmitter* soundEmitter;
+    StudioRender* studioRender;
 
-#undef GAME_INTERFACE
 private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
