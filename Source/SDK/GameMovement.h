@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class Entity;
 class MoveData;
 
-class GameMovement {
+class GameMovement : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(GameMovement)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD_V(void, processMovement, 1, (Entity* localPlayer, MoveData* moveData), (this, localPlayer, moveData))
+    VIRTUAL_METHOD2_V(void, processMovement, 1, (Entity* localPlayer, MoveData* moveData), (localPlayer, moveData))
 };

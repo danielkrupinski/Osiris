@@ -31,7 +31,7 @@ void EnginePrediction::run(const ClientInterfaces& clientInterfaces, const Memor
 
     memory.moveHelper->setHost(localPlayer.get());
     clientInterfaces.prediction->setupMove(localPlayer.get(), cmd, memory.moveHelper, memory.moveData);
-    clientInterfaces.gameMovement->processMovement(localPlayer.get(), memory.moveData);
+    clientInterfaces.getGameMovement().processMovement(localPlayer.get(), memory.moveData);
     clientInterfaces.prediction->finishMove(localPlayer.get(), cmd, memory.moveData);
     memory.moveHelper->setHost(nullptr);
 
