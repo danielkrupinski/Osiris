@@ -323,9 +323,9 @@ BaseData::BaseData(const Entity& entity) noexcept
     distanceToLocal = entity.getAbsOrigin().distTo(localPlayerData.origin);
  
     if (entity.isPlayer()) {
-        const auto collideable = entity.getCollideable();
-        obbMins = collideable->obbMins();
-        obbMaxs = collideable->obbMaxs();
+        const Collideable collideable{ retSpoofGadgets.jmpEbxInClient, entity.getCollideable() };
+        obbMins = collideable.obbMins();
+        obbMaxs = collideable.obbMaxs();
     } else if (const auto model = entity.getRenderable().getModel()) {
         obbMins = model->mins;
         obbMaxs = model->maxs;

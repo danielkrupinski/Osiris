@@ -51,12 +51,12 @@ enum class Team {
 
 }
 
-class Collideable {
+class Collideable : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(Collideable)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
-    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
+    VIRTUAL_METHOD2(const Vector&, obbMins, 1, (), ())
+    VIRTUAL_METHOD2(const Vector&, obbMaxs, 2, (), ())
 };
 
 class Networkable : private VirtualCallable {
@@ -111,7 +111,7 @@ public:
     }
 
     VIRTUAL_METHOD2_V(int&, handle, 2, (), ())
-    VIRTUAL_METHOD2_V(Collideable*, getCollideable, 3, (), ())
+    VIRTUAL_METHOD2_V(std::uintptr_t, getCollideable, 3, (), ())
 
     VIRTUAL_METHOD2(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
     VIRTUAL_METHOD2(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
