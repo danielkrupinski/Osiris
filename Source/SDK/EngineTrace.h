@@ -22,10 +22,10 @@ struct Ray {
 class Entity;
 
 struct TraceFilter {
-    TraceFilter(const Entity* entity) : skip{ entity } { }
-    virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
+    TraceFilter(std::uintptr_t entity) : skip{ entity } { }
+    virtual bool shouldHitEntity(std::uintptr_t entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    const void* skip;
+    std::uintptr_t skip;
 };
 
 namespace HitGroup {
@@ -91,7 +91,7 @@ struct Trace {
     } surface;
     int hitgroup;
     std::byte pad2[4];
-    Entity* entity;
+    std::uintptr_t entity;
     int hitbox;
 };
 

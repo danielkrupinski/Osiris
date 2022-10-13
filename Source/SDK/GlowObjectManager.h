@@ -7,7 +7,7 @@ class Entity;
 
 struct GlowObjectDefinition {
     int nextFreeSlot;
-    Entity* entity;
+    std::uintptr_t entity;
 
     // TODO: try to declare those as std::array<float, 4> for easier color copying
     Vector glowColor;
@@ -34,7 +34,7 @@ struct GlowObjectDefinition {
 struct GlowObjectManager {
     UtlVector<GlowObjectDefinition> glowObjectDefinitions;
 
-    constexpr bool hasGlowEffect(Entity* entity) noexcept
+    constexpr bool hasGlowEffect(std::uintptr_t entity) noexcept
     {
         for (int i = 0; i < glowObjectDefinitions.size; i++)
             if (!glowObjectDefinitions[i].isUnused() && glowObjectDefinitions[i].entity == entity)
@@ -43,7 +43,7 @@ struct GlowObjectManager {
         return false;
     }
 
-    constexpr int registerGlowObject(Entity* entity) noexcept
+    constexpr int registerGlowObject(std::uintptr_t entity) noexcept
     {
         int index = firstFreeSlot;
         if (index != -1) {
@@ -60,7 +60,7 @@ struct GlowObjectManager {
     constexpr void unregisterGlowObject(int index) noexcept
     {
         glowObjectDefinitions[index].nextFreeSlot = firstFreeSlot;
-        glowObjectDefinitions[index].entity = nullptr;
+        glowObjectDefinitions[index].entity = 0;
         glowObjectDefinitions[index].renderWhenOccluded = false;
         glowObjectDefinitions[index].renderWhenUnoccluded = false;
         firstFreeSlot = index;

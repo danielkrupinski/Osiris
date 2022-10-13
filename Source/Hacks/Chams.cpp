@@ -158,31 +158,31 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons(interfaces,memory, config);
     } else {
-        const auto entity = clientInterfaces.getEntityList().getEntity(info.entityIndex);
-        if (entity && !entity->getNetworkable().isDormant() && entity->isPlayer())
+        const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(info.entityIndex) };
+        if (entity.getThis() != 0 && !entity.getNetworkable().isDormant() && entity.isPlayer())
             renderPlayer(engine, interfaces, memory, config, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, Entity* player) noexcept
+void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, const Entity& player) noexcept
 {
     if (!localPlayer)
         return;
 
-    const auto health = player->health();
+    const auto health = player.health();
 
-    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, player.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Planting"].materials, health);
-    } else if (player->isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Defusing"].materials, health);
-    } else if (player == localPlayer.get()) {
+    } else if (player.getThis() == localPlayer.get().getThis()) {
         applyChams(interfaces, memory, config.chams["Local player"].materials, health);
-    } else if (localPlayer->isOtherEnemy(memory, player)) {
+    } else if (localPlayer.get().isOtherEnemy(memory, player)) {
         applyChams(interfaces, memory, config.chams["Enemies"].materials, health);
 
-        const auto records = Backtrack::getRecords(player->getNetworkable().index());
+        const auto records = Backtrack::getRecords(player.getNetworkable().index());
         if (records && !records->empty() && Backtrack::valid(engine, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
@@ -196,26 +196,26 @@ void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, con
 
 void Chams::renderWeapons(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
-    if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
+    if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().isScoped())
         return;
 
-    applyChams(interfaces, memory, config.chams["Weapons"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Weapons"].materials, localPlayer.get().health());
 }
 
 void Chams::renderHands(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(interfaces, memory, config.chams["Hands"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Hands"].materials, localPlayer.get().health());
 }
 
 void Chams::renderSleeves(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(interfaces, memory, config.chams["Sleeves"].materials, localPlayer->health());
+    applyChams(interfaces, memory, config.chams["Sleeves"].materials, localPlayer.get().health());
 }
 
 void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept

@@ -326,31 +326,31 @@ void Visuals::thirdperson(const Memory& memory) noexcept
     if (!visualsConfig.thirdperson)
         return;
 
-    memory.input->isCameraInThirdPerson = (!visualsConfig.thirdpersonKey.isSet() || visualsConfig.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
+    memory.input->isCameraInThirdPerson = (!visualsConfig.thirdpersonKey.isSet() || visualsConfig.thirdpersonKey.isToggled()) && localPlayer && localPlayer.get().isAlive();
     memory.input->cameraOffset.z = static_cast<float>(visualsConfig.thirdpersonDistance); 
 }
 
 void Visuals::removeVisualRecoil(csgo::FrameStage stage) noexcept
 {
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
     static Vector aimPunch;
     static Vector viewPunch;
 
     if (stage == csgo::FrameStage::RENDER_START) {
-        aimPunch = localPlayer->aimPunchAngle();
-        viewPunch = localPlayer->viewPunchAngle();
+        aimPunch = localPlayer.get().aimPunchAngle();
+        viewPunch = localPlayer.get().viewPunchAngle();
 
         if (visualsConfig.noAimPunch)
-            localPlayer->aimPunchAngle() = Vector{ };
+            localPlayer.get().aimPunchAngle() = Vector{ };
 
         if (visualsConfig.noViewPunch)
-            localPlayer->viewPunchAngle() = Vector{ };
+            localPlayer.get().viewPunchAngle() = Vector{ };
 
     } else if (stage == csgo::FrameStage::RENDER_END) {
-        localPlayer->aimPunchAngle() = aimPunch;
-        localPlayer->viewPunchAngle() = viewPunch;
+        localPlayer.get().aimPunchAngle() = aimPunch;
+        localPlayer.get().viewPunchAngle() = viewPunch;
     }
 }
 
@@ -405,10 +405,10 @@ void Visuals::removeShadows(const Interfaces& interfaces) noexcept
 void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 {
     if (visualsConfig.zoom && localPlayer) {
-        if (stage == csgo::FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
+        if (stage == csgo::FrameStage::RENDER_START && (localPlayer.get().fov() == 90 || localPlayer.get().fovStart() == 90)) {
             if (visualsConfig.zoomKey.isToggled()) {
-                localPlayer->fov() = 40;
-                localPlayer->fovStart() = 40;
+                localPlayer.get().fov() = 40;
+                localPlayer.get().fovStart() = 40;
             }
         }
     }
@@ -474,7 +474,7 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
-        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer->getNetworkable().index()) {
+        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer.get().getNetworkable().index()) {
             lastHitTime = memory.globalVars->realtime;
             return;
         }
@@ -515,7 +515,7 @@ void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, cons
     static float lastHitTime = 0.0f;
 
     if (event) {
-        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId(engine))
+        if (localPlayer && event->getInt("attacker") == localPlayer.get().getUserId(engine))
             lastHitTime = memory.globalVars->realtime;
         return;
     }
@@ -546,7 +546,7 @@ void Visuals::disablePostProcessing(const Memory& memory, csgo::FrameStage stage
 void Visuals::reduceFlashEffect() noexcept
 {
     if (localPlayer && visualsConfig.flashReduction != 0)
-        localPlayer->flashMaxAlpha() = 255.0f - visualsConfig.flashReduction * 2.55f;
+        localPlayer.get().flashMaxAlpha() = 255.0f - visualsConfig.flashReduction * 2.55f;
 }
 
 bool Visuals::removeHands(const char* modelName) noexcept
@@ -587,28 +587,28 @@ void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientI
     if (!localPlayer)
         return;
 
-    if (event.getInt("userid") != localPlayer->getUserId(engine))
+    if (event.getInt("userid") != localPlayer.get().getUserId(engine))
         return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon)
+    const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+    if (activeWeapon.getThis() == 0)
         return;
 
     BeamInfo beamInfo;
 
-    if (!localPlayer->shouldDraw()) {
-        const auto viewModel = clientInterfaces.getEntityList().getEntityFromHandle(localPlayer->viewModel());
-        if (!viewModel)
+    if (!localPlayer.get().shouldDraw()) {
+        const Entity viewModel{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()) };
+        if (viewModel.getThis() == 0)
             return;
 
-        if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
+        if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getThis()), beamInfo.start))
             return;
     } else {
-        const auto worldModel = clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon->weaponWorldModel());
-        if (!worldModel)
+        const Entity worldModel{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()) };
+        if (worldModel.getThis() == 0)
             return;
 
-        if (!worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
+        if (!worldModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
             return;
     }
 

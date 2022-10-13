@@ -209,13 +209,13 @@ void Misc::edgejump(UserCmd* cmd) noexcept
     if (!miscConfig.edgejump || !miscConfig.edgejumpkey.isDown())
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+    if (const auto mt = localPlayer.get().moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
         return;
 
-    if ((EnginePrediction::getFlags() & 1) && !localPlayer->isOnGround())
+    if ((EnginePrediction::getFlags() & 1) && !localPlayer.get().isOnGround())
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
@@ -224,18 +224,18 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     if (!miscConfig.slowwalk || !miscConfig.slowwalkKey.isDown())
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon)
+    const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+    if (activeWeapon.getThis() == 0)
         return;
 
-    const auto weaponData = activeWeapon->getWeaponData();
+    const auto weaponData = activeWeapon.getWeaponData();
     if (!weaponData)
         return;
 
-    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+    const float maxSpeed = (localPlayer.get().isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
 
     if (cmd->forwardmove && cmd->sidemove) {
         const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
@@ -421,8 +421,8 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
 
     static float readyTime;
     if (miscConfig.prepareRevolver && localPlayer && (!miscConfig.prepareRevolverKey.isSet() || miscConfig.prepareRevolverKey.isDown())) {
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (activeWeapon && activeWeapon->itemDefinitionIndex() == WeaponId::Revolver) {
+        const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+        if (activeWeapon.getThis() != 0 && activeWeapon.itemDefinitionIndex() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
             auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - engine.getNetworkChannel()->getLatency(0));
             if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))
@@ -441,10 +441,10 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     if (static auto plantAnywhere = interfaces.cvar->findVar("mp_plant_c4_anywhere"); plantAnywhere->getInt())
         return;
 
-    if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->isOnGround()))
+    if (!localPlayer || !localPlayer.get().isAlive() || (localPlayer.get().inBombZone() && localPlayer.get().isOnGround()))
         return;
 
-    if (const auto activeWeapon = localPlayer->getActiveWeapon(); !activeWeapon || activeWeapon->getNetworkable().getClientClass()->classId != ClassId::C4)
+    if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() == 0 || activeWeapon.getNetworkable().getClientClass()->classId != ClassId::C4)
         return;
 
     cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -452,11 +452,12 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     constexpr auto doorRange = 200.0f;
 
     Trace trace;
-    const auto startPos = localPlayer->getEyePosition();
+    const auto startPos = localPlayer.get().getEyePosition();
     const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
-    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get().getThis(), trace);
 
-    if (!trace.entity || trace.entity->getNetworkable().getClientClass()->classId != ClassId::PropDoorRotating)
+    const Entity entity{ retSpoofGadgets.jmpEbxInClient, trace.entity };
+    if (entity.getThis() == 0 || entity.getNetworkable().getClientClass()->classId != ClassId::PropDoorRotating)
         cmd->buttons &= ~UserCmd::IN_USE;
 }
 
@@ -465,16 +466,16 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     if (!miscConfig.fastStop)
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    if (localPlayer->moveType() == MoveType::NOCLIP || localPlayer->moveType() == MoveType::LADDER || !localPlayer->isOnGround() || cmd->buttons & UserCmd::IN_JUMP)
+    if (localPlayer.get().moveType() == MoveType::NOCLIP || localPlayer.get().moveType() == MoveType::LADDER || !localPlayer.get().isOnGround() || cmd->buttons & UserCmd::IN_JUMP)
         return;
 
     if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT | UserCmd::IN_FORWARD | UserCmd::IN_BACK))
         return;
     
-    const auto velocity = localPlayer->velocity();
+    const auto velocity = localPlayer.get().velocity();
     const auto speed = velocity.length2D();
     if (speed < 15.0f)
         return;
@@ -560,13 +561,14 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
     static std::vector<int> stolenIds;
 
     for (int i = 1; i <= memory.globalVars->maxClients; ++i) {
-        const auto entity = clientInterfaces.getEntityList().getEntity(i);
+        const auto entityPtr = clientInterfaces.getEntityList().getEntity(i);
+        const Entity entity{ retSpoofGadgets.jmpEbxInClient, entityPtr };
 
-        if (!entity || entity == localPlayer.get())
+        if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis())
             continue;
 
         PlayerInfo playerInfo;
-        if (!engine.getPlayerInfo(entity->getNetworkable().index(), playerInfo))
+        if (!engine.getPlayerInfo(entity.getNetworkable().index(), playerInfo))
             continue;
 
         if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
@@ -589,32 +591,32 @@ void Misc::disablePanoramablur(const Interfaces& interfaces) noexcept
 void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
-        static Entity* reloadedWeapon{ nullptr };
+        static std::uintptr_t reloadedWeapon = 0;
 
         if (reloadedWeapon) {
-            for (auto weaponHandle : localPlayer->weapons()) {
+            for (auto weaponHandle : localPlayer.get().weapons()) {
                 if (weaponHandle == -1)
                     break;
 
                 if (clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) == reloadedWeapon) {
-                    cmd->weaponselect = reloadedWeapon->getNetworkable().index();
-                    cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+                    cmd->weaponselect = Entity{ retSpoofGadgets.jmpEbxInClient, reloadedWeapon }.getNetworkable().index();
+                    cmd->weaponsubtype = Entity{ retSpoofGadgets.jmpEbxInClient, reloadedWeapon }.getWeaponSubType();
                     break;
                 }
             }
-            reloadedWeapon = nullptr;
+            reloadedWeapon = 0;
         }
 
-        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->isInReload() && activeWeapon->clip() == activeWeapon->getWeaponData()->maxClip) {
-            reloadedWeapon = activeWeapon;
+        if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.isInReload() && activeWeapon.clip() == activeWeapon.getWeaponData()->maxClip) {
+            reloadedWeapon = activeWeapon.getThis();
 
-            for (auto weaponHandle : localPlayer->weapons()) {
+            for (auto weaponHandle : localPlayer.get().weapons()) {
                 if (weaponHandle == -1)
                     break;
 
-                if (auto weapon{ clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
-                    cmd->weaponselect = weapon->getNetworkable().index();
-                    cmd->weaponsubtype = weapon->getWeaponSubType();
+                if (const Entity weapon{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) }; weapon.getThis() && weapon.getThis() != reloadedWeapon) {
+                    cmd->weaponselect = weapon.getNetworkable().index();
+                    cmd->weaponsubtype = weapon.getWeaponSubType();
                     break;
                 }
             }
@@ -634,7 +636,7 @@ bool Misc::changeName(const Engine& engine, const Interfaces& interfaces, const 
     }
 
     if (!exploitInitialized && engine.isInGame()) {
-        if (PlayerInfo playerInfo; localPlayer && engine.getPlayerInfo(localPlayer->getNetworkable().index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
+        if (PlayerInfo playerInfo; localPlayer && engine.getPlayerInfo(localPlayer.get().getNetworkable().index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
             exploitInitialized = true;
         } else {
             name->onChangeCallbacks.size = 0;
@@ -656,12 +658,12 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     if (!localPlayer)
         return;
 
-    static auto wasLastTimeOnGround{ localPlayer->isOnGround() };
+    static auto wasLastTimeOnGround{ localPlayer.get().isOnGround() };
 
-    if (miscConfig.bunnyHop && !localPlayer->isOnGround() && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+    if (miscConfig.bunnyHop && !localPlayer.get().isOnGround() && localPlayer.get().moveType() != MoveType::LADDER && !wasLastTimeOnGround)
         cmd->buttons &= ~UserCmd::IN_JUMP;
 
-    wasLastTimeOnGround = localPlayer->isOnGround();
+    wasLastTimeOnGround = localPlayer.get().isOnGround();
 }
 
 void Misc::fakeBan(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool set) noexcept
@@ -686,8 +688,8 @@ void Misc::nadePredict(const Interfaces& interfaces) noexcept
 void Misc::fixTabletSignal() noexcept
 {
     if (miscConfig.fixTabletSignal && localPlayer) {
-        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::Tablet)
-            activeWeapon->tabletReceptionIsBlocked() = false;
+        if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+            activeWeapon.tabletReceptionIsBlocked() = false;
     }
 }
 
@@ -696,10 +698,10 @@ void Misc::killMessage(const Engine& engine, const GameEvent& event) noexcept
     if (!miscConfig.killMessage)
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    if (const auto localUserId = localPlayer->getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer.get().getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     std::string cmd = "say \"";
@@ -737,10 +739,10 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
             return;
 
         for (int i = 1; i <= engine.getMaxClients(); i++) {
-            Entity* entity = clientInterfaces.getEntityList().getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->getNetworkable().isDormant() || !entity->isAlive()) continue;
-            *reinterpret_cast<int*>(entity + 0xA28) = 0;
-            *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
+            const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+            if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()) continue;
+            *reinterpret_cast<int*>(entity.getThis() + 0xA28) = 0;
+            *reinterpret_cast<int*>(entity.getThis() + 0xA30) = memory.globalVars->framecount;
         }
     }
 #endif
@@ -749,9 +751,9 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
 void Misc::autoPistol(const Memory& memory, UserCmd* cmd) noexcept
 {
     if (miscConfig.autoPistol && localPlayer) {
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime()) {
-            if (activeWeapon->itemDefinitionIndex() == WeaponId::Revolver)
+        const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+        if (activeWeapon.getThis() != 0 && activeWeapon.isPistol() && activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime()) {
+            if (activeWeapon.itemDefinitionIndex() == WeaponId::Revolver)
                 cmd->buttons &= ~UserCmd::IN_ATTACK2;
             else
                 cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -768,8 +770,8 @@ void Misc::chokePackets(const Engine& engine, bool& sendPacket) noexcept
 void Misc::autoReload(UserCmd* cmd) noexcept
 {
     if (miscConfig.autoReload && localPlayer) {
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex()) && !activeWeapon->clip())
+        const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+        if (activeWeapon.getThis() != 0 && getWeaponIndex(activeWeapon.itemDefinitionIndex()) && !activeWeapon.clip())
             cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
     }
 }
@@ -784,8 +786,8 @@ void Misc::autoStrafe(UserCmd* cmd) noexcept
 {
     if (localPlayer
         && miscConfig.autoStrafe
-        && !localPlayer->isOnGround()
-        && localPlayer->moveType() != MoveType::NOCLIP) {
+        && !localPlayer.get().isOnGround()
+        && localPlayer.get().moveType() != MoveType::NOCLIP) {
         if (cmd->mousedx < 0)
             cmd->sidemove = -450.0f;
         else if (cmd->mousedx > 0)
@@ -801,7 +803,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 
 void Misc::moonwalk(UserCmd* cmd) noexcept
 {
-    if (miscConfig.moonwalk && localPlayer && localPlayer->moveType() != MoveType::LADDER)
+    if (miscConfig.moonwalk && localPlayer && localPlayer.get().moveType() != MoveType::LADDER)
         cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
 }
 
@@ -813,7 +815,7 @@ void Misc::playHitSound(const Engine& engine, const GameEvent& event) noexcept
     if (!localPlayer)
         return;
 
-    if (const auto localUserId = localPlayer->getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer.get().getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     static constexpr std::array hitSounds{
@@ -834,10 +836,10 @@ void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
     if (!miscConfig.killSound)
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    if (const auto localUserId = localPlayer->getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer.get().getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     static constexpr std::array killSounds{
@@ -872,9 +874,9 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            if (const auto player = clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))); player && localPlayer && localPlayer->isOtherEnemy(memory, player)) {
+            if (const Entity player{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))) }; player.getThis() != 0 && localPlayer && localPlayer.get().isOtherEnemy(memory, player)) {
                 if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
-                    auto& purchase = playerPurchases[player->handle()];
+                    auto& purchase = playerPurchases[player.handle()];
                     if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition->getWeaponId())) {
                         purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
@@ -967,8 +969,8 @@ void Misc::oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stag
     if (stage == csgo::FrameStage::RENDER_START) {
         original = cl_righthand->getInt();
 
-        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
-            if (const auto classId = activeWeapon->getNetworkable().getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
+        if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon()}; activeWeapon.getThis() != 0) {
+            if (const auto classId = activeWeapon.getNetworkable().getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
                 cl_righthand->setValue(!original);
         }
     } else {
@@ -1005,11 +1007,11 @@ static int reportbotRound;
     std::vector<std::uint64_t> xuids;
 
     for (int i = 1; i <= engine.getMaxClients(); ++i) {
-        const auto entity = clientInterfaces.getEntityList().getEntity(i);
-        if (!entity || entity == localPlayer.get())
+        const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+        if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis())
             continue;
 
-        if (miscConfig.reportbot.target != 2 && (localPlayer->isOtherEnemy(memory, entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
+        if (miscConfig.reportbot.target != 2 && (localPlayer.get().isOtherEnemy(memory, entity) ? miscConfig.reportbot.target != 0 : miscConfig.reportbot.target != 1))
             continue;
 
         if (PlayerInfo playerInfo; engine.getPlayerInfo(i, playerInfo) && !playerInfo.fakeplayer)
@@ -1098,15 +1100,15 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfac
     if (!miscConfig.revealVotes)
         return;
 
-    const auto entity = clientInterfaces.getEntityList().getEntity(event.getInt("entityid"));
-    if (!entity || !entity->isPlayer())
+    const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(event.getInt("entityid")) };
+    if (entity.getThis() == 0 || !entity.isPlayer())
         return;
     
     const auto votedYes = event.getInt("vote_option") == 0;
-    const auto isLocal = localPlayer && entity == localPlayer.get();
+    const auto isLocal = localPlayer && entity.getThis() == localPlayer.get().getThis();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
+    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
@@ -1127,14 +1129,14 @@ void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interface
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
     const auto entityIndex = reader.readInt32(2);
 
-    const auto entity = clientInterfaces.getEntityList().getEntity(entityIndex);
-    if (!entity || !entity->isPlayer())
+    const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(entityIndex) };
+    if (entity.getThis() == 0 || !entity.isPlayer())
         return;
 
-    const auto isLocal = localPlayer && entity == localPlayer.get();
+    const auto isLocal = localPlayer && entity.getThis() == localPlayer.get().getThis();
 
     const auto voteType = reader.readInt32(3);
-    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName(interfaces, memory).c_str(), voteName(voteType));
+    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass(const Memory& memory) noexcept

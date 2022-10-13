@@ -48,27 +48,27 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
 void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
-        if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
+        if (!backtrackConfig.enabled || !localPlayer || !localPlayer.get().isAlive()) {
             for (auto& record : records)
                 record.clear();
             return;
         }
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            auto entity = clientInterfaces.getEntityList().getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->getNetworkable().isDormant() || !entity->isAlive() || !entity->isOtherEnemy(memory, localPlayer.get())) {
+            const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+            if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive() || !entity.isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
             }
 
-            if (!records[i].empty() && (records[i].front().simulationTime == entity->simulationTime()))
+            if (!records[i].empty() && (records[i].front().simulationTime == entity.simulationTime()))
                 continue;
 
             Record record{ };
-            record.origin = entity->getAbsOrigin();
-            record.simulationTime = entity->simulationTime();
+            record.origin = entity.getAbsOrigin();
+            record.simulationTime = entity.simulationTime();
 
-            entity->setupBones(memory, record.matrix, 256, 0x7FF00, memory.globalVars->currenttime);
+            entity.setupBones(memory, record.matrix, 256, 0x7FF00, memory.globalVars->currenttime);
 
             records[i].push_front(record);
 
@@ -98,36 +98,36 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
     if (!localPlayer)
         return;
 
-    auto localPlayerEyePosition = localPlayer->getEyePosition();
+    auto localPlayerEyePosition = localPlayer.get().getEyePosition();
 
     auto bestFov{ 255.f };
-    Entity * bestTarget{ };
+    std::uintptr_t bestTarget{ };
     int bestTargetIndex{ };
     Vector bestTargetOrigin{ };
     int bestRecord{ };
 
-    const auto aimPunch = localPlayer->getAimPunch();
+    const auto aimPunch = localPlayer.get().getAimPunch();
 
     for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-        auto entity = clientInterfaces.getEntityList().getEntity(i);
-        if (!entity || entity == localPlayer.get() || entity->getNetworkable().isDormant() || !entity->isAlive()
-            || !entity->isOtherEnemy(memory, localPlayer.get()))
+        const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+        if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()
+            || !entity.isOtherEnemy(memory, localPlayer.get()))
             continue;
 
-        const auto& origin = entity->getAbsOrigin();
+        const auto& origin = entity.getAbsOrigin();
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
-            bestTarget = entity;
+            bestTarget = entity.getThis();
             bestTargetIndex = i;
             bestTargetOrigin = origin;
         }
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!backtrackConfig.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!backtrackConfig.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer.get().getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;

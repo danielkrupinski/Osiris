@@ -57,7 +57,7 @@ public:
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
-    void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence);
+    void fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence);
 
     void reset(const Interfaces& interfaces, const Memory& memory);
 

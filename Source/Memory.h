@@ -124,12 +124,12 @@ public:
     std::uintptr_t cameraThink;
     std::add_pointer_t<bool CDECL_CONV(Vector, Vector, short)> lineGoesThroughSmoke;
     int(THISCALL_CONV* getSequenceActivity)(void*, int);
-    bool(THISCALL_CONV* isOtherEnemy)(Entity*, Entity*);
+    bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
     std::uintptr_t hud;
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* CDECL_CONV()> itemSystem;
-    void(THISCALL_CONV* setAbsOrigin)(Entity*, const Vector&);
+    void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const Vector&);
     std::uintptr_t insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
@@ -139,7 +139,7 @@ public:
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
-    int(THISCALL_CONV* equipWearable)(void* wearable, void* player);
+    int(THISCALL_CONV* equipWearable)(std::uintptr_t wearable, std::uintptr_t player);
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
@@ -158,7 +158,7 @@ public:
     std::uintptr_t demoOrHLTV;
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;
-    Entity** gameRules;
+    std::uintptr_t* gameRules;
     InventoryManager* inventoryManager;
     std::add_pointer_t<EconItem* STDCALL_CONV()> createEconItemSharedObject;
     bool(THISCALL_CONV* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);

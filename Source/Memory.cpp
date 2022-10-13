@@ -192,7 +192,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     money = findPattern(CLIENT_DLL, "\x84\xC0\x75\x0C\x5B");
     demoFileEndReached = findPattern(CLIENT_DLL, "\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10");
     plantedC4s = reinterpret_cast<decltype(plantedC4s)>(SafeAddress{ findPattern(CLIENT_DLL, "\x7E\x2C\x8B\x15") }.add(4).deref().get());
-    gameRules = reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") }.add(4).deref().get());
+    gameRules = reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") }.add(4).deref().get());
     registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xA1????\xA8\x01\x75\x21") }.add(6).deref().add(-36).get());
     makePanoramaSymbolFn = reinterpret_cast<decltype(makePanoramaSymbolFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\x0E\x8D\x4D\x0E") }.add(1).relativeToAbsolute().get());
     inventoryManager = reinterpret_cast<InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") }.add(5).deref().get());
@@ -211,7 +211,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") }.add(1).relativeToAbsolute().get());
     removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8"));
 
-    localPlayer.init(reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") }.add(1).deref().get()));
+    localPlayer.init(reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") }.add(1).deref().get()));
 
     keyValuesSystem = reinterpret_cast<KeyValuesSystem* (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
     keyValuesAllocEngine = SafeAddress{ findPattern(ENGINE_DLL, "\xE8????\x83\xC4\x08\x84\xC0\x75\x10\xFF\x75\x0C") }.add(1).relativeToAbsolute().add(0x4A).get();
@@ -288,6 +288,6 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
 
     removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") }.add(1).relativeToAbsolute().get());
 
-    localPlayer.init(reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") }.add(6).relativeToAbsolute().get()));
+    localPlayer.init(reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") }.add(6).relativeToAbsolute().get()));
 #endif
 }

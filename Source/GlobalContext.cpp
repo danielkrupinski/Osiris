@@ -136,7 +136,7 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
@@ -221,7 +221,7 @@ bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
 
 bool GlobalContext::shouldDrawViewModelHook()
 {
-    if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (Visuals::isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
 }
@@ -242,7 +242,7 @@ void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t 
 
 void GlobalContext::overrideViewHook(ViewSetup* setup)
 {
-    if (localPlayer && !localPlayer->isScoped())
+    if (localPlayer && !localPlayer.get().isScoped())
         setup->fov += Visuals::fov();
     setup->farZ += Visuals::farZ() * 10;
     hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
@@ -404,11 +404,11 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
 {
-    const auto viewModel = reinterpret_cast<Entity*>(outStruct);
+    const Entity viewModel{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(outStruct) };
 
-    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
-        if (const auto weapon = clientInterfaces->getEntityList().getEntityFromHandle(viewModel->weapon())) {
-            if (Visuals::isDeagleSpinnerOn() && weapon->getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getThis()) {
+        if (const Entity weapon{ retSpoofGadgets.jmpEbxInClient, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon()) }; weapon.getThis() != 0) {
+            if (Visuals::isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);
