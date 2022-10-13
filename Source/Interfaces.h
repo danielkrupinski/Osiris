@@ -21,6 +21,7 @@
 #include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameMovement.h"
+#include "SDK/Localize.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
 #include "SDK/Prediction.h"
@@ -35,7 +36,6 @@ class Cvar;
 class EngineSound;
 class GameUI;
 class InputSystem;
-class Localize;
 class MaterialSystem;
 class ModelRender;
 class NetworkStringTableContainer;
@@ -167,24 +167,25 @@ public:
 
 class Interfaces {
 public:
-    Interfaces()
+    Interfaces(RetSpoofInvoker retSpoofInvoker)
         : baseFileSystem{ static_cast<BaseFileSystem*>(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
           cvar{ static_cast<Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
           inputSystem{ static_cast<InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          localize{ static_cast<Localize*>(find(LOCALIZE_DLL, "Localize_001")) },
           materialSystem{ static_cast<MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
           panoramaUIEngine{ static_cast<PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
           physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
           surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
           soundEmitter{ static_cast<SoundEmitter*>(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ static_cast<StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) }
+          studioRender{ static_cast<StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) },
+          retSpoofInvoker{ retSpoofInvoker },
+          localize{ std::uintptr_t(find(LOCALIZE_DLL, "Localize_001")) }
     {
     }
 
     BaseFileSystem* baseFileSystem;
     Cvar* cvar;
     InputSystem* inputSystem;
-    Localize* localize;
+    
     MaterialSystem* materialSystem;
     PanoramaUIEngine* panoramaUIEngine;
     PhysicsSurfaceProps* physicsSurfaceProps;
@@ -192,7 +193,15 @@ public:
     SoundEmitter* soundEmitter;
     StudioRender* studioRender;
 
+    [[nodiscard]] auto getLocalize() const noexcept
+    {
+        return Localize{ retSpoofInvoker, localize };
+    }
+
 private:
+    RetSpoofInvoker retSpoofInvoker;
+    std::uintptr_t localize;
+
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #ifdef _WIN32

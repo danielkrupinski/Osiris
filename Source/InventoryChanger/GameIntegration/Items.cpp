@@ -16,7 +16,7 @@ void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& stor
         if (musicKit->id == 1 || musicKit->id == 2)
             continue;
 
-        const auto musicName = interfaces.localize->findSafe(musicKit->nameLocalized);
+        const auto musicName = interfaces.getLocalize().findSafe(musicKit->nameLocalized);
         storage.addMusic(musicKit->id, game_items::ItemName{ toUtf8.convertUnicodeToAnsi(musicName), toUpperConverter.toUpper(musicName) }, musicKit->inventoryImage);
     }
 }
@@ -36,13 +36,13 @@ void Items::getStickers(const Interfaces& interfaces, game_items::Storage& stora
 
         if (isSticker) {
             const auto isGolden = name.ends_with("gold");
-            const auto stickerName = interfaces.localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
+            const auto stickerName = interfaces.getLocalize().findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold");
             storage.addSticker(static_cast<csgo::StickerId>(stickerKit->id), game_items::ItemName{ toUtf8.convertUnicodeToAnsi(stickerName), toUpperConverter.toUpper(stickerName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data(), static_cast<csgo::Tournament>(stickerKit->tournamentID), static_cast<csgo::TournamentTeam>(stickerKit->tournamentTeamID), stickerKit->tournamentPlayerID, isGolden);
         } else if (isPatch) {
-            const auto patchName = interfaces.localize->findSafe(stickerKit->itemName.data());
+            const auto patchName = interfaces.getLocalize().findSafe(stickerKit->itemName.data());
             storage.addPatch(stickerKit->id, game_items::ItemName{ toUtf8.convertUnicodeToAnsi(patchName), toUpperConverter.toUpper(patchName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data());
         } else if (isGraffiti) {
-            const auto paintName = interfaces.localize->findSafe(stickerKit->itemName.data());
+            const auto paintName = interfaces.getLocalize().findSafe(stickerKit->itemName.data());
             storage.addGraffiti(stickerKit->id, game_items::ItemName{ toUtf8.convertUnicodeToAnsi(paintName), toUpperConverter.toUpper(paintName) }, static_cast<EconRarity>(stickerKit->rarity), stickerKit->inventoryImage.data());
         }
     }
@@ -84,7 +84,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
 
-        const auto paintKitName = interfaces.localize->findSafe(paintKit->itemName.data());
+        const auto paintKitName = interfaces.getLocalize().findSafe(paintKit->itemName.data());
         storage.addPaintKit(paintKit->id, game_items::ItemName{ toUtf8.convertUnicodeToAnsi(paintKitName), toUpperConverter.toUpper(paintKitName) }, paintKit->wearRemapMin, paintKit->wearRemapMax);
 
         const auto isGlove = (paintKit->id >= 10000);

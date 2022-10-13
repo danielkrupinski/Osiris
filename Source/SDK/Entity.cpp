@@ -113,7 +113,7 @@ void Entity::getPlayerName(const Interfaces& interfaces, const Memory& memory, c
     end = removeConsecutiveSpaces(wide, end);
     *end = L'\0';
 
-    interfaces.localize->convertUnicodeToAnsi(wide, out, 128);
+    interfaces.getLocalize().convertUnicodeToAnsi(wide, out, 128);
 }
 
 bool Entity::canSee(const EngineTrace& engineTrace, const Memory& memory, const Entity& other, const Vector& pos) const noexcept

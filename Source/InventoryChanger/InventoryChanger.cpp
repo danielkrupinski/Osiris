@@ -1086,7 +1086,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
 InventoryChanger createInventoryChanger(const Interfaces& interfaces, const Memory& memory)
 {
     const auto itemSchema = memory.itemSystem()->getItemSchema();
-    game_integration::Items items{ *itemSchema, *interfaces.localize };
+    game_integration::Items items{ *itemSchema, interfaces.getLocalize() };
     auto storage = game_integration::createGameItemStorage(interfaces, items);
     storage.compress();
     auto gameItemLookup = game_items::Lookup{ std::move(storage) };

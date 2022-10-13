@@ -12,7 +12,7 @@ namespace inventory_changer::game_integration
 
 class Items {
 public:
-    Items(ItemSchema& itemSchema, Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
+    Items(ItemSchema& itemSchema, const Localize& localize) : itemSchema{ itemSchema }, toUtf8{ localize } {}
 
     void getMusicKits(const Interfaces& interfaces, game_items::Storage& storage);
     void getStickers(const Interfaces& interfaces, game_items::Storage& storage);

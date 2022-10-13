@@ -447,7 +447,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     if (const Entity weapon{ retSpoofGadgets.jmpEbxInClient, entity.getActiveWeapon() }; weapon.getThis() != 0) {
         audible = audible || isEntityAudible(weapon.getNetworkable().index());
         if (const auto weaponInfo = weapon.getWeaponData())
-            activeWeapon = interfaces.localize->findAsUTF8(weaponInfo->name);
+            activeWeapon = interfaces.getLocalize().findAsUTF8(weaponInfo->name);
     }
 
     if (!alive || !inViewFrustum)
@@ -645,7 +645,7 @@ WeaponData::WeaponData(const Interfaces& interfaces, const Entity& entity) noexc
             }
         }(entity.itemDefinitionIndex());
 
-        displayName = interfaces.localize->findAsUTF8(weaponInfo->name);
+        displayName = interfaces.getLocalize().findAsUTF8(weaponInfo->name);
     }
 }
 

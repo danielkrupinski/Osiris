@@ -881,7 +881,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
                         purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
-                    const std::string weapon = interfaces.localize->findAsUTF8(definition->getItemBaseName());
+                    const std::string weapon = interfaces.getLocalize().findAsUTF8(definition->getItemBaseName());
                     ++purchaseTotal[weapon];
                     ++purchase.items[weapon];
                 }

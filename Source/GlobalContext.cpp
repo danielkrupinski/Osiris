@@ -305,7 +305,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.jmpEbxInClient);
         engineInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
-        interfaces.emplace(Interfaces{});
+        interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
 
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
@@ -365,7 +365,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
         engineInterfaces.emplace(InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
 
-        interfaces.emplace(Interfaces{});
+        interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
         Netvars::init(clientInterfaces->getClient());
