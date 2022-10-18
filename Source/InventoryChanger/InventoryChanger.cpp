@@ -140,7 +140,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
         definitionIndex = item->gameItem().getWeaponID();
 
         if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID()))
-            glove.setModelIndex(engineInterfaces.getModelInfo().getModelIndex(def->getWorldDisplayModel()));
+            glove.setModelIndex(engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getWorldDisplayModel()));
 
         dataUpdated = true;
     }
@@ -202,7 +202,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
             definitionIndex = item->gameItem().getWeaponID();
 
             if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-                weapon.setModelIndex(engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel()));
+                weapon.setModelIndex(engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getPlayerDisplayModel()));
                 weapon.getNetworkable().preDataUpdate(0);
             }
         }
@@ -220,13 +220,13 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     if (!def)
         return;
 
-    viewModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getPlayerDisplayModel());
+    viewModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getPlayerDisplayModel());
 
     const Entity worldModel{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(viewModelWeapon.weaponWorldModel()) };
     if (worldModel.getThis() == 0)
         return;
 
-    worldModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getWorldDisplayModel());
+    worldModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getWorldDisplayModel());
 }
 
 static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const CSPlayerInventory& localInventory, const Entity& local) noexcept
@@ -253,7 +253,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
         if (!def)
             continue;
 
-        const auto loadoutSlot = def->getLoadoutSlot(localTeam);
+        const auto loadoutSlot = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getLoadoutSlot(localTeam);
         const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getLoadout(), localTeam, loadoutSlot);
         if (!optionalItem.has_value())
             continue;
@@ -334,7 +334,7 @@ static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces&
     if (!def)
         return;
 
-    const auto model = def->getPlayerDisplayModel();
+    const auto model = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getPlayerDisplayModel();
     if (!model)
         return;
 
@@ -1175,7 +1175,7 @@ void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memor
     const auto& item = *optionalItem;
 
     if (const auto def = memory.itemSystem()->getItemSchema()->getItemDefinitionInterface(item->gameItem().getWeaponID())) {
-        if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
+        if (const auto defName = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
             event.setString("weapon", defName + 7);
     }
 }
@@ -1335,7 +1335,7 @@ void InventoryChanger::onUserTextMsg(const Memory& memory, const void*& data, in
         if (!def)
             return;
 
-        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], def->getItemBaseName());
+        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTCENTER, strings[0], EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getItemBaseName());
         data = userTextMsgBuffer.data();
         size = static_cast<int>(userTextMsgBuffer.size());
     } else if (reader.readInt32(1) == HUD_PRINTTALK) {
@@ -1357,7 +1357,7 @@ void InventoryChanger::onUserTextMsg(const Memory& memory, const void*& data, in
         if (!def)
             return;
 
-        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], def->getItemBaseName());
+        userTextMsgBuffer = buildTextUserMessage(HUD_PRINTTALK, strings[0], strings[1], EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getItemBaseName());
         data = userTextMsgBuffer.data();
         size = static_cast<int>(userTextMsgBuffer.size());
     }

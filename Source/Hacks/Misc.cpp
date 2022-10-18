@@ -875,13 +875,13 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
             if (const Entity player{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))) }; player.getThis() != 0 && localPlayer && localPlayer.get().isOtherEnemy(memory, player)) {
-                if (const auto definition = memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                if (const auto definition = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, memory.itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon")) }; definition.getThis() != 0) {
                     auto& purchase = playerPurchases[player.handle()];
-                    if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition->getWeaponId())) {
+                    if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition.getWeaponId())) {
                         purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
-                    const std::string weapon = interfaces.getLocalize().findAsUTF8(definition->getItemBaseName());
+                    const std::string weapon = interfaces.getLocalize().findAsUTF8(definition.getItemBaseName());
                     ++purchaseTotal[weapon];
                     ++purchase.items[weapon];
                 }

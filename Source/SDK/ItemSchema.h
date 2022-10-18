@@ -77,50 +77,53 @@ struct EconTool {
     const char* typeName;
 };
 
-class EconItemDefinition {
+using EconItemDefinitionPointer = std::uintptr_t;
+
+class EconItemDefinition : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(EconItemDefinition)
+    using VirtualCallable::VirtualCallable;
+    using VirtualCallable::getThis;
 
-    VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
-    VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
-    VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), (this))
-    VIRTUAL_METHOD(const char*, getInventoryImage, 5, (), (this))
-    VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), (this))
-    VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
-    VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
-    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), (this))
+    VIRTUAL_METHOD2(WeaponId, getWeaponId, 0, (), ())
+    VIRTUAL_METHOD2(const char*, getItemBaseName, 2, (), ())
+    VIRTUAL_METHOD2(const char*, getItemTypeName, 3, (), ())
+    VIRTUAL_METHOD2(const char*, getInventoryImage, 5, (), ())
+    VIRTUAL_METHOD2(const char*, getPlayerDisplayModel, 6, (), ())
+    VIRTUAL_METHOD2(const char*, getWorldDisplayModel, 7, (), ())
+    VIRTUAL_METHOD2(std::uint8_t, getRarity, 12, (), ())
+    VIRTUAL_METHOD2_V(int, getNumberOfSupportedStickerSlots, 44, (), ())
 
-    std::uint8_t getQuality() noexcept
+    std::uint8_t getQuality() const noexcept
     {
-        return *reinterpret_cast<std::uint8_t*>(std::uintptr_t(this) + WIN32_LINUX(0x2B, 0x4B));
+        return *reinterpret_cast<std::uint8_t*>(getThis() + WIN32_LINUX(0x2B, 0x4B));
     }
 
-    int getCapabilities() noexcept
+    int getCapabilities() const noexcept
     {
-        return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
+        return *reinterpret_cast<int*>(getThis() + WIN32_LINUX(0x148, 0x1F8));
     }
 
-    int getItemType() noexcept
+    int getItemType() const noexcept
     {
-        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x130, 0x1C8));
+        return *reinterpret_cast<int*>(getThis() + WIN32_LINUX(0x130, 0x1C8));
     }
 
-    bool isServiceMedal() noexcept
+    bool isServiceMedal() const noexcept
     {
         return getItemType() == 5; /* prestige_coin */
     }
 
-    bool isTournamentCoin() noexcept
+    bool isTournamentCoin() const noexcept
     {
         return getItemType() == 8; /* fan_shield */
     }
 
-    const UtlVector<StaticAttrib>& getStaticAttributes() noexcept
+    const UtlVector<StaticAttrib>& getStaticAttributes() const noexcept
     {
-        return *reinterpret_cast<const UtlVector<StaticAttrib>*>(std::uintptr_t(this) + WIN32_LINUX(0x30, 0x50));
+        return *reinterpret_cast<const UtlVector<StaticAttrib>*>(getThis() + WIN32_LINUX(0x30, 0x50));
     }
 
-    std::uint32_t getAttributeValue(std::uint16_t attributeDefinitionIndex) noexcept
+    std::uint32_t getAttributeValue(std::uint16_t attributeDefinitionIndex) const noexcept
     {
         const auto& staticAttributes = getStaticAttributes();
         for (int i = 0; i < staticAttributes.size; ++i) {
@@ -130,54 +133,54 @@ public:
         return 0;
     }
 
-    std::uint32_t getCrateSeriesNumber() noexcept
+    std::uint32_t getCrateSeriesNumber() const noexcept
     {
         return getAttributeValue(68 /* "set supply crate series" */);
     }
 
-    bool hasCrateSeries() noexcept
+    bool hasCrateSeries() const noexcept
     {
         return getCrateSeriesNumber() != 0;
     }
 
-    std::uint32_t getTournamentEventID() noexcept
+    std::uint32_t getTournamentEventID() const noexcept
     {
         return getAttributeValue(137 /* "tournament event id" */);
     }
 
-    std::uint32_t getStickerID() noexcept
+    std::uint32_t getStickerID() const noexcept
     {
         return getAttributeValue(113 /* "sticker slot 0 id" */);
     }
 
-    bool hasTournamentEventID() noexcept
+    bool hasTournamentEventID() const noexcept
     {
         return getTournamentEventID() != 0;
     }
 
-    std::uint32_t getServiceMedalYear() noexcept
+    std::uint32_t getServiceMedalYear() const noexcept
     {
         return getAttributeValue(221 /* "prestige year" */);
     }
 
-    bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
-    bool isPatchable() noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
+    bool isPaintable() const noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
+    bool isPatchable() const noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
 
-    const char* getDefinitionName() noexcept
+    const char* getDefinitionName() const noexcept
     {
-        return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2E0));
+        return *reinterpret_cast<const char**>(getThis() + WIN32_LINUX(0x1DC, 0x2E0));
     }
 
-    EconTool* getEconTool() noexcept
+    EconTool* getEconTool() const noexcept
     {
-        return *reinterpret_cast<EconTool**>(std::uintptr_t(this) + WIN32_LINUX(0x140, 0x1E8));
+        return *reinterpret_cast<EconTool**>(getThis() + WIN32_LINUX(0x140, 0x1E8));
     }
 
-    int getLoadoutSlot(csgo::Team team) noexcept
+    int getLoadoutSlot(csgo::Team team) const noexcept
     {
         if (team >= csgo::Team::None && team <= csgo::Team::CT)
-            return reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x28C, 0x3F4))[static_cast<int>(team)];
-        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x268, 0x3BC));
+            return reinterpret_cast<int*>(getThis() + WIN32_LINUX(0x28C, 0x3F4))[static_cast<int>(team)];
+        return *reinterpret_cast<int*>(getThis() + WIN32_LINUX(0x268, 0x3BC));
     }
 };
 
@@ -255,7 +258,7 @@ public:
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
-    UtlMap<int, EconItemDefinition*> itemsSorted;
+    UtlMap<int, EconItemDefinitionPointer> itemsSorted;
     PAD(WIN32_LINUX(0x60, 0x88))
     UtlMap<int, const char*> revolvingLootLists;
     PAD(WIN32_LINUX(0x80, 0xB0))
@@ -266,7 +269,7 @@ public:
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
 
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinitionPointer, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
@@ -274,7 +277,7 @@ public:
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (this, name, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+    VIRTUAL_METHOD(EconItemDefinitionPointer, getItemDefinitionByName, 42, (const char* name), (this, name))
 
     auto getItemDefinitionInterface(WeaponId id) noexcept
     {
