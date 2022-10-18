@@ -241,10 +241,10 @@ struct EconMusicDefinition {
 
 class EconItemAttributeDefinition;
 
-class ItemSchema {
-public:
-    INCONSTRUCTIBLE(ItemSchema)
+namespace csgo::pod
+{
 
+struct ItemSchema {
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
@@ -258,6 +258,18 @@ public:
     UtlMap<int, StickerKit*> stickerKits;
     PAD(WIN32_LINUX(0x11C, 0x1A0))
     UtlMap<int, EconMusicDefinition*> musicKits;
+};
+
+}
+
+class ItemSchema {
+public:
+    INCONSTRUCTIBLE(ItemSchema)
+
+    [[nodiscard]] const csgo::pod::ItemSchema* getPOD() const noexcept
+    {
+        return reinterpret_cast<const csgo::pod::ItemSchema*>(this);
+    }
 
     VIRTUAL_METHOD(EconItemDefinitionPointer, getItemDefinitionInterface, 4, (int id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))

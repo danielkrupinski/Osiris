@@ -11,7 +11,7 @@ namespace inventory_changer::game_integration
 
 void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& storage)
 {
-    for (const auto& node : itemSchema.musicKits) {
+    for (const auto& node : itemSchema.getPOD()->musicKits) {
         const auto musicKit = node.value;
         if (musicKit->id == 1 || musicKit->id == 2)
             continue;
@@ -23,7 +23,7 @@ void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& stor
 
 void Items::getStickers(const Interfaces& interfaces, game_items::Storage& storage)
 {
-    const auto& stickerMap = itemSchema.stickerKits;
+    const auto& stickerMap = itemSchema.getPOD()->stickerKits;
     for (const auto& node : stickerMap) {
         const auto stickerKit = node.value;
         if (stickerKit->id == 0)
@@ -76,9 +76,9 @@ struct KitWeapon {
 
 void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage& storage)
 {
-    const auto kitsWeapons = getKitsWeapons(itemSchema.alternateIcons);
+    const auto kitsWeapons = getKitsWeapons(itemSchema.getPOD()->alternateIcons);
 
-    for (const auto& node : itemSchema.paintKits) {
+    for (const auto& node : itemSchema.getPOD()->paintKits) {
         const auto paintKit = node.value;
 
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
@@ -105,7 +105,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
 
 void Items::getOtherItems(game_items::Storage& storage)
 {
-    for (const auto& node : itemSchema.itemsSorted) {
+    for (const auto& node : itemSchema.getPOD()->itemsSorted) {
         const auto item = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, node.value };
         const auto itemTypeName = std::string_view{ item.getItemTypeName() };
         const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");

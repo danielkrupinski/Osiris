@@ -15,7 +15,7 @@ namespace inventory_changer
     ToUtf8Converter converter{ interfaces.getLocalize() };
     Helpers::ToUpperConverter toUpperConverter;
 
-    for (const auto& node : itemSchema->itemsSorted) {
+    for (const auto& node : itemSchema->getPOD()->itemsSorted) {
         const auto item = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, node.value };
         const auto nameWide = interfaces.getLocalize().findSafe(item.getItemBaseName());
         storage.add(item.getWeaponId(), converter.convertUnicodeToAnsi(nameWide), toUpperConverter.toUpper(nameWide));

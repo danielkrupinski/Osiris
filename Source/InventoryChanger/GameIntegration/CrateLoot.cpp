@@ -10,7 +10,7 @@ void CrateLoot::getLoot(game_items::CrateLoot& crateLoot)
 {
     rebuildMissingLootList(crateLoot);
 
-    for (const auto& revolvingLootList : itemSchema.revolvingLootLists) {
+    for (const auto& revolvingLootList : itemSchema.getPOD()->revolvingLootLists) {
         const auto lootListName = revolvingLootList.value;
 
         if (const auto lootList = itemSchema.getLootList(lootListName)) {
