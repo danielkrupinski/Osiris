@@ -60,7 +60,6 @@
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Platform.h"
-#include "SDK/RenderContext.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/StudioRender.h"
