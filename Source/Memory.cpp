@@ -263,7 +263,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     equipWearable = reinterpret_cast<decltype(equipWearable)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07"));
     setAbsOrigin = reinterpret_cast<decltype(setAbsOrigin)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x49\x8B\x07\x31\xF6") }.add(1).relativeToAbsolute().get());
     plantedC4s = reinterpret_cast<decltype(plantedC4s)>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x3D????\x42\xC6\x44\x28") }.add(3).relativeToAbsolute().get());
-    gameRules = reinterpret_cast<Entity**>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06") }.add(3).relativeToAbsolute().deref().get());
+    gameRules = reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06") }.add(3).relativeToAbsolute().deref().get());
     dispatchSound = reinterpret_cast<int*>(SafeAddress{ findPattern(ENGINE_DLL, "\x74\x10\xE8????\x48\x8B\x35") }.add(3).get());
     predictionRandomSeed = reinterpret_cast<int*>(SafeAddress{ findPattern(CLIENT_DLL, "\x41\x8D\x56\xFF\x31\xC9") }.add(-14).relativeToAbsolute().deref().get());
     registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x50\x10\x49\x89\xC6") }.add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
