@@ -161,12 +161,12 @@ public:
     std::uintptr_t* gameRules;
     InventoryManager* inventoryManager;
     std::add_pointer_t<EconItem* STDCALL_CONV()> createEconItemSharedObject;
-    bool(THISCALL_CONV* addEconItem)(CSPlayerInventory* thisptr, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     InventoryChangerReturnAddresses inventoryChangerReturnAddresses;
     std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
-    void*(THISCALL_CONV* getInventoryItemByItemID)(CSPlayerInventory* thisptr, std::uint64_t itemID);
+    void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
     EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     void(THISCALL_CONV* setCustomName)(EconItem* thisptr, const char* name);
     SharedObjectTypeCache<EconItem>*(THISCALL_CONV* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);

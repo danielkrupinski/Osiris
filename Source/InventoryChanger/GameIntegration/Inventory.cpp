@@ -38,12 +38,12 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     memory.setCustomName(econItem, newNameTag);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot)
@@ -52,13 +52,13 @@ void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t 
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, patchID);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
@@ -67,8 +67,8 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     if (hide)
@@ -76,7 +76,7 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
     else
         econItem->flags &= ~16;
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 }
@@ -137,19 +137,19 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return {};
 
-    const auto baseTypeCache = localInventory->getItemBaseTypeCache(memory);
+    const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory);
     if (!baseTypeCache)
         return {};
 
     const auto econItem = memory.createEconItemSharedObject();
-    econItem->itemID = localInventory->getHighestIDs(memory).first + 1;
+    econItem->itemID = localInventory.getHighestIDs(memory).first + 1;
     econItem->originalID = 0;
-    econItem->accountID = localInventory->getAccountID();
-    econItem->inventory = asUnacknowledged ? 0 : localInventory->getHighestIDs(memory).second + 1;
+    econItem->accountID = localInventory.getAccountID();
+    econItem->inventory = asUnacknowledged ? 0 : localInventory.getHighestIDs(memory).second + 1;
 
     const auto& item = inventoryItem.gameItem();
     econItem->rarity = static_cast<std::uint16_t>(item.getRarity());
@@ -235,7 +235,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     }
 
     baseTypeCache->addObject(econItem);
-    localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soCreated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {
         memory.setItemSessionPropertyValue(inventoryComponent, econItem->itemID, "recent", "0");
@@ -254,14 +254,14 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (!econItem)
         return itemID;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return itemID;
 
-    localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
-    const auto newItemID = localInventory->getHighestIDs(memory).first + 1;
+    localInventory.soDestroyed(localInventory.getSOID(), (SharedObject*)econItem, 4);
+    const auto newItemID = localInventory.getHighestIDs(memory).first + 1;
     econItem->itemID = newItemID;
-    localInventory->soCreated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soCreated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 
     if (const auto newView = memory.findOrCreateEconItemViewForItemID(newItemID))
         newView->clearInventoryImageRGBA(memory);
@@ -280,15 +280,15 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, static_cast<int>(stickerID));
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification(interfaces, memory, "sticker_apply", itemID);
 }
 
@@ -298,14 +298,14 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, slot, 0);
     attributeSetter.setStickerWear(*econItem, slot, 0.0f);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification(interfaces, memory, "sticker_remove", itemID);
 }
 
@@ -315,13 +315,13 @@ void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWea
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerWear(*econItem, slot, newWear);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::viewerPassActivated(ItemId tournamentCoinItemID)
@@ -346,13 +346,13 @@ void Inventory::deleteItem(ItemId itemID)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
-    localInventory->soDestroyed(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soDestroyed(localInventory.getSOID(), (SharedObject*)econItem, 4);
 
-    if (const auto baseTypeCache = localInventory->getItemBaseTypeCache(memory))
+    if (const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory))
         baseTypeCache->removeObject(econItem);
 
     econItem->destructor();
@@ -364,13 +364,13 @@ void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStatTrak(*econItem, newStatTrakValue);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::containerOpened(ItemId unlockedItemID)
@@ -396,13 +396,13 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setDropsAwarded(*econItem, dropsAwarded);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification(interfaces, memory, "ticket_activated", itemID);
 }
 
@@ -412,14 +412,14 @@ void Inventory::unsealGraffiti(ItemId itemID)
     if (!econItem || econItem->weaponId != WeaponId::SealedGraffiti)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setSpraysRemaining(*econItem, 50);
     econItem->weaponId = WeaponId::Graffiti;
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification(interfaces, memory, "graffity_unseal", itemID);
 }
 
@@ -429,13 +429,13 @@ void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setStickerID(*econItem, 0, graffitiID);
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::statTrakSwapped(ItemId itemID)
@@ -486,13 +486,13 @@ void Inventory::xRayItemClaimed(ItemId itemID)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     econItem->flags &= ~16;
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 
     initItemCustomizationNotification(interfaces, memory, "xray_item_claim", itemID);
 }
@@ -508,15 +508,15 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setModificationDate(*econItem, modificationDate);
     attributeSetter.setItemsCount(*econItem, itemCount);
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
@@ -525,15 +525,15 @@ void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setCasketItemIdLow(*econItem, static_cast<std::uint32_t>(static_cast<csgo::ItemId>(storageUnitItemID) & 0xFFFFFFFF));
     attributeSetter.setCasketItemIdHigh(*econItem, static_cast<std::uint32_t>((static_cast<csgo::ItemId>(storageUnitItemID) >> 32) & 0xFFFFFFFF));
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
@@ -547,14 +547,14 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.removeCasketItemId(*econItem);
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
     initItemCustomizationNotification(interfaces, memory, "casket_removed", storageUnitItemID);
 }
 
@@ -564,14 +564,14 @@ void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAft
     if (!econItem)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     EconItemAttributeSetter attributeSetter{ *memory.itemSystem()->getItemSchema(), memory };
     attributeSetter.setTradableAfterDate(*econItem, tradableAfterDate);
 
-    localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+    localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)econItem, 4);
 }
 
 }

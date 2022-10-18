@@ -104,7 +104,7 @@ static std::optional<std::list<inventory_changer::inventory::Item>::const_iterat
     }
 }
 
-static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, const Entity& local) noexcept
+static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, const CSPlayerInventory& localInventory, const Entity& local) noexcept
 {
     const auto optionalItem = getItemFromLoadout(backend.getLoadout(), local.getTeamNumber(), 41);
     if (!optionalItem.has_value())
@@ -165,7 +165,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     }
 }
 
-static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, CSPlayerInventory& localInventory, const Entity& local) noexcept
+static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const inventory_changer::backend::BackendSimulator& backend, const CSPlayerInventory& localInventory, const Entity& local) noexcept
 {
     const auto localXuid = local.getSteamId(engineInterfaces.getEngine());
 
@@ -229,7 +229,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     worldModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, CSPlayerInventory& localInventory, const Entity& local) noexcept
+static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const CSPlayerInventory& localInventory, const Entity& local) noexcept
 {
     const auto localTeam = local.getTeamNumber();
     const auto localXuid = local.getSteamId(engine);
@@ -278,12 +278,12 @@ static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, cons
     if (local.getThis() == 0)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
-    applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), *localInventory, local);
-    applyWeapons(engineInterfaces.getEngine(), clientInterfaces, interfaces, memory, *localInventory, local);
+    applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), localInventory, local);
+    applyWeapons(engineInterfaces.getEngine(), clientInterfaces, interfaces, memory, localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -382,13 +382,13 @@ static std::vector<EquipRequest> equipRequests;
 
 static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
 {
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory.getSOCData(view))
-            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+            localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
     }
 }
 
@@ -1067,12 +1067,12 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     if (stage != csgo::FrameStage::RENDER_START)
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     if (localPlayer)
-        applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, *localInventory, localPlayer.get());
+        applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
     applyPlayerAgent(engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
@@ -1384,14 +1384,14 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (!backend.itemFromID(ItemId{ itemID }).has_value())
         return;
 
-    const auto localInventory = memory.inventoryManager->getLocalInventory();
-    if (!localInventory)
+    const CSPlayerInventory localInventory{ retSpoofGadgets.jmpEbxInClient, memory.inventoryManager->getLocalInventory() };
+    if (localInventory.getThis() == 0)
         return;
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory.getSOCData(view)) {
-            soc->inventory = localInventory->getHighestIDs(memory).second + 1;
-            localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)soc, 4);
+            soc->inventory = localInventory.getHighestIDs(memory).second + 1;
+            localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
         }
     }
 }

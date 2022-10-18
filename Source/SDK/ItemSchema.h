@@ -422,22 +422,23 @@ struct SOID {
 
 class EconItemView;
 
-class CSPlayerInventory {
+class CSPlayerInventory : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(CSPlayerInventory)
+    using VirtualCallable::VirtualCallable;
+    using VirtualCallable::getThis;
 
-    VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
-    VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
-    VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (this, owner, object, event))
-    VIRTUAL_METHOD_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (this, team, slot))
-    VIRTUAL_METHOD_V(void, removeItem, 15, (csgo::ItemId itemID), (this, itemID))
+    VIRTUAL_METHOD2(void, soCreated, 0, (SOID owner, SharedObject* object, int event), (owner, object, event))
+    VIRTUAL_METHOD2(void, soUpdated, 1, (SOID owner, SharedObject* object, int event), (owner, object, event))
+    VIRTUAL_METHOD2(void, soDestroyed, 2, (SOID owner, SharedObject* object, int event), (owner, object, event))
+    VIRTUAL_METHOD2_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (team, slot))
+    VIRTUAL_METHOD2_V(void, removeItem, 15, (csgo::ItemId itemID), (itemID))
 
-    auto getSOC() noexcept
+    auto getSOC() const noexcept
     {
-        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0xB4, 0xF8));
+        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(getThis() + WIN32_LINUX(0xB4, 0xF8));
     }
 
-    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache(const Memory& memory) noexcept
+    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache(const Memory& memory) const noexcept
     {
         const auto soc = getSOC();
         if (!soc)
@@ -446,7 +447,7 @@ public:
         return soc->findBaseTypeCache(memory, 1);
     }
 
-    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) noexcept
+    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) const noexcept
     {
         const auto soc = getSOC();
         if (!soc)
@@ -469,14 +470,14 @@ public:
         return std::make_pair(maxItemID, maxInventoryID);
     }
 
-    auto getAccountID() noexcept
+    auto getAccountID() const noexcept
     {
-        return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
+        return *reinterpret_cast<std::uint32_t*>(getThis() + WIN32_LINUX(0x8, 0x10));
     }
 
-    auto getSOID() noexcept
+    auto getSOID() const noexcept
     {
-        return *reinterpret_cast<SOID*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
+        return *reinterpret_cast<SOID*>(getThis() + WIN32_LINUX(0x8, 0x10));
     }
 };
 
@@ -485,6 +486,6 @@ public:
     INCONSTRUCTIBLE(InventoryManager)
 
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (this, team, slot, itemID, swap))
-    VIRTUAL_METHOD_V(CSPlayerInventory*, getLocalInventory, 23, (), (this))
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventory* inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(std::uintptr_t, getLocalInventory, 23, (), (this))
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
 };

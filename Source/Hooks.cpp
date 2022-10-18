@@ -266,7 +266,7 @@ static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params
     return result;
 }
 
-static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) CSPlayerInventory* inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap) noexcept
+static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap) noexcept
 {
     inventory_changer::InventoryChanger::instance(*interfaces, *memory).onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
@@ -348,7 +348,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
 #endif
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
-    inventory.init(memory.inventoryManager->getLocalInventory());
+    inventory.init((void*)memory.inventoryManager->getLocalInventory());
     inventory.hookAt(1, &soUpdated);
 
     inventoryManager.init(memory.inventoryManager);
