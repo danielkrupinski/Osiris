@@ -214,16 +214,6 @@ public:
     }
 };
 
-class EconItemSetDefinition {
-public:
-    INCONSTRUCTIBLE(EconItemSetDefinition)
-
-    VIRTUAL_METHOD(const char*, getLocKey, 1, (), (this))
-    VIRTUAL_METHOD(int, getItemCount, 4, (), (this))
-    VIRTUAL_METHOD(WeaponId, getItemDef, 5, (int index), (this, index))
-    VIRTUAL_METHOD(int, getItemPaintKit, 6, (int index), (this, index))
-};
-
 struct EconItemQualityDefinition {
     int value;
     const char* name;
@@ -273,7 +263,6 @@ public:
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
-    VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (this, name, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
