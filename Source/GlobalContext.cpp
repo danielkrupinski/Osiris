@@ -303,8 +303,8 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        clientInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.jmpEbxInClient);
-        engineInterfaces.emplace(InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.jmpEbxInClient);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.engine);
         interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
 
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
@@ -361,9 +361,9 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.jmpEbxInClient);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.jmpEbxInClient);
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient }, retSpoofGadgets.engine);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.engine);
 
         interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });

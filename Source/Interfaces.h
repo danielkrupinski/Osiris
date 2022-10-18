@@ -58,6 +58,24 @@ struct InterfaceFinder {
             if (void* foundInterface = invoker.invokeCdecl<void*>(std::uintptr_t(createInterface), name, nullptr))
                 return foundInterface;
         }
+    }
+
+private:
+    DynamicLibraryView<DynamicLibraryWrapper> library;
+    RetSpoofInvoker invoker;
+};
+
+template <typename DynamicLibraryWrapper>
+struct InterfaceFinderWithLog {
+    explicit InterfaceFinderWithLog(InterfaceFinder<DynamicLibraryWrapper> finder)
+        : finder{ finder }
+    {
+    }
+
+    void* operator()(const char* name) const noexcept
+    {
+        if (const auto foundInterface = finder(name))
+            return foundInterface;
 
 #ifdef _WIN32
         MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
@@ -66,14 +84,13 @@ struct InterfaceFinder {
     }
 
 private:
-    DynamicLibraryView<DynamicLibraryWrapper> library;
-    RetSpoofInvoker invoker;
+    InterfaceFinder<DynamicLibraryWrapper> finder;
 };
 
 class ClientInterfaces {
 public:
     template <typename DynamicLibraryWrapper>
-    explicit ClientInterfaces(InterfaceFinder<DynamicLibraryWrapper> clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
+    explicit ClientInterfaces(InterfaceFinderWithLog<DynamicLibraryWrapper> clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
           client{ std::uintptr_t(clientInterfaceFinder("VClient018")) },
           entityList{ std::uintptr_t(clientInterfaceFinder("VClientEntityList003")) },
@@ -118,7 +135,7 @@ private:
 class EngineInterfaces {
 public:
     template <typename DynamicLibraryWrapper>
-    explicit EngineInterfaces(InterfaceFinder<DynamicLibraryWrapper> engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
+    explicit EngineInterfaces(InterfaceFinderWithLog<DynamicLibraryWrapper> engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
           engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
@@ -205,10 +222,10 @@ private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #ifdef _WIN32
-        const InterfaceFinder finder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName }, retSpoofGadgets.jmpEbxInClient };
+        const InterfaceFinderWithLog finder{ InterfaceFinder { DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName }, retSpoofGadgets.jmpEbxInClient } };
 #else
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
-        const InterfaceFinder finder{ so.getView(), retSpoofGadgets.jmpEbxInClient };
+        const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets.jmpEbxInClient } };
 #endif
         return finder(name);
     }
