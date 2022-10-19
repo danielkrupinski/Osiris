@@ -29,16 +29,16 @@ struct BacktrackConfig {
 static std::array<std::deque<Backtrack::Record>, 65> records;
 
 struct Cvars {
-    ConVar* updateRate;
-    ConVar* maxUpdateRate;
-    ConVar* interp;
-    ConVar* interpRatio;
-    ConVar* minInterpRatio;
-    ConVar* maxInterpRatio;
-    ConVar* maxUnlag;
+    ConVar updateRate;
+    ConVar maxUpdateRate;
+    ConVar interp;
+    ConVar interpRatio;
+    ConVar minInterpRatio;
+    ConVar maxInterpRatio;
+    ConVar maxUnlag;
 };
 
-static Cvars cvars;
+static std::optional<Cvars> cvars;
 
 static auto timeToTicks(const Memory& memory, float time) noexcept
 {
@@ -83,8 +83,8 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
 
 static float getLerp() noexcept
 {
-    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
-    return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+    auto ratio = std::clamp(cvars->interpRatio.getFloat(), cvars->minInterpRatio.getFloat(), cvars->maxInterpRatio.getFloat());
+    return (std::max)(cvars->interp.getFloat(), (ratio / ((cvars->maxUpdateRate.getThis() != 0) ? cvars->maxUpdateRate.getFloat() : cvars->updateRate.getFloat())));
 }
 
 void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
@@ -166,19 +166,20 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
     if (!network)
         return false;
 
-    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->serverTime() - simtime);
+    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars->maxUnlag.getFloat()) - (memory.globalVars->serverTime() - simtime);
     return std::abs(delta) <= 0.2f;
 }
 
 void Backtrack::init(const Interfaces& interfaces) noexcept
 {
-    cvars.updateRate = interfaces.cvar->findVar("cl_updaterate");
-    cvars.maxUpdateRate = interfaces.cvar->findVar("sv_maxupdaterate");
-    cvars.interp = interfaces.cvar->findVar("cl_interp");
-    cvars.interpRatio = interfaces.cvar->findVar("cl_interp_ratio");
-    cvars.minInterpRatio = interfaces.cvar->findVar("sv_client_min_interp_ratio");
-    cvars.maxInterpRatio = interfaces.cvar->findVar("sv_client_max_interp_ratio");
-    cvars.maxUnlag = interfaces.cvar->findVar("sv_maxunlag");
+    cvars.emplace(Cvars{
+        .updateRate = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_updaterate")),
+        .maxUpdateRate = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_maxupdaterate")),
+        .interp = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_interp")),
+        .interpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_interp_ratio")),
+        .minInterpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_client_min_interp_ratio")),
+        .maxInterpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_client_max_interp_ratio")),
+        .maxUnlag = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_maxunlag")) });
 }
 
 static bool backtrackWindowOpen = false;

@@ -438,7 +438,7 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     if (!miscConfig.fastPlant)
         return;
 
-    if (static auto plantAnywhere = interfaces.cvar->findVar("mp_plant_c4_anywhere"); plantAnywhere->getInt())
+    if (static auto plantAnywhere = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("mp_plant_c4_anywhere")); plantAnywhere.getInt())
         return;
 
     if (!localPlayer || !localPlayer.get().isAlive() || (localPlayer.get().inBombZone() && localPlayer.get().isOnGround()))
@@ -585,7 +585,7 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
 void Misc::disablePanoramablur(const Interfaces& interfaces) noexcept
 {
     static auto blur = interfaces.cvar->findVar("@panorama_disable_blur");
-    blur->setValue(miscConfig.disablePanoramablur);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, blur).setValue(miscConfig.disablePanoramablur);
 }
 
 void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd* cmd) noexcept
@@ -640,13 +640,13 @@ bool Misc::changeName(const Engine& engine, const Interfaces& interfaces, const 
             exploitInitialized = true;
         } else {
             name->onChangeCallbacks.size = 0;
-            name->setValue("\n\xAD\xAD\xAD");
+            ConVar::from(retSpoofGadgets.jmpEbxInClient, name).setValue("\n\xAD\xAD\xAD");
             return false;
         }
     }
 
     if (static auto nextChangeTime = 0.0f; nextChangeTime <= memory.globalVars->realtime) {
-        name->setValue(newName);
+        ConVar::from(retSpoofGadgets.jmpEbxInClient, name).setValue(newName);
         nextChangeTime = memory.globalVars->realtime + delay;
         return true;
     }
@@ -682,7 +682,7 @@ void Misc::nadePredict(const Interfaces& interfaces) noexcept
     static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
 
     nadeVar->onChangeCallbacks.size = 0;
-    nadeVar->setValue(miscConfig.nadePredict);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, nadeVar).setValue(miscConfig.nadePredict);
 }
 
 void Misc::fixTabletSignal() noexcept
@@ -902,7 +902,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
         if (!miscConfig.purchaseList.enabled)
             return;
 
-        if (static const auto mp_buytime = interfaces.cvar->findVar("mp_buytime"); (!engine.isInGame() || freezeEnd != 0.0f && memory.globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
+        if (static const auto mp_buytime = interfaces.cvar->findVar("mp_buytime"); (!engine.isInGame() || freezeEnd != 0.0f && memory.globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? ConVar::from(retSpoofGadgets.jmpEbxInClient, mp_buytime).getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
             return;
 
         ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
@@ -963,18 +963,18 @@ void Misc::oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stag
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    static const auto cl_righthand = interfaces.cvar->findVar("cl_righthand");
+    static const auto cl_righthand = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_righthand"));
     static bool original;
 
     if (stage == csgo::FrameStage::RENDER_START) {
-        original = cl_righthand->getInt();
+        original = cl_righthand.getInt();
 
         if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon()}; activeWeapon.getThis() != 0) {
             if (const auto classId = activeWeapon.getNetworkable().getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
-                cl_righthand->setValue(!original);
+                cl_righthand.setValue(!original);
         }
     } else {
-        cl_righthand->setValue(original);
+        cl_righthand.setValue(original);
     }
 }
 

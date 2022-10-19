@@ -272,7 +272,7 @@ void Visuals::performColorCorrection(const Memory& memory) noexcept
 void Visuals::inverseRagdollGravity(const Interfaces& interfaces) noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
 void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noexcept
@@ -366,7 +366,7 @@ void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) n
 void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
 {
     static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
-    brightness->setValue(visualsConfig.brightness);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, brightness).setValue(visualsConfig.brightness);
 }
 
 void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
@@ -393,13 +393,13 @@ void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, cs
 void Visuals::remove3dSky(const Interfaces& interfaces) noexcept
 {
     static auto sky = interfaces.cvar->findVar("r_3dsky");
-    sky->setValue(!visualsConfig.no3dSky);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, sky).setValue(!visualsConfig.no3dSky);
 }
 
 void Visuals::removeShadows(const Interfaces& interfaces) noexcept
 {
     static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
-    shadows->setValue(!visualsConfig.noShadows);
+    ConVar::from(retSpoofGadgets.jmpEbxInClient, shadows).setValue(!visualsConfig.noShadows);
 }
 
 void Visuals::applyZoom(csgo::FrameStage stage) noexcept
