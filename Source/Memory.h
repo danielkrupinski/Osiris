@@ -46,6 +46,11 @@ struct GlowObjectManager;
 struct PanoramaEventRegistration;
 struct Vector;
 
+namespace csgo::pod
+{
+    struct EconItem;
+}
+
 template <bool ReportNotFound = true>
 std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept;
 
@@ -160,19 +165,19 @@ public:
     std::uintptr_t demoFileEndReached;
     std::uintptr_t* gameRules;
     InventoryManager* inventoryManager;
-    std::add_pointer_t<EconItem* STDCALL_CONV()> createEconItemSharedObject;
-    bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
+    bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     InventoryChangerReturnAddresses inventoryChangerReturnAddresses;
     std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
-    EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
-    void(THISCALL_CONV* setCustomName)(EconItem* thisptr, const char* name);
+    csgo::pod::EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
+    void(THISCALL_CONV* setCustomName)(csgo::pod::EconItem* thisptr, const char* name);
     std::uintptr_t createBaseTypeCache;
     void** uiComponentInventory;
     void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
-    void(THISCALL_CONV* removeDynamicAttribute)(EconItem* thisptr, EconItemAttributeDefinition* attribute);
+    std::uintptr_t removeDynamicAttribute;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -190,15 +195,6 @@ public:
 #endif
     }
 
-    void setDynamicAttributeValue(EconItem* thisptr, EconItemAttributeDefinition* attribute, void* value) const noexcept
-    {
-#ifdef _WIN32
-        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(thisptr, attribute, value);
-#else
-        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, thisptr, attribute, value);
-#endif
-    }
-
 #ifdef _WIN32
     class KeyValuesSystem* keyValuesSystem;
     std::uintptr_t keyValuesAllocEngine;
@@ -206,12 +202,12 @@ public:
 
     std::uintptr_t shouldDrawFogReturnAddress;
 #endif
+    std::uintptr_t setDynamicAttributeValueFn;
 
 private:
     void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
-    std::uintptr_t setDynamicAttributeValueFn;
 };
 
 inline std::optional<const Memory> memory;

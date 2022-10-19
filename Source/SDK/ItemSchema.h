@@ -293,6 +293,71 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+namespace csgo::pod
+{
+
+struct EconItem {
+    PAD(2 * sizeof(std::uintptr_t))
+
+    csgo::ItemId itemID;
+    csgo::ItemId originalID;
+    void* customDataOptimizedObject;
+    std::uint32_t accountID;
+    std::uint32_t inventory;
+    WeaponId weaponId;
+
+    std::uint16_t origin : 5;
+    std::uint16_t quality : 4;
+    std::uint16_t level : 2;
+    std::uint16_t rarity : 4;
+    std::uint16_t dirtybitInUse : 1;
+
+    std::int16_t itemSet;
+    int soUpdateFrame;
+    std::uint8_t flags;
+};
+
+}
+
+class EconItem : private VirtualCallable {
+public:
+    EconItem(RetSpoofInvoker invoker, csgo::pod::EconItem* pod, std::uintptr_t setDynamicAttributeValueFn, std::uintptr_t removeDynamicAttributeFn)
+        : VirtualCallable{ invoker, std::uintptr_t(pod) }, setDynamicAttributeValueFn{ setDynamicAttributeValueFn }, removeDynamicAttributeFn{ removeDynamicAttributeFn }
+    {
+    }
+
+    using VirtualCallable::getThis;
+
+#ifdef _WIN32
+    VIRTUAL_METHOD2(void, destructor, 0, (), (true))
+#else
+    VIRTUAL_METHOD2(void, destructor, 1, (), ())
+#endif
+
+    void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept
+    {
+#if IS_WIN32()
+        getInvoker().invokeThiscall<void>(getThis(), setDynamicAttributeValueFn, attribute, value);
+#else
+        getInvoker().invokeCdecl<void>(setDynamicAttributeValueFn, nullptr, getThis(), attribute, value);
+#endif
+    }
+
+    void removeDynamicAttribute(EconItemAttributeDefinition* attribute) const noexcept
+    {
+        getInvoker().invokeThiscall<void>(getThis(), removeDynamicAttributeFn, attribute);
+    }
+
+    [[nodiscard]] csgo::pod::EconItem* getPOD() const noexcept
+    {
+        return reinterpret_cast<csgo::pod::EconItem*>(getThis());
+    }
+
+private:
+    std::uintptr_t setDynamicAttributeValueFn;
+    std::uintptr_t removeDynamicAttributeFn;
+};
+
 class EconItemAttributeSetter {
 public:
     explicit EconItemAttributeSetter(ItemSchema& itemSchema, const Memory& memory)
@@ -338,47 +403,17 @@ private:
     void setAttributeValue(EconItem& econItem, int index, void* value) noexcept
     {
         if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
-            memory.setDynamicAttributeValue(&econItem, attribute, value);
+            econItem.setDynamicAttributeValue(attribute, value);
     }
 
     void removeAttribute(EconItem& econItem, int index) noexcept
     {
         if (const auto attribute = itemSchema.getAttributeDefinitionInterface(index))
-            memory.removeDynamicAttribute(&econItem, attribute);
+            econItem.removeDynamicAttribute(attribute);
     }
 
     ItemSchema& itemSchema;
     const Memory& memory;
-};
-
-class EconItem {
-public:
-    INCONSTRUCTIBLE(EconItem)
-
-#ifdef _WIN32
-    VIRTUAL_METHOD(void, destructor, 0, (), (this, true))
-#else
-    VIRTUAL_METHOD(void, destructor, 1, (), (this))
-#endif
-
-    PAD(2 * sizeof(std::uintptr_t))
-
-    csgo::ItemId itemID;
-    csgo::ItemId originalID;
-    void* customDataOptimizedObject;
-    std::uint32_t accountID;
-    std::uint32_t inventory;
-    WeaponId weaponId;
-
-    std::uint16_t origin : 5;
-    std::uint16_t quality : 4;
-    std::uint16_t level : 2;
-    std::uint16_t rarity : 4;
-    std::uint16_t dirtybitInUse : 1;
-
-    std::int16_t itemSet;
-    int soUpdateFrame;
-    std::uint8_t flags;
 };
 
 class SharedObject {
@@ -447,13 +482,13 @@ public:
         return ClientSharedObjectCache{ VirtualCallable{ getInvoker(), *reinterpret_cast<std::uintptr_t*>(getThis() + WIN32_LINUX(0xB4, 0xF8)) }, memory.createBaseTypeCache };
     }
 
-    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache(const Memory& memory) const noexcept
+    SharedObjectTypeCache<csgo::pod::EconItem>* getItemBaseTypeCache(const Memory& memory) const noexcept
     {
         const auto soc = getSOC(memory);
         if (soc.getThis() == 0)
             return nullptr;
 
-        return soc.findBaseTypeCache<EconItem>(1);
+        return soc.findBaseTypeCache<csgo::pod::EconItem>(1);
     }
 
     std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) const noexcept
@@ -462,7 +497,7 @@ public:
         if (soc.getThis() == 0)
             return {};
 
-        const auto baseTypeCache = soc.findBaseTypeCache<EconItem>(1);
+        const auto baseTypeCache = soc.findBaseTypeCache<csgo::pod::EconItem>(1);
         if (!baseTypeCache)
             return {};
 

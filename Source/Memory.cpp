@@ -209,7 +209,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     createBaseTypeCache = SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") }.add(1).relativeToAbsolute().get();
     uiComponentInventory = reinterpret_cast<void**>(SafeAddress{ findPattern(CLIENT_DLL, "\xC6\x44\x24??\x83\x3D") }.add(7).deref().get());
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") }.add(1).relativeToAbsolute().get());
-    removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8"));
+    removeDynamicAttribute = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8");
 
     localPlayer.init(reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") }.add(1).deref().get()));
 
@@ -286,7 +286,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     uiComponentInventory = reinterpret_cast<decltype(uiComponentInventory)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E") }.add(8).relativeToAbsolute().get());
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x8B\x85????\x41\x83\xC4\x01") }.add(1).relativeToAbsolute().get());
 
-    removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") }.add(1).relativeToAbsolute().get());
+    removeDynamicAttribute = SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x80\x3D?????\x75\x14\x48\x8D\x3D????\xE8????\x85\xC0\x0F\x85????\xC7\x45") }.add(1).relativeToAbsolute().get();
 
     localPlayer.init(reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") }.add(6).relativeToAbsolute().get()));
 #endif
