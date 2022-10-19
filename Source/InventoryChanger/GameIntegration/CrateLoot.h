@@ -22,7 +22,7 @@ public:
 
 private:
     [[nodiscard]] const game_items::Item* findStickerlikeItem(WeaponId weaponID, int stickerKit) const;
-    void fillLootFromLootList(EconLootListDefinition& lootList, game_items::CrateLoot& crateLoot);
+    void fillLootFromLootList(const EconLootListDefinition& lootList, game_items::CrateLoot& crateLoot);
     void rebuildMissingLootList(game_items::CrateLoot& crateLoot);
 
     ItemSchema& itemSchema;
