@@ -54,10 +54,9 @@ struct InterfaceFinder {
 
     void* operator()(const char* name) const noexcept
     {
-        if (const auto createInterface = library.getFunctionAddress("CreateInterface")) {
-            if (void* foundInterface = invoker.invokeCdecl<void*>(std::uintptr_t(createInterface), name, nullptr))
-                return foundInterface;
-        }
+        if (const auto createInterface = library.getFunctionAddress("CreateInterface"))
+            return invoker.invokeCdecl<void*>(std::uintptr_t(createInterface), name, nullptr);
+        return nullptr;
     }
 
 private:
