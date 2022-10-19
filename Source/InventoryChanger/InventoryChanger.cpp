@@ -874,15 +874,15 @@ static ImTextureID getItemIconTexture(const Interfaces& interfaces, std::string_
 
         const auto start = std::chrono::steady_clock::now();
 
-        auto handle = interfaces.baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
+        auto handle = interfaces.getBaseFileSystem().open(("resource/flash/" + std::string{ iconpath } + (iconpath.find("status_icons") != std::string_view::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
-            handle = interfaces.baseFileSystem->open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
+            handle = interfaces.getBaseFileSystem().open(("resource/flash/" + std::string{ iconpath } + ".png").c_str(), "r", "GAME");
 
         assert(handle);
         if (handle) {
-            if (const auto size = interfaces.baseFileSystem->size(handle); size > 0) {
+            if (const auto size = interfaces.getBaseFileSystem().size(handle); size > 0) {
                 const auto buffer = std::make_unique<std::uint8_t[]>(size);
-                if (interfaces.baseFileSystem->read(buffer.get(), size, handle) > 0) {
+                if (interfaces.getBaseFileSystem().read(buffer.get(), size, handle) > 0) {
                     int width, height;
                     stbi_set_flip_vertically_on_load_thread(false);
 
@@ -894,7 +894,7 @@ static ImTextureID getItemIconTexture(const Interfaces& interfaces, std::string_
                     }
                 }
             }
-            interfaces.baseFileSystem->close(handle);
+            interfaces.getBaseFileSystem().close(handle);
         }
 
         const auto end = std::chrono::steady_clock::now();

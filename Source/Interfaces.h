@@ -19,6 +19,7 @@
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/EntityList.h"
+#include "SDK/FileSystem.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameMovement.h"
 #include "SDK/Localize.h"
@@ -31,7 +32,6 @@
 
 #include "RetSpoofGadgets.h"
 
-class BaseFileSystem;
 class Cvar;
 class EngineSound;
 class GameUI;
@@ -184,7 +184,7 @@ public:
 class Interfaces {
 public:
     Interfaces(RetSpoofInvoker retSpoofInvoker)
-        : baseFileSystem{ static_cast<BaseFileSystem*>(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
+        : baseFileSystem{ std::uintptr_t(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
           cvar{ static_cast<Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
           inputSystem{ static_cast<InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
           materialSystem{ static_cast<MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
@@ -198,7 +198,6 @@ public:
     {
     }
 
-    BaseFileSystem* baseFileSystem;
     Cvar* cvar;
     InputSystem* inputSystem;
     
@@ -214,9 +213,15 @@ public:
         return Localize{ retSpoofInvoker, localize };
     }
 
+    [[nodiscard]] auto getBaseFileSystem() const noexcept
+    {
+        return BaseFileSystem{ retSpoofInvoker, baseFileSystem };
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
+    std::uintptr_t baseFileSystem;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {
