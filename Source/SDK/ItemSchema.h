@@ -262,25 +262,18 @@ struct ItemSchema {
 
 }
 
-class ItemSchema {
+class ItemSchema : public VirtualCallableFromPOD<ItemSchema, csgo::pod::ItemSchema> {
 public:
-    INCONSTRUCTIBLE(ItemSchema)
+    VIRTUAL_METHOD2(EconItemDefinitionPointer, getItemDefinitionInterface, 4, (int id), (id))
+    VIRTUAL_METHOD2(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
+    VIRTUAL_METHOD2(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
+    VIRTUAL_METHOD2(int, getItemSetCount, 28, (), ())
+    VIRTUAL_METHOD2(EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
+    VIRTUAL_METHOD2(EconLootListDefinition*, getLootList, 32, (int index), (index))
+    VIRTUAL_METHOD2(int, getLootListCount, 34, (), ())
+    VIRTUAL_METHOD2(EconItemDefinitionPointer, getItemDefinitionByName, 42, (const char* name), (name))
 
-    [[nodiscard]] const csgo::pod::ItemSchema* getPOD() const noexcept
-    {
-        return reinterpret_cast<const csgo::pod::ItemSchema*>(this);
-    }
-
-    VIRTUAL_METHOD(EconItemDefinitionPointer, getItemDefinitionInterface, 4, (int id), (this, id))
-    VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
-    VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
-    VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
-    VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (this, name, index))
-    VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
-    VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
-    VIRTUAL_METHOD(EconItemDefinitionPointer, getItemDefinitionByName, 42, (const char* name), (this, name))
-
-    auto getItemDefinitionInterface(WeaponId id) noexcept
+    auto getItemDefinitionInterface(WeaponId id) const noexcept
     {
         return getItemDefinitionInterface(static_cast<int>(id));
     }
@@ -290,7 +283,7 @@ class ItemSystem {
 public:
     INCONSTRUCTIBLE(ItemSystem)
 
-    VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
+    VIRTUAL_METHOD(csgo::pod::ItemSchema*, getItemSchema, 0, (), (this))
 };
 
 namespace csgo::pod
@@ -360,7 +353,7 @@ private:
 
 class EconItemAttributeSetter {
 public:
-    explicit EconItemAttributeSetter(ItemSchema& itemSchema)
+    explicit EconItemAttributeSetter(ItemSchema itemSchema)
         : itemSchema{ itemSchema } {}
 
     void setPaintKit(EconItem& econItem, float paintKit) noexcept { setAttributeValue(econItem, 6, &paintKit); }
@@ -412,7 +405,7 @@ private:
             econItem.removeDynamicAttribute(attribute);
     }
 
-    ItemSchema& itemSchema;
+    ItemSchema itemSchema;
 };
 
 class SharedObject {
