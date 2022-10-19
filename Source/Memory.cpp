@@ -206,7 +206,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     getSOCData = reinterpret_cast<decltype(getSOCData)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x32\xC9") }.add(1).relativeToAbsolute().get());
     setCustomName = reinterpret_cast<decltype(setCustomName)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34") }.add(1).relativeToAbsolute().get());
     setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x3C\x53\x8B\x5D\x08\x56\x57\x6A");
-    createBaseTypeCache = reinterpret_cast<decltype(createBaseTypeCache)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") }.add(1).relativeToAbsolute().get());
+    createBaseTypeCache = SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8D\x4D\x0F") }.add(1).relativeToAbsolute().get();
     uiComponentInventory = reinterpret_cast<void**>(SafeAddress{ findPattern(CLIENT_DLL, "\xC6\x44\x24??\x83\x3D") }.add(7).deref().get());
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x4C\x24\x2C\x46") }.add(1).relativeToAbsolute().get());
     removeDynamicAttribute = reinterpret_cast<decltype(removeDynamicAttribute)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x08\x8B\xC1\x89\x45\xF8"));

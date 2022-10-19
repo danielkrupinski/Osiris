@@ -40,6 +40,11 @@ public:
         return thisptr;
     }
 
+    [[nodiscard]] RetSpoofInvoker getInvoker() const noexcept
+    {
+        return invoker;
+    }
+
 private:
     RetSpoofInvoker invoker;
     std::uintptr_t thisptr;

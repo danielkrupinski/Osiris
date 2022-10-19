@@ -404,18 +404,23 @@ public:
     int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
 };
 
-template <typename T>
-class ClientSharedObjectCache {
+class ClientSharedObjectCache : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(ClientSharedObjectCache)
-
-    PAD(16)
-    UtlVector<SharedObjectTypeCache<T>*> sharedObjectTypeCaches;
-
-    SharedObjectTypeCache<T>* findBaseTypeCache(const Memory& memory, int classID) noexcept
-    {
-        return memory.createBaseTypeCache(this, classID);
+    ClientSharedObjectCache(VirtualCallable virtualCallable, std::uintptr_t createBaseTypeCacheFn)
+        : VirtualCallable{ virtualCallable }, createBaseTypeCache{ createBaseTypeCacheFn }
+    {    
     }
+
+    using VirtualCallable::getThis;
+
+    template <typename T>
+    SharedObjectTypeCache<T>* findBaseTypeCache(int classID) const noexcept
+    {
+        return getInvoker().invokeThiscall<SharedObjectTypeCache<T>*>(getThis(), createBaseTypeCache, classID);
+    }
+
+private:
+    std::uintptr_t createBaseTypeCache;
 };
 
 struct SOID {
@@ -437,27 +442,27 @@ public:
     VIRTUAL_METHOD2_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (team, slot))
     VIRTUAL_METHOD2_V(void, removeItem, 15, (csgo::ItemId itemID), (itemID))
 
-    auto getSOC() const noexcept
+    auto getSOC(const Memory& memory) const noexcept
     {
-        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(getThis() + WIN32_LINUX(0xB4, 0xF8));
+        return ClientSharedObjectCache{ VirtualCallable{ getInvoker(), *reinterpret_cast<std::uintptr_t*>(getThis() + WIN32_LINUX(0xB4, 0xF8)) }, memory.createBaseTypeCache };
     }
 
     SharedObjectTypeCache<EconItem>* getItemBaseTypeCache(const Memory& memory) const noexcept
     {
-        const auto soc = getSOC();
-        if (!soc)
+        const auto soc = getSOC(memory);
+        if (soc.getThis() == 0)
             return nullptr;
 
-        return soc->findBaseTypeCache(memory, 1);
+        return soc.findBaseTypeCache<EconItem>(1);
     }
 
     std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) const noexcept
     {
-        const auto soc = getSOC();
-        if (!soc)
+        const auto soc = getSOC(memory);
+        if (soc.getThis() == 0)
             return {};
 
-        const auto baseTypeCache = soc->findBaseTypeCache(memory, 1);
+        const auto baseTypeCache = soc.findBaseTypeCache<EconItem>(1);
         if (!baseTypeCache)
             return {};
 

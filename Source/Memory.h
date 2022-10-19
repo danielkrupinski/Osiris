@@ -15,7 +15,7 @@
 #include "RetSpoofGadgets.h"
 
 class ClientMode;
-template <typename T> class ClientSharedObjectCache;
+class ClientSharedObjectCache;
 class CSPlayerInventory;
 class EconItem;
 class EconItemAttributeDefinition;
@@ -169,7 +169,7 @@ public:
     void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
     EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     void(THISCALL_CONV* setCustomName)(EconItem* thisptr, const char* name);
-    SharedObjectTypeCache<EconItem>*(THISCALL_CONV* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* thisptr, int classID);
+    std::uintptr_t createBaseTypeCache;
     void** uiComponentInventory;
     void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
     void(THISCALL_CONV* removeDynamicAttribute)(EconItem* thisptr, EconItemAttributeDefinition* attribute);
