@@ -360,8 +360,8 @@ private:
 
 class EconItemAttributeSetter {
 public:
-    explicit EconItemAttributeSetter(ItemSchema& itemSchema, const Memory& memory)
-        : itemSchema{ itemSchema }, memory{ memory } {}
+    explicit EconItemAttributeSetter(ItemSchema& itemSchema)
+        : itemSchema{ itemSchema } {}
 
     void setPaintKit(EconItem& econItem, float paintKit) noexcept { setAttributeValue(econItem, 6, &paintKit); }
     void setSeed(EconItem& econItem, float seed) noexcept { setAttributeValue(econItem, 7, &seed); }
@@ -413,7 +413,6 @@ private:
     }
 
     ItemSchema& itemSchema;
-    const Memory& memory;
 };
 
 class SharedObject {
