@@ -55,7 +55,7 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
         }
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+            const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
             if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive() || !entity.isOtherEnemy(memory, localPlayer.get())) {
                 records[i].clear();
                 continue;
@@ -109,7 +109,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
     const auto aimPunch = localPlayer.get().getAimPunch();
 
     for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-        const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
         if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()
             || !entity.isOtherEnemy(memory, localPlayer.get()))
             continue;
@@ -173,13 +173,13 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
 void Backtrack::init(const Interfaces& interfaces) noexcept
 {
     cvars.emplace(Cvars{
-        .updateRate = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_updaterate")),
-        .maxUpdateRate = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_maxupdaterate")),
-        .interp = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_interp")),
-        .interpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("cl_interp_ratio")),
-        .minInterpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_client_min_interp_ratio")),
-        .maxInterpRatio = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_client_max_interp_ratio")),
-        .maxUnlag = ConVar::from(retSpoofGadgets.jmpEbxInClient, interfaces.cvar->findVar("sv_maxunlag")) });
+        .updateRate = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_updaterate")),
+        .maxUpdateRate = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_maxupdaterate")),
+        .interp = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_interp")),
+        .interpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_interp_ratio")),
+        .minInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_client_min_interp_ratio")),
+        .maxInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_client_max_interp_ratio")),
+        .maxUnlag = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_maxunlag")) });
 }
 
 static bool backtrackWindowOpen = false;

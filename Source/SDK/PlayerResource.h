@@ -21,7 +21,7 @@ public:
 
     auto getIPlayerResource() noexcept
     {
-        return IPlayerResource{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68) };
+        return IPlayerResource{ retSpoofGadgets.client, std::uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68) };
     }
 
     NETVAR(bombsiteCenterA, "CCSPlayerResource", "m_bombsiteCenterA", Vector)

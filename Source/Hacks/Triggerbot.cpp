@@ -17,7 +17,7 @@ void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, con
     if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
     if (activeWeapon.getThis() == 0 || !activeWeapon.clip() || activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
@@ -77,7 +77,7 @@ void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, con
 
     lastTime = now;
 
-    const Entity entity{ retSpoofGadgets.jmpEbxInClient, trace.entity };
+    const Entity entity{ retSpoofGadgets.client, trace.entity };
     if (entity.getThis() == 0 || !entity.isPlayer())
         return;
 

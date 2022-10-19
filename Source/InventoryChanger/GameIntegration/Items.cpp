@@ -93,7 +93,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
             if (!itemDefPtr)
                 continue;
 
-            const EconItemDefinition itemDef{ retSpoofGadgets.jmpEbxInClient, itemDefPtr };
+            const EconItemDefinition itemDef{ retSpoofGadgets.client, itemDefPtr };
             if (isGlove) {
                 storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, it->iconPath);
             } else {
@@ -106,7 +106,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
 void Items::getOtherItems(game_items::Storage& storage)
 {
     for (const auto& node : itemSchema.getPOD()->itemsSorted) {
-        const auto item = EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, node.value };
+        const auto item = EconItemDefinition{ retSpoofGadgets.client, node.value };
         const auto itemTypeName = std::string_view{ item.getItemTypeName() };
         const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
         const auto isOriginal = (item.getQuality() == 1);

@@ -135,11 +135,11 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 
 Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #ifdef _WIN32
-    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
-      weaponSystem{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() }
+    : viewRenderBeams{ retSpoofGadgets.client, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
+      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() }
 #else
-    : viewRenderBeams{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05") }.add(6).relativeToAbsolute().deref<2>().get() },
-      weaponSystem{ retSpoofGadgets.jmpEbxInClient, SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get() }
+    : viewRenderBeams{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05") }.add(6).relativeToAbsolute().deref<2>().get() },
+      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get() }
 #endif
 {
 #ifdef _WIN32

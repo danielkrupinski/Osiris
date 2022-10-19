@@ -272,7 +272,7 @@ void Visuals::performColorCorrection(const Memory& memory) noexcept
 void Visuals::inverseRagdollGravity(const Interfaces& interfaces) noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ConVar::from(retSpoofGadgets.jmpEbxInClient, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+    ConVar::from(retSpoofGadgets.client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
 void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noexcept
@@ -366,7 +366,7 @@ void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) n
 void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
 {
     static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
-    ConVar::from(retSpoofGadgets.jmpEbxInClient, brightness).setValue(visualsConfig.brightness);
+    ConVar::from(retSpoofGadgets.client, brightness).setValue(visualsConfig.brightness);
 }
 
 void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
@@ -393,13 +393,13 @@ void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, cs
 void Visuals::remove3dSky(const Interfaces& interfaces) noexcept
 {
     static auto sky = interfaces.cvar->findVar("r_3dsky");
-    ConVar::from(retSpoofGadgets.jmpEbxInClient, sky).setValue(!visualsConfig.no3dSky);
+    ConVar::from(retSpoofGadgets.client, sky).setValue(!visualsConfig.no3dSky);
 }
 
 void Visuals::removeShadows(const Interfaces& interfaces) noexcept
 {
     static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
-    ConVar::from(retSpoofGadgets.jmpEbxInClient, shadows).setValue(!visualsConfig.noShadows);
+    ConVar::from(retSpoofGadgets.client, shadows).setValue(!visualsConfig.noShadows);
 }
 
 void Visuals::applyZoom(csgo::FrameStage stage) noexcept
@@ -590,21 +590,21 @@ void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientI
     if (event.getInt("userid") != localPlayer.get().getUserId(engine))
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() };
+    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
     if (activeWeapon.getThis() == 0)
         return;
 
     BeamInfo beamInfo;
 
     if (!localPlayer.get().shouldDraw()) {
-        const Entity viewModel{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()) };
+        const Entity viewModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()) };
         if (viewModel.getThis() == 0)
             return;
 
         if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getThis()), beamInfo.start))
             return;
     } else {
-        const Entity worldModel{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()) };
+        const Entity worldModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()) };
         if (worldModel.getThis() == 0)
             return;
 

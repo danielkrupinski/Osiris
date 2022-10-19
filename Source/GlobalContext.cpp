@@ -136,7 +136,7 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
-        if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
@@ -303,9 +303,9 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.jmpEbxInClient);
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.engine);
-        interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.client } }, retSpoofGadgets.client);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.client } }, retSpoofGadgets.engine);
+        interfaces.emplace(retSpoofGadgets.client);
 
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
@@ -361,11 +361,11 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.jmpEbxInClient);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets.client } }, retSpoofGadgets.client);
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets.jmpEbxInClient } }, retSpoofGadgets.engine);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets.client } }, retSpoofGadgets.engine);
 
-        interfaces.emplace(retSpoofGadgets.jmpEbxInClient);
+        interfaces.emplace(retSpoofGadgets.client);
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
 
         Netvars::init(clientInterfaces->getClient());
@@ -404,10 +404,10 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
 {
-    const Entity viewModel{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(outStruct) };
+    const Entity viewModel{ retSpoofGadgets.client, std::uintptr_t(outStruct) };
 
     if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getThis()) {
-        if (const Entity weapon{ retSpoofGadgets.jmpEbxInClient, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon()) }; weapon.getThis() != 0) {
+        if (const Entity weapon{ retSpoofGadgets.client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon()) }; weapon.getThis() != 0) {
             if (Visuals::isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
@@ -420,7 +420,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 
 void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
 {
-    const GameEvent event{ retSpoofGadgets.jmpEbxInClient, eventPointer };
+    const GameEvent event{ retSpoofGadgets.client, eventPointer };
 
     switch (fnv::hashRuntime(event.getName())) {
     case fnv::hash("round_start"):

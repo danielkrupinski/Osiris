@@ -102,11 +102,11 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
 
     viewMatrix = engineInterfaces.getEngine().worldToScreenMatrix();
 
-    const Entity observerTarget{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : 0 };
+    const Entity observerTarget{ retSpoofGadgets.client, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : 0 };
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
-        const auto entity = Entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+        const auto entity = Entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
         if (entity.getThis() == 0)
             continue;
 
@@ -121,7 +121,7 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
             }
 
             if (!entity.getNetworkable().isDormant() && !entity.isAlive()) {
-                if (const Entity obs{ retSpoofGadgets.jmpEbxInClient, entity.getObserverTarget() }; obs.getThis() != 0)
+                if (const Entity obs{ retSpoofGadgets.client, entity.getObserverTarget() }; obs.getThis() != 0)
                     observerData.emplace_back(entity, obs, obs.getThis() == localPlayer.get().getThis());
             }
         } else {
@@ -299,7 +299,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     exists = true;
     alive = localPlayer.get().isAlive();
 
-    if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0) {
+    if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0) {
         inReload = activeWeapon.isInReload();
         shooting = localPlayer.get().shotsFired() > 1;
         noScope = activeWeapon.isSniperRifle() && !localPlayer.get().isScoped();
@@ -312,7 +312,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     aimPunch = localPlayer.get().getEyePosition() + Vector::fromAngle(engine.getViewAngles() + localPlayer.get().getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer.get().getObserverMode();
-    if (const Entity obs{ retSpoofGadgets.jmpEbxInClient, localPlayer.get().getObserverTarget() }; obs.getThis() != 0 && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
+    if (const Entity obs{ retSpoofGadgets.client, localPlayer.get().getObserverTarget() }; obs.getThis() != 0 && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
         origin = obs.getAbsOrigin();
     else
         origin = localPlayer.get().getAbsOrigin();
@@ -323,7 +323,7 @@ BaseData::BaseData(const Entity& entity) noexcept
     distanceToLocal = entity.getAbsOrigin().distTo(localPlayerData.origin);
  
     if (entity.isPlayer()) {
-        const Collideable collideable{ retSpoofGadgets.jmpEbxInClient, entity.getCollideable() };
+        const Collideable collideable{ retSpoofGadgets.client, entity.getCollideable() };
         obbMins = collideable.obbMins();
         obbMaxs = collideable.obbMaxs();
     } else if (const auto model = entity.getRenderable().getModel()) {
@@ -373,7 +373,7 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         }
     }(projectile);
 
-    if (const Entity thrower{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower()) }; thrower.getThis() != 0 && localPlayer) {
+    if (const Entity thrower{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower()) }; thrower.getThis() != 0 && localPlayer) {
         if (thrower.getThis() == localPlayer.get().getThis())
             thrownByLocalPlayer = true;
         else
@@ -444,7 +444,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     immune = entity.gunGameImmunity();
     flashDuration = entity.flashDuration();
 
-    if (const Entity weapon{ retSpoofGadgets.jmpEbxInClient, entity.getActiveWeapon() }; weapon.getThis() != 0) {
+    if (const Entity weapon{ retSpoofGadgets.client, entity.getActiveWeapon() }; weapon.getThis() != 0) {
         audible = audible || isEntityAudible(weapon.getNetworkable().index());
         if (const auto weaponInfo = weapon.getWeaponData())
             activeWeapon = interfaces.getLocalize().findAsUTF8(weaponInfo->name);
@@ -672,7 +672,7 @@ ObserverData::ObserverData(const Entity& entity, const Entity& obs, bool targetI
 
 void BombData::update(const Memory& memory) noexcept
 {
-    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity{ retSpoofGadgets.jmpEbxInClient, *memory.gameRules }.mapHasBombTarget())) {
+    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity{ retSpoofGadgets.client, *memory.gameRules }.mapHasBombTarget())) {
         if (const auto bomb = (*memory.plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
             timerLength = bomb->c4TimerLength();

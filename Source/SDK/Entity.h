@@ -93,12 +93,12 @@ public:
 
     [[nodiscard]] auto getNetworkable() const noexcept
     {
-        return Networkable{ retSpoofGadgets.jmpEbxInClient, getThis() + sizeof(std::uintptr_t) * 2 };
+        return Networkable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) * 2 };
     }
 
     [[nodiscard]] auto getRenderable() const noexcept
     {
-        return Renderable{ retSpoofGadgets.jmpEbxInClient, getThis() + sizeof(std::uintptr_t) };
+        return Renderable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) };
     }
 
     bool shouldDraw() const

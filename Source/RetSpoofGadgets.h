@@ -7,7 +7,7 @@
 struct RetSpoofGadgets {
     RetSpoofGadgets();
 
-    RetSpoofInvoker jmpEbxInClient;
+    RetSpoofInvoker client;
     RetSpoofInvoker engine;
 };
 

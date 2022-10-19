@@ -65,7 +65,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
-        const Entity entity{ retSpoofGadgets.jmpEbxInClient, clientInterfaces.getEntityList().getEntity(i) };
+        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
         if (entity.getThis() == 0 || entity.getNetworkable().isDormant())
             continue;
 
@@ -94,7 +94,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-        const Entity entity{ retSpoofGadgets.jmpEbxInClient, glowobject.entity };
+        const Entity entity{ retSpoofGadgets.client, glowobject.entity };
 
         if (glowobject.isUnused() || entity.getThis() == 0 || entity.getNetworkable().isDormant())
             continue;
@@ -131,7 +131,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::CSPlayer:
             if (!entity.isAlive())
                 break;
-            if (const Entity activeWeapon{ retSpoofGadgets.jmpEbxInClient, entity.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
+            if (const Entity activeWeapon{ retSpoofGadgets.client, entity.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
                 applyPlayerGlow("Planting", entity);
             else if (entity.isDefusing())
                 applyPlayerGlow("Defusing", entity);

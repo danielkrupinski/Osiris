@@ -21,7 +21,7 @@ public:
     [[nodiscard]] auto get() noexcept
     {
         assert(localEntity && *localEntity);
-        return Entity{ retSpoofGadgets.jmpEbxInClient, *localEntity };
+        return Entity{ retSpoofGadgets.client, *localEntity };
     }
 
 private:

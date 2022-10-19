@@ -862,8 +862,8 @@ namespace inventory_changer::item_generator
 
 [[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(const Memory& memory, WeaponId weaponID) noexcept
 {
-    if (const auto def = ItemSchema::from(retSpoofGadgets.jmpEbxInClient, memory.itemSystem()->getItemSchema()).getItemDefinitionInterface(weaponID))
-        return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getNumberOfSupportedStickerSlots(), 0, 5));
+    if (const auto def = ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()).getItemDefinitionInterface(weaponID))
+        return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.client, def }.getNumberOfSupportedStickerSlots(), 0, 5));
     return 0;
 }
 
@@ -874,7 +874,7 @@ public:
     [[nodiscard]] std::uint8_t operator()(WeaponId weaponId) const
     {
         if (const auto def = itemSchema.getItemDefinitionInterface(weaponId))
-            return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.jmpEbxInClient, def }.getNumberOfSupportedStickerSlots(), 0, 5));
+            return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.client, def }.getNumberOfSupportedStickerSlots(), 0, 5));
         return 0;
     }
 
@@ -892,7 +892,7 @@ std::optional<inventory::Item> generateItemFromContainer(const Memory& memory, H
         return std::nullopt;
 
     const auto& unlockedItem = getRandomItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
-    DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets.jmpEbxInClient, memory.itemSystem()->getItemSchema()) } };
+    DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) } };
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
 }
 

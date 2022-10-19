@@ -26,7 +26,7 @@
 
 static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
-    const Entity entity{ retSpoofGadgets.jmpEbxInClient, std::uintptr_t(outStruct) };
+    const Entity entity{ retSpoofGadgets.client, std::uintptr_t(outStruct) };
 
     if (Misc::isRadarHackOn()) {
         data.value._int = 1;
