@@ -409,9 +409,6 @@
     <ClInclude Include="SDK\Surface.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\GameUI.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>

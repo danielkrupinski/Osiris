@@ -53,7 +53,6 @@
 #include "SDK/Constants/FrameStage.h"
 #include "SDK/CSPlayerInventory.h"
 #include "SDK/GameEvent.h"
-#include "SDK/GameUI.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/ItemSchema.h"
