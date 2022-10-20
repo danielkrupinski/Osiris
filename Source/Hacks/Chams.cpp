@@ -245,14 +245,14 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            material.findVar("$envmaptint")->setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            material.findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 
@@ -283,14 +283,14 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            material.findVar("$envmaptint")->setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            material.findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 

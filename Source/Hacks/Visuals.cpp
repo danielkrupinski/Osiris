@@ -460,11 +460,11 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
     }()));
 
     if (visualsConfig.screenEffect == 1)
-        material.findVar("$c0_x")->setValue(0.0f);
+        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.0f);
     else if (visualsConfig.screenEffect == 2)
-        material.findVar("$c0_x")->setValue(0.1f);
+        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.1f);
     else if (visualsConfig.screenEffect >= 4)
-        material.findVar("$c0_x")->setValue(1.0f);
+        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
 
     DRAW_SCREEN_EFFECT(material, memory, engine)
 }
@@ -496,11 +496,11 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
            
             auto material = Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial(getEffectMaterial()));
             if (visualsConfig.hitEffect == 1)
-                material.findVar("$c0_x")->setValue(0.0f);
+                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.0f);
             else if (visualsConfig.hitEffect == 2)
-                material.findVar("$c0_x")->setValue(0.1f);
+                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.1f);
             else if (visualsConfig.hitEffect >= 4)
-                material.findVar("$c0_x")->setValue(1.0f);
+                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
 
             DRAW_SCREEN_EFFECT(material, memory, engine)
         }

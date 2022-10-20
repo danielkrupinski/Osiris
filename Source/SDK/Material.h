@@ -2,16 +2,19 @@
 
 #include <tuple>
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class MaterialVar {
-public:
-    INCONSTRUCTIBLE(MaterialVar)
+namespace csgo::pod
+{
+    struct Material;
+    struct MaterialVar;
+}
 
-    VIRTUAL_METHOD(void, setValue, 4, (float value), (this, value))
-    VIRTUAL_METHOD(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (this, x, y, z))
-    VIRTUAL_METHOD(void, setVecComponentValue, 26, (float value, int component), (this, value, component))
+class MaterialVar : public VirtualCallableFromPOD<MaterialVar, csgo::pod::MaterialVar> {
+public:
+    VIRTUAL_METHOD2(void, setValue, 4, (float value), (value))
+    VIRTUAL_METHOD2(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (x, y, z))
+    VIRTUAL_METHOD2(void, setVecComponentValue, 26, (float value, int component), (value, component))
 };
 
 enum class MaterialVarFlag {
@@ -20,13 +23,11 @@ enum class MaterialVarFlag {
     WIREFRAME = 1 << 28
 };
 
-namespace csgo::pod { struct Material; }
-
 class Material : public VirtualCallableFromPOD<Material, csgo::pod::Material> {
 public:
     VIRTUAL_METHOD2(const char*, getName, 0, (), ())
     VIRTUAL_METHOD2(const char*, getTextureGroupName, 1, (), ())
-    VIRTUAL_METHOD2(MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (name, found, complain))
+    VIRTUAL_METHOD2(csgo::pod::MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (name, found, complain))
     VIRTUAL_METHOD2(void, incrementReferenceCount, 12, (), ())
     VIRTUAL_METHOD2(void, decrementReferenceCount, 13, (), ())
     VIRTUAL_METHOD2(void, alphaModulate, 27, (float alpha), (alpha))
