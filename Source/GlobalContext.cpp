@@ -299,7 +299,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 {
     if (state == GlobalContext::State::Initialized) {
         ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
-        interfaces->inputSystem->enableInput(!gui->isOpen());
+        interfaces->getInputSystem().enableInput(!gui->isOpen());
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 

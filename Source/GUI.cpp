@@ -128,7 +128,7 @@ void GUI::handleToggle(const Interfaces& interfaces) noexcept
     if (Misc::isMenuKeyPressed()) {
         open = !open;
         if (!open)
-            interfaces.inputSystem->resetInputState();
+            interfaces.getInputSystem().resetInputState();
 #ifndef _WIN32
         ImGui::GetIO().MouseDrawCursor = gui->open;
 #endif
