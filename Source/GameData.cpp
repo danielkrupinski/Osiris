@@ -395,7 +395,7 @@ PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interface
 {
     if (const auto steamID = entity.getSteamId(engineInterfaces.getEngine())) {
         const auto ctx = engineInterfaces.getEngine().getSteamAPIContext();
-        const auto avatar = ctx->steamFriends->getSmallFriendAvatar(steamID);
+        const auto avatar = SteamFriends::from(retSpoofGadgets.client, ctx->steamFriends).getSmallFriendAvatar(steamID);
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
         PlayerAvatar playerAvatar;
