@@ -27,6 +27,7 @@
 #include "SDK/Localize.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/Panorama.h"
 #include "SDK/Platform.h"
 #include "SDK/Prediction.h"
 #include "SDK/SoundEmitter.h"
@@ -41,7 +42,6 @@ class EngineSound;
 class GameUI;
 class ModelRender;
 class NetworkStringTableContainer;
-class PanoramaUIEngine;
 class PhysicsSurfaceProps;
 class Surface;
 
@@ -188,7 +188,7 @@ public:
           cvar{ std::uintptr_t(find(VSTDLIB_DLL, "VEngineCvar007")) },
           inputSystem{ std::uintptr_t(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
           materialSystem{ std::uintptr_t(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
-          panoramaUIEngine{ static_cast<PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
+          panoramaUIEngine{ std::uintptr_t(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
           physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
           surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
           soundEmitter{ std::uintptr_t(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
@@ -198,7 +198,6 @@ public:
     {
     }
 
-    PanoramaUIEngine* panoramaUIEngine;
     PhysicsSurfaceProps* physicsSurfaceProps;
     Surface* surface;
 
@@ -237,6 +236,11 @@ public:
         return StudioRender::from(retSpoofInvoker, (csgo::pod::StudioRender*)studioRender);
     }
 
+    [[nodiscard]] auto getPanoramaUIEngine() const noexcept
+    {
+        return PanoramaUIEngine::from(retSpoofInvoker, (csgo::pod::PanoramaUIEngine*)panoramaUIEngine);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
@@ -246,6 +250,7 @@ private:
     std::uintptr_t inputSystem;
     std::uintptr_t soundEmitter;
     std::uintptr_t studioRender;
+    std::uintptr_t panoramaUIEngine;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {

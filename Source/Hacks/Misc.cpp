@@ -1269,7 +1269,7 @@ void Misc::autoAccept(const Interfaces& interfaces, const Memory& memory, const 
 
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
         if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
-            UIEngine{ retSpoofGadgets.client, interfaces.panoramaUIEngine->accessUIEngine() }.dispatchEvent(eventPtr);
+            UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
     }
 
 #ifdef _WIN32

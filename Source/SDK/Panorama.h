@@ -34,9 +34,9 @@ public:
     VIRTUAL_METHOD2_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
 };
 
-class PanoramaUIEngine {
-public:
-    INCONSTRUCTIBLE(PanoramaUIEngine)
+namespace csgo::pod { struct PanoramaUIEngine; }
 
-    VIRTUAL_METHOD(UIEnginePointer, accessUIEngine, 11, (), (this))
+class PanoramaUIEngine : public VirtualCallableFromPOD<PanoramaUIEngine, csgo::pod::PanoramaUIEngine> {
+public:
+    VIRTUAL_METHOD2(UIEnginePointer, accessUIEngine, 11, (), ())
 };
