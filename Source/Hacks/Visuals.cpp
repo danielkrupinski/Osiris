@@ -271,7 +271,7 @@ void Visuals::performColorCorrection(const Memory& memory) noexcept
 
 void Visuals::inverseRagdollGravity(const Interfaces& interfaces) noexcept
 {
-    static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
+    static auto ragdollGravity = interfaces.getCvar().findVar("cl_ragdoll_gravity");
     ConVar::from(retSpoofGadgets.client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
@@ -365,7 +365,7 @@ void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) n
 
 void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
 {
-    static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
+    static auto brightness = interfaces.getCvar().findVar("mat_force_tonemap_scale");
     ConVar::from(retSpoofGadgets.client, brightness).setValue(visualsConfig.brightness);
 }
 
@@ -392,13 +392,13 @@ void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, cs
 
 void Visuals::remove3dSky(const Interfaces& interfaces) noexcept
 {
-    static auto sky = interfaces.cvar->findVar("r_3dsky");
+    static auto sky = interfaces.getCvar().findVar("r_3dsky");
     ConVar::from(retSpoofGadgets.client, sky).setValue(!visualsConfig.no3dSky);
 }
 
 void Visuals::removeShadows(const Interfaces& interfaces) noexcept
 {
-    static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
+    static auto shadows = interfaces.getCvar().findVar("cl_csm_enabled");
     ConVar::from(retSpoofGadgets.client, shadows).setValue(!visualsConfig.noShadows);
 }
 
@@ -576,7 +576,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     if (stage == csgo::FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
         memory.loadSky(skyboxList[visualsConfig.skybox]);
     } else {
-        static const auto sv_skyname = interfaces.cvar->findVar("sv_skyname");
+        static const auto sv_skyname = interfaces.getCvar().findVar("sv_skyname");
         memory.loadSky(sv_skyname->string);
     }
 }

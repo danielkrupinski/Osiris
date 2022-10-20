@@ -683,7 +683,7 @@ private:
 
 void InventoryChanger::scheduleHudUpdate(const Interfaces& interfaces) noexcept
 {
-    interfaces.cvar->findVar("cl_fullupdate")->changeCallback();
+    interfaces.getCvar().findVar("cl_fullupdate")->changeCallback();
     hudUpdateRequired = true;
 }
 

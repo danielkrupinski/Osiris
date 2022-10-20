@@ -369,7 +369,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     surface.init(interfaces.surface);
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
-    svCheats.init(interfaces.cvar->findVar("sv_cheats"));
+    svCheats.init(interfaces.getCvar().findVar("sv_cheats"));
     svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetBool);
 
     viewRender.init(memory.viewRender);

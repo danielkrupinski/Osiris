@@ -16,6 +16,7 @@
 #endif
 
 #include "SDK/Client.h"
+#include "SDK/Cvar.h"
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/EntityList.h"
@@ -33,7 +34,6 @@
 
 #include "RetSpoofGadgets.h"
 
-class Cvar;
 class EngineSound;
 class GameUI;
 class InputSystem;
@@ -185,7 +185,7 @@ class Interfaces {
 public:
     Interfaces(RetSpoofInvoker retSpoofInvoker)
         : baseFileSystem{ std::uintptr_t(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
-          cvar{ static_cast<Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
+          cvar{ std::uintptr_t(find(VSTDLIB_DLL, "VEngineCvar007")) },
           inputSystem{ static_cast<InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
           materialSystem{ std::uintptr_t(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
           panoramaUIEngine{ static_cast<PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
@@ -198,7 +198,6 @@ public:
     {
     }
 
-    Cvar* cvar;
     InputSystem* inputSystem;
     PanoramaUIEngine* panoramaUIEngine;
     PhysicsSurfaceProps* physicsSurfaceProps;
@@ -221,11 +220,17 @@ public:
         return MaterialSystem::from(retSpoofInvoker, (csgo::pod::MaterialSystem*)materialSystem);
     }
 
+    [[nodiscard]] auto getCvar() const noexcept
+    {
+        return Cvar::from(retSpoofInvoker, (csgo::pod::Cvar*)cvar);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
     std::uintptr_t baseFileSystem;
     std::uintptr_t materialSystem;
+    std::uintptr_t cvar;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {

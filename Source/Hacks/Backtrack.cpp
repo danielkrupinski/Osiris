@@ -173,13 +173,13 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
 void Backtrack::init(const Interfaces& interfaces) noexcept
 {
     cvars.emplace(Cvars{
-        .updateRate = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_updaterate")),
-        .maxUpdateRate = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_maxupdaterate")),
-        .interp = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_interp")),
-        .interpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("cl_interp_ratio")),
-        .minInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_client_min_interp_ratio")),
-        .maxInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_client_max_interp_ratio")),
-        .maxUnlag = ConVar::from(retSpoofGadgets.client, interfaces.cvar->findVar("sv_maxunlag")) });
+        .updateRate = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("cl_updaterate")),
+        .maxUpdateRate = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("sv_maxupdaterate")),
+        .interp = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("cl_interp")),
+        .interpRatio = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("cl_interp_ratio")),
+        .minInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("sv_client_min_interp_ratio")),
+        .maxInterpRatio = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("sv_client_max_interp_ratio")),
+        .maxUnlag = ConVar::from(retSpoofGadgets.client, interfaces.getCvar().findVar("sv_maxunlag")) });
 }
 
 static bool backtrackWindowOpen = false;
