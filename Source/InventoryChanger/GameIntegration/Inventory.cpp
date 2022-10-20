@@ -3,6 +3,7 @@
 #include <Interfaces.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
+#include <SDK/CSPlayerInventory.h>
 #include <SDK/EconItemView.h>
 #include <SDK/Panorama.h>
 

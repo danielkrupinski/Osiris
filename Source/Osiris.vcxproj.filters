@@ -862,6 +862,9 @@
     <ClInclude Include="SafeAddress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\CSPlayerInventory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

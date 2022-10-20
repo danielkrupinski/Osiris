@@ -55,6 +55,7 @@
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
 #include <SDK/PanoramaMarshallHelper.h>
+#include <SDK/CSPlayerInventory.h>
 #include "../Helpers.h"
 
 #include "GameItems/Lookup.h"

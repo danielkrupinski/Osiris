@@ -51,6 +51,7 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/Constants/FrameStage.h"
+#include "SDK/CSPlayerInventory.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
 #include "SDK/GlobalVars.h"
