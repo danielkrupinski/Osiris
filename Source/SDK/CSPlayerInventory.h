@@ -34,13 +34,13 @@ public:
         return ClientSharedObjectCache{ VirtualCallable{ getInvoker(), *reinterpret_cast<std::uintptr_t*>(getThis() + WIN32_LINUX(0xB4, 0xF8)) }, memory.createBaseTypeCache };
     }
 
-    SharedObjectTypeCache<csgo::pod::EconItem>* getItemBaseTypeCache(const Memory& memory) const noexcept
+    csgo::pod::SharedObjectTypeCache* getItemBaseTypeCache(const Memory& memory) const noexcept
     {
         const auto soc = getSOC(memory);
         if (soc.getThis() == 0)
             return nullptr;
 
-        return soc.findBaseTypeCache<csgo::pod::EconItem>(1);
+        return soc.findBaseTypeCache(1);
     }
 
     std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) const noexcept
@@ -49,7 +49,7 @@ public:
         if (soc.getThis() == 0)
             return {};
 
-        const auto baseTypeCache = soc.findBaseTypeCache<csgo::pod::EconItem>(1);
+        const auto baseTypeCache = soc.findBaseTypeCache(1);
         if (!baseTypeCache)
             return {};
 
@@ -57,10 +57,10 @@ public:
         std::uint32_t maxInventoryID = 0;
         for (int i = 0; i < baseTypeCache->objectCount; ++i) {
             const auto item = baseTypeCache->objects[i];
-            if (const auto isDefaultItem = (item->itemID & 0xF000000000000000) != 0)
+            if (const auto isDefaultItem = (((csgo::pod::EconItem*)item)->itemID & 0xF000000000000000) != 0)
                 continue;
-            maxItemID = (std::max)(maxItemID, item->itemID);
-            maxInventoryID = (std::max)(maxInventoryID, item->inventory);
+            maxItemID = (std::max)(maxItemID, ((csgo::pod::EconItem*)item)->itemID);
+            maxInventoryID = (std::max)(maxInventoryID, ((csgo::pod::EconItem*)item)->inventory);
         }
 
         return std::make_pair(maxItemID, maxInventoryID);

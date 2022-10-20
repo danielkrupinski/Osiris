@@ -406,27 +406,29 @@ private:
     ItemSchema itemSchema;
 };
 
-namespace csgo::pod { struct SharedObject; }
+namespace csgo::pod
+{
+    struct SharedObject;
+
+    struct SharedObjectTypeCache {
+        PAD(sizeof(std::uintptr_t))
+        csgo::pod::SharedObject** objects;
+        PAD(WIN32_LINUX(16, 24))
+        int objectCount;
+        PAD(WIN32_LINUX(4, 12))
+        int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
+    };
+}
 
 class SharedObject : public VirtualCallableFromPOD<SharedObject, csgo::pod::SharedObject> {
 public:
     VIRTUAL_METHOD2_V(int, getTypeID, 1, (), ())
 };
 
-template <typename T>
-class SharedObjectTypeCache {
+class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, csgo::pod::SharedObjectTypeCache> {
 public:
-    INCONSTRUCTIBLE(SharedObjectTypeCache)
-
-    VIRTUAL_METHOD_V(void, addObject, 1, (T* object), (this, object))
-    VIRTUAL_METHOD_V(void, removeObject, 3, (T* object), (this, object))
-
-    PAD(sizeof(std::uintptr_t))
-    T** objects;
-    PAD(WIN32_LINUX(16, 24))
-    int objectCount;
-    PAD(WIN32_LINUX(4, 12))
-    int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
+    VIRTUAL_METHOD2_V(void, addObject, 1, (csgo::pod::SharedObject* object), (object))
+    VIRTUAL_METHOD2_V(void, removeObject, 3, (csgo::pod::SharedObject* object), (object))
 };
 
 class ClientSharedObjectCache : private VirtualCallable {
@@ -438,10 +440,9 @@ public:
 
     using VirtualCallable::getThis;
 
-    template <typename T>
-    SharedObjectTypeCache<T>* findBaseTypeCache(int classID) const noexcept
+    csgo::pod::SharedObjectTypeCache* findBaseTypeCache(int classID) const noexcept
     {
-        return getInvoker().invokeThiscall<SharedObjectTypeCache<T>*>(getThis(), createBaseTypeCache, classID);
+        return getInvoker().invokeThiscall<csgo::pod::SharedObjectTypeCache*>(getThis(), createBaseTypeCache, classID);
     }
 
 private:

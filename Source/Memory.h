@@ -31,7 +31,6 @@ class MoveHelper;
 class MoveData;
 class PlantedC4;
 class PlayerResource;
-template <typename T> class SharedObjectTypeCache;
 class ViewRender;
 template <typename Key, typename Value>
 struct UtlMap;
