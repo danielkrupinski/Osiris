@@ -23,6 +23,7 @@
 #include "SDK/GameEvent.h"
 #include "SDK/GameMovement.h"
 #include "SDK/Localize.h"
+#include "SDK/MaterialSystem.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
 #include "SDK/Prediction.h"
@@ -36,7 +37,6 @@ class Cvar;
 class EngineSound;
 class GameUI;
 class InputSystem;
-class MaterialSystem;
 class ModelRender;
 class NetworkStringTableContainer;
 class PanoramaUIEngine;
@@ -187,7 +187,7 @@ public:
         : baseFileSystem{ std::uintptr_t(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
           cvar{ static_cast<Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
           inputSystem{ static_cast<InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          materialSystem{ static_cast<MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
+          materialSystem{ std::uintptr_t(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
           panoramaUIEngine{ static_cast<PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
           physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
           surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
@@ -200,8 +200,6 @@ public:
 
     Cvar* cvar;
     InputSystem* inputSystem;
-    
-    MaterialSystem* materialSystem;
     PanoramaUIEngine* panoramaUIEngine;
     PhysicsSurfaceProps* physicsSurfaceProps;
     Surface* surface;
@@ -218,10 +216,16 @@ public:
         return BaseFileSystem{ retSpoofInvoker, baseFileSystem };
     }
 
+    [[nodiscard]] auto getMaterialSystem() const noexcept
+    {
+        return MaterialSystem::from(retSpoofInvoker, (csgo::pod::MaterialSystem*)materialSystem);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
     std::uintptr_t baseFileSystem;
+    std::uintptr_t materialSystem;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {

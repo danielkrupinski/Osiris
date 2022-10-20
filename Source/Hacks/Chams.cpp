@@ -69,35 +69,35 @@ static auto dispatchMaterial(int id) noexcept
 
 static void initializeMaterials(const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    normal = interfaces.materialSystem->createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
-    flat = interfaces.materialSystem->createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
-    chrome = interfaces.materialSystem->createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
-    glow = interfaces.materialSystem->createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
-    pearlescent = interfaces.materialSystem->createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
-    metallic = interfaces.materialSystem->createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
+    normal = interfaces.getMaterialSystem().createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
+    flat = interfaces.getMaterialSystem().createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
+    chrome = interfaces.getMaterialSystem().createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
+    glow = interfaces.getMaterialSystem().createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+    pearlescent = interfaces.getMaterialSystem().createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
+    metallic = interfaces.getMaterialSystem().createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
         kv->setString(memory, "$envmaptint", "[.7 .7 .7]");
-        animated = interfaces.materialSystem->createMaterial("animated", kv);
+        animated = interfaces.getMaterialSystem().createMaterial("animated", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture models/player/ct_fbi/ct_fbi_glass $envmap env_cubemap");
         kv->setString(memory, "$envmaptint", "[.4 .6 .7]");
-        platinum = interfaces.materialSystem->createMaterial("platinum", kv);
+        platinum = interfaces.getMaterialSystem().createMaterial("platinum", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
         kv->setString(memory, "$color", "[.05 .05 .05]");
-        glass = interfaces.materialSystem->createMaterial("glass", kv);
+        glass = interfaces.getMaterialSystem().createMaterial("glass", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
         kv->setString(memory, "$phongtint", "[.2 .35 .6]");
-        crystal = interfaces.materialSystem->createMaterial("crystal", kv);
+        crystal = interfaces.getMaterialSystem().createMaterial("crystal", kv);
     }
 
     {
@@ -106,7 +106,7 @@ static void initializeMaterials(const Interfaces& interfaces, const Memory& memo
         kv->setString(memory, "$envmaptint", "[.2 .2 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        silver = interfaces.materialSystem->createMaterial("silver", kv);
+        silver = interfaces.getMaterialSystem().createMaterial("silver", kv);
     }
 
     {
@@ -115,14 +115,14 @@ static void initializeMaterials(const Interfaces& interfaces, const Memory& memo
         kv->setString(memory, "$envmaptint", "[.6 .5 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.6 .5 .2]");
-        gold = interfaces.materialSystem->createMaterial("gold", kv);
+        gold = interfaces.getMaterialSystem().createMaterial("gold", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
         kv->setString(memory, "$phongfresnelranges", "[.1 .4 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        plastic = interfaces.materialSystem->createMaterial("plastic", kv);
+        plastic = interfaces.getMaterialSystem().createMaterial("plastic", kv);
     }
 }
 
