@@ -250,7 +250,7 @@ void GlobalContext::overrideViewHook(ViewSetup* setup)
 
 int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 {
-    if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
+    if (const char* soundName = interfaces->getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
         Sound::modulateSound(*clientInterfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
         soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     }
