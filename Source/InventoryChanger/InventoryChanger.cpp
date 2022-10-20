@@ -388,7 +388,7 @@ static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory.getSOCData(view))
-            localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
+            localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
     }
 }
 
@@ -1040,10 +1040,10 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
 namespace inventory_changer
 {
 
-void InventoryChanger::onSoUpdated(SharedObject* object) noexcept
+void InventoryChanger::onSoUpdated(const SharedObject& object) noexcept
 {
-    if (object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
-        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C));
+    if (object.getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
+        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(object.getThis() + WIN32_LINUX(0x10, 0x1C));
         if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
             ++it->counter;
             weaponID = WeaponId::None;
@@ -1391,7 +1391,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory.getSOCData(view)) {
             soc->inventory = localInventory.getHighestIDs(memory).second + 1;
-            localInventory.soUpdated(localInventory.getSOID(), (SharedObject*)soc, 4);
+            localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
         }
     }
 }

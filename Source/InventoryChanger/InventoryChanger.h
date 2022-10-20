@@ -65,7 +65,7 @@ public:
 
     void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate(const Interfaces& interfaces) noexcept;
-    void onSoUpdated(SharedObject* object) noexcept;
+    void onSoUpdated(const SharedObject& object) noexcept;
 
 private:
     void placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID);

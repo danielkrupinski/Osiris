@@ -271,9 +271,9 @@ static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, 
     return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
-static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
+static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, csgo::pod::SharedObject* object, int event) noexcept
 {
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(object);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(SharedObject::from(retSpoofGadgets.client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
