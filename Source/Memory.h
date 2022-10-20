@@ -6,6 +6,7 @@
 #include <type_traits>
 
 #include "SDK/ItemSchema.h"
+#include "SDK/PanoramaMarshallHelper.h"
 #include "SDK/Platform.h"
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
@@ -28,7 +29,6 @@ class Input;
 class KeyValues;
 class MoveHelper;
 class MoveData;
-class PanoramaMarshallHelper;
 class PlantedC4;
 class PlayerResource;
 template <typename T> class SharedObjectTypeCache;
@@ -167,7 +167,7 @@ public:
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
     bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
-    PanoramaMarshallHelper* panoramaMarshallHelper;
+    csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     InventoryChangerReturnAddresses inventoryChangerReturnAddresses;
     std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
