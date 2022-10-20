@@ -192,7 +192,7 @@ void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, con
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
             applyChams(interfaces, memory, config.chams["Backtrack"].materials, health, records->back().matrix);
-            interfaces.studioRender->forcedMaterialOverride(nullptr);
+            interfaces.getStudioRender().forcedMaterialOverride(nullptr);
         }
     } else {
         applyChams(interfaces, memory, config.chams["Allies"].materials, health);
@@ -258,9 +258,9 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material.getPOD());
+        interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-        interfaces.studioRender->forcedMaterialOverride(nullptr);
+        interfaces.getStudioRender().forcedMaterialOverride(nullptr);
     }
 
     for (const auto& cham : chams) {
@@ -299,7 +299,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material.getPOD());
+        interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }

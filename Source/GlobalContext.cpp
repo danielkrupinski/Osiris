@@ -145,7 +145,7 @@ float GlobalContext::getViewModelFovHook()
 
 void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
-    if (interfaces->studioRender->isForcedMaterialOverride())
+    if (interfaces->getStudioRender().isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
@@ -154,7 +154,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (static Chams chams; !chams.render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
-    interfaces->studioRender->forcedMaterialOverride(nullptr);
+    interfaces->getStudioRender().forcedMaterialOverride(nullptr);
 }
 
 bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress)

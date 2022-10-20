@@ -30,6 +30,7 @@
 #include "SDK/Platform.h"
 #include "SDK/Prediction.h"
 #include "SDK/SoundEmitter.h"
+#include "SDK/StudioRender.h"
 
 #include "Platform/DynamicLibraryView.h"
 #include "Platform/RetSpoofInvoker.h"
@@ -43,7 +44,6 @@ class NetworkStringTableContainer;
 class PanoramaUIEngine;
 class PhysicsSurfaceProps;
 class Surface;
-class StudioRender;
 
 template <typename DynamicLibraryWrapper>
 struct InterfaceFinder {
@@ -192,7 +192,7 @@ public:
           physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
           surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
           soundEmitter{ std::uintptr_t(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ static_cast<StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) },
+          studioRender{ std::uintptr_t(find(STUDIORENDER_DLL, "VStudioRender026")) },
           retSpoofInvoker{ retSpoofInvoker },
           localize{ std::uintptr_t(find(LOCALIZE_DLL, "Localize_001")) }
     {
@@ -201,7 +201,6 @@ public:
     PanoramaUIEngine* panoramaUIEngine;
     PhysicsSurfaceProps* physicsSurfaceProps;
     Surface* surface;
-    StudioRender* studioRender;
 
     [[nodiscard]] auto getLocalize() const noexcept
     {
@@ -233,6 +232,11 @@ public:
         return SoundEmitter::from(retSpoofInvoker, (csgo::pod::SoundEmitter*)soundEmitter);
     }
 
+    [[nodiscard]] auto getStudioRender() const noexcept
+    {
+        return StudioRender::from(retSpoofInvoker, (csgo::pod::StudioRender*)studioRender);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
@@ -241,6 +245,7 @@ private:
     std::uintptr_t cvar;
     std::uintptr_t inputSystem;
     std::uintptr_t soundEmitter;
+    std::uintptr_t studioRender;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {
