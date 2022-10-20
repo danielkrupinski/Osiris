@@ -39,7 +39,7 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
     if (!econItem)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -53,7 +53,7 @@ void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t 
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -68,7 +68,7 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
     if (!econItem)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -138,7 +138,7 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return {};
 
@@ -256,7 +256,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (!econItem)
         return itemID;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return itemID;
 
@@ -282,7 +282,7 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -300,7 +300,7 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -317,7 +317,7 @@ void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWea
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -348,7 +348,7 @@ void Inventory::deleteItem(ItemId itemID)
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -366,7 +366,7 @@ void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -398,7 +398,7 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -414,7 +414,7 @@ void Inventory::unsealGraffiti(ItemId itemID)
     if (econItem.getThis() == 0 || econItem.getPOD()->weaponId != WeaponId::SealedGraffiti)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -431,7 +431,7 @@ void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -447,7 +447,7 @@ void Inventory::statTrakSwapped(ItemId itemID)
 
 void Inventory::equipItem(ItemId itemID, csgo::Team team, std::uint8_t slot)
 {
-    memory.inventoryManager->equipItemInSlot(team, slot, static_cast<csgo::ItemId>(itemID));
+    memory.inventoryManager.equipItemInSlot(team, slot, static_cast<csgo::ItemId>(itemID));
 }
 
 void Inventory::markItemUpdated(ItemId itemID)
@@ -488,7 +488,7 @@ void Inventory::xRayItemClaimed(ItemId itemID)
     if (!econItem)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -510,7 +510,7 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -527,7 +527,7 @@ void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -549,7 +549,7 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 
@@ -566,7 +566,7 @@ void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAft
     if (econItem.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager->getLocalInventory() };
+    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
     if (localInventory.getThis() == 0)
         return;
 

@@ -12,6 +12,9 @@
 #include "InventoryHandler.h"
 #include "ItemRemovalHandler.h"
 
+// TODO: remove this dependency
+#include "../../../Memory.h"
+
 namespace inventory_changer::backend
 {
 

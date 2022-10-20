@@ -21,6 +21,7 @@
 
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/ItemSchema.h"
 #include "SDK/LocalPlayer.h"
 
 #include "SafeAddress.h"
@@ -136,10 +137,12 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #ifdef _WIN32
     : viewRenderBeams{ retSpoofGadgets.client, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
-      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() }
+      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() },
+      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, reinterpret_cast<csgo::pod::InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") }.add(5).deref().get())) }
 #else
     : viewRenderBeams{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05") }.add(6).relativeToAbsolute().deref<2>().get() },
-      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get() }
+      weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10") }.add(12).relativeToAbsolute().deref().get() },
+      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, reinterpret_cast<csgo::pod::InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") }.add(3).relativeToAbsolute().get())) }
 #endif
 {
 #ifdef _WIN32
@@ -195,7 +198,6 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     gameRules = reinterpret_cast<std::uintptr_t*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07") }.add(4).deref().get());
     registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xA1????\xA8\x01\x75\x21") }.add(6).deref().add(-36).get());
     makePanoramaSymbolFn = reinterpret_cast<decltype(makePanoramaSymbolFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\x0E\x8D\x4D\x0E") }.add(1).relativeToAbsolute().get());
-    inventoryManager = reinterpret_cast<InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") }.add(5).deref().get());
     createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(SafeAddress{ findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45") }.add(20).deref().get());
     addEconItem = reinterpret_cast<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x74\xE7") }.add(1).relativeToAbsolute().get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47"));
@@ -271,7 +273,6 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     moveData = reinterpret_cast<MoveData*>(SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x8B\x2D????\x0F\xB6\x93") }.add(3).relativeToAbsolute().deref<2>().get());
     moveHelper = reinterpret_cast<MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") }.add(3).relativeToAbsolute().deref<2>().get());
 
-    inventoryManager = reinterpret_cast<decltype(inventoryManager)>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") }.add(3).relativeToAbsolute().get());
     createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(SafeAddress{ findPattern(CLIENT_DLL, "\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D") }.add(50).relativeToAbsolute().get());
     addEconItem = reinterpret_cast<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x45\x3B\x65\x28\x72\xD6") }.add(1).relativeToAbsolute().get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50") }.add(1).relativeToAbsolute().get());

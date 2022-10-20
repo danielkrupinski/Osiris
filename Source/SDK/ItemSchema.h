@@ -11,8 +11,6 @@
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
-#include "../Memory.h"
-
 #include "Constants/ItemId.h"
 
 enum class WeaponId : short;
@@ -450,11 +448,11 @@ private:
     std::uintptr_t createBaseTypeCache;
 };
 
-class InventoryManager {
-public:
-    INCONSTRUCTIBLE(InventoryManager)
+namespace csgo::pod { struct InventoryManager; }
 
-    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (this, team, slot, itemID, swap))
-    VIRTUAL_METHOD_V(std::uintptr_t, getLocalInventory, 23, (), (this))
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (this, inventory, itemID, team, slot, swap))
+class InventoryManager : public VirtualCallableFromPOD<InventoryManager, csgo::pod::InventoryManager> {
+public:
+    VIRTUAL_METHOD2_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (team, slot, itemID, swap))
+    VIRTUAL_METHOD2_V(std::uintptr_t, getLocalInventory, 23, (), ())
+    VIRTUAL_METHOD2_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
 };

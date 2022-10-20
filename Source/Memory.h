@@ -5,6 +5,7 @@
 #include <optional>
 #include <type_traits>
 
+#include "SDK/ItemSchema.h"
 #include "SDK/Platform.h"
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
@@ -25,7 +26,6 @@ class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class ItemSystem;
-class InventoryManager;
 class KeyValues;
 class MoveHelper;
 class MoveData;
@@ -164,7 +164,7 @@ public:
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;
     std::uintptr_t* gameRules;
-    InventoryManager* inventoryManager;
+    InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
     bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);

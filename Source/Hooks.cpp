@@ -348,10 +348,10 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
 #endif
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
-    inventory.init((void*)memory.inventoryManager->getLocalInventory());
+    inventory.init((void*)memory.inventoryManager.getLocalInventory());
     inventory.hookAt(1, &soUpdated);
 
-    inventoryManager.init(memory.inventoryManager);
+    inventoryManager.init(memory.inventoryManager.getPOD());
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
     modelRender.init(globalContext->engineInterfaces->modelRender);
