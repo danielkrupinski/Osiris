@@ -48,19 +48,19 @@ class Surface;
 template <typename DynamicLibraryWrapper>
 struct InterfaceFinder {
     explicit InterfaceFinder(DynamicLibraryView<DynamicLibraryWrapper> library, RetSpoofInvoker invoker)
-        : library{ library }, invoker{ invoker }
+        : createInterfaceFn{ std::uintptr_t(library.getFunctionAddress("CreateInterface")) }, invoker{ invoker }
     {
     }
 
     void* operator()(const char* name) const noexcept
     {
-        if (const auto createInterface = library.getFunctionAddress("CreateInterface"))
-            return invoker.invokeCdecl<void*>(std::uintptr_t(createInterface), name, nullptr);
+        if (createInterfaceFn != 0)
+            return invoker.invokeCdecl<void*>(createInterfaceFn, name, nullptr);
         return nullptr;
     }
 
 private:
-    DynamicLibraryView<DynamicLibraryWrapper> library;
+    std::uintptr_t createInterfaceFn;
     RetSpoofInvoker invoker;
 };
 
