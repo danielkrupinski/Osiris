@@ -17,18 +17,18 @@ enum class OverrideType {
 
 class StudioRender {
     std::byte pad_0[WIN32_LINUX(592, 600)];
-    Material* materialOverride;
+    csgo::pod::Material* materialOverride;
     std::byte pad_1[WIN32_LINUX(12, 24)];
     OverrideType overrideType;
 public:
     INCONSTRUCTIBLE(StudioRender)
 
-    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (Material* material, OverrideType type = OverrideType::Normal, int index = -1), (this, material, type, index))
+    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (csgo::pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (this, material, type, index))
 
     bool isForcedMaterialOverride() noexcept
     {
         if (!materialOverride)
             return overrideType == OverrideType::DepthWrite || overrideType == OverrideType::SsaoDepthWrite; // see CStudioRenderContext::IsForcedMaterialOverride
-        return std::string_view{ materialOverride->getName() }.starts_with("dev/glow");
+        return std::string_view{ Material::from(retSpoofGadgets.client, materialOverride).getName() }.starts_with("dev/glow");
     }
 };

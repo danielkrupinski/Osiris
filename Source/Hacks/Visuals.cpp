@@ -281,23 +281,23 @@ void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noe
         return;
 
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-        const auto mat = interfaces.materialSystem->getMaterial(h);
+        const auto mat = Material::from(retSpoofGadgets.client, interfaces.materialSystem->getMaterial(h));
 
-        if (!mat || !mat->isPrecached())
+        if (mat.getThis() == 0 || !mat.isPrecached())
             continue;
 
-        const std::string_view textureGroup = mat->getTextureGroupName();
+        const std::string_view textureGroup = mat.getTextureGroupName();
 
         if (visualsConfig.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (visualsConfig.world.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.world.asColor3().rainbowSpeed));
+                mat.colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.world.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.world.asColor3().color);
+                mat.colorModulate(visualsConfig.world.asColor3().color);
         } else if (visualsConfig.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (visualsConfig.sky.asColor3().rainbow)
-                mat->colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.sky.asColor3().rainbowSpeed));
+                mat.colorModulate(rainbowColor(memory.globalVars->realtime, visualsConfig.sky.asColor3().rainbowSpeed));
             else
-                mat->colorModulate(visualsConfig.sky.asColor3().color);
+                mat.colorModulate(visualsConfig.sky.asColor3().color);
         }
     }
 }
@@ -315,9 +315,9 @@ void Visuals::modifySmoke(const Interfaces& interfaces, csgo::FrameStage stage) 
     };
 
     for (const auto mat : smokeMaterials) {
-        const auto material = interfaces.materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == csgo::FrameStage::RENDER_START && visualsConfig.wireframeSmoke);
+        const auto material = Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial(mat));
+        material.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noSmoke);
+        material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == csgo::FrameStage::RENDER_START && visualsConfig.wireframeSmoke);
     }
 }
 
@@ -359,8 +359,8 @@ void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) n
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noBlur);
+    static auto blur = Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial("dev/scope_bluroverlay"));
+    blur.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noBlur);
 }
 
 void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
@@ -387,7 +387,7 @@ void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, cs
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces.materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
+        Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
 }
 
 void Visuals::remove3dSky(const Interfaces& interfaces) noexcept
@@ -437,7 +437,7 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 { \
     int w, h; \
     engine.getScreenSize(w, h); \
-    reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material, 0, 0, w, h); \
+    reinterpret_cast<void(*)(csgo::pod::Material*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material.getPOD(), 0, 0, w, h); \
 }
 #endif
 
@@ -446,7 +446,7 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
     if (!visualsConfig.screenEffect)
         return;
 
-    const auto material = interfaces.materialSystem->findMaterial([] {
+    const auto material = Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial([] {
         constexpr std::array effects{
             "effects/dronecam",
             "effects/underwater_overlay",
@@ -457,14 +457,14 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
         if (visualsConfig.screenEffect <= 2 || static_cast<std::size_t>(visualsConfig.screenEffect - 2) >= effects.size())
             return effects[0];
         return effects[visualsConfig.screenEffect - 2];
-    }());
+    }()));
 
     if (visualsConfig.screenEffect == 1)
-        material->findVar("$c0_x")->setValue(0.0f);
+        material.findVar("$c0_x")->setValue(0.0f);
     else if (visualsConfig.screenEffect == 2)
-        material->findVar("$c0_x")->setValue(0.1f);
+        material.findVar("$c0_x")->setValue(0.1f);
     else if (visualsConfig.screenEffect >= 4)
-        material->findVar("$c0_x")->setValue(1.0f);
+        material.findVar("$c0_x")->setValue(1.0f);
 
     DRAW_SCREEN_EFFECT(material, memory, engine)
 }
@@ -494,13 +494,13 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
             };
 
            
-            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+            auto material = Material::from(retSpoofGadgets.client, interfaces.materialSystem->findMaterial(getEffectMaterial()));
             if (visualsConfig.hitEffect == 1)
-                material->findVar("$c0_x")->setValue(0.0f);
+                material.findVar("$c0_x")->setValue(0.0f);
             else if (visualsConfig.hitEffect == 2)
-                material->findVar("$c0_x")->setValue(0.1f);
+                material.findVar("$c0_x")->setValue(0.1f);
             else if (visualsConfig.hitEffect >= 4)
-                material->findVar("$c0_x")->setValue(1.0f);
+                material.findVar("$c0_x")->setValue(1.0f);
 
             DRAW_SCREEN_EFFECT(material, memory, engine)
         }

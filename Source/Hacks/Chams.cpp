@@ -28,21 +28,21 @@
 #include "../SDK/KeyValues.h"
 #include "../SDK/Utils.h"
 
-static Material* normal;
-static Material* flat;
-static Material* animated;
-static Material* platinum;
-static Material* glass;
-static Material* crystal;
-static Material* chrome;
-static Material* silver;
-static Material* gold;
-static Material* plastic;
-static Material* glow;
-static Material* pearlescent;
-static Material* metallic;
+static csgo::pod::Material* normal;
+static csgo::pod::Material* flat;
+static csgo::pod::Material* animated;
+static csgo::pod::Material* platinum;
+static csgo::pod::Material* glass;
+static csgo::pod::Material* crystal;
+static csgo::pod::Material* chrome;
+static csgo::pod::Material* silver;
+static csgo::pod::Material* gold;
+static csgo::pod::Material* plastic;
+static csgo::pod::Material* glow;
+static csgo::pod::Material* pearlescent;
+static csgo::pod::Material* metallic;
 
-static constexpr auto dispatchMaterial(int id) noexcept
+static constexpr auto dispatchMaterial_(int id) noexcept
 {
     switch (id) {
     default:
@@ -60,6 +60,11 @@ static constexpr auto dispatchMaterial(int id) noexcept
     case 11: return pearlescent;
     case 12: return metallic;
     }
+}
+
+static auto dispatchMaterial(int id) noexcept
+{
+    return Material::from(retSpoofGadgets.client, dispatchMaterial_(id));
 }
 
 static void initializeMaterials(const Interfaces& interfaces, const Memory& memory) noexcept
@@ -225,7 +230,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (!material)
+        if (material.getThis() == 0)
             continue;
         
         float r, g, b;
@@ -239,21 +244,21 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             b = cham.color[2];
         }
 
-        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal)
-            material->findVar("$envmaptint")->setVectorValue(r, g, b);
+        if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
+            material.findVar("$envmaptint")->setVectorValue(r, g, b);
         else
-            material->colorModulate(r, g, b);
+            material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
-        if (material == glow)
-            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
+        if (material.getPOD() == glow)
+            material.findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
-            material->alphaModulate(pulse);
+            material.alphaModulate(pulse);
 
-        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material);
+        material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
+        material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
+        interfaces.studioRender->forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         interfaces.studioRender->forcedMaterialOverride(nullptr);
     }
@@ -263,7 +268,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (!material)
+        if (material.getThis())
             continue;
 
         float r, g, b;
@@ -277,24 +282,24 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             b = cham.color[2];
         }
 
-        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal)
-            material->findVar("$envmaptint")->setVectorValue(r, g, b);
+        if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
+            material.findVar("$envmaptint")->setVectorValue(r, g, b);
         else
-            material->colorModulate(r, g, b);
+            material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
-        if (material == glow)
-            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
+        if (material.getPOD() == glow)
+            material.findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
-            material->alphaModulate(pulse);
+            material.alphaModulate(pulse);
 
         if (cham.cover && !appliedChams)
             hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
 
-        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material);
+        material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
+        material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
+        interfaces.studioRender->forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }
