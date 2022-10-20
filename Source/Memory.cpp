@@ -164,7 +164,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     hud = SafeAddress{ temp }.deref().get();
     findHudElement = reinterpret_cast<decltype(findHudElement)>(temp.add(5).relativeToAbsolute().get());
     clearHudWeapon = reinterpret_cast<decltype(clearHudWeapon)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\xF0\xC6\x44\x24??\xC6\x44\x24") }.add(1).relativeToAbsolute().get());
-    itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") }.add(1).relativeToAbsolute().get());
+    itemSystemFn = reinterpret_cast<decltype(itemSystemFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") }.add(1).relativeToAbsolute().get());
     setAbsOrigin = reinterpret_cast<decltype(setAbsOrigin)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") }.add(1).relativeToAbsolute().get());
     insertIntoTree = SafeAddress{ findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") }.add(5).get();
     dispatchSound = reinterpret_cast<int*>(SafeAddress{ findPattern(ENGINE_DLL, "\x74\x0B\xE8????\x8B\x3D") }.add(3).get());
@@ -227,7 +227,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     dlclose(tier0);
 
     globalVars = reinterpret_cast<GlobalVars*>(SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().get());
-    itemSystem = reinterpret_cast<decltype(itemSystem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).relativeToAbsolute().get());
+    itemSystemFn = reinterpret_cast<decltype(itemSystemFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4D\x63\xEC") }.add(1).relativeToAbsolute().get());
 
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") }.add(1).relativeToAbsolute().get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0"));

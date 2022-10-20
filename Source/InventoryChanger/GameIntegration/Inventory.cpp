@@ -57,7 +57,7 @@ void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t 
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, patchID);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -84,7 +84,7 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
 
 void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
 
     const auto paintKit = gameItemStorage.getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
@@ -163,7 +163,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     if (inventoryItem.getState() == inventory::Item::State::InXrayScanner)
         econItemPOD->flags |= 16;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
 
     if (const auto tradableAfterDate = inventoryItem.getProperties().common.tradableAfterDate; tradableAfterDate != 0) {
         attributeSetter.setTradableAfterDate(econItem, tradableAfterDate);
@@ -286,7 +286,7 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, static_cast<int>(stickerID));
     attributeSetter.setStickerWear(econItem, slot, 0.0f);
 
@@ -304,7 +304,7 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, 0);
     attributeSetter.setStickerWear(econItem, slot, 0.0f);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -321,7 +321,7 @@ void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWea
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerWear(econItem, slot, newWear);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -370,7 +370,7 @@ void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStatTrak(econItem, newStatTrakValue);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -402,7 +402,7 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setDropsAwarded(econItem, dropsAwarded);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
     initItemCustomizationNotification(interfaces, memory, "ticket_activated", itemID);
@@ -418,7 +418,7 @@ void Inventory::unsealGraffiti(ItemId itemID)
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setSpraysRemaining(econItem, 50);
     econItem.getPOD()->weaponId = WeaponId::Graffiti;
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -435,7 +435,7 @@ void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, 0, graffitiID);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -514,7 +514,7 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setModificationDate(econItem, modificationDate);
     attributeSetter.setItemsCount(econItem, itemCount);
 
@@ -531,7 +531,7 @@ void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setCasketItemIdLow(econItem, static_cast<std::uint32_t>(static_cast<csgo::ItemId>(storageUnitItemID) & 0xFFFFFFFF));
     attributeSetter.setCasketItemIdHigh(econItem, static_cast<std::uint32_t>((static_cast<csgo::ItemId>(storageUnitItemID) >> 32) & 0xFFFFFFFF));
 
@@ -553,7 +553,7 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.removeCasketItemId(econItem);
 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -570,7 +570,7 @@ void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAft
     if (localInventory.getThis() == 0)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem()->getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setTradableAfterDate(econItem, tradableAfterDate);
 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);

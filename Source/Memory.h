@@ -25,7 +25,6 @@ class Entity;
 class GameEventDescriptor;
 class GameEventManager;
 class Input;
-class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
@@ -49,6 +48,7 @@ struct Vector;
 namespace csgo::pod
 {
     struct EconItem;
+    struct ItemSystem;
 }
 
 template <bool ReportNotFound = true>
@@ -133,7 +133,6 @@ public:
     std::uintptr_t hud;
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
-    std::add_pointer_t<ItemSystem* CDECL_CONV()> itemSystem;
     void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const Vector&);
     std::uintptr_t insertIntoTree;
     int* dispatchSound;
@@ -195,6 +194,11 @@ public:
 #endif
     }
 
+    [[nodiscard]] ItemSystem itemSystem() const noexcept
+    {
+        return ItemSystem::from(retSpoofGadgets.client, itemSystemFn());
+    }
+
 #ifdef _WIN32
     class KeyValuesSystem* keyValuesSystem;
     std::uintptr_t keyValuesAllocEngine;
@@ -206,6 +210,7 @@ public:
 
 private:
     void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
+    std::add_pointer_t<csgo::pod::ItemSystem* CDECL_CONV()> itemSystemFn;
 
     std::uintptr_t submitReportFunction;
 };

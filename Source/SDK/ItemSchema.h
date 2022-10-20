@@ -277,11 +277,11 @@ public:
     }
 };
 
-class ItemSystem {
-public:
-    INCONSTRUCTIBLE(ItemSystem)
+namespace csgo::pod { struct ItemSystem; }
 
-    VIRTUAL_METHOD(csgo::pod::ItemSchema*, getItemSchema, 0, (), (this))
+class ItemSystem : public VirtualCallableFromPOD<ItemSystem, csgo::pod::ItemSystem> {
+public:
+    VIRTUAL_METHOD2(csgo::pod::ItemSchema*, getItemSchema, 0, (), ())
 };
 
 namespace csgo::pod
