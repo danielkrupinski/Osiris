@@ -400,7 +400,7 @@ PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interface
 
         PlayerAvatar playerAvatar;
         playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
-        if (ctx->steamUtils->getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
+        if (SteamUtils::from(retSpoofGadgets.client, ctx->steamUtils).getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
