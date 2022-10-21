@@ -8,6 +8,7 @@
 #include <Windows.h>
 
 #include "Platform/Windows/DynamicLibraryWrapper.h"
+#include "Platform/Windows/DynamicLibrary.h"
 #else
 #include <dlfcn.h>
 
@@ -255,7 +256,8 @@ private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #ifdef _WIN32
-        const InterfaceFinderWithLog finder{ InterfaceFinder { DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, moduleName }, retSpoofGadgets.client } };
+        const windows_platform::DynamicLibrary dll{ windows_platform::DynamicLibraryWrapper{}, moduleName };
+        const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets.client } };
 #else
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
         const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets.client } };

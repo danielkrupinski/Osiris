@@ -303,8 +303,10 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL }, retSpoofGadgets.client } }, retSpoofGadgets.client);
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ DynamicLibraryView<windows_platform::DynamicLibraryWrapper>{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL }, retSpoofGadgets.client } }, retSpoofGadgets.engine);
+        const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets.client } }, retSpoofGadgets.client);
+        const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets.client } }, retSpoofGadgets.engine);
         interfaces.emplace(retSpoofGadgets.client);
 
         memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });

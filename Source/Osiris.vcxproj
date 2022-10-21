@@ -266,6 +266,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
     <ClInclude Include="Platform\RetSpoofInvoker.h" />
+    <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h" />
     <ClInclude Include="Platform\Windows\RetSpoofInvoker.h" />
