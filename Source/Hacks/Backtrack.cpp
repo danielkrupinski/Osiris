@@ -166,7 +166,7 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
     if (!network)
         return false;
 
-    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars->maxUnlag.getFloat()) - (memory.globalVars->serverTime() - simtime);
+    auto delta = std::clamp(NetworkChannel::from(retSpoofGadgets.client, network).getLatency(0) + NetworkChannel::from(retSpoofGadgets.client, network).getLatency(1) + getLerp(), 0.f, cvars->maxUnlag.getFloat()) - (memory.globalVars->serverTime() - simtime);
     return std::abs(delta) <= 0.2f;
 }
 

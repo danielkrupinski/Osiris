@@ -424,7 +424,7 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
         const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
         if (activeWeapon.getThis() != 0 && activeWeapon.itemDefinitionIndex() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
-            auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - engine.getNetworkChannel()->getLatency(0));
+            auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - NetworkChannel::from(retSpoofGadgets.client, engine.getNetworkChannel()).getLatency(0));
             if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))
                 cmd->buttons |= UserCmd::IN_ATTACK;
             else

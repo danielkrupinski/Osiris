@@ -1,14 +1,17 @@
 #pragma once
 
-#include "Inconstructible.h"
+#include "Pad.h"
 #include "VirtualMethod.h"
 
-class NetworkChannel {
+namespace csgo::pod
+{
+    struct NetworkChannel {
+        PAD(44)
+        int chokedPackets;
+    };
+}
+
+class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, csgo::pod::NetworkChannel> {
 public:
-    INCONSTRUCTIBLE(NetworkChannel)
-
-    VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
-
-    std::byte pad[44];
-    int chokedPackets;
+    VIRTUAL_METHOD2(float, getLatency, 9, (int flow), (flow))
 };

@@ -62,7 +62,7 @@ static auto playerByHandleWritable(int handle) noexcept
 static void updateNetLatency(const Engine& engine) noexcept
 {
     if (const auto networkChannel = engine.getNetworkChannel())
-        netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
+        netOutgoingLatency = (std::max)(static_cast<int>(NetworkChannel::from(retSpoofGadgets.client, networkChannel).getLatency(0) * 1000.0f), 0);
     else
         netOutgoingLatency = 0;
 }

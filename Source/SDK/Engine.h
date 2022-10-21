@@ -48,7 +48,7 @@ struct DemoPlaybackParameters {
     PAD(23)
 };
 
-class NetworkChannel;
+namespace csgo::pod { struct NetworkChannel; }
 
 class Engine : private VirtualCallable {
 public:
@@ -66,7 +66,7 @@ public:
     VIRTUAL_METHOD2(const Matrix4x4&, worldToScreenMatrix, 37, (), ())
     VIRTUAL_METHOD2(void*, getBSPTreeQuery, 43, (), ())
     VIRTUAL_METHOD2(const char*, getLevelName, 53, (), ())
-    VIRTUAL_METHOD2(NetworkChannel*, getNetworkChannel, 78, (), ())
+    VIRTUAL_METHOD2(csgo::pod::NetworkChannel*, getNetworkChannel, 78, (), ())
     VIRTUAL_METHOD2(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (cmd, fromConsoleOrKeybind))
     VIRTUAL_METHOD2_V(const SteamAPIContext*, getSteamAPIContext, 185, (), ())
 
