@@ -31,12 +31,3 @@ void KeyValues::setString(const Memory& memory, const char* keyName, const char*
     if (const auto key = findKey(memory, keyName, true))
         memory.keyValuesSetString(key, value);
 }
-
-const char* KeyValues::getName(const Memory& memory) noexcept
-{
-#ifdef _WIN32
-    return memory.keyValuesSystem->getStringForSymbol(*reinterpret_cast<std::uint8_t*>(std::uintptr_t(this) + 3) | (*reinterpret_cast<std::uint16_t*>(std::uintptr_t(this) + 18) << 8));
-#else
-    return nullptr;
-#endif
-}
