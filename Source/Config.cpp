@@ -6,11 +6,13 @@
 #include <system_error>
 #include <tuple>
 
-#ifdef _WIN32
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 #include <Windows.h>
 #include <shellapi.h>
 #include <ShlObj.h>
-#elif __linux__
+#elif IS_LINUX()
 #include <unistd.h>
 #endif
 
@@ -28,7 +30,7 @@
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
 
-#ifdef _WIN32
+#if IS_WIN32()
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
     const wchar_t* const fontName = reinterpret_cast<const ENUMLOGFONTEXW*>(lpelfe)->elfFullName;
@@ -64,7 +66,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 [[nodiscard]] static std::filesystem::path buildConfigsFolderPath() noexcept
 {
     std::filesystem::path path;
-#ifdef _WIN32
+#if IS_WIN32()
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         CoTaskMemFree(pathToDocuments);
@@ -84,7 +86,7 @@ Config::Config(const Interfaces& interfaces, const Memory& memory) noexcept : pa
 
     load(interfaces, memory, u8"default.json", false);
 
-#ifdef _WIN32
+#if IS_WIN32()
     LOGFONTW logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
@@ -615,7 +617,7 @@ void Config::createConfigDir() const noexcept
 void Config::openConfigDir() const noexcept
 {
     createConfigDir();
-#ifdef _WIN32
+#if IS_WIN32()
     ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
     if (fork() == 0) {
@@ -630,7 +632,7 @@ void Config::scheduleFontLoad(const std::string& name) noexcept
     scheduledFonts.push_back(name);
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 static auto getFontData(const std::string& fontName) noexcept
 {
     HFONT font = CreateFontA(0, 0, 0, 0,
@@ -693,7 +695,7 @@ bool Config::loadScheduledFonts() noexcept
             continue;
         }
 
-#ifdef _WIN32
+#if IS_WIN32()
         const auto [fontData, fontDataSize] = getFontData(fontName);
         if (fontDataSize == GDI_ERROR)
             continue;

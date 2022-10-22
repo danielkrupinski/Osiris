@@ -4,7 +4,9 @@
 
 #include "imgui/imgui.h"
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
@@ -70,7 +72,7 @@
 
 #include "GlobalContext.h"
 
-#ifdef _WIN32
+#if IS_WIN32()
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -282,7 +284,7 @@ static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::U
     return globalContext->dispatchUserMessageHook(type, passthroughFlags, size, data);
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 
 static void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
 {
@@ -306,7 +308,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
-#ifdef _WIN32
+#if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
     **reinterpret_cast<decltype(present)***>(memory.present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
@@ -341,7 +343,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     engine.init((void*)globalContext->engineInterfaces->getEngineAddress());
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
-#ifdef _WIN32
+#if IS_WIN32()
     keyValuesSystem.init(memory.keyValuesSystem);
     keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
 #endif
@@ -375,7 +377,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);
     viewRender.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay);
 
-#ifdef _WIN32
+#if IS_WIN32()
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
 #else
     if (const auto addressPageAligned = std::uintptr_t(memory.dispatchSound) - std::uintptr_t(memory.dispatchSound) % sysconf(_SC_PAGESIZE);
@@ -383,12 +385,12 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
 #endif
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
         *memory.dispatchSound = uintptr_t(&dispatchSound) - uintptr_t(memory.dispatchSound + 1);
-#ifdef _WIN32
+#if IS_WIN32()
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
 #endif
     }
 
-#ifdef _WIN32
+#if IS_WIN32()
     surface.hookAt(67, &lockCursor);
 
     if constexpr (std::is_same_v<HookType, MinHook>)
@@ -396,7 +398,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
 #endif
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
 
@@ -423,7 +425,7 @@ void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces
     Misc::updateEventListeners(*globalContext->engineInterfaces, true);
     Visuals::updateEventListeners(*globalContext->engineInterfaces, true);
 
-#ifdef _WIN32
+#if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
         MH_DisableHook(MH_ALL_HOOKS);
         MH_Uninitialize();
@@ -448,7 +450,7 @@ void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces
     Glow::clearCustomObjects(memory);
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
 
-#ifdef _WIN32
+#if IS_WIN32()
     keyValuesSystem.restore();
 
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
@@ -473,7 +475,7 @@ void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRend
     modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
 
-#ifndef _WIN32
+#if !IS_WIN32()
 
 Hooks::Hooks() noexcept
     : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" }.getView() }

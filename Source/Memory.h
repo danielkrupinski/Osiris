@@ -55,7 +55,7 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 
 struct InventoryChangerReturnAddresses {
     InventoryChangerReturnAddresses()
-#ifdef _WIN32
+#if IS_WIN32()
     : setStickerToolSlotGetArgAsNumber{ SafeAddress{ findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") }.add(2).get() },
       wearItemStickerGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF") }.add(-80).get() },
       setNameToolStringGetArgAsString{ findPattern(CLIENT_DLL, "\x8B\xF8\xC6\x45\x08?\x33\xC0") },
@@ -109,7 +109,7 @@ class Memory {
 public:
     Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
-#ifdef _WIN32
+#if IS_WIN32()
     std::uintptr_t present;
     std::uintptr_t reset;
 #endif
@@ -185,7 +185,7 @@ public:
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
-#ifdef _WIN32
+#if IS_WIN32()
         return reinterpret_cast<bool(__stdcall*)(const char*, const char*)>(submitReportFunction)(xuid, report);
 #else
         return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
@@ -202,7 +202,7 @@ public:
         return MoveHelper::from(retSpoofGadgets.client, moveHelperPtr);
     }
 
-#ifdef _WIN32
+#if IS_WIN32()
     class KeyValuesSystem* keyValuesSystem;
     std::uintptr_t keyValuesAllocEngine;
     std::uintptr_t keyValuesAllocClient;

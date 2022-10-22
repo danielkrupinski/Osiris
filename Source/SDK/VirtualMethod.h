@@ -4,7 +4,7 @@
 
 #include "Platform.h"
 
-#ifdef _WIN32
+#if IS_WIN32()
 #include <x86RetSpoof.h>
 #include "../RetSpoofGadgets.h"
 #endif
@@ -80,7 +80,7 @@ returnType name args const noexcept \
     return call<returnType, idx>argsRaw; \
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 #define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw)
 #else
 #define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx + 1, args, argsRaw)

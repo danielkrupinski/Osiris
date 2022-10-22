@@ -1,6 +1,8 @@
 #include <memory>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <clocale>
 #include <Windows.h>
 #endif
@@ -8,7 +10,7 @@
 #include "GlobalContext.h"
 #include "Hooks.h"
 
-#ifdef _WIN32
+#if IS_WIN32()
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
 

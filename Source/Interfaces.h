@@ -4,7 +4,9 @@
 #include <string>
 #include <type_traits>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <Windows.h>
 
 #include "Platform/Windows/DynamicLibraryWrapper.h"
@@ -77,7 +79,7 @@ struct InterfaceFinderWithLog {
         if (const auto foundInterface = finder(name))
             return foundInterface;
 
-#ifdef _WIN32
+#if IS_WIN32()
         MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
 #endif
         std::exit(EXIT_FAILURE);
@@ -264,7 +266,7 @@ private:
 
     static void* find(const char* moduleName, const char* name) noexcept
     {
-#ifdef _WIN32
+#if IS_WIN32()
         const windows_platform::DynamicLibrary dll{ windows_platform::DynamicLibraryWrapper{}, moduleName };
         const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets.client } };
 #else

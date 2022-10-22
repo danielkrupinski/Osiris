@@ -7,7 +7,7 @@ public:
     using VirtualCallable::VirtualCallable;
 
     VIRTUAL_METHOD2(std::uintptr_t, getEntity, 3, (int index), (index))
-#ifdef _WIN32
+#if IS_WIN32()
     VIRTUAL_METHOD2(std::uintptr_t, getEntityFromHandle, 4, (int handle), (handle))
 #else
     VIRTUAL_METHOD2(std::uintptr_t, getEntityFromHandle, 4, (int handle), (&handle))

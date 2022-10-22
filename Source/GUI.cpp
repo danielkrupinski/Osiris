@@ -6,7 +6,9 @@
 #include <unordered_map>
 #include <vector>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <ShlObj.h>
 #include <Windows.h>
 #endif
@@ -66,7 +68,7 @@ GUI::GUI() noexcept
     ImFontConfig cfg;
     cfg.SizePixels = 15.0f;
 
-#ifdef _WIN32
+#if IS_WIN32()
     if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
@@ -129,7 +131,7 @@ void GUI::handleToggle(const Interfaces& interfaces) noexcept
         open = !open;
         if (!open)
             interfaces.getInputSystem().resetInputState();
-#ifndef _WIN32
+#if !IS_WIN32()
         ImGui::GetIO().MouseDrawCursor = gui->open;
 #endif
     }

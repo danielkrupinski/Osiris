@@ -7,10 +7,12 @@
 #include <string_view>
 #include <utility>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <Windows.h>
 #include <Psapi.h>
-#elif __linux__
+#elif IS_LINUX()
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <link.h>
@@ -28,13 +30,13 @@
 
 static std::span<const std::byte> getModuleInformation(const char* name) noexcept
 {
-#ifdef _WIN32
+#if IS_WIN32()
     if (HMODULE handle = GetModuleHandleA(name)) {
         if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
             return { reinterpret_cast<const std::byte*>(moduleInfo.lpBaseOfDll), moduleInfo.SizeOfImage };
     }
     return {};
-#elif __linux__
+#elif IS_LINUX()
     struct ModuleInfo_ {
         const char* name;
         void* base = nullptr;
@@ -121,7 +123,7 @@ static std::uintptr_t findPattern(std::span<const std::byte> bytes, std::string_
     }
 
     assert(false);
-#ifdef _WIN32
+#if IS_WIN32()
     if constexpr (ReportNotFound)
         MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
@@ -135,7 +137,7 @@ std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noe
 }
 
 Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
-#ifdef _WIN32
+#if IS_WIN32()
     : viewRenderBeams{ retSpoofGadgets.client, *reinterpret_cast<std::uintptr_t*>(findPattern(CLIENT_DLL, "\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24") + 1) },
       weaponSystem{ retSpoofGadgets.client, SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x35????\xFF\x10\x0F\xB7\xC0") }.add(2).deref().get() },
       inventoryManager{ InventoryManager::from(retSpoofGadgets.client, reinterpret_cast<csgo::pod::InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9????\x50") }.add(5).deref().get())) }
@@ -145,7 +147,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
       inventoryManager{ InventoryManager::from(retSpoofGadgets.client, reinterpret_cast<csgo::pod::InventoryManager*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") }.add(3).relativeToAbsolute().get())) }
 #endif
 {
-#ifdef _WIN32
+#if IS_WIN32()
     present = SafeAddress{ findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF0\x85\xFF") }.add(2).get();
     reset = SafeAddress{ findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xD8") }.add(9).get();
 

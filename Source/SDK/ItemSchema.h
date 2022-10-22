@@ -319,7 +319,7 @@ public:
 
     using VirtualCallable::getThis;
 
-#ifdef _WIN32
+#if IS_WIN32()
     VIRTUAL_METHOD2(void, destructor, 0, (), (true))
 #else
     VIRTUAL_METHOD2(void, destructor, 1, (), ())

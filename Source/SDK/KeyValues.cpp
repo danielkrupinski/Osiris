@@ -4,7 +4,7 @@
 
 KeyValues* KeyValues::fromString(const Memory& memory, const char* name, const char* value) noexcept
 {
-#ifdef _WIN32
+#if IS_WIN32()
     const auto keyValuesFromString = memory.keyValuesFromString;
     KeyValues* keyValues;
     __asm {

@@ -2,7 +2,9 @@
 #include <array>
 #include <string_view>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <Windows.h>
 #else
 #include <SDL2/SDL.h>

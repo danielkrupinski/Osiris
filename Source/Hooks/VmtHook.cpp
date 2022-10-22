@@ -1,6 +1,8 @@
 #include <algorithm>
 
-#ifdef _WIN32
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 #include <Windows.h>
 #endif
 
@@ -19,7 +21,7 @@ void VmtHook::init(void* base) noexcept
 void VmtHook::restore() const noexcept
 {
     auto vmt = *reinterpret_cast<std::uintptr_t**>(base);
-#ifdef _WIN32
+#if IS_WIN32()
     if (DWORD oldProtection; VirtualProtect(vmt, length, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         std::copy(oldVmt.get(), oldVmt.get() + length, vmt);
         VirtualProtect(vmt, length, oldProtection, nullptr);
@@ -30,7 +32,7 @@ void VmtHook::restore() const noexcept
 void VmtHook::hookAt(std::size_t index, void* fun) const noexcept
 {
     auto address = *reinterpret_cast<std::uintptr_t**>(base) + index;
-#ifdef _WIN32
+#if IS_WIN32()
     if (DWORD oldProtection; VirtualProtect(address, sizeof(address), PAGE_EXECUTE_READWRITE, &oldProtection)) {
         *address = std::uintptr_t(fun);
         VirtualProtect(address, sizeof(address), oldProtection, nullptr);

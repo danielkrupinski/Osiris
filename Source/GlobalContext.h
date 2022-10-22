@@ -2,7 +2,9 @@
 
 #include <cstdint>
 
-#ifdef _WIN32
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 #include <Windows.h>
 #else
 #include <SDL2/SDL.h>
@@ -43,7 +45,7 @@ public:
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(std::uintptr_t returnAddress);
     bool dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data);
 
-#ifdef _WIN32
+#if IS_WIN32()
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
 #else

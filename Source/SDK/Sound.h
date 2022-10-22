@@ -9,7 +9,7 @@ struct ActiveChannels {
 };
 
 struct Channel {
-#ifdef _WIN32
+#if IS_WIN32()
     PAD(244)
 #else
     PAD(260)

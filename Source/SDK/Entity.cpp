@@ -15,7 +15,7 @@
 
 bool Entity::setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept
 {
-#ifdef _WIN32
+#if IS_WIN32()
     if (Misc::shouldFixBoneMatrix()) {
         int* render = reinterpret_cast<int*>(getThis() + 0x274);
         int backup = *render;

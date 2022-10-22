@@ -1,6 +1,6 @@
 #include "GlobalContext.h"
 
-#ifdef _WIN32
+#if IS_WIN32()
 #include <imgui/imgui_impl_dx9.h>
 #include <imgui/imgui_impl_win32.h>
 #else
@@ -53,7 +53,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     if (!cmd->commandNumber)
         return result;
 
-#ifdef _WIN32
+#if IS_WIN32()
     // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
     // since 19.02.2022 game update sendPacket is no longer on stack
     bool sendPacket = true;
@@ -209,7 +209,7 @@ int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, con
 
 bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
 {
-#ifdef _WIN32
+#if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
         if (returnAddress != memory->shouldDrawFogReturnAddress)
             return hooks->clientMode.callOriginal<bool, 17>();
@@ -292,7 +292,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)

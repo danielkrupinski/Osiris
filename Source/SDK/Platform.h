@@ -1,6 +1,8 @@
 #pragma once
 
-#ifdef _WIN32
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 
 #define THISCALL_CONV __thiscall
 #define FASTCALL_CONV __fastcall
@@ -16,7 +18,7 @@
 
 #endif
 
-#ifdef _WIN32
+#if IS_WIN32()
 
 #define LINUX_ARGS(...)
 #define RETURN_ADDRESS() std::uintptr_t(_ReturnAddress())

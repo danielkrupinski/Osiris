@@ -79,7 +79,7 @@ class Renderable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-#ifdef _WIN32
+#if IS_WIN32()
     VIRTUAL_METHOD2(bool, shouldDraw, 3, (), ())
 #endif
 
@@ -105,7 +105,7 @@ public:
 
     bool shouldDraw() const
     {
-#ifndef _WIN32
+#if !IS_WIN32()
         return call<bool, 149>();
 #else
         return getRenderable().shouldDraw();
@@ -185,7 +185,7 @@ public:
    
     AnimState* getAnimstate() const noexcept
     {
-#ifdef _WIN32
+#if IS_WIN32()
         return *reinterpret_cast<AnimState**>(getThis() + 0x3914);
 #else
         return nullptr;

@@ -733,7 +733,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
 
 void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
-#ifdef _WIN32
+#if IS_WIN32()
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
         if (!localPlayer)
             return;
@@ -1272,7 +1272,7 @@ void Misc::autoAccept(const Interfaces& interfaces, const Memory& memory, const 
             UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
     }
 
-#ifdef _WIN32
+#if IS_WIN32()
     auto window = FindWindowW(L"Valve001", NULL);
     FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
     FlashWindowEx(&flash);

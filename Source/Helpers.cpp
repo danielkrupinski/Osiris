@@ -9,7 +9,9 @@
 #include <string_view>
 #include <unordered_map>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <Windows.h>
 #endif
 
@@ -156,7 +158,7 @@ std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
 std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
 {
     std::size_t length = 0;
-#ifdef _WIN32
+#if IS_WIN32()
     MEMORY_BASIC_INFORMATION memoryInfo;
     while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
         ++length;

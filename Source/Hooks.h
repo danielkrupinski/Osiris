@@ -4,10 +4,10 @@
 #include <optional>
 #include <type_traits>
 
-#ifdef _WIN32
+#if IS_WIN32()
 #include <d3d9.h>
 #include <Windows.h>
-#elif __linux__
+#elif IS_LINUX()
 #include "SdlFunctions.h"
 struct SDL_Window;
 union SDL_Event;
@@ -26,7 +26,7 @@ class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
 
-#ifdef _WIN32
+#if IS_WIN32()
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
 using HookType = MinHook;
 #else
@@ -35,7 +35,7 @@ using HookType = VmtSwap;
 
 class Hooks {
 public:
-#ifdef _WIN32
+#if IS_WIN32()
     Hooks(HMODULE moduleHandle) noexcept;
 
     WNDPROC originalWndProc;
@@ -69,11 +69,11 @@ public:
     HookType viewRender;
     HookType svCheats;
 
-#ifdef _WIN32
+#if IS_WIN32()
     HookType keyValuesSystem;
 #endif
 private:
-#ifdef _WIN32
+#if IS_WIN32()
     HMODULE moduleHandle;
     HWND window;
 #endif
