@@ -466,8 +466,10 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
     else if (visualsConfig.screenEffect >= 4)
         MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
 
+#ifdef _WIN32
     const auto pod = material.getPOD();
     DRAW_SCREEN_EFFECT(pod, memory, engine)
+#endif
 }
 
 void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
@@ -503,8 +505,10 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
             else if (visualsConfig.hitEffect >= 4)
                 MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
 
+#ifdef _WIN32
             const auto pod = material.getPOD();
             DRAW_SCREEN_EFFECT(pod, memory, engine)
+#endif
         }
     }
 }

@@ -253,7 +253,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     keyValuesFromString = reinterpret_cast<decltype(keyValuesFromString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDF\x48\x89\x45\xE0") }.add(1).relativeToAbsolute().get());
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x48\x85\xC0\x75\x24") }.add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03") }.add(1).relativeToAbsolute().get());
-    drawScreenEffectMaterial = findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53");
+    // drawScreenEffectMaterial = findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53");
     vignette = reinterpret_cast<float*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x07\x0F\x2F\x05") }.add(6).relativeToAbsolute().get());
     viewRender = reinterpret_cast<ViewRender*>(SafeAddress{ findPattern(CLIENT_DLL, "\x0F\x85????\x48\x8B\x05????\x45\x89\xF8") }.add(9).relativeToAbsolute().deref<2>().get());
     scopeDust = findPattern(CLIENT_DLL, "\x8B\x85????\x43\x8D\x14\x2E");
