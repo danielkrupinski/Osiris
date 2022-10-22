@@ -365,7 +365,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     sound.init(globalContext->engineInterfaces->sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
 
-    surface.init(interfaces.surface);
+    surface.init(interfaces.getSurface().getPOD());
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
     svCheats.init(interfaces.getCvar().findVar("sv_cheats"));

@@ -229,7 +229,7 @@ bool GlobalContext::shouldDrawViewModelHook()
 void GlobalContext::lockCursorHook()
 {
     if (gui->isOpen())
-        return interfaces->surface->unlockCursor();
+        return interfaces->getSurface().unlockCursor();
     return hooks->surface.callOriginal<void, 67>();
 }
 
