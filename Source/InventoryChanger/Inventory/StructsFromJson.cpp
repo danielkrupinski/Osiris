@@ -6,9 +6,9 @@
 namespace inventory_changer::inventory
 {
 
-Glove gloveFromJson(const json& j)
+Gloves glovesFromJson(const json& j)
 {
-    Glove glove;
+    Gloves glove;
 
     if (const auto wear = j.find("Wear"); wear != j.end() && wear->is_number_float())
         glove.wear = wear->get<float>();
@@ -111,7 +111,7 @@ std::array<Skin::Sticker, 5> skinStickersFromJson(const json& j)
         if (slot >= skinStickers.size())
             continue;
 
-        skinStickers[slot].stickerID = stickerID;
+        skinStickers[slot].stickerID = static_cast<csgo::StickerId>(stickerID);
 
         if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
             skinStickers[slot].wear = sticker["Wear"];
@@ -209,6 +209,19 @@ Agent agentFromJson(const json& j)
     Agent dynamicData;
     dynamicData.patches = agentPatchesFromJson(j);
     return dynamicData;
+}
+
+StorageUnit storageUnitFromJson(const json& j)
+{
+    StorageUnit storageUnit;
+
+    if (const auto modificationDateTimestamp = j.find("Modification Date Timestamp"); modificationDateTimestamp != j.end() && modificationDateTimestamp->is_number_integer())
+        storageUnit.modificationDateTimestamp = modificationDateTimestamp->get<std::uint32_t>();
+    
+    if (const auto name = j.find("Name"); name != j.end() && name->is_string())
+        storageUnit.name = name->get<std::string>();
+    
+    return storageUnit;
 }
 
 }

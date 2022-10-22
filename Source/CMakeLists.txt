@@ -3,6 +3,7 @@ target_sources(OsirisOBJ PRIVATE
   ConfigStructs.cpp
   EventListener.cpp
   GameData.cpp
+  GlobalContext.cpp
   GUI.cpp
   Helpers.cpp
   Hooks.cpp
@@ -10,6 +11,7 @@ target_sources(OsirisOBJ PRIVATE
   InputUtil.cpp
   Memory.cpp
   Netvars.cpp
+  RetSpoofGadgets.cpp
   Texture.cpp
 )
 

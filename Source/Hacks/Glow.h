@@ -1,13 +1,14 @@
 #pragma once
 
 #include "../JsonForward.h"
+#include "../Memory.h"
 
 #define OSIRIS_GLOW() true
 
 namespace Glow
 {
-    void render() noexcept;
-    void clearCustomObjects() noexcept;
+    void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void clearCustomObjects(const Memory& memory) noexcept;
     void updateInput() noexcept;
 
     // GUI

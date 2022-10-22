@@ -13,7 +13,7 @@ namespace
 {
 
 template <typename ResponseType>
-[[nodiscard]] ResponseType makeResponse(ItemConstIterator item)
+[[nodiscard]] ResponseType makeResponse(ItemIterator item)
 {
     if constexpr (std::is_same_v<ResponseType, response::ItemAdded>)
         return response::ItemAdded{ item, false };
@@ -22,7 +22,7 @@ template <typename ResponseType>
     else if constexpr (std::is_same_v<ResponseType, response::ItemUpdated>)
         return response::ItemUpdated{ item };
     else if constexpr (std::is_same_v<ResponseType, response::ItemEquipped>)
-        return response::ItemEquipped{ item, 0, Team::None };
+        return response::ItemEquipped{ item, 0, csgo::Team::None };
     else if constexpr (std::is_same_v<ResponseType, response::StickerApplied>)
         return response::StickerApplied{ item, 0 };
     else if constexpr (std::is_same_v<ResponseType, response::StickerScraped>)
@@ -49,6 +49,14 @@ template <typename ResponseType>
         return response::TeamGraffitiSelected{ item, 0 };
     else if constexpr (std::is_same_v<ResponseType, response::StatTrakSwapped>)
         return response::StatTrakSwapped{ item };
+    else if constexpr (std::is_same_v<ResponseType, response::StatTrakUpdated>)
+        return response::StatTrakUpdated{ item, 123 };
+    else if constexpr (std::is_same_v<ResponseType, response::ItemHidden>)
+        return response::ItemHidden{ item };
+    else if constexpr (std::is_same_v<ResponseType, response::XRayItemClaimed>)
+        return response::XRayItemClaimed{ item };
+    else if constexpr (std::is_same_v<ResponseType, response::XRayScannerUsed>)
+        return response::XRayScannerUsed{ item };
     else
         static_assert(!std::is_same_v<ResponseType, ResponseType>, "Not implemented!");
 }
@@ -65,55 +73,51 @@ constexpr game_items::Item gameItem{ game_items::Item::Type::Agent, EconRarity::
 }
 
 const ItemList itemList{ createItemList() };
-const ItemConstIterator item1{ itemList.begin() };
-const ItemConstIterator item2{ std::next(item1) };
-const ItemConstIterator item3{ std::next(item2) };
-
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, MonostateNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(std::monostate{}));
-}
-
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForMonostate) {
-    ASSERT_FALSE(responseContainsItem(std::monostate{}, item1));
-}
+const ItemIterator item1{ itemList.begin() };
+const ItemIterator item2{ std::next(item1) };
+const ItemIterator item3{ std::next(item2) };
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ItemRemovedResponseNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ 0 }));
+    ASSERT_FALSE(ItemInResponse{ item1 }(response::ItemRemoved{ ItemId{} }));
 }
 
 TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForItemRemoved) {
-    ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ 0 }, item1));
+    ASSERT_FALSE(responseContainsItem(response::ItemRemoved{ ItemId{} }, item1));
 }
 
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, StatTrakUpdatedResponseNeverContainsItem) {
-    ASSERT_FALSE(ItemInResponse{ item1 }(response::StatTrakUpdated{ 0, 1 }));
+TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, PickEmUpdatedResponseNeverContainsItem) {
+    ASSERT_FALSE(ItemInResponse{ item1 }(response::PickEmUpdated{}));
 }
 
-TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForStatTrakUpdated) {
-    ASSERT_FALSE(responseContainsItem(response::StatTrakUpdated{ 0, 1 }, item1));
+TEST(InventoryChanger_Backend_ItemInResponse_NeverInResponseTest, ResponseContainsItemReturnsFalseForPickEmUpdated) {
+    ASSERT_FALSE(responseContainsItem(response::PickEmUpdated{}, item1));
 }
 
 template <typename ResponseType>
 class InventoryChanger_Backend_ItemInResponseTest : public testing::Test {};
 
 using ResponseTypes = testing::Types<
+    response::ContainerOpened,
+    response::GraffitiUnsealed,
     response::ItemAdded,
+    response::ItemEquipped,
+    response::ItemHidden,
     response::ItemMovedToFront,
     response::ItemUpdated,
-    response::ItemEquipped,
-    response::StickerApplied,
-    response::StickerScraped,
-    response::StickerRemoved,
-    response::ViewerPassActivated,
     response::NameTagAdded,
     response::NameTagRemoved,
-    response::ContainerOpened,
     response::PatchApplied,
     response::PatchRemoved,
     response::SouvenirTokenActivated,
-    response::GraffitiUnsealed,
+    response::StatTrakSwapped,
+    response::StatTrakUpdated,
+    response::StickerApplied,
+    response::StickerRemoved,
+    response::StickerScraped,
     response::TeamGraffitiSelected,
-    response::StatTrakSwapped
+    response::ViewerPassActivated,
+    response::XRayItemClaimed,
+    response::XRayScannerUsed
 >;
 
 TYPED_TEST_SUITE(InventoryChanger_Backend_ItemInResponseTest, ResponseTypes);

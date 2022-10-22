@@ -3,11 +3,13 @@
 #include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-struct ConVar;
+namespace csgo::pod
+{
+    struct ConVar;
+    struct Cvar;
+}
 
-class Cvar {
+class Cvar : public VirtualCallableFromPOD<Cvar, csgo::pod::Cvar> {
 public:
-    INCONSTRUCTIBLE(Cvar)
-
-    VIRTUAL_METHOD(ConVar*, findVar, 15, (const char* name), (this, name))
+    VIRTUAL_METHOD2(csgo::pod::ConVar*, findVar, 15, (const char* name), (name))
 };

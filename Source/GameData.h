@@ -7,9 +7,13 @@
 #include <vector>
 
 #include "SDK/matrix3x4.h"
+#include "SDK/Entity.h"
 #include "SDK/Vector.h"
 
 #include "Texture.h"
+
+#include "Interfaces.h"
+#include "Memory.h"
 
 struct LocalPlayerData;
 
@@ -26,7 +30,7 @@ struct Matrix4x4;
 
 namespace GameData
 {
-    void update() noexcept;
+    void update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
     void clearUnusedAvatars() noexcept;
@@ -57,7 +61,7 @@ namespace GameData
 }
 
 struct LocalPlayerData {
-    void update() noexcept;
+    void update(const Engine& engine) noexcept;
 
     bool exists = false;
     bool alive = false;
@@ -75,7 +79,7 @@ struct LocalPlayerData {
 class Entity;
 
 struct BaseData {
-    BaseData(Entity* entity) noexcept;
+    BaseData(const Entity& entity) noexcept;
 
     float distanceToLocal;
     Vector obbMins, obbMaxs;
@@ -83,15 +87,15 @@ struct BaseData {
 };
 
 struct EntityData final : BaseData {
-    EntityData(Entity* entity) noexcept;
+    EntityData(const Entity& entity) noexcept;
    
     const char* name;
 };
 
 struct ProjectileData : BaseData {
-    ProjectileData(Entity* projectile) noexcept;
+    ProjectileData(const ClientInterfaces& clientInterfaces, const Memory& memory, const Entity& projectile) noexcept;
 
-    void update(Entity* projectile) noexcept;
+    void update(const Memory& memory, const Entity& projectile) noexcept;
 
     constexpr auto operator==(int otherHandle) const noexcept
     {
@@ -109,15 +113,15 @@ struct ProjectileData : BaseData {
 enum class Team;
 
 struct PlayerData : BaseData {
-    PlayerData(Entity* entity) noexcept;
+    PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
     PlayerData(const PlayerData&) = delete;
     PlayerData& operator=(const PlayerData&) = delete;
     PlayerData(PlayerData&&) = default;
     PlayerData& operator=(PlayerData&&) = default;
 
-    void update(Entity* entity) noexcept;
+    void update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
     [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
-    [[nodiscard]] float fadingAlpha() const noexcept;
+    [[nodiscard]] float fadingAlpha(const Memory& memory) const noexcept;
 
     bool dormant;
     bool enemy = false;
@@ -131,7 +135,7 @@ struct PlayerData : BaseData {
     float lastContactTime = 0.0f;
     int health;
     int handle;
-    Team team;
+    csgo::Team team;
     std::string name;
     Vector headMins, headMaxs;
     Vector origin;
@@ -140,7 +144,7 @@ struct PlayerData : BaseData {
 };
 
 struct WeaponData : BaseData {
-    WeaponData(Entity* entity) noexcept;
+    WeaponData(const Interfaces& interfaces, const Entity& entity) noexcept;
 
     int clip;
     int reserveAmmo;
@@ -150,13 +154,13 @@ struct WeaponData : BaseData {
 };
 
 struct LootCrateData : BaseData {
-    LootCrateData(Entity* entity) noexcept;
+    LootCrateData(const Entity& entity) noexcept;
 
     const char* name = nullptr;
 };
 
 struct ObserverData {
-    ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept;
+    ObserverData(const Entity& entity, const Entity& obs, bool targetIsLocalPlayer) noexcept;
 
     int playerHandle;
     int targetHandle;
@@ -164,7 +168,7 @@ struct ObserverData {
 };
 
 struct BombData {
-    void update() noexcept;
+    void update(const Memory& memory) noexcept;
 
     float blowTime;
     float timerLength;
@@ -175,7 +179,7 @@ struct BombData {
 };
 
 struct InfernoData {
-    InfernoData(Entity* inferno) noexcept;
+    InfernoData(const Entity& inferno) noexcept;
 
     std::vector<Vector> points;
 };

@@ -1,8 +1,6 @@
 # Osiris 
 [![C++](https://img.shields.io/badge/language-C%2B%2B-%23f34b7d.svg?style=plastic)](https://en.wikipedia.org/wiki/C%2B%2B) 
 [![CS:GO](https://img.shields.io/badge/game-CS%3AGO-yellow.svg?style=plastic)](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/) 
-[![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg?style=plastic)](https://en.wikipedia.org/wiki/Microsoft_Windows) 
-[![x86](https://img.shields.io/badge/arch-x86-red.svg?style=plastic)](https://en.wikipedia.org/wiki/X86) 
 [![License](https://img.shields.io/github/license/danielkrupinski/Osiris.svg?style=plastic)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/danielkrupinski/Osiris.svg?style=plastic)](https://github.com/danielkrupinski/Osiris/issues)
 [![PayPal](https://img.shields.io/badge/donate-PayPal-104098.svg?style=plastic&logo=PayPal)](https://paypal.me/DanielK19)
@@ -19,7 +17,7 @@ Free open-source cross-platform cheat software for **Counter-Strike: Global Offe
 *   **Chams** - color player models to improve visibility
 *   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
 *   **Visuals** - miscellaneous visual options
-*   **Inventory Changer** - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
+*   [**Inventory Changer**](Source/InventoryChanger/) - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
 *   **Sound** - modify volume of certain sound effects
 *   **Style** - select menu window layout and colors
 *   **Misc** - miscellaneous features
@@ -329,7 +327,7 @@ Currently implemented hooking methods are:
 *   VmtHook - hook a function directly in a vtable
 *   VmtSwap - create a copy of a vtable and swap the pointer on the class instance
 
-Hooking implementation files are located in [Hooks](https://github.com/danielkrupinski/Osiris/tree/master/Osiris/Hooks) directory.
+Hooking implementation files are located in [Hooks](Source/Hooks) directory.
 
 ## Acknowledgments
 

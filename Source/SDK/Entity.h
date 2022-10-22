@@ -13,6 +13,10 @@
 
 #include "../Netvars.h"
 
+#include <Platform/IsPlatform.h>
+
+class Memory;
+
 class EconItemView;
 
 class matrix3x4;
@@ -37,6 +41,9 @@ enum class ObsMode {
     Roaming
 };
 
+namespace csgo
+{
+
 enum class Team {
     None = 0,
     Spectators,
@@ -44,76 +51,112 @@ enum class Team {
     CT
 };
 
-class Collideable {
-public:
-    INCONSTRUCTIBLE(Collideable)
+}
 
-    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
-    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
+class Collideable : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+
+    VIRTUAL_METHOD2(const Vector&, obbMins, 1, (), ())
+    VIRTUAL_METHOD2(const Vector&, obbMaxs, 2, (), ())
 };
 
-class Entity {
+class Networkable : private VirtualCallable {
 public:
-    INCONSTRUCTIBLE(Entity)
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
-    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD2(void, release, 1, (), ())
+    VIRTUAL_METHOD2(ClientClass*, getClientClass, 2, (), ())
+    VIRTUAL_METHOD2(void, onDataChanged, 5, (int updateType), (updateType))
+    VIRTUAL_METHOD2(void, preDataUpdate, 6, (int updateType), (updateType))
+    VIRTUAL_METHOD2(void, postDataUpdate, 7, (int updateType), (updateType))
+    VIRTUAL_METHOD2(bool, isDormant, 9, (), ())
+    VIRTUAL_METHOD2(int, index, 10, (), ())
+    VIRTUAL_METHOD2(void, setDestroyedOnRecreateEntities, 13, (), ())
+};
 
-    VIRTUAL_METHOD(bool, shouldDraw, WIN32_LINUX(3, 149), (), (this + WIN32_LINUX(sizeof(uintptr_t), 0)))
-    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
-    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
+class Renderable : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
-    VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
+#ifdef _WIN32
+    VIRTUAL_METHOD2(bool, shouldDraw, 3, (), ())
+#endif
 
-    VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
-    VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
-    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (this, index, std::ref(origin)))
-    VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(88, 128), (), (this))
-    VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), (this))
-    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), (this))
-    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), (this))
-    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), (this))
-    VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), (this))
-    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), (this))
-    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), (this))
-    VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), (this))
-    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), (this))
-    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), (this))
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (Entity* viewModel), (this, viewModel))
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), (this))
-    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), (this))
+    VIRTUAL_METHOD2(const Model*, getModel, 8, (), ())
+    VIRTUAL_METHOD2(const matrix3x4&, toWorldTransform, 32, (), ())
+    VIRTUAL_METHOD2(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
+};
+
+class Entity : private VirtualCallable {
+public:
+    using VirtualCallable::VirtualCallable;
+    using VirtualCallable::getThis;
+
+    [[nodiscard]] auto getNetworkable() const noexcept
+    {
+        return Networkable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) * 2 };
+    }
+
+    [[nodiscard]] auto getRenderable() const noexcept
+    {
+        return Renderable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) };
+    }
+
+    bool shouldDraw() const
+    {
+#ifndef _WIN32
+        return call<bool, 149>();
+#else
+        return getRenderable().shouldDraw();
+#endif
+    }
+
+    VIRTUAL_METHOD2_V(int&, handle, 2, (), ())
+    VIRTUAL_METHOD2_V(std::uintptr_t, getCollideable, 3, (), ())
+
+    VIRTUAL_METHOD2(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
+    VIRTUAL_METHOD2(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
+    VIRTUAL_METHOD2(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
+    VIRTUAL_METHOD2(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
+    VIRTUAL_METHOD2(int, health, WIN32_LINUX(122, 167), (), ())
+    VIRTUAL_METHOD2(bool, isAlive, WIN32_LINUX(156, 208), (), ())
+    VIRTUAL_METHOD2(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
+    VIRTUAL_METHOD2(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
+    VIRTUAL_METHOD2(std::uintptr_t, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD2(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
+    VIRTUAL_METHOD2(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
+    VIRTUAL_METHOD2(std::uintptr_t, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD2(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
+    VIRTUAL_METHOD2(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
+    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (std::uintptr_t viewModel), (viewModel))
+    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
+    VIRTUAL_METHOD2(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 
 #if IS_WIN32()
-    auto getEyePosition() noexcept
+    auto getEyePosition() const noexcept
     {
         Vector v;
-        VirtualMethod::call<void, 285>(this, std::ref(v));
+        call<void, 285>(std::ref(v));
         return v;
     }
 
-    auto getAimPunch() noexcept
+    auto getAimPunch() const noexcept
     {
         Vector v;
-        VirtualMethod::call<void, 346>(this, std::ref(v));
+        call<void, 346>(std::ref(v));
         return v;
     }
 #else
-    VIRTUAL_METHOD(Vector, getEyePosition, 348, (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, 409, (), (this))
+    VIRTUAL_METHOD2(Vector, getEyePosition, 348, (), ())
+    VIRTUAL_METHOD2(Vector, getAimPunch, 409, (), ())
 #endif
 
-    auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
-    auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
-    auto isGrenade() noexcept { return getWeaponType() == WeaponType::Grenade; }
+    auto isPistol() const noexcept { return getWeaponType() == WeaponType::Pistol; }
+    auto isSniperRifle() const noexcept { return getWeaponType() == WeaponType::SniperRifle; }
+    auto isGrenade() const noexcept { return getWeaponType() == WeaponType::Grenade; }
 
-    auto isFullAuto() noexcept
+    auto isFullAuto() const noexcept
     {
         const auto weaponData = getWeaponData();
         if (weaponData)
@@ -121,7 +164,7 @@ public:
         return false;
     }
 
-    auto requiresRecoilControl() noexcept
+    auto requiresRecoilControl() const noexcept
     {
         const auto weaponData = getWeaponData();
         if (weaponData)
@@ -129,146 +172,145 @@ public:
         return false;
     }
 
-    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept;
-    Vector getBonePosition(int bone) noexcept;
+    bool setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept;
+    Vector getBonePosition(const Memory& memory, int bone) const noexcept;
 
-    bool isVisible(const Vector& position = { }) noexcept;
-    bool isOtherEnemy(Entity* other) noexcept;
+    bool isVisible(const EngineTrace& engineTrace, const Memory& memory, const Vector& position = { }) const noexcept;
+    bool isOtherEnemy(const Memory& memory, const Entity& other) const noexcept;
 
-    VarMap& getVarMap() noexcept
+    VarMap& getVarMap() const noexcept
     {
-        return *reinterpret_cast<VarMap*>(std::uintptr_t(this) + WIN32_LINUX(0x24, 0x48));
+        return *reinterpret_cast<VarMap*>(getThis() + WIN32_LINUX(0x24, 0x48));
     }
    
-    AnimState* getAnimstate() noexcept
+    AnimState* getAnimstate() const noexcept
     {
 #ifdef _WIN32
-        return *reinterpret_cast<AnimState**>(this + 0x3914);
+        return *reinterpret_cast<AnimState**>(getThis() + 0x3914);
 #else
         return nullptr;
 #endif
     }
 
-    float getMaxDesyncAngle() noexcept;
+    float getMaxDesyncAngle() const noexcept;
 
-    bool isInReload() noexcept
+    bool isInReload() const noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + WIN32_LINUX(0x41, 0x45));
     }
 
-    int getUserId() noexcept;
-    std::uint64_t getSteamId() noexcept;
+    int getUserId(const Engine& engine) const noexcept;
+    std::uint64_t getSteamId(const Engine& engine) const noexcept;
 
-    void getPlayerName(char(&out)[128]) noexcept;
-    [[nodiscard]] std::string getPlayerName() noexcept
+    void getPlayerName(const Interfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept;
+    [[nodiscard]] std::string getPlayerName(const Interfaces& interfaces, const Memory& memory) const noexcept
     {
         char name[128];
-        getPlayerName(name);
+        getPlayerName(interfaces, memory, name);
         return name;
     }
 
-    bool canSee(Entity* other, const Vector& pos) noexcept;
-    bool visibleTo(Entity* other) noexcept;
+    bool canSee(const EngineTrace& engineTrace, const Memory& memory, const Entity& other, const Vector& pos) const noexcept;
+    bool visibleTo(const EngineInterfaces& engineInterfaces, const Memory& memory, const Entity& other) const noexcept;
 
-    NETVAR(body, "CBaseAnimating", "m_nBody", int)
-    NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
+    NETVAR2(body, "CBaseAnimating", "m_nBody", int)
+    NETVAR2(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
-    NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
-    NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
-    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
-    NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
-    NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
-    NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
+    NETVAR2(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
+    NETVAR2(origin, "CBaseEntity", "m_vecOrigin", Vector)
+    NETVAR_OFFSET2(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
+    NETVAR2(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
+    NETVAR2(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
+    NETVAR2(spotted, "CBaseEntity", "m_bSpotted", bool)
+    NETVAR2(spottedByMask, "CBaseEntity", "m_bSpottedByMask", std::uint32_t)
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
-    PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
+    NETVAR2(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
+    PNETVAR2(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
-    NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
-    NETVAR(fov, "CBasePlayer", "m_iFOV", int)
-    NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
-    NETVAR(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
-    NETVAR(flags, "CBasePlayer", "m_fFlags", int)
-    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
-    NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
-    NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
-    NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-    NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
+    NETVAR2(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
+    NETVAR2(fov, "CBasePlayer", "m_iFOV", int)
+    NETVAR2(fovStart, "CBasePlayer", "m_iFOVStart", int)
+    NETVAR2(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
+    NETVAR2(flags, "CBasePlayer", "m_fFlags", int)
+    NETVAR2(tickBase, "CBasePlayer", "m_nTickBase", int)
+    NETVAR2(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
+    NETVAR2(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
+    NETVAR2(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
+    NETVAR2(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
 
-    NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
-    NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
-    NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
-    NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
-    NETVAR_OFFSET(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
-    NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
-    NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
-    NETVAR(account, "CCSPlayer", "m_iAccount", int)
-    NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool)
-    NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
-    NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
-    NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
-    NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
-    NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
-    NETVAR(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
-    NETVAR(playerPatchIndices, "CCSPlayer", "m_vecPlayerPatchEconIndices", int[5])
+    NETVAR2(armor, "CCSPlayer", "m_ArmorValue", int)
+    NETVAR2(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
+    NETVAR2(isScoped, "CCSPlayer", "m_bIsScoped", bool)
+    NETVAR2(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
+    NETVAR_OFFSET2(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
+    NETVAR2(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
+    NETVAR2(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
+    NETVAR2(account, "CCSPlayer", "m_iAccount", int)
+    NETVAR2(inBombZone, "CCSPlayer", "m_bInBombZone", bool)
+    NETVAR2(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
+    NETVAR2(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
+    NETVAR2(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
+    NETVAR2(ragdoll, "CCSPlayer", "m_hRagdoll", int)
+    NETVAR2(shotsFired, "CCSPlayer", "m_iShotsFired", int)
+    NETVAR2(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
+    NETVAR2(playerPatchIndices, "CCSPlayer", "m_vecPlayerPatchEconIndices", int[5])
 
-    NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
-    NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
-    NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
-    NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
-    NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
-    NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
-    NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+    NETVAR2(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
+    NETVAR2(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
+    NETVAR2(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
+    NETVAR2(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
+    NETVAR2(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR2(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
+    NETVAR2(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
-    NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
+    NETVAR2(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
-    NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
-    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
-    NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
-    NETVAR(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
-    NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
-    NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
-    NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
-    NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
-    NETVAR(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
+    NETVAR2(accountID, "CBaseAttributableItem", "m_iAccountID", int)
+    NETVAR2(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
+    NETVAR2(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
+    NETVAR2(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
+    NETVAR2(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
+    NETVAR2(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
+    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
+    NETVAR2(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
+    NETVAR2(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 
-    NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
-    NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
+    NETVAR2(owner, "CBaseViewModel", "m_hOwner", int)
+    NETVAR2(weapon, "CBaseViewModel", "m_hWeapon", int)
 
-    NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
+    NETVAR2(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
-    NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
+    NETVAR2(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
-    NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
+    NETVAR2(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
-    NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+    NETVAR2(thrower, "CBaseGrenade", "m_hThrower", int)
         
-    NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
+    NETVAR2(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
-    NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
-    NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
-    NETVAR(fireZDelta, "CInferno", "m_fireZDelta", int[100])
-    NETVAR(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
-    NETVAR(fireCount, "CInferno", "m_fireCount", int)
+    NETVAR2(fireXDelta, "CInferno", "m_fireXDelta", int[100])
+    NETVAR2(fireYDelta, "CInferno", "m_fireYDelta", int[100])
+    NETVAR2(fireZDelta, "CInferno", "m_fireZDelta", int[100])
+    NETVAR2(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
+    NETVAR2(fireCount, "CInferno", "m_fireCount", int)
         
-    bool isFlashed() noexcept
+    bool isFlashed() const noexcept
     {
         return flashDuration() > 75.0f;
     }
 
-    std::uint64_t originalOwnerXuid() noexcept
+    std::uint64_t originalOwnerXuid() const noexcept
     {
         return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
     }
 
-    std::uint64_t itemID() noexcept
+    std::uint64_t itemID() const noexcept
     {
         return (std::uint64_t(itemIDHigh()) << 32) | itemIDLow();
     }
 
-    [[nodiscard]] bool isOnGround() noexcept
+    [[nodiscard]] bool isOnGround() const noexcept
     {
         return (flags() & 1) != 0;
     }
 };
-
-static_assert(sizeof(Entity) == 1);

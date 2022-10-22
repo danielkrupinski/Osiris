@@ -6,3 +6,4 @@ target_sources(Tests PRIVATE
 add_subdirectory(Backend)
 add_subdirectory(GameItems)
 add_subdirectory(Inventory)
+add_subdirectory(ItemGenerator)

@@ -2,11 +2,11 @@
 
 #include <cassert>
 
-class Entity;
+#include "Entity.h"
 
 class LocalPlayer {
 public:
-    void init(Entity** entity) noexcept
+    void init(std::uintptr_t* entity) noexcept
     {
         assert(!localEntity);
         localEntity = entity;
@@ -15,22 +15,17 @@ public:
     constexpr operator bool() noexcept
     {
         assert(localEntity);
-        return *localEntity != nullptr;
+        return *localEntity != 0;
     }
 
-    constexpr auto operator->() noexcept
+    [[nodiscard]] auto get() noexcept
     {
         assert(localEntity && *localEntity);
-        return *localEntity;
+        return Entity{ retSpoofGadgets.client, *localEntity };
     }
 
-    constexpr auto get() noexcept
-    {
-        assert(localEntity && *localEntity);
-        return *localEntity;
-    }
 private:
-    Entity** localEntity = nullptr;
+    std::uintptr_t* localEntity = nullptr;
 };
 
 inline LocalPlayer localPlayer;

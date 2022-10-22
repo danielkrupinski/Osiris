@@ -29,7 +29,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             cmd->viewangles.x = antiAimConfig.pitchAngle;
 
         if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
-            cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
+            cmd->viewangles.y += localPlayer.get().getMaxDesyncAngle();
             if (std::abs(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
                     cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;

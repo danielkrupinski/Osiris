@@ -1,5 +1,8 @@
 #include "Storage.h"
 
+#include <SDK/ItemSchema.h>
+#include <SDK/WeaponId.h>
+
 namespace inventory_changer::game_items
 {
 
@@ -16,9 +19,9 @@ void Storage::addGraffiti(int id, ItemName name, EconRarity rarity, std::string_
     addItem(Item::Type::Graffiti, rarity, WeaponId::SealedGraffiti, index, pooled(iconPath));
 }
 
-void Storage::addSticker(int id, ItemName name, EconRarity rarity, std::string_view iconPath, std::uint32_t tournamentID, TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
+void Storage::addSticker(csgo::StickerId id, ItemName name, EconRarity rarity, std::string_view iconPath, csgo::Tournament tournament, csgo::TournamentTeam tournamentTeam, int tournamentPlayerID, bool isGoldenSticker)
 {
-    stickerKits.emplace_back(id, pooled(name), tournamentID, tournamentTeam, tournamentPlayerID, isGoldenSticker);
+    stickerKits.emplace_back(id, pooled(name), tournament, tournamentTeam, tournamentPlayerID, isGoldenSticker);
     addItem(Item::Type::Sticker, rarity, WeaponId::Sticker, stickerKits.size() - 1, pooled(iconPath));
 }
 
@@ -48,9 +51,9 @@ void Storage::addServiceMedal(EconRarity rarity, std::uint32_t year, WeaponId we
     addItem(Item::Type::ServiceMedal, rarity, weaponID, static_cast<std::size_t>(year), pooled(iconPath));
 }
 
-void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::uint16_t defaultGraffitiID, std::string_view iconPath)
+void Storage::addTournamentCoin(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::uint16_t defaultGraffitiID, std::string_view iconPath)
 {
-    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(tournamentEventID | defaultGraffitiID << 8), pooled(iconPath));
+    addItem(Item::Type::TournamentCoin, rarity, weaponID, static_cast<std::size_t>(static_cast<std::uint8_t>(tournament) | defaultGraffitiID << 8), pooled(iconPath));
 }
 
 void Storage::addPaintKit(int id, ItemName name, float wearRemapMin, float wearRemapMax)
@@ -78,15 +81,15 @@ void Storage::addAgent(EconRarity rarity, WeaponId weaponID, std::string_view ic
     addItem(Item::Type::Agent, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addCase(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, std::uint8_t tournamentID, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
+void Storage::addCrate(EconRarity rarity, WeaponId weaponID, std::uint16_t crateSeries, csgo::Tournament tournament, TournamentMap map, bool isSouvenirPackage, std::string_view iconPath)
 {
     assert((static_cast<std::uint8_t>(map) & 0x80) == 0);
-    addItem(Item::Type::Case, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | tournamentID, pooled(iconPath));
+    addItem(Item::Type::Crate, rarity, weaponID, (static_cast<std::uint8_t>(isSouvenirPackage) << 31) | (static_cast<std::uint8_t>(map) & 0x7F) << 24 | crateSeries << 8 | static_cast<std::uint8_t>(tournament), pooled(iconPath));
 }
 
 void Storage::addCaseKey(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
 {
-    addItem(Item::Type::CaseKey, rarity, weaponID, 0, pooled(iconPath));
+    addItem(Item::Type::CrateKey, rarity, weaponID, 0, pooled(iconPath));
 }
 
 void Storage::addOperationPass(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
@@ -99,14 +102,19 @@ void Storage::addStatTrakSwapTool(EconRarity rarity, WeaponId weaponID, std::str
     addItem(Item::Type::StatTrakSwapTool, rarity, weaponID, 0, pooled(iconPath));
 }
 
-void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
+void Storage::addSouvenirToken(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, std::string_view iconPath)
 {
-    addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
+    addItem(Item::Type::SouvenirToken, rarity, weaponID, static_cast<std::size_t>(tournament), pooled(iconPath));
 }
 
-void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, std::uint8_t tournamentEventID, std::string_view iconPath)
+void Storage::addViewerPass(EconRarity rarity, WeaponId weaponID, csgo::Tournament tournament, bool hasExtraTokens, std::string_view iconPath)
 {
-    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournamentEventID), pooled(iconPath));
+    addItem(Item::Type::ViewerPass, rarity, weaponID, static_cast<std::size_t>(tournament) | (static_cast<std::size_t>(hasExtraTokens) << 8), pooled(iconPath));
+}
+
+void Storage::addStorageUnit(EconRarity rarity, WeaponId weaponID, std::string_view iconPath)
+{
+    addItem(Item::Type::StorageUnit, rarity, weaponID, 0, pooled(iconPath));
 }
 
 void Storage::compress()

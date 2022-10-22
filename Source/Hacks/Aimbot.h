@@ -1,12 +1,15 @@
 #pragma once
 
+#include <Config.h>
+#include "../Memory.h"
+
 struct UserCmd;
 struct Vector;
 
 namespace Aimbot
 {
     Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept;
-    void run(UserCmd*) noexcept;
+    void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd*) noexcept;
 
-    void updateInput() noexcept;
+    void updateInput(const Config& config) noexcept;
 }

@@ -63,6 +63,12 @@
     <Filter Include="InventoryChanger\Backend\Request">
       <UniqueIdentifier>{f7214d3f-4cd4-4d69-8c0d-b3b579db52d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{5b374e7e-04e3-430e-bd54-02300b034b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{9d72c449-86f4-4c33-8e45-d88047d888eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -290,6 +296,12 @@
     <ClCompile Include="InventoryChanger\WeaponNames.cpp">
       <Filter>InventoryChanger</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RetSpoofGadgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -352,9 +364,6 @@
     <ClInclude Include="Hacks\Chams.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\RenderView.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Aimbot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -400,9 +409,6 @@
     <ClInclude Include="SDK\Surface.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\GameUI.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -442,9 +448,6 @@
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\RenderContext.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="imguiCustom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -482,9 +485,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\WeaponSystem.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\NetworkStringTable.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="Hooks\VmtSwap.h">
@@ -759,6 +759,114 @@
     </ClInclude>
     <ClInclude Include="SortFilter.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\XRayScanner.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\StorageUnitManager.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator\DefaultGenerator.h">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator\AttributeGenerator.h">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\ProPlayer.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\TournamentTeam.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemGenerator\DropGenerator.h">
+      <Filter>InventoryChanger\ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\Tournament.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\PickEmHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\LoadoutHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Response\ResponseAccumulator.h">
+      <Filter>InventoryChanger\Backend\Response</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\InventoryHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\StorageUnitHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\ItemRemovalHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\XRayScannerHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\ItemModificationHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Request\ItemActivationHandler.h">
+      <Filter>InventoryChanger\Backend\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\Backend\Items.h">
+      <Filter>InventoryChanger\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\PaintkitConditionChances.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\PaintkitWear.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\StickerId.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\TournamentStage.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\ItemId.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\ItemId.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoofGadgets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ViewSetup.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\RetSpoofInvoker.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibraryView.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\DynamicLibraryView.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\CSPlayerInventory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibrary.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\IsPlatform.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

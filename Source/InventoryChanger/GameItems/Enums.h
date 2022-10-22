@@ -3,12 +3,11 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace inventory_changer::game_items
+namespace inventory_changer
 {
 
 enum class TournamentMap : std::uint8_t {
-    None = 0,
-    Ancient,
+    Ancient = 1,
     Cache,
     Cobblestone,
     Dust2,

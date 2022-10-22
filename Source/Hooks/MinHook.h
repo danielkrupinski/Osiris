@@ -5,9 +5,9 @@
 
 #ifdef _WIN32
 #include <x86RetSpoof.h>
+#include "../RetSpoofGadgets.h"
 #endif
 
-#include "../Memory.h"
 #include "../SDK/Platform.h"
 
 class MinHook {
@@ -26,7 +26,7 @@ public:
     constexpr auto callOriginal(Args... args) const noexcept
     {
 #ifdef _WIN32
-        return x86RetSpoof::invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], memory->jmpEbxGadgetInClient, args...);
+        return retSpoofGadgets.engine.invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], args...);
 #else
         return getOriginal<T, Idx>(args...)(base, args...);
 #endif

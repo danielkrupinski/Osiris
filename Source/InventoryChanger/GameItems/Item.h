@@ -25,14 +25,15 @@ public:
     [[nodiscard]] constexpr bool isPatch() const noexcept { return type == Type::Patch; }
     [[nodiscard]] constexpr bool isGraffiti() const noexcept { return type == Type::Graffiti; }
     [[nodiscard]] constexpr bool isAgent() const noexcept { return type == Type::Agent; }
-    [[nodiscard]] constexpr bool isCase() const noexcept { return type == Type::Case; }
-    [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CaseKey; }
+    [[nodiscard]] constexpr bool isCrate() const noexcept { return type == Type::Crate; }
+    [[nodiscard]] constexpr bool isCaseKey() const noexcept { return type == Type::CrateKey; }
     [[nodiscard]] constexpr bool isOperationPass() const noexcept { return type == Type::OperationPass; }
     [[nodiscard]] constexpr bool isStatTrakSwapTool() const noexcept { return type == Type::StatTrakSwapTool; }
     [[nodiscard]] constexpr bool isViewerPass() const noexcept { return type == Type::ViewerPass; }
     [[nodiscard]] constexpr bool isServiceMedal() const noexcept { return type == Type::ServiceMedal; }
     [[nodiscard]] constexpr bool isSouvenirToken() const noexcept { return type == Type::SouvenirToken; }
     [[nodiscard]] constexpr bool isTournamentCoin() const noexcept { return type == Type::TournamentCoin; }
+    [[nodiscard]] constexpr bool isStorageUnit() const noexcept { return type == Type::StorageUnit; }
 
     enum class Type : std::uint8_t {
         Gloves,
@@ -44,14 +45,15 @@ public:
         Collectible,
         NameTag,
         Agent,
-        Case,
-        CaseKey,
+        Crate,
+        CrateKey,
         OperationPass,
         StatTrakSwapTool,
         ViewerPass,
         ServiceMedal,
         SouvenirToken,
-        TournamentCoin
+        TournamentCoin,
+        StorageUnit
     };
 
     [[nodiscard]] constexpr Item(Type type, EconRarity rarity, WeaponId weaponID, std::size_t dataIndex, std::string_view iconPath) noexcept

@@ -5,8 +5,6 @@
 #include "../Helpers.h"
 #include "Utils.h"
 
-class matrix3x4;
-
 struct Vector {
     Vector() = default;
     constexpr Vector(float x, float y, float z) noexcept : x{ x }, y{ y }, z{ z } {}
@@ -132,8 +130,6 @@ struct Vector {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    constexpr auto transform(const matrix3x4& mat) const noexcept;
-
     auto distTo(const Vector& v) const noexcept
     {
         return (*this - v).length();
@@ -155,12 +151,3 @@ struct Vector {
 
     float x, y, z;
 };
-
-#include "matrix3x4.h"
-
-constexpr auto Vector::transform(const matrix3x4& mat) const noexcept
-{
-    return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
-                   dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],
-                   dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
-}

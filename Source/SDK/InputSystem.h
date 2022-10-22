@@ -3,10 +3,10 @@
 #include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class InputSystem {
-public:
-    INCONSTRUCTIBLE(InputSystem)
+namespace csgo::pod { struct InputSystem; }
 
-    VIRTUAL_METHOD(void, enableInput, 11, (bool enable), (this, enable))
-    VIRTUAL_METHOD(void, resetInputState, 39, (), (this))
+class InputSystem : public VirtualCallableFromPOD<InputSystem, csgo::pod::InputSystem> {
+public:
+    VIRTUAL_METHOD2(void, enableInput, 11, (bool enable), (enable))
+    VIRTUAL_METHOD2(void, resetInputState, 39, (), ())
 };

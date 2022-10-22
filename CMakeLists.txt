@@ -21,6 +21,10 @@ endif()
 
 add_library(OsirisOBJ OBJECT "")
 set_target_properties(OsirisOBJ PROPERTIES CXX_VISIBILITY_PRESET hidden C_VISIBILITY_PRESET hidden)
+if (WIN32)
+  target_compile_definitions(OsirisOBJ PUBLIC NOMINMAX)
+endif()
+
 add_subdirectory(Dependencies)
 add_subdirectory(Source)
 

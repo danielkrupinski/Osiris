@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <type_traits>
 
 #ifdef _WIN32
 #include <d3d9.h>
 #include <Windows.h>
 #elif __linux__
+#include "SdlFunctions.h"
 struct SDL_Window;
 union SDL_Event;
 #endif
@@ -16,6 +18,9 @@ union SDL_Event;
 #include "Hooks/VmtSwap.h"
 
 #include "SDK/Platform.h"
+
+#include "Interfaces.h"
+#include "Memory.h"
 
 class matrix3x4;
 struct ModelRenderInfo;
@@ -39,12 +44,14 @@ public:
 #else
     Hooks() noexcept;
 
+    SdlFunctions sdlFunctions;
+
     std::add_pointer_t<int(SDL_Event*)> pollEvent;
     std::add_pointer_t<void(SDL_Window*)> swapWindow;
 #endif
 
-    void install() noexcept;
-    void uninstall() noexcept;
+    void install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
     void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;
@@ -72,4 +79,4 @@ private:
 #endif
 };
 
-inline std::unique_ptr<Hooks> hooks;
+inline std::optional<Hooks> hooks;

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class SoundEmitter {
-public:
-    INCONSTRUCTIBLE(SoundEmitter)
+namespace csgo::pod { struct SoundEmitter; }
 
-    VIRTUAL_METHOD(const char*, getSoundName, 46, (int index), (this, index))
+class SoundEmitter : public VirtualCallableFromPOD<SoundEmitter, csgo::pod::SoundEmitter> {
+public:
+    VIRTUAL_METHOD2(const char*, getSoundName, 46, (int index), (index))
 };

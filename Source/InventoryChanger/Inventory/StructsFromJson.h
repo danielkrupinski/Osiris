@@ -9,7 +9,7 @@
 namespace inventory_changer::inventory
 {
 
-[[nodiscard]] Glove gloveFromJson(const json& j);
+[[nodiscard]] Gloves glovesFromJson(const json& j);
 [[nodiscard]] SouvenirPackage souvenirPackageFromJson(const json& j);
 [[nodiscard]] Music musicFromJson(const json& j);
 [[nodiscard]] ServiceMedal serviceMedalFromJson(const json& j);
@@ -18,5 +18,6 @@ namespace inventory_changer::inventory
 [[nodiscard]] Skin skinFromJson(const json& j);
 [[nodiscard]] std::array<Agent::Patch, 5> agentPatchesFromJson(const json& j);
 [[nodiscard]] Agent agentFromJson(const json& j);
+[[nodiscard]] StorageUnit storageUnitFromJson(const json& j);
 
 }

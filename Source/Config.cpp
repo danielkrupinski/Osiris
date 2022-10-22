@@ -4,11 +4,14 @@
 #include <iomanip>
 #include <iterator>
 #include <system_error>
+#include <tuple>
 
 #ifdef _WIN32
 #include <Windows.h>
 #include <shellapi.h>
 #include <ShlObj.h>
+#elif __linux__
+#include <unistd.h>
 #endif
 
 #include "nlohmann/json.hpp"
@@ -20,6 +23,7 @@
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
 #include "InventoryChanger/InventoryChanger.h"
+#include "InventoryChanger/InventoryConfig.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
@@ -74,11 +78,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config() noexcept : path{ buildConfigsFolderPath() }
+Config::Config(const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(u8"default.json", false);
+    load(interfaces, memory, u8"default.json", false);
 
 #ifdef _WIN32
     LOGFONTW logfont;
@@ -99,15 +103,15 @@ static void from_json(const json& j, ColorToggleRounding& ctr)
     read(j, "Rounding", ctr.rounding);
 }
 
-static void from_json(const json& j, Font& f)
+static void from_json(Config& config, const json& j, Font& f)
 {
     read<value_t::string>(j, "Name", f.name);
 
     if (!f.name.empty())
-        config->scheduleFontLoad(f.name);
+        config.scheduleFontLoad(f.name);
 
-    if (const auto it = std::ranges::find(config->getSystemFonts(), f.name); it != config->getSystemFonts().end())
-        f.index = std::distance(config->getSystemFonts().begin(), it);
+    if (const auto it = std::ranges::find(config.getSystemFonts(), f.name); it != config.getSystemFonts().end())
+        f.index = std::distance(config.getSystemFonts().begin(), it);
     else
         f.index = 0;
 }
@@ -128,19 +132,24 @@ static void from_json(const json& j, Box& b)
     read<value_t::object>(j, "Fill", b.fill);
 }
 
-static void from_json(const json& j, Shared& s)
+static void from_json(Config& config, const json& j, Shared& s)
 {
     read(j, "Enabled", s.enabled);
-    read<value_t::object>(j, "Font", s.font);
+
+    if (j.contains("Font")) {
+        if (const auto& val = j["Font"]; val.type() == value_t::object)
+            from_json(config, val, s.font);
+    }
+
     read<value_t::object>(j, "Snapline", s.snapline);
     read<value_t::object>(j, "Box", s.box);
     read<value_t::object>(j, "Name", s.name);
     read(j, "Text Cull Distance", s.textCullDistance);
 }
 
-static void from_json(const json& j, Weapon& w)
+static void from_json(Config& config, const json& j, Weapon& w)
 {
-    from_json(j, static_cast<Shared&>(w));
+    from_json(config, j, static_cast<Shared&>(w));
 
     read<value_t::object>(j, "Ammo", w.ammo);
 }
@@ -161,16 +170,16 @@ static void from_json(const json& j, Trails& t)
     read<value_t::object>(j, "Enemies", t.enemies);
 }
 
-static void from_json(const json& j, Projectile& p)
+static void from_json(Config& config, const json& j, Projectile& p)
 {
-    from_json(j, static_cast<Shared&>(p));
+    from_json(config, j, static_cast<Shared&>(p));
 
     read<value_t::object>(j, "Trails", p.trails);
 }
 
-static void from_json(const json& j, Player& p)
+static void from_json(Config& config, const json& j, Player& p)
 {
-    from_json(j, static_cast<Shared&>(p));
+    from_json(config, j, static_cast<Shared&>(p));
 
     read<value_t::object>(j, "Weapon", p.weapon);
     read<value_t::object>(j, "Flash Duration", p.flashDuration);
@@ -235,16 +244,25 @@ static void from_json(const json& j, Config::Chams& c)
     read_array_opt(j, "Materials", c.materials);
 }
 
-static void from_json(const json& j, Config::StreamProofESP& e)
+template <typename T>
+void read(Config& config, const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+{
+    if (j.contains(key) && j[key].is_object()) {
+        for (auto& element : j[key].items())
+            from_json(config, element.value(), o[element.key()]);
+    }
+}
+
+static void from_json(Config& config, const json& j, Config::StreamProofESP& e)
 {
     read(j, "Toggle Key", e.toggleKey);
     read(j, "Hold Key", e.holdKey);
-    read(j, "Allies", e.allies);
-    read(j, "Enemies", e.enemies);
-    read(j, "Weapons", e.weapons);
-    read(j, "Projectiles", e.projectiles);
-    read(j, "Loot Crates", e.lootCrates);
-    read(j, "Other Entities", e.otherEntities);
+    read(config, j, "Allies", e.allies);
+    read(config, j, "Enemies", e.enemies);
+    read(config, j, "Weapons", e.weapons);
+    read(config, j, "Projectiles", e.projectiles);
+    read(config, j, "Loot Crates", e.lootCrates);
+    read(config, j, "Other Entities", e.otherEntities);
 }
 
 static void from_json(const json& j, Config::Style& s)
@@ -270,12 +288,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(size_t id, bool incremental) noexcept
+void Config::load(const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(configs[id].c_str(), incremental);
+    load(interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(const char8_t* name, bool incremental) noexcept
+void Config::load(const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -288,7 +306,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     }
 
     if (!incremental)
-        reset();
+        reset(interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -301,14 +319,19 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Chams", chams);
     read(j["Chams"], "Toggle Key", chamsToggleKey);
     read(j["Chams"], "Hold Key", chamsHoldKey);
-    read<value_t::object>(j, "ESP", streamProofESP);
+
+    if (j.contains("ESP")) {
+        if (const auto& val = j["ESP"]; val.type() == value_t::object)
+            from_json(*this, val, streamProofESP);
+    }
+
     read<value_t::object>(j, "Style", style);
 
     AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     Visuals::fromJson(j["Visuals"]);
-    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance());
+    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
     Sound::fromJson(j["Sound"]);
     Misc::fromJson(j["Misc"]);
 }
@@ -502,7 +525,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(size_t id) const noexcept
+void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -525,7 +548,7 @@ void Config::save(size_t id) const noexcept
     j["Visuals"] = Visuals::toJson();
     j["Misc"] = Misc::toJson();
     j["Style"] = style;
-    j["Inventory Changer"] = toJson(inventory_changer::InventoryChanger::instance());
+    j["Inventory Changer"] = toJson(interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory));
 
     removeEmptyObjects(j);
 
@@ -534,11 +557,11 @@ void Config::save(size_t id) const noexcept
         out << std::setw(2) << j;
 }
 
-void Config::add(const char8_t* name) noexcept
+void Config::add(const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(configs.size() - 1);
+        save(interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -556,7 +579,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset() noexcept
+void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -568,7 +591,7 @@ void Config::reset() noexcept
     Backtrack::resetConfig();
     Glow::resetConfig();
     Visuals::resetConfig();
-    inventory_changer::InventoryChanger::instance().reset();
+    inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
     Sound::resetConfig();
     Misc::resetConfig();
 }
@@ -595,7 +618,10 @@ void Config::openConfigDir() const noexcept
 #ifdef _WIN32
     ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
-    int ret = std::system(("xdg-open " + path.string()).c_str());
+    if (fork() == 0) {
+        constexpr auto xdgPath = "/usr/bin/xdg-open";
+        execl(xdgPath, xdgPath, path.string().c_str(), static_cast<char*>(nullptr));
+    }
 #endif
 }
 

@@ -2,26 +2,27 @@
 
 #include <cstdint>
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class SteamFriends {
-public:
-    INCONSTRUCTIBLE(SteamFriends)
+namespace csgo::pod
+{
+    struct SteamFriends;
+    struct SteamUtils;
+}
 
-    VIRTUAL_METHOD(int, getSmallFriendAvatar, 34, (std::uint64_t steamID), (this, steamID))
+class SteamFriends : public VirtualCallableFromPOD<SteamFriends, csgo::pod::SteamFriends> {
+public:
+    VIRTUAL_METHOD2(int, getSmallFriendAvatar, 34, (std::uint64_t steamID), (steamID))
 };
 
-class SteamUtils {
+class SteamUtils : public VirtualCallableFromPOD<SteamUtils, csgo::pod::SteamUtils> {
 public:
-    INCONSTRUCTIBLE(SteamUtils)
-
-    VIRTUAL_METHOD(bool, getImageRGBA, 6, (int image, std::uint8_t* buff, int buffSize), (this, image, buff, buffSize))
+    VIRTUAL_METHOD2(bool, getImageRGBA, 6, (int image, std::uint8_t* buff, int buffSize), (image, buff, buffSize))
 };
 
 struct SteamAPIContext {
     void* steamClient;
     void* steamUser;
-    SteamFriends* steamFriends;
-    SteamUtils* steamUtils;
+    csgo::pod::SteamFriends* steamFriends;
+    csgo::pod::SteamUtils* steamUtils;
 };

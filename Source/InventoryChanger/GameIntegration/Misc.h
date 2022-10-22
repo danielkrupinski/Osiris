@@ -4,12 +4,12 @@
 
 #include <InventoryChanger/GameItems/Enums.h>
 
+#include <SDK/Constants/StickerId.h>
+
 namespace inventory_changer::game_integration
 {
-    constexpr game_items::TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
+    constexpr TournamentMap getTournamentMapOfSouvenirPackage(std::string_view lootListName) noexcept
     {
-        using game_items::TournamentMap;
-
         if (lootListName.ends_with("de_dust2"))
             return TournamentMap::Dust2;
         if (lootListName.ends_with("de_mirage"))
@@ -30,22 +30,22 @@ namespace inventory_changer::game_integration
             return TournamentMap::Vertigo;
         if (lootListName.ends_with("de_ancient"))
             return TournamentMap::Ancient;
-        return TournamentMap::None;
+        return TournamentMap{};
     }
 
-    constexpr int getTournamentMapGoldStickerID(game_items::TournamentMap map) noexcept
+    [[nodiscard]] constexpr csgo::StickerId getTournamentMapGoldStickerID(TournamentMap map) noexcept
     {
-        using game_items::TournamentMap;
-
         switch (map) {
-        case TournamentMap::Ancient: return 1689;
-        case TournamentMap::Dust2: return 1690;
-        case TournamentMap::Inferno: return 1691;
-        case TournamentMap::Mirage: return 1692;
-        case TournamentMap::Nuke: return 1693;
-        case TournamentMap::Overpass: return 1694;
-        case TournamentMap::Vertigo: return 1695;
-        default: return 0;
+        using enum TournamentMap;
+        using enum csgo::StickerId;
+        case Ancient: return AncientGold;
+        case Dust2: return Dust2Gold;
+        case Inferno: return InfernoGold;
+        case Mirage: return MirageGold;
+        case Nuke: return NukeGold;
+        case Overpass: return OverpassGold;
+        case Vertigo: return VertigoGold;
+        default: return Default;
         }
     }
 

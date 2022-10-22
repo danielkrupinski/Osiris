@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class Surface {
-public:
-    INCONSTRUCTIBLE(Surface)
+namespace csgo::pod { struct Surface; }
 
-    VIRTUAL_METHOD(void, unlockCursor, 66, (), (this))
+class Surface : public VirtualCallableFromPOD<Surface, csgo::pod::Surface> {
+public:
+    VIRTUAL_METHOD2(void, unlockCursor, 66, (), ())
 };

@@ -35,10 +35,18 @@ private:
 };
 
 struct MockResponseHandler {
-    MOCK_METHOD(void, responseHandled, (), (const));
+    MOCK_METHOD(void, handle, (const response::ItemAdded&), (const));
+    MOCK_METHOD(void, handle, (const response::StickerApplied&), (const));
+    MOCK_METHOD(void, handleOther, (), (const));
 
     template <typename ResponseType>
-    void operator()(const ResponseType& response) const { responseHandled(); }
+    void operator()(const ResponseType& response) const
+    {
+        if constexpr (std::is_same_v<ResponseType, response::ItemAdded> || std::is_same_v<ResponseType, response::StickerApplied>)
+            handle(response);
+        else
+            handleOther();
+    }
 };
 
 class InventoryChanger_Backend_ResponseQueue_InstantResponseTest : public testing::TestWithParam<std::chrono::milliseconds> {};
@@ -48,8 +56,11 @@ TEST_P(InventoryChanger_Backend_ResponseQueue_InstantResponseTest, ResponsesAreH
     queue.add(response::ItemAdded{ {}, false });
     queue.add(response::StickerApplied{ {}, 0 });
 
-    MockResponseHandler mock;
-    EXPECT_CALL(mock, responseHandled()).Times(GetParam() <= 0ms ? 2 : 0);
+    testing::InSequence _;
+    testing::StrictMock<MockResponseHandler> mock;
+    EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>())).Times(GetParam() <= 0ms);
+    EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>())).Times(GetParam() <= 0ms);
+
     queue.visit(mock, GetParam());
 }
 
@@ -69,8 +80,11 @@ TEST_P(InventoryChanger_Backend_ResponseQueue_ResponseTimeTest, ResponsesAreHand
 
     FakeClock::advance(GetParam().timePassed);
 
-    MockResponseHandler mock;
-    EXPECT_CALL(mock, responseHandled()).Times(GetParam().timePassed >= GetParam().delay ? 2 : 0);
+    testing::InSequence _;
+    testing::StrictMock<MockResponseHandler> mock;
+    EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>())).Times(GetParam().timePassed >= GetParam().delay);
+    EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>())).Times(GetParam().timePassed >= GetParam().delay);
+
     queue.visit(mock, GetParam().delay);
 }
 
@@ -85,8 +99,11 @@ TEST(InventoryChanger_Backend_ResponseQueueTest, ResponsesAreKeptInQueueWhenNotH
 
     queue.visit([](auto&&){}, 1ms);
 
-    MockResponseHandler mock;
-    EXPECT_CALL(mock, responseHandled()).Times(2);
+    testing::InSequence _;
+    testing::StrictMock<MockResponseHandler> mock;
+    EXPECT_CALL(mock, handle(testing::An<const response::ItemAdded&>()));
+    EXPECT_CALL(mock, handle(testing::An<const response::StickerApplied&>()));
+
     queue.visit(mock, 0ms);
 }
 

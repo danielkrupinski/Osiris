@@ -3,7 +3,6 @@
 #include <cstddef>
 #include <string_view>
 
-#include "Inconstructible.h"
 #include "Material.h"
 #include "VirtualMethod.h"
 
@@ -15,20 +14,24 @@ enum class OverrideType {
     SsaoDepthWrite
 };
 
-class StudioRender {
-    std::byte pad_0[WIN32_LINUX(592, 600)];
-    Material* materialOverride;
-    std::byte pad_1[WIN32_LINUX(12, 24)];
-    OverrideType overrideType;
+namespace csgo::pod
+{
+    struct StudioRender {
+        PAD(WIN32_LINUX(592, 600))
+        csgo::pod::Material* materialOverride;
+        PAD(WIN32_LINUX(12, 24))
+        OverrideType overrideType;
+    };
+}
+
+class StudioRender : public VirtualCallableFromPOD<StudioRender, csgo::pod::StudioRender> {
 public:
-    INCONSTRUCTIBLE(StudioRender)
+    VIRTUAL_METHOD2(void, forcedMaterialOverride, 33, (csgo::pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
 
-    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (Material* material, OverrideType type = OverrideType::Normal, int index = -1), (this, material, type, index))
-
-    bool isForcedMaterialOverride() noexcept
+    bool isForcedMaterialOverride() const noexcept
     {
-        if (!materialOverride)
-            return overrideType == OverrideType::DepthWrite || overrideType == OverrideType::SsaoDepthWrite; // see CStudioRenderContext::IsForcedMaterialOverride
-        return std::string_view{ materialOverride->getName() }.starts_with("dev/glow");
+        if (!getPOD()->materialOverride)
+            return getPOD()->overrideType == OverrideType::DepthWrite || getPOD()->overrideType == OverrideType::SsaoDepthWrite; // see CStudioRenderContext::IsForcedMaterialOverride
+        return std::string_view{ Material::from(getInvoker(), getPOD()->materialOverride).getName() }.starts_with("dev/glow");
     }
 };
