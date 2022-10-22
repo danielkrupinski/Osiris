@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "Pad.h"
 #include "VirtualMethod.h"
 
@@ -14,9 +13,9 @@ struct SurfaceData {
     bool climbable;
 };
 
-class PhysicsSurfaceProps {
-public:
-    INCONSTRUCTIBLE(PhysicsSurfaceProps)
+namespace csgo::pod { struct PhysicsSurfaceProps; }
 
-    VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (this, index))
+class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, csgo::pod::PhysicsSurfaceProps> {
+public:
+    VIRTUAL_METHOD2_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
 };

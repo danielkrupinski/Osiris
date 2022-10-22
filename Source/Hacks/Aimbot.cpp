@@ -63,7 +63,7 @@ static float handleBulletPenetration(const Interfaces& interfaces, const Memory&
     if (!traceToExit(memory, enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
-    SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
+    SurfaceData* exitSurfaceData = interfaces.getPhysicsSurfaceProps().getSurfaceData(exitTrace.surface.surfaceProps);
 
     float damageModifier = 0.16f;
     float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
@@ -119,7 +119,7 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& 
 
             return damage >= minDamage;
         }
-        const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+        const auto surfaceData = interfaces.getPhysicsSurfaceProps().getSurfaceData(trace.surface.surfaceProps);
 
         if (surfaceData->penetrationmodifier < 0.1f)
             break;

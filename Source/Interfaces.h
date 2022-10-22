@@ -29,6 +29,7 @@
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Panorama.h"
+#include "SDK/PhysicsSurfaceProps.h"
 #include "SDK/Platform.h"
 #include "SDK/Prediction.h"
 #include "SDK/SoundEmitter.h"
@@ -43,7 +44,6 @@ class EngineSound;
 class GameUI;
 class ModelRender;
 class NetworkStringTableContainer;
-class PhysicsSurfaceProps;
 class Surface;
 
 template <typename DynamicLibraryWrapper>
@@ -190,7 +190,7 @@ public:
           inputSystem{ std::uintptr_t(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
           materialSystem{ std::uintptr_t(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
           panoramaUIEngine{ std::uintptr_t(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
-          physicsSurfaceProps{ static_cast<PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
+          physicsSurfaceProps{ std::uintptr_t(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
           surface{ static_cast<Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
           soundEmitter{ std::uintptr_t(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
           studioRender{ std::uintptr_t(find(STUDIORENDER_DLL, "VStudioRender026")) },
@@ -199,7 +199,6 @@ public:
     {
     }
 
-    PhysicsSurfaceProps* physicsSurfaceProps;
     Surface* surface;
 
     [[nodiscard]] auto getLocalize() const noexcept
@@ -242,6 +241,11 @@ public:
         return PanoramaUIEngine::from(retSpoofInvoker, (csgo::pod::PanoramaUIEngine*)panoramaUIEngine);
     }
 
+    [[nodiscard]] auto getPhysicsSurfaceProps() const noexcept
+    {
+        return PhysicsSurfaceProps::from(retSpoofInvoker, (csgo::pod::PhysicsSurfaceProps*)physicsSurfaceProps);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t localize;
@@ -252,6 +256,7 @@ private:
     std::uintptr_t soundEmitter;
     std::uintptr_t studioRender;
     std::uintptr_t panoramaUIEngine;
+    std::uintptr_t physicsSurfaceProps;
 
     static void* find(const char* moduleName, const char* name) noexcept
     {
