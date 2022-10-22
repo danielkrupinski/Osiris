@@ -6,6 +6,7 @@
 #include <type_traits>
 
 #include "SDK/ItemSchema.h"
+#include "SDK/MoveHelper.h"
 #include "SDK/PanoramaMarshallHelper.h"
 #include "SDK/Platform.h"
 #include "SDK/ViewRenderBeams.h"
@@ -27,7 +28,6 @@ class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class KeyValues;
-class MoveHelper;
 class MoveData;
 class PlantedC4;
 class PlayerResource;
@@ -145,7 +145,6 @@ public:
     int(THISCALL_CONV* equipWearable)(std::uintptr_t wearable, std::uintptr_t player);
     int* predictionRandomSeed;
     MoveData* moveData;
-    MoveHelper* moveHelper;
     std::uintptr_t keyValuesFromString;
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
@@ -198,6 +197,11 @@ public:
         return ItemSystem::from(retSpoofGadgets.client, itemSystemFn());
     }
 
+    [[nodiscard]] MoveHelper moveHelper() const noexcept
+    {
+        return MoveHelper::from(retSpoofGadgets.client, moveHelperPtr);
+    }
+
 #ifdef _WIN32
     class KeyValuesSystem* keyValuesSystem;
     std::uintptr_t keyValuesAllocEngine;
@@ -212,6 +216,7 @@ private:
     std::add_pointer_t<csgo::pod::ItemSystem* CDECL_CONV()> itemSystemFn;
 
     std::uintptr_t submitReportFunction;
+    csgo::pod::MoveHelper* moveHelperPtr;
 };
 
 inline std::optional<const Memory> memory;

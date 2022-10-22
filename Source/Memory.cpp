@@ -179,7 +179,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     equipWearable = reinterpret_cast<decltype(equipWearable)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9"));
     predictionRandomSeed = reinterpret_cast<int*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04") }.add(2).deref().get());
     moveData = reinterpret_cast<MoveData*>(SafeAddress{ findPattern(CLIENT_DLL, "\xA1????\xF3\x0F\x59\xCD") }.add(1).deref<2>().get());
-    moveHelper = reinterpret_cast<MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01") }.add(2).deref<2>().get());
+    moveHelperPtr = reinterpret_cast<csgo::pod::MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01") }.add(2).deref<2>().get());
     keyValuesFromString = SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x83\xC4\x04\x89\x45\xD8") }.add(1).relativeToAbsolute().get();
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\xF7\x45") }.add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x89\x77\x38") }.add(1).relativeToAbsolute().get());
@@ -271,7 +271,7 @@ Memory::Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGa
     registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x8B\x50\x10\x49\x89\xC6") }.add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
     makePanoramaSymbolFn = reinterpret_cast<decltype(makePanoramaSymbolFn)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x45\xA0\x31\xF6") }.add(1).relativeToAbsolute().get());
     moveData = reinterpret_cast<MoveData*>(SafeAddress{ findPattern(CLIENT_DLL, "\x4C\x8B\x2D????\x0F\xB6\x93") }.add(3).relativeToAbsolute().deref<2>().get());
-    moveHelper = reinterpret_cast<MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") }.add(3).relativeToAbsolute().deref<2>().get());
+    moveHelperPtr = reinterpret_cast<csgo::pod::MoveHelper*>(SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") }.add(3).relativeToAbsolute().deref<2>().get());
 
     createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(SafeAddress{ findPattern(CLIENT_DLL, "\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D") }.add(50).relativeToAbsolute().get());
     addEconItem = reinterpret_cast<decltype(addEconItem)>(SafeAddress{ findPattern(CLIENT_DLL, "\xE8????\x45\x3B\x65\x28\x72\xD6") }.add(1).relativeToAbsolute().get());

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class MoveHelper {
-public:
-    INCONSTRUCTIBLE(MoveHelper)
+namespace csgo::pod { struct MoveHelper; }
 
-    VIRTUAL_METHOD(void, setHost, 1, (std::uintptr_t host), (this, host))
+class MoveHelper : public VirtualCallableFromPOD<MoveHelper, csgo::pod::MoveHelper> {
+public:
+    VIRTUAL_METHOD2(void, setHost, 1, (std::uintptr_t host), (this, host))
 };
