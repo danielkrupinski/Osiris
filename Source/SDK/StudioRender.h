@@ -32,6 +32,6 @@ public:
     {
         if (!getPOD()->materialOverride)
             return getPOD()->overrideType == OverrideType::DepthWrite || getPOD()->overrideType == OverrideType::SsaoDepthWrite; // see CStudioRenderContext::IsForcedMaterialOverride
-        return std::string_view{ Material::from(retSpoofGadgets.client, getPOD()->materialOverride).getName() }.starts_with("dev/glow");
+        return std::string_view{ Material::from(getInvoker(), getPOD()->materialOverride).getName() }.starts_with("dev/glow");
     }
 };
