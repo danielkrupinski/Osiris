@@ -13,6 +13,8 @@
 
 #include "../Netvars.h"
 
+#include <Platform/IsPlatform.h>
+
 class Memory;
 
 class EconItemView;
