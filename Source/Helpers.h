@@ -63,14 +63,18 @@ namespace Helpers
 
     constexpr auto bronzeEventCoinFromViewerPass(WeaponId id) noexcept
     {
+        // TODO: auto detect which coin should the viewer pass give
         switch (id) {
-        case WeaponId::Katowice2019ViewerPass: return WeaponId::Katowice2019BronzeCoin;
-        case WeaponId::Berlin2019ViewerPass:
-        case WeaponId::Berlin2019ViewerPassWith3Tokens: return WeaponId::Berlin2019BronzeCoin;
-        case WeaponId::Stockholm2021ViewerPass:
-        case WeaponId::Stockholm2021ViewerPassWith3Tokens: return WeaponId::Stockholm2021BronzeCoin;
-        case WeaponId::Antwerp2022ViewerPass:
-        case WeaponId::Antwerp2022ViewerPassWith3Tokens: return WeaponId::Antwerp2022BronzeCoin;
+        using enum WeaponId;
+        case Katowice2019ViewerPass: return Katowice2019BronzeCoin;
+        case Berlin2019ViewerPass:
+        case Berlin2019ViewerPassWith3Tokens: return Berlin2019BronzeCoin;
+        case Stockholm2021ViewerPass:
+        case Stockholm2021ViewerPassWith3Tokens: return Stockholm2021BronzeCoin;
+        case Antwerp2022ViewerPass:
+        case Antwerp2022ViewerPassWith3Tokens: return Antwerp2022BronzeCoin;
+        case Rio2022ViewerPass:
+        case Rio2022ViewerPassWith3Tokens: return Rio2022BronzeCoin;
         default: return WeaponId::None;
         }
     }
