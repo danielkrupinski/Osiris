@@ -19,7 +19,7 @@ public:
 template <std::size_t BufferSize = 4096>
 class ToUtf8Converter {
 public:
-    ToUtf8Converter(const Localize& localize) : localize{ localize } {}
+    ToUtf8Converter(Localize localize) : localize{ localize } {}
     
     [[nodiscard]] std::string_view convertUnicodeToAnsi(const wchar_t* string)
     {
@@ -29,6 +29,6 @@ public:
     }
 
 private:
-    const Localize& localize;
+    Localize localize;
     std::array<char, BufferSize> buffer;
 };
