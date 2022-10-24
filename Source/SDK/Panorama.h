@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platform/CallingConventions.h>
+
 #include "Inconstructible.h"
 #include "VirtualMethod.h"
 

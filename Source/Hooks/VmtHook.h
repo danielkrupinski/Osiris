@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "../SDK/Platform.h"
+#include <Platform/CallingConventions.h>
 
 class VmtHook {
 public:

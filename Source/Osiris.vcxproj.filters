@@ -871,6 +871,9 @@
     <ClInclude Include="Platform\PlatformSpecific.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\CallingConventions.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

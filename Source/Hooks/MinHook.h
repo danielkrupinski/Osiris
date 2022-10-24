@@ -3,14 +3,13 @@
 #include <cstddef>
 #include <memory>
 
+#include <Platform/CallingConventions.h>
 #include <Platform/IsPlatform.h>
 
 #if IS_WIN32()
 #include <x86RetSpoof.h>
 #include "../RetSpoofGadgets.h"
 #endif
-
-#include "../SDK/Platform.h"
 
 class MinHook {
 public:

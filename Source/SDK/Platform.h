@@ -5,22 +5,6 @@
 
 #if IS_WIN32()
 
-#define THISCALL_CONV __thiscall
-#define FASTCALL_CONV __fastcall
-#define CDECL_CONV __cdecl
-#define STDCALL_CONV __stdcall
-
-#else
-
-#define THISCALL_CONV
-#define FASTCALL_CONV
-#define CDECL_CONV
-#define STDCALL_CONV
-
-#endif
-
-#if IS_WIN32()
-
 #define RETURN_ADDRESS() std::uintptr_t(_ReturnAddress())
 #define FRAME_ADDRESS() (std::uintptr_t(_AddressOfReturnAddress()) - sizeof(std::uintptr_t))
 
