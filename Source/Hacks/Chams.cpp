@@ -268,7 +268,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (material.getThis())
+        if (material.getThis() == 0)
             continue;
 
         float r, g, b;
