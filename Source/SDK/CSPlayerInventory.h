@@ -2,6 +2,7 @@
 
 #include "Constants/ItemId.h"
 #include "ItemSchema.h"
+#include "PODs/EconItem.h"
 #include "VirtualMethod.h"
 
 // TODO: remove this dependency
