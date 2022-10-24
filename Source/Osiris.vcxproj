@@ -265,6 +265,7 @@
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\CallingConventions.h" />
+    <ClInclude Include="Platform\CallStack.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
     <ClInclude Include="Platform\IsPlatform.h" />
     <ClInclude Include="Platform\PlatformSpecific.h" />

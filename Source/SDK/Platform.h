@@ -1,19 +1,6 @@
 #pragma once
 
-#include <Platform/IsPlatform.h>
 #include <Platform/PlatformSpecific.h>
-
-#if IS_WIN32()
-
-#define RETURN_ADDRESS() std::uintptr_t(_ReturnAddress())
-#define FRAME_ADDRESS() (std::uintptr_t(_AddressOfReturnAddress()) - sizeof(std::uintptr_t))
-
-#else
-
-#define RETURN_ADDRESS() std::uintptr_t(__builtin_return_address(0))
-#define FRAME_ADDRESS() std::uintptr_t(__builtin_frame_address(0))
-
-#endif
 
 constexpr auto CLIENT_DLL = WIN32_LINUX("client", "csgo/bin/linux64/client_client.so");
 constexpr auto ENGINE_DLL = WIN32_LINUX("engine", "engine_client.so");
