@@ -17,6 +17,7 @@
 #include "../imguiCustom.h"
 #include "Visuals.h"
 
+#include <SDK/PODs/ConVar.h>
 #include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/Engine.h"

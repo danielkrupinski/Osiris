@@ -35,6 +35,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <SDK/PODs/ConVar.h>
 #include <SDK/Constants/ClassId.h>
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"

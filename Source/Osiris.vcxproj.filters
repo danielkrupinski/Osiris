@@ -69,6 +69,9 @@
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{9d72c449-86f4-4c33-8e45-d88047d888eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\PODs">
+      <UniqueIdentifier>{57f076f9-b8f5-4962-8356-64f7584047f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -876,6 +879,9 @@
     </ClInclude>
     <ClInclude Include="Platform\CallStack.h">
       <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\ConVar.h">
+      <Filter>SDK\PODs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

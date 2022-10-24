@@ -1,26 +1,9 @@
 #pragma once
 
-#include <type_traits>
-
-#include "Pad.h"
-#include "Platform.h"
-#include "UtlVector.h"
+#include <Platform/PlatformSpecific.h>
 #include "VirtualMethod.h"
 
-namespace csgo::pod
-{
-
-struct ConVar {
-    PAD(WIN32_LINUX(24, 48))
-    std::add_pointer_t<void CDECL_CONV()> changeCallback;
-    ConVar* parent;
-    const char* defaultValue;
-    char* string;
-    PAD(28)
-    UtlVector<void(CDECL_CONV*)()> onChangeCallbacks;
-};
-
-}
+namespace csgo::pod { struct ConVar; }
 
 struct ConVar : public VirtualCallableFromPOD<ConVar, csgo::pod::ConVar> {
     VIRTUAL_METHOD2(float, getFloat, WIN32_LINUX(12, 15), (), ())
