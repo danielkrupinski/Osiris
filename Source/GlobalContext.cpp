@@ -69,7 +69,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::antiAfkKick(cmd);
     Misc::fastStop(cmd);
     Misc::prepareRevolver(engineInterfaces->getEngine(), *memory, cmd);
-    Visuals::removeShadows(*interfaces);
+    visuals->removeShadows(*interfaces);
     Misc::runReportbot(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -122,11 +122,11 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 void GlobalContext::doPostScreenEffectsHook(void* param)
 {
     if (engineInterfaces->getEngine().isInGame()) {
-        Visuals::thirdperson(*memory);
-        Visuals::inverseRagdollGravity(*interfaces);
-        Visuals::reduceFlashEffect();
-        Visuals::updateBrightness(*interfaces);
-        Visuals::remove3dSky(*interfaces);
+        visuals->thirdperson(*memory);
+        visuals->inverseRagdollGravity(*interfaces);
+        visuals->reduceFlashEffect();
+        visuals->updateBrightness(*interfaces);
+        visuals->remove3dSky(*interfaces);
         Glow::render(*engineInterfaces, *clientInterfaces, *interfaces, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
@@ -134,7 +134,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
 
 float GlobalContext::getViewModelFovHook()
 {
-    float additionalFov = Visuals::viewModelFov();
+    float additionalFov = visuals->viewModelFov();
     if (localPlayer) {
         if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
@@ -148,7 +148,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (interfaces->getStudioRender().isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
-    if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
+    if (visuals->removeHands(info.model->name) || visuals->removeSleeves(info.model->name) || visuals->removeWeapons(info.model->name))
         return;
 
     if (static Chams chams; !chams.render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
@@ -159,7 +159,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
 
 bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress)
 {
-    if (returnAddress == memory->cameraThink && Visuals::isThirdpersonOn())
+    if (returnAddress == memory->cameraThink && visuals->isThirdpersonOn())
         return true;
 
     return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
@@ -177,19 +177,19 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
         Misc::disablePanoramablur(*interfaces);
-        Visuals::colorWorld(*interfaces, *memory);
+        visuals->colorWorld(*interfaces, *memory);
         Misc::updateEventListeners(*engineInterfaces);
-        Visuals::updateEventListeners(*engineInterfaces);
+        visuals->updateEventListeners(*engineInterfaces);
     }
     if (engineInterfaces->getEngine().isInGame()) {
-        Visuals::skybox(*interfaces, *memory, stage);
-        Visuals::removeBlur(*interfaces, stage);
+        visuals->skybox(*interfaces, *memory, stage);
+        visuals->removeBlur(*interfaces, stage);
         Misc::oppositeHandKnife(*interfaces, stage);
-        Visuals::removeGrass(engineInterfaces->getEngine(), *interfaces, stage);
-        Visuals::modifySmoke(*interfaces, stage);
-        Visuals::disablePostProcessing(*memory, stage);
-        Visuals::removeVisualRecoil(stage);
-        Visuals::applyZoom(stage);
+        visuals->removeGrass(engineInterfaces->getEngine(), *interfaces, stage);
+        visuals->modifySmoke(*interfaces, stage);
+        visuals->disablePostProcessing(*memory, stage);
+        visuals->removeVisualRecoil(stage);
+        visuals->applyZoom(stage);
         Misc::fixAnimationLOD(engineInterfaces->getEngine(), *clientInterfaces, *memory, stage);
         Backtrack::update(*engineInterfaces, *clientInterfaces, *interfaces, *memory, stage);
     }
@@ -216,12 +216,12 @@ bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
     }
 #endif
 
-    return !Visuals::shouldRemoveFog();
+    return !visuals->shouldRemoveFog();
 }
 
 bool GlobalContext::shouldDrawViewModelHook()
 {
-    if (Visuals::isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
+    if (visuals->isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
 }
@@ -235,7 +235,7 @@ void GlobalContext::lockCursorHook()
 
 void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress)
 {
-    if (Visuals::shouldRemoveScopeOverlay() && (returnAddress == memory->scopeDust || returnAddress == memory->scopeArc))
+    if (visuals->shouldRemoveScopeOverlay() && (returnAddress == memory->scopeDust || returnAddress == memory->scopeArc))
         a = 0;
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
 }
@@ -243,8 +243,8 @@ void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t 
 void GlobalContext::overrideViewHook(ViewSetup* setup)
 {
     if (localPlayer && !localPlayer.get().isScoped())
-        setup->fov += Visuals::fov();
-    setup->farZ += Visuals::farZ() * 10;
+        setup->fov += visuals->fov();
+    setup->farZ += visuals->farZ() * 10;
     hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
 }
 
@@ -259,8 +259,8 @@ int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 
 void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 {
-    Visuals::applyScreenEffects(engineInterfaces->getEngine(), *interfaces, *memory);
-    Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory);
+    visuals->applyScreenEffects(engineInterfaces->getEngine(), *interfaces, *memory);
+    visuals->hitEffect(engineInterfaces->getEngine(), *interfaces, *memory);
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
@@ -316,7 +316,8 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        config.emplace(Config{ *interfaces, *memory });
+        visuals.emplace();
+        config.emplace(Config{ *visuals, *interfaces, *memory });
         gui.emplace(GUI{});
         hooks->install(*clientInterfaces, *interfaces, *memory);
 
@@ -374,7 +375,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
 
         ImGui::CreateContext();
-        config.emplace(Config{ *interfaces, *memory });
+        visuals.emplace();
+        config.emplace(Config{ *visuals, *interfaces, *memory });
 
         gui.emplace(GUI{});
         hooks->install(*clientInterfaces, *interfaces, *memory);
@@ -410,7 +412,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 
     if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getThis()) {
         if (const Entity weapon{ retSpoofGadgets.client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon()) }; weapon.getThis() != 0) {
-            if (Visuals::isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             inventory_changer::InventoryChanger::instance(*interfaces, *memory).fixKnifeAnimation(weapon, data.value._int);
@@ -442,8 +444,8 @@ void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
     }
     case fnv::hash("player_hurt"):
         Misc::playHitSound(engineInterfaces->getEngine(), event);
-        Visuals::hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, &event);
-        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, &event);
+        visuals->hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, &event);
+        visuals->hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, &event);
         break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, event);
@@ -455,7 +457,7 @@ void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
         Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
-        Visuals::bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
+        visuals->bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
         break;
     }
 }
@@ -472,12 +474,12 @@ void GlobalContext::renderFrame()
         Misc::drawOffscreenEnemies(engineInterfaces->getEngine(), *memory, ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer(*memory);
         Misc::spectatorList();
-        Visuals::hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
-        Visuals::drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
+        visuals->hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
+        visuals->drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
         Aimbot::updateInput(*config);
-        Visuals::updateInput();
+        visuals->updateInput();
         StreamProofESP::updateInput(*config);
         Misc::updateInput();
         Triggerbot::updateInput(*config);
@@ -487,7 +489,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(*interfaces);
 
         if (gui->isOpen())
-            gui->render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config);
+            gui->render(*visuals, engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config);
     }
 
     ImGui::EndFrame();

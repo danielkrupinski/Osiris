@@ -6,8 +6,8 @@ namespace csgo { enum class FrameStage; }
 class GameEvent;
 struct ImDrawList;
 
-namespace Visuals
-{
+class Visuals {
+public:
     bool isThirdpersonOn() noexcept;
     bool isZoomOn() noexcept;
     bool isSmokeWireframe() noexcept;
@@ -43,7 +43,7 @@ namespace Visuals
     void bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept;
     void drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexcept;
 
-    inline constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
+    static constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;
@@ -52,9 +52,9 @@ namespace Visuals
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
-    
+
     // Config
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+};

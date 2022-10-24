@@ -218,8 +218,8 @@ static void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr))
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
 
-    Visuals::performColorCorrection(*memory);
-    if (Visuals::shouldRemoveScopeOverlay())
+    globalContext->visuals->performColorCorrection(*memory);
+    if (globalContext->visuals->shouldRemoveScopeOverlay())
         *memory->vignette = 0.0f;
 }
 
@@ -232,7 +232,7 @@ static float STDCALL_CONV getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int wi
 
 static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (Visuals::shouldRemoveSmoke() || Visuals::isSmokeWireframe())
+    if (globalContext->visuals->shouldRemoveSmoke() || globalContext->visuals->isSmokeWireframe())
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
@@ -424,7 +424,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     Misc::updateEventListeners(*globalContext->engineInterfaces, true);
-    Visuals::updateEventListeners(*globalContext->engineInterfaces, true);
+    globalContext->visuals->updateEventListeners(*globalContext->engineInterfaces, true);
 
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {

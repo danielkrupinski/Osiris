@@ -94,10 +94,10 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
-        renderMenuBar();
+        renderMenuBar(visuals);
         renderAimbotWindow(config);
         AntiAim::drawGUI(false);
         renderTriggerbotWindow(config);
@@ -105,14 +105,14 @@ void GUI::render(const Engine& engine, const ClientInterfaces& clientInterfaces,
         Glow::drawGUI(false);
         renderChamsWindow(config);
         StreamProofESP::drawGUI(config, false);
-        Visuals::drawGUI(false);
+        visuals.drawGUI(false);
         inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
         Misc::drawGUI(engine, clientInterfaces, interfaces, memory, false);
-        renderConfigWindow(interfaces, memory, config);
+        renderConfigWindow(visuals, interfaces, memory, config);
     } else {
-        renderGuiStyle2(engine, clientInterfaces, interfaces, memory, config);
+        renderGuiStyle2(visuals, engine, clientInterfaces, interfaces, memory, config);
     }
 }
 
@@ -146,7 +146,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
     }
 }
 
-void GUI::renderMenuBar() noexcept
+void GUI::renderMenuBar(Visuals& visuals) noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         menuBarItem("Aimbot", window.aimbot);
@@ -156,7 +156,7 @@ void GUI::renderMenuBar() noexcept
         Glow::menuBarItem();
         menuBarItem("Chams", window.chams);
         StreamProofESP::menuBarItem();
-        Visuals::menuBarItem();
+        visuals.menuBarItem();
         InventoryChanger::menuBarItem();
         Sound::menuBarItem();
         menuBarItem("Style", window.style);
@@ -515,7 +515,7 @@ void GUI::renderStyleWindow(Config& config, bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
+void GUI::renderConfigWindow(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!window.config)
@@ -572,7 +572,7 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
             config.openConfigDir();
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
-            config.add(interfaces, memory, buffer.c_str());
+            config.add(visuals, interfaces, memory, buffer.c_str());
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Config to reset");
@@ -584,7 +584,7 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(interfaces, memory); updateColors(config); Misc::updateClanTag(memory, true); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
+                    case 0: config.reset(visuals, interfaces, memory); updateColors(config); Misc::updateClanTag(memory, true); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: Backtrack::resetConfig(); break;
@@ -592,7 +592,7 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
                     case 5: Glow::resetConfig(); break;
                     case 6: config.chams = { }; break;
                     case 7: config.streamProofESP = { }; break;
-                    case 8: Visuals::resetConfig(); break;
+                    case 8: visuals.resetConfig(); break;
                     case 9: inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
                     case 10: Sound::resetConfig(); break;
                     case 11: config.style = { }; updateColors(config); break;
@@ -604,13 +604,13 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config.load(interfaces, memory, currentConfig, incrementalLoad);
+                config.load(visuals, interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
                 inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces);
                 Misc::updateClanTag(memory, true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config.save(interfaces, memory, currentConfig);
+                config.save(visuals, interfaces, memory, currentConfig);
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config.remove(currentConfig);
 
@@ -625,7 +625,7 @@ void GUI::renderConfigWindow(const Interfaces& interfaces, const Memory& memory,
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -646,7 +646,7 @@ void GUI::renderGuiStyle2(const Engine& engine, const ClientInterfaces& clientIn
             ImGui::EndTabItem();
         }
         StreamProofESP::tabItem(config);
-        Visuals::tabItem();
+        visuals.tabItem();
         InventoryChanger::tabItem(interfaces, memory);
         Sound::tabItem();
         if (ImGui::BeginTabItem("Style")) {
@@ -655,7 +655,7 @@ void GUI::renderGuiStyle2(const Engine& engine, const ClientInterfaces& clientIn
         }
         Misc::tabItem(engine, clientInterfaces, interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
-            renderConfigWindow(interfaces, memory, config, true);
+            renderConfigWindow(visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

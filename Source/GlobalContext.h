@@ -12,6 +12,8 @@
 #include "Config.h"
 #include "EventListener.h"
 
+#include "Hacks/Visuals.h"
+
 struct DemoPlaybackParameters;
 class matrix3x4;
 struct ModelRenderInfo;
@@ -60,6 +62,8 @@ public:
     std::optional<EventListener> gameEventListener;
 
     std::optional<EngineInterfaces> engineInterfaces; // TODO: make private
+
+    std::optional<Visuals> visuals;
 
 private:
     void renderFrame();

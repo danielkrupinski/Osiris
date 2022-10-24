@@ -80,11 +80,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Visuals& visuals, const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(interfaces, memory, u8"default.json", false);
+    load(visuals, interfaces, memory, u8"default.json", false);
 
 #if IS_WIN32()
     LOGFONTW logfont;
@@ -290,12 +290,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(interfaces, memory, configs[id].c_str(), incremental);
+    load(visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -308,7 +308,7 @@ void Config::load(const Interfaces& interfaces, const Memory& memory, const char
     }
 
     if (!incremental)
-        reset(interfaces, memory);
+        reset(visuals, interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -332,7 +332,7 @@ void Config::load(const Interfaces& interfaces, const Memory& memory, const char
     AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
-    Visuals::fromJson(j["Visuals"]);
+    visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
     Sound::fromJson(j["Sound"]);
     Misc::fromJson(j["Misc"]);
@@ -527,7 +527,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -547,7 +547,7 @@ void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id)
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
     j["Sound"] = Sound::toJson();
-    j["Visuals"] = Visuals::toJson();
+    j["Visuals"] = visuals.toJson();
     j["Misc"] = Misc::toJson();
     j["Style"] = style;
     j["Inventory Changer"] = toJson(interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory));
@@ -559,11 +559,11 @@ void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id)
         out << std::setw(2) << j;
 }
 
-void Config::add(const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(interfaces, memory, configs.size() - 1);
+        save(visuals, interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -581,7 +581,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(Visuals& visuals, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -592,7 +592,7 @@ void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
     AntiAim::resetConfig();
     Backtrack::resetConfig();
     Glow::resetConfig();
-    Visuals::resetConfig();
+    visuals.resetConfig();
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
     Sound::resetConfig();
     Misc::resetConfig();
