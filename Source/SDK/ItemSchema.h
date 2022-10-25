@@ -26,6 +26,9 @@ enum class EconRarity : std::uint8_t {
     Gold
 };
 
+namespace csgo::pod
+{
+
 struct PaintKit {
     int id;
     UtlString name;
@@ -54,6 +57,8 @@ struct StickerKit {
     int tournamentTeamID;
     int tournamentPlayerID;
 };
+
+}
 
 union AttributeDataUnion {
     float asFloat;

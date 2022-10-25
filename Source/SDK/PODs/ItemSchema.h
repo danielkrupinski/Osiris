@@ -6,13 +6,14 @@
 
 struct EconItemQualityDefinition;
 struct AlternateIconData;
-struct PaintKit;
-struct StickerKit;
 struct EconMusicDefinition;
 using EconItemDefinitionPointer = std::uintptr_t;
 
 namespace csgo::pod
 {
+
+struct PaintKit;
+struct StickerKit;
 
 struct ItemSchema {
     PAD(WIN32_LINUX(0x88, 0xB8))
