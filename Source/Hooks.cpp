@@ -218,7 +218,7 @@ static void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr))
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
 
-    globalContext->visuals->performColorCorrection(*memory);
+    globalContext->visuals->performColorCorrection();
     if (globalContext->visuals->shouldRemoveScopeOverlay())
         *memory->vignette = 0.0f;
 }
@@ -424,7 +424,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
     Misc::updateEventListeners(*globalContext->engineInterfaces, true);
-    globalContext->visuals->updateEventListeners(*globalContext->engineInterfaces, true);
+    globalContext->visuals->updateEventListeners(true);
 
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {

@@ -257,7 +257,7 @@ float Visuals::farZ() noexcept
     return static_cast<float>(visualsConfig.farZ);
 }
 
-void Visuals::performColorCorrection(const Memory& memory) noexcept
+void Visuals::performColorCorrection() noexcept
 {
     if (const auto& cfg = visualsConfig.colorCorrection; cfg.enabled) {
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x49C, 0x908)) = cfg.blue;
@@ -270,13 +270,13 @@ void Visuals::performColorCorrection(const Memory& memory) noexcept
     }
 }
 
-void Visuals::inverseRagdollGravity(const Interfaces& interfaces) noexcept
+void Visuals::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.getCvar().findVar("cl_ragdoll_gravity");
     ConVar::from(retSpoofGadgets.client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
-void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noexcept
+void Visuals::colorWorld() noexcept
 {
     if (!visualsConfig.world.enabled && !visualsConfig.sky.enabled)
         return;
@@ -303,7 +303,7 @@ void Visuals::colorWorld(const Interfaces& interfaces, const Memory& memory) noe
     }
 }
 
-void Visuals::modifySmoke(const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
@@ -322,7 +322,7 @@ void Visuals::modifySmoke(const Interfaces& interfaces, csgo::FrameStage stage) 
     }
 }
 
-void Visuals::thirdperson(const Memory& memory) noexcept
+void Visuals::thirdperson() noexcept
 {
     if (!visualsConfig.thirdperson)
         return;
@@ -355,7 +355,7 @@ void Visuals::removeVisualRecoil(csgo::FrameStage stage) noexcept
     }
 }
 
-void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Visuals::removeBlur(csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
@@ -364,19 +364,19 @@ void Visuals::removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) n
     blur.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noBlur);
 }
 
-void Visuals::updateBrightness(const Interfaces& interfaces) noexcept
+void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces.getCvar().findVar("mat_force_tonemap_scale");
     ConVar::from(retSpoofGadgets.client, brightness).setValue(visualsConfig.brightness);
 }
 
-void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Visuals::removeGrass(csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    auto getGrassMaterialName = [&engine]() noexcept -> const char* {
-        switch (fnv::hashRuntime(engine.getLevelName())) {
+    auto getGrassMaterialName = [this]() noexcept -> const char* {
+        switch (fnv::hashRuntime(engineInterfaces.getEngine().getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
         case fnv::hash("coop_autumn"): return "detail/autumn_detail_sprites";
@@ -391,13 +391,13 @@ void Visuals::removeGrass(const Engine& engine, const Interfaces& interfaces, cs
         Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
 }
 
-void Visuals::remove3dSky(const Interfaces& interfaces) noexcept
+void Visuals::remove3dSky() noexcept
 {
     static auto sky = interfaces.getCvar().findVar("r_3dsky");
     ConVar::from(retSpoofGadgets.client, sky).setValue(!visualsConfig.no3dSky);
 }
 
-void Visuals::removeShadows(const Interfaces& interfaces) noexcept
+void Visuals::removeShadows() noexcept
 {
     static auto shadows = interfaces.getCvar().findVar("cl_csm_enabled");
     ConVar::from(retSpoofGadgets.client, shadows).setValue(!visualsConfig.noShadows);
@@ -442,7 +442,7 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 }
 #endif
 
-void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept
+void Visuals::applyScreenEffects() noexcept
 {
     if (!visualsConfig.screenEffect)
         return;
@@ -469,16 +469,17 @@ void Visuals::applyScreenEffects(const Engine& engine, const Interfaces& interfa
 
 #if IS_WIN32()
     const auto pod = material.getPOD();
+    const auto engine = engineInterfaces.getEngine();
     DRAW_SCREEN_EFFECT(pod, memory, engine)
 #endif
 }
 
-void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
+void Visuals::hitEffect(const GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
-        if (event && engine.getPlayerForUserID(event->getInt("attacker")) == localPlayer.get().getNetworkable().index()) {
+        if (event && engineInterfaces.getEngine().getPlayerForUserID(event->getInt("attacker")) == localPlayer.get().getNetworkable().index()) {
             lastHitTime = memory.globalVars->realtime;
             return;
         }
@@ -508,13 +509,14 @@ void Visuals::hitEffect(const Engine& engine, const Interfaces& interfaces, cons
 
 #if IS_WIN32()
             const auto pod = material.getPOD();
+            const auto engine = engineInterfaces.getEngine();
             DRAW_SCREEN_EFFECT(pod, memory, engine)
 #endif
         }
     }
 }
 
-void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(const GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -522,7 +524,7 @@ void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, cons
     static float lastHitTime = 0.0f;
 
     if (event) {
-        if (localPlayer && event->getInt("attacker") == localPlayer.get().getUserId(engine))
+        if (localPlayer && event->getInt("attacker") == localPlayer.get().getUserId(engineInterfaces.getEngine()))
             lastHitTime = memory.globalVars->realtime;
         return;
     }
@@ -542,7 +544,7 @@ void Visuals::hitMarker(const Engine& engine, const Interfaces& interfaces, cons
     }
 }
 
-void Visuals::disablePostProcessing(const Memory& memory, csgo::FrameStage stage) noexcept
+void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
@@ -573,7 +575,7 @@ bool Visuals::removeWeapons(const char* modelName) noexcept
         && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
 }
 
-void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Visuals::skybox(csgo::FrameStage stage) noexcept
 {
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
@@ -586,7 +588,7 @@ void Visuals::skybox(const Interfaces& interfaces, const Memory& memory, csgo::F
     }
 }
 
-void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
+void Visuals::bulletTracer(const GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -594,7 +596,7 @@ void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientI
     if (!localPlayer)
         return;
 
-    if (event.getInt("userid") != localPlayer.get().getUserId(engine))
+    if (event.getInt("userid") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
     const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
@@ -653,7 +655,7 @@ void Visuals::bulletTracer(const Engine& engine, const ClientInterfaces& clientI
     }
 }
 
-void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexcept
+void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
 {
     if (!visualsConfig.molotovHull.enabled)
         return;
@@ -698,7 +700,7 @@ void Visuals::drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexce
     }
 }
 
-void Visuals::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
+void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:

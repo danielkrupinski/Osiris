@@ -69,7 +69,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::antiAfkKick(cmd);
     Misc::fastStop(cmd);
     Misc::prepareRevolver(engineInterfaces->getEngine(), *memory, cmd);
-    visuals->removeShadows(*interfaces);
+    visuals->removeShadows();
     Misc::runReportbot(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -122,11 +122,11 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 void GlobalContext::doPostScreenEffectsHook(void* param)
 {
     if (engineInterfaces->getEngine().isInGame()) {
-        visuals->thirdperson(*memory);
-        visuals->inverseRagdollGravity(*interfaces);
+        visuals->thirdperson();
+        visuals->inverseRagdollGravity();
         visuals->reduceFlashEffect();
-        visuals->updateBrightness(*interfaces);
-        visuals->remove3dSky(*interfaces);
+        visuals->updateBrightness();
+        visuals->remove3dSky();
         Glow::render(*engineInterfaces, *clientInterfaces, *interfaces, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
@@ -177,17 +177,17 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
         Misc::disablePanoramablur(*interfaces);
-        visuals->colorWorld(*interfaces, *memory);
+        visuals->colorWorld();
         Misc::updateEventListeners(*engineInterfaces);
-        visuals->updateEventListeners(*engineInterfaces);
+        visuals->updateEventListeners();
     }
     if (engineInterfaces->getEngine().isInGame()) {
-        visuals->skybox(*interfaces, *memory, stage);
-        visuals->removeBlur(*interfaces, stage);
+        visuals->skybox(stage);
+        visuals->removeBlur(stage);
         Misc::oppositeHandKnife(*interfaces, stage);
-        visuals->removeGrass(engineInterfaces->getEngine(), *interfaces, stage);
-        visuals->modifySmoke(*interfaces, stage);
-        visuals->disablePostProcessing(*memory, stage);
+        visuals->removeGrass(stage);
+        visuals->modifySmoke(stage);
+        visuals->disablePostProcessing(stage);
         visuals->removeVisualRecoil(stage);
         visuals->applyZoom(stage);
         Misc::fixAnimationLOD(engineInterfaces->getEngine(), *clientInterfaces, *memory, stage);
@@ -259,8 +259,8 @@ int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 
 void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 {
-    visuals->applyScreenEffects(engineInterfaces->getEngine(), *interfaces, *memory);
-    visuals->hitEffect(engineInterfaces->getEngine(), *interfaces, *memory);
+    visuals->applyScreenEffects();
+    visuals->hitEffect();
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
@@ -316,7 +316,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        visuals.emplace();
+        visuals.emplace(*memory, *interfaces, *clientInterfaces, *engineInterfaces);
         config.emplace(Config{ *visuals, *interfaces, *memory });
         gui.emplace(GUI{});
         hooks->install(*clientInterfaces, *interfaces, *memory);
@@ -375,7 +375,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
 
         ImGui::CreateContext();
-        visuals.emplace();
+        visuals.emplace(*memory, *interfaces, *clientInterfaces, *engineInterfaces);
         config.emplace(Config{ *visuals, *interfaces, *memory });
 
         gui.emplace(GUI{});
@@ -444,8 +444,8 @@ void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
     }
     case fnv::hash("player_hurt"):
         Misc::playHitSound(engineInterfaces->getEngine(), event);
-        visuals->hitEffect(engineInterfaces->getEngine(), *interfaces, *memory, &event);
-        visuals->hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, &event);
+        visuals->hitEffect(&event);
+        visuals->hitMarker(&event);
         break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, event);
@@ -457,7 +457,7 @@ void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
         Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
-        visuals->bulletTracer(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, event);
+        visuals->bulletTracer(event);
         break;
     }
 }
@@ -474,8 +474,8 @@ void GlobalContext::renderFrame()
         Misc::drawOffscreenEnemies(engineInterfaces->getEngine(), *memory, ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer(*memory);
         Misc::spectatorList();
-        visuals->hitMarker(engineInterfaces->getEngine(), *interfaces, *memory, nullptr, ImGui::GetBackgroundDrawList());
-        visuals->drawMolotovHull(*memory, ImGui::GetBackgroundDrawList());
+        visuals->hitMarker(nullptr, ImGui::GetBackgroundDrawList());
+        visuals->drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
         Aimbot::updateInput(*config);
