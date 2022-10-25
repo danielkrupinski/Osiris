@@ -5,6 +5,7 @@
 
 #include <Interfaces.h>
 #include <SDK/ItemSchema.h>
+#include <SDK/PODs/ItemSchema.h>
 
 namespace inventory_changer::game_integration
 {

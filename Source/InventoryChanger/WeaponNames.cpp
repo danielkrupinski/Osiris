@@ -2,6 +2,7 @@
 
 #include <SDK/ItemSchema.h>
 #include <SDK/Localize.h>
+#include <SDK/PODs/ItemSchema.h>
 
 #include <Helpers.h>
 #include <Interfaces.h>

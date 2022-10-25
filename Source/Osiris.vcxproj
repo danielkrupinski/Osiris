@@ -336,6 +336,7 @@
     <ClInclude Include="SDK\PlayerResource.h" />
     <ClInclude Include="SDK\PODs\ConVar.h" />
     <ClInclude Include="SDK\PODs\EconItem.h" />
+    <ClInclude Include="SDK\PODs\ItemSchema.h" />
     <ClInclude Include="SDK\Prediction.h" />
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\Sound.h" />

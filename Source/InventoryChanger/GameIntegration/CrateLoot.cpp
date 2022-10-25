@@ -3,6 +3,8 @@
 #include <InventoryChanger/GameItems/CrateLoot.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
+#include <SDK/PODs/ItemSchema.h>
+
 namespace inventory_changer::game_integration
 {
 
