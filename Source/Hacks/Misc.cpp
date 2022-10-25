@@ -1285,7 +1285,7 @@ void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool f
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEventPointer eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
+        void fireGameEvent(csgo::pod::GameEvent* eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
     };
 
     static PurchaseEventListener listener;

@@ -704,7 +704,7 @@ void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEventPointer eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
+        void fireGameEvent(csgo::pod::GameEvent* eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
     };
 
     static ImpactEventListener listener;

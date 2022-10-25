@@ -422,9 +422,9 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
     proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::fireGameEventCallback(GameEventPointer eventPointer)
+void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
 {
-    const GameEvent event{ retSpoofGadgets.client, eventPointer };
+    const auto event = GameEvent::from(retSpoofGadgets.client, eventPointer);
 
     switch (fnv::hashRuntime(event.getName())) {
     case fnv::hash("round_start"):

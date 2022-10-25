@@ -3,12 +3,10 @@
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
-using GameEventPointer = std::uintptr_t;
+namespace csgo::pod { struct GameEvent; }
 
-class GameEvent : private VirtualCallable {
+class GameEvent : public VirtualCallableFromPOD<GameEvent, csgo::pod::GameEvent> {
 public:
-    using VirtualCallable::VirtualCallable;
-
     VIRTUAL_METHOD2_V(const char*, getName, 1, (), ())
     VIRTUAL_METHOD2_V(int, getInt, 6, (const char* keyName, int defaultValue = 0), (keyName, defaultValue))
     VIRTUAL_METHOD2_V(float, getFloat, 8, (const char* keyName, float defaultValue = 0.0f), (keyName, defaultValue))
@@ -20,7 +18,7 @@ public:
 class GameEventListener {
 public:
     virtual ~GameEventListener() = default;
-    virtual void fireGameEvent(GameEventPointer event) = 0;
+    virtual void fireGameEvent(csgo::pod::GameEvent* event) = 0;
     virtual int getEventDebugId() { return 42; }
 };
 

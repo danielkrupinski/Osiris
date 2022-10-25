@@ -57,7 +57,7 @@ public:
 
     void viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3);
 
-    void fireGameEventCallback(GameEventPointer eventPointer);
+    void fireGameEventCallback(csgo::pod::GameEvent* eventPointer);
 
     std::optional<EventListener> gameEventListener;
 

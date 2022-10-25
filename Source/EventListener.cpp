@@ -41,7 +41,7 @@ EventListener::EventListener(const Memory& memory, const ClientInterfaces& clien
         assert(false);
 }
 
-void EventListener::fireGameEvent(GameEventPointer event)
+void EventListener::fireGameEvent(csgo::pod::GameEvent* event)
 {
     globalContext->fireGameEventCallback(event);
 }

@@ -9,7 +9,7 @@ class EventListener : public GameEventListener {
 public:
     EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces);
 
-    void fireGameEvent(GameEventPointer event) override;
+    void fireGameEvent(csgo::pod::GameEvent* event) override;
     void remove();
 
 private:
