@@ -746,12 +746,12 @@ void InventoryChanger::drawGUI(const Interfaces& interfaces, const Memory& memor
             return true;
         };
 
-        static SortFilter gameItemList{ gameItemLookup.getStorage().getItems() };
+        static SortFilter gameItemList{ getGameItemLookup().getStorage().getItems() };
 
         if (filterChanged) {
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
-            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(interfaces, memory), &gameItemStorage = gameItemLookup.getStorage()](const inventory_changer::game_items::Item& item) {
+            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(interfaces, memory), &gameItemStorage = getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
                 return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
@@ -760,21 +760,21 @@ void InventoryChanger::drawGUI(const Interfaces& interfaces, const Memory& memor
             static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
-                gameItemList.sort(inventory_changer::NameComparator{ gameItemLookup.getStorage(), inventory_changer::WeaponNames::instance(interfaces, memory) });
+                gameItemList.sort(inventory_changer::NameComparator{ getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance(interfaces, memory) });
                 sorted = true;
             }
 
             Helpers::RandomGenerator randomGenerator;
             for (const auto& [i, gameItem] : gameItemList.getItems()) {
                 if (addingAll) {
-                    backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
+                    backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, getGameItemLookup().getStorage(), gameItem) }, true);
                 }
 
                 ImGui::PushID(i);
 
                 if (ImGui::SkinSelectable(interfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
-                        backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, gameItemLookup.getStorage(), gameItem) }, true);
+                        backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, getGameItemLookup().getStorage(), gameItem) }, true);
                     toAddCount[i] = 1;
                 }
                 ImGui::PopID();
@@ -1422,11 +1422,11 @@ void InventoryChanger::reset(const Interfaces& interfaces, const Memory& memory)
 
 void InventoryChanger::placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID)
 {
-    const auto sticker = gameItemLookup.findSticker(stickerID);
+    const auto sticker = getGameItemLookup().findSticker(stickerID);
     if (!sticker || !sticker->isSticker())
         return;
 
-    const auto tournamentTeam = gameItemLookup.getStorage().getStickerKit(*sticker).tournamentTeam;
+    const auto tournamentTeam = getGameItemLookup().getStorage().getStickerKit(*sticker).tournamentTeam;
     backend.getPickEmHandler().pickSticker(backend::PickEm::PickPosition{ tournament, group, indexInGroup }, tournamentTeam);
 }
 

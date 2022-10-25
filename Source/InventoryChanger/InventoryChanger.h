@@ -23,18 +23,18 @@ namespace inventory_changer
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
-        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, backend{ this->gameItemLookup, this->crateLootLookup } {}
+        : backend{ std::move(gameItemLookup), std::move(crateLootLookup) } {}
 
     static InventoryChanger& instance(const Interfaces& interfaces, const Memory& memory);
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
-        return gameItemLookup;
+        return backend.getGameItemLookup();
     }
 
     [[nodiscard]] const game_items::CrateLootLookup& getCrateLootLookup() const noexcept
     {
-        return crateLootLookup;
+        return backend.getCrateLootLookup();
     }
 
     [[nodiscard]] const backend::BackendSimulator& getBackend() const noexcept
@@ -75,8 +75,6 @@ private:
         return backend::RequestBuilder{ requestBuilderParams, backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler(), backend.getXRayScannerHandler(), backend.getItemActivationHandler() };
     }
 
-    game_items::Lookup gameItemLookup;
-    game_items::CrateLootLookup crateLootLookup;
     backend::BackendSimulator backend;
     backend::RequestBuilderParams requestBuilderParams;
     bool panoramaCodeInXrayScanner = false;
