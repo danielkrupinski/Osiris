@@ -863,7 +863,7 @@ namespace inventory_changer::item_generator
 [[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(const Memory& memory, WeaponId weaponID) noexcept
 {
     if (const auto def = ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()).getItemDefinitionInterface(weaponID))
-        return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.client, def }.getNumberOfSupportedStickerSlots(), 0, 5));
+        return static_cast<std::uint8_t>(std::clamp(EconItemDefinition::from(retSpoofGadgets.client, def).getNumberOfSupportedStickerSlots(), 0, 5));
     return 0;
 }
 
@@ -874,7 +874,7 @@ public:
     [[nodiscard]] std::uint8_t operator()(WeaponId weaponId) const
     {
         if (const auto def = itemSchema.getItemDefinitionInterface(weaponId))
-            return static_cast<std::uint8_t>(std::clamp(EconItemDefinition{ retSpoofGadgets.client, def }.getNumberOfSupportedStickerSlots(), 0, 5));
+            return static_cast<std::uint8_t>(std::clamp(EconItemDefinition::from(retSpoofGadgets.client, def).getNumberOfSupportedStickerSlots(), 0, 5));
         return 0;
     }
 

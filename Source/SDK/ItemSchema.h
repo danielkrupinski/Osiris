@@ -80,13 +80,10 @@ struct EconTool {
     const char* typeName;
 };
 
-using EconItemDefinitionPointer = std::uintptr_t;
+namespace csgo::pod { struct EconItemDefinition; }
 
-class EconItemDefinition : private VirtualCallable {
+class EconItemDefinition : public VirtualCallableFromPOD<EconItemDefinition, csgo::pod::EconItemDefinition> {
 public:
-    using VirtualCallable::VirtualCallable;
-    using VirtualCallable::getThis;
-
     VIRTUAL_METHOD2(WeaponId, getWeaponId, 0, (), ())
     VIRTUAL_METHOD2(const char*, getItemBaseName, 2, (), ())
     VIRTUAL_METHOD2(const char*, getItemTypeName, 3, (), ())
@@ -248,14 +245,14 @@ namespace csgo::pod { struct ItemSchema; }
 
 class ItemSchema : public VirtualCallableFromPOD<ItemSchema, csgo::pod::ItemSchema> {
 public:
-    VIRTUAL_METHOD2(EconItemDefinitionPointer, getItemDefinitionInterface, 4, (int id), (id))
+    VIRTUAL_METHOD2(csgo::pod::EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (id))
     VIRTUAL_METHOD2(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
     VIRTUAL_METHOD2(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
     VIRTUAL_METHOD2(int, getItemSetCount, 28, (), ())
     VIRTUAL_METHOD2(csgo::pod::EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
     VIRTUAL_METHOD2(csgo::pod::EconLootListDefinition*, getLootList, 32, (int index), (index))
     VIRTUAL_METHOD2(int, getLootListCount, 34, (), ())
-    VIRTUAL_METHOD2(EconItemDefinitionPointer, getItemDefinitionByName, 42, (const char* name), (name))
+    VIRTUAL_METHOD2(csgo::pod::EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (name))
 
     auto getItemDefinitionInterface(WeaponId id) const noexcept
     {

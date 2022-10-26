@@ -876,7 +876,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
             if (const Entity player{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))) }; player.getThis() != 0 && localPlayer && localPlayer.get().isOtherEnemy(memory, player)) {
-                if (const auto definition = EconItemDefinition{ retSpoofGadgets.client, ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()).getItemDefinitionByName(event->getString("weapon")) }; definition.getThis() != 0) {
+                if (const auto definition = EconItemDefinition::from(retSpoofGadgets.client, ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()).getItemDefinitionByName(event->getString("weapon"))); definition.getThis() != 0) {
                     auto& purchase = playerPurchases[player.handle()];
                     if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition.getWeaponId())) {
                         purchase.totalCost += weaponInfo->price;

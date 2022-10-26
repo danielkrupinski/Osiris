@@ -7,11 +7,11 @@
 struct EconItemQualityDefinition;
 struct AlternateIconData;
 struct EconMusicDefinition;
-using EconItemDefinitionPointer = std::uintptr_t;
 
 namespace csgo::pod
 {
 
+struct EconItemDefinition;
 struct PaintKit;
 struct StickerKit;
 
@@ -19,7 +19,7 @@ struct ItemSchema {
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
-    UtlMap<int, EconItemDefinitionPointer> itemsSorted;
+    UtlMap<int, EconItemDefinition*> itemsSorted;
     PAD(WIN32_LINUX(0x60, 0x88))
     UtlMap<int, const char*> revolvingLootLists;
     PAD(WIN32_LINUX(0x80, 0xB0))
