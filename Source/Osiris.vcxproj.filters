@@ -889,6 +889,9 @@
     <ClInclude Include="SDK\PODs\ItemSchema.h">
       <Filter>SDK\PODs</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\PODs\PaintKit.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
