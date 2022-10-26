@@ -77,6 +77,14 @@ TEST_P(InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, CrateKe
     ASSERT_EQ(commonProperties.tradableAfterDate, GetParam().end);
 }
 
+TEST_P(InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, IemRio2022CratesAreNotTradableForOneWeek) {
+    gameItemStorage.addCrate(EconRarity::Default, WeaponId::None, 0, csgo::Tournament::IemRio2022, {}, false, {});
+    const auto& crate = gameItemStorage.getItems().back();
+    FakeSystemClock::set(GetParam().now);
+    const auto commonProperties = defaultGenerator.createCommonProperties(crate);
+    ASSERT_EQ(commonProperties.tradableAfterDate, GetParam().end);
+}
+
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, testing::Values(
     TradePenalty{ 1660629977, 1661238000 },
     TradePenalty{ 1660808922, 1661497200 }

@@ -21,7 +21,8 @@ enum class Tournament : std::uint8_t {
     FaceitLondon2018,
     IemKatowice2019,
     PglStockholm2021 = 18,
-    PglAntwerp2022
+    PglAntwerp2022,
+    IemRio2022
 };
 
 }
