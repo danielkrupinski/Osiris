@@ -264,6 +264,8 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
 {
     if (properties.tradableAfterDate != 0)
         j.emplace("Tradable After Date", properties.tradableAfterDate);
+    if (properties.purchasedFromStore)
+        j.emplace("Purchased From Store", true);
 }
 
 [[nodiscard]] json itemsToJson(const Interfaces& interfaces, const Memory& memory, const backend::BackendSimulator& backend)
@@ -379,6 +381,9 @@ namespace inventory_changer
 
     if (const auto it = j.find("Tradable After Date"); it != j.end() && it->is_number_unsigned())
         properties.tradableAfterDate = it->get<std::uint32_t>();
+
+    if (const auto it = j.find("Purchased From Store"); it != j.end() && it->is_boolean())
+        properties.purchasedFromStore = it->get<bool>();
 
     return properties;
 }

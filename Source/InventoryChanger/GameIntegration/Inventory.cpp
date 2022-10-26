@@ -163,6 +163,9 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     if (inventoryItem.getState() == inventory::Item::State::InXrayScanner)
         econItemPOD->flags |= 16;
 
+    if (inventoryItem.getProperties().common.purchasedFromStore)
+        econItemPOD->flags |= 2;
+
     EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
 
     if (const auto tradableAfterDate = inventoryItem.getProperties().common.tradableAfterDate; tradableAfterDate != 0) {

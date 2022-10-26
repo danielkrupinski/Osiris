@@ -17,6 +17,7 @@ class Item {
 public:
     struct CommonProperties {
         std::uint32_t tradableAfterDate = 0;
+        bool purchasedFromStore = false;
     };
 
     using VariantProperties = SmallVariant<32,
