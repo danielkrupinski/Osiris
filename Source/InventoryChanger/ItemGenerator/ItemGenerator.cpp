@@ -7,6 +7,7 @@
 #include <span>
 
 #include <Helpers.h>
+#include "../../Memory.h"
 #include "ItemGenerator.h"
 
 #include <SDK/ItemSchema.h>
@@ -893,7 +894,7 @@ std::optional<inventory::Item> generateItemFromContainer(const Memory& memory, H
 
     const auto& unlockedItem = getRandomItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
     DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) } };
-    return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
+    return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(caseItem, crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
 }
 
 inventory::Item::Properties createDefaultItemProperties(Helpers::RandomGenerator& randomGenerator, const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
