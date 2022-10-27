@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <functional>
 
+#include <Platform/PlatformSpecific.h>
+
 #include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"

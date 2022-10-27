@@ -3,13 +3,7 @@
 #include <cstddef>
 #include <utility>
 
-#include "Platform.h"
-
-#if IS_WIN32()
-#include <x86RetSpoof.h>
-#include "../RetSpoofGadgets.h"
-#endif
-
+#include <Platform/IsPlatform.h>
 #include <Platform/RetSpoofInvoker.h>
 
 class VirtualCallable {

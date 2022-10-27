@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Platform/PlatformSpecific.h>
 #include "VirtualMethod.h"
 
 class BaseFileSystem : private VirtualCallable {
