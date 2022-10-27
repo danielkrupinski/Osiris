@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 
 #include "Platform.h"
 
@@ -43,9 +44,10 @@ public:
     VirtualCallableFromPOD(RetSpoofInvoker invoker, POD* pod)
         : invoker{ invoker }, thisptr{ std::uintptr_t(pod) } {}
 
-    [[nodiscard]] static T from(RetSpoofInvoker invoker, POD* pod) noexcept
+    template <typename... Args>
+    [[nodiscard]] static T from(RetSpoofInvoker invoker, POD* pod, Args&&... args) noexcept
     {
-        return T{ VirtualCallableFromPOD{ invoker, pod } };
+        return T{ VirtualCallableFromPOD{ invoker, pod }, std::forward<Args>(args)... };
     }
 
     [[nodiscard]] POD* getPOD() const noexcept
