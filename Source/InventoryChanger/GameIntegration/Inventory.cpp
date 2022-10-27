@@ -136,6 +136,24 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
     }
 }
 
+[[nodiscard]] std::uint8_t computeItemFlags(const inventory::Item& item)
+{
+    std::uint8_t flags = 0;
+
+    if (item.gameItem().isCaseKey()) {
+        constexpr auto nonEconomyFlag = 8;
+        flags |= nonEconomyFlag;
+    }
+
+    if (item.getState() == inventory::Item::State::InXrayScanner)
+        flags |= 16;
+
+    if (item.getProperties().common.purchasedFromStore)
+        flags |= 2;
+
+    return flags;
+}
+
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
     const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
@@ -159,12 +177,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     econItemPOD->origin = foundInCrateOrigin;
     econItemPOD->quality = 4;
     econItemPOD->weaponId = item.getWeaponID();
-
-    if (inventoryItem.getState() == inventory::Item::State::InXrayScanner)
-        econItemPOD->flags |= 16;
-
-    if (inventoryItem.getProperties().common.purchasedFromStore)
-        econItemPOD->flags |= 2;
+    econItemPOD->flags = computeItemFlags(inventoryItem);
 
     EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
 
@@ -229,9 +242,6 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
             if (souvenirPackage->proPlayer != csgo::ProPlayer{})
                 attributeSetter.setTournamentPlayer(econItem, static_cast<int>(souvenirPackage->proPlayer));
         }
-    } else if (item.isCaseKey()) {
-        constexpr auto nonEconomyFlag = 8;
-        econItemPOD->flags |= nonEconomyFlag;
     } else if (item.isStorageUnit()) {
         if (const auto storageUnit = get<inventory::StorageUnit>(inventoryItem); storageUnit && storageUnit->modificationDateTimestamp != 0) {
             attributeSetter.setModificationDate(econItem, storageUnit->modificationDateTimestamp);
