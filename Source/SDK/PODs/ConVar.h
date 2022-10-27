@@ -17,7 +17,7 @@ struct ConVar {
     ConVar* parent;
     const char* defaultValue;
     char* string;
-    PAD(28)
+    PAD(WIN32_LINUX(44, 56))
     UtlVector<void(CDECL_CONV*)()> onChangeCallbacks;
 };
 
