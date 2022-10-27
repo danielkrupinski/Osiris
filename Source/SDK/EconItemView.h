@@ -2,31 +2,42 @@
 
 #include <cstdint>
 
-#include "Inconstructible.h"
-#include "Platform.h"
+#include <Platform/PlatformSpecific.h>
 
-#include "../Memory.h"
+#include "VirtualMethod.h"
 
 template <typename T> class UtlVector;
 
-class EconItemView {
+namespace csgo::pod { struct EconItemView; }
+
+class EconItemView : public VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView> {
 public:
-    INCONSTRUCTIBLE(EconItemView)
-
-    std::uintptr_t getAttributeList() noexcept
+    EconItemView(VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView> base, std::uintptr_t clearInventoryImageRGBA_)
+        : VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView>{ base }, clearInventoryImageRGBA_{ clearInventoryImageRGBA_ }
     {
-        return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
     }
 
-    UtlVector<void*>& customMaterials() noexcept
+    void clearInventoryImageRGBA() const noexcept
     {
-        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x14, 0x28));
+        getInvoker().invokeThiscall<void>(getThis(), clearInventoryImageRGBA_);
     }
 
-    UtlVector<void*>& visualDataProcessors() noexcept
+    std::uintptr_t getAttributeList() const noexcept
     {
-        return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, 0x2D8));
+        return getThis() + WIN32_LINUX(0x244, 0x2F8);
     }
 
-    void clearInventoryImageRGBA(const Memory& memory) noexcept;
+    UtlVector<void*>& customMaterials() const noexcept
+    {
+        return *reinterpret_cast<UtlVector<void*>*>(getThis() + WIN32_LINUX(0x14, 0x28));
+    }
+
+    UtlVector<void*>& visualDataProcessors() const noexcept
+    {
+        return *reinterpret_cast<UtlVector<void*>*>(getThis() + WIN32_LINUX(0x230, 0x2D8));
+    }
+
+private:
+    std::uintptr_t clearInventoryImageRGBA_;
+    
 };

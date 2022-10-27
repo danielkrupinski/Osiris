@@ -5,6 +5,7 @@
 #include <optional>
 #include <type_traits>
 
+#include "SDK/EconItemView.h"
 #include "SDK/ItemSchema.h"
 #include "SDK/MoveHelper.h"
 #include "SDK/PanoramaMarshallHelper.h"
@@ -22,7 +23,6 @@ class ClientSharedObjectCache;
 class CSPlayerInventory;
 class EconItem;
 class EconItemAttributeDefinition;
-class EconItemView;
 class Entity;
 class GameEventDescriptor;
 class GameEventManager;
@@ -164,10 +164,10 @@ public:
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
     bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
-    void(THISCALL_CONV* clearInventoryImageRGBA)(EconItemView* itemView);
+    void(THISCALL_CONV* clearInventoryImageRGBA)(csgo::pod::EconItemView* itemView);
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     InventoryChangerReturnAddresses inventoryChangerReturnAddresses;
-    std::add_pointer_t<EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
     csgo::pod::EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     void(THISCALL_CONV* setCustomName)(csgo::pod::EconItem* thisptr, const char* name);

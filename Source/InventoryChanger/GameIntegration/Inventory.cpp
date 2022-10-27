@@ -257,8 +257,8 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "updated", "0");
     }
 
-    if (const auto view = memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID))
-        view->clearInventoryImageRGBA(memory);
+    if (const auto view = EconItemView::from(retSpoofGadgets.client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getThis() != 0)
+        view.clearInventoryImageRGBA();
 
     return ItemId{ econItemPOD->itemID };
 }
@@ -278,8 +278,8 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     econItem->itemID = newItemID;
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 
-    if (const auto newView = memory.findOrCreateEconItemViewForItemID(newItemID))
-        newView->clearInventoryImageRGBA(memory);
+    if (const auto view = EconItemView::from(retSpoofGadgets.client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getThis() != 0)
+        view.clearInventoryImageRGBA();
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {
         memory.setItemSessionPropertyValue(inventoryComponent, newItemID, "recent", "0");
