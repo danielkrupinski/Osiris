@@ -314,7 +314,13 @@ static void renderPlayerBox(const Memory& memory, const Config& configGlobal, co
 
     ImVec2 offsetMins{}, offsetMaxs{};
 
+    const auto height = (bbox.max.y - bbox.min.y);
     drawHealthBar(memory, config.healthBar, bbox.min - ImVec2{ 5.0f, 0.0f }, (bbox.max.y - bbox.min.y), playerData.health);
+    if (config.healthBar.enabled && config.healthBar.healthNumber && playerData.health < 100)
+    {
+        const auto position = bbox.min - ImVec2{ 5.0f, 0.0f } + ImVec2{ 0.0f, (100 - playerData.health) / 100.0f * height };
+        renderText(memory, playerData.distanceToLocal, config.textCullDistance, Color4(), std::to_string(playerData.health).c_str(), { position.x , position.y });
+    }
 
     FontPush font{ configGlobal, config.font.name, playerData.distanceToLocal };
 
@@ -911,6 +917,7 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
                 ImGui::OpenPopup("");
 
             if (ImGui::BeginPopup("")) {
+                ImGui::Checkbox("Health Number", &playerConfig.healthBar.healthNumber);
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("Type", &playerConfig.healthBar.type, "Gradient\0Solid\0Health-based\0");
                 if (playerConfig.healthBar.type == HealthBar::Solid) {

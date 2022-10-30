@@ -57,6 +57,7 @@ void to_json(json& j, const HealthBar& o, const HealthBar& dummy)
 {
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
     WRITE("Type", type);
+    WRITE("Health Number", healthNumber);
 }
 
 void read(const json& j, const char* key, bool& o) noexcept
@@ -165,6 +166,7 @@ void from_json(const json& j, HealthBar& o)
 {
     from_json(j, static_cast<ColorToggle&>(o));
     read(j, "Type", o.type);
+    read(j, "Health Number", o.healthNumber);
 }
 
 void from_json(const json& j, ColorToggleThickness& ctt)
