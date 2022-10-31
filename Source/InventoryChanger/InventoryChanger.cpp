@@ -157,9 +157,9 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     memory.equipWearable(glove.getThis(), local.getThis());
 
     if (dataUpdated) {
-        // FIXME: This leaks memory
-        glove.econItemView().visualDataProcessors().size = 0;
-        glove.econItemView().customMaterials().size = 0;
+        // FIXME: This leaks game memory
+        EconItemView::from(retSpoofGadgets.client, &glove.econItemView(), std::uintptr_t(memory.clearInventoryImageRGBA)).visualDataProcessors().size = 0;
+        EconItemView::from(retSpoofGadgets.client, &glove.econItemView(), std::uintptr_t(memory.clearInventoryImageRGBA)).customMaterials().size = 0;
         //
 
         glove.getNetworkable().postDataUpdate(0);

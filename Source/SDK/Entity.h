@@ -15,6 +15,8 @@
 
 #include <Platform/IsPlatform.h>
 
+namespace csgo::pod { struct EconItemView; }
+
 class Memory;
 
 class EconItemView;
@@ -271,7 +273,7 @@ public:
     NETVAR2(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR2(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR2(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
-    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
+    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", csgo::pod::EconItemView)
     NETVAR2(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
     NETVAR2(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 
