@@ -89,6 +89,7 @@ enum class TournamentTeam : std::uint8_t {
     Vitality = 89,
     forZeESports = 90,
     Heroic = 95,
+    OG = 96,
     EvilGeniuses = 98,
     CopenhagenFlames = 101,
     paiNGaming = 102,
@@ -102,7 +103,9 @@ enum class TournamentTeam : std::uint8_t {
     ComplexityGaming_ = 111,
     _9ZTeam = 112,
     ImperialEsports = 113,
-    BadNewsEagles = 114
+    BadNewsEagles = 114,
+    GamerLegion = 115,
+    _00Nation = 116
 };
 
 }
