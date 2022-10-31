@@ -1111,6 +1111,18 @@ constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
+constexpr auto iemRio2022Matches = std::to_array<Match>({
+    { TournamentMap::Inferno, ChallengersStage, GamerLegion, _9ZTeam },
+    { TournamentMap::Inferno, ChallengersStage, MOUZ, Outsiders },
+    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, OG },
+    { TournamentMap::Inferno, ChallengersStage, ImperialEsports, Vitality },
+    { TournamentMap::Inferno, ChallengersStage, Fnatic, Cloud9 },
+    { TournamentMap::Nuke, ChallengersStage, EvilGeniuses, IHCEsports },
+    { TournamentMap::Vertigo, ChallengersStage, _00Nation, BadNewsEagles },
+    { TournamentMap::Vertigo, ChallengersStage, FURIA, BIG }
+});
+static_assert(std::ranges::is_sorted(iemRio2022Matches, {}, &Match::map));
+
 using enum csgo::Tournament;
 constexpr auto tournaments = std::to_array<Tournament>({
     { DreamHack2013, dreamHack2013Matches },
@@ -1128,7 +1140,8 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { FaceitLondon2018, faceitLondon2018Matches },
     { IemKatowice2019, iemKatowice2019Matches },
     { PglStockholm2021, pglStockholm2021Matches },
-    { PglAntwerp2022, pglAntwerp2022Matches }
+    { PglAntwerp2022, pglAntwerp2022Matches },
+    { IemRio2022, iemRio2022Matches },
 });
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournament));
 
