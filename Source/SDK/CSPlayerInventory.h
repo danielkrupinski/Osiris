@@ -27,7 +27,6 @@ public:
     VIRTUAL_METHOD2(void, soCreated, 0, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD2(void, soUpdated, 1, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD2(void, soDestroyed, 2, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
-    VIRTUAL_METHOD2_V(EconItemView*, getItemInLoadout, 8, (csgo::Team team, int slot), (team, slot))
     VIRTUAL_METHOD2_V(void, removeItem, 15, (csgo::ItemId itemID), (itemID))
 
     auto getSOC(const Memory& memory) const noexcept
