@@ -33,7 +33,7 @@ void initItemCustomizationNotification(const Interfaces& interfaces, const Memor
     using namespace std::string_view_literals;
     std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
-    if (const auto event = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+    if (const auto event = retSpoofGadgets.client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, args.c_str(), &dummy))
         UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(event);
 }
 
@@ -473,7 +473,7 @@ void Inventory::pickEmUpdated()
 {
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
         const char* dummy;
-        if (const auto eventPtr = memory.registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, "", &dummy))
+        if (const auto eventPtr = retSpoofGadgets.client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, "", &dummy))
             UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
     }
 }
