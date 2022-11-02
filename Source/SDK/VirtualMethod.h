@@ -77,7 +77,7 @@ returnType name args const noexcept \
 }
 
 #if IS_WIN32()
-#define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw)
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw)
 #else
-#define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx + 1, args, argsRaw)
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx + 1, args, argsRaw)
 #endif

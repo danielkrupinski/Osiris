@@ -75,7 +75,7 @@ public:
     VIRTUAL_METHOD2(const char*, getPlayerDisplayModel, 6, (), ())
     VIRTUAL_METHOD2(const char*, getWorldDisplayModel, 7, (), ())
     VIRTUAL_METHOD2(std::uint8_t, getRarity, 12, (), ())
-    VIRTUAL_METHOD2_V(int, getNumberOfSupportedStickerSlots, 44, (), ())
+    VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), ())
 
     std::uint8_t getQuality() const noexcept
     {
@@ -366,13 +366,13 @@ namespace csgo::pod
 
 class SharedObject : public VirtualCallableFromPOD<SharedObject, csgo::pod::SharedObject> {
 public:
-    VIRTUAL_METHOD2_V(int, getTypeID, 1, (), ())
+    VIRTUAL_METHOD_V(int, getTypeID, 1, (), ())
 };
 
 class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, csgo::pod::SharedObjectTypeCache> {
 public:
-    VIRTUAL_METHOD2_V(void, addObject, 1, (csgo::pod::SharedObject* object), (object))
-    VIRTUAL_METHOD2_V(void, removeObject, 3, (csgo::pod::SharedObject* object), (object))
+    VIRTUAL_METHOD_V(void, addObject, 1, (csgo::pod::SharedObject* object), (object))
+    VIRTUAL_METHOD_V(void, removeObject, 3, (csgo::pod::SharedObject* object), (object))
 };
 
 class ClientSharedObjectCache : private VirtualCallable {
@@ -397,7 +397,7 @@ namespace csgo::pod { struct InventoryManager; }
 
 class InventoryManager : public VirtualCallableFromPOD<InventoryManager, csgo::pod::InventoryManager> {
 public:
-    VIRTUAL_METHOD2_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (team, slot, itemID, swap))
-    VIRTUAL_METHOD2_V(std::uintptr_t, getLocalInventory, 23, (), ())
-    VIRTUAL_METHOD2_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (team, slot, itemID, swap))
+    VIRTUAL_METHOD_V(std::uintptr_t, getLocalInventory, 23, (), ())
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
 };

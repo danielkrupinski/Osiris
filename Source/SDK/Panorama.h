@@ -11,8 +11,8 @@ class UIPanel : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2_V(int, getChildCount, 48, (), ())
-    VIRTUAL_METHOD2_V(UIPanelPointer, getChild, 49, (int n), (n))
+    VIRTUAL_METHOD_V(int, getChildCount, 48, (), ())
+    VIRTUAL_METHOD_V(UIPanelPointer, getChild, 49, (int n), (n))
     VIRTUAL_METHOD2(bool, hasClass, 139, (const char* name), (name))
     VIRTUAL_METHOD2(void, setHasClass, 145, (const char* name, bool hasClass), (name, hasClass))
     VIRTUAL_METHOD2(float, getAttributeFloat, 278, (const char* name, float defaultValue), (name, defaultValue))
@@ -33,7 +33,7 @@ class UIEngine : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
+    VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
 };
 
 namespace csgo::pod { struct PanoramaUIEngine; }

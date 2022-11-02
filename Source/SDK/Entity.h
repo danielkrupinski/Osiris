@@ -114,8 +114,8 @@ public:
 #endif
     }
 
-    VIRTUAL_METHOD2_V(int&, handle, 2, (), ())
-    VIRTUAL_METHOD2_V(std::uintptr_t, getCollideable, 3, (), ())
+    VIRTUAL_METHOD_V(int&, handle, 2, (), ())
+    VIRTUAL_METHOD_V(std::uintptr_t, getCollideable, 3, (), ())
 
     VIRTUAL_METHOD2(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
     VIRTUAL_METHOD2(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))

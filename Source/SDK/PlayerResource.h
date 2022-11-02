@@ -10,9 +10,9 @@ class IPlayerResource : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2_V(bool, isAlive, 5, (int index), (index))
-    VIRTUAL_METHOD2_V(const char*, getPlayerName, 8, (int index), (index))
-    VIRTUAL_METHOD2_V(int, getPlayerHealth, 14, (int index), (index))
+    VIRTUAL_METHOD_V(bool, isAlive, 5, (int index), (index))
+    VIRTUAL_METHOD_V(const char*, getPlayerName, 8, (int index), (index))
+    VIRTUAL_METHOD_V(int, getPlayerHealth, 14, (int index), (index))
 };
 
 class PlayerResource {

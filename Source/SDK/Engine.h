@@ -70,7 +70,7 @@ public:
     VIRTUAL_METHOD2(const char*, getLevelName, 53, (), ())
     VIRTUAL_METHOD2(csgo::pod::NetworkChannel*, getNetworkChannel, 78, (), ())
     VIRTUAL_METHOD2(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (cmd, fromConsoleOrKeybind))
-    VIRTUAL_METHOD2_V(const SteamAPIContext*, getSteamAPIContext, 185, (), ())
+    VIRTUAL_METHOD_V(const SteamAPIContext*, getSteamAPIContext, 185, (), ())
 
     auto getViewAngles() const noexcept
     {

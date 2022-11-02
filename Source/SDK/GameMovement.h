@@ -8,5 +8,5 @@ class GameMovement : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2_V(void, processMovement, 1, (std::uintptr_t localPlayer, MoveData* moveData), (localPlayer, moveData))
+    VIRTUAL_METHOD_V(void, processMovement, 1, (std::uintptr_t localPlayer, MoveData* moveData), (localPlayer, moveData))
 };
