@@ -72,6 +72,9 @@
     <Filter Include="SDK\PODs">
       <UniqueIdentifier>{57f076f9-b8f5-4962-8356-64f7584047f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{861c156a-293c-443e-aaab-2ca4847b6143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -894,6 +897,9 @@
     </ClInclude>
     <ClInclude Include="SDK\Constants\EconItemFlags.h">
       <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FlagsBuilder.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
