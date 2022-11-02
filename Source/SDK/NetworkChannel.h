@@ -13,5 +13,5 @@ namespace csgo::pod
 
 class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, csgo::pod::NetworkChannel> {
 public:
-    VIRTUAL_METHOD2(float, getLatency, 9, (int flow), (flow))
+    VIRTUAL_METHOD(float, getLatency, 9, (int flow), (flow))
 };

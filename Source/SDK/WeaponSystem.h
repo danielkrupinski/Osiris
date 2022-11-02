@@ -9,5 +9,5 @@ class WeaponSystem : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(WeaponInfo*, getWeaponInfo, 2, (WeaponId weaponId), (weaponId))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponInfo, 2, (WeaponId weaponId), (weaponId))
 };

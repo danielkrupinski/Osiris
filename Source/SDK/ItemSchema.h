@@ -68,13 +68,13 @@ namespace csgo::pod { struct EconItemDefinition; }
 
 class EconItemDefinition : public VirtualCallableFromPOD<EconItemDefinition, csgo::pod::EconItemDefinition> {
 public:
-    VIRTUAL_METHOD2(WeaponId, getWeaponId, 0, (), ())
-    VIRTUAL_METHOD2(const char*, getItemBaseName, 2, (), ())
-    VIRTUAL_METHOD2(const char*, getItemTypeName, 3, (), ())
-    VIRTUAL_METHOD2(const char*, getInventoryImage, 5, (), ())
-    VIRTUAL_METHOD2(const char*, getPlayerDisplayModel, 6, (), ())
-    VIRTUAL_METHOD2(const char*, getWorldDisplayModel, 7, (), ())
-    VIRTUAL_METHOD2(std::uint8_t, getRarity, 12, (), ())
+    VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), ())
+    VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), ())
+    VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), ())
+    VIRTUAL_METHOD(const char*, getInventoryImage, 5, (), ())
+    VIRTUAL_METHOD(const char*, getPlayerDisplayModel, 6, (), ())
+    VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), ())
+    VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), ())
     VIRTUAL_METHOD_V(int, getNumberOfSupportedStickerSlots, 44, (), ())
 
     std::uint8_t getQuality() const noexcept
@@ -189,8 +189,8 @@ namespace csgo::pod { struct EconLootListDefinition; }
 
 class EconLootListDefinition : public VirtualCallableFromPOD<EconLootListDefinition, csgo::pod::EconLootListDefinition> {
 public:
-    VIRTUAL_METHOD2(const char*, getName, 0, (), ())
-    VIRTUAL_METHOD2(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), ())
+    VIRTUAL_METHOD(const char*, getName, 0, (), ())
+    VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), ())
 
     bool willProduceStatTrak() const noexcept
     {
@@ -229,14 +229,14 @@ namespace csgo::pod { struct ItemSchema; }
 
 class ItemSchema : public VirtualCallableFromPOD<ItemSchema, csgo::pod::ItemSchema> {
 public:
-    VIRTUAL_METHOD2(csgo::pod::EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (id))
-    VIRTUAL_METHOD2(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
-    VIRTUAL_METHOD2(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
-    VIRTUAL_METHOD2(int, getItemSetCount, 28, (), ())
-    VIRTUAL_METHOD2(csgo::pod::EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
-    VIRTUAL_METHOD2(csgo::pod::EconLootListDefinition*, getLootList, 32, (int index), (index))
-    VIRTUAL_METHOD2(int, getLootListCount, 34, (), ())
-    VIRTUAL_METHOD2(csgo::pod::EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (name))
+    VIRTUAL_METHOD(csgo::pod::EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (id))
+    VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
+    VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
+    VIRTUAL_METHOD(int, getItemSetCount, 28, (), ())
+    VIRTUAL_METHOD(csgo::pod::EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
+    VIRTUAL_METHOD(csgo::pod::EconLootListDefinition*, getLootList, 32, (int index), (index))
+    VIRTUAL_METHOD(int, getLootListCount, 34, (), ())
+    VIRTUAL_METHOD(csgo::pod::EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (name))
 
     auto getItemDefinitionInterface(WeaponId id) const noexcept
     {
@@ -248,7 +248,7 @@ namespace csgo::pod { struct ItemSystem; }
 
 class ItemSystem : public VirtualCallableFromPOD<ItemSystem, csgo::pod::ItemSystem> {
 public:
-    VIRTUAL_METHOD2(csgo::pod::ItemSchema*, getItemSchema, 0, (), ())
+    VIRTUAL_METHOD(csgo::pod::ItemSchema*, getItemSchema, 0, (), ())
 };
 
 namespace csgo::pod { struct EconItem; }
@@ -263,9 +263,9 @@ public:
     using VirtualCallable::getThis;
 
 #if IS_WIN32()
-    VIRTUAL_METHOD2(void, destructor, 0, (), (true))
+    VIRTUAL_METHOD(void, destructor, 0, (), (true))
 #else
-    VIRTUAL_METHOD2(void, destructor, 1, (), ())
+    VIRTUAL_METHOD(void, destructor, 1, (), ())
 #endif
 
     void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept

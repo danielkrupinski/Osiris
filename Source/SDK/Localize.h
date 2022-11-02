@@ -9,11 +9,11 @@ class Localize : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
-    VIRTUAL_METHOD2(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))
-    VIRTUAL_METHOD2(int, convertAnsiToUnicode, 15, (const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes), (ansi, unicode, unicodeBufferSizeInBytes))
-    VIRTUAL_METHOD2(int, convertUnicodeToAnsi, 16, (const wchar_t* unicode, char* ansi, int ansiBufferSize), (unicode, ansi, ansiBufferSize))
-    VIRTUAL_METHOD2(const char*, findAsUTF8, 47, (const char* tokenName), (tokenName))
+    VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
+    VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))
+    VIRTUAL_METHOD(int, convertAnsiToUnicode, 15, (const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes), (ansi, unicode, unicodeBufferSizeInBytes))
+    VIRTUAL_METHOD(int, convertUnicodeToAnsi, 16, (const wchar_t* unicode, char* ansi, int ansiBufferSize), (unicode, ansi, ansiBufferSize))
+    VIRTUAL_METHOD(const char*, findAsUTF8, 47, (const char* tokenName), (tokenName))
 };
 
 template <std::size_t BufferSize = 4096>

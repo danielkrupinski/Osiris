@@ -13,10 +13,10 @@ public:
 
     VIRTUAL_METHOD_V(int, getChildCount, 48, (), ())
     VIRTUAL_METHOD_V(UIPanelPointer, getChild, 49, (int n), (n))
-    VIRTUAL_METHOD2(bool, hasClass, 139, (const char* name), (name))
-    VIRTUAL_METHOD2(void, setHasClass, 145, (const char* name, bool hasClass), (name, hasClass))
-    VIRTUAL_METHOD2(float, getAttributeFloat, 278, (const char* name, float defaultValue), (name, defaultValue))
-    VIRTUAL_METHOD2(void, setAttributeFloat, WIN32_LINUX(288, 283), (const char* name, float value), (name, value))
+    VIRTUAL_METHOD(bool, hasClass, 139, (const char* name), (name))
+    VIRTUAL_METHOD(void, setHasClass, 145, (const char* name, bool hasClass), (name, hasClass))
+    VIRTUAL_METHOD(float, getAttributeFloat, 278, (const char* name, float defaultValue), (name, defaultValue))
+    VIRTUAL_METHOD(void, setAttributeFloat, WIN32_LINUX(288, 283), (const char* name, float value), (name, value))
 };
 
 struct PanoramaEventRegistration {
@@ -40,5 +40,5 @@ namespace csgo::pod { struct PanoramaUIEngine; }
 
 class PanoramaUIEngine : public VirtualCallableFromPOD<PanoramaUIEngine, csgo::pod::PanoramaUIEngine> {
 public:
-    VIRTUAL_METHOD2(UIEnginePointer, accessUIEngine, 11, (), ())
+    VIRTUAL_METHOD(UIEnginePointer, accessUIEngine, 11, (), ())
 };

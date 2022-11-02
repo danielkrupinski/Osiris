@@ -6,5 +6,5 @@ namespace csgo::pod { struct MoveHelper; }
 
 class MoveHelper : public VirtualCallableFromPOD<MoveHelper, csgo::pod::MoveHelper> {
 public:
-    VIRTUAL_METHOD2(void, setHost, 1, (std::uintptr_t host), (host))
+    VIRTUAL_METHOD(void, setHost, 1, (std::uintptr_t host), (host))
 };

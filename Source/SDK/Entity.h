@@ -59,22 +59,22 @@ class Collideable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(const Vector&, obbMins, 1, (), ())
-    VIRTUAL_METHOD2(const Vector&, obbMaxs, 2, (), ())
+    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), ())
+    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), ())
 };
 
 class Networkable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(void, release, 1, (), ())
-    VIRTUAL_METHOD2(ClientClass*, getClientClass, 2, (), ())
-    VIRTUAL_METHOD2(void, onDataChanged, 5, (int updateType), (updateType))
-    VIRTUAL_METHOD2(void, preDataUpdate, 6, (int updateType), (updateType))
-    VIRTUAL_METHOD2(void, postDataUpdate, 7, (int updateType), (updateType))
-    VIRTUAL_METHOD2(bool, isDormant, 9, (), ())
-    VIRTUAL_METHOD2(int, index, 10, (), ())
-    VIRTUAL_METHOD2(void, setDestroyedOnRecreateEntities, 13, (), ())
+    VIRTUAL_METHOD(void, release, 1, (), ())
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), ())
+    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (updateType))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), ())
+    VIRTUAL_METHOD(int, index, 10, (), ())
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), ())
 };
 
 class Renderable : private VirtualCallable {
@@ -82,12 +82,12 @@ public:
     using VirtualCallable::VirtualCallable;
 
 #if IS_WIN32()
-    VIRTUAL_METHOD2(bool, shouldDraw, 3, (), ())
+    VIRTUAL_METHOD(bool, shouldDraw, 3, (), ())
 #endif
 
-    VIRTUAL_METHOD2(const Model*, getModel, 8, (), ())
-    VIRTUAL_METHOD2(const matrix3x4&, toWorldTransform, 32, (), ())
-    VIRTUAL_METHOD2(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), ())
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), ())
+    VIRTUAL_METHOD(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
 };
 
 class Entity : private VirtualCallable {
@@ -117,23 +117,23 @@ public:
     VIRTUAL_METHOD_V(int&, handle, 2, (), ())
     VIRTUAL_METHOD_V(std::uintptr_t, getCollideable, 3, (), ())
 
-    VIRTUAL_METHOD2(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
-    VIRTUAL_METHOD2(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
-    VIRTUAL_METHOD2(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
-    VIRTUAL_METHOD2(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
-    VIRTUAL_METHOD2(int, health, WIN32_LINUX(122, 167), (), ())
-    VIRTUAL_METHOD2(bool, isAlive, WIN32_LINUX(156, 208), (), ())
-    VIRTUAL_METHOD2(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
-    VIRTUAL_METHOD2(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
-    VIRTUAL_METHOD2(std::uintptr_t, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
-    VIRTUAL_METHOD2(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
-    VIRTUAL_METHOD2(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
-    VIRTUAL_METHOD2(std::uintptr_t, getObserverTarget, WIN32_LINUX(295, 358), (), ())
-    VIRTUAL_METHOD2(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
-    VIRTUAL_METHOD2(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
-    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (std::uintptr_t viewModel), (viewModel))
-    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
-    VIRTUAL_METHOD2(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
+    VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
+    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
+    VIRTUAL_METHOD(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
+    VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), ())
+    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
+    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
+    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
+    VIRTUAL_METHOD(std::uintptr_t, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
+    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
+    VIRTUAL_METHOD(std::uintptr_t, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (std::uintptr_t viewModel), (viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
+    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 
 #if IS_WIN32()
     auto getEyePosition() const noexcept
@@ -150,8 +150,8 @@ public:
         return v;
     }
 #else
-    VIRTUAL_METHOD2(Vector, getEyePosition, 348, (), ())
-    VIRTUAL_METHOD2(Vector, getAimPunch, 409, (), ())
+    VIRTUAL_METHOD(Vector, getEyePosition, 348, (), ())
+    VIRTUAL_METHOD(Vector, getAimPunch, 409, (), ())
 #endif
 
     auto isPistol() const noexcept { return getWeaponType() == WeaponType::Pistol; }

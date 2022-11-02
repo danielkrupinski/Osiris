@@ -114,6 +114,6 @@ class ModelInfo : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (name))
-    VIRTUAL_METHOD2(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (model))
+    VIRTUAL_METHOD(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (name))
+    VIRTUAL_METHOD(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (model))
 };

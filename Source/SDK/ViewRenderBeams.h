@@ -54,5 +54,5 @@ class ViewRenderBeams : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (std::ref(beamInfo)))
+    VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (std::ref(beamInfo)))
 };
