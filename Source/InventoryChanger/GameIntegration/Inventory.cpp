@@ -7,6 +7,8 @@
 #include <SDK/EconItemView.h>
 #include <SDK/Panorama.h>
 
+#include <SDK/Constants/EconItemFlags.h>
+
 namespace inventory_changer::game_integration
 {
 
@@ -72,10 +74,12 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
     if (localInventory.getThis() == 0)
         return;
 
+    using enum csgo::EconItemFlags;
+
     if (hide)
-        econItem->flags |= 16;
+        econItem->flags |= static_cast<std::uint8_t>(InXrayScanner);
     else
-        econItem->flags &= ~16;
+        econItem->flags &= ~static_cast<std::uint8_t>(InXrayScanner);
 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 }
@@ -140,16 +144,16 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 {
     std::uint8_t flags = 0;
 
-    if (item.gameItem().isCaseKey()) {
-        constexpr auto nonEconomyFlag = 8;
-        flags |= nonEconomyFlag;
-    }
+    using enum csgo::EconItemFlags;
+
+    if (item.gameItem().isCaseKey())
+        flags |= static_cast<std::uint8_t>(NonEconomy);
 
     if (item.getState() == inventory::Item::State::InXrayScanner)
-        flags |= 16;
+        flags |= static_cast<std::uint8_t>(InXrayScanner);
 
     if (item.getProperties().common.purchasedFromStore)
-        flags |= 2;
+        flags |= static_cast<std::uint8_t>(PurchasedFromStore);
 
     return flags;
 }
