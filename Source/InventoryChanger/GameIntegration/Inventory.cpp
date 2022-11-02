@@ -9,6 +9,8 @@
 
 #include <SDK/Constants/EconItemFlags.h>
 
+#include <Utils/FlagsBuilder.h>
+
 namespace inventory_changer::game_integration
 {
 
@@ -142,20 +144,12 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
 [[nodiscard]] std::uint8_t computeItemFlags(const inventory::Item& item)
 {
-    std::uint8_t flags = 0;
-
     using enum csgo::EconItemFlags;
-
-    if (item.gameItem().isCaseKey())
-        flags |= static_cast<std::uint8_t>(NonEconomy);
-
-    if (item.getState() == inventory::Item::State::InXrayScanner)
-        flags |= static_cast<std::uint8_t>(InXrayScanner);
-
-    if (item.getProperties().common.purchasedFromStore)
-        flags |= static_cast<std::uint8_t>(PurchasedFromStore);
-
-    return flags;
+    return FlagsBuilder<std::uint8_t, csgo::EconItemFlags>{}
+        .set<PurchasedFromStore>(item.getProperties().common.purchasedFromStore)
+        .set<NonEconomy>(item.gameItem().isCaseKey())
+        .set<InXrayScanner>(item.getState() == inventory::Item::State::InXrayScanner)
+        .get();
 }
 
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
