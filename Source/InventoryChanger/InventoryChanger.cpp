@@ -75,10 +75,10 @@
 
 #include <SortFilter.h>
 
-static std::uintptr_t createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
+static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {
     static const auto createWearable = [&clientInterfaces]{
-        std::add_pointer_t<std::uintptr_t CDECL_CONV(int, int)> createWearableFn = nullptr;
+        std::add_pointer_t<csgo::pod::Entity* CDECL_CONV(int, int)> createWearableFn = nullptr;
         for (auto clientClass = clientInterfaces.getClient().getAllClasses(); clientClass; clientClass = clientClass->next) {
             if (clientClass->classId == ClassId::EconWearable) {
                 createWearableFn = clientClass->createFunction;
@@ -89,11 +89,11 @@ static std::uintptr_t createGlove(const ClientInterfaces& clientInterfaces, int 
     }();
 
     if (!createWearable)
-        return 0;
+        return nullptr;
 
     if (const auto wearable = createWearable(entry, serial))
-        return std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t);
-    return 0;
+        return reinterpret_cast<csgo::pod::Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
+    return nullptr;
 }
 
 static std::optional<std::list<inventory_changer::inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, csgo::Team team, std::uint8_t slot)
@@ -131,7 +131,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     if (!glovePtr)
         return;
 
-    const Entity glove{ retSpoofGadgets.client, glovePtr };
+    const auto glove = Entity::from(retSpoofGadgets.client, glovePtr);
     wearables[0] = gloveHandle = glove.handle();
     glove.accountID() = localInventory.getAccountID();
     glove.entityQuality() = 3;
@@ -184,7 +184,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
         if (weaponHandle == -1)
             break;
 
-        const Entity weapon{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) };
+        const auto weapon = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle));
         if (weapon.getThis() == 0)
             continue;
 
@@ -210,11 +210,11 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
         }
     }
 
-    const Entity viewModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(local.viewModel()) };
+    const auto viewModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(local.viewModel()));
     if (viewModel.getThis() == 0)
         return;
 
-    const Entity viewModelWeapon{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModel.weapon()) };
+    const auto viewModelWeapon = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModel.weapon()));
     if (viewModelWeapon.getThis() == 0)
         return;
 
@@ -224,7 +224,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
 
     viewModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition::from(retSpoofGadgets.client, def).getPlayerDisplayModel());
 
-    const Entity worldModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModelWeapon.weaponWorldModel()) };
+    const auto worldModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModelWeapon.weaponWorldModel()));
     if (worldModel.getThis() == 0)
         return;
 
@@ -239,7 +239,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = memory.globalVars->maxClients + 1; i <= highestEntityIndex; ++i) {
-        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
+        const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
         if (entity.getThis() == 0 || !entity.isWeapon())
             continue;
 
@@ -276,7 +276,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
 
 static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
-    const Entity local{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localHandle) };
+    const auto local = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localHandle));
     if (local.getThis() == 0)
         return;
 
@@ -350,7 +350,7 @@ static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces&
     const auto idx = modelInfo.getModelIndex(model);
     localPlayer.get().setModelIndex(idx);
 
-    if (const Entity ragdoll{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().ragdoll())}; ragdoll.getThis() != 0)
+    if (const auto ragdoll = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().ragdoll())); ragdoll.getThis() != 0)
         ragdoll.setModelIndex(idx);
 }
 
@@ -1142,7 +1142,7 @@ void InventoryChanger::updateStatTrak(const Engine& engine, const GameEvent& eve
     if (const auto localUserId = localPlayer.get().getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
-    const Entity weapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+    const auto weapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
     if (weapon.getThis() == 0)
         return;
 

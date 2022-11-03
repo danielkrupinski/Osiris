@@ -90,19 +90,18 @@ public:
     VIRTUAL_METHOD(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
 };
 
-class Entity : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
-    using VirtualCallable::getThis;
+namespace csgo::pod { struct Entity; }
 
+class Entity : public VirtualCallableFromPOD<Entity, csgo::pod::Entity> {
+public:
     [[nodiscard]] auto getNetworkable() const noexcept
     {
-        return Networkable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) * 2 };
+        return Networkable{ getInvoker(), getThis() + sizeof(std::uintptr_t) * 2 };
     }
 
     [[nodiscard]] auto getRenderable() const noexcept
     {
-        return Renderable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) };
+        return Renderable{ getInvoker(), getThis() + sizeof(std::uintptr_t) };
     }
 
     bool shouldDraw() const
@@ -125,13 +124,13 @@ public:
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
-    VIRTUAL_METHOD(std::uintptr_t, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD(csgo::pod::Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
-    VIRTUAL_METHOD(std::uintptr_t, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD(csgo::pod::Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (std::uintptr_t viewModel), (viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (csgo::pod::Entity* viewModel), (viewModel))
     VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 

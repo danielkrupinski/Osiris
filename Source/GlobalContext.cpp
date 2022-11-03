@@ -136,7 +136,7 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = visuals->viewModelFov();
     if (localPlayer) {
-        if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
@@ -408,10 +408,10 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
 {
-    const Entity viewModel{ retSpoofGadgets.client, std::uintptr_t(outStruct) };
+    const auto viewModel = Entity::from(retSpoofGadgets.client, static_cast<csgo::pod::Entity*>(outStruct));
 
-    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getThis()) {
-        if (const Entity weapon{ retSpoofGadgets.client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon()) }; weapon.getThis() != 0) {
+    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
+        if (const auto weapon = Entity::from(retSpoofGadgets.client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getThis() != 0) {
             if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 

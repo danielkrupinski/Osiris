@@ -19,13 +19,13 @@ struct Ray {
     bool isSwept{ };
 };
 
-class Entity;
+namespace csgo::pod { struct Entity; }
 
 struct TraceFilter {
-    TraceFilter(std::uintptr_t entity) : skip{ entity } { }
-    virtual bool shouldHitEntity(std::uintptr_t entity, int) { return entity != skip; }
+    TraceFilter(csgo::pod::Entity* entity) : skip{ entity } { }
+    virtual bool shouldHitEntity(csgo::pod::Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    std::uintptr_t skip;
+    csgo::pod::Entity* skip;
 };
 
 namespace HitGroup {
@@ -91,7 +91,7 @@ struct Trace {
     } surface;
     int hitgroup;
     std::byte pad2[4];
-    std::uintptr_t entity;
+    csgo::pod::Entity* entity;
     int hitbox;
 };
 

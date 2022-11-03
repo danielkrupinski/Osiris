@@ -599,21 +599,21 @@ void Visuals::bulletTracer(const GameEvent& event) noexcept
     if (event.getInt("userid") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+    const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getThis() == 0)
         return;
 
     BeamInfo beamInfo;
 
     if (!localPlayer.get().shouldDraw()) {
-        const Entity viewModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()) };
+        const auto viewModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()));
         if (viewModel.getThis() == 0)
             return;
 
-        if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getThis()), beamInfo.start))
+        if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getPOD()), beamInfo.start))
             return;
     } else {
-        const Entity worldModel{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()) };
+        const auto worldModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()));
         if (worldModel.getThis() == 0)
             return;
 

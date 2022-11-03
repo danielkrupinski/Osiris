@@ -31,7 +31,7 @@ static struct SoundConfig {
 void Sound::modulateSound(const ClientInterfaces& clientInterfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept
 {
     auto modulateVolume = [&](int SoundConfig::Player::* proj) {
-        if (const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(entityIndex) }; localPlayer && entity.getThis() != 0 && entity.isPlayer()) {
+        if (const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(entityIndex)); localPlayer && entity.getPOD() != nullptr && entity.isPlayer()) {
             if (entityIndex == localPlayer.get().getNetworkable().index())
                 volume *= std::invoke(proj, soundConfig.players[0]) / 100.0f;
             else if (!entity.isOtherEnemy(memory, localPlayer.get()))

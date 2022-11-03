@@ -7,8 +7,10 @@
 
 struct RecvTable;
 
+namespace csgo::pod { struct Entity; }
+
 struct ClientClass {
-    std::add_pointer_t<std::uintptr_t CDECL_CONV(int, int)> createFunction;
+    std::add_pointer_t<csgo::pod::Entity* CDECL_CONV(int, int)> createFunction;
     void* createEventFunction;
     char* networkName;
     RecvTable* recvTable;

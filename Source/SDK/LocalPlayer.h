@@ -6,7 +6,7 @@
 
 class LocalPlayer {
 public:
-    void init(std::uintptr_t* entity) noexcept
+    void init(csgo::pod::Entity** entity) noexcept
     {
         assert(!localEntity);
         localEntity = entity;
@@ -15,17 +15,17 @@ public:
     constexpr operator bool() noexcept
     {
         assert(localEntity);
-        return *localEntity != 0;
+        return *localEntity != nullptr;
     }
 
     [[nodiscard]] auto get() noexcept
     {
         assert(localEntity && *localEntity);
-        return Entity{ retSpoofGadgets.client, *localEntity };
+        return Entity::from(retSpoofGadgets.client, *localEntity);
     }
 
 private:
-    std::uintptr_t* localEntity = nullptr;
+    csgo::pod::Entity** localEntity = nullptr;
 };
 
 inline LocalPlayer localPlayer;

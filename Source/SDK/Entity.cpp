@@ -45,8 +45,8 @@ bool Entity::isVisible(const EngineTrace& engineTrace, const Memory& memory, con
         return false;
 
     Trace trace;
-    engineTrace.traceRay({ localPlayer.get().getEyePosition(), position.notNull() ? position : getBonePosition(memory, 8) }, 0x46004009, { localPlayer.get().getThis() }, trace);
-    return trace.entity == getThis() || trace.fraction > 0.97f;
+    engineTrace.traceRay({ localPlayer.get().getEyePosition(), position.notNull() ? position : getBonePosition(memory, 8) }, 0x46004009, { localPlayer.get().getPOD() }, trace);
+    return trace.entity == getPOD() || trace.fraction > 0.97f;
 }
 
 bool Entity::isOtherEnemy(const Memory& memory, const Entity& other) const noexcept
@@ -123,8 +123,8 @@ bool Entity::canSee(const EngineTrace& engineTrace, const Memory& memory, const 
         return false;
 
     Trace trace;
-    engineTrace.traceRay({ eyePos, pos }, 0x46004009, getThis(), trace);
-    return trace.entity == other.getThis() || trace.fraction > 0.97f;
+    engineTrace.traceRay({ eyePos, pos }, 0x46004009, getPOD(), trace);
+    return trace.entity == other.getPOD() || trace.fraction > 0.97f;
 }
 
 bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& memory, const Entity& other) const noexcept

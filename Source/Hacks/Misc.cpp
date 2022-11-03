@@ -228,7 +228,7 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+    const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getThis() == 0)
         return;
 
@@ -422,7 +422,7 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
 
     static float readyTime;
     if (miscConfig.prepareRevolver && localPlayer && (!miscConfig.prepareRevolverKey.isSet() || miscConfig.prepareRevolverKey.isDown())) {
-        const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+        const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
         if (activeWeapon.getThis() != 0 && activeWeapon.itemDefinitionIndex() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
             auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - NetworkChannel::from(retSpoofGadgets.client, engine.getNetworkChannel()).getLatency(0));
@@ -445,7 +445,7 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     if (!localPlayer || !localPlayer.get().isAlive() || (localPlayer.get().inBombZone() && localPlayer.get().isOnGround()))
         return;
 
-    if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() == 0 || activeWeapon.getNetworkable().getClientClass()->classId != ClassId::C4)
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() == 0 || activeWeapon.getNetworkable().getClientClass()->classId != ClassId::C4)
         return;
 
     cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -455,9 +455,9 @@ void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, Use
     Trace trace;
     const auto startPos = localPlayer.get().getEyePosition();
     const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
-    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get().getThis(), trace);
+    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get().getPOD(), trace);
 
-    const Entity entity{ retSpoofGadgets.client, trace.entity };
+    const auto entity = Entity::from(retSpoofGadgets.client, trace.entity);
     if (entity.getThis() == 0 || entity.getNetworkable().getClientClass()->classId != ClassId::PropDoorRotating)
         cmd->buttons &= ~UserCmd::IN_USE;
 }
@@ -563,7 +563,7 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
 
     for (int i = 1; i <= memory.globalVars->maxClients; ++i) {
         const auto entityPtr = clientInterfaces.getEntityList().getEntity(i);
-        const Entity entity{ retSpoofGadgets.client, entityPtr };
+        const auto entity = Entity::from(retSpoofGadgets.client, entityPtr);
 
         if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis())
             continue;
@@ -592,7 +592,7 @@ void Misc::disablePanoramablur(const Interfaces& interfaces) noexcept
 void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
-        static std::uintptr_t reloadedWeapon = 0;
+        static csgo::pod::Entity* reloadedWeapon = 0;
 
         if (reloadedWeapon) {
             for (auto weaponHandle : localPlayer.get().weapons()) {
@@ -600,22 +600,22 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
                     break;
 
                 if (clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) == reloadedWeapon) {
-                    cmd->weaponselect = Entity{ retSpoofGadgets.client, reloadedWeapon }.getNetworkable().index();
-                    cmd->weaponsubtype = Entity{ retSpoofGadgets.client, reloadedWeapon }.getWeaponSubType();
+                    cmd->weaponselect = Entity::from(retSpoofGadgets.client, reloadedWeapon).getNetworkable().index();
+                    cmd->weaponsubtype = Entity::from(retSpoofGadgets.client, reloadedWeapon).getWeaponSubType();
                     break;
                 }
             }
             reloadedWeapon = 0;
         }
 
-        if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.isInReload() && activeWeapon.clip() == activeWeapon.getWeaponData()->maxClip) {
-            reloadedWeapon = activeWeapon.getThis();
+        if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.isInReload() && activeWeapon.clip() == activeWeapon.getWeaponData()->maxClip) {
+            reloadedWeapon = activeWeapon.getPOD();
 
             for (auto weaponHandle : localPlayer.get().weapons()) {
                 if (weaponHandle == -1)
                     break;
 
-                if (const Entity weapon{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle) }; weapon.getThis() && weapon.getThis() != reloadedWeapon) {
+                if (const auto weapon = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle)); weapon.getPOD() && weapon.getPOD() != reloadedWeapon) {
                     cmd->weaponselect = weapon.getNetworkable().index();
                     cmd->weaponsubtype = weapon.getWeaponSubType();
                     break;
@@ -689,7 +689,7 @@ void Misc::nadePredict(const Interfaces& interfaces) noexcept
 void Misc::fixTabletSignal() noexcept
 {
     if (miscConfig.fixTabletSignal && localPlayer) {
-        if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             activeWeapon.tabletReceptionIsBlocked() = false;
     }
 }
@@ -740,7 +740,7 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
             return;
 
         for (int i = 1; i <= engine.getMaxClients(); i++) {
-            const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
+            const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
             if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()) continue;
             *reinterpret_cast<int*>(entity.getThis() + 0xA28) = 0;
             *reinterpret_cast<int*>(entity.getThis() + 0xA30) = memory.globalVars->framecount;
@@ -752,7 +752,7 @@ void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientI
 void Misc::autoPistol(const Memory& memory, UserCmd* cmd) noexcept
 {
     if (miscConfig.autoPistol && localPlayer) {
-        const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+        const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
         if (activeWeapon.getThis() != 0 && activeWeapon.isPistol() && activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime()) {
             if (activeWeapon.itemDefinitionIndex() == WeaponId::Revolver)
                 cmd->buttons &= ~UserCmd::IN_ATTACK2;
@@ -771,7 +771,7 @@ void Misc::chokePackets(const Engine& engine, bool& sendPacket) noexcept
 void Misc::autoReload(UserCmd* cmd) noexcept
 {
     if (miscConfig.autoReload && localPlayer) {
-        const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
+        const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
         if (activeWeapon.getThis() != 0 && getWeaponIndex(activeWeapon.itemDefinitionIndex()) && !activeWeapon.clip())
             cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
     }
@@ -875,7 +875,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("item_purchase"): {
-            if (const Entity player{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid"))) }; player.getThis() != 0 && localPlayer && localPlayer.get().isOtherEnemy(memory, player)) {
+            if (const auto player = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(engine.getPlayerForUserID(event->getInt("userid")))); player.getThis() != 0 && localPlayer && localPlayer.get().isOtherEnemy(memory, player)) {
                 if (const auto definition = EconItemDefinition::from(retSpoofGadgets.client, ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()).getItemDefinitionByName(event->getString("weapon"))); definition.getThis() != 0) {
                     auto& purchase = playerPurchases[player.handle()];
                     if (const auto weaponInfo = memory.weaponSystem.getWeaponInfo(definition.getWeaponId())) {
@@ -970,7 +970,7 @@ void Misc::oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stag
     if (stage == csgo::FrameStage::RENDER_START) {
         original = cl_righthand.getInt();
 
-        if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon()}; activeWeapon.getThis() != 0) {
+        if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() != 0) {
             if (const auto classId = activeWeapon.getNetworkable().getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
                 cl_righthand.setValue(!original);
         }
@@ -1008,7 +1008,7 @@ static int reportbotRound;
     std::vector<std::uint64_t> xuids;
 
     for (int i = 1; i <= engine.getMaxClients(); ++i) {
-        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
+        const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
         if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis())
             continue;
 
@@ -1101,7 +1101,7 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfac
     if (!miscConfig.revealVotes)
         return;
 
-    const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(event.getInt("entityid")) };
+    const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(event.getInt("entityid")));
     if (entity.getThis() == 0 || !entity.isPlayer())
         return;
     
@@ -1130,7 +1130,7 @@ void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interface
     const auto reader = ProtobufReader{ static_cast<const std::uint8_t*>(data), size };
     const auto entityIndex = reader.readInt32(2);
 
-    const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(entityIndex) };
+    const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(entityIndex));
     if (entity.getThis() == 0 || !entity.isPlayer())
         return;
 

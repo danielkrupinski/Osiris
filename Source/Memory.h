@@ -160,7 +160,7 @@ public:
     std::uintptr_t demoOrHLTV;
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;
-    std::uintptr_t* gameRules;
+    csgo::pod::Entity** gameRules;
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
     bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);

@@ -163,8 +163,8 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons(interfaces,memory, config);
     } else {
-        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(info.entityIndex) };
-        if (entity.getThis() != 0 && !entity.getNetworkable().isDormant() && entity.isPlayer())
+        const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
+        if (entity.getPOD() != nullptr && !entity.getNetworkable().isDormant() && entity.isPlayer())
             renderPlayer(engine, interfaces, memory, config, entity);
     }
 
@@ -178,7 +178,7 @@ void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, con
 
     const auto health = player.health();
 
-    if (const Entity activeWeapon{ retSpoofGadgets.client, player.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, player.getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Planting"].materials, health);
     } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(interfaces, memory, config.chams["Defusing"].materials, health);
