@@ -365,6 +365,7 @@
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
+    <ClInclude Include="Utils\TypeHint.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
