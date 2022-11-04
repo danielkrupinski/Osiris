@@ -33,7 +33,7 @@ TEST_F(LinuxPlatform_SharedObjectTest, LibraryIsOpenedWithCorrectFlags) {
     createSharedObject(dummyLibraryName);
 }
 
-TEST_F(LinuxPlatform_SharedObjectTest, LibraryIsNotBeginClosedWhenOpeningFailed) {
+TEST_F(LinuxPlatform_SharedObjectTest, LibraryIsNotBeingClosedWhenOpeningFailed) {
     EXPECT_CALL(dlWrapper, dlopen(testing::_, testing::_)).WillOnce(testing::Return(nullptr));
     EXPECT_CALL(dlWrapper, dlclose(testing::_)).Times(0);
 
