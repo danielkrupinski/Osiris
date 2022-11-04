@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 namespace windows_platform
 {
 
@@ -14,6 +16,11 @@ public:
     [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
     {
         return dl.GetProcAddress(handle, functionName);
+    }
+
+    [[nodiscard]] HMODULE getHandle() const noexcept
+    {
+        return handle;
     }
 
 private:
