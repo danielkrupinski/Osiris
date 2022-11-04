@@ -38,8 +38,8 @@ protected:
         return builder.get();
     }
 
-    static constexpr auto firstFlag = static_cast<T>(1 << 0);
-    static constexpr auto secondFlag = static_cast<T>(1 << 1);
+    static constexpr T firstFlag{ 1 << 0 };
+    static constexpr T secondFlag{ 1 << 1 };
     static constexpr auto dummyFlag = maxValue<T>();
 
 private:
@@ -85,6 +85,11 @@ TYPED_TEST(Utils_FlagBuilderTest, FlagRemainsSetWhenPassingFalseAfterSetting) {
 TYPED_TEST(Utils_FlagBuilderTest, MultipleIndependentFlagsCanBeSet) {
     this->template set<TestFixture::firstFlag>(true);
     this->template set<TestFixture::secondFlag>(true);
+    EXPECT_EQ(this->get(), TestFixture::firstFlag | TestFixture::secondFlag);
+}
+
+TYPED_TEST(Utils_FlagBuilderTest, SetMethodReturnsTheReferenceToSelf) {
+    this->template set<TestFixture::firstFlag>(true).template set<TestFixture::secondFlag>(true);
     EXPECT_EQ(this->get(), TestFixture::firstFlag | TestFixture::secondFlag);
 }
 
