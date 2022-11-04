@@ -292,8 +292,89 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
+bool GlobalContext::isPlayingDemoHook(std::uintptr_t returnAddress, std::uintptr_t frameAddress)
+{
+    if (Misc::shouldRevealMoney() && returnAddress == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == memory->money)
+        return true;
+
+    return hooks->engine.callOriginal<bool, 82>();
+}
+
+void GlobalContext::updateColorCorrectionWeightsHook()
+{
+    hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
+
+    globalContext->visuals->performColorCorrection();
+    if (globalContext->visuals->shouldRemoveScopeOverlay())
+        *memory->vignette = 0.0f;
+}
+
+float GlobalContext::getScreenAspectRatioHook(int width, int height)
+{
+    if (Misc::aspectRatio() != 0.0f)
+        return Misc::aspectRatio();
+    return hooks->engine.callOriginal<float, 101>(width, height);
+}
+
+void GlobalContext::renderSmokeOverlayHook(bool update)
+{
+    if (visuals->shouldRemoveSmoke() || visuals->isSmokeWireframe())
+        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
+    else
+        hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
+}
+
+double GlobalContext::getArgAsNumberHook(void* params, int index, std::uintptr_t returnAddress)
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(memory->inventoryChangerReturnAddresses, static_cast<int>(result), returnAddress);
+    return result;
+}
+
+const char* GlobalContext::getArgAsStringHook(void* params, int index, std::uintptr_t returnAddress)
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
+
+    if (result)
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(memory->inventoryChangerReturnAddresses, *memory, result, returnAddress, params);
+
+    return result;
+}
+
+void GlobalContext::setResultIntHook(void* params, int result, std::uintptr_t returnAddress)
+{
+    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(memory->inventoryChangerReturnAddresses, returnAddress, params, result);
+    hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
+}
+
+unsigned GlobalContext::getNumArgsHook(void* params, std::uintptr_t returnAddress)
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(memory->inventoryChangerReturnAddresses, result, returnAddress, params);
+    return result;
+}
+
+void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap)
+{
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onItemEquip(team, slot, itemID);
+    hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
+}
+
+void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event)
+{
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(SharedObject::from(retSpoofGadgets.client, object));
+    hooks->inventory.callOriginal<void, 1>(owner, object, event);
+}
+
 #if IS_WIN32()
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+void* GlobalContext::allocKeyValuesMemoryHook(int size, std::uintptr_t returnAddress)
+{
+    if (returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
+        return nullptr;
+    return hooks->keyValuesSystem.callOriginal<void*, 2>(size);
+}
 
 LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {

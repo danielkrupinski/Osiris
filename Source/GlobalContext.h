@@ -13,6 +13,7 @@
 #include "EventListener.h"
 
 #include "Hacks/Visuals.h"
+#include "SDK/CSPlayerInventory.h"
 
 struct DemoPlaybackParameters;
 class matrix3x4;
@@ -46,8 +47,20 @@ public:
     void render2dEffectsPreHudHook(void* viewSetup);
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(std::uintptr_t returnAddress);
     bool dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data);
+    bool isPlayingDemoHook(std::uintptr_t returnAddress, std::uintptr_t frameAddress);
+    void updateColorCorrectionWeightsHook();
+    float getScreenAspectRatioHook(int width, int height);
+    void renderSmokeOverlayHook(bool update);
+    double getArgAsNumberHook(void* params, int index, std::uintptr_t returnAddress);
+    const char* getArgAsStringHook(void* params, int index, std::uintptr_t returnAddress);
+    void setResultIntHook(void* params, int result, std::uintptr_t returnAddress);
+    unsigned getNumArgsHook(void* params, std::uintptr_t returnAddress);
+    void updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap);
+    void soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event);
 
 #if IS_WIN32()
+    void* allocKeyValuesMemoryHook(int size, std::uintptr_t returnAddress);
+
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
 #else

@@ -208,76 +208,52 @@ static const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINU
 
 static bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (Misc::shouldRevealMoney() && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + WIN32_LINUX(8, 24)) == memory->money)
-        return true;
-
-    return hooks->engine.callOriginal<bool, 82>();
+    return globalContext->isPlayingDemoHook(RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
 static void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
 {
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
-
-    globalContext->visuals->performColorCorrection();
-    if (globalContext->visuals->shouldRemoveScopeOverlay())
-        *memory->vignette = 0.0f;
+    globalContext->updateColorCorrectionWeightsHook();
 }
 
 static float STDCALL_CONV getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
 {
-    if (Misc::aspectRatio() != 0.0f)
-        return Misc::aspectRatio();
-    return hooks->engine.callOriginal<float, 101>(width, height);
+    return globalContext->getScreenAspectRatioHook(width, height);
 }
 
 static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (globalContext->visuals->shouldRemoveSmoke() || globalContext->visuals->isSmokeWireframe())
-        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
-    else
-        hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
+    globalContext->renderSmokeOverlayHook(update);
 }
 
 static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(memory->inventoryChangerReturnAddresses, static_cast<int>(result), RETURN_ADDRESS());
-    return result;
+    return globalContext->getArgAsNumberHook(params, index, RETURN_ADDRESS());
 }
 
 static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
-
-    if (result)
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(memory->inventoryChangerReturnAddresses, *memory, result, RETURN_ADDRESS(), params);
-
-    return result;
+    return globalContext->getArgAsStringHook(params, index, RETURN_ADDRESS());
 }
 
 static void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
 {
-    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(memory->inventoryChangerReturnAddresses, RETURN_ADDRESS(), params, result);
-    hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
+    return globalContext->setResultIntHook(params, result, RETURN_ADDRESS());
 }
 
 static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(memory->inventoryChangerReturnAddresses, result, RETURN_ADDRESS(), params);
-    return result;
+    return globalContext->getNumArgsHook(params, RETURN_ADDRESS());
 }
 
-static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, std::uint64_t itemID, csgo::Team team, int slot, bool swap) noexcept
+static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
 {
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onItemEquip(team, slot, itemID);
-    return hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
+    globalContext->updateInventoryEquippedStateHook(inventory, itemID, team, slot, swap);
 }
 
 static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, csgo::pod::SharedObject* object, int event) noexcept
 {
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(SharedObject::from(retSpoofGadgets.client, object));
-    hooks->inventory.callOriginal<void, 1>(owner, object, event);
+    globalContext->soUpdatedHook(owner, object, event);
 }
 
 static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
@@ -289,9 +265,7 @@ static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::U
 
 static void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
 {
-    if (const auto returnAddress = RETURN_ADDRESS(); returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
-        return nullptr;
-    return hooks->keyValuesSystem.callOriginal<void*, 2>(size);
+    return globalContext->allocKeyValuesMemoryHook(size, RETURN_ADDRESS());
 }
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
