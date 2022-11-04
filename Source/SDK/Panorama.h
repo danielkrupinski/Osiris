@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Platform/CallingConventions.h>
+#include <Utils/TypeHint.h>
 
 #include "Inconstructible.h"
 #include "VirtualMethod.h"
@@ -22,8 +23,8 @@ public:
 struct PanoramaEventRegistration {
     int numberOfArgs;
     PAD(4)
-    void* (CDECL_CONV* makeEvent)(void*);
-    void* (CDECL_CONV* createEventFromString)(void*, const char* args, const char** result);
+    TypeHint<std::uintptr_t, void*(CDECL_CONV*)(void*)> makeEvent;
+    TypeHint<std::uintptr_t, void*(CDECL_CONV*)(void*, const char* args, const char** result)> createEventFromString;
     PAD(WIN32_LINUX(24, 48))
 };
 
