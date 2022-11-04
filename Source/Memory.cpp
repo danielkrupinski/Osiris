@@ -12,6 +12,8 @@
 #if IS_WIN32()
 #include <Windows.h>
 #include <Psapi.h>
+
+#include <Platform/Windows/DynamicLibrarySection.h>
 #elif IS_LINUX()
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -33,11 +35,8 @@
 static std::span<const std::byte> getModuleInformation(const char* name) noexcept
 {
 #if IS_WIN32()
-    if (HMODULE handle = GetModuleHandleA(name)) {
-        if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
-            return { reinterpret_cast<const std::byte*>(moduleInfo.lpBaseOfDll), moduleInfo.SizeOfImage };
-    }
-    return {};
+    const windows_platform::DynamicLibrary dll{ windows_platform::DynamicLibraryWrapper{}, name };
+    return windows_platform::getCodeSection(dll.getView());
 #elif IS_LINUX()
     const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, name };
     return linux_platform::getCodeSection(so.getView());

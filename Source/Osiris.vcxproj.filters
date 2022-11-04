@@ -904,6 +904,9 @@
     <ClInclude Include="Utils\TypeHint.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibrarySection.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

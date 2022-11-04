@@ -271,6 +271,7 @@
     <ClInclude Include="Platform\PlatformSpecific.h" />
     <ClInclude Include="Platform\RetSpoofInvoker.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
+    <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h" />
     <ClInclude Include="Platform\Windows\RetSpoofInvoker.h" />
