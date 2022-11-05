@@ -907,6 +907,9 @@
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\PODs\SharedObjectTypeCache.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

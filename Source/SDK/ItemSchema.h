@@ -350,25 +350,13 @@ private:
     ItemSchema itemSchema;
 };
 
-namespace csgo::pod
-{
-    struct SharedObject;
-
-    struct SharedObjectTypeCache {
-        PAD(sizeof(std::uintptr_t))
-        csgo::pod::SharedObject** objects;
-        PAD(WIN32_LINUX(16, 24))
-        int objectCount;
-        PAD(WIN32_LINUX(4, 12))
-        int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
-    };
-}
-
+namespace csgo::pod { struct SharedObject; }
 class SharedObject : public VirtualCallableFromPOD<SharedObject, csgo::pod::SharedObject> {
 public:
     VIRTUAL_METHOD_V(int, getTypeID, 1, (), ())
 };
 
+namespace csgo::pod { struct SharedObjectTypeCache; }
 class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, csgo::pod::SharedObjectTypeCache> {
 public:
     VIRTUAL_METHOD_V(void, addObject, 1, (csgo::pod::SharedObject* object), (object))

@@ -3,6 +3,7 @@
 #include "Constants/ItemId.h"
 #include "ItemSchema.h"
 #include "PODs/EconItem.h"
+#include "PODs/SharedObjectTypeCache.h"
 #include "VirtualMethod.h"
 
 // TODO: remove this dependency
