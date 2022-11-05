@@ -107,11 +107,11 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
         const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
-        if (entity.getThis() == 0)
+        if (entity.getPOD() == nullptr)
             continue;
 
         if (entity.isPlayer()) {
-            if (entity.getThis() == localPlayer.get().getThis() || entity.getThis() == observerTarget.getThis())
+            if (entity.getPOD() == localPlayer.get().getPOD() || entity.getPOD() == observerTarget.getPOD())
                 continue;
 
             if (const auto player = playerByHandleWritable(entity.handle())) {
@@ -121,8 +121,8 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
             }
 
             if (!entity.getNetworkable().isDormant() && !entity.isAlive()) {
-                if (const auto obs = Entity::from(retSpoofGadgets.client, entity.getObserverTarget()); obs.getThis() != 0)
-                    observerData.emplace_back(entity, obs, obs.getThis() == localPlayer.get().getThis());
+                if (const auto obs = Entity::from(retSpoofGadgets.client, entity.getObserverTarget()); obs.getPOD() != nullptr)
+                    observerData.emplace_back(entity, obs, obs.getPOD() == localPlayer.get().getPOD());
             }
         } else {
             if (entity.getNetworkable().isDormant())
@@ -299,7 +299,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     exists = true;
     alive = localPlayer.get().isAlive();
 
-    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getThis() != 0) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr) {
         inReload = activeWeapon.isInReload();
         shooting = localPlayer.get().shotsFired() > 1;
         noScope = activeWeapon.isSniperRifle() && !localPlayer.get().isScoped();
@@ -312,7 +312,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     aimPunch = localPlayer.get().getEyePosition() + Vector::fromAngle(engine.getViewAngles() + localPlayer.get().getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer.get().getObserverMode();
-    if (const auto obs = Entity::from(retSpoofGadgets.client, localPlayer.get().getObserverTarget()); obs.getThis() != 0 && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
+    if (const auto obs = Entity::from(retSpoofGadgets.client, localPlayer.get().getObserverTarget()); obs.getPOD() != nullptr && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
         origin = obs.getAbsOrigin();
     else
         origin = localPlayer.get().getAbsOrigin();
@@ -373,8 +373,8 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         }
     }(projectile);
 
-    if (const auto thrower = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower())); thrower.getThis() != 0 && localPlayer) {
-        if (thrower.getThis() == localPlayer.get().getThis())
+    if (const auto thrower = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower())); thrower.getPOD() != nullptr && localPlayer) {
+        if (thrower.getPOD() == localPlayer.get().getPOD())
             thrownByLocalPlayer = true;
         else
             thrownByEnemy = localPlayer.get().isOtherEnemy(memory, thrower);
@@ -444,7 +444,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     immune = entity.gunGameImmunity();
     flashDuration = entity.flashDuration();
 
-    if (const auto weapon = Entity::from(retSpoofGadgets.client, entity.getActiveWeapon()); weapon.getThis() != 0) {
+    if (const auto weapon = Entity::from(retSpoofGadgets.client, entity.getActiveWeapon()); weapon.getPOD() != nullptr) {
         audible = audible || isEntityAudible(weapon.getNetworkable().index());
         if (const auto weaponInfo = weapon.getWeaponData())
             activeWeapon = interfaces.getLocalize().findAsUTF8(weaponInfo->name);

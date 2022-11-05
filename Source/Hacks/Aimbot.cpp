@@ -146,7 +146,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
         return;
 
     const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
-    if (activeWeapon.getThis() == 0 || !activeWeapon.clip())
+    if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip())
         return;
 
     if (localPlayer.get().shotsFired() > 0 && !activeWeapon.isFullAuto())
@@ -185,7 +185,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
             const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
-            if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()
+            if (entity.getPOD() == nullptr || entity.getPOD() == localPlayer.get().getPOD() || entity.getNetworkable().isDormant() || !entity.isAlive()
                 || !entity.isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity.gunGameImmunity())
                 continue;
 

@@ -18,7 +18,7 @@ void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, con
         return;
 
     const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
-    if (activeWeapon.getThis() == 0 || !activeWeapon.clip() || activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime())
+    if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip() || activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
     if (localPlayer.get().shotsFired() > 0 && !activeWeapon.isFullAuto())
@@ -78,7 +78,7 @@ void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, con
     lastTime = now;
 
     const auto entity = Entity::from(retSpoofGadgets.client, trace.entity);
-    if (entity.getThis() == 0 || !entity.isPlayer())
+    if (entity.getPOD() == nullptr || !entity.isPlayer())
         return;
 
     if (!cfg.friendlyFire && !localPlayer.get().isOtherEnemy(memory, entity))

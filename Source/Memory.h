@@ -142,7 +142,7 @@ public:
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
-    int(THISCALL_CONV* equipWearable)(std::uintptr_t wearable, std::uintptr_t player);
+    int(THISCALL_CONV* equipWearable)(csgo::pod::Entity* wearable, csgo::pod::Entity* player);
     int* predictionRandomSeed;
     MoveData* moveData;
     std::uintptr_t keyValuesFromString;

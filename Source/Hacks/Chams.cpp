@@ -178,11 +178,11 @@ void Chams::renderPlayer(const Engine& engine, const StudioRender& studioRender,
 
     const auto health = player.health();
 
-    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, player.getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(studioRender, memory, config.chams["Planting"].materials, health);
     } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(studioRender, memory, config.chams["Defusing"].materials, health);
-    } else if (player.getThis() == localPlayer.get().getThis()) {
+    } else if (player.getPOD() == localPlayer.get().getPOD()) {
         applyChams(studioRender, memory, config.chams["Local player"].materials, health);
     } else if (localPlayer.get().isOtherEnemy(memory, player)) {
         applyChams(studioRender, memory, config.chams["Enemies"].materials, health);
@@ -230,7 +230,7 @@ void Chams::applyChams(const StudioRender& studioRender, const Memory& memory, c
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (material.getThis() == 0)
+        if (material.getPOD() == nullptr)
             continue;
         
         float r, g, b;
@@ -268,7 +268,7 @@ void Chams::applyChams(const StudioRender& studioRender, const Memory& memory, c
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (material.getThis() == 0)
+        if (material.getPOD() == nullptr)
             continue;
 
         float r, g, b;

@@ -154,7 +154,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     }
 
     glove.initialized() = true;
-    memory.equipWearable(glove.getThis(), local.getThis());
+    memory.equipWearable(glove.getPOD(), local.getPOD());
 
     if (dataUpdated) {
         // FIXME: This leaks game memory
@@ -185,7 +185,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
             break;
 
         const auto weapon = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(weaponHandle));
-        if (weapon.getThis() == 0)
+        if (weapon.getPOD() == nullptr)
             continue;
 
         auto& definitionIndex = weapon.itemDefinitionIndex();
@@ -211,11 +211,11 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     }
 
     const auto viewModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(local.viewModel()));
-    if (viewModel.getThis() == 0)
+    if (viewModel.getPOD() == nullptr)
         return;
 
     const auto viewModelWeapon = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModel.weapon()));
-    if (viewModelWeapon.getThis() == 0)
+    if (viewModelWeapon.getPOD() == nullptr)
         return;
 
     const auto def = ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()).getItemDefinitionInterface(viewModelWeapon.itemDefinitionIndex());
@@ -225,7 +225,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     viewModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition::from(retSpoofGadgets.client, def).getPlayerDisplayModel());
 
     const auto worldModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(viewModelWeapon.weaponWorldModel()));
-    if (worldModel.getThis() == 0)
+    if (worldModel.getPOD() == nullptr)
         return;
 
     worldModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition::from(retSpoofGadgets.client, def).getWorldDisplayModel());
@@ -240,7 +240,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = memory.globalVars->maxClients + 1; i <= highestEntityIndex; ++i) {
         const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
-        if (entity.getThis() == 0 || !entity.isWeapon())
+        if (entity.getPOD() == nullptr || !entity.isWeapon())
             continue;
 
         const auto weapon = entity;
@@ -277,11 +277,11 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
 static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
     const auto local = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localHandle));
-    if (local.getThis() == 0)
+    if (local.getPOD() == nullptr)
         return;
 
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
-    if (localInventory.getThis() == 0)
+    if (localInventory.getPOD() == nullptr)
         return;
 
     applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), localInventory, local);
@@ -350,7 +350,7 @@ static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces&
     const auto idx = modelInfo.getModelIndex(model);
     localPlayer.get().setModelIndex(idx);
 
-    if (const auto ragdoll = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().ragdoll())); ragdoll.getThis() != 0)
+    if (const auto ragdoll = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().ragdoll())); ragdoll.getPOD() != nullptr)
         ragdoll.setModelIndex(idx);
 }
 
@@ -385,7 +385,7 @@ static std::vector<EquipRequest> equipRequests;
 static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
 {
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
-    if (localInventory.getThis() == 0)
+    if (localInventory.getPOD() == nullptr)
         return;
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
@@ -1045,7 +1045,7 @@ namespace inventory_changer
 void InventoryChanger::onSoUpdated(const SharedObject& object) noexcept
 {
     if (object.getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
-        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(object.getThis() + WIN32_LINUX(0x10, 0x1C));
+        WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object.getPOD()) + WIN32_LINUX(0x10, 0x1C));
         if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
             ++it->counter;
             weaponID = WeaponId::None;
@@ -1070,7 +1070,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         return;
 
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
-    if (localInventory.getThis() == 0)
+    if (localInventory.getPOD() == nullptr)
         return;
 
     if (localPlayer)
@@ -1143,7 +1143,7 @@ void InventoryChanger::updateStatTrak(const Engine& engine, const GameEvent& eve
         return;
 
     const auto weapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
-    if (weapon.getThis() == 0)
+    if (weapon.getPOD() == nullptr)
         return;
 
     const auto optionalItem = backend.itemFromID(ItemId{ weapon.itemID() });
@@ -1387,7 +1387,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
         return;
 
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
-    if (localInventory.getThis() == 0)
+    if (localInventory.getPOD() == nullptr)
         return;
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {

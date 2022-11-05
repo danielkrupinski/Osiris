@@ -55,14 +55,15 @@ public:
         return invoker.invokeThiscall<ReturnType, Args...>(thisptr, (*reinterpret_cast<std::uintptr_t**>(thisptr))[Idx], args...);
     }
 
-    [[nodiscard]] std::uintptr_t getThis() const noexcept
-    {
-        return thisptr;
-    }
-
     [[nodiscard]] RetSpoofInvoker getInvoker() const noexcept
     {
         return invoker;
+    }
+
+protected:
+    [[nodiscard]] std::uintptr_t getThis() const noexcept
+    {
+        return thisptr;
     }
 
 private:

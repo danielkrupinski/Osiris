@@ -66,7 +66,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
         const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
-        if (entity.getThis() == 0 || entity.getNetworkable().isDormant())
+        if (entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
         switch (entity.getNetworkable().getClientClass()->classId) {
@@ -96,7 +96,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 
         const auto entity = Entity::from(retSpoofGadgets.client, glowobject.entity);
 
-        if (glowobject.isUnused() || entity.getThis() == 0 || entity.getNetworkable().isDormant())
+        if (glowobject.isUnused() || entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
         auto applyGlow = [&glowobject, &memory](const GlowItem& glow, int health = 0) noexcept
@@ -131,11 +131,11 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::CSPlayer:
             if (!entity.isAlive())
                 break;
-            if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, entity.getActiveWeapon()); activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
+            if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, entity.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
                 applyPlayerGlow("Planting", entity);
             else if (entity.isDefusing())
                 applyPlayerGlow("Defusing", entity);
-            else if (entity.getThis() == localPlayer.get().getThis())
+            else if (entity.getPOD() == localPlayer.get().getPOD())
                 applyGlow(glow["Local Player"], entity.health());
             else if (entity.isOtherEnemy(memory, localPlayer.get()))
                 applyPlayerGlow("Enemies", entity);
