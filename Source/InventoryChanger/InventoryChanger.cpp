@@ -1392,8 +1392,10 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
 
     if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
         if (const auto soc = memory.getSOCData(view)) {
-            soc->inventory = localInventory.getHighestIDs(memory).second + 1;
-            localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
+            if (const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory)) {
+                soc->inventory = baseTypeCache->getHighestIDs().second + 1;
+                localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
+            }
         }
     }
 }

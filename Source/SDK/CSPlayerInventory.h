@@ -44,29 +44,6 @@ public:
         return soc.findBaseTypeCache(1);
     }
 
-    std::pair<csgo::ItemId, std::uint32_t> getHighestIDs(const Memory& memory) const noexcept
-    {
-        const auto soc = getSOC(memory);
-        if (soc.getThis() == 0)
-            return {};
-
-        const auto baseTypeCache = soc.findBaseTypeCache(1);
-        if (!baseTypeCache)
-            return {};
-
-        csgo::ItemId maxItemID = 0;
-        std::uint32_t maxInventoryID = 0;
-        for (int i = 0; i < baseTypeCache->objectCount; ++i) {
-            const auto item = baseTypeCache->objects[i];
-            if (const auto isDefaultItem = (((csgo::pod::EconItem*)item)->itemID & 0xF000000000000000) != 0)
-                continue;
-            maxItemID = (std::max)(maxItemID, ((csgo::pod::EconItem*)item)->itemID);
-            maxInventoryID = (std::max)(maxInventoryID, ((csgo::pod::EconItem*)item)->inventory);
-        }
-
-        return std::make_pair(maxItemID, maxInventoryID);
-    }
-
     auto getAccountID() const noexcept
     {
         return *reinterpret_cast<std::uint32_t*>(getThis() + WIN32_LINUX(0x8, 0x10));

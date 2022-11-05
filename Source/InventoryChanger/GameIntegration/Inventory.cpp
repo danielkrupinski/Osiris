@@ -164,10 +164,10 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
 
     const auto econItemPOD = memory.createEconItemSharedObject();
     EconItem econItem{ retSpoofGadgets.client, econItemPOD, memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
-    econItemPOD->itemID = localInventory.getHighestIDs(memory).first + 1;
+    econItemPOD->itemID = baseTypeCache->getHighestIDs().first + 1;
     econItemPOD->originalID = 0;
     econItemPOD->accountID = localInventory.getAccountID();
-    econItemPOD->inventory = asUnacknowledged ? 0 : localInventory.getHighestIDs(memory).second + 1;
+    econItemPOD->inventory = asUnacknowledged ? 0 : baseTypeCache->getHighestIDs().second + 1;
 
     const auto& item = inventoryItem.gameItem();
     econItemPOD->rarity = static_cast<std::uint16_t>(item.getRarity());
@@ -271,8 +271,12 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (localInventory.getThis() == 0)
         return itemID;
 
+    const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory);
+    if (!baseTypeCache)
+        return itemID;
+
     localInventory.soDestroyed(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
-    const auto newItemID = localInventory.getHighestIDs(memory).first + 1;
+    const auto newItemID = baseTypeCache->getHighestIDs().first + 1;
     econItem->itemID = newItemID;
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 
