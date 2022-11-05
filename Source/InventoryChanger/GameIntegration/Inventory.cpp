@@ -158,7 +158,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     if (localInventory.getThis() == 0)
         return {};
 
-    const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory);
+    const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache);
     if (!baseTypeCache)
         return {};
 
@@ -271,7 +271,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (localInventory.getThis() == 0)
         return itemID;
 
-    const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory);
+    const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache);
     if (!baseTypeCache)
         return itemID;
 
@@ -369,7 +369,7 @@ void Inventory::deleteItem(ItemId itemID)
 
     localInventory.soDestroyed(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 
-    if (const auto baseTypeCache = localInventory.getItemBaseTypeCache(memory))
+    if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache))
         SharedObjectTypeCache::from(retSpoofGadgets.client, baseTypeCache).removeObject((csgo::pod::SharedObject*)econItem.getPOD());
 
     econItem.destructor();

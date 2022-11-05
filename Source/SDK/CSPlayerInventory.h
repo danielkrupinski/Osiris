@@ -6,9 +6,6 @@
 #include "PODs/SharedObjectTypeCache.h"
 #include "VirtualMethod.h"
 
-// TODO: remove this dependency
-#include "../Memory.h"
-
 struct SOID {
     std::uint64_t id;
     std::uint32_t type;
@@ -18,30 +15,23 @@ struct SOID {
 class EconItemView;
 
 namespace csgo::pod { struct SharedObject; }
+namespace csgo::pod { struct ClientSharedObjectCache; }
 namespace csgo { enum class Team; }
 
 class CSPlayerInventory : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
     using VirtualCallable::getThis;
+    using VirtualCallable::getInvoker;
 
     VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD_V(void, removeItem, 15, (csgo::ItemId itemID), (itemID))
 
-    auto getSOC(const Memory& memory) const noexcept
+    auto getSOC() const noexcept
     {
-        return ClientSharedObjectCache{ VirtualCallable{ getInvoker(), *reinterpret_cast<std::uintptr_t*>(getThis() + WIN32_LINUX(0xB4, 0xF8)) }, memory.createBaseTypeCache };
-    }
-
-    csgo::pod::SharedObjectTypeCache* getItemBaseTypeCache(const Memory& memory) const noexcept
-    {
-        const auto soc = getSOC(memory);
-        if (soc.getThis() == 0)
-            return nullptr;
-
-        return soc.findBaseTypeCache(1);
+        return *reinterpret_cast<csgo::pod::ClientSharedObjectCache**>(getThis() + WIN32_LINUX(0xB4, 0xF8));
     }
 
     auto getAccountID() const noexcept
@@ -54,3 +44,10 @@ public:
         return *reinterpret_cast<SOID*>(getThis() + WIN32_LINUX(0x8, 0x10));
     }
 };
+
+inline csgo::pod::SharedObjectTypeCache* getItemBaseTypeCache(const CSPlayerInventory& inventory, std::uintptr_t createBaseTypeCacheFn) noexcept
+{
+    if (const auto soc = ClientSharedObjectCache{ VirtualCallable{ inventory.getInvoker(), std::uintptr_t(inventory.getSOC()) }, createBaseTypeCacheFn }; soc.getThis() != 0)
+        return soc.findBaseTypeCache(1);
+    return nullptr;
+}
