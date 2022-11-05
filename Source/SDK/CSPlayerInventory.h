@@ -18,12 +18,9 @@ namespace csgo::pod { struct SharedObject; }
 namespace csgo::pod { struct ClientSharedObjectCache; }
 namespace csgo { enum class Team; }
 
-class CSPlayerInventory : private VirtualCallable {
+namespace csgo::pod { struct CSPlayerInventory; }
+class CSPlayerInventory : public VirtualCallableFromPOD<CSPlayerInventory, csgo::pod::CSPlayerInventory> {
 public:
-    using VirtualCallable::VirtualCallable;
-    using VirtualCallable::getThis;
-    using VirtualCallable::getInvoker;
-
     VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, csgo::pod::SharedObject* object, int event), (owner, object, event))

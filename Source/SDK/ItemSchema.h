@@ -382,10 +382,11 @@ private:
 };
 
 namespace csgo::pod { struct InventoryManager; }
+namespace csgo::pod { struct CSPlayerInventory; }
 
 class InventoryManager : public VirtualCallableFromPOD<InventoryManager, csgo::pod::InventoryManager> {
 public:
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (csgo::Team team, int slot, csgo::ItemId itemID, bool swap = false), (team, slot, itemID, swap))
-    VIRTUAL_METHOD_V(std::uintptr_t, getLocalInventory, 23, (), ())
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(csgo::pod::CSPlayerInventory*, getLocalInventory, 23, (), ())
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (csgo::pod::CSPlayerInventory* inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
 };

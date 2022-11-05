@@ -280,7 +280,7 @@ static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, cons
     if (local.getThis() == 0)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getThis() == 0)
         return;
 
@@ -384,7 +384,7 @@ static std::vector<EquipRequest> equipRequests;
 
 static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
 {
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getThis() == 0)
         return;
 
@@ -1069,7 +1069,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     if (stage != csgo::FrameStage::RENDER_START)
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getThis() == 0)
         return;
 
@@ -1386,7 +1386,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (!backend.itemFromID(ItemId{ itemID }).has_value())
         return;
 
-    const CSPlayerInventory localInventory{ retSpoofGadgets.client, memory.inventoryManager.getLocalInventory() };
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getThis() == 0)
         return;
 
