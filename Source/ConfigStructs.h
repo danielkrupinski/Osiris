@@ -105,6 +105,7 @@ struct HealthBar : ColorToggle {
         HealthBased
     };
 
+    bool healthNumber = false;
     int type = Type::Gradient;
 };
 
