@@ -32,6 +32,8 @@
 
 #include "SafeAddress.h"
 
+#include "Utils/PatternFinder.h"
+
 static std::span<const std::byte> getModuleInformation(const char* name) noexcept
 {
 #if IS_WIN32()
@@ -43,49 +45,14 @@ static std::span<const std::byte> getModuleInformation(const char* name) noexcep
 #endif
 }
 
-[[nodiscard]] static auto generateBadCharTable(std::string_view pattern) noexcept
-{
-    assert(!pattern.empty());
-
-    std::array<std::size_t, (std::numeric_limits<std::uint8_t>::max)() + 1> table;
-
-    auto lastWildcard = pattern.rfind('?');
-    if (lastWildcard == std::string_view::npos)
-        lastWildcard = 0;
-
-    const auto defaultShift = (std::max)(std::size_t(1), pattern.length() - 1 - lastWildcard);
-    table.fill(defaultShift);
-
-    for (auto i = lastWildcard; i < pattern.length() - 1; ++i)
-        table[static_cast<std::uint8_t>(pattern[i])] = pattern.length() - 1 - i;
-
-    return table;
-}
-
 template <bool ReportNotFound = true>
 static std::uintptr_t findPattern(std::span<const std::byte> bytes, std::string_view pattern) noexcept
 {
     static auto id = 0;
     ++id;
 
-    if (!bytes.empty()) {
-        const auto lastIdx = pattern.length() - 1;
-        const auto badCharTable = generateBadCharTable(pattern);
-
-        auto start = reinterpret_cast<const char*>(bytes.data());
-        const auto end = start + bytes.size() - pattern.length();
-
-        while (start <= end) {
-            int i = lastIdx;
-            while (i >= 0 && (pattern[i] == '?' || start[i] == pattern[i]))
-                --i;
-
-            if (i < 0)
-                return reinterpret_cast<std::uintptr_t>(start);
-
-            start += badCharTable[static_cast<std::uint8_t>(start[lastIdx])];
-        }
-    }
+    if (const auto found = PatternFinder{ bytes }(pattern))
+        return std::uintptr_t(found);
 
     assert(false);
 #if IS_WIN32()
