@@ -166,6 +166,7 @@
     <ClCompile Include="SDK\KeyValues.cpp" />
     <ClCompile Include="SDK\Utils.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Utils\PatternFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h" />
@@ -367,6 +368,7 @@
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
+    <ClInclude Include="Utils\PatternFinder.h" />
     <ClInclude Include="Utils\TypeHint.h" />
   </ItemGroup>
   <ItemGroup>

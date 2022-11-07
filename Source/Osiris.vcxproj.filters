@@ -308,6 +308,9 @@
     <ClCompile Include="RetSpoofGadgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PatternFinder.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -909,6 +912,9 @@
     </ClInclude>
     <ClInclude Include="SDK\PODs\SharedObjectTypeCache.h">
       <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PatternFinder.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
