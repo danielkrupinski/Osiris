@@ -2,8 +2,11 @@
 #include <array>
 #include <cassert>
 #include <cstring>
+#include <iomanip>
 #include <limits>
 #include <span>
+#include <sstream>
+#include <string>
 #include <string_view>
 #include <utility>
 
@@ -45,19 +48,36 @@ static std::span<const std::byte> getModuleInformation(const char* name) noexcep
 #endif
 }
 
+[[nodiscard]] std::string patternToString(std::string_view pattern)
+{
+    std::ostringstream os;
+
+    bool printedFirst = false;
+    for (auto byte : pattern) {
+        if (printedFirst)
+            os << ' ';
+
+        if (byte != '?')
+            os << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<unsigned>(static_cast<unsigned char>(byte));
+        else
+            os << '?';
+
+        printedFirst = true;
+    }
+
+    return os.str();
+}
+
 template <bool ReportNotFound = true>
 static std::uintptr_t findPattern(std::span<const std::byte> bytes, std::string_view pattern) noexcept
 {
-    static auto id = 0;
-    ++id;
-
     if (const auto found = PatternFinder{ bytes }(pattern))
         return std::uintptr_t(found);
 
     assert(false);
 #if IS_WIN32()
     if constexpr (ReportNotFound)
-        MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+        MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern)).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return 0;
 }
