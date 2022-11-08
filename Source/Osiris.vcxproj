@@ -125,6 +125,10 @@
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="Helpers\PatternFinder.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)Helpers/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)Helpers/</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="Hooks\MinHook.cpp" />
     <ClCompile Include="Hooks\VmtHook.cpp" />
     <ClCompile Include="Hooks\VmtSwap.cpp" />
@@ -207,6 +211,7 @@
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="Helpers\PatternFinder.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />

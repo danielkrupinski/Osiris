@@ -75,6 +75,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{861c156a-293c-443e-aaab-2ca4847b6143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{91bf4578-bff7-4d46-965e-3991ce345331}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Utils\PatternFinder.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\PatternFinder.cpp">
+      <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -915,6 +921,9 @@
     </ClInclude>
     <ClInclude Include="Utils\PatternFinder.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\PatternFinder.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
