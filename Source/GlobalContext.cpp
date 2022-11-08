@@ -464,10 +464,10 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
         clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->client);
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets.engine);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
 
         interfaces.emplace(retSpoofGadgets->client);
-        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClientAddress(), retSpoofGadgets);
+        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClientAddress(), *retSpoofGadgets);
 
         Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
