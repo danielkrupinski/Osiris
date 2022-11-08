@@ -33,8 +33,8 @@ void initItemCustomizationNotification(const Interfaces& interfaces, const Memor
     using namespace std::string_view_literals;
     std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
-    if (const auto event = retSpoofGadgets.client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, args.c_str(), &dummy))
-        UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(event);
+    if (const auto event = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, args.c_str(), &dummy))
+        UIEngine{ retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(event);
 }
 
 void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
@@ -43,7 +43,7 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
     if (!econItem)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
@@ -53,15 +53,15 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
 
 void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, patchID);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -72,7 +72,7 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
     if (!econItem)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
@@ -90,7 +90,7 @@ void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
 
 void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, EconItem& econItem) noexcept
 {
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
 
     const auto paintKit = gameItemStorage.getPaintKit(inventoryItem.gameItem()).id;
     attributeSetter.setPaintKit(econItem, static_cast<float>(paintKit));
@@ -154,7 +154,7 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
 ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged)
 {
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return {};
 
@@ -163,7 +163,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         return {};
 
     const auto econItemPOD = memory.createEconItemSharedObject();
-    EconItem econItem{ retSpoofGadgets.client, econItemPOD, memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, econItemPOD, memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     econItemPOD->itemID = baseTypeCache->getHighestIDs().first + 1;
     econItemPOD->originalID = 0;
     econItemPOD->accountID = localInventory.getAccountID();
@@ -177,7 +177,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     econItemPOD->weaponId = item.getWeaponID();
     econItemPOD->flags = computeItemFlags(inventoryItem);
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
 
     if (const auto tradableAfterDate = inventoryItem.getProperties().common.tradableAfterDate; tradableAfterDate != 0) {
         attributeSetter.setTradableAfterDate(econItem, tradableAfterDate);
@@ -247,7 +247,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         }
     }
 
-    SharedObjectTypeCache::from(retSpoofGadgets.client, baseTypeCache).addObject((csgo::pod::SharedObject*)econItemPOD);
+    SharedObjectTypeCache::from(retSpoofGadgets->client, baseTypeCache).addObject((csgo::pod::SharedObject*)econItemPOD);
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItemPOD, 4);
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {
@@ -255,7 +255,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "updated", "0");
     }
 
-    if (const auto view = EconItemView::from(retSpoofGadgets.client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     return ItemId{ econItemPOD->itemID };
@@ -267,7 +267,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (!econItem)
         return itemID;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return itemID;
 
@@ -280,7 +280,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     econItem->itemID = newItemID;
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 
-    if (const auto view = EconItemView::from(retSpoofGadgets.client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {
@@ -293,15 +293,15 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
 
 void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, static_cast<int>(stickerID));
     attributeSetter.setStickerWear(econItem, slot, 0.0f);
 
@@ -311,15 +311,15 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
 
 void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, slot, 0);
     attributeSetter.setStickerWear(econItem, slot, 0.0f);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -328,15 +328,15 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 
 void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWear)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerWear(econItem, slot, newWear);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -359,33 +359,33 @@ void Inventory::removeNameTag(ItemId itemID)
 
 void Inventory::deleteItem(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
     localInventory.soDestroyed(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 
     if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache))
-        SharedObjectTypeCache::from(retSpoofGadgets.client, baseTypeCache).removeObject((csgo::pod::SharedObject*)econItem.getPOD());
+        SharedObjectTypeCache::from(retSpoofGadgets->client, baseTypeCache).removeObject((csgo::pod::SharedObject*)econItem.getPOD());
 
     econItem.destructor();
 }
 
 void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStatTrak(econItem, newStatTrakValue);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -409,15 +409,15 @@ void Inventory::removePatch(ItemId itemID, std::uint8_t slot)
 
 void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setDropsAwarded(econItem, dropsAwarded);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
     initItemCustomizationNotification(interfaces, memory, "ticket_activated", itemID);
@@ -425,15 +425,15 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
 
 void Inventory::unsealGraffiti(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0 || econItem.getPOD()->weaponId != WeaponId::SealedGraffiti)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setSpraysRemaining(econItem, 50);
     econItem.getPOD()->weaponId = WeaponId::Graffiti;
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -442,15 +442,15 @@ void Inventory::unsealGraffiti(ItemId itemID)
 
 void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setStickerID(econItem, 0, graffitiID);
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
@@ -477,8 +477,8 @@ void Inventory::pickEmUpdated()
 {
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_MatchList_PredictionUploaded")); idx != -1) {
         const char* dummy;
-        if (const auto eventPtr = retSpoofGadgets.client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, "", &dummy))
-            UIEngine{ retSpoofGadgets.client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
+        if (const auto eventPtr = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, "", &dummy))
+            UIEngine{ retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
     }
 }
 
@@ -503,7 +503,7 @@ void Inventory::xRayItemClaimed(ItemId itemID)
     if (!econItem)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
@@ -521,15 +521,15 @@ void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
 
 void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setModificationDate(econItem, modificationDate);
     attributeSetter.setItemsCount(econItem, itemCount);
 
@@ -538,15 +538,15 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
 
 void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setCasketItemIdLow(econItem, static_cast<std::uint32_t>(static_cast<csgo::ItemId>(storageUnitItemID) & 0xFFFFFFFF));
     attributeSetter.setCasketItemIdHigh(econItem, static_cast<std::uint32_t>((static_cast<csgo::ItemId>(storageUnitItemID) >> 32) & 0xFFFFFFFF));
 
@@ -560,15 +560,15 @@ void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
 
 void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.removeCasketItemId(econItem);
 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
@@ -577,15 +577,15 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
 
 void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate)
 {
-    EconItem econItem{ retSpoofGadgets.client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), memory.setDynamicAttributeValueFn, memory.removeDynamicAttribute };
     if (econItem.getThis() == 0)
         return;
 
-    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets.client, memory.inventoryManager.getLocalInventory());
+    const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets.client, memory.itemSystem().getItemSchema()) };
+    EconItemAttributeSetter attributeSetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) };
     attributeSetter.setTradableAfterDate(econItem, tradableAfterDate);
 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);

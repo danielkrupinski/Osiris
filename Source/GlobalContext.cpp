@@ -3,9 +3,13 @@
 #if IS_WIN32()
 #include <imgui/imgui_impl_dx9.h>
 #include <imgui/imgui_impl_win32.h>
+
+#include "Platform/Windows/DynamicLibrarySection.h"
 #else
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
+
+#include "Platform/Linux/DynamicLibrarySection.h"
 #endif
 
 #include "EventListener.h"
@@ -45,6 +49,19 @@
 #include "SDK/ViewSetup.h"
 
 #include "Interfaces.h"
+
+GlobalContext::GlobalContext()
+{
+#if IS_WIN32()
+    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+    const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+#elif IS_LINUX()
+    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+    const linux_platform::SharedObject engineDLL{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+#endif
+
+    retSpoofGadgets.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
+}
 
 bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 {
@@ -136,7 +153,7 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = visuals->viewModelFov();
     if (localPlayer) {
-        if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
@@ -362,7 +379,7 @@ void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, c
 
 void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event)
 {
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(SharedObject::from(retSpoofGadgets.client, object));
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
@@ -385,12 +402,12 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         state = GlobalContext::State::Initializing;
 
         const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets.client } }, retSpoofGadgets.client);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets->client } }, retSpoofGadgets->client);
         const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets.client } }, retSpoofGadgets.engine);
-        interfaces.emplace(retSpoofGadgets.client);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
+        interfaces.emplace(retSpoofGadgets->client);
 
-        memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
+        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->getClientAddress(), *retSpoofGadgets);
 
         Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
@@ -445,12 +462,12 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets.client } }, retSpoofGadgets.client);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->client);
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
-        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets.client } }, retSpoofGadgets.engine);
+        engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets.engine);
 
-        interfaces.emplace(retSpoofGadgets.client);
-        memory.emplace(Memory{ clientInterfaces->getClientAddress(), retSpoofGadgets });
+        interfaces.emplace(retSpoofGadgets->client);
+        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClientAddress(), retSpoofGadgets);
 
         Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(*memory, *clientInterfaces, *engineInterfaces, *interfaces);
@@ -489,10 +506,10 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
 {
-    const auto viewModel = Entity::from(retSpoofGadgets.client, static_cast<csgo::pod::Entity*>(outStruct));
+    const auto viewModel = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
 
     if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
-        if (const auto weapon = Entity::from(retSpoofGadgets.client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
+        if (const auto weapon = Entity::from(retSpoofGadgets->client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
             if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
@@ -505,7 +522,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 
 void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
 {
-    const auto event = GameEvent::from(retSpoofGadgets.client, eventPointer);
+    const auto event = GameEvent::from(retSpoofGadgets->client, eventPointer);
 
     switch (fnv::hashRuntime(event.getName())) {
     case fnv::hash("round_start"):

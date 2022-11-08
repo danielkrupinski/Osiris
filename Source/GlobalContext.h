@@ -31,6 +31,8 @@ namespace csgo
 
 class GlobalContext {
 public:
+    GlobalContext();
+
     bool createMoveHook(float inputSampleTime, UserCmd* cmd);
     void doPostScreenEffectsHook(void* param);
     float getViewModelFovHook();

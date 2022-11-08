@@ -17,6 +17,7 @@
 
 #include "SafeAddress.h"
 #include "RetSpoofGadgets.h"
+#include "Helpers/PatternFinder.h"
 
 class ClientMode;
 class ClientSharedObjectCache;
@@ -50,41 +51,38 @@ namespace csgo::pod
     struct ItemSystem;
 }
 
-template <bool ReportNotFound = true>
-std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept;
-
 struct InventoryChangerReturnAddresses {
-    InventoryChangerReturnAddresses()
+    explicit InventoryChangerReturnAddresses(const helpers::PatternFinder& clientPatternFinder)
 #if IS_WIN32()
-    : setStickerToolSlotGetArgAsNumber{ SafeAddress{ findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") }.add(2).get() },
-      wearItemStickerGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF") }.add(-80).get() },
-      setNameToolStringGetArgAsString{ findPattern(CLIENT_DLL, "\x8B\xF8\xC6\x45\x08?\x33\xC0") },
-      clearCustomNameGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21") }.add(3).get() },
-      deleteItemGetArgAsString{ findPattern(CLIENT_DLL, "\x85\xC0\x74\x22\x51") },
-      setStatTrakSwapToolItemsGetArgAsString{ findPattern(CLIENT_DLL, "\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37") },
-      acknowledgeNewItemByItemIDGetArgAsString{ findPattern(CLIENT_DLL, "\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9") },
-      setItemAttributeValueAsyncGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57") }.add(-22).get() },
-      setMyPredictionUsingItemIdGetNumArgs{ findPattern(CLIENT_DLL, "\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01") },
-      getMyPredictionTeamIDGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8") }.add(-20).get() },
-      setInventorySortAndFiltersGetArgAsString{ findPattern(CLIENT_DLL, "\x80\x7D\xFF?\x8B\xF8\x74\x27") },
-      getInventoryCountSetResultInt{ SafeAddress{ findPattern(CLIENT_DLL, "\xB9????\xE8????\xB9????\xE8????\xC2\x08") }.add(-10).get() },
-      performItemCasketTransactionGetArgAsString{ findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24") },
-      useToolGetArgAsString{ findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37") }
+    : setStickerToolSlotGetArgAsNumber{ clientPatternFinder("\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24").add(2).get() },
+      wearItemStickerGetArgAsString{ clientPatternFinder("\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF").add(-80).get() },
+      setNameToolStringGetArgAsString{ clientPatternFinder("\x8B\xF8\xC6\x45\x08?\x33\xC0").get() },
+      clearCustomNameGetArgAsString{ clientPatternFinder("\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21").add(3).get() },
+      deleteItemGetArgAsString{ clientPatternFinder("\x85\xC0\x74\x22\x51").get() },
+      setStatTrakSwapToolItemsGetArgAsString{ clientPatternFinder("\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37").get() },
+      acknowledgeNewItemByItemIDGetArgAsString{ clientPatternFinder("\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9").get() },
+      setItemAttributeValueAsyncGetArgAsString{ clientPatternFinder("\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57").add(-22).get() },
+      setMyPredictionUsingItemIdGetNumArgs{ clientPatternFinder("\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01").get() },
+      getMyPredictionTeamIDGetArgAsString{ clientPatternFinder("\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8").add(-20).get() },
+      setInventorySortAndFiltersGetArgAsString{ clientPatternFinder("\x80\x7D\xFF?\x8B\xF8\x74\x27").get() },
+      getInventoryCountSetResultInt{ clientPatternFinder("\xB9????\xE8????\xB9????\xE8????\xC2\x08").add(-10).get() },
+      performItemCasketTransactionGetArgAsString{ clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24").get() },
+      useToolGetArgAsString{ clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37").get() }
 #else
-    : setStickerToolSlotGetArgAsNumber{ findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF0\x45\x85\xF6\x78\x32") },
-      wearItemStickerGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE") }.add(-57).get() },
-      setNameToolStringGetArgAsString{ findPattern(CLIENT_DLL, "\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4") },
-      clearCustomNameGetArgAsString{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4") },
-      deleteItemGetArgAsString{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDE\x48\x89\xC7\xE8????\x48\x89\xC3\xE8????\x48\x89\xDE") },
-      setStatTrakSwapToolItemsGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0") }.add(-86).get() },
-      acknowledgeNewItemByItemIDGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B") }.add(-5).get() },
-      setItemAttributeValueAsyncGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\xFF\x50\x38\x48\x85\xC0\x74\xC2") }.add(3).get() },
-      setMyPredictionUsingItemIdGetNumArgs{ findPattern(CLIENT_DLL, "\x83\xF8\x01\x89\x85") },
-      getMyPredictionTeamIDGetArgAsString{ SafeAddress{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF") }.add(-20).get() },
-      setInventorySortAndFiltersGetArgAsString{ findPattern(CLIENT_DLL, "\x8B\x4D\xCC\x49\x89\xC5\x84\xC9") },
-      getInventoryCountSetResultInt{ SafeAddress{ findPattern(CLIENT_DLL, "\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02") }.add(19).get() },
-      performItemCasketTransactionGetArgAsString{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x0F\x84????\x48\x89\xC7\xE8????\x48\x89\xC7\xE8????\x48\x85\xC0\x49\x89\xC6\x0F\x84????\xF2\x0F\x10\x85") },
-      useToolGetArgAsString{ findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B") }
+    : setStickerToolSlotGetArgAsNumber{ clientPatternFinder("\xF2\x44\x0F\x2C\xF0\x45\x85\xF6\x78\x32").get() },
+      wearItemStickerGetArgAsString{ clientPatternFinder("\xF2\x44\x0F\x2C\xF8\x45\x39\xFE").add(-57).get() },
+      setNameToolStringGetArgAsString{ clientPatternFinder("\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4").get() },
+      clearCustomNameGetArgAsString{ clientPatternFinder("\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4").get() },
+      deleteItemGetArgAsString{ clientPatternFinder("\x48\x85\xC0\x74\xDE\x48\x89\xC7\xE8????\x48\x89\xC3\xE8????\x48\x89\xDE").get() },
+      setStatTrakSwapToolItemsGetArgAsString{ clientPatternFinder("\x74\x84\x4C\x89\xEE\x4C\x89\xF7\xE8????\x48\x85\xC0").add(-86).get() },
+      acknowledgeNewItemByItemIDGetArgAsString{ clientPatternFinder("\x48\x89\xC7\xE8????\x4C\x89\xEF\x48\x89\xC6\xE8????\x48\x8B\x0B").add(-5).get() },
+      setItemAttributeValueAsyncGetArgAsString{ clientPatternFinder("\xFF\x50\x38\x48\x85\xC0\x74\xC2").add(3).get() },
+      setMyPredictionUsingItemIdGetNumArgs{ clientPatternFinder("\x83\xF8\x01\x89\x85").get() },
+      getMyPredictionTeamIDGetArgAsString{ clientPatternFinder("\x48\x85\xC0\x74\xC5\x48\x89\xC7\x41\xBF").add(-20).get() },
+      setInventorySortAndFiltersGetArgAsString{ clientPatternFinder("\x8B\x4D\xCC\x49\x89\xC5\x84\xC9").get() },
+      getInventoryCountSetResultInt{ clientPatternFinder("\x48\x8B\x08\x48\x89\xDE\x48\x89\xC7\x41\x8B\x96\x38\x02").add(19).get() },
+      performItemCasketTransactionGetArgAsString{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x48\x89\xC7\xE8????\x48\x89\xC7\xE8????\x48\x85\xC0\x49\x89\xC6\x0F\x84????\xF2\x0F\x10\x85").get() },
+      useToolGetArgAsString{ clientPatternFinder("\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B").get() }
 #endif
     {
     }
@@ -107,7 +105,7 @@ struct InventoryChangerReturnAddresses {
 
 class Memory {
 public:
-    Memory(std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32()
     std::uintptr_t present;
@@ -194,12 +192,12 @@ public:
 
     [[nodiscard]] ItemSystem itemSystem() const noexcept
     {
-        return ItemSystem::from(retSpoofGadgets.client, itemSystemFn());
+        return ItemSystem::from(retSpoofGadgets->client, itemSystemFn());
     }
 
     [[nodiscard]] MoveHelper moveHelper() const noexcept
     {
-        return MoveHelper::from(retSpoofGadgets.client, moveHelperPtr);
+        return MoveHelper::from(retSpoofGadgets->client, moveHelperPtr);
     }
 
 #if IS_WIN32()

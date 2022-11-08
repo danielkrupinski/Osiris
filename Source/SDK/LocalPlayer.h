@@ -21,7 +21,7 @@ public:
     [[nodiscard]] auto get() noexcept
     {
         assert(localEntity && *localEntity);
-        return Entity::from(retSpoofGadgets.client, *localEntity);
+        return Entity::from(retSpoofGadgets->client, *localEntity);
     }
 
 private:

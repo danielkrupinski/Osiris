@@ -178,7 +178,7 @@ static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector
 {
     if (Misc::shouldDisableModelOcclusion() && RETURN_ADDRESS() == memory->insertIntoTree) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
-            if (const auto ent = VirtualCallable{ retSpoofGadgets.client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>(); ent && Entity::from(retSpoofGadgets.client, ent).isPlayer()) {
+            if (const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>(); ent && Entity::from(retSpoofGadgets->client, ent).isPlayer()) {
                 constexpr float maxCoord = 16384.0f;
                 constexpr float minCoord = -maxCoord;
                 constexpr Vector min{ minCoord, minCoord, minCoord };

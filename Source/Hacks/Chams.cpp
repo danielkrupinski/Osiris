@@ -64,7 +64,7 @@ static constexpr auto dispatchMaterial_(int id) noexcept
 
 static auto dispatchMaterial(int id) noexcept
 {
-    return Material::from(retSpoofGadgets.client, dispatchMaterial_(id));
+    return Material::from(retSpoofGadgets->client, dispatchMaterial_(id));
 }
 
 static void initializeMaterials(const MaterialSystem& materialSystem, const Memory& memory) noexcept
@@ -163,7 +163,7 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons(interfaces.getStudioRender(), memory, config);
     } else {
-        const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
+        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
         if (entity.getPOD() != nullptr && !entity.getNetworkable().isDormant() && entity.isPlayer())
             renderPlayer(engine, interfaces.getStudioRender(), memory, config, entity);
     }
@@ -178,7 +178,7 @@ void Chams::renderPlayer(const Engine& engine, const StudioRender& studioRender,
 
     const auto health = player.health();
 
-    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(studioRender, memory, config.chams["Planting"].materials, health);
     } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(studioRender, memory, config.chams["Defusing"].materials, health);
@@ -245,14 +245,14 @@ void Chams::applyChams(const StudioRender& studioRender, const Memory& memory, c
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 
@@ -283,14 +283,14 @@ void Chams::applyChams(const StudioRender& studioRender, const Memory& memory, c
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 

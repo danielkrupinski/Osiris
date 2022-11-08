@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <span>
 
+#include <Psapi.h>
 #include <Windows.h>
 
 #include "DynamicLibraryView.h"

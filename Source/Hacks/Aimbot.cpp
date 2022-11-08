@@ -105,7 +105,7 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& 
         Trace trace;
         engineInterfaces.engineTrace.traceRay({ start, destination }, 0x4600400B, localPlayer.get().getPOD(), trace);
 
-        if (!allowFriendlyFire && trace.entity && Entity::from(retSpoofGadgets.client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity::from(retSpoofGadgets.client, trace.entity)))
+        if (!allowFriendlyFire && trace.entity && Entity::from(retSpoofGadgets->client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity::from(retSpoofGadgets->client, trace.entity)))
             return false;
 
         if (trace.fraction == 1.0f)
@@ -114,8 +114,8 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& 
         if (trace.entity == entity.getPOD() && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
             damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
-            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, Entity::from(retSpoofGadgets.client, trace.entity).hasHelmet()))
-                damage -= (Entity::from(retSpoofGadgets.client, trace.entity).armor() < damage * armorRatio / 2.0f ? Entity::from(retSpoofGadgets.client, trace.entity).armor() * 4.0f : damage) * (1.0f - armorRatio);
+            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, Entity::from(retSpoofGadgets->client, trace.entity).hasHelmet()))
+                damage -= (Entity::from(retSpoofGadgets->client, trace.entity).armor() < damage * armorRatio / 2.0f ? Entity::from(retSpoofGadgets->client, trace.entity).armor() * 4.0f : damage) * (1.0f - armorRatio);
 
             return damage >= minDamage;
         }
@@ -145,7 +145,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
     if (!localPlayer || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
 
-    const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
+    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip())
         return;
 
@@ -184,7 +184,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
         const auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch() : Vector{ };
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
+            const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
             if (entity.getPOD() == nullptr || entity.getPOD() == localPlayer.get().getPOD() || entity.getNetworkable().isDormant() || !entity.isAlive()
                 || !entity.isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity.gunGameImmunity())
                 continue;

@@ -3,6 +3,12 @@
 #include <cstddef>
 #include <span>
 
+#include <elf.h>
+#include <fcntl.h>
+#include <link.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+
 #include "DynamicLibraryView.h"
 
 namespace linux_platform

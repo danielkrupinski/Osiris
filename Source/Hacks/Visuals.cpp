@@ -273,7 +273,7 @@ void Visuals::performColorCorrection() noexcept
 void Visuals::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.getCvar().findVar("cl_ragdoll_gravity");
-    ConVar::from(retSpoofGadgets.client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+    ConVar::from(retSpoofGadgets->client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
 void Visuals::colorWorld() noexcept
@@ -282,7 +282,7 @@ void Visuals::colorWorld() noexcept
         return;
 
     for (short h = interfaces.getMaterialSystem().firstMaterial(); h != interfaces.getMaterialSystem().invalidMaterial(); h = interfaces.getMaterialSystem().nextMaterial(h)) {
-        const auto mat = Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().getMaterial(h));
+        const auto mat = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().getMaterial(h));
 
         if (mat.getPOD() == nullptr || !mat.isPrecached())
             continue;
@@ -316,7 +316,7 @@ void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
     };
 
     for (const auto mat : smokeMaterials) {
-        const auto material = Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial(mat));
+        const auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(mat));
         material.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noSmoke);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == csgo::FrameStage::RENDER_START && visualsConfig.wireframeSmoke);
     }
@@ -360,14 +360,14 @@ void Visuals::removeBlur(csgo::FrameStage stage) noexcept
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    static auto blur = Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial("dev/scope_bluroverlay"));
+    static auto blur = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial("dev/scope_bluroverlay"));
     blur.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces.getCvar().findVar("mat_force_tonemap_scale");
-    ConVar::from(retSpoofGadgets.client, brightness).setValue(visualsConfig.brightness);
+    ConVar::from(retSpoofGadgets->client, brightness).setValue(visualsConfig.brightness);
 }
 
 void Visuals::removeGrass(csgo::FrameStage stage) noexcept
@@ -388,19 +388,19 @@ void Visuals::removeGrass(csgo::FrameStage stage) noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
+        Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && visualsConfig.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
 {
     static auto sky = interfaces.getCvar().findVar("r_3dsky");
-    ConVar::from(retSpoofGadgets.client, sky).setValue(!visualsConfig.no3dSky);
+    ConVar::from(retSpoofGadgets->client, sky).setValue(!visualsConfig.no3dSky);
 }
 
 void Visuals::removeShadows() noexcept
 {
     static auto shadows = interfaces.getCvar().findVar("cl_csm_enabled");
-    ConVar::from(retSpoofGadgets.client, shadows).setValue(!visualsConfig.noShadows);
+    ConVar::from(retSpoofGadgets->client, shadows).setValue(!visualsConfig.noShadows);
 }
 
 void Visuals::applyZoom(csgo::FrameStage stage) noexcept
@@ -447,7 +447,7 @@ void Visuals::applyScreenEffects() noexcept
     if (!visualsConfig.screenEffect)
         return;
 
-    const auto material = Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial([] {
+    const auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial([] {
         constexpr std::array effects{
             "effects/dronecam",
             "effects/underwater_overlay",
@@ -461,11 +461,11 @@ void Visuals::applyScreenEffects() noexcept
     }()));
 
     if (visualsConfig.screenEffect == 1)
-        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.0f);
+        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
     else if (visualsConfig.screenEffect == 2)
-        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.1f);
+        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
     else if (visualsConfig.screenEffect >= 4)
-        MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
+        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
 
 #if IS_WIN32()
     const auto pod = material.getPOD();
@@ -499,13 +499,13 @@ void Visuals::hitEffect(const GameEvent* event) noexcept
             };
 
            
-            auto material = Material::from(retSpoofGadgets.client, interfaces.getMaterialSystem().findMaterial(getEffectMaterial()));
+            auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(getEffectMaterial()));
             if (visualsConfig.hitEffect == 1)
-                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.0f);
+                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
             else if (visualsConfig.hitEffect == 2)
-                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(0.1f);
+                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
             else if (visualsConfig.hitEffect >= 4)
-                MaterialVar::from(retSpoofGadgets.client, material.findVar("$c0_x")).setValue(1.0f);
+                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
 
 #if IS_WIN32()
             const auto pod = material.getPOD();
@@ -599,21 +599,21 @@ void Visuals::bulletTracer(const GameEvent& event) noexcept
     if (event.getInt("userid") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
-    const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon());
+    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getPOD() == nullptr)
         return;
 
     BeamInfo beamInfo;
 
     if (!localPlayer.get().shouldDraw()) {
-        const auto viewModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()));
+        const auto viewModel = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()));
         if (viewModel.getPOD() == nullptr)
             return;
 
         if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getPOD()), beamInfo.start))
             return;
     } else {
-        const auto worldModel = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()));
+        const auto worldModel = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()));
         if (worldModel.getPOD() == nullptr)
             return;
 

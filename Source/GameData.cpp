@@ -62,7 +62,7 @@ static auto playerByHandleWritable(int handle) noexcept
 static void updateNetLatency(const Engine& engine) noexcept
 {
     if (const auto networkChannel = engine.getNetworkChannel())
-        netOutgoingLatency = (std::max)(static_cast<int>(NetworkChannel::from(retSpoofGadgets.client, networkChannel).getLatency(0) * 1000.0f), 0);
+        netOutgoingLatency = (std::max)(static_cast<int>(NetworkChannel::from(retSpoofGadgets->client, networkChannel).getLatency(0) * 1000.0f), 0);
     else
         netOutgoingLatency = 0;
 }
@@ -102,11 +102,11 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
 
     viewMatrix = engineInterfaces.getEngine().worldToScreenMatrix();
 
-    const auto observerTarget = Entity::from(retSpoofGadgets.client, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : nullptr);
+    const auto observerTarget = Entity::from(retSpoofGadgets->client, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : nullptr);
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
-        const auto entity = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i));
+        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
         if (entity.getPOD() == nullptr)
             continue;
 
@@ -121,7 +121,7 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
             }
 
             if (!entity.getNetworkable().isDormant() && !entity.isAlive()) {
-                if (const auto obs = Entity::from(retSpoofGadgets.client, entity.getObserverTarget()); obs.getPOD() != nullptr)
+                if (const auto obs = Entity::from(retSpoofGadgets->client, entity.getObserverTarget()); obs.getPOD() != nullptr)
                     observerData.emplace_back(entity, obs, obs.getPOD() == localPlayer.get().getPOD());
             }
         } else {
@@ -299,7 +299,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     exists = true;
     alive = localPlayer.get().isAlive();
 
-    if (const auto activeWeapon = Entity::from(retSpoofGadgets.client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr) {
         inReload = activeWeapon.isInReload();
         shooting = localPlayer.get().shotsFired() > 1;
         noScope = activeWeapon.isSniperRifle() && !localPlayer.get().isScoped();
@@ -312,7 +312,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     aimPunch = localPlayer.get().getEyePosition() + Vector::fromAngle(engine.getViewAngles() + localPlayer.get().getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer.get().getObserverMode();
-    if (const auto obs = Entity::from(retSpoofGadgets.client, localPlayer.get().getObserverTarget()); obs.getPOD() != nullptr && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
+    if (const auto obs = Entity::from(retSpoofGadgets->client, localPlayer.get().getObserverTarget()); obs.getPOD() != nullptr && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
         origin = obs.getAbsOrigin();
     else
         origin = localPlayer.get().getAbsOrigin();
@@ -323,7 +323,7 @@ BaseData::BaseData(const Entity& entity) noexcept
     distanceToLocal = entity.getAbsOrigin().distTo(localPlayerData.origin);
  
     if (entity.isPlayer()) {
-        const Collideable collideable{ retSpoofGadgets.client, entity.getCollideable() };
+        const Collideable collideable{ retSpoofGadgets->client, entity.getCollideable() };
         obbMins = collideable.obbMins();
         obbMaxs = collideable.obbMaxs();
     } else if (const auto model = entity.getRenderable().getModel()) {
@@ -373,7 +373,7 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         }
     }(projectile);
 
-    if (const auto thrower = Entity::from(retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower())); thrower.getPOD() != nullptr && localPlayer) {
+    if (const auto thrower = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower())); thrower.getPOD() != nullptr && localPlayer) {
         if (thrower.getPOD() == localPlayer.get().getPOD())
             thrownByLocalPlayer = true;
         else
@@ -395,12 +395,12 @@ PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interface
 {
     if (const auto steamID = entity.getSteamId(engineInterfaces.getEngine())) {
         const auto ctx = engineInterfaces.getEngine().getSteamAPIContext();
-        const auto avatar = SteamFriends::from(retSpoofGadgets.client, ctx->steamFriends).getSmallFriendAvatar(steamID);
+        const auto avatar = SteamFriends::from(retSpoofGadgets->client, ctx->steamFriends).getSmallFriendAvatar(steamID);
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
         PlayerAvatar playerAvatar;
         playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
-        if (SteamUtils::from(retSpoofGadgets.client, ctx->steamUtils).getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
+        if (SteamUtils::from(retSpoofGadgets->client, ctx->steamUtils).getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
@@ -444,7 +444,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     immune = entity.gunGameImmunity();
     flashDuration = entity.flashDuration();
 
-    if (const auto weapon = Entity::from(retSpoofGadgets.client, entity.getActiveWeapon()); weapon.getPOD() != nullptr) {
+    if (const auto weapon = Entity::from(retSpoofGadgets->client, entity.getActiveWeapon()); weapon.getPOD() != nullptr) {
         audible = audible || isEntityAudible(weapon.getNetworkable().index());
         if (const auto weaponInfo = weapon.getWeaponData())
             activeWeapon = interfaces.getLocalize().findAsUTF8(weaponInfo->name);
@@ -672,7 +672,7 @@ ObserverData::ObserverData(const Entity& entity, const Entity& obs, bool targetI
 
 void BombData::update(const Memory& memory) noexcept
 {
-    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity::from(retSpoofGadgets.client, *memory.gameRules).mapHasBombTarget())) {
+    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity::from(retSpoofGadgets->client, *memory.gameRules).mapHasBombTarget())) {
         if (const auto bomb = (*memory.plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
             timerLength = bomb->c4TimerLength();

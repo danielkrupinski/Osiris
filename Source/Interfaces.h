@@ -268,10 +268,10 @@ private:
     {
 #if IS_WIN32()
         const windows_platform::DynamicLibrary dll{ windows_platform::DynamicLibraryWrapper{}, moduleName };
-        const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets.client } };
+        const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets->client } };
 #else
         const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
-        const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets.client } };
+        const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets->client } };
 #endif
         return finder(name);
     }
