@@ -75,6 +75,12 @@
 
 #include <SortFilter.h>
 
+#if IS_WIN32()
+#include "Platform/Windows/DynamicLibrarySection.h"
+#elif IS_LINUX()
+#include "Platform/Linux/DynamicLibrarySection.h"
+#endif
+
 static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {
     static const auto createWearable = [&clientInterfaces]{
@@ -1099,7 +1105,13 @@ InventoryChanger createInventoryChanger(const Interfaces& interfaces, const Memo
     crateLoot.compress();
     auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
 
-    return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup) };
+#if IS_WIN32()
+    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+#elif IS_LINUX()
+    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+#endif
+
+    return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };
 }
 
 InventoryChanger& InventoryChanger::instance(const Interfaces& interfaces, const Memory& memory)
@@ -1108,7 +1120,7 @@ InventoryChanger& InventoryChanger::instance(const Interfaces& interfaces, const
     return inventoryChanger;
 }
 
-void InventoryChanger::getArgAsNumberHook(const InventoryChangerReturnAddresses& returnAddresses, int number, std::uintptr_t returnAddress)
+void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress)
 {
     if (returnAddress == returnAddresses.setStickerToolSlotGetArgAsNumber)
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
@@ -1197,7 +1209,7 @@ void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memor
     return static_cast<csgo::Tournament>(stringToUint64(removePrefix(s, "tournament:")));
 }
 
-void InventoryChanger::getArgAsStringHook(const InventoryChangerReturnAddresses& returnAddresses, const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params)
 {
     if (returnAddress == returnAddresses.useToolGetArgAsString) {
         const auto toolItemID = stringToUint64(string);
@@ -1253,7 +1265,7 @@ void InventoryChanger::getArgAsStringHook(const InventoryChangerReturnAddresses&
     }
 }
 
-void InventoryChanger::getNumArgsHook(const InventoryChangerReturnAddresses& returnAddresses, unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
 {
     if (returnAddress != returnAddresses.setMyPredictionUsingItemIdGetNumArgs)
         return;
@@ -1281,7 +1293,7 @@ void InventoryChanger::getNumArgsHook(const InventoryChangerReturnAddresses& ret
     }
 }
 
-int InventoryChanger::setResultIntHook(const InventoryChangerReturnAddresses& returnAddresses, std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
+int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
 {
     if (returnAddress == returnAddresses.getInventoryCountSetResultInt && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
         return 0;

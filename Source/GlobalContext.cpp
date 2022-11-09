@@ -344,7 +344,7 @@ void GlobalContext::renderSmokeOverlayHook(bool update)
 double GlobalContext::getArgAsNumberHook(void* params, int index, std::uintptr_t returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(memory->inventoryChangerReturnAddresses, static_cast<int>(result), returnAddress);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsNumberHook(static_cast<int>(result), returnAddress);
     return result;
 }
 
@@ -353,21 +353,21 @@ const char* GlobalContext::getArgAsStringHook(void* params, int index, std::uint
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(memory->inventoryChangerReturnAddresses, *memory, result, returnAddress, params);
+        inventory_changer::InventoryChanger::instance(*interfaces, *memory).getArgAsStringHook(*memory, result, returnAddress, params);
 
     return result;
 }
 
 void GlobalContext::setResultIntHook(void* params, int result, std::uintptr_t returnAddress)
 {
-    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(memory->inventoryChangerReturnAddresses, returnAddress, params, result);
+    result = inventory_changer::InventoryChanger::instance(*interfaces, *memory).setResultIntHook(returnAddress, params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
 unsigned GlobalContext::getNumArgsHook(void* params, std::uintptr_t returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(memory->inventoryChangerReturnAddresses, result, returnAddress, params);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).getNumArgsHook(result, returnAddress, params);
     return result;
 }
 
