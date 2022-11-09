@@ -29,13 +29,13 @@ EventListener::EventListener(const Memory& memory, const ClientInterfaces& clien
     gameEventManager.addListener(this, "round_mvp");
 
     // Move our player_death listener to the first position to override killfeed icons (InventoryChanger::overrideHudIcon()) before HUD gets them
-    if (const auto desc = memory.getEventDescriptor(engineInterfaces.getGameEventManagerAddress(), "player_death", nullptr))
+    if (const auto desc = memory.getEventDescriptor(std::uintptr_t(gameEventManager.getPOD()), "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);
 
     // Move our round_mvp listener to the first position to override event data (InventoryChanger::onRoundMVP()) before HUD gets them
-    if (const auto desc = memory.getEventDescriptor(engineInterfaces.getGameEventManagerAddress(), "round_mvp", nullptr))
+    if (const auto desc = memory.getEventDescriptor(std::uintptr_t(gameEventManager.getPOD()), "round_mvp", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);

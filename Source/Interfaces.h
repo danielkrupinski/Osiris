@@ -141,7 +141,7 @@ public:
         : retSpoofInvoker{ retSpoofInvoker },
           engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
-          gameEventManager{ std::uintptr_t(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
+          gameEventManager{ static_cast<csgo::pod::GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
           modelInfo{ std::uintptr_t(engineInterfaceFinder("VModelInfoClient004")) },
           modelRender{ static_cast<ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
           sound{ static_cast<EngineSound*>(engineInterfaceFinder("IEngineSoundClient003")) }
@@ -160,12 +160,7 @@ public:
 
     [[nodiscard]] auto getGameEventManager() const noexcept
     {
-        return GameEventManager{ retSpoofInvoker, gameEventManager };
-    }
-
-    [[nodiscard]] std::uintptr_t getGameEventManagerAddress() const noexcept
-    {
-        return gameEventManager;
+        return GameEventManager::from(retSpoofInvoker, gameEventManager);
     }
 
     [[nodiscard]] auto getModelInfo() const noexcept
@@ -176,7 +171,7 @@ public:
 private:
     RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t engine;
-    std::uintptr_t gameEventManager;
+    csgo::pod::GameEventManager* gameEventManager;
     std::uintptr_t modelInfo;
 public:
     EngineTrace engineTrace;
