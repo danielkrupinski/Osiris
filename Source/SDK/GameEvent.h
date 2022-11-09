@@ -35,6 +35,19 @@ public:
 namespace csgo::pod { struct GameEventManager; }
 class GameEventManager : public VirtualCallableFromPOD<GameEventManager, csgo::pod::GameEventManager> {
 public:
+    GameEventManager(VirtualCallableFromPOD base, std::uintptr_t getEventDescriptorFn)
+        : VirtualCallableFromPOD{ base }, getEventDescriptorFn{ getEventDescriptorFn }
+    {
+    }
+
     VIRTUAL_METHOD_V(bool, addListener, 3, (GameEventListener* listener, const char* name), (listener, name, false))
     VIRTUAL_METHOD_V(void, removeListener, 5, (GameEventListener* listener), (listener))
+
+    [[nodiscard]] GameEventDescriptor* getEventDescriptor(const char* name, int* cookie) const noexcept
+    {
+        return getInvoker().invokeThiscall<GameEventDescriptor*>(getThis(), getEventDescriptorFn, name, cookie);
+    }
+
+private:
+    std::uintptr_t getEventDescriptorFn;
 };

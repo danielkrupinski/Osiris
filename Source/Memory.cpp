@@ -89,7 +89,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\xF7\x45").add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x89\x77\x38").add(1).relativeToAbsolute().get());
     getPlayerViewmodelArmConfigForPlayerModel = reinterpret_cast<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(clientPatternFinder("\xE8????\x89\x87????\x6A").add(1).relativeToAbsolute().get());
-    getEventDescriptor = reinterpret_cast<decltype(getEventDescriptor)>(enginePatternFinder("\xE8????\x8B\xD8\x85\xDB\x75\x27").add(1).relativeToAbsolute().get());
+    getEventDescriptor = enginePatternFinder("\xE8????\x8B\xD8\x85\xDB\x75\x27").add(1).relativeToAbsolute().get();
     activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x8B\x1D????\x89\x5C\x24\x48").add(2).deref().get());
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().get());
     playerResource = reinterpret_cast<PlayerResource**>(clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().get());
@@ -150,7 +150,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     glowObjectManager = reinterpret_cast<decltype(glowObjectManager)>(clientPatternFinder("\xE8????\x4C\x89\xE7\x8B\x70\x20").add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
     setClanTag = reinterpret_cast<decltype(setClanTag)>(enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().get());
-    getEventDescriptor = reinterpret_cast<decltype(getEventDescriptor)>(enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get());
+    getEventDescriptor = enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get();
     activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().get());
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().get());
     cameraThink = clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get();

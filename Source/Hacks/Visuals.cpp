@@ -711,10 +711,10 @@ void Visuals::updateEventListeners(bool forceRemove) noexcept
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {
-        engineInterfaces.getGameEventManager().addListener(&listener, "bullet_impact");
+        engineInterfaces.getGameEventManager(memory.getEventDescriptor).addListener(&listener, "bullet_impact");
         listenerRegistered = true;
     } else if ((!visualsConfig.bulletTracers.enabled || forceRemove) && listenerRegistered) {
-        engineInterfaces.getGameEventManager().removeListener(&listener);
+        engineInterfaces.getGameEventManager(memory.getEventDescriptor).removeListener(&listener);
         listenerRegistered = false;
     }
 }

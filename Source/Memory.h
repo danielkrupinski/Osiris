@@ -13,11 +13,10 @@
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
 
-#include "Interfaces.h"
-
 #include "SafeAddress.h"
 #include "RetSpoofGadgets.h"
 #include "Helpers/PatternFinder.h"
+#include "Utils/TypeHint.h"
 
 class ClientMode;
 class ClientSharedObjectCache;
@@ -96,7 +95,7 @@ public:
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem weaponSystem;
     std::add_pointer_t<const char** FASTCALL_CONV(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
-    GameEventDescriptor* (THISCALL_CONV* getEventDescriptor)(/* GameEventManager* */ std::uintptr_t thisptr, const char* name, int* cookie);
+    TypeHint<std::uintptr_t, GameEventDescriptor*(THISCALL_CONV*)(csgo::pod::GameEventManager* thisptr, const char* name, int* cookie)> getEventDescriptor;
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;

@@ -158,9 +158,9 @@ public:
         return engine;
     }
 
-    [[nodiscard]] auto getGameEventManager() const noexcept
+    [[nodiscard]] auto getGameEventManager(std::uintptr_t getEventDescriptorFn) const noexcept
     {
-        return GameEventManager::from(retSpoofInvoker, gameEventManager);
+        return GameEventManager::from(retSpoofInvoker, gameEventManager, getEventDescriptorFn);
     }
 
     [[nodiscard]] auto getModelInfo() const noexcept
