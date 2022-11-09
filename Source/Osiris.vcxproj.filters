@@ -78,6 +78,9 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{91bf4578-bff7-4d46-965e-3991ce345331}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{7ff80fe4-c5eb-4eef-b792-75c87aa46dc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -924,6 +927,9 @@
     </ClInclude>
     <ClInclude Include="Helpers\PatternFinder.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\InterfaceFinder.h">
+      <Filter>Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
