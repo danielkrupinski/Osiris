@@ -14,13 +14,12 @@
 
 #include "GlobalContext.h"
 
-EventListener::EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces)
-    : memory{ memory }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }
+EventListener::EventListener(const GameEventManager& gameEventManager)
+    : gameEventManager{ gameEventManager }
 {
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
-    const auto gameEventManager = engineInterfaces.getGameEventManager(memory.getEventDescriptor);
     gameEventManager.addListener(this, "round_start");
     gameEventManager.addListener(this, "round_freeze_end");
     gameEventManager.addListener(this, "player_hurt");
@@ -48,5 +47,5 @@ void EventListener::fireGameEvent(csgo::pod::GameEvent* event)
 
 void EventListener::remove()
 {
-    engineInterfaces.getGameEventManager(memory.getEventDescriptor).removeListener(this);
+    gameEventManager.removeListener(this);
 }
