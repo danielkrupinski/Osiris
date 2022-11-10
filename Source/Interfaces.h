@@ -50,9 +50,8 @@ class GameUI;
 class ModelRender;
 class NetworkStringTableContainer;
 
-template <typename DynamicLibraryWrapper>
 struct InterfaceFinderWithLog {
-    explicit InterfaceFinderWithLog(InterfaceFinder<DynamicLibraryWrapper> finder)
+    explicit InterfaceFinderWithLog(InterfaceFinder finder)
         : finder{ finder }
     {
     }
@@ -69,13 +68,12 @@ struct InterfaceFinderWithLog {
     }
 
 private:
-    InterfaceFinder<DynamicLibraryWrapper> finder;
+    InterfaceFinder finder;
 };
 
 class ClientInterfaces {
 public:
-    template <typename DynamicLibraryWrapper>
-    explicit ClientInterfaces(InterfaceFinderWithLog<DynamicLibraryWrapper> clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
+    explicit ClientInterfaces(InterfaceFinderWithLog clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
           client{ std::uintptr_t(clientInterfaceFinder("VClient018")) },
           entityList{ std::uintptr_t(clientInterfaceFinder("VClientEntityList003")) },
@@ -119,8 +117,7 @@ private:
 
 class EngineInterfaces {
 public:
-    template <typename DynamicLibraryWrapper>
-    explicit EngineInterfaces(InterfaceFinderWithLog<DynamicLibraryWrapper> engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
+    explicit EngineInterfaces(InterfaceFinderWithLog engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
           engine{ std::uintptr_t(engineInterfaceFinder("VEngineClient014")) },
           engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },

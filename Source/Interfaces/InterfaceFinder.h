@@ -3,8 +3,8 @@
 #include <Platform/DynamicLibraryView.h>
 #include <Platform/RetSpoofInvoker.h>
 
-template <typename DynamicLibraryWrapper>
 struct InterfaceFinder {
+    template <typename DynamicLibraryWrapper>
     explicit InterfaceFinder(DynamicLibraryView<DynamicLibraryWrapper> library, RetSpoofInvoker invoker)
         : createInterfaceFn{ std::uintptr_t(library.getFunctionAddress("CreateInterface")) }, invoker{ invoker }
     {
