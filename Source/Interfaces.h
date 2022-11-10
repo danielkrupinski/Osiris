@@ -44,32 +44,12 @@
 #include "RetSpoofGadgets.h"
 
 #include "Interfaces/InterfaceFinder.h"
+#include "Interfaces/InterfaceFinderWithLog.h"
 
 class EngineSound;
 class GameUI;
 class ModelRender;
 class NetworkStringTableContainer;
-
-struct InterfaceFinderWithLog {
-    explicit InterfaceFinderWithLog(InterfaceFinder finder)
-        : finder{ finder }
-    {
-    }
-
-    void* operator()(const char* name) const noexcept
-    {
-        if (const auto foundInterface = finder(name))
-            return foundInterface;
-
-#if IS_WIN32()
-        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
-#endif
-        std::exit(EXIT_FAILURE);
-    }
-
-private:
-    InterfaceFinder finder;
-};
 
 class ClientInterfaces {
 public:
