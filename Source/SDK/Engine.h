@@ -51,11 +51,10 @@ struct DemoPlaybackParameters {
 };
 
 namespace csgo::pod { struct NetworkChannel; }
+namespace csgo::pod { struct Engine; }
 
-class Engine : private VirtualCallable {
+class Engine : public VirtualCallableFromPOD<Engine, csgo::pod::Engine> {
 public:
-    using VirtualCallable::VirtualCallable;
-
     VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (std::ref(w), std::ref(h)))
     VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, std::ref(playerInfo)))
     VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (userId))

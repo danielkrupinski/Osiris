@@ -315,7 +315,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init((void*)globalContext->engineInterfaces->getEngineAddress());
+    engine.init(globalContext->engineInterfaces->getEngine().getPOD());
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #if IS_WIN32()
