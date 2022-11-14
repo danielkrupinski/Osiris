@@ -81,6 +81,8 @@
 #include "Platform/Linux/DynamicLibrarySection.h"
 #endif
 
+#include <Interfaces/ClientInterfaces.h>
+
 static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {
     static const auto createWearable = [&clientInterfaces]{

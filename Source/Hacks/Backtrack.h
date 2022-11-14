@@ -12,6 +12,7 @@
 
 namespace csgo { enum class FrameStage; }
 struct UserCmd;
+class ClientInterfaces;
 
 #define OSIRIS_BACKTRACK() true
 

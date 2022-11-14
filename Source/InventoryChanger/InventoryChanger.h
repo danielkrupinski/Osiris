@@ -16,6 +16,7 @@ enum class Team;
 class Entity;
 class GameEvent;
 class SharedObject;
+class ClientInterfaces;
 
 namespace inventory_changer
 {

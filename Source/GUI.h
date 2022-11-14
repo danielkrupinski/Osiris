@@ -8,6 +8,7 @@
 
 class Visuals;
 struct ImFont;
+class ClientInterfaces;
 
 class GUI {
 public:

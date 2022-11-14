@@ -5,6 +5,8 @@
 
 #define OSIRIS_GLOW() true
 
+class ClientInterfaces;
+
 namespace Glow
 {
     void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;

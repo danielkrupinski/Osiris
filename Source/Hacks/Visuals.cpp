@@ -33,6 +33,7 @@
 #include "../SDK/ViewRenderBeams.h"
 
 #include "../GlobalContext.h"
+#include <Interfaces/ClientInterfaces.h>
 
 struct BulletTracers : ColorToggle {
     BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}

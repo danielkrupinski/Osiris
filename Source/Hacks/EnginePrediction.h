@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Interfaces.h"
 #include "../Memory.h"
 
+class ClientInterfaces;
 struct UserCmd;
 
 namespace EnginePrediction

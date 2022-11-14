@@ -11,6 +11,8 @@
 #include "../SDK/EntityList.h"
 #include "../SDK/LocalPlayer.h"
 
+#include <Interfaces/ClientInterfaces.h>
+
 #include "Sound.h"
 
 #if OSIRIS_SOUND()

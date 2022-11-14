@@ -1,6 +1,5 @@
 #include <memory>
 
-#include "../Interfaces.h"
 #include "../Memory.h"
 
 #include "../SDK/Entity.h"
@@ -11,6 +10,7 @@
 #include "../SDK/Prediction.h"
 
 #include "EnginePrediction.h"
+#include <Interfaces/ClientInterfaces.h>
 
 static int localPlayerFlags;
 

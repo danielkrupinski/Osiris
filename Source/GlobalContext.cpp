@@ -50,6 +50,8 @@
 
 #include "Interfaces.h"
 
+#include "Interfaces/ClientInterfaces.h"
+
 GlobalContext::GlobalContext()
 {
 #if IS_WIN32()

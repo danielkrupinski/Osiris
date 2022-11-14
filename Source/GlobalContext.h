@@ -15,6 +15,7 @@ struct IDirect3DDevice9;
 #include "EventListener.h"
 
 #include "Hacks/Visuals.h"
+#include "Interfaces/ClientInterfaces.h"
 #include "SDK/CSPlayerInventory.h"
 
 struct DemoPlaybackParameters;

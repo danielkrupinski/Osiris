@@ -36,6 +36,8 @@
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
 
+#include <Interfaces/ClientInterfaces.h>
+
 auto operator<(const BaseData& a, const BaseData& b) noexcept
 {
     return a.distanceToLocal > b.distanceToLocal;

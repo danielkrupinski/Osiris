@@ -25,6 +25,7 @@ union SDL_Event;
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
+class ClientInterfaces;
 
 #if IS_WIN32()
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap

@@ -28,6 +28,8 @@
 #include "../SDK/KeyValues.h"
 #include "../SDK/Utils.h"
 
+#include <Interfaces/ClientInterfaces.h>
+
 static csgo::pod::Material* normal;
 static csgo::pod::Material* flat;
 static csgo::pod::Material* animated;

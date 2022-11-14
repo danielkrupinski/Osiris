@@ -72,6 +72,7 @@
 #include "SDK/Constants/UserMessages.h"
 
 #include "GlobalContext.h"
+#include "Interfaces/ClientInterfaces.h"
 
 #if IS_WIN32()
 

@@ -8,6 +8,7 @@
 class Entity;
 struct ModelRenderInfo;
 class matrix3x4;
+class ClientInterfaces;
 
 class Chams {
 public:

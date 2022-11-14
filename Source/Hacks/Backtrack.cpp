@@ -17,6 +17,8 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
+#include <Interfaces/ClientInterfaces.h>
+
 #if OSIRIS_BACKTRACK()
 
 struct BacktrackConfig {

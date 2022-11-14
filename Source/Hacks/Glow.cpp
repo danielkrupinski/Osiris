@@ -28,6 +28,8 @@
 #include "../SDK/Vector.h"
 #include "../imguiCustom.h"
 
+#include <Interfaces/ClientInterfaces.h>
+
 #if OSIRIS_GLOW()
 
 struct GlowItem : Color4 {

@@ -28,6 +28,8 @@ struct InfernoData;
 
 struct Matrix4x4;
 
+class ClientInterfaces;
+
 namespace GameData
 {
     void update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;

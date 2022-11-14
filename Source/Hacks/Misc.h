@@ -9,6 +9,7 @@ namespace csgo { enum class FrameStage; }
 class GameEvent;
 struct ImDrawList;
 struct UserCmd;
+class ClientInterfaces;
 
 namespace Misc
 {

@@ -5,6 +5,7 @@
 
 struct UserCmd;
 struct Vector;
+class ClientInterfaces;
 
 namespace Aimbot
 {

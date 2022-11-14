@@ -55,6 +55,7 @@
 #include "../GlobalContext.h"
 
 #include "../imguiCustom.h"
+#include <Interfaces/ClientInterfaces.h>
 
 struct PreserveKillfeed {
     bool enabled = false;
