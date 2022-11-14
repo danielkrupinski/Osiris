@@ -409,7 +409,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
         interfaces.emplace(retSpoofGadgets->client);
 
-        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->getClientAddress(), *retSpoofGadgets);
+        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->getClient().getPOD(), *retSpoofGadgets);
 
         Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(engineInterfaces->getGameEventManager(memory->getEventDescriptor));
@@ -469,7 +469,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
 
         interfaces.emplace(retSpoofGadgets->client);
-        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClientAddress(), *retSpoofGadgets);
+        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClient().getPOD(), *retSpoofGadgets);
 
         Netvars::init(clientInterfaces->getClient());
         gameEventListener.emplace(engineInterfaces->getGameEventManager(memory->getEventDescriptor));

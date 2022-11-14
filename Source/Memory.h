@@ -52,7 +52,7 @@ namespace csgo::pod
 
 class Memory {
 public:
-    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::pod::Client* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32()
     std::uintptr_t present;

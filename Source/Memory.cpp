@@ -37,7 +37,7 @@
 
 #include "Utils/PatternFinder.h"
 
-Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, std::uintptr_t clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
+Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::pod::Client* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #if IS_WIN32()
     : viewRenderBeams{ retSpoofGadgets.client, clientPatternFinder("\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24").add(1).deref().get() },
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("\x8B\x35????\xFF\x10\x0F\xB7\xC0").add(2).deref().get() },
