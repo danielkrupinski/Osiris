@@ -13,7 +13,7 @@ public:
         client{ static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")) },
         entityList{ static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
         gameMovement{ static_cast<csgo::pod::GameMovement*>(clientInterfaceFinder("GameMovement001")) },
-        prediction{ std::uintptr_t(clientInterfaceFinder("VClientPrediction001")) }
+        prediction{ static_cast<csgo::pod::Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
     {
     }
 
@@ -34,7 +34,7 @@ public:
 
     [[nodiscard]] auto getPrediction() const noexcept
     {
-        return Prediction{ retSpoofInvoker, prediction };
+        return Prediction::from(retSpoofInvoker, prediction);
     }
 
 private:
@@ -42,5 +42,5 @@ private:
     csgo::pod::Client* client;
     csgo::pod::EntityList* entityList;
     csgo::pod::GameMovement* gameMovement;
-    std::uintptr_t prediction;
+    csgo::pod::Prediction* prediction;
 };
