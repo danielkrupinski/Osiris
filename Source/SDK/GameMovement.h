@@ -5,10 +5,9 @@
 class MoveData;
 
 namespace csgo::pod { struct Entity; }
+namespace csgo::pod { struct GameMovement; }
 
-class GameMovement : private VirtualCallable {
+class GameMovement : public VirtualCallableFromPOD<GameMovement, csgo::pod::GameMovement> {
 public:
-    using VirtualCallable::VirtualCallable;
-
     VIRTUAL_METHOD_V(void, processMovement, 1, (csgo::pod::Entity* localPlayer, MoveData* moveData), (localPlayer, moveData))
 };
