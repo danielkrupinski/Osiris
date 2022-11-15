@@ -11,7 +11,7 @@ public:
     explicit ClientInterfaces(InterfaceFinderWithLog clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
         client{ static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")) },
-        entityList{ std::uintptr_t(clientInterfaceFinder("VClientEntityList003")) },
+        entityList{ static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
         gameMovement{ std::uintptr_t(clientInterfaceFinder("GameMovement001")) },
         prediction{ std::uintptr_t(clientInterfaceFinder("VClientPrediction001")) }
     {
@@ -24,7 +24,7 @@ public:
 
     [[nodiscard]] auto getEntityList() const noexcept
     {
-        return EntityList{ retSpoofInvoker, entityList };
+        return EntityList::from(retSpoofInvoker, entityList);
     }
 
     [[nodiscard]] auto getGameMovement() const noexcept
@@ -40,7 +40,7 @@ public:
 private:
     RetSpoofInvoker retSpoofInvoker;
     csgo::pod::Client* client;
-    std::uintptr_t entityList;
+    csgo::pod::EntityList* entityList;
     std::uintptr_t gameMovement;
     std::uintptr_t prediction;
 };
