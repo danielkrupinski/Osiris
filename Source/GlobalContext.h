@@ -16,6 +16,7 @@ struct IDirect3DDevice9;
 
 #include "Hacks/Visuals.h"
 #include "Interfaces/ClientInterfaces.h"
+#include "Interfaces/EngineInterfaces.h"
 #include "SDK/CSPlayerInventory.h"
 
 struct DemoPlaybackParameters;

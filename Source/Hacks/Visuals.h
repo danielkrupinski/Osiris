@@ -6,6 +6,7 @@ namespace csgo { enum class FrameStage; }
 class GameEvent;
 struct ImDrawList;
 class ClientInterfaces;
+class EngineInterfaces;
 
 class Visuals {
 public:

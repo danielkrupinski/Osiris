@@ -4,7 +4,7 @@
 
 #if IS_WIN32()
 #include <Windows.h>
-#endif()
+#endif
 
 #include "InterfaceFinder.h"
 

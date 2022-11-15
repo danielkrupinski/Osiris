@@ -6,6 +6,7 @@
 #define OSIRIS_GLOW() true
 
 class ClientInterfaces;
+class EngineInterfaces;
 
 namespace Glow
 {

@@ -10,6 +10,7 @@ class GameEvent;
 struct ImDrawList;
 struct UserCmd;
 class ClientInterfaces;
+class EngineInterfaces;
 
 namespace Misc
 {
