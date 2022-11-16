@@ -1,27 +1,12 @@
 #pragma once
 
-#include "InterfaceFinderWithLog.h"
+#include "ClientInterfacesPODs.h"
+
+#include <Platform/RetSpoofInvoker.h>
 #include <SDK/Client.h>
 #include <SDK/EntityList.h>
 #include <SDK/GameMovement.h>
 #include <SDK/Prediction.h>
-
-struct ClientInterfacesPODs {
-    csgo::pod::Client* client;
-    csgo::pod::EntityList* entityList;
-    csgo::pod::GameMovement* gameMovement;
-    csgo::pod::Prediction* prediction;
-};
-
-[[nodiscard]] inline ClientInterfacesPODs createClientInterfacesPODs(InterfaceFinderWithLog clientInterfaceFinder)
-{
-    return ClientInterfacesPODs{
-        .client = static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")),
-        .entityList = static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")),
-        .gameMovement = static_cast<csgo::pod::GameMovement*>(clientInterfaceFinder("GameMovement001")),
-        .prediction = static_cast<csgo::pod::Prediction*>(clientInterfaceFinder("VClientPrediction001"))
-    };
-}
 
 class ClientInterfaces {
 public:
