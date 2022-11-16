@@ -220,6 +220,7 @@
     <ClInclude Include="Interfaces\ClientInterfaces.h" />
     <ClInclude Include="Interfaces\ClientInterfacesPODs.h" />
     <ClInclude Include="Interfaces\EngineInterfaces.h" />
+    <ClInclude Include="Interfaces\EngineInterfacesPODs.h" />
     <ClInclude Include="Interfaces\InterfaceFinder.h" />
     <ClInclude Include="Interfaces\InterfaceFinderWithLog.h" />
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
