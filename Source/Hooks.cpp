@@ -282,7 +282,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interfaces, const Memory& memory) noexcept
 {
 #if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -303,7 +303,7 @@ void Hooks::install(const ClientInterfaces& clientInterfaces, const Interfaces& 
     bspQuery.init(globalContext->engineInterfaces->getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(clientInterfaces.getClient().getPOD());
+    client.init(clientInterface);
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 

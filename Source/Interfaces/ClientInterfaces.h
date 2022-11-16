@@ -6,41 +6,49 @@
 #include <SDK/GameMovement.h>
 #include <SDK/Prediction.h>
 
+struct ClientInterfacesPODs {
+    explicit ClientInterfacesPODs(InterfaceFinderWithLog clientInterfaceFinder)
+        : client{ static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")) },
+          entityList{ static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
+          gameMovement{ static_cast<csgo::pod::GameMovement*>(clientInterfaceFinder("GameMovement001")) },
+          prediction{ static_cast<csgo::pod::Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
+    {
+    }
+
+    csgo::pod::Client* client;
+    csgo::pod::EntityList* entityList;
+    csgo::pod::GameMovement* gameMovement;
+    csgo::pod::Prediction* prediction;
+};
+
 class ClientInterfaces {
 public:
-    explicit ClientInterfaces(InterfaceFinderWithLog clientInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
-        : retSpoofInvoker{ retSpoofInvoker },
-        client{ static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")) },
-        entityList{ static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")) },
-        gameMovement{ static_cast<csgo::pod::GameMovement*>(clientInterfaceFinder("GameMovement001")) },
-        prediction{ static_cast<csgo::pod::Prediction*>(clientInterfaceFinder("VClientPrediction001")) }
+    explicit ClientInterfaces(RetSpoofInvoker retSpoofInvoker, const ClientInterfacesPODs& pods)
+        : retSpoofInvoker{ retSpoofInvoker }, pods{ pods }
     {
     }
 
     [[nodiscard]] auto getClient() const noexcept
     {
-        return Client::from(retSpoofInvoker, client);
+        return Client::from(retSpoofInvoker, pods.client);
     }
 
     [[nodiscard]] auto getEntityList() const noexcept
     {
-        return EntityList::from(retSpoofInvoker, entityList);
+        return EntityList::from(retSpoofInvoker, pods.entityList);
     }
 
     [[nodiscard]] auto getGameMovement() const noexcept
     {
-        return GameMovement::from(retSpoofInvoker, gameMovement);
+        return GameMovement::from(retSpoofInvoker, pods.gameMovement);
     }
 
     [[nodiscard]] auto getPrediction() const noexcept
     {
-        return Prediction::from(retSpoofInvoker, prediction);
+        return Prediction::from(retSpoofInvoker, pods.prediction);
     }
 
 private:
     RetSpoofInvoker retSpoofInvoker;
-    csgo::pod::Client* client;
-    csgo::pod::EntityList* entityList;
-    csgo::pod::GameMovement* gameMovement;
-    csgo::pod::Prediction* prediction;
+    const ClientInterfacesPODs& pods;
 };

@@ -89,7 +89,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::fastStop(cmd);
     Misc::prepareRevolver(engineInterfaces->getEngine(), *memory, cmd);
     visuals->removeShadows();
-    Misc::runReportbot(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
+    Misc::runReportbot(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
@@ -97,17 +97,17 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::autoReload(cmd);
     Misc::updateClanTag(*memory);
     Misc::fakeBan(engineInterfaces->getEngine(), *interfaces, *memory);
-    Misc::stealNames(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
-    Misc::revealRanks(*clientInterfaces, cmd);
-    Misc::quickReload(*clientInterfaces, *interfaces, cmd);
+    Misc::stealNames(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory);
+    Misc::revealRanks(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, cmd);
+    Misc::quickReload(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
-    EnginePrediction::run(*clientInterfaces, *memory, cmd);
+    EnginePrediction::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, cmd);
 
-    Aimbot::run(*engineInterfaces, *clientInterfaces, *interfaces, *config, *memory, cmd);
+    Aimbot::run(*engineInterfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *config, *memory, cmd);
     Triggerbot::run(engineInterfaces->engineTrace, *interfaces, *memory, *config, cmd);
-    Backtrack::run(*clientInterfaces, *engineInterfaces, *interfaces, *memory, cmd);
+    Backtrack::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces, *interfaces, *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(engineInterfaces->engineTrace, *interfaces, cmd);
@@ -146,7 +146,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         visuals->reduceFlashEffect();
         visuals->updateBrightness();
         visuals->remove3dSky();
-        Glow::render(*engineInterfaces, *clientInterfaces, *interfaces, *memory);
+        Glow::render(*engineInterfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
@@ -170,7 +170,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (visuals->removeHands(info.model->name) || visuals->removeSleeves(info.model->name) || visuals->removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     interfaces->getStudioRender().forcedMaterialOverride(nullptr);
@@ -191,7 +191,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::changeName(engineInterfaces->getEngine(), *interfaces, *memory, true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
-        GameData::update(*clientInterfaces, *engineInterfaces, *interfaces, *memory);
+        GameData::update(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces, *interfaces, *memory);
 
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
@@ -209,17 +209,17 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         visuals->disablePostProcessing(stage);
         visuals->removeVisualRecoil(stage);
         visuals->applyZoom(stage);
-        Misc::fixAnimationLOD(engineInterfaces->getEngine(), *clientInterfaces, *memory, stage);
-        Backtrack::update(*engineInterfaces, *clientInterfaces, *interfaces, *memory, stage);
+        Misc::fixAnimationLOD(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, stage);
+        Backtrack::update(*engineInterfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, stage);
     }
-    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*engineInterfaces, *clientInterfaces, *interfaces, *memory, stage);
+    inventory_changer::InventoryChanger::instance(*interfaces, *memory).run(*engineInterfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
 
 int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
 {
-    Sound::modulateSound(*clientInterfaces, *memory, soundEntry, entityIndex, volume);
+    Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, soundEntry, entityIndex, volume);
     Misc::autoAccept(*interfaces, *memory, soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
@@ -270,7 +270,7 @@ void GlobalContext::overrideViewHook(ViewSetup* setup)
 int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 {
     if (const char* soundName = interfaces->getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
-        Sound::modulateSound(*clientInterfaces, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+        Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
         soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     }
     return hooks->originalDispatchSound(soundInfo);
@@ -302,7 +302,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     if (type == csgo::UserMessageType::Text)
         inventory_changer::InventoryChanger::instance(*interfaces, *memory).onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
-        Misc::onVoteStart(*globalContext->clientInterfaces, *interfaces, *memory, data, size);
+        Misc::onVoteStart(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
         Misc::onVotePass(*memory);
     else if (type == csgo::UserMessageType::VoteFailed)
@@ -404,22 +404,22 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         state = GlobalContext::State::Initializing;
 
         const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets->client } }, retSpoofGadgets->client);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets->client } });
         const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
         engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
         interfaces.emplace(retSpoofGadgets->client);
 
-        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->getClient().getPOD(), *retSpoofGadgets);
+        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->client, *retSpoofGadgets);
 
-        Netvars::init(clientInterfaces->getClient());
+        Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
         gameEventListener.emplace(engineInterfaces->getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        visuals.emplace(*memory, *interfaces, *clientInterfaces, *engineInterfaces);
-        config.emplace(Config{ *visuals, *interfaces, *memory });
-        gui.emplace(GUI{});
-        hooks->install(*clientInterfaces, *interfaces, *memory);
+        visuals.emplace(*memory, *interfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces);
+        config.emplace(*visuals, *interfaces, *memory);
+        gui.emplace();
+        hooks->install(clientInterfaces->client, *interfaces, *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -464,22 +464,22 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         state = GlobalContext::State::Initializing;
 
         const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->client);
+        clientInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
         const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
         engineInterfaces.emplace(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } }, retSpoofGadgets->engine);
 
         interfaces.emplace(retSpoofGadgets->client);
-        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->getClient().getPOD(), *retSpoofGadgets);
+        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->client, *retSpoofGadgets);
 
-        Netvars::init(clientInterfaces->getClient());
+        Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
         gameEventListener.emplace(engineInterfaces->getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
-        visuals.emplace(*memory, *interfaces, *clientInterfaces, *engineInterfaces);
-        config.emplace(Config{ *visuals, *interfaces, *memory });
+        visuals.emplace(*memory, *interfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces);
+        config.emplace(*visuals, *interfaces, *memory);
 
-        gui.emplace(GUI{});
-        hooks->install(*clientInterfaces, *interfaces, *memory);
+        gui.emplace();
+        hooks->install(clientInterfaces->client, *interfaces, *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -510,8 +510,8 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 {
     const auto viewModel = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
 
-    if (localPlayer && clientInterfaces->getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
-        if (const auto weapon = Entity::from(retSpoofGadgets->client, clientInterfaces->getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
+    if (localPlayer && ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
+        if (const auto weapon = Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
             if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
@@ -532,7 +532,7 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         Misc::preserveKillfeed(*memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
+        Misc::purchaseList(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, &event);
         break;
     case fnv::hash("player_death"): {
         auto& inventoryChanger = inventory_changer::InventoryChanger::instance(*interfaces, *memory);
@@ -548,13 +548,13 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         visuals->hitMarker(&event);
         break;
     case fnv::hash("vote_cast"):
-        Misc::voteRevealer(*clientInterfaces, *interfaces, *memory, event);
+        Misc::voteRevealer(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, event);
         break;
     case fnv::hash("round_mvp"):
         inventory_changer::InventoryChanger::instance(*interfaces, *memory).onRoundMVP(engineInterfaces->getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
-        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, &event);
+        Misc::purchaseList(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
         visuals->bulletTracer(event);
@@ -568,7 +568,7 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        Misc::purchaseList(engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory);
+        Misc::purchaseList(engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory);
         Misc::noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(engineInterfaces->getEngine(), *memory, ImGui::GetBackgroundDrawList());
@@ -589,7 +589,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(*interfaces);
 
         if (gui->isOpen())
-            gui->render(*visuals, engineInterfaces->getEngine(), *clientInterfaces, *interfaces, *memory, *config);
+            gui->render(*visuals, engineInterfaces->getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *memory, *config);
     }
 
     ImGui::EndFrame();

@@ -96,7 +96,7 @@ private:
     State state = State::NotInitialized;
 
     std::optional<Config> config;
-    std::optional<ClientInterfaces> clientInterfaces;
+    std::optional<ClientInterfacesPODs> clientInterfaces;
 
 };
 
