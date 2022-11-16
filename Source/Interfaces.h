@@ -73,7 +73,7 @@ public:
 
     [[nodiscard]] auto getBaseFileSystem() const noexcept
     {
-        return BaseFileSystem{ retSpoofInvoker, baseFileSystem };
+        return BaseFileSystem::from(retSpoofInvoker, (csgo::pod::BaseFileSystem*)baseFileSystem);
     }
 
     [[nodiscard]] auto getMaterialSystem() const noexcept
