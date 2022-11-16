@@ -472,10 +472,10 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->client, *retSpoofGadgets);
 
         Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
-        gameEventListener.emplace(engineInterfaces->getGameEventManager(memory->getEventDescriptor));
+        gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
-        visuals.emplace(*memory, *interfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces);
+        visuals.emplace(*memory, *interfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces());
         config.emplace(*visuals, *interfaces, *memory);
 
         gui.emplace();
