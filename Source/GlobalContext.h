@@ -80,9 +80,14 @@ public:
 
     std::optional<EventListener> gameEventListener;
 
-    std::optional<EngineInterfaces> engineInterfaces; // TODO: make private
+    std::optional<EngineInterfacesPODs> engineInterfacesPODs; // TODO: make private
 
     std::optional<Visuals> visuals;
+
+    [[nodiscard]] EngineInterfaces getEngineInterfaces() const noexcept
+    {
+        return EngineInterfaces{ retSpoofGadgets->engine, *engineInterfacesPODs };
+    }
 
 private:
     void renderFrame();

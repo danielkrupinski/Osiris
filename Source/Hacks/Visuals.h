@@ -10,7 +10,7 @@ class EngineInterfaces;
 
 class Visuals {
 public:
-    Visuals(const Memory& memory, const Interfaces& interfaces, ClientInterfaces clientInterfaces, const EngineInterfaces& engineInterfaces)
+    Visuals(const Memory& memory, const Interfaces& interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }
     {
     }
@@ -69,5 +69,5 @@ private:
     const Memory& memory;
     const Interfaces& interfaces;
     ClientInterfaces clientInterfaces;
-    const EngineInterfaces& engineInterfaces;
+    EngineInterfaces engineInterfaces;
 };

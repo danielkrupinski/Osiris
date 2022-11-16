@@ -300,7 +300,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interf
 
 #endif
     
-    bspQuery.init(globalContext->engineInterfaces->getEngine().getBSPTreeQuery());
+    bspQuery.init(globalContext->getEngineInterfaces().getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(clientInterface);
@@ -316,7 +316,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interf
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(globalContext->engineInterfaces->getEngine().getPOD());
+    engine.init(globalContext->getEngineInterfaces().getEngine().getPOD());
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #if IS_WIN32()
@@ -331,7 +331,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interf
     inventoryManager.init(memory.inventoryManager.getPOD());
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
-    modelRender.init(globalContext->engineInterfaces->modelRender);
+    modelRender.init(globalContext->engineInterfacesPODs->modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory.panoramaMarshallHelper);
@@ -340,7 +340,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interf
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
     panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
 
-    sound.init(globalContext->engineInterfaces->sound);
+    sound.init(globalContext->engineInterfacesPODs->sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
 
     surface.init(interfaces.getSurface().getPOD());
@@ -398,7 +398,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
 {
-    Misc::updateEventListeners(*globalContext->engineInterfaces, true);
+    Misc::updateEventListeners(globalContext->getEngineInterfaces(), true);
     globalContext->visuals->updateEventListeners(true);
 
 #if IS_WIN32()
