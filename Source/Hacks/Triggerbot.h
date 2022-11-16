@@ -8,6 +8,6 @@ struct UserCmd;
 
 namespace Triggerbot
 {
-    void run(EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd*) noexcept;
+    void run(const EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd*) noexcept;
     void updateInput(const Config& config) noexcept;
 }

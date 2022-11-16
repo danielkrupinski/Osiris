@@ -31,7 +31,7 @@ namespace Misc
     void recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept;
     void watermark(const Memory& memory) noexcept;
     void prepareRevolver(const Engine& engine, const Memory& memory, UserCmd*) noexcept;
-    void fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd*) noexcept;
+    void fastPlant(const EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
     void drawBombTimer(const Memory& memory) noexcept;
     void stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;

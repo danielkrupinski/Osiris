@@ -106,11 +106,11 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     EnginePrediction::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, cmd);
 
     Aimbot::run(*engineInterfaces, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *interfaces, *config, *memory, cmd);
-    Triggerbot::run(engineInterfaces->engineTrace, *interfaces, *memory, *config, cmd);
+    Triggerbot::run(engineInterfaces->engineTrace(), *interfaces, *memory, *config, cmd);
     Backtrack::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *engineInterfaces, *interfaces, *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
-    Misc::fastPlant(engineInterfaces->engineTrace, *interfaces, cmd);
+    Misc::fastPlant(engineInterfaces->engineTrace(), *interfaces, cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(engineInterfaces->getEngine(), sendPacket);

@@ -95,10 +95,10 @@ struct Trace {
     int hitbox;
 };
 
-class EngineTrace : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
+namespace csgo::pod { struct EngineTrace; }
 
+class EngineTrace : public VirtualCallableFromPOD<EngineTrace, csgo::pod::EngineTrace> {
+public:
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (std::cref(absPosition), contentsMask, nullptr))
     VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (std::cref(ray), mask, std::cref(filter), std::ref(trace)))
 };

@@ -435,7 +435,7 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
     }
 }
 
-void Misc::fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::fastPlant(const EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (!miscConfig.fastPlant)
         return;

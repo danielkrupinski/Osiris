@@ -131,10 +131,10 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
 {
     assert(isAlive());
 
-    if (other.canSee(engineInterfaces.engineTrace, memory, *this, getAbsOrigin() + Vector{ 0.0f, 0.0f, 5.0f }))
+    if (other.canSee(engineInterfaces.engineTrace(), memory, *this, getAbsOrigin() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 
-    if (other.canSee(engineInterfaces.engineTrace, memory, *this, getEyePosition() + Vector{ 0.0f, 0.0f, 5.0f }))
+    if (other.canSee(engineInterfaces.engineTrace(), memory, *this, getEyePosition() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 
     const auto model = getRenderable().getModel();
@@ -155,7 +155,7 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
 
     for (const auto boxNum : { Hitbox::Belly, Hitbox::LeftForearm, Hitbox::RightForearm }) {
         const auto hitbox = set->getHitbox(boxNum);
-        if (hitbox && other.canSee(engineInterfaces.engineTrace, memory, *this, boneMatrices[hitbox->bone].origin()))
+        if (hitbox && other.canSee(engineInterfaces.engineTrace(), memory, *this, boneMatrices[hitbox->bone].origin()))
             return true;
     }
 

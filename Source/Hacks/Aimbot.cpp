@@ -105,7 +105,7 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& 
 
     while (damage >= 1.0f && hitsLeft) {
         Trace trace;
-        engineInterfaces.engineTrace.traceRay({ start, destination }, 0x4600400B, localPlayer.get().getPOD(), trace);
+        engineInterfaces.engineTrace().traceRay({ start, destination }, 0x4600400B, localPlayer.get().getPOD(), trace);
 
         if (!allowFriendlyFire && trace.entity && Entity::from(retSpoofGadgets->client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity::from(retSpoofGadgets->client, trace.entity)))
             return false;
@@ -202,7 +202,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
                 if (!config.aimbot[weaponIndex].ignoreSmoke && memory.lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity.isVisible(engineInterfaces.engineTrace, memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(engineInterfaces, interfaces, memory, entity, bonePosition, activeWeapon.getWeaponData(), config.aimbot[weaponIndex].killshot ? entity.health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
+                if (!entity.isVisible(engineInterfaces.engineTrace(), memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(engineInterfaces, interfaces, memory, entity, bonePosition, activeWeapon.getWeaponData(), config.aimbot[weaponIndex].killshot ? entity.health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {

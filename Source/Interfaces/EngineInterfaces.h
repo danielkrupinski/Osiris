@@ -15,7 +15,7 @@ public:
     explicit EngineInterfaces(InterfaceFinderWithLog engineInterfaceFinder, RetSpoofInvoker retSpoofInvoker)
         : retSpoofInvoker{ retSpoofInvoker },
         engine{ static_cast<csgo::pod::Engine*>(engineInterfaceFinder("VEngineClient014")) },
-        engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
+        engineTrace_{ static_cast<csgo::pod::EngineTrace*>(engineInterfaceFinder("EngineTraceClient004")) },
         gameEventManager{ static_cast<csgo::pod::GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
         modelInfo{ static_cast<csgo::pod::ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
         modelRender{ static_cast<csgo::pod::ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
@@ -38,13 +38,18 @@ public:
         return ModelInfo::from(retSpoofInvoker, modelInfo);
     }
 
+    [[nodiscard]] auto engineTrace() const noexcept
+    {
+        return EngineTrace::from(retSpoofInvoker, engineTrace_);
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     csgo::pod::Engine* engine;
     csgo::pod::GameEventManager* gameEventManager;
     csgo::pod::ModelInfo* modelInfo;
+    csgo::pod::EngineTrace* engineTrace_;
 public:
-    EngineTrace engineTrace;
     csgo::pod::ModelRender* modelRender;
     csgo::pod::EngineSound* sound;
 };

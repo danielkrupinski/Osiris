@@ -12,7 +12,7 @@
 
 static bool keyPressed;
 
-void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
+void Triggerbot::run(const EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
