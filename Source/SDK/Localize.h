@@ -1,14 +1,14 @@
 #pragma once
 
-#include <string>
+#include <array>
+#include <string_view>
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-class Localize : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
+namespace csgo::pod { struct Localize; }
 
+class Localize : public VirtualCallableFromPOD<Localize, csgo::pod::Localize> {
+public:
     VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(int, convertAnsiToUnicode, 15, (const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes), (ansi, unicode, unicodeBufferSizeInBytes))

@@ -68,7 +68,7 @@ public:
 
     [[nodiscard]] auto getLocalize() const noexcept
     {
-        return Localize{ retSpoofInvoker, localize };
+        return Localize::from(retSpoofInvoker, (csgo::pod::Localize*)localize);
     }
 
     [[nodiscard]] auto getBaseFileSystem() const noexcept
