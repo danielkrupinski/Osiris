@@ -5,6 +5,7 @@
 
 #include <SDK/Engine.h>
 #include <SDK/GameEvent.h>
+#include <SDK/ModelInfo.h>
 
 namespace csgo::pod { struct ModelRender; }
 namespace csgo::pod { struct EngineSound; }
@@ -16,7 +17,7 @@ public:
         engine{ static_cast<csgo::pod::Engine*>(engineInterfaceFinder("VEngineClient014")) },
         engineTrace{ retSpoofInvoker, std::uintptr_t(engineInterfaceFinder("EngineTraceClient004")) },
         gameEventManager{ static_cast<csgo::pod::GameEventManager*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")) },
-        modelInfo{ std::uintptr_t(engineInterfaceFinder("VModelInfoClient004")) },
+        modelInfo{ static_cast<csgo::pod::ModelInfo*>(engineInterfaceFinder("VModelInfoClient004")) },
         modelRender{ static_cast<csgo::pod::ModelRender*>(engineInterfaceFinder("VEngineModel016")) },
         sound{ static_cast<csgo::pod::EngineSound*>(engineInterfaceFinder("IEngineSoundClient003")) }
     {
@@ -34,14 +35,14 @@ public:
 
     [[nodiscard]] auto getModelInfo() const noexcept
     {
-        return ModelInfo{ retSpoofInvoker, modelInfo };
+        return ModelInfo::from(retSpoofInvoker, modelInfo);
     }
 
 private:
     RetSpoofInvoker retSpoofInvoker;
     csgo::pod::Engine* engine;
     csgo::pod::GameEventManager* gameEventManager;
-    std::uintptr_t modelInfo;
+    csgo::pod::ModelInfo* modelInfo;
 public:
     EngineTrace engineTrace;
     csgo::pod::ModelRender* modelRender;
