@@ -117,7 +117,6 @@ public:
     std::uintptr_t createBaseTypeCache;
     void** uiComponentInventory;
     void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
-    std::uintptr_t removeDynamicAttribute;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -152,7 +151,6 @@ public:
 
     std::uintptr_t shouldDrawFogReturnAddress;
 #endif
-    std::uintptr_t setDynamicAttributeValueFn;
 
 private:
     void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);

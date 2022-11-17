@@ -1089,7 +1089,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory);
-    static game_integration::Inventory gameInventory{ interfaces, memory };
+    static game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions };
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
@@ -1432,7 +1432,7 @@ void InventoryChanger::reset(const Interfaces& interfaces, const Memory& memory)
 {
     clearInventory(backend);
     backend.getPickEmHandler().clearPicks();
-    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory };
+    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions };
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 

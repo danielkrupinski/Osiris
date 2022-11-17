@@ -10,6 +10,7 @@
 #include "Backend/Request/XRayScannerHandler.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
+#include "EconItemFunctions.h"
 
 namespace csgo { enum class FrameStage; }
 enum class Team;
@@ -133,6 +134,7 @@ private:
     bool panoramaCodeInXrayScanner = false;
     std::vector<char> userTextMsgBuffer;
     InventoryChangerReturnAddresses returnAddresses;
+    EconItemFunctions econItemFunctions;
 };
 
 }

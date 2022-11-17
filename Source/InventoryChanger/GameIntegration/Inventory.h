@@ -5,6 +5,7 @@
 #include <SDK/Constants/ItemId.h>
 
 #include "../../Memory.h"
+#include <InventoryChanger/EconItemFunctions.h>
 
 namespace csgo
 {
@@ -32,8 +33,8 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(const Interfaces& interfaces, const Memory& memory)
-        : interfaces{ interfaces }, memory{ memory } {}
+    Inventory(const Interfaces& interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions)
+        : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ econItemFunctions } {}
 
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] ItemId assingNewItemID(ItemId itemID);
@@ -69,6 +70,7 @@ public:
 private:
     const Interfaces& interfaces;
     const Memory& memory;
+    EconItemFunctions econItemFunctions;
 };
 
 }
