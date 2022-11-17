@@ -223,6 +223,7 @@
     <ClInclude Include="Interfaces\EngineInterfacesPODs.h" />
     <ClInclude Include="Interfaces\InterfaceFinder.h" />
     <ClInclude Include="Interfaces\InterfaceFinderWithLog.h" />
+    <ClInclude Include="Interfaces\OtherInterfacesPODs.h" />
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
