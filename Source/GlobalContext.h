@@ -107,7 +107,7 @@ private:
 
     std::optional<Config> config;
     std::optional<ClientInterfacesPODs> clientInterfaces;
-
+    std::optional<const OtherInterfacesPODs> interfaces;
 };
 
 inline std::optional<GlobalContext> globalContext;

@@ -150,5 +150,3 @@ private:
     RetSpoofInvoker retSpoofInvoker;
     const OtherInterfacesPODs& pods;
 };
-
-inline std::optional<const OtherInterfacesPODs> interfaces;
