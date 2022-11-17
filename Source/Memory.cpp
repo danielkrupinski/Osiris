@@ -104,7 +104,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(clientPatternFinder("\xE8????\xA1????\xA8\x01\x75\x21").add(6).deref().add(-36).get());
     makePanoramaSymbolFn = reinterpret_cast<decltype(makePanoramaSymbolFn)>(clientPatternFinder("\xE8????\x0F\xB7\x45\x0E\x8D\x4D\x0E").add(1).relativeToAbsolute().get());
     createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(clientPatternFinder("\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45").add(20).deref().get());
-    addEconItem = reinterpret_cast<decltype(addEconItem)>(clientPatternFinder("\xE8????\x84\xC0\x74\xE7").add(1).relativeToAbsolute().get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(clientPatternFinder("\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47").get());
     panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3").add(1).deref().get());
 
@@ -176,7 +175,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     moveHelperPtr = reinterpret_cast<csgo::pod::MoveHelper*>(clientPatternFinder("\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38").add(3).relativeToAbsolute().deref<2>().get());
 
     createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(clientPatternFinder("\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D").add(50).relativeToAbsolute().get());
-    addEconItem = reinterpret_cast<decltype(addEconItem)>(clientPatternFinder("\xE8????\x45\x3B\x65\x28\x72\xD6").add(1).relativeToAbsolute().get());
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(clientPatternFinder("\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50").add(1).relativeToAbsolute().get());
     panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().get());
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().get());

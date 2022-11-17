@@ -108,7 +108,6 @@ public:
     csgo::pod::Entity** gameRules;
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
-    bool(THISCALL_CONV* addEconItem)(std::uintptr_t playerInventory, csgo::pod::EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(THISCALL_CONV* clearInventoryImageRGBA)(csgo::pod::EconItemView* itemView);
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
