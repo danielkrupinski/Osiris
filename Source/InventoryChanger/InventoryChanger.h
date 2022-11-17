@@ -79,7 +79,7 @@ public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
         : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder } {}
 
-    static InventoryChanger& instance(const Interfaces& interfaces, const Memory& memory);
+    static InventoryChanger& instance(const OtherInterfaces& interfaces, const Memory& memory);
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
@@ -113,12 +113,12 @@ public:
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
     void fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence);
 
-    void reset(const Interfaces& interfaces, const Memory& memory);
+    void reset(const OtherInterfaces& interfaces, const Memory& memory);
 
-    void drawGUI(const Interfaces& interfaces, const Memory& memory, bool contentOnly);
+    void drawGUI(const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly);
 
-    void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
-    void scheduleHudUpdate(const Interfaces& interfaces) noexcept;
+    void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
+    void scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept;
     void onSoUpdated(const SharedObject& object) noexcept;
 
 private:
@@ -143,7 +143,7 @@ namespace InventoryChanger
 {
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(const Interfaces& interfaces, const Memory& memory) noexcept;
+    void tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;

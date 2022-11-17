@@ -19,8 +19,8 @@ class EngineInterfaces;
 
 namespace Backtrack
 {
-    void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
-    void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
+    void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
+    void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
 
     struct Record {
         Vector origin;
@@ -30,7 +30,7 @@ namespace Backtrack
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept;
     bool valid(const Engine& engine, const Memory& memory, float simtime) noexcept;
-    void init(const Interfaces& interfaces) noexcept;
+    void init(const OtherInterfaces& interfaces) noexcept;
 
     // GUI
     void menuBarItem() noexcept;

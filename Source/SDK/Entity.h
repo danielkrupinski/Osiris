@@ -204,8 +204,8 @@ public:
     int getUserId(const Engine& engine) const noexcept;
     std::uint64_t getSteamId(const Engine& engine) const noexcept;
 
-    void getPlayerName(const Interfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept;
-    [[nodiscard]] std::string getPlayerName(const Interfaces& interfaces, const Memory& memory) const noexcept
+    void getPlayerName(const OtherInterfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept;
+    [[nodiscard]] std::string getPlayerName(const OtherInterfaces& interfaces, const Memory& memory) const noexcept
     {
         char name[128];
         getPlayerName(interfaces, memory, name);

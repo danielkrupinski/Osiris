@@ -94,7 +94,7 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
         renderMenuBar(visuals);
@@ -125,7 +125,7 @@ void GUI::updateColors(Config& config) const noexcept
     }
 }
 
-void GUI::handleToggle(const Interfaces& interfaces) noexcept
+void GUI::handleToggle(const OtherInterfaces& interfaces) noexcept
 {
     if (Misc::isMenuKeyPressed()) {
         open = !open;
@@ -515,7 +515,7 @@ void GUI::renderStyleWindow(Config& config, bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderConfigWindow(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
+void GUI::renderConfigWindow(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!window.config)
@@ -625,7 +625,7 @@ void GUI::renderConfigWindow(Visuals& visuals, const Interfaces& interfaces, con
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 

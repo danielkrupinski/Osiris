@@ -133,7 +133,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())

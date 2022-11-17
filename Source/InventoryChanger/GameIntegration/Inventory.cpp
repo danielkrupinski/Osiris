@@ -25,7 +25,7 @@ namespace
     return nullptr;
 }
 
-void initItemCustomizationNotification(const Interfaces& interfaces, const Memory& memory, std::string_view typeStr, ItemId itemID)
+void initItemCustomizationNotification(const OtherInterfaces& interfaces, const Memory& memory, std::string_view typeStr, ItemId itemID)
 {
     const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification"));
     if (idx == -1)

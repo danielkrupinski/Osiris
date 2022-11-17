@@ -11,7 +11,7 @@
 namespace inventory_changer::game_integration
 {
 
-void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getMusicKits(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     for (const auto& node : itemSchema.getPOD()->musicKits) {
         const auto musicKit = node.value;
@@ -23,7 +23,7 @@ void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& stor
     }
 }
 
-void Items::getStickers(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getStickers(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     const auto& stickerMap = itemSchema.getPOD()->stickerKits;
     for (const auto& node : stickerMap) {
@@ -76,7 +76,7 @@ struct KitWeapon {
 
 }
 
-void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getSkinsAndGloves(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     const auto kitsWeapons = getKitsWeapons(itemSchema.getPOD()->alternateIcons);
 
@@ -159,7 +159,7 @@ void Items::getOtherItems(game_items::Storage& storage)
     }
 }
 
-game_items::Storage createGameItemStorage(const Interfaces& interfaces, Items& items)
+game_items::Storage createGameItemStorage(const OtherInterfaces& interfaces, Items& items)
 {
     game_items::Storage storage;
     items.getStickers(interfaces, storage);

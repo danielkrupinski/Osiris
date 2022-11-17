@@ -282,7 +282,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(csgo::pod::Client* clientInterface, const Interfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
 #if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -396,7 +396,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 #endif
 
-void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     Misc::updateEventListeners(globalContext->getEngineInterfaces(), true);
     globalContext->visuals->updateEventListeners(true);

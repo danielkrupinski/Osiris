@@ -268,7 +268,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
         j.emplace("Purchased From Store", true);
 }
 
-[[nodiscard]] json itemsToJson(const Interfaces& interfaces, const Memory& memory, const backend::BackendSimulator& backend)
+[[nodiscard]] json itemsToJson(const OtherInterfaces& interfaces, const Memory& memory, const backend::BackendSimulator& backend)
 {
     const auto& gameItemStorage = backend.getGameItemLookup().getStorage();
     const auto& loadout = backend.getLoadout();
@@ -352,7 +352,7 @@ void commonPropertiesToJson(const inventory::Item::CommonProperties& properties,
 
 }
 
-json inventory_changer::toJson(const Interfaces& interfaces, const Memory& memory, const InventoryChanger& inventoryChanger)
+json inventory_changer::toJson(const OtherInterfaces& interfaces, const Memory& memory, const InventoryChanger& inventoryChanger)
 {
     json j;
 

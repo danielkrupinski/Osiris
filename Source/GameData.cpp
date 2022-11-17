@@ -77,7 +77,7 @@ static bool shouldUpdatePlayerVisibility(const Memory& memory) noexcept
     return nextPlayerVisibilityUpdateTime <= memory.globalVars->realtime;
 }
 
-void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     static int lastFrame;
     if (lastFrame == memory.globalVars->framecount)
@@ -393,7 +393,7 @@ void ProjectileData::update(const Memory& memory, const Entity& projectile) noex
         trajectory.emplace_back(memory.globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept : BaseData{ entity }, handle{ entity.handle() }
+PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept : BaseData{ entity }, handle{ entity.handle() }
 {
     if (const auto steamID = entity.getSteamId(engineInterfaces.getEngine())) {
         const auto ctx = engineInterfaces.getEngine().getSteamAPIContext();
@@ -409,7 +409,7 @@ PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interface
     update(engineInterfaces, interfaces, memory, entity);
 }
 
-void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept
+void PlayerData::update(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept
 {
     name = entity.getPlayerName(interfaces, memory);
 
@@ -551,7 +551,7 @@ float PlayerData::fadingAlpha(const Memory& memory) const noexcept
     return std::clamp(1.0f - (memory.globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
 }
 
-WeaponData::WeaponData(const Interfaces& interfaces, const Entity& entity) noexcept : BaseData{ entity }
+WeaponData::WeaponData(const OtherInterfaces& interfaces, const Entity& entity) noexcept : BaseData{ entity }
 {
     clip = entity.clip();
     reserveAmmo = entity.reserveAmmoCount();

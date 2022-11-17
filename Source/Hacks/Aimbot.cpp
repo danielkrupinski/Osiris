@@ -57,7 +57,7 @@ static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vec
     return result;
 }
 
-static float handleBulletPenetration(const Interfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+static float handleBulletPenetration(const OtherInterfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
@@ -90,7 +90,7 @@ static float handleBulletPenetration(const Interfaces& interfaces, const Memory&
     return damage;
 }
 
-static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
@@ -142,7 +142,7 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;

@@ -47,7 +47,7 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
     return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
 }
 
-void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
 {
     if (stage == csgo::FrameStage::RENDER_START) {
         if (!backtrackConfig.enabled || !localPlayer || !localPlayer.get().isAlive()) {
@@ -89,7 +89,7 @@ static float getLerp() noexcept
     return (std::max)(cvars->interp.getFloat(), (ratio / ((cvars->maxUpdateRate.getPOD() != nullptr) ? cvars->maxUpdateRate.getFloat() : cvars->updateRate.getFloat())));
 }
 
-void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
+void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
         return;
@@ -172,7 +172,7 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
     return std::abs(delta) <= 0.2f;
 }
 
-void Backtrack::init(const Interfaces& interfaces) noexcept
+void Backtrack::init(const OtherInterfaces& interfaces) noexcept
 {
     cvars.emplace(Cvars{
         .updateRate = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("cl_updaterate")),

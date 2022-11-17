@@ -49,7 +49,7 @@ static KeyBind glowHoldKey;
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
-void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;

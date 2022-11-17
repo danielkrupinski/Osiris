@@ -435,7 +435,7 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
     }
 }
 
-void Misc::fastPlant(const EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::fastPlant(const EngineTrace& engineTrace, const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (!miscConfig.fastPlant)
         return;
@@ -552,7 +552,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -584,13 +584,13 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
     stolenIds.clear();
 }
 
-void Misc::disablePanoramablur(const Interfaces& interfaces) noexcept
+void Misc::disablePanoramablur(const OtherInterfaces& interfaces) noexcept
 {
     static auto blur = interfaces.getCvar().findVar("@panorama_disable_blur");
     ConVar::from(retSpoofGadgets->client, blur).setValue(miscConfig.disablePanoramablur);
 }
 
-void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::quickReload(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
         static csgo::pod::Entity* reloadedWeapon = 0;
@@ -626,7 +626,7 @@ void Misc::quickReload(const ClientInterfaces& clientInterfaces, const Interface
     }
 }
 
-bool Misc::changeName(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
+bool Misc::changeName(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
 {
     static auto exploitInitialized{ false };
 
@@ -668,7 +668,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer.get().isOnGround();
 }
 
-void Misc::fakeBan(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool set) noexcept
+void Misc::fakeBan(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool set) noexcept
 {
     static bool shouldSet = false;
 
@@ -679,7 +679,7 @@ void Misc::fakeBan(const Engine& engine, const Interfaces& interfaces, const Mem
         shouldSet = false;
 }
 
-void Misc::nadePredict(const Interfaces& interfaces) noexcept
+void Misc::nadePredict(const OtherInterfaces& interfaces) noexcept
 {
     static auto nadeVar{ interfaces.getCvar().findVar("cl_grenadepreview") };
 
@@ -857,7 +857,7 @@ void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -954,7 +954,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
     }
 }
 
-void Misc::oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stage) noexcept
+void Misc::oppositeHandKnife(const OtherInterfaces& interfaces, csgo::FrameStage stage) noexcept
 {
     if (!miscConfig.oppositeHandKnife)
         return;
@@ -1004,7 +1004,7 @@ static int reportbotRound;
     return std::ranges::find(std::as_const(reportedPlayers), xuid) != reportedPlayers.cend();
 }
 
-[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory)
+[[nodiscard]] static std::vector<std::uint64_t> getXuidsOfCandidatesToBeReported(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory)
 {
     std::vector<std::uint64_t> xuids;
 
@@ -1023,7 +1023,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1097,7 +1097,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
+void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1113,7 +1113,7 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const Interfac
     memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
+void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1261,7 +1261,7 @@ void Misc::drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDr
     }
 }
 
-void Misc::autoAccept(const Interfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept
+void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept
 {
     if (!miscConfig.autoAccept)
         return;
@@ -1317,7 +1317,7 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
         drawGUI(engine, clientInterfaces, interfaces, memory, true);
@@ -1325,7 +1325,7 @@ void Misc::tabItem(const Engine& engine, const ClientInterfaces& clientInterface
     }
 }
 
-void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)

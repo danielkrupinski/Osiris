@@ -36,9 +36,9 @@
 class GameUI;
 class NetworkStringTableContainer;
 
-class Interfaces {
+class OtherInterfaces {
 public:
-    Interfaces(RetSpoofInvoker retSpoofInvoker, const OtherInterfacesPODs& pods)
+    OtherInterfaces(RetSpoofInvoker retSpoofInvoker, const OtherInterfacesPODs& pods)
         : retSpoofInvoker{ retSpoofInvoker }, pods{ pods }
     {
     }

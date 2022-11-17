@@ -80,7 +80,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(Visuals& visuals, const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
@@ -290,12 +290,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
     load(visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -527,7 +527,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -559,7 +559,7 @@ void Config::save(Visuals& visuals, const Interfaces& interfaces, const Memory& 
         out << std::setw(2) << j;
 }
 
-void Config::add(Visuals& visuals, const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
@@ -581,7 +581,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(Visuals& visuals, const Interfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };

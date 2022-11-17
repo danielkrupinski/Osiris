@@ -89,9 +89,9 @@ public:
         return EngineInterfaces{ retSpoofGadgets->engine, *engineInterfacesPODs };
     }
 
-    [[nodiscard]] Interfaces getOtherInterfaces() const noexcept
+    [[nodiscard]] OtherInterfaces getOtherInterfaces() const noexcept
     {
-        return Interfaces{ retSpoofGadgets->client, *interfaces };
+        return OtherInterfaces{ retSpoofGadgets->client, *interfaces };
     }
 
 private:

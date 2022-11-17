@@ -12,7 +12,7 @@ class ClientInterfaces;
 
 class Chams {
 public:
-    bool render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    bool render(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
 private:
     void renderPlayer(const Engine& engine, const StudioRender& studioRender, const Memory& memory, Config& config, const Entity& player) noexcept;

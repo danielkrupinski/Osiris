@@ -98,7 +98,7 @@ std::uint64_t Entity::getSteamId(const Engine& engine) const noexcept
     return std::unique(begin, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
 }
 
-void Entity::getPlayerName(const Interfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept
+void Entity::getPlayerName(const OtherInterfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept
 {
     if (!*memory.playerResource) {
         strcpy(out, "unknown");
