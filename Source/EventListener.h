@@ -4,11 +4,11 @@
 
 class EventListener : public GameEventListener {
 public:
-    explicit EventListener(const GameEventManager& gameEventManager);
+    explicit EventListener(GameEventManager gameEventManager);
 
     void fireGameEvent(csgo::pod::GameEvent* event) override;
     void remove();
 
 private:
-    const GameEventManager& gameEventManager;
+    GameEventManager gameEventManager;
 };
