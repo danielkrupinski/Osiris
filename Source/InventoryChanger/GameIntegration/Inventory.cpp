@@ -19,8 +19,8 @@ namespace
 
 [[nodiscard]] csgo::pod::EconItem* getEconItem(const Memory& memory, ItemId itemID)
 {
-    if (const auto view = memory.findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)))
-        return memory.getSOCData(view);
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
+        return view.getSOCData();
     return nullptr;
 }
 
@@ -255,7 +255,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "updated", "0");
     }
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     return ItemId{ econItemPOD->itemID };
@@ -280,7 +280,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     econItem->itemID = newItemID;
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {

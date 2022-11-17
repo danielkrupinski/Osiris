@@ -396,8 +396,8 @@ static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
     if (localInventory.getPOD() == nullptr)
         return;
 
-    if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
-        if (const auto soc = memory.getSOCData(view))
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr) {
+        if (const auto soc = view.getSOCData())
             localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
     }
 }
@@ -1404,8 +1404,8 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (localInventory.getPOD() == nullptr)
         return;
 
-    if (const auto view = memory.findOrCreateEconItemViewForItemID(itemID)) {
-        if (const auto soc = memory.getSOCData(view)) {
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr) {
+        if (const auto soc = view.getSOCData()) {
             if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache)) {
                 soc->inventory = baseTypeCache->getHighestIDs().second + 1;
                 localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);

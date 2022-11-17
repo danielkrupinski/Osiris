@@ -26,12 +26,14 @@ namespace csgo::pod
             return *reinterpret_cast<UtlVector<void*>*>(std::uintptr_t(this) + WIN32_LINUX(0x230, 0x2D8));
         }
     };
+    
+    struct EconItem;
 }
 
 class EconItemView : public VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView> {
 public:
-    EconItemView(VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView> base, std::uintptr_t clearInventoryImageRGBA_)
-        : VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView>{ base }, clearInventoryImageRGBA_{ clearInventoryImageRGBA_ }
+    EconItemView(VirtualCallableFromPOD base, std::uintptr_t clearInventoryImageRGBA_, std::uintptr_t getSOCData_)
+        : VirtualCallableFromPOD{ base }, clearInventoryImageRGBA_{ clearInventoryImageRGBA_ }, getSOCData_{ getSOCData_ }
     {
     }
 
@@ -40,7 +42,12 @@ public:
         getInvoker().invokeThiscall<void>(getThis(), clearInventoryImageRGBA_);
     }
 
+    csgo::pod::EconItem* getSOCData() const noexcept
+    {
+        return getInvoker().invokeThiscall<csgo::pod::EconItem*>(getThis(), getSOCData_);
+    }
+
 private:
     std::uintptr_t clearInventoryImageRGBA_;
-    
+    std::uintptr_t getSOCData_;
 };
