@@ -49,86 +49,33 @@
 class GameUI;
 class NetworkStringTableContainer;
 
-class Interfaces {
-public:
-    Interfaces(RetSpoofInvoker retSpoofInvoker)
-        : baseFileSystem{ std::uintptr_t(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
-          cvar{ std::uintptr_t(find(VSTDLIB_DLL, "VEngineCvar007")) },
-          inputSystem{ std::uintptr_t(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          materialSystem{ std::uintptr_t(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
-          panoramaUIEngine{ std::uintptr_t(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
-          physicsSurfaceProps{ std::uintptr_t(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
-          surface{ std::uintptr_t(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) },
-          soundEmitter{ std::uintptr_t(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ std::uintptr_t(find(STUDIORENDER_DLL, "VStudioRender026")) },
-          retSpoofInvoker{ retSpoofInvoker },
-          localize{ std::uintptr_t(find(LOCALIZE_DLL, "Localize_001")) }
+struct OtherInterfacesPODs {
+    OtherInterfacesPODs()
+        : baseFileSystem{ static_cast<csgo::pod::BaseFileSystem*>(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
+          cvar{ static_cast<csgo::pod::Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
+          inputSystem{ static_cast<csgo::pod::InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
+          localize{ static_cast<csgo::pod::Localize*>(find(LOCALIZE_DLL, "Localize_001")) },
+          materialSystem{ static_cast<csgo::pod::MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
+          panoramaUIEngine{ static_cast<csgo::pod::PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
+          physicsSurfaceProps{ static_cast<csgo::pod::PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
+          soundEmitter{ static_cast<csgo::pod::SoundEmitter*>(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
+          studioRender{ static_cast<csgo::pod::StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) },
+          surface{ static_cast<csgo::pod::Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
     {
     }
 
-    [[nodiscard]] auto getLocalize() const noexcept
-    {
-        return Localize::from(retSpoofInvoker, (csgo::pod::Localize*)localize);
-    }
-
-    [[nodiscard]] auto getBaseFileSystem() const noexcept
-    {
-        return BaseFileSystem::from(retSpoofInvoker, (csgo::pod::BaseFileSystem*)baseFileSystem);
-    }
-
-    [[nodiscard]] auto getMaterialSystem() const noexcept
-    {
-        return MaterialSystem::from(retSpoofInvoker, (csgo::pod::MaterialSystem*)materialSystem);
-    }
-
-    [[nodiscard]] auto getCvar() const noexcept
-    {
-        return Cvar::from(retSpoofInvoker, (csgo::pod::Cvar*)cvar);
-    }
-
-    [[nodiscard]] auto getInputSystem() const noexcept
-    {
-        return InputSystem::from(retSpoofInvoker, (csgo::pod::InputSystem*)inputSystem);
-    }
-
-    [[nodiscard]] auto getSoundEmitter() const noexcept
-    {
-        return SoundEmitter::from(retSpoofInvoker, (csgo::pod::SoundEmitter*)soundEmitter);
-    }
-
-    [[nodiscard]] auto getStudioRender() const noexcept
-    {
-        return StudioRender::from(retSpoofInvoker, (csgo::pod::StudioRender*)studioRender);
-    }
-
-    [[nodiscard]] auto getPanoramaUIEngine() const noexcept
-    {
-        return PanoramaUIEngine::from(retSpoofInvoker, (csgo::pod::PanoramaUIEngine*)panoramaUIEngine);
-    }
-
-    [[nodiscard]] auto getPhysicsSurfaceProps() const noexcept
-    {
-        return PhysicsSurfaceProps::from(retSpoofInvoker, (csgo::pod::PhysicsSurfaceProps*)physicsSurfaceProps);
-    }
-
-    [[nodiscard]] auto getSurface() const noexcept
-    {
-        return Surface::from(retSpoofInvoker, (csgo::pod::Surface*)surface);
-    }
+    csgo::pod::BaseFileSystem* baseFileSystem;
+    csgo::pod::Cvar* cvar;
+    csgo::pod::InputSystem* inputSystem;
+    csgo::pod::Localize* localize;
+    csgo::pod::MaterialSystem* materialSystem;
+    csgo::pod::PanoramaUIEngine* panoramaUIEngine;
+    csgo::pod::PhysicsSurfaceProps* physicsSurfaceProps;
+    csgo::pod::SoundEmitter* soundEmitter;
+    csgo::pod::StudioRender* studioRender;
+    csgo::pod::Surface* surface;
 
 private:
-    RetSpoofInvoker retSpoofInvoker;
-    std::uintptr_t localize;
-    std::uintptr_t baseFileSystem;
-    std::uintptr_t materialSystem;
-    std::uintptr_t cvar;
-    std::uintptr_t inputSystem;
-    std::uintptr_t soundEmitter;
-    std::uintptr_t studioRender;
-    std::uintptr_t panoramaUIEngine;
-    std::uintptr_t physicsSurfaceProps;
-    std::uintptr_t surface;
-
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #if IS_WIN32()
@@ -142,4 +89,66 @@ private:
     }
 };
 
-inline std::optional<const Interfaces> interfaces;
+class Interfaces {
+public:
+    Interfaces(RetSpoofInvoker retSpoofInvoker, const OtherInterfacesPODs& pods)
+        : retSpoofInvoker{ retSpoofInvoker }, pods{ pods }
+    {
+    }
+
+    [[nodiscard]] auto getLocalize() const noexcept
+    {
+        return Localize::from(retSpoofInvoker, pods.localize);
+    }
+
+    [[nodiscard]] auto getBaseFileSystem() const noexcept
+    {
+        return BaseFileSystem::from(retSpoofInvoker, pods.baseFileSystem);
+    }
+
+    [[nodiscard]] auto getMaterialSystem() const noexcept
+    {
+        return MaterialSystem::from(retSpoofInvoker, pods.materialSystem);
+    }
+
+    [[nodiscard]] auto getCvar() const noexcept
+    {
+        return Cvar::from(retSpoofInvoker, pods.cvar);
+    }
+
+    [[nodiscard]] auto getInputSystem() const noexcept
+    {
+        return InputSystem::from(retSpoofInvoker, pods.inputSystem);
+    }
+
+    [[nodiscard]] auto getSoundEmitter() const noexcept
+    {
+        return SoundEmitter::from(retSpoofInvoker, pods.soundEmitter);
+    }
+
+    [[nodiscard]] auto getStudioRender() const noexcept
+    {
+        return StudioRender::from(retSpoofInvoker, pods.studioRender);
+    }
+
+    [[nodiscard]] auto getPanoramaUIEngine() const noexcept
+    {
+        return PanoramaUIEngine::from(retSpoofInvoker, pods.panoramaUIEngine);
+    }
+
+    [[nodiscard]] auto getPhysicsSurfaceProps() const noexcept
+    {
+        return PhysicsSurfaceProps::from(retSpoofInvoker, pods.physicsSurfaceProps);
+    }
+
+    [[nodiscard]] auto getSurface() const noexcept
+    {
+        return Surface::from(retSpoofInvoker, pods.surface);
+    }
+
+private:
+    RetSpoofInvoker retSpoofInvoker;
+    const OtherInterfacesPODs& pods;
+};
+
+inline std::optional<const OtherInterfacesPODs> interfaces;

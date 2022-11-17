@@ -89,6 +89,11 @@ public:
         return EngineInterfaces{ retSpoofGadgets->engine, *engineInterfacesPODs };
     }
 
+    [[nodiscard]] Interfaces getOtherInterfaces() const noexcept
+    {
+        return Interfaces{ retSpoofGadgets->client, *interfaces };
+    }
+
 private:
     void renderFrame();
 

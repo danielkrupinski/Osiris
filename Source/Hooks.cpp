@@ -382,7 +382,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 {
     Sleep(100);
 
-    interfaces->getInputSystem().enableInput(true);
+    globalContext->getOtherInterfaces().getInputSystem().enableInput(true);
     globalContext->gameEventListener->remove();
 
     ImGui_ImplDX9_Shutdown();
