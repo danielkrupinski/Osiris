@@ -109,7 +109,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3").add(1).deref().get());
 
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x8B\xCE\x83\xC4\x08").add(1).relativeToAbsolute().get());
-    getInventoryItemByItemID = reinterpret_cast<decltype(getInventoryItemByItemID)>(clientPatternFinder("\xE8????\x8B\x33\x8B\xD0").add(1).relativeToAbsolute().get());
     getSOCData = reinterpret_cast<decltype(getSOCData)>(clientPatternFinder("\xE8????\x32\xC9").add(1).relativeToAbsolute().get());
     setCustomName = reinterpret_cast<decltype(setCustomName)>(clientPatternFinder("\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34").add(1).relativeToAbsolute().get());
     setDynamicAttributeValueFn = clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x3C\x53\x8B\x5D\x08\x56\x57\x6A").get();
@@ -183,7 +182,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     clearInventoryImageRGBA = reinterpret_cast<decltype(clearInventoryImageRGBA)>(clientPatternFinder("\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50").add(1).relativeToAbsolute().get());
     panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().get());
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().get());
-    getInventoryItemByItemID = reinterpret_cast<decltype(getInventoryItemByItemID)>(clientPatternFinder("\xE8????\x45\x84\xED\x49\x89\xC1").add(1).relativeToAbsolute().get());
     getSOCData = reinterpret_cast<decltype(getSOCData)>(clientPatternFinder("\xE8????\x5B\x44\x89\xEE").add(1).relativeToAbsolute().get());
     setCustomName = reinterpret_cast<decltype(setCustomName)>(clientPatternFinder("\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98").add(1).relativeToAbsolute().get());
     setDynamicAttributeValueFn = clientPatternFinder("\x41\x8B\x06\x49\x8D\x7D\x08").add(-95).get();

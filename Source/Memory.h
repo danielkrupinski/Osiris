@@ -112,7 +112,6 @@ public:
     void(THISCALL_CONV* clearInventoryImageRGBA)(csgo::pod::EconItemView* itemView);
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
-    void*(THISCALL_CONV* getInventoryItemByItemID)(std::uintptr_t playerInventory, std::uint64_t itemID);
     csgo::pod::EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     void(THISCALL_CONV* setCustomName)(csgo::pod::EconItem* thisptr, const char* name);
     std::uintptr_t createBaseTypeCache;
