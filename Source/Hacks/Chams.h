@@ -9,6 +9,7 @@ class Entity;
 struct ModelRenderInfo;
 class matrix3x4;
 class ClientInterfaces;
+class StudioRender;
 
 class Chams {
 public:

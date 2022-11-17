@@ -16,7 +16,9 @@
 #include <Windows.h>
 #include <Psapi.h>
 
+#include <Platform/Windows/DynamicLibrary.h>
 #include <Platform/Windows/DynamicLibrarySection.h>
+#include <Platform/Windows/DynamicLibraryWrapper.h>
 #elif IS_LINUX()
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -28,7 +30,6 @@
 #include <Platform/Linux/DynamicLibrarySection.h>
 #endif
 
-#include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/ItemSchema.h"
 #include "SDK/LocalPlayer.h"

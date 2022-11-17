@@ -19,7 +19,8 @@
 namespace csgo::pod { struct EconItemView; }
 
 class Memory;
-
+class EngineTrace;
+class OtherInterfaces;
 class EconItemView;
 
 class matrix3x4;

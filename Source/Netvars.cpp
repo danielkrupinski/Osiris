@@ -10,7 +10,6 @@
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
-#include "Interfaces.h"
 #include "Netvars.h"
 
 #include "SDK/Constants/ClassId.h"

@@ -10,6 +10,7 @@
 #include "Platform/Linux/SharedObject.h"
 #endif
 
+#include <RetSpoofGadgets.h>
 #include <SDK/Platform.h>
 
 #include "Interfaces/InterfaceFinder.h"

@@ -2,6 +2,7 @@
 
 #include "../JsonForward.h"
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;

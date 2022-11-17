@@ -5,7 +5,7 @@
 #include <SDK/PODs/ItemSchema.h>
 
 #include <Helpers.h>
-#include <Interfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 namespace inventory_changer
 {

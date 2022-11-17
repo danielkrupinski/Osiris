@@ -11,7 +11,6 @@
 #include "../Config.h"
 #include "../Helpers.h"
 #include "../Hooks.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "Backtrack.h"
 #include "../InputUtil.h"
@@ -29,6 +28,7 @@
 #include "../SDK/Utils.h"
 
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 static csgo::pod::Material* normal;
 static csgo::pod::Material* flat;

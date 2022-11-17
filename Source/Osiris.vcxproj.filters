@@ -334,9 +334,6 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Interfaces.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\UserCmd.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -950,6 +947,9 @@
       <Filter>InventoryChanger</Filter>
     </ClInclude>
     <ClInclude Include="Interfaces\OtherInterfacesPODs.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\OtherInterfaces.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

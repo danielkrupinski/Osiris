@@ -24,7 +24,6 @@
 #include "Hacks/Misc.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Helpers.h"
-#include "Interfaces.h"
 #include "SDK/InputSystem.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Glow.h"

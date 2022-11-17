@@ -19,13 +19,13 @@ union SDL_Event;
 
 #include "SDK/Platform.h"
 
-#include "Interfaces.h"
 #include "Memory.h"
 
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
 class ClientInterfaces;
+class OtherInterfaces;
 
 #if IS_WIN32()
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap

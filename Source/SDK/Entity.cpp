@@ -1,7 +1,6 @@
 #include "Entity.h"
 
 #include "../Memory.h"
-#include "../Interfaces.h"
 #include "GlobalVars.h"
 #include "Localize.h"
 #include "ModelInfo.h"
@@ -12,6 +11,8 @@
 #include "LocalPlayer.h"
 
 #include "matrix3x4.h"
+
+#include <Interfaces/OtherInterfaces.h>
 
 bool Entity::setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept
 {

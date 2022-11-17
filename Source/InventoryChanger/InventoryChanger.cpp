@@ -28,7 +28,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
-#include "../Interfaces.h"
 #include "InventoryChanger.h"
 #include "../ProtobufReader.h"
 #include "../Texture.h"
@@ -82,6 +81,7 @@
 #endif
 
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {

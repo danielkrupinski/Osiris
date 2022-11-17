@@ -9,7 +9,6 @@
 
 #include "fnv.h"
 #include "GameData.h"
-#include "Interfaces.h"
 #include "Memory.h"
 
 #include "Resources/avatar_ct.h"
@@ -37,6 +36,7 @@
 #include "SDK/WeaponData.h"
 
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 auto operator<(const BaseData& a, const BaseData& b) noexcept
 {

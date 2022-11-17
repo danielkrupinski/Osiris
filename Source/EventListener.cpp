@@ -7,7 +7,6 @@
 #include "Hacks/Misc.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Visuals.h"
-#include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/GameEvent.h"
 #include "SDK/UtlVector.h"

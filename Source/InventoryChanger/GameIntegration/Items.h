@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Helpers.h>
-#include <Interfaces.h>
 #include <InventoryChanger/GameItems/Storage.h>
 #include <SDK/Localize.h>
 
 class ItemSchema;
+class OtherInterfaces;
 
 namespace inventory_changer::game_integration
 {

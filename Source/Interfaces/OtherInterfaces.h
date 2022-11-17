@@ -1,40 +1,17 @@
 #pragma once
 
-#include <optional>
-#include <string>
-#include <type_traits>
-
-#include "Platform/IsPlatform.h"
-
-#include "SDK/Client.h"
-#include "SDK/Cvar.h"
-#include "SDK/Engine.h"
-#include "SDK/EngineTrace.h"
-#include "SDK/EntityList.h"
-#include "SDK/FileSystem.h"
-#include "SDK/GameEvent.h"
-#include "SDK/GameMovement.h"
-#include "SDK/InputSystem.h"
-#include "SDK/Localize.h"
-#include "SDK/MaterialSystem.h"
-#include "SDK/ModelInfo.h"
-#include "SDK/Panorama.h"
-#include "SDK/PhysicsSurfaceProps.h"
-#include "SDK/Platform.h"
-#include "SDK/Prediction.h"
-#include "SDK/SoundEmitter.h"
-#include "SDK/StudioRender.h"
-#include "SDK/Surface.h"
-
-#include "Platform/DynamicLibraryView.h"
-#include "Platform/RetSpoofInvoker.h"
-
-#include "RetSpoofGadgets.h"
-
-#include "Interfaces/OtherInterfacesPODs.h"
-
-class GameUI;
-class NetworkStringTableContainer;
+#include "OtherInterfacesPODs.h"
+#include <Platform/RetSpoofInvoker.h>
+#include <SDK/Cvar.h>
+#include <SDK/FileSystem.h>
+#include <SDK/InputSystem.h>
+#include <SDK/Localize.h>
+#include <SDK/MaterialSystem.h>
+#include <SDK/Panorama.h>
+#include <SDK/PhysicsSurfaceProps.h>
+#include <SDK/SoundEmitter.h>
+#include <SDK/StudioRender.h>
+#include <SDK/Surface.h>
 
 class OtherInterfaces {
 public:

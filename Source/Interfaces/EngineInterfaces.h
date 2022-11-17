@@ -4,6 +4,7 @@
 #include <Platform/RetSpoofInvoker.h>
 
 #include <SDK/Engine.h>
+#include <SDK/EngineTrace.h>
 #include <SDK/GameEvent.h>
 #include <SDK/ModelInfo.h>
 

@@ -18,6 +18,8 @@
 #include "Helpers/PatternFinder.h"
 #include "Utils/TypeHint.h"
 
+#include "Platform/CallingConventions.h"
+
 class ClientMode;
 class ClientSharedObjectCache;
 class CSPlayerInventory;
@@ -46,6 +48,7 @@ struct Vector;
 
 namespace csgo::pod
 {
+    struct Client;
     struct EconItem;
     struct ItemSystem;
 }

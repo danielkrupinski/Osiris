@@ -48,8 +48,6 @@
 #include "SDK/UserCmd.h"
 #include "SDK/ViewSetup.h"
 
-#include "Interfaces.h"
-
 #include "Interfaces/ClientInterfaces.h"
 
 GlobalContext::GlobalContext()

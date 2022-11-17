@@ -1,6 +1,5 @@
 #include "Inventory.h"
 
-#include <Interfaces.h>
 #include <InventoryChanger/EconItemFunctions.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
@@ -11,7 +10,8 @@
 #include <SDK/Constants/EconItemFlags.h>
 
 #include <Utils/FlagsBuilder.h>
-#
+#include <Interfaces/OtherInterfaces.h>
+
 namespace inventory_changer::game_integration
 {
 

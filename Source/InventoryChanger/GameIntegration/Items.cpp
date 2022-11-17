@@ -3,10 +3,12 @@
 #include "Items.h"
 #include "Misc.h"
 
-#include <Interfaces.h>
 #include <SDK/ItemSchema.h>
 #include <SDK/PODs/ItemSchema.h>
 #include <SDK/PODs/PaintKit.h>
+
+#include <Interfaces/OtherInterfaces.h>
+#include <RetSpoofGadgets.h>
 
 namespace inventory_changer::game_integration
 {

@@ -223,6 +223,7 @@
     <ClInclude Include="Interfaces\EngineInterfacesPODs.h" />
     <ClInclude Include="Interfaces\InterfaceFinder.h" />
     <ClInclude Include="Interfaces\InterfaceFinderWithLog.h" />
+    <ClInclude Include="Interfaces\OtherInterfaces.h" />
     <ClInclude Include="Interfaces\OtherInterfacesPODs.h" />
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
@@ -321,7 +322,6 @@
     <ClInclude Include="SDK\Engine.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
-    <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\FileSystem.h" />
     <ClInclude Include="SDK\GameEvent.h" />

@@ -4,7 +4,6 @@
 #include "Aimbot.h"
 #include "Backtrack.h"
 #include "../ConfigStructs.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/ConVar.h"
@@ -18,6 +17,7 @@
 #include "../SDK/UserCmd.h"
 
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 #if OSIRIS_BACKTRACK()
 

@@ -31,7 +31,6 @@
 #include "GameData.h"
 #include "GUI.h"
 #include "Hooks.h"
-#include "Interfaces.h"
 #include "Memory.h"
 
 #include "Hacks/Aimbot.h"

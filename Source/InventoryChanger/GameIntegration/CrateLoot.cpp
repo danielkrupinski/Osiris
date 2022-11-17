@@ -5,6 +5,8 @@
 
 #include <SDK/PODs/ItemSchema.h>
 
+#include <RetSpoofGadgets.h>
+
 namespace inventory_changer::game_integration
 {
 

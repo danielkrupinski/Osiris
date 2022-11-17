@@ -7,7 +7,6 @@
 #include "Aimbot.h"
 #include "../Config.h"
 #include "../InputUtil.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "Misc.h"
 #include "../SDK/Engine.h"
@@ -23,6 +22,7 @@
 #include "../SDK/WeaponData.h"
 
 #include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {

@@ -12,7 +12,6 @@
 
 #include "Texture.h"
 
-#include "Interfaces.h"
 #include "Memory.h"
 
 struct LocalPlayerData;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../JsonForward.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 
 namespace inventory_changer

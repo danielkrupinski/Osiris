@@ -13,7 +13,6 @@
 #include "../InputUtil.h"
 #include "Glow.h"
 #include "../Helpers.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include <SDK/Constants/ClassId.h>
 #include "../SDK/ClientClass.h"
