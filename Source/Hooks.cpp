@@ -47,6 +47,7 @@
 
 #include "InventoryChanger/InventoryChanger.h"
 
+#include "SDK/PODs/RenderableInfo.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Cvar.h"
 #include "SDK/Engine.h"
@@ -164,17 +165,10 @@ static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setu
     globalContext->overrideViewHook(setup);
 }
 
-struct RenderableInfo {
-    std::uintptr_t renderable;
-    std::byte pad[18];
-    uint16_t flags;
-    uint16_t flags2;
-};
-
 static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     if (Misc::shouldDisableModelOcclusion() && RETURN_ADDRESS() == memory->insertIntoTree) {
-        if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
+        if (const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
             if (const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>(); ent && Entity::from(retSpoofGadgets->client, ent).isPlayer()) {
                 constexpr float maxCoord = 16384.0f;
                 constexpr float minCoord = -maxCoord;
