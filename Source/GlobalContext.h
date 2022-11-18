@@ -5,9 +5,8 @@
 #include <Platform/IsPlatform.h>
 
 #if IS_WIN32()
+#include <d3d9.h>
 #include <Windows.h>
-
-struct IDirect3DDevice9;
 #else
 #include <SDL2/SDL.h>
 #endif
@@ -69,6 +68,8 @@ public:
 
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
+    HRESULT resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params);
+
 #else
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);

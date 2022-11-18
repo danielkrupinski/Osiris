@@ -450,6 +450,14 @@ HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, co
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
+HRESULT GlobalContext::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    InventoryChanger::clearItemIconTextures();
+    GameData::clearTextures();
+    return hooks->originalReset(device, params);
+}
+
 #else
 int GlobalContext::pollEventHook(SDL_Event* event)
 {

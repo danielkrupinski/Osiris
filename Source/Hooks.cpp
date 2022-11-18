@@ -82,10 +82,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
-    ImGui_ImplDX9_InvalidateDeviceObjects();
-    InventoryChanger::clearItemIconTextures();
-    GameData::clearTextures();
-    return hooks->originalReset(device, params);
+    return globalContext->resetHook(device, params);
 }
 
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
