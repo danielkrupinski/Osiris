@@ -6,14 +6,12 @@
 #include "Inconstructible.h"
 #include "VirtualMethod.h"
 
-using UIPanelPointer = std::uintptr_t;
+namespace csgo::pod { struct UIPanel; }
 
-class UIPanel : private VirtualCallable {
+class UIPanel : public VirtualCallableFromPOD<UIPanel, csgo::pod::UIPanel> {
 public:
-    using VirtualCallable::VirtualCallable;
-
     VIRTUAL_METHOD_V(int, getChildCount, 48, (), ())
-    VIRTUAL_METHOD_V(UIPanelPointer, getChild, 49, (int n), (n))
+    VIRTUAL_METHOD_V(csgo::pod::UIPanel*, getChild, 49, (int n), (n))
     VIRTUAL_METHOD(bool, hasClass, 139, (const char* name), (name))
     VIRTUAL_METHOD(void, setHasClass, 145, (const char* name, bool hasClass), (name, hasClass))
     VIRTUAL_METHOD(float, getAttributeFloat, 278, (const char* name, float defaultValue), (name, defaultValue))

@@ -1081,7 +1081,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     if (!deathNotice)
         return;
 
-    const auto deathNoticePanel = UIPanel{ retSpoofGadgets->client, (*(UIPanelPointer*)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t))) };
+    const auto deathNoticePanel = UIPanel::from(retSpoofGadgets->client, (*(csgo::pod::UIPanel**)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t))));
 
     const auto childPanelCount = deathNoticePanel.getChildCount();
 
@@ -1090,7 +1090,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
         if (!childPointer)
             continue;
 
-        const UIPanel child{ retSpoofGadgets->client, childPointer };
+        const auto child = UIPanel::from(retSpoofGadgets->client, childPointer);
         if (child.hasClass("DeathNotice_Killer") && (!miscConfig.preserveKillfeed.onlyHeadshots || child.hasClass("DeathNoticeHeadShot")))
             child.setAttributeFloat("SpawnTime", memory.globalVars->currenttime);
     }
