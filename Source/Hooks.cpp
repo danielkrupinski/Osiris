@@ -167,19 +167,7 @@ static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setu
 
 static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    if (Misc::shouldDisableModelOcclusion() && RETURN_ADDRESS() == memory->insertIntoTree) {
-        if (const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
-            if (const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>(); ent && Entity::from(retSpoofGadgets->client, ent).isPlayer()) {
-                constexpr float maxCoord = 16384.0f;
-                constexpr float minCoord = -maxCoord;
-                constexpr Vector min{ minCoord, minCoord, minCoord };
-                constexpr Vector max{ maxCoord, maxCoord, maxCoord };
-                return hooks->bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
-            }
-        }
-    }
-
-    return hooks->bspQuery.callOriginal<int, 6>(std::cref(mins), std::cref(maxs), list, listMax);
+    return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
 static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept

@@ -47,6 +47,7 @@
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 #include "SDK/ViewSetup.h"
+#include "SDK/PODs/RenderableInfo.h"
 
 #include "Interfaces/ClientInterfaces.h"
 
@@ -381,6 +382,23 @@ void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, i
 {
     inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
+}
+
+int GlobalContext::listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, std::uintptr_t returnAddress, std::uintptr_t frameAddress)
+{
+    if (Misc::shouldDisableModelOcclusion() && returnAddress == memory->insertIntoTree) {
+        if (const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
+            if (const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>(); ent && Entity::from(retSpoofGadgets->client, ent).isPlayer()) {
+                constexpr float maxCoord = 16384.0f;
+                constexpr float minCoord = -maxCoord;
+                constexpr Vector min{ minCoord, minCoord, minCoord };
+                constexpr Vector max{ maxCoord, maxCoord, maxCoord };
+                return hooks->bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
+            }
+        }
+    }
+
+    return hooks->bspQuery.callOriginal<int, 6>(std::cref(mins), std::cref(maxs), list, listMax);
 }
 
 #if IS_WIN32()

@@ -62,6 +62,7 @@ public:
     unsigned getNumArgsHook(void* params, std::uintptr_t returnAddress);
     void updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap);
     void soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event);
+    int listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, std::uintptr_t returnAddress, std::uintptr_t frameAddress);
 
 #if IS_WIN32()
     void* allocKeyValuesMemoryHook(int size, std::uintptr_t returnAddress);
