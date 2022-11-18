@@ -328,6 +328,7 @@
     <ClInclude Include="SDK\GameMovement.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\GlowObjectManager.h" />
+    <ClInclude Include="SDK\Helpers\EconItemFunctions.h" />
     <ClInclude Include="SDK\Inconstructible.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\InputSystem.h" />

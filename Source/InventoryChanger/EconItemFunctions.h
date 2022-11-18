@@ -4,11 +4,7 @@
 
 #include <Helpers/PatternFinder.h>
 #include <Platform/IsPlatform.h>
-
-struct EconItemFunctions {
-    std::uintptr_t setDynamicAttributeValue;
-    std::uintptr_t removeDynamicAttribute;
-};
+#include <SDK/Helpers/EconItemFunctions.h>
 
 [[nodiscard]] inline EconItemFunctions createEconItemFunctions(const helpers::PatternFinder& clientPatternFinder)
 {

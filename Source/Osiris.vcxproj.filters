@@ -81,6 +81,9 @@
     <Filter Include="Interfaces">
       <UniqueIdentifier>{7ff80fe4-c5eb-4eef-b792-75c87aa46dc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\Helpers">
+      <UniqueIdentifier>{acb6732a-176f-40fa-b54a-7851139f9385}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -951,6 +954,9 @@
     </ClInclude>
     <ClInclude Include="Interfaces\OtherInterfaces.h">
       <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Helpers\EconItemFunctions.h">
+      <Filter>SDK\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
