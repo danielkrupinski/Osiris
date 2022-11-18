@@ -54,7 +54,7 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
 
 void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot, const EconItemFunctions& econItemFunctions)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -164,7 +164,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         return {};
 
     const auto econItemPOD = memory.createEconItemSharedObject();
-    EconItem econItem{ retSpoofGadgets->client, econItemPOD, econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, econItemPOD, econItemFunctions };
     econItemPOD->itemID = baseTypeCache->getHighestIDs().first + 1;
     econItemPOD->originalID = 0;
     econItemPOD->accountID = localInventory.getAccountID();
@@ -294,7 +294,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
 
 void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -312,7 +312,7 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
 
 void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -329,7 +329,7 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 
 void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWear)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -360,7 +360,7 @@ void Inventory::removeNameTag(ItemId itemID)
 
 void Inventory::deleteItem(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -378,7 +378,7 @@ void Inventory::deleteItem(ItemId itemID)
 
 void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -410,7 +410,7 @@ void Inventory::removePatch(ItemId itemID, std::uint8_t slot)
 
 void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -426,7 +426,7 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
 
 void Inventory::unsealGraffiti(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0 || econItem.getPOD()->weaponId != WeaponId::SealedGraffiti)
         return;
 
@@ -443,7 +443,7 @@ void Inventory::unsealGraffiti(ItemId itemID)
 
 void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -522,7 +522,7 @@ void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
 
 void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -539,7 +539,7 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
 
 void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -561,7 +561,7 @@ void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
 
 void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -578,7 +578,7 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
 
 void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions.setDynamicAttributeValue, econItemFunctions.removeDynamicAttribute };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 

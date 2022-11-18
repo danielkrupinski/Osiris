@@ -12,6 +12,7 @@
 #include "VirtualMethod.h"
 
 #include "Constants/ItemId.h"
+#include "Helpers/EconItemFunctions.h"
 
 enum class WeaponId : short;
 
@@ -255,8 +256,8 @@ namespace csgo::pod { struct EconItem; }
 
 class EconItem : private VirtualCallable {
 public:
-    EconItem(RetSpoofInvoker invoker, csgo::pod::EconItem* pod, std::uintptr_t setDynamicAttributeValueFn, std::uintptr_t removeDynamicAttributeFn)
-        : VirtualCallable{ invoker, std::uintptr_t(pod) }, setDynamicAttributeValueFn{ setDynamicAttributeValueFn }, removeDynamicAttributeFn{ removeDynamicAttributeFn }
+    EconItem(RetSpoofInvoker invoker, csgo::pod::EconItem* pod, const EconItemFunctions& econItemFunctions)
+        : VirtualCallable{ invoker, std::uintptr_t(pod) }, functions{ econItemFunctions }
     {
     }
 
@@ -271,15 +272,15 @@ public:
     void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept
     {
 #if IS_WIN32()
-        getInvoker().invokeThiscall<void>(getThis(), setDynamicAttributeValueFn, attribute, value);
+        getInvoker().invokeThiscall<void>(getThis(), functions.setDynamicAttributeValue, attribute, value);
 #else
-        getInvoker().invokeCdecl<void>(setDynamicAttributeValueFn, nullptr, getThis(), attribute, value);
+        getInvoker().invokeCdecl<void>(functions.setDynamicAttributeValue, nullptr, getThis(), attribute, value);
 #endif
     }
 
     void removeDynamicAttribute(EconItemAttributeDefinition* attribute) const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), removeDynamicAttributeFn, attribute);
+        getInvoker().invokeThiscall<void>(getThis(), functions.removeDynamicAttribute, attribute);
     }
 
     [[nodiscard]] csgo::pod::EconItem* getPOD() const noexcept
@@ -288,8 +289,7 @@ public:
     }
 
 private:
-    std::uintptr_t setDynamicAttributeValueFn;
-    std::uintptr_t removeDynamicAttributeFn;
+    const EconItemFunctions& functions;
 };
 
 class EconItemAttributeSetter {
