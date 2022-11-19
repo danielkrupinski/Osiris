@@ -3,6 +3,7 @@
 #include "../JsonForward.h"
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
+#include <Platform/IsPlatform.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -11,9 +12,14 @@ class EngineInterfaces;
 
 class Visuals {
 public:
-    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces)
+    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }
     {
+#if IS_WIN32()
+        disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().get());
+#elif IS_LINUX()
+        disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().get());
+#endif
     }
 
     bool isThirdpersonOn() noexcept;
@@ -71,4 +77,5 @@ private:
     OtherInterfaces interfaces;
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
+    bool* disablePostProcessingPtr;
 };

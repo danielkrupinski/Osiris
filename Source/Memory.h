@@ -69,8 +69,6 @@ public:
     UtlVector<PlantedC4*>* plantedC4s;
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
-    bool* disablePostProcessing;
-
     std::add_pointer_t<void FASTCALL_CONV(const char*)> loadSky;
     std::add_pointer_t<void FASTCALL_CONV(const char*, const char*)> setClanTag;
     std::uintptr_t cameraThink;

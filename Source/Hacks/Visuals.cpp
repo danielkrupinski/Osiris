@@ -549,7 +549,7 @@ void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    *memory.disablePostProcessing = stage == csgo::FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
+    *disablePostProcessingPtr = stage == csgo::FrameStage::RENDER_START && visualsConfig.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept

@@ -432,7 +432,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces());
+        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
         config.emplace(*visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
@@ -499,7 +499,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces());
+        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) });
         config.emplace(*visuals, getOtherInterfaces(), *memory);
 
         gui.emplace();
