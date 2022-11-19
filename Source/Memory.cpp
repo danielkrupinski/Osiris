@@ -63,7 +63,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     setClanTag = reinterpret_cast<decltype(setClanTag)>(enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(clientPatternFinder("\xE8????\x8B\x4C\x24\x30\x33\xD2").add(1).relativeToAbsolute().get());
     cameraThink = clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get();
-    getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(clientPatternFinder("\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83").get());
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(clientPatternFinder("\x8B\xCE\xE8????\x02\xC0").add(3).relativeToAbsolute().get());
     auto temp = clientPatternFinder("\xB9????\xE8????\x8B\x5D\x08").add(1);
     hud = SafeAddress{ temp }.deref().get();
