@@ -88,7 +88,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesFromString = clientPatternFinder("\xE8????\x83\xC4\x04\x89\x45\xD8").add(1).relativeToAbsolute().get();
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\xF7\x45").add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x89\x77\x38").add(1).relativeToAbsolute().get());
-    getPlayerViewmodelArmConfigForPlayerModel = reinterpret_cast<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(clientPatternFinder("\xE8????\x89\x87????\x6A").add(1).relativeToAbsolute().get());
     getEventDescriptor = enginePatternFinder("\xE8????\x8B\xD8\x85\xDB\x75\x27").add(1).relativeToAbsolute().get();
     activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x8B\x1D????\x89\x5C\x24\x48").add(2).deref().get());
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().get());
@@ -146,7 +145,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().get());
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().get());
     cameraThink = clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get();
-    getPlayerViewmodelArmConfigForPlayerModel = reinterpret_cast<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(clientPatternFinder("\xE8????\x48\x8B\x78\x08\xBA").add(1).relativeToAbsolute().get());
     keyValuesFromString = reinterpret_cast<decltype(keyValuesFromString)>(clientPatternFinder("\xE8????\x48\x89\xDF\x48\x89\x45\xE0").add(1).relativeToAbsolute().get());
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().get());
