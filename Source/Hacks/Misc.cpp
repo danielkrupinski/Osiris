@@ -772,7 +772,7 @@ void Misc::autoReload(UserCmd* cmd) noexcept
 {
     if (miscConfig.autoReload && localPlayer) {
         const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
-        if (activeWeapon.getPOD() == nullptr && getWeaponIndex(activeWeapon.itemDefinitionIndex()) && !activeWeapon.clip())
+        if (activeWeapon.getPOD() != nullptr && getWeaponIndex(activeWeapon.itemDefinitionIndex()) && !activeWeapon.clip())
             cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
     }
 }
