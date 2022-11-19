@@ -7,6 +7,7 @@
 #include "../../Memory.h"
 #include <InventoryChanger/EconItemFunctions.h>
 #include <InventoryChanger/EconItemViewFunctions.h>
+#include <Interfaces/OtherInterfaces.h>
 
 namespace csgo
 {
@@ -34,7 +35,7 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(const OtherInterfaces& interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions)
+    Inventory(OtherInterfaces interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions)
         : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ econItemFunctions }, econItemViewFunctions{ econItemViewFunctions } {}
 
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
@@ -69,7 +70,7 @@ public:
     void updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate);
 
 private:
-    const OtherInterfaces& interfaces;
+    OtherInterfaces interfaces;
     const Memory& memory;
     EconItemFunctions econItemFunctions;
     EconItemViewFunctions econItemViewFunctions;
