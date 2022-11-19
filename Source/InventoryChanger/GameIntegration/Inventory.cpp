@@ -38,18 +38,18 @@ void initItemCustomizationNotification(const OtherInterfaces& interfaces, const 
         UIEngine{ retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(event);
 }
 
-void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag)
+void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag, const EconItemFunctions& econItemFunctions)
 {
-    const auto econItem = getEconItem(memory, itemID);
-    if (!econItem)
+    const auto econItem = EconItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    if (econItem.getPOD() == nullptr)
         return;
 
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    memory.setCustomName(econItem, newNameTag);
-    localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
+    econItem.setCustomName(newNameTag);
+    localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
 
 void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot, const EconItemFunctions& econItemFunctions)
@@ -131,7 +131,7 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
     attributeSetter.setWear(econItem, dynamicData.wear);
     attributeSetter.setSeed(econItem, static_cast<float>(dynamicData.seed));
-    memory.setCustomName(econItem.getPOD(), dynamicData.nameTag.c_str());
+    econItem.setCustomName(dynamicData.nameTag.c_str());
 
     for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
         const auto& sticker = dynamicData.stickers[j];
@@ -244,7 +244,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     } else if (item.isStorageUnit()) {
         if (const auto storageUnit = get<inventory::StorageUnit>(inventoryItem); storageUnit && storageUnit->modificationDateTimestamp != 0) {
             attributeSetter.setModificationDate(econItem, storageUnit->modificationDateTimestamp);
-            memory.setCustomName(econItemPOD, storageUnit->name.c_str());
+            econItem.setCustomName(storageUnit->name.c_str());
         }
     }
 
@@ -349,13 +349,13 @@ void Inventory::viewerPassActivated(ItemId tournamentCoinItemID)
 
 void Inventory::addNameTag(ItemId itemID, const char* newNameTag)
 {
-    updateNameTag(memory, itemID, newNameTag);
+    updateNameTag(memory, itemID, newNameTag, econItemFunctions);
     initItemCustomizationNotification(interfaces, memory, "nametag_add", itemID);
 }
 
 void Inventory::removeNameTag(ItemId itemID)
 {
-    updateNameTag(memory, itemID, "");
+    updateNameTag(memory, itemID, "", econItemFunctions);
 }
 
 void Inventory::deleteItem(ItemId itemID)

@@ -110,7 +110,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x8B\xCE\x83\xC4\x08").add(1).relativeToAbsolute().get());
     getSOCData = reinterpret_cast<decltype(getSOCData)>(clientPatternFinder("\xE8????\x32\xC9").add(1).relativeToAbsolute().get());
-    setCustomName = reinterpret_cast<decltype(setCustomName)>(clientPatternFinder("\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34").add(1).relativeToAbsolute().get());
     createBaseTypeCache = clientPatternFinder("\xE8????\x8D\x4D\x0F").add(1).relativeToAbsolute().get();
     uiComponentInventory = reinterpret_cast<void**>(clientPatternFinder("\xC6\x44\x24??\x83\x3D").add(7).deref().get());
     setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().get());
@@ -180,7 +179,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().get());
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().get());
     getSOCData = reinterpret_cast<decltype(getSOCData)>(clientPatternFinder("\xE8????\x5B\x44\x89\xEE").add(1).relativeToAbsolute().get());
-    setCustomName = reinterpret_cast<decltype(setCustomName)>(clientPatternFinder("\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98").add(1).relativeToAbsolute().get());
     createBaseTypeCache = reinterpret_cast<decltype(createBaseTypeCache)>(clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get());
     insertIntoTree = clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get();
     uiComponentInventory = reinterpret_cast<decltype(uiComponentInventory)>(clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().get());

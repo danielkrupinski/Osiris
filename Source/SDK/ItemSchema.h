@@ -283,6 +283,11 @@ public:
         getInvoker().invokeThiscall<void>(getThis(), functions.removeDynamicAttribute, attribute);
     }
 
+    void setCustomName(const char* name) const noexcept
+    {
+        getInvoker().invokeThiscall<void>(getThis(), functions.setCustomName, name);
+    }
+
     [[nodiscard]] csgo::pod::EconItem* getPOD() const noexcept
     {
         return reinterpret_cast<csgo::pod::EconItem*>(getThis());

@@ -115,7 +115,6 @@ public:
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     csgo::pod::EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
-    void(THISCALL_CONV* setCustomName)(csgo::pod::EconItem* thisptr, const char* name);
     std::uintptr_t createBaseTypeCache;
     void** uiComponentInventory;
     void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
