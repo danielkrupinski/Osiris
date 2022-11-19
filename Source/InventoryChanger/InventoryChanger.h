@@ -11,6 +11,7 @@
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 #include "EconItemFunctions.h"
+#include "EconItemViewFunctions.h"
 
 namespace csgo { enum class FrameStage; }
 enum class Team;
@@ -77,7 +78,7 @@ struct InventoryChangerReturnAddresses {
 class InventoryChanger {
 public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
-        : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) } {}
+        : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) } {}
 
     static InventoryChanger& instance(const OtherInterfaces& interfaces, const Memory& memory);
 
@@ -135,6 +136,7 @@ private:
     std::vector<char> userTextMsgBuffer;
     InventoryChangerReturnAddresses returnAddresses;
     EconItemFunctions econItemFunctions;
+    EconItemViewFunctions econItemViewFunctions;
 };
 
 }

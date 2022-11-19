@@ -111,10 +111,8 @@ public:
     csgo::pod::Entity** gameRules;
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
-    void(THISCALL_CONV* clearInventoryImageRGBA)(csgo::pod::EconItemView* itemView);
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
-    csgo::pod::EconItem*(THISCALL_CONV* getSOCData)(void* itemView);
     std::uintptr_t createBaseTypeCache;
     void** uiComponentInventory;
     void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);

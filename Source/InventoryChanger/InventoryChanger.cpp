@@ -390,25 +390,25 @@ struct EquipRequest {
 };
 static std::vector<EquipRequest> equipRequests;
 
-static void simulateItemUpdate(const Memory& memory, std::uint64_t itemID)
+static void simulateItemUpdate(const Memory& memory, const EconItemViewFunctions& econItemViewFunctions, std::uint64_t itemID)
 {
     const auto localInventory = CSPlayerInventory::from(retSpoofGadgets->client, memory.inventoryManager.getLocalInventory());
     if (localInventory.getPOD() == nullptr)
         return;
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr) {
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), econItemViewFunctions); view.getPOD() != nullptr) {
         if (const auto soc = view.getSOCData())
             localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
     }
 }
 
-static void processEquipRequests(const Memory& memory)
+static void processEquipRequests(const Memory& memory, const EconItemViewFunctions& econItemViewFunctions)
 {
     const auto now = std::chrono::steady_clock::now();
     for (auto it = equipRequests.begin(); it != equipRequests.end();) {
         if (now - it->time >= std::chrono::milliseconds{ 500 }) {
             if (it->counter == 0)
-                simulateItemUpdate(memory, it->itemID);
+                simulateItemUpdate(memory, econItemViewFunctions, it->itemID);
             it = equipRequests.erase(it);
         } else {
             ++it;
@@ -1088,8 +1088,8 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     applyPlayerAgent(engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
-    processEquipRequests(memory);
-    static game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions };
+    processEquipRequests(memory, econItemViewFunctions);
+    static game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions, econItemViewFunctions };
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
@@ -1404,7 +1404,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (localInventory.getPOD() == nullptr)
         return;
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr) {
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), econItemViewFunctions); view.getPOD() != nullptr) {
         if (const auto soc = view.getSOCData()) {
             if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache)) {
                 soc->inventory = baseTypeCache->getHighestIDs().second + 1;
@@ -1432,7 +1432,7 @@ void InventoryChanger::reset(const OtherInterfaces& interfaces, const Memory& me
 {
     clearInventory(backend);
     backend.getPickEmHandler().clearPicks();
-    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions };
+    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions, econItemViewFunctions };
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 

@@ -961,6 +961,12 @@
     <ClInclude Include="SDK\PODs\RenderableInfo.h">
       <Filter>SDK\PODs</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Helpers\EconItemViewFunctions.h">
+      <Filter>SDK\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\EconItemViewFunctions.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

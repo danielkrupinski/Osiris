@@ -18,9 +18,9 @@ namespace inventory_changer::game_integration
 namespace
 {
 
-[[nodiscard]] csgo::pod::EconItem* getEconItem(const Memory& memory, ItemId itemID)
+[[nodiscard]] csgo::pod::EconItem* getEconItem(const Memory& memory, const EconItemViewFunctions& econItemViewFunctions, ItemId itemID)
 {
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(static_cast<csgo::ItemId>(itemID)), econItemViewFunctions); view.getPOD() != nullptr)
         return view.getSOCData();
     return nullptr;
 }
@@ -38,9 +38,9 @@ void initItemCustomizationNotification(const OtherInterfaces& interfaces, const 
         UIEngine{ retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(event);
 }
 
-void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag, const EconItemFunctions& econItemFunctions)
+void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions)
 {
-    const auto econItem = EconItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    const auto econItem = EconItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getPOD() == nullptr)
         return;
 
@@ -52,9 +52,9 @@ void updateNameTag(const Memory& memory, ItemId itemID, const char* newNameTag, 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
 
-void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot, const EconItemFunctions& econItemFunctions)
+void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t slot, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -67,9 +67,9 @@ void updatePatch(const Memory& memory, ItemId itemID, int patchID, std::uint8_t 
     localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem.getPOD(), 4);
 }
 
-void setItemHiddenFlag(const Memory& memory, ItemId itemID, bool hide)
+void setItemHiddenFlag(const Memory& memory, const EconItemViewFunctions& econItemViewFunctions, ItemId itemID, bool hide)
 {
-    const auto econItem = getEconItem(memory, itemID);
+    const auto econItem = getEconItem(memory, econItemViewFunctions, itemID);
     if (!econItem)
         return;
 
@@ -256,7 +256,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
         memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "updated", "0");
     }
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), econItemViewFunctions); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     return ItemId{ econItemPOD->itemID };
@@ -264,7 +264,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
 
 ItemId Inventory::assingNewItemID(ItemId itemID)
 {
-    const auto econItem = getEconItem(memory, itemID);
+    const auto econItem = getEconItem(memory, econItemViewFunctions, itemID);
     if (!econItem)
         return itemID;
 
@@ -281,7 +281,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     econItem->itemID = newItemID;
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItem, 4);
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), std::uintptr_t(memory.clearInventoryImageRGBA), std::uintptr_t(memory.getSOCData)); view.getPOD() != nullptr)
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), econItemViewFunctions); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
     if (const auto inventoryComponent = *memory.uiComponentInventory) {
@@ -294,7 +294,7 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
 
 void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -312,7 +312,7 @@ void Inventory::applySticker(ItemId itemID, csgo::StickerId stickerID, std::uint
 
 void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -329,7 +329,7 @@ void Inventory::removeSticker(ItemId itemID, std::uint8_t slot)
 
 void Inventory::updateStickerWear(ItemId itemID, std::uint8_t slot, float newWear)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -349,18 +349,18 @@ void Inventory::viewerPassActivated(ItemId tournamentCoinItemID)
 
 void Inventory::addNameTag(ItemId itemID, const char* newNameTag)
 {
-    updateNameTag(memory, itemID, newNameTag, econItemFunctions);
+    updateNameTag(memory, itemID, newNameTag, econItemFunctions, econItemViewFunctions);
     initItemCustomizationNotification(interfaces, memory, "nametag_add", itemID);
 }
 
 void Inventory::removeNameTag(ItemId itemID)
 {
-    updateNameTag(memory, itemID, "", econItemFunctions);
+    updateNameTag(memory, itemID, "", econItemFunctions, econItemViewFunctions);
 }
 
 void Inventory::deleteItem(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -378,7 +378,7 @@ void Inventory::deleteItem(ItemId itemID)
 
 void Inventory::updateStatTrak(ItemId itemID, int newStatTrakValue)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -398,19 +398,19 @@ void Inventory::containerOpened(ItemId unlockedItemID)
 
 void Inventory::applyPatch(ItemId itemID, int patchID, std::uint8_t slot)
 {
-    updatePatch(memory, itemID, patchID, slot, econItemFunctions);
+    updatePatch(memory, itemID, patchID, slot, econItemFunctions, econItemViewFunctions);
     initItemCustomizationNotification(interfaces, memory, "patch_apply", itemID);
 }
 
 void Inventory::removePatch(ItemId itemID, std::uint8_t slot)
 {
-    updatePatch(memory, itemID, 0, slot, econItemFunctions);
+    updatePatch(memory, itemID, 0, slot, econItemFunctions, econItemViewFunctions);
     initItemCustomizationNotification(interfaces, memory, "patch_remove", itemID);
 }
 
 void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -426,7 +426,7 @@ void Inventory::souvenirTokenActivated(ItemId itemID, std::uint32_t dropsAwarded
 
 void Inventory::unsealGraffiti(ItemId itemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0 || econItem.getPOD()->weaponId != WeaponId::SealedGraffiti)
         return;
 
@@ -443,7 +443,7 @@ void Inventory::unsealGraffiti(ItemId itemID)
 
 void Inventory::selectTeamGraffiti(ItemId itemID, std::uint16_t graffitiID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -485,12 +485,12 @@ void Inventory::pickEmUpdated()
 
 void Inventory::hideItem(ItemId itemID)
 {
-    setItemHiddenFlag(memory, itemID, true);
+    setItemHiddenFlag(memory, econItemViewFunctions, itemID, true);
 }
 
 void Inventory::unhideItem(ItemId itemID)
 {
-    setItemHiddenFlag(memory, itemID, false);
+    setItemHiddenFlag(memory, econItemViewFunctions, itemID, false);
 }
 
 void Inventory::xRayItemRevealed(ItemId itemID)
@@ -500,7 +500,7 @@ void Inventory::xRayItemRevealed(ItemId itemID)
 
 void Inventory::xRayItemClaimed(ItemId itemID)
 {
-    const auto econItem = getEconItem(memory, itemID);
+    const auto econItem = getEconItem(memory, econItemViewFunctions, itemID);
     if (!econItem)
         return;
 
@@ -522,7 +522,7 @@ void Inventory::nameStorageUnit(ItemId itemID, const char* newName)
 
 void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDate, std::uint32_t itemCount)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -539,7 +539,7 @@ void Inventory::storageUnitModified(ItemId itemID, std::uint32_t modificationDat
 
 void Inventory::addItemToStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -561,7 +561,7 @@ void Inventory::itemAddedToStorageUnit(ItemId storageUnitItemID)
 
 void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 
@@ -578,7 +578,7 @@ void Inventory::removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemI
 
 void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate)
 {
-    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, itemID), econItemFunctions };
+    EconItem econItem{ retSpoofGadgets->client, getEconItem(memory, econItemViewFunctions, itemID), econItemFunctions };
     if (econItem.getThis() == 0)
         return;
 

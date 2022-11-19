@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include <Platform/PlatformSpecific.h>
-
+#include "Helpers/EconItemViewFunctions.h"
 #include "VirtualMethod.h"
 
 template <typename T> class UtlVector;
@@ -32,22 +32,21 @@ namespace csgo::pod
 
 class EconItemView : public VirtualCallableFromPOD<EconItemView, csgo::pod::EconItemView> {
 public:
-    EconItemView(VirtualCallableFromPOD base, std::uintptr_t clearInventoryImageRGBA_, std::uintptr_t getSOCData_)
-        : VirtualCallableFromPOD{ base }, clearInventoryImageRGBA_{ clearInventoryImageRGBA_ }, getSOCData_{ getSOCData_ }
+    EconItemView(VirtualCallableFromPOD base, const EconItemViewFunctions& functions)
+        : VirtualCallableFromPOD{ base }, functions{ functions }
     {
     }
 
     void clearInventoryImageRGBA() const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), clearInventoryImageRGBA_);
+        getInvoker().invokeThiscall<void>(getThis(), functions.clearInventoryImageRGBA);
     }
 
     csgo::pod::EconItem* getSOCData() const noexcept
     {
-        return getInvoker().invokeThiscall<csgo::pod::EconItem*>(getThis(), getSOCData_);
+        return getInvoker().invokeThiscall<csgo::pod::EconItem*>(getThis(), functions.getSOCData);
     }
 
 private:
-    std::uintptr_t clearInventoryImageRGBA_;
-    std::uintptr_t getSOCData_;
+    const EconItemViewFunctions& functions;
 };
