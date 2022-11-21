@@ -52,7 +52,6 @@
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Panorama.h"
 #include "../SDK/PlayerResource.h"
-#include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
 #include <SDK/PanoramaMarshallHelper.h>
 #include <SDK/CSPlayerInventory.h>

@@ -39,7 +39,6 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/Panorama.h"
-#include "../SDK/Platform.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/UtlVector.h"
 #include "../SDK/Vector.h"

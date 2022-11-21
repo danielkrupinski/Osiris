@@ -9,7 +9,6 @@
 #include "SDK/ItemSchema.h"
 #include "SDK/MoveHelper.h"
 #include "SDK/PanoramaMarshallHelper.h"
-#include "SDK/Platform.h"
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
 

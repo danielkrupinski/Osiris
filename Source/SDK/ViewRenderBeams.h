@@ -4,7 +4,6 @@
 
 #include "Inconstructible.h"
 #include "Pad.h"
-#include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 

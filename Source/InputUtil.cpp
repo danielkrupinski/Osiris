@@ -13,7 +13,7 @@
 #include "imgui/imgui.h"
 
 #include "InputUtil.h"
-#include "SDK/Platform.h"
+#include <Platform/PlatformSpecific.h>
 
 struct Key {
     constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }

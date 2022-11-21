@@ -3,7 +3,7 @@
 #include <type_traits>
 
 #include "Constants/ClassId.h"
-#include "Platform.h"
+#include <Platform/CallingConventions.h>
 
 struct RecvTable;
 

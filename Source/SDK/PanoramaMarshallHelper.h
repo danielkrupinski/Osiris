@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform.h"
+#include <Platform/PlatformSpecific.h>
 #include "VirtualMethod.h"
 
 namespace csgo::pod { struct PanoramaMarshallHelper; }

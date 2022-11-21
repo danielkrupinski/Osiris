@@ -18,7 +18,6 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/LocalPlayer.h"
-#include "SDK/Platform.h"
 #include "SDK/Recv.h"
 
 #include "GlobalContext.h"

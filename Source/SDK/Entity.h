@@ -5,7 +5,6 @@
 
 #include "AnimState.h"
 #include "Inconstructible.h"
-#include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
@@ -15,6 +14,7 @@
 
 #include <Interfaces/EngineInterfaces.h>
 #include <Platform/IsPlatform.h>
+#include <Platform/PlatformSpecific.h>
 
 namespace csgo::pod { struct EconItemView; }
 

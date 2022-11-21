@@ -16,9 +16,7 @@ union SDL_Event;
 #include "Hooks/MinHook.h"
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
-
-#include "SDK/Platform.h"
-
+#include <Platform/IsPlatform.h>
 #include "Memory.h"
 
 class matrix3x4;

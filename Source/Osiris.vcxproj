@@ -301,6 +301,7 @@
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\Constants\ClassId.h" />
+    <ClInclude Include="SDK\Constants\DllNames.h" />
     <ClInclude Include="SDK\Constants\EconItemFlags.h" />
     <ClInclude Include="SDK\Constants\FrameStage.h" />
     <ClInclude Include="SDK\Constants\ItemId.h" />
@@ -351,7 +352,6 @@
     <ClInclude Include="SDK\PanoramaMarshallHelper.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\PlantedC4.h" />
-    <ClInclude Include="SDK\Platform.h" />
     <ClInclude Include="SDK\PlayerResource.h" />
     <ClInclude Include="SDK\PODs\ConVar.h" />
     <ClInclude Include="SDK\PODs\EconItem.h" />

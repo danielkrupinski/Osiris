@@ -529,9 +529,6 @@
     <ClInclude Include="SDK\Panorama.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Platform.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="InputUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -966,6 +963,9 @@
     </ClInclude>
     <ClInclude Include="InventoryChanger\EconItemViewFunctions.h">
       <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\DllNames.h">
+      <Filter>SDK\Constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

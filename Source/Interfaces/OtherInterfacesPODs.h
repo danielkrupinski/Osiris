@@ -11,7 +11,7 @@
 #endif
 
 #include <RetSpoofGadgets.h>
-#include <SDK/Platform.h>
+#include <SDK/Constants/DllNames.h>
 
 #include "Interfaces/InterfaceFinder.h"
 #include "Interfaces/InterfaceFinderWithLog.h"
