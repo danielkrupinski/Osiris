@@ -70,7 +70,7 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
             record.origin = entity.getAbsOrigin();
             record.simulationTime = entity.simulationTime();
 
-            entity.setupBones(memory, record.matrix, 256, 0x7FF00, memory.globalVars->currenttime);
+            entity.setupBones(record.matrix, 256, 0x7FF00, memory.globalVars->currenttime);
 
             records[i].push_front(record);
 

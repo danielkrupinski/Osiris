@@ -16,7 +16,6 @@ namespace Misc
     bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
-    bool shouldFixBoneMatrix() noexcept;
     bool isRadarHackOn() noexcept;
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;

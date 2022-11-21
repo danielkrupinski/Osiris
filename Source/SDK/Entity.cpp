@@ -14,39 +14,26 @@
 
 #include <Interfaces/OtherInterfaces.h>
 
-bool Entity::setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept
+bool Entity::setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept
 {
-#if IS_WIN32()
-    if (Misc::shouldFixBoneMatrix()) {
-        int* render = reinterpret_cast<int*>(getThis() + 0x274);
-        int backup = *render;
-        Vector absOrigin = getAbsOrigin();
-        *render = 0;
-        memory.setAbsOrigin(getThis(), origin());
-        auto result = getRenderable().setupBones(out, maxBones, boneMask, currentTime);
-        memory.setAbsOrigin(getThis(), absOrigin);
-        *render = backup;
-        return result;
-    }
-#endif
     return getRenderable().setupBones(out, maxBones, boneMask, currentTime);
 }
 
-Vector Entity::getBonePosition(const Memory& memory, int bone) const noexcept
+Vector Entity::getBonePosition(int bone) const noexcept
 {
-    if (matrix3x4 boneMatrices[256]; setupBones(memory, boneMatrices, 256, 256, 0.0f))
+    if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
         return boneMatrices[bone].origin();
     else
         return Vector{ };
 }
 
-bool Entity::isVisible(const EngineTrace& engineTrace, const Memory& memory, const Vector& position) const noexcept
+bool Entity::isVisible(const EngineTrace& engineTrace, const Vector& position) const noexcept
 {
     if (!localPlayer)
         return false;
 
     Trace trace;
-    engineTrace.traceRay({ localPlayer.get().getEyePosition(), position.notNull() ? position : getBonePosition(memory, 8) }, 0x46004009, { localPlayer.get().getPOD() }, trace);
+    engineTrace.traceRay({ localPlayer.get().getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get().getPOD() }, trace);
     return trace.entity == getPOD() || trace.fraction > 0.97f;
 }
 
@@ -151,7 +138,7 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
         return false;
 
     matrix3x4 boneMatrices[MAXSTUDIOBONES];
-    if (!setupBones(memory, boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
+    if (!setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
         return false;
 
     for (const auto boxNum : { Hitbox::Belly, Hitbox::LeftForearm, Hitbox::RightForearm }) {

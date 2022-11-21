@@ -464,7 +464,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const OtherInt
         return;
 
     matrix3x4 boneMatrices[MAXSTUDIOBONES];
-    if (!entity.setupBones(memory, boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
+    if (!entity.setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
         return;
 
     bones.clear();

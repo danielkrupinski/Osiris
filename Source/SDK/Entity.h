@@ -175,10 +175,10 @@ public:
         return false;
     }
 
-    bool setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept;
-    Vector getBonePosition(const Memory& memory, int bone) const noexcept;
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept;
+    Vector getBonePosition(int bone) const noexcept;
 
-    bool isVisible(const EngineTrace& engineTrace, const Memory& memory, const Vector& position = { }) const noexcept;
+    bool isVisible(const EngineTrace& engineTrace, const Vector& position = { }) const noexcept;
     bool isOtherEnemy(const Memory& memory, const Entity& other) const noexcept;
 
     VarMap& getVarMap() const noexcept
