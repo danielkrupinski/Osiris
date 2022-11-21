@@ -29,16 +29,16 @@ namespace csgo::pod { struct Surface; }
 
 struct OtherInterfacesPODs {
     OtherInterfacesPODs()
-        : baseFileSystem{ static_cast<csgo::pod::BaseFileSystem*>(find(FILESYSTEM_DLL, "VBaseFileSystem011")) },
-          cvar{ static_cast<csgo::pod::Cvar*>(find(VSTDLIB_DLL, "VEngineCvar007")) },
-          inputSystem{ static_cast<csgo::pod::InputSystem*>(find(INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          localize{ static_cast<csgo::pod::Localize*>(find(LOCALIZE_DLL, "Localize_001")) },
-          materialSystem{ static_cast<csgo::pod::MaterialSystem*>(find(MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
-          panoramaUIEngine{ static_cast<csgo::pod::PanoramaUIEngine*>(find(PANORAMA_DLL, "PanoramaUIEngine001")) },
-          physicsSurfaceProps{ static_cast<csgo::pod::PhysicsSurfaceProps*>(find(VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
-          soundEmitter{ static_cast<csgo::pod::SoundEmitter*>(find(SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ static_cast<csgo::pod::StudioRender*>(find(STUDIORENDER_DLL, "VStudioRender026")) },
-          surface{ static_cast<csgo::pod::Surface*>(find(VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
+        : baseFileSystem{ static_cast<csgo::pod::BaseFileSystem*>(find(csgo::FILESYSTEM_DLL, "VBaseFileSystem011")) },
+          cvar{ static_cast<csgo::pod::Cvar*>(find(csgo::VSTDLIB_DLL, "VEngineCvar007")) },
+          inputSystem{ static_cast<csgo::pod::InputSystem*>(find(csgo::INPUTSYSTEM_DLL, "InputSystemVersion001")) },
+          localize{ static_cast<csgo::pod::Localize*>(find(csgo::LOCALIZE_DLL, "Localize_001")) },
+          materialSystem{ static_cast<csgo::pod::MaterialSystem*>(find(csgo::MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
+          panoramaUIEngine{ static_cast<csgo::pod::PanoramaUIEngine*>(find(csgo::PANORAMA_DLL, "PanoramaUIEngine001")) },
+          physicsSurfaceProps{ static_cast<csgo::pod::PhysicsSurfaceProps*>(find(csgo::VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
+          soundEmitter{ static_cast<csgo::pod::SoundEmitter*>(find(csgo::SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
+          studioRender{ static_cast<csgo::pod::StudioRender*>(find(csgo::STUDIORENDER_DLL, "VStudioRender026")) },
+          surface{ static_cast<csgo::pod::Surface*>(find(csgo::VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
     {
     }
 

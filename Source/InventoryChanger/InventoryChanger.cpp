@@ -1108,9 +1108,9 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
     auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
 
 #if IS_WIN32()
-    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
 #elif IS_LINUX()
-    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
 #endif
 
     return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };

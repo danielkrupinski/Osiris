@@ -54,11 +54,11 @@
 GlobalContext::GlobalContext()
 {
 #if IS_WIN32()
-    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-    const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
+    const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
 #elif IS_LINUX()
-    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
-    const linux_platform::SharedObject engineDLL{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
+    const linux_platform::SharedObject engineDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
 #endif
 
     retSpoofGadgets.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
@@ -419,9 +419,9 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+        const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
         clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets->client } });
-        const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+        const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
         engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } });
         interfaces.emplace();
 
@@ -487,9 +487,9 @@ int GlobalContext::pollEventHook(SDL_Event* event)
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
 
-        const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, CLIENT_DLL };
+        const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
         clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
-        const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, ENGINE_DLL };
+        const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
         engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
 
         interfaces.emplace();

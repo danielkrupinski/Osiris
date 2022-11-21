@@ -117,7 +117,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     shouldDrawFogReturnAddress = clientPatternFinder("\xE8????\x8B\x0D????\x0F\xB6\xD0").add(1).relativeToAbsolute().add(82).get();
 #else
-    const auto tier0 = dlopen(TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
+    const auto tier0 = dlopen(csgo::TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
     debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);

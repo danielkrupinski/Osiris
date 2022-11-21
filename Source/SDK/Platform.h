@@ -2,6 +2,9 @@
 
 #include <Platform/PlatformSpecific.h>
 
+namespace csgo
+{
+
 constexpr auto CLIENT_DLL = WIN32_LINUX("client", "csgo/bin/linux64/client_client.so");
 constexpr auto ENGINE_DLL = WIN32_LINUX("engine", "engine_client.so");
 constexpr auto FILESYSTEM_DLL = WIN32_LINUX("filesystem_stdio", "filesystem_stdio_client.so");
@@ -16,3 +19,5 @@ constexpr auto VGUI2_DLL = WIN32_LINUX("vgui2", "vgui2_client.so");
 constexpr auto VGUIMATSURFACE_DLL = WIN32_LINUX("vguimatsurface", "vguimatsurface_client.so");
 constexpr auto VPHYSICS_DLL = WIN32_LINUX("vphysics", "vphysics_client.so");
 constexpr auto VSTDLIB_DLL = WIN32_LINUX("vstdlib", "libvstdlib_client.so");
+
+}
