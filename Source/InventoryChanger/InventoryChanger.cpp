@@ -49,6 +49,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/LocalPlayer.h"
+#include <SDK/MemAlloc.h>
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Panorama.h"
 #include "../SDK/PlayerResource.h"
@@ -82,6 +83,36 @@
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 
+#if IS_WIN32()
+static csgo::pod::Entity* createGloves(const ClientInterfaces& clientInterfaces) noexcept
+{
+    static const auto createWearable = [&clientInterfaces] {
+        std::uintptr_t createWearableFn = 0;
+        for (auto clientClass = clientInterfaces.getClient().getAllClasses(); clientClass; clientClass = clientClass->next) {
+            if (clientClass->classId == ClassId::EconWearable) {
+                createWearableFn = std::uintptr_t(clientClass->createFunction);
+                break;
+            }
+        }
+        return createWearableFn;
+    }();
+
+    const auto sizeOfEconWearable = *reinterpret_cast<std::uint32_t*>(std::uintptr_t(createWearable) + 39);
+
+    const auto econWearable = csgo::MemAlloc::from(retSpoofGadgets->client, memory->memAlloc).allocAligned(sizeOfEconWearable, 16);
+    if (!econWearable)
+        return nullptr;
+
+    std::memset(econWearable, 0, sizeOfEconWearable);
+
+    const auto econWearableConstructor = SafeAddress{ std::uintptr_t(createWearable) + 61 }.relativeToAbsolute().get();
+    retSpoofGadgets->client.invokeThiscall<void>(std::uintptr_t(econWearable), econWearableConstructor);
+
+    Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(econWearable)).initializeAsClientEntity(nullptr, false);
+    return static_cast<csgo::pod::Entity*>(econWearable);
+}
+
+#else
 static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {
     static const auto createWearable = [&clientInterfaces]{
@@ -102,6 +133,7 @@ static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, 
         return reinterpret_cast<csgo::pod::Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
     return nullptr;
 }
+#endif
 
 static std::optional<std::list<inventory_changer::inventory::Item>::const_iterator> getItemFromLoadout(const inventory_changer::backend::Loadout& loadout, csgo::Team team, std::uint8_t slot)
 {
@@ -131,9 +163,14 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
     if (!glovePtr)
         glovePtr = clientInterfaces.getEntityList().getEntityFromHandle(gloveHandle);
 
-    constexpr auto NUM_ENT_ENTRIES = 8192;
-    if (!glovePtr)
+    if (!glovePtr) {
+#if IS_WIN32()
+        glovePtr = createGloves(clientInterfaces);
+#else
+        constexpr auto NUM_ENT_ENTRIES = 8192;
         glovePtr = createGlove(clientInterfaces, NUM_ENT_ENTRIES - 1, -1);
+#endif
+    }
 
     if (!glovePtr)
         return;
