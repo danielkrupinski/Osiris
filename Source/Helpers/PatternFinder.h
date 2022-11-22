@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SafeAddress.h>
 #include <Utils/PatternFinder.h>
+#include <Utils/SafeAddress.h>
 
 namespace helpers
 {

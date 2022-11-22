@@ -865,9 +865,6 @@
     <ClInclude Include="Platform\DynamicLibraryView.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="SafeAddress.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\CSPlayerInventory.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -963,6 +960,9 @@
     </ClInclude>
     <ClInclude Include="SDK\MemAlloc.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafeAddress.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

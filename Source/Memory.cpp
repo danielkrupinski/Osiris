@@ -35,9 +35,8 @@
 #include "SDK/ItemSchema.h"
 #include "SDK/LocalPlayer.h"
 
-#include "SafeAddress.h"
-
 #include "Utils/PatternFinder.h"
+#include "Utils/SafeAddress.h"
 
 Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::pod::Client* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #if IS_WIN32()

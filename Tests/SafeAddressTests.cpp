@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <SafeAddress.h>
+#include <Utils/SafeAddress.h>
 
 namespace
 {

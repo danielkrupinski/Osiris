@@ -12,7 +12,7 @@
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
 
-#include "SafeAddress.h"
+#include "Utils/SafeAddress.h"
 #include "RetSpoofGadgets.h"
 #include "Helpers/PatternFinder.h"
 #include "Utils/TypeHint.h"
