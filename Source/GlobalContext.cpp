@@ -104,7 +104,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 
     EnginePrediction::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, cmd);
 
-    Aimbot::run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *config, *memory, cmd);
+    aimbot->run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *config, *memory, cmd);
     Triggerbot::run(getEngineInterfaces().engineTrace(), getOtherInterfaces(), *memory, *config, cmd);
     Backtrack::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
     Misc::edgejump(cmd);
@@ -435,6 +435,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
         config.emplace(*visuals, getOtherInterfaces(), *memory);
         gui.emplace();
+        aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
@@ -503,6 +504,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         config.emplace(*visuals, getOtherInterfaces(), *memory);
 
         gui.emplace();
+        aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
@@ -602,7 +604,7 @@ void GlobalContext::renderFrame()
         visuals->drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
-        Aimbot::updateInput(*config);
+        aimbot->updateInput(*config);
         visuals->updateInput();
         StreamProofESP::updateInput(*config);
         Misc::updateInput();

@@ -31,6 +31,7 @@
 #endif
 
 #include "Memory.h"
+#include "SDK/Constants/DllNames.h"
 #include "SDK/ItemSchema.h"
 #include "SDK/LocalPlayer.h"
 

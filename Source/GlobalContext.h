@@ -13,6 +13,7 @@
 #include "Config.h"
 #include "EventListener.h"
 
+#include "Hacks/Aimbot.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces/ClientInterfaces.h"
 #include "Interfaces/EngineInterfaces.h"
@@ -110,6 +111,7 @@ private:
     std::optional<Config> config;
     std::optional<ClientInterfacesPODs> clientInterfaces;
     std::optional<const OtherInterfacesPODs> interfaces;
+    std::optional<Aimbot> aimbot;
 };
 
 inline std::optional<GlobalContext> globalContext;
