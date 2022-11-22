@@ -79,6 +79,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     const auto tier0 = GetModuleHandleW(L"tier0");
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
     conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
+    memAlloc = *reinterpret_cast<csgo::pod::MemAlloc**>(GetProcAddress(tier0, "g_pMemAlloc"));
     vignette = reinterpret_cast<float*>(clientPatternFinder("\x0F\x11\x05????\xF3\x0F\x7E\x87").add(3).deref().add(4).get());
     equipWearable = reinterpret_cast<decltype(equipWearable)>(clientPatternFinder("\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9").get());
     predictionRandomSeed = reinterpret_cast<int*>(clientPatternFinder("\x8B\x0D????\xBA????\xE8????\x83\xC4\x04").add(2).deref().get());

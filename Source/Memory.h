@@ -50,6 +50,7 @@ namespace csgo::pod
     struct Client;
     struct EconItem;
     struct ItemSystem;
+    struct MemAlloc;
 }
 
 class Memory {
@@ -61,6 +62,7 @@ public:
     std::uintptr_t reset;
 #endif
 
+    csgo::pod::MemAlloc* memAlloc;
     ClientMode* clientMode;
     Input* input;
     GlobalVars* globalVars;
