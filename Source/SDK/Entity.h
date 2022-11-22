@@ -122,6 +122,9 @@ public:
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
     VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
     VIRTUAL_METHOD(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
+#if IS_WIN32()
+    VIRTUAL_METHOD(bool, initializeAsClientEntity, 97, (const char* modelName, bool renderWithViewmodels), (modelName, renderWithViewmodels))
+#endif
     VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), ())
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
