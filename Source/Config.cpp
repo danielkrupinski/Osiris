@@ -21,7 +21,6 @@
 #include "imgui/imgui.h"
 
 #include "Config.h"
-#include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
 #include "InventoryChanger/InventoryChanger.h"
@@ -329,7 +328,6 @@ void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
 
     read<value_t::object>(j, "Style", style);
 
-    AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     visuals.fromJson(j["Visuals"]);
@@ -540,7 +538,6 @@ void Config::save(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
     j["Backtrack"] = Backtrack::toJson();
-    j["Anti aim"] = AntiAim::toJson();
     j["Glow"] = Glow::toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
@@ -589,7 +586,6 @@ void Config::reset(Visuals& visuals, const OtherInterfaces& interfaces, const Me
     streamProofESP = { };
     style = { };
 
-    AntiAim::resetConfig();
     Backtrack::resetConfig();
     Glow::resetConfig();
     visuals.resetConfig();

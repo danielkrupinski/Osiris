@@ -19,7 +19,6 @@
 #include "InventoryChanger/InventoryChanger.h"
 #include "Memory.h"
 #include "Hacks/Aimbot.h"
-#include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
 #include "Hacks/EnginePrediction.h"
@@ -113,7 +112,6 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(getEngineInterfaces().getEngine(), sendPacket);
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };

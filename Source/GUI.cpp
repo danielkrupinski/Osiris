@@ -27,7 +27,6 @@
 #include "SDK/InputSystem.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Glow.h"
-#include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Sound.h"
 #include "Hacks/StreamProofESP.h"
@@ -98,7 +97,6 @@ void GUI::render(Visuals& visuals, const Engine& engine, const ClientInterfaces&
     if (!config.style.menuStyle) {
         renderMenuBar(visuals);
         renderAimbotWindow(config);
-        AntiAim::drawGUI(false);
         renderTriggerbotWindow(config);
         Backtrack::drawGUI(false);
         Glow::drawGUI(false);
@@ -149,7 +147,6 @@ void GUI::renderMenuBar(Visuals& visuals) noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         menuBarItem("Aimbot", window.aimbot);
-        AntiAim::menuBarItem();
         menuBarItem("Triggerbot", window.triggerbot);
         Backtrack::menuBarItem();
         Glow::menuBarItem();
@@ -577,7 +574,7 @@ void GUI::renderConfigWindow(Visuals& visuals, const OtherInterfaces& interfaces
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Inventory Changer", "Sound", "Style", "Misc" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Glow", "Chams", "ESP", "Visuals", "Inventory Changer", "Sound", "Style", "Misc" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -587,15 +584,14 @@ void GUI::renderConfigWindow(Visuals& visuals, const OtherInterfaces& interfaces
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: Backtrack::resetConfig(); break;
-                    case 4: AntiAim::resetConfig(); break;
-                    case 5: Glow::resetConfig(); break;
-                    case 6: config.chams = { }; break;
-                    case 7: config.streamProofESP = { }; break;
-                    case 8: visuals.resetConfig(); break;
-                    case 9: inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
-                    case 10: Sound::resetConfig(); break;
-                    case 11: config.style = { }; updateColors(config); break;
-                    case 12: Misc::resetConfig(); Misc::updateClanTag(memory, true); break;
+                    case 4: Glow::resetConfig(); break;
+                    case 5: config.chams = { }; break;
+                    case 6: config.streamProofESP = { }; break;
+                    case 7: visuals.resetConfig(); break;
+                    case 8: inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
+                    case 9: Sound::resetConfig(); break;
+                    case 10: config.style = { }; updateColors(config); break;
+                    case 11: Misc::resetConfig(); Misc::updateClanTag(memory, true); break;
                     }
                 }
             }
@@ -633,7 +629,6 @@ void GUI::renderGuiStyle2(Visuals& visuals, const Engine& engine, const ClientIn
             renderAimbotWindow(config, true);
             ImGui::EndTabItem();
         }
-        AntiAim::tabItem();
         if (ImGui::BeginTabItem("Triggerbot")) {
             renderTriggerbotWindow(config, true);
             ImGui::EndTabItem();
