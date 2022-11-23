@@ -15,8 +15,6 @@ struct UserCmd;
 class ClientInterfaces;
 class EngineInterfaces;
 
-#define OSIRIS_BACKTRACK() true
-
 namespace Backtrack
 {
     void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;

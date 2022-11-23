@@ -14,8 +14,6 @@
 
 #include "Sound.h"
 
-#if OSIRIS_SOUND()
-
 static struct SoundConfig {
     int chickenVolume = 100;
 
@@ -139,17 +137,3 @@ void Sound::fromJson(const json& j) noexcept
     read(j, "Chicken volume", soundConfig.chickenVolume);
     read(j, "Players", soundConfig.players);
 }
-
-#else
-void Sound::modulateSound(std::string_view name, int entityIndex, float& volume) noexcept {}
-
-// GUI
-void Sound::menuBarItem() noexcept {}
-void Sound::tabItem() noexcept {}
-void Sound::drawGUI(bool contentOnly) noexcept {}
-
-// Config
-json Sound::toJson() noexcept { return {}; }
-void Sound::fromJson(const json& j) noexcept {}
-void Sound::resetConfig() noexcept {}
-#endif

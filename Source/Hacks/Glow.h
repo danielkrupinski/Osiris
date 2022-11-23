@@ -3,8 +3,6 @@
 #include "../JsonForward.h"
 #include "../Memory.h"
 
-#define OSIRIS_GLOW() true
-
 class ClientInterfaces;
 class EngineInterfaces;
 
