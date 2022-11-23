@@ -6,6 +6,7 @@
 #include <SDK/CSPlayerInventory.h>
 #include <SDK/EconItemView.h>
 #include <SDK/Panorama.h>
+#include <SDK/UiComponentInventory.h>
 
 #include <SDK/Constants/EconItemFlags.h>
 
@@ -251,9 +252,9 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     SharedObjectTypeCache::from(retSpoofGadgets->client, baseTypeCache).addObject((csgo::pod::SharedObject*)econItemPOD);
     localInventory.soCreated(localInventory.getSOID(), (csgo::pod::SharedObject*)econItemPOD, 4);
 
-    if (const auto inventoryComponent = *memory.uiComponentInventory) {
-        memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "recent", "0");
-        memory.setItemSessionPropertyValue(inventoryComponent, econItemPOD->itemID, "updated", "0");
+    if (const auto inventoryComponent = csgo::UiComponentInventory::from(retSpoofGadgets->client, *memory.uiComponentInventory, memory.setItemSessionPropertyValue); inventoryComponent.getPOD() != nullptr) {
+        inventoryComponent.setItemSessionPropertyValue(econItemPOD->itemID, "recent", "0");
+        inventoryComponent.setItemSessionPropertyValue(econItemPOD->itemID, "updated", "0");
     }
 
     if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(econItemPOD->itemID), econItemViewFunctions); view.getPOD() != nullptr)
@@ -284,9 +285,9 @@ ItemId Inventory::assingNewItemID(ItemId itemID)
     if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(newItemID), econItemViewFunctions); view.getPOD() != nullptr)
         view.clearInventoryImageRGBA();
 
-    if (const auto inventoryComponent = *memory.uiComponentInventory) {
-        memory.setItemSessionPropertyValue(inventoryComponent, newItemID, "recent", "0");
-        memory.setItemSessionPropertyValue(inventoryComponent, newItemID, "updated", "0");
+    if (const auto inventoryComponent = csgo::UiComponentInventory::from(retSpoofGadgets->client, *memory.uiComponentInventory, memory.setItemSessionPropertyValue); inventoryComponent.getPOD() != nullptr) {
+        inventoryComponent.setItemSessionPropertyValue(newItemID, "recent", "0");
+        inventoryComponent.setItemSessionPropertyValue(newItemID, "updated", "0");
     }
 
     return ItemId{ newItemID };
@@ -468,9 +469,9 @@ void Inventory::equipItem(ItemId itemID, csgo::Team team, std::uint8_t slot)
 
 void Inventory::markItemUpdated(ItemId itemID)
 {
-    if (const auto inventoryComponent = *memory.uiComponentInventory) {
-        memory.setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "recent", "0");
-        memory.setItemSessionPropertyValue(inventoryComponent, static_cast<csgo::ItemId>(itemID), "updated", "1");
+    if (const auto inventoryComponent = csgo::UiComponentInventory::from(retSpoofGadgets->client, *memory.uiComponentInventory, memory.setItemSessionPropertyValue); inventoryComponent.getPOD() != nullptr) {
+        inventoryComponent.setItemSessionPropertyValue(static_cast<csgo::ItemId>(itemID), "recent", "0");
+        inventoryComponent.setItemSessionPropertyValue(static_cast<csgo::ItemId>(itemID), "updated", "1");
     }
 }
 

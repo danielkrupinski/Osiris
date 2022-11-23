@@ -964,6 +964,9 @@
     <ClInclude Include="Utils\SafeAddress.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\UiComponentInventory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

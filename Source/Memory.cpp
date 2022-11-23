@@ -107,8 +107,8 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x8B\xCE\x83\xC4\x08").add(1).relativeToAbsolute().get());
     createBaseTypeCache = clientPatternFinder("\xE8????\x8D\x4D\x0F").add(1).relativeToAbsolute().get();
-    uiComponentInventory = reinterpret_cast<void**>(clientPatternFinder("\xC6\x44\x24??\x83\x3D").add(7).deref().get());
-    setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().get());
+    uiComponentInventory = reinterpret_cast<csgo::pod::UiComponentInventory**>(clientPatternFinder("\xC6\x44\x24??\x83\x3D").add(7).deref().get());
+    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().get();
 
     localPlayer.init(reinterpret_cast<csgo::pod::Entity**>(clientPatternFinder("\xA1????\x89\x45\xBC\x85\xC0").add(1).deref().get()));
 
@@ -174,7 +174,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     createBaseTypeCache = reinterpret_cast<decltype(createBaseTypeCache)>(clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get());
     insertIntoTree = clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get();
     uiComponentInventory = reinterpret_cast<decltype(uiComponentInventory)>(clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().get());
-    setItemSessionPropertyValue = reinterpret_cast<decltype(setItemSessionPropertyValue)>(clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get());
+    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get();
 
     localPlayer.init(reinterpret_cast<csgo::pod::Entity**>(clientPatternFinder("\x83\xFF\xFF\x48\x8B\x05").add(6).relativeToAbsolute().get()));
 #endif

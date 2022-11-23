@@ -51,6 +51,7 @@ namespace csgo::pod
     struct EconItem;
     struct ItemSystem;
     struct MemAlloc;
+    struct UiComponentInventory;
 }
 
 class Memory {
@@ -111,8 +112,8 @@ public:
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     std::uintptr_t createBaseTypeCache;
-    void** uiComponentInventory;
-    void(THISCALL_CONV* setItemSessionPropertyValue)(void* thisptr, std::uint64_t itemID, const char* type, const char* value);
+    csgo::pod::UiComponentInventory** uiComponentInventory;
+    TypeHint<std::uintptr_t, void(THISCALL_CONV*)(csgo::pod::UiComponentInventory* thisptr, std::uint64_t itemID, const char* type, const char* value)> setItemSessionPropertyValue;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
