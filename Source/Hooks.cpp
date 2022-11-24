@@ -52,6 +52,7 @@
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
+#include "SDK/Constants/ConVarNames.h"
 #include "SDK/Constants/FrameStage.h"
 #include "SDK/CSPlayerInventory.h"
 #include "SDK/GameEvent.h"
@@ -322,7 +323,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
     surface.init(interfaces.getSurface().getPOD());
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
-    svCheats.init(interfaces.getCvar().findVar("sv_cheats"));
+    svCheats.init(interfaces.getCvar().findVar(csgo::sv_cheats));
     svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetBool);
 
     viewRender.init(memory.viewRender);

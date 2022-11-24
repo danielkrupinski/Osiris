@@ -22,6 +22,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -272,7 +273,7 @@ void Visuals::performColorCorrection() noexcept
 
 void Visuals::inverseRagdollGravity() noexcept
 {
-    static auto ragdollGravity = interfaces.getCvar().findVar("cl_ragdoll_gravity");
+    static auto ragdollGravity = interfaces.getCvar().findVar(csgo::cl_ragdoll_gravity);
     ConVar::from(retSpoofGadgets->client, ragdollGravity).setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
 }
 
@@ -366,7 +367,7 @@ void Visuals::removeBlur(csgo::FrameStage stage) noexcept
 
 void Visuals::updateBrightness() noexcept
 {
-    static auto brightness = interfaces.getCvar().findVar("mat_force_tonemap_scale");
+    static auto brightness = interfaces.getCvar().findVar(csgo::mat_force_tonemap_scale);
     ConVar::from(retSpoofGadgets->client, brightness).setValue(visualsConfig.brightness);
 }
 
@@ -393,13 +394,13 @@ void Visuals::removeGrass(csgo::FrameStage stage) noexcept
 
 void Visuals::remove3dSky() noexcept
 {
-    static auto sky = interfaces.getCvar().findVar("r_3dsky");
+    static auto sky = interfaces.getCvar().findVar(csgo::r_3dsky);
     ConVar::from(retSpoofGadgets->client, sky).setValue(!visualsConfig.no3dSky);
 }
 
 void Visuals::removeShadows() noexcept
 {
-    static auto shadows = interfaces.getCvar().findVar("cl_csm_enabled");
+    static auto shadows = interfaces.getCvar().findVar(csgo::cl_csm_enabled);
     ConVar::from(retSpoofGadgets->client, shadows).setValue(!visualsConfig.noShadows);
 }
 
@@ -583,7 +584,7 @@ void Visuals::skybox(csgo::FrameStage stage) noexcept
     if (stage == csgo::FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
         memory.loadSky(skyboxList[visualsConfig.skybox]);
     } else {
-        static const auto sv_skyname = interfaces.getCvar().findVar("sv_skyname");
+        static const auto sv_skyname = interfaces.getCvar().findVar(csgo::sv_skyname);
         memory.loadSky(sv_skyname->string);
     }
 }

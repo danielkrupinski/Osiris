@@ -44,6 +44,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/FileSystem.h"
+#include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -728,7 +729,7 @@ private:
 
 void InventoryChanger::scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept
 {
-    interfaces.getCvar().findVar("cl_fullupdate")->changeCallback();
+    interfaces.getCvar().findVar(csgo::cl_fullupdate)->changeCallback();
     hudUpdateRequired = true;
 }
 

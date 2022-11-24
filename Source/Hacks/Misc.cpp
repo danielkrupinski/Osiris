@@ -31,6 +31,7 @@
 #include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -432,7 +433,7 @@ void Misc::fastPlant(const EngineTrace& engineTrace, const OtherInterfaces& inte
     if (!miscConfig.fastPlant)
         return;
 
-    if (static auto plantAnywhere = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("mp_plant_c4_anywhere")); plantAnywhere.getInt())
+    if (static auto plantAnywhere = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar(csgo::mp_plant_c4_anywhere)); plantAnywhere.getInt())
         return;
 
     if (!localPlayer || !localPlayer.get().isAlive() || (localPlayer.get().inBombZone() && localPlayer.get().isOnGround()))
@@ -578,7 +579,7 @@ void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterf
 
 void Misc::disablePanoramablur(const OtherInterfaces& interfaces) noexcept
 {
-    static auto blur = interfaces.getCvar().findVar("@panorama_disable_blur");
+    static auto blur = interfaces.getCvar().findVar(csgo::panorama_disable_blur);
     ConVar::from(retSpoofGadgets->client, blur).setValue(miscConfig.disablePanoramablur);
 }
 
@@ -622,7 +623,7 @@ bool Misc::changeName(const Engine& engine, const OtherInterfaces& interfaces, c
 {
     static auto exploitInitialized{ false };
 
-    static auto name{ interfaces.getCvar().findVar("name") };
+    static auto name{ interfaces.getCvar().findVar(csgo::name) };
 
     if (reconnect) {
         exploitInitialized = false;
@@ -673,7 +674,7 @@ void Misc::fakeBan(const Engine& engine, const OtherInterfaces& interfaces, cons
 
 void Misc::nadePredict(const OtherInterfaces& interfaces) noexcept
 {
-    static auto nadeVar{ interfaces.getCvar().findVar("cl_grenadepreview") };
+    static auto nadeVar{ interfaces.getCvar().findVar(csgo::cl_grenadepreview) };
 
     nadeVar->onChangeCallbacks.size = 0;
     ConVar::from(retSpoofGadgets->client, nadeVar).setValue(miscConfig.nadePredict);
@@ -896,7 +897,7 @@ void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInte
         if (!miscConfig.purchaseList.enabled)
             return;
 
-        if (static const auto mp_buytime = interfaces.getCvar().findVar("mp_buytime"); (!engine.isInGame() || freezeEnd != 0.0f && memory.globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? ConVar::from(retSpoofGadgets->client, mp_buytime).getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
+        if (static const auto mp_buytime = interfaces.getCvar().findVar(csgo::mp_buytime); (!engine.isInGame() || freezeEnd != 0.0f && memory.globalVars->realtime > freezeEnd + (!miscConfig.purchaseList.onlyDuringFreezeTime ? ConVar::from(retSpoofGadgets->client, mp_buytime).getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->isOpen())
             return;
 
         ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
@@ -957,7 +958,7 @@ void Misc::oppositeHandKnife(const OtherInterfaces& interfaces, csgo::FrameStage
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    static const auto cl_righthand = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("cl_righthand"));
+    static const auto cl_righthand = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar(csgo::cl_righthand));
     static bool original;
 
     if (stage == csgo::FrameStage::RENDER_START) {

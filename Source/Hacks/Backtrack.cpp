@@ -10,6 +10,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
 #include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
@@ -34,13 +35,13 @@ static auto timeToTicks(const Memory& memory, float time) noexcept
 }
 
 Backtrack::Backtrack(const Cvar& cvar) : cvars{
-        .updateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_updaterate")),
-        .maxUpdateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_maxupdaterate")),
-        .interp = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_interp")),
-        .interpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_interp_ratio")),
-        .minInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_client_min_interp_ratio")),
-        .maxInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_client_max_interp_ratio")),
-        .maxUnlag = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_maxunlag")) }
+        .updateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::cl_updaterate)),
+        .maxUpdateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_maxupdaterate)),
+        .interp = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::cl_interp)),
+        .interpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::cl_interp_ratio)),
+        .minInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_client_min_interp_ratio)),
+        .maxInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_client_max_interp_ratio)),
+        .maxUnlag = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_maxunlag)) }
 {
 }
 
