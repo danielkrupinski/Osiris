@@ -79,11 +79,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(visuals, interfaces, memory, u8"default.json", false);
+    load(backtrack, visuals, interfaces, memory, u8"default.json", false);
 
 #if IS_WIN32()
     LOGFONTW logfont;
@@ -289,12 +289,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(visuals, interfaces, memory, configs[id].c_str(), incremental);
+    load(backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -307,7 +307,7 @@ void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
     }
 
     if (!incremental)
-        reset(visuals, interfaces, memory);
+        reset(backtrack, visuals, interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -328,7 +328,7 @@ void Config::load(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
 
     read<value_t::object>(j, "Style", style);
 
-    Backtrack::fromJson(j["Backtrack"]);
+    backtrack.fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
@@ -525,7 +525,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -537,7 +537,7 @@ void Config::save(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
-    j["Backtrack"] = Backtrack::toJson();
+    j["Backtrack"] = backtrack.toJson();
     j["Glow"] = Glow::toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
@@ -556,11 +556,11 @@ void Config::save(Visuals& visuals, const OtherInterfaces& interfaces, const Mem
         out << std::setw(2) << j;
 }
 
-void Config::add(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(visuals, interfaces, memory, configs.size() - 1);
+        save(backtrack, visuals, interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -578,7 +578,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -586,7 +586,7 @@ void Config::reset(Visuals& visuals, const OtherInterfaces& interfaces, const Me
     streamProofESP = { };
     style = { };
 
-    Backtrack::resetConfig();
+    backtrack.resetConfig();
     Glow::resetConfig();
     visuals.resetConfig();
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);

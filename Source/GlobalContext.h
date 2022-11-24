@@ -14,6 +14,7 @@
 #include "EventListener.h"
 
 #include "Hacks/Aimbot.h"
+#include "Hacks/Backtrack.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces/ClientInterfaces.h"
 #include "Interfaces/EngineInterfaces.h"
@@ -112,6 +113,7 @@ private:
     std::optional<ClientInterfacesPODs> clientInterfaces;
     std::optional<const OtherInterfacesPODs> interfaces;
     std::optional<Aimbot> aimbot;
+    std::optional<Backtrack> backtrack;
 };
 
 inline std::optional<GlobalContext> globalContext;

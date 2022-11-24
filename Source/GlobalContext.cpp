@@ -105,7 +105,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 
     aimbot->run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *config, *memory, cmd);
     Triggerbot::run(getEngineInterfaces().engineTrace(), getOtherInterfaces(), *memory, *config, cmd);
-    Backtrack::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
+    backtrack->run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(getEngineInterfaces().engineTrace(), getOtherInterfaces(), cmd);
@@ -167,7 +167,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (visuals->removeHands(info.model->name) || visuals->removeSleeves(info.model->name) || visuals->removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(*backtrack, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
@@ -183,7 +183,7 @@ bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddres
 
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 {
-    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(getOtherInterfaces()), false);
+    [[maybe_unused]] static auto backtrackInit = (backtrack->init(getOtherInterfaces()), false);
     if (getEngineInterfaces().getEngine().isConnected() && !getEngineInterfaces().getEngine().isInGame())
         Misc::changeName(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, true, nullptr, 0.0f);
 
@@ -207,7 +207,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         visuals->removeVisualRecoil(stage);
         visuals->applyZoom(stage);
         Misc::fixAnimationLOD(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, stage);
-        Backtrack::update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
+        backtrack->update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
     }
     inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
 
@@ -430,8 +430,9 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
+        backtrack.emplace();
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
-        config.emplace(*visuals, getOtherInterfaces(), *memory);
+        config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
@@ -498,8 +499,9 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
+        backtrack.emplace();
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) });
-        config.emplace(*visuals, getOtherInterfaces(), *memory);
+        config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
 
         gui.emplace();
         aimbot.emplace();
@@ -613,7 +615,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(*visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(*backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();

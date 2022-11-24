@@ -15,8 +15,8 @@ struct UserCmd;
 class ClientInterfaces;
 class EngineInterfaces;
 
-namespace Backtrack
-{
+class Backtrack {
+public:
     void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
     void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
 
@@ -39,4 +39,4 @@ namespace Backtrack
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+};

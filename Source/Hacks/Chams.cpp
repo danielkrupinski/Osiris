@@ -133,7 +133,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(Backtrack& backtrack, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -167,13 +167,13 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
     } else {
         const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
         if (entity.getPOD() != nullptr && !entity.getNetworkable().isDormant() && entity.isPlayer())
-            renderPlayer(engine, interfaces.getStudioRender(), memory, config, entity);
+            renderPlayer(backtrack, engine, interfaces.getStudioRender(), memory, config, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(const Engine& engine, const StudioRender& studioRender, const Memory& memory, Config& config, const Entity& player) noexcept
+void Chams::renderPlayer(Backtrack& backtrack, const Engine& engine, const StudioRender& studioRender, const Memory& memory, Config& config, const Entity& player) noexcept
 {
     if (!localPlayer)
         return;
@@ -189,8 +189,8 @@ void Chams::renderPlayer(const Engine& engine, const StudioRender& studioRender,
     } else if (localPlayer.get().isOtherEnemy(memory, player)) {
         applyChams(studioRender, memory, config.chams["Enemies"].materials, health);
 
-        const auto records = Backtrack::getRecords(player.getNetworkable().index());
-        if (records && !records->empty() && Backtrack::valid(engine, memory, records->front().simulationTime)) {
+        const auto records = backtrack.getRecords(player.getNetworkable().index());
+        if (records && !records->empty() && backtrack.valid(engine, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
             applyChams(studioRender, memory, config.chams["Backtrack"].materials, health, records->back().matrix);
