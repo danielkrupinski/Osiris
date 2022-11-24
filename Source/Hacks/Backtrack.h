@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <deque>
 
@@ -56,5 +57,11 @@ private:
         ConVar maxUnlag;
     };
 
+    bool enabled = false;
+    bool ignoreSmoke = false;
+    bool recoilBasedFov = false;
+    int timeLimit = 200;
     Cvars cvars;
+    std::array<std::deque<Record>, 65> records;
+    bool backtrackWindowOpen = false;
 };
