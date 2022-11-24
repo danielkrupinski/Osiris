@@ -183,7 +183,6 @@ bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddres
 
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 {
-    [[maybe_unused]] static auto backtrackInit = (backtrack->init(getOtherInterfaces()), false);
     if (getEngineInterfaces().getEngine().isConnected() && !getEngineInterfaces().getEngine().isInGame())
         Misc::changeName(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, true, nullptr, 0.0f);
 
@@ -430,7 +429,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        backtrack.emplace();
+        backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
         config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
@@ -499,7 +498,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
-        backtrack.emplace();
+        backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) });
         config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
 

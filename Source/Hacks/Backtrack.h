@@ -5,18 +5,22 @@
 
 #include "../JsonForward.h"
 
-#include "../SDK/matrix3x4.h"
-#include "../SDK/Vector.h"
+#include <SDK/matrix3x4.h>
+#include <SDK/Vector.h>
+#include <SDK/ConVar.h>
 
 #include "../Memory.h"
 
 namespace csgo { enum class FrameStage; }
 struct UserCmd;
 class ClientInterfaces;
+class Cvar;
 class EngineInterfaces;
 
 class Backtrack {
 public:
+    explicit Backtrack(const Cvar& cvar);
+
     void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
     void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
 
@@ -28,7 +32,6 @@ public:
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept;
     bool valid(const Engine& engine, const Memory& memory, float simtime) noexcept;
-    void init(const OtherInterfaces& interfaces) noexcept;
 
     // GUI
     void menuBarItem() noexcept;
@@ -39,4 +42,19 @@ public:
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
+
+private:
+    float getLerp() noexcept;
+
+    struct Cvars {
+        ConVar updateRate;
+        ConVar maxUpdateRate;
+        ConVar interp;
+        ConVar interpRatio;
+        ConVar minInterpRatio;
+        ConVar maxInterpRatio;
+        ConVar maxUnlag;
+    };
+
+    Cvars cvars;
 };

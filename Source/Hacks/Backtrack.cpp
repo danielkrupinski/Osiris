@@ -28,21 +28,20 @@ struct BacktrackConfig {
 
 static std::array<std::deque<Backtrack::Record>, 65> records;
 
-struct Cvars {
-    ConVar updateRate;
-    ConVar maxUpdateRate;
-    ConVar interp;
-    ConVar interpRatio;
-    ConVar minInterpRatio;
-    ConVar maxInterpRatio;
-    ConVar maxUnlag;
-};
-
-static std::optional<Cvars> cvars;
-
 static auto timeToTicks(const Memory& memory, float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
+}
+
+Backtrack::Backtrack(const Cvar& cvar) : cvars{
+        .updateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_updaterate")),
+        .maxUpdateRate = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_maxupdaterate")),
+        .interp = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_interp")),
+        .interpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("cl_interp_ratio")),
+        .minInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_client_min_interp_ratio")),
+        .maxInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_client_max_interp_ratio")),
+        .maxUnlag = ConVar::from(retSpoofGadgets->client, cvar.findVar("sv_maxunlag")) }
+{
 }
 
 void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
@@ -81,10 +80,10 @@ void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInt
     }
 }
 
-static float getLerp() noexcept
+float Backtrack::getLerp() noexcept
 {
-    auto ratio = std::clamp(cvars->interpRatio.getFloat(), cvars->minInterpRatio.getFloat(), cvars->maxInterpRatio.getFloat());
-    return (std::max)(cvars->interp.getFloat(), (ratio / ((cvars->maxUpdateRate.getPOD() != nullptr) ? cvars->maxUpdateRate.getFloat() : cvars->updateRate.getFloat())));
+    auto ratio = std::clamp(cvars.interpRatio.getFloat(), cvars.minInterpRatio.getFloat(), cvars.maxInterpRatio.getFloat());
+    return (std::max)(cvars.interp.getFloat(), (ratio / ((cvars.maxUpdateRate.getPOD() != nullptr) ? cvars.maxUpdateRate.getFloat() : cvars.updateRate.getFloat())));
 }
 
 void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd* cmd) noexcept
@@ -166,20 +165,8 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
     if (!network)
         return false;
 
-    auto delta = std::clamp(NetworkChannel::from(retSpoofGadgets->client, network).getLatency(0) + NetworkChannel::from(retSpoofGadgets->client, network).getLatency(1) + getLerp(), 0.f, cvars->maxUnlag.getFloat()) - (memory.globalVars->serverTime() - simtime);
+    auto delta = std::clamp(NetworkChannel::from(retSpoofGadgets->client, network).getLatency(0) + NetworkChannel::from(retSpoofGadgets->client, network).getLatency(1) + getLerp(), 0.f, cvars.maxUnlag.getFloat()) - (memory.globalVars->serverTime() - simtime);
     return std::abs(delta) <= 0.2f;
-}
-
-void Backtrack::init(const OtherInterfaces& interfaces) noexcept
-{
-    cvars.emplace(Cvars{
-        .updateRate = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("cl_updaterate")),
-        .maxUpdateRate = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("sv_maxupdaterate")),
-        .interp = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("cl_interp")),
-        .interpRatio = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("cl_interp_ratio")),
-        .minInterpRatio = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("sv_client_min_interp_ratio")),
-        .maxInterpRatio = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("sv_client_max_interp_ratio")),
-        .maxUnlag = ConVar::from(retSpoofGadgets->client, interfaces.getCvar().findVar("sv_maxunlag")) });
 }
 
 static bool backtrackWindowOpen = false;
