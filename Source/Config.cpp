@@ -28,6 +28,9 @@
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
+#include <Config/LoadConfigurator.h>
+#include <Config/ResetConfigurator.h>
+#include <Config/SaveConfigurator.h>
 
 #if IS_WIN32()
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -328,7 +331,8 @@ void Config::load(Glow& glow, Backtrack& backtrack, Visuals& visuals, const Othe
 
     read<value_t::object>(j, "Style", style);
 
-    backtrack.fromJson(j["Backtrack"]);
+    LoadConfigurator backtrackConfigurator{ j["Backtrack"] };
+    backtrack.configure(backtrackConfigurator);
     glow.fromJson(j["Glow"]);
     visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
@@ -537,7 +541,9 @@ void Config::save(Glow& glow, Backtrack& backtrack, Visuals& visuals, const Othe
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
-    j["Backtrack"] = backtrack.toJson();
+    SaveConfigurator backtrackConfigurator;
+    backtrack.configure(backtrackConfigurator);
+    j["Backtrack"] = backtrackConfigurator.getJson();
     j["Glow"] = glow.toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
@@ -586,7 +592,8 @@ void Config::reset(Glow& glow, Backtrack& backtrack, Visuals& visuals, const Oth
     streamProofESP = { };
     style = { };
 
-    backtrack.resetConfig();
+    ResetConfigurator configurator;
+    backtrack.configure(configurator);
     glow.resetConfig();
     visuals.resetConfig();
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);

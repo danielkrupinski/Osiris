@@ -30,6 +30,7 @@
 #include "Hacks/Backtrack.h"
 #include "Hacks/Sound.h"
 #include "Hacks/StreamProofESP.h"
+#include <Config/ResetConfigurator.h>
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -578,12 +579,14 @@ void GUI::renderConfigWindow(Glow& glow, Backtrack& backtrack, Visuals& visuals,
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
+                ResetConfigurator configurator;
+
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
                     case 0: config.reset(glow, backtrack, visuals, interfaces, memory); updateColors(config); Misc::updateClanTag(memory, true); inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
-                    case 3: backtrack.resetConfig(); break;
+                    case 3: backtrack.configure(configurator); break;
                     case 4: glow.resetConfig(); break;
                     case 5: config.chams = { }; break;
                     case 6: config.streamProofESP = { }; break;

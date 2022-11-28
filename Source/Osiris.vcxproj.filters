@@ -84,6 +84,9 @@
     <Filter Include="SDK\Helpers">
       <UniqueIdentifier>{acb6732a-176f-40fa-b54a-7851139f9385}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{571171a8-ca62-48a5-91c2-9b837e642a80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -969,6 +972,15 @@
     </ClInclude>
     <ClInclude Include="SDK\Constants\ConVarNames.h">
       <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ResetConfigurator.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\LoadConfigurator.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\SaveConfigurator.h">
+      <Filter>Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

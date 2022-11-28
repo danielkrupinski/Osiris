@@ -195,6 +195,9 @@
     <ClInclude Include="..\Dependencies\nlohmann\json.hpp" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
+    <ClInclude Include="Config\LoadConfigurator.h" />
+    <ClInclude Include="Config\ResetConfigurator.h" />
+    <ClInclude Include="Config\SaveConfigurator.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GlobalContext.h" />
