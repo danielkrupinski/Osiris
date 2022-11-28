@@ -6,8 +6,8 @@
 class ClientInterfaces;
 class EngineInterfaces;
 
-namespace Glow
-{
+class Glow {
+public:
     void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void clearCustomObjects(const Memory& memory) noexcept;
     void updateInput() noexcept;
@@ -21,4 +21,4 @@ namespace Glow
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+};
