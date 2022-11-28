@@ -29,23 +29,6 @@
 
 #include <Interfaces/ClientInterfaces.h>
 
-struct GlowItem : Color4 {
-    bool enabled = false;
-    bool healthBased = false;
-    int style = 0;
-};
-
-struct PlayerGlow {
-    GlowItem all, visible, occluded;
-};
-
-static std::unordered_map<std::string, PlayerGlow> playerGlowConfig;
-static std::unordered_map<std::string, GlowItem> glowConfig;
-static KeyBindToggle glowToggleKey;
-static KeyBind glowHoldKey;
-
-static std::vector<std::pair<int, int>> customGlowEntities;
-
 void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
@@ -116,7 +99,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
             }
         };
 
-        auto applyPlayerGlow = [applyGlow, &memory, &engineInterfaces](const std::string& name, const Entity& entity) noexcept {
+        auto applyPlayerGlow = [this, applyGlow, &memory, &engineInterfaces](const std::string& name, const Entity& entity) noexcept {
             const auto& cfg = playerGlowConfig[name];
             if (cfg.all.enabled) 
                 applyGlow(cfg.all, entity.health());
@@ -253,7 +236,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
+static void to_json(json& j, const Glow::GlowItem& o, const Glow::GlowItem& dummy = {})
 {
     to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
@@ -261,7 +244,7 @@ static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
     WRITE("Style", style);
 }
 
-static void to_json(json& j, const PlayerGlow& o, const PlayerGlow& dummy = {})
+static void to_json(json& j, const Glow::PlayerGlow& o, const Glow::PlayerGlow& dummy = {})
 {
     WRITE("All", all);
     WRITE("Visible", visible);
@@ -278,7 +261,7 @@ json Glow::toJson() noexcept
     return j;
 }
 
-static void from_json(const json& j, GlowItem& g)
+static void from_json(const json& j, Glow::GlowItem& g)
 {
     from_json(j, static_cast<Color4&>(g));
 
@@ -287,7 +270,7 @@ static void from_json(const json& j, GlowItem& g)
     read(j, "Style", g.style);
 }
 
-static void from_json(const json& j, PlayerGlow& g)
+static void from_json(const json& j, Glow::PlayerGlow& g)
 {
     read<value_t::object>(j, "All", g.all);
     read<value_t::object>(j, "Visible", g.visible);
