@@ -7,7 +7,9 @@
 <br>![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-适用于 **反恐精英: 全球攻势** 的免费、开源、跨平台的作弊软件. 设计为内部作弊 - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) 可加载到游戏进程中. 与 Steam 版本的游戏兼容。适用于 Windows 和 Linux 系统。
+适用于 **反恐精英: 全球攻势** 的免费、开源、跨平台的作弊软件。设计为内部作弊 - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) 可加载到游戏进程中。与 Steam 版本的游戏兼容。适用于 Windows 和 Linux 系统。
+
+如果你需要反馈任何并非由翻译造成的问题，请前往 [Osiris](https://github.com/danielkrupinski/Osiris) 仓库提交 Issue。
 
 ## 特性
 *   **自瞄** - 瞄准辅助
@@ -25,7 +27,7 @@
 
 <details>
 
-*   **Aimbot** - aim assistance
+*   **自瞄** - aim assistance
     *   **Enabled** - on / off master switch
     *   **On key \[ key \]** - aimbot works only when chosen key is being held
     *   **Aimlock** - brings your aim to the target (affected by Smooth).
@@ -42,7 +44,7 @@
     *   **Smooth** - smooth aimbot movement in order to seem more human-like
     *   **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
-*   **Triggerbot** - automatically fires when crosshair is on enemy
+*   **开火** - automatically fires when crosshair is on enemy
     *   **Enabled** - on / off master switch
     *   **On key \[ key \]** - triggerbot works only when chosen key is being held
     *   **Friendly fire** - treat allies as enemies
@@ -53,12 +55,12 @@
     *   **Shot delay** - delay time in ms (milliseconds)
     *   **Min damage** - minimal damage to fire.
 
-*   **Backtrack** - abuse lag compensation in order to move players back in time
+*   **回溯** - abuse lag compensation in order to move players back in time
     *   **Enabled** - on / off master switch
     *   **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
     *   **Time limit** - limit the backtracking window \[*1*-*200*ms\]
 
-*   **Glow** - render glow effect on entities
+*   **描边** - render glow effect on entities
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens, Defuse kits, Projectiles, Hostages, Ragdolls* **/** *All, Visible, Occluded*
 
@@ -67,7 +69,7 @@
     *   **Color** - glow color in rgba format
     *   **Style** - glow style { `Default`, `Rim3d`, `Edge`, `Edge Pulse` }
 
-*   **Chams** - color player models to improve visibility
+*   **上色** - color player models to improve visibility
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
     *   **Enabled** - on / off master switch
@@ -104,7 +106,7 @@
     *   **Head dot** - draw dot on player's head
     *   **Active Weapon** - draw player equipped weapon
 
-*   **Visuals** - miscellaneous visual options
+*   **视觉** - miscellaneous visual options
     *   **Disable post-processing** - disable post-processing effects in order to increase FPS
     *   **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     *   **No fog** - remove fog from map for better visibility
@@ -134,9 +136,9 @@
     *   **Hit effect** - show screen effect on enemy hit
     *   **Hit marker** - show a cross detail on enemy hit
 
-*   **Inventory Changer** - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
+*   **物品替换** - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
 
-*   **Sound** - modify volume of certain sound effects
+*   **声音** - modify volume of certain sound effects
     *   **Chicken volume** - volume of chicken sounds
 
     *Local player, Allies, Enemies*
@@ -145,7 +147,7 @@
     *   **Weapon volume** - volume of player weapon shots
     *   **Footstep volume** - volume of player footsteps
 
-*   **Misc** - miscellaneous features
+*   **其他** - miscellaneous features
     *   **Menu key \[ key \]** - menu toggle key
 
     *   **Menu style** - menu style toggle (*Classic* **/** *One window*)
