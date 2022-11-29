@@ -7,22 +7,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019, windows-2022]
-        toolset: [ClangCL, MSVC]
-        configuration: [Debug, Release]
-        exclude:
-          - os: windows-2019
-            toolset: ClangCL
+        os: [windows-2022]
+        toolset: [MSVC]
+        configuration: [Release]
     steps:
     - uses: actions/checkout@v2
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
-    - name: Set toolset
-      if: matrix.toolset == 'ClangCL'
-      run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Build
       shell: cmd
       run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Osiris.dll
+        path: Release/Osiris.dll
 
   cmake:
     runs-on: ${{ matrix.os }}
