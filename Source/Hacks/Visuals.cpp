@@ -539,10 +539,10 @@ void Visuals::skybox(csgo::FrameStage stage) noexcept
         return;
 
     if (stage == csgo::FrameStage::RENDER_START && visualsConfig.skybox > 0 && static_cast<std::size_t>(visualsConfig.skybox) < skyboxList.size()) {
-        memory.loadSky(skyboxList[visualsConfig.skybox]);
+        loadSky(skyboxList[visualsConfig.skybox]);
     } else {
         static const auto sv_skyname = interfaces.getCvar().findVar(csgo::sv_skyname);
-        memory.loadSky(sv_skyname->string);
+        loadSky(sv_skyname->string);
     }
 }
 

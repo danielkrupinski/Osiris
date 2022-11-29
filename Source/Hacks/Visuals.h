@@ -14,13 +14,15 @@ class EngineInterfaces;
 
 class Visuals {
 public:
-    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder)
+    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }
     {
 #if IS_WIN32()
         disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().get());
+        loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get());
 #elif IS_LINUX()
         disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().get());
+        loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get());
 #endif
     }
 
@@ -80,5 +82,6 @@ private:
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
     bool* disablePostProcessingPtr;
+    std::add_pointer_t<void FASTCALL_CONV(const char*)> loadSky;
     ColorCorrection colorCorrection;
 };

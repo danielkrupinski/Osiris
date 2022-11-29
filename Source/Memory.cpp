@@ -59,7 +59,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
     globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
     glowObjectManager = reinterpret_cast<GlowObjectManager*>(clientPatternFinder("\x0F\x11\x05????\x83\xC8\x01").add(3).deref().get());
-    loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get());
     setClanTag = reinterpret_cast<decltype(setClanTag)>(enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(clientPatternFinder("\xE8????\x8B\x4C\x24\x30\x33\xD2").add(1).relativeToAbsolute().get());
     cameraThink = clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get();
@@ -134,7 +133,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     findHudElement = reinterpret_cast<decltype(findHudElement)>(clientPatternFinder("\xE8????\x48\x8D\x50\xE0").add(1).relativeToAbsolute().get());
 
     submitReportFunction = clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get();
-    loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get());
     clientMode = reinterpret_cast<decltype(clientMode)>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().get());
     input = reinterpret_cast<Input*>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().get());
     playerResource = reinterpret_cast<PlayerResource**>(clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().get());

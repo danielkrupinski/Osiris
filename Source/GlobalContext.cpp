@@ -430,7 +430,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
         backtrack.emplace(getOtherInterfaces().getCvar());
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
+        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
         glow.emplace();
         config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
@@ -500,7 +500,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
 
         ImGui::CreateContext();
         backtrack.emplace(getOtherInterfaces().getCvar());
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) });
+        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) });
         glow.emplace();
         config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
 
