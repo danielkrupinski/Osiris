@@ -671,6 +671,17 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
             const auto items = [](std::size_t category) noexcept -> std::vector<const char*> {
                 switch (category) {
                 case 0:
+                case 1: return { "Visible", "Occluded" };
+                case 2: return { "Pistols", "SMGs", "Rifles", "Sniper Rifles", "Shotguns", "Machineguns", "Grenades", "Melee", "Other" };
+                case 3: return { "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
+                case 4: return { "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Cash Dufflebag" };
+                case 5: return { "Defuse Kit", "Chicken", "Planted C4", "Hostage", "Sentry", "Cash", "Ammo Box", "Radar Jammer", "Snowball Pile", "Collectable Coin" };
+                default: return { };
+                }
+            }(i);
+            const auto itemsCHS = [](std::size_t category) noexcept -> std::vector<const char*> {
+                switch (category) {
+                case 0:
                 case 1: return { "可见的", "遮挡的" };
                 case 2: return { "手枪", "冲锋枪", "步枪", "狙击枪", "霰弹枪", "机枪", "投掷物", "Melee", "Other" };
                 case 3: return { "闪光弹", "手雷", "Breach Charge", "Bump Mine", "诱饵弹", "燃烧瓶", "TA Grenade", "烟雾弹", "雪球" };
@@ -685,7 +696,7 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
             for (std::size_t j = 0; j < items.size(); ++j) {
                 static bool selectedSubItem;
                 if (!categoryEnabled || getConfigShared(i, items[j]).enabled) {
-                    if (ImGui::Selectable(items[j], currentCategory == i && !selectedSubItem && std::string_view{ currentItem } == items[j])) {
+                    if (ImGui::Selectable(itemsCHS[j], currentCategory == i && !selectedSubItem && std::string_view{ currentItem } == items[j])) {
                         currentCategory = i;
                         currentItem = items[j];
                         selectedSubItem = false;

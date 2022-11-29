@@ -340,17 +340,17 @@ EntityData::EntityData(const Entity& entity) noexcept : BaseData{ entity }
 {
     name = [](const Entity& entity) {
         switch (entity.getNetworkable().getClientClass()->classId) {
-        case ClassId::EconEntity: return "Defuse Kit";
-        case ClassId::Chicken: return "Chicken";
-        case ClassId::PlantedC4: return "Planted C4";
-        case ClassId::Hostage: return "Hostage";
+        case ClassId::EconEntity: return "拆弹工具";
+        case ClassId::Chicken: return "只因";
+        case ClassId::PlantedC4: return "已安放C4";
+        case ClassId::Hostage: return "人质";
         case ClassId::Dronegun: return "Sentry";
         case ClassId::Cash: return "Cash";
         case ClassId::AmmoBox: return "Ammo Box";
         case ClassId::RadarJammer: return "Radar Jammer";
         case ClassId::SnowballPile: return "Snowball Pile";
         case ClassId::DynamicProp: return "Collectable Coin";
-        default: assert(false); return "unknown";
+        default: assert(false); return "未知";
         }
     }(entity);
 }
@@ -361,17 +361,17 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         switch (projectile.getNetworkable().getClientClass()->classId) {
         case ClassId::BaseCSGrenadeProjectile:
             if (const auto model = projectile.getRenderable().getModel(); model && strstr(model->name, "flashbang"))
-                return "Flashbang";
+                return "闪光弹";
             else
-                return "HE Grenade";
+                return "手雷";
         case ClassId::BreachChargeProjectile: return "Breach Charge";
         case ClassId::BumpMineProjectile: return "Bump Mine";
-        case ClassId::DecoyProjectile: return "Decoy Grenade";
-        case ClassId::MolotovProjectile: return "Molotov";
+        case ClassId::DecoyProjectile: return "诱饵弹";
+        case ClassId::MolotovProjectile: return "燃烧瓶";
         case ClassId::SensorGrenadeProjectile: return "TA Grenade";
-        case ClassId::SmokeGrenadeProjectile: return "Smoke Grenade";
-        case ClassId::SnowballProjectile: return "Snowball";
-        default: assert(false); return "unknown";
+        case ClassId::SmokeGrenadeProjectile: return "烟雾弹";
+        case ClassId::SnowballProjectile: return "雪球";
+        default: assert(false); return "未知";
         }
     }(projectile);
 

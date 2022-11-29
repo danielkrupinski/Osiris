@@ -215,8 +215,9 @@ void Glow::drawGUI(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    constexpr std::array categories{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "C4", "已安放 C4", "只因", "拆弹工具", "投掷物", "人质", "Ragdolls" };
-    ImGui::Combo("", &currentCategory, categories.data(), categories.size());
+    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local Player", "Weapons", "C4", "Planted C4", "Chickens", "Defuse Kits", "Projectiles", "Hostages", "Ragdolls" };
+    constexpr std::array categoriesCHS{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "C4", "已安放C4", "只因", "拆弹工具", "投掷物", "人质", "Ragdolls" };
+    ImGui::Combo("", &currentCategory, categoriesCHS.data(), categoriesCHS.size());
     ImGui::PopID();
     GlowItem* currentItem;
     if (currentCategory <= 3) {
