@@ -4,6 +4,7 @@
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 #include <Platform/IsPlatform.h>
+#include <Config/ResetConfigurator.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -78,4 +79,34 @@ private:
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
     bool* disablePostProcessingPtr;
+
+    struct ColorCorrection {
+        bool enabled;
+        float blue;
+        float red;
+        float mono;
+        float saturation;
+        float ghost;
+        float green;
+        float yellow;
+        
+        ColorCorrection()
+        {
+            ResetConfigurator configurator;
+            configure(configurator);
+        }
+
+        template <typename Configurator>
+        void configure(Configurator& configurator)
+        {
+            configurator("Enabled", enabled).def(false);
+            configurator("Blue", blue).def(0.0f);
+            configurator("Red", red).def(0.0f);
+            configurator("Mono", mono).def(0.0f);
+            configurator("Saturation", saturation).def(0.0f);
+            configurator("Ghost", ghost).def(0.0f);
+            configurator("Green", green).def(0.0f);
+            configurator("Yellow", yellow).def(0.0f);
+        }
+    } colorCorrection;
 };

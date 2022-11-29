@@ -10,6 +10,8 @@ constexpr bool jsonValueTypeMatchesType(json::value_t valueType) noexcept
         return valueType == json::value_t::boolean;
     } else if constexpr (std::is_same_v<T, int>) {
         return valueType == json::value_t::number_integer || valueType == json::value_t::number_unsigned;
+    } else if constexpr (std::is_same_v<T, float>) {
+        return valueType == json::value_t::number_float;
     } else {
         static_assert(!std::is_same_v<T, T>, "Unsupported type!");
     }
