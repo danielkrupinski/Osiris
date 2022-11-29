@@ -1303,16 +1303,16 @@ static bool windowOpen = false;
 
 void Misc::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Misc")) {
+    if (ImGui::MenuItem("其他")) {
         windowOpen = true;
-        ImGui::SetWindowFocus("Misc");
-        ImGui::SetWindowPos("Misc", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("其他");
+        ImGui::SetWindowPos("其他", { 100.0f, 100.0f });
     }
 }
 
 void Misc::tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
-    if (ImGui::BeginTabItem("Misc")) {
+    if (ImGui::BeginTabItem("其他")) {
         drawGUI(engine, clientInterfaces, interfaces, memory, true);
         ImGui::EndTabItem();
     }
@@ -1324,13 +1324,13 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
         if (!windowOpen)
             return;
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+        ImGui::Begin("其他", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
             | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
-    ImGui::hotkey("Menu Key", miscConfig.menuKey);
-    ImGui::Checkbox("Anti AFK kick", &miscConfig.antiAfkKick);
+    ImGui::hotkey("切出菜单", miscConfig.menuKey);
+    ImGui::Checkbox("防止AFK踢出", &miscConfig.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &miscConfig.autoStrafe);
     ImGui::Checkbox("Bunny hop", &miscConfig.bunnyHop);
     ImGui::Checkbox("Fast duck", &miscConfig.fastDuck);
@@ -1340,7 +1340,7 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     ImGui::PushID("Edge Jump Key");
     ImGui::hotkey("", miscConfig.edgejumpkey);
     ImGui::PopID();
-    ImGui::Checkbox("Slowwalk", &miscConfig.slowwalk);
+    ImGui::Checkbox("慢步", &miscConfig.slowwalk);
     ImGui::SameLine();
     ImGui::PushID("Slowwalk Key");
     ImGui::hotkey("", miscConfig.slowwalkKey);
@@ -1350,7 +1350,7 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
     ImGui::Checkbox("Auto accept", &miscConfig.autoAccept);
-    ImGui::Checkbox("Radar hack", &miscConfig.radarHack);
+    ImGui::Checkbox("雷达黑客", &miscConfig.radarHack);
     ImGui::Checkbox("Reveal ranks", &miscConfig.revealRanks);
     ImGui::Checkbox("Reveal money", &miscConfig.revealMoney);
     ImGui::Checkbox("Reveal suspect", &miscConfig.revealSuspect);
@@ -1369,7 +1369,7 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     }
     ImGui::PopID();
 
-    ImGui::Checkbox("Watermark", &miscConfig.watermark.enabled);
+    ImGui::Checkbox("水印栏", &miscConfig.watermark.enabled);
     ImGuiCustom::colorPicker("Offscreen Enemies", miscConfig.offscreenEnemies.asColor4(), &miscConfig.offscreenEnemies.enabled);
     ImGui::SameLine();
     ImGui::PushID("Offscreen Enemies");
@@ -1394,9 +1394,9 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     ImGui::SliderFloat("Aspect Ratio", &miscConfig.aspectratio, 0.0f, 5.0f, "%.2f");
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &miscConfig.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &miscConfig.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &miscConfig.clocktag);
-    ImGui::Checkbox("Custom clantag", &miscConfig.customClanTag);
+    ImGui::Checkbox("动画战队标签", &miscConfig.animatedClanTag);
+    ImGui::Checkbox("时钟标签", &miscConfig.clocktag);
+    ImGui::Checkbox("自定义战队标签", &miscConfig.customClanTag);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
@@ -1404,13 +1404,13 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     if (ImGui::InputText("", miscConfig.clanTag, sizeof(miscConfig.clanTag)))
         Misc::updateClanTag(memory, true);
     ImGui::PopID();
-    ImGui::Checkbox("Kill message", &miscConfig.killMessage);
+    ImGui::Checkbox("击杀消息", &miscConfig.killMessage);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(1);
     ImGui::InputText("", &miscConfig.killMessageString);
     ImGui::PopID();
-    ImGui::Checkbox("Name stealer", &miscConfig.nameStealer);
+    ImGui::Checkbox("名字切换器", &miscConfig.nameStealer);
     ImGui::PushID(3);
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &miscConfig.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
@@ -1422,23 +1422,23 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
         Misc::fakeBan(engine, interfaces, memory, true);
-    ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
-    ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
-    ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
+    ImGui::Checkbox("快速下包", &miscConfig.fastPlant);
+    ImGui::Checkbox("急停", &miscConfig.fastStop);
+    ImGuiCustom::colorPicker("炸弹计时器", miscConfig.bombTimer);
     ImGui::Checkbox("Quick reload", &miscConfig.quickReload);
     ImGui::Checkbox("Prepare revolver", &miscConfig.prepareRevolver);
     ImGui::SameLine();
     ImGui::PushID("Prepare revolver Key");
     ImGui::hotkey("", miscConfig.prepareRevolverKey);
     ImGui::PopID();
-    ImGui::Combo("Hit Sound", &miscConfig.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
+    ImGui::Combo("命中声音", &miscConfig.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (miscConfig.hitSound == 5) {
         ImGui::InputText("Hit Sound filename", &miscConfig.customHitSound);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
     }
     ImGui::PushID(5);
-    ImGui::Combo("Kill Sound", &miscConfig.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
+    ImGui::Combo("击杀声音", &miscConfig.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (miscConfig.killSound == 5) {
         ImGui::InputText("Kill Sound filename", &miscConfig.customKillSound);
         if (ImGui::IsItemHovered())
@@ -1518,7 +1518,7 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
     }
     ImGui::PopID();
 
-    if (ImGui::Button("Unhook"))
+    if (ImGui::Button("关闭 Osiris"))
         hooks->uninstall(clientInterfaces, interfaces, memory);
 
     ImGui::Columns(1);

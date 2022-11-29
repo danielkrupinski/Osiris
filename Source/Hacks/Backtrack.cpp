@@ -163,16 +163,16 @@ bool Backtrack::valid(const Engine& engine, const Memory& memory, float simtime)
 
 void Backtrack::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Backtrack")) {
+    if (ImGui::MenuItem("回溯")) {
         backtrackWindowOpen = true;
-        ImGui::SetWindowFocus("Backtrack");
-        ImGui::SetWindowPos("Backtrack", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("回溯");
+        ImGui::SetWindowPos("回溯", { 100.0f, 100.0f });
     }
 }
 
 void Backtrack::tabItem() noexcept
 {
-    if (ImGui::BeginTabItem("Backtrack")) {
+    if (ImGui::BeginTabItem("回溯")) {
         drawGUI(true);
         ImGui::EndTabItem();
     }
@@ -184,7 +184,7 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
         if (!backtrackWindowOpen)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("回溯", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Checkbox("Enabled", &enabled);
     ImGui::Checkbox("Ignore smoke", &ignoreSmoke);

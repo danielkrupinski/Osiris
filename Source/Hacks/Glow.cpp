@@ -184,16 +184,16 @@ static bool glowWindowOpen = false;
 
 void Glow::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Glow")) {
+    if (ImGui::MenuItem("描边")) {
         glowWindowOpen = true;
-        ImGui::SetWindowFocus("Glow");
-        ImGui::SetWindowPos("Glow", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("描边");
+        ImGui::SetWindowPos("描边", { 100.0f, 100.0f });
     }
 }
 
 void Glow::tabItem() noexcept
 {
-    if (ImGui::BeginTabItem("Glow")) {
+    if (ImGui::BeginTabItem("描边")) {
         drawGUI(true);
         ImGui::EndTabItem();
     }
@@ -205,7 +205,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         if (!glowWindowOpen)
             return;
         ImGui::SetNextWindowSize({ 450.0f, 0.0f });
-        ImGui::Begin("Glow", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("描边", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
 
     ImGui::hotkey("Toggle Key", glowToggleKey, 80.0f);
@@ -215,7 +215,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local Player", "Weapons", "C4", "Planted C4", "Chickens", "Defuse Kits", "Projectiles", "Hostages", "Ragdolls" };
+    constexpr std::array categories{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "C4", "已安放 C4", "只因", "拆弹工具", "投掷物", "人质", "Ragdolls" };
     ImGui::Combo("", &currentCategory, categories.data(), categories.size());
     ImGui::PopID();
     GlowItem* currentItem;
@@ -223,7 +223,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        ImGui::Combo("", &currentType, "全部\0可见的\0遮挡的\0");
         ImGui::PopID();
         auto& cfg = playerGlowConfig[categories[currentCategory]];
         switch (currentType) {
@@ -236,17 +236,17 @@ void Glow::drawGUI(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &currentItem->enabled);
+    ImGui::Checkbox("启用", &currentItem->enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &currentItem->healthBased);
+    ImGui::Checkbox("基于血量", &currentItem->healthBased);
 
-    ImGuiCustom::colorPicker("Color", *currentItem);
+    ImGuiCustom::colorPicker("颜色", *currentItem);
 
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("Style", &currentItem->style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
+    ImGui::Combo("样式", &currentItem->style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
 
     ImGui::Columns(1);
     if (!contentOnly)
