@@ -462,16 +462,16 @@ static bool windowOpen = false;
 
 void InventoryChanger::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Inventory Changer")) {
+    if (ImGui::MenuItem("物品替换")) {
         windowOpen = true;
-        ImGui::SetWindowFocus("Inventory Changer");
-        ImGui::SetWindowPos("Inventory Changer", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("物品替换");
+        ImGui::SetWindowPos("物品替换", { 100.0f, 100.0f });
     }
 }
 
 void InventoryChanger::tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
-    if (ImGui::BeginTabItem("Inventory Changer")) {
+    if (ImGui::BeginTabItem("物品替换")) {
         inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, true);
         ImGui::EndTabItem();
     }
@@ -739,7 +739,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
         if (!windowOpen)
             return;
         ImGui::SetNextWindowSize({ 700.0f, 400.0f });
-        if (!ImGui::Begin("Inventory Changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+        if (!ImGui::Begin("物品替换", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
             ImGui::End();
             return;
         }
