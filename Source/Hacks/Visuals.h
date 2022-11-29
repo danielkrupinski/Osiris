@@ -6,6 +6,7 @@
 #include <Platform/IsPlatform.h>
 #include <Config/ResetConfigurator.h>
 #include "Visuals/ColorCorrection.h"
+#include "Visuals/SkyboxChanger.h"
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -15,14 +16,12 @@ class EngineInterfaces;
 class Visuals {
 public:
     Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
-        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }
+        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }
     {
 #if IS_WIN32()
         disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().get());
-        loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get());
 #elif IS_LINUX()
         disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().get());
-        loadSky = reinterpret_cast<decltype(loadSky)>(enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get());
 #endif
     }
 
@@ -61,8 +60,6 @@ public:
     void bulletTracer(const GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 
-    static constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
-
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
@@ -82,6 +79,6 @@ private:
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
     bool* disablePostProcessingPtr;
-    std::add_pointer_t<void FASTCALL_CONV(const char*)> loadSky;
     ColorCorrection colorCorrection;
+    SkyboxChanger skyboxChanger;
 };
