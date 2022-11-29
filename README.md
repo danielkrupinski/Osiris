@@ -7,21 +7,21 @@
 <br>![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-Free open-source cross-platform cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game. Available for Windows and Linux systems.
+适用于 **反恐精英: 全球攻势** 的免费、开源、跨平台的作弊软件. 设计为内部作弊 - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) 可加载到游戏进程中. 与 Steam 版本的游戏兼容。适用于 Windows 和 Linux 系统。
 
-## Features
-*   **Aimbot** - aim assistance
-*   **Triggerbot** - automatically fires when crosshair is on enemy
-*   **Backtrack** - abuse lag compensation to move players back in time
-*   **Glow** - render glow effect on entities
-*   **Chams** - color player models to improve visibility
-*   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
-*   **Visuals** - miscellaneous visual options
-*   [**Inventory Changer**](Source/InventoryChanger/) - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
-*   **Sound** - modify volume of certain sound effects
-*   **Style** - select menu window layout and colors
-*   **Misc** - miscellaneous features
-*   **Config** - JSON-based configuration system
+## 特性
+*   **自瞄** - 瞄准辅助
+*   **开火** - 当准心瞄准敌人时自动开火
+*   **回溯** - 利用延迟补偿以使玩家及时回退
+*   **描边** - 在实体上渲染光晕效果
+*   **上色** - 给玩家模型上色，以提高可见性
+*   **ESP** - 显示玩家、投掷武器和射弹的信息
+*   **视觉** - 其他视觉选项
+*   [**物品替换**](Source/InventoryChanger/) - 将武器皮肤、贴纸、刀、手套、奖牌等添加到游戏的库存中
+*   **声音** - 修改某些声音效果的音量
+*   **主题** - 选择菜单窗口布局和颜色
+*   **其他** - 杂项功能
+*   **配置** - 基于 JSON 的配置系统
 
 <details>
 
