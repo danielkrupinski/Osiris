@@ -170,7 +170,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
         ImGui::Begin("自瞄", &window.aimbot, windowFlags);
     }
-    ImGui::Checkbox("On key", &config.aimbotOnKey);
+    ImGui::Checkbox("快捷键", &config.aimbotOnKey);
     ImGui::SameLine();
     ImGui::PushID("Aimbot Key");
     ImGui::hotkey("", config.aimbotKey);
@@ -402,7 +402,7 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Checkbox("启用", &config.triggerbot[currentWeapon].enabled);
     ImGui::Separator();
-    ImGui::hotkey("Hold Key", config.triggerbotHoldKey);
+    ImGui::hotkey("按住键", config.triggerbotHoldKey);
     ImGui::Checkbox("不分敌我", &config.triggerbot[currentWeapon].friendlyFire);
     ImGui::Checkbox("仅开镜", &config.triggerbot[currentWeapon].scopedOnly);
     ImGui::Checkbox("忽略闪", &config.triggerbot[currentWeapon].ignoreFlash);
@@ -429,8 +429,8 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
         ImGui::Begin("上色", &window.chams, windowFlags);
     }
 
-    ImGui::hotkey("Toggle Key", config.chamsToggleKey, 80.0f);
-    ImGui::hotkey("Hold Key", config.chamsHoldKey, 80.0f);
+    ImGui::hotkey("切换键", config.chamsToggleKey, 80.0f);
+    ImGui::hotkey("按住键", config.chamsHoldKey, 80.0f);
     ImGui::Separator();
 
     static int currentCategory{ 0 };
@@ -555,7 +555,7 @@ void GUI::renderConfigWindow(Backtrack& backtrack, Visuals& visuals, const Other
             buffer = configItems[currentConfig];
 
         ImGui::PushID(0);
-        if (ImGui::InputTextWithHint("", "config name", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
+        if (ImGui::InputTextWithHint("", "配置名称", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
             if (currentConfig != -1)
                 config.rename(currentConfig, buffer);
         }

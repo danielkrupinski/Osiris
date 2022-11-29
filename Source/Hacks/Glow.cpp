@@ -208,8 +208,8 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::Begin("描边", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
 
-    ImGui::hotkey("Toggle Key", glowToggleKey, 80.0f);
-    ImGui::hotkey("Hold Key", glowHoldKey, 80.0f);
+    ImGui::hotkey("切换键", glowToggleKey, 80.0f);
+    ImGui::hotkey("按住键", glowHoldKey, 80.0f);
     ImGui::Separator();
 
     static int currentCategory{ 0 };

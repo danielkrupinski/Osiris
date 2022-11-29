@@ -186,11 +186,11 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("回溯", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
-    ImGui::Checkbox("Enabled", &enabled);
-    ImGui::Checkbox("Ignore smoke", &ignoreSmoke);
+    ImGui::Checkbox("启用", &enabled);
+    ImGui::Checkbox("忽略烟", &ignoreSmoke);
     ImGui::Checkbox("Recoil based fov", &recoilBasedFov);
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &timeLimit, 1, 200, "%d ms");
+    ImGui::SliderInt("时间限制", &timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();

@@ -779,7 +779,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("第三人称", &visualsConfig.thirdperson);
     ImGui::SameLine();
-    ImGui::PushID("Thirdperson Key");
+    ImGui::PushID("第三人称切换键");
     ImGui::hotkey("", visualsConfig.thirdpersonKey);
     ImGui::PopID();
     ImGui::PushItemWidth(290.0f);
@@ -812,7 +812,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::Combo("命中标记", &visualsConfig.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("命中标记时间", &visualsConfig.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("子弹追踪", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
-    ImGuiCustom::colorPicker("Molotov Hull", visualsConfig.molotovHull);
+    ImGuiCustom::colorPicker("显示燃烧区域", visualsConfig.molotovHull);
 
     ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
     ImGui::SameLine();

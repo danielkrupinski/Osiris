@@ -522,14 +522,14 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
         if (plantedC4.defuserHandle == GameData::local().handle) {
             if (canDefuse) {
                 ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
-                ImGui::textUnformattedCentered("You can defuse!");
+                ImGui::textUnformattedCentered("你可以拆除!");
             } else {
                 ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-                ImGui::textUnformattedCentered("You can not defuse!");
+                ImGui::textUnformattedCentered("快跑要炸了!");
             }
             ImGui::PopStyleColor();
         } else if (const auto defusingPlayer = GameData::playerByHandle(plantedC4.defuserHandle)) {
-            std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory.globalVars->currenttime, 0.0f) << " s";
+            std::ostringstream ss; ss << defusingPlayer->name << " 正在拆除: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory.globalVars->currenttime, 0.0f) << " s";
 
             ImGui::textUnformattedCentered(ss.str().c_str());
 
@@ -1520,6 +1520,8 @@ void Misc::drawGUI(const Engine& engine, const ClientInterfaces& clientInterface
 
     if (ImGui::Button("关闭 Osiris"))
         hooks->uninstall(clientInterfaces, interfaces, memory);
+
+    ImGui::Text("由 NKXingXh 汉化");
 
     ImGui::Columns(1);
     if (!contentOnly)

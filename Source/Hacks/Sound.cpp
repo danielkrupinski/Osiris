@@ -87,7 +87,7 @@ void Sound::drawGUI(bool contentOnly) noexcept
 
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
-    ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
+    ImGui::Combo("", &currentCategory, "本地玩家\0友军\0敌人\0");
     ImGui::PopItemWidth();
     ImGui::SliderInt("主音量", &soundConfig.players[currentCategory].masterVolume, 0, 200, "%d%%");
     ImGui::SliderInt("爆头音量", &soundConfig.players[currentCategory].headshotVolume, 0, 200, "%d%%");
