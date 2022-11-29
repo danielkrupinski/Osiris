@@ -146,18 +146,18 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar(Backtrack& backtrack, Visuals& visuals) noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        menuBarItem("Aimbot", window.aimbot);
-        menuBarItem("Triggerbot", window.triggerbot);
+        menuBarItem("自瞄", window.aimbot);
+        menuBarItem("开火", window.triggerbot);
         backtrack.menuBarItem();
         Glow::menuBarItem();
-        menuBarItem("Chams", window.chams);
+        menuBarItem("上色", window.chams);
         StreamProofESP::menuBarItem();
         visuals.menuBarItem();
         InventoryChanger::menuBarItem();
         Sound::menuBarItem();
-        menuBarItem("Style", window.style);
+        menuBarItem("主题", window.style);
         Misc::menuBarItem();
-        menuBarItem("Config", window.config);
+        menuBarItem("配置", window.config);
         ImGui::EndMainMenuBar();   
     }
 }
@@ -168,7 +168,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
         if (!window.aimbot)
             return;
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
+        ImGui::Begin("自瞄", &window.aimbot, windowFlags);
     }
     ImGui::Checkbox("On key", &config.aimbotOnKey);
     ImGui::SameLine();
@@ -178,14 +178,14 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config.aimbotKeyMode, "Hold\0Toggle\0");
+    ImGui::Combo("", &config.aimbotKeyMode, "按住\0切换\0");
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Separator();
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+    ImGui::Combo("", &currentCategory, "全部\0手枪\0重型武器\0冲锋枪\0步枪\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -198,7 +198,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
         break;
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "全部", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->aimbot[idx ? idx : 35].enabled) {
@@ -216,7 +216,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "全部", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->aimbot[idx ? idx + 10 : 36].enabled) {
@@ -234,7 +234,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "全部", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->aimbot[idx ? idx + 16 : 37].enabled) {
@@ -252,7 +252,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "全部", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->aimbot[idx ? idx + 23 : 38].enabled) {
@@ -271,28 +271,28 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config.aimbot[currentWeapon].enabled);
+    ImGui::Checkbox("启用", &config.aimbot[currentWeapon].enabled);
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("Aimlock", &config.aimbot[currentWeapon].aimlock);
-    ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
-    ImGui::Checkbox("Friendly fire", &config.aimbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Visible only", &config.aimbot[currentWeapon].visibleOnly);
-    ImGui::Checkbox("Scoped only", &config.aimbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config.aimbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config.aimbot[currentWeapon].ignoreSmoke);
-    ImGui::Checkbox("Auto shot", &config.aimbot[currentWeapon].autoShot);
-    ImGui::Checkbox("Auto scope", &config.aimbot[currentWeapon].autoScope);
-    ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+    ImGui::Checkbox("锁定准心", &config.aimbot[currentWeapon].aimlock);
+    ImGui::Checkbox("静默模式", &config.aimbot[currentWeapon].silent);
+    ImGui::Checkbox("不分敌我", &config.aimbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("仅可见", &config.aimbot[currentWeapon].visibleOnly);
+    ImGui::Checkbox("仅开镜", &config.aimbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("忽略闪", &config.aimbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("忽略烟", &config.aimbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("自动开火", &config.aimbot[currentWeapon].autoShot);
+    ImGui::Checkbox("自动开镜", &config.aimbot[currentWeapon].autoScope);
+    ImGui::Combo("部位", &config.aimbot[currentWeapon].bone, "最近的\0最佳伤害\0头\0颈\0上胸部\0中胸部\0胃\0屁股\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Max shot inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::InputInt("Min damage", &config.aimbot[currentWeapon].minDamage);
+    ImGui::SliderFloat("角度", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("平滑", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+    ImGui::SliderFloat("最大瞄准误差", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("最大射击误差", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::InputInt("最小伤害", &config.aimbot[currentWeapon].minDamage);
     config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
+    ImGui::Checkbox("致命一击", &config.aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Between shots", &config.aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
@@ -305,12 +305,12 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
         if (!window.triggerbot)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
+        ImGui::Begin("开火", &window.triggerbot, windowFlags);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
+    ImGui::Combo("", &currentCategory, "全部\0手枪\0重型武器\0冲锋枪\0步枪\0Zeus x27\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -327,7 +327,7 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
 
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "全部", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->triggerbot[idx ? idx : 35].enabled) {
@@ -345,7 +345,7 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "全部", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->triggerbot[idx ? idx + 10 : 36].enabled) {
@@ -363,7 +363,7 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "全部", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->triggerbot[idx ? idx + 16 : 37].enabled) {
@@ -381,7 +381,7 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "全部", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* config, int idx, const char** out_text) {
             if (static_cast<Config*>(config)->triggerbot[idx ? idx + 23 : 38].enabled) {
@@ -400,21 +400,21 @@ void GUI::renderTriggerbotWindow(Config& config, bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config.triggerbot[currentWeapon].enabled);
+    ImGui::Checkbox("启用", &config.triggerbot[currentWeapon].enabled);
     ImGui::Separator();
     ImGui::hotkey("Hold Key", config.triggerbotHoldKey);
-    ImGui::Checkbox("Friendly fire", &config.triggerbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Scoped only", &config.triggerbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config.triggerbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config.triggerbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("不分敌我", &config.triggerbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("仅开镜", &config.triggerbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("忽略闪", &config.triggerbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("忽略烟", &config.triggerbot[currentWeapon].ignoreSmoke);
     ImGui::SetNextItemWidth(85.0f);
-    ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
+    ImGui::Combo("命中点", &config.triggerbot[currentWeapon].hitgroup, "全部\0头\0胸\0胃\0左手\0右手\0左腿\0右腿\0");
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Shot delay", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
-    ImGui::InputInt("Min damage", &config.triggerbot[currentWeapon].minDamage);
+    ImGui::SliderInt("开火延迟", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+    ImGui::InputInt("最小伤害", &config.triggerbot[currentWeapon].minDamage);
     config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
-    ImGui::SliderFloat("Burst Time", &config.triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
+    ImGui::Checkbox("致命一击", &config.triggerbot[currentWeapon].killshot);
+    ImGui::SliderFloat("过度时间", &config.triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
     if (!contentOnly)
         ImGui::End();
@@ -426,7 +426,7 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
         if (!window.chams)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Chams", &window.chams, windowFlags);
+        ImGui::Begin("上色", &window.chams, windowFlags);
     }
 
     ImGui::hotkey("Toggle Key", config.chamsToggleKey, 80.0f);
@@ -439,7 +439,7 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
 
     static int material = 1;
 
-    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+    if (ImGui::Combo("", &currentCategory, "友军\0敌人\0安放中\0拆除中\0本地玩家\0武器\0手\0回溯\0袖子\0"))
         material = 1;
 
     ImGui::PopID();
@@ -454,7 +454,7 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "手", "回溯", "袖子" };
 
     ImGui::SameLine();
 
@@ -467,15 +467,15 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
 
     auto& chams{ config.chams[categories[currentCategory]].materials[material - 1] };
 
-    ImGui::Checkbox("Enabled", &chams.enabled);
+    ImGui::Checkbox("启用", &chams.enabled);
     ImGui::Separator();
-    ImGui::Checkbox("Health based", &chams.healthBased);
-    ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
-    ImGui::Checkbox("Wireframe", &chams.wireframe);
+    ImGui::Checkbox("基于血量", &chams.healthBased);
+    ImGui::Checkbox("闪烁", &chams.blinking);
+    ImGui::Combo("材质", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
+    ImGui::Checkbox("线框", &chams.wireframe);
     ImGui::Checkbox("Cover", &chams.cover);
     ImGui::Checkbox("Ignore-Z", &chams.ignorez);
-    ImGuiCustom::colorPicker("Color", chams);
+    ImGuiCustom::colorPicker("颜色", chams);
 
     if (!contentOnly) {
         ImGui::End();
@@ -488,13 +488,13 @@ void GUI::renderStyleWindow(Config& config, bool contentOnly) noexcept
         if (!window.style)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Style", &window.style, windowFlags);
+        ImGui::Begin("主题", &window.style, windowFlags);
     }
 
     ImGui::PushItemWidth(150.0f);
-    if (ImGui::Combo("Menu style", &config.style.menuStyle, "Classic\0One window\0"))
+    if (ImGui::Combo("菜单样式", &config.style.menuStyle, "经典\0单窗口\0"))
         window = { };
-    if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+    if (ImGui::Combo("菜单颜色", &config.style.menuColors, "暗色\0亮色\0经典\0自定义\0"))
         updateColors(config);
     ImGui::PopItemWidth();
 
@@ -517,7 +517,7 @@ void GUI::renderConfigWindow(Backtrack& backtrack, Visuals& visuals, const Other
         if (!window.config)
             return;
         ImGui::SetNextWindowSize({ 320.0f, 0.0f });
-        if (!ImGui::Begin("Config", &window.config, windowFlags)) {
+        if (!ImGui::Begin("配置", &window.config, windowFlags)) {
             ImGui::End();
             return;
         }
@@ -564,17 +564,17 @@ void GUI::renderConfigWindow(Backtrack& backtrack, Visuals& visuals, const Other
 
         ImGui::PushItemWidth(100.0f);
 
-        if (ImGui::Button("Open config directory"))
+        if (ImGui::Button("打开配置目录"))
             config.openConfigDir();
 
-        if (ImGui::Button("Create config", { 100.0f, 25.0f }))
+        if (ImGui::Button("创建配置", { 100.0f, 25.0f }))
             config.add(backtrack, visuals, interfaces, memory, buffer.c_str());
 
-        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
-            ImGui::OpenPopup("Config to reset");
+        if (ImGui::Button("重置配置", { 100.0f, 25.0f }))
+            ImGui::OpenPopup("要重置的配置");
 
-        if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Glow", "Chams", "ESP", "Visuals", "Inventory Changer", "Sound", "Style", "Misc" };
+        if (ImGui::BeginPopup("要重置的配置")) {
+            static constexpr const char* names[]{ "全部", "自瞄", "开火", "回溯", "描边", "上色", "ESP", "视觉", "物品替换", "声音", "主题", "其他" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -598,15 +598,15 @@ void GUI::renderConfigWindow(Backtrack& backtrack, Visuals& visuals, const Other
             ImGui::EndPopup();
         }
         if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
+            if (ImGui::Button("加载选中", { 100.0f, 25.0f })) {
                 config.load(backtrack, visuals, interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
                 inventory_changer::InventoryChanger::instance(interfaces, memory).scheduleHudUpdate(interfaces);
                 Misc::updateClanTag(memory, true);
             }
-            if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("保存选中", { 100.0f, 25.0f }))
                 config.save(backtrack, visuals, interfaces, memory, currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
+            if (ImGui::Button("删除选中", { 100.0f, 25.0f })) {
                 config.remove(currentConfig);
 
                 if (static_cast<std::size_t>(currentConfig) < configItems.size())
@@ -625,17 +625,17 @@ void GUI::renderGuiStyle2(Backtrack& backtrack, Visuals& visuals, const Engine& 
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
-        if (ImGui::BeginTabItem("Aimbot")) {
+        if (ImGui::BeginTabItem("自瞄")) {
             renderAimbotWindow(config, true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Triggerbot")) {
+        if (ImGui::BeginTabItem("开火")) {
             renderTriggerbotWindow(config, true);
             ImGui::EndTabItem();
         }
         backtrack.tabItem();
         Glow::tabItem();
-        if (ImGui::BeginTabItem("Chams")) {
+        if (ImGui::BeginTabItem("上色")) {
             renderChamsWindow(config, true);
             ImGui::EndTabItem();
         }
@@ -643,12 +643,12 @@ void GUI::renderGuiStyle2(Backtrack& backtrack, Visuals& visuals, const Engine& 
         visuals.tabItem();
         InventoryChanger::tabItem(interfaces, memory);
         Sound::tabItem();
-        if (ImGui::BeginTabItem("Style")) {
+        if (ImGui::BeginTabItem("主题")) {
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
         Misc::tabItem(engine, clientInterfaces, interfaces, memory);
-        if (ImGui::BeginTabItem("Config")) {
+        if (ImGui::BeginTabItem("配置")) {
             renderConfigWindow(backtrack, visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();
         }
