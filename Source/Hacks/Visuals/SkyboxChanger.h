@@ -25,6 +25,9 @@ public:
         if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
             return;
 
+        if (!loadSky)
+            return;
+
         if (stage == csgo::FrameStage::RENDER_START && skybox > 0 && static_cast<std::size_t>(skybox) < skyboxList.size()) {
             loadSky(skyboxList[skybox]);
         } else {
