@@ -7,7 +7,7 @@
 <br>![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-适用于 **反恐精英: 全球攻势** 的免费、开源、跨平台的作弊软件。设计为内部作弊 - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) 可加载到游戏进程中。与 Steam 版本的游戏兼容。适用于 Windows 和 Linux 系统。
+适用于 **反恐精英: 全球攻势** 的免费、开源、跨平台的作弊软件。设计为内部作弊 - [动态链接库](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) 可加载到游戏进程中。与 Steam 版本的游戏兼容。适用于 Windows 和 Linux 系统。
 
 如果你需要反馈任何并非由翻译造成的问题，请前往 [Osiris](https://github.com/danielkrupinski/Osiris) 仓库提交 Issue。
 
@@ -28,8 +28,8 @@
 <details>
 
 *   **自瞄** - aim assistance
-    *   **Enabled** - on / off master switch
-    *   **On key \[ key \]** - aimbot works only when chosen key is being held
+    *   **启用** - 主开关
+    *   **On key \[ key \]** - 自瞄仅在选中的键按下时工作
     *   **Aimlock** - brings your aim to the target (affected by Smooth).
     *   **Silent** - aimbot is not visible on your screen (client-sided only)
     *   **Friendly fire** - treat allies as enemies
@@ -45,7 +45,7 @@
     *   **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
 *   **开火** - automatically fires when crosshair is on enemy
-    *   **Enabled** - on / off master switch
+    *   **启用** - 主开关
     *   **On key \[ key \]** - triggerbot works only when chosen key is being held
     *   **Friendly fire** - treat allies as enemies
     *   **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
@@ -56,7 +56,7 @@
     *   **Min damage** - minimal damage to fire.
 
 *   **回溯** - abuse lag compensation in order to move players back in time
-    *   **Enabled** - on / off master switch
+    *   **启用** - 主开关
     *   **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
     *   **Time limit** - limit the backtracking window \[*1*-*200*ms\]
 
@@ -64,7 +64,7 @@
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens, Defuse kits, Projectiles, Hostages, Ragdolls* **/** *All, Visible, Occluded*
 
-    *   **Enabled** - on / off master switch
+    *   **启用** - 主开关
     *   **Health based** - color is based on player's hp
     *   **Color** - glow color in rgba format
     *   **Style** - glow style { `Default`, `Rim3d`, `Edge`, `Edge Pulse` }
@@ -72,7 +72,7 @@
 *   **上色** - color player models to improve visibility
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
-    *   **Enabled** - on / off master switch
+    *   **启用** - 主开关
     *   **Health based** - color is based on player's hp
     *   **Blinking** - change transparency frequently
     *   **Material** - material applied to model { `Normal`, `Flat`, `Animated`, `Platinum`, `Glass`, `Chrome`, `Crystal`, `Silver`, `Gold`, `Plastic`, `Glow` }
@@ -92,7 +92,7 @@
     4.  *Danger Zone*
         *   *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
 
-    *   **Enabled** - on / off master switch
+    *   **启用** - 主开关
     *   **Font** - esp text font
     *   **Snaplines** - draw snapline to player
     *   **Eye traces** - draw player eye traces (shows where player looks)
@@ -221,7 +221,7 @@
     *   **Purchase List** - show the purchased equipment by enemies.
 
     *   **Reportbot** - automatically report players on server for cheating or other abusive actions
-        *   **Enabled** - on / off master switch
+        *   **启用** - 主开关
         *   **Target** - report target *Enemies/Allies/All*
         *   **Delay** - delay between reports, in seconds
         *   **Aimbot** - report for aim assistance
@@ -241,75 +241,75 @@
     *   **Reload configs** - reload configs list
 </details>
 
-## Getting started
+## 入门
 
-### Prerequisites
-Microsoft Visual Studio 2019 16.10 (or newer), platform toolset v142 and Windows SDK 10.0.x.x are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+### 编译环境
+Microsoft Visual Studio 2019 16.10 (或更新版本), 平台工具集 v142 和 Windows SDK 10.0.x.x。如果你没有, 可以在 [这里](https://visualstudio.microsoft.com/) 下载 Visual Studio (安装过程中将会安装 Windows SDK)。
 
-### Downloading
+### 获取源代码
 
-There are two options of downloading the source code:
+获取源代码有两种选择：
 
-#### Without [git](https://git-scm.com)
+#### 没有 [git](https://git-scm.com)
 
-Choose this option if you want pure source and you're not going to contribute to the repo. Download size ~600 kB.
+如果你只需要源代码，并且你不打算参与开发，请选择此选项。下载大小约为 600 KB。
 
-To download source code this way [click here](https://github.com/danielkrupinski/Osiris/archive/master.zip).
+点击 [此处](https://github.com/nkxingxh/Osiris/archive/master.zip) 下载源代码。
 
-#### With [git](https://git-scm.com)
+#### 使用 [git](https://git-scm.com)
 
-Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~4 MB. Git is required to step further, if not installed download it [here](https://git-scm.com).
+如果你打算参与开发或者想要使用版本控制系统，请选择此选项。下载大小约为 4 MB。没安装 git 或不会用的自行百度。
 
-Open git command prompt and enter following command:
+打开 git 命令行并输入以下命令: 
 
-    git clone --depth=1 https://github.com/danielkrupinski/Osiris.git
+    git clone --depth=1 https://github.com/nkxingxh/Osiris.git
 
-`Osiris` folder should have been successfully created, containing all the source files.
+`Osiris` 文件夹应该已成功创建，包含所有源文件。
 
-### Compiling from source
+### 从源代码编译
 
-When you have equipped a copy of the source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
+当您获取了源代码副本后，下一步是在 Microsoft Visual Studio 2019 中打开 **Osiris.sln**。
 
-Then change build configuration to `Release | x86` and simply press **Build solution**.
+然后将构建配置更改为 `Release | x86`并点击 **生成解决方案** 即可。
 
-If everything went right you should receive `Osiris.dll`  binary file.
+如果一切顺利，你应该得到 `Osiris.dll` 二进制文件。
 
-### Loading / Injecting into game process
+### 加载 / 注入游戏进程
 
-Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
+打开你喜欢的 [DLL 注入器](https://en.wikipedia.org/wiki/DLL_injection) 并将 `Osiris.dll` 注入进 `csgo.exe` 进程.
 
-When injected, menu is openable under `INSERT` key.
+注入后，可通过 `INSERT` 键打开菜单。
 
-### Further optimizations
-If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
+### 进一步优化
+如果您的 CPU 支持 AVX / AVX2 / AVX-512 指令集，则可以在项目设置中启用它。这将产生更高性能的代码，并针对您的 CPU 进行优化。当前在项目设置中选择 SSE2 指令。
 
 ## FAQ
 
-### How do I open menu?
-Press <kbd>INSERT</kbd> while focused on CS:GO window.
+### 如何打开菜单？
+当焦点在游戏窗口时按 <kbd>INSERT</kbd> 键。
 
-### Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
+### 我的配置文件保存在哪里？
+配置文件保存在你账户的 `文档` 文件夹 (`%USERPROFILE%\Documents\Osiris`)。配置文件为可读的格式，并且你可以编辑。有时在更新后，需要删除并重新创建配置文件。
 
-### What hooking methods Osiris uses?
-Currently implemented hooking methods are:
+### Osiris 使用什么 hook 方法？
+当前使用的 hook 方法有:
 *   MinHook - trampoline hook
 *   VmtHook - hook a function directly in a vtable
 *   VmtSwap - create a copy of a vtable and swap the pointer on the class instance
 
-Hooking implementation files are located in [Hooks](Source/Hooks) directory.
+hook 实现文件位于 [Hooks](Source/Hooks) 目录。
 
-## Acknowledgments
+## 致谢
 
-*   [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
-*   [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
+*   [ocornut](https://github.com/ocornut) 与 [contributors](https://github.com/ocornut/imgui/graphs/contributors) 创建并维护一个惊人的 GUI 库 - [Dear imgui](https://github.com/ocornut/imgui).
+*   [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - 关于逆向工程和游戏外挂的优秀教程
 
-## License
+## 许可
 
 > Copyright (c) 2018-2022 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
 
-## See also
-*   [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO
-*   [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source cross-platform streamproof ESP hack for Counter-Strike: Global Offensive, written in modern C++
+## 另请参见
+*   [Anubis](https://github.com/danielkrupinski/Anubis) - 为 反恐精英:全球攻势 设计的免费开源作弊程序
+*   [GOESP](https://github.com/danielkrupinski/GOESP) - 适用于 反恐精英:全球攻势 的免费开源跨平台的 streamproof ESP 工具，使用现代 C++ 编写
