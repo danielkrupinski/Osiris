@@ -599,6 +599,12 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
+void Visuals::setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept
+{
+    if (noScopeOverlay && (hookReturnAddress == memory.scopeDust || hookReturnAddress == memory.scopeArc))
+        alpha = 0;
+}
+
 void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {

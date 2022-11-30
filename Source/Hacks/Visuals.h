@@ -60,6 +60,8 @@ public:
     void bulletTracer(const GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 
+    void setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept;
+
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 

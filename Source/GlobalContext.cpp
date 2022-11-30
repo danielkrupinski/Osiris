@@ -250,8 +250,7 @@ void GlobalContext::lockCursorHook()
 
 void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress)
 {
-    if (visuals->shouldRemoveScopeOverlay() && (returnAddress == memory->scopeDust || returnAddress == memory->scopeArc))
-        a = 0;
+    visuals->setDrawColorHook(returnAddress, a);
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
 }
 
@@ -319,8 +318,8 @@ void GlobalContext::updateColorCorrectionWeightsHook()
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
 
-    globalContext->visuals->performColorCorrection();
-    if (globalContext->visuals->shouldRemoveScopeOverlay())
+    visuals->performColorCorrection();
+    if (visuals->shouldRemoveScopeOverlay())
         *memory->vignette = 0.0f;
 }
 
