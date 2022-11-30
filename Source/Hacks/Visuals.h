@@ -77,6 +77,22 @@ public:
     void configure(Configurator& configurator)
     {
         configurator("Color correction", colorCorrection);
+        configurator("Disable post-processing", disablePostProcessing_).def(false);
+        configurator("Inverse ragdoll gravity", inverseRagdollGravity_).def(false);
+        configurator("No fog", noFog).def(false);
+        configurator("No 3d sky", no3dSky).def(false);
+        configurator("No aim punch", noAimPunch).def(false);
+        configurator("No view punch", noViewPunch).def(false);
+        configurator("No hands", noHands).def(false);
+        configurator("No sleeves", noSleeves).def(false);
+        configurator("No weapons", noWeapons).def(false);
+        configurator("No smoke", noSmoke).def(false);
+        configurator("No blur", noBlur).def(false);
+        configurator("No scope overlay", noScopeOverlay).def(false);
+        configurator("No grass", noGrass).def(false);
+        configurator("No shadows", noShadows).def(false);
+        configurator("Wireframe smoke", wireframeSmoke).def(false);
+        configurator("Zoom", zoom).def(false);
     }
 
 private:
@@ -87,4 +103,21 @@ private:
     bool* disablePostProcessingPtr;
     ColorCorrection colorCorrection;
     SkyboxChanger skyboxChanger;
+
+    bool disablePostProcessing_;
+    bool inverseRagdollGravity_;
+    bool noFog;
+    bool no3dSky;
+    bool noAimPunch;
+    bool noViewPunch;
+    bool noHands;
+    bool noSleeves;
+    bool noWeapons;
+    bool noSmoke;
+    bool noBlur;
+    bool noScopeOverlay;
+    bool noGrass;
+    bool noShadows;
+    bool wireframeSmoke;
+    bool zoom;
 };
