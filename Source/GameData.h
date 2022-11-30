@@ -91,6 +91,7 @@ struct EntityData final : BaseData {
     EntityData(const Entity& entity) noexcept;
    
     const char* name;
+    const char* nameCHS;
 };
 
 struct ProjectileData : BaseData {
@@ -108,6 +109,7 @@ struct ProjectileData : BaseData {
     bool thrownByEnemy = false;
     int handle;
     const char* name = nullptr;
+    const char* nameCHS = nullptr;
     std::vector<std::pair<float, Vector>> trajectory;
 };
 
@@ -150,6 +152,7 @@ struct WeaponData : BaseData {
     int clip;
     int reserveAmmo;
     const char* group = "All";
+    //const char* groupCHS = "全部";
     const char* name = "All";
     std::string displayName;
 };

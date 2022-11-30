@@ -340,6 +340,21 @@ EntityData::EntityData(const Entity& entity) noexcept : BaseData{ entity }
 {
     name = [](const Entity& entity) {
         switch (entity.getNetworkable().getClientClass()->classId) {
+        case ClassId::EconEntity: return "Defuse Kit";
+        case ClassId::Chicken: return "Chicken";
+        case ClassId::PlantedC4: return "Planted C4";
+        case ClassId::Hostage: return "Hostage";
+        case ClassId::Dronegun: return "Sentry";
+        case ClassId::Cash: return "Cash";
+        case ClassId::AmmoBox: return "Ammo Box";
+        case ClassId::RadarJammer: return "Radar Jammer";
+        case ClassId::SnowballPile: return "Snowball Pile";
+        case ClassId::DynamicProp: return "Collectable Coin";
+        default: assert(false); return "unknown";
+        }
+    }(entity);
+    nameCHS = [](const Entity& entity) {
+        switch (entity.getNetworkable().getClientClass()->classId) {
         case ClassId::EconEntity: return "拆弹工具";
         case ClassId::Chicken: return "只因";
         case ClassId::PlantedC4: return "已安放C4";
@@ -358,6 +373,23 @@ EntityData::EntityData(const Entity& entity) noexcept : BaseData{ entity }
 ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const Memory& memory, const Entity& projectile) noexcept : BaseData { projectile }
 {
     name = [](const Entity& projectile) {
+        switch (projectile.getNetworkable().getClientClass()->classId) {
+        case ClassId::BaseCSGrenadeProjectile:
+            if (const auto model = projectile.getRenderable().getModel(); model && strstr(model->name, "flashbang"))
+                return "Flashbang";
+            else
+                return "HE Grenade";
+        case ClassId::BreachChargeProjectile: return "Breach Charge";
+        case ClassId::BumpMineProjectile: return "Bump Mine";
+        case ClassId::DecoyProjectile: return "Decoy Grenade";
+        case ClassId::MolotovProjectile: return "Molotov";
+        case ClassId::SensorGrenadeProjectile: return "TA Grenade";
+        case ClassId::SmokeGrenadeProjectile: return "Smoke Grenade";
+        case ClassId::SnowballProjectile: return "Snowball";
+        default: assert(false); return "unknown";
+        }
+    }(projectile);
+    nameCHS = [](const Entity& projectile) {
         switch (projectile.getNetworkable().getClientClass()->classId) {
         case ClassId::BaseCSGrenadeProjectile:
             if (const auto model = projectile.getRenderable().getModel(); model && strstr(model->name, "flashbang"))
@@ -579,6 +611,28 @@ WeaponData::WeaponData(const OtherInterfaces& interfaces, const Entity& entity) 
                 }
             }
         }(weaponInfo->type, entity.itemDefinitionIndex());
+        /*groupCHS = [](WeaponType type, WeaponId weaponId) {
+            switch (type) {
+            case WeaponType::Pistol: return "手枪";
+            case WeaponType::SubMachinegun: return "冲锋枪";
+            case WeaponType::Rifle: return "步枪";
+            case WeaponType::SniperRifle: return "狙击步枪";
+            case WeaponType::Shotgun: return "霰弹枪";
+            case WeaponType::Machinegun: return "机枪";
+            case WeaponType::Grenade: return "投掷物";
+            case WeaponType::Melee: return "Melee";
+            default:
+                switch (weaponId) {
+                case WeaponId::C4:
+                case WeaponId::Healthshot:
+                case WeaponId::BumpMine:
+                case WeaponId::ZoneRepulsor:
+                case WeaponId::Shield:
+                    return "其他";
+                default: return "全部";
+                }
+            }
+        }(weaponInfo->type, entity.itemDefinitionIndex());*/
         name = [](WeaponId weaponId) {
             switch (weaponId) {
             default: return "All";
