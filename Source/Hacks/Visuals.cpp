@@ -784,36 +784,38 @@ void Visuals::drawGUI(bool contentOnly) noexcept
 
 json Visuals::toJson() noexcept
 {
+    // old way
     json j;
     to_json(j, visualsConfig);
     
-    SaveConfigurator colorCorrectionConfigurator;
-    colorCorrection.configure(colorCorrectionConfigurator);
-    j.emplace("Color correction", colorCorrectionConfigurator.getJson());
+    // new way
+    SaveConfigurator saveConfigurator;
+    configure(saveConfigurator);
+    if (const auto saveJson = saveConfigurator.getJson(); saveJson.is_object())
+        j.update(saveJson);
 
+    // temporary, until skyboxChanger is saved as a json object
     SaveConfigurator skyboxChangerConfigurator;
     skyboxChanger.configure(skyboxChangerConfigurator);
-    j.merge_patch(skyboxChangerConfigurator.getJson());
+    if (const auto skyboxJson = skyboxChangerConfigurator.getJson(); skyboxJson.is_object())
+        j.update(skyboxJson);
     return j;
 }
 
 void Visuals::fromJson(const json& j) noexcept
 {
     from_json(j, visualsConfig);
-    
-    if (j.contains("Color correction")) {
-        LoadConfigurator colorCorrectionConfigurator{ j["Color correction"] };
-        colorCorrection.configure(colorCorrectionConfigurator);
-    }
 
-    LoadConfigurator skyboxChangerConfigurator{ j };
-    skyboxChanger.configure(skyboxChangerConfigurator);
+    LoadConfigurator configurator{ j };
+    skyboxChanger.configure(configurator);
+    configure(configurator);
 }
 
 void Visuals::resetConfig() noexcept
 {
     visualsConfig = {};
     ResetConfigurator resetConfigurator;
-    colorCorrection.configure(resetConfigurator);
+    configure(resetConfigurator);
+
     skyboxChanger.configure(resetConfigurator);
 }

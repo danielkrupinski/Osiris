@@ -3,6 +3,8 @@
 #include <JsonForward.h>
 #include <nlohmann/json.hpp>
 
+#include "Configurable.h"
+
 template <typename T>
 constexpr bool jsonValueTypeMatchesType(json::value_t valueType) noexcept
 {
@@ -38,7 +40,6 @@ private:
     const char* name;
     T& variable;
     const json& j;
-    bool variableHasDefaultValue = false;
 };
 
 struct LoadConfigurator {
@@ -50,7 +51,14 @@ struct LoadConfigurator {
     template <typename T>
     auto operator()(const char* name, T& variable)
     {
-        return LoadHandler<T>{ name, variable, j };
+        if constexpr (Configurable<T, LoadConfigurator>) {
+            if (const auto it = j.find(name); it != j.end() && it->is_object()) {
+                LoadConfigurator configurator{ *it };
+                variable.configure(configurator);
+            }
+        } else {
+            return LoadHandler<T>{ name, variable, j };
+        }
     }
 
 private:

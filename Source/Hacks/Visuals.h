@@ -73,6 +73,12 @@ public:
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
+    template <typename Configurator>
+    void configure(Configurator& configurator)
+    {
+        configurator("Color correction", colorCorrection);
+    }
+
 private:
     const Memory& memory;
     OtherInterfaces interfaces;

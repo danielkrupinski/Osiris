@@ -991,6 +991,9 @@
     <ClInclude Include="Hacks\Visuals\SkyboxChanger.h">
       <Filter>Hacks\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="Config\Configurable.h">
+      <Filter>Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

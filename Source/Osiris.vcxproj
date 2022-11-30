@@ -195,6 +195,7 @@
     <ClInclude Include="..\Dependencies\nlohmann\json.hpp" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
+    <ClInclude Include="Config\Configurable.h" />
     <ClInclude Include="Config\LoadConfigurator.h" />
     <ClInclude Include="Config\ResetConfigurator.h" />
     <ClInclude Include="Config\SaveConfigurator.h" />

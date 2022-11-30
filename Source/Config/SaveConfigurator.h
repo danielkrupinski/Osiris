@@ -3,6 +3,8 @@
 #include <JsonForward.h>
 #include <nlohmann/json.hpp>
 
+#include "Configurable.h"
+
 template <typename T>
 struct SaveHandler {
     SaveHandler(const char* name, const T& variable, json& j)
@@ -31,9 +33,15 @@ private:
 
 struct SaveConfigurator {
     template <typename T>
-    auto operator()(const char* name, const T& variable)
+    auto operator()(const char* name, T& variable)
     {
-        return SaveHandler<T>{ name, variable, j };
+        if constexpr (Configurable<T, SaveConfigurator>) {
+            SaveConfigurator configurator;
+            variable.configure(configurator);
+            j.emplace(name, configurator.getJson());
+        } else {
+            return SaveHandler<T>{ name, variable, j };
+        }
     }
 
     [[nodiscard]] json getJson() const

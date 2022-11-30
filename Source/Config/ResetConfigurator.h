@@ -10,10 +10,18 @@ struct ResetHandler {
     void def(const T& defaultValue)
     {
         variable = defaultValue;
+        resetToDefaultConstructed = false;
+    }
+
+    ~ResetHandler() noexcept
+    {
+        if (resetToDefaultConstructed)
+            variable = T{};
     }
 
 private:
     T& variable;
+    bool resetToDefaultConstructed = true;
 };
 
 struct ResetConfigurator {
