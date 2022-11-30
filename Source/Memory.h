@@ -19,7 +19,7 @@
 
 #include "Platform/CallingConventions.h"
 
-class ClientMode;
+struct ClientMode;
 class ClientSharedObjectCache;
 class CSPlayerInventory;
 class EconItem;

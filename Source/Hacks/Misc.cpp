@@ -1103,7 +1103,7 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const OtherInt
     const auto isLocal = localPlayer && entity.getPOD() == localPlayer.get().getPOD();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
+    memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
@@ -1131,19 +1131,19 @@ void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const OtherInte
     const auto isLocal = localPlayer && entity.getPOD() == localPlayer.get().getPOD();
 
     const auto voteType = reader.readInt32(3);
-    memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
+    memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass(const Memory& memory) noexcept
 {
     if (miscConfig.revealVotes)
-        memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
+        memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
 }
 
 void Misc::onVoteFailed(const Memory& memory) noexcept
 {
     if (miscConfig.revealVotes)
-        memory.clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
+        memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
