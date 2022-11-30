@@ -28,6 +28,9 @@
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
+#include <Config/LoadConfigurator.h>
+#include <Config/ResetConfigurator.h>
+#include <Config/SaveConfigurator.h>
 
 #if IS_WIN32()
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -79,11 +82,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(backtrack, visuals, interfaces, memory, u8"default.json", false);
+    load(glow, backtrack, visuals, interfaces, memory, u8"default.json", false);
 
 #if IS_WIN32()
     LOGFONTW logfont;
@@ -289,12 +292,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
+    load(glow, backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -307,7 +310,7 @@ void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces&
     }
 
     if (!incremental)
-        reset(backtrack, visuals, interfaces, memory);
+        reset(glow, backtrack, visuals, interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -328,8 +331,9 @@ void Config::load(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces&
 
     read<value_t::object>(j, "Style", style);
 
-    backtrack.fromJson(j["Backtrack"]);
-    Glow::fromJson(j["Glow"]);
+    LoadConfigurator backtrackConfigurator{ j["Backtrack"] };
+    backtrack.configure(backtrackConfigurator);
+    glow.fromJson(j["Glow"]);
     visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
     Sound::fromJson(j["Sound"]);
@@ -525,7 +529,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -537,8 +541,10 @@ void Config::save(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces&
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
-    j["Backtrack"] = backtrack.toJson();
-    j["Glow"] = Glow::toJson();
+    SaveConfigurator backtrackConfigurator;
+    backtrack.configure(backtrackConfigurator);
+    j["Backtrack"] = backtrackConfigurator.getJson();
+    j["Glow"] = glow.toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
@@ -556,11 +562,11 @@ void Config::save(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces&
         out << std::setw(2) << j;
 }
 
-void Config::add(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(backtrack, visuals, interfaces, memory, configs.size() - 1);
+        save(glow, backtrack, visuals, interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -578,7 +584,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -586,8 +592,9 @@ void Config::reset(Backtrack& backtrack, Visuals& visuals, const OtherInterfaces
     streamProofESP = { };
     style = { };
 
-    backtrack.resetConfig();
-    Glow::resetConfig();
+    ResetConfigurator configurator;
+    backtrack.configure(configurator);
+    glow.resetConfig();
     visuals.resetConfig();
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
     Sound::resetConfig();

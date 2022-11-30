@@ -10,6 +10,7 @@ struct ImDrawList;
 struct UserCmd;
 class ClientInterfaces;
 class EngineInterfaces;
+class Glow;
 
 namespace Misc
 {
@@ -70,8 +71,8 @@ namespace Misc
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void drawGUI(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void drawGUI(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;

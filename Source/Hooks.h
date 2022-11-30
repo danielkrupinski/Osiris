@@ -24,6 +24,7 @@ struct ModelRenderInfo;
 struct SoundInfo;
 class ClientInterfaces;
 class OtherInterfaces;
+class Glow;
 
 #if IS_WIN32()
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
@@ -50,7 +51,7 @@ public:
 #endif
 
     void install(csgo::pod::Client* clientInterface, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void uninstall(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void uninstall(Glow& glow, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;

@@ -143,7 +143,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         visuals->reduceFlashEffect();
         visuals->updateBrightness();
         visuals->remove3dSky();
-        Glow::render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
+        glow->render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
@@ -431,7 +431,8 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         ImGui_ImplWin32_Init(window);
         backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) });
-        config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
+        glow.emplace();
+        config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
@@ -500,7 +501,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         ImGui::CreateContext();
         backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) });
-        config.emplace(*backtrack, *visuals, getOtherInterfaces(), *memory);
+        glow.emplace();
+        config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
 
         gui.emplace();
         aimbot.emplace();
@@ -609,12 +611,12 @@ void GlobalContext::renderFrame()
         Misc::updateInput();
         Triggerbot::updateInput(*config);
         Chams::updateInput(*config);
-        Glow::updateInput();
+        glow->updateInput();
 
         gui->handleToggle(getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(*backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(*glow, *backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();

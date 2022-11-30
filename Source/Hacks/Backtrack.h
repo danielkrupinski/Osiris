@@ -38,11 +38,15 @@ public:
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
-
-    // Config
-    json toJson() noexcept;
-    void fromJson(const json& j) noexcept;
-    void resetConfig() noexcept;
+  
+    template <typename Configurator>
+    void configure(Configurator& configurator)
+    {
+        configurator("Enabled", enabled).def(false);
+        configurator("Ignore smoke", ignoreSmoke).def(false);
+        configurator("Recoil based fov", recoilBasedFov).def(false);
+        configurator("Time limit", timeLimit).def(200);
+    }
 
 private:
     float getLerp() noexcept;
@@ -57,10 +61,10 @@ private:
         ConVar maxUnlag;
     };
 
-    bool enabled = false;
-    bool ignoreSmoke = false;
-    bool recoilBasedFov = false;
-    int timeLimit = 200;
+    bool enabled;
+    bool ignoreSmoke;
+    bool recoilBasedFov;
+    int timeLimit;
     Cvars cvars;
     std::array<std::deque<Record>, 65> records;
     bool backtrackWindowOpen = false;

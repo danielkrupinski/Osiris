@@ -373,7 +373,7 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 #endif
 
-void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Hooks::uninstall(Glow& glow, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     Misc::updateEventListeners(globalContext->getEngineInterfaces(), true);
     globalContext->visuals->updateEventListeners(true);
@@ -400,7 +400,7 @@ void Hooks::uninstall(const ClientInterfaces& clientInterfaces, const OtherInter
 
     Netvars::restore();
 
-    Glow::clearCustomObjects(memory);
+    glow.clearCustomObjects(memory);
     inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
 
 #if IS_WIN32()

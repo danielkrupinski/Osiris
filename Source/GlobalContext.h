@@ -15,6 +15,7 @@
 
 #include "Hacks/Aimbot.h"
 #include "Hacks/Backtrack.h"
+#include "Hacks/Glow.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces/ClientInterfaces.h"
 #include "Interfaces/EngineInterfaces.h"
@@ -114,6 +115,7 @@ private:
     std::optional<const OtherInterfacesPODs> interfaces;
     std::optional<Aimbot> aimbot;
     std::optional<Backtrack> backtrack;
+    std::optional<Glow> glow;
 };
 
 inline std::optional<GlobalContext> globalContext;

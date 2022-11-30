@@ -19,6 +19,7 @@
 
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
+#include <Config/ResetConfigurator.h>
 
 static auto timeToTicks(const Memory& memory, float time) noexcept
 {
@@ -34,6 +35,8 @@ Backtrack::Backtrack(const Cvar& cvar) : cvars{
         .maxInterpRatio = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_client_max_interp_ratio)),
         .maxUnlag = ConVar::from(retSpoofGadgets->client, cvar.findVar(csgo::sv_maxunlag)) }
 {
+    ResetConfigurator configurator;
+    configure(configurator);
 }
 
 void Backtrack::update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
@@ -194,34 +197,4 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
-}
-
-json Backtrack::toJson() noexcept
-{
-    json j;
-    if (enabled)
-        j.emplace("Enabled", true);
-    if (ignoreSmoke)
-        j.emplace("Ignore smoke", true);
-    if (recoilBasedFov)
-        j.emplace("Recoil based fov", true);
-    if (timeLimit != 200)
-        j.emplace("Time limit", timeLimit);
-    return j;
-}
-
-void Backtrack::fromJson(const json& j) noexcept
-{
-    read(j, "Enabled", enabled);
-    read(j, "Ignore smoke", ignoreSmoke);
-    read(j, "Recoil based fov", recoilBasedFov);
-    read(j, "Time limit", timeLimit);
-}
-
-void Backtrack::resetConfig() noexcept
-{
-    enabled = false;
-    ignoreSmoke = false;
-    recoilBasedFov = false;
-    timeLimit = 200;
 }

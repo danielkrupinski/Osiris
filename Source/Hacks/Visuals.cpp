@@ -34,6 +34,9 @@
 
 #include "../GlobalContext.h"
 #include <Interfaces/ClientInterfaces.h>
+#include <Config/LoadConfigurator.h>
+#include <Config/ResetConfigurator.h>
+#include <Config/SaveConfigurator.h>
 
 struct BulletTracers : ColorToggle {
     BulletTracers() : ColorToggle{ 0.0f, 0.75f, 1.0f, 1.0f } {}
@@ -76,31 +79,7 @@ struct VisualsConfig {
     float hitMarkerTime{ 0.6f };
     BulletTracers bulletTracers;
     ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-
-    struct ColorCorrection {
-        bool enabled = false;
-        float blue = 0.0f;
-        float red = 0.0f;
-        float mono = 0.0f;
-        float saturation = 0.0f;
-        float ghost = 0.0f;
-        float green = 0.0f;
-        float yellow = 0.0f;
-    } colorCorrection;
 } visualsConfig;
-
-
-static void from_json(const json& j, VisualsConfig::ColorCorrection& c)
-{
-    read(j, "Enabled", c.enabled);
-    read(j, "Blue", c.blue);
-    read(j, "Red", c.red);
-    read(j, "Mono", c.mono);
-    read(j, "Saturation", c.saturation);
-    read(j, "Ghost", c.ghost);
-    read(j, "Green", c.green);
-    read(j, "Yellow", c.yellow);
-}
 
 static void from_json(const json& j, BulletTracers& o)
 {
@@ -143,21 +122,8 @@ static void from_json(const json& j, VisualsConfig& v)
     read(j, "Hit effect time", v.hitEffectTime);
     read(j, "Hit marker", v.hitMarker);
     read(j, "Hit marker time", v.hitMarkerTime);
-    read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
     read<value_t::object>(j, "Molotov Hull", v.molotovHull);
-}
-
-static void to_json(json& j, const VisualsConfig::ColorCorrection& o, const VisualsConfig::ColorCorrection& dummy)
-{
-    WRITE("Enabled", enabled);
-    WRITE("Blue", blue);
-    WRITE("Red", red);
-    WRITE("Mono", mono);
-    WRITE("Saturation", saturation);
-    WRITE("Ghost", ghost);
-    WRITE("Green", green);
-    WRITE("Yellow", yellow);
 }
 
 static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
@@ -165,7 +131,7 @@ static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy 
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
 }
 
-static void to_json(json& j, const VisualsConfig& o)
+static void to_json(json& j, VisualsConfig& o)
 {
     const VisualsConfig dummy;
 
@@ -203,7 +169,6 @@ static void to_json(json& j, const VisualsConfig& o)
     WRITE("Hit effect time", hitEffectTime);
     WRITE("Hit marker", hitMarker);
     WRITE("Hit marker time", hitMarkerTime);
-    WRITE("Color correction", colorCorrection);
     WRITE("Bullet Tracers", bulletTracers);
     WRITE("Molotov Hull", molotovHull);
 }
@@ -260,15 +225,7 @@ float Visuals::farZ() noexcept
 
 void Visuals::performColorCorrection() noexcept
 {
-    if (const auto& cfg = visualsConfig.colorCorrection; cfg.enabled) {
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x49C, 0x908)) = cfg.blue;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4A4, 0x918)) = cfg.red;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4AC, 0x928)) = cfg.mono;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4B4, 0x938)) = cfg.saturation;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4C4, 0x958)) = cfg.ghost;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4CC, 0x968)) = cfg.green;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + WIN32_LINUX(0x4D4, 0x978)) = cfg.yellow;
-    }
+    colorCorrection.run(memory.clientMode);
 }
 
 void Visuals::inverseRagdollGravity() noexcept
@@ -814,20 +771,20 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGuiCustom::colorPicker("子弹追踪", visualsConfig.bulletTracers.asColor4().color.data(), &visualsConfig.bulletTracers.asColor4().color[3], nullptr, nullptr, &visualsConfig.bulletTracers.enabled);
     ImGuiCustom::colorPicker("显示燃烧区域", visualsConfig.molotovHull);
 
-    ImGui::Checkbox("Color correction", &visualsConfig.colorCorrection.enabled);
+    ImGui::Checkbox("Color correction", &colorCorrection.enabled);
     ImGui::SameLine();
 
     if (bool ccPopup = ImGui::Button("Edit"))
         ImGui::OpenPopup("##popup");
 
     if (ImGui::BeginPopup("##popup")) {
-        ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.saturation, 0.0f, 1.0f, "Sat\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &visualsConfig.colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &colorCorrection.saturation, 0.0f, 1.0f, "Sat\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
         ImGui::EndPopup();
     }
     ImGui::Columns(1);
@@ -840,15 +797,24 @@ json Visuals::toJson() noexcept
 {
     json j;
     to_json(j, visualsConfig);
+    
+    SaveConfigurator colorCorrectionConfigurator;
+    colorCorrection.configure(colorCorrectionConfigurator);
+    j.emplace("Color correction", colorCorrectionConfigurator.getJson());
     return j;
 }
 
 void Visuals::fromJson(const json& j) noexcept
 {
     from_json(j, visualsConfig);
+    
+    LoadConfigurator colorCorrectionConfigurator{ j["Color correction"] };
+    colorCorrection.configure(colorCorrectionConfigurator);
 }
 
 void Visuals::resetConfig() noexcept
 {
     visualsConfig = {};
+    ResetConfigurator resetConfigurator;
+    colorCorrection.configure(resetConfigurator);
 }
