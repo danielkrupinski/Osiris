@@ -453,10 +453,7 @@ void Visuals::hitMarker(const GameEvent* event, ImDrawList* drawList) noexcept
 
 void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
 {
-    if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
-        return;
-
-    *disablePostProcessingPtr = stage == csgo::FrameStage::RENDER_START && disablePostProcessing_;
+    postProcessingDisabler.run(stage);
 }
 
 void Visuals::reduceFlashEffect() noexcept
@@ -660,7 +657,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
-    ImGui::Checkbox("Disable post-processing", &disablePostProcessing_);
+    ImGui::Checkbox("Disable post-processing", &postProcessingDisabler.enabled);
     ImGui::Checkbox("Inverse ragdoll gravity", &inverseRagdollGravity_);
     ImGui::Checkbox("No fog", &noFog);
     ImGui::Checkbox("No 3d sky", &no3dSky);

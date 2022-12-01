@@ -994,6 +994,9 @@
     <ClInclude Include="Config\Configurable.h">
       <Filter>Config</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h">
+      <Filter>Hacks\Visuals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

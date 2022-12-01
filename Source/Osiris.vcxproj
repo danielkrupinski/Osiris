@@ -213,6 +213,7 @@
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
     <ClInclude Include="Hacks\Visuals\ColorCorrection.h" />
+    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h" />
     <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Helpers\PatternFinder.h" />

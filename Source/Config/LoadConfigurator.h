@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 #include <JsonForward.h>
 #include <nlohmann/json.hpp>
 
@@ -51,7 +53,8 @@ struct LoadConfigurator {
     template <typename T>
     auto operator()(const char* name, T& variable)
     {
-        if constexpr (Configurable<T, LoadConfigurator>) {
+        if constexpr (std::is_class_v<T>) {
+            static_assert(Configurable<T, LoadConfigurator>, "Class type T must be configurable!");
             if (const auto it = j.find(name); it != j.end() && it->is_object()) {
                 LoadConfigurator configurator{ *it };
                 variable.configure(configurator);

@@ -7,6 +7,7 @@
 #include <Config/ResetConfigurator.h>
 #include "Visuals/ColorCorrection.h"
 #include "Visuals/SkyboxChanger.h"
+#include "Visuals/PostProcessingDisabler.h"
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -16,13 +17,8 @@ class EngineInterfaces;
 class Visuals {
 public:
     Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
-        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }
+        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }
     {
-#if IS_WIN32()
-        disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().get());
-#elif IS_LINUX()
-        disablePostProcessingPtr = reinterpret_cast<bool*>(clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().get());
-#endif
     }
 
     bool isThirdpersonOn() noexcept;
@@ -79,7 +75,7 @@ public:
     void configure(Configurator& configurator)
     {
         configurator("Color correction", colorCorrection);
-        configurator("Disable post-processing", disablePostProcessing_).def(false);
+        configurator("Post-processing Disabler", postProcessingDisabler);
         configurator("Inverse ragdoll gravity", inverseRagdollGravity_).def(false);
         configurator("No fog", noFog).def(false);
         configurator("No 3d sky", no3dSky).def(false);
@@ -102,11 +98,10 @@ private:
     OtherInterfaces interfaces;
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
-    bool* disablePostProcessingPtr;
     ColorCorrection colorCorrection;
     SkyboxChanger skyboxChanger;
+    PostProcessingDisabler postProcessingDisabler;
 
-    bool disablePostProcessing_;
     bool inverseRagdollGravity_;
     bool noFog;
     bool no3dSky;
