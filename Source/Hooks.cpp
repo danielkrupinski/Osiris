@@ -124,9 +124,9 @@ static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, 
     globalContext->drawModelExecuteHook(ctx, state, info, customBoneToWorld);
 }
 
-static bool FASTCALL_CONV svCheatsGetBool(void* _this) noexcept
+static int FASTCALL_CONV svCheatsGetInt(void* _this) noexcept
 {
-    return globalContext->svCheatsGetBoolHook(_this, RETURN_ADDRESS());
+    return globalContext->svCheatsGetIntHook(_this, RETURN_ADDRESS());
 }
 
 static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept
@@ -324,7 +324,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
     svCheats.init(interfaces.getCvar().findVar(csgo::sv_cheats));
-    svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetBool);
+    svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetInt);
 
     viewRender.init(memory.viewRender);
     viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);

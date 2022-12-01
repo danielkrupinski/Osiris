@@ -173,9 +173,12 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
 }
 
-bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress)
+int GlobalContext::svCheatsGetIntHook(void* _this, std::uintptr_t returnAddress)
 {
-    return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this) || visuals->svCheatsGetBoolHook(returnAddress);
+    const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(_this);
+    if (visuals->svCheatsGetBoolHook(returnAddress))
+        return 1;
+    return original;
 }
 
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
