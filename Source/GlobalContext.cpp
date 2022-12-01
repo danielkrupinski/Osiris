@@ -317,10 +317,7 @@ bool GlobalContext::isPlayingDemoHook(std::uintptr_t returnAddress, std::uintptr
 void GlobalContext::updateColorCorrectionWeightsHook()
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
-
-    visuals->performColorCorrection();
-    if (visuals->shouldRemoveScopeOverlay())
-        *memory->vignette = 0.0f;
+    visuals->updateColorCorrectionWeightsHook();
 }
 
 float GlobalContext::getScreenAspectRatioHook(int width, int height)

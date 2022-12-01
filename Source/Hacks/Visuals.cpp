@@ -147,11 +147,6 @@ bool Visuals::shouldRemoveFog() noexcept
     return noFog;
 }
 
-bool Visuals::shouldRemoveScopeOverlay() noexcept
-{
-    return noScopeOverlay;
-}
-
 bool Visuals::shouldRemoveSmoke() noexcept
 {
     return noSmoke;
@@ -170,11 +165,6 @@ float Visuals::fov() noexcept
 float Visuals::farZ() noexcept
 {
     return static_cast<float>(visualsConfig.farZ);
-}
-
-void Visuals::performColorCorrection() noexcept
-{
-    colorCorrection.run(memory.clientMode);
 }
 
 void Visuals::inverseRagdollGravity() noexcept
@@ -600,6 +590,13 @@ void Visuals::setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) con
 {
     if (noScopeOverlay && (hookReturnAddress == memory.scopeDust || hookReturnAddress == memory.scopeArc))
         alpha = 0;
+}
+
+void Visuals::updateColorCorrectionWeightsHook() const noexcept
+{
+    colorCorrection.run(memory.clientMode);
+    if (noScopeOverlay)
+        *memory.vignette = 0.0f;
 }
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept

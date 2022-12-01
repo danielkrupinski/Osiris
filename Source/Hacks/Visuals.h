@@ -26,13 +26,11 @@ public:
     bool isSmokeWireframe() noexcept;
     bool isDeagleSpinnerOn() noexcept;
     bool shouldRemoveFog() noexcept;
-    bool shouldRemoveScopeOverlay() noexcept;
     bool shouldRemoveSmoke() noexcept;
     float viewModelFov() noexcept;
     float fov() noexcept;
     float farZ() noexcept;
 
-    void performColorCorrection() noexcept;
     void inverseRagdollGravity() noexcept;
     void colorWorld() noexcept;
     void modifySmoke(csgo::FrameStage stage) noexcept;
@@ -57,6 +55,7 @@ public:
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 
     void setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept;
+    void updateColorCorrectionWeightsHook() const noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
