@@ -8,6 +8,7 @@
 #include "Visuals/ColorCorrection.h"
 #include "Visuals/SkyboxChanger.h"
 #include "Visuals/PostProcessingDisabler.h"
+#include "Visuals/ScopeOverlayRemover.h"
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -17,17 +18,8 @@ class EngineInterfaces;
 class Visuals {
 public:
     Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
-        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }
+        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) }
     {
-#if IS_WIN32()
-        scopeDust = clientPatternFinder("\xFF\x50\x3C\x8B\x4C\x24\x20").add(3).get();
-        scopeArc = clientPatternFinder("\x8B\x0D????\xFF\xB7????\x8B\x01\xFF\x90????\x8B\x7C\x24\x1C").get();
-        vignette = reinterpret_cast<float*>(clientPatternFinder("\x0F\x11\x05????\xF3\x0F\x7E\x87").add(3).deref().add(4).get());
-#elif IS_LINUX()
-        scopeDust = clientPatternFinder("\x8B\x85????\x43\x8D\x14\x2E").get();
-        scopeArc = clientPatternFinder("\x49\x8B\x3C\x24\x8B\xB3????\x48\x8B\x07\xFF\x90????\x49\x8B\x3C\x24\x4C\x89\xEA").get();
-        vignette = reinterpret_cast<float*>(clientPatternFinder("\x48\x8B\x07\x0F\x2F\x05").add(6).relativeToAbsolute().get());
-#endif
     }
 
     bool isZoomOn() noexcept;
@@ -84,6 +76,7 @@ public:
     {
         configurator("Color correction", colorCorrection);
         configurator("Post-processing Disabler", postProcessingDisabler);
+        configurator("Scope Overlay Remover", scopeOverlayRemover);
         configurator("Inverse ragdoll gravity", inverseRagdollGravity_).def(false);
         configurator("No fog", noFog).def(false);
         configurator("No 3d sky", no3dSky).def(false);
@@ -94,7 +87,6 @@ public:
         configurator("No weapons", noWeapons).def(false);
         configurator("No smoke", noSmoke).def(false);
         configurator("No blur", noBlur).def(false);
-        configurator("No scope overlay", noScopeOverlay).def(false);
         configurator("No grass", noGrass).def(false);
         configurator("No shadows", noShadows).def(false);
         configurator("Wireframe smoke", wireframeSmoke).def(false);
@@ -109,9 +101,7 @@ private:
     ColorCorrection colorCorrection;
     SkyboxChanger skyboxChanger;
     PostProcessingDisabler postProcessingDisabler;
-    std::uintptr_t scopeDust;
-    std::uintptr_t scopeArc;
-    float* vignette;
+    ScopeOverlayRemover scopeOverlayRemover;
 
     bool inverseRagdollGravity_;
     bool noFog;
@@ -123,7 +113,6 @@ private:
     bool noWeapons;
     bool noSmoke;
     bool noBlur;
-    bool noScopeOverlay;
     bool noGrass;
     bool noShadows;
     bool wireframeSmoke;

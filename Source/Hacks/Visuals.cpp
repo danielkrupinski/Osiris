@@ -583,15 +583,13 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
 
 void Visuals::setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept
 {
-    if (noScopeOverlay && (hookReturnAddress == scopeDust || hookReturnAddress == scopeArc))
-        alpha = 0;
+    scopeOverlayRemover.setDrawColorHook(hookReturnAddress, alpha);
 }
 
 void Visuals::updateColorCorrectionWeightsHook() const noexcept
 {
     colorCorrection.run(memory.clientMode);
-    if (noScopeOverlay)
-        *vignette = 0.0f;
+    scopeOverlayRemover.updateColorCorrectionWeightsHook();
 }
 
 bool Visuals::svCheatsGetBoolHook(std::uintptr_t hookReturnAddress) const noexcept
@@ -665,7 +663,7 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::Checkbox("No weapons", &noWeapons);
     ImGui::Checkbox("No smoke", &noSmoke);
     ImGui::Checkbox("No blur", &noBlur);
-    ImGui::Checkbox("No scope overlay", &noScopeOverlay);
+    ImGui::Checkbox("No scope overlay", &scopeOverlayRemover.enabled);
     ImGui::Checkbox("No grass", &noGrass);
     ImGui::Checkbox("No shadows", &noShadows);
     ImGui::Checkbox("Wireframe smoke", &wireframeSmoke);
