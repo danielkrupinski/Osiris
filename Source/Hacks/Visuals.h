@@ -30,7 +30,6 @@ public:
 #endif
     }
 
-    bool isThirdpersonOn() noexcept;
     bool isZoomOn() noexcept;
     bool isSmokeWireframe() noexcept;
     bool isDeagleSpinnerOn() noexcept;
@@ -65,6 +64,7 @@ public:
 
     void setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept;
     void updateColorCorrectionWeightsHook() const noexcept;
+    bool svCheatsGetBoolHook(std::uintptr_t hookReturnAddress) const noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;

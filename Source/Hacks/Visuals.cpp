@@ -122,11 +122,6 @@ static void to_json(json& j, VisualsConfig& o)
     WRITE("Molotov Hull", molotovHull);
 }
 
-bool Visuals::isThirdpersonOn() noexcept
-{
-    return visualsConfig.thirdperson;
-}
-
 bool Visuals::isZoomOn() noexcept
 {
     return zoom;
@@ -597,6 +592,11 @@ void Visuals::updateColorCorrectionWeightsHook() const noexcept
     colorCorrection.run(memory.clientMode);
     if (noScopeOverlay)
         *vignette = 0.0f;
+}
+
+bool Visuals::svCheatsGetBoolHook(std::uintptr_t hookReturnAddress) const noexcept
+{
+    return visualsConfig.thirdperson && hookReturnAddress == memory.cameraThink;
 }
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept

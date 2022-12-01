@@ -175,10 +175,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
 
 bool GlobalContext::svCheatsGetBoolHook(void* _this, std::uintptr_t returnAddress)
 {
-    if (returnAddress == memory->cameraThink && visuals->isThirdpersonOn())
-        return true;
-
-    return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this);
+    return hooks->svCheats.getOriginal<bool, WIN32_LINUX(13, 16)>()(_this) || visuals->svCheatsGetBoolHook(returnAddress);
 }
 
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
