@@ -87,7 +87,6 @@ public:
     std::uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
-    float* vignette;
     int(THISCALL_CONV* equipWearable)(csgo::pod::Entity* wearable, csgo::pod::Entity* player);
     int* predictionRandomSeed;
     MoveData* moveData;
@@ -100,8 +99,6 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    std::uintptr_t scopeDust;
-    std::uintptr_t scopeArc;
     std::uintptr_t demoOrHLTV;
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;

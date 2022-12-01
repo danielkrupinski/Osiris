@@ -79,7 +79,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
     conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
     memAlloc = *reinterpret_cast<csgo::pod::MemAlloc**>(GetProcAddress(tier0, "g_pMemAlloc"));
-    vignette = reinterpret_cast<float*>(clientPatternFinder("\x0F\x11\x05????\xF3\x0F\x7E\x87").add(3).deref().add(4).get());
     equipWearable = reinterpret_cast<decltype(equipWearable)>(clientPatternFinder("\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9").get());
     predictionRandomSeed = reinterpret_cast<int*>(clientPatternFinder("\x8B\x0D????\xBA????\xE8????\x83\xC4\x04").add(2).deref().get());
     moveData = reinterpret_cast<MoveData*>(clientPatternFinder("\xA1????\xF3\x0F\x59\xCD").add(1).deref<2>().get());
@@ -92,8 +91,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().get());
     playerResource = reinterpret_cast<PlayerResource**>(clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().get());
     getDecoratedPlayerName = reinterpret_cast<decltype(getDecoratedPlayerName)>(clientPatternFinder("\xE8????\x66\x83\x3E").add(1).relativeToAbsolute().get());
-    scopeDust = clientPatternFinder("\xFF\x50\x3C\x8B\x4C\x24\x20").add(3).get();
-    scopeArc = clientPatternFinder("\x8B\x0D????\xFF\xB7????\x8B\x01\xFF\x90????\x8B\x7C\x24\x1C").get();
     demoOrHLTV = clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get();
     money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
     demoFileEndReached = clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get();
@@ -147,10 +144,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().get());
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();
-    vignette = reinterpret_cast<float*>(clientPatternFinder("\x48\x8B\x07\x0F\x2F\x05").add(6).relativeToAbsolute().get());
     viewRender = reinterpret_cast<ViewRender*>(clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().get());
-    scopeDust = clientPatternFinder("\x8B\x85????\x43\x8D\x14\x2E").get();
-    scopeArc = clientPatternFinder("\x49\x8B\x3C\x24\x8B\xB3????\x48\x8B\x07\xFF\x90????\x49\x8B\x3C\x24\x4C\x89\xEA").get();
     demoOrHLTV = clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get();
     money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
     demoFileEndReached = clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get();

@@ -588,7 +588,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
 
 void Visuals::setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept
 {
-    if (noScopeOverlay && (hookReturnAddress == memory.scopeDust || hookReturnAddress == memory.scopeArc))
+    if (noScopeOverlay && (hookReturnAddress == scopeDust || hookReturnAddress == scopeArc))
         alpha = 0;
 }
 
@@ -596,7 +596,7 @@ void Visuals::updateColorCorrectionWeightsHook() const noexcept
 {
     colorCorrection.run(memory.clientMode);
     if (noScopeOverlay)
-        *memory.vignette = 0.0f;
+        *vignette = 0.0f;
 }
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept
