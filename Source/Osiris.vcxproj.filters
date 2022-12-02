@@ -1000,6 +1000,9 @@
     <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h">
       <Filter>Hacks\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\ReturnAddress.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

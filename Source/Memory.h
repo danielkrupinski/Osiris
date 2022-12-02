@@ -12,6 +12,7 @@
 #include "SDK/ViewRenderBeams.h"
 #include "SDK/WeaponSystem.h"
 
+#include "Utils/ReturnAddress.h"
 #include "Utils/SafeAddress.h"
 #include "RetSpoofGadgets.h"
 #include "Helpers/PatternFinder.h"
@@ -72,14 +73,14 @@ public:
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
     std::add_pointer_t<void FASTCALL_CONV(const char*, const char*)> setClanTag;
-    std::uintptr_t cameraThink;
+    ReturnAddress cameraThink;
     std::add_pointer_t<bool CDECL_CONV(Vector, Vector, short)> lineGoesThroughSmoke;
     bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
     std::uintptr_t hud;
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
     void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const Vector&);
-    std::uintptr_t insertIntoTree;
+    ReturnAddress insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
     ViewRender* viewRender;
@@ -99,9 +100,9 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    std::uintptr_t demoOrHLTV;
+    ReturnAddress demoOrHLTV;
     std::uintptr_t money;
-    std::uintptr_t demoFileEndReached;
+    ReturnAddress demoFileEndReached;
     csgo::pod::Entity** gameRules;
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
@@ -139,10 +140,10 @@ public:
 
 #if IS_WIN32()
     class KeyValuesSystem* keyValuesSystem;
-    std::uintptr_t keyValuesAllocEngine;
-    std::uintptr_t keyValuesAllocClient;
+    ReturnAddress keyValuesAllocEngine;
+    ReturnAddress keyValuesAllocClient;
 
-    std::uintptr_t shouldDrawFogReturnAddress;
+    ReturnAddress shouldDrawFogReturnAddress;
 #endif
 
 private:

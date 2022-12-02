@@ -5,6 +5,7 @@
 #include <Interfaces/OtherInterfaces.h>
 #include <Platform/IsPlatform.h>
 #include <Config/ResetConfigurator.h>
+#include <Utils/ReturnAddress.h>
 #include "Visuals/ColorCorrection.h"
 #include "Visuals/SkyboxChanger.h"
 #include "Visuals/PostProcessingDisabler.h"
@@ -54,9 +55,9 @@ public:
     void bulletTracer(const GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 
-    void setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept;
+    void setDrawColorHook(ReturnAddress hookReturnAddress, int& alpha) const noexcept;
     void updateColorCorrectionWeightsHook() const noexcept;
-    bool svCheatsGetBoolHook(std::uintptr_t hookReturnAddress) const noexcept;
+    bool svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;

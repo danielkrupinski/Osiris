@@ -1159,7 +1159,7 @@ InventoryChanger& InventoryChanger::instance(const OtherInterfaces& interfaces, 
     return inventoryChanger;
 }
 
-void InventoryChanger::getArgAsNumberHook(int number, std::uintptr_t returnAddress)
+void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)
 {
     if (returnAddress == returnAddresses.setStickerToolSlotGetArgAsNumber)
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
@@ -1248,7 +1248,7 @@ void InventoryChanger::overrideHudIcon(const Engine& engine, const Memory& memor
     return static_cast<csgo::Tournament>(stringToUint64(removePrefix(s, "tournament:")));
 }
 
-void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* string, ReturnAddress returnAddress, void* params)
 {
     if (returnAddress == returnAddresses.useToolGetArgAsString) {
         const auto toolItemID = stringToUint64(string);
@@ -1304,7 +1304,7 @@ void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* stri
     }
 }
 
-void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params)
+void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, ReturnAddress returnAddress, void* params)
 {
     if (returnAddress != returnAddresses.setMyPredictionUsingItemIdGetNumArgs)
         return;
@@ -1332,7 +1332,7 @@ void InventoryChanger::getNumArgsHook(unsigned numberOfArgs, std::uintptr_t retu
     }
 }
 
-int InventoryChanger::setResultIntHook(std::uintptr_t returnAddress, [[maybe_unused]] void* params, int result)
+int InventoryChanger::setResultIntHook(ReturnAddress returnAddress, [[maybe_unused]] void* params, int result)
 {
     if (returnAddress == returnAddresses.getInventoryCountSetResultInt && panoramaCodeInXrayScanner && !backend.isInXRayScan()) {
         return 0;

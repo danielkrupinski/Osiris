@@ -173,7 +173,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
 }
 
-int GlobalContext::svCheatsGetIntHook(void* _this, std::uintptr_t returnAddress)
+int GlobalContext::svCheatsGetIntHook(void* _this, ReturnAddress returnAddress)
 {
     const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(_this);
     if (visuals->svCheatsGetBoolHook(returnAddress))
@@ -222,7 +222,7 @@ int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, con
     return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
-bool GlobalContext::shouldDrawFogHook(std::uintptr_t returnAddress)
+bool GlobalContext::shouldDrawFogHook(ReturnAddress returnAddress)
 {
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
@@ -248,7 +248,7 @@ void GlobalContext::lockCursorHook()
     return hooks->surface.callOriginal<void, 67>();
 }
 
-void GlobalContext::setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress)
+void GlobalContext::setDrawColorHook(int r, int g, int b, int a, ReturnAddress returnAddress)
 {
     visuals->setDrawColorHook(returnAddress, a);
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
@@ -278,7 +278,7 @@ void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
-const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(std::uintptr_t returnAddress)
+const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(ReturnAddress returnAddress)
 {
     const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
 
@@ -306,7 +306,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }
 
-bool GlobalContext::isPlayingDemoHook(std::uintptr_t returnAddress, std::uintptr_t frameAddress)
+bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
     if (Misc::shouldRevealMoney() && returnAddress == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == memory->money)
         return true;
@@ -335,14 +335,14 @@ void GlobalContext::renderSmokeOverlayHook(bool update)
         hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
 }
 
-double GlobalContext::getArgAsNumberHook(void* params, int index, std::uintptr_t returnAddress)
+double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
     inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).getArgAsNumberHook(static_cast<int>(result), returnAddress);
     return result;
 }
 
-const char* GlobalContext::getArgAsStringHook(void* params, int index, std::uintptr_t returnAddress)
+const char* GlobalContext::getArgAsStringHook(void* params, int index, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
@@ -352,13 +352,13 @@ const char* GlobalContext::getArgAsStringHook(void* params, int index, std::uint
     return result;
 }
 
-void GlobalContext::setResultIntHook(void* params, int result, std::uintptr_t returnAddress)
+void GlobalContext::setResultIntHook(void* params, int result, ReturnAddress returnAddress)
 {
     result = inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).setResultIntHook(returnAddress, params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
-unsigned GlobalContext::getNumArgsHook(void* params, std::uintptr_t returnAddress)
+unsigned GlobalContext::getNumArgsHook(void* params, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
     inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).getNumArgsHook(result, returnAddress, params);
@@ -377,7 +377,7 @@ void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, i
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
-int GlobalContext::listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, std::uintptr_t returnAddress, std::uintptr_t frameAddress)
+int GlobalContext::listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
     if (Misc::shouldDisableModelOcclusion() && returnAddress == memory->insertIntoTree) {
         if (const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
@@ -397,7 +397,7 @@ int GlobalContext::listLeavesInBoxHook(const Vector& mins, const Vector& maxs, u
 #if IS_WIN32()
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void* GlobalContext::allocKeyValuesMemoryHook(int size, std::uintptr_t returnAddress)
+void* GlobalContext::allocKeyValuesMemoryHook(int size, ReturnAddress returnAddress)
 {
     if (returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
         return nullptr;

@@ -12,6 +12,7 @@
 #include "GameItems/CrateLootLookup.h"
 #include "EconItemFunctions.h"
 #include "EconItemViewFunctions.h"
+#include <Utils/ReturnAddress.h>
 
 namespace csgo { enum class FrameStage; }
 enum class Team;
@@ -59,20 +60,20 @@ struct InventoryChangerReturnAddresses {
     {
     }
 
-    std::uintptr_t setStickerToolSlotGetArgAsNumber;
-    std::uintptr_t wearItemStickerGetArgAsString;
-    std::uintptr_t setNameToolStringGetArgAsString;
-    std::uintptr_t clearCustomNameGetArgAsString;
-    std::uintptr_t deleteItemGetArgAsString;
-    std::uintptr_t setStatTrakSwapToolItemsGetArgAsString;
-    std::uintptr_t acknowledgeNewItemByItemIDGetArgAsString;
-    std::uintptr_t setItemAttributeValueAsyncGetArgAsString;
-    std::uintptr_t setMyPredictionUsingItemIdGetNumArgs;
-    std::uintptr_t getMyPredictionTeamIDGetArgAsString;
-    std::uintptr_t setInventorySortAndFiltersGetArgAsString;
-    std::uintptr_t getInventoryCountSetResultInt;
-    std::uintptr_t performItemCasketTransactionGetArgAsString;
-    std::uintptr_t useToolGetArgAsString;
+    ReturnAddress setStickerToolSlotGetArgAsNumber;
+    ReturnAddress wearItemStickerGetArgAsString;
+    ReturnAddress setNameToolStringGetArgAsString;
+    ReturnAddress clearCustomNameGetArgAsString;
+    ReturnAddress deleteItemGetArgAsString;
+    ReturnAddress setStatTrakSwapToolItemsGetArgAsString;
+    ReturnAddress acknowledgeNewItemByItemIDGetArgAsString;
+    ReturnAddress setItemAttributeValueAsyncGetArgAsString;
+    ReturnAddress setMyPredictionUsingItemIdGetNumArgs;
+    ReturnAddress getMyPredictionTeamIDGetArgAsString;
+    ReturnAddress setInventorySortAndFiltersGetArgAsString;
+    ReturnAddress getInventoryCountSetResultInt;
+    ReturnAddress performItemCasketTransactionGetArgAsString;
+    ReturnAddress useToolGetArgAsString;
 };
 
 class InventoryChanger {
@@ -102,13 +103,13 @@ public:
         return backend;
     }
 
-    void getArgAsNumberHook(int number, std::uintptr_t returnAddress);
+    void getArgAsNumberHook(int number, ReturnAddress returnAddress);
     void onRoundMVP(const Engine& engine, const GameEvent& event);
     void updateStatTrak(const Engine& engine, const GameEvent& event);
     void overrideHudIcon(const Engine& engine, const Memory& memory, const GameEvent& event);
-    void getArgAsStringHook(const Memory& memory, const char* string, std::uintptr_t returnAddress, void* params);
-    void getNumArgsHook(unsigned numberOfArgs, std::uintptr_t returnAddress, void* params);
-    int setResultIntHook(std::uintptr_t returnAddress, void* params, int result);
+    void getArgAsStringHook(const Memory& memory, const char* string, ReturnAddress returnAddress, void* params);
+    void getNumArgsHook(unsigned numberOfArgs, ReturnAddress returnAddress, void* params);
+    int setResultIntHook(ReturnAddress returnAddress, void* params, int result);
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);

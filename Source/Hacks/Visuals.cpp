@@ -581,7 +581,7 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
-void Visuals::setDrawColorHook(std::uintptr_t hookReturnAddress, int& alpha) const noexcept
+void Visuals::setDrawColorHook(ReturnAddress hookReturnAddress, int& alpha) const noexcept
 {
     scopeOverlayRemover.setDrawColorHook(hookReturnAddress, alpha);
 }
@@ -592,7 +592,7 @@ void Visuals::updateColorCorrectionWeightsHook() const noexcept
     scopeOverlayRemover.updateColorCorrectionWeightsHook();
 }
 
-bool Visuals::svCheatsGetBoolHook(std::uintptr_t hookReturnAddress) const noexcept
+bool Visuals::svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept
 {
     return visualsConfig.thirdperson && hookReturnAddress == memory.cameraThink;
 }

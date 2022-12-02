@@ -20,6 +20,7 @@
 #include "Interfaces/ClientInterfaces.h"
 #include "Interfaces/EngineInterfaces.h"
 #include "SDK/CSPlayerInventory.h"
+#include "Utils/ReturnAddress.h"
 
 struct DemoPlaybackParameters;
 class matrix3x4;
@@ -43,32 +44,32 @@ public:
     void doPostScreenEffectsHook(void* param);
     float getViewModelFovHook();
     void drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld);
-    int svCheatsGetIntHook(void* _this, std::uintptr_t returnAddress);
+    int svCheatsGetIntHook(void* _this, ReturnAddress returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
     int emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams);
-    bool shouldDrawFogHook(std::uintptr_t returnAddress);
+    bool shouldDrawFogHook(ReturnAddress returnAddress);
     bool shouldDrawViewModelHook();
     void lockCursorHook();
-    void setDrawColorHook(int r, int g, int b, int a, std::uintptr_t returnAddress);
+    void setDrawColorHook(int r, int g, int b, int a, ReturnAddress returnAddress);
     void overrideViewHook(ViewSetup* setup);
     int dispatchSoundHook(SoundInfo& soundInfo);
     void render2dEffectsPreHudHook(void* viewSetup);
-    const DemoPlaybackParameters* getDemoPlaybackParametersHook(std::uintptr_t returnAddress);
+    const DemoPlaybackParameters* getDemoPlaybackParametersHook(ReturnAddress returnAddress);
     bool dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data);
-    bool isPlayingDemoHook(std::uintptr_t returnAddress, std::uintptr_t frameAddress);
+    bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress);
     void updateColorCorrectionWeightsHook();
     float getScreenAspectRatioHook(int width, int height);
     void renderSmokeOverlayHook(bool update);
-    double getArgAsNumberHook(void* params, int index, std::uintptr_t returnAddress);
-    const char* getArgAsStringHook(void* params, int index, std::uintptr_t returnAddress);
-    void setResultIntHook(void* params, int result, std::uintptr_t returnAddress);
-    unsigned getNumArgsHook(void* params, std::uintptr_t returnAddress);
+    double getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress);
+    const char* getArgAsStringHook(void* params, int index, ReturnAddress returnAddress);
+    void setResultIntHook(void* params, int result, ReturnAddress returnAddress);
+    unsigned getNumArgsHook(void* params, ReturnAddress returnAddress);
     void updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap);
     void soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event);
-    int listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, std::uintptr_t returnAddress, std::uintptr_t frameAddress);
+    int listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress);
 
 #if IS_WIN32()
-    void* allocKeyValuesMemoryHook(int size, std::uintptr_t returnAddress);
+    void* allocKeyValuesMemoryHook(int size, ReturnAddress returnAddress);
 
     LRESULT wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
