@@ -21,6 +21,7 @@
 #include "Interfaces/EngineInterfaces.h"
 #include "SDK/CSPlayerInventory.h"
 #include "Utils/ReturnAddress.h"
+#include "InventoryChanger/InventoryChanger.h"
 
 struct DemoPlaybackParameters;
 class matrix3x4;
@@ -89,6 +90,7 @@ public:
     std::optional<EngineInterfacesPODs> engineInterfacesPODs; // TODO: make private
 
     std::optional<Visuals> visuals;
+    std::optional<inventory_changer::InventoryChanger> inventoryChanger;
 
     [[nodiscard]] EngineInterfaces getEngineInterfaces() const noexcept
     {

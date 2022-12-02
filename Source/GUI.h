@@ -4,6 +4,7 @@
 
 #include "Config.h"
 #include "Memory.h"
+#include "InventoryChanger/InventoryChanger.h"
 
 class Visuals;
 struct ImFont;
@@ -12,7 +13,7 @@ class ClientInterfaces;
 class GUI {
 public:
     GUI() noexcept;
-    void render(Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void render(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
     void handleToggle(const OtherInterfaces& interfaces) noexcept;
     [[nodiscard]] bool isOpen() const noexcept { return open; }
 private:
@@ -24,8 +25,8 @@ private:
     void renderTriggerbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderChamsWindow(Config& config, bool contentOnly = false) noexcept;
     void renderStyleWindow(Config& config, bool contentOnly = false) noexcept;
-    void renderConfigWindow(Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly = false) noexcept;
-    void renderGuiStyle2(Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void renderConfigWindow(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly = false) noexcept;
+    void renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
 
     struct {
         bool aimbot = false;

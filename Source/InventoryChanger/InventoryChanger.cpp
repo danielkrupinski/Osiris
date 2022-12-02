@@ -276,7 +276,7 @@ static void applyKnife(const EngineInterfaces& engineInterfaces, const ClientInt
     worldModel.modelIndex() = engineInterfaces.getModelInfo().getModelIndex(EconItemDefinition::from(retSpoofGadgets->client, def).getWorldDisplayModel());
 }
 
-static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const CSPlayerInventory& localInventory, const Entity& local) noexcept
+static void applyWeapons(const inventory_changer::InventoryChanger& inventoryChanger, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const CSPlayerInventory& localInventory, const Entity& local) noexcept
 {
     const auto localTeam = local.getTeamNumber();
     const auto localXuid = local.getSteamId(engine);
@@ -301,7 +301,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
             continue;
 
         const auto loadoutSlot = EconItemDefinition::from(retSpoofGadgets->client, def).getLoadoutSlot(localTeam);
-        const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getLoadout(), localTeam, loadoutSlot);
+        const auto optionalItem = getItemFromLoadout(inventoryChanger.getBackend().getLoadout(), localTeam, loadoutSlot);
         if (!optionalItem.has_value())
             continue;
         
@@ -309,7 +309,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
         if (definitionIndex != item->gameItem().getWeaponID())
             continue;
 
-        const auto itemID = inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getItemID(item);
+        const auto itemID = inventoryChanger.getBackend().getItemID(item);
         if (!itemID.has_value())
             continue;
 
@@ -319,7 +319,7 @@ static void applyWeapons(const Engine& engine, const ClientInterfaces& clientInt
     }
 }
 
-static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, int localHandle) noexcept
+static void onPostDataUpdateStart(const inventory_changer::InventoryChanger& inventoryChanger, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, int localHandle) noexcept
 {
     const auto local = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(localHandle));
     if (local.getPOD() == nullptr)
@@ -329,8 +329,8 @@ static void onPostDataUpdateStart(const EngineInterfaces& engineInterfaces, cons
     if (localInventory.getPOD() == nullptr)
         return;
 
-    applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend(), localInventory, local);
-    applyWeapons(engineInterfaces.getEngine(), clientInterfaces, interfaces, memory, localInventory, local);
+    applyKnife(engineInterfaces, clientInterfaces, interfaces, memory, inventoryChanger.getBackend(), localInventory, local);
+    applyWeapons(inventoryChanger, engineInterfaces.getEngine(), clientInterfaces, interfaces, memory, localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
@@ -364,12 +364,12 @@ static void applyMusicKit(const Memory& memory, const inventory_changer::backend
     pr->musicID()[localPlayer.get().getNetworkable().index()] = backend.getGameItemLookup().getStorage().getMusicKit(item->gameItem()).id;
 }
 
-static void applyPlayerAgent(const ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+static void applyPlayerAgent(const inventory_changer::InventoryChanger& inventoryChanger, const ModelInfo& modelInfo, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
 
-    const auto optionalItem = getItemFromLoadout(inventory_changer::InventoryChanger::instance(interfaces, memory).getBackend().getLoadout(), localPlayer.get().getTeamNumber(), 38);
+    const auto optionalItem = getItemFromLoadout(inventoryChanger.getBackend().getLoadout(), localPlayer.get().getTeamNumber(), 38);
     if (!optionalItem.has_value())
         return;
 
@@ -469,10 +469,10 @@ void InventoryChanger::menuBarItem() noexcept
     }
 }
 
-void InventoryChanger::tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void InventoryChanger::tabItem(inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Inventory Changer")) {
-        inventory_changer::InventoryChanger::instance(interfaces, memory).drawGUI(interfaces, memory, true);
+        inventoryChanger.drawGUI(interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
@@ -481,7 +481,7 @@ static ImTextureID getItemIconTexture(const OtherInterfaces& interfaces, std::st
 
 namespace ImGui
 {
-    static bool SkinSelectable(const OtherInterfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
+    static bool SkinSelectable(const inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -493,7 +493,7 @@ namespace ImGui
         const auto itemName = inventory_changer::WeaponNames::instance(interfaces, memory).getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(interfaces, memory).getGameItemLookup().getStorage(), item).forDisplay.data();
+        const auto paintKitName = getItemName(inventoryChanger.getGameItemLookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -610,7 +610,7 @@ namespace ImGui
         return pressed;
     }
 
-    static void SkinItem(const OtherInterfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    static void SkinItem(const inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory, const inventory_changer::game_items::Item& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -622,7 +622,7 @@ namespace ImGui
         const auto itemName = inventory_changer::WeaponNames::instance(interfaces, memory).getWeaponName(item.getWeaponID()).data();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto paintKitName = getItemName(inventory_changer::InventoryChanger::instance(interfaces, memory).getGameItemLookup().getStorage(), item).forDisplay.data();
+        const auto paintKitName = getItemName(inventoryChanger.getGameItemLookup().getStorage(), item).forDisplay.data();
         const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
@@ -817,7 +817,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
 
                 ImGui::PushID(i);
 
-                if (ImGui::SkinSelectable(interfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
+                if (ImGui::SkinSelectable(*this, interfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
                         backend.getInventoryHandler().addItem(inventory::Item{ gameItem, item_generator::createDefaultItemProperties(randomGenerator, getGameItemLookup().getStorage(), gameItem) }, true);
                     toAddCount[i] = 1;
@@ -838,7 +838,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(interfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
+                ImGui::SkinItem(*this, interfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
                     it = std::make_reverse_iterator(backend.getItemRemovalHandler()(std::next(it).base()));
                 } else {
@@ -1106,7 +1106,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         localPlayerHandle = localPlayer.get().handle();
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(engineInterfaces, clientInterfaces, interfaces, memory, localPlayerHandle);
+        onPostDataUpdateStart(*this, engineInterfaces, clientInterfaces, interfaces, memory, localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer.get().getNetworkable().isDormant())
             updateHud(memory);
     }
@@ -1122,7 +1122,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
+    applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory, econItemViewFunctions);
@@ -1151,12 +1151,6 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
 #endif
 
     return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };
-}
-
-InventoryChanger& InventoryChanger::instance(const OtherInterfaces& interfaces, const Memory& memory)
-{
-    static InventoryChanger inventoryChanger{ createInventoryChanger(interfaces, memory) };
-    return inventoryChanger;
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)

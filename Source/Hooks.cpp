@@ -401,7 +401,7 @@ void Hooks::uninstall(Glow& glow, const ClientInterfaces& clientInterfaces, cons
     Netvars::restore();
 
     glow.clearCustomObjects(memory);
-    inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
+    globalContext->inventoryChanger->reset(interfaces, memory);
 
 #if IS_WIN32()
     keyValuesSystem.restore();

@@ -81,8 +81,6 @@ public:
     InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
         : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) } {}
 
-    static InventoryChanger& instance(const OtherInterfaces& interfaces, const Memory& memory);
-
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
         return backend.getGameItemLookup();
@@ -140,13 +138,15 @@ private:
     EconItemViewFunctions econItemViewFunctions;
 };
 
+InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory);
+
 }
 
 namespace InventoryChanger
 {
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void tabItem(inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;

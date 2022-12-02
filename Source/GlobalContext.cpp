@@ -208,7 +208,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         Misc::fixAnimationLOD(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, stage);
         backtrack->update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
     }
-    inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
+    inventoryChanger->run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
@@ -295,7 +295,7 @@ const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(Retur
 bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data)
 {
     if (type == csgo::UserMessageType::Text)
-        inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).onUserTextMsg(*memory, data, size);
+        inventoryChanger->onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
         Misc::onVoteStart(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
@@ -338,7 +338,7 @@ void GlobalContext::renderSmokeOverlayHook(bool update)
 double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).getArgAsNumberHook(static_cast<int>(result), returnAddress);
+    inventoryChanger->getArgAsNumberHook(static_cast<int>(result), returnAddress);
     return result;
 }
 
@@ -347,33 +347,33 @@ const char* GlobalContext::getArgAsStringHook(void* params, int index, ReturnAdd
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).getArgAsStringHook(*memory, result, returnAddress, params);
+        inventoryChanger->getArgAsStringHook(*memory, result, returnAddress, params);
 
     return result;
 }
 
 void GlobalContext::setResultIntHook(void* params, int result, ReturnAddress returnAddress)
 {
-    result = inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).setResultIntHook(returnAddress, params, result);
+    result = inventoryChanger->setResultIntHook(returnAddress, params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
 unsigned GlobalContext::getNumArgsHook(void* params, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).getNumArgsHook(result, returnAddress, params);
+    inventoryChanger->getNumArgsHook(result, returnAddress, params);
     return result;
 }
 
 void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap)
 {
-    inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).onItemEquip(team, slot, itemID);
+    inventoryChanger->onItemEquip(team, slot, itemID);
     hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
 void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event)
 {
-    inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
+    inventoryChanger->onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
@@ -428,7 +428,8 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
         glow.emplace();
-        config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
+        inventoryChanger.emplace(inventory_changer::createInventoryChanger(getOtherInterfaces(), *memory));
+        config.emplace(*inventoryChanger, *glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
@@ -498,8 +499,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         backtrack.emplace(getOtherInterfaces().getCvar());
         visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) });
         glow.emplace();
-        config.emplace(*glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
-
+        inventoryChanger.emplace(inventory_changer::createInventoryChanger(getOtherInterfaces(), *memory));
+        config.emplace(*inventoryChanger, *glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
@@ -538,7 +539,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
             if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).fixKnifeAnimation(weapon, data.value._int);
+            inventoryChanger->fixKnifeAnimation(weapon, data.value._int);
         }
     }
 
@@ -557,14 +558,12 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
     case fnv::hash("round_freeze_end"):
         Misc::purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
         break;
-    case fnv::hash("player_death"): {
-        auto& inventoryChanger = inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory);
-        inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
-        inventoryChanger.overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
+    case fnv::hash("player_death"):
+        inventoryChanger->updateStatTrak(getEngineInterfaces().getEngine(), event);
+        inventoryChanger->overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
         Misc::killMessage(getEngineInterfaces().getEngine(), event);
         Misc::killSound(getEngineInterfaces().getEngine(), event);
         break;
-    }
     case fnv::hash("player_hurt"):
         Misc::playHitSound(getEngineInterfaces().getEngine(), event);
         visuals->hitEffect(&event);
@@ -574,7 +573,7 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         Misc::voteRevealer(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, event);
         break;
     case fnv::hash("round_mvp"):
-        inventory_changer::InventoryChanger::instance(getOtherInterfaces(), *memory).onRoundMVP(getEngineInterfaces().getEngine(), event);
+        inventoryChanger->onRoundMVP(getEngineInterfaces().getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
         Misc::purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
@@ -612,7 +611,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(*glow, *backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(*inventoryChanger, *glow, *backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();
