@@ -86,7 +86,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     Misc::antiAfkKick(cmd);
     Misc::fastStop(cmd);
     Misc::prepareRevolver(getEngineInterfaces().getEngine(), *memory, cmd);
-    visuals->removeShadows();
+    features->visuals.removeShadows();
     Misc::runReportbot(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -103,9 +103,9 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 
     EnginePrediction::run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, cmd);
 
-    aimbot->run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *config, *memory, cmd);
+    features->aimbot.run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *config, *memory, cmd);
     Triggerbot::run(getEngineInterfaces().engineTrace(), getOtherInterfaces(), *memory, *config, cmd);
-    backtrack->run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
+    features->backtrack.run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(getEngineInterfaces().engineTrace(), getOtherInterfaces(), cmd);
@@ -138,19 +138,19 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
 void GlobalContext::doPostScreenEffectsHook(void* param)
 {
     if (getEngineInterfaces().getEngine().isInGame()) {
-        visuals->thirdperson();
-        visuals->inverseRagdollGravity();
-        visuals->reduceFlashEffect();
-        visuals->updateBrightness();
-        visuals->remove3dSky();
-        glow->render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
+        features->visuals.thirdperson();
+        features->visuals.inverseRagdollGravity();
+        features->visuals.reduceFlashEffect();
+        features->visuals.updateBrightness();
+        features->visuals.remove3dSky();
+        features->glow.render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
 
 float GlobalContext::getViewModelFovHook()
 {
-    float additionalFov = visuals->viewModelFov();
+    float additionalFov = features->visuals.viewModelFov();
     if (localPlayer) {
         if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
@@ -164,10 +164,10 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
     if (getOtherInterfaces().getStudioRender().isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
-    if (visuals->removeHands(info.model->name) || visuals->removeSleeves(info.model->name) || visuals->removeWeapons(info.model->name))
+    if (features->visuals.removeHands(info.model->name) || features->visuals.removeSleeves(info.model->name) || features->visuals.removeWeapons(info.model->name))
         return;
 
-    if (static Chams chams; !chams.render(*backtrack, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config, ctx, state, info, customBoneToWorld))
+    if (static Chams chams; !chams.render(features->backtrack, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config, ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
@@ -176,7 +176,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRend
 int GlobalContext::svCheatsGetIntHook(void* _this, ReturnAddress returnAddress)
 {
     const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(_this);
-    if (visuals->svCheatsGetBoolHook(returnAddress))
+    if (features->visuals.svCheatsGetBoolHook(returnAddress))
         return 1;
     return original;
 }
@@ -192,23 +192,23 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     if (stage == csgo::FrameStage::RENDER_START) {
         Misc::preserveKillfeed(*memory);
         Misc::disablePanoramablur(getOtherInterfaces());
-        visuals->colorWorld();
+        features->visuals.colorWorld();
         Misc::updateEventListeners(getEngineInterfaces());
-        visuals->updateEventListeners();
+        features->visuals.updateEventListeners();
     }
     if (getEngineInterfaces().getEngine().isInGame()) {
-        visuals->skybox(stage);
-        visuals->removeBlur(stage);
+        features->visuals.skybox(stage);
+        features->visuals.removeBlur(stage);
         Misc::oppositeHandKnife(getOtherInterfaces(), stage);
-        visuals->removeGrass(stage);
-        visuals->modifySmoke(stage);
-        visuals->disablePostProcessing(stage);
-        visuals->removeVisualRecoil(stage);
-        visuals->applyZoom(stage);
+        features->visuals.removeGrass(stage);
+        features->visuals.modifySmoke(stage);
+        features->visuals.disablePostProcessing(stage);
+        features->visuals.removeVisualRecoil(stage);
+        features->visuals.applyZoom(stage);
         Misc::fixAnimationLOD(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, stage);
-        backtrack->update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
+        features->backtrack.update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
     }
-    inventoryChanger->run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
+    features->inventoryChanger.run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
@@ -231,12 +231,12 @@ bool GlobalContext::shouldDrawFogHook(ReturnAddress returnAddress)
     }
 #endif
 
-    return !visuals->shouldRemoveFog();
+    return !features->visuals.shouldRemoveFog();
 }
 
 bool GlobalContext::shouldDrawViewModelHook()
 {
-    if (visuals->isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
+    if (features->visuals.isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
 }
@@ -250,15 +250,15 @@ void GlobalContext::lockCursorHook()
 
 void GlobalContext::setDrawColorHook(int r, int g, int b, int a, ReturnAddress returnAddress)
 {
-    visuals->setDrawColorHook(returnAddress, a);
+    features->visuals.setDrawColorHook(returnAddress, a);
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
 }
 
 void GlobalContext::overrideViewHook(ViewSetup* setup)
 {
     if (localPlayer && !localPlayer.get().isScoped())
-        setup->fov += visuals->fov();
-    setup->farZ += visuals->farZ() * 10;
+        setup->fov += features->visuals.fov();
+    setup->farZ += features->visuals.farZ() * 10;
     hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
 }
 
@@ -273,8 +273,8 @@ int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
 
 void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 {
-    visuals->applyScreenEffects();
-    visuals->hitEffect();
+    features->visuals.applyScreenEffects();
+    features->visuals.hitEffect();
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
@@ -295,7 +295,7 @@ const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(Retur
 bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data)
 {
     if (type == csgo::UserMessageType::Text)
-        inventoryChanger->onUserTextMsg(*memory, data, size);
+        features->inventoryChanger.onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
         Misc::onVoteStart(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
@@ -317,7 +317,7 @@ bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_
 void GlobalContext::updateColorCorrectionWeightsHook()
 {
     hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
-    visuals->updateColorCorrectionWeightsHook();
+    features->visuals.updateColorCorrectionWeightsHook();
 }
 
 float GlobalContext::getScreenAspectRatioHook(int width, int height)
@@ -329,7 +329,7 @@ float GlobalContext::getScreenAspectRatioHook(int width, int height)
 
 void GlobalContext::renderSmokeOverlayHook(bool update)
 {
-    if (visuals->shouldRemoveSmoke() || visuals->isSmokeWireframe())
+    if (features->visuals.shouldRemoveSmoke() || features->visuals.isSmokeWireframe())
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
@@ -338,7 +338,7 @@ void GlobalContext::renderSmokeOverlayHook(bool update)
 double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-    inventoryChanger->getArgAsNumberHook(static_cast<int>(result), returnAddress);
+    features->inventoryChanger.getArgAsNumberHook(static_cast<int>(result), returnAddress);
     return result;
 }
 
@@ -347,33 +347,33 @@ const char* GlobalContext::getArgAsStringHook(void* params, int index, ReturnAdd
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result)
-        inventoryChanger->getArgAsStringHook(*memory, result, returnAddress, params);
+        features->inventoryChanger.getArgAsStringHook(*memory, result, returnAddress, params);
 
     return result;
 }
 
 void GlobalContext::setResultIntHook(void* params, int result, ReturnAddress returnAddress)
 {
-    result = inventoryChanger->setResultIntHook(returnAddress, params, result);
+    result = features->inventoryChanger.setResultIntHook(returnAddress, params, result);
     hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
 }
 
 unsigned GlobalContext::getNumArgsHook(void* params, ReturnAddress returnAddress)
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    inventoryChanger->getNumArgsHook(result, returnAddress, params);
+    features->inventoryChanger.getNumArgsHook(result, returnAddress, params);
     return result;
 }
 
 void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap)
 {
-    inventoryChanger->onItemEquip(team, slot, itemID);
+    features->inventoryChanger.onItemEquip(team, slot, itemID);
     hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
 void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event)
 {
-    inventoryChanger->onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
+    features->inventoryChanger.onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
@@ -425,13 +425,10 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        backtrack.emplace(getOtherInterfaces().getCvar());
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
-        glow.emplace();
-        inventoryChanger.emplace(inventory_changer::createInventoryChanger(getOtherInterfaces(), *memory));
-        config.emplace(*inventoryChanger, *glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
+
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }));
+        config.emplace(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         gui.emplace();
-        aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
@@ -496,13 +493,11 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
         ImGui::CreateContext();
-        backtrack.emplace(getOtherInterfaces().getCvar());
-        visuals.emplace(*memory, getOtherInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) });
-        glow.emplace();
-        inventoryChanger.emplace(inventory_changer::createInventoryChanger(getOtherInterfaces(), *memory));
-        config.emplace(*inventoryChanger, *glow, *backtrack, *visuals, getOtherInterfaces(), *memory);
+
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }));
+        config.emplace(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
+        
         gui.emplace();
-        aimbot.emplace();
         hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
@@ -536,10 +531,10 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
 
     if (localPlayer && ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
         if (const auto weapon = Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
-            if (visuals->isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (features->visuals.isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            inventoryChanger->fixKnifeAnimation(weapon, data.value._int);
+            features->inventoryChanger.fixKnifeAnimation(weapon, data.value._int);
         }
     }
 
@@ -559,27 +554,27 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         Misc::purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
         break;
     case fnv::hash("player_death"):
-        inventoryChanger->updateStatTrak(getEngineInterfaces().getEngine(), event);
-        inventoryChanger->overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
+        features->inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
+        features->inventoryChanger.overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
         Misc::killMessage(getEngineInterfaces().getEngine(), event);
         Misc::killSound(getEngineInterfaces().getEngine(), event);
         break;
     case fnv::hash("player_hurt"):
         Misc::playHitSound(getEngineInterfaces().getEngine(), event);
-        visuals->hitEffect(&event);
-        visuals->hitMarker(&event);
+        features->visuals.hitEffect(&event);
+        features->visuals.hitMarker(&event);
         break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, event);
         break;
     case fnv::hash("round_mvp"):
-        inventoryChanger->onRoundMVP(getEngineInterfaces().getEngine(), event);
+        features->inventoryChanger.onRoundMVP(getEngineInterfaces().getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
         Misc::purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
-        visuals->bulletTracer(event);
+        features->visuals.bulletTracer(event);
         break;
     }
 }
@@ -596,22 +591,22 @@ void GlobalContext::renderFrame()
         Misc::drawOffscreenEnemies(getEngineInterfaces().getEngine(), *memory, ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer(*memory);
         Misc::spectatorList();
-        visuals->hitMarker(nullptr, ImGui::GetBackgroundDrawList());
-        visuals->drawMolotovHull(ImGui::GetBackgroundDrawList());
+        features->visuals.hitMarker(nullptr, ImGui::GetBackgroundDrawList());
+        features->visuals.drawMolotovHull(ImGui::GetBackgroundDrawList());
         Misc::watermark(*memory);
 
-        aimbot->updateInput(*config);
-        visuals->updateInput();
+        features->aimbot.updateInput(*config);
+        features->visuals.updateInput();
         StreamProofESP::updateInput(*config);
         Misc::updateInput();
         Triggerbot::updateInput(*config);
         Chams::updateInput(*config);
-        glow->updateInput();
+        features->glow.updateInput();
 
         gui->handleToggle(getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(*inventoryChanger, *glow, *backtrack, *visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();

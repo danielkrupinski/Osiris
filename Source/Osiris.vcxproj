@@ -206,6 +206,7 @@
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
+    <ClInclude Include="Hacks\Features.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Sound.h" />

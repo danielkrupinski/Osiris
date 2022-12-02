@@ -1003,6 +1003,9 @@
     <ClInclude Include="Utils\ReturnAddress.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Features.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
