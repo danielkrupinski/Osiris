@@ -200,7 +200,7 @@ void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    constexpr std::array smokeMaterials{
+    static constexpr std::array smokeMaterials{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
