@@ -594,7 +594,7 @@ void Visuals::updateColorCorrectionWeightsHook() const noexcept
 
 bool Visuals::svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept
 {
-    return visualsConfig.thirdperson && hookReturnAddress == memory.cameraThink;
+    return visualsConfig.thirdperson && hookReturnAddress == cameraThink;
 }
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept

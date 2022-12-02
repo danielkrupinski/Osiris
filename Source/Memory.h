@@ -73,7 +73,6 @@ public:
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
     std::add_pointer_t<void FASTCALL_CONV(const char*, const char*)> setClanTag;
-    ReturnAddress cameraThink;
     std::add_pointer_t<bool CDECL_CONV(Vector, Vector, short)> lineGoesThroughSmoke;
     bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
     std::uintptr_t hud;

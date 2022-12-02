@@ -61,7 +61,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     glowObjectManager = reinterpret_cast<GlowObjectManager*>(clientPatternFinder("\x0F\x11\x05????\x83\xC8\x01").add(3).deref().get());
     setClanTag = reinterpret_cast<decltype(setClanTag)>(enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get());
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(clientPatternFinder("\xE8????\x8B\x4C\x24\x30\x33\xD2").add(1).relativeToAbsolute().get());
-    cameraThink = ReturnAddress{ clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get() };
     isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(clientPatternFinder("\x8B\xCE\xE8????\x02\xC0").add(3).relativeToAbsolute().get());
     auto temp = clientPatternFinder("\xB9????\xE8????\x8B\x5D\x08").add(1);
     hud = SafeAddress{ temp }.deref().get();
@@ -139,7 +138,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     getEventDescriptor = enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get();
     activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().get());
     channels = reinterpret_cast<Channel*>(enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().get());
-    cameraThink = ReturnAddress{ clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get() };
     keyValuesFromString = reinterpret_cast<decltype(keyValuesFromString)>(clientPatternFinder("\xE8????\x48\x89\xDF\x48\x89\x45\xE0").add(1).relativeToAbsolute().get());
     keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().get());
     keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().get());

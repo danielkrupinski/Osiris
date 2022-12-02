@@ -21,6 +21,11 @@ public:
     Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) }
     {
+#if IS_WIN32()
+        cameraThink = ReturnAddress{ clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get() };
+#elif IS_LINUX()
+        cameraThink = ReturnAddress{ clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get() };
+#endif
     }
 
     bool isZoomOn() noexcept;
@@ -103,6 +108,7 @@ private:
     SkyboxChanger skyboxChanger;
     PostProcessingDisabler postProcessingDisabler;
     ScopeOverlayRemover scopeOverlayRemover;
+    ReturnAddress cameraThink;
 
     bool inverseRagdollGravity_;
     bool noFog;
