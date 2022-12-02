@@ -121,6 +121,12 @@ public:
     void scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept;
     void onSoUpdated(const SharedObject& object) noexcept;
 
+    void menuBarItem() noexcept;
+    void tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+
+    void clearItemIconTextures() noexcept;
+    void clearUnusedItemIconTextures() noexcept;
+
 private:
     void placePickEmPick(csgo::Tournament tournament, std::uint16_t group, std::uint8_t indexInGroup, csgo::StickerId stickerID);
 
@@ -142,12 +148,3 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
 
 }
 
-namespace InventoryChanger
-{
-    // GUI
-    void menuBarItem() noexcept;
-    void tabItem(inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-
-    void clearItemIconTextures() noexcept;
-    void clearUnusedItemIconTextures() noexcept;
-}

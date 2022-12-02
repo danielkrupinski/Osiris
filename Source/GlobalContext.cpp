@@ -456,7 +456,7 @@ HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, co
 
     //
     GameData::clearUnusedAvatars();
-    InventoryChanger::clearUnusedItemIconTextures();
+    features->inventoryChanger.clearUnusedItemIconTextures();
     //
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
@@ -465,7 +465,7 @@ HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, co
 HRESULT GlobalContext::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    InventoryChanger::clearItemIconTextures();
+    features->inventoryChanger.clearItemIconTextures();
     GameData::clearTextures();
     return hooks->originalReset(device, params);
 }

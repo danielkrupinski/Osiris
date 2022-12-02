@@ -20,7 +20,7 @@ private:
     bool open = true;
 
     void updateColors(Config& config) const noexcept;
-    void renderMenuBar(Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept;
+    void renderMenuBar(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept;
     void renderAimbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderTriggerbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderChamsWindow(Config& config, bool contentOnly = false) noexcept;

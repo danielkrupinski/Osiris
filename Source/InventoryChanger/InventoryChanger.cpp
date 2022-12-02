@@ -460,7 +460,7 @@ static void processEquipRequests(const Memory& memory, const EconItemViewFunctio
 
 static bool windowOpen = false;
 
-void InventoryChanger::menuBarItem() noexcept
+void inventory_changer::InventoryChanger::menuBarItem() noexcept
 {
     if (ImGui::MenuItem("Inventory Changer")) {
         windowOpen = true;
@@ -469,10 +469,10 @@ void InventoryChanger::menuBarItem() noexcept
     }
 }
 
-void InventoryChanger::tabItem(inventory_changer::InventoryChanger& inventoryChanger, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void inventory_changer::InventoryChanger::tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Inventory Changer")) {
-        inventoryChanger.drawGUI(interfaces, memory, true);
+        drawGUI(interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
@@ -951,12 +951,12 @@ static ImTextureID getItemIconTexture(const OtherInterfaces& interfaces, std::st
     return icon.texture.get();
 }
 
-void InventoryChanger::clearItemIconTextures() noexcept
+void inventory_changer::InventoryChanger::clearItemIconTextures() noexcept
 {
     iconTextures.clear();
 }
 
-void InventoryChanger::clearUnusedItemIconTextures() noexcept
+void inventory_changer::InventoryChanger::clearUnusedItemIconTextures() noexcept
 {
     constexpr auto maxIcons = 30;
     const auto frameCount = ImGui::GetFrameCount();

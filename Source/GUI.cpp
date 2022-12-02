@@ -96,7 +96,7 @@ GUI::GUI() noexcept
 void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
-        renderMenuBar(glow, backtrack, visuals);
+        renderMenuBar(inventoryChanger, glow, backtrack, visuals);
         renderAimbotWindow(config);
         renderTriggerbotWindow(config);
         backtrack.drawGUI(false);
@@ -144,7 +144,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
     }
 }
 
-void GUI::renderMenuBar(Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept
+void GUI::renderMenuBar(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         menuBarItem("Aimbot", window.aimbot);
@@ -154,7 +154,7 @@ void GUI::renderMenuBar(Glow& glow, Backtrack& backtrack, Visuals& visuals) noex
         menuBarItem("Chams", window.chams);
         StreamProofESP::menuBarItem();
         visuals.menuBarItem();
-        InventoryChanger::menuBarItem();
+        inventoryChanger.menuBarItem();
         Sound::menuBarItem();
         menuBarItem("Style", window.style);
         Misc::menuBarItem();
@@ -644,7 +644,7 @@ void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger,
         }
         StreamProofESP::tabItem(config);
         visuals.tabItem();
-        InventoryChanger::tabItem(inventoryChanger, interfaces, memory);
+        inventoryChanger.tabItem(interfaces, memory);
         Sound::tabItem();
         if (ImGui::BeginTabItem("Style")) {
             renderStyleWindow(config, true);
