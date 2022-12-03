@@ -518,7 +518,7 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     GameData::clearUnusedAvatars();
-    InventoryChanger::clearUnusedItemIconTextures();
+    features->inventoryChanger.clearUnusedItemIconTextures();
 
     hooks->swapWindow(window);
 }

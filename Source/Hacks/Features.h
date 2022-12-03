@@ -19,7 +19,7 @@ struct Features {
 [[nodiscard]] inline Features createFeatures(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterface, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
 {
     return Features{
-        .backtrack{ otherInterface.getCvar() },
+        .backtrack = Backtrack{ otherInterface.getCvar() },
         .visuals{ memory, otherInterface, clientInterfaces, engineInterfaces, clientPatternFinder, enginePatternFinder },
         .inventoryChanger{ inventory_changer::createInventoryChanger(otherInterface, memory) }
     };
