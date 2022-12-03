@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Helpers/PatternFinder.h>
+#include <Platform/IsPlatform.h>
 #include <SDK/Constants/FrameStage.h>
 
 class PostProcessingDisabler {
@@ -13,10 +15,12 @@ public:
 
     void run(csgo::FrameStage stage) noexcept
     {
-        if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
+        using enum csgo::FrameStage;
+        if (stage != RENDER_START && stage != RENDER_END)
             return;
 
-        *disablePostProcessing = (stage == csgo::FrameStage::RENDER_START && enabled);
+        if (disablePostProcessing)
+            *disablePostProcessing = (stage == RENDER_START && enabled);
     }
 
     template <typename Configurator>
@@ -32,8 +36,8 @@ private:
 [[nodiscard]] inline PostProcessingDisabler createPostProcessingDisabler(const helpers::PatternFinder& clientPatternFinder)
 {
 #if IS_WIN32()
-    return PostProcessingDisabler{ reinterpret_cast<bool*>(clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().get()) };
+    return PostProcessingDisabler{ clientPatternFinder("\x83\xEC\x4C\x80\x3D").add(5).deref().as<bool*>() };
 #elif IS_LINUX()
-    return PostProcessingDisabler{ reinterpret_cast<bool*>(clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().get()) };
+    return PostProcessingDisabler{ clientPatternFinder("\x80\x3D?????\x89\xB5").add(2).relativeToAbsolute().as<bool*>() };
 #endif
 }
