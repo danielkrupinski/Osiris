@@ -90,6 +90,9 @@
     <Filter Include="Hacks\Visuals">
       <UniqueIdentifier>{b06cfa86-3590-4502-9bed-468e781c19cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RetSpoof">
+      <UniqueIdentifier>{17172044-e24f-46ec-90cf-e556a1d707aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1011,6 +1014,9 @@
     </ClInclude>
     <ClInclude Include="Endpoints.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h">
+      <Filter>RetSpoof</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

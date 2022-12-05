@@ -305,6 +305,7 @@
     <ClInclude Include="Resources\avatar_tt.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="RetSpoofGadgets.h" />
+    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ClientMode.h" />
