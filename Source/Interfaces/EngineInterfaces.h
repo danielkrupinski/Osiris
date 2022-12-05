@@ -35,6 +35,11 @@ public:
         return EngineTrace::from(retSpoofInvoker, pods.engineTrace);
     }
 
+    [[nodiscard]] const EngineInterfacesPODs& getPODs() const noexcept
+    {
+        return pods;
+    }
+
 private:
     RetSpoofInvoker retSpoofInvoker;
     const EngineInterfacesPODs& pods;

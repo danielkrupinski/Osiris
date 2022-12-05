@@ -1,6 +1,7 @@
 target_sources(OsirisOBJ PRIVATE
   Config.cpp
   ConfigStructs.cpp
+  Endpoints.cpp
   EventListener.cpp
   GameData.cpp
   GlobalContext.cpp

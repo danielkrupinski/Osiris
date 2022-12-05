@@ -599,12 +599,7 @@ bool Visuals::svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcep
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
-    class ImpactEventListener : public GameEventListener {
-    public:
-        void fireGameEvent(csgo::pod::GameEvent* eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
-    };
-
-    static ImpactEventListener listener;
+    static DefaultEventListener listener;
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {

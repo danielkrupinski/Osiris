@@ -429,7 +429,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }));
         config.emplace(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         gui.emplace();
-        hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
+        hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -498,7 +498,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         config.emplace(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         
         gui.emplace();
-        hooks->install(clientInterfaces->client, getOtherInterfaces(), *memory);
+        hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
 
         state = GlobalContext::State::Initialized;
     }
@@ -606,7 +606,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(features->inventoryChanger, features->glow, features->backtrack, features->visuals, getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();

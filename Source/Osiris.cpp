@@ -7,7 +7,7 @@
 #include <Windows.h>
 #endif
 
-#include "GlobalContext.h"
+#include "Endpoints.h"
 #include "Hooks.h"
 
 #if IS_WIN32()
@@ -21,7 +21,7 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 
     if (reason == DLL_PROCESS_ATTACH) {
         std::setlocale(LC_CTYPE, ".utf8");
-        globalContext.emplace();
+        initializeGlobalContext();
         hooks.emplace(moduleHandle);
     }
     return TRUE;
@@ -31,7 +31,7 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 
 void __attribute__((constructor)) DllEntryPoint()
 {
-    globalContext.emplace();
+    initializeGlobalContext();
     hooks.emplace(Hooks{});
 }
 

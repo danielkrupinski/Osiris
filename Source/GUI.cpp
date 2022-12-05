@@ -93,7 +93,7 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
         renderMenuBar(inventoryChanger, glow, backtrack, visuals);
@@ -107,10 +107,10 @@ void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& gl
         inventoryChanger.drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        Misc::drawGUI(glow, engine, clientInterfaces, interfaces, memory, false);
+        Misc::drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, false);
         renderConfigWindow(inventoryChanger, glow, backtrack, visuals, interfaces, memory, config);
     } else {
-        renderGuiStyle2(inventoryChanger, glow, backtrack, visuals, engine, clientInterfaces, interfaces, memory, config);
+        renderGuiStyle2(inventoryChanger, glow, backtrack, visuals, engineInterfaces, clientInterfaces, interfaces, memory, config);
     }
 }
 
@@ -623,7 +623,7 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -650,7 +650,7 @@ void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger,
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        Misc::tabItem(glow, engine, clientInterfaces, interfaces, memory);
+        Misc::tabItem(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(inventoryChanger, glow, backtrack, visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();

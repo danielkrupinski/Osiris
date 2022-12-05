@@ -39,11 +39,6 @@ EventListener::EventListener(GameEventManager gameEventManager)
         assert(false);
 }
 
-void EventListener::fireGameEvent(csgo::pod::GameEvent* event)
-{
-    globalContext->fireGameEventCallback(event);
-}
-
 void EventListener::remove()
 {
     gameEventManager.removeListener(this);

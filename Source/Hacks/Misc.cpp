@@ -1277,12 +1277,7 @@ void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, c
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
 {
-    class PurchaseEventListener : public GameEventListener {
-    public:
-        void fireGameEvent(csgo::pod::GameEvent* eventPointer) override { globalContext->fireGameEventCallback(eventPointer); }
-    };
-
-    static PurchaseEventListener listener;
+    static DefaultEventListener listener;
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {
@@ -1310,15 +1305,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(glow, engine, clientInterfaces, interfaces, memory, true);
+        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -1421,7 +1416,7 @@ void Misc::drawGUI(Glow& glow, const Engine& engine, const ClientInterfaces& cli
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
-        Misc::fakeBan(engine, interfaces, memory, true);
+        Misc::fakeBan(engineInterfaces.getEngine(), interfaces, memory, true);
     ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
@@ -1519,7 +1514,7 @@ void Misc::drawGUI(Glow& glow, const Engine& engine, const ClientInterfaces& cli
     ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
-        hooks->uninstall(glow, clientInterfaces, interfaces, memory);
+        hooks->uninstall(glow, engineInterfaces, clientInterfaces, interfaces, memory, visuals, inventoryChanger);
 
     ImGui::Columns(1);
     if (!contentOnly)

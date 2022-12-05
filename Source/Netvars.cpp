@@ -38,10 +38,7 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
     proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
-static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
-{
-    globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
-}
+void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept;
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
 

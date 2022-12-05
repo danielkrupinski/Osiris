@@ -111,6 +111,7 @@
     </ClCompile>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigStructs.cpp" />
+    <ClCompile Include="Endpoints.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GlobalContext.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Config\LoadConfigurator.h" />
     <ClInclude Include="Config\ResetConfigurator.h" />
     <ClInclude Include="Config\SaveConfigurator.h" />
+    <ClInclude Include="Endpoints.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GlobalContext.h" />

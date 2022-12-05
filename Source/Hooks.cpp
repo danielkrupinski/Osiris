@@ -72,179 +72,9 @@
 
 #include "GlobalContext.h"
 #include "Interfaces/ClientInterfaces.h"
+#include "Endpoints.h"
 
 #if IS_WIN32()
-
-static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
-{
-    return globalContext->wndProcHook(window, msg, wParam, lParam);
-}
-
-static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
-{
-    return globalContext->resetHook(device, params);
-}
-
-static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
-{
-    return globalContext->presentHook(device, src, dest, windowOverride, dirtyRegion);
-}
-
-#else
-
-static int pollEvent(SDL_Event* event) noexcept
-{
-    return globalContext->pollEventHook(event);
-}
-
-static void swapWindow(SDL_Window* window) noexcept
-{
-    globalContext->swapWindowHook(window);
-}
-
-#endif
-
-static bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
-{
-    return globalContext->createMoveHook(inputSampleTime, cmd);
-}
-
-static void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
-{
-    globalContext->doPostScreenEffectsHook(param);
-}
-
-static float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
-{
-    return globalContext->getViewModelFovHook();
-}
-
-static void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
-{
-    globalContext->drawModelExecuteHook(ctx, state, info, customBoneToWorld);
-}
-
-static int FASTCALL_CONV svCheatsGetInt(void* _this) noexcept
-{
-    return globalContext->svCheatsGetIntHook(_this, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr,) csgo::FrameStage stage) noexcept
-{
-    globalContext->frameStageNotifyHook(stage);
-}
-
-static int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
-{
-    return globalContext->emitSoundHook(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
-}
-
-static bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
-{
-    return globalContext->shouldDrawFogHook(ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
-{
-    return globalContext->shouldDrawViewModelHook();
-}
-
-static void STDCALL_CONV lockCursor() noexcept
-{
-    globalContext->lockCursorHook();
-}
-
-static void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
-{
-    globalContext->setDrawColorHook(r, g, b, a, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
-{
-    globalContext->overrideViewHook(setup);
-}
-
-static int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
-{
-    return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, ReturnAddress{ RETURN_ADDRESS() }, FRAME_ADDRESS());
-}
-
-static int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
-{
-    return globalContext->dispatchSoundHook(soundInfo);
-}
-
-static void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
-{
-    globalContext->render2dEffectsPreHudHook(viewSetup);
-}
-
-static const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
-{
-    return globalContext->getDemoPlaybackParametersHook(ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
-{
-    return globalContext->isPlayingDemoHook(ReturnAddress{ RETURN_ADDRESS() }, FRAME_ADDRESS());
-}
-
-static void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
-{
-    globalContext->updateColorCorrectionWeightsHook();
-}
-
-static float STDCALL_CONV getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
-{
-    return globalContext->getScreenAspectRatioHook(width, height);
-}
-
-static void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
-{
-    globalContext->renderSmokeOverlayHook(update);
-}
-
-static double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
-{
-    return globalContext->getArgAsNumberHook(params, index, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
-{
-    return globalContext->getArgAsStringHook(params, index, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
-{
-    return globalContext->setResultIntHook(params, result, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
-{
-    return globalContext->getNumArgsHook(params, ReturnAddress{ RETURN_ADDRESS() });
-}
-
-static void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
-{
-    globalContext->updateInventoryEquippedStateHook(inventory, itemID, team, slot, swap);
-}
-
-static void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, csgo::pod::SharedObject* object, int event) noexcept
-{
-    globalContext->soUpdatedHook(owner, object, event);
-}
-
-static bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
-{
-    return globalContext->dispatchUserMessageHook(type, passthroughFlags, size, data);
-}
-
-#if IS_WIN32()
-
-static void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
-{
-    return globalContext->allocKeyValuesMemoryHook(size, ReturnAddress{ RETURN_ADDRESS() });
-}
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 {
@@ -259,7 +89,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install(csgo::pod::Client* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
 #if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -277,7 +107,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
 
 #endif
     
-    bspQuery.init(globalContext->getEngineInterfaces().getEngine().getBSPTreeQuery());
+    bspQuery.init(engineInterfaces.getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(clientInterface);
@@ -293,7 +123,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(globalContext->getEngineInterfaces().getEngine().getPOD());
+    engine.init(engineInterfaces.getEngine().getPOD());
     engine.hookAt(82, &isPlayingDemo);
     engine.hookAt(101, &getScreenAspectRatio);
 #if IS_WIN32()
@@ -308,7 +138,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
     inventoryManager.init(memory.inventoryManager.getPOD());
     inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
 
-    modelRender.init(globalContext->engineInterfacesPODs->modelRender);
+    modelRender.init(engineInterfaces.getPODs().modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory.panoramaMarshallHelper);
@@ -317,7 +147,7 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
     panoramaMarshallHelper.hookAt(7, &getArgAsString);
     panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
 
-    sound.init(globalContext->engineInterfacesPODs->sound);
+    sound.init(engineInterfaces.getPODs().sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
 
     surface.init(interfaces.getSurface().getPOD());
@@ -351,32 +181,10 @@ void Hooks::install(csgo::pod::Client* clientInterface, const OtherInterfaces& i
 #endif
 }
 
-#if IS_WIN32()
-
-extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
-
-static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
+void Hooks::uninstall(Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept
 {
-    Sleep(100);
-
-    globalContext->getOtherInterfaces().getInputSystem().enableInput(true);
-    globalContext->gameEventListener->remove();
-
-    ImGui_ImplDX9_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
-
-    _CRT_INIT(moduleHandle, DLL_PROCESS_DETACH, nullptr);
-
-    FreeLibraryAndExitThread(moduleHandle, 0);
-}
-
-#endif
-
-void Hooks::uninstall(Glow& glow, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
-{
-    Misc::updateEventListeners(globalContext->getEngineInterfaces(), true);
-    globalContext->features->visuals.updateEventListeners(true);
+    Misc::updateEventListeners(engineInterfaces, true);
+    visuals.updateEventListeners(true);
 
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
@@ -401,7 +209,7 @@ void Hooks::uninstall(Glow& glow, const ClientInterfaces& clientInterfaces, cons
     Netvars::restore();
 
     glow.clearCustomObjects(memory);
-    globalContext->features->inventoryChanger.reset(interfaces, memory);
+    inventoryChanger.reset(interfaces, memory);
 
 #if IS_WIN32()
     keyValuesSystem.restore();

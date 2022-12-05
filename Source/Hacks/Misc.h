@@ -2,6 +2,7 @@
 
 #include "../JsonForward.h"
 #include "../Memory.h"
+#include <InventoryChanger/InventoryChanger.h>
 
 namespace csgo { enum class FrameStage; }
 
@@ -11,6 +12,7 @@ struct UserCmd;
 class ClientInterfaces;
 class EngineInterfaces;
 class Glow;
+class Visuals;
 
 namespace Misc
 {
@@ -71,8 +73,8 @@ namespace Misc
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void drawGUI(Glow& glow, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;

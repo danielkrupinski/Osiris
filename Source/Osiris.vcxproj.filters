@@ -326,6 +326,9 @@
     <ClCompile Include="Helpers\PatternFinder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Endpoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -1005,6 +1008,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\Features.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Endpoints.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
