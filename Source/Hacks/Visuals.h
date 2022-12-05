@@ -26,6 +26,8 @@ public:
 #elif IS_LINUX()
         cameraThink = ReturnAddress{ clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get() };
 #endif
+        ResetConfigurator configurator;
+        configure(configurator);
     }
 
     bool isZoomOn() noexcept;
