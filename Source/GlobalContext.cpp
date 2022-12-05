@@ -329,10 +329,8 @@ float GlobalContext::getScreenAspectRatioHook(int width, int height)
 
 void GlobalContext::renderSmokeOverlayHook(bool update)
 {
-    if (features->visuals.shouldRemoveSmoke() || features->visuals.isSmokeWireframe())
-        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
-    else
-        hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);
+    if (!features->visuals.renderSmokeOverlayHook())
+        hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);  
 }
 
 double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)

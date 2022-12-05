@@ -127,11 +127,6 @@ bool Visuals::isZoomOn() noexcept
     return zoom;
 }
 
-bool Visuals::isSmokeWireframe() noexcept
-{
-    return wireframeSmoke;
-}
-
 bool Visuals::isDeagleSpinnerOn() noexcept
 {
     return visualsConfig.deagleSpinner;
@@ -140,11 +135,6 @@ bool Visuals::isDeagleSpinnerOn() noexcept
 bool Visuals::shouldRemoveFog() noexcept
 {
     return noFog;
-}
-
-bool Visuals::shouldRemoveSmoke() noexcept
-{
-    return noSmoke;
 }
 
 float Visuals::viewModelFov() noexcept
@@ -595,6 +585,15 @@ void Visuals::updateColorCorrectionWeightsHook() const noexcept
 bool Visuals::svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept
 {
     return visualsConfig.thirdperson && hookReturnAddress == cameraThink;
+}
+
+bool Visuals::renderSmokeOverlayHook() const noexcept
+{
+    if (noSmoke || wireframeSmoke) {
+        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + WIN32_LINUX(0x588, 0x648)) = 0.0f;
+        return true;
+    }
+    return false;
 }
 
 void Visuals::updateEventListeners(bool forceRemove) noexcept

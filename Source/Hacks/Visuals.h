@@ -31,10 +31,8 @@ public:
     }
 
     bool isZoomOn() noexcept;
-    bool isSmokeWireframe() noexcept;
     bool isDeagleSpinnerOn() noexcept;
     bool shouldRemoveFog() noexcept;
-    bool shouldRemoveSmoke() noexcept;
     float viewModelFov() noexcept;
     float fov() noexcept;
     float farZ() noexcept;
@@ -65,6 +63,7 @@ public:
     void setDrawColorHook(ReturnAddress hookReturnAddress, int& alpha) const noexcept;
     void updateColorCorrectionWeightsHook() const noexcept;
     bool svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept;
+    bool renderSmokeOverlayHook() const noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
