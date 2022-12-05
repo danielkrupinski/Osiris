@@ -46,7 +46,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 #else
     : viewRenderBeams{ retSpoofGadgets.client, clientPatternFinder("\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05").add(6).relativeToAbsolute().deref<2>().get() },
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10").add(12).relativeToAbsolute().deref().get() },
-      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, reinterpret_cast<csgo::pod::InventoryManager*>(clientPatternFinder("\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55").add(3).relativeToAbsolute().get())) }
+      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55").add(3).relativeToAbsolute().as<csgo::pod::InventoryManager*>()) }
 #endif
 {
 #if IS_WIN32()
@@ -118,54 +118,54 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);
 
-    globalVars = reinterpret_cast<GlobalVars*>(SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().get());
-    itemSystemFn = reinterpret_cast<decltype(itemSystemFn)>( clientPatternFinder("\xE8????\x4D\x63\xEC").add(1).relativeToAbsolute().get());
+    globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().as<GlobalVars*>();
+    itemSystemFn = clientPatternFinder("\xE8????\x4D\x63\xEC").add(1).relativeToAbsolute().as<decltype(itemSystemFn)>();
 
-    isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(clientPatternFinder("\xE8????\x84\xC0\x44\x89\xE2").add(1).relativeToAbsolute().get());
-    lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0").get());
-    getDecoratedPlayerName = reinterpret_cast<decltype(getDecoratedPlayerName)>(clientPatternFinder("\xE8????\x8B\x33\x4C\x89\xF7").add(1).relativeToAbsolute().get());
+    isOtherEnemy = clientPatternFinder("\xE8????\x84\xC0\x44\x89\xE2").add(1).relativeToAbsolute().as<decltype(isOtherEnemy)>();
+    lineGoesThroughSmoke = clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x30\x66\x0F\xD6\x45\xD0").as<decltype(lineGoesThroughSmoke)>();
+    getDecoratedPlayerName = clientPatternFinder("\xE8????\x8B\x33\x4C\x89\xF7").add(1).relativeToAbsolute().as<decltype(getDecoratedPlayerName)>();
 
-    hud = reinterpret_cast<decltype(hud)>(clientPatternFinder("\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8").add(4).relativeToAbsolute().get());
-    findHudElement = reinterpret_cast<decltype(findHudElement)>(clientPatternFinder("\xE8????\x48\x8D\x50\xE0").add(1).relativeToAbsolute().get());
+    hud = clientPatternFinder("\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8").add(4).relativeToAbsolute().get();
+    findHudElement = clientPatternFinder("\xE8????\x48\x8D\x50\xE0").add(1).relativeToAbsolute().as<decltype(findHudElement)>();
 
     submitReportFunction = clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get();
-    clientMode = reinterpret_cast<decltype(clientMode)>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().get());
-    input = reinterpret_cast<Input*>(SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().get());
-    playerResource = reinterpret_cast<PlayerResource**>(clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().get());
+    clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().as<decltype(clientMode)>();
+    input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<Input*>();
+    playerResource = clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().as<PlayerResource**>();
 
-    glowObjectManager = reinterpret_cast<decltype(glowObjectManager)>(clientPatternFinder("\xE8????\x4C\x89\xE7\x8B\x70\x20").add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
-    setClanTag = reinterpret_cast<decltype(setClanTag)>(enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().get());
+    glowObjectManager = clientPatternFinder("\xE8????\x4C\x89\xE7\x8B\x70\x20").add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<decltype(glowObjectManager)>();
+    setClanTag = enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().as<decltype(setClanTag)>();
     getEventDescriptor = enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get();
-    activeChannels = reinterpret_cast<ActiveChannels*>(enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().get());
-    channels = reinterpret_cast<Channel*>(enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().get());
-    keyValuesFromString = reinterpret_cast<decltype(keyValuesFromString)>(clientPatternFinder("\xE8????\x48\x89\xDF\x48\x89\x45\xE0").add(1).relativeToAbsolute().get());
-    keyValuesFindKey = reinterpret_cast<decltype(keyValuesFindKey)>(clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().get());
-    keyValuesSetString = reinterpret_cast<decltype(keyValuesSetString)>(clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().get());
+    activeChannels = enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().as<ActiveChannels*>();
+    channels = enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().as<Channel*>();
+    keyValuesFromString = clientPatternFinder("\xE8????\x48\x89\xDF\x48\x89\x45\xE0").add(1).relativeToAbsolute().get();
+    keyValuesFindKey = clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
+    keyValuesSetString = clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();
-    viewRender = reinterpret_cast<ViewRender*>(clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().get());
+    viewRender = clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().as<ViewRender*>();
     demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
     money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
     demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
-    clearHudWeapon = reinterpret_cast<decltype(clearHudWeapon)>(clientPatternFinder("\xE8????\xC6\x45\xB8\x01").add(1).relativeToAbsolute().get());
-    equipWearable = reinterpret_cast<decltype(equipWearable)>(clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07").get());
-    setAbsOrigin = reinterpret_cast<decltype(setAbsOrigin)>(clientPatternFinder("\xE8????\x49\x8B\x07\x31\xF6").add(1).relativeToAbsolute().get());
-    plantedC4s = reinterpret_cast<decltype(plantedC4s)>(clientPatternFinder("\x48\x8D\x3D????\x42\xC6\x44\x28").add(3).relativeToAbsolute().get());
-    gameRules = reinterpret_cast<csgo::pod::Entity**>(clientPatternFinder("\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06").add(3).relativeToAbsolute().deref().get());
-    dispatchSound = reinterpret_cast<int*>(enginePatternFinder("\x74\x10\xE8????\x48\x8B\x35").add(3).get());
-    predictionRandomSeed = reinterpret_cast<int*>(clientPatternFinder("\x41\x8D\x56\xFF\x31\xC9").add(-14).relativeToAbsolute().deref().get());
-    registeredPanoramaEvents = reinterpret_cast<decltype(registeredPanoramaEvents)>(clientPatternFinder("\xE8????\x8B\x50\x10\x49\x89\xC6").add(1).relativeToAbsolute().add(12).relativeToAbsolute().get());
-    makePanoramaSymbolFn = reinterpret_cast<decltype(makePanoramaSymbolFn)>(clientPatternFinder("\xE8????\x0F\xB7\x45\xA0\x31\xF6").add(1).relativeToAbsolute().get());
-    moveData = reinterpret_cast<MoveData*>(clientPatternFinder("\x4C\x8B\x2D????\x0F\xB6\x93").add(3).relativeToAbsolute().deref<2>().get());
-    moveHelperPtr = reinterpret_cast<csgo::pod::MoveHelper*>(clientPatternFinder("\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38").add(3).relativeToAbsolute().deref<2>().get());
+    clearHudWeapon = clientPatternFinder("\xE8????\xC6\x45\xB8\x01").add(1).relativeToAbsolute().as<decltype(clearHudWeapon)>();
+    equipWearable = clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07").as<decltype(equipWearable)>();
+    setAbsOrigin = clientPatternFinder("\xE8????\x49\x8B\x07\x31\xF6").add(1).relativeToAbsolute().as<decltype(setAbsOrigin)>();
+    plantedC4s = clientPatternFinder("\x48\x8D\x3D????\x42\xC6\x44\x28").add(3).relativeToAbsolute().as<decltype(plantedC4s)>();
+    gameRules = clientPatternFinder("\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06").add(3).relativeToAbsolute().deref().as<csgo::pod::Entity**>();
+    dispatchSound = enginePatternFinder("\x74\x10\xE8????\x48\x8B\x35").add(3).as<int*>();
+    predictionRandomSeed = clientPatternFinder("\x41\x8D\x56\xFF\x31\xC9").add(-14).relativeToAbsolute().deref().as<int*>();
+    registeredPanoramaEvents = clientPatternFinder("\xE8????\x8B\x50\x10\x49\x89\xC6").add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<decltype(registeredPanoramaEvents)>();
+    makePanoramaSymbolFn = clientPatternFinder("\xE8????\x0F\xB7\x45\xA0\x31\xF6").add(1).relativeToAbsolute().as<decltype(makePanoramaSymbolFn)>();
+    moveData = clientPatternFinder("\x4C\x8B\x2D????\x0F\xB6\x93").add(3).relativeToAbsolute().deref<2>().as<MoveData*>();
+    moveHelperPtr = clientPatternFinder("\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38").add(3).relativeToAbsolute().deref<2>().as<csgo::pod::MoveHelper*>();
 
-    createEconItemSharedObject = reinterpret_cast<decltype(createEconItemSharedObject)>(clientPatternFinder("\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D").add(50).relativeToAbsolute().get());
-    panoramaMarshallHelper = reinterpret_cast<decltype(panoramaMarshallHelper)>(clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().get());
-    findOrCreateEconItemViewForItemID = reinterpret_cast<decltype(findOrCreateEconItemViewForItemID)>(clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().get());
-    createBaseTypeCache = reinterpret_cast<decltype(createBaseTypeCache)>(clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get());
+    createEconItemSharedObject = clientPatternFinder("\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D").add(50).relativeToAbsolute().as<decltype(createEconItemSharedObject)>();
+    panoramaMarshallHelper = clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().as<decltype(panoramaMarshallHelper)>();
+    findOrCreateEconItemViewForItemID = clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().as<decltype(findOrCreateEconItemViewForItemID)>();
+    createBaseTypeCache = clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get();
     insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
-    uiComponentInventory = reinterpret_cast<decltype(uiComponentInventory)>(clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().get());
+    uiComponentInventory = clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().as<decltype(uiComponentInventory)>();
     setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get();
 
-    localPlayer.init(reinterpret_cast<csgo::pod::Entity**>(clientPatternFinder("\x83\xFF\xFF\x48\x8B\x05").add(6).relativeToAbsolute().get()));
+    localPlayer.init(clientPatternFinder("\x83\xFF\xFF\x48\x8B\x05").add(6).relativeToAbsolute().as<csgo::pod::Entity**>());
 #endif
 }
