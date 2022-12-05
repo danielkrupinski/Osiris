@@ -85,7 +85,7 @@ void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* 
 
 int FASTCALL_CONV svCheatsGetInt(void* _this) noexcept
 {
-    return globalContext->svCheatsGetIntHook(_this, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->svCheatsGetIntHook(_this, RETURN_ADDRESS());
 }
 
 void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage stage) noexcept
@@ -100,7 +100,7 @@ int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr, ) void* filter, int entityI
 
 bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
-    return globalContext->shouldDrawFogHook(ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->shouldDrawFogHook(RETURN_ADDRESS());
 }
 
 bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
@@ -115,7 +115,7 @@ void STDCALL_CONV lockCursor() noexcept
 
 void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr, ) int r, int g, int b, int a) noexcept
 {
-    globalContext->setDrawColorHook(r, g, b, a, ReturnAddress{ RETURN_ADDRESS() });
+    globalContext->setDrawColorHook(r, g, b, a, RETURN_ADDRESS());
 }
 
 void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) ViewSetup* setup) noexcept
@@ -125,7 +125,7 @@ void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) ViewSetup* setup) noe
 
 int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, ReturnAddress{ RETURN_ADDRESS() }, FRAME_ADDRESS());
+    return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
 int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
@@ -140,12 +140,12 @@ void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr, ) void* viewSe
 
 const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
-    return globalContext->getDemoPlaybackParametersHook(ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->getDemoPlaybackParametersHook(RETURN_ADDRESS());
 }
 
 bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-    return globalContext->isPlayingDemoHook(ReturnAddress{ RETURN_ADDRESS() }, FRAME_ADDRESS());
+    return globalContext->isPlayingDemoHook(RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
 void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
@@ -165,22 +165,22 @@ void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr, ) bool update) no
 
 double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept
 {
-    return globalContext->getArgAsNumberHook(params, index, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->getArgAsNumberHook(params, index, RETURN_ADDRESS());
 }
 
 const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept
 {
-    return globalContext->getArgAsStringHook(params, index, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->getArgAsStringHook(params, index, RETURN_ADDRESS());
 }
 
 void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
 {
-    return globalContext->setResultIntHook(params, result, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->setResultIntHook(params, result, RETURN_ADDRESS());
 }
 
 unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
 {
-    return globalContext->getNumArgsHook(params, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->getNumArgsHook(params, RETURN_ADDRESS());
 }
 
 void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
@@ -202,7 +202,7 @@ bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMess
 
 void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
 {
-    return globalContext->allocKeyValuesMemoryHook(size, ReturnAddress{ RETURN_ADDRESS() });
+    return globalContext->allocKeyValuesMemoryHook(size, RETURN_ADDRESS());
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
