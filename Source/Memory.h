@@ -33,7 +33,6 @@ class KeyValues;
 class MoveData;
 class PlantedC4;
 class PlayerResource;
-class ViewRender;
 template <typename Key, typename Value>
 struct UtlMap;
 template <typename T>
@@ -45,6 +44,8 @@ struct GlobalVars;
 struct GlowObjectManager;
 struct PanoramaEventRegistration;
 struct Vector;
+
+namespace csgo { struct ViewRender; }
 
 namespace csgo::pod
 {
@@ -82,7 +83,7 @@ public:
     ReturnAddress insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
-    ViewRender* viewRender;
+    csgo::ViewRender* viewRender;
     ViewRenderBeams viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;

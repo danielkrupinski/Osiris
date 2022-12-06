@@ -71,7 +71,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
     dispatchSound = enginePatternFinder("\x74\x0B\xE8????\x8B\x3D").add(3).as<int*>();
     traceToExit = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x4C\xF3\x0F\x10\x75").get();
-    viewRender = clientPatternFinder("\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08").add(2).deref<2>().as<ViewRender*>();
+    viewRender = clientPatternFinder("\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08").add(2).deref<2>().as<csgo::ViewRender*>();
     drawScreenEffectMaterial = clientPatternFinder("\xE8????\x83\xC4\x0C\x8D\x4D\xF8").add(1).relativeToAbsolute().get();
     submitReportFunction = clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08").get();
     const auto tier0 = GetModuleHandleW(L"tier0");
@@ -142,7 +142,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesFindKey = clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
     keyValuesSetString = clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();
-    viewRender = clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().as<ViewRender*>();
+    viewRender = clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().as<csgo::ViewRender*>();
     demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
     money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
     demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
