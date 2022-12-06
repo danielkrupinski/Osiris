@@ -29,7 +29,6 @@ public:
 #endif
     }
 
-    bool shouldDisableModelOcclusion() noexcept;
     bool isRadarHackOn() noexcept;
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
@@ -81,6 +80,7 @@ public:
 
     bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const;
+    std::optional<std::pair<Vector, Vector>> listLeavesInBoxHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;

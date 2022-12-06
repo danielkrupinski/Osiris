@@ -46,6 +46,7 @@
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/WeaponSystem.h"
+#include <SDK/PODs/RenderableInfo.h>
 
 #include "../GUI.h"
 #include "../Helpers.h"
@@ -163,11 +164,6 @@ struct MiscConfig {
 
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
-
-bool Misc::shouldDisableModelOcclusion() noexcept
-{
-    return miscConfig.disableModelOcclusion;
-}
 
 bool Misc::isRadarHackOn() noexcept
 {
@@ -1280,6 +1276,26 @@ const DemoPlaybackParameters* Misc::getDemoPlaybackParametersHook(ReturnAddress 
     }
 
     return &demoPlaybackParameters;
+}
+
+std::optional<std::pair<Vector, Vector>> Misc::listLeavesInBoxHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const
+{
+    if (!miscConfig.disableModelOcclusion || returnAddress != memory->insertIntoTree)
+        return {};
+
+    const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948));
+    if (!info || !info->renderable)
+        return {};
+
+    const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>();
+    if (!ent || !Entity::from(retSpoofGadgets->client, ent).isPlayer())
+        return {};
+
+    constexpr float maxCoord = 16384.0f;
+    constexpr float minCoord = -maxCoord;
+    constexpr Vector min{ minCoord, minCoord, minCoord };
+    constexpr Vector max{ maxCoord, maxCoord, maxCoord };
+    return std::pair{ min, max };
 }
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
