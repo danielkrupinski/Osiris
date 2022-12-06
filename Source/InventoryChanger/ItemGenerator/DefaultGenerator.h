@@ -37,8 +37,8 @@ public:
 
     [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const game_items::Item& item) const
     {
-        if (item.isCaseKey())
-            return { .tradableAfterDate = static_cast<std::uint32_t>(SystemClock::to_time_t(getTradableAfterWeekDate())) };
+        if (item.isCaseKey() || (item.isCrate() && gameItemStorage.getTournamentEventID(item) == csgo::Tournament::IemRio2022))
+            return { .tradableAfterDate = static_cast<std::uint32_t>(SystemClock::to_time_t(getTradableAfterWeekDate())), .purchasedFromStore = true };
         return {};
     }
 

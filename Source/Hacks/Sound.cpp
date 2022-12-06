@@ -6,14 +6,13 @@
 #include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
-#include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/LocalPlayer.h"
 
-#include "Sound.h"
+#include <Interfaces/ClientInterfaces.h>
 
-#if OSIRIS_SOUND()
+#include "Sound.h"
 
 static struct SoundConfig {
     int chickenVolume = 100;
@@ -31,7 +30,7 @@ static struct SoundConfig {
 void Sound::modulateSound(const ClientInterfaces& clientInterfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept
 {
     auto modulateVolume = [&](int SoundConfig::Player::* proj) {
-        if (const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(entityIndex) }; localPlayer && entity.getThis() != 0 && entity.isPlayer()) {
+        if (const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(entityIndex)); localPlayer && entity.getPOD() != nullptr && entity.isPlayer()) {
             if (entityIndex == localPlayer.get().getNetworkable().index())
                 volume *= std::invoke(proj, soundConfig.players[0]) / 100.0f;
             else if (!entity.isOtherEnemy(memory, localPlayer.get()))
@@ -138,17 +137,3 @@ void Sound::fromJson(const json& j) noexcept
     read(j, "Chicken volume", soundConfig.chickenVolume);
     read(j, "Players", soundConfig.players);
 }
-
-#else
-void Sound::modulateSound(std::string_view name, int entityIndex, float& volume) noexcept {}
-
-// GUI
-void Sound::menuBarItem() noexcept {}
-void Sound::tabItem() noexcept {}
-void Sound::drawGUI(bool contentOnly) noexcept {}
-
-// Config
-json Sound::toJson() noexcept { return {}; }
-void Sound::fromJson(const json& j) noexcept {}
-void Sound::resetConfig() noexcept {}
-#endif

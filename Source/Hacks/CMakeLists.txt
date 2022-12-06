@@ -1,6 +1,5 @@
 target_sources(OsirisOBJ PRIVATE
   Aimbot.cpp
-  AntiAim.cpp
   Backtrack.cpp
   Chams.cpp
   EnginePrediction.cpp

@@ -17,5 +17,5 @@ namespace csgo::pod { struct PhysicsSurfaceProps; }
 
 class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, csgo::pod::PhysicsSurfaceProps> {
 public:
-    VIRTUAL_METHOD2_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
+    VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
 };

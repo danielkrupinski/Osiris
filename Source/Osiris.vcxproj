@@ -111,11 +111,11 @@
     </ClCompile>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigStructs.cpp" />
+    <ClCompile Include="Endpoints.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GlobalContext.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
-    <ClCompile Include="Hacks\AntiAim.cpp" />
     <ClCompile Include="Hacks\Backtrack.cpp" />
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
@@ -125,6 +125,10 @@
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="Helpers\PatternFinder.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)Helpers/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)Helpers/</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="Hooks\MinHook.cpp" />
     <ClCompile Include="Hooks\VmtHook.cpp" />
     <ClCompile Include="Hooks\VmtSwap.cpp" />
@@ -166,6 +170,7 @@
     <ClCompile Include="SDK\KeyValues.cpp" />
     <ClCompile Include="SDK\Utils.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Utils\PatternFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h" />
@@ -191,26 +196,44 @@
     <ClInclude Include="..\Dependencies\nlohmann\json.hpp" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
+    <ClInclude Include="Config\Configurable.h" />
+    <ClInclude Include="Config\LoadConfigurator.h" />
+    <ClInclude Include="Config\ResetConfigurator.h" />
+    <ClInclude Include="Config\SaveConfigurator.h" />
+    <ClInclude Include="Endpoints.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GlobalContext.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
-    <ClInclude Include="Hacks\AntiAim.h" />
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
+    <ClInclude Include="Hacks\Features.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Sound.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
+    <ClInclude Include="Hacks\Visuals\ColorCorrection.h" />
+    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h" />
+    <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h" />
+    <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="Helpers\PatternFinder.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />
     <ClInclude Include="imguiCustom.h" />
     <ClInclude Include="InputUtil.h" />
+    <ClInclude Include="Interfaces\ClientInterfaces.h" />
+    <ClInclude Include="Interfaces\ClientInterfacesPODs.h" />
+    <ClInclude Include="Interfaces\EngineInterfaces.h" />
+    <ClInclude Include="Interfaces\EngineInterfacesPODs.h" />
+    <ClInclude Include="Interfaces\InterfaceFinder.h" />
+    <ClInclude Include="Interfaces\InterfaceFinderWithLog.h" />
+    <ClInclude Include="Interfaces\OtherInterfaces.h" />
+    <ClInclude Include="Interfaces\OtherInterfacesPODs.h" />
     <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
     <ClInclude Include="InventoryChanger\Backend\Item.h" />
     <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
@@ -236,6 +259,8 @@
     <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
     <ClInclude Include="InventoryChanger\Backend\StorageUnitManager.h" />
     <ClInclude Include="InventoryChanger\Backend\XRayScanner.h" />
+    <ClInclude Include="InventoryChanger\EconItemFunctions.h" />
+    <ClInclude Include="InventoryChanger\EconItemViewFunctions.h" />
     <ClInclude Include="InventoryChanger\EconRarities.h" />
     <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h" />
     <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h" />
@@ -264,10 +289,14 @@
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Platform\CallingConventions.h" />
+    <ClInclude Include="Platform\CallStack.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
     <ClInclude Include="Platform\IsPlatform.h" />
+    <ClInclude Include="Platform\PlatformSpecific.h" />
     <ClInclude Include="Platform\RetSpoofInvoker.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
+    <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h" />
     <ClInclude Include="Platform\Windows\RetSpoofInvoker.h" />
@@ -276,11 +305,14 @@
     <ClInclude Include="Resources\avatar_tt.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="RetSpoofGadgets.h" />
-    <ClInclude Include="SafeAddress.h" />
+    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\Constants\ClassId.h" />
+    <ClInclude Include="SDK\Constants\ConVarNames.h" />
+    <ClInclude Include="SDK\Constants\DllNames.h" />
+    <ClInclude Include="SDK\Constants\EconItemFlags.h" />
     <ClInclude Include="SDK\Constants\FrameStage.h" />
     <ClInclude Include="SDK\Constants\ItemId.h" />
     <ClInclude Include="SDK\Constants\PaintkitConditionChances.h" />
@@ -302,13 +334,14 @@
     <ClInclude Include="SDK\Engine.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
-    <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\FileSystem.h" />
     <ClInclude Include="SDK\GameEvent.h" />
     <ClInclude Include="SDK\GameMovement.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\GlowObjectManager.h" />
+    <ClInclude Include="SDK\Helpers\EconItemFunctions.h" />
+    <ClInclude Include="SDK\Helpers\EconItemViewFunctions.h" />
     <ClInclude Include="SDK\Inconstructible.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\InputSystem.h" />
@@ -320,6 +353,7 @@
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\MaterialSystem.h" />
     <ClInclude Include="SDK\matrix3x4.h" />
+    <ClInclude Include="SDK\MemAlloc.h" />
     <ClInclude Include="SDK\ModelInfo.h" />
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\MoveHelper.h" />
@@ -329,8 +363,13 @@
     <ClInclude Include="SDK\PanoramaMarshallHelper.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\PlantedC4.h" />
-    <ClInclude Include="SDK\Platform.h" />
     <ClInclude Include="SDK\PlayerResource.h" />
+    <ClInclude Include="SDK\PODs\ConVar.h" />
+    <ClInclude Include="SDK\PODs\EconItem.h" />
+    <ClInclude Include="SDK\PODs\ItemSchema.h" />
+    <ClInclude Include="SDK\PODs\PaintKit.h" />
+    <ClInclude Include="SDK\PODs\RenderableInfo.h" />
+    <ClInclude Include="SDK\PODs\SharedObjectTypeCache.h" />
     <ClInclude Include="SDK\Prediction.h" />
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\Sound.h" />
@@ -339,6 +378,7 @@
     <ClInclude Include="SDK\Steam.h" />
     <ClInclude Include="SDK\StudioRender.h" />
     <ClInclude Include="SDK\Surface.h" />
+    <ClInclude Include="SDK\UiComponentInventory.h" />
     <ClInclude Include="SDK\UserCmd.h" />
     <ClInclude Include="SDK\UtlMap.h" />
     <ClInclude Include="SDK\UtlMemory.h" />
@@ -356,6 +396,11 @@
     <ClInclude Include="SmallVariant.h" />
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Utils\FlagsBuilder.h" />
+    <ClInclude Include="Utils\PatternFinder.h" />
+    <ClInclude Include="Utils\ReturnAddress.h" />
+    <ClInclude Include="Utils\SafeAddress.h" />
+    <ClInclude Include="Utils\TypeHint.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

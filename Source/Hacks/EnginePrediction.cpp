@@ -1,6 +1,5 @@
 #include <memory>
 
-#include "../Interfaces.h"
 #include "../Memory.h"
 
 #include "../SDK/Entity.h"
@@ -11,6 +10,7 @@
 #include "../SDK/Prediction.h"
 
 #include "EnginePrediction.h"
+#include <Interfaces/ClientInterfaces.h>
 
 static int localPlayerFlags;
 
@@ -29,11 +29,11 @@ void EnginePrediction::run(const ClientInterfaces& clientInterfaces, const Memor
     memory.globalVars->currenttime = memory.globalVars->serverTime();
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
-    memory.moveHelper().setHost(localPlayer.get().getThis());
-    clientInterfaces.getPrediction().setupMove(localPlayer.get().getThis(), cmd, memory.moveHelper().getPOD(), memory.moveData);
-    clientInterfaces.getGameMovement().processMovement(localPlayer.get().getThis(), memory.moveData);
-    clientInterfaces.getPrediction().finishMove(localPlayer.get().getThis(), cmd, memory.moveData);
-    memory.moveHelper().setHost(0);
+    memory.moveHelper().setHost(localPlayer.get().getPOD());
+    clientInterfaces.getPrediction().setupMove(localPlayer.get().getPOD(), cmd, memory.moveHelper().getPOD(), memory.moveData);
+    clientInterfaces.getGameMovement().processMovement(localPlayer.get().getPOD(), memory.moveData);
+    clientInterfaces.getPrediction().finishMove(localPlayer.get().getPOD(), cmd, memory.moveData);
+    memory.moveHelper().setHost(nullptr);
 
     *memory.predictionRandomSeed = -1;
 

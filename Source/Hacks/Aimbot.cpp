@@ -7,7 +7,6 @@
 #include "Aimbot.h"
 #include "../Config.h"
 #include "../InputUtil.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "Misc.h"
 #include "../SDK/Engine.h"
@@ -22,6 +21,9 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 
+#include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
+
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     return ((destination - source).toAngle() - viewAngles).normalize();
@@ -30,7 +32,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
     bool result = false;
-#if defined(_WIN32) && (!defined(__clang__) || !defined(_DEBUG))
+#if IS_WIN32() && (!defined(__clang__) || !defined(_DEBUG))
     const auto traceToExitFn = memory.traceToExit;
     __asm {
         push 0
@@ -55,7 +57,7 @@ static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vec
     return result;
 }
 
-static float handleBulletPenetration(const Interfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+static float handleBulletPenetration(const OtherInterfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
@@ -88,7 +90,7 @@ static float handleBulletPenetration(const Interfaces& interfaces, const Memory&
     return damage;
 }
 
-static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
@@ -103,19 +105,19 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const Interfaces& 
 
     while (damage >= 1.0f && hitsLeft) {
         Trace trace;
-        engineInterfaces.engineTrace.traceRay({ start, destination }, 0x4600400B, localPlayer.get().getThis(), trace);
+        engineInterfaces.engineTrace().traceRay({ start, destination }, 0x4600400B, localPlayer.get().getPOD(), trace);
 
-        if (!allowFriendlyFire && trace.entity && Entity{ retSpoofGadgets.client, trace.entity }.isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity{ retSpoofGadgets.client, trace.entity }))
+        if (!allowFriendlyFire && trace.entity && Entity::from(retSpoofGadgets->client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity::from(retSpoofGadgets->client, trace.entity)))
             return false;
 
         if (trace.fraction == 1.0f)
             break;
 
-        if (trace.entity == entity.getThis() && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
+        if (trace.entity == entity.getPOD() && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
             damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
-            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, Entity{ retSpoofGadgets.client, trace.entity }.hasHelmet()))
-                damage -= (Entity{ retSpoofGadgets.client, trace.entity }.armor() < damage * armorRatio / 2.0f ? Entity{ retSpoofGadgets.client, trace.entity }.armor() * 4.0f : damage) * (1.0f - armorRatio);
+            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, Entity::from(retSpoofGadgets->client, trace.entity).hasHelmet()))
+                damage -= (Entity::from(retSpoofGadgets->client, trace.entity).armor() < damage * armorRatio / 2.0f ? Entity::from(retSpoofGadgets->client, trace.entity).armor() * 4.0f : damage) * (1.0f - armorRatio);
 
             return damage >= minDamage;
         }
@@ -140,13 +142,13 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
-    if (activeWeapon.getThis() == 0 || !activeWeapon.clip())
+    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
+    if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip())
         return;
 
     if (localPlayer.get().shotsFired() > 0 && !activeWeapon.isFullAuto())
@@ -184,13 +186,13 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
         const auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch() : Vector{ };
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
-            if (entity.getThis() == 0 || entity.getThis() == localPlayer.get().getThis() || entity.getNetworkable().isDormant() || !entity.isAlive()
+            const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
+            if (entity.getPOD() == nullptr || entity.getPOD() == localPlayer.get().getPOD() || entity.getNetworkable().isDormant() || !entity.isAlive()
                 || !entity.isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity.gunGameImmunity())
                 continue;
 
             for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
-                const auto bonePosition = entity.getBonePosition(memory, config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
+                const auto bonePosition = entity.getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
                 const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 
                 const auto fov = std::hypot(angle.x, angle.y);
@@ -200,7 +202,7 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
                 if (!config.aimbot[weaponIndex].ignoreSmoke && memory.lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
 
-                if (!entity.isVisible(engineInterfaces.engineTrace, memory, bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(engineInterfaces, interfaces, memory, entity, bonePosition, activeWeapon.getWeaponData(), config.aimbot[weaponIndex].killshot ? entity.health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
+                if (!entity.isVisible(engineInterfaces.engineTrace(), bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(engineInterfaces, interfaces, memory, entity, bonePosition, activeWeapon.getWeaponData(), config.aimbot[weaponIndex].killshot ? entity.health() : config.aimbot[weaponIndex].minDamage, config.aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 if (fov < bestFov) {

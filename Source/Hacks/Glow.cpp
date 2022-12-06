@@ -13,7 +13,6 @@
 #include "../InputUtil.h"
 #include "Glow.h"
 #include "../Helpers.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include <SDK/Constants/ClassId.h>
 #include "../SDK/ClientClass.h"
@@ -28,26 +27,9 @@
 #include "../SDK/Vector.h"
 #include "../imguiCustom.h"
 
-#if OSIRIS_GLOW()
+#include <Interfaces/ClientInterfaces.h>
 
-struct GlowItem : Color4 {
-    bool enabled = false;
-    bool healthBased = false;
-    int style = 0;
-};
-
-struct PlayerGlow {
-    GlowItem all, visible, occluded;
-};
-
-static std::unordered_map<std::string, PlayerGlow> playerGlowConfig;
-static std::unordered_map<std::string, GlowItem> glowConfig;
-static KeyBindToggle glowToggleKey;
-static KeyBind glowHoldKey;
-
-static std::vector<std::pair<int, int>> customGlowEntities;
-
-void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
@@ -65,8 +47,8 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
-        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
-        if (entity.getThis() == 0 || entity.getNetworkable().isDormant())
+        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
+        if (entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
         switch (entity.getNetworkable().getClientClass()->classId) {
@@ -81,8 +63,8 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::SnowballProjectile:
         case ClassId::Hostage:
         case ClassId::CSRagdoll:
-            if (!memory.glowObjectManager->hasGlowEffect(entity.getThis())) {
-                if (auto index{ memory.glowObjectManager->registerGlowObject(entity.getThis()) }; index != -1)
+            if (!memory.glowObjectManager->hasGlowEffect(entity.getPOD())) {
+                if (auto index{ memory.glowObjectManager->registerGlowObject(entity.getPOD()) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
             break;
@@ -94,9 +76,9 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-        const Entity entity{ retSpoofGadgets.client, glowobject.entity };
+        const auto entity = Entity::from(retSpoofGadgets->client, glowobject.entity);
 
-        if (glowobject.isUnused() || entity.getThis() == 0 || entity.getNetworkable().isDormant())
+        if (glowobject.isUnused() || entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
         auto applyGlow = [&glowobject, &memory](const GlowItem& glow, int health = 0) noexcept
@@ -117,7 +99,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
             }
         };
 
-        auto applyPlayerGlow = [applyGlow, &memory, &engineInterfaces](const std::string& name, const Entity& entity) noexcept {
+        auto applyPlayerGlow = [this, applyGlow, &memory, &engineInterfaces](const std::string& name, const Entity& entity) noexcept {
             const auto& cfg = playerGlowConfig[name];
             if (cfg.all.enabled) 
                 applyGlow(cfg.all, entity.health());
@@ -131,11 +113,11 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::CSPlayer:
             if (!entity.isAlive())
                 break;
-            if (const Entity activeWeapon{ retSpoofGadgets.client, entity.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
+            if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, entity.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
                 applyPlayerGlow("Planting", entity);
             else if (entity.isDefusing())
                 applyPlayerGlow("Defusing", entity);
-            else if (entity.getThis() == localPlayer.get().getThis())
+            else if (entity.getPOD() == localPlayer.get().getPOD())
                 applyGlow(glow["Local Player"], entity.health());
             else if (entity.isOtherEnemy(memory, localPlayer.get()))
                 applyPlayerGlow("Enemies", entity);
@@ -254,7 +236,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
+static void to_json(json& j, const Glow::GlowItem& o, const Glow::GlowItem& dummy = {})
 {
     to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
@@ -262,7 +244,7 @@ static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
     WRITE("Style", style);
 }
 
-static void to_json(json& j, const PlayerGlow& o, const PlayerGlow& dummy = {})
+static void to_json(json& j, const Glow::PlayerGlow& o, const Glow::PlayerGlow& dummy = {})
 {
     WRITE("All", all);
     WRITE("Visible", visible);
@@ -279,7 +261,7 @@ json Glow::toJson() noexcept
     return j;
 }
 
-static void from_json(const json& j, GlowItem& g)
+static void from_json(const json& j, Glow::GlowItem& g)
 {
     from_json(j, static_cast<Color4&>(g));
 
@@ -288,7 +270,7 @@ static void from_json(const json& j, GlowItem& g)
     read(j, "Style", g.style);
 }
 
-static void from_json(const json& j, PlayerGlow& g)
+static void from_json(const json& j, Glow::PlayerGlow& g)
 {
     read<value_t::object>(j, "All", g.all);
     read<value_t::object>(j, "Visible", g.visible);
@@ -310,21 +292,3 @@ void Glow::resetConfig() noexcept
     glowToggleKey = {};
     glowHoldKey = {};
 }
-
-#else
-
-void Glow::render() noexcept {}
-void Glow::clearCustomObjects() noexcept {}
-void Glow::updateInput() noexcept {}
-
-// GUI
-void Glow::menuBarItem() noexcept {}
-void Glow::tabItem() noexcept {}
-void Glow::drawGUI(bool contentOnly) noexcept {}
-
-// Config
-json Glow::toJson() noexcept { return {}; }
-void Glow::fromJson(const json& j) noexcept {}
-void Glow::resetConfig() noexcept {}
-
-#endif

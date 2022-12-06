@@ -6,11 +6,13 @@
 #include <system_error>
 #include <tuple>
 
-#ifdef _WIN32
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 #include <Windows.h>
 #include <shellapi.h>
 #include <ShlObj.h>
-#elif __linux__
+#elif IS_LINUX()
 #include <unistd.h>
 #endif
 
@@ -19,7 +21,6 @@
 #include "imgui/imgui.h"
 
 #include "Config.h"
-#include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
 #include "InventoryChanger/InventoryChanger.h"
@@ -27,8 +28,11 @@
 #include "Hacks/Sound.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Misc.h"
+#include <Config/LoadConfigurator.h>
+#include <Config/ResetConfigurator.h>
+#include <Config/SaveConfigurator.h>
 
-#ifdef _WIN32
+#if IS_WIN32()
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
     const wchar_t* const fontName = reinterpret_cast<const ENUMLOGFONTEXW*>(lpelfe)->elfFullName;
@@ -64,7 +68,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 [[nodiscard]] static std::filesystem::path buildConfigsFolderPath() noexcept
 {
     std::filesystem::path path;
-#ifdef _WIN32
+#if IS_WIN32()
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         CoTaskMemFree(pathToDocuments);
@@ -78,13 +82,13 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(const Interfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(interfaces, memory, u8"default.json", false);
+    load(inventoryChanger, glow, backtrack, visuals, interfaces, memory, u8"default.json", false);
 
-#ifdef _WIN32
+#if IS_WIN32()
     LOGFONTW logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
@@ -288,12 +292,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(const Interfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(interfaces, memory, configs[id].c_str(), incremental);
+    load(inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(const Interfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -306,7 +310,7 @@ void Config::load(const Interfaces& interfaces, const Memory& memory, const char
     }
 
     if (!incremental)
-        reset(interfaces, memory);
+        reset(inventoryChanger, glow, backtrack, visuals, interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -327,11 +331,11 @@ void Config::load(const Interfaces& interfaces, const Memory& memory, const char
 
     read<value_t::object>(j, "Style", style);
 
-    AntiAim::fromJson(j["Anti aim"]);
-    Backtrack::fromJson(j["Backtrack"]);
-    Glow::fromJson(j["Glow"]);
-    Visuals::fromJson(j["Visuals"]);
-    fromJson(j["Inventory Changer"], inventory_changer::InventoryChanger::instance(interfaces, memory));
+    LoadConfigurator backtrackConfigurator{ j["Backtrack"] };
+    backtrack.configure(backtrackConfigurator);
+    glow.fromJson(j["Glow"]);
+    visuals.fromJson(j["Visuals"]);
+    fromJson(j["Inventory Changer"], inventoryChanger);
     Sound::fromJson(j["Sound"]);
     Misc::fromJson(j["Misc"]);
 }
@@ -525,7 +529,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -537,18 +541,19 @@ void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id)
     j["Triggerbot"] = triggerbot;
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
-    j["Backtrack"] = Backtrack::toJson();
-    j["Anti aim"] = AntiAim::toJson();
-    j["Glow"] = Glow::toJson();
+    SaveConfigurator backtrackConfigurator;
+    backtrack.configure(backtrackConfigurator);
+    j["Backtrack"] = backtrackConfigurator.getJson();
+    j["Glow"] = glow.toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
     j["Sound"] = Sound::toJson();
-    j["Visuals"] = Visuals::toJson();
+    j["Visuals"] = visuals.toJson();
     j["Misc"] = Misc::toJson();
     j["Style"] = style;
-    j["Inventory Changer"] = toJson(interfaces, memory, inventory_changer::InventoryChanger::instance(interfaces, memory));
+    j["Inventory Changer"] = toJson(interfaces, memory, inventoryChanger);
 
     removeEmptyObjects(j);
 
@@ -557,11 +562,11 @@ void Config::save(const Interfaces& interfaces, const Memory& memory, size_t id)
         out << std::setw(2) << j;
 }
 
-void Config::add(const Interfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(interfaces, memory, configs.size() - 1);
+        save(inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -579,7 +584,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -587,11 +592,11 @@ void Config::reset(const Interfaces& interfaces, const Memory& memory) noexcept
     streamProofESP = { };
     style = { };
 
-    AntiAim::resetConfig();
-    Backtrack::resetConfig();
-    Glow::resetConfig();
-    Visuals::resetConfig();
-    inventory_changer::InventoryChanger::instance(interfaces, memory).reset(interfaces, memory);
+    ResetConfigurator configurator;
+    backtrack.configure(configurator);
+    glow.resetConfig();
+    visuals.resetConfig();
+    inventoryChanger.reset(interfaces, memory);
     Sound::resetConfig();
     Misc::resetConfig();
 }
@@ -615,7 +620,7 @@ void Config::createConfigDir() const noexcept
 void Config::openConfigDir() const noexcept
 {
     createConfigDir();
-#ifdef _WIN32
+#if IS_WIN32()
     ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
     if (fork() == 0) {
@@ -630,7 +635,7 @@ void Config::scheduleFontLoad(const std::string& name) noexcept
     scheduledFonts.push_back(name);
 }
 
-#ifdef _WIN32
+#if IS_WIN32()
 static auto getFontData(const std::string& fontName) noexcept
 {
     HFONT font = CreateFontA(0, 0, 0, 0,
@@ -693,7 +698,7 @@ bool Config::loadScheduledFonts() noexcept
             continue;
         }
 
-#ifdef _WIN32
+#if IS_WIN32()
         const auto [fontData, fontDataSize] = getFontData(fontName);
         if (fontDataSize == GDI_ERROR)
             continue;

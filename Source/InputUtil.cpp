@@ -2,7 +2,9 @@
 #include <array>
 #include <string_view>
 
-#ifdef _WIN32
+#include "Platform/IsPlatform.h"
+
+#if IS_WIN32()
 #include <Windows.h>
 #else
 #include <SDL2/SDL.h>
@@ -11,7 +13,7 @@
 #include "imgui/imgui.h"
 
 #include "InputUtil.h"
-#include "SDK/Platform.h"
+#include <Platform/PlatformSpecific.h>
 
 struct Key {
     constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }

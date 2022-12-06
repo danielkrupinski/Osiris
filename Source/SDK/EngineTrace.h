@@ -10,22 +10,22 @@ struct Ray {
     Vector start{ };
     float pad{ };
     Vector delta{ };
-#ifdef _WIN32
+#if IS_WIN32()
     std::byte pad2[40]{ };
-#elif __linux__
+#elif IS_LINUX()
     std::byte pad2[44]{ };
 #endif
     bool isRay{ true };
     bool isSwept{ };
 };
 
-class Entity;
+namespace csgo::pod { struct Entity; }
 
 struct TraceFilter {
-    TraceFilter(std::uintptr_t entity) : skip{ entity } { }
-    virtual bool shouldHitEntity(std::uintptr_t entity, int) { return entity != skip; }
+    TraceFilter(csgo::pod::Entity* entity) : skip{ entity } { }
+    virtual bool shouldHitEntity(csgo::pod::Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    std::uintptr_t skip;
+    csgo::pod::Entity* skip;
 };
 
 namespace HitGroup {
@@ -91,14 +91,14 @@ struct Trace {
     } surface;
     int hitgroup;
     std::byte pad2[4];
-    std::uintptr_t entity;
+    csgo::pod::Entity* entity;
     int hitbox;
 };
 
-class EngineTrace : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
+namespace csgo::pod { struct EngineTrace; }
 
-    VIRTUAL_METHOD2(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (std::cref(absPosition), contentsMask, nullptr))
-    VIRTUAL_METHOD2(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (std::cref(ray), mask, std::cref(filter), std::ref(trace)))
+class EngineTrace : public VirtualCallableFromPOD<EngineTrace, csgo::pod::EngineTrace> {
+public:
+    VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (std::cref(absPosition), contentsMask, nullptr))
+    VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (std::cref(ray), mask, std::cref(filter), std::ref(trace)))
 };

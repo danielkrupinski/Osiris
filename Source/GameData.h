@@ -12,7 +12,6 @@
 
 #include "Texture.h"
 
-#include "Interfaces.h"
 #include "Memory.h"
 
 struct LocalPlayerData;
@@ -28,9 +27,11 @@ struct InfernoData;
 
 struct Matrix4x4;
 
+class ClientInterfaces;
+
 namespace GameData
 {
-    void update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
     void clearUnusedAvatars() noexcept;
@@ -113,13 +114,13 @@ struct ProjectileData : BaseData {
 enum class Team;
 
 struct PlayerData : BaseData {
-    PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
+    PlayerData(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
     PlayerData(const PlayerData&) = delete;
     PlayerData& operator=(const PlayerData&) = delete;
     PlayerData(PlayerData&&) = default;
     PlayerData& operator=(PlayerData&&) = default;
 
-    void update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
+    void update(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept;
     [[nodiscard]] ImTextureID getAvatarTexture() const noexcept;
     [[nodiscard]] float fadingAlpha(const Memory& memory) const noexcept;
 
@@ -144,7 +145,7 @@ struct PlayerData : BaseData {
 };
 
 struct WeaponData : BaseData {
-    WeaponData(const Interfaces& interfaces, const Entity& entity) noexcept;
+    WeaponData(const OtherInterfaces& interfaces, const Entity& entity) noexcept;
 
     int clip;
     int reserveAmmo;

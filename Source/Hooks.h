@@ -4,10 +4,10 @@
 #include <optional>
 #include <type_traits>
 
-#ifdef _WIN32
+#if IS_WIN32()
 #include <d3d9.h>
 #include <Windows.h>
-#elif __linux__
+#elif IS_LINUX()
 #include "SdlFunctions.h"
 struct SDL_Window;
 union SDL_Event;
@@ -16,17 +16,19 @@ union SDL_Event;
 #include "Hooks/MinHook.h"
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
-
-#include "SDK/Platform.h"
-
-#include "Interfaces.h"
+#include <Platform/IsPlatform.h>
 #include "Memory.h"
+#include "InventoryChanger/InventoryChanger.h"
 
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
+class ClientInterfaces;
+class OtherInterfaces;
+class Glow;
+class Visuals;
 
-#ifdef _WIN32
+#if IS_WIN32()
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
 using HookType = MinHook;
 #else
@@ -35,7 +37,7 @@ using HookType = VmtSwap;
 
 class Hooks {
 public:
-#ifdef _WIN32
+#if IS_WIN32()
     Hooks(HMODULE moduleHandle) noexcept;
 
     WNDPROC originalWndProc;
@@ -50,8 +52,8 @@ public:
     std::add_pointer_t<void(SDL_Window*)> swapWindow;
 #endif
 
-    void install(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
-    void uninstall(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void install(csgo::pod::Client* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void uninstall(Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
     void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;
@@ -69,11 +71,11 @@ public:
     HookType viewRender;
     HookType svCheats;
 
-#ifdef _WIN32
+#if IS_WIN32()
     HookType keyValuesSystem;
 #endif
 private:
-#ifdef _WIN32
+#if IS_WIN32()
     HMODULE moduleHandle;
     HWND window;
 #endif

@@ -5,7 +5,6 @@
 
 #include "AnimState.h"
 #include "Inconstructible.h"
-#include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
@@ -13,10 +12,15 @@
 
 #include "../Netvars.h"
 
+#include <Interfaces/EngineInterfaces.h>
 #include <Platform/IsPlatform.h>
+#include <Platform/PlatformSpecific.h>
+
+namespace csgo::pod { struct EconItemView; }
 
 class Memory;
-
+class EngineTrace;
+class OtherInterfaces;
 class EconItemView;
 
 class matrix3x4;
@@ -57,81 +61,83 @@ class Collideable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(const Vector&, obbMins, 1, (), ())
-    VIRTUAL_METHOD2(const Vector&, obbMaxs, 2, (), ())
+    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), ())
+    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), ())
 };
 
 class Networkable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-    VIRTUAL_METHOD2(void, release, 1, (), ())
-    VIRTUAL_METHOD2(ClientClass*, getClientClass, 2, (), ())
-    VIRTUAL_METHOD2(void, onDataChanged, 5, (int updateType), (updateType))
-    VIRTUAL_METHOD2(void, preDataUpdate, 6, (int updateType), (updateType))
-    VIRTUAL_METHOD2(void, postDataUpdate, 7, (int updateType), (updateType))
-    VIRTUAL_METHOD2(bool, isDormant, 9, (), ())
-    VIRTUAL_METHOD2(int, index, 10, (), ())
-    VIRTUAL_METHOD2(void, setDestroyedOnRecreateEntities, 13, (), ())
+    VIRTUAL_METHOD(void, release, 1, (), ())
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), ())
+    VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (updateType))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), ())
+    VIRTUAL_METHOD(int, index, 10, (), ())
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), ())
 };
 
 class Renderable : private VirtualCallable {
 public:
     using VirtualCallable::VirtualCallable;
 
-#ifdef _WIN32
-    VIRTUAL_METHOD2(bool, shouldDraw, 3, (), ())
+#if IS_WIN32()
+    VIRTUAL_METHOD(bool, shouldDraw, 3, (), ())
 #endif
 
-    VIRTUAL_METHOD2(const Model*, getModel, 8, (), ())
-    VIRTUAL_METHOD2(const matrix3x4&, toWorldTransform, 32, (), ())
-    VIRTUAL_METHOD2(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), ())
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), ())
+    VIRTUAL_METHOD(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
 };
 
-class Entity : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
-    using VirtualCallable::getThis;
+namespace csgo::pod { struct Entity; }
 
+class Entity : public VirtualCallableFromPOD<Entity, csgo::pod::Entity> {
+public:
     [[nodiscard]] auto getNetworkable() const noexcept
     {
-        return Networkable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) * 2 };
+        return Networkable{ getInvoker(), getThis() + sizeof(std::uintptr_t) * 2 };
     }
 
     [[nodiscard]] auto getRenderable() const noexcept
     {
-        return Renderable{ retSpoofGadgets.client, getThis() + sizeof(std::uintptr_t) };
+        return Renderable{ getInvoker(), getThis() + sizeof(std::uintptr_t) };
     }
 
     bool shouldDraw() const
     {
-#ifndef _WIN32
+#if !IS_WIN32()
         return call<bool, 149>();
 #else
         return getRenderable().shouldDraw();
 #endif
     }
 
-    VIRTUAL_METHOD2_V(int&, handle, 2, (), ())
-    VIRTUAL_METHOD2_V(std::uintptr_t, getCollideable, 3, (), ())
+    VIRTUAL_METHOD_V(int&, handle, 2, (), ())
+    VIRTUAL_METHOD_V(std::uintptr_t, getCollideable, 3, (), ())
 
-    VIRTUAL_METHOD2(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
-    VIRTUAL_METHOD2(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
-    VIRTUAL_METHOD2(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
-    VIRTUAL_METHOD2(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
-    VIRTUAL_METHOD2(int, health, WIN32_LINUX(122, 167), (), ())
-    VIRTUAL_METHOD2(bool, isAlive, WIN32_LINUX(156, 208), (), ())
-    VIRTUAL_METHOD2(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
-    VIRTUAL_METHOD2(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
-    VIRTUAL_METHOD2(std::uintptr_t, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
-    VIRTUAL_METHOD2(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
-    VIRTUAL_METHOD2(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
-    VIRTUAL_METHOD2(std::uintptr_t, getObserverTarget, WIN32_LINUX(295, 358), (), ())
-    VIRTUAL_METHOD2(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
-    VIRTUAL_METHOD2(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
-    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (std::uintptr_t viewModel), (viewModel))
-    VIRTUAL_METHOD2(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
-    VIRTUAL_METHOD2(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
+    VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
+    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
+    VIRTUAL_METHOD(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
+#if IS_WIN32()
+    VIRTUAL_METHOD(bool, initializeAsClientEntity, 97, (const char* modelName, bool renderWithViewmodels), (modelName, renderWithViewmodels))
+#endif
+    VIRTUAL_METHOD(int, health, WIN32_LINUX(122, 167), (), ())
+    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
+    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
+    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
+    VIRTUAL_METHOD(csgo::pod::Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
+    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
+    VIRTUAL_METHOD(csgo::pod::Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (csgo::pod::Entity* viewModel), (viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
+    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 
 #if IS_WIN32()
     auto getEyePosition() const noexcept
@@ -148,8 +154,8 @@ public:
         return v;
     }
 #else
-    VIRTUAL_METHOD2(Vector, getEyePosition, 348, (), ())
-    VIRTUAL_METHOD2(Vector, getAimPunch, 409, (), ())
+    VIRTUAL_METHOD(Vector, getEyePosition, 348, (), ())
+    VIRTUAL_METHOD(Vector, getAimPunch, 409, (), ())
 #endif
 
     auto isPistol() const noexcept { return getWeaponType() == WeaponType::Pistol; }
@@ -172,10 +178,10 @@ public:
         return false;
     }
 
-    bool setupBones(const Memory& memory, matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept;
-    Vector getBonePosition(const Memory& memory, int bone) const noexcept;
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept;
+    Vector getBonePosition(int bone) const noexcept;
 
-    bool isVisible(const EngineTrace& engineTrace, const Memory& memory, const Vector& position = { }) const noexcept;
+    bool isVisible(const EngineTrace& engineTrace, const Vector& position = { }) const noexcept;
     bool isOtherEnemy(const Memory& memory, const Entity& other) const noexcept;
 
     VarMap& getVarMap() const noexcept
@@ -185,7 +191,7 @@ public:
    
     AnimState* getAnimstate() const noexcept
     {
-#ifdef _WIN32
+#if IS_WIN32()
         return *reinterpret_cast<AnimState**>(getThis() + 0x3914);
 #else
         return nullptr;
@@ -202,8 +208,8 @@ public:
     int getUserId(const Engine& engine) const noexcept;
     std::uint64_t getSteamId(const Engine& engine) const noexcept;
 
-    void getPlayerName(const Interfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept;
-    [[nodiscard]] std::string getPlayerName(const Interfaces& interfaces, const Memory& memory) const noexcept
+    void getPlayerName(const OtherInterfaces& interfaces, const Memory& memory, char(&out)[128]) const noexcept;
+    [[nodiscard]] std::string getPlayerName(const OtherInterfaces& interfaces, const Memory& memory) const noexcept
     {
         char name[128];
         getPlayerName(interfaces, memory, name);
@@ -271,7 +277,7 @@ public:
     NETVAR2(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR2(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR2(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
-    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
+    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", csgo::pod::EconItemView)
     NETVAR2(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
     NETVAR2(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 

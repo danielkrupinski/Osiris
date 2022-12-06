@@ -5,7 +5,7 @@
 #include "Platform/Linux/DynamicLibraryWrapper.h"
 #include "Platform/Linux/DynamicLibraryView.h"
 
-#include "SafeAddress.h"
+#include "Utils/SafeAddress.h"
 
 struct SdlFunctions {
     SdlFunctions(linux_platform::DynamicLibraryView<linux_platform::DynamicLibraryWrapper> libSDL)

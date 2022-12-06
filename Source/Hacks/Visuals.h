@@ -1,60 +1,129 @@
 #pragma once
 
 #include "../JsonForward.h"
+#include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
+#include <Platform/IsPlatform.h>
+#include <Config/ResetConfigurator.h>
+#include <Utils/ReturnAddress.h>
+#include "Visuals/ColorCorrection.h"
+#include "Visuals/SkyboxChanger.h"
+#include "Visuals/PostProcessingDisabler.h"
+#include "Visuals/ScopeOverlayRemover.h"
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
 struct ImDrawList;
+class EngineInterfaces;
 
-namespace Visuals
-{
-    bool isThirdpersonOn() noexcept;
+class Visuals {
+public:
+    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
+        : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) }
+    {
+#if IS_WIN32()
+        cameraThink = ReturnAddress{ clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get() };
+#elif IS_LINUX()
+        cameraThink = ReturnAddress{ clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get() };
+#endif
+        ResetConfigurator configurator;
+        configure(configurator);
+    }
+
     bool isZoomOn() noexcept;
     bool isSmokeWireframe() noexcept;
     bool isDeagleSpinnerOn() noexcept;
     bool shouldRemoveFog() noexcept;
-    bool shouldRemoveScopeOverlay() noexcept;
     bool shouldRemoveSmoke() noexcept;
     float viewModelFov() noexcept;
     float fov() noexcept;
     float farZ() noexcept;
 
-    void performColorCorrection(const Memory& memory) noexcept;
-    void inverseRagdollGravity(const Interfaces& interfaces) noexcept;
-    void colorWorld(const Interfaces& interfaces, const Memory& memory) noexcept;
-    void modifySmoke(const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
-    void thirdperson(const Memory& memory) noexcept;
+    void inverseRagdollGravity() noexcept;
+    void colorWorld() noexcept;
+    void modifySmoke(csgo::FrameStage stage) noexcept;
+    void thirdperson() noexcept;
     void removeVisualRecoil(csgo::FrameStage stage) noexcept;
-    void removeBlur(const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
-    void updateBrightness(const Interfaces& interfaces) noexcept;
-    void removeGrass(const Engine& engine, const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
-    void remove3dSky(const Interfaces& interfaces) noexcept;
-    void removeShadows(const Interfaces& interfaces) noexcept;
+    void removeBlur(csgo::FrameStage stage) noexcept;
+    void updateBrightness() noexcept;
+    void removeGrass(csgo::FrameStage stage) noexcept;
+    void remove3dSky() noexcept;
+    void removeShadows() noexcept;
     void applyZoom(csgo::FrameStage stage) noexcept;
-    void applyScreenEffects(const Engine& engine, const Interfaces& interfaces, const Memory& memory) noexcept;
-    void hitEffect(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event = nullptr) noexcept;
-    void hitMarker(const Engine& engine, const Interfaces& interfaces, const Memory& memory, const GameEvent* event, ImDrawList* drawList = nullptr) noexcept;
-    void disablePostProcessing(const Memory& memory, csgo::FrameStage stage) noexcept;
+    void applyScreenEffects() noexcept;
+    void hitEffect(const GameEvent* event = nullptr) noexcept;
+    void hitMarker(const GameEvent* event, ImDrawList* drawList = nullptr) noexcept;
+    void disablePostProcessing(csgo::FrameStage stage) noexcept;
     void reduceFlashEffect() noexcept;
     bool removeHands(const char* modelName) noexcept;
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
-    void skybox(const Interfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept;
-    void bulletTracer(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept;
-    void drawMolotovHull(const Memory& memory, ImDrawList* drawList) noexcept;
+    void skybox(csgo::FrameStage stage) noexcept;
+    void bulletTracer(const GameEvent& event) noexcept;
+    void drawMolotovHull(ImDrawList* drawList) noexcept;
 
-    inline constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
+    void setDrawColorHook(ReturnAddress hookReturnAddress, int& alpha) const noexcept;
+    void updateColorCorrectionWeightsHook() const noexcept;
+    bool svCheatsGetBoolHook(ReturnAddress hookReturnAddress) const noexcept;
 
-    void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
+    void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
     // GUI
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
-    
+
     // Config
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+
+    template <typename Configurator>
+    void configure(Configurator& configurator)
+    {
+        configurator("Color correction", colorCorrection);
+        configurator("Post-processing Disabler", postProcessingDisabler);
+        configurator("Scope Overlay Remover", scopeOverlayRemover);
+        configurator("Inverse ragdoll gravity", inverseRagdollGravity_).def(false);
+        configurator("No fog", noFog).def(false);
+        configurator("No 3d sky", no3dSky).def(false);
+        configurator("No aim punch", noAimPunch).def(false);
+        configurator("No view punch", noViewPunch).def(false);
+        configurator("No hands", noHands).def(false);
+        configurator("No sleeves", noSleeves).def(false);
+        configurator("No weapons", noWeapons).def(false);
+        configurator("No smoke", noSmoke).def(false);
+        configurator("No blur", noBlur).def(false);
+        configurator("No grass", noGrass).def(false);
+        configurator("No shadows", noShadows).def(false);
+        configurator("Wireframe smoke", wireframeSmoke).def(false);
+        configurator("Zoom", zoom).def(false);
+    }
+
+private:
+    const Memory& memory;
+    OtherInterfaces interfaces;
+    ClientInterfaces clientInterfaces;
+    EngineInterfaces engineInterfaces;
+    ColorCorrection colorCorrection;
+    SkyboxChanger skyboxChanger;
+    PostProcessingDisabler postProcessingDisabler;
+    ScopeOverlayRemover scopeOverlayRemover;
+    ReturnAddress cameraThink;
+
+    bool inverseRagdollGravity_;
+    bool noFog;
+    bool no3dSky;
+    bool noAimPunch;
+    bool noViewPunch;
+    bool noHands;
+    bool noSleeves;
+    bool noWeapons;
+    bool noSmoke;
+    bool noBlur;
+    bool noGrass;
+    bool noShadows;
+    bool wireframeSmoke;
+    bool zoom;
+};

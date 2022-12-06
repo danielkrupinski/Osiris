@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef _WIN32
+#if IS_WIN32()
 #include "Windows/DynamicLibrary.h"
 
 template <typename DynamicLibraryWrapper>

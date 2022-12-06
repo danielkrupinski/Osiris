@@ -11,7 +11,6 @@
 #include "../Config.h"
 #include "../Helpers.h"
 #include "../Hooks.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "Backtrack.h"
 #include "../InputUtil.h"
@@ -27,6 +26,9 @@
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
 #include "../SDK/Utils.h"
+
+#include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 static csgo::pod::Material* normal;
 static csgo::pod::Material* flat;
@@ -64,40 +66,40 @@ static constexpr auto dispatchMaterial_(int id) noexcept
 
 static auto dispatchMaterial(int id) noexcept
 {
-    return Material::from(retSpoofGadgets.client, dispatchMaterial_(id));
+    return Material::from(retSpoofGadgets->client, dispatchMaterial_(id));
 }
 
-static void initializeMaterials(const Interfaces& interfaces, const Memory& memory) noexcept
+static void initializeMaterials(const MaterialSystem& materialSystem, const Memory& memory) noexcept
 {
-    normal = interfaces.getMaterialSystem().createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
-    flat = interfaces.getMaterialSystem().createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
-    chrome = interfaces.getMaterialSystem().createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
-    glow = interfaces.getMaterialSystem().createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
-    pearlescent = interfaces.getMaterialSystem().createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
-    metallic = interfaces.getMaterialSystem().createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
+    normal = materialSystem.createMaterial("normal", KeyValues::fromString(memory, "VertexLitGeneric", nullptr));
+    flat = materialSystem.createMaterial("flat", KeyValues::fromString(memory, "UnlitGeneric", nullptr));
+    chrome = materialSystem.createMaterial("chrome", KeyValues::fromString(memory, "VertexLitGeneric", "$envmap env_cubemap"));
+    glow = materialSystem.createMaterial("glow", KeyValues::fromString(memory, "VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+    pearlescent = materialSystem.createMaterial("pearlescent", KeyValues::fromString(memory, "VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
+    metallic = materialSystem.createMaterial("metallic", KeyValues::fromString(memory, "VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
         kv->setString(memory, "$envmaptint", "[.7 .7 .7]");
-        animated = interfaces.getMaterialSystem().createMaterial("animated", kv);
+        animated = materialSystem.createMaterial("animated", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture models/player/ct_fbi/ct_fbi_glass $envmap env_cubemap");
         kv->setString(memory, "$envmaptint", "[.4 .6 .7]");
-        platinum = interfaces.getMaterialSystem().createMaterial("platinum", kv);
+        platinum = materialSystem.createMaterial("platinum", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
         kv->setString(memory, "$color", "[.05 .05 .05]");
-        glass = interfaces.getMaterialSystem().createMaterial("glass", kv);
+        glass = materialSystem.createMaterial("glass", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
         kv->setString(memory, "$phongtint", "[.2 .35 .6]");
-        crystal = interfaces.getMaterialSystem().createMaterial("crystal", kv);
+        crystal = materialSystem.createMaterial("crystal", kv);
     }
 
     {
@@ -106,7 +108,7 @@ static void initializeMaterials(const Interfaces& interfaces, const Memory& memo
         kv->setString(memory, "$envmaptint", "[.2 .2 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        silver = interfaces.getMaterialSystem().createMaterial("silver", kv);
+        silver = materialSystem.createMaterial("silver", kv);
     }
 
     {
@@ -115,14 +117,14 @@ static void initializeMaterials(const Interfaces& interfaces, const Memory& memo
         kv->setString(memory, "$envmaptint", "[.6 .5 .2]");
         kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
         kv->setString(memory, "$phongtint", "[.6 .5 .2]");
-        gold = interfaces.getMaterialSystem().createMaterial("gold", kv);
+        gold = materialSystem.createMaterial("gold", kv);
     }
 
     {
         const auto kv = KeyValues::fromString(memory, "VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
         kv->setString(memory, "$phongfresnelranges", "[.1 .4 1]");
         kv->setString(memory, "$phongtint", "[.8 .9 1]");
-        plastic = interfaces.getMaterialSystem().createMaterial("plastic", kv);
+        plastic = materialSystem.createMaterial("plastic", kv);
     }
 }
 
@@ -131,7 +133,7 @@ void Chams::updateInput(Config& config) noexcept
     config.chamsToggleKey.handleToggle();
 }
 
-bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(Backtrack& backtrack, const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chamsToggleKey.isSet()) {
         if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
@@ -142,7 +144,7 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
 
     static bool materialsInitialized = false;
     if (!materialsInitialized) {
-        initializeMaterials(interfaces, memory);
+        initializeMaterials(interfaces.getMaterialSystem(), memory);
         materialsInitialized = true;
     }
 
@@ -155,82 +157,82 @@ bool Chams::render(const Engine& engine, const ClientInterfaces& clientInterface
     if (std::string_view{ info.model->name }.starts_with("models/weapons/v_")) {
         // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
         if (std::strstr(info.model->name + 17, "sleeve"))
-            renderSleeves(interfaces,memory, config);
+            renderSleeves(interfaces.getStudioRender(), memory, config);
         else if (std::strstr(info.model->name + 17, "arms"))
-            renderHands(interfaces,memory, config);
+            renderHands(interfaces.getStudioRender(), memory, config);
         else if (!std::strstr(info.model->name + 17, "tablet")
             && !std::strstr(info.model->name + 17, "parachute")
             && !std::strstr(info.model->name + 17, "fists"))
-            renderWeapons(interfaces,memory, config);
+            renderWeapons(interfaces.getStudioRender(), memory, config);
     } else {
-        const Entity entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(info.entityIndex) };
-        if (entity.getThis() != 0 && !entity.getNetworkable().isDormant() && entity.isPlayer())
-            renderPlayer(engine, interfaces, memory, config, entity);
+        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
+        if (entity.getPOD() != nullptr && !entity.getNetworkable().isDormant() && entity.isPlayer())
+            renderPlayer(backtrack, engine, interfaces.getStudioRender(), memory, config, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(const Engine& engine, const Interfaces& interfaces, const Memory& memory, Config& config, const Entity& player) noexcept
+void Chams::renderPlayer(Backtrack& backtrack, const Engine& engine, const StudioRender& studioRender, const Memory& memory, Config& config, const Entity& player) noexcept
 {
     if (!localPlayer)
         return;
 
     const auto health = player.health();
 
-    if (const Entity activeWeapon{ retSpoofGadgets.client, player.getActiveWeapon() }; activeWeapon.getThis() != 0 && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(interfaces, memory, config.chams["Planting"].materials, health);
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+        applyChams(studioRender, memory, config.chams["Planting"].materials, health);
     } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(interfaces, memory, config.chams["Defusing"].materials, health);
-    } else if (player.getThis() == localPlayer.get().getThis()) {
-        applyChams(interfaces, memory, config.chams["Local player"].materials, health);
+        applyChams(studioRender, memory, config.chams["Defusing"].materials, health);
+    } else if (player.getPOD() == localPlayer.get().getPOD()) {
+        applyChams(studioRender, memory, config.chams["Local player"].materials, health);
     } else if (localPlayer.get().isOtherEnemy(memory, player)) {
-        applyChams(interfaces, memory, config.chams["Enemies"].materials, health);
+        applyChams(studioRender, memory, config.chams["Enemies"].materials, health);
 
-        const auto records = Backtrack::getRecords(player.getNetworkable().index());
-        if (records && !records->empty() && Backtrack::valid(engine, memory, records->front().simulationTime)) {
+        const auto records = backtrack.getRecords(player.getNetworkable().index());
+        if (records && !records->empty() && backtrack.valid(engine, memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-            applyChams(interfaces, memory, config.chams["Backtrack"].materials, health, records->back().matrix);
-            interfaces.getStudioRender().forcedMaterialOverride(nullptr);
+            applyChams(studioRender, memory, config.chams["Backtrack"].materials, health, records->back().matrix);
+            studioRender.forcedMaterialOverride(nullptr);
         }
     } else {
-        applyChams(interfaces, memory, config.chams["Allies"].materials, health);
+        applyChams(studioRender, memory, config.chams["Allies"].materials, health);
     }
 }
 
-void Chams::renderWeapons(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void Chams::renderWeapons(const StudioRender& studioRender, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().isScoped())
         return;
 
-    applyChams(interfaces, memory, config.chams["Weapons"].materials, localPlayer.get().health());
+    applyChams(studioRender, memory, config.chams["Weapons"].materials, localPlayer.get().health());
 }
 
-void Chams::renderHands(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void Chams::renderHands(const StudioRender& studioRender, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(interfaces, memory, config.chams["Hands"].materials, localPlayer.get().health());
+    applyChams(studioRender, memory, config.chams["Hands"].materials, localPlayer.get().health());
 }
 
-void Chams::renderSleeves(const Interfaces& interfaces, const Memory& memory, Config& config) noexcept
+void Chams::renderSleeves(const StudioRender& studioRender, const Memory& memory, Config& config) noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(interfaces, memory, config.chams["Sleeves"].materials, localPlayer.get().health());
+    applyChams(studioRender, memory, config.chams["Sleeves"].materials, localPlayer.get().health());
 }
 
-void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const StudioRender& studioRender, const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (material.getThis() == 0)
+        if (material.getPOD() == nullptr)
             continue;
         
         float r, g, b;
@@ -245,22 +247,22 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
+        studioRender.forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-        interfaces.getStudioRender().forcedMaterialOverride(nullptr);
+        studioRender.forcedMaterialOverride(nullptr);
     }
 
     for (const auto& cham : chams) {
@@ -268,7 +270,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
             continue;
 
         const auto material = dispatchMaterial(cham.material);
-        if (material.getThis())
+        if (material.getPOD() == nullptr)
             continue;
 
         float r, g, b;
@@ -283,14 +285,14 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
         }
 
         if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
         else
             material.colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material.getPOD() == glow)
-            MaterialVar::from(retSpoofGadgets.client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
+            MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
 
@@ -299,7 +301,7 @@ void Chams::applyChams(const Interfaces& interfaces, const Memory& memory, const
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
-        interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
+        studioRender.forcedMaterialOverride(material.getPOD());
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }

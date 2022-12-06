@@ -3,7 +3,8 @@
 #include <cstdint>
 
 #include "Inconstructible.h"
-#include "Platform.h"
+#include <Platform/CallingConventions.h>
+#include <Platform/PlatformSpecific.h>
 
 class HudChat {
 public:
@@ -16,12 +17,21 @@ public:
     }
 };
 
-class ClientMode {
-public:
-    INCONSTRUCTIBLE(ClientMode)
-
-    auto getHudChat() noexcept
-    {
-        return *reinterpret_cast<HudChat**>(std::uintptr_t(this) + WIN32_LINUX(28, 48));
-    }
+struct ClientMode {
+    PAD(WIN32_LINUX(28, 48))
+    HudChat* hudChat;
+    PAD(WIN32_LINUX(0x47C, 0x8D0))
+    float blueColorCorrection;
+    PAD(WIN32_LINUX(4, 12))
+    float redColorCorrection;
+    PAD(WIN32_LINUX(4, 12))
+    float monoColorCorrection;
+    PAD(WIN32_LINUX(4, 12))
+    float saturationColorCorrection;
+    PAD(WIN32_LINUX(12, 28))
+    float ghostColorCorrection;
+    PAD(WIN32_LINUX(4, 12))
+    float greenColorCorrection;
+    PAD(WIN32_LINUX(4, 12))
+    float yellowColorCorrection;
 };

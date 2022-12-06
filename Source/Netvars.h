@@ -4,7 +4,6 @@
 #include <type_traits>
 
 #include "fnv.h"
-#include "Interfaces.h"
 
 #include "SDK/Recv.h"
 
@@ -19,6 +18,7 @@ struct ProxyHooks {
 };
 
 inline ProxyHooks proxyHooks;
+class Client;
 
 namespace Netvars
 {

@@ -1,21 +1,24 @@
 #pragma once
 
 #include "../JsonForward.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
+#include <InventoryChanger/InventoryChanger.h>
 
 namespace csgo { enum class FrameStage; }
 
 class GameEvent;
 struct ImDrawList;
 struct UserCmd;
+class ClientInterfaces;
+class EngineInterfaces;
+class Glow;
+class Visuals;
 
 namespace Misc
 {
     bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
-    bool shouldFixBoneMatrix() noexcept;
     bool isRadarHackOn() noexcept;
     bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
@@ -29,16 +32,16 @@ namespace Misc
     void recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept;
     void watermark(const Memory& memory) noexcept;
     void prepareRevolver(const Engine& engine, const Memory& memory, UserCmd*) noexcept;
-    void fastPlant(EngineTrace& engineTrace, const Interfaces& interfaces, UserCmd*) noexcept;
+    void fastPlant(const EngineTrace& engineTrace, const OtherInterfaces& interfaces, UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
     void drawBombTimer(const Memory& memory) noexcept;
-    void stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
-    void disablePanoramablur(const Interfaces& interfaces) noexcept;
-    void quickReload(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, UserCmd*) noexcept;
-    bool changeName(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool, const char*, float) noexcept;
+    void stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void disablePanoramablur(const OtherInterfaces& interfaces) noexcept;
+    void quickReload(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, UserCmd*) noexcept;
+    bool changeName(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool, const char*, float) noexcept;
     void bunnyHop(UserCmd*) noexcept;
-    void fakeBan(const Engine& engine, const Interfaces& interfaces, const Memory& memory, bool = false) noexcept;
-    void nadePredict(const Interfaces& interfaces) noexcept;
+    void fakeBan(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool = false) noexcept;
+    void nadePredict(const OtherInterfaces& interfaces) noexcept;
     void fixTabletSignal() noexcept;
     void killMessage(const Engine& engine, const GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
@@ -53,25 +56,25 @@ namespace Misc
     void moonwalk(UserCmd* cmd) noexcept;
     void playHitSound(const Engine& engine, const GameEvent& event) noexcept;
     void killSound(const Engine& engine, const GameEvent& event) noexcept;
-    void purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent* event = nullptr) noexcept;
-    void oppositeHandKnife(const Interfaces& interfaces, csgo::FrameStage stage) noexcept;
-    void runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
+    void purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent* event = nullptr) noexcept;
+    void oppositeHandKnife(const OtherInterfaces& interfaces, csgo::FrameStage stage) noexcept;
+    void runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(const Memory& memory, bool roundStart = false) noexcept;
-    void voteRevealer(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept;
-    void onVoteStart(const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, const void* data, int size) noexcept;
+    void voteRevealer(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept;
+    void onVoteStart(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept;
     void onVotePass(const Memory& memory) noexcept;
     void onVoteFailed(const Memory& memory) noexcept;
     void drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept;
-    void autoAccept(const Interfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
+    void autoAccept(const OtherInterfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept;
-    void drawGUI(const Engine& engine, const ClientInterfaces& clientInterfaces, const Interfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;

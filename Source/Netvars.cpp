@@ -10,7 +10,6 @@
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
-#include "Interfaces.h"
 #include "Netvars.h"
 
 #include "SDK/Constants/ClassId.h"
@@ -19,14 +18,13 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/LocalPlayer.h"
-#include "SDK/Platform.h"
 #include "SDK/Recv.h"
 
 #include "GlobalContext.h"
 
 static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
-    const Entity entity{ retSpoofGadgets.client, std::uintptr_t(outStruct) };
+    const auto entity = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
 
     if (Misc::isRadarHackOn()) {
         data.value._int = 1;
@@ -40,10 +38,7 @@ static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* a
     proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
-static void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
-{
-    globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
-}
+void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept;
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../Memory.h"
+#include <algorithm>
+
 #include <SDK/WeaponId.h>
 
 #include <InventoryChanger/GameIntegration/Misc.h>
@@ -32,11 +33,12 @@ public:
         return {};
     }
 
-    [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const inventory::Item* crateKey) const
+    [[nodiscard]] inventory::Item::CommonProperties createCommonProperties(const inventory::Item& crate, const inventory::Item* crateKey) const
     {
+        inventory::Item::CommonProperties properties{ .tradableAfterDate = crate.getProperties().common.tradableAfterDate };
         if (crateKey)
-            return { .tradableAfterDate = crateKey->getProperties().common.tradableAfterDate };
-        return {};
+            properties.tradableAfterDate = (std::max)(properties.tradableAfterDate, crateKey->getProperties().common.tradableAfterDate);
+        return properties;
     }
 
 private:

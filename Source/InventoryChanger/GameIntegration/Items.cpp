@@ -3,13 +3,17 @@
 #include "Items.h"
 #include "Misc.h"
 
-#include <Interfaces.h>
 #include <SDK/ItemSchema.h>
+#include <SDK/PODs/ItemSchema.h>
+#include <SDK/PODs/PaintKit.h>
+
+#include <Interfaces/OtherInterfaces.h>
+#include <RetSpoofGadgets.h>
 
 namespace inventory_changer::game_integration
 {
 
-void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getMusicKits(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     for (const auto& node : itemSchema.getPOD()->musicKits) {
         const auto musicKit = node.value;
@@ -21,7 +25,7 @@ void Items::getMusicKits(const Interfaces& interfaces, game_items::Storage& stor
     }
 }
 
-void Items::getStickers(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getStickers(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     const auto& stickerMap = itemSchema.getPOD()->stickerKits;
     for (const auto& node : stickerMap) {
@@ -74,7 +78,7 @@ struct KitWeapon {
 
 }
 
-void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage& storage)
+void Items::getSkinsAndGloves(const OtherInterfaces& interfaces, game_items::Storage& storage)
 {
     const auto kitsWeapons = getKitsWeapons(itemSchema.getPOD()->alternateIcons);
 
@@ -93,7 +97,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
             if (!itemDefPtr)
                 continue;
 
-            const EconItemDefinition itemDef{ retSpoofGadgets.client, itemDefPtr };
+            const auto itemDef = EconItemDefinition::from(retSpoofGadgets->client, itemDefPtr);
             if (isGlove) {
                 storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, it->iconPath);
             } else {
@@ -106,7 +110,7 @@ void Items::getSkinsAndGloves(const Interfaces& interfaces, game_items::Storage&
 void Items::getOtherItems(game_items::Storage& storage)
 {
     for (const auto& node : itemSchema.getPOD()->itemsSorted) {
-        const auto item = EconItemDefinition{ retSpoofGadgets.client, node.value };
+        const auto item = EconItemDefinition::from(retSpoofGadgets->client, node.value);
         const auto itemTypeName = std::string_view{ item.getItemTypeName() };
         const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
         const auto isOriginal = (item.getQuality() == 1);
@@ -157,7 +161,7 @@ void Items::getOtherItems(game_items::Storage& storage)
     }
 }
 
-game_items::Storage createGameItemStorage(const Interfaces& interfaces, Items& items)
+game_items::Storage createGameItemStorage(const OtherInterfaces& interfaces, Items& items)
 {
     game_items::Storage storage;
     items.getStickers(interfaces, storage);

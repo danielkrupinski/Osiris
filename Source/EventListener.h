@@ -1,20 +1,19 @@
 #pragma once
 
-#include "Interfaces.h"
-#include "Memory.h"
-
 #include <SDK/GameEvent.h>
+
+class DefaultEventListener : public GameEventListener {
+public:
+    void fireGameEvent(csgo::pod::GameEvent* eventPointer) override;
+};
 
 class EventListener : public GameEventListener {
 public:
-    EventListener(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces);
+    explicit EventListener(GameEventManager gameEventManager);
 
-    void fireGameEvent(GameEventPointer event) override;
+    void fireGameEvent(csgo::pod::GameEvent* event) override;
     void remove();
 
 private:
-    const Memory& memory;
-    const ClientInterfaces& clientInterfaces;
-    const EngineInterfaces& engineInterfaces;
-    const Interfaces& interfaces;
+    GameEventManager gameEventManager;
 };

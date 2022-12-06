@@ -9,7 +9,6 @@
 
 #include "fnv.h"
 #include "GameData.h"
-#include "Interfaces.h"
 #include "Memory.h"
 
 #include "Resources/avatar_ct.h"
@@ -35,6 +34,9 @@
 #include "SDK/UtlVector.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
+
+#include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 
 auto operator<(const BaseData& a, const BaseData& b) noexcept
 {
@@ -62,7 +64,7 @@ static auto playerByHandleWritable(int handle) noexcept
 static void updateNetLatency(const Engine& engine) noexcept
 {
     if (const auto networkChannel = engine.getNetworkChannel())
-        netOutgoingLatency = (std::max)(static_cast<int>(NetworkChannel::from(retSpoofGadgets.client, networkChannel).getLatency(0) * 1000.0f), 0);
+        netOutgoingLatency = (std::max)(static_cast<int>(NetworkChannel::from(retSpoofGadgets->client, networkChannel).getLatency(0) * 1000.0f), 0);
     else
         netOutgoingLatency = 0;
 }
@@ -75,7 +77,7 @@ static bool shouldUpdatePlayerVisibility(const Memory& memory) noexcept
     return nextPlayerVisibilityUpdateTime <= memory.globalVars->realtime;
 }
 
-void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory) noexcept
+void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     static int lastFrame;
     if (lastFrame == memory.globalVars->framecount)
@@ -102,16 +104,16 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
 
     viewMatrix = engineInterfaces.getEngine().worldToScreenMatrix();
 
-    const Entity observerTarget{ retSpoofGadgets.client, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : 0 };
+    const auto observerTarget = Entity::from(retSpoofGadgets->client, localPlayer.get().getObserverMode() == ObsMode::InEye ? localPlayer.get().getObserverTarget() : nullptr);
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = 1; i <= highestEntityIndex; ++i) {
-        const auto entity = Entity{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntity(i) };
-        if (entity.getThis() == 0)
+        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
+        if (entity.getPOD() == nullptr)
             continue;
 
         if (entity.isPlayer()) {
-            if (entity.getThis() == localPlayer.get().getThis() || entity.getThis() == observerTarget.getThis())
+            if (entity.getPOD() == localPlayer.get().getPOD() || entity.getPOD() == observerTarget.getPOD())
                 continue;
 
             if (const auto player = playerByHandleWritable(entity.handle())) {
@@ -121,8 +123,8 @@ void GameData::update(const ClientInterfaces& clientInterfaces, const EngineInte
             }
 
             if (!entity.getNetworkable().isDormant() && !entity.isAlive()) {
-                if (const Entity obs{ retSpoofGadgets.client, entity.getObserverTarget() }; obs.getThis() != 0)
-                    observerData.emplace_back(entity, obs, obs.getThis() == localPlayer.get().getThis());
+                if (const auto obs = Entity::from(retSpoofGadgets->client, entity.getObserverTarget()); obs.getPOD() != nullptr)
+                    observerData.emplace_back(entity, obs, obs.getPOD() == localPlayer.get().getPOD());
             }
         } else {
             if (entity.getNetworkable().isDormant())
@@ -299,7 +301,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     exists = true;
     alive = localPlayer.get().isAlive();
 
-    if (const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() }; activeWeapon.getThis() != 0) {
+    if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr) {
         inReload = activeWeapon.isInReload();
         shooting = localPlayer.get().shotsFired() > 1;
         noScope = activeWeapon.isSniperRifle() && !localPlayer.get().isScoped();
@@ -312,7 +314,7 @@ void LocalPlayerData::update(const Engine& engine) noexcept
     aimPunch = localPlayer.get().getEyePosition() + Vector::fromAngle(engine.getViewAngles() + localPlayer.get().getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer.get().getObserverMode();
-    if (const Entity obs{ retSpoofGadgets.client, localPlayer.get().getObserverTarget() }; obs.getThis() != 0 && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
+    if (const auto obs = Entity::from(retSpoofGadgets->client, localPlayer.get().getObserverTarget()); obs.getPOD() != nullptr && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
         origin = obs.getAbsOrigin();
     else
         origin = localPlayer.get().getAbsOrigin();
@@ -323,7 +325,7 @@ BaseData::BaseData(const Entity& entity) noexcept
     distanceToLocal = entity.getAbsOrigin().distTo(localPlayerData.origin);
  
     if (entity.isPlayer()) {
-        const Collideable collideable{ retSpoofGadgets.client, entity.getCollideable() };
+        const Collideable collideable{ retSpoofGadgets->client, entity.getCollideable() };
         obbMins = collideable.obbMins();
         obbMaxs = collideable.obbMaxs();
     } else if (const auto model = entity.getRenderable().getModel()) {
@@ -373,8 +375,8 @@ ProjectileData::ProjectileData(const ClientInterfaces& clientInterfaces, const M
         }
     }(projectile);
 
-    if (const Entity thrower{ retSpoofGadgets.client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower()) }; thrower.getThis() != 0 && localPlayer) {
-        if (thrower.getThis() == localPlayer.get().getThis())
+    if (const auto thrower = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(projectile.thrower())); thrower.getPOD() != nullptr && localPlayer) {
+        if (thrower.getPOD() == localPlayer.get().getPOD())
             thrownByLocalPlayer = true;
         else
             thrownByEnemy = localPlayer.get().isOtherEnemy(memory, thrower);
@@ -391,23 +393,23 @@ void ProjectileData::update(const Memory& memory, const Entity& projectile) noex
         trajectory.emplace_back(memory.globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept : BaseData{ entity }, handle{ entity.handle() }
+PlayerData::PlayerData(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept : BaseData{ entity }, handle{ entity.handle() }
 {
     if (const auto steamID = entity.getSteamId(engineInterfaces.getEngine())) {
         const auto ctx = engineInterfaces.getEngine().getSteamAPIContext();
-        const auto avatar = SteamFriends::from(retSpoofGadgets.client, ctx->steamFriends).getSmallFriendAvatar(steamID);
+        const auto avatar = SteamFriends::from(retSpoofGadgets->client, ctx->steamFriends).getSmallFriendAvatar(steamID);
         constexpr auto rgbaDataSize = 4 * 32 * 32;
 
         PlayerAvatar playerAvatar;
         playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
-        if (SteamUtils::from(retSpoofGadgets.client, ctx->steamUtils).getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
+        if (SteamUtils::from(retSpoofGadgets->client, ctx->steamUtils).getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
     update(engineInterfaces, interfaces, memory, entity);
 }
 
-void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfaces& interfaces, const Memory& memory, const Entity& entity) noexcept
+void PlayerData::update(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity) noexcept
 {
     name = entity.getPlayerName(interfaces, memory);
 
@@ -444,7 +446,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
     immune = entity.gunGameImmunity();
     flashDuration = entity.flashDuration();
 
-    if (const Entity weapon{ retSpoofGadgets.client, entity.getActiveWeapon() }; weapon.getThis() != 0) {
+    if (const auto weapon = Entity::from(retSpoofGadgets->client, entity.getActiveWeapon()); weapon.getPOD() != nullptr) {
         audible = audible || isEntityAudible(weapon.getNetworkable().index());
         if (const auto weaponInfo = weapon.getWeaponData())
             activeWeapon = interfaces.getLocalize().findAsUTF8(weaponInfo->name);
@@ -462,7 +464,7 @@ void PlayerData::update(const EngineInterfaces& engineInterfaces, const Interfac
         return;
 
     matrix3x4 boneMatrices[MAXSTUDIOBONES];
-    if (!entity.setupBones(memory, boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
+    if (!entity.setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory.globalVars->currenttime))
         return;
 
     bones.clear();
@@ -549,7 +551,7 @@ float PlayerData::fadingAlpha(const Memory& memory) const noexcept
     return std::clamp(1.0f - (memory.globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
 }
 
-WeaponData::WeaponData(const Interfaces& interfaces, const Entity& entity) noexcept : BaseData{ entity }
+WeaponData::WeaponData(const OtherInterfaces& interfaces, const Entity& entity) noexcept : BaseData{ entity }
 {
     clip = entity.clip();
     reserveAmmo = entity.reserveAmmoCount();
@@ -672,7 +674,7 @@ ObserverData::ObserverData(const Entity& entity, const Entity& obs, bool targetI
 
 void BombData::update(const Memory& memory) noexcept
 {
-    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity{ retSpoofGadgets.client, *memory.gameRules }.mapHasBombTarget())) {
+    if (memory.plantedC4s->size > 0 && (!*memory.gameRules || Entity::from(retSpoofGadgets->client, *memory.gameRules).mapHasBombTarget())) {
         if (const auto bomb = (*memory.plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
             timerLength = bomb->c4TimerLength();

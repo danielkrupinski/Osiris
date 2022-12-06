@@ -34,7 +34,7 @@ public:
         names.emplace(weaponID, std::make_pair(pool.add(name), poolWide.add(nameUpperCase)));
     }
 
-    static const WeaponNames& instance(const Interfaces& interfaces, const Memory& memory);
+    static const WeaponNames& instance(const OtherInterfaces& interfaces, const Memory& memory);
 
 private:
     StringPool<char> pool;

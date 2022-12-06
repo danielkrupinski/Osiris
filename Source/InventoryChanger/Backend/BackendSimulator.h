@@ -31,8 +31,8 @@ namespace inventory_changer::backend
 
 class BackendSimulator {
 public:
-    explicit BackendSimulator(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup)
-        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup } {}
+    explicit BackendSimulator(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup)
+        : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) } {}
 
     [[nodiscard]] const Loadout& getLoadout() const noexcept
     {
@@ -86,7 +86,7 @@ public:
 
     [[nodiscard]] RequestHandler getRequestHandler()
     {
-        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), items.xRayScanner, getResponseAccumulator(), items.inventory, items.loadout, gameItemLookup, crateLootLookup, ItemConstRemover{ items.inventory } };
+        return RequestHandler{ getItemModificationHandler(), getItemRemovalHandler(), getInventoryHandler(), getStorageUnitHandler(), getResponseAccumulator(), items.inventory, gameItemLookup, ItemConstRemover{ items.inventory } };
     }
 
     [[nodiscard]] PickEmHandler<ResponseAccumulator> getPickEmHandler()
@@ -146,8 +146,8 @@ private:
         return ResponseAccumulator{ items.responseQueue };
     }
 
-    const game_items::Lookup& gameItemLookup;
-    const game_items::CrateLootLookup& crateLootLookup;
+    game_items::Lookup gameItemLookup;
+    game_items::CrateLootLookup crateLootLookup;
     Items items;
     PickEm pickEm;
 };

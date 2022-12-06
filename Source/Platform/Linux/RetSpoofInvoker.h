@@ -14,6 +14,12 @@ public:
     }
 
     template <typename ReturnType, typename... Args>
+    ReturnType invokeFastcall(std::uintptr_t ecx, std::uintptr_t edx, std::uintptr_t functionAddress, Args... args) const noexcept
+    {
+        return reinterpret_cast<ReturnType(*)(std::uintptr_t, std::uintptr_t, Args...)>(functionAddress)(ecx, edx, args...);
+    }
+
+    template <typename ReturnType, typename... Args>
     ReturnType invokeCdecl(std::uintptr_t functionAddress, Args... args) const noexcept
     {
         return reinterpret_cast<ReturnType(*)(Args...)>(functionAddress)(args...);

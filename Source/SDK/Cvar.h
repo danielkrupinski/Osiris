@@ -11,5 +11,5 @@ namespace csgo::pod
 
 class Cvar : public VirtualCallableFromPOD<Cvar, csgo::pod::Cvar> {
 public:
-    VIRTUAL_METHOD2(csgo::pod::ConVar*, findVar, 15, (const char* name), (name))
+    VIRTUAL_METHOD(csgo::pod::ConVar*, findVar, 15, (const char* name), (name))
 };

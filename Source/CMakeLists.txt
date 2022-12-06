@@ -1,6 +1,7 @@
 target_sources(OsirisOBJ PRIVATE
   Config.cpp
   ConfigStructs.cpp
+  Endpoints.cpp
   EventListener.cpp
   GameData.cpp
   GlobalContext.cpp
@@ -16,6 +17,8 @@ target_sources(OsirisOBJ PRIVATE
 )
 
 add_subdirectory(Hacks)
+add_subdirectory(Helpers)
 add_subdirectory(Hooks)
 add_subdirectory(InventoryChanger)
 add_subdirectory(SDK)
+add_subdirectory(Utils)

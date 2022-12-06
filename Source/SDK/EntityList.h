@@ -2,15 +2,16 @@
 
 #include "VirtualMethod.h"
 
-class EntityList : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
+namespace csgo::pod { struct Entity; }
+namespace csgo::pod { struct EntityList; }
 
-    VIRTUAL_METHOD2(std::uintptr_t, getEntity, 3, (int index), (index))
-#ifdef _WIN32
-    VIRTUAL_METHOD2(std::uintptr_t, getEntityFromHandle, 4, (int handle), (handle))
+class EntityList : public VirtualCallableFromPOD<EntityList, csgo::pod::EntityList> {
+public:
+    VIRTUAL_METHOD(csgo::pod::Entity*, getEntity, 3, (int index), (index))
+#if IS_WIN32()
+    VIRTUAL_METHOD(csgo::pod::Entity*, getEntityFromHandle, 4, (int handle), (handle))
 #else
-    VIRTUAL_METHOD2(std::uintptr_t, getEntityFromHandle, 4, (int handle), (&handle))
+    VIRTUAL_METHOD(csgo::pod::Entity*, getEntityFromHandle, 4, (int handle), (&handle))
 #endif
-    VIRTUAL_METHOD2(int, getHighestEntityIndex, 6, (), ())
+    VIRTUAL_METHOD(int, getHighestEntityIndex, 6, (), ())
 };

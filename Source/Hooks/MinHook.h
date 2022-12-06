@@ -3,12 +3,13 @@
 #include <cstddef>
 #include <memory>
 
-#ifdef _WIN32
+#include <Platform/CallingConventions.h>
+#include <Platform/IsPlatform.h>
+
+#if IS_WIN32()
 #include <x86RetSpoof.h>
 #include "../RetSpoofGadgets.h"
 #endif
-
-#include "../SDK/Platform.h"
 
 class MinHook {
 public:
@@ -25,8 +26,8 @@ public:
     template<typename T, std::size_t Idx, typename ...Args>
     constexpr auto callOriginal(Args... args) const noexcept
     {
-#ifdef _WIN32
-        return retSpoofGadgets.engine.invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], args...);
+#if IS_WIN32()
+        return retSpoofGadgets->engine.invokeThiscall<T, Args...>(std::uintptr_t(base), originals[Idx], args...);
 #else
         return getOriginal<T, Idx>(args...)(base, args...);
 #endif

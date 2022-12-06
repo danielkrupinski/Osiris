@@ -26,7 +26,7 @@ namespace csgo::pod
 
 class StudioRender : public VirtualCallableFromPOD<StudioRender, csgo::pod::StudioRender> {
 public:
-    VIRTUAL_METHOD2(void, forcedMaterialOverride, 33, (csgo::pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
+    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (csgo::pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
 
     bool isForcedMaterialOverride() const noexcept
     {

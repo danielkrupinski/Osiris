@@ -1,14 +1,9 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 
-#include "Platform.h"
-
-#ifdef _WIN32
-#include <x86RetSpoof.h>
-#include "../RetSpoofGadgets.h"
-#endif
-
+#include <Platform/IsPlatform.h>
 #include <Platform/RetSpoofInvoker.h>
 
 class VirtualCallable {
@@ -43,9 +38,10 @@ public:
     VirtualCallableFromPOD(RetSpoofInvoker invoker, POD* pod)
         : invoker{ invoker }, thisptr{ std::uintptr_t(pod) } {}
 
-    [[nodiscard]] static T from(RetSpoofInvoker invoker, POD* pod) noexcept
+    template <typename... Args>
+    [[nodiscard]] static T from(RetSpoofInvoker invoker, POD* pod, Args&&... args) noexcept
     {
-        return T{ VirtualCallableFromPOD{ invoker, pod } };
+        return T{ VirtualCallableFromPOD{ invoker, pod }, std::forward<Args>(args)... };
     }
 
     [[nodiscard]] POD* getPOD() const noexcept
@@ -59,14 +55,15 @@ public:
         return invoker.invokeThiscall<ReturnType, Args...>(thisptr, (*reinterpret_cast<std::uintptr_t**>(thisptr))[Idx], args...);
     }
 
-    [[nodiscard]] std::uintptr_t getThis() const noexcept
-    {
-        return thisptr;
-    }
-
     [[nodiscard]] RetSpoofInvoker getInvoker() const noexcept
     {
         return invoker;
+    }
+
+protected:
+    [[nodiscard]] std::uintptr_t getThis() const noexcept
+    {
+        return thisptr;
     }
 
 private:
@@ -74,14 +71,14 @@ private:
     std::uintptr_t thisptr;
 };
 
-#define VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw) \
+#define VIRTUAL_METHOD(returnType, name, idx, args, argsRaw) \
 returnType name args const noexcept \
 { \
     return call<returnType, idx>argsRaw; \
 }
 
-#ifdef _WIN32
-#define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx, args, argsRaw)
+#if IS_WIN32()
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD(returnType, name, idx, args, argsRaw)
 #else
-#define VIRTUAL_METHOD2_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD2(returnType, name, idx + 1, args, argsRaw)
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) VIRTUAL_METHOD(returnType, name, idx + 1, args, argsRaw)
 #endif

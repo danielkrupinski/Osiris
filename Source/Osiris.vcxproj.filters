@@ -69,6 +69,30 @@
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{9d72c449-86f4-4c33-8e45-d88047d888eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\PODs">
+      <UniqueIdentifier>{57f076f9-b8f5-4962-8356-64f7584047f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{861c156a-293c-443e-aaab-2ca4847b6143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{91bf4578-bff7-4d46-965e-3991ce345331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{7ff80fe4-c5eb-4eef-b792-75c87aa46dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\Helpers">
+      <UniqueIdentifier>{acb6732a-176f-40fa-b54a-7851139f9385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{571171a8-ca62-48a5-91c2-9b837e642a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hacks\Visuals">
+      <UniqueIdentifier>{b06cfa86-3590-4502-9bed-468e781c19cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RetSpoof">
+      <UniqueIdentifier>{17172044-e24f-46ec-90cf-e556a1d707aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -112,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="SDK\GlobalVars.cpp">
       <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\AntiAim.cpp">
-      <Filter>Hacks</Filter>
     </ClCompile>
     <ClCompile Include="imguiCustom.cpp">
       <Filter>Source Files</Filter>
@@ -302,6 +323,15 @@
     <ClCompile Include="RetSpoofGadgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PatternFinder.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\PatternFinder.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Endpoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -314,9 +344,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\UserCmd.h">
@@ -442,9 +469,6 @@
     <ClInclude Include="SDK\AnimState.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\AntiAim.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -509,9 +533,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Panorama.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="InputUtil.h">
@@ -856,9 +877,6 @@
     <ClInclude Include="Platform\DynamicLibraryView.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="SafeAddress.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\CSPlayerInventory.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -867,6 +885,138 @@
     </ClInclude>
     <ClInclude Include="Platform\IsPlatform.h">
       <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformSpecific.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\CallingConventions.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\CallStack.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\ConVar.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\EconItem.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\ItemSchema.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\PaintKit.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\EconItemFlags.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FlagsBuilder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TypeHint.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DynamicLibrarySection.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\SharedObjectTypeCache.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PatternFinder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\PatternFinder.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\InterfaceFinder.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\InterfaceFinderWithLog.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\ClientInterfaces.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\EngineInterfaces.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\ClientInterfacesPODs.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\EngineInterfacesPODs.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\EconItemFunctions.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\OtherInterfacesPODs.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\OtherInterfaces.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Helpers\EconItemFunctions.h">
+      <Filter>SDK\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PODs\RenderableInfo.h">
+      <Filter>SDK\PODs</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Helpers\EconItemViewFunctions.h">
+      <Filter>SDK\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryChanger\EconItemViewFunctions.h">
+      <Filter>InventoryChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\DllNames.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MemAlloc.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafeAddress.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UiComponentInventory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Constants\ConVarNames.h">
+      <Filter>SDK\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ResetConfigurator.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\LoadConfigurator.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\SaveConfigurator.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Visuals\ColorCorrection.h">
+      <Filter>Hacks\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Visuals\SkyboxChanger.h">
+      <Filter>Hacks\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Configurable.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h">
+      <Filter>Hacks\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h">
+      <Filter>Hacks\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ReturnAddress.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Features.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Endpoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h">
+      <Filter>RetSpoof</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

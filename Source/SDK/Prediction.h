@@ -7,12 +7,12 @@ class MoveData;
 class MoveHelper;
 struct UserCmd;
 
+namespace csgo::pod { struct Entity; }
 namespace csgo::pod { struct MoveHelper; }
+namespace csgo::pod { struct Prediction; }
 
-class Prediction : private VirtualCallable {
+class Prediction : public VirtualCallableFromPOD<Prediction, csgo::pod::Prediction> {
 public:
-    using VirtualCallable::VirtualCallable;
-
-    VIRTUAL_METHOD2_V(void, setupMove, 20, (std::uintptr_t localPlayer, UserCmd* cmd, csgo::pod::MoveHelper* moveHelper, MoveData* moveData), (localPlayer, cmd, moveHelper, moveData))
-    VIRTUAL_METHOD2_V(void, finishMove, 21, (std::uintptr_t localPlayer, UserCmd* cmd, MoveData* moveData), (localPlayer, cmd, moveData))
+    VIRTUAL_METHOD_V(void, setupMove, 20, (csgo::pod::Entity* localPlayer, UserCmd* cmd, csgo::pod::MoveHelper* moveHelper, MoveData* moveData), (localPlayer, cmd, moveHelper, moveData))
+    VIRTUAL_METHOD_V(void, finishMove, 21, (csgo::pod::Entity* localPlayer, UserCmd* cmd, MoveData* moveData), (localPlayer, cmd, moveData))
 };

@@ -1111,6 +1111,40 @@ constexpr auto pglAntwerp2022Matches = std::to_array<Match>({
 });
 static_assert(std::ranges::is_sorted(pglAntwerp2022Matches, {}, &Match::map));
 
+constexpr auto iemRio2022Matches = std::to_array<Match>({
+    { TournamentMap::Ancient, ChallengersStage, _00Nation, IHCEsports },
+    { TournamentMap::Ancient, ChallengersStage, Fnatic, MOUZ },
+    { TournamentMap::Ancient, ChallengersStage, GamerLegion, BadNewsEagles },
+    { TournamentMap::Dust2, ChallengersStage, GrayhoundGaming, Cloud9 },
+    { TournamentMap::Dust2, ChallengersStage, BIG, BadNewsEagles },
+    { TournamentMap::Dust2, ChallengersStage, BIG, GrayhoundGaming },
+    { TournamentMap::Inferno, ChallengersStage, GamerLegion, _9ZTeam },
+    { TournamentMap::Inferno, ChallengersStage, MOUZ, Outsiders },
+    { TournamentMap::Inferno, ChallengersStage, GrayhoundGaming, OG },
+    { TournamentMap::Inferno, ChallengersStage, ImperialEsports, Vitality },
+    { TournamentMap::Inferno, ChallengersStage, Fnatic, Cloud9 },
+    { TournamentMap::Inferno, ChallengersStage, Fnatic, MOUZ },
+    { TournamentMap::Inferno, ChallengersStage, IHCEsports, _00Nation },
+    { TournamentMap::Mirage, ChallengersStage, FURIA, _00Nation },
+    { TournamentMap::Mirage, ChallengersStage, MOUZ, EvilGeniuses },
+    { TournamentMap::Mirage, ChallengersStage, ImperialEsports, _9ZTeam },
+    { TournamentMap::Mirage, ChallengersStage, Fnatic, OG },
+    { TournamentMap::Mirage, ChallengersStage, GamerLegion, BadNewsEagles },
+    { TournamentMap::Nuke, ChallengersStage, EvilGeniuses, IHCEsports },
+    { TournamentMap::Nuke, ChallengersStage, EvilGeniuses, _9ZTeam },
+    { TournamentMap::Overpass, ChallengersStage, Outsiders, IHCEsports },
+    { TournamentMap::Overpass, ChallengersStage, Vitality, Outsiders },
+    { TournamentMap::Overpass, ChallengersStage, OG, FURIA },
+    { TournamentMap::Overpass, ChallengersStage, IHCEsports, _00Nation },
+    { TournamentMap::Overpass, ChallengersStage, Cloud9, ImperialEsports },
+    { TournamentMap::Vertigo, ChallengersStage, _00Nation, BadNewsEagles },
+    { TournamentMap::Vertigo, ChallengersStage, FURIA, BIG },
+    { TournamentMap::Vertigo, ChallengersStage, Vitality, GamerLegion },
+    { TournamentMap::Vertigo, ChallengersStage, Fnatic, MOUZ },
+    { TournamentMap::Vertigo, ChallengersStage, ImperialEsports, Cloud9 }
+});
+static_assert(std::ranges::is_sorted(iemRio2022Matches, {}, &Match::map));
+
 using enum csgo::Tournament;
 constexpr auto tournaments = std::to_array<Tournament>({
     { DreamHack2013, dreamHack2013Matches },
@@ -1128,7 +1162,8 @@ constexpr auto tournaments = std::to_array<Tournament>({
     { FaceitLondon2018, faceitLondon2018Matches },
     { IemKatowice2019, iemKatowice2019Matches },
     { PglStockholm2021, pglStockholm2021Matches },
-    { PglAntwerp2022, pglAntwerp2022Matches }
+    { PglAntwerp2022, pglAntwerp2022Matches },
+    { IemRio2022, iemRio2022Matches },
 });
 static_assert(std::ranges::is_sorted(tournaments, {}, &Tournament::tournament));
 

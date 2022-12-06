@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pad.h"
-#include "Platform.h"
+#include <Platform/PlatformSpecific.h>
 
 struct SoundInfo {
     PAD(WIN32_LINUX(40, 44))

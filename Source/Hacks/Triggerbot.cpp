@@ -1,5 +1,4 @@
 #include "../Config.h"
-#include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
@@ -12,13 +11,13 @@
 
 static bool keyPressed;
 
-void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
+void Triggerbot::run(const EngineTrace& engineTrace, const OtherInterfaces& interfaces, const Memory& memory, const Config& config, UserCmd* cmd) noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
 
-    const Entity activeWeapon{ retSpoofGadgets.client, localPlayer.get().getActiveWeapon() };
-    if (activeWeapon.getThis() == 0 || !activeWeapon.clip() || activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime())
+    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
+    if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip() || activeWeapon.nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
     if (localPlayer.get().shotsFired() > 0 && !activeWeapon.isFullAuto())
@@ -73,12 +72,12 @@ void Triggerbot::run(EngineTrace& engineTrace, const Interfaces& interfaces, con
         return;
 
     Trace trace;
-    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get().getThis(), trace);
+    engineTrace.traceRay({ startPos, endPos }, 0x46004009, localPlayer.get().getPOD(), trace);
 
     lastTime = now;
 
-    const Entity entity{ retSpoofGadgets.client, trace.entity };
-    if (entity.getThis() == 0 || !entity.isPlayer())
+    const auto entity = Entity::from(retSpoofGadgets->client, trace.entity);
+    if (entity.getPOD() == nullptr || !entity.isPlayer())
         return;
 
     if (!cfg.friendlyFire && !localPlayer.get().isOtherEnemy(memory, entity))
