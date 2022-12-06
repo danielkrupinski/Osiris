@@ -3,6 +3,7 @@
 #include "../JsonForward.h"
 #include "../Memory.h"
 #include <InventoryChanger/InventoryChanger.h>
+#include <Platform/IsPlatform.h>
 
 namespace csgo { enum class FrameStage; }
 
@@ -16,6 +17,17 @@ class Visuals;
 
 class Misc {
 public:
+    Misc(const helpers::PatternFinder& clientPatternFinder)
+    {
+#if IS_WIN32()
+        demoOrHLTV = ReturnAddress{ clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get() };
+        money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
+#elif IS_LINUX()
+        demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
+        money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
+#endif
+    }
+
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
     bool isRadarHackOn() noexcept;
@@ -81,4 +93,8 @@ public:
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
+
+private:
+    ReturnAddress demoOrHLTV;
+    std::uintptr_t money;
 };

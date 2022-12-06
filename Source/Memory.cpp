@@ -90,8 +90,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     channels = enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().as<Channel*>();
     playerResource = clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().as<PlayerResource**>();
     getDecoratedPlayerName = clientPatternFinder("\xE8????\x66\x83\x3E").add(1).relativeToAbsolute().as<decltype(getDecoratedPlayerName)>();
-    demoOrHLTV = ReturnAddress{ clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get() };
-    money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
     demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
     plantedC4s = clientPatternFinder("\x7E\x2C\x8B\x15").add(4).deref().as<decltype(plantedC4s)>();
     gameRules = clientPatternFinder("\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07").add(4).deref().as<csgo::pod::Entity**>();
@@ -143,8 +141,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesSetString = clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();
     viewRender = clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().as<csgo::ViewRender*>();
-    demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
-    money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
     demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
     clearHudWeapon = clientPatternFinder("\xE8????\xC6\x45\xB8\x01").add(1).relativeToAbsolute().as<decltype(clearHudWeapon)>();
     equipWearable = clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07").as<decltype(equipWearable)>();

@@ -1272,7 +1272,7 @@ void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, c
 
 bool Misc::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const
 {
-    return miscConfig.revealMoney && returnAddress == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == memory->money;
+    return miscConfig.revealMoney && returnAddress == demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == money;
 }
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
