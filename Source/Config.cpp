@@ -82,11 +82,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
 {
     listConfigs();
 
-    load(inventoryChanger, glow, backtrack, visuals, interfaces, memory, u8"default.json", false);
+    load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, u8"default.json", false);
 
 #if IS_WIN32()
     LOGFONTW logfont;
@@ -292,12 +292,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
+    load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -310,7 +310,7 @@ void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& g
     }
 
     if (!incremental)
-        reset(inventoryChanger, glow, backtrack, visuals, interfaces, memory);
+        reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -337,7 +337,7 @@ void Config::load(inventory_changer::InventoryChanger& inventoryChanger, Glow& g
     visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], inventoryChanger);
     Sound::fromJson(j["Sound"]);
-    Misc::fromJson(j["Misc"]);
+    misc.fromJson(j["Misc"]);
 }
 
 static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
@@ -529,7 +529,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -551,7 +551,7 @@ void Config::save(inventory_changer::InventoryChanger& inventoryChanger, Glow& g
     j["ESP"] = streamProofESP;
     j["Sound"] = Sound::toJson();
     j["Visuals"] = visuals.toJson();
-    j["Misc"] = Misc::toJson();
+    j["Misc"] = misc.toJson();
     j["Style"] = style;
     j["Inventory Changer"] = toJson(interfaces, memory, inventoryChanger);
 
@@ -562,11 +562,11 @@ void Config::save(inventory_changer::InventoryChanger& inventoryChanger, Glow& g
         out << std::setw(2) << j;
 }
 
-void Config::add(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs.size() - 1);
+        save(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -584,7 +584,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -598,7 +598,7 @@ void Config::reset(inventory_changer::InventoryChanger& inventoryChanger, Glow& 
     visuals.resetConfig();
     inventoryChanger.reset(interfaces, memory);
     Sound::resetConfig();
-    Misc::resetConfig();
+    misc.resetConfig();
 }
 
 void Config::listConfigs() noexcept

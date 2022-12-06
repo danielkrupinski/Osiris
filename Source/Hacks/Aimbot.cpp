@@ -142,7 +142,7 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
@@ -224,9 +224,9 @@ void Aimbot::run(const EngineInterfaces& engineInterfaces, const ClientInterface
             auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (std::abs(angle.x) > Misc::maxAngleDelta() || std::abs(angle.y) > Misc::maxAngleDelta()) {
-                    angle.x = std::clamp(angle.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
-                    angle.y = std::clamp(angle.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+            if (std::abs(angle.x) > misc.maxAngleDelta() || std::abs(angle.y) > misc.maxAngleDelta()) {
+                    angle.x = std::clamp(angle.x, -misc.maxAngleDelta(), misc.maxAngleDelta());
+                    angle.y = std::clamp(angle.y, -misc.maxAngleDelta(), misc.maxAngleDelta());
                     clamped = true;
             }
             

@@ -93,10 +93,10 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     if (!config.style.menuStyle) {
-        renderMenuBar(inventoryChanger, glow, backtrack, visuals);
+        renderMenuBar(misc, inventoryChanger, glow, backtrack, visuals);
         renderAimbotWindow(config);
         renderTriggerbotWindow(config);
         backtrack.drawGUI(false);
@@ -107,10 +107,10 @@ void GUI::render(inventory_changer::InventoryChanger& inventoryChanger, Glow& gl
         inventoryChanger.drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        Misc::drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, false);
-        renderConfigWindow(inventoryChanger, glow, backtrack, visuals, interfaces, memory, config);
+        misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, false);
+        renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config);
     } else {
-        renderGuiStyle2(inventoryChanger, glow, backtrack, visuals, engineInterfaces, clientInterfaces, interfaces, memory, config);
+        renderGuiStyle2(misc, inventoryChanger, glow, backtrack, visuals, engineInterfaces, clientInterfaces, interfaces, memory, config);
     }
 }
 
@@ -123,14 +123,14 @@ void GUI::updateColors(Config& config) const noexcept
     }
 }
 
-void GUI::handleToggle(const OtherInterfaces& interfaces) noexcept
+void GUI::handleToggle(Misc& misc, const OtherInterfaces& interfaces) noexcept
 {
-    if (Misc::isMenuKeyPressed()) {
+    if (misc.isMenuKeyPressed()) {
         open = !open;
         if (!open)
             interfaces.getInputSystem().resetInputState();
 #if !IS_WIN32()
-        ImGui::GetIO().MouseDrawCursor = gui->open;
+        ImGui::GetIO().MouseDrawCursor = open;
 #endif
     }
 }
@@ -144,7 +144,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
     }
 }
 
-void GUI::renderMenuBar(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept
+void GUI::renderMenuBar(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         menuBarItem("Aimbot", window.aimbot);
@@ -157,7 +157,7 @@ void GUI::renderMenuBar(inventory_changer::InventoryChanger& inventoryChanger, G
         inventoryChanger.menuBarItem();
         Sound::menuBarItem();
         menuBarItem("Style", window.style);
-        Misc::menuBarItem();
+        misc.menuBarItem();
         menuBarItem("Config", window.config);
         ImGui::EndMainMenuBar();   
     }
@@ -512,7 +512,7 @@ void GUI::renderStyleWindow(Config& config, bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
+void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!window.config)
@@ -569,7 +569,7 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
             config.openConfigDir();
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
-            config.add(inventoryChanger, glow, backtrack, visuals, interfaces, memory, buffer.c_str());
+            config.add(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, buffer.c_str());
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Config to reset");
@@ -583,7 +583,7 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); Misc::updateClanTag(memory, true); inventoryChanger.scheduleHudUpdate(interfaces); break;
+                    case 0: config.reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); misc.updateClanTag(memory, true); inventoryChanger.scheduleHudUpdate(interfaces); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: backtrack.configure(configurator); break;
@@ -594,7 +594,7 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
                     case 8: inventoryChanger.reset(interfaces, memory); inventoryChanger.scheduleHudUpdate(interfaces); break;
                     case 9: Sound::resetConfig(); break;
                     case 10: config.style = { }; updateColors(config); break;
-                    case 11: Misc::resetConfig(); Misc::updateClanTag(memory, true); break;
+                    case 11: misc.resetConfig(); misc.updateClanTag(memory, true); break;
                     }
                 }
             }
@@ -602,13 +602,13 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config.load(inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig, incrementalLoad);
+                config.load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
                 inventoryChanger.scheduleHudUpdate(interfaces);
-                Misc::updateClanTag(memory, true);
+                misc.updateClanTag(memory, true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config.save(inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig);
+                config.save(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig);
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config.remove(currentConfig);
 
@@ -623,7 +623,7 @@ void GUI::renderConfigWindow(inventory_changer::InventoryChanger& inventoryChang
             ImGui::End();
 }
 
-void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::renderGuiStyle2(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -650,9 +650,9 @@ void GUI::renderGuiStyle2(inventory_changer::InventoryChanger& inventoryChanger,
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        Misc::tabItem(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory);
+        misc.tabItem(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
-            renderConfigWindow(inventoryChanger, glow, backtrack, visuals, interfaces, memory, config, true);
+            renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

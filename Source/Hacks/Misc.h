@@ -14,8 +14,8 @@ class EngineInterfaces;
 class Glow;
 class Visuals;
 
-namespace Misc
-{
+class Misc {
+public:
     bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
@@ -80,4 +80,4 @@ namespace Misc
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+};

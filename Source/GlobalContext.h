@@ -83,6 +83,7 @@ public:
 #endif
 
     void viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3);
+    void spottedHook(recvProxyData& data, void* outStruct, void* arg3);
 
     void fireGameEventCallback(csgo::pod::GameEvent* eventPointer);
 

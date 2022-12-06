@@ -32,6 +32,11 @@ void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* ar
     globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
 }
 
+void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
+{
+    globalContext->spottedHook(data, outStruct, arg3);
+}
+
 #if IS_WIN32()
 
 LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept

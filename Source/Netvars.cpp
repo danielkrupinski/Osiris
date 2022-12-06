@@ -22,22 +22,7 @@
 
 #include "GlobalContext.h"
 
-static void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
-{
-    const auto entity = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
-
-    if (Misc::isRadarHackOn()) {
-        data.value._int = 1;
-
-        if (localPlayer) {
-            if (const auto index = localPlayer.get().getNetworkable().index(); index > 0 && index <= 32)
-                entity.spottedByMask() |= 1 << (index - 1);
-        }
-    }
-
-    proxyHooks.spotted.originalProxy(data, outStruct, arg3);
-}
-
+void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept;
 void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept;
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
