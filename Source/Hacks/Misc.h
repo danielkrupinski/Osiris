@@ -23,9 +23,13 @@ public:
 #if IS_WIN32()
         demoOrHLTV = ReturnAddress{ clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get() };
         money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
+        insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
+        demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
 #elif IS_LINUX()
         demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
         money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
+        insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
+        demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
 #endif
     }
 
@@ -98,4 +102,6 @@ public:
 private:
     ReturnAddress demoOrHLTV;
     std::uintptr_t money;
+    ReturnAddress insertIntoTree;
+    ReturnAddress demoFileEndReached;
 };

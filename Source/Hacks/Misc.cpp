@@ -1268,7 +1268,7 @@ bool Misc::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAd
 
 const DemoPlaybackParameters* Misc::getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const
 {
-    if (miscConfig.revealSuspect && returnAddress != memory->demoFileEndReached) {
+    if (miscConfig.revealSuspect && returnAddress != demoFileEndReached) {
         static DemoPlaybackParameters customParams;
         customParams = demoPlaybackParameters;
         customParams.anonymousPlayerIdentity = false;
@@ -1280,7 +1280,7 @@ const DemoPlaybackParameters* Misc::getDemoPlaybackParametersHook(ReturnAddress 
 
 std::optional<std::pair<Vector, Vector>> Misc::listLeavesInBoxHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const
 {
-    if (!miscConfig.disableModelOcclusion || returnAddress != memory->insertIntoTree)
+    if (!miscConfig.disableModelOcclusion || returnAddress != insertIntoTree)
         return {};
 
     const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948));

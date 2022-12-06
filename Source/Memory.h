@@ -80,7 +80,6 @@ public:
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
     void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const Vector&);
-    ReturnAddress insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
     csgo::ViewRender* viewRender;
@@ -100,7 +99,6 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    ReturnAddress demoFileEndReached;
     csgo::pod::Entity** gameRules;
     InventoryManager inventoryManager;
     std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;

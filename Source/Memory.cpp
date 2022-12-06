@@ -68,7 +68,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     clearHudWeapon = clientPatternFinder("\xE8????\x8B\xF0\xC6\x44\x24??\xC6\x44\x24").add(1).relativeToAbsolute().as<decltype(clearHudWeapon)>();
     itemSystemFn = clientPatternFinder("\xE8????\x0F\xB7\x0F").add(1).relativeToAbsolute().as<decltype(itemSystemFn)>();
     setAbsOrigin = clientPatternFinder("\xE8????\xEB\x19\x8B\x07").add(1).relativeToAbsolute().as<decltype(setAbsOrigin)>();
-    insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
     dispatchSound = enginePatternFinder("\x74\x0B\xE8????\x8B\x3D").add(3).as<int*>();
     traceToExit = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x4C\xF3\x0F\x10\x75").get();
     viewRender = clientPatternFinder("\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08").add(2).deref<2>().as<csgo::ViewRender*>();
@@ -90,7 +89,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     channels = enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().as<Channel*>();
     playerResource = clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().as<PlayerResource**>();
     getDecoratedPlayerName = clientPatternFinder("\xE8????\x66\x83\x3E").add(1).relativeToAbsolute().as<decltype(getDecoratedPlayerName)>();
-    demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
     plantedC4s = clientPatternFinder("\x7E\x2C\x8B\x15").add(4).deref().as<decltype(plantedC4s)>();
     gameRules = clientPatternFinder("\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07").add(4).deref().as<csgo::pod::Entity**>();
     registeredPanoramaEvents = clientPatternFinder("\xE8????\xA1????\xA8\x01\x75\x21").add(6).deref().add(-36).as<decltype(registeredPanoramaEvents)>();
@@ -141,7 +139,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     keyValuesSetString = clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();
     viewRender = clientPatternFinder("\x0F\x85????\x48\x8B\x05????\x45\x89\xF8").add(9).relativeToAbsolute().deref<2>().as<csgo::ViewRender*>();
-    demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
     clearHudWeapon = clientPatternFinder("\xE8????\xC6\x45\xB8\x01").add(1).relativeToAbsolute().as<decltype(clearHudWeapon)>();
     equipWearable = clientPatternFinder("\x55\x48\x89\xE5\x41\x56\x41\x55\x41\x54\x49\x89\xF4\x53\x48\x89\xFB\x48\x83\xEC\x10\x48\x8B\x07").as<decltype(equipWearable)>();
     setAbsOrigin = clientPatternFinder("\xE8????\x49\x8B\x07\x31\xF6").add(1).relativeToAbsolute().as<decltype(setAbsOrigin)>();
@@ -158,7 +155,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     panoramaMarshallHelper = clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().as<decltype(panoramaMarshallHelper)>();
     findOrCreateEconItemViewForItemID = clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().as<decltype(findOrCreateEconItemViewForItemID)>();
     createBaseTypeCache = clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get();
-    insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
     uiComponentInventory = clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().as<decltype(uiComponentInventory)>();
     setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get();
 
