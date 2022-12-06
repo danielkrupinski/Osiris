@@ -14,6 +14,7 @@ class ClientInterfaces;
 class EngineInterfaces;
 class Glow;
 class Visuals;
+struct DemoPlaybackParameters;
 
 class Misc {
 public:
@@ -28,7 +29,6 @@ public:
 #endif
     }
 
-    bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
     bool isRadarHackOn() noexcept;
     bool isMenuKeyPressed() noexcept;
@@ -80,6 +80,7 @@ public:
     void autoAccept(const OtherInterfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
 
     bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
+    const DemoPlaybackParameters* getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const;
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;

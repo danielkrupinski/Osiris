@@ -282,12 +282,8 @@ const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(Retur
 {
     const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
 
-    if (params && features->misc.shouldRevealSuspect() && returnAddress != memory->demoFileEndReached) {
-        static DemoPlaybackParameters customParams;
-        customParams = *params;
-        customParams.anonymousPlayerIdentity = false;
-        return &customParams;
-    }
+    if (params)
+        return features->misc.getDemoPlaybackParametersHook(returnAddress, *params);
 
     return params;
 }

@@ -164,11 +164,6 @@ struct MiscConfig {
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
 
-bool Misc::shouldRevealSuspect() noexcept
-{
-    return miscConfig.revealSuspect;
-}
-
 bool Misc::shouldDisableModelOcclusion() noexcept
 {
     return miscConfig.disableModelOcclusion;
@@ -1273,6 +1268,18 @@ void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, c
 bool Misc::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const
 {
     return miscConfig.revealMoney && returnAddress == demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == money;
+}
+
+const DemoPlaybackParameters* Misc::getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const
+{
+    if (miscConfig.revealSuspect && returnAddress != memory->demoFileEndReached) {
+        static DemoPlaybackParameters customParams;
+        customParams = demoPlaybackParameters;
+        customParams.anonymousPlayerIdentity = false;
+        return &customParams;
+    }
+
+    return &demoPlaybackParameters;
 }
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
