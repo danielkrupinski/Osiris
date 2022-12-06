@@ -308,10 +308,12 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
 
 bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
-    if (features->misc.shouldRevealMoney() && returnAddress == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == memory->money)
+    const auto result = hooks->engine.callOriginal<bool, 82>();
+
+    if (features->misc.isPlayingDemoHook(returnAddress, frameAddress))
         return true;
 
-    return hooks->engine.callOriginal<bool, 82>();
+    return result;
 }
 
 void GlobalContext::updateColorCorrectionWeightsHook()

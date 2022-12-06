@@ -16,7 +16,6 @@ class Visuals;
 
 class Misc {
 public:
-    bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
     bool isRadarHackOn() noexcept;
@@ -67,6 +66,8 @@ public:
     void onVoteFailed(const Memory& memory) noexcept;
     void drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept;
     void autoAccept(const OtherInterfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept;
+
+    bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;

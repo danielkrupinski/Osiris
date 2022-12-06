@@ -164,11 +164,6 @@ struct MiscConfig {
     OffscreenEnemies offscreenEnemies;
 } miscConfig;
 
-bool Misc::shouldRevealMoney() noexcept
-{
-    return miscConfig.revealMoney;
-}
-
 bool Misc::shouldRevealSuspect() noexcept
 {
     return miscConfig.revealSuspect;
@@ -1273,6 +1268,11 @@ void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, c
     FlashWindowEx(&flash);
     ShowWindow(window, SW_RESTORE);
 #endif
+}
+
+bool Misc::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const
+{
+    return miscConfig.revealMoney && returnAddress == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(frameAddress + WIN32_LINUX(8, 24)) == memory->money;
 }
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
