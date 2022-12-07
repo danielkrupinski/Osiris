@@ -290,14 +290,9 @@ const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(Retur
 
 bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int passthroughFlags, int size, const void* data)
 {
+    features->misc.dispatchUserMessageHook(type, size, data);
     if (type == csgo::UserMessageType::Text)
         features->inventoryChanger.onUserTextMsg(*memory, data, size);
-    else if (type == csgo::UserMessageType::VoteStart)
-        features->misc.onVoteStart(data, size);
-    else if (type == csgo::UserMessageType::VotePass)
-        features->misc.onVotePass();
-    else if (type == csgo::UserMessageType::VoteFailed)
-        features->misc.onVoteFailed();
 
     return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
 }

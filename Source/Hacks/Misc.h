@@ -8,6 +8,7 @@
 #include <Interfaces/OtherInterfaces.h>
 
 namespace csgo { enum class FrameStage; }
+namespace csgo { enum class UserMessageType; }
 
 class GameEvent;
 struct ImDrawList;
@@ -78,15 +79,13 @@ public:
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void voteRevealer(const GameEvent& event) noexcept;
-    void onVoteStart(const void* data, int size) noexcept;
-    void onVotePass() noexcept;
-    void onVoteFailed() noexcept;
     void drawOffscreenEnemies(const Engine& engine, ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
 
     bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const;
     std::optional<std::pair<Vector, Vector>> listLeavesInBoxHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
+    void dispatchUserMessageHook(csgo::UserMessageType type, int size, const void* data);
 
     void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
     void updateInput() noexcept;
@@ -102,6 +101,10 @@ public:
     void resetConfig() noexcept;
 
 private:
+    void onVoteStart(const void* data, int size) noexcept;
+    void onVotePass() noexcept;
+    void onVoteFailed() noexcept;
+
     ClientInterfaces clientInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;

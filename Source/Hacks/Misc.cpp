@@ -33,6 +33,7 @@
 #include "../SDK/EntityList.h"
 #include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
+#include <SDK/Constants/UserMessages.h>
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
@@ -1296,6 +1297,17 @@ std::optional<std::pair<Vector, Vector>> Misc::listLeavesInBoxHook(ReturnAddress
     constexpr Vector min{ minCoord, minCoord, minCoord };
     constexpr Vector max{ maxCoord, maxCoord, maxCoord };
     return std::pair{ min, max };
+}
+
+void Misc::dispatchUserMessageHook(csgo::UserMessageType type, int size, const void* data)
+{
+    switch (type) {
+    using enum csgo::UserMessageType;
+    case VoteStart: return onVoteStart(data, size);
+    case VotePass: return onVotePass();
+    case VoteFailed: return onVoteFailed();
+    default: break;
+    }
 }
 
 void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove) noexcept
