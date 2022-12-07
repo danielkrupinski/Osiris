@@ -229,7 +229,7 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::updateClanTag(const Memory& memory, bool tagChanged) noexcept
+void Misc::updateClanTag(bool tagChanged) noexcept
 {
     static std::string clanTag;
 
@@ -344,7 +344,7 @@ static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color) 
     drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
 }
 
-void Misc::noscopeCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
+void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
 {
     if (!miscConfig.noscopeCrosshair.asColorToggle().enabled)
         return;
@@ -358,7 +358,7 @@ void Misc::noscopeCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.noscopeCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
+void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!miscConfig.recoilCrosshair.asColorToggle().enabled)
         return;
@@ -376,7 +376,7 @@ void Misc::recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept
         drawCrosshair(drawList, pos, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.recoilCrosshair.asColorToggle().asColor4()));
 }
 
-void Misc::watermark(const Memory& memory) noexcept
+void Misc::watermark() noexcept
 {
     if (!miscConfig.watermark.enabled)
         return;
@@ -395,9 +395,9 @@ void Misc::watermark(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* cmd) noexcept
+void Misc::prepareRevolver(const Engine& engine, UserCmd* cmd) noexcept
 {
-    auto timeToTicks = [&memory](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
+    auto timeToTicks = [this](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
@@ -469,7 +469,7 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     cmd->sidemove = negatedDirection.y;
 }
 
-void Misc::drawBombTimer(const Memory& memory) noexcept
+void Misc::drawBombTimer() noexcept
 {
     if (!miscConfig.bombTimer.enabled)
         return;
@@ -531,7 +531,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(const Engine& engine, const Memory& memory) noexcept
+void Misc::stealNames(const Engine& engine) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -555,7 +555,7 @@ void Misc::stealNames(const Engine& engine, const Memory& memory) noexcept
         if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
-        if (changeName(engine, memory, false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
+        if (changeName(engine, false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
             stolenIds.push_back(playerInfo.userId);
 
         return;
@@ -605,7 +605,7 @@ void Misc::quickReload(UserCmd* cmd) noexcept
     }
 }
 
-bool Misc::changeName(const Engine& engine, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
+bool Misc::changeName(const Engine& engine, bool reconnect, const char* newName, float delay) noexcept
 {
     static auto exploitInitialized{ false };
 
@@ -647,14 +647,14 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer.get().isOnGround();
 }
 
-void Misc::fakeBan(const Engine& engine, const Memory& memory, bool set) noexcept
+void Misc::fakeBan(const Engine& engine, bool set) noexcept
 {
     static bool shouldSet = false;
 
     if (set)
         shouldSet = set;
 
-    if (shouldSet && engine.isInGame() && changeName(engine, memory, false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && engine.isInGame() && changeName(engine, false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
@@ -712,7 +712,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
         cmd->buttons |= 1 << 27;
 }
 
-void Misc::fixAnimationLOD(const Engine& engine, const Memory& memory, csgo::FrameStage stage) noexcept
+void Misc::fixAnimationLOD(const Engine& engine, csgo::FrameStage stage) noexcept
 {
 #if IS_WIN32()
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
@@ -729,7 +729,7 @@ void Misc::fixAnimationLOD(const Engine& engine, const Memory& memory, csgo::Fra
 #endif
 }
 
-void Misc::autoPistol(const Memory& memory, UserCmd* cmd) noexcept
+void Misc::autoPistol(UserCmd* cmd) noexcept
 {
     if (miscConfig.autoPistol && localPlayer) {
         const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
@@ -836,7 +836,7 @@ void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Engine& engine, const Memory& memory, const GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -1002,7 +1002,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(const Engine& engine, const Memory& memory) noexcept
+void Misc::runReportbot(const Engine& engine) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1040,7 +1040,7 @@ void Misc::resetReportbot() noexcept
     reportedPlayers.clear();
 }
 
-void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
+void Misc::preserveKillfeed(bool roundStart) noexcept
 {
     if (!miscConfig.preserveKillfeed.enabled)
         return;
@@ -1076,7 +1076,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const Memory& memory, const GameEvent& event) noexcept
+void Misc::voteRevealer(const GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1092,7 +1092,7 @@ void Misc::voteRevealer(const Memory& memory, const GameEvent& event) noexcept
     memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const Memory& memory, const void* data, int size) noexcept
+void Misc::onVoteStart(const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1120,13 +1120,13 @@ void Misc::onVoteStart(const Memory& memory, const void* data, int size) noexcep
     memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
 }
 
-void Misc::onVotePass(const Memory& memory) noexcept
+void Misc::onVotePass() noexcept
 {
     if (miscConfig.revealVotes)
         memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
 }
 
-void Misc::onVoteFailed(const Memory& memory) noexcept
+void Misc::onVoteFailed() noexcept
 {
     if (miscConfig.revealVotes)
         memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
@@ -1161,7 +1161,7 @@ static void shadeVertsHSVColorGradientKeepAlpha(ImDrawList* draw_list, int vert_
     }
 }
 
-void Misc::drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept
+void Misc::drawOffscreenEnemies(const Engine& engine, ImDrawList* drawList) noexcept
 {
     if (!miscConfig.offscreenEnemies.enabled)
         return;
@@ -1240,7 +1240,7 @@ void Misc::drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDr
     }
 }
 
-void Misc::autoAccept(const Memory& memory, const char* soundEntry) noexcept
+void Misc::autoAccept(const char* soundEntry) noexcept
 {
     if (!miscConfig.autoAccept)
         return;
@@ -1304,10 +1304,10 @@ void Misc::updateEventListeners(const EngineInterfaces& engineInterfaces, bool f
     static bool listenerRegistered = false;
 
     if (miscConfig.purchaseList.enabled && !listenerRegistered) {
-        engineInterfaces.getGameEventManager(memory->getEventDescriptor).addListener(&listener, "item_purchase");
+        engineInterfaces.getGameEventManager(memory.getEventDescriptor).addListener(&listener, "item_purchase");
         listenerRegistered = true;
     } else if ((!miscConfig.purchaseList.enabled || forceRemove) && listenerRegistered) {
-        engineInterfaces.getGameEventManager(memory->getEventDescriptor).removeListener(&listener);
+        engineInterfaces.getGameEventManager(memory.getEventDescriptor).removeListener(&listener);
         listenerRegistered = false;
     }
 }
@@ -1328,15 +1328,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory) noexcept
+void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, memory, true);
+        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -1420,7 +1420,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PushID(0);
 
     if (ImGui::InputText("", miscConfig.clanTag, sizeof(miscConfig.clanTag)))
-        Misc::updateClanTag(memory, true);
+        updateClanTag(true);
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &miscConfig.killMessage);
     ImGui::SameLine();
@@ -1439,7 +1439,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
-        fakeBan(engineInterfaces.getEngine(), memory, true);
+        fakeBan(engineInterfaces.getEngine(), true);
     ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);

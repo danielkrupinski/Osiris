@@ -107,7 +107,7 @@ void GUI::render(Misc& misc, inventory_changer::InventoryChanger& inventoryChang
         inventoryChanger.drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, memory, false);
+        misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, false);
         renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config);
     } else {
         renderGuiStyle2(misc, inventoryChanger, glow, backtrack, visuals, engineInterfaces, clientInterfaces, interfaces, memory, config);
@@ -583,7 +583,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); misc.updateClanTag(memory, true); inventoryChanger.scheduleHudUpdate(interfaces); break;
+                    case 0: config.reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); misc.updateClanTag(true); inventoryChanger.scheduleHudUpdate(interfaces); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: backtrack.configure(configurator); break;
@@ -594,7 +594,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
                     case 8: inventoryChanger.reset(interfaces, memory); inventoryChanger.scheduleHudUpdate(interfaces); break;
                     case 9: Sound::resetConfig(); break;
                     case 10: config.style = { }; updateColors(config); break;
-                    case 11: misc.resetConfig(); misc.updateClanTag(memory, true); break;
+                    case 11: misc.resetConfig(); misc.updateClanTag(true); break;
                     }
                 }
             }
@@ -605,7 +605,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
                 config.load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
                 inventoryChanger.scheduleHudUpdate(interfaces);
-                misc.updateClanTag(memory, true);
+                misc.updateClanTag(true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config.save(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig);
@@ -650,7 +650,7 @@ void GUI::renderGuiStyle2(Misc& misc, inventory_changer::InventoryChanger& inven
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        misc.tabItem(visuals, inventoryChanger, glow, engineInterfaces, memory);
+        misc.tabItem(visuals, inventoryChanger, glow, engineInterfaces);
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();

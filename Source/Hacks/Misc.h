@@ -19,8 +19,8 @@ struct DemoPlaybackParameters;
 
 class Misc {
 public:
-    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const helpers::PatternFinder& clientPatternFinder)
-        : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }
+    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
+        : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory }
     {
 #if IS_WIN32()
         demoOrHLTV = ReturnAddress{ clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get() };
@@ -42,28 +42,28 @@ public:
 
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
-    void updateClanTag(const Memory& memory, bool = false) noexcept;
+    void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
-    void noscopeCrosshair(const Memory& memory, ImDrawList* drawlist) noexcept;
-    void recoilCrosshair(const Memory& memory, ImDrawList* drawList) noexcept;
-    void watermark(const Memory& memory) noexcept;
-    void prepareRevolver(const Engine& engine, const Memory& memory, UserCmd*) noexcept;
+    void noscopeCrosshair(ImDrawList* drawlist) noexcept;
+    void recoilCrosshair(ImDrawList* drawList) noexcept;
+    void watermark() noexcept;
+    void prepareRevolver(const Engine& engine, UserCmd*) noexcept;
     void fastPlant(const EngineTrace& engineTrace, UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
-    void drawBombTimer(const Memory& memory) noexcept;
-    void stealNames(const Engine& engine, const Memory& memory) noexcept;
+    void drawBombTimer() noexcept;
+    void stealNames(const Engine& engine) noexcept;
     void disablePanoramablur() noexcept;
     void quickReload(UserCmd*) noexcept;
-    bool changeName(const Engine& engine, const Memory& memory, bool, const char*, float) noexcept;
+    bool changeName(const Engine& engine, bool, const char*, float) noexcept;
     void bunnyHop(UserCmd*) noexcept;
-    void fakeBan(const Engine& engine, const Memory& memory, bool = false) noexcept;
+    void fakeBan(const Engine& engine, bool = false) noexcept;
     void nadePredict() noexcept;
     void fixTabletSignal() noexcept;
     void killMessage(const Engine& engine, const GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(UserCmd* cmd) noexcept;
-    void fixAnimationLOD(const Engine& engine, const Memory& memory, csgo::FrameStage stage) noexcept;
-    void autoPistol(const Memory& memory, UserCmd* cmd) noexcept;
+    void fixAnimationLOD(const Engine& engine, csgo::FrameStage stage) noexcept;
+    void autoPistol(UserCmd* cmd) noexcept;
     void chokePackets(const Engine& engine, bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(UserCmd* cmd) noexcept;
@@ -72,17 +72,17 @@ public:
     void moonwalk(UserCmd* cmd) noexcept;
     void playHitSound(const Engine& engine, const GameEvent& event) noexcept;
     void killSound(const Engine& engine, const GameEvent& event) noexcept;
-    void purchaseList(const Engine& engine, const Memory& memory, const GameEvent* event = nullptr) noexcept;
+    void purchaseList(const Engine& engine, const GameEvent* event = nullptr) noexcept;
     void oppositeHandKnife(csgo::FrameStage stage) noexcept;
-    void runReportbot(const Engine& engine, const Memory& memory) noexcept;
+    void runReportbot(const Engine& engine) noexcept;
     void resetReportbot() noexcept;
-    void preserveKillfeed(const Memory& memory, bool roundStart = false) noexcept;
-    void voteRevealer(const Memory& memory, const GameEvent& event) noexcept;
-    void onVoteStart(const Memory& memory, const void* data, int size) noexcept;
-    void onVotePass(const Memory& memory) noexcept;
-    void onVoteFailed(const Memory& memory) noexcept;
-    void drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDrawList* drawList) noexcept;
-    void autoAccept(const Memory& memory, const char* soundEntry) noexcept;
+    void preserveKillfeed(bool roundStart = false) noexcept;
+    void voteRevealer(const GameEvent& event) noexcept;
+    void onVoteStart(const void* data, int size) noexcept;
+    void onVotePass() noexcept;
+    void onVoteFailed() noexcept;
+    void drawOffscreenEnemies(const Engine& engine, ImDrawList* drawList) noexcept;
+    void autoAccept(const char* soundEntry) noexcept;
 
     bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
     const DemoPlaybackParameters* getDemoPlaybackParametersHook(ReturnAddress returnAddress, const DemoPlaybackParameters& demoPlaybackParameters) const;
@@ -93,8 +93,8 @@ public:
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory) noexcept;
-    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory, bool contentOnly) noexcept;
+    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces) noexcept;
+    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;
@@ -104,6 +104,7 @@ public:
 private:
     ClientInterfaces clientInterfaces;
     OtherInterfaces interfaces;
+    const Memory& memory;
 
     ReturnAddress demoOrHLTV;
     std::uintptr_t money;
