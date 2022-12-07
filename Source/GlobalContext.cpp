@@ -87,7 +87,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     features->misc.fastStop(cmd);
     features->misc.prepareRevolver(getEngineInterfaces().getEngine(), *memory, cmd);
     features->visuals.removeShadows();
-    features->misc.runReportbot(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
+    features->misc.runReportbot(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
     features->misc.bunnyHop(cmd);
     features->misc.autoStrafe(cmd);
     features->misc.removeCrouchCooldown(cmd);
@@ -95,9 +95,9 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     features->misc.autoReload(cmd);
     features->misc.updateClanTag(*memory);
     features->misc.fakeBan(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
-    features->misc.stealNames(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
-    features->misc.revealRanks(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, cmd);
-    features->misc.quickReload(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), cmd);
+    features->misc.stealNames(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
+    features->misc.revealRanks(cmd);
+    features->misc.quickReload(getOtherInterfaces(), cmd);
     features->misc.fixTabletSignal();
     features->misc.slowwalk(cmd);
 
@@ -205,7 +205,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         features->visuals.disablePostProcessing(stage);
         features->visuals.removeVisualRecoil(stage);
         features->visuals.applyZoom(stage);
-        features->misc.fixAnimationLOD(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, stage);
+        features->misc.fixAnimationLOD(getEngineInterfaces().getEngine(), *memory, stage);
         features->backtrack.update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
     }
     features->inventoryChanger.run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
@@ -293,7 +293,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     if (type == csgo::UserMessageType::Text)
         features->inventoryChanger.onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
-        features->misc.onVoteStart(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, data, size);
+        features->misc.onVoteStart(getOtherInterfaces(), *memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
         features->misc.onVotePass(*memory);
     else if (type == csgo::UserMessageType::VoteFailed)
@@ -552,7 +552,7 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         features->misc.preserveKillfeed(*memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, &event);
         break;
     case fnv::hash("player_death"):
         features->inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
@@ -566,13 +566,13 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         features->visuals.hitMarker(&event);
         break;
     case fnv::hash("vote_cast"):
-        features->misc.voteRevealer(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, event);
+        features->misc.voteRevealer(getOtherInterfaces(), *memory, event);
         break;
     case fnv::hash("round_mvp"):
         features->inventoryChanger.onRoundMVP(getEngineInterfaces().getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, &event);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
         features->visuals.bulletTracer(event);
@@ -586,7 +586,7 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
         features->misc.noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         features->misc.recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
         features->misc.drawOffscreenEnemies(getEngineInterfaces().getEngine(), *memory, ImGui::GetBackgroundDrawList());

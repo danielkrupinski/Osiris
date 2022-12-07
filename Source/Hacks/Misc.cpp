@@ -531,7 +531,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::stealNames(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -569,7 +569,7 @@ void Misc::disablePanoramablur(const OtherInterfaces& interfaces) noexcept
     ConVar::from(retSpoofGadgets->client, blur).setValue(miscConfig.disablePanoramablur);
 }
 
-void Misc::quickReload(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::quickReload(const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
         static csgo::pod::Entity* reloadedWeapon = 0;
@@ -712,7 +712,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
         cmd->buttons |= 1 << 27;
 }
 
-void Misc::fixAnimationLOD(const Engine& engine, const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void Misc::fixAnimationLOD(const Engine& engine, const Memory& memory, csgo::FrameStage stage) noexcept
 {
 #if IS_WIN32()
     if (miscConfig.fixAnimationLOD && stage == csgo::FrameStage::RENDER_START) {
@@ -757,7 +757,7 @@ void Misc::autoReload(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::revealRanks(const ClientInterfaces& clientInterfaces, UserCmd* cmd) noexcept
+void Misc::revealRanks(UserCmd* cmd) noexcept
 {
     if (miscConfig.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
         clientInterfaces.getClient().dispatchUserMessage(50, 0, 0, nullptr);
@@ -836,7 +836,7 @@ void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -1002,7 +1002,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(const Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::runReportbot(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1076,7 +1076,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
+void Misc::voteRevealer(const OtherInterfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1092,7 +1092,7 @@ void Misc::voteRevealer(const ClientInterfaces& clientInterfaces, const OtherInt
     memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
+void Misc::onVoteStart(const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1328,15 +1328,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, true);
+        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, interfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)

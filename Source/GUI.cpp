@@ -107,7 +107,7 @@ void GUI::render(Misc& misc, inventory_changer::InventoryChanger& inventoryChang
         inventoryChanger.drawGUI(interfaces, memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
-        misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory, false);
+        misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, interfaces, memory, false);
         renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config);
     } else {
         renderGuiStyle2(misc, inventoryChanger, glow, backtrack, visuals, engineInterfaces, clientInterfaces, interfaces, memory, config);
@@ -650,7 +650,7 @@ void GUI::renderGuiStyle2(Misc& misc, inventory_changer::InventoryChanger& inven
             renderStyleWindow(config, true);
             ImGui::EndTabItem();
         }
-        misc.tabItem(visuals, inventoryChanger, glow, engineInterfaces, clientInterfaces, interfaces, memory);
+        misc.tabItem(visuals, inventoryChanger, glow, engineInterfaces, interfaces, memory);
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, config, true);
             ImGui::EndTabItem();
