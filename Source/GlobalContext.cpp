@@ -82,22 +82,22 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     const auto currentViewAngles{ cmd->viewangles };
 
     memory->globalVars->serverTime(cmd);
-    features->misc.nadePredict(getOtherInterfaces());
+    features->misc.nadePredict();
     features->misc.antiAfkKick(cmd);
     features->misc.fastStop(cmd);
     features->misc.prepareRevolver(getEngineInterfaces().getEngine(), *memory, cmd);
     features->visuals.removeShadows();
-    features->misc.runReportbot(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
+    features->misc.runReportbot(getEngineInterfaces().getEngine(), *memory);
     features->misc.bunnyHop(cmd);
     features->misc.autoStrafe(cmd);
     features->misc.removeCrouchCooldown(cmd);
     features->misc.autoPistol(*memory, cmd);
     features->misc.autoReload(cmd);
     features->misc.updateClanTag(*memory);
-    features->misc.fakeBan(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
-    features->misc.stealNames(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
+    features->misc.fakeBan(getEngineInterfaces().getEngine(), *memory);
+    features->misc.stealNames(getEngineInterfaces().getEngine(), *memory);
     features->misc.revealRanks(cmd);
-    features->misc.quickReload(getOtherInterfaces(), cmd);
+    features->misc.quickReload(cmd);
     features->misc.fixTabletSignal();
     features->misc.slowwalk(cmd);
 
@@ -108,7 +108,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     features->backtrack.run(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory, cmd);
     features->misc.edgejump(cmd);
     features->misc.moonwalk(cmd);
-    features->misc.fastPlant(getEngineInterfaces().engineTrace(), getOtherInterfaces(), cmd);
+    features->misc.fastPlant(getEngineInterfaces().engineTrace(), cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         features->misc.chokePackets(getEngineInterfaces().getEngine(), sendPacket);
@@ -184,14 +184,14 @@ int GlobalContext::svCheatsGetIntHook(void* _this, ReturnAddress returnAddress)
 void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 {
     if (getEngineInterfaces().getEngine().isConnected() && !getEngineInterfaces().getEngine().isInGame())
-        features->misc.changeName(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, true, nullptr, 0.0f);
+        features->misc.changeName(getEngineInterfaces().getEngine(), *memory, true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
         GameData::update(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), *memory);
 
     if (stage == csgo::FrameStage::RENDER_START) {
         features->misc.preserveKillfeed(*memory);
-        features->misc.disablePanoramablur(getOtherInterfaces());
+        features->misc.disablePanoramablur();
         features->visuals.colorWorld();
         features->misc.updateEventListeners(getEngineInterfaces());
         features->visuals.updateEventListeners();
@@ -199,7 +199,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     if (getEngineInterfaces().getEngine().isInGame()) {
         features->visuals.skybox(stage);
         features->visuals.removeBlur(stage);
-        features->misc.oppositeHandKnife(getOtherInterfaces(), stage);
+        features->misc.oppositeHandKnife(stage);
         features->visuals.removeGrass(stage);
         features->visuals.modifySmoke(stage);
         features->visuals.disablePostProcessing(stage);
@@ -216,7 +216,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
 int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
 {
     Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, soundEntry, entityIndex, volume);
-    features->misc.autoAccept(getOtherInterfaces(), *memory, soundEntry);
+    features->misc.autoAccept(*memory, soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
     return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
@@ -293,7 +293,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     if (type == csgo::UserMessageType::Text)
         features->inventoryChanger.onUserTextMsg(*memory, data, size);
     else if (type == csgo::UserMessageType::VoteStart)
-        features->misc.onVoteStart(getOtherInterfaces(), *memory, data, size);
+        features->misc.onVoteStart(*memory, data, size);
     else if (type == csgo::UserMessageType::VotePass)
         features->misc.onVotePass(*memory);
     else if (type == csgo::UserMessageType::VoteFailed)
@@ -552,7 +552,7 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         features->misc.preserveKillfeed(*memory, true);
         [[fallthrough]];
     case fnv::hash("round_freeze_end"):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, &event);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), *memory, &event);
         break;
     case fnv::hash("player_death"):
         features->inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
@@ -566,13 +566,13 @@ void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
         features->visuals.hitMarker(&event);
         break;
     case fnv::hash("vote_cast"):
-        features->misc.voteRevealer(getOtherInterfaces(), *memory, event);
+        features->misc.voteRevealer(*memory, event);
         break;
     case fnv::hash("round_mvp"):
         features->inventoryChanger.onRoundMVP(getEngineInterfaces().getEngine(), event);
         break;
     case fnv::hash("item_purchase"):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory, &event);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), *memory, &event);
         break;
     case fnv::hash("bullet_impact"):
         features->visuals.bulletTracer(event);
@@ -586,7 +586,7 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), getOtherInterfaces(), *memory);
+        features->misc.purchaseList(getEngineInterfaces().getEngine(), *memory);
         features->misc.noscopeCrosshair(*memory, ImGui::GetBackgroundDrawList());
         features->misc.recoilCrosshair(*memory, ImGui::GetBackgroundDrawList());
         features->misc.drawOffscreenEnemies(getEngineInterfaces().getEngine(), *memory, ImGui::GetBackgroundDrawList());

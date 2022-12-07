@@ -18,12 +18,12 @@ struct Features {
     Misc misc;
 };
 
-[[nodiscard]] inline Features createFeatures(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterface, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
+[[nodiscard]] inline Features createFeatures(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
 {
     return Features{
-        .backtrack = Backtrack{ otherInterface.getCvar() },
-        .visuals{ memory, otherInterface, clientInterfaces, engineInterfaces, clientPatternFinder, enginePatternFinder },
-        .inventoryChanger{ inventory_changer::createInventoryChanger(otherInterface, memory) },
-        .misc{ clientInterfaces, clientPatternFinder }
+        .backtrack = Backtrack{ otherInterfaces.getCvar() },
+        .visuals{ memory, otherInterfaces, clientInterfaces, engineInterfaces, clientPatternFinder, enginePatternFinder },
+        .inventoryChanger{ inventory_changer::createInventoryChanger(otherInterfaces, memory) },
+        .misc{ clientInterfaces, otherInterfaces, clientPatternFinder }
     };
 }

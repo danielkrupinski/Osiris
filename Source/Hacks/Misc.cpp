@@ -414,7 +414,7 @@ void Misc::prepareRevolver(const Engine& engine, const Memory& memory, UserCmd* 
     }
 }
 
-void Misc::fastPlant(const EngineTrace& engineTrace, const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::fastPlant(const EngineTrace& engineTrace, UserCmd* cmd) noexcept
 {
     if (!miscConfig.fastPlant)
         return;
@@ -531,7 +531,7 @@ void Misc::drawBombTimer(const Memory& memory) noexcept
     ImGui::End();
 }
 
-void Misc::stealNames(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::stealNames(const Engine& engine, const Memory& memory) noexcept
 {
     if (!miscConfig.nameStealer)
         return;
@@ -555,7 +555,7 @@ void Misc::stealNames(const Engine& engine, const OtherInterfaces& interfaces, c
         if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
-        if (changeName(engine, interfaces, memory, false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
+        if (changeName(engine, memory, false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
             stolenIds.push_back(playerInfo.userId);
 
         return;
@@ -563,13 +563,13 @@ void Misc::stealNames(const Engine& engine, const OtherInterfaces& interfaces, c
     stolenIds.clear();
 }
 
-void Misc::disablePanoramablur(const OtherInterfaces& interfaces) noexcept
+void Misc::disablePanoramablur() noexcept
 {
     static auto blur = interfaces.getCvar().findVar(csgo::panorama_disable_blur);
     ConVar::from(retSpoofGadgets->client, blur).setValue(miscConfig.disablePanoramablur);
 }
 
-void Misc::quickReload(const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
+void Misc::quickReload(UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
         static csgo::pod::Entity* reloadedWeapon = 0;
@@ -605,7 +605,7 @@ void Misc::quickReload(const OtherInterfaces& interfaces, UserCmd* cmd) noexcept
     }
 }
 
-bool Misc::changeName(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
+bool Misc::changeName(const Engine& engine, const Memory& memory, bool reconnect, const char* newName, float delay) noexcept
 {
     static auto exploitInitialized{ false };
 
@@ -647,18 +647,18 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer.get().isOnGround();
 }
 
-void Misc::fakeBan(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, bool set) noexcept
+void Misc::fakeBan(const Engine& engine, const Memory& memory, bool set) noexcept
 {
     static bool shouldSet = false;
 
     if (set)
         shouldSet = set;
 
-    if (shouldSet && engine.isInGame() && changeName(engine, interfaces, memory, false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && engine.isInGame() && changeName(engine, memory, false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(miscConfig.banColor + 1) }).append(miscConfig.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
-void Misc::nadePredict(const OtherInterfaces& interfaces) noexcept
+void Misc::nadePredict() noexcept
 {
     static auto nadeVar{ interfaces.getCvar().findVar(csgo::cl_grenadepreview) };
 
@@ -836,7 +836,7 @@ void Misc::killSound(const Engine& engine, const GameEvent& event) noexcept
         engine.clientCmdUnrestricted(("play " + miscConfig.customKillSound).c_str());
 }
 
-void Misc::purchaseList(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory, const GameEvent* event) noexcept
+void Misc::purchaseList(const Engine& engine, const Memory& memory, const GameEvent* event) noexcept
 {
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
@@ -933,7 +933,7 @@ void Misc::purchaseList(const Engine& engine, const OtherInterfaces& interfaces,
     }
 }
 
-void Misc::oppositeHandKnife(const OtherInterfaces& interfaces, csgo::FrameStage stage) noexcept
+void Misc::oppositeHandKnife(csgo::FrameStage stage) noexcept
 {
     if (!miscConfig.oppositeHandKnife)
         return;
@@ -1002,7 +1002,7 @@ static int reportbotRound;
     return xuids;
 }
 
-void Misc::runReportbot(const Engine& engine, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::runReportbot(const Engine& engine, const Memory& memory) noexcept
 {
     if (!miscConfig.reportbot.enabled)
         return;
@@ -1076,7 +1076,7 @@ void Misc::preserveKillfeed(const Memory& memory, bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(const OtherInterfaces& interfaces, const Memory& memory, const GameEvent& event) noexcept
+void Misc::voteRevealer(const Memory& memory, const GameEvent& event) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1092,7 +1092,7 @@ void Misc::voteRevealer(const OtherInterfaces& interfaces, const Memory& memory,
     memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
-void Misc::onVoteStart(const OtherInterfaces& interfaces, const Memory& memory, const void* data, int size) noexcept
+void Misc::onVoteStart(const Memory& memory, const void* data, int size) noexcept
 {
     if (!miscConfig.revealVotes)
         return;
@@ -1240,7 +1240,7 @@ void Misc::drawOffscreenEnemies(const Engine& engine, const Memory& memory, ImDr
     }
 }
 
-void Misc::autoAccept(const OtherInterfaces& interfaces, const Memory& memory, const char* soundEntry) noexcept
+void Misc::autoAccept(const Memory& memory, const char* soundEntry) noexcept
 {
     if (!miscConfig.autoAccept)
         return;
@@ -1328,15 +1328,15 @@ void Misc::menuBarItem() noexcept
     }
 }
 
-void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Misc::tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Misc")) {
-        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, interfaces, memory, true);
+        drawGUI(visuals, inventoryChanger, glow, engineInterfaces, memory, true);
         ImGui::EndTabItem();
     }
 }
 
-void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly) noexcept
+void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, const Memory& memory, bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -1439,7 +1439,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
-        Misc::fakeBan(engineInterfaces.getEngine(), interfaces, memory, true);
+        fakeBan(engineInterfaces.getEngine(), memory, true);
     ImGui::Checkbox("Fast plant", &miscConfig.fastPlant);
     ImGui::Checkbox("Fast Stop", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", miscConfig.bombTimer);
