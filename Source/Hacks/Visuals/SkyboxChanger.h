@@ -3,10 +3,11 @@
 #include <array>
 
 #include <Config/ResetConfigurator.h>
-#include <RetSpoof/FastcallFunctionInvoker.h>
+#include <RetSpoof/FunctionInvoker.h>
 #include <SDK/Constants/ConVarNames.h>
 #include <SDK/Constants/FrameStage.h>
 #include <SDK/Cvar.h>
+#include <SDK/Functions.h>
 #include <SDK/PODs/ConVar.h>
 
 class SkyboxChanger {
@@ -15,7 +16,7 @@ public:
 
     static constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
 
-    SkyboxChanger(Cvar cvar, FastcallFunctionInvoker<void, const char*> loadSky) : cvar{ cvar }, loadSky{ loadSky }
+    SkyboxChanger(Cvar cvar, FunctionInvoker<csgo::R_LoadNamedSkys> loadSky) : cvar{ cvar }, loadSky{ loadSky }
     {
         ResetConfigurator configurator;
         configure(configurator);
@@ -45,14 +46,14 @@ public:
 
 private:
     Cvar cvar;
-    FastcallFunctionInvoker<void, const char*> loadSky;
+    FunctionInvoker<csgo::R_LoadNamedSkys> loadSky;
 };
 
 [[nodiscard]] inline SkyboxChanger createSkyboxChanger(Cvar cvar, const helpers::PatternFinder& enginePatternFinder)
 {
 #if IS_WIN32()
-    return SkyboxChanger{ cvar, FastcallFunctionInvoker<void, const char*>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get() } };
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get() } };
 #elif IS_LINUX()
-    return SkyboxChanger{ cvar, FastcallFunctionInvoker<void, const char*>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get() } };
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get() } };
 #endif
 }
