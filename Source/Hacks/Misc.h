@@ -20,7 +20,7 @@ struct DemoPlaybackParameters;
 
 class Misc {
 public:
-    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
+    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory }
     {
 #if IS_WIN32()
@@ -28,11 +28,13 @@ public:
         money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
         insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
         demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
+        setClanTag = enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").as<decltype(setClanTag)>();
 #elif IS_LINUX()
         demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
         money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
         insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
         demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
+        setClanTag = enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().as<decltype(setClanTag)>();
 #endif
     }
 
@@ -113,4 +115,5 @@ private:
     std::uintptr_t money;
     ReturnAddress insertIntoTree;
     ReturnAddress demoFileEndReached;
+    std::add_pointer_t<void FASTCALL_CONV(const char*, const char*)> setClanTag;
 };

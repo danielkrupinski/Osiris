@@ -253,7 +253,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         s[0] = '\0';
         snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory.globalVars->realtime;
-        memory.setClanTag(s, s);
+        setClanTag(s, s);
     } else if (miscConfig.customClanTag) {
         if (memory.globalVars->realtime - lastTime < 0.6f)
             return;
@@ -263,7 +263,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
         lastTime = memory.globalVars->realtime;
-        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
+        setClanTag(clanTag.c_str(), clanTag.c_str());
     }
 }
 
