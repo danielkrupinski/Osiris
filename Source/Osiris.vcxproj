@@ -336,6 +336,7 @@
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\FileSystem.h" />
+    <ClInclude Include="SDK\Functions.h" />
     <ClInclude Include="SDK\GameEvent.h" />
     <ClInclude Include="SDK\GameMovement.h" />
     <ClInclude Include="SDK\GlobalVars.h" />

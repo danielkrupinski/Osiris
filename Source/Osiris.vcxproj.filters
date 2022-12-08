@@ -1021,6 +1021,9 @@
     <ClInclude Include="SDK\ViewRender.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Functions.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
