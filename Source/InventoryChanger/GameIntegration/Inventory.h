@@ -69,6 +69,11 @@ public:
     void removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID);
     void updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate);
 
+    [[nodiscard]] const EconItemViewFunctions& getEconItemViewFunctions() const noexcept
+    {
+        return econItemViewFunctions;
+    }
+
 private:
     OtherInterfaces interfaces;
     const Memory& memory;

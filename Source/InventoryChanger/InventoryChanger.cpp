@@ -1125,8 +1125,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
-    processEquipRequests(memory, econItemViewFunctions);
-    static game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions, econItemViewFunctions };
+    processEquipRequests(memory, gameInventory.getEconItemViewFunctions());
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
@@ -1150,7 +1149,7 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
     const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
 #endif
 
-    return InventoryChanger{ std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };
+    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)
@@ -1435,7 +1434,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     if (localInventory.getPOD() == nullptr)
         return;
 
-    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), econItemViewFunctions); view.getPOD() != nullptr) {
+    if (const auto view = EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), gameInventory.getEconItemViewFunctions()); view.getPOD() != nullptr) {
         if (const auto soc = view.getSOCData()) {
             if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache)) {
                 soc->inventory = baseTypeCache->getHighestIDs().second + 1;
@@ -1463,7 +1462,6 @@ void InventoryChanger::reset(const OtherInterfaces& interfaces, const Memory& me
 {
     clearInventory(backend);
     backend.getPickEmHandler().clearPicks();
-    static inventory_changer::game_integration::Inventory gameInventory{ interfaces, memory, econItemFunctions, econItemViewFunctions };
     backend.run(gameInventory, std::chrono::milliseconds{ 0 });
 }
 

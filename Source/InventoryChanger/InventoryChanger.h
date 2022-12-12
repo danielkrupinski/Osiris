@@ -8,6 +8,7 @@
 #include "Backend/Request/RequestBuilder.h"
 #include "Backend/Request/ItemActivationHandler.h"
 #include "Backend/Request/XRayScannerHandler.h"
+#include "GameIntegration/Inventory.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
 #include "EconItemFunctions.h"
@@ -78,8 +79,8 @@ struct InventoryChangerReturnAddresses {
 
 class InventoryChanger {
 public:
-    InventoryChanger(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
-        : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) } {}
+    InventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
+        : backend{ std::move(gameItemLookup), std::move(crateLootLookup) }, returnAddresses{ clientPatternFinder }, gameInventory{ interfaces, memory, createEconItemFunctions(clientPatternFinder), createEconItemViewFunctions(clientPatternFinder) } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
@@ -140,8 +141,7 @@ private:
     bool panoramaCodeInXrayScanner = false;
     std::vector<char> userTextMsgBuffer;
     InventoryChangerReturnAddresses returnAddresses;
-    EconItemFunctions econItemFunctions;
-    EconItemViewFunctions econItemViewFunctions;
+    game_integration::Inventory gameInventory;
 };
 
 InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory);
