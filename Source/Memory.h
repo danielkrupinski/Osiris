@@ -114,15 +114,6 @@ public:
         return symbol;
     }
 
-    bool submitReport(const char* xuid, const char* report) const noexcept
-    {
-#if IS_WIN32()
-        return reinterpret_cast<bool(__stdcall*)(const char*, const char*)>(submitReportFunction)(xuid, report);
-#else
-        return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
-#endif
-    }
-
     [[nodiscard]] ItemSystem itemSystem() const noexcept
     {
         return ItemSystem::from(retSpoofGadgets->client, itemSystemFn());
@@ -145,7 +136,6 @@ private:
     void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
     std::add_pointer_t<csgo::pod::ItemSystem* CDECL_CONV()> itemSystemFn;
 
-    std::uintptr_t submitReportFunction;
     csgo::pod::MoveHelper* moveHelperPtr;
 };
 

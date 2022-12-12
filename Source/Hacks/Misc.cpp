@@ -1024,7 +1024,7 @@ void Misc::runReportbot(const Engine& engine) noexcept
             continue;
 
         if (const auto report = generateReportString(); !report.empty()) {
-            memory.submitReport(std::to_string(xuid).c_str(), report.c_str());
+            submitReport(std::to_string(xuid).c_str(), report.c_str());
             lastReportTime = memory.globalVars->realtime;
             reportedPlayers.push_back(xuid);
             return;

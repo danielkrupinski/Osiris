@@ -71,7 +71,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     traceToExit = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x4C\xF3\x0F\x10\x75").get();
     viewRender = clientPatternFinder("\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08").add(2).deref<2>().as<csgo::ViewRender*>();
     drawScreenEffectMaterial = clientPatternFinder("\xE8????\x83\xC4\x0C\x8D\x4D\xF8").add(1).relativeToAbsolute().get();
-    submitReportFunction = clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08").get();
     const auto tier0 = GetModuleHandleW(L"tier0");
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
     conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
@@ -123,7 +122,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     hud = clientPatternFinder("\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8").add(4).relativeToAbsolute().get();
     findHudElement = clientPatternFinder("\xE8????\x48\x8D\x50\xE0").add(1).relativeToAbsolute().as<decltype(findHudElement)>();
 
-    submitReportFunction = clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get();
     clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().as<decltype(clientMode)>();
     input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<Input*>();
     playerResource = clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().as<PlayerResource**>();
