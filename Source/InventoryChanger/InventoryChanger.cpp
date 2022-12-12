@@ -1129,7 +1129,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory)
+InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
 {
     auto itemSchema = ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema());
     game_integration::Items items{ itemSchema, interfaces.getLocalize() };
@@ -1143,13 +1143,7 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
     crateLoot.compress();
     auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
 
-#if IS_WIN32()
-    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-#elif IS_LINUX()
-    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-#endif
-
-    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) } };
+    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), clientPatternFinder };
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)

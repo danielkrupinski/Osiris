@@ -144,7 +144,7 @@ private:
     game_integration::Inventory gameInventory;
 };
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory);
+InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder);
 
 }
 
