@@ -11,15 +11,14 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class XRayScannerHandler {
 public:
-    XRayScannerHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, XRayScanner& xRayScanner, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator, ItemConstRemover constRemover)
-        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, xRayScanner{ xRayScanner }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{responseAccumulator}, constRemover{constRemover} {}
+    XRayScannerHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const ItemGenerator& itemGenerator, XRayScanner& xRayScanner, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator, ItemConstRemover constRemover)
+        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, itemGenerator{ itemGenerator }, xRayScanner{ xRayScanner }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator }, constRemover{ constRemover } {}
 
     void performXRayScan(ItemIterator crate) const
     {
         assert(crate->gameItem().isCrate());
 
-        Helpers::RandomGenerator randomGenerator;
-        auto generatedItem = item_generator::generateItemFromContainer(*memory, randomGenerator, gameItemLookup, crateLootLookup, *crate, nullptr);
+        auto generatedItem = itemGenerator.generateItemFromContainer(*crate, nullptr);
         if (!generatedItem.has_value())
             return;
 
@@ -71,6 +70,7 @@ public:
 private:
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
+    const ItemGenerator& itemGenerator;
     XRayScanner& xRayScanner;
     InventoryHandler inventoryHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;

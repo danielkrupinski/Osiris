@@ -10,10 +10,24 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/Inventory/Item.h>
 
-namespace inventory_changer::item_generator
+namespace inventory_changer
 {
-    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const Memory& memory, Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept;
-    inventory::Item::Properties createDefaultItemProperties(Helpers::RandomGenerator& randomGenerator, const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept;
+
+class ItemGenerator {
+public:
+    ItemGenerator(const Memory& memory, Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup)
+        : memory{ memory }, randomGenerator{ randomGenerator }, gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup } {}
+
+    [[nodiscard]] std::optional<inventory::Item> generateItemFromContainer(const inventory::Item& caseItem, const inventory::Item* crateKey) const noexcept;
+    inventory::Item::Properties createDefaultItemProperties(const game_items::Item& item) const noexcept;
+
+private:
+    const Memory& memory;
+    Helpers::RandomGenerator& randomGenerator;
+    const game_items::Lookup& gameItemLookup;
+    const game_items::CrateLootLookup& crateLootLookup;
+};
+
 }
 
 [[nodiscard]] std::time_t getStartOfYearTimestamp(std::uint16_t year) noexcept;

@@ -21,8 +21,8 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class ItemActivationHandler {
 public:
-    ItemActivationHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
-        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator } {}
+    ItemActivationHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const ItemGenerator& itemGenerator, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
+        : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, itemGenerator{ itemGenerator }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator } {}
 
     void activateOperationPass(ItemIterator operationPass) const
     {
@@ -56,8 +56,7 @@ public:
     {
         assert(container->gameItem().isCrate() && key->gameItem().isCaseKey());
 
-        Helpers::RandomGenerator randomGenerator;
-        auto generatedItem = item_generator::generateItemFromContainer(*memory, randomGenerator, gameItemLookup, crateLootLookup, *container, std::to_address(key));
+        auto generatedItem = itemGenerator.generateItemFromContainer(*container, std::to_address(key));
         if (!generatedItem.has_value())
             return;
 
@@ -71,8 +70,7 @@ public:
     {
         assert(container->gameItem().isCrate());
 
-        Helpers::RandomGenerator randomGenerator;
-        auto generatedItem = item_generator::generateItemFromContainer(*memory, randomGenerator, gameItemLookup, crateLootLookup, *container, nullptr);
+        auto generatedItem = itemGenerator.generateItemFromContainer(*container, nullptr);
         if (!generatedItem.has_value())
             return;
 
@@ -84,6 +82,7 @@ public:
 private:
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
+    const ItemGenerator& itemGenerator;
     InventoryHandler inventoryHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     ResponseAccumulator responseAccumulator;

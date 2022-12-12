@@ -817,7 +817,7 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return EconRarity::Default;
 }
 
-namespace inventory_changer::item_generator
+namespace inventory_changer
 {
 
 [[nodiscard]] const game_items::Item& getRandomItemFromContainer(Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& lookup, const game_items::CrateLootLookup& crateLootLookup, WeaponId weaponID, const game_items::CrateLoot::LootList& lootList) noexcept
@@ -858,7 +858,7 @@ namespace inventory_changer::item_generator
     return system_clock::to_time_t(sys_days(31d / December / year) + 23h + 59min + 59s);
 }
 
-namespace inventory_changer::item_generator
+namespace inventory_changer
 {
 
 [[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(const Memory& memory, WeaponId weaponID) noexcept
@@ -883,7 +883,7 @@ private:
     ItemSchema itemSchema;
 };
 
-std::optional<inventory::Item> generateItemFromContainer(const Memory& memory, Helpers::RandomGenerator& randomGenerator, const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const inventory::Item& caseItem, const inventory::Item* crateKey) noexcept
+std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem, const inventory::Item* crateKey) const noexcept
 {
     assert(caseItem.gameItem().isCrate());
 
@@ -893,13 +893,13 @@ std::optional<inventory::Item> generateItemFromContainer(const Memory& memory, H
         return std::nullopt;
 
     const auto& unlockedItem = getRandomItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
-    DropGenerator dropGenerator{ gameItemLookup, AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) } };
+    item_generator::DropGenerator dropGenerator{ gameItemLookup, item_generator::AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) } };
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(caseItem, crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
 }
 
-inventory::Item::Properties createDefaultItemProperties(Helpers::RandomGenerator& randomGenerator, const game_items::Storage& gameItemStorage, const game_items::Item& item) noexcept
+inventory::Item::Properties ItemGenerator::createDefaultItemProperties(const game_items::Item& item) const noexcept
 {
-    DefaultGenerator defaultGenerator{ gameItemStorage, AttributeGenerator{ randomGenerator } };
+    item_generator::DefaultGenerator defaultGenerator{ gameItemLookup.getStorage(), item_generator::AttributeGenerator{ randomGenerator } };
     return { defaultGenerator.createCommonProperties(item), defaultGenerator.createVariantProperties(item) };
 }
 
