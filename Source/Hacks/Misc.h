@@ -25,9 +25,11 @@ public:
     Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
 #if IS_WIN32()
-        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get() }
+        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get() },
+        submitReport{ retSpoofGadgets->client, clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08").get() }
 #elif IS_LINUX()
-        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().get() }
+        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().get() },
+        submitReport{ retSpoofGadgets->client, clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get() }
 #endif
     {
 #if IS_WIN32()
@@ -35,13 +37,11 @@ public:
         money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
         insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
         demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
-        submitReportFunction = clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08").get();
 #elif IS_LINUX()
         demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
         money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
         insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
         demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
-        submitReportFunction = clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get();
 #endif
     }
 
@@ -114,15 +114,6 @@ private:
     void onVotePass() noexcept;
     void onVoteFailed() noexcept;
 
-    bool submitReport(const char* xuid, const char* report) const noexcept
-    {
-#if IS_WIN32()
-        return reinterpret_cast<bool(__stdcall*)(const char*, const char*)>(submitReportFunction)(xuid, report);
-#else
-        return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
-#endif
-    }
-
     ClientInterfaces clientInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;
@@ -132,5 +123,5 @@ private:
     ReturnAddress insertIntoTree;
     ReturnAddress demoFileEndReached;
     FunctionInvoker<csgo::SendClanTag> setClanTag;
-    std::uintptr_t submitReportFunction;
+    FunctionInvoker<csgo::SubmitReport> submitReport;
 };
