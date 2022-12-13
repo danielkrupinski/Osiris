@@ -29,14 +29,14 @@
 
 #include <Interfaces/ClientInterfaces.h>
 
-void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)
         return;
 
     auto& glow = glowConfig;
 
-    Glow::clearCustomObjects(memory);
+    Glow::clearCustomObjects();
 
     if (glowToggleKey.isSet()) {
         if (!glowToggleKey.isToggled() && !glowHoldKey.isDown())
@@ -150,7 +150,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     }
 }
 
-void Glow::clearCustomObjects(const Memory& memory) noexcept
+void Glow::clearCustomObjects() noexcept
 {
     for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
         glowObjectManager->unregisterGlowObject(glowObjectIndex);

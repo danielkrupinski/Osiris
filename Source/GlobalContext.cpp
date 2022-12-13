@@ -143,7 +143,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         features->visuals.reduceFlashEffect();
         features->visuals.updateBrightness();
         features->visuals.remove3dSky();
-        features->glow.render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory);
+        features->glow.render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory);
     }
     hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
 }
