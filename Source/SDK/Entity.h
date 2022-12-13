@@ -120,7 +120,7 @@ public:
 
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
-    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, std::ref(origin)))
+    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, &origin))
     VIRTUAL_METHOD(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
 #if IS_WIN32()
     VIRTUAL_METHOD(bool, initializeAsClientEntity, 97, (const char* modelName, bool renderWithViewmodels), (modelName, renderWithViewmodels))
@@ -143,14 +143,14 @@ public:
     auto getEyePosition() const noexcept
     {
         Vector v;
-        call<void, 285>(std::ref(v));
+        call<void, 285>(&v);
         return v;
     }
 
     auto getAimPunch() const noexcept
     {
         Vector v;
-        call<void, 346>(std::ref(v));
+        call<void, 346>(&v);
         return v;
     }
 #else

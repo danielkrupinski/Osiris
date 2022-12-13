@@ -233,7 +233,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 
 void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
 }
 
 #if !IS_WIN32()

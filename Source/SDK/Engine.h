@@ -55,15 +55,15 @@ namespace csgo::pod { struct Engine; }
 
 class Engine : public VirtualCallableFromPOD<Engine, csgo::pod::Engine> {
 public:
-    VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (std::ref(w), std::ref(h)))
-    VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, std::ref(playerInfo)))
+    VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (&w, &h))
+    VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, &playerInfo))
     VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (userId))
-    VIRTUAL_METHOD(void, getViewAngles, 18, (Vector& angles), (std::ref(angles)))
-    VIRTUAL_METHOD(void, setViewAngles, 19, (const Vector& angles), (std::cref(angles)))
+    VIRTUAL_METHOD(void, getViewAngles, 18, (Vector& angles), (&angles))
+    VIRTUAL_METHOD(void, setViewAngles, 19, (const Vector& angles), (&angles))
     VIRTUAL_METHOD(int, getMaxClients, 20, (), ())
     VIRTUAL_METHOD(bool, isInGame, 26, (), ())
     VIRTUAL_METHOD(bool, isConnected, 27, (), ())
-    VIRTUAL_METHOD(bool, cullBox, 34, (const Vector& mins, const Vector& maxs), (std::cref(mins), std::cref(maxs)))
+    VIRTUAL_METHOD(bool, cullBox, 34, (const Vector& mins, const Vector& maxs), (&mins, &maxs))
     VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix, 37, (), ())
     VIRTUAL_METHOD(void*, getBSPTreeQuery, 43, (), ())
     VIRTUAL_METHOD(const char*, getLevelName, 53, (), ())
