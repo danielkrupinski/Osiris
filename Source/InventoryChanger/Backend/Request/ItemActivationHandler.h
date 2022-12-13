@@ -21,7 +21,7 @@ namespace inventory_changer::backend
 template <typename ResponseAccumulator>
 class ItemActivationHandler {
 public:
-    ItemActivationHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, const ItemGenerator& itemGenerator, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
+    ItemActivationHandler(const game_items::Lookup& gameItemLookup, const game_items::CrateLootLookup& crateLootLookup, ItemGenerator itemGenerator, InventoryHandler inventoryHandler, ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler, ResponseAccumulator responseAccumulator)
         : gameItemLookup{ gameItemLookup }, crateLootLookup{ crateLootLookup }, itemGenerator{ itemGenerator }, inventoryHandler{ inventoryHandler }, itemRemovalHandler{ itemRemovalHandler }, responseAccumulator{ responseAccumulator } {}
 
     void activateOperationPass(ItemIterator operationPass) const
@@ -82,7 +82,7 @@ public:
 private:
     const game_items::Lookup& gameItemLookup;
     const game_items::CrateLootLookup& crateLootLookup;
-    const ItemGenerator& itemGenerator;
+    ItemGenerator itemGenerator;
     InventoryHandler inventoryHandler;
     ItemRemovalHandler<ResponseAccumulator> itemRemovalHandler;
     ResponseAccumulator responseAccumulator;
