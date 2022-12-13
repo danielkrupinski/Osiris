@@ -63,8 +63,8 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::SnowballProjectile:
         case ClassId::Hostage:
         case ClassId::CSRagdoll:
-            if (!memory.glowObjectManager->hasGlowEffect(entity.getPOD())) {
-                if (auto index{ memory.glowObjectManager->registerGlowObject(entity.getPOD()) }; index != -1)
+            if (!glowObjectManager->hasGlowEffect(entity.getPOD())) {
+                if (auto index{ glowObjectManager->registerGlowObject(entity.getPOD()) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
             break;
@@ -73,8 +73,8 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         }
     }
 
-    for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
-        GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
+    for (int i = 0; i < glowObjectManager->glowObjectDefinitions.size; i++) {
+        GlowObjectDefinition& glowobject = glowObjectManager->glowObjectDefinitions[i];
 
         const auto entity = Entity::from(retSpoofGadgets->client, glowobject.entity);
 
@@ -153,7 +153,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 void Glow::clearCustomObjects(const Memory& memory) noexcept
 {
     for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
-        memory.glowObjectManager->unregisterGlowObject(glowObjectIndex);
+        glowObjectManager->unregisterGlowObject(glowObjectIndex);
 
     customGlowEntities.clear();
 }

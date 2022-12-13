@@ -58,7 +58,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
     input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
     globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
-    glowObjectManager = clientPatternFinder("\x0F\x11\x05????\x83\xC8\x01").add(3).deref().as<GlowObjectManager*>();
     lineGoesThroughSmoke = clientPatternFinder("\xE8????\x8B\x4C\x24\x30\x33\xD2").add(1).relativeToAbsolute().as<decltype(lineGoesThroughSmoke)>();
     isOtherEnemy = clientPatternFinder("\x8B\xCE\xE8????\x02\xC0").add(3).relativeToAbsolute().as<decltype(isOtherEnemy)>();
     auto temp = clientPatternFinder("\xB9????\xE8????\x8B\x5D\x08").add(1);
@@ -126,7 +125,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<Input*>();
     playerResource = clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().as<PlayerResource**>();
 
-    glowObjectManager = clientPatternFinder("\xE8????\x4C\x89\xE7\x8B\x70\x20").add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<decltype(glowObjectManager)>();
     getEventDescriptor = enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get();
     activeChannels = enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().as<ActiveChannels*>();
     channels = enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().as<Channel*>();

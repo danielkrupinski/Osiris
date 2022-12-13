@@ -69,7 +69,6 @@ public:
     ClientMode* clientMode;
     Input* input;
     GlobalVars* globalVars;
-    GlowObjectManager* glowObjectManager;
     UtlVector<PlantedC4*>* plantedC4s;
     UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
