@@ -1027,6 +1027,9 @@
     <ClInclude Include="RetSpoof\FunctionInvoker.h">
       <Filter>RetSpoof</Filter>
     </ClInclude>
+    <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

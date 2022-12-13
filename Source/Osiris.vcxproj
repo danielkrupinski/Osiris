@@ -307,6 +307,7 @@
     <ClInclude Include="RetSpoofGadgets.h" />
     <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FunctionInvoker.h" />
+    <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ClientMode.h" />
