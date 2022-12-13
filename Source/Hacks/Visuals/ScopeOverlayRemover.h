@@ -21,7 +21,7 @@ public:
 
     void updateColorCorrectionWeightsHook() const noexcept
     {
-        if (enabled)
+        if (enabled && vignette)
             *vignette = 0.0f;
     }
 
