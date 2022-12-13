@@ -20,6 +20,12 @@ public:
     }
 
     template <typename ReturnType, typename... Args>
+    ReturnType invokeStdcall(std::uintptr_t functionAddress, Args... args) const noexcept
+    {
+        return reinterpret_cast<ReturnType(*)(Args...)>(functionAddress)(args...);
+    }
+
+    template <typename ReturnType, typename... Args>
     ReturnType invokeCdecl(std::uintptr_t functionAddress, Args... args) const noexcept
     {
         return reinterpret_cast<ReturnType(*)(Args...)>(functionAddress)(args...);
