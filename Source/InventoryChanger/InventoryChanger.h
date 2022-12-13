@@ -80,7 +80,7 @@ struct InventoryChangerReturnAddresses {
 class InventoryChanger {
 public:
     InventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
-        : backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ clientPatternFinder }, gameInventory{ interfaces, memory, createEconItemFunctions(clientPatternFinder), createEconItemViewFunctions(clientPatternFinder) } {}
+        : backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ clientPatternFinder }, gameInventory{ interfaces, memory, createEconItemFunctions(clientPatternFinder), createEconItemViewFunctions(clientPatternFinder), clientPatternFinder } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {

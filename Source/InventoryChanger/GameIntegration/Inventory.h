@@ -35,8 +35,15 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(OtherInterfaces interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions)
-        : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ econItemFunctions }, econItemViewFunctions{ econItemViewFunctions } {}
+    Inventory(OtherInterfaces interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions, const helpers::PatternFinder& clientPatternFinder)
+        : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ econItemFunctions }, econItemViewFunctions{ econItemViewFunctions }
+    {
+#if IS_WIN32()
+        createEconItemSharedObject = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45").add(20).deref().as<decltype(createEconItemSharedObject)>();
+#elif IS_LINUX()
+        createEconItemSharedObject = clientPatternFinder("\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D").add(50).relativeToAbsolute().as<decltype(createEconItemSharedObject)>();
+#endif
+    }
 
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] ItemId assingNewItemID(ItemId itemID);
@@ -79,6 +86,7 @@ private:
     const Memory& memory;
     EconItemFunctions econItemFunctions;
     EconItemViewFunctions econItemViewFunctions;
+    std::add_pointer_t<csgo::pod::EconItem* STDCALL_CONV()> createEconItemSharedObject;
 };
 
 }

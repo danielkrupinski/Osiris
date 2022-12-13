@@ -164,7 +164,7 @@ ItemId Inventory::createSOCItem(const game_items::Storage& gameItemStorage, cons
     if (!baseTypeCache)
         return {};
 
-    const auto econItemPOD = memory.createEconItemSharedObject();
+    const auto econItemPOD = createEconItemSharedObject();
     EconItem econItem{ retSpoofGadgets->client, econItemPOD, econItemFunctions };
     econItemPOD->itemID = baseTypeCache->getHighestIDs().first + 1;
     econItemPOD->originalID = 0;
