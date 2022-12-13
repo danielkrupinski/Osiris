@@ -35,8 +35,8 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(OtherInterfaces interfaces, const Memory& memory, const EconItemFunctions& econItemFunctions, const EconItemViewFunctions& econItemViewFunctions, const helpers::PatternFinder& clientPatternFinder)
-        : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ econItemFunctions }, econItemViewFunctions{ econItemViewFunctions }
+    Inventory(OtherInterfaces interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
+        : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) }
     {
 #if IS_WIN32()
         createEconItemSharedObject = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45").add(20).deref().as<decltype(createEconItemSharedObject)>();
