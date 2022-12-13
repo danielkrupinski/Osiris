@@ -31,7 +31,7 @@ namespace inventory_changer::backend
 
 class BackendSimulator {
 public:
-    explicit BackendSimulator(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const Memory& memory, Helpers::RandomGenerator randomGenerator)
+    explicit BackendSimulator(game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const Memory& memory, Helpers::RandomGenerator& randomGenerator)
         : gameItemLookup{ std::move(gameItemLookup) }, crateLootLookup{ std::move(crateLootLookup) }, itemGenerator{ memory, randomGenerator, this->gameItemLookup, this->crateLootLookup } {}
 
     [[nodiscard]] const Loadout& getLoadout() const noexcept

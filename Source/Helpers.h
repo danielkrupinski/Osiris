@@ -102,22 +102,22 @@ namespace Helpers
             return (GeneratorType::max)();
         }
 
-        auto operator()() const
+        auto operator()()
         {
             std::scoped_lock lock{ mutex };
             return gen();
         }
 
         template <typename Distribution>
-        auto operator()(Distribution&& distribution) const
+        auto operator()(Distribution&& distribution)
         {
             std::scoped_lock lock{ mutex };
             return distribution(gen);
         }
 
     private:
-        inline static GeneratorType gen{ std::random_device{}() };
-        inline static std::mutex mutex;
+        GeneratorType gen{ std::random_device{}() };
+        std::mutex mutex;
     };
 
     class ToUpperConverter {

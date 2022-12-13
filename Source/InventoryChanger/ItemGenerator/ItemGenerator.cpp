@@ -808,10 +808,10 @@ constexpr auto crateRareSpecialItems = std::to_array<CrateRareSpecialItems>({
     return {};
 }
 
-[[nodiscard]] static EconRarity getRandomRarity(inventory_changer::EconRarities rarities)
+[[nodiscard]] static EconRarity getRandomRarity(inventory_changer::EconRarities rarities, Helpers::RandomGenerator& randomGenerator)
 {
     if (const auto rate = std::ranges::find(dropRates, rarities, &DropRate::rarities); rate != dropRates.end()) {
-        const auto rolledNumber = Helpers::RandomGenerator{}(std::uniform_int_distribution<DropRate::T>{(std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)()});
+        const auto rolledNumber = randomGenerator(std::uniform_int_distribution<DropRate::T>{(std::numeric_limits<DropRate::T>::min)(), (std::numeric_limits<DropRate::T>::max)()});
         return rate->mapToRarity(rolledNumber);
     }
     return EconRarity::Default;
@@ -828,7 +828,7 @@ namespace inventory_changer
     if (!rareSpecialItems.empty())
         rarities.set(EconRarity::Gold);
 
-    if (const auto rarity = getRandomRarity(rarities); rarity != EconRarity::Default) {
+    if (const auto rarity = getRandomRarity(rarities, randomGenerator); rarity != EconRarity::Default) {
         if (rarity == EconRarity::Gold) {
             const auto& randomRareSpecialItem = rareSpecialItems[randomGenerator(std::uniform_int_distribution<std::size_t>{0u, rareSpecialItems.size() - 1u})];
             if (const auto item = lookup.findItem(randomRareSpecialItem.weaponID, randomRareSpecialItem.paintKit))

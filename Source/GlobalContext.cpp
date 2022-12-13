@@ -407,7 +407,8 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
 
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }));
+        randomGenerator.emplace();
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, *randomGenerator));
         config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
@@ -475,7 +476,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
 
         ImGui::CreateContext();
 
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }));
+        randomGenerator.emplace();
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, *randomGenerator));
         config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         
         gui.emplace();
@@ -515,7 +517,7 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
             if (features->visuals.isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            features->inventoryChanger.fixKnifeAnimation(weapon, data.value._int);
+            features->inventoryChanger.fixKnifeAnimation(weapon, data.value._int, *randomGenerator);
         }
     }
 

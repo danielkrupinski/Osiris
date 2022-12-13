@@ -79,8 +79,8 @@ struct InventoryChangerReturnAddresses {
 
 class InventoryChanger {
 public:
-    InventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder)
-        : backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, Helpers::RandomGenerator{} }, returnAddresses{ clientPatternFinder }, gameInventory{ interfaces, memory, createEconItemFunctions(clientPatternFinder), createEconItemViewFunctions(clientPatternFinder) } {}
+    InventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+        : backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ clientPatternFinder }, gameInventory{ interfaces, memory, createEconItemFunctions(clientPatternFinder), createEconItemViewFunctions(clientPatternFinder) } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
@@ -112,7 +112,7 @@ public:
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
-    void fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence);
+    void fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence, Helpers::RandomGenerator& randomGenerator);
 
     void reset(const OtherInterfaces& interfaces, const Memory& memory);
 
@@ -144,7 +144,7 @@ private:
     game_integration::Inventory gameInventory;
 };
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder);
+InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
 
 }
 

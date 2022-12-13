@@ -968,7 +968,7 @@ void inventory_changer::InventoryChanger::clearUnusedItemIconTextures() noexcept
     }
 }
 
-static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
+static int remapKnifeAnim(WeaponId weaponID, const int sequence, Helpers::RandomGenerator& randomGenerator) noexcept
 {
     enum Sequence
     {
@@ -1006,9 +1006,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     case WeaponId::Butterfly:
         switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 });
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_LOOKAT01, SEQUENCE_BUTTERFLY_LOOKAT03 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_LOOKAT01, SEQUENCE_BUTTERFLY_LOOKAT03 });
         default:
             return sequence + 1;
         }
@@ -1020,9 +1020,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
         case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
             return sequence;
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_FALCHION_HEAVY_MISS1, SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_FALCHION_HEAVY_MISS1, SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP });
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_FALCHION_LOOKAT01, SEQUENCE_FALCHION_LOOKAT02 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_FALCHION_LOOKAT01, SEQUENCE_FALCHION_LOOKAT02 });
         default:
             return sequence - 1;
         }
@@ -1032,9 +1032,9 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
             return SEQUENCE_DAGGERS_IDLE1;
         case SEQUENCE_DEFAULT_LIGHT_MISS1:
         case SEQUENCE_DEFAULT_LIGHT_MISS2:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_DAGGERS_LIGHT_MISS1, SEQUENCE_DAGGERS_LIGHT_MISS5 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_DAGGERS_LIGHT_MISS1, SEQUENCE_DAGGERS_LIGHT_MISS5 });
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_DAGGERS_HEAVY_MISS2, SEQUENCE_DAGGERS_HEAVY_MISS1 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_DAGGERS_HEAVY_MISS2, SEQUENCE_DAGGERS_HEAVY_MISS1 });
         case SEQUENCE_DEFAULT_HEAVY_HIT1:
         case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
         case SEQUENCE_DEFAULT_LOOKAT01:
@@ -1062,21 +1062,21 @@ static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
     case WeaponId::SurvivalKnife:
         switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 });
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_LOOKAT01, Sequence(14) });
+            return randomGenerator(std::uniform_int_distribution<>{ SEQUENCE_BUTTERFLY_LOOKAT01, Sequence(14) });
         default:
             return sequence + 1;
         }
     case WeaponId::Stiletto:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ 12, 13 });
+            return randomGenerator(std::uniform_int_distribution<>{ 12, 13 });
         }
     case WeaponId::Talon:
         switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
-            return Helpers::RandomGenerator{}(std::uniform_int_distribution<>{ 14, 15 });
+            return randomGenerator(std::uniform_int_distribution<>{ 14, 15 });
         }
     default:
         return sequence;
@@ -1128,7 +1128,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
+InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
 {
     auto itemSchema = ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema());
     game_integration::Items items{ itemSchema, interfaces.getLocalize() };
@@ -1142,7 +1142,7 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
     crateLoot.compress();
     auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
 
-    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), clientPatternFinder };
+    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), clientPatternFinder, randomGenerator };
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)
@@ -1437,7 +1437,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
     }
 }
 
-void InventoryChanger::fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence)
+void InventoryChanger::fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence, Helpers::RandomGenerator& randomGenerator)
 {
     if (!localPlayer)
         return;
@@ -1448,7 +1448,7 @@ void InventoryChanger::fixKnifeAnimation(const Entity& viewModelWeapon, long& se
     if (const auto optionalItem = getItemFromLoadout(backend.getLoadout(), localPlayer.get().getTeamNumber(), 0); !optionalItem.has_value())
         return;
 
-    sequence = remapKnifeAnim(viewModelWeapon.itemDefinitionIndex(), sequence);
+    sequence = remapKnifeAnim(viewModelWeapon.itemDefinitionIndex(), sequence, randomGenerator);
 }
 
 void InventoryChanger::reset(const OtherInterfaces& interfaces, const Memory& memory)
