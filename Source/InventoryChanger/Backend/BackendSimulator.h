@@ -116,7 +116,7 @@ public:
 
     [[nodiscard]] XRayScannerHandler<ResponseAccumulator> getXRayScannerHandler()
     {
-        return XRayScannerHandler{ gameItemLookup, crateLootLookup, getItemGenerator(), items.xRayScanner, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator(), ItemConstRemover{ items.inventory } };
+        return XRayScannerHandler{ getItemGenerator(), items.xRayScanner, getInventoryHandler(), getItemRemovalHandler(), getResponseAccumulator(), ItemConstRemover{ items.inventory } };
     }
 
     [[nodiscard]] ItemModificationHandler<ResponseAccumulator> getItemModificationHandler()
