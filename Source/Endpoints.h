@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Platform/CallingConventions.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/IsPlatform.h>
 
 #include <SDK/Constants/ItemId.h>
 

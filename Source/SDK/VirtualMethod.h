@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <utility>
 
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Platform/RetSpoofInvoker.h>
 
 class VirtualCallable {

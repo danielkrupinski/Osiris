@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
 #include <d3d9.h>

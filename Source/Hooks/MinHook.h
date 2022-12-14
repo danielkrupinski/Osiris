@@ -3,8 +3,8 @@
 #include <cstddef>
 #include <memory>
 
-#include <Platform/CallingConventions.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
 #include <x86RetSpoof.h>

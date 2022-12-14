@@ -13,8 +13,8 @@
 #include "../Netvars.h"
 
 #include <Interfaces/EngineInterfaces.h>
-#include <Platform/IsPlatform.h>
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/IsPlatform.h>
+#include <Platform/Macros/PlatformSpecific.h>
 
 namespace csgo::pod { struct EconItemView; }
 

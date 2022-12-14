@@ -1,4 +1,4 @@
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
 #include "imgui/imgui_impl_dx9.h"
@@ -8,7 +8,7 @@
 #include "EventListener.h"
 #include "GlobalContext.h"
 
-#include <Platform/CallStack.h>
+#include <Platform/Macros/CallStack.h>
 
 static std::optional<GlobalContext> globalContext;
 

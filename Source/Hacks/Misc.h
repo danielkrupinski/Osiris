@@ -3,7 +3,7 @@
 #include "../JsonForward.h"
 #include "../Memory.h"
 #include <InventoryChanger/InventoryChanger.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoof/FunctionInvoker.h>

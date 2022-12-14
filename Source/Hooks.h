@@ -4,6 +4,8 @@
 #include <optional>
 #include <type_traits>
 
+#include <Platform/Macros/IsPlatform.h>
+
 #if IS_WIN32()
 #include <d3d9.h>
 #include <Windows.h>
@@ -16,7 +18,6 @@ union SDL_Event;
 #include "Hooks/MinHook.h"
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
-#include <Platform/IsPlatform.h>
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
 

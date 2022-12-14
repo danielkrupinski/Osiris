@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include "Helpers/EconItemViewFunctions.h"
 #include "VirtualMethod.h"
 

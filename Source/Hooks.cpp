@@ -4,8 +4,8 @@
 
 #include "imgui/imgui.h"
 
-#include "Platform/CallStack.h"
-#include "Platform/IsPlatform.h"
+#include "Platform/Macros/CallStack.h"
+#include "Platform/Macros/IsPlatform.h"
 
 #if IS_WIN32()
 #include <intrin.h>

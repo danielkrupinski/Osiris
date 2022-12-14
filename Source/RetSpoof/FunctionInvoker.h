@@ -2,7 +2,7 @@
 
 #include "FastcallFunctionInvoker.h"
 #include "StdcallFunctionInvoker.h"
-#include <Platform/CallingConventions.h>
+#include <Platform/Macros/CallingConventions.h>
 
 template <typename FunctionType>
 struct FunctionInvoker {};

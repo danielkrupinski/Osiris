@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IsPlatform.h"
+#include "Macros/IsPlatform.h"
 
 #if IS_WIN32()
 #include "Windows/RetSpoofInvoker.h"

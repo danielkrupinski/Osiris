@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Platform/IsPlatform.h"
+#include "Platform/Macros/IsPlatform.h"
 
 #if IS_WIN32()
 #include <ShlObj.h>

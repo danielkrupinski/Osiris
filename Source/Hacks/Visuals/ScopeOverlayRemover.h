@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Helpers/PatternFinder.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Utils/ReturnAddress.h>
 
 class ScopeOverlayRemover {

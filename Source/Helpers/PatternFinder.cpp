@@ -6,7 +6,7 @@
 
 #include "PatternFinder.h"
 
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 
 [[nodiscard]] static std::string patternToString(std::string_view pattern)
 {

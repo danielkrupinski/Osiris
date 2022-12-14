@@ -3,8 +3,8 @@
 #include <cstdint>
 
 #include "Inconstructible.h"
-#include <Platform/CallingConventions.h>
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 
 class HudChat {
 public:

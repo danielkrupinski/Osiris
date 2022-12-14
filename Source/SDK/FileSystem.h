@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include "VirtualMethod.h"
 
 namespace csgo::pod { struct BaseFileSystem; }

@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include <Helpers/PatternFinder.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <SDK/Helpers/EconItemFunctions.h>
 
 [[nodiscard]] inline EconItemFunctions createEconItemFunctions(const helpers::PatternFinder& clientPatternFinder)

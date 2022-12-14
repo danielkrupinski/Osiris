@@ -3,7 +3,7 @@
 #include "../JsonForward.h"
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Config/ResetConfigurator.h>
 #include <Utils/ReturnAddress.h>
 #include "Visuals/ColorCorrection.h"

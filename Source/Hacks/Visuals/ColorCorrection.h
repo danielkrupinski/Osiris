@@ -3,7 +3,6 @@
 #include <cstdint>
 
 #include <Config/ResetConfigurator.h>
-#include <Platform/PlatformSpecific.h>
 #include <SDK/ClientMode.h>
 
 struct ColorCorrection {

@@ -3,7 +3,7 @@
 #include <cassert>
 #include <utility>
 
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <SDK/Constants/ItemId.h>
 #include <SDK/Pad.h>
 

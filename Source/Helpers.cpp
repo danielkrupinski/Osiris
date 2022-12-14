@@ -9,7 +9,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "Platform/IsPlatform.h"
+#include "Platform/Macros/IsPlatform.h"
 
 #if IS_WIN32()
 #include <Windows.h>

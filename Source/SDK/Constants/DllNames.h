@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Platform/PlatformSpecific.h>
+#include <Platform/Macros/PlatformSpecific.h>
 
 namespace csgo
 {

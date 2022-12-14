@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Platform/IsPlatform.h>
+#include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
 #include <Windows.h>

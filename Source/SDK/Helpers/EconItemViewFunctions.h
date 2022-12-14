@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Platform/CallingConventions.h>
+#include <Platform/Macros/CallingConventions.h>
 #include <Utils/TypeHint.h>
 
 namespace csgo::pod { struct EconItem; }
