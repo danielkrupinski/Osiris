@@ -94,7 +94,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     findOrCreateEconItemViewForItemID = clientPatternFinder("\xE8????\x8B\xCE\x83\xC4\x08").add(1).relativeToAbsolute().as<decltype(findOrCreateEconItemViewForItemID)>();
     createBaseTypeCache = clientPatternFinder("\xE8????\x8D\x4D\x0F").add(1).relativeToAbsolute().get();
-    uiComponentInventory = clientPatternFinder("\xC6\x44\x24??\x83\x3D").add(7).deref().as<csgo::pod::UiComponentInventory**>();
     setItemSessionPropertyValue = clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().get();
 
     localPlayer.init(clientPatternFinder("\xA1????\x89\x45\xBC\x85\xC0").add(1).deref().as<csgo::pod::Entity**>());
@@ -147,7 +146,6 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     panoramaMarshallHelper = clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().as<decltype(panoramaMarshallHelper)>();
     findOrCreateEconItemViewForItemID = clientPatternFinder("\xE8????\x4C\x89\xEF\x48\x89\x45\xC8").add(1).relativeToAbsolute().as<decltype(findOrCreateEconItemViewForItemID)>();
     createBaseTypeCache = clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().get();
-    uiComponentInventory = clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().as<decltype(uiComponentInventory)>();
     setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get();
 
     localPlayer.init(clientPatternFinder("\x83\xFF\xFF\x48\x8B\x05").add(6).relativeToAbsolute().as<csgo::pod::Entity**>());

@@ -102,7 +102,6 @@ public:
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     std::uintptr_t createBaseTypeCache;
-    csgo::pod::UiComponentInventory** uiComponentInventory;
     TypeHint<std::uintptr_t, void(THISCALL_CONV*)(csgo::pod::UiComponentInventory* thisptr, std::uint64_t itemID, const char* type, const char* value)> setItemSessionPropertyValue;
 
     short makePanoramaSymbol(const char* name) const noexcept
