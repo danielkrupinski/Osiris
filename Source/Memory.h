@@ -81,7 +81,6 @@ public:
     int* dispatchSound;
     std::uintptr_t traceToExit;
     csgo::ViewRender* viewRender;
-    ViewRenderBeams viewRenderBeams;
     std::uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;

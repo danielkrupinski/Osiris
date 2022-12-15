@@ -520,7 +520,7 @@ void Visuals::bulletTracer(const GameEvent& event) noexcept
     beamInfo.flags = 0x40;
     beamInfo.fadeLength = 20.0f;
 
-    if (const auto beam = memory.viewRenderBeams.createBeamPoints(beamInfo)) {
+    if (const auto beam = viewRenderBeams.createBeamPoints(beamInfo)) {
         constexpr auto FBEAM_FOREVER = 0x4000;
         beam->flags &= ~FBEAM_FOREVER;
         beam->die = memory.globalVars->currenttime + 2.0f;
