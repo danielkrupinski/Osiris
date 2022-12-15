@@ -1090,7 +1090,7 @@ void Misc::voteRevealer(const GameEvent& event) noexcept
     const auto isLocal = localPlayer && entity.getPOD() == localPlayer.get().getPOD();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
+    HudChat::from(retSpoofGadgets->client, memory.clientMode->hudChat).printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::onVoteStart(const void* data, int size) noexcept
@@ -1118,19 +1118,19 @@ void Misc::onVoteStart(const void* data, int size) noexcept
     const auto isLocal = localPlayer && entity.getPOD() == localPlayer.get().getPOD();
 
     const auto voteType = reader.readInt32(3);
-    memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
+    HudChat::from(retSpoofGadgets->client, memory.clientMode->hudChat).printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity.getPlayerName(interfaces, memory).c_str(), voteName(voteType));
 }
 
 void Misc::onVotePass() noexcept
 {
     if (miscConfig.revealVotes)
-        memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
+        HudChat::from(retSpoofGadgets->client, memory.clientMode->hudChat).printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x06 PASSED");
 }
 
 void Misc::onVoteFailed() noexcept
 {
     if (miscConfig.revealVotes)
-        memory.clientMode->hudChat->printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
+        HudChat::from(retSpoofGadgets->client, memory.clientMode->hudChat).printf(0, " \x0C\u2022Osiris\u2022\x01 Vote\x07 FAILED");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV

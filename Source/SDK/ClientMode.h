@@ -2,24 +2,23 @@
 
 #include <cstdint>
 
-#include "Inconstructible.h"
-#include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include "VirtualMethod.h"
 
-class HudChat {
+namespace csgo::pod { struct HudChat; }
+
+class HudChat : public VirtualCallableFromPOD<HudChat, csgo::pod::HudChat> {
 public:
-    INCONSTRUCTIBLE(HudChat)
-
     template <typename... Args>
-    void printf(int filter, const char* fmt, Args... args) noexcept
+    void printf(int filter, const char* fmt, Args... args) const noexcept
     {
-        (*reinterpret_cast<void(CDECL_CONV***)(void*, int, const char*, ...)>(this))[WIN32_LINUX(26, 29)](this, filter, fmt, args...);
+        getInvoker().invokeCdecl<void>((*reinterpret_cast<std::uintptr_t**>(getThis()))[WIN32_LINUX(26, 29)], getThis(), filter, fmt, args...);
     }
 };
 
 struct ClientMode {
     PAD(WIN32_LINUX(28, 48))
-    HudChat* hudChat;
+    csgo::pod::HudChat* hudChat;
     PAD(WIN32_LINUX(0x47C, 0x8D0))
     float blueColorCorrection;
     PAD(WIN32_LINUX(4, 12))
