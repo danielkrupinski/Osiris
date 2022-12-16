@@ -42,11 +42,11 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 #if IS_WIN32()
     : 
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("\x8B\x35????\xFF\x10\x0F\xB7\xC0").add(2).deref().get() },
-      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("\x8D\x44\x24\x28\xB9????\x50").add(5).deref().as<csgo::pod::InventoryManager*>()) }
+      inventoryManager{ csgo::InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("\x8D\x44\x24\x28\xB9????\x50").add(5).deref().as<csgo::pod::InventoryManager*>()) }
 #else
     : 
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("\x48\x8B\x58\x10\x48\x8B\x07\xFF\x10").add(12).relativeToAbsolute().deref().get() },
-      inventoryManager{ InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55").add(3).relativeToAbsolute().as<csgo::pod::InventoryManager*>()) }
+      inventoryManager{ csgo::InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55").add(3).relativeToAbsolute().as<csgo::pod::InventoryManager*>()) }
 #endif
 {
 #if IS_WIN32()
@@ -55,9 +55,9 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     present = helpers::PatternFinder{ getCodeSection(gameOverlayRenderer.getView()) }("\xFF\x15????\x8B\xF0\x85\xFF").add(2).get();
     reset = helpers::PatternFinder{ getCodeSection(gameOverlayRenderer.getView()) }("\xC7\x45?????\xFF\x15????\x8B\xD8").add(9).get();
 
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
+    clientMode = **reinterpret_cast<csgo::ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
+    input = *reinterpret_cast<csgo::Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
+    globalVars = **reinterpret_cast<csgo::GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
     lineGoesThroughSmoke = clientPatternFinder("\xE8????\x8B\x4C\x24\x30\x33\xD2").add(1).relativeToAbsolute().as<decltype(lineGoesThroughSmoke)>();
     isOtherEnemy = clientPatternFinder("\x8B\xCE\xE8????\x02\xC0").add(3).relativeToAbsolute().as<decltype(isOtherEnemy)>();
     auto temp = clientPatternFinder("\xB9????\xE8????\x8B\x5D\x08").add(1);
@@ -76,15 +76,15 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     memAlloc = *reinterpret_cast<csgo::pod::MemAlloc**>(GetProcAddress(tier0, "g_pMemAlloc"));
     equipWearable = clientPatternFinder("\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9").as<decltype(equipWearable)>();
     predictionRandomSeed = clientPatternFinder("\x8B\x0D????\xBA????\xE8????\x83\xC4\x04").add(2).deref().as<int*>();
-    moveData = clientPatternFinder("\xA1????\xF3\x0F\x59\xCD").add(1).deref<2>().as<MoveData*>();
+    moveData = clientPatternFinder("\xA1????\xF3\x0F\x59\xCD").add(1).deref<2>().as<csgo::MoveData*>();
     moveHelperPtr = clientPatternFinder("\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01").add(2).deref<2>().as<csgo::pod::MoveHelper*>();
     keyValuesFromString = clientPatternFinder("\xE8????\x83\xC4\x04\x89\x45\xD8").add(1).relativeToAbsolute().get();
     keyValuesFindKey = clientPatternFinder("\xE8????\xF7\x45").add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
     keyValuesSetString = clientPatternFinder("\xE8????\x89\x77\x38").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     getEventDescriptor = enginePatternFinder("\xE8????\x8B\xD8\x85\xDB\x75\x27").add(1).relativeToAbsolute().get();
-    activeChannels = enginePatternFinder("\x8B\x1D????\x89\x5C\x24\x48").add(2).deref().as<ActiveChannels*>();
-    channels = enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().as<Channel*>();
-    playerResource = clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().as<PlayerResource**>();
+    activeChannels = enginePatternFinder("\x8B\x1D????\x89\x5C\x24\x48").add(2).deref().as<csgo::ActiveChannels*>();
+    channels = enginePatternFinder("\x81\xC2????\x8B\x72\x54").add(2).deref().as<csgo::Channel*>();
+    playerResource = clientPatternFinder("\x74\x30\x8B\x35????\x85\xF6").add(4).deref().as<csgo::PlayerResource**>();
     getDecoratedPlayerName = clientPatternFinder("\xE8????\x66\x83\x3E").add(1).relativeToAbsolute().as<decltype(getDecoratedPlayerName)>();
     plantedC4s = clientPatternFinder("\x7E\x2C\x8B\x15").add(4).deref().as<decltype(plantedC4s)>();
     gameRules = clientPatternFinder("\x8B\xEC\x8B\x0D????\x85\xC9\x74\x07").add(4).deref().as<csgo::pod::Entity**>();
@@ -109,7 +109,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);
 
-    globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().as<GlobalVars*>();
+    globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.relativeToAbsolute().deref().as<csgo::GlobalVars*>();
     itemSystemFn = clientPatternFinder("\xE8????\x4D\x63\xEC").add(1).relativeToAbsolute().as<decltype(itemSystemFn)>();
 
     isOtherEnemy = clientPatternFinder("\xE8????\x84\xC0\x44\x89\xE2").add(1).relativeToAbsolute().as<decltype(isOtherEnemy)>();
@@ -120,12 +120,12 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     findHudElement = clientPatternFinder("\xE8????\x48\x8D\x50\xE0").add(1).relativeToAbsolute().as<decltype(findHudElement)>();
 
     clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().as<decltype(clientMode)>();
-    input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<Input*>();
-    playerResource = clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().as<PlayerResource**>();
+    input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<csgo::Input*>();
+    playerResource = clientPatternFinder("\x74\x38\x48\x8B\x3D????\x89\xDE").add(5).relativeToAbsolute().as<csgo::PlayerResource**>();
 
     getEventDescriptor = enginePatternFinder("\xE8????\x48\x85\xC0\x74\x62").add(1).relativeToAbsolute().get();
-    activeChannels = enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().as<ActiveChannels*>();
-    channels = enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().as<Channel*>();
+    activeChannels = enginePatternFinder("\x48\x8D\x3D????\x4C\x89\xE6\xE8????\x8B\xBD").add(3).relativeToAbsolute().as<csgo::ActiveChannels*>();
+    channels = enginePatternFinder("\x4C\x8D\x35????\x49\x83\xC4\x04").add(3).relativeToAbsolute().as<csgo::Channel*>();
     keyValuesFromString = clientPatternFinder("\xE8????\x48\x89\xDF\x48\x89\x45\xE0").add(1).relativeToAbsolute().get();
     keyValuesFindKey = clientPatternFinder("\xE8????\x48\x85\xC0\x75\x24").add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
     keyValuesSetString = clientPatternFinder("\xE8????\x4C\x89\xE6\x4C\x89\xFF\xE8????\x48\x8B\x03").add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
@@ -140,7 +140,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     predictionRandomSeed = clientPatternFinder("\x41\x8D\x56\xFF\x31\xC9").add(-14).relativeToAbsolute().deref().as<int*>();
     registeredPanoramaEvents = clientPatternFinder("\xE8????\x8B\x50\x10\x49\x89\xC6").add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<decltype(registeredPanoramaEvents)>();
     makePanoramaSymbolFn = clientPatternFinder("\xE8????\x0F\xB7\x45\xA0\x31\xF6").add(1).relativeToAbsolute().as<decltype(makePanoramaSymbolFn)>();
-    moveData = clientPatternFinder("\x4C\x8B\x2D????\x0F\xB6\x93").add(3).relativeToAbsolute().deref<2>().as<MoveData*>();
+    moveData = clientPatternFinder("\x4C\x8B\x2D????\x0F\xB6\x93").add(3).relativeToAbsolute().deref<2>().as<csgo::MoveData*>();
     moveHelperPtr = clientPatternFinder("\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38").add(3).relativeToAbsolute().deref<2>().as<csgo::pod::MoveHelper*>();
 
     panoramaMarshallHelper = clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().as<decltype(panoramaMarshallHelper)>();

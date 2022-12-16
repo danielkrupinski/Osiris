@@ -2,17 +2,20 @@
 
 #include "VirtualMethod.h"
 
-class Entity;
+namespace csgo
+{
+
 class MoveData;
-class MoveHelper;
 struct UserCmd;
 
-namespace csgo::pod { struct Entity; }
-namespace csgo::pod { struct MoveHelper; }
-namespace csgo::pod { struct Prediction; }
+namespace pod { struct Entity; }
+namespace pod { struct MoveHelper; }
+namespace pod { struct Prediction; }
 
-class Prediction : public VirtualCallableFromPOD<Prediction, csgo::pod::Prediction> {
+class Prediction : public VirtualCallableFromPOD<Prediction, pod::Prediction> {
 public:
-    VIRTUAL_METHOD_V(void, setupMove, 20, (csgo::pod::Entity* localPlayer, UserCmd* cmd, csgo::pod::MoveHelper* moveHelper, MoveData* moveData), (localPlayer, cmd, moveHelper, moveData))
-    VIRTUAL_METHOD_V(void, finishMove, 21, (csgo::pod::Entity* localPlayer, UserCmd* cmd, MoveData* moveData), (localPlayer, cmd, moveData))
+    VIRTUAL_METHOD_V(void, setupMove, 20, (pod::Entity* localPlayer, UserCmd* cmd, pod::MoveHelper* moveHelper, MoveData* moveData), (localPlayer, cmd, moveHelper, moveData))
+    VIRTUAL_METHOD_V(void, finishMove, 21, (pod::Entity* localPlayer, UserCmd* cmd, MoveData* moveData), (localPlayer, cmd, moveData))
 };
+
+}

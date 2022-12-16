@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void setItemSessionPropertyValue(csgo::ItemId itemID, const char* type, const char* value) const noexcept
+    void setItemSessionPropertyValue(ItemId itemID, const char* type, const char* value) const noexcept
     {
         getInvoker().invokeThiscall<void>(getThis(), setItemSessionPropertyValueFn, itemID, type, value);
     }

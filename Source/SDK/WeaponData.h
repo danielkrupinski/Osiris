@@ -23,6 +23,9 @@ enum class WeaponType {
     Melee
 };
 
+namespace csgo
+{
+
 struct WeaponInfo {
     PAD(WIN32_LINUX(20, 32))
     int maxClip;
@@ -56,3 +59,5 @@ struct WeaponInfo {
     PAD(16)
     float recoveryTimeStand;
 };
+
+}

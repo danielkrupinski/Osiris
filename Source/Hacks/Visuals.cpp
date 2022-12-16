@@ -156,7 +156,7 @@ float Visuals::farZ() noexcept
 void Visuals::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.getCvar().findVar(csgo::cl_ragdoll_gravity);
-    ConVar::from(retSpoofGadgets->client, ragdollGravity).setValue(inverseRagdollGravity_ ? -600 : 600);
+    csgo::ConVar::from(retSpoofGadgets->client, ragdollGravity).setValue(inverseRagdollGravity_ ? -600 : 600);
 }
 
 void Visuals::colorWorld() noexcept
@@ -165,7 +165,7 @@ void Visuals::colorWorld() noexcept
         return;
 
     for (short h = interfaces.getMaterialSystem().firstMaterial(); h != interfaces.getMaterialSystem().invalidMaterial(); h = interfaces.getMaterialSystem().nextMaterial(h)) {
-        const auto mat = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().getMaterial(h));
+        const auto mat = csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().getMaterial(h));
 
         if (mat.getPOD() == nullptr || !mat.isPrecached())
             continue;
@@ -199,7 +199,7 @@ void Visuals::modifySmoke(csgo::FrameStage stage) noexcept
     };
 
     for (const auto mat : smokeMaterials) {
-        const auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(mat));
+        const auto material = csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(mat));
         material.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && noSmoke);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == csgo::FrameStage::RENDER_START && wireframeSmoke);
     }
@@ -219,18 +219,18 @@ void Visuals::removeVisualRecoil(csgo::FrameStage stage) noexcept
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    static Vector aimPunch;
-    static Vector viewPunch;
+    static csgo::Vector aimPunch;
+    static csgo::Vector viewPunch;
 
     if (stage == csgo::FrameStage::RENDER_START) {
         aimPunch = localPlayer.get().aimPunchAngle();
         viewPunch = localPlayer.get().viewPunchAngle();
 
         if (noAimPunch)
-            localPlayer.get().aimPunchAngle() = Vector{ };
+            localPlayer.get().aimPunchAngle() = csgo::Vector{ };
 
         if (noViewPunch)
-            localPlayer.get().viewPunchAngle() = Vector{ };
+            localPlayer.get().viewPunchAngle() = csgo::Vector{ };
 
     } else if (stage == csgo::FrameStage::RENDER_END) {
         localPlayer.get().aimPunchAngle() = aimPunch;
@@ -243,14 +243,14 @@ void Visuals::removeBlur(csgo::FrameStage stage) noexcept
     if (stage != csgo::FrameStage::RENDER_START && stage != csgo::FrameStage::RENDER_END)
         return;
 
-    static auto blur = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial("dev/scope_bluroverlay"));
+    static auto blur = csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial("dev/scope_bluroverlay"));
     blur.setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces.getCvar().findVar(csgo::mat_force_tonemap_scale);
-    ConVar::from(retSpoofGadgets->client, brightness).setValue(visualsConfig.brightness);
+    csgo::ConVar::from(retSpoofGadgets->client, brightness).setValue(visualsConfig.brightness);
 }
 
 void Visuals::removeGrass(csgo::FrameStage stage) noexcept
@@ -271,19 +271,19 @@ void Visuals::removeGrass(csgo::FrameStage stage) noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && noGrass);
+        csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(grassMaterialName)).setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == csgo::FrameStage::RENDER_START && noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
 {
     static auto sky = interfaces.getCvar().findVar(csgo::r_3dsky);
-    ConVar::from(retSpoofGadgets->client, sky).setValue(!no3dSky);
+    csgo::ConVar::from(retSpoofGadgets->client, sky).setValue(!no3dSky);
 }
 
 void Visuals::removeShadows() noexcept
 {
     static auto shadows = interfaces.getCvar().findVar(csgo::cl_csm_enabled);
-    ConVar::from(retSpoofGadgets->client, shadows).setValue(!noShadows);
+    csgo::ConVar::from(retSpoofGadgets->client, shadows).setValue(!noShadows);
 }
 
 void Visuals::applyZoom(csgo::FrameStage stage) noexcept
@@ -330,7 +330,7 @@ void Visuals::applyScreenEffects() noexcept
     if (!visualsConfig.screenEffect)
         return;
 
-    const auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial([] {
+    const auto material = csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial([] {
         constexpr std::array effects{
             "effects/dronecam",
             "effects/underwater_overlay",
@@ -344,11 +344,11 @@ void Visuals::applyScreenEffects() noexcept
     }()));
 
     if (visualsConfig.screenEffect == 1)
-        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
+        csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
     else if (visualsConfig.screenEffect == 2)
-        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
+        csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
     else if (visualsConfig.screenEffect >= 4)
-        MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
+        csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
 
 #if IS_WIN32()
     const auto pod = material.getPOD();
@@ -357,7 +357,7 @@ void Visuals::applyScreenEffects() noexcept
 #endif
 }
 
-void Visuals::hitEffect(const GameEvent* event) noexcept
+void Visuals::hitEffect(const csgo::GameEvent* event) noexcept
 {
     if (visualsConfig.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
@@ -382,13 +382,13 @@ void Visuals::hitEffect(const GameEvent* event) noexcept
             };
 
            
-            auto material = Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(getEffectMaterial()));
+            auto material = csgo::Material::from(retSpoofGadgets->client, interfaces.getMaterialSystem().findMaterial(getEffectMaterial()));
             if (visualsConfig.hitEffect == 1)
-                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
+                csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.0f);
             else if (visualsConfig.hitEffect == 2)
-                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
+                csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(0.1f);
             else if (visualsConfig.hitEffect >= 4)
-                MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
+                csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$c0_x")).setValue(1.0f);
 
 #if IS_WIN32()
             const auto pod = material.getPOD();
@@ -399,7 +399,7 @@ void Visuals::hitEffect(const GameEvent* event) noexcept
     }
 }
 
-void Visuals::hitMarker(const GameEvent* event, ImDrawList* drawList) noexcept
+void Visuals::hitMarker(const csgo::GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (visualsConfig.hitMarker == 0)
         return;
@@ -460,7 +460,7 @@ void Visuals::skybox(csgo::FrameStage stage) noexcept
     skyboxChanger.run(stage);
 }
 
-void Visuals::bulletTracer(const GameEvent& event) noexcept
+void Visuals::bulletTracer(const csgo::GameEvent& event) noexcept
 {
     if (!visualsConfig.bulletTracers.enabled)
         return;
@@ -471,21 +471,21 @@ void Visuals::bulletTracer(const GameEvent& event) noexcept
     if (event.getInt("userid") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
-    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
+    const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getPOD() == nullptr)
         return;
 
-    BeamInfo beamInfo;
+    csgo::BeamInfo beamInfo;
 
     if (!localPlayer.get().shouldDraw()) {
-        const auto viewModel = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()));
+        const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(localPlayer.get().viewModel()));
         if (viewModel.getPOD() == nullptr)
             return;
 
         if (!viewModel.getAttachment(activeWeapon.getMuzzleAttachmentIndex1stPerson(viewModel.getPOD()), beamInfo.start))
             return;
     } else {
-        const auto worldModel = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()));
+        const auto worldModel = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntityFromHandle(activeWeapon.weaponWorldModel()));
         if (worldModel.getPOD() == nullptr)
             return;
 
@@ -537,10 +537,10 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     GameData::Lock lock;
 
     static const auto flameCircumference = [] {
-        std::array<Vector, 72> points;
+        std::array<csgo::Vector, 72> points;
         for (std::size_t i = 0; i < points.size(); ++i) {
             constexpr auto flameRadius = 60.0f; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/server/cstrike15/Effects/inferno.cpp#L889
-            points[i] = Vector{ flameRadius * std::cos(Helpers::deg2rad(i * (360.0f / points.size()))),
+            points[i] = csgo::Vector{ flameRadius * std::cos(Helpers::deg2rad(i * (360.0f / points.size()))),
                                 flameRadius * std::sin(Helpers::deg2rad(i * (360.0f / points.size()))),
                                 0.0f };
         }

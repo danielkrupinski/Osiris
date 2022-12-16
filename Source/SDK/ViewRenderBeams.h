@@ -7,6 +7,9 @@
 #include "Vector.h"
 #include "VirtualMethod.h"
 
+namespace csgo
+{
+
 class Entity;
 
 struct BeamInfo {
@@ -55,3 +58,5 @@ public:
 
     VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (&beamInfo))
 };
+
+}

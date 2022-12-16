@@ -6,6 +6,9 @@
 #include <Platform/Macros/CallingConventions.h>
 #include "Vector.h"
 
+namespace csgo
+{
+
 struct RecvProp;
 
 struct recvProxyData {
@@ -48,3 +51,5 @@ struct RecvTable {
     bool isInitialized;
     bool isInMainList;
 };
+
+}

@@ -5,9 +5,12 @@
 
 #include "VirtualMethod.h"
 
-namespace csgo::pod { struct Localize; }
+namespace csgo
+{
 
-class Localize : public VirtualCallableFromPOD<Localize, csgo::pod::Localize> {
+namespace pod { struct Localize; }
+
+class Localize : public VirtualCallableFromPOD<Localize, pod::Localize> {
 public:
     VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))
@@ -16,10 +19,12 @@ public:
     VIRTUAL_METHOD(const char*, findAsUTF8, 47, (const char* tokenName), (tokenName))
 };
 
+}
+
 template <std::size_t BufferSize = 4096>
 class ToUtf8Converter {
 public:
-    ToUtf8Converter(Localize localize) : localize{ localize } {}
+    ToUtf8Converter(csgo::Localize localize) : localize{ localize } {}
     
     [[nodiscard]] std::string_view convertUnicodeToAnsi(const wchar_t* string)
     {
@@ -29,6 +34,6 @@ public:
     }
 
 private:
-    Localize localize;
+    csgo::Localize localize;
     std::array<char, BufferSize> buffer;
 };

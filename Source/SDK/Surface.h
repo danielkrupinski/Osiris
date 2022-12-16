@@ -2,9 +2,14 @@
 
 #include "VirtualMethod.h"
 
-namespace csgo::pod { struct Surface; }
+namespace csgo
+{
 
-class Surface : public VirtualCallableFromPOD<Surface, csgo::pod::Surface> {
+namespace pod { struct Surface; }
+
+class Surface : public VirtualCallableFromPOD<Surface, pod::Surface> {
 public:
     VIRTUAL_METHOD(void, unlockCursor, 66, (), ())
 };
+
+}

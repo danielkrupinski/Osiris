@@ -1,5 +1,8 @@
 #pragma once
 
+namespace csgo
+{
+
 template <typename T>
 struct UtlMemory {
     T& operator[](int i) const noexcept { return memory[i]; }
@@ -8,3 +11,5 @@ struct UtlMemory {
     int allocationCount;
     int growSize;
 };
+
+}

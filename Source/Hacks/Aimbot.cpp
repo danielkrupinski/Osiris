@@ -24,13 +24,15 @@
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 
-Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
+csgo::Vector Aimbot::calculateRelativeAngle(const csgo::Vector& source, const csgo::Vector& destination, const csgo::Vector& viewAngles) noexcept
 {
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
-static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+static bool traceToExit(const Memory& memory, const csgo::Trace& enterTrace, const csgo::Vector& start, const csgo::Vector& direction, csgo::Vector& end, csgo::Trace& exitTrace)
 {
+    using csgo::Vector;
+
     bool result = false;
 #if IS_WIN32() && (!defined(__clang__) || !defined(_DEBUG))
     const auto traceToExitFn = memory.traceToExit;
@@ -57,15 +59,15 @@ static bool traceToExit(const Memory& memory, const Trace& enterTrace, const Vec
     return result;
 }
 
-static float handleBulletPenetration(const OtherInterfaces& interfaces, const Memory& memory, SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+static float handleBulletPenetration(const OtherInterfaces& interfaces, const Memory& memory, csgo::SurfaceData* enterSurfaceData, const csgo::Trace& enterTrace, const csgo::Vector& direction, csgo::Vector& result, float penetration, float damage) noexcept
 {
-    Vector end;
-    Trace exitTrace;
+    csgo::Vector end;
+    csgo::Trace exitTrace;
 
     if (!traceToExit(memory, enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
-    SurfaceData* exitSurfaceData = interfaces.getPhysicsSurfaceProps().getSurfaceData(exitTrace.surface.surfaceProps);
+    csgo::SurfaceData* exitSurfaceData = interfaces.getPhysicsSurfaceProps().getSurfaceData(exitTrace.surface.surfaceProps);
 
     float damageModifier = 0.16f;
     float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
@@ -90,24 +92,24 @@ static float handleBulletPenetration(const OtherInterfaces& interfaces, const Me
     return damage;
 }
 
-static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const Entity& entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
+static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const csgo::Entity& entity, const csgo::Vector& destination, const csgo::WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
     if (!localPlayer)
         return false;
 
     float damage{ static_cast<float>(weaponData->damage) };
 
-    Vector start{ localPlayer.get().getEyePosition() };
-    Vector direction{ destination - start };
+    csgo::Vector start{ localPlayer.get().getEyePosition() };
+    csgo::Vector direction{ destination - start };
     direction /= direction.length();
 
     int hitsLeft = 4;
 
     while (damage >= 1.0f && hitsLeft) {
-        Trace trace;
+        csgo::Trace trace;
         engineInterfaces.engineTrace().traceRay({ start, destination }, 0x4600400B, localPlayer.get().getPOD(), trace);
 
-        if (!allowFriendlyFire && trace.entity && Entity::from(retSpoofGadgets->client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, Entity::from(retSpoofGadgets->client, trace.entity)))
+        if (!allowFriendlyFire && trace.entity && csgo::Entity::from(retSpoofGadgets->client, trace.entity).isPlayer() && !localPlayer.get().isOtherEnemy(memory, csgo::Entity::from(retSpoofGadgets->client, trace.entity)))
             return false;
 
         if (trace.fraction == 1.0f)
@@ -116,8 +118,8 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfa
         if (trace.entity == entity.getPOD() && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
             damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
-            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, Entity::from(retSpoofGadgets->client, trace.entity).hasHelmet()))
-                damage -= (Entity::from(retSpoofGadgets->client, trace.entity).armor() < damage * armorRatio / 2.0f ? Entity::from(retSpoofGadgets->client, trace.entity).armor() * 4.0f : damage) * (1.0f - armorRatio);
+            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, csgo::Entity::from(retSpoofGadgets->client, trace.entity).hasHelmet()))
+                damage -= (csgo::Entity::from(retSpoofGadgets->client, trace.entity).armor() < damage * armorRatio / 2.0f ? csgo::Entity::from(retSpoofGadgets->client, trace.entity).armor() * 4.0f : damage) * (1.0f - armorRatio);
 
             return damage >= minDamage;
         }
@@ -142,12 +144,12 @@ void Aimbot::updateInput(const Config& config) noexcept
         keyPressed = !keyPressed;
 }
 
-void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, UserCmd* cmd) noexcept
+void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Config& config, const Memory& memory, csgo::UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer.get().nextAttack() > memory.globalVars->serverTime() || localPlayer.get().isDefusing() || localPlayer.get().waitForNoAttack())
         return;
 
-    const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
+    const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
     if (activeWeapon.getPOD() == nullptr || !activeWeapon.clip())
         return;
 
@@ -174,19 +176,19 @@ void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const Cli
     if (config.aimbotOnKey && !keyPressed)
         return;
 
-    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock) && activeWeapon.getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
+    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & csgo::UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock) && activeWeapon.getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
 
         if (config.aimbot[weaponIndex].scopedOnly && activeWeapon.isSniperRifle() && !localPlayer.get().isScoped())
             return;
 
         auto bestFov = config.aimbot[weaponIndex].fov;
-        Vector bestTarget{ };
+        csgo::Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer.get().getEyePosition();
 
-        const auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch() : Vector{ };
+        const auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch() : csgo::Vector{ };
 
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
-            const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
+            const auto entity = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
             if (entity.getPOD() == nullptr || entity.getPOD() == localPlayer.get().getPOD() || entity.getNetworkable().isDormant() || !entity.isAlive()
                 || !entity.isOtherEnemy(memory, localPlayer.get()) && !config.aimbot[weaponIndex].friendlyFire || entity.gunGameImmunity())
                 continue;
@@ -215,7 +217,7 @@ void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const Cli
         }
 
         if (bestTarget.notNull()) {
-            static Vector lastAngles{ cmd->viewangles };
+            static csgo::Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles.notNull() && config.aimbot[weaponIndex].silent)
@@ -236,16 +238,16 @@ void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const Cli
                 engineInterfaces.getEngine().setViewAngles(cmd->viewangles);
 
             if (config.aimbot[weaponIndex].autoScope && activeWeapon.nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon.isSniperRifle() && !localPlayer.get().isScoped())
-                cmd->buttons |= UserCmd::IN_ATTACK2;
+                cmd->buttons |= csgo::UserCmd::IN_ATTACK2;
 
             if (config.aimbot[weaponIndex].autoShot && activeWeapon.nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon.getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
-                cmd->buttons |= UserCmd::IN_ATTACK;
+                cmd->buttons |= csgo::UserCmd::IN_ATTACK;
 
             if (clamped)
-                cmd->buttons &= ~UserCmd::IN_ATTACK;
+                cmd->buttons &= ~csgo::UserCmd::IN_ATTACK;
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
-            else lastAngles = Vector{ };
+            else lastAngles = csgo::Vector{ };
 
             lastCommand = cmd->commandNumber;
         }

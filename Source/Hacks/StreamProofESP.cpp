@@ -24,7 +24,7 @@
 
 static constexpr auto operator-(float sub, const std::array<float, 3>& a) noexcept
 {
-    return Vector{ sub - a[0], sub - a[1], sub - a[2] };
+    return csgo::Vector{ sub - a[0], sub - a[1], sub - a[2] };
 }
 
 struct BoundingBox {
@@ -34,7 +34,7 @@ public:
     ImVec2 min, max;
     std::array<ImVec2, 8> vertices;
 
-    BoundingBox(const Vector& mins, const Vector& maxs, const std::array<float, 3>& scale, const matrix3x4* matrix = nullptr) noexcept
+    BoundingBox(const csgo::Vector& mins, const csgo::Vector& maxs, const std::array<float, 3>& scale, const csgo::matrix3x4* matrix = nullptr) noexcept
     {
         min.y = min.x = (std::numeric_limits<float>::max)();
         max.y = max.x = -(std::numeric_limits<float>::max)();
@@ -43,7 +43,7 @@ public:
         const auto scaledMaxs = maxs - (maxs - mins) * 2 * (0.25f - scale);
 
         for (int i = 0; i < 8; ++i) {
-            const Vector point{ i & 1 ? scaledMaxs.x : scaledMins.x,
+            const csgo::Vector point{ i & 1 ? scaledMaxs.x : scaledMins.x,
                                 i & 2 ? scaledMaxs.y : scaledMins.y,
                                 i & 4 ? scaledMaxs.z : scaledMins.z };
 
@@ -61,7 +61,7 @@ public:
     }
 
     BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept : BoundingBox{ data.obbMins, data.obbMaxs, scale, &data.coordinateFrame } {}
-    BoundingBox(const Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
+    BoundingBox(const csgo::Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
 
     explicit operator bool() const noexcept
     {
@@ -385,7 +385,7 @@ static void renderEntityBox(const Memory& memory, const Config& configGlobal, co
         renderText(memory, entityData.distanceToLocal, config.textCullDistance, config.name.asColor4(), name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
 }
 
-static void drawProjectileTrajectory(const Memory& memory, const Trail& config, const std::vector<std::pair<float, Vector>>& trajectory) noexcept
+static void drawProjectileTrajectory(const Memory& memory, const Trail& config, const std::vector<std::pair<float, csgo::Vector>>& trajectory) noexcept
 {
     if (!config.asColorToggle().enabled)
         return;
@@ -413,7 +413,7 @@ static void drawProjectileTrajectory(const Memory& memory, const Trail& config, 
     }
 }
 
-static void drawPlayerSkeleton(const Memory& memory, const ColorToggleThickness& config, const std::vector<std::pair<Vector, Vector>>& bones) noexcept
+static void drawPlayerSkeleton(const Memory& memory, const ColorToggleThickness& config, const std::vector<std::pair<csgo::Vector, csgo::Vector>>& bones) noexcept
 {
     if (!config.asColorToggle().enabled)
         return;

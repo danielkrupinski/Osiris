@@ -3,6 +3,9 @@
 #include "Pad.h"
 #include "Vector.h"
 
+namespace csgo
+{
+
 struct ActiveChannels {
     int count;
     short list[128];
@@ -20,3 +23,5 @@ struct Channel {
     Vector direction;
     PAD(80)
 };
+
+}

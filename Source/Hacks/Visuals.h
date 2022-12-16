@@ -55,15 +55,15 @@ public:
     void removeShadows() noexcept;
     void applyZoom(csgo::FrameStage stage) noexcept;
     void applyScreenEffects() noexcept;
-    void hitEffect(const GameEvent* event = nullptr) noexcept;
-    void hitMarker(const GameEvent* event, ImDrawList* drawList = nullptr) noexcept;
+    void hitEffect(const csgo::GameEvent* event = nullptr) noexcept;
+    void hitMarker(const csgo::GameEvent* event, ImDrawList* drawList = nullptr) noexcept;
     void disablePostProcessing(csgo::FrameStage stage) noexcept;
     void reduceFlashEffect() noexcept;
     bool removeHands(const char* modelName) noexcept;
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox(csgo::FrameStage stage) noexcept;
-    void bulletTracer(const GameEvent& event) noexcept;
+    void bulletTracer(const csgo::GameEvent& event) noexcept;
     void drawMolotovHull(ImDrawList* drawList) noexcept;
 
     void setDrawColorHook(ReturnAddress hookReturnAddress, int& alpha) const noexcept;
@@ -116,7 +116,7 @@ private:
     PostProcessingDisabler postProcessingDisabler;
     ScopeOverlayRemover scopeOverlayRemover;
     ReturnAddress cameraThink;
-    ViewRenderBeams viewRenderBeams;
+    csgo::ViewRenderBeams viewRenderBeams;
 
     bool inverseRagdollGravity_;
     bool noFog;

@@ -62,7 +62,7 @@ struct KitWeapon {
     const char* iconPath;
 };
 
-[[nodiscard]] std::vector<KitWeapon> getKitsWeapons(const UtlMap<std::uint64_t, AlternateIconData>& alternateIcons)
+[[nodiscard]] std::vector<KitWeapon> getKitsWeapons(const csgo::UtlMap<std::uint64_t, csgo::AlternateIconData>& alternateIcons)
 {
     std::vector<KitWeapon> kitsWeapons;
     kitsWeapons.reserve(alternateIcons.numElements);
@@ -97,7 +97,7 @@ void Items::getSkinsAndGloves(const OtherInterfaces& interfaces, game_items::Sto
             if (!itemDefPtr)
                 continue;
 
-            const auto itemDef = EconItemDefinition::from(retSpoofGadgets->client, itemDefPtr);
+            const auto itemDef = csgo::EconItemDefinition::from(retSpoofGadgets->client, itemDefPtr);
             if (isGlove) {
                 storage.addGlovesWithLastPaintKit(static_cast<EconRarity>(paintKit->rarity), it->weaponId, it->iconPath);
             } else {
@@ -110,7 +110,7 @@ void Items::getSkinsAndGloves(const OtherInterfaces& interfaces, game_items::Sto
 void Items::getOtherItems(game_items::Storage& storage)
 {
     for (const auto& node : itemSchema.getPOD()->itemsSorted) {
-        const auto item = EconItemDefinition::from(retSpoofGadgets->client, node.value);
+        const auto item = csgo::EconItemDefinition::from(retSpoofGadgets->client, node.value);
         const auto itemTypeName = std::string_view{ item.getItemTypeName() };
         const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
         const auto isOriginal = (item.getQuality() == 1);

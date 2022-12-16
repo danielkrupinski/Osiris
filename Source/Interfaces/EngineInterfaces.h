@@ -17,22 +17,22 @@ public:
 
     [[nodiscard]] auto getEngine() const noexcept
     {
-        return Engine::from(retSpoofInvoker, pods.engine);
+        return csgo::Engine::from(retSpoofInvoker, pods.engine);
     }
 
     [[nodiscard]] auto getGameEventManager(std::uintptr_t getEventDescriptorFn) const noexcept
     {
-        return GameEventManager::from(retSpoofInvoker, pods.gameEventManager, getEventDescriptorFn);
+        return csgo::GameEventManager::from(retSpoofInvoker, pods.gameEventManager, getEventDescriptorFn);
     }
 
     [[nodiscard]] auto getModelInfo() const noexcept
     {
-        return ModelInfo::from(retSpoofInvoker, pods.modelInfo);
+        return csgo::ModelInfo::from(retSpoofInvoker, pods.modelInfo);
     }
 
     [[nodiscard]] auto engineTrace() const noexcept
     {
-        return EngineTrace::from(retSpoofInvoker, pods.engineTrace);
+        return csgo::EngineTrace::from(retSpoofInvoker, pods.engineTrace);
     }
 
     [[nodiscard]] const EngineInterfacesPODs& getPODs() const noexcept

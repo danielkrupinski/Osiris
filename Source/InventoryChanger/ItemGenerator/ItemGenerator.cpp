@@ -863,24 +863,24 @@ namespace inventory_changer
 
 [[nodiscard]] inline std::uint8_t getNumberOfSupportedStickerSlots(const Memory& memory, WeaponId weaponID) noexcept
 {
-    if (const auto def = ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()).getItemDefinitionInterface(weaponID))
-        return static_cast<std::uint8_t>(std::clamp(EconItemDefinition::from(retSpoofGadgets->client, def).getNumberOfSupportedStickerSlots(), 0, 5));
+    if (const auto def = csgo::ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()).getItemDefinitionInterface(weaponID))
+        return static_cast<std::uint8_t>(std::clamp(csgo::EconItemDefinition::from(retSpoofGadgets->client, def).getNumberOfSupportedStickerSlots(), 0, 5));
     return 0;
 }
 
 struct StickerSlotCountGetter {
 public:
-    explicit StickerSlotCountGetter(ItemSchema itemSchema) : itemSchema{ itemSchema } {}
+    explicit StickerSlotCountGetter(csgo::ItemSchema itemSchema) : itemSchema{ itemSchema } {}
 
     [[nodiscard]] std::uint8_t operator()(WeaponId weaponId) const
     {
         if (const auto def = itemSchema.getItemDefinitionInterface(weaponId))
-            return static_cast<std::uint8_t>(std::clamp(EconItemDefinition::from(retSpoofGadgets->client, def).getNumberOfSupportedStickerSlots(), 0, 5));
+            return static_cast<std::uint8_t>(std::clamp(csgo::EconItemDefinition::from(retSpoofGadgets->client, def).getNumberOfSupportedStickerSlots(), 0, 5));
         return 0;
     }
 
 private:
-    ItemSchema itemSchema;
+    csgo::ItemSchema itemSchema;
 };
 
 std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const inventory::Item& caseItem, const inventory::Item* crateKey) const noexcept
@@ -893,7 +893,7 @@ std::optional<inventory::Item> ItemGenerator::generateItemFromContainer(const in
         return std::nullopt;
 
     const auto& unlockedItem = getRandomItemFromContainer(randomGenerator, gameItemLookup, crateLootLookup, caseItem.gameItem().getWeaponID(), *lootList);
-    item_generator::DropGenerator dropGenerator{ gameItemLookup, item_generator::AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) } };
+    item_generator::DropGenerator dropGenerator{ gameItemLookup, item_generator::AttributeGenerator{ randomGenerator }, StickerSlotCountGetter{ csgo::ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema()) } };
     return inventory::Item{ unlockedItem, { dropGenerator.createCommonProperties(caseItem, crateKey), dropGenerator.createVariantProperties(unlockedItem, caseItem, lootList->willProduceStatTrak) } };
 }
 

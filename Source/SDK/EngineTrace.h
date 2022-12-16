@@ -5,6 +5,9 @@
 #include "Vector.h"
 #include "VirtualMethod.h"
 
+namespace csgo
+{
+
 struct Ray {
     Ray(const Vector& src, const Vector& dest) : start(src), delta(dest - src) { isSwept = delta.x || delta.y || delta.z; }
     Vector start{ };
@@ -19,14 +22,21 @@ struct Ray {
     bool isSwept{ };
 };
 
+}
+
 namespace csgo::pod { struct Entity; }
 
+namespace csgo
+{
+
 struct TraceFilter {
-    TraceFilter(csgo::pod::Entity* entity) : skip{ entity } { }
-    virtual bool shouldHitEntity(csgo::pod::Entity* entity, int) { return entity != skip; }
+    TraceFilter(pod::Entity* entity) : skip{ entity } {}
+    virtual bool shouldHitEntity(pod::Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    csgo::pod::Entity* skip;
+    pod::Entity* skip;
 };
+
+}
 
 namespace HitGroup {
     enum {
@@ -74,6 +84,9 @@ namespace HitGroup {
     }
 }
 
+namespace csgo
+{
+
 struct Trace {
     Vector startpos;
     Vector endpos;
@@ -91,14 +104,16 @@ struct Trace {
     } surface;
     int hitgroup;
     std::byte pad2[4];
-    csgo::pod::Entity* entity;
+    pod::Entity* entity;
     int hitbox;
 };
 
-namespace csgo::pod { struct EngineTrace; }
+namespace pod { struct EngineTrace; }
 
-class EngineTrace : public VirtualCallableFromPOD<EngineTrace, csgo::pod::EngineTrace> {
+class EngineTrace : public VirtualCallableFromPOD<EngineTrace, pod::EngineTrace> {
 public:
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (&absPosition, contentsMask, nullptr))
     VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (&ray, mask, &filter, &trace))
 };
+
+}

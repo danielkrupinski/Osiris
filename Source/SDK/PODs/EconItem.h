@@ -12,8 +12,8 @@ namespace csgo::pod
 struct EconItem {
     PAD(2 * sizeof(std::uintptr_t))
 
-    csgo::ItemId itemID;
-    csgo::ItemId originalID;
+    ItemId itemID;
+    ItemId originalID;
     void* customDataOptimizedObject;
     std::uint32_t accountID;
     std::uint32_t inventory;

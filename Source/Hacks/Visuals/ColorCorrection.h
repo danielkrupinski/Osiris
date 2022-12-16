@@ -21,7 +21,7 @@ struct ColorCorrection {
         configure(configurator);
     }
 
-    void run(ClientMode* clientMode) const noexcept
+    void run(csgo::ClientMode* clientMode) const noexcept
     {
         if (!enabled)
             return;

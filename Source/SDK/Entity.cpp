@@ -14,6 +14,9 @@
 
 #include <Interfaces/OtherInterfaces.h>
 
+namespace csgo
+{
+
 bool Entity::setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) const noexcept
 {
     return getRenderable().setupBones(out, maxBones, boneMask, currentTime);
@@ -148,4 +151,6 @@ bool Entity::visibleTo(const EngineInterfaces& engineInterfaces, const Memory& m
     }
 
     return false;
+}
+
 }

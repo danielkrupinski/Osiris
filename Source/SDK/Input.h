@@ -3,6 +3,9 @@
 #include "Pad.h"
 #include "Vector.h"
 
+namespace csgo
+{
+
 class Input {
 public:
     PAD(WIN32_LINUX(12, 16))
@@ -14,3 +17,5 @@ public:
     bool cameraMovingWithMouse;
     Vector cameraOffset;
 };
+
+}

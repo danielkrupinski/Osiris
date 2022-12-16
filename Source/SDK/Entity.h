@@ -23,10 +23,8 @@ class EngineTrace;
 class OtherInterfaces;
 class EconItemView;
 
-class matrix3x4;
-
-struct AnimState;
-struct ClientClass;
+namespace csgo { struct AnimState; }
+namespace csgo { struct ClientClass; }
 struct Model;
 struct VarMap;
 
@@ -56,6 +54,11 @@ enum class Team {
 };
 
 }
+
+namespace csgo
+{
+
+class matrix3x4;
 
 class Collideable : private VirtualCallable {
 public:
@@ -94,7 +97,7 @@ public:
 
 namespace csgo::pod { struct Entity; }
 
-class Entity : public VirtualCallableFromPOD<Entity, csgo::pod::Entity> {
+class Entity : public VirtualCallableFromPOD<Entity, pod::Entity> {
 public:
     [[nodiscard]] auto getNetworkable() const noexcept
     {
@@ -121,7 +124,7 @@ public:
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))
     VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(84, 122), (int index, Vector& origin), (index, &origin))
-    VIRTUAL_METHOD(csgo::Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
+    VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(88, 128), (), ())
 #if IS_WIN32()
     VIRTUAL_METHOD(bool, initializeAsClientEntity, 97, (const char* modelName, bool renderWithViewmodels), (modelName, renderWithViewmodels))
 #endif
@@ -129,13 +132,13 @@ public:
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
-    VIRTUAL_METHOD(csgo::pod::Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD(pod::Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
-    VIRTUAL_METHOD(csgo::pod::Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD(pod::Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (csgo::pod::Entity* viewModel), (viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (pod::Entity* viewModel), (viewModel))
     VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 
@@ -188,7 +191,7 @@ public:
     {
         return *reinterpret_cast<VarMap*>(getThis() + WIN32_LINUX(0x24, 0x48));
     }
-   
+
     AnimState* getAnimstate() const noexcept
     {
 #if IS_WIN32()
@@ -277,7 +280,7 @@ public:
     NETVAR2(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR2(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR2(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
-    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", csgo::pod::EconItemView)
+    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", pod::EconItemView)
     NETVAR2(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
     NETVAR2(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 
@@ -287,11 +290,11 @@ public:
     NETVAR2(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
     NETVAR2(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
-    
+
     NETVAR2(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR2(thrower, "CBaseGrenade", "m_hThrower", int)
-        
+
     NETVAR2(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
     NETVAR2(fireXDelta, "CInferno", "m_fireXDelta", int[100])
@@ -299,7 +302,7 @@ public:
     NETVAR2(fireZDelta, "CInferno", "m_fireZDelta", int[100])
     NETVAR2(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
     NETVAR2(fireCount, "CInferno", "m_fireCount", int)
-        
+
     bool isFlashed() const noexcept
     {
         return flashDuration() > 75.0f;
@@ -320,3 +323,5 @@ public:
         return (flags() & 1) != 0;
     }
 };
+
+}

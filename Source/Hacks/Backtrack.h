@@ -12,27 +12,31 @@
 
 #include "../Memory.h"
 
-namespace csgo { enum class FrameStage; }
-struct UserCmd;
+namespace csgo
+{
+    enum class FrameStage;
+    struct UserCmd;
+    class Cvar;
+}
+
 class ClientInterfaces;
-class Cvar;
 class EngineInterfaces;
 
 class Backtrack {
 public:
-    explicit Backtrack(const Cvar& cvar);
+    explicit Backtrack(const csgo::Cvar& cvar);
 
     void update(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage) noexcept;
-    void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, UserCmd*) noexcept;
+    void run(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::UserCmd*) noexcept;
 
     struct Record {
-        Vector origin;
+        csgo::Vector origin;
         float simulationTime;
-        matrix3x4 matrix[256];
+        csgo::matrix3x4 matrix[256];
     };
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept;
-    bool valid(const Engine& engine, const Memory& memory, float simtime) noexcept;
+    bool valid(const csgo::Engine& engine, const Memory& memory, float simtime) noexcept;
 
     // GUI
     void menuBarItem() noexcept;
@@ -52,13 +56,13 @@ private:
     float getLerp() noexcept;
 
     struct Cvars {
-        ConVar updateRate;
-        ConVar maxUpdateRate;
-        ConVar interp;
-        ConVar interpRatio;
-        ConVar minInterpRatio;
-        ConVar maxInterpRatio;
-        ConVar maxUnlag;
+        csgo::ConVar updateRate;
+        csgo::ConVar maxUpdateRate;
+        csgo::ConVar interp;
+        csgo::ConVar interpRatio;
+        csgo::ConVar minInterpRatio;
+        csgo::ConVar maxInterpRatio;
+        csgo::ConVar maxUnlag;
     };
 
     bool enabled;

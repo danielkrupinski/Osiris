@@ -21,9 +21,15 @@ union SDL_Event;
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
 
+namespace csgo
+{
+
 class matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
+
+}
+
 class ClientInterfaces;
 class OtherInterfaces;
 class Glow;
@@ -56,9 +62,9 @@ public:
 
     void install(csgo::pod::Client* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
-    void callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept;
+    void callOriginalDrawModelExecute(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
 
-    std::add_pointer_t<int FASTCALL_CONV(SoundInfo&)> originalDispatchSound;
+    std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
     HookType bspQuery;
     HookType client;

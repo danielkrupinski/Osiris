@@ -14,7 +14,7 @@
 
 static int localPlayerFlags;
 
-void EnginePrediction::run(const ClientInterfaces& clientInterfaces, const Memory& memory, UserCmd* cmd) noexcept
+void EnginePrediction::run(const ClientInterfaces& clientInterfaces, const Memory& memory, csgo::UserCmd* cmd) noexcept
 {
     if (!localPlayer)
         return;

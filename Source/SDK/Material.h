@@ -4,30 +4,33 @@
 
 #include "VirtualMethod.h"
 
-namespace csgo::pod
-{
-    struct Material;
-    struct MaterialVar;
-}
-
-class MaterialVar : public VirtualCallableFromPOD<MaterialVar, csgo::pod::MaterialVar> {
-public:
-    VIRTUAL_METHOD(void, setValue, 4, (float value), (value))
-    VIRTUAL_METHOD(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (x, y, z))
-    VIRTUAL_METHOD(void, setVecComponentValue, 26, (float value, int component), (value, component))
-};
-
 enum class MaterialVarFlag {
     NO_DRAW = 1 << 2,
     IGNOREZ = 1 << 15,
     WIREFRAME = 1 << 28
 };
 
-class Material : public VirtualCallableFromPOD<Material, csgo::pod::Material> {
+namespace csgo
+{
+
+namespace pod
+{
+    struct Material;
+    struct MaterialVar;
+}
+
+class MaterialVar : public VirtualCallableFromPOD<MaterialVar, pod::MaterialVar> {
+public:
+    VIRTUAL_METHOD(void, setValue, 4, (float value), (value))
+    VIRTUAL_METHOD(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (x, y, z))
+    VIRTUAL_METHOD(void, setVecComponentValue, 26, (float value, int component), (value, component))
+};
+
+class Material : public VirtualCallableFromPOD<Material, pod::Material> {
 public:
     VIRTUAL_METHOD(const char*, getName, 0, (), ())
     VIRTUAL_METHOD(const char*, getTextureGroupName, 1, (), ())
-    VIRTUAL_METHOD(csgo::pod::MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (name, found, complain))
+    VIRTUAL_METHOD(pod::MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (name, found, complain))
     VIRTUAL_METHOD(void, incrementReferenceCount, 12, (), ())
     VIRTUAL_METHOD(void, decrementReferenceCount, 13, (), ())
     VIRTUAL_METHOD(void, alphaModulate, 27, (float alpha), (alpha))
@@ -38,3 +41,5 @@ public:
     VIRTUAL_METHOD(int, getReferenceCount, 56, (), ())
     VIRTUAL_METHOD(bool, isPrecached, 70, (), ())
 };
+
+}

@@ -4,6 +4,9 @@
 #include "../Netvars.h"
 #include "VirtualMethod.h"
 
+namespace csgo
+{
+
 struct Vector;
 
 class IPlayerResource : private VirtualCallable {
@@ -29,3 +32,5 @@ public:
     NETVAR(musicID, "CCSPlayerResource", "m_nMusicID", int[65])
     NETVAR(activeCoinRank, "CCSPlayerResource", "m_nActiveCoinRank", int[65])
 };
+
+}

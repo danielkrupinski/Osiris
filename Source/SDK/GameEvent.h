@@ -3,9 +3,14 @@
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
-namespace csgo::pod { struct GameEvent; }
+class KeyValues;
 
-class GameEvent : public VirtualCallableFromPOD<GameEvent, csgo::pod::GameEvent> {
+namespace csgo
+{
+
+namespace pod { struct GameEvent; }
+
+class GameEvent : public VirtualCallableFromPOD<GameEvent, pod::GameEvent> {
 public:
     VIRTUAL_METHOD_V(const char*, getName, 1, (), ())
     VIRTUAL_METHOD_V(int, getInt, 6, (const char* keyName, int defaultValue = 0), (keyName, defaultValue))
@@ -18,11 +23,9 @@ public:
 class GameEventListener {
 public:
     virtual ~GameEventListener() = default;
-    virtual void fireGameEvent(csgo::pod::GameEvent* event) = 0;
+    virtual void fireGameEvent(pod::GameEvent* event) = 0;
     virtual int getEventDebugId() { return 42; }
 };
-
-class KeyValues;
 
 class GameEventDescriptor {
 public:
@@ -32,8 +35,8 @@ public:
     UtlVector<void*> listeners;
 };
 
-namespace csgo::pod { struct GameEventManager; }
-class GameEventManager : public VirtualCallableFromPOD<GameEventManager, csgo::pod::GameEventManager> {
+namespace pod { struct GameEventManager; }
+class GameEventManager : public VirtualCallableFromPOD<GameEventManager, pod::GameEventManager> {
 public:
     GameEventManager(VirtualCallableFromPOD base, std::uintptr_t getEventDescriptorFn)
         : VirtualCallableFromPOD{ base }, getEventDescriptorFn{ getEventDescriptorFn }
@@ -51,3 +54,5 @@ public:
 private:
     std::uintptr_t getEventDescriptorFn;
 };
+
+}

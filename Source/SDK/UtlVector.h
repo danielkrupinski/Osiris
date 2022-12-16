@@ -1,5 +1,8 @@
 #pragma once
 
+namespace csgo
+{
+
 template <typename T>
 class UtlVector {
 public:
@@ -12,3 +15,5 @@ public:
     int size;
     T* elements;
 };
+
+}

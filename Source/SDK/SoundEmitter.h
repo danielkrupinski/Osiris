@@ -2,9 +2,14 @@
 
 #include "VirtualMethod.h"
 
-namespace csgo::pod { struct SoundEmitter; }
+namespace csgo
+{
 
-class SoundEmitter : public VirtualCallableFromPOD<SoundEmitter, csgo::pod::SoundEmitter> {
+namespace pod { struct SoundEmitter; }
+
+class SoundEmitter : public VirtualCallableFromPOD<SoundEmitter, pod::SoundEmitter> {
 public:
     VIRTUAL_METHOD(const char*, getSoundName, 46, (int index), (index))
 };
+
+}

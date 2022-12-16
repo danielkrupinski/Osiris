@@ -5,6 +5,9 @@
 #include "../Helpers.h"
 #include "Utils.h"
 
+namespace csgo
+{
+
 struct Vector {
     Vector() = default;
     constexpr Vector(float x, float y, float z) noexcept : x{ x }, y{ y }, z{ z } {}
@@ -13,7 +16,7 @@ struct Vector {
     {
         return x || y || z;
     }
-    
+
     friend constexpr auto operator==(const Vector& a, const Vector& b) noexcept
     {
         return a.x == b.x && a.y == b.y && a.z == b.z;
@@ -73,7 +76,7 @@ struct Vector {
     {
         return Vector{ a.x + b.x, a.y + b.y, a.z + b.z };
     }
-    
+
     friend constexpr auto operator*(const Vector& a, const Vector& b) noexcept
     {
         return Vector{ a.x * b.x, a.y * b.y, a.z * b.z };
@@ -138,16 +141,18 @@ struct Vector {
     auto toAngle() const noexcept
     {
         return Vector{ Helpers::rad2deg(std::atan2(-z, std::hypot(x, y))),
-                       Helpers::rad2deg(std::atan2(y, x)),
-                       0.0f };
+                        Helpers::rad2deg(std::atan2(y, x)),
+                        0.0f };
     }
 
     static auto fromAngle(const Vector& angle) noexcept
     {
         return Vector{ std::cos(Helpers::deg2rad(angle.x)) * std::cos(Helpers::deg2rad(angle.y)),
-                       std::cos(Helpers::deg2rad(angle.x)) * std::sin(Helpers::deg2rad(angle.y)),
-                      -std::sin(Helpers::deg2rad(angle.x)) };
+                        std::cos(Helpers::deg2rad(angle.x)) * std::sin(Helpers::deg2rad(angle.y)),
+                        -std::sin(Helpers::deg2rad(angle.x)) };
     }
 
     float x, y, z;
 };
+
+}

@@ -2,6 +2,9 @@
 
 #include "Vector.h"
 
+namespace csgo
+{
+
 struct UserCmd {
     enum {
         IN_ATTACK = 1 << 0,
@@ -33,3 +36,5 @@ struct UserCmd {
     short mousedy;
     bool hasbeenpredicted;
 };
+
+}

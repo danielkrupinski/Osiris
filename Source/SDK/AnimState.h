@@ -2,6 +2,9 @@
 
 #include <cstddef>
 
+namespace csgo
+{
+
 struct AnimState {
     std::byte pad[164];
     float duckAmount;
@@ -13,3 +16,5 @@ struct AnimState {
     std::byte pad3[532];
     float velocitySubtractY;
 };
+
+}

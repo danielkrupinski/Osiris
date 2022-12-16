@@ -2,6 +2,9 @@
 
 #include "UtlMemory.h"
 
+namespace csgo
+{
+
 template <typename Key, typename Value>
 struct Node {
     int left;
@@ -42,3 +45,5 @@ struct UtlMap {
     int lastAlloc;
     Node<Key, Value>* elements;
 };
+
+}

@@ -47,7 +47,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 
     const auto highestEntityIndex = clientInterfaces.getEntityList().getHighestEntityIndex();
     for (int i = engineInterfaces.getEngine().getMaxClients() + 1; i <= highestEntityIndex; ++i) {
-        const auto entity = Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
+        const auto entity = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
         if (entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
@@ -74,9 +74,9 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
     }
 
     for (int i = 0; i < glowObjectManager->glowObjectDefinitions.size; i++) {
-        GlowObjectDefinition& glowobject = glowObjectManager->glowObjectDefinitions[i];
+        csgo::GlowObjectDefinition& glowobject = glowObjectManager->glowObjectDefinitions[i];
 
-        const auto entity = Entity::from(retSpoofGadgets->client, glowobject.entity);
+        const auto entity = csgo::Entity::from(retSpoofGadgets->client, glowobject.entity);
 
         if (glowobject.isUnused() || entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
@@ -99,7 +99,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
             }
         };
 
-        auto applyPlayerGlow = [this, applyGlow, &memory, &engineInterfaces](const std::string& name, const Entity& entity) noexcept {
+        auto applyPlayerGlow = [this, applyGlow, &memory, &engineInterfaces](const std::string& name, const csgo::Entity& entity) noexcept {
             const auto& cfg = playerGlowConfig[name];
             if (cfg.all.enabled) 
                 applyGlow(cfg.all, entity.health());
@@ -113,7 +113,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::CSPlayer:
             if (!entity.isAlive())
                 break;
-            if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, entity.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
+            if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, entity.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming())
                 applyPlayerGlow("Planting", entity);
             else if (entity.isDefusing())
                 applyPlayerGlow("Defusing", entity);

@@ -2,18 +2,18 @@
 
 #include <SDK/GameEvent.h>
 
-class DefaultEventListener : public GameEventListener {
+class DefaultEventListener : public csgo::GameEventListener {
 public:
     void fireGameEvent(csgo::pod::GameEvent* eventPointer) override;
 };
 
-class EventListener : public GameEventListener {
+class EventListener : public csgo::GameEventListener {
 public:
-    explicit EventListener(GameEventManager gameEventManager);
+    explicit EventListener(csgo::GameEventManager gameEventManager);
 
     void fireGameEvent(csgo::pod::GameEvent* event) override;
     void remove();
 
 private:
-    GameEventManager gameEventManager;
+    csgo::GameEventManager gameEventManager;
 };

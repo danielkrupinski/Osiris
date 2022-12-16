@@ -8,8 +8,8 @@
 #include "SDK/Recv.h"
 
 struct ProxyHook {
-    recvProxy originalProxy = nullptr;
-    recvProxy* addressOfOriginalProxy = nullptr;
+    csgo::recvProxy originalProxy = nullptr;
+    csgo::recvProxy* addressOfOriginalProxy = nullptr;
 };
 
 struct ProxyHooks {
@@ -18,11 +18,11 @@ struct ProxyHooks {
 };
 
 inline ProxyHooks proxyHooks;
-class Client;
+namespace csgo { class Client; }
 
 namespace Netvars
 {
-    void init(const Client& client) noexcept;
+    void init(const csgo::Client& client) noexcept;
     void restore() noexcept;
     std::uint32_t get(std::uint32_t hash) noexcept;
 }

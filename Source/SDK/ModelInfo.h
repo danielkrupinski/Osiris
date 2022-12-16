@@ -6,17 +6,6 @@
 #include "Vector.h"
 #include "VirtualMethod.h"
 
-struct StudioBbox {
-    int bone;
-    int group;
-    Vector bbMin;
-    Vector bbMax;
-    int hitboxNameIndex;
-    Vector offsetOrientation;
-    float capsuleRadius;
-    int	unused[4];
-};
-
 enum class Hitbox {
     Head,
     Neck,
@@ -40,6 +29,23 @@ enum class Hitbox {
     Max
 };
 
+constexpr auto MAXSTUDIOBONES = 256;
+constexpr auto BONE_USED_BY_HITBOX = 0x100;
+
+namespace csgo
+{
+
+struct StudioBbox {
+    int bone;
+    int group;
+    Vector bbMin;
+    Vector bbMax;
+    int hitboxNameIndex;
+    Vector offsetOrientation;
+    float capsuleRadius;
+    int	unused[4];
+};
+
 struct StudioHitboxSet {
     int nameIndex;
     int numHitboxes;
@@ -61,9 +67,6 @@ struct StudioHitboxSet {
     }
 };
 
-constexpr auto MAXSTUDIOBONES = 256;
-constexpr auto BONE_USED_BY_HITBOX = 0x100;
-
 struct StudioBone {
     int nameIndex;
     int	parent;
@@ -71,7 +74,7 @@ struct StudioBone {
     int flags;
     PAD(52)
 
-    const char* getName() const noexcept
+        const char* getName() const noexcept
     {
         return nameIndex ? reinterpret_cast<const char*>(std::uintptr_t(this) + nameIndex) : nullptr;
     }
@@ -110,9 +113,11 @@ struct StudioHdr {
 
 struct Model;
 
-namespace csgo::pod { struct ModelInfo; }
-class ModelInfo : public VirtualCallableFromPOD<ModelInfo, csgo::pod::ModelInfo> {
+namespace pod { struct ModelInfo; }
+class ModelInfo : public VirtualCallableFromPOD<ModelInfo, pod::ModelInfo> {
 public:
     VIRTUAL_METHOD(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (name))
     VIRTUAL_METHOD(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (model))
 };
+
+}

@@ -3,6 +3,9 @@
 #include "Pad.h"
 #include "VirtualMethod.h"
 
+namespace csgo
+{
+
 struct SurfaceData {
     PAD(80)
     float maxspeedfactor;
@@ -13,9 +16,11 @@ struct SurfaceData {
     bool climbable;
 };
 
-namespace csgo::pod { struct PhysicsSurfaceProps; }
+namespace pod { struct PhysicsSurfaceProps; }
 
-class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, csgo::pod::PhysicsSurfaceProps> {
+class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, pod::PhysicsSurfaceProps> {
 public:
     VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
 };
+
+}

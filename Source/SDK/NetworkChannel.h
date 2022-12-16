@@ -3,15 +3,22 @@
 #include "Pad.h"
 #include "VirtualMethod.h"
 
-namespace csgo::pod
+namespace csgo
 {
-    struct NetworkChannel {
-        PAD(44)
-        int chokedPackets;
-    };
+
+namespace pod
+{
+
+struct NetworkChannel {
+    PAD(44)
+    int chokedPackets;
+};
+
 }
 
-class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, csgo::pod::NetworkChannel> {
+class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, pod::NetworkChannel> {
 public:
     VIRTUAL_METHOD(float, getLatency, 9, (int flow), (flow))
 };
+
+}

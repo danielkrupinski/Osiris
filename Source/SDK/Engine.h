@@ -9,6 +9,9 @@
 #include "Vector.h"
 #include "VirtualMethod.h"
 
+namespace csgo
+{
+
 struct SteamAPIContext;
 
 struct Matrix4x4 {
@@ -50,10 +53,10 @@ struct DemoPlaybackParameters {
     PAD(23)
 };
 
-namespace csgo::pod { struct NetworkChannel; }
-namespace csgo::pod { struct Engine; }
+namespace pod { struct NetworkChannel; }
+namespace pod { struct Engine; }
 
-class Engine : public VirtualCallableFromPOD<Engine, csgo::pod::Engine> {
+class Engine : public VirtualCallableFromPOD<Engine, pod::Engine> {
 public:
     VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (&w, &h))
     VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, &playerInfo))
@@ -67,7 +70,7 @@ public:
     VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix, 37, (), ())
     VIRTUAL_METHOD(void*, getBSPTreeQuery, 43, (), ())
     VIRTUAL_METHOD(const char*, getLevelName, 53, (), ())
-    VIRTUAL_METHOD(csgo::pod::NetworkChannel*, getNetworkChannel, 78, (), ())
+    VIRTUAL_METHOD(pod::NetworkChannel*, getNetworkChannel, 78, (), ())
     VIRTUAL_METHOD(void, clientCmdUnrestricted, WIN32_LINUX(114, 113), (const char* cmd, bool fromConsoleOrKeybind = false), (cmd, fromConsoleOrKeybind))
     VIRTUAL_METHOD_V(const SteamAPIContext*, getSteamAPIContext, 185, (), ())
 
@@ -78,3 +81,5 @@ public:
         return ang;
     }
 };
+
+}

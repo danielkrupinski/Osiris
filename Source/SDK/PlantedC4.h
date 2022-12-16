@@ -3,6 +3,9 @@
 #include "Entity.h"
 #include "Inconstructible.h"
 
+namespace csgo
+{
+
 class PlantedC4 : public Entity {
 public:
     INCONSTRUCTIBLE(PlantedC4)
@@ -15,3 +18,5 @@ public:
     NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 };
+
+}

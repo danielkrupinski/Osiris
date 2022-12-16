@@ -63,7 +63,7 @@ GlobalContext::GlobalContext()
     retSpoofGadgets.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
 }
 
-bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
+bool GlobalContext::createMoveHook(float inputSampleTime, csgo::UserCmd* cmd)
 {
     auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
 
@@ -110,7 +110,7 @@ bool GlobalContext::createMoveHook(float inputSampleTime, UserCmd* cmd)
     features->misc.moonwalk(cmd);
     features->misc.fastPlant(getEngineInterfaces().engineTrace(), cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (csgo::UserCmd::IN_ATTACK | csgo::UserCmd::IN_ATTACK2))) {
         features->misc.chokePackets(getEngineInterfaces().getEngine(), sendPacket);
     }
 
@@ -152,14 +152,14 @@ float GlobalContext::getViewModelFovHook()
 {
     float additionalFov = features->visuals.viewModelFov();
     if (localPlayer) {
-        if (const auto activeWeapon = Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
     return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
 }
 
-void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
+void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld)
 {
     if (getOtherInterfaces().getStudioRender().isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
@@ -213,7 +213,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     hooks->client.callOriginal<void, 37>(stage);
 }
 
-int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
+int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
 {
     Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, soundEntry, entityIndex, volume);
     features->misc.autoAccept(soundEntry);
@@ -254,7 +254,7 @@ void GlobalContext::setDrawColorHook(int r, int g, int b, int a, ReturnAddress r
     hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
 }
 
-void GlobalContext::overrideViewHook(ViewSetup* setup)
+void GlobalContext::overrideViewHook(csgo::ViewSetup* setup)
 {
     if (localPlayer && !localPlayer.get().isScoped())
         setup->fov += features->visuals.fov();
@@ -262,7 +262,7 @@ void GlobalContext::overrideViewHook(ViewSetup* setup)
     hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
 }
 
-int GlobalContext::dispatchSoundHook(SoundInfo& soundInfo)
+int GlobalContext::dispatchSoundHook(csgo::SoundInfo& soundInfo)
 {
     if (const char* soundName = getOtherInterfaces().getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
         Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory, soundName, soundInfo.entityIndex, soundInfo.volume);
@@ -278,9 +278,9 @@ void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
     hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
 }
 
-const DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(ReturnAddress returnAddress)
+const csgo::DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(ReturnAddress returnAddress)
 {
-    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
+    const auto params = hooks->engine.callOriginal<const csgo::DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
 
     if (params)
         return features->misc.getDemoPlaybackParametersHook(returnAddress, *params);
@@ -362,13 +362,13 @@ void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, c
     hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
-void GlobalContext::soUpdatedHook(SOID owner, csgo::pod::SharedObject* object, int event)
+void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::pod::SharedObject* object, int event)
 {
-    features->inventoryChanger.onSoUpdated(SharedObject::from(retSpoofGadgets->client, object));
+    features->inventoryChanger.onSoUpdated(csgo::SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
-int GlobalContext::listLeavesInBoxHook(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress)
+int GlobalContext::listLeavesInBoxHook(const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
     if (const auto newVectors = features->misc.listLeavesInBoxHook(returnAddress, frameAddress))
         return hooks->bspQuery.callOriginal<int, 6>(&newVectors->first, &newVectors->second, list, listMax);
@@ -508,12 +508,12 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 #endif
 
-void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outStruct, void* arg3)
+void GlobalContext::viewModelSequenceNetvarHook(csgo::recvProxyData& data, void* outStruct, void* arg3)
 {
-    const auto viewModel = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
+    const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
 
     if (localPlayer && ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
-        if (const auto weapon = Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
+        if (const auto weapon = csgo::Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
             if (features->visuals.isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
@@ -524,13 +524,13 @@ void GlobalContext::viewModelSequenceNetvarHook(recvProxyData& data, void* outSt
     proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::spottedHook(recvProxyData& data, void* outStruct, void* arg3)
+void GlobalContext::spottedHook(csgo::recvProxyData& data, void* outStruct, void* arg3)
 {
     if (features->misc.isRadarHackOn()) {
         data.value._int = 1;
 
         if (localPlayer) {
-            const auto entity = Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
+            const auto entity = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
             if (const auto index = localPlayer.get().getNetworkable().index(); index > 0 && index <= 32)
                 entity.spottedByMask() |= 1 << (index - 1);
         }
@@ -541,7 +541,7 @@ void GlobalContext::spottedHook(recvProxyData& data, void* outStruct, void* arg3
 
 void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
 {
-    const auto event = GameEvent::from(retSpoofGadgets->client, eventPointer);
+    const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
 
     switch (fnv::hashRuntime(event.getName())) {
     case fnv::hash("round_start"):

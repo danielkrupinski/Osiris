@@ -2,6 +2,9 @@
 
 #include "UtlVector.h"
 
+namespace csgo
+{
+
 struct VarEntry {
     unsigned short type;
     unsigned short needsToInterpolate;
@@ -12,3 +15,5 @@ struct VarMap {
     UtlVector<VarEntry> entries;
     int interpolatedEntries;
 };
+
+}

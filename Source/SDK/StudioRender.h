@@ -14,19 +14,24 @@ enum class OverrideType {
     SsaoDepthWrite
 };
 
-namespace csgo::pod
+namespace csgo
 {
-    struct StudioRender {
-        PAD(WIN32_LINUX(592, 600))
-        csgo::pod::Material* materialOverride;
-        PAD(WIN32_LINUX(12, 24))
-        OverrideType overrideType;
-    };
+
+namespace pod
+{
+
+struct StudioRender {
+    PAD(WIN32_LINUX(592, 600))
+    Material* materialOverride;
+    PAD(WIN32_LINUX(12, 24))
+    OverrideType overrideType;
+};
+
 }
 
-class StudioRender : public VirtualCallableFromPOD<StudioRender, csgo::pod::StudioRender> {
+class StudioRender : public VirtualCallableFromPOD<StudioRender, pod::StudioRender> {
 public:
-    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (csgo::pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
+    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
 
     bool isForcedMaterialOverride() const noexcept
     {
@@ -35,3 +40,5 @@ public:
         return std::string_view{ Material::from(getInvoker(), getPOD()->materialOverride).getName() }.starts_with("dev/glow");
     }
 };
+
+}

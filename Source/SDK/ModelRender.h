@@ -3,6 +3,9 @@
 #include "Utils.h"
 #include "Vector.h"
 
+namespace csgo
+{
+
 class matrix3x4;
 
 struct Model {
@@ -27,3 +30,5 @@ struct ModelRenderInfo {
     int flags;
     int entityIndex;
 };
+
+}

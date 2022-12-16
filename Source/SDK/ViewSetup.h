@@ -2,6 +2,9 @@
 
 #include "Pad.h"
 
+namespace csgo
+{
+
 struct ViewSetup {
     PAD(172);
     void* csm;
@@ -9,3 +12,5 @@ struct ViewSetup {
     PAD(32);
     float farZ;
 };
+
+}

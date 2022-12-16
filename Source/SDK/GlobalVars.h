@@ -2,6 +2,9 @@
 
 #include <cstddef>
 
+namespace csgo
+{
+
 struct UserCmd;
 
 struct GlobalVars {
@@ -17,3 +20,5 @@ struct GlobalVars {
 
     float serverTime(UserCmd* = nullptr) const noexcept;
 };
+
+}

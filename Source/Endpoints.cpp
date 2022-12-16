@@ -27,12 +27,12 @@ void EventListener::fireGameEvent(csgo::pod::GameEvent* event)
     globalContext->fireGameEventCallback(event);
 }
 
-void CDECL_CONV viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
+void CDECL_CONV viewModelSequence(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
     globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
 }
 
-void CDECL_CONV spottedHook(recvProxyData& data, void* outStruct, void* arg3) noexcept
+void CDECL_CONV spottedHook(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
     globalContext->spottedHook(data, outStruct, arg3);
 }
@@ -68,7 +68,7 @@ void swapWindow(SDL_Window* window) noexcept
 
 #endif
 
-bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, UserCmd* cmd) noexcept
+bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, csgo::UserCmd* cmd) noexcept
 {
     return globalContext->createMoveHook(inputSampleTime, cmd);
 }
@@ -83,7 +83,7 @@ float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
     return globalContext->getViewModelFovHook();
 }
 
-void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
 {
     globalContext->drawModelExecuteHook(ctx, state, info, customBoneToWorld);
 }
@@ -98,7 +98,7 @@ void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage 
     globalContext->frameStageNotifyHook(stage);
 }
 
-int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr, ) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
+int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr, ) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
     return globalContext->emitSoundHook(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
@@ -123,17 +123,17 @@ void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr, ) int r, int g, int b, 
     globalContext->setDrawColorHook(r, g, b, a, RETURN_ADDRESS());
 }
 
-void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) ViewSetup* setup) noexcept
+void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) csgo::ViewSetup* setup) noexcept
 {
     globalContext->overrideViewHook(setup);
 }
 
-int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
+int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
-int FASTCALL_CONV dispatchSound(SoundInfo& soundInfo) noexcept
+int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept
 {
     return globalContext->dispatchSoundHook(soundInfo);
 }
@@ -143,7 +143,7 @@ void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr, ) void* viewSe
     globalContext->render2dEffectsPreHudHook(viewSetup);
 }
 
-const DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
+const csgo::DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
     return globalContext->getDemoPlaybackParametersHook(RETURN_ADDRESS());
 }
@@ -193,7 +193,7 @@ void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::
     globalContext->updateInventoryEquippedStateHook(inventory, itemID, team, slot, swap);
 }
 
-void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, csgo::pod::SharedObject* object, int event) noexcept
+void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::pod::SharedObject* object, int event) noexcept
 {
     globalContext->soUpdatedHook(owner, object, event);
 }

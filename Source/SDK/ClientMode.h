@@ -5,9 +5,12 @@
 #include <Platform/Macros/PlatformSpecific.h>
 #include "VirtualMethod.h"
 
-namespace csgo::pod { struct HudChat; }
+namespace csgo
+{
 
-class HudChat : public VirtualCallableFromPOD<HudChat, csgo::pod::HudChat> {
+namespace pod { struct HudChat; }
+
+class HudChat : public VirtualCallableFromPOD<HudChat, pod::HudChat> {
 public:
     template <typename... Args>
     void printf(int filter, const char* fmt, Args... args) const noexcept
@@ -18,7 +21,7 @@ public:
 
 struct ClientMode {
     PAD(WIN32_LINUX(28, 48))
-    csgo::pod::HudChat* hudChat;
+    pod::HudChat* hudChat;
     PAD(WIN32_LINUX(0x47C, 0x8D0))
     float blueColorCorrection;
     PAD(WIN32_LINUX(4, 12))
@@ -34,3 +37,5 @@ struct ClientMode {
     PAD(WIN32_LINUX(4, 12))
     float yellowColorCorrection;
 };
+
+}

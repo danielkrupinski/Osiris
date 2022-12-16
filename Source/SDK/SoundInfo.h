@@ -3,6 +3,9 @@
 #include "Pad.h"
 #include <Platform/Macros/PlatformSpecific.h>
 
+namespace csgo
+{
+
 struct SoundInfo {
     PAD(WIN32_LINUX(40, 44))
     float volume;
@@ -13,3 +16,5 @@ struct SoundInfo {
     int flags;
     int soundIndex;
 };
+
+}

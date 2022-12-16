@@ -13,7 +13,7 @@
 
 #include "GlobalContext.h"
 
-EventListener::EventListener(GameEventManager gameEventManager)
+EventListener::EventListener(csgo::GameEventManager gameEventManager)
     : gameEventManager{ gameEventManager }
 {
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).

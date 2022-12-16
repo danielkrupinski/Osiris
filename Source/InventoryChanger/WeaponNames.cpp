@@ -17,7 +17,7 @@ namespace inventory_changer
     Helpers::ToUpperConverter toUpperConverter;
 
     for (const auto& node : itemSchema.itemsSorted) {
-        const auto item = EconItemDefinition::from(retSpoofGadgets->client, node.value);
+        const auto item = csgo::EconItemDefinition::from(retSpoofGadgets->client, node.value);
         const auto nameWide = interfaces.getLocalize().findSafe(item.getItemBaseName());
         storage.add(item.getWeaponId(), converter.convertUnicodeToAnsi(nameWide), toUpperConverter.toUpper(nameWide));
     }

@@ -15,11 +15,17 @@
 #include "EconItemViewFunctions.h"
 #include <Utils/ReturnAddress.h>
 
-namespace csgo { enum class FrameStage; }
+namespace csgo
+{
+
+enum class FrameStage;
 enum class Team;
 class Entity;
 class GameEvent;
 class SharedObject;
+
+}
+
 class ClientInterfaces;
 
 namespace inventory_changer
@@ -103,16 +109,16 @@ public:
     }
 
     void getArgAsNumberHook(int number, ReturnAddress returnAddress);
-    void onRoundMVP(const Engine& engine, const GameEvent& event);
-    void updateStatTrak(const Engine& engine, const GameEvent& event);
-    void overrideHudIcon(const Engine& engine, const Memory& memory, const GameEvent& event);
+    void onRoundMVP(const csgo::Engine& engine, const csgo::GameEvent& event);
+    void updateStatTrak(const csgo::Engine& engine, const csgo::GameEvent& event);
+    void overrideHudIcon(const csgo::Engine& engine, const Memory& memory, const csgo::GameEvent& event);
     void getArgAsStringHook(const Memory& memory, const char* string, ReturnAddress returnAddress, void* params);
     void getNumArgsHook(unsigned numberOfArgs, ReturnAddress returnAddress, void* params);
     int setResultIntHook(ReturnAddress returnAddress, void* params, int result);
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
-    void fixKnifeAnimation(const Entity& viewModelWeapon, long& sequence, Helpers::RandomGenerator& randomGenerator);
+    void fixKnifeAnimation(const csgo::Entity& viewModelWeapon, long& sequence, Helpers::RandomGenerator& randomGenerator);
 
     void reset(const OtherInterfaces& interfaces, const Memory& memory);
 
@@ -120,7 +126,7 @@ public:
 
     void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
     void scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept;
-    void onSoUpdated(const SharedObject& object) noexcept;
+    void onSoUpdated(const csgo::SharedObject& object) noexcept;
 
     void menuBarItem() noexcept;
     void tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept;

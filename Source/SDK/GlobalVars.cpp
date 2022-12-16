@@ -3,6 +3,9 @@
 #include "LocalPlayer.h"
 #include "UserCmd.h"
 
+namespace csgo
+{
+
 float GlobalVars::serverTime(UserCmd* cmd) const noexcept
 {
     static int tick;
@@ -17,3 +20,6 @@ float GlobalVars::serverTime(UserCmd* cmd) const noexcept
     }
     return tick * intervalPerTick;
 }
+
+}
+

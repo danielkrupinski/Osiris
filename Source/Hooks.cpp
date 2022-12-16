@@ -231,7 +231,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 #endif
 }
 
-void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
 {
     modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
 }

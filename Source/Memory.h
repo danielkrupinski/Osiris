@@ -20,6 +20,11 @@
 
 #include "Platform/Macros/CallingConventions.h"
 
+class KeyValues;
+
+namespace csgo
+{
+
 struct ClientMode;
 class ClientSharedObjectCache;
 class CSPlayerInventory;
@@ -29,7 +34,6 @@ class Entity;
 class GameEventDescriptor;
 class GameEventManager;
 class Input;
-class KeyValues;
 class MoveData;
 class PlantedC4;
 class PlayerResource;
@@ -44,6 +48,8 @@ struct GlobalVars;
 struct GlowObjectManager;
 struct PanoramaEventRegistration;
 struct Vector;
+
+}
 
 namespace csgo { struct ViewRender; }
 
@@ -66,18 +72,18 @@ public:
 #endif
 
     csgo::pod::MemAlloc* memAlloc;
-    ClientMode* clientMode;
-    Input* input;
-    GlobalVars* globalVars;
-    UtlVector<PlantedC4*>* plantedC4s;
-    UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
+    csgo::ClientMode* clientMode;
+    csgo::Input* input;
+    csgo::GlobalVars* globalVars;
+    csgo::UtlVector<csgo::PlantedC4*>* plantedC4s;
+    csgo::UtlMap<short, csgo::PanoramaEventRegistration>* registeredPanoramaEvents;
 
-    std::add_pointer_t<bool CDECL_CONV(Vector, Vector, short)> lineGoesThroughSmoke;
+    std::add_pointer_t<bool CDECL_CONV(csgo::Vector, csgo::Vector, short)> lineGoesThroughSmoke;
     bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
     std::uintptr_t hud;
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
-    void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const Vector&);
+    void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const csgo::Vector&);
     int* dispatchSound;
     std::uintptr_t traceToExit;
     csgo::ViewRender* viewRender;
@@ -86,18 +92,18 @@ public:
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     int(THISCALL_CONV* equipWearable)(csgo::pod::Entity* wearable, csgo::pod::Entity* player);
     int* predictionRandomSeed;
-    MoveData* moveData;
+    csgo::MoveData* moveData;
     std::uintptr_t keyValuesFromString;
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
-    WeaponSystem weaponSystem;
-    TypeHint<std::uintptr_t, GameEventDescriptor*(THISCALL_CONV*)(csgo::pod::GameEventManager* thisptr, const char* name, int* cookie)> getEventDescriptor;
-    ActiveChannels* activeChannels;
-    Channel* channels;
-    PlayerResource** playerResource;
-    const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    csgo::WeaponSystem weaponSystem;
+    TypeHint<std::uintptr_t, csgo::GameEventDescriptor*(THISCALL_CONV*)(csgo::pod::GameEventManager* thisptr, const char* name, int* cookie)> getEventDescriptor;
+    csgo::ActiveChannels* activeChannels;
+    csgo::Channel* channels;
+    csgo::PlayerResource** playerResource;
+    const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(csgo::PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
     csgo::pod::Entity** gameRules;
-    InventoryManager inventoryManager;
+    csgo::InventoryManager inventoryManager;
     csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
     std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     std::uintptr_t createBaseTypeCache;
@@ -110,14 +116,14 @@ public:
         return symbol;
     }
 
-    [[nodiscard]] ItemSystem itemSystem() const noexcept
+    [[nodiscard]] csgo::ItemSystem itemSystem() const noexcept
     {
-        return ItemSystem::from(retSpoofGadgets->client, itemSystemFn());
+        return csgo::ItemSystem::from(retSpoofGadgets->client, itemSystemFn());
     }
 
-    [[nodiscard]] MoveHelper moveHelper() const noexcept
+    [[nodiscard]] csgo::MoveHelper moveHelper() const noexcept
     {
-        return MoveHelper::from(retSpoofGadgets->client, moveHelperPtr);
+        return csgo::MoveHelper::from(retSpoofGadgets->client, moveHelperPtr);
     }
 
 #if IS_WIN32()

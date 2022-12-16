@@ -17,7 +17,7 @@
 
 struct Color3;
 struct Color4;
-struct Vector;
+namespace csgo { struct Vector; }
 
 namespace Helpers
 {
@@ -79,8 +79,8 @@ namespace Helpers
         }
     }
 
-    bool worldToScreen(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
-    bool worldToScreenPixelAligned(const Vector& worldPosition, ImVec2& screenPosition) noexcept;
+    bool worldToScreen(const csgo::Vector& worldPosition, ImVec2& screenPosition) noexcept;
+    bool worldToScreenPixelAligned(const csgo::Vector& worldPosition, ImVec2& screenPosition) noexcept;
 
     [[nodiscard]] constexpr auto isMP5LabRats(WeaponId weaponID, int paintKit) noexcept
     {
