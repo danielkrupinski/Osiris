@@ -350,7 +350,6 @@
     <ClInclude Include="SDK\InputSystem.h" />
     <ClInclude Include="SDK\ItemSchema.h" />
     <ClInclude Include="SDK\KeyValues.h" />
-    <ClInclude Include="SDK\KeyValuesSystem.h" />
     <ClInclude Include="SDK\Localize.h" />
     <ClInclude Include="SDK\LocalPlayer.h" />
     <ClInclude Include="SDK\Material.h" />
