@@ -3,7 +3,6 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Utils/TypeHint.h>
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 namespace csgo

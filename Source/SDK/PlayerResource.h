@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "../Netvars.h"
 #include "VirtualMethod.h"
 
@@ -20,8 +19,6 @@ public:
 
 class PlayerResource {
 public:
-    INCONSTRUCTIBLE(PlayerResource)
-
     auto getIPlayerResource() noexcept
     {
         return IPlayerResource{ retSpoofGadgets->client, std::uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68) };

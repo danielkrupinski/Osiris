@@ -4,7 +4,6 @@
 #include <string>
 
 #include "AnimState.h"
-#include "Inconstructible.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"

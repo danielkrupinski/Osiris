@@ -2,7 +2,6 @@
 
 #include <functional>
 
-#include "Inconstructible.h"
 #include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"

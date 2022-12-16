@@ -1,15 +1,12 @@
 #pragma once
 
 #include "Entity.h"
-#include "Inconstructible.h"
 
 namespace csgo
 {
 
 class PlantedC4 : public Entity {
 public:
-    INCONSTRUCTIBLE(PlantedC4)
-
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
     NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)

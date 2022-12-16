@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 namespace csgo

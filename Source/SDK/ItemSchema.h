@@ -2,7 +2,6 @@
 
 #include <cstddef>
 
-#include "Inconstructible.h"
 #include "Pad.h"
 #include "Entity.h"
 #include "UtlMap.h"
@@ -62,8 +61,6 @@ struct StaticAttrib {
 static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
 
 struct EconTool {
-    INCONSTRUCTIBLE(EconTool)
-
     PAD(sizeof(std::uintptr_t))
     const char* typeName;
 };
