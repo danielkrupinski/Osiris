@@ -48,30 +48,31 @@ struct GlobalVars;
 struct GlowObjectManager;
 struct PanoramaEventRegistration;
 struct Vector;
+struct EconItemPOD;
+struct UiComponentInventoryPOD;
+struct ClientPOD;
+struct PanoramaMarshallHelperPOD;
 
 }
 
 namespace csgo { struct ViewRender; }
 
-namespace csgo::pod
+namespace csgo
 {
-    struct Client;
-    struct EconItem;
-    struct ItemSystem;
-    struct MemAlloc;
-    struct UiComponentInventory;
+    struct ItemSystemPOD;
+    struct MemAllocPOD;
 }
 
 class Memory {
 public:
-    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::pod::Client* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32()
     std::uintptr_t present;
     std::uintptr_t reset;
 #endif
 
-    csgo::pod::MemAlloc* memAlloc;
+    csgo::MemAllocPOD* memAlloc;
     csgo::ClientMode* clientMode;
     csgo::Input* input;
     csgo::GlobalVars* globalVars;
@@ -90,24 +91,24 @@ public:
     std::uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
-    int(THISCALL_CONV* equipWearable)(csgo::pod::Entity* wearable, csgo::pod::Entity* player);
+    int(THISCALL_CONV* equipWearable)(csgo::EntityPOD* wearable, csgo::EntityPOD* player);
     int* predictionRandomSeed;
     csgo::MoveData* moveData;
     std::uintptr_t keyValuesFromString;
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     csgo::WeaponSystem weaponSystem;
-    TypeHint<std::uintptr_t, csgo::GameEventDescriptor*(THISCALL_CONV*)(csgo::pod::GameEventManager* thisptr, const char* name, int* cookie)> getEventDescriptor;
+    TypeHint<std::uintptr_t, csgo::GameEventDescriptor*(THISCALL_CONV*)(csgo::GameEventManagerPOD* thisptr, const char* name, int* cookie)> getEventDescriptor;
     csgo::ActiveChannels* activeChannels;
     csgo::Channel* channels;
     csgo::PlayerResource** playerResource;
     const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(csgo::PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    csgo::pod::Entity** gameRules;
+    csgo::EntityPOD** gameRules;
     csgo::InventoryManager inventoryManager;
-    csgo::pod::PanoramaMarshallHelper* panoramaMarshallHelper;
-    std::add_pointer_t<csgo::pod::EconItemView* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper;
+    std::add_pointer_t<csgo::EconItemViewPOD* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     std::uintptr_t createBaseTypeCache;
-    TypeHint<std::uintptr_t, void(THISCALL_CONV*)(csgo::pod::UiComponentInventory* thisptr, std::uint64_t itemID, const char* type, const char* value)> setItemSessionPropertyValue;
+    TypeHint<std::uintptr_t, void(THISCALL_CONV*)(csgo::UiComponentInventoryPOD* thisptr, std::uint64_t itemID, const char* type, const char* value)> setItemSessionPropertyValue;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -136,9 +137,9 @@ public:
 
 private:
     void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
-    std::add_pointer_t<csgo::pod::ItemSystem* CDECL_CONV()> itemSystemFn;
+    std::add_pointer_t<csgo::ItemSystemPOD* CDECL_CONV()> itemSystemFn;
 
-    csgo::pod::MoveHelper* moveHelperPtr;
+    csgo::MoveHelperPOD* moveHelperPtr;
 };
 
 inline std::optional<const Memory> memory;

@@ -8,12 +8,12 @@
 namespace csgo
 {
 
-namespace pod { struct UIPanel; }
+struct UIPanelPOD;
 
-class UIPanel : public VirtualCallableFromPOD<UIPanel, pod::UIPanel> {
+class UIPanel : public VirtualCallableFromPOD<UIPanel, UIPanelPOD> {
 public:
     VIRTUAL_METHOD_V(int, getChildCount, 48, (), ())
-    VIRTUAL_METHOD_V(pod::UIPanel*, getChild, 49, (int n), (n))
+    VIRTUAL_METHOD_V(UIPanelPOD*, getChild, 49, (int n), (n))
     VIRTUAL_METHOD(bool, hasClass, 139, (const char* name), (name))
     VIRTUAL_METHOD(void, setHasClass, 145, (const char* name, bool hasClass), (name, hasClass))
     VIRTUAL_METHOD(float, getAttributeFloat, 278, (const char* name, float defaultValue), (name, defaultValue))
@@ -37,9 +37,9 @@ public:
     VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
 };
 
-namespace pod { struct PanoramaUIEngine; }
+struct PanoramaUIEnginePOD;
 
-class PanoramaUIEngine : public VirtualCallableFromPOD<PanoramaUIEngine, pod::PanoramaUIEngine> {
+class PanoramaUIEngine : public VirtualCallableFromPOD<PanoramaUIEngine, PanoramaUIEnginePOD> {
 public:
     VIRTUAL_METHOD(UIEnginePointer, accessUIEngine, 11, (), ())
 };

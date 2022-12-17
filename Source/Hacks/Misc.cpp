@@ -573,7 +573,7 @@ void Misc::disablePanoramablur() noexcept
 void Misc::quickReload(csgo::UserCmd* cmd) noexcept
 {
     if (miscConfig.quickReload) {
-        static csgo::pod::Entity* reloadedWeapon = 0;
+        static csgo::EntityPOD* reloadedWeapon = nullptr;
 
         if (reloadedWeapon) {
             for (auto weaponHandle : localPlayer.get().weapons()) {
@@ -586,7 +586,7 @@ void Misc::quickReload(csgo::UserCmd* cmd) noexcept
                     break;
                 }
             }
-            reloadedWeapon = 0;
+            reloadedWeapon = nullptr;
         }
 
         if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.isInReload() && activeWeapon.clip() == activeWeapon.getWeaponData()->maxClip) {
@@ -1062,7 +1062,7 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
     if (!deathNotice)
         return;
 
-    const auto deathNoticePanel = csgo::UIPanel::from(retSpoofGadgets->client, (*(csgo::pod::UIPanel**)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t))));
+    const auto deathNoticePanel = csgo::UIPanel::from(retSpoofGadgets->client, (*(csgo::UIPanelPOD**)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t))));
 
     const auto childPanelCount = deathNoticePanel.getChildCount();
 
@@ -1284,11 +1284,11 @@ std::optional<std::pair<csgo::Vector, csgo::Vector>> Misc::listLeavesInBoxHook(R
     if (!miscConfig.disableModelOcclusion || returnAddress != insertIntoTree)
         return {};
 
-    const auto info = *reinterpret_cast<csgo::pod::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948));
+    const auto info = *reinterpret_cast<csgo::RenderableInfo**>(frameAddress + WIN32_LINUX(0x18, 0x10 + 0x948));
     if (!info || !info->renderable)
         return {};
 
-    const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::pod::Entity*, WIN32_LINUX(7, 8)>();
+    const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::EntityPOD*, WIN32_LINUX(7, 8)>();
     if (!ent || !csgo::Entity::from(retSpoofGadgets->client, ent).isPlayer())
         return {};
 

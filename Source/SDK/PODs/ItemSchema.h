@@ -4,22 +4,21 @@
 #include <SDK/Pad.h>
 #include <SDK/UtlMap.h>
 
+namespace csgo
+{
+
+struct PaintKit;
+struct StickerKit;
 struct EconItemQualityDefinition;
 struct AlternateIconData;
 struct EconMusicDefinition;
+struct EconItemDefinitionPOD;
 
-namespace csgo::pod
-{
-
-struct EconItemDefinition;
-struct PaintKit;
-struct StickerKit;
-
-struct ItemSchema {
+struct ItemSchemaPOD {
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
-    UtlMap<int, EconItemDefinition*> itemsSorted;
+    UtlMap<int, EconItemDefinitionPOD*> itemsSorted;
     PAD(WIN32_LINUX(0x60, 0x88))
     UtlMap<int, const char*> revolvingLootLists;
     PAD(WIN32_LINUX(0x80, 0xB0))

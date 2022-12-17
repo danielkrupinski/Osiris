@@ -7,9 +7,9 @@
 namespace csgo
 {
 
-namespace pod { struct MemAlloc; }
+struct MemAllocPOD;
 
-class MemAlloc : public VirtualCallableFromPOD<MemAlloc, pod::MemAlloc> {
+class MemAlloc : public VirtualCallableFromPOD<MemAlloc, MemAllocPOD> {
 public:
     VIRTUAL_METHOD(void*, alloc, 1, (std::size_t size), (size))
 

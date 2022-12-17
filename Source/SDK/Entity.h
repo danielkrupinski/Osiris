@@ -15,17 +15,13 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
-namespace csgo::pod { struct EconItemView; }
+namespace csgo { struct EconItemViewPOD; }
 
 class Memory;
-class EngineTrace;
 class OtherInterfaces;
-class EconItemView;
 
 namespace csgo { struct AnimState; }
 namespace csgo { struct ClientClass; }
-struct Model;
-struct VarMap;
 
 enum class MoveType {
     NOCLIP = 8,
@@ -56,6 +52,9 @@ enum class Team {
 
 namespace csgo
 {
+
+struct Model;
+struct VarMap;
 
 class matrix3x4;
 
@@ -94,9 +93,9 @@ public:
     VIRTUAL_METHOD(bool, setupBones, 13, (matrix3x4* out, int maxBones, int boneMask, float currentTime), (out, maxBones, boneMask, currentTime))
 };
 
-namespace csgo::pod { struct Entity; }
+struct EntityPOD;
 
-class Entity : public VirtualCallableFromPOD<Entity, pod::Entity> {
+class Entity : public VirtualCallableFromPOD<Entity, EntityPOD> {
 public:
     [[nodiscard]] auto getNetworkable() const noexcept
     {
@@ -131,13 +130,13 @@ public:
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(156, 208), (), ())
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(158, 210), (), ())
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(166, 218), (), ())
-    VIRTUAL_METHOD(pod::Entity*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
+    VIRTUAL_METHOD(EntityPOD*, getActiveWeapon, WIN32_LINUX(268, 331), (), ())
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(282, 350), (), ())
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(294, 357), (), ())
-    VIRTUAL_METHOD(pod::Entity*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
+    VIRTUAL_METHOD(EntityPOD*, getObserverTarget, WIN32_LINUX(295, 358), (), ())
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(455, 523), (), ())
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(461, 529), (), ())
-    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (pod::Entity* viewModel), (viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(468, 536), (EntityPOD* viewModel), (viewModel))
     VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(469, 537), (), ())
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(483, 551), (), ())
 
@@ -279,7 +278,7 @@ public:
     NETVAR2(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR2(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR2(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
-    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", pod::EconItemView)
+    NETVAR2(econItemView, "CBaseAttributableItem", "m_Item", EconItemViewPOD)
     NETVAR2(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
     NETVAR2(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 

@@ -6,11 +6,11 @@
 namespace csgo
 {
 
-namespace pod { struct Entity; }
+struct EntityPOD;
 
 struct GlowObjectDefinition {
     int nextFreeSlot;
-    pod::Entity* entity;
+    EntityPOD* entity;
 
     // TODO: try to declare those as std::array<float, 4> for easier color copying
     Vector glowColor;
@@ -37,7 +37,7 @@ struct GlowObjectDefinition {
 struct GlowObjectManager {
     UtlVector<GlowObjectDefinition> glowObjectDefinitions;
 
-    constexpr bool hasGlowEffect(pod::Entity* entity) noexcept
+    constexpr bool hasGlowEffect(EntityPOD* entity) noexcept
     {
         for (int i = 0; i < glowObjectDefinitions.size; i++)
             if (!glowObjectDefinitions[i].isUnused() && glowObjectDefinitions[i].entity == entity)
@@ -46,7 +46,7 @@ struct GlowObjectManager {
         return false;
     }
 
-    constexpr int registerGlowObject(pod::Entity* entity) noexcept
+    constexpr int registerGlowObject(EntityPOD* entity) noexcept
     {
         int index = firstFreeSlot;
         if (index != -1) {

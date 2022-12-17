@@ -321,7 +321,7 @@ void Visuals::applyZoom(csgo::FrameStage stage) noexcept
 { \
     int w, h; \
     engine.getScreenSize(w, h); \
-    reinterpret_cast<void(*)(csgo::pod::Material*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material, 0, 0, w, h); \
+    reinterpret_cast<void(*)(csgo::MaterialPOD*, int, int, int, int)>(memory.drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
 #endif
 

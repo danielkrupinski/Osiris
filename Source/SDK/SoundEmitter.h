@@ -5,9 +5,9 @@
 namespace csgo
 {
 
-namespace pod { struct SoundEmitter; }
+struct SoundEmitterPOD;
 
-class SoundEmitter : public VirtualCallableFromPOD<SoundEmitter, pod::SoundEmitter> {
+class SoundEmitter : public VirtualCallableFromPOD<SoundEmitter, SoundEmitterPOD> {
 public:
     VIRTUAL_METHOD(const char*, getSoundName, 46, (int index), (index))
 };

@@ -2,24 +2,24 @@
 
 #include "InterfaceFinderWithLog.h"
 
-namespace csgo::pod { struct Client; }
-namespace csgo::pod { struct EntityList; }
-namespace csgo::pod { struct GameMovement; }
-namespace csgo::pod { struct Prediction; }
+namespace csgo { struct ClientPOD; }
+namespace csgo { struct EntityListPOD; }
+namespace csgo { struct GameMovementPOD; }
+namespace csgo { struct PredictionPOD; }
 
 struct ClientInterfacesPODs {
-    csgo::pod::Client* client;
-    csgo::pod::EntityList* entityList;
-    csgo::pod::GameMovement* gameMovement;
-    csgo::pod::Prediction* prediction;
+    csgo::ClientPOD* client;
+    csgo::EntityListPOD* entityList;
+    csgo::GameMovementPOD* gameMovement;
+    csgo::PredictionPOD* prediction;
 };
 
 [[nodiscard]] inline ClientInterfacesPODs createClientInterfacesPODs(InterfaceFinderWithLog clientInterfaceFinder)
 {
     return ClientInterfacesPODs{
-        .client = static_cast<csgo::pod::Client*>(clientInterfaceFinder("VClient018")),
-        .entityList = static_cast<csgo::pod::EntityList*>(clientInterfaceFinder("VClientEntityList003")),
-        .gameMovement = static_cast<csgo::pod::GameMovement*>(clientInterfaceFinder("GameMovement001")),
-        .prediction = static_cast<csgo::pod::Prediction*>(clientInterfaceFinder("VClientPrediction001"))
+        .client = static_cast<csgo::ClientPOD*>(clientInterfaceFinder("VClient018")),
+        .entityList = static_cast<csgo::EntityListPOD*>(clientInterfaceFinder("VClientEntityList003")),
+        .gameMovement = static_cast<csgo::GameMovementPOD*>(clientInterfaceFinder("GameMovement001")),
+        .prediction = static_cast<csgo::PredictionPOD*>(clientInterfaceFinder("VClientPrediction001"))
     };
 }

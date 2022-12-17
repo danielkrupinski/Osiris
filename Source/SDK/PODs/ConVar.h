@@ -8,13 +8,13 @@
 #include <SDK/Pad.h>
 #include <SDK/UtlVector.h>
 
-namespace csgo::pod
+namespace csgo
 {
 
-struct ConVar {
+struct ConVarPOD {
     PAD(WIN32_LINUX(24, 48))
     std::add_pointer_t<void CDECL_CONV()> changeCallback;
-    ConVar* parent;
+    ConVarPOD* parent;
     const char* defaultValue;
     char* string;
     PAD(WIN32_LINUX(44, 56))

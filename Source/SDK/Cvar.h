@@ -5,12 +5,12 @@
 namespace csgo
 {
 
-namespace pod { struct ConVar; }
-namespace pod { struct Cvar; }
+struct ConVarPOD;
+struct CvarPOD;
 
-class Cvar : public VirtualCallableFromPOD<Cvar, pod::Cvar> {
+class Cvar : public VirtualCallableFromPOD<Cvar, CvarPOD> {
 public:
-    VIRTUAL_METHOD(pod::ConVar*, findVar, 15, (const char* name), (name))
+    VIRTUAL_METHOD(ConVarPOD*, findVar, 15, (const char* name), (name))
 };
 
 }

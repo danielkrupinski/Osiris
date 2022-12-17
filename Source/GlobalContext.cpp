@@ -362,7 +362,7 @@ void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, c
     hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
 }
 
-void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::pod::SharedObject* object, int event)
+void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::SharedObjectPOD* object, int event)
 {
     features->inventoryChanger.onSoUpdated(csgo::SharedObject::from(retSpoofGadgets->client, object));
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
@@ -510,7 +510,7 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 void GlobalContext::viewModelSequenceNetvarHook(csgo::recvProxyData& data, void* outStruct, void* arg3)
 {
-    const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
+    const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(outStruct));
 
     if (localPlayer && ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
         if (const auto weapon = csgo::Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
@@ -530,7 +530,7 @@ void GlobalContext::spottedHook(csgo::recvProxyData& data, void* outStruct, void
         data.value._int = 1;
 
         if (localPlayer) {
-            const auto entity = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(outStruct));
+            const auto entity = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(outStruct));
             if (const auto index = localPlayer.get().getNetworkable().index(); index > 0 && index <= 32)
                 entity.spottedByMask() |= 1 << (index - 1);
         }
@@ -539,7 +539,7 @@ void GlobalContext::spottedHook(csgo::recvProxyData& data, void* outStruct, void
     proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::fireGameEventCallback(csgo::pod::GameEvent* eventPointer)
+void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
 {
     const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
 

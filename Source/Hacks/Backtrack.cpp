@@ -95,7 +95,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
     auto localPlayerEyePosition = localPlayer.get().getEyePosition();
 
     auto bestFov{ 255.f };
-    csgo::pod::Entity* bestTarget{ };
+    csgo::EntityPOD* bestTarget{ };
     int bestTargetIndex{ };
     csgo::Vector bestTargetOrigin{ };
     int bestRecord{ };

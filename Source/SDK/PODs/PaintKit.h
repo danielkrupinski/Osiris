@@ -3,7 +3,7 @@
 #include <SDK/Pad.h>
 #include <SDK/UtlString.h>
 
-namespace csgo::pod
+namespace csgo
 {
 
 struct PaintKit {

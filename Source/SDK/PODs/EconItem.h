@@ -6,10 +6,10 @@
 #include <SDK/WeaponId.h>
 #include <SDK/Pad.h>
 
-namespace csgo::pod
+namespace csgo
 {
 
-struct EconItem {
+struct EconItemPOD {
     PAD(2 * sizeof(std::uintptr_t))
 
     ItemId itemID;

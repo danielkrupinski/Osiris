@@ -10,7 +10,7 @@
 namespace inventory_changer
 {
 
-[[nodiscard]] static WeaponNames createWeaponNamesStorage(const OtherInterfaces& interfaces, const csgo::pod::ItemSchema& itemSchema)
+[[nodiscard]] static WeaponNames createWeaponNamesStorage(const OtherInterfaces& interfaces, const csgo::ItemSchemaPOD& itemSchema)
 {
     WeaponNames storage;
     ToUtf8Converter converter{ interfaces.getLocalize() };

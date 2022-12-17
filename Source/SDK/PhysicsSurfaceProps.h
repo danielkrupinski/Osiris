@@ -16,9 +16,9 @@ struct SurfaceData {
     bool climbable;
 };
 
-namespace pod { struct PhysicsSurfaceProps; }
+struct PhysicsSurfacePropsPOD;
 
-class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, pod::PhysicsSurfaceProps> {
+class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, PhysicsSurfacePropsPOD> {
 public:
     VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
 };

@@ -17,12 +17,12 @@ void initializeGlobalContext()
     globalContext.emplace();
 }
 
-void DefaultEventListener::fireGameEvent(csgo::pod::GameEvent* eventPointer)
+void DefaultEventListener::fireGameEvent(csgo::GameEventPOD* eventPointer)
 {
     globalContext->fireGameEventCallback(eventPointer);
 }
 
-void EventListener::fireGameEvent(csgo::pod::GameEvent* event)
+void EventListener::fireGameEvent(csgo::GameEventPOD* event)
 {
     globalContext->fireGameEventCallback(event);
 }
@@ -193,7 +193,7 @@ void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::
     globalContext->updateInventoryEquippedStateHook(inventory, itemID, team, slot, swap);
 }
 
-void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::pod::SharedObject* object, int event) noexcept
+void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept
 {
     globalContext->soUpdatedHook(owner, object, event);
 }

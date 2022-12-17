@@ -89,7 +89,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 
 #endif
 
-void Hooks::install(csgo::pod::Client* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
 #if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);

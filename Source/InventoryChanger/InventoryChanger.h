@@ -21,6 +21,7 @@ namespace csgo
 enum class FrameStage;
 enum class Team;
 class Entity;
+struct EntityPOD;
 class GameEvent;
 class SharedObject;
 

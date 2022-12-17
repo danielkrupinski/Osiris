@@ -22,18 +22,13 @@ struct Ray {
     bool isSwept{ };
 };
 
-}
-
-namespace csgo::pod { struct Entity; }
-
-namespace csgo
-{
+struct EntityPOD;
 
 struct TraceFilter {
-    TraceFilter(pod::Entity* entity) : skip{ entity } {}
-    virtual bool shouldHitEntity(pod::Entity* entity, int) { return entity != skip; }
+    TraceFilter(EntityPOD* entity) : skip{ entity } {}
+    virtual bool shouldHitEntity(EntityPOD* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    pod::Entity* skip;
+    EntityPOD* skip;
 };
 
 }
@@ -104,13 +99,13 @@ struct Trace {
     } surface;
     int hitgroup;
     std::byte pad2[4];
-    pod::Entity* entity;
+    EntityPOD* entity;
     int hitbox;
 };
 
-namespace pod { struct EngineTrace; }
+struct EngineTracePOD;
 
-class EngineTrace : public VirtualCallableFromPOD<EngineTrace, pod::EngineTrace> {
+class EngineTrace : public VirtualCallableFromPOD<EngineTrace, EngineTracePOD> {
 public:
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (&absPosition, contentsMask, nullptr))
     VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (&ray, mask, &filter, &trace))

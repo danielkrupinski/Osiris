@@ -8,9 +8,9 @@
 namespace csgo
 {
 
-namespace pod { struct Localize; }
+struct LocalizePOD;
 
-class Localize : public VirtualCallableFromPOD<Localize, pod::Localize> {
+class Localize : public VirtualCallableFromPOD<Localize, LocalizePOD> {
 public:
     VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))

@@ -6,9 +6,9 @@
 namespace csgo
 {
 
-namespace pod { struct UiComponentInventory; }
+struct UiComponentInventoryPOD;
 
-class UiComponentInventory : public VirtualCallableFromPOD<UiComponentInventory, pod::UiComponentInventory> {
+class UiComponentInventory : public VirtualCallableFromPOD<UiComponentInventory, UiComponentInventoryPOD> {
 public:
     UiComponentInventory(VirtualCallableFromPOD base, std::uintptr_t setItemSessionPropertyValueFn)
         : VirtualCallableFromPOD{ base }, setItemSessionPropertyValueFn{ setItemSessionPropertyValueFn }

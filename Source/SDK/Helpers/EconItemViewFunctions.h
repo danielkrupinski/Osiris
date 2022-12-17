@@ -3,10 +3,10 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Utils/TypeHint.h>
 
-namespace csgo::pod { struct EconItem; }
-namespace csgo::pod { struct EconItemView; }
+namespace csgo { struct EconItemPOD; }
+namespace csgo { struct EconItemViewPOD; }
 
 struct EconItemViewFunctions {
-    TypeHint<std::uintptr_t, void (THISCALL_CONV*)(csgo::pod::EconItemView* thisptr)> clearInventoryImageRGBA;
-    TypeHint<std::uintptr_t, csgo::pod::EconItem* (THISCALL_CONV*)(csgo::pod::EconItemView* thisptr)> getSOCData;
+    TypeHint<std::uintptr_t, void (THISCALL_CONV*)(csgo::EconItemViewPOD* thisptr)> clearInventoryImageRGBA;
+    TypeHint<std::uintptr_t, csgo::EconItemPOD* (THISCALL_CONV*)(csgo::EconItemViewPOD* thisptr)> getSOCData;
 };

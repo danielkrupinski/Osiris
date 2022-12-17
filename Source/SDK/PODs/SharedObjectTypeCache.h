@@ -9,14 +9,14 @@
 
 #include "EconItem.h"
 
-namespace csgo::pod
+namespace csgo
 {
 
-struct SharedObject;
+struct SharedObjectPOD;
 
-struct SharedObjectTypeCache {
+struct SharedObjectTypeCachePOD {
     PAD(sizeof(void*))
-    SharedObject** objects;
+    SharedObjectPOD** objects;
     PAD(WIN32_LINUX(16, 24))
     int objectCount;
     PAD(WIN32_LINUX(4, 12))
@@ -30,10 +30,10 @@ struct SharedObjectTypeCache {
         std::uint32_t maxInventoryID = 0;
         for (int i = 0; i < objectCount; ++i) {
             const auto item = objects[i];
-            if (const auto isDefaultItem = (((EconItem*)item)->itemID & 0xF000000000000000) != 0)
+            if (const auto isDefaultItem = (((EconItemPOD*)item)->itemID & 0xF000000000000000) != 0)
                 continue;
-            maxItemID = (std::max)(maxItemID, ((EconItem*)item)->itemID);
-            maxInventoryID = (std::max)(maxInventoryID, ((EconItem*)item)->inventory);
+            maxItemID = (std::max)(maxItemID, ((EconItemPOD*)item)->itemID);
+            maxInventoryID = (std::max)(maxInventoryID, ((EconItemPOD*)item)->inventory);
         }
 
         return std::make_pair(maxItemID, maxInventoryID);

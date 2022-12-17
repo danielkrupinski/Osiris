@@ -29,9 +29,6 @@ enum class EconRarity : std::uint8_t {
 namespace csgo
 {
 
-namespace pod
-{
-
 struct StickerKit {
     int id;
     int rarity;
@@ -44,8 +41,6 @@ struct StickerKit {
     int tournamentTeamID;
     int tournamentPlayerID;
 };
-
-}
 
 union AttributeDataUnion {
     float asFloat;
@@ -65,9 +60,9 @@ struct EconTool {
     const char* typeName;
 };
 
-namespace pod { struct EconItemDefinition; }
+struct EconItemDefinitionPOD;
 
-class EconItemDefinition : public VirtualCallableFromPOD<EconItemDefinition, pod::EconItemDefinition> {
+class EconItemDefinition : public VirtualCallableFromPOD<EconItemDefinition, EconItemDefinitionPOD> {
 public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), ())
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), ())
@@ -186,9 +181,9 @@ struct ItemListEntry {
     }
 };
 
-namespace pod { struct EconLootListDefinition; }
+struct EconLootListDefinitionPOD;
 
-class EconLootListDefinition : public VirtualCallableFromPOD<EconLootListDefinition, pod::EconLootListDefinition> {
+class EconLootListDefinition : public VirtualCallableFromPOD<EconLootListDefinition, EconLootListDefinitionPOD> {
 public:
     VIRTUAL_METHOD(const char*, getName, 0, (), ())
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), ())
@@ -226,18 +221,18 @@ struct EconMusicDefinition {
 
 class EconItemAttributeDefinition;
 
-namespace pod { struct ItemSchema; }
+struct ItemSchemaPOD;
 
-class ItemSchema : public VirtualCallableFromPOD<ItemSchema, pod::ItemSchema> {
+class ItemSchema : public VirtualCallableFromPOD<ItemSchema, ItemSchemaPOD> {
 public:
-    VIRTUAL_METHOD(pod::EconItemDefinition*, getItemDefinitionInterface, 4, (int id), (id))
+    VIRTUAL_METHOD(EconItemDefinitionPOD*, getItemDefinitionInterface, 4, (int id), (id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), ())
-    VIRTUAL_METHOD(pod::EconLootListDefinition*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
-    VIRTUAL_METHOD(pod::EconLootListDefinition*, getLootList, 32, (int index), (index))
+    VIRTUAL_METHOD(EconLootListDefinitionPOD*, getLootList, 31, (const char* name, int* index = nullptr), (name, index))
+    VIRTUAL_METHOD(EconLootListDefinitionPOD*, getLootList, 32, (int index), (index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), ())
-    VIRTUAL_METHOD(pod::EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (name))
+    VIRTUAL_METHOD(EconItemDefinitionPOD*, getItemDefinitionByName, 42, (const char* name), (name))
 
     auto getItemDefinitionInterface(WeaponId id) const noexcept
     {
@@ -245,18 +240,18 @@ public:
     }
 };
 
-namespace pod { struct ItemSystem; }
+struct ItemSystemPOD;
 
-class ItemSystem : public VirtualCallableFromPOD<ItemSystem, pod::ItemSystem> {
+class ItemSystem : public VirtualCallableFromPOD<ItemSystem, ItemSystemPOD> {
 public:
-    VIRTUAL_METHOD(pod::ItemSchema*, getItemSchema, 0, (), ())
+    VIRTUAL_METHOD(ItemSchemaPOD*, getItemSchema, 0, (), ())
 };
 
-namespace pod { struct EconItem; }
+struct EconItemPOD;
 
 class EconItem : private VirtualCallable {
 public:
-    EconItem(RetSpoofInvoker invoker, pod::EconItem* pod, const EconItemFunctions& econItemFunctions)
+    EconItem(RetSpoofInvoker invoker, EconItemPOD* pod, const EconItemFunctions& econItemFunctions)
         : VirtualCallable{ invoker, std::uintptr_t(pod) }, functions{ econItemFunctions }
     {
     }
@@ -269,7 +264,7 @@ public:
     VIRTUAL_METHOD(void, destructor, 1, (), ())
 #endif
 
-        void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept
+    void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept
     {
 #if IS_WIN32()
         getInvoker().invokeThiscall<void>(getThis(), functions.setDynamicAttributeValue, attribute, value);
@@ -288,9 +283,9 @@ public:
         getInvoker().invokeThiscall<void>(getThis(), functions.setCustomName, name);
     }
 
-    [[nodiscard]] pod::EconItem* getPOD() const noexcept
+    [[nodiscard]] EconItemPOD* getPOD() const noexcept
     {
-        return reinterpret_cast<pod::EconItem*>(getThis());
+        return reinterpret_cast<EconItemPOD*>(getThis());
     }
 
 private:
@@ -357,17 +352,19 @@ private:
     ItemSchema itemSchema;
 };
 
-namespace pod { struct SharedObject; }
-class SharedObject : public VirtualCallableFromPOD<SharedObject, pod::SharedObject> {
+struct SharedObjectPOD;
+
+class SharedObject : public VirtualCallableFromPOD<SharedObject, SharedObjectPOD> {
 public:
     VIRTUAL_METHOD_V(int, getTypeID, 1, (), ())
 };
 
-namespace pod { struct SharedObjectTypeCache; }
-class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, pod::SharedObjectTypeCache> {
+struct SharedObjectTypeCachePOD;
+
+class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, SharedObjectTypeCachePOD> {
 public:
-    VIRTUAL_METHOD_V(void, addObject, 1, (pod::SharedObject* object), (object))
-    VIRTUAL_METHOD_V(void, removeObject, 3, (pod::SharedObject* object), (object))
+    VIRTUAL_METHOD_V(void, addObject, 1, (SharedObjectPOD* object), (object))
+    VIRTUAL_METHOD_V(void, removeObject, 3, (SharedObjectPOD* object), (object))
 };
 
 class ClientSharedObjectCache : private VirtualCallable {
@@ -379,23 +376,23 @@ public:
 
     using VirtualCallable::getThis;
 
-    pod::SharedObjectTypeCache* findBaseTypeCache(int classID) const noexcept
+    SharedObjectTypeCachePOD* findBaseTypeCache(int classID) const noexcept
     {
-        return getInvoker().invokeThiscall<pod::SharedObjectTypeCache*>(getThis(), createBaseTypeCache, classID);
+        return getInvoker().invokeThiscall<SharedObjectTypeCachePOD*>(getThis(), createBaseTypeCache, classID);
     }
 
 private:
     std::uintptr_t createBaseTypeCache;
 };
 
-namespace pod { struct InventoryManager; }
-namespace pod { struct CSPlayerInventory; }
+struct InventoryManagerPOD;
+struct CSPlayerInventoryPOD;
 
-class InventoryManager : public VirtualCallableFromPOD<InventoryManager, pod::InventoryManager> {
+class InventoryManager : public VirtualCallableFromPOD<InventoryManager, InventoryManagerPOD> {
 public:
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (Team team, int slot, ItemId itemID, bool swap = false), (team, slot, itemID, swap))
-    VIRTUAL_METHOD_V(pod::CSPlayerInventory*, getLocalInventory, 23, (), ())
-    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (pod::CSPlayerInventory* inventory, ItemId itemID, Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
+    VIRTUAL_METHOD_V(CSPlayerInventoryPOD*, getLocalInventory, 23, (), ())
+    VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventoryPOD* inventory, ItemId itemID, Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))
 };
 
 }

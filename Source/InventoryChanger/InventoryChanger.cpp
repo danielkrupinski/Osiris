@@ -85,7 +85,7 @@
 #include <Interfaces/OtherInterfaces.h>
 
 #if IS_WIN32()
-static csgo::pod::Entity* createGloves(const ClientInterfaces& clientInterfaces) noexcept
+static csgo::EntityPOD* createGloves(const ClientInterfaces& clientInterfaces) noexcept
 {
     static const auto createWearable = [&clientInterfaces] {
         std::uintptr_t createWearableFn = 0;
@@ -109,15 +109,15 @@ static csgo::pod::Entity* createGloves(const ClientInterfaces& clientInterfaces)
     const auto econWearableConstructor = SafeAddress{ std::uintptr_t(createWearable) + 61 }.relativeToAbsolute().get();
     retSpoofGadgets->client.invokeThiscall<void>(std::uintptr_t(econWearable), econWearableConstructor);
 
-    csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::pod::Entity*>(econWearable)).initializeAsClientEntity(nullptr, false);
-    return static_cast<csgo::pod::Entity*>(econWearable);
+    csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(econWearable)).initializeAsClientEntity(nullptr, false);
+    return static_cast<csgo::EntityPOD*>(econWearable);
 }
 
 #else
-static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
+static csgo::EntityPOD* createGlove(const ClientInterfaces& clientInterfaces, int entry, int serial) noexcept
 {
     static const auto createWearable = [&clientInterfaces]{
-        std::add_pointer_t<csgo::pod::Entity* CDECL_CONV(int, int)> createWearableFn = nullptr;
+        std::add_pointer_t<csgo::EntityPOD* CDECL_CONV(int, int)> createWearableFn = nullptr;
         for (auto clientClass = clientInterfaces.getClient().getAllClasses(); clientClass; clientClass = clientClass->next) {
             if (clientClass->classId == ClassId::EconWearable) {
                 createWearableFn = clientClass->createFunction;
@@ -131,7 +131,7 @@ static csgo::pod::Entity* createGlove(const ClientInterfaces& clientInterfaces, 
         return nullptr;
 
     if (const auto wearable = createWearable(entry, serial))
-        return reinterpret_cast<csgo::pod::Entity*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
+        return reinterpret_cast<csgo::EntityPOD*>(std::uintptr_t(wearable) - 2 * sizeof(std::uintptr_t));
     return nullptr;
 }
 #endif
@@ -435,7 +435,7 @@ static void simulateItemUpdate(const Memory& memory, const EconItemViewFunctions
 
     if (const auto view = csgo::EconItemView::from(retSpoofGadgets->client, memory.findOrCreateEconItemViewForItemID(itemID), econItemViewFunctions); view.getPOD() != nullptr) {
         if (const auto soc = view.getSOCData())
-            localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
+            localInventory.soUpdated(localInventory.getSOID(), (csgo::SharedObjectPOD*)soc, 4);
     }
 }
 
@@ -1431,7 +1431,7 @@ void InventoryChanger::acknowledgeItem(const Memory& memory, std::uint64_t itemI
         if (const auto soc = view.getSOCData()) {
             if (const auto baseTypeCache = getItemBaseTypeCache(localInventory, memory.createBaseTypeCache)) {
                 soc->inventory = baseTypeCache->getHighestIDs().second + 1;
-                localInventory.soUpdated(localInventory.getSOID(), (csgo::pod::SharedObject*)soc, 4);
+                localInventory.soUpdated(localInventory.getSOID(), (csgo::SharedObjectPOD*)soc, 4);
             }
         }
     }

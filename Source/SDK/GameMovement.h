@@ -7,12 +7,12 @@ namespace csgo
 
 class MoveData;
 
-namespace pod { struct Entity; }
-namespace pod { struct GameMovement; }
+struct EntityPOD;
+struct GameMovementPOD;
 
-class GameMovement : public VirtualCallableFromPOD<GameMovement, pod::GameMovement> {
+class GameMovement : public VirtualCallableFromPOD<GameMovement, GameMovementPOD> {
 public:
-    VIRTUAL_METHOD_V(void, processMovement, 1, (pod::Entity* localPlayer, MoveData* moveData), (localPlayer, moveData))
+    VIRTUAL_METHOD_V(void, processMovement, 1, (EntityPOD* localPlayer, MoveData* moveData), (localPlayer, moveData))
 };
 
 }

@@ -16,42 +16,42 @@
 #include "Interfaces/InterfaceFinder.h"
 #include "Interfaces/InterfaceFinderWithLog.h"
 
-namespace csgo::pod { struct BaseFileSystem; }
-namespace csgo::pod { struct Cvar; }
-namespace csgo::pod { struct InputSystem; }
-namespace csgo::pod { struct Localize; }
-namespace csgo::pod { struct MaterialSystem; }
-namespace csgo::pod { struct PanoramaUIEngine; }
-namespace csgo::pod { struct PhysicsSurfaceProps; }
-namespace csgo::pod { struct SoundEmitter; }
-namespace csgo::pod { struct StudioRender; }
-namespace csgo::pod { struct Surface; }
+namespace csgo { struct BaseFileSystemPOD; }
+namespace csgo { struct CvarPOD; }
+namespace csgo { struct InputSystemPOD; }
+namespace csgo { struct LocalizePOD; }
+namespace csgo { struct MaterialSystemPOD; }
+namespace csgo { struct PanoramaUIEnginePOD; }
+namespace csgo { struct PhysicsSurfacePropsPOD; }
+namespace csgo { struct SoundEmitterPOD; }
+namespace csgo { struct StudioRenderPOD; }
+namespace csgo { struct SurfacePOD; }
 
 struct OtherInterfacesPODs {
     OtherInterfacesPODs()
-        : baseFileSystem{ static_cast<csgo::pod::BaseFileSystem*>(find(csgo::FILESYSTEM_DLL, "VBaseFileSystem011")) },
-          cvar{ static_cast<csgo::pod::Cvar*>(find(csgo::VSTDLIB_DLL, "VEngineCvar007")) },
-          inputSystem{ static_cast<csgo::pod::InputSystem*>(find(csgo::INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          localize{ static_cast<csgo::pod::Localize*>(find(csgo::LOCALIZE_DLL, "Localize_001")) },
-          materialSystem{ static_cast<csgo::pod::MaterialSystem*>(find(csgo::MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
-          panoramaUIEngine{ static_cast<csgo::pod::PanoramaUIEngine*>(find(csgo::PANORAMA_DLL, "PanoramaUIEngine001")) },
-          physicsSurfaceProps{ static_cast<csgo::pod::PhysicsSurfaceProps*>(find(csgo::VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
-          soundEmitter{ static_cast<csgo::pod::SoundEmitter*>(find(csgo::SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ static_cast<csgo::pod::StudioRender*>(find(csgo::STUDIORENDER_DLL, "VStudioRender026")) },
-          surface{ static_cast<csgo::pod::Surface*>(find(csgo::VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
+        : baseFileSystem{ static_cast<csgo::BaseFileSystemPOD*>(find(csgo::FILESYSTEM_DLL, "VBaseFileSystem011")) },
+          cvar{ static_cast<csgo::CvarPOD*>(find(csgo::VSTDLIB_DLL, "VEngineCvar007")) },
+          inputSystem{ static_cast<csgo::InputSystemPOD*>(find(csgo::INPUTSYSTEM_DLL, "InputSystemVersion001")) },
+          localize{ static_cast<csgo::LocalizePOD*>(find(csgo::LOCALIZE_DLL, "Localize_001")) },
+          materialSystem{ static_cast<csgo::MaterialSystemPOD*>(find(csgo::MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
+          panoramaUIEngine{ static_cast<csgo::PanoramaUIEnginePOD*>(find(csgo::PANORAMA_DLL, "PanoramaUIEngine001")) },
+          physicsSurfaceProps{ static_cast<csgo::PhysicsSurfacePropsPOD*>(find(csgo::VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
+          soundEmitter{ static_cast<csgo::SoundEmitterPOD*>(find(csgo::SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
+          studioRender{ static_cast<csgo::StudioRenderPOD*>(find(csgo::STUDIORENDER_DLL, "VStudioRender026")) },
+          surface{ static_cast<csgo::SurfacePOD*>(find(csgo::VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
     {
     }
 
-    csgo::pod::BaseFileSystem* baseFileSystem;
-    csgo::pod::Cvar* cvar;
-    csgo::pod::InputSystem* inputSystem;
-    csgo::pod::Localize* localize;
-    csgo::pod::MaterialSystem* materialSystem;
-    csgo::pod::PanoramaUIEngine* panoramaUIEngine;
-    csgo::pod::PhysicsSurfaceProps* physicsSurfaceProps;
-    csgo::pod::SoundEmitter* soundEmitter;
-    csgo::pod::StudioRender* studioRender;
-    csgo::pod::Surface* surface;
+    csgo::BaseFileSystemPOD* baseFileSystem;
+    csgo::CvarPOD* cvar;
+    csgo::InputSystemPOD* inputSystem;
+    csgo::LocalizePOD* localize;
+    csgo::MaterialSystemPOD* materialSystem;
+    csgo::PanoramaUIEnginePOD* panoramaUIEngine;
+    csgo::PhysicsSurfacePropsPOD* physicsSurfaceProps;
+    csgo::SoundEmitterPOD* soundEmitter;
+    csgo::StudioRenderPOD* studioRender;
+    csgo::SurfacePOD* surface;
 
 private:
     static void* find(const char* moduleName, const char* name) noexcept

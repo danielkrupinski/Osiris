@@ -30,19 +30,19 @@
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 
-static csgo::pod::Material* normal;
-static csgo::pod::Material* flat;
-static csgo::pod::Material* animated;
-static csgo::pod::Material* platinum;
-static csgo::pod::Material* glass;
-static csgo::pod::Material* crystal;
-static csgo::pod::Material* chrome;
-static csgo::pod::Material* silver;
-static csgo::pod::Material* gold;
-static csgo::pod::Material* plastic;
-static csgo::pod::Material* glow;
-static csgo::pod::Material* pearlescent;
-static csgo::pod::Material* metallic;
+static csgo::MaterialPOD* normal;
+static csgo::MaterialPOD* flat;
+static csgo::MaterialPOD* animated;
+static csgo::MaterialPOD* platinum;
+static csgo::MaterialPOD* glass;
+static csgo::MaterialPOD* crystal;
+static csgo::MaterialPOD* chrome;
+static csgo::MaterialPOD* silver;
+static csgo::MaterialPOD* gold;
+static csgo::MaterialPOD* plastic;
+static csgo::MaterialPOD* glow;
+static csgo::MaterialPOD* pearlescent;
+static csgo::MaterialPOD* metallic;
 
 static constexpr auto dispatchMaterial_(int id) noexcept
 {

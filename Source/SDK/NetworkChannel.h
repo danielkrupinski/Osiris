@@ -6,17 +6,12 @@
 namespace csgo
 {
 
-namespace pod
-{
-
-struct NetworkChannel {
+struct NetworkChannelPOD {
     PAD(44)
     int chokedPackets;
 };
 
-}
-
-class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, pod::NetworkChannel> {
+class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, NetworkChannelPOD> {
 public:
     VIRTUAL_METHOD(float, getLatency, 9, (int flow), (flow))
 };

@@ -38,15 +38,13 @@ struct SoundInfo;
 struct UserCmd;
 struct Vector;
 struct ViewSetup;
+struct SharedObjectPOD;
 
 enum class FrameStage;
 enum class Team;
 enum class UserMessageType;
 
 }
-
-
-namespace csgo::pod { struct SharedObject; }
 
 bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, csgo::UserCmd* cmd) noexcept;
 void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr, ) void* param) noexcept;
@@ -73,7 +71,7 @@ const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr, ) void* params
 void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept;
 unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept;
 void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
-void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::pod::SharedObject* object, int event) noexcept;
+void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
 bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept;
 
 #if IS_WIN32()

@@ -5,9 +5,9 @@
 namespace csgo
 {
 
-namespace pod { struct Surface; }
+struct SurfacePOD;
 
-class Surface : public VirtualCallableFromPOD<Surface, pod::Surface> {
+class Surface : public VirtualCallableFromPOD<Surface, SurfacePOD> {
 public:
     VIRTUAL_METHOD(void, unlockCursor, 66, (), ())
 };

@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace csgo::pod
+namespace csgo
 {
 
 struct RenderableInfo {

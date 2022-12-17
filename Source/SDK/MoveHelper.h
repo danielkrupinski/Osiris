@@ -5,12 +5,12 @@
 namespace csgo
 {
 
-namespace pod { struct Entity; }
-namespace pod { struct MoveHelper; }
+struct EntityPOD;
+struct MoveHelperPOD;
 
-class MoveHelper : public VirtualCallableFromPOD<MoveHelper, pod::MoveHelper> {
+class MoveHelper : public VirtualCallableFromPOD<MoveHelper, MoveHelperPOD> {
 public:
-    VIRTUAL_METHOD(void, setHost, 1, (pod::Entity* host), (host))
+    VIRTUAL_METHOD(void, setHost, 1, (EntityPOD* host), (host))
 };
 
 }

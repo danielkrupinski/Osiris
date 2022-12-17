@@ -11,10 +11,7 @@ namespace csgo
 
 template <typename T> class UtlVector;
 
-namespace pod
-{
-
-struct EconItemView {
+struct EconItemViewPOD {
     std::uintptr_t getAttributeList() const noexcept
     {
         return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
@@ -31,11 +28,9 @@ struct EconItemView {
     }
 };
 
-struct EconItem;
+struct EconItemPOD;
 
-}
-
-class EconItemView : public VirtualCallableFromPOD<EconItemView, pod::EconItemView> {
+class EconItemView : public VirtualCallableFromPOD<EconItemView, EconItemViewPOD> {
 public:
     EconItemView(VirtualCallableFromPOD base, const EconItemViewFunctions& functions)
         : VirtualCallableFromPOD{ base }, functions{ functions }
@@ -47,9 +42,9 @@ public:
         getInvoker().invokeThiscall<void>(getThis(), functions.clearInventoryImageRGBA);
     }
 
-    pod::EconItem* getSOCData() const noexcept
+    EconItemPOD* getSOCData() const noexcept
     {
-        return getInvoker().invokeThiscall<pod::EconItem*>(getThis(), functions.getSOCData);
+        return getInvoker().invokeThiscall<EconItemPOD*>(getThis(), functions.getSOCData);
     }
 
 private:

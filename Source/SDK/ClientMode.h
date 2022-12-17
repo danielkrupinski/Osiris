@@ -8,9 +8,9 @@
 namespace csgo
 {
 
-namespace pod { struct HudChat; }
+struct HudChatPOD;
 
-class HudChat : public VirtualCallableFromPOD<HudChat, pod::HudChat> {
+class HudChat : public VirtualCallableFromPOD<HudChat, HudChatPOD> {
 public:
     template <typename... Args>
     void printf(int filter, const char* fmt, Args... args) const noexcept
@@ -21,7 +21,7 @@ public:
 
 struct ClientMode {
     PAD(WIN32_LINUX(28, 48))
-    pod::HudChat* hudChat;
+    HudChatPOD* hudChat;
     PAD(WIN32_LINUX(0x47C, 0x8D0))
     float blueColorCorrection;
     PAD(WIN32_LINUX(4, 12))

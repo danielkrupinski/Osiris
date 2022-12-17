@@ -5,16 +5,16 @@
 namespace csgo
 {
 
-namespace pod { struct Entity; }
-namespace pod { struct EntityList; }
+struct EntityPOD;
+struct EntityListPOD;
 
-class EntityList : public VirtualCallableFromPOD<EntityList, pod::EntityList> {
+class EntityList : public VirtualCallableFromPOD<EntityList, EntityListPOD> {
 public:
-    VIRTUAL_METHOD(pod::Entity*, getEntity, 3, (int index), (index))
+    VIRTUAL_METHOD(EntityPOD*, getEntity, 3, (int index), (index))
 #if IS_WIN32()
-    VIRTUAL_METHOD(pod::Entity*, getEntityFromHandle, 4, (int handle), (handle))
+    VIRTUAL_METHOD(EntityPOD*, getEntityFromHandle, 4, (int handle), (handle))
 #else
-    VIRTUAL_METHOD(pod::Entity*, getEntityFromHandle, 4, (int handle), (&handle))
+    VIRTUAL_METHOD(EntityPOD*, getEntityFromHandle, 4, (int handle), (&handle))
 #endif
     VIRTUAL_METHOD(int, getHighestEntityIndex, 6, (), ())
 };

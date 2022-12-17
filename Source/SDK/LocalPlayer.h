@@ -7,7 +7,7 @@
 
 class LocalPlayer {
 public:
-    void init(csgo::pod::Entity** entity) noexcept
+    void init(csgo::EntityPOD** entity) noexcept
     {
         assert(!localEntity);
         localEntity = entity;
@@ -26,7 +26,7 @@ public:
     }
 
 private:
-    csgo::pod::Entity** localEntity = nullptr;
+    csgo::EntityPOD** localEntity = nullptr;
 };
 
 inline LocalPlayer localPlayer;

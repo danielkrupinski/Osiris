@@ -17,21 +17,16 @@ enum class OverrideType {
 namespace csgo
 {
 
-namespace pod
-{
-
-struct StudioRender {
+struct StudioRenderPOD {
     PAD(WIN32_LINUX(592, 600))
-    Material* materialOverride;
+    MaterialPOD* materialOverride;
     PAD(WIN32_LINUX(12, 24))
     OverrideType overrideType;
 };
 
-}
-
-class StudioRender : public VirtualCallableFromPOD<StudioRender, pod::StudioRender> {
+class StudioRender : public VirtualCallableFromPOD<StudioRender, StudioRenderPOD> {
 public:
-    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (pod::Material* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
+    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (MaterialPOD* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
 
     bool isForcedMaterialOverride() const noexcept
     {

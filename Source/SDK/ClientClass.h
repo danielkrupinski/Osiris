@@ -9,11 +9,10 @@ namespace csgo
 {
 
 struct RecvTable;
-
-namespace pod { struct Entity; }
+struct EntityPOD;
 
 struct ClientClass {
-    std::add_pointer_t<pod::Entity* CDECL_CONV(int, int)> createFunction;
+    std::add_pointer_t<EntityPOD* CDECL_CONV(int, int)> createFunction;
     void* createEventFunction;
     char* networkName;
     RecvTable* recvTable;
