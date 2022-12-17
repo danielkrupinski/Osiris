@@ -5,7 +5,7 @@
 
 #include "fnv.h"
 
-#include "SDK/Recv.h"
+#include "CSGO/Recv.h"
 
 struct ProxyHook {
     csgo::recvProxy originalProxy = nullptr;

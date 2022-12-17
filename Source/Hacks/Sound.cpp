@@ -6,9 +6,9 @@
 #include <imgui/imgui.h>
 
 #include "../ConfigStructs.h"
-#include "../SDK/Entity.h"
-#include "../SDK/EntityList.h"
-#include "../SDK/LocalPlayer.h"
+#include <CSGO/Entity.h>
+#include <CSGO/EntityList.h>
+#include <CSGO/LocalPlayer.h>
 
 #include <Interfaces/ClientInterfaces.h>
 

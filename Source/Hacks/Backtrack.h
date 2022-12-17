@@ -6,9 +6,9 @@
 
 #include "../JsonForward.h"
 
-#include <SDK/matrix3x4.h>
-#include <SDK/Vector.h>
-#include <SDK/ConVar.h>
+#include <CSGO/matrix3x4.h>
+#include <CSGO/Vector.h>
+#include <CSGO/ConVar.h>
 
 #include "../Memory.h"
 

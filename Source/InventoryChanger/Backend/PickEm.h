@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <map>
 
-#include <SDK/Constants/Tournament.h>
-#include <SDK/Constants/TournamentTeam.h>
+#include <CSGO/Constants/Tournament.h>
+#include <CSGO/Constants/TournamentTeam.h>
 
 namespace inventory_changer::backend
 {

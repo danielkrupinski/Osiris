@@ -8,8 +8,8 @@
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Visuals.h"
 #include "Memory.h"
-#include "SDK/GameEvent.h"
-#include "SDK/UtlVector.h"
+#include "CSGO/GameEvent.h"
+#include "CSGO/UtlVector.h"
 
 #include "GlobalContext.h"
 

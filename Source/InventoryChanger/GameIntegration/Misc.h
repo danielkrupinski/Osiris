@@ -4,7 +4,7 @@
 
 #include <InventoryChanger/GameItems/Enums.h>
 
-#include <SDK/Constants/StickerId.h>
+#include <CSGO/Constants/StickerId.h>
 
 namespace inventory_changer::game_integration
 {

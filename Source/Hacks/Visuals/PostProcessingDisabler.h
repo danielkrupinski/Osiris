@@ -2,7 +2,7 @@
 
 #include <Helpers/PatternFinder.h>
 #include <Platform/Macros/IsPlatform.h>
-#include <SDK/Constants/FrameStage.h>
+#include <CSGO/Constants/FrameStage.h>
 
 class PostProcessingDisabler {
 public:

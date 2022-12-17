@@ -4,11 +4,11 @@
 
 #include <Config/ResetConfigurator.h>
 #include <RetSpoof/FunctionInvoker.h>
-#include <SDK/Constants/ConVarNames.h>
-#include <SDK/Constants/FrameStage.h>
-#include <SDK/Cvar.h>
-#include <SDK/Functions.h>
-#include <SDK/PODs/ConVar.h>
+#include <CSGO/Constants/ConVarNames.h>
+#include <CSGO/Constants/FrameStage.h>
+#include <CSGO/Cvar.h>
+#include <CSGO/Functions.h>
+#include <CSGO/PODs/ConVar.h>
 
 class SkyboxChanger {
 public:

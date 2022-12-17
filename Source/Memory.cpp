@@ -31,9 +31,9 @@
 #endif
 
 #include "Memory.h"
-#include "SDK/Constants/DllNames.h"
-#include "SDK/ItemSchema.h"
-#include "SDK/LocalPlayer.h"
+#include "CSGO/Constants/DllNames.h"
+#include "CSGO/ItemSchema.h"
+#include "CSGO/LocalPlayer.h"
 
 #include "Utils/PatternFinder.h"
 #include "Utils/SafeAddress.h"

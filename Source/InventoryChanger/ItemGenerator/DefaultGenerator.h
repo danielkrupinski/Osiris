@@ -6,7 +6,7 @@
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
-#include <SDK/Constants/StickerId.h>
+#include <CSGO/Constants/StickerId.h>
 
 #include "ItemGenerator.h"
 

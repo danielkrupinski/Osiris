@@ -8,7 +8,7 @@
 #include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Item.h>
 #include <InventoryChanger/EconRarities.h>
-#include <SDK/ItemSchema.h>
+#include <CSGO/ItemSchema.h>
 
 namespace inventory_changer
 {

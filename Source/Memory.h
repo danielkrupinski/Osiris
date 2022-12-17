@@ -5,12 +5,9 @@
 #include <optional>
 #include <type_traits>
 
-#include "SDK/EconItemView.h"
-#include "SDK/ItemSchema.h"
-#include "SDK/MoveHelper.h"
-#include "SDK/PanoramaMarshallHelper.h"
-#include "SDK/ViewRenderBeams.h"
-#include "SDK/WeaponSystem.h"
+#include "CSGO/ItemSchema.h"
+#include "CSGO/MoveHelper.h"
+#include "CSGO/WeaponSystem.h"
 
 #include "Utils/ReturnAddress.h"
 #include "Utils/SafeAddress.h"

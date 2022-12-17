@@ -10,7 +10,7 @@
 #include "Visuals/SkyboxChanger.h"
 #include "Visuals/PostProcessingDisabler.h"
 #include "Visuals/ScopeOverlayRemover.h"
-#include <SDK/ViewRenderBeams.h>
+#include <CSGO/ViewRenderBeams.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;

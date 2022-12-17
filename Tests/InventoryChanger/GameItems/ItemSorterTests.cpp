@@ -4,7 +4,7 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
-#include <SDK/ItemSchema.h>
+#include <CSGO/ItemSchema.h>
 
 namespace inventory_changer::game_items
 {

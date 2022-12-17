@@ -6,7 +6,7 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <InventoryChanger/ItemGenerator/DefaultGenerator.h>
 
-#include <SDK/ItemSchema.h>
+#include <CSGO/ItemSchema.h>
 
 namespace inventory_changer::item_generator
 {

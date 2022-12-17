@@ -1,7 +1,7 @@
 #include "Storage.h"
 
-#include <SDK/ItemSchema.h>
-#include <SDK/WeaponId.h>
+#include <CSGO/ItemSchema.h>
+#include <CSGO/WeaponId.h>
 
 namespace inventory_changer::game_items
 {

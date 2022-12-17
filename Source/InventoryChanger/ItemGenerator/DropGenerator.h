@@ -2,15 +2,15 @@
 
 #include <algorithm>
 
-#include <SDK/WeaponId.h>
+#include <CSGO/WeaponId.h>
 
 #include <InventoryChanger/GameIntegration/Misc.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
 #include <InventoryChanger/Inventory/Structs.h>
 
-#include <SDK/Constants/Tournament.h>
-#include <SDK/ItemSchema.h>
+#include <CSGO/Constants/Tournament.h>
+#include <CSGO/ItemSchema.h>
 
 namespace inventory_changer::item_generator
 {

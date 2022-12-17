@@ -2,8 +2,8 @@
 
 #include <string_view>
 
-#include <SDK/Constants/Tournament.h>
-#include <SDK/Constants/TournamentTeam.h>
+#include <CSGO/Constants/Tournament.h>
+#include <CSGO/Constants/TournamentTeam.h>
 
 namespace csgo { enum class StickerId : int; }
 

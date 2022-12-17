@@ -8,7 +8,7 @@
 #include <InventoryChanger/Backend/StorageUnitManager.h>
 #include <InventoryChanger/GameItems/Item.h>
 
-#include <SDK/ItemSchema.h>
+#include <CSGO/ItemSchema.h>
 
 namespace inventory_changer::backend
 {

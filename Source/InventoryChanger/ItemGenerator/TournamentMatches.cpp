@@ -3,8 +3,8 @@
 #include "TournamentMatches.h"
 
 #include <InventoryChanger/GameItems/Enums.h>
-#include <SDK/Constants/Tournament.h>
-#include <SDK/Constants/TournamentStage.h>
+#include <CSGO/Constants/Tournament.h>
+#include <CSGO/Constants/TournamentStage.h>
 
 namespace inventory_changer::item_generator
 {

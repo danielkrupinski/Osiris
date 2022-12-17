@@ -7,8 +7,8 @@
 #include <random>
 
 #include <InventoryChanger/Inventory/Structs.h>
-#include <SDK/Constants/PaintkitConditionChances.h>
-#include <SDK/Constants/PaintkitWear.h>
+#include <CSGO/Constants/PaintkitConditionChances.h>
+#include <CSGO/Constants/PaintkitWear.h>
 
 #include "ItemGenerator.h"
 #include "TournamentMatches.h"

@@ -4,8 +4,8 @@
 #include <utility>
 
 #include <Platform/Macros/PlatformSpecific.h>
-#include <SDK/Constants/ItemId.h>
-#include <SDK/Pad.h>
+#include <CSGO/Constants/ItemId.h>
+#include <CSGO/Pad.h>
 
 #include "EconItem.h"
 

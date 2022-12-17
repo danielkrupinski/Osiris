@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDK/GameEvent.h>
+#include <CSGO/GameEvent.h>
 
 class DefaultEventListener : public csgo::GameEventListener {
 public:

@@ -10,7 +10,7 @@
 #include "../../Memory.h"
 #include "ItemGenerator.h"
 
-#include <SDK/ItemSchema.h>
+#include <CSGO/ItemSchema.h>
 #include "TournamentMatches.h"
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/GameItems/CrateLootLookup.h>

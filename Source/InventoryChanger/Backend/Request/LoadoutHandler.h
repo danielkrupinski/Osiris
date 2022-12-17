@@ -4,7 +4,7 @@
 #include <InventoryChanger/Backend/Loadout.h>
 #include <InventoryChanger/Backend/Response/ResponseQueue.h>
 
-#include <SDK/Entity.h>
+#include <CSGO/Entity.h>
 
 namespace inventory_changer::backend
 {

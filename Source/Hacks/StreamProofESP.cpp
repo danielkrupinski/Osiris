@@ -16,8 +16,8 @@
 #include "../GameData.h"
 #include "../Helpers.h"
 #include "../InputUtil.h"
-#include "../SDK/Engine.h"
-#include "../SDK/GlobalVars.h"
+#include <CSGO/Engine.h>
+#include <CSGO/GlobalVars.h>
 #include "../Memory.h"
 
 #include "../imguiCustom.h"

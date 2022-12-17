@@ -3,12 +3,12 @@
 #include <InventoryChanger/EconItemFunctions.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 #include <InventoryChanger/Inventory/Item.h>
-#include <SDK/CSPlayerInventory.h>
-#include <SDK/EconItemView.h>
-#include <SDK/Panorama.h>
-#include <SDK/UiComponentInventory.h>
+#include <CSGO/CSPlayerInventory.h>
+#include <CSGO/EconItemView.h>
+#include <CSGO/Panorama.h>
+#include <CSGO/UiComponentInventory.h>
 
-#include <SDK/Constants/EconItemFlags.h>
+#include <CSGO/Constants/EconItemFlags.h>
 
 #include <Utils/FlagsBuilder.h>
 #include <Interfaces/OtherInterfaces.h>

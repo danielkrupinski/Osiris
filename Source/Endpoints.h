@@ -3,7 +3,7 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/IsPlatform.h>
 
-#include <SDK/Constants/ItemId.h>
+#include <CSGO/Constants/ItemId.h>
 
 #if IS_WIN32()
 #include <d3d9.h>

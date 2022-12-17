@@ -3,10 +3,10 @@
 #include "EngineInterfacesPODs.h"
 #include <Platform/RetSpoofInvoker.h>
 
-#include <SDK/Engine.h>
-#include <SDK/EngineTrace.h>
-#include <SDK/GameEvent.h>
-#include <SDK/ModelInfo.h>
+#include <CSGO/Engine.h>
+#include <CSGO/EngineTrace.h>
+#include <CSGO/GameEvent.h>
+#include <CSGO/ModelInfo.h>
 
 class EngineInterfaces {
 public:

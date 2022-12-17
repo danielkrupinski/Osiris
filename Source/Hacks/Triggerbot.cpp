@@ -1,12 +1,12 @@
 #include "../Config.h"
 #include "../Memory.h"
-#include "../SDK/EngineTrace.h"
-#include "../SDK/Entity.h"
-#include "../SDK/GlobalVars.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/WeaponData.h"
-#include "../SDK/WeaponId.h"
+#include <CSGO/EngineTrace.h>
+#include <CSGO/Entity.h>
+#include <CSGO/GlobalVars.h>
+#include <CSGO/LocalPlayer.h>
+#include <CSGO/UserCmd.h>
+#include <CSGO/WeaponData.h>
+#include <CSGO/WeaponId.h>
 #include "Triggerbot.h"
 
 static bool keyPressed;

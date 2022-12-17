@@ -12,13 +12,13 @@
 #include "Hacks/Visuals.h"
 #include "Netvars.h"
 
-#include "SDK/Constants/ClassId.h"
-#include "SDK/Client.h"
-#include "SDK/ClientClass.h"
-#include "SDK/Entity.h"
-#include "SDK/EntityList.h"
-#include "SDK/LocalPlayer.h"
-#include "SDK/Recv.h"
+#include "CSGO/Constants/ClassId.h"
+#include "CSGO/Client.h"
+#include "CSGO/ClientClass.h"
+#include "CSGO/Entity.h"
+#include "CSGO/EntityList.h"
+#include "CSGO/LocalPlayer.h"
+#include "CSGO/Recv.h"
 
 #include "GlobalContext.h"
 

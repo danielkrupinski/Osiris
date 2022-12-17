@@ -19,7 +19,7 @@
 #include "Hacks/Visuals.h"
 #include "Interfaces/ClientInterfaces.h"
 #include "Interfaces/EngineInterfaces.h"
-#include "SDK/CSPlayerInventory.h"
+#include "CSGO/CSPlayerInventory.h"
 #include "Utils/ReturnAddress.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Features.h"

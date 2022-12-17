@@ -5,8 +5,8 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
-#include <SDK/Pad.h>
-#include <SDK/UtlVector.h>
+#include <CSGO/Pad.h>
+#include <CSGO/UtlVector.h>
 
 namespace csgo
 {

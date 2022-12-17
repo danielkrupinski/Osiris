@@ -2,7 +2,7 @@
 
 #include <Helpers.h>
 #include <InventoryChanger/GameItems/Storage.h>
-#include <SDK/Localize.h>
+#include <CSGO/Localize.h>
 
 namespace csgo { class ItemSchema; }
 class OtherInterfaces;

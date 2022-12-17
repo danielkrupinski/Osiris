@@ -2,14 +2,14 @@
 
 #include <cstdint>
 
-#include <SDK/Constants/ItemId.h>
+#include <CSGO/Constants/ItemId.h>
 
 #include "../../Memory.h"
 #include <InventoryChanger/EconItemFunctions.h>
 #include <InventoryChanger/EconItemViewFunctions.h>
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoof/FunctionInvoker.h>
-#include <SDK/Functions.h>
+#include <CSGO/Functions.h>
 
 namespace csgo
 {

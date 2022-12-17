@@ -7,7 +7,7 @@
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoof/FunctionInvoker.h>
-#include <SDK/Functions.h>
+#include <CSGO/Functions.h>
 
 namespace csgo { enum class FrameStage; }
 namespace csgo { enum class UserMessageType; }

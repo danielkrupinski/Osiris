@@ -7,8 +7,8 @@
 
 #include <StringPool.h>
 
-#include <SDK/Constants/Tournament.h>
-#include <SDK/Constants/TournamentTeam.h>
+#include <CSGO/Constants/Tournament.h>
+#include <CSGO/Constants/TournamentTeam.h>
 
 #include "Item.h"
 #include "Structs.h"

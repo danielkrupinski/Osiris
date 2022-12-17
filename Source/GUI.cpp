@@ -24,7 +24,7 @@
 #include "Hacks/Misc.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Helpers.h"
-#include "SDK/InputSystem.h"
+#include "CSGO/InputSystem.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Backtrack.h"

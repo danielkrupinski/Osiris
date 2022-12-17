@@ -13,7 +13,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui/imgui_internal.h"
 
-#include "SDK/WeaponId.h"
+#include "CSGO/WeaponId.h"
 
 struct Color3;
 struct Color4;

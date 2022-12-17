@@ -9,9 +9,9 @@
 #include "ItemSorter.h"
 #include "Storage.h"
 #include <Helpers.h>
-#include <SDK/Constants/ProPlayer.h>
-#include <SDK/Constants/StickerId.h>
-#include <SDK/Constants/Tournament.h>
+#include <CSGO/Constants/ProPlayer.h>
+#include <CSGO/Constants/StickerId.h>
+#include <CSGO/Constants/Tournament.h>
 
 namespace inventory_changer::game_items
 {

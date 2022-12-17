@@ -2,16 +2,16 @@
 
 #include "OtherInterfacesPODs.h"
 #include <Platform/RetSpoofInvoker.h>
-#include <SDK/Cvar.h>
-#include <SDK/FileSystem.h>
-#include <SDK/InputSystem.h>
-#include <SDK/Localize.h>
-#include <SDK/MaterialSystem.h>
-#include <SDK/Panorama.h>
-#include <SDK/PhysicsSurfaceProps.h>
-#include <SDK/SoundEmitter.h>
-#include <SDK/StudioRender.h>
-#include <SDK/Surface.h>
+#include <CSGO/Cvar.h>
+#include <CSGO/FileSystem.h>
+#include <CSGO/InputSystem.h>
+#include <CSGO/Localize.h>
+#include <CSGO/MaterialSystem.h>
+#include <CSGO/Panorama.h>
+#include <CSGO/PhysicsSurfaceProps.h>
+#include <CSGO/SoundEmitter.h>
+#include <CSGO/StudioRender.h>
+#include <CSGO/Surface.h>
 
 class OtherInterfaces {
 public:

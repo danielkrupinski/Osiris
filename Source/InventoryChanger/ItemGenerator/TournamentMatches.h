@@ -7,9 +7,9 @@
 #include <span>
 #include <variant>
 
-#include <SDK/Constants/ProPlayer.h>
-#include <SDK/Constants/TournamentTeam.h>
-#include <SDK/ItemSchema.h>
+#include <CSGO/Constants/ProPlayer.h>
+#include <CSGO/Constants/TournamentTeam.h>
+#include <CSGO/ItemSchema.h>
 
 namespace csgo
 {

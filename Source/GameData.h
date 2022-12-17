@@ -6,9 +6,9 @@
 #include <utility>
 #include <vector>
 
-#include "SDK/matrix3x4.h"
-#include "SDK/Entity.h"
-#include "SDK/Vector.h"
+#include "CSGO/matrix3x4.h"
+#include "CSGO/Entity.h"
+#include "CSGO/Vector.h"
 
 #include "Texture.h"
 

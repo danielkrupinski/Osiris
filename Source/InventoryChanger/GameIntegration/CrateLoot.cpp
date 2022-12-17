@@ -3,7 +3,7 @@
 #include <InventoryChanger/GameItems/CrateLoot.h>
 #include <InventoryChanger/GameItems/Lookup.h>
 
-#include <SDK/PODs/ItemSchema.h>
+#include <CSGO/PODs/ItemSchema.h>
 
 #include <RetSpoofGadgets.h>
 

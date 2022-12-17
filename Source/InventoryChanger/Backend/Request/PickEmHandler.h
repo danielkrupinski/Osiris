@@ -3,7 +3,7 @@
 #include <InventoryChanger/Backend/PickEm.h>
 #include <InventoryChanger/Backend/Response/ResponseQueue.h>
 
-#include <SDK/Constants/TournamentTeam.h>
+#include <CSGO/Constants/TournamentTeam.h>
 
 namespace inventory_changer::backend
 {

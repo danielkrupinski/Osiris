@@ -3,10 +3,10 @@
 #include "ClientInterfacesPODs.h"
 
 #include <Platform/RetSpoofInvoker.h>
-#include <SDK/Client.h>
-#include <SDK/EntityList.h>
-#include <SDK/GameMovement.h>
-#include <SDK/Prediction.h>
+#include <CSGO/Client.h>
+#include <CSGO/EntityList.h>
+#include <CSGO/GameMovement.h>
+#include <CSGO/Prediction.h>
 
 class ClientInterfaces {
 public:

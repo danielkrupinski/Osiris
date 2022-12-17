@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include <Config/ResetConfigurator.h>
-#include <SDK/ClientMode.h>
+#include <CSGO/ClientMode.h>
 
 struct ColorCorrection {
     bool enabled;

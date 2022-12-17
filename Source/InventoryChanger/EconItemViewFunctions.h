@@ -4,7 +4,7 @@
 
 #include <Helpers/PatternFinder.h>
 #include <Platform/Macros/IsPlatform.h>
-#include <SDK/Helpers/EconItemViewFunctions.h>
+#include <CSGO/Helpers/EconItemViewFunctions.h>
 
 [[nodiscard]] inline EconItemViewFunctions createEconItemViewFunctions(const helpers::PatternFinder& clientPatternFinder)
 {

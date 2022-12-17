@@ -2,9 +2,9 @@
 
 #include <cstdint>
 
-#include <SDK/Constants/ItemId.h>
-#include <SDK/WeaponId.h>
-#include <SDK/Pad.h>
+#include <CSGO/Constants/ItemId.h>
+#include <CSGO/WeaponId.h>
+#include <CSGO/Pad.h>
 
 namespace csgo
 {

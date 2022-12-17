@@ -3,9 +3,9 @@
 #include "Items.h"
 #include "Misc.h"
 
-#include <SDK/ItemSchema.h>
-#include <SDK/PODs/ItemSchema.h>
-#include <SDK/PODs/PaintKit.h>
+#include <CSGO/ItemSchema.h>
+#include <CSGO/PODs/ItemSchema.h>
+#include <CSGO/PODs/PaintKit.h>
 
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoofGadgets.h>
