@@ -78,7 +78,7 @@ public:
     csgo::UtlVector<csgo::PlantedC4*>* plantedC4s;
     csgo::UtlMap<short, csgo::PanoramaEventRegistration>* registeredPanoramaEvents;
 
-    std::add_pointer_t<bool CDECL_CONV(csgo::Vector, csgo::Vector, short)> lineGoesThroughSmoke;
+    FunctionInvoker<csgo::LineGoesThroughSmoke> lineGoesThroughSmoke;
     bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
     std::uintptr_t hud;
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);

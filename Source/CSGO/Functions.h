@@ -16,4 +16,7 @@ using CreateSharedObjectSubclass = T* STDCALL_CONV ();
 struct EconItemViewPOD;
 using FindOrCreateEconItemViewForItemID = EconItemViewPOD* CDECL_CONV (ItemId itemID);
 
+struct Vector;
+using LineGoesThroughSmoke = bool CDECL_CONV (Vector from, Vector to, short);
+
 }
