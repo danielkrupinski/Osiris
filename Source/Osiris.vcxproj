@@ -389,6 +389,7 @@
     <ClInclude Include="Resources\avatar_tt.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="RetSpoofGadgets.h" />
+    <ClInclude Include="RetSpoof\CdeclFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FunctionInvoker.h" />
     <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h" />

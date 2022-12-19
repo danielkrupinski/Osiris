@@ -1024,6 +1024,9 @@
     <ClInclude Include="CSGO\WeaponSystem.h">
       <Filter>CSGO</Filter>
     </ClInclude>
+    <ClInclude Include="RetSpoof\CdeclFunctionInvoker.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
