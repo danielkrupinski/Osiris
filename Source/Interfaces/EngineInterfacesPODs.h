@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CSGO/Constants/InterfaceNames.h>
 #include "InterfaceFinderWithLog.h"
 
 namespace csgo { struct EnginePOD; }
@@ -20,12 +21,13 @@ struct EngineInterfacesPODs {
 
 [[nodiscard]] inline EngineInterfacesPODs createEngineInterfacesPODs(InterfaceFinderWithLog engineInterfaceFinder)
 {
+    using namespace csgo::i;
     return EngineInterfacesPODs{
-        .engine = static_cast<csgo::EnginePOD*>(engineInterfaceFinder("VEngineClient014")),
-        .engineTrace = static_cast<csgo::EngineTracePOD*>(engineInterfaceFinder("EngineTraceClient004")),
-        .gameEventManager = static_cast<csgo::GameEventManagerPOD*>(engineInterfaceFinder("GAMEEVENTSMANAGER002")),
-        .modelInfo = static_cast<csgo::ModelInfoPOD*>(engineInterfaceFinder("VModelInfoClient004")),
-        .modelRender = static_cast<csgo::ModelRenderPOD*>(engineInterfaceFinder("VEngineModel016")),
-        .sound = static_cast<csgo::EngineSoundPOD*>(engineInterfaceFinder("IEngineSoundClient003"))
+        .engine = static_cast<csgo::EnginePOD*>(engineInterfaceFinder(VEngineClient)),
+        .engineTrace = static_cast<csgo::EngineTracePOD*>(engineInterfaceFinder(EngineTraceClient)),
+        .gameEventManager = static_cast<csgo::GameEventManagerPOD*>(engineInterfaceFinder(GAMEEVENTSMANAGER)),
+        .modelInfo = static_cast<csgo::ModelInfoPOD*>(engineInterfaceFinder(VModelInfoClient)),
+        .modelRender = static_cast<csgo::ModelRenderPOD*>(engineInterfaceFinder(VEngineModel)),
+        .sound = static_cast<csgo::EngineSoundPOD*>(engineInterfaceFinder(IEngineSoundClient))
     };
 }

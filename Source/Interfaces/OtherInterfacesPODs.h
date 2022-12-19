@@ -12,6 +12,7 @@
 
 #include <RetSpoofGadgets.h>
 #include <CSGO/Constants/DllNames.h>
+#include <CSGO/Constants/InterfaceNames.h>
 
 #include "Interfaces/InterfaceFinder.h"
 #include "Interfaces/InterfaceFinderWithLog.h"
@@ -29,16 +30,16 @@ namespace csgo { struct SurfacePOD; }
 
 struct OtherInterfacesPODs {
     OtherInterfacesPODs()
-        : baseFileSystem{ static_cast<csgo::BaseFileSystemPOD*>(find(csgo::FILESYSTEM_DLL, "VBaseFileSystem011")) },
-          cvar{ static_cast<csgo::CvarPOD*>(find(csgo::VSTDLIB_DLL, "VEngineCvar007")) },
-          inputSystem{ static_cast<csgo::InputSystemPOD*>(find(csgo::INPUTSYSTEM_DLL, "InputSystemVersion001")) },
-          localize{ static_cast<csgo::LocalizePOD*>(find(csgo::LOCALIZE_DLL, "Localize_001")) },
-          materialSystem{ static_cast<csgo::MaterialSystemPOD*>(find(csgo::MATERIALSYSTEM_DLL, "VMaterialSystem080")) },
-          panoramaUIEngine{ static_cast<csgo::PanoramaUIEnginePOD*>(find(csgo::PANORAMA_DLL, "PanoramaUIEngine001")) },
-          physicsSurfaceProps{ static_cast<csgo::PhysicsSurfacePropsPOD*>(find(csgo::VPHYSICS_DLL, "VPhysicsSurfaceProps001")) },
-          soundEmitter{ static_cast<csgo::SoundEmitterPOD*>(find(csgo::SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")) },
-          studioRender{ static_cast<csgo::StudioRenderPOD*>(find(csgo::STUDIORENDER_DLL, "VStudioRender026")) },
-          surface{ static_cast<csgo::SurfacePOD*>(find(csgo::VGUIMATSURFACE_DLL, "VGUI_Surface031")) }
+        : baseFileSystem{ static_cast<csgo::BaseFileSystemPOD*>(find(csgo::FILESYSTEM_DLL, csgo::i::VBaseFileSystem)) },
+          cvar{ static_cast<csgo::CvarPOD*>(find(csgo::VSTDLIB_DLL, csgo::i::VEngineCvar)) },
+          inputSystem{ static_cast<csgo::InputSystemPOD*>(find(csgo::INPUTSYSTEM_DLL, csgo::i::InputSystem)) },
+          localize{ static_cast<csgo::LocalizePOD*>(find(csgo::LOCALIZE_DLL, csgo::i::Localize)) },
+          materialSystem{ static_cast<csgo::MaterialSystemPOD*>(find(csgo::MATERIALSYSTEM_DLL, csgo::i::VMaterialSystem)) },
+          panoramaUIEngine{ static_cast<csgo::PanoramaUIEnginePOD*>(find(csgo::PANORAMA_DLL, csgo::i::PanoramaUIEngine)) },
+          physicsSurfaceProps{ static_cast<csgo::PhysicsSurfacePropsPOD*>(find(csgo::VPHYSICS_DLL, csgo::i::VPhysicsSurfaceProps)) },
+          soundEmitter{ static_cast<csgo::SoundEmitterPOD*>(find(csgo::SOUNDEMITTERSYSTEM_DLL, csgo::i::VSoundEmitter)) },
+          studioRender{ static_cast<csgo::StudioRenderPOD*>(find(csgo::STUDIORENDER_DLL, csgo::i::VStudioRender)) },
+          surface{ static_cast<csgo::SurfacePOD*>(find(csgo::VGUIMATSURFACE_DLL, csgo::i::VGUI_Surface)) }
     {
     }
 
