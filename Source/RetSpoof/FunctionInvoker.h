@@ -16,6 +16,9 @@ struct FunctionInvoker<ReturnType (FASTCALL_CONV*)(Args...)> : FastcallFunctionI
     using FastcallFunctionInvoker<ReturnType, Args...>::FastcallFunctionInvoker;
 };
 
+template <typename ReturnType, typename... Args>
+FunctionInvoker(RetSpoofInvoker, ReturnType (FASTCALL_CONV*)(Args...)) -> FunctionInvoker<ReturnType (FASTCALL_CONV*)(Args...)>;
+
 #if IS_WIN32()
 
 template <typename ReturnType, typename... Args>
