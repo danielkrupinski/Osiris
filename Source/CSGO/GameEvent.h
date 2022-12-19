@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Functions.h"
+#include <RetSpoof/FunctionInvoker.h>
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
@@ -39,7 +41,7 @@ struct GameEventManagerPOD;
 
 class GameEventManager : public VirtualCallableFromPOD<GameEventManager, GameEventManagerPOD> {
 public:
-    GameEventManager(VirtualCallableFromPOD base, std::uintptr_t getEventDescriptorFn)
+    GameEventManager(VirtualCallableFromPOD base, csgo::GetEventDescriptor getEventDescriptorFn)
         : VirtualCallableFromPOD{ base }, getEventDescriptorFn{ getEventDescriptorFn }
     {
     }
@@ -49,11 +51,11 @@ public:
 
     [[nodiscard]] GameEventDescriptor* getEventDescriptor(const char* name, int* cookie) const noexcept
     {
-        return getInvoker().invokeThiscall<GameEventDescriptor*>(getThis(), getEventDescriptorFn, name, cookie);
+        return FunctionInvoker{ getInvoker(), getEventDescriptorFn }(getPOD(), name, cookie);
     }
 
 private:
-    std::uintptr_t getEventDescriptorFn;
+    csgo::GetEventDescriptor getEventDescriptorFn;
 };
 
 }

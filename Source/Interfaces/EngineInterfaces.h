@@ -20,7 +20,7 @@ public:
         return csgo::Engine::from(retSpoofInvoker, pods.engine);
     }
 
-    [[nodiscard]] auto getGameEventManager(std::uintptr_t getEventDescriptorFn) const noexcept
+    [[nodiscard]] auto getGameEventManager(csgo::GetEventDescriptor getEventDescriptorFn) const noexcept
     {
         return csgo::GameEventManager::from(retSpoofInvoker, pods.gameEventManager, getEventDescriptorFn);
     }

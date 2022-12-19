@@ -19,4 +19,8 @@ using FindOrCreateEconItemViewForItemID = EconItemViewPOD* (CDECL_CONV*)(ItemId 
 struct Vector;
 using LineGoesThroughSmoke = bool (CDECL_CONV*)(Vector from, Vector to, short);
 
+class GameEventDescriptor;
+struct GameEventManagerPOD;
+using GetEventDescriptor = GameEventDescriptor* (THISCALL_CONV*)(GameEventManagerPOD* thisptr, const char* name, int* cookie);
+
 }

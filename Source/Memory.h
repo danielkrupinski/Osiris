@@ -97,7 +97,7 @@ public:
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     csgo::WeaponSystem weaponSystem;
-    TypeHint<std::uintptr_t, csgo::GameEventDescriptor*(THISCALL_CONV*)(csgo::GameEventManagerPOD* thisptr, const char* name, int* cookie)> getEventDescriptor;
+    csgo::GetEventDescriptor getEventDescriptor;
     csgo::ActiveChannels* activeChannels;
     csgo::Channel* channels;
     csgo::PlayerResource** playerResource;
