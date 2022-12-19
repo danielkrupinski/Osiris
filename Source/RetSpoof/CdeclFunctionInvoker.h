@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include <Platform/Macros/CallingConventions.h>
 #include <Platform/RetSpoofInvoker.h>
 
 template <typename ReturnType, typename... Args>
@@ -9,6 +10,11 @@ class CdeclFunctionInvoker {
 public:
     explicit CdeclFunctionInvoker(RetSpoofInvoker invoker, std::uintptr_t functionAddress)
         : invoker{ invoker }, functionAddress{ functionAddress }
+    {
+    }
+
+    explicit CdeclFunctionInvoker(RetSpoofInvoker invoker, ReturnType(CDECL_CONV* function)(Args...))
+        : invoker{ invoker }, functionAddress{ std::uintptr_t(function) }
     {
     }
 
