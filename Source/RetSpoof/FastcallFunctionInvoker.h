@@ -13,6 +13,11 @@ public:
     {
     }
 
+    explicit FastcallFunctionInvoker(RetSpoofInvoker invoker, ReturnType(FASTCALL_CONV* function)(Args...))
+        : invoker{ invoker }, functionAddress{ std::uintptr_t(function) }
+    {
+    }
+
     ReturnType operator()(Args... args) const noexcept
     {
         return invoke(std::forward_as_tuple(args...));
