@@ -64,7 +64,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::Hostage:
         case ClassId::CSRagdoll:
             if (!glowObjectManager->hasGlowEffect(entity.getPOD())) {
-                if (auto index{ glowObjectManager->registerGlowObject(entity.getPOD(), glowObjectAntiCheatCheck) }; index != -1)
+                if (auto index{ glowObjectManager->registerGlowObject(entity.getPOD() WIN32_ARGS(, glowObjectAntiCheatCheck)) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
             break;
@@ -96,7 +96,9 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
                 } else {
                     glowobject.glowColor = { glow.color[0], glow.color[1], glow.color[2] };
                 }
+#if IS_WIN32()
                 glowObjectAntiCheatCheck(&glowobject.entity);
+#endif
             }
         };
 
@@ -147,7 +149,9 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
                 applyGlow(glow["Weapons"]);
                 if (!glow["Weapons"].enabled) {
                     glowobject.renderWhenOccluded = false;
+#if IS_WIN32()
                     glowObjectAntiCheatCheck(&glowobject.entity);
+#endif
                 }
             }
         }
@@ -157,7 +161,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 void Glow::clearCustomObjects() noexcept
 {
     for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
-        glowObjectManager->unregisterGlowObject(glowObjectIndex, glowObjectAntiCheatCheck);
+        glowObjectManager->unregisterGlowObject(glowObjectIndex WIN32_ARGS(, glowObjectAntiCheatCheck));
 
     customGlowEntities.clear();
 }
