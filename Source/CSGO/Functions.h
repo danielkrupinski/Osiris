@@ -23,4 +23,6 @@ class GameEventDescriptor;
 struct GameEventManagerPOD;
 using GetEventDescriptor = GameEventDescriptor* (THISCALL_CONV*)(GameEventManagerPOD* thisptr, const char* name, int* cookie);
 
+using GlowObjectAntiCheatCheck = void (THISCALL_CONV*)(void*);
+
 }

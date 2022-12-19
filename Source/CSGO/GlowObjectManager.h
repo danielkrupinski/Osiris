@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Functions.h"
+#include <Platform/Macros/IsPlatform.h>
+#include <Platform/Macros/PlatformSpecific.h>
+#include <RetSpoof/FunctionInvoker.h>
 #include "UtlVector.h"
 #include "Vector.h"
 
@@ -37,7 +41,7 @@ struct GlowObjectDefinition {
 struct GlowObjectManager {
     UtlVector<GlowObjectDefinition> glowObjectDefinitions;
 
-    constexpr bool hasGlowEffect(EntityPOD* entity) noexcept
+    bool hasGlowEffect(EntityPOD* entity) noexcept
     {
         for (int i = 0; i < glowObjectDefinitions.size; i++)
             if (!glowObjectDefinitions[i].isUnused() && glowObjectDefinitions[i].entity == entity)
@@ -46,7 +50,7 @@ struct GlowObjectManager {
         return false;
     }
 
-    constexpr int registerGlowObject(EntityPOD* entity) noexcept
+    int registerGlowObject(EntityPOD* entity WIN32_ARGS(, FunctionInvoker<csgo::GlowObjectAntiCheatCheck> glowObjectAntiCheatCheck)) noexcept
     {
         int index = firstFreeSlot;
         if (index != -1) {
@@ -56,16 +60,22 @@ struct GlowObjectManager {
             glowObjectDefinitions[index].fullBloomStencilTestValue = 0;
             glowObjectDefinitions[index].splitScreenSlot = -1;
             glowObjectDefinitions[index].nextFreeSlot = -2;
+#if IS_WIN32()
+            glowObjectAntiCheatCheck(&glowObjectDefinitions[index].entity);
+#endif
         }
         return index;
     }
 
-    constexpr void unregisterGlowObject(int index) noexcept
+    void unregisterGlowObject(int index WIN32_ARGS(, FunctionInvoker<csgo::GlowObjectAntiCheatCheck> glowObjectAntiCheatCheck)) noexcept
     {
         glowObjectDefinitions[index].nextFreeSlot = firstFreeSlot;
         glowObjectDefinitions[index].entity = nullptr;
         glowObjectDefinitions[index].renderWhenOccluded = false;
         glowObjectDefinitions[index].renderWhenUnoccluded = false;
+#if IS_WIN32()
+        glowObjectAntiCheatCheck(&glowObjectDefinitions[index].entity);
+#endif
         firstFreeSlot = index;
     }
 

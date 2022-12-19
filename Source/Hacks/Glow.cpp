@@ -64,7 +64,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         case ClassId::Hostage:
         case ClassId::CSRagdoll:
             if (!glowObjectManager->hasGlowEffect(entity.getPOD())) {
-                if (auto index{ glowObjectManager->registerGlowObject(entity.getPOD()) }; index != -1)
+                if (auto index{ glowObjectManager->registerGlowObject(entity.getPOD(), glowObjectAntiCheatCheck) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
             break;
@@ -81,7 +81,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         if (glowobject.isUnused() || entity.getPOD() == nullptr || entity.getNetworkable().isDormant())
             continue;
 
-        auto applyGlow = [&glowobject, &memory](const GlowItem& glow, int health = 0) noexcept
+        auto applyGlow = [&glowobject, &memory, this](const GlowItem& glow, int health = 0) noexcept
         {
             if (glow.enabled) {
                 glowobject.renderWhenOccluded = true;
@@ -96,6 +96,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
                 } else {
                     glowobject.glowColor = { glow.color[0], glow.color[1], glow.color[2] };
                 }
+                glowObjectAntiCheatCheck(&glowobject.entity);
             }
         };
 
@@ -144,7 +145,10 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
         default:
            if (entity.isWeapon()) {
                 applyGlow(glow["Weapons"]);
-                if (!glow["Weapons"].enabled) glowobject.renderWhenOccluded = false;
+                if (!glow["Weapons"].enabled) {
+                    glowobject.renderWhenOccluded = false;
+                    glowObjectAntiCheatCheck(&glowobject.entity);
+                }
             }
         }
     }
@@ -153,7 +157,7 @@ void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfac
 void Glow::clearCustomObjects() noexcept
 {
     for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
-        glowObjectManager->unregisterGlowObject(glowObjectIndex);
+        glowObjectManager->unregisterGlowObject(glowObjectIndex, glowObjectAntiCheatCheck);
 
     customGlowEntities.clear();
 }
