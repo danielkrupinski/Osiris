@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Constants/ItemId.h"
 #include <Platform/Macros/CallingConventions.h>
 
 namespace csgo
@@ -11,5 +12,8 @@ using SubmitReport = bool STDCALL_CONV (LINUX_ARGS(void*, ) const char* xuid, co
 
 template <typename T>
 using CreateSharedObjectSubclass = T* STDCALL_CONV ();
+
+struct EconItemViewPOD;
+using FindOrCreateEconItemViewForItemID = EconItemViewPOD* CDECL_CONV (ItemId itemID);
 
 }

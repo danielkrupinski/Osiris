@@ -5,6 +5,7 @@
 #include <optional>
 #include <type_traits>
 
+#include "CSGO/Functions.h"
 #include "CSGO/ItemSchema.h"
 #include "CSGO/MoveHelper.h"
 #include "CSGO/WeaponSystem.h"
@@ -16,6 +17,7 @@
 #include "Utils/TypeHint.h"
 
 #include "Platform/Macros/CallingConventions.h"
+#include "RetSpoof/FunctionInvoker.h"
 
 class KeyValues;
 
@@ -103,7 +105,7 @@ public:
     csgo::EntityPOD** gameRules;
     csgo::InventoryManager inventoryManager;
     csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper;
-    std::add_pointer_t<csgo::EconItemViewPOD* CDECL_CONV(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    FunctionInvoker<csgo::FindOrCreateEconItemViewForItemID> findOrCreateEconItemViewForItemID;
     std::uintptr_t createBaseTypeCache;
     TypeHint<std::uintptr_t, void(THISCALL_CONV*)(csgo::UiComponentInventoryPOD* thisptr, std::uint64_t itemID, const char* type, const char* value)> setItemSessionPropertyValue;
 
