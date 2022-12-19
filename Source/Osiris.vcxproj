@@ -396,6 +396,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="RetSpoof\ThiscallFunctionInvoker.h" />
     <ClInclude Include="SmallVariant.h" />
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
