@@ -250,14 +250,12 @@ public:
 
 struct EconItemPOD;
 
-class EconItem : private VirtualCallable {
+class EconItem : public VirtualCallableFromPOD<EconItem, EconItemPOD> {
 public:
-    EconItem(RetSpoofInvoker invoker, EconItemPOD* pod, const EconItemFunctions& econItemFunctions)
-        : VirtualCallable{ invoker, std::uintptr_t(pod) }, functions{ econItemFunctions }
+    EconItem(VirtualCallableFromPOD base, const EconItemFunctions& econItemFunctions)
+        : VirtualCallableFromPOD{ base }, functions{ econItemFunctions }
     {
     }
-
-    using VirtualCallable::getThis;
 
 #if IS_WIN32()
     VIRTUAL_METHOD(void, destructor, 0, (), (true))
@@ -278,11 +276,6 @@ public:
     void setCustomName(const char* name) const noexcept
     {
         FunctionInvoker{ getInvoker(), functions.setCustomName }(getPOD(), name);
-    }
-
-    [[nodiscard]] EconItemPOD* getPOD() const noexcept
-    {
-        return reinterpret_cast<EconItemPOD*>(getThis());
     }
 
 private:
