@@ -12,6 +12,7 @@
 
 #include "Constants/ItemId.h"
 #include "Helpers/EconItemFunctions.h"
+#include <RetSpoof/FunctionInvoker.h>
 
 enum class WeaponId : short;
 
@@ -266,21 +267,17 @@ public:
 
     void setDynamicAttributeValue(EconItemAttributeDefinition* attribute, void* value) const noexcept
     {
-#if IS_WIN32()
-        getInvoker().invokeThiscall<void>(getThis(), functions.setDynamicAttributeValue, attribute, value);
-#else
-        getInvoker().invokeCdecl<void>(functions.setDynamicAttributeValue, nullptr, getThis(), attribute, value);
-#endif
+        FunctionInvoker{ getInvoker(), functions.setDynamicAttributeValue }(LINUX_ARGS(nullptr,) getPOD(), attribute, value);
     }
 
     void removeDynamicAttribute(EconItemAttributeDefinition* attribute) const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), functions.removeDynamicAttribute, attribute);
+        FunctionInvoker{ getInvoker(), functions.removeDynamicAttribute }(getPOD(), attribute);
     }
 
     void setCustomName(const char* name) const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), functions.setCustomName, name);
+        FunctionInvoker{ getInvoker(), functions.setCustomName }(getPOD(), name);
     }
 
     [[nodiscard]] EconItemPOD* getPOD() const noexcept

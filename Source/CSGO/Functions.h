@@ -2,6 +2,7 @@
 
 #include "Constants/ItemId.h"
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 
 namespace csgo
 {
@@ -24,5 +25,13 @@ struct GameEventManagerPOD;
 using GetEventDescriptor = GameEventDescriptor* (THISCALL_CONV*)(GameEventManagerPOD* thisptr, const char* name, int* cookie);
 
 using GlowObjectAntiCheatCheck = void (THISCALL_CONV*)(void*);
+
+struct EconItemPOD;
+using SetCustomName = void (THISCALL_CONV*)(csgo::EconItemPOD* thisptr, const char* name);
+
+class EconItemAttributeDefinition;
+using RemoveDynamicAttribute = void (THISCALL_CONV*)(csgo::EconItemPOD* thisptr, EconItemAttributeDefinition* attribute);
+
+using SetDynamicAttributeValue = void (THISCALL_CONV*)(LINUX_ARGS(void*,) csgo::EconItemPOD* thisptr, EconItemAttributeDefinition* attribute, void* value);
 
 }
