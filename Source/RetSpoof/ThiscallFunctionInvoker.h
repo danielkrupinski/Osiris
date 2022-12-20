@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <tuple>
 #include <utility>
 
@@ -37,7 +38,7 @@ private:
         constexpr auto numberOfRegisterArgs = std::min<std::size_t>(numberOfArgs, 1);
         constexpr auto numberOfStackArgs = numberOfArgs - numberOfRegisterArgs;
 
-        return [this] <std::size_t... I> (const Tuple & tuple, std::index_sequence<I...>) {
+        return [this] <std::size_t... I> (const Tuple& tuple, std::index_sequence<I...>) {
             const auto ecx = getRegisterArgument<numberOfRegisterArgs, 0>(tuple);
 
             return invoker.invokeThiscall<ReturnType>(ecx, functionAddress, std::get<I + numberOfRegisterArgs>(tuple)...);
