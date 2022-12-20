@@ -93,6 +93,9 @@
     <Filter Include="CSGO\PODs">
       <UniqueIdentifier>{8514249c-6b12-4d2a-b904-919d1d0b0e5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Macros">
+      <UniqueIdentifier>{debcafb0-2338-4015-a582-96cf480e9d5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -670,18 +673,6 @@
     <ClInclude Include="Platform\Windows\DynamicLibrary.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\IsPlatform.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\PlatformSpecific.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\CallingConventions.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\CallStack.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\FlagsBuilder.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -1029,6 +1020,18 @@
     </ClInclude>
     <ClInclude Include="RetSpoof\ThiscallFunctionInvoker.h">
       <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Macros\CallingConventions.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Macros\CallStack.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Macros\IsPlatform.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Macros\PlatformSpecific.h">
+      <Filter>Platform\Macros</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

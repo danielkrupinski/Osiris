@@ -373,11 +373,11 @@
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Platform\CallingConventions.h" />
-    <ClInclude Include="Platform\CallStack.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
-    <ClInclude Include="Platform\IsPlatform.h" />
-    <ClInclude Include="Platform\PlatformSpecific.h" />
+    <ClInclude Include="Platform\Macros\CallingConventions.h" />
+    <ClInclude Include="Platform\Macros\CallStack.h" />
+    <ClInclude Include="Platform\Macros\IsPlatform.h" />
+    <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
     <ClInclude Include="Platform\RetSpoofInvoker.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
