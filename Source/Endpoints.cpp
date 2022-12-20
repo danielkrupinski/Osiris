@@ -27,12 +27,12 @@ void EventListener::fireGameEvent(csgo::GameEventPOD* event)
     globalContext->fireGameEventCallback(event);
 }
 
-void CDECL_CONV viewModelSequence(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept
+void CDECL_CONV viewModelSequence(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept
 {
     globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
 }
 
-void CDECL_CONV spottedHook(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept
+void CDECL_CONV spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept
 {
     globalContext->spottedHook(data, outStruct, arg3);
 }

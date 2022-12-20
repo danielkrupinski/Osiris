@@ -8,8 +8,8 @@
 #include "CSGO/Recv.h"
 
 struct ProxyHook {
-    csgo::recvProxy originalProxy = nullptr;
-    csgo::recvProxy* addressOfOriginalProxy = nullptr;
+    csgo::RecvProxy originalProxy = nullptr;
+    csgo::RecvProxy* addressOfOriginalProxy = nullptr;
 };
 
 struct ProxyHooks {

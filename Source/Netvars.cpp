@@ -22,8 +22,8 @@
 
 #include "GlobalContext.h"
 
-void CDECL_CONV spottedHook(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept;
-void CDECL_CONV viewModelSequence(csgo::recvProxyData& data, void* outStruct, void* arg3) noexcept;
+void CDECL_CONV spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept;
+void CDECL_CONV viewModelSequence(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept;
 
 static std::vector<std::pair<std::uint32_t, std::uint32_t>> offsets;
 

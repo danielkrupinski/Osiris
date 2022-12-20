@@ -23,7 +23,7 @@ struct recvProxyData {
     } value;
 };
 
-using recvProxy = std::add_pointer_t<void CDECL_CONV(recvProxyData&, void*, void*)>;
+using RecvProxy = void (CDECL_CONV*)(recvProxyData* data, void* outStruct, void* out);
 
 struct RecvProp {
     char* name;
@@ -34,7 +34,7 @@ struct RecvProp {
     const void* extraData;
     RecvProp* arrayProp;
     void* arrayLengthProxy;
-    recvProxy proxy;
+    RecvProxy proxy;
     void* dataTableProxy;
     struct RecvTable* dataTable;
     int offset;

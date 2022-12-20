@@ -82,8 +82,8 @@ public:
     void swapWindowHook(SDL_Window* window);
 #endif
 
-    void viewModelSequenceNetvarHook(csgo::recvProxyData& data, void* outStruct, void* arg3);
-    void spottedHook(csgo::recvProxyData& data, void* outStruct, void* arg3);
+    void viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
+    void spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
 
     void fireGameEventCallback(csgo::GameEventPOD* eventPointer);
 

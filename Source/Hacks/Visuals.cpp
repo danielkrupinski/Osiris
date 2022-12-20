@@ -434,8 +434,18 @@ void Visuals::disablePostProcessing(csgo::FrameStage stage) noexcept
 
 void Visuals::reduceFlashEffect() noexcept
 {
-    if (localPlayer && visualsConfig.flashReduction != 0)
+    if (localPlayer && visualsConfig.flashReduction != 0) {
+#if IS_WIN32()
+        if (maxFlashAlphaProxy) {
+            csgo::recvProxyData data;
+            data.recvProp = nullptr;
+            data.value._float = 255.0f - visualsConfig.flashReduction * 2.55f;
+            maxFlashAlphaProxy(&data, localPlayer.get().getPOD(), nullptr);
+        }
+#else
         localPlayer.get().flashMaxAlpha() = 255.0f - visualsConfig.flashReduction * 2.55f;
+#endif
+    }
 }
 
 bool Visuals::removeHands(const char* modelName) noexcept
