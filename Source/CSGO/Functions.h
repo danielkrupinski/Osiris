@@ -37,4 +37,8 @@ using SetDynamicAttributeValue = void (THISCALL_CONV*)(LINUX_ARGS(void*,) EconIt
 using ClearInventoryImageRGBA = void (THISCALL_CONV*)(EconItemViewPOD* thisptr);
 using GetSOCData = EconItemPOD* (THISCALL_CONV*)(EconItemViewPOD* thisptr);
 
+struct SharedObjectTypeCachePOD;
+struct ClientSharedObjectCachePOD;
+using CreateBaseTypeCache = SharedObjectTypeCachePOD* (THISCALL_CONV*)(ClientSharedObjectCachePOD* thisptr, int classID);
+
 }

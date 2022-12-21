@@ -361,18 +361,18 @@ struct ClientSharedObjectCachePOD;
 
 class ClientSharedObjectCache : public VirtualCallableFromPOD<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
 public:
-    ClientSharedObjectCache(VirtualCallableFromPOD base, std::uintptr_t createBaseTypeCacheFn)
-        : VirtualCallableFromPOD{ base }, createBaseTypeCache{ createBaseTypeCacheFn }
+    ClientSharedObjectCache(VirtualCallableFromPOD base, csgo::CreateBaseTypeCache createBaseTypeCache)
+        : VirtualCallableFromPOD{ base }, createBaseTypeCache{ createBaseTypeCache }
     {
     }
 
     SharedObjectTypeCachePOD* findBaseTypeCache(int classID) const noexcept
     {
-        return getInvoker().invokeThiscall<SharedObjectTypeCachePOD*>(getThis(), createBaseTypeCache, classID);
+        return FunctionInvoker{ getInvoker(), createBaseTypeCache }(getPOD(), classID);
     }
 
 private:
-    std::uintptr_t createBaseTypeCache;
+    csgo::CreateBaseTypeCache createBaseTypeCache;
 };
 
 struct InventoryManagerPOD;
