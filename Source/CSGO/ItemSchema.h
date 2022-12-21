@@ -357,14 +357,14 @@ public:
     VIRTUAL_METHOD_V(void, removeObject, 3, (SharedObjectPOD* object), (object))
 };
 
-class ClientSharedObjectCache : private VirtualCallable {
+struct ClientSharedObjectCachePOD;
+
+class ClientSharedObjectCache : public VirtualCallableFromPOD<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
 public:
-    ClientSharedObjectCache(VirtualCallable virtualCallable, std::uintptr_t createBaseTypeCacheFn)
-        : VirtualCallable{ virtualCallable }, createBaseTypeCache{ createBaseTypeCacheFn }
+    ClientSharedObjectCache(VirtualCallableFromPOD base, std::uintptr_t createBaseTypeCacheFn)
+        : VirtualCallableFromPOD{ base }, createBaseTypeCache{ createBaseTypeCacheFn }
     {
     }
-
-    using VirtualCallable::getThis;
 
     SharedObjectTypeCachePOD* findBaseTypeCache(int classID) const noexcept
     {

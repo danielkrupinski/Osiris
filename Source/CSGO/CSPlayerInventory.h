@@ -49,7 +49,7 @@ public:
 
 inline csgo::SharedObjectTypeCachePOD* getItemBaseTypeCache(const csgo::CSPlayerInventory& inventory, std::uintptr_t createBaseTypeCacheFn) noexcept
 {
-    if (const auto soc = csgo::ClientSharedObjectCache{ VirtualCallable{ inventory.getInvoker(), std::uintptr_t(inventory.getSOC()) }, createBaseTypeCacheFn }; soc.getThis() != 0)
+    if (const auto soc = csgo::ClientSharedObjectCache::from(inventory.getInvoker(), inventory.getSOC(), createBaseTypeCacheFn); soc.getPOD() != nullptr)
         return soc.findBaseTypeCache(1);
     return nullptr;
 }
