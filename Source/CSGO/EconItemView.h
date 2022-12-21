@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <Platform/Macros/PlatformSpecific.h>
+#include <RetSpoof/FunctionInvoker.h>
 #include "Helpers/EconItemViewFunctions.h"
 #include "VirtualMethod.h"
 
@@ -39,12 +40,12 @@ public:
 
     void clearInventoryImageRGBA() const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), functions.clearInventoryImageRGBA);
+        FunctionInvoker{ getInvoker(), functions.clearInventoryImageRGBA }(getPOD());
     }
 
-    EconItemPOD* getSOCData() const noexcept
+    [[nodiscard]] EconItemPOD* getSOCData() const noexcept
     {
-        return getInvoker().invokeThiscall<EconItemPOD*>(getThis(), functions.getSOCData);
+        return FunctionInvoker{ getInvoker(), functions.getSOCData }(getPOD());
     }
 
 private:

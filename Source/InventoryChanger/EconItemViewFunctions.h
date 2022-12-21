@@ -10,11 +10,11 @@
 {
     return EconItemViewFunctions{
 #if IS_WIN32()
-        .clearInventoryImageRGBA = clientPatternFinder("\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47").get(),
-        .getSOCData = clientPatternFinder("\xE8????\x32\xC9").add(1).relativeToAbsolute().get()
+        .clearInventoryImageRGBA = clientPatternFinder("\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47").as<csgo::ClearInventoryImageRGBA>(),
+        .getSOCData = clientPatternFinder("\xE8????\x32\xC9").add(1).relativeToAbsolute().as<csgo::GetSOCData>()
 #elif IS_LINUX()
-        .clearInventoryImageRGBA = clientPatternFinder("\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50").add(1).relativeToAbsolute().get(),
-        .getSOCData = clientPatternFinder("\xE8????\x5B\x44\x89\xEE").add(1).relativeToAbsolute().get()
+        .clearInventoryImageRGBA = clientPatternFinder("\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50").add(1).relativeToAbsolute().as<csgo::ClearInventoryImageRGBA>(),
+        .getSOCData = clientPatternFinder("\xE8????\x5B\x44\x89\xEE").add(1).relativeToAbsolute().as<csgo::GetSOCData>()
 #endif
     };
 }

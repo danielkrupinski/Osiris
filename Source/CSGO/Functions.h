@@ -27,11 +27,14 @@ using GetEventDescriptor = GameEventDescriptor* (THISCALL_CONV*)(GameEventManage
 using GlowObjectAntiCheatCheck = void (THISCALL_CONV*)(void*);
 
 struct EconItemPOD;
-using SetCustomName = void (THISCALL_CONV*)(csgo::EconItemPOD* thisptr, const char* name);
+using SetCustomName = void (THISCALL_CONV*)(EconItemPOD* thisptr, const char* name);
 
 class EconItemAttributeDefinition;
-using RemoveDynamicAttribute = void (THISCALL_CONV*)(csgo::EconItemPOD* thisptr, EconItemAttributeDefinition* attribute);
+using RemoveDynamicAttribute = void (THISCALL_CONV*)(EconItemPOD* thisptr, EconItemAttributeDefinition* attribute);
 
-using SetDynamicAttributeValue = void (THISCALL_CONV*)(LINUX_ARGS(void*,) csgo::EconItemPOD* thisptr, EconItemAttributeDefinition* attribute, void* value);
+using SetDynamicAttributeValue = void (THISCALL_CONV*)(LINUX_ARGS(void*,) EconItemPOD* thisptr, EconItemAttributeDefinition* attribute, void* value);
+
+using ClearInventoryImageRGBA = void (THISCALL_CONV*)(EconItemViewPOD* thisptr);
+using GetSOCData = EconItemPOD* (THISCALL_CONV*)(EconItemViewPOD* thisptr);
 
 }
