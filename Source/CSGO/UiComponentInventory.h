@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Constants/ItemId.h"
+#include "Functions.h"
+#include <RetSpoof/FunctionInvoker.h>
 #include "VirtualMethod.h"
 
 namespace csgo
@@ -10,18 +12,18 @@ struct UiComponentInventoryPOD;
 
 class UiComponentInventory : public VirtualCallableFromPOD<UiComponentInventory, UiComponentInventoryPOD> {
 public:
-    UiComponentInventory(VirtualCallableFromPOD base, std::uintptr_t setItemSessionPropertyValueFn)
+    UiComponentInventory(VirtualCallableFromPOD base, csgo::SetItemSessionPropertyValue setItemSessionPropertyValueFn)
         : VirtualCallableFromPOD{ base }, setItemSessionPropertyValueFn{ setItemSessionPropertyValueFn }
     {
     }
 
     void setItemSessionPropertyValue(ItemId itemID, const char* type, const char* value) const noexcept
     {
-        getInvoker().invokeThiscall<void>(getThis(), setItemSessionPropertyValueFn, itemID, type, value);
+        FunctionInvoker{ getInvoker(), setItemSessionPropertyValueFn }(getPOD(), itemID, type, value);
     }
 
 private:
-    std::uintptr_t setItemSessionPropertyValueFn;
+    csgo::SetItemSessionPropertyValue setItemSessionPropertyValueFn;
 };
 
 }

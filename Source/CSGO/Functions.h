@@ -41,4 +41,7 @@ struct SharedObjectTypeCachePOD;
 struct ClientSharedObjectCachePOD;
 using CreateBaseTypeCache = SharedObjectTypeCachePOD* (THISCALL_CONV*)(ClientSharedObjectCachePOD* thisptr, int classID);
 
+struct UiComponentInventoryPOD;
+using SetItemSessionPropertyValue = void (THISCALL_CONV*)(UiComponentInventoryPOD* thisptr, ItemId itemID, const char* type, const char* value);
+
 }

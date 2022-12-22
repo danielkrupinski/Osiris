@@ -94,7 +94,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
     panoramaMarshallHelper = clientPatternFinder("\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3").add(1).deref().as<decltype(panoramaMarshallHelper)>();
 
     createBaseTypeCache = clientPatternFinder("\xE8????\x8D\x4D\x0F").add(1).relativeToAbsolute().as<csgo::CreateBaseTypeCache>();
-    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().get();
+    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>();
 
     localPlayer.init(clientPatternFinder("\xA1????\x89\x45\xBC\x85\xC0").add(1).deref().as<csgo::EntityPOD**>());
 
@@ -144,7 +144,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     panoramaMarshallHelper = clientPatternFinder("\xF3\x0F\x11\x05????\x48\x89\x05????\x48\xC7\x05????????\xC7\x05").add(11).relativeToAbsolute().as<decltype(panoramaMarshallHelper)>();
     createBaseTypeCache = clientPatternFinder("\xE8????\x48\x89\xDE\x5B\x48\x8B\x10").add(1).relativeToAbsolute().as<csgo::CreateBaseTypeCache>();
-    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().get();
+    setItemSessionPropertyValue = clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>();
 
     localPlayer.init(clientPatternFinder("\x83\xFF\xFF\x48\x8B\x05").add(6).relativeToAbsolute().as<csgo::EntityPOD**>());
 #endif
