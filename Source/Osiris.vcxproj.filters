@@ -335,6 +335,9 @@
     <ClCompile Include="CSGO\Utils.cpp">
       <Filter>CSGO</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\HybridPatternFinder.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -1032,6 +1035,9 @@
     </ClInclude>
     <ClInclude Include="Platform\Macros\PlatformSpecific.h">
       <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HybridPatternFinder.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

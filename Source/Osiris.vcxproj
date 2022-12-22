@@ -170,6 +170,7 @@
     </ClCompile>
     <ClCompile Include="RetSpoofGadgets.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Utils\HybridPatternFinder.cpp" />
     <ClCompile Include="Utils\PatternFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +402,7 @@
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
+    <ClInclude Include="Utils\HybridPatternFinder.h" />
     <ClInclude Include="Utils\PatternFinder.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
