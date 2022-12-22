@@ -8,8 +8,8 @@ class HybridPatternFinder {
 public:
     HybridPatternFinder(std::span<const std::byte> bytes, std::string_view pattern);
 
-    [[nodiscard]] const std::byte* findSIMD();
-    [[nodiscard]] const std::byte* findScalar();
+    [[nodiscard]] const std::byte* findSIMD() noexcept;
+    [[nodiscard]] const std::byte* findScalar() noexcept;
 
 private:
     [[nodiscard]] std::size_t remainingBytes() const noexcept

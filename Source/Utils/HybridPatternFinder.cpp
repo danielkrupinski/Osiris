@@ -1,3 +1,4 @@
+#include <bit>
 #include <cassert>
 #include <emmintrin.h>
 
@@ -11,12 +12,12 @@ HybridPatternFinder::HybridPatternFinder(std::span<const std::byte> bytes, std::
     assert(pattern.front() != utils::wildcardChar && pattern.back() != utils::wildcardChar);
 }
 
-const std::byte* HybridPatternFinder::findSIMD()
+const std::byte* HybridPatternFinder::findSIMD() noexcept
 {
     // http://0x80.pl/articles/simd-strfind.html
 
     const auto indexOfLastPatternChar = pattern.size() - 1;
-    const auto patternWithoutFirstAndLastChar = pattern.substr(1, pattern.size() >= 2 ? pattern.size() - 2 : 0);
+    const auto patternWithoutFirstAndLastChar = pattern.size() > 2 ? std::string_view{ pattern.data() + 1, pattern.size() - 2 } : std::string_view{};
     const auto byteSpanPerIteration = indexOfLastPatternChar + sizeof(__m128i);
 
     const auto firstCharMask = _mm_set1_epi8(pattern[0]);
@@ -41,7 +42,7 @@ const std::byte* HybridPatternFinder::findSIMD()
     return nullptr;
 }
 
-const std::byte* HybridPatternFinder::findScalar()
+const std::byte* HybridPatternFinder::findScalar() noexcept
 {
     while (remainingBytes() >= pattern.size()) {
         if (matchPattern(bytes.subspan(currentPos, pattern.size()), pattern))
