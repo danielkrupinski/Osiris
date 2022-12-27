@@ -9,10 +9,7 @@ const std::byte* PatternFinder::operator()(std::string_view pattern) const noexc
     assert(!pattern.empty());
     assert(pattern.front() != utils::wildcardChar && pattern.back() != utils::wildcardChar);
 
-    HybridPatternFinder finder{ bytes, pattern };
-    if (const auto foundSIMD = finder.findSIMD())
-        return foundSIMD;
-    return finder.findScalar();
+    return HybridPatternFinder{ bytes, pattern }();
 }
 
 bool matchPattern(std::span<const std::byte> bytes, std::string_view pattern) noexcept

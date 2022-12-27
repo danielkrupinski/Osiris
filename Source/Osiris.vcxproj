@@ -172,6 +172,8 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utils\HybridPatternFinder.cpp" />
     <ClCompile Include="Utils\PatternFinder.cpp" />
+    <ClCompile Include="Utils\PatternFinderScalar.cpp" />
+    <ClCompile Include="Utils\PatternFinderSIMD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h" />
@@ -404,6 +406,8 @@
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\HybridPatternFinder.h" />
     <ClInclude Include="Utils\PatternFinder.h" />
+    <ClInclude Include="Utils\PatternFinderScalar.h" />
+    <ClInclude Include="Utils\PatternFinderSIMD.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\TypeHint.h" />

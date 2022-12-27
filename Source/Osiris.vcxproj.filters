@@ -338,6 +338,12 @@
     <ClCompile Include="Utils\HybridPatternFinder.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PatternFinderScalar.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\PatternFinderSIMD.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -1037,6 +1043,12 @@
       <Filter>Platform\Macros</Filter>
     </ClInclude>
     <ClInclude Include="Utils\HybridPatternFinder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PatternFinderScalar.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PatternFinderSIMD.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
