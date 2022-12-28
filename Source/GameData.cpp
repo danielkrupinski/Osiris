@@ -675,17 +675,17 @@ ObserverData::ObserverData(const csgo::Entity& entity, const csgo::Entity& obs, 
 void BombData::update(const Memory& memory) noexcept
 {
     if (memory.plantedC4s->size > 0 && (!*memory.gameRules || csgo::Entity::from(retSpoofGadgets->client, *memory.gameRules).mapHasBombTarget())) {
-        if (const auto bomb = (*memory.plantedC4s)[0]; bomb && bomb->c4Ticking()) {
-            blowTime = bomb->c4BlowTime();
-            timerLength = bomb->c4TimerLength();
-            defuserHandle = bomb->c4Defuser();
+        if (const auto bomb = csgo::PlantedC4::from(retSpoofGadgets->client, (*memory.plantedC4s)[0]); bomb.getPOD() != nullptr && bomb.c4Ticking()) {
+            blowTime = bomb.c4BlowTime();
+            timerLength = bomb.c4TimerLength();
+            defuserHandle = bomb.c4Defuser();
             if (defuserHandle != -1) {
-                defuseCountDown = bomb->c4DefuseCountDown();
-                defuseLength = bomb->c4DefuseLength();
+                defuseCountDown = bomb.c4DefuseCountDown();
+                defuseLength = bomb.c4DefuseLength();
             }
 
             if (*memory.playerResource) {
-                const auto& bombOrigin = bomb->origin();
+                const auto& bombOrigin = bomb.getEntity().origin();
                 bombsite = bombOrigin.distTo((*memory.playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory.playerResource)->bombsiteCenterB());
             }
             return;

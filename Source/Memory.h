@@ -34,7 +34,7 @@ class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class MoveData;
-class PlantedC4;
+struct PlantedC4POD;
 class PlayerResource;
 template <typename Key, typename Value>
 struct UtlMap;
@@ -75,7 +75,7 @@ public:
     csgo::ClientMode* clientMode;
     csgo::Input* input;
     csgo::GlobalVars* globalVars;
-    csgo::UtlVector<csgo::PlantedC4*>* plantedC4s;
+    csgo::UtlVector<csgo::PlantedC4POD*>* plantedC4s;
     csgo::UtlMap<short, csgo::PanoramaEventRegistration>* registeredPanoramaEvents;
 
     FunctionInvoker<csgo::LineGoesThroughSmoke> lineGoesThroughSmoke;
