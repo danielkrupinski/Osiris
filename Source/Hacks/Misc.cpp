@@ -1251,7 +1251,7 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
         if (const auto eventPtr = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.makeEvent), nullptr))
-            csgo::UIEngine{ retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine() }.dispatchEvent(eventPtr);
+            csgo::UIEngine::from(retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine()).dispatchEvent(eventPtr);
     }
 
 #if IS_WIN32()
