@@ -12,12 +12,12 @@ namespace csgo
 {
 
 struct ConVarPOD {
-    PAD(WIN32_LINUX(24, 48))
+    PAD(WIN32_LINUX(24, 48));
     std::add_pointer_t<void CDECL_CONV()> changeCallback;
     ConVarPOD* parent;
     const char* defaultValue;
     char* string;
-    PAD(WIN32_LINUX(44, 56))
+    PAD(WIN32_LINUX(44, 56));
     UtlVector<void(CDECL_CONV*)()> onChangeCallbacks;
 };
 

@@ -13,15 +13,15 @@ struct ActiveChannels {
 
 struct Channel {
 #if IS_WIN32()
-    PAD(244)
+    PAD(244);
 #else
-    PAD(260)
+    PAD(260);
 #endif
     int soundSource;
-    PAD(56)
+    PAD(56);
     Vector origin;
     Vector direction;
-    PAD(80)
+    PAD(80);
 };
 
 }

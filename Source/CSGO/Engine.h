@@ -48,9 +48,9 @@ struct PlayerInfo {
 };
 
 struct DemoPlaybackParameters {
-    PAD(16)
+    PAD(16);
     bool anonymousPlayerIdentity;
-    PAD(23)
+    PAD(23);
 };
 
 struct NetworkChannelPOD;

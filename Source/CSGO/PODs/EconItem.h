@@ -10,7 +10,7 @@ namespace csgo
 {
 
 struct EconItemPOD {
-    PAD(2 * sizeof(std::uintptr_t))
+    PAD(2 * sizeof(std::uintptr_t));
 
     ItemId itemID;
     ItemId originalID;

@@ -70,11 +70,11 @@ struct StudioHitboxSet {
 struct StudioBone {
     int nameIndex;
     int	parent;
-    PAD(152)
+    PAD(152);
     int flags;
-    PAD(52)
+    PAD(52);
 
-        const char* getName() const noexcept
+    const char* getName() const noexcept
     {
         return nameIndex ? reinterpret_cast<const char*>(std::uintptr_t(this) + nameIndex) : nullptr;
     }

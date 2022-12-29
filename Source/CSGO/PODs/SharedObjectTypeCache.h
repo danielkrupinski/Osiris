@@ -15,11 +15,11 @@ namespace csgo
 struct SharedObjectPOD;
 
 struct SharedObjectTypeCachePOD {
-    PAD(sizeof(void*))
+    PAD(sizeof(void*));
     SharedObjectPOD** objects;
-    PAD(WIN32_LINUX(16, 24))
+    PAD(WIN32_LINUX(16, 24));
     int objectCount;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
 
     std::pair<ItemId, std::uint32_t> getHighestIDs() const noexcept

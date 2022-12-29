@@ -20,21 +20,21 @@ public:
 };
 
 struct ClientMode {
-    PAD(WIN32_LINUX(28, 48))
+    PAD(WIN32_LINUX(28, 48));
     HudChatPOD* hudChat;
-    PAD(WIN32_LINUX(0x47C, 0x8D0))
+    PAD(WIN32_LINUX(0x47C, 0x8D0));
     float blueColorCorrection;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     float redColorCorrection;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     float monoColorCorrection;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     float saturationColorCorrection;
-    PAD(WIN32_LINUX(12, 28))
+    PAD(WIN32_LINUX(12, 28));
     float ghostColorCorrection;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     float greenColorCorrection;
-    PAD(WIN32_LINUX(4, 12))
+    PAD(WIN32_LINUX(4, 12));
     float yellowColorCorrection;
 };
 

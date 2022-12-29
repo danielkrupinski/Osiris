@@ -36,7 +36,7 @@ struct StickerKit {
     UtlString name;
     UtlString description;
     UtlString itemName;
-    PAD(2 * sizeof(UtlString))
+    PAD(2 * sizeof(UtlString));
     UtlString inventoryImage;
     int tournamentID;
     int tournamentTeamID;
@@ -57,7 +57,7 @@ struct StaticAttrib {
 static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
 
 struct EconTool {
-    PAD(sizeof(std::uintptr_t))
+    PAD(sizeof(std::uintptr_t));
     const char* typeName;
 };
 
@@ -174,7 +174,7 @@ struct ItemListEntry {
     std::uint32_t musicKit;
     bool isNestedList;
     bool isUnusualList;
-    PAD(2)
+    PAD(2);
 
     auto weaponId() const noexcept
     {
@@ -209,14 +209,14 @@ struct AlternateIconData {
     UtlString largeSimpleName;
     UtlString iconURLSmall;
     UtlString iconURLLarge;
-    PAD(WIN32_LINUX(28, 48))
+    PAD(WIN32_LINUX(28, 48));
 };
 
 struct EconMusicDefinition {
     int id;
     const char* name;
     const char* nameLocalized;
-    PAD(2 * sizeof(const char*))
+    PAD(2 * sizeof(const char*));
     const char* inventoryImage;
 };
 

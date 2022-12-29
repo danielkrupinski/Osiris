@@ -7,7 +7,7 @@ namespace csgo
 {
 
 struct ViewRender {
-    PAD(WIN32_LINUX(0x588, 0x648))
+    PAD(WIN32_LINUX(0x588, 0x648));
     float smokeOverlayAmount;
 };
 

@@ -45,9 +45,9 @@ struct BeamInfo {
 };
 
 struct Beam {
-    PAD(WIN32_LINUX(52, 76))
+    PAD(WIN32_LINUX(52, 76));
     int flags;
-    PAD(144)
+    PAD(144);
     float die;
 };
 

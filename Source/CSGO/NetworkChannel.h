@@ -7,7 +7,7 @@ namespace csgo
 {
 
 struct NetworkChannelPOD {
-    PAD(44)
+    PAD(44);
     int chokedPackets;
 };
 

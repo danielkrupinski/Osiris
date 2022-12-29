@@ -18,9 +18,9 @@ namespace csgo
 {
 
 struct StudioRenderPOD {
-    PAD(WIN32_LINUX(592, 600))
+    PAD(WIN32_LINUX(592, 600));
     MaterialPOD* materialOverride;
-    PAD(WIN32_LINUX(12, 24))
+    PAD(WIN32_LINUX(12, 24));
     OverrideType overrideType;
 };
 

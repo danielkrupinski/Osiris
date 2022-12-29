@@ -7,7 +7,7 @@ namespace csgo
 {
 
 struct SurfaceData {
-    PAD(80)
+    PAD(80);
     float maxspeedfactor;
     float jumpfactor;
     float penetrationmodifier;
