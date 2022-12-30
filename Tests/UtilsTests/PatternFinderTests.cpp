@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Utils/PatternFinder.h>
+#include <MemorySearch/PatternFinder.h>
 
 namespace
 {

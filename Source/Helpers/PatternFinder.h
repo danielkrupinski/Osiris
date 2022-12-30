@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Utils/PatternFinder.h>
+#include <MemorySearch/PatternFinder.h>
 #include <Utils/SafeAddress.h>
 
 namespace helpers

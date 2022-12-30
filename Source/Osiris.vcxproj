@@ -150,6 +150,10 @@
     <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp" />
     <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp" />
     <ClCompile Include="InventoryChanger\WeaponNames.cpp" />
+    <ClCompile Include="MemorySearch\HybridPatternFinder.cpp" />
+    <ClCompile Include="MemorySearch\PatternFinder.cpp" />
+    <ClCompile Include="MemorySearch\PatternFinderScalar.cpp" />
+    <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -170,10 +174,6 @@
     </ClCompile>
     <ClCompile Include="RetSpoofGadgets.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Utils\HybridPatternFinder.cpp" />
-    <ClCompile Include="Utils\PatternFinder.cpp" />
-    <ClCompile Include="Utils\PatternFinderScalar.cpp" />
-    <ClCompile Include="Utils\PatternFinderSIMD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h" />
@@ -374,6 +374,10 @@
     <ClInclude Include="InventoryChanger\ItemId.h" />
     <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="MemorySearch\HybridPatternFinder.h" />
+    <ClInclude Include="MemorySearch\PatternFinder.h" />
+    <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
+    <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
@@ -404,10 +408,6 @@
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
-    <ClInclude Include="Utils\HybridPatternFinder.h" />
-    <ClInclude Include="Utils\PatternFinder.h" />
-    <ClInclude Include="Utils\PatternFinderScalar.h" />
-    <ClInclude Include="Utils\PatternFinderSIMD.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\TypeHint.h" />

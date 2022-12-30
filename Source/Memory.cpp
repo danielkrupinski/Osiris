@@ -35,7 +35,7 @@
 #include "CSGO/ItemSchema.h"
 #include "CSGO/LocalPlayer.h"
 
-#include "Utils/PatternFinder.h"
+#include <MemorySearch/PatternFinder.h>
 #include "Utils/SafeAddress.h"
 
 Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept

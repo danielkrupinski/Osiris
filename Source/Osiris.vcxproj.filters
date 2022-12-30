@@ -96,6 +96,9 @@
     <Filter Include="Platform\Macros">
       <UniqueIdentifier>{debcafb0-2338-4015-a582-96cf480e9d5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemorySearch">
+      <UniqueIdentifier>{a463f11e-5e7b-40b4-b955-c60208980d86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -311,9 +314,6 @@
     <ClCompile Include="RetSpoofGadgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\PatternFinder.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Helpers\PatternFinder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -335,14 +335,17 @@
     <ClCompile Include="CSGO\Utils.cpp">
       <Filter>CSGO</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\HybridPatternFinder.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="MemorySearch\HybridPatternFinder.cpp">
+      <Filter>MemorySearch</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\PatternFinderScalar.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="MemorySearch\PatternFinder.cpp">
+      <Filter>MemorySearch</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\PatternFinderSIMD.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="MemorySearch\PatternFinderScalar.cpp">
+      <Filter>MemorySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp">
+      <Filter>MemorySearch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -690,9 +693,6 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h">
       <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\PatternFinder.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\PatternFinder.h">
       <Filter>Helpers</Filter>
@@ -1042,14 +1042,17 @@
     <ClInclude Include="Platform\Macros\PlatformSpecific.h">
       <Filter>Platform\Macros</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\HybridPatternFinder.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="MemorySearch\HybridPatternFinder.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\PatternFinderScalar.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="MemorySearch\PatternFinder.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\PatternFinderSIMD.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="MemorySearch\PatternFinderScalar.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternFinderSIMD.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
