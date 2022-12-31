@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <type_traits>
 
+#include "ReturnAddress.h"
+
 class SafeAddress {
 public:
     explicit SafeAddress(std::uintptr_t address)
@@ -48,6 +50,11 @@ public:
     [[nodiscard]] std::uintptr_t get() const noexcept
     {
         return address;
+    }
+
+    [[nodiscard]] ReturnAddress asReturnAddress() const noexcept
+    {
+        return ReturnAddress{ address };
     }
 
     template <typename T>
