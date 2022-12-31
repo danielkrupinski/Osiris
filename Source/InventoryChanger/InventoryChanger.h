@@ -53,20 +53,20 @@ struct InventoryChangerReturnAddresses {
 {
     return InventoryChangerReturnAddresses{
 #if IS_WIN32()
-        .setStickerToolSlotGetArgAsNumber = clientPatternFinder("\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24").add(2).asReturnAddress(),
-        .wearItemStickerGetArgAsString = clientPatternFinder("\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF").add(-80).asReturnAddress(),
-        .setNameToolStringGetArgAsString = clientPatternFinder("\x8B\xF8\xC6\x45\x08?\x33\xC0").asReturnAddress(),
-        .clearCustomNameGetArgAsString = clientPatternFinder("\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21").add(3).asReturnAddress(),
-        .deleteItemGetArgAsString = clientPatternFinder("\x85\xC0\x74\x22\x51").asReturnAddress(),
-        .setStatTrakSwapToolItemsGetArgAsString = clientPatternFinder("\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37").asReturnAddress(),
-        .acknowledgeNewItemByItemIDGetArgAsString = clientPatternFinder("\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9").asReturnAddress(),
-        .setItemAttributeValueAsyncGetArgAsString = clientPatternFinder("\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57").add(-22).asReturnAddress(),
-        .setMyPredictionUsingItemIdGetNumArgs = clientPatternFinder("\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01").asReturnAddress(),
-        .getMyPredictionTeamIDGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8").add(-20).asReturnAddress(),
-        .setInventorySortAndFiltersGetArgAsString = clientPatternFinder("\x80\x7D\xFF?\x8B\xF8\x74\x27").asReturnAddress(),
-        .getInventoryCountSetResultInt = clientPatternFinder("\xB9????\xE8????\xB9????\xE8????\xC2\x08").add(-10).asReturnAddress(),
-        .performItemCasketTransactionGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24").asReturnAddress(),
-        .useToolGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37").asReturnAddress()
+        .setStickerToolSlotGetArgAsNumber = clientPatternFinder("\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24", OffsetHint{ 6120862 }).add(2).asReturnAddress(),
+        .wearItemStickerGetArgAsString = clientPatternFinder("\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF", OffsetHint{ 6095215 }).add(-80).asReturnAddress(),
+        .setNameToolStringGetArgAsString = clientPatternFinder("\x8B\xF8\xC6\x45\x08?\x33\xC0", OffsetHint{ 6121111 }).asReturnAddress(),
+        .clearCustomNameGetArgAsString = clientPatternFinder("\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21", OffsetHint{ 6121269 }).add(3).asReturnAddress(),
+        .deleteItemGetArgAsString = clientPatternFinder("\x85\xC0\x74\x22\x51", OffsetHint{ 6122298 }).asReturnAddress(),
+        .setStatTrakSwapToolItemsGetArgAsString = clientPatternFinder("\x85\xC0\x74\x7E\x8B\xC8\xE8????\x8B\x37", OffsetHint{ 6120623 }).asReturnAddress(),
+        .acknowledgeNewItemByItemIDGetArgAsString = clientPatternFinder("\x85\xC0\x74\x33\x8B\xC8\xE8????\xB9", OffsetHint{ 6092121 }).asReturnAddress(),
+        .setItemAttributeValueAsyncGetArgAsString = clientPatternFinder("\x8B\xD8\x83\xC4\x08\x85\xDB\x0F\x84????\x8B\x16\x8B\xCE\x57", OffsetHint{ 6098822 }).add(-22).asReturnAddress(),
+        .setMyPredictionUsingItemIdGetNumArgs = clientPatternFinder("\x8B\xF0\x89\x74\x24\x2C\x83\xFE\x01", OffsetHint{ 6702914 }).asReturnAddress(),
+        .getMyPredictionTeamIDGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x57\x8B\xC8\xE8????\xBF????\x89\x45\xE8", OffsetHint{ 6699829 }).add(-20).asReturnAddress(),
+        .setInventorySortAndFiltersGetArgAsString = clientPatternFinder("\x80\x7D\xFF?\x8B\xF8\x74\x27", OffsetHint{ 6088445 }).asReturnAddress(),
+        .getInventoryCountSetResultInt = clientPatternFinder("\xB9????\xE8????\xB9????\xE8????\xC2\x08", OffsetHint{ 6092048 }).add(-10).asReturnAddress(),
+        .performItemCasketTransactionGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x52\x50\xE8????\x83\xC4\x08\x89\x44\x24\x0C\x85\xC0\x0F\x84????\xF2\x0F\x2C\x44\x24", OffsetHint{ 6098213 }).asReturnAddress(),
+        .useToolGetArgAsString = clientPatternFinder("\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37", OffsetHint{ 6118723 }).asReturnAddress()
 #elif IS_LINUX()
         .setStickerToolSlotGetArgAsNumber = clientPatternFinder("\xF2\x44\x0F\x2C\xF0\x45\x85\xF6\x78\x32").asReturnAddress(),
         .wearItemStickerGetArgAsString = clientPatternFinder("\xF2\x44\x0F\x2C\xF8\x45\x39\xFE").add(-57).asReturnAddress(),
