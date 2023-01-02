@@ -16,6 +16,14 @@ TEST_P(SafeAddress_AddressTest, AfterConstructionHasAddressPassedToTheConstructo
     EXPECT_EQ(SafeAddress{ GetParam() }.get(), GetParam());
 }
 
+TEST_P(SafeAddress_AddressTest, ReturnsCorrectAddressWhenConvertedToReturnAddress) {
+    EXPECT_EQ(static_cast<std::uintptr_t>(SafeAddress{ GetParam() }.asReturnAddress()), GetParam());
+}
+
+TEST_P(SafeAddress_AddressTest, ReturnsCorrectAddressWhenConvertedToPointer) {
+    EXPECT_EQ(reinterpret_cast<std::uintptr_t>(SafeAddress{ GetParam() }.as<int*>()), GetParam());
+}
+
 INSTANTIATE_TEST_SUITE_P(, SafeAddress_AddressTest, testing::Values(minAddress, 123, maxAddress));
 
 TEST(SafeAddressTest, AddingPositiveOffsetToZeroAddressDoesNothing) {
