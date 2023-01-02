@@ -85,7 +85,7 @@
 #include <Interfaces/OtherInterfaces.h>
 
 #if IS_WIN32()
-static csgo::EntityPOD* createGloves(const ClientInterfaces& clientInterfaces) noexcept
+static csgo::EntityPOD* createGloves(const ClientInterfaces& clientInterfaces, csgo::MemAllocPOD* memAlloc) noexcept
 {
     static const auto createWearable = [&clientInterfaces] {
         std::uintptr_t createWearableFn = 0;
@@ -100,7 +100,7 @@ static csgo::EntityPOD* createGloves(const ClientInterfaces& clientInterfaces) n
 
     const auto sizeOfEconWearable = *reinterpret_cast<std::uint32_t*>(std::uintptr_t(createWearable) + 39);
 
-    const auto econWearable = csgo::MemAlloc::from(retSpoofGadgets->client, memory->memAlloc).allocAligned(sizeOfEconWearable, 16);
+    const auto econWearable = csgo::MemAlloc::from(retSpoofGadgets->client, memAlloc).allocAligned(sizeOfEconWearable, 16);
     if (!econWearable)
         return nullptr;
 
@@ -166,7 +166,7 @@ static void applyGloves(const EngineInterfaces& engineInterfaces, const ClientIn
 
     if (!glovePtr) {
 #if IS_WIN32()
-        glovePtr = createGloves(clientInterfaces);
+        glovePtr = createGloves(clientInterfaces, memory.memAlloc);
 #else
         constexpr auto NUM_ENT_ENTRIES = 8192;
         glovePtr = createGlove(clientInterfaces, NUM_ENT_ENTRIES - 1, -1);
