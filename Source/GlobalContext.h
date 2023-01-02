@@ -118,4 +118,5 @@ private:
     std::optional<ClientInterfacesPODs> clientInterfaces;
     std::optional<const OtherInterfacesPODs> interfaces;
     std::optional<Helpers::RandomGenerator> randomGenerator;
+    std::optional<const Memory> memory;
 };

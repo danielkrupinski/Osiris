@@ -139,5 +139,3 @@ private:
 
     csgo::MoveHelperPOD* moveHelperPtr;
 };
-
-inline std::optional<const Memory> memory;
