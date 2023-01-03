@@ -24,6 +24,7 @@
 #include <CSGO/EntityList.h>
 #include <CSGO/Constants/ConVarNames.h>
 #include <CSGO/Constants/FrameStage.h>
+#include <CSGO/Constants/GameEventNames.h>
 #include <CSGO/GameEvent.h>
 #include <CSGO/GlobalVars.h>
 #include <CSGO/Input.h>
@@ -613,7 +614,7 @@ void Visuals::updateEventListeners(bool forceRemove) noexcept
     static bool listenerRegistered = false;
 
     if (visualsConfig.bulletTracers.enabled && !listenerRegistered) {
-        engineInterfaces.getGameEventManager(memory.getEventDescriptor).addListener(&listener, "bullet_impact");
+        engineInterfaces.getGameEventManager(memory.getEventDescriptor).addListener(&listener, csgo::bullet_impact);
         listenerRegistered = true;
     } else if ((!visualsConfig.bulletTracers.enabled || forceRemove) && listenerRegistered) {
         engineInterfaces.getGameEventManager(memory.getEventDescriptor).removeListener(&listener);

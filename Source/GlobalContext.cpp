@@ -31,6 +31,7 @@
 #include "CSGO/ClientClass.h"
 #include "CSGO/Constants/ClassId.h"
 #include "CSGO/Constants/FrameStage.h"
+#include "CSGO/Constants/GameEventNames.h"
 #include "CSGO/Constants/UserMessages.h"
 #include "CSGO/Engine.h"
 #include "CSGO/Entity.h"
@@ -544,34 +545,34 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
     const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
 
     switch (fnv::hashRuntime(event.getName())) {
-    case fnv::hash("round_start"):
+    case fnv::hash(csgo::round_start):
         GameData::clearProjectileList();
         features->misc.preserveKillfeed(true);
         [[fallthrough]];
-    case fnv::hash("round_freeze_end"):
+    case fnv::hash(csgo::round_freeze_end):
         features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);
         break;
-    case fnv::hash("player_death"):
+    case fnv::hash(csgo::player_death):
         features->inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
         features->inventoryChanger.overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
         features->misc.killMessage(getEngineInterfaces().getEngine(), event);
         features->misc.killSound(getEngineInterfaces().getEngine(), event);
         break;
-    case fnv::hash("player_hurt"):
+    case fnv::hash(csgo::player_hurt):
         features->misc.playHitSound(getEngineInterfaces().getEngine(), event);
         features->visuals.hitEffect(&event);
         features->visuals.hitMarker(&event);
         break;
-    case fnv::hash("vote_cast"):
+    case fnv::hash(csgo::vote_cast):
         features->misc.voteRevealer(event);
         break;
-    case fnv::hash("round_mvp"):
+    case fnv::hash(csgo::round_mvp):
         features->inventoryChanger.onRoundMVP(getEngineInterfaces().getEngine(), event);
         break;
-    case fnv::hash("item_purchase"):
+    case fnv::hash(csgo::item_purchase):
         features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);
         break;
-    case fnv::hash("bullet_impact"):
+    case fnv::hash(csgo::bullet_impact):
         features->visuals.bulletTracer(event);
         break;
     }

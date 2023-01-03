@@ -1057,6 +1057,9 @@
     <ClInclude Include="Utils\SpanSlice.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="CSGO\Constants\GameEventNames.h">
+      <Filter>CSGO\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
