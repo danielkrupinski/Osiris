@@ -209,7 +209,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     Netvars::restore();
 
     glow.clearCustomObjects();
-    inventoryChanger.reset(interfaces, memory);
+    inventoryChanger.reset(memory);
 
 #if IS_WIN32()
     keyValuesSystem.restore();

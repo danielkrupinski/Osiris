@@ -469,10 +469,10 @@ void inventory_changer::InventoryChanger::menuBarItem() noexcept
     }
 }
 
-void inventory_changer::InventoryChanger::tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void inventory_changer::InventoryChanger::tabItem(const Memory& memory) noexcept
 {
     if (ImGui::BeginTabItem("Inventory Changer")) {
-        drawGUI(interfaces, memory, true);
+        drawGUI(memory, true);
         ImGui::EndTabItem();
     }
 }
@@ -727,13 +727,13 @@ private:
     const WeaponNames& weaponNames;
 };
 
-void InventoryChanger::scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept
+void InventoryChanger::scheduleHudUpdate() noexcept
 {
-    interfaces.getCvar().findVar(csgo::cl_fullupdate)->changeCallback();
+    otherInterfaces.getCvar().findVar(csgo::cl_fullupdate)->changeCallback();
     hudUpdateRequired = true;
 }
 
-void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly)
+void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -755,7 +755,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
     if (!isInAddMode) {
         ImGui::SameLine();
         if (ImGui::Button("Force Update"))
-            scheduleHudUpdate(interfaces);
+            scheduleHudUpdate();
     }
 
     constexpr auto rarityColor = [](EconRarity rarity) noexcept {
@@ -796,7 +796,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
         if (filterChanged) {
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
-            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(interfaces, memory), &gameItemStorage = getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
+            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(otherInterfaces, memory), &gameItemStorage = getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
                 return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
@@ -805,7 +805,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
             static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
-                gameItemList.sort(inventory_changer::NameComparator{ getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance(interfaces, memory) });
+                gameItemList.sort(inventory_changer::NameComparator{ getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance(otherInterfaces, memory) });
                 sorted = true;
             }
 
@@ -816,7 +816,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
 
                 ImGui::PushID(i);
 
-                if (ImGui::SkinSelectable(*this, interfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
+                if (ImGui::SkinSelectable(*this, otherInterfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
                         backend.getInventoryHandler().addItem(inventory::Item{ gameItem, backend.getItemGenerator().createDefaultItemProperties(gameItem) }, true);
                     toAddCount[i] = 1;
@@ -837,7 +837,7 @@ void InventoryChanger::drawGUI(const OtherInterfaces& interfaces, const Memory& 
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(*this, interfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
+                ImGui::SkinItem(*this, otherInterfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
                     it = std::make_reverse_iterator(backend.getItemRemovalHandler()(std::next(it).base()));
                 } else {
@@ -1097,7 +1097,7 @@ void InventoryChanger::onSoUpdated(const csgo::SharedObject& object) noexcept
     }
 }
 
-void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage stage) noexcept
+void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
 
@@ -1105,7 +1105,7 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         localPlayerHandle = localPlayer.get().handle();
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(*this, engineInterfaces, clientInterfaces, interfaces, memory, localPlayerHandle);
+        onPostDataUpdateStart(*this, engineInterfaces, clientInterfaces, otherInterfaces, memory, localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer.get().getNetworkable().isDormant())
             updateHud(memory);
     }
@@ -1118,17 +1118,17 @@ void InventoryChanger::run(const EngineInterfaces& engineInterfaces, const Clien
         return;
 
     if (localPlayer)
-        applyGloves(engineInterfaces, clientInterfaces, interfaces, memory, backend, localInventory, localPlayer.get());
+        applyGloves(engineInterfaces, clientInterfaces, otherInterfaces, memory, backend, localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, interfaces, memory);
+    applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, otherInterfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory, gameInventory.getEconItemViewFunctions());
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
 {
     auto itemSchema = csgo::ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema());
     game_integration::Items items{ itemSchema, interfaces.getLocalize() };
@@ -1142,7 +1142,7 @@ InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const
     crateLoot.compress();
     auto crateLootLookup = game_items::CrateLootLookup{ std::move(crateLoot) };
 
-    return InventoryChanger{ interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), clientPatternFinder, randomGenerator };
+    return InventoryChanger{ engineInterfaces, clientInterfaces, interfaces, memory, std::move(gameItemLookup), std::move(crateLootLookup), clientPatternFinder, randomGenerator };
 }
 
 void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddress)
@@ -1151,9 +1151,9 @@ void InventoryChanger::getArgAsNumberHook(int number, ReturnAddress returnAddres
         requestBuilderParams.stickerSlot = static_cast<std::uint8_t>(number);
 }
 
-void InventoryChanger::onRoundMVP(const csgo::Engine& engine, const csgo::GameEvent& event)
+void InventoryChanger::onRoundMVP(const csgo::GameEvent& event)
 {
-    if (!isLocalPlayerMVP(engine, event))
+    if (!isLocalPlayerMVP(engineInterfaces.getEngine(), event))
         return;
 
     const auto optionalItem = backend.getLoadout().getItemInSlotNoTeam(54);
@@ -1171,12 +1171,12 @@ void InventoryChanger::onRoundMVP(const csgo::Engine& engine, const csgo::GameEv
     }
 }
 
-void InventoryChanger::updateStatTrak(const csgo::Engine& engine, const csgo::GameEvent& event)
+void InventoryChanger::updateStatTrak(const csgo::GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (const auto localUserId = localPlayer.get().getUserId(engine); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+    if (const auto localUserId = localPlayer.get().getUserId(engineInterfaces.getEngine()); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     const auto weapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
@@ -1196,12 +1196,12 @@ void InventoryChanger::updateStatTrak(const csgo::Engine& engine, const csgo::Ga
         backend.getItemModificationHandler().updateStatTrak(item, skin->statTrak + 1);
 }
 
-void InventoryChanger::overrideHudIcon(const csgo::Engine& engine, const Memory& memory, const csgo::GameEvent& event)
+void InventoryChanger::overrideHudIcon(const Memory& memory, const csgo::GameEvent& event)
 {
     if (!localPlayer)
         return;
 
-    if (event.getInt("attacker") != localPlayer.get().getUserId(engine))
+    if (event.getInt("attacker") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
@@ -1451,7 +1451,7 @@ void InventoryChanger::fixKnifeAnimation(const csgo::Entity& viewModelWeapon, lo
     sequence = remapKnifeAnim(viewModelWeapon.itemDefinitionIndex(), sequence, randomGenerator);
 }
 
-void InventoryChanger::reset(const OtherInterfaces& interfaces, const Memory& memory)
+void InventoryChanger::reset(const Memory& memory)
 {
     clearInventory(backend);
     backend.getPickEmHandler().clearPicks();

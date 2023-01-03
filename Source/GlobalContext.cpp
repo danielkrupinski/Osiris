@@ -209,7 +209,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
         features->misc.fixAnimationLOD(getEngineInterfaces().getEngine(), stage);
         features->backtrack.update(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
     }
-    features->inventoryChanger.run(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, stage);
+    features->inventoryChanger.run(*memory, stage);
 
     hooks->client.callOriginal<void, 37>(stage);
 }
@@ -553,8 +553,8 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
         features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);
         break;
     case fnv::hash(csgo::player_death):
-        features->inventoryChanger.updateStatTrak(getEngineInterfaces().getEngine(), event);
-        features->inventoryChanger.overrideHudIcon(getEngineInterfaces().getEngine(), *memory, event);
+        features->inventoryChanger.updateStatTrak(event);
+        features->inventoryChanger.overrideHudIcon(*memory, event);
         features->misc.killMessage(getEngineInterfaces().getEngine(), event);
         features->misc.killSound(getEngineInterfaces().getEngine(), event);
         break;
@@ -567,7 +567,7 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
         features->misc.voteRevealer(event);
         break;
     case fnv::hash(csgo::round_mvp):
-        features->inventoryChanger.onRoundMVP(getEngineInterfaces().getEngine(), event);
+        features->inventoryChanger.onRoundMVP(event);
         break;
     case fnv::hash(csgo::item_purchase):
         features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);

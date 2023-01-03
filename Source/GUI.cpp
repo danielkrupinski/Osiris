@@ -104,7 +104,7 @@ void GUI::render(Misc& misc, inventory_changer::InventoryChanger& inventoryChang
         renderChamsWindow(config);
         StreamProofESP::drawGUI(config, false);
         visuals.drawGUI(false);
-        inventoryChanger.drawGUI(interfaces, memory, false);
+        inventoryChanger.drawGUI(memory, false);
         Sound::drawGUI(false);
         renderStyleWindow(config);
         misc.drawGUI(visuals, inventoryChanger, glow, engineInterfaces, false);
@@ -583,7 +583,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
 
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); misc.updateClanTag(true); inventoryChanger.scheduleHudUpdate(interfaces); break;
+                    case 0: config.reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory); updateColors(config); misc.updateClanTag(true); inventoryChanger.scheduleHudUpdate(); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: backtrack.configure(configurator); break;
@@ -591,7 +591,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
                     case 5: config.chams = { }; break;
                     case 6: config.streamProofESP = { }; break;
                     case 7: visuals.resetConfig(); break;
-                    case 8: inventoryChanger.reset(interfaces, memory); inventoryChanger.scheduleHudUpdate(interfaces); break;
+                    case 8: inventoryChanger.reset(memory); inventoryChanger.scheduleHudUpdate(); break;
                     case 9: Sound::resetConfig(); break;
                     case 10: config.style = { }; updateColors(config); break;
                     case 11: misc.resetConfig(); misc.updateClanTag(true); break;
@@ -604,7 +604,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config.load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, currentConfig, incrementalLoad);
                 updateColors(config);
-                inventoryChanger.scheduleHudUpdate(interfaces);
+                inventoryChanger.scheduleHudUpdate();
                 misc.updateClanTag(true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
@@ -644,7 +644,7 @@ void GUI::renderGuiStyle2(Misc& misc, inventory_changer::InventoryChanger& inven
         }
         StreamProofESP::tabItem(config);
         visuals.tabItem();
-        inventoryChanger.tabItem(interfaces, memory);
+        inventoryChanger.tabItem(memory);
         Sound::tabItem();
         if (ImGui::BeginTabItem("Style")) {
             renderStyleWindow(config, true);

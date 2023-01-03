@@ -596,7 +596,7 @@ void Config::reset(Misc& misc, inventory_changer::InventoryChanger& inventoryCha
     backtrack.configure(configurator);
     glow.resetConfig();
     visuals.resetConfig();
-    inventoryChanger.reset(interfaces, memory);
+    inventoryChanger.reset(memory);
     Sound::resetConfig();
     misc.resetConfig();
 }

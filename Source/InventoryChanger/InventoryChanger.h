@@ -11,6 +11,9 @@
 #include "GameIntegration/Inventory.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
+#include <Interfaces/ClientInterfaces.h>
+#include <Interfaces/EngineInterfaces.h>
+#include <Interfaces/OtherInterfaces.h>
 #include "EconItemFunctions.h"
 #include "EconItemViewFunctions.h"
 #include <Utils/ReturnAddress.h>
@@ -88,8 +91,8 @@ struct InventoryChangerReturnAddresses {
 
 class InventoryChanger {
 public:
-    InventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
-        : backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ createInventoryChangerReturnAddresses(clientPatternFinder) }, gameInventory{ interfaces, memory, clientPatternFinder } {}
+    InventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+        : engineInterfaces{ engineInterfaces }, clientInterfaces{ clientInterfaces }, otherInterfaces{ interfaces }, backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ createInventoryChangerReturnAddresses(clientPatternFinder) }, gameInventory{ interfaces, memory, clientPatternFinder } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
     {
@@ -112,9 +115,9 @@ public:
     }
 
     void getArgAsNumberHook(int number, ReturnAddress returnAddress);
-    void onRoundMVP(const csgo::Engine& engine, const csgo::GameEvent& event);
-    void updateStatTrak(const csgo::Engine& engine, const csgo::GameEvent& event);
-    void overrideHudIcon(const csgo::Engine& engine, const Memory& memory, const csgo::GameEvent& event);
+    void onRoundMVP(const csgo::GameEvent& event);
+    void updateStatTrak(const csgo::GameEvent& event);
+    void overrideHudIcon(const Memory& memory, const csgo::GameEvent& event);
     void getArgAsStringHook(const Memory& memory, const char* string, ReturnAddress returnAddress, void* params);
     void getNumArgsHook(unsigned numberOfArgs, ReturnAddress returnAddress, void* params);
     int setResultIntHook(ReturnAddress returnAddress, void* params, int result);
@@ -123,16 +126,16 @@ public:
     void acknowledgeItem(const Memory& memory, std::uint64_t itemID);
     void fixKnifeAnimation(const csgo::Entity& viewModelWeapon, long& sequence, Helpers::RandomGenerator& randomGenerator);
 
-    void reset(const OtherInterfaces& interfaces, const Memory& memory);
+    void reset(const Memory& memory);
 
-    void drawGUI(const OtherInterfaces& interfaces, const Memory& memory, bool contentOnly);
+    void drawGUI(const Memory& memory, bool contentOnly);
 
-    void run(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, csgo::FrameStage frameStage) noexcept;
-    void scheduleHudUpdate(const OtherInterfaces& interfaces) noexcept;
+    void run(const Memory& memory, csgo::FrameStage frameStage) noexcept;
+    void scheduleHudUpdate() noexcept;
     void onSoUpdated(const csgo::SharedObject& object) noexcept;
 
     void menuBarItem() noexcept;
-    void tabItem(const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void tabItem(const Memory& memory) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
@@ -145,6 +148,9 @@ private:
         return backend::RequestBuilder{ requestBuilderParams, backend.getItemIDMap(), backend.getRequestHandler(), backend.getStorageUnitHandler(), backend.getXRayScannerHandler(), backend.getItemActivationHandler() };
     }
 
+    EngineInterfaces engineInterfaces;
+    ClientInterfaces clientInterfaces;
+    OtherInterfaces otherInterfaces;
     backend::BackendSimulator backend;
     backend::RequestBuilderParams requestBuilderParams;
     bool panoramaCodeInXrayScanner = false;
@@ -153,7 +159,7 @@ private:
     game_integration::Inventory gameInventory;
 };
 
-InventoryChanger createInventoryChanger(const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
+InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
 
 }
 
