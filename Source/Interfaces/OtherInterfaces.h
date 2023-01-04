@@ -72,5 +72,5 @@ public:
 
 private:
     RetSpoofInvoker retSpoofInvoker;
-    const OtherInterfacesPODs& pods;
+    OtherInterfacesPODs pods;
 };

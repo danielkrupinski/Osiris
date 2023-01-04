@@ -42,5 +42,5 @@ public:
 
 private:
     RetSpoofInvoker retSpoofInvoker;
-    const EngineInterfacesPODs& pods;
+    EngineInterfacesPODs pods;
 };

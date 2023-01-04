@@ -37,5 +37,5 @@ public:
 
 private:
     RetSpoofInvoker retSpoofInvoker;
-    const ClientInterfacesPODs& pods;
+    ClientInterfacesPODs pods;
 };
