@@ -58,6 +58,7 @@
 
 #include "../imguiCustom.h"
 #include <Interfaces/ClientInterfaces.h>
+#include <RetSpoof/FunctionInvoker.h>
 
 struct PreserveKillfeed {
     bool enabled = false;
@@ -1251,7 +1252,7 @@ void Misc::autoAccept(const char* soundEntry) noexcept
         return;
 
     if (const auto idx = memory.registeredPanoramaEvents->find(memory.makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
-        if (const auto eventPtr = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.makeEvent), nullptr))
+        if (const auto eventPtr = FunctionInvoker{ retSpoofGadgets->client, memory.registeredPanoramaEvents->memory[idx].value.makeEvent }(nullptr))
             csgo::UIEngine::from(retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine()).dispatchEvent(eventPtr);
     }
 

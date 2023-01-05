@@ -23,7 +23,7 @@ public:
 struct PanoramaEventRegistration {
     int numberOfArgs;
     PAD(4);
-    TypeHint<std::uintptr_t, void* (CDECL_CONV*)(void*)> makeEvent;
+    void* (CDECL_CONV* makeEvent)(void*);
     TypeHint<std::uintptr_t, void* (CDECL_CONV*)(void*, const char* args, const char** result)> createEventFromString;
     PAD(WIN32_LINUX(24, 48));
 };
