@@ -550,16 +550,16 @@ static bool windowOpen = false;
 
 void StreamProofESP::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("ESP")) {
+    if (ImGui::MenuItem("透视功能")) {
         windowOpen = true;
-        ImGui::SetWindowFocus("ESP");
-        ImGui::SetWindowPos("ESP", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("透视功能");
+        ImGui::SetWindowPos("透视功能", { 100.0f, 100.0f });
     }
 }
 
 void StreamProofESP::tabItem(Config& config) noexcept
 {
-    if (ImGui::BeginTabItem("ESP")) {
+    if (ImGui::BeginTabItem("透视功能")) {
         drawGUI(config, true);
         ImGui::EndTabItem();
     }
@@ -571,11 +571,11 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
         if (!windowOpen)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("ESP", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("透视功能", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
 
-    ImGui::hotkey("Toggle Key", config.streamProofESP.toggleKey, 80.0f);
-    ImGui::hotkey("Hold Key", config.streamProofESP.holdKey, 80.0f);
+    ImGui::hotkey("切换键", config.streamProofESP.toggleKey, 80.0f);
+    ImGui::hotkey("长按键", config.streamProofESP.holdKey, 80.0f);
     ImGui::Separator();
 
     static std::size_t currentCategory;
@@ -600,7 +600,7 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
     };
 
     if (ImGui::BeginListBox("##list", { 170.0f, 300.0f })) {
-        constexpr std::array categories{ "Enemies", "Allies", "Weapons", "Projectiles", "Loot Crates", "Other Entities" };
+        constexpr std::array categories{ "敌人", "友军", "武器", "投掷物", "头号箱子", "其他实体"  };
 
         for (std::size_t i = 0; i < categories.size(); ++i) {
             if (ImGui::Selectable(categories[i], currentCategory == i && std::string_view{ currentItem } == "All")) {
@@ -671,11 +671,11 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
             const auto items = [](std::size_t category) noexcept -> std::vector<const char*> {
                 switch (category) {
                 case 0:
-                case 1: return { "Visible", "Occluded" };
-                case 2: return { "Pistols", "SMGs", "Rifles", "Sniper Rifles", "Shotguns", "Machineguns", "Grenades", "Melee", "Other" };
-                case 3: return { "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
-                case 4: return { "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Cash Dufflebag" };
-                case 5: return { "Defuse Kit", "Chicken", "Planted C4", "Hostage", "Sentry", "Cash", "Ammo Box", "Radar Jammer", "Snowball Pile", "Collectable Coin" };
+                case 1: return {"可见的", "不可见" };
+                case 2: return { "手枪", "冲锋枪", "步枪", "狙击枪", "霰弹枪", "机枪", "投掷物", "近战", "其他" };
+                case 3: return { "闪光弹", "手雷", "火炸弹", "跳跃炸弹", "诱饵弹", "燃烧瓶", "手雷", "烟雾弹", "雪球" };
+                case 4: return {"手枪箱", "轻型箱", "重型箱", "爆炸箱", "工具箱", "钱提包"};
+                case 5: return { "拆弹工具", "鸡", "已安放的 C4", "人质", "哨兵", "现金", "弹药", "雷达干扰器", "雪球堆", "可收集的硬币"};
                 default: return { };
                 }
             }(i);
@@ -756,15 +756,15 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
 
                 const auto subItems = [](std::size_t item) noexcept -> std::vector<const char*> {
                     switch (item) {
-                    case 0: return { "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-SeveN", "CZ75-Auto", "Desert Eagle", "R8 Revolver" };
-                    case 1: return { "MAC-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
-                    case 2: return { "Galil AR", "FAMAS", "AK-47", "M4A4", "M4A1-S", "SG 553", "AUG" };
+                    case 0: return { "Glock-18", "P2000", "USP-S", "双枪", "P250", "Tec-9", "FN57", "CZ75", "沙鹰", "R8 左轮" };
+                    case 1: return { "MAC-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP野牛" };
+                    case 2: return { "加利尔AR", "法玛斯", "AK-47", "M4A4", "M4A1-S", "SG 553", "AUG" };
                     case 3: return { "SSG 08", "AWP", "G3SG1", "SCAR-20" };
-                    case 4: return { "Nova", "XM1014", "Sawed-Off", "MAG-7" };
+                    case 4: return { "新星", "XM1014", "匪喷", "MAG-7" };
                     case 5: return { "M249", "Negev" };
-                    case 6: return { "Flashbang", "HE Grenade", "Smoke Grenade", "Molotov", "Decoy Grenade", "Incendiary", "TA Grenade", "Fire Bomb", "Diversion", "Frag Grenade", "Snowball" };
-                    case 7: return { "Axe", "Hammer", "Wrench" };
-                    case 8: return { "C4", "Healthshot", "Bump Mine", "Zone Repulsor", "Shield" };
+                    case 6: return { "闪光弹", "手雷", "烟雾弹", "燃烧弹", "诱饵弹", "燃烧弹", "手雷", "火炸弹", "转移", "碎片榴弹", "雪球" };
+                    case 7: return { "斧头", "锤子", "板子" };
+                    case 8: return { "C4", "医疗针", "跳跃炸弹", "区域排斥器", "盾" };
                     default: return { };
                     }
                 }(j);
@@ -824,10 +824,10 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
     if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
         auto& sharedConfig = getConfigShared(currentCategory, currentItem);
 
-        ImGui::Checkbox("Enabled", &sharedConfig.enabled);
+        ImGui::Checkbox("启用", &sharedConfig.enabled);
         ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 260.0f);
         ImGui::SetNextItemWidth(220.0f);
-        if (ImGui::BeginCombo("Font", config.getSystemFonts()[sharedConfig.font.index].c_str())) {
+        if (ImGui::BeginCombo("字体", config.getSystemFonts()[sharedConfig.font.index].c_str())) {
             for (size_t i = 0; i < config.getSystemFonts().size(); i++) {
                 bool isSelected = config.getSystemFonts()[i] == sharedConfig.font.name;
                 if (ImGui::Selectable(config.getSystemFonts()[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
@@ -844,12 +844,12 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
         ImGui::Separator();
 
         constexpr auto spacing = 250.0f;
-        ImGuiCustom::colorPicker("Snapline", sharedConfig.snapline);
+        ImGuiCustom::colorPicker("线条", sharedConfig.snapline);
         ImGui::SameLine();
         ImGui::SetNextItemWidth(90.0f);
-        ImGui::Combo("##1", &sharedConfig.snapline.type, "Bottom\0Top\0Crosshair\0");
+        ImGui::Combo("##1", &sharedConfig.snapline.type, "底部\0顶部\0准星\0");
         ImGui::SameLine(spacing);
-        ImGuiCustom::colorPicker("Box", sharedConfig.box);
+        ImGuiCustom::colorPicker("方框", sharedConfig.box);
         ImGui::SameLine();
 
         ImGui::PushID("Box");
@@ -859,30 +859,30 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
 
         if (ImGui::BeginPopup("")) {
             ImGui::SetNextItemWidth(95.0f);
-            ImGui::Combo("Type", &sharedConfig.box.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
+            ImGui::Combo("类型", &sharedConfig.box.type,  "2D\0" "2D 四角\0" "3D\0" "3D 四角\0");
             ImGui::SetNextItemWidth(275.0f);
-            ImGui::SliderFloat3("Scale", sharedConfig.box.scale.data(), 0.0f, 0.50f, "%.2f");
-            ImGuiCustom::colorPicker("Fill", sharedConfig.box.fill);
+            ImGui::SliderFloat3("比例", sharedConfig.box.scale.data(), 0.0f, 0.50f, "%.2f");
+            ImGuiCustom::colorPicker("填充", sharedConfig.box.fill);
             ImGui::EndPopup();
         }
 
         ImGui::PopID();
 
-        ImGuiCustom::colorPicker("Name", sharedConfig.name);
+        ImGuiCustom::colorPicker("名字", sharedConfig.name);
         ImGui::SameLine(spacing);
 
         if (currentCategory < 2) {
             auto& playerConfig = getConfigPlayer(currentCategory, currentItem);
 
-            ImGuiCustom::colorPicker("Weapon", playerConfig.weapon);
-            ImGuiCustom::colorPicker("Flash Duration", playerConfig.flashDuration);
+            ImGuiCustom::colorPicker("显示武器", playerConfig.weapon);
+            ImGuiCustom::colorPicker("闪光持续时间", playerConfig.flashDuration);
             ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Skeleton", playerConfig.skeleton);
-            ImGui::Checkbox("Audible Only", &playerConfig.audibleOnly);
+            ImGuiCustom::colorPicker("骨骼", playerConfig.skeleton);
+            ImGui::Checkbox("仅显示发出声音的", &playerConfig.audibleOnly);
             ImGui::SameLine(spacing);
-            ImGui::Checkbox("Spotted Only", &playerConfig.spottedOnly);
+            ImGui::Checkbox("仅显示发现的", &playerConfig.spottedOnly);
 
-            ImGuiCustom::colorPicker("Head Box", playerConfig.headBox);
+            ImGuiCustom::colorPicker("头部方框", playerConfig.headBox);
             ImGui::SameLine();
 
             ImGui::PushID("Head Box");
@@ -892,17 +892,17 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
 
             if (ImGui::BeginPopup("")) {
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
+                ImGui::Combo("类型", &playerConfig.headBox.type, "2D\0" "2D 四角\0" "3D\0" "3D 四角\0");
                 ImGui::SetNextItemWidth(275.0f);
-                ImGui::SliderFloat3("Scale", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
-                ImGuiCustom::colorPicker("Fill", playerConfig.headBox.fill);
+                ImGui::SliderFloat3("比例填充", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
+                ImGuiCustom::colorPicker("填充", playerConfig.headBox.fill);
                 ImGui::EndPopup();
             }
 
             ImGui::PopID();
 
             ImGui::SameLine(spacing);
-            ImGui::Checkbox("Health Bar", &playerConfig.healthBar.enabled);
+            ImGui::Checkbox("血量显示", &playerConfig.healthBar.enabled);
             ImGui::SameLine();
 
             ImGui::PushID("Health Bar");
@@ -912,7 +912,7 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
 
             if (ImGui::BeginPopup("")) {
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("Type", &playerConfig.healthBar.type, "Gradient\0Solid\0Health-based\0");
+                ImGui::Combo("类型", &playerConfig.healthBar.type, "渐变色\0实心\0跟随人物\0");
                 if (playerConfig.healthBar.type == HealthBar::Solid) {
                     ImGui::SameLine();
                     ImGuiCustom::colorPicker("", playerConfig.healthBar.asColor4());
@@ -923,11 +923,11 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
             ImGui::PopID();
         } else if (currentCategory == 2) {
             auto& weaponConfig = config.streamProofESP.weapons[currentItem];
-            ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
+            ImGuiCustom::colorPicker("显示弹药", weaponConfig.ammo);
         } else if (currentCategory == 3) {
             auto& trails = config.streamProofESP.projectiles[currentItem].trails;
 
-            ImGui::Checkbox("Trails", &trails.enabled);
+            ImGui::Checkbox("显示轨迹", &trails.enabled);
             ImGui::SameLine(spacing + 77.0f);
             ImGui::PushID("Trails");
 
@@ -940,17 +940,17 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
                     ImGuiCustom::colorPicker(name, trail);
                     ImGui::SameLine(150.0f);
                     ImGui::SetNextItemWidth(95.0f);
-                    ImGui::Combo("", &trail.type, "Line\0Circles\0Filled Circles\0");
+                    ImGui::Combo("", &trail.type, "线\0圆\0实心圆\0");
                     ImGui::SameLine();
                     ImGui::SetNextItemWidth(95.0f);
-                    ImGui::InputFloat("Time", &trail.time, 0.1f, 0.5f, "%.1fs");
+                    ImGui::InputFloat("时间", &trail.time, 0.1f, 0.5f, "%.1fs");
                     trail.time = std::clamp(trail.time, 1.0f, 60.0f);
                     ImGui::PopID();
                 };
 
-                trailPicker("Local Player", trails.localPlayer);
-                trailPicker("Allies", trails.allies);
-                trailPicker("Enemies", trails.enemies);
+                trailPicker("本地玩家", trails.localPlayer);
+                trailPicker("友军", trails.allies);
+                trailPicker("敌人", trails.enemies);
                 ImGui::EndPopup();
             }
 
@@ -958,7 +958,7 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
         }
 
         ImGui::SetNextItemWidth(95.0f);
-        ImGui::InputFloat("Text Cull Distance", &sharedConfig.textCullDistance, 0.4f, 0.8f, "%.1fm");
+        ImGui::InputFloat("文字间隔距离", &sharedConfig.textCullDistance, 0.4f, 0.8f, "%.1fm");
         sharedConfig.textCullDistance = std::clamp(sharedConfig.textCullDistance, 0.0f, 999.9f);
     }
 
@@ -967,3 +967,4 @@ void StreamProofESP::drawGUI(Config& config, bool contentOnly) noexcept
     if (!contentOnly)
         ImGui::End();
 }
+
