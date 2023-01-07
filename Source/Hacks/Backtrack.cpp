@@ -166,16 +166,16 @@ bool Backtrack::valid(const csgo::Engine& engine, const Memory& memory, float si
 
 void Backtrack::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Backtrack")) {
+    if (ImGui::MenuItem("回溯功能")) {
         backtrackWindowOpen = true;
-        ImGui::SetWindowFocus("Backtrack");
-        ImGui::SetWindowPos("Backtrack", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("回溯功能");
+        ImGui::SetWindowPos("回溯功能", { 100.0f, 100.0f });
     }
 }
 
 void Backtrack::tabItem() noexcept
 {
-    if (ImGui::BeginTabItem("Backtrack")) {
+    if (ImGui::BeginTabItem("回溯功能")) {
         drawGUI(true);
         ImGui::EndTabItem();
     }
@@ -187,13 +187,13 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
         if (!backtrackWindowOpen)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("回溯功能", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
-    ImGui::Checkbox("Enabled", &enabled);
-    ImGui::Checkbox("Ignore smoke", &ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &recoilBasedFov);
+    ImGui::Checkbox("开启", &enabled);
+    ImGui::Checkbox("无视烟雾", &ignoreSmoke);
+    ImGui::Checkbox("后坐力视角", &recoilBasedFov);
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &timeLimit, 1, 200, "%d ms");
+    ImGui::SliderInt("回溯时间", &timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
