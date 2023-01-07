@@ -50,7 +50,7 @@ SafeAddress PatternFinder::operator()(std::string_view pattern, OffsetHint offse
 
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
-    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern)).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern)).c_str(), "QS", MB_OK | MB_ICONWARNING);
 #endif
     return SafeAddress{ 0 };
 }
