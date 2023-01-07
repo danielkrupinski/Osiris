@@ -462,17 +462,17 @@ static bool windowOpen = false;
 
 void inventory_changer::InventoryChanger::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Inventory Changer")) {
+    if (ImGui::MenuItem("库存修改器")) {
         windowOpen = true;
-        ImGui::SetWindowFocus("Inventory Changer");
-        ImGui::SetWindowPos("Inventory Changer", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("库存修改器");
+        ImGui::SetWindowPos("库存修改器", { 100.0f, 100.0f });
     }
 }
 
 void inventory_changer::InventoryChanger::tabItem(const Memory& memory) noexcept
 {
-    if (ImGui::BeginTabItem("Inventory Changer")) {
-        drawGUI(memory, true);
+    if (ImGui::BeginTabItem("库存修改器")) {
+  drawGUI(memory, true);
         ImGui::EndTabItem();
     }
 }
@@ -598,7 +598,7 @@ namespace ImGui
             const auto cursorPosBackup = window->DC.CursorPos.y;
 
             window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
-            pressed = Button("Add");
+            pressed = Button("添加");
 
             window->DC.CursorPosPrevLine.y = cursorPosBackup;
             window->DC.CursorPos.y = cursorPosNext;
@@ -697,7 +697,7 @@ namespace ImGui
         const auto cursorPosBackup = window->DC.CursorPos.y;
 
         window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
-        if (Button("Delete"))
+        if (Button("删除"))
             shouldDelete = true;
 
         window->DC.CursorPosPrevLine.y = cursorPosBackup;
@@ -739,7 +739,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
         if (!windowOpen)
             return;
         ImGui::SetNextWindowSize({ 700.0f, 400.0f });
-        if (!ImGui::Begin("Inventory Changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+        if (!ImGui::Begin("库存修改器", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
             ImGui::End();
             return;
         }
@@ -749,13 +749,13 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 
     static bool isInAddMode = false;
 
-    if (!isInAddMode && ImGui::Button("Add items.."))
+    if (!isInAddMode && ImGui::Button("添加库存"))
         isInAddMode = true;
 
     if (!isInAddMode) {
         ImGui::SameLine();
-        if (ImGui::Button("Force Update"))
-            scheduleHudUpdate();
+        if (ImGui::Button("强制刷新"))
+               scheduleHudUpdate();
     }
 
     constexpr auto rarityColor = [](EconRarity rarity) noexcept {
@@ -773,15 +773,15 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
     };
 
     if (isInAddMode) {
-        if (ImGui::Button("Back")) {
+        if (ImGui::Button("返回")) {
             isInAddMode = false;
         }
 
         ImGui::SameLine();
         ImGui::SetNextItemWidth(550.0f);
-        const bool filterChanged = ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
+        const bool filterChanged = ImGui::InputTextWithHint("##search", "搜索皮肤，贴纸，刀，手套，音乐盒，勋章等..", &filter);
         ImGui::SameLine();
-        const bool addingAll = ImGui::Button("Add all in list");
+        const bool addingAll = ImGui::Button("添加库存");
 
         constexpr auto passesFilter = []<typename... Strings>(std::wstring_view filter, Strings&&... strings) {
             for (const auto filterWord : ranges::views::split(filter, L' ')) {
@@ -796,7 +796,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
         if (filterChanged) {
             const std::wstring filterWide{ Helpers::ToUpperConverter{}.toUpper(Helpers::toWideString(filter)) };
 
-            gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(otherInterfaces, memory), &gameItemStorage = getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
+                gameItemList.filter([&passesFilter, &filterWide, &weaponNames = inventory_changer::WeaponNames::instance(otherInterfaces, memory), &gameItemStorage = getGameItemLookup().getStorage()](const inventory_changer::game_items::Item& item) {
                 return filterWide.empty() || passesFilter(filterWide, weaponNames.getWeaponNameUpper(item.getWeaponID()), getItemName(gameItemStorage, item).forSearch);
             });
         }
@@ -805,7 +805,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
             static std::vector<int> toAddCount(gameItemList.totalItemCount(), 1);
 
             if (static bool sorted = false; !sorted) {
-                gameItemList.sort(inventory_changer::NameComparator{ getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance(otherInterfaces, memory) });
+                    gameItemList.sort(inventory_changer::NameComparator{ getGameItemLookup().getStorage(), inventory_changer::WeaponNames::instance(otherInterfaces, memory) });
                 sorted = true;
             }
 
@@ -816,7 +816,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 
                 ImGui::PushID(i);
 
-                if (ImGui::SkinSelectable(*this, otherInterfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
+                    if (ImGui::SkinSelectable(*this, otherInterfaces, memory, gameItem, { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItem.getRarity()), &toAddCount[i])) {
                     for (int j = 0; j < toAddCount[i]; ++j)
                         backend.getInventoryHandler().addItem(inventory::Item{ gameItem, backend.getItemGenerator().createDefaultItemProperties(gameItem) }, true);
                     toAddCount[i] = 1;
@@ -837,7 +837,7 @@ void InventoryChanger::drawGUI(const Memory& memory, bool contentOnly)
 
                 ImGui::PushID(i);
                 bool shouldDelete = false;
-                ImGui::SkinItem(*this, otherInterfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
+                            ImGui::SkinItem(*this, otherInterfaces, memory, it->gameItem(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(it->gameItem().getRarity()), shouldDelete);
                 if (shouldDelete) {
                     it = std::make_reverse_iterator(backend.getItemRemovalHandler()(std::next(it).base()));
                 } else {
@@ -1105,7 +1105,7 @@ void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcep
         localPlayerHandle = localPlayer.get().handle();
 
     if (stage == csgo::FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        onPostDataUpdateStart(*this, engineInterfaces, clientInterfaces, otherInterfaces, memory, localPlayerHandle);
+         onPostDataUpdateStart(*this, engineInterfaces, clientInterfaces, otherInterfaces, memory, localPlayerHandle);
         if (hudUpdateRequired && localPlayer && !localPlayer.get().getNetworkable().isDormant())
             updateHud(memory);
     }
@@ -1118,10 +1118,10 @@ void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcep
         return;
 
     if (localPlayer)
-        applyGloves(engineInterfaces, clientInterfaces, otherInterfaces, memory, backend, localInventory, localPlayer.get());
+           applyGloves(engineInterfaces, clientInterfaces, otherInterfaces, memory, backend, localInventory, localPlayer.get());
 
     applyMusicKit(memory, backend);
-    applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, otherInterfaces, memory);
+   applyPlayerAgent(*this, engineInterfaces.getModelInfo(), clientInterfaces, otherInterfaces, memory);
     applyMedal(memory, backend.getLoadout());
 
     processEquipRequests(memory, gameInventory.getEconItemViewFunctions());
@@ -1176,7 +1176,7 @@ void InventoryChanger::updateStatTrak(const csgo::GameEvent& event)
     if (!localPlayer)
         return;
 
-    if (const auto localUserId = localPlayer.get().getUserId(engineInterfaces.getEngine()); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+      if (const auto localUserId = localPlayer.get().getUserId(engineInterfaces.getEngine()); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     const auto weapon = csgo::Entity::from(retSpoofGadgets->client, localPlayer.get().getActiveWeapon());
@@ -1201,7 +1201,7 @@ void InventoryChanger::overrideHudIcon(const Memory& memory, const csgo::GameEve
     if (!localPlayer)
         return;
 
-    if (event.getInt("attacker") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
+     if (event.getInt("attacker") != localPlayer.get().getUserId(engineInterfaces.getEngine()))
         return;
 
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
