@@ -301,7 +301,7 @@ void Misc::spectatorList() noexcept
         ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
-    ImGui::Begin("Spectator list", nullptr, windowFlags);
+    ImGui::Begin("观战者名单", nullptr, windowFlags);
     ImGui::PopStyleVar();
 
     if (!gui->isOpen())
@@ -495,7 +495,7 @@ void Misc::drawBombTimer() noexcept
         ImGui::SetNextWindowSize({ windowWidth, 0 });
 
     ImGui::SetNextWindowSizeConstraints({ 0, -1 }, { FLT_MAX, -1 });
-    ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar | (gui->isOpen() ? 0 : ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration));
+    ImGui::Begin("炸弹计时器", nullptr, ImGuiWindowFlags_NoTitleBar | (gui->isOpen() ? 0 : ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration));
 
     std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory.globalVars->currenttime, 0.0f) << " s";
 
@@ -898,7 +898,7 @@ void Misc::purchaseList(const csgo::Engine& engine, const csgo::GameEvent* event
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
-        ImGui::Begin("Purchases", nullptr, windowFlags);
+        ImGui::Begin("购买", nullptr, windowFlags);
         ImGui::PopStyleVar();
 
         if (miscConfig.purchaseList.mode == PurchaseList::Details) {
