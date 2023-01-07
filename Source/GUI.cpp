@@ -454,8 +454,8 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
 
     ImGui::SameLine();
     ImGui::Text("%d", material);
-
-    constexpr std::array categories{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "手", "回溯", "袖子" };
+     constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categoriesQS{ "友军", "敌人", "安放中", "拆除中", "本地玩家", "武器", "手", "回溯", "袖子" };
 
     ImGui::SameLine();
 
