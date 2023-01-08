@@ -159,7 +159,10 @@ void GUI::renderMenuBar(Misc& misc, inventory_changer::InventoryChanger& invento
         menuBarItem("界面风格", window.style);
         misc.menuBarItem();
         menuBarItem("参数设置", window.config);
-        ImGui::EndMainMenuBar();   
+        menuBarItem("枪神辅助更新Q群:717307553", window.abs);
+        menuBarItem("TAB官方:tabshop.top", window.abs);
+        ImGui::EndMainMenuBar();  
+
     }
 }
 
