@@ -36,6 +36,7 @@ private:
         bool sound = false;
         bool style = false;
         bool config = false;
+        bool abs = false;
     } window;
 
     struct {
