@@ -133,6 +133,9 @@ bool GlobalContext::createMoveHook(float inputSampleTime, csgo::UserCmd* cmd)
 
     previousViewAngles = cmd->viewangles;
 
+    cmd->viewanglesBackup = cmd->viewangles;
+    cmd->buttonsBackup = cmd->buttons;
+
     return false;
 }
 
