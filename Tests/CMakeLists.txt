@@ -13,6 +13,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(Tests HelpersTests.cpp SafeAddressTests.cpp SortFilterTests.cpp)
 add_subdirectory(InventoryChanger)
+add_subdirectory(MemorySearchTests)
 add_subdirectory(Platform)
 add_subdirectory(UtilsTests)
 target_link_libraries(Tests gtest_main gmock Threads::Threads OsirisOBJ)

@@ -19,10 +19,10 @@ const std::byte* PatternFinderSIMD::operator()() noexcept
     const auto patternWithoutFirstAndLastChar = pattern.size() > 2 ? std::string_view{ pattern.data() + 1, pattern.size() - 2 } : std::string_view{};
     const auto byteSpanPerIteration = indexOfLastPatternChar + sizeof(__m128i);
 
-    const auto firstCharMask = _mm_set1_epi8(pattern[0]);
+    const auto firstCharMask = _mm_set1_epi8(pattern.front());
     const auto lastCharMask = _mm_set1_epi8(pattern.back());
 
-    for (; currentPos + byteSpanPerIteration < bytes.size(); currentPos += sizeof(__m128i)) {
+    for (; currentPos + byteSpanPerIteration <= bytes.size(); currentPos += sizeof(__m128i)) {
         const auto possibleFirstChars = _mm_loadu_si128(reinterpret_cast<const __m128i*>(&bytes[currentPos]));
         const auto possibleLastChars = _mm_loadu_si128(reinterpret_cast<const __m128i*>(&bytes[currentPos + indexOfLastPatternChar]));
 
