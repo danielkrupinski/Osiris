@@ -35,6 +35,8 @@ struct UserCmd {
     short mousedx;
     short mousedy;
     bool hasbeenpredicted;
+    Vector viewanglesBackup;
+    int buttonsBackup;
 };
 
 }
