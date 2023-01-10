@@ -20,7 +20,7 @@ struct InterfaceFinderWithLog {
             return foundInterface;
 
 #if IS_WIN32()
-        MessageBoxA(nullptr, ("找不到 " + std::string{ name } + " interface!").c_str(), "QS", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, ("找不到 " + std::string{ name } + " 接口!").c_str(), "QS", MB_OK | MB_ICONERROR);
 #endif
         std::exit(EXIT_FAILURE);
     }
