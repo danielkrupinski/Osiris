@@ -1,6 +1,6 @@
+#include <array>
 #include <cstddef>
 #include <string_view>
-#include <vector>
 
 #include <gtest/gtest.h>
 
@@ -22,7 +22,7 @@ TEST(PatternFinderSIMD_NoBytesTest, FinderReturnsNullptr) {
 }
 
 TEST(PatternFinderSIMDTest, NoBytesAreCheckedUntilFinderIsInvoked) {
-    std::vector<std::byte> bytes(1000);
+    std::array<std::byte, 1000> bytes{};
     PatternFinderSIMD finder{ bytes, "\xAA" };
     const auto notCheckedBytes = finder.getNotCheckedBytes();
     ASSERT_EQ(notCheckedBytes.size(), bytes.size());
