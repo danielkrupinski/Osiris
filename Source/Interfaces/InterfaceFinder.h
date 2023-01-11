@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Platform/DynamicLibraryView.h>
-#include <Platform/RetSpoofInvoker.h>
+#include <RetSpoof/RetSpoofInvoker.h>
 
 struct InterfaceFinder {
     template <typename DynamicLibraryWrapper>

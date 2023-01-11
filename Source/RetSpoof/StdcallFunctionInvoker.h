@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <Platform/RetSpoofInvoker.h>
+#include "RetSpoofInvoker.h"
 
 template <typename ReturnType, typename... Args>
 class StdcallFunctionInvoker {

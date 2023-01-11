@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include <Platform/Macros/CallingConventions.h>
-#include <Platform/RetSpoofInvoker.h>
+#include "RetSpoofInvoker.h"
 
 template <typename ReturnType, typename... Args>
 class CdeclFunctionInvoker {

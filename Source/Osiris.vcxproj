@@ -387,12 +387,10 @@
     <ClInclude Include="Platform\Macros\CallStack.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
-    <ClInclude Include="Platform\RetSpoofInvoker.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h" />
-    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h" />
     <ClInclude Include="ProtobufReader.h" />
     <ClInclude Include="Resources\avatar_ct.h" />
     <ClInclude Include="Resources\avatar_tt.h" />
@@ -401,6 +399,9 @@
     <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FunctionInvoker.h" />
     <ClInclude Include="RetSpoof\RetSpoofGadgets.h" />
+    <ClInclude Include="RetSpoof\RetSpoofInvoker.h" />
+    <ClInclude Include="RetSpoof\RetSpoofInvokerLinux.h" />
+    <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h" />
     <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />

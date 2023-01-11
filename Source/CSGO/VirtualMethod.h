@@ -4,7 +4,7 @@
 #include <utility>
 
 #include <Platform/Macros/IsPlatform.h>
-#include <Platform/RetSpoofInvoker.h>
+#include <RetSpoof/RetSpoofInvoker.h>
 
 class VirtualCallable {
 public:

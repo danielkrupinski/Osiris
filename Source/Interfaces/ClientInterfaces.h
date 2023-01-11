@@ -2,7 +2,7 @@
 
 #include "ClientInterfacesPODs.h"
 
-#include <Platform/RetSpoofInvoker.h>
+#include <RetSpoof/RetSpoofInvoker.h>
 #include <CSGO/Client.h>
 #include <CSGO/EntityList.h>
 #include <CSGO/GameMovement.h>

@@ -2,10 +2,7 @@
 
 #include <cstdint>
 
-namespace linux_platform
-{
-
-class RetSpoofInvoker {
+class RetSpoofInvokerLinux {
 public:
     template <typename ReturnType, typename... Args>
     ReturnType invokeThiscall(std::uintptr_t thisptr, std::uintptr_t functionAddress, Args... args) const noexcept
@@ -31,5 +28,3 @@ public:
         return reinterpret_cast<ReturnType(*)(Args...)>(functionAddress)(args...);
     }
 };
-
-}

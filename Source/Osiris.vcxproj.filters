@@ -664,13 +664,7 @@
     <ClInclude Include="GlobalContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\RetSpoofInvoker.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h">
@@ -1061,6 +1055,15 @@
       <Filter>MemorySearch</Filter>
     </ClInclude>
     <ClInclude Include="RetSpoof\RetSpoofGadgets.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvoker.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvokerLinux.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h">
       <Filter>RetSpoof</Filter>
     </ClInclude>
   </ItemGroup>

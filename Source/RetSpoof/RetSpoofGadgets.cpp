@@ -1,6 +1,5 @@
 #include "RetSpoofGadgets.h"
-
-#include "Memory.h"
+#include <Helpers/PatternFinder.h>
 
 RetSpoofGadgets::RetSpoofGadgets(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
 #if IS_WIN32()
