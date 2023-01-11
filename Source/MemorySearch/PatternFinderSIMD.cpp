@@ -4,18 +4,17 @@
 
 #include "PatternFinderSIMD.h"
 
-PatternFinderSIMD::PatternFinderSIMD(std::span<const std::byte> bytes, std::string_view pattern)
+PatternFinderSIMD::PatternFinderSIMD(std::span<const std::byte> bytes, BytePattern pattern)
     : bytes{ bytes }, pattern{ pattern }
 {
-    assert(!pattern.empty());
-    assert(pattern.front() != utils::wildcardChar && pattern.back() != utils::wildcardChar);
+    
 }
 
 const std::byte* PatternFinderSIMD::operator()() noexcept
 {
     // http://0x80.pl/articles/simd-strfind.html
 
-    const auto patternWithoutFirstAndLastChar = pattern.size() > 2 ? std::string_view{ pattern.data() + 1, pattern.size() - 2 } : std::string_view{};
+    const auto patternWithoutFirstAndLastChar = pattern.withoutFirstAndLastChar();
 
     const auto firstCharMask = _mm_set1_epi8(pattern.front());
     const auto lastCharMask = _mm_set1_epi8(pattern.back());
@@ -29,7 +28,7 @@ const std::byte* PatternFinderSIMD::operator()() noexcept
 
         auto mask = static_cast<std::uint16_t>(_mm_movemask_epi8(_mm_and_si128(firstCharMatchPositions, lastCharMatchPositions)));
         while (mask != 0) {
-            if (const auto bitPos = std::countr_zero(mask); matchPattern(bytes.subspan(currentPos + bitPos + 1, patternWithoutFirstAndLastChar.length()), patternWithoutFirstAndLastChar)) {
+            if (const auto bitPos = std::countr_zero(mask); patternWithoutFirstAndLastChar.matches(bytes.subspan(currentPos + bitPos + 1, patternWithoutFirstAndLastChar.length()))) {
                 return &bytes[currentPos + bitPos];
             }
 

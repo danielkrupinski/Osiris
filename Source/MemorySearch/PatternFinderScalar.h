@@ -4,9 +4,11 @@
 #include <span>
 #include <string_view>
 
+#include "BytePattern.h"
+
 class PatternFinderScalar {
 public:
-    PatternFinderScalar(std::span<const std::byte> bytes, std::string_view pattern);
+    PatternFinderScalar(std::span<const std::byte> bytes, BytePattern pattern);
 
     const std::byte* operator()() noexcept;
 
@@ -18,6 +20,6 @@ private:
 
     std::size_t currentPos = 0;
     std::span<const std::byte> bytes;
-    std::string_view pattern;
+    BytePattern pattern;
 };
 

@@ -5,11 +5,12 @@
 #include <span>
 #include <string_view>
 
+#include "BytePattern.h"
 #include "PatternFinder.h"
 
 class PatternFinderSIMD {
 public:
-    PatternFinderSIMD(std::span<const std::byte> bytes, std::string_view pattern);
+    PatternFinderSIMD(std::span<const std::byte> bytes, BytePattern pattern);
 
     const std::byte* operator()() noexcept;
 
@@ -26,7 +27,7 @@ private:
 
     [[nodiscard]] std::size_t indexOfLastPatternChar() const noexcept
     {
-        return pattern.size() - 1;
+        return pattern.length() - 1;
     }
 
     [[nodiscard]] std::size_t byteSpanPerIteration() const noexcept
@@ -41,5 +42,5 @@ private:
 
     std::size_t currentPos = 0;
     std::span<const std::byte> bytes;
-    std::string_view pattern;
+    BytePattern pattern;
 };

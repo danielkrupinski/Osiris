@@ -29,31 +29,7 @@ template <std::size_t N>
     return arr;
 }
 
-using namespace std::literals::string_view_literals;
-
-TEST(Utils_matchPatternTest, EmptyPatternMatchesEmptyBuffer) {
-    EXPECT_TRUE(matchPattern({}, {}));
-}
-
-TEST(Utils_matchPatternTest, PatternMatchesMemoryWhenBytesAreTheSame) {
-    EXPECT_TRUE(matchPattern(createByteArray({ 0xAB, 0xCD, 0xEF }), "\xAB\xCD\xEF"sv));
-}
-
-TEST(Utils_matchPatternTest, PatternDoesNotMatchMemoryWhenBytesAreDifferent) {
-    EXPECT_FALSE(matchPattern(createByteArray({ 0xAB, 0xCD, 0xEF }), "\xAB\xCD\xAB"sv));
-}
-
-TEST(Utils_matchPatternTest, NullCharsInPatternDoesNotTerminateComparison) {
-    EXPECT_FALSE(matchPattern(createByteArray({ 0xAB, 0x00, 0xEF, 0x00, 0x12 }), "\xAB\x00\xEF\x00\x13"sv));
-}
-
-TEST(Utils_matchPatternTest, BytesOnWildcardPositionsAreIgnored) {
-    EXPECT_TRUE(matchPattern(createByteArray({ 0xAB, 0xCC, 0xEF, 0xDD, 0xFF }), std::string{ '\xAB', utils::wildcardChar, '\xEF', utils::wildcardChar, '\xFF' }));
-}
-
-TEST(Utils_matchPatternTest, WildcardCharInMemoryDoesNotMatchEveryPatternChar) {
-    EXPECT_FALSE(matchPattern(createByteArray({ 0xAB, utils::wildcardChar, 0xEF, utils::wildcardChar, 0xFF }), "\xAB\xCC\xEF\xDD\xFF"sv));
-}
+using namespace std::string_view_literals;
 
 TEST(Utils_PatternFinderTest, ShortPatternCanBeFound) {
     constexpr auto bytes = createByteArray({ 0xA0, 0xA1, 0xA2 });
