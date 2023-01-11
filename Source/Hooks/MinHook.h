@@ -7,8 +7,7 @@
 #include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
-#include <x86RetSpoof.h>
-#include "../RetSpoofGadgets.h"
+#include <RetSpoof/RetSpoofGadgets.h>
 #endif
 
 class MinHook {

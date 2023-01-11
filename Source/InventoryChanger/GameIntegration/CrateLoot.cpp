@@ -5,7 +5,7 @@
 
 #include <CSGO/PODs/ItemSchema.h>
 
-#include <RetSpoofGadgets.h>
+#include <RetSpoof/RetSpoofGadgets.h>
 
 namespace inventory_changer::game_integration
 {

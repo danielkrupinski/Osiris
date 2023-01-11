@@ -172,7 +172,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="RetSpoofGadgets.cpp" />
+    <ClCompile Include="RetSpoof\RetSpoofGadgets.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +375,7 @@
     <ClInclude Include="InventoryChanger\ItemId.h" />
     <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\HybridPatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
@@ -396,10 +397,10 @@
     <ClInclude Include="Resources\avatar_ct.h" />
     <ClInclude Include="Resources\avatar_tt.h" />
     <ClInclude Include="Resources\Resource.h" />
-    <ClInclude Include="RetSpoofGadgets.h" />
     <ClInclude Include="RetSpoof\CdeclFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
     <ClInclude Include="RetSpoof\FunctionInvoker.h" />
+    <ClInclude Include="RetSpoof\RetSpoofGadgets.h" />
     <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />

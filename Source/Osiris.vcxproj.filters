@@ -311,9 +311,6 @@
     <ClCompile Include="GlobalContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RetSpoofGadgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Helpers\PatternFinder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -346,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp">
       <Filter>MemorySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="RetSpoof\RetSpoofGadgets.cpp">
+      <Filter>RetSpoof</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -662,9 +662,6 @@
       <Filter>InventoryChanger</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoofGadgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Platform\RetSpoofInvoker.h">
@@ -1059,6 +1056,12 @@
     </ClInclude>
     <ClInclude Include="CSGO\Constants\GameEventNames.h">
       <Filter>CSGO\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofGadgets.h">
+      <Filter>RetSpoof</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

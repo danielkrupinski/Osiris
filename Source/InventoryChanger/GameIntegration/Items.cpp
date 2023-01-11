@@ -8,7 +8,7 @@
 #include <CSGO/PODs/PaintKit.h>
 
 #include <Interfaces/OtherInterfaces.h>
-#include <RetSpoofGadgets.h>
+#include <RetSpoof/RetSpoofGadgets.h>
 
 namespace inventory_changer::game_integration
 {

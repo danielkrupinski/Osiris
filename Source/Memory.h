@@ -12,7 +12,7 @@
 
 #include "Utils/ReturnAddress.h"
 #include "Utils/SafeAddress.h"
-#include "RetSpoofGadgets.h"
+#include "RetSpoof/RetSpoofGadgets.h"
 #include "Helpers/PatternFinder.h"
 #include "Utils/TypeHint.h"
 
