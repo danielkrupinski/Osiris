@@ -297,7 +297,7 @@ void GUI::renderAimbotWindow(Config& config, bool contentOnly) noexcept
     ImGui::InputInt("最小伤害", &config.aimbot[currentWeapon].minDamage);
     config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("自适应瞄准部位", &config.aimbot[currentWeapon].killshot);
-    ImGui::Checkbox("隔墙开枪", &config.aimbot[currentWeapon].betweenShots);
+    ImGui::Checkbox("允许多次急停射击", &config.aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -531,7 +531,7 @@ void GUI::renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& in
     ImGui::SetColumnOffset(1, 170.0f);
 
     static bool incrementalLoad = false;
-    ImGui::Checkbox("增量负载", &incrementalLoad);
+    ImGui::Checkbox("叠加加载参数", &incrementalLoad);
 
     ImGui::PushItemWidth(160.0f);
 
