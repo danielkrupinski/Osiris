@@ -1455,7 +1455,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     if (ImGui::Button("设置假封禁"))
         fakeBan(engineInterfaces.getEngine(), true);
     ImGui::Checkbox("快速安放炸弹", &miscConfig.fastPlant);
-    ImGui::Checkbox("自动急停", &miscConfig.fastStop);
+    ImGui::Checkbox("快速急停", &miscConfig.fastStop);
     ImGuiCustom::colorPicker("C4倒计时", miscConfig.bombTimer);
     ImGui::Checkbox("快速换弹", &miscConfig.quickReload);
     ImGui::Checkbox("自动捏左轮", &miscConfig.prepareRevolver);
