@@ -44,4 +44,6 @@ using CreateBaseTypeCache = SharedObjectTypeCachePOD* (THISCALL_CONV*)(ClientSha
 struct UiComponentInventoryPOD;
 using SetItemSessionPropertyValue = void (THISCALL_CONV*)(UiComponentInventoryPOD* thisptr, ItemId itemID, const char* type, const char* value);
 
+using MakePanoramaSymbol = void (THISCALL_CONV*)(short* symbol, const char* name);
+
 }

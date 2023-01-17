@@ -1,7 +1,7 @@
 #pragma once
 
 #include "OtherInterfacesPODs.h"
-#include <Platform/RetSpoofInvoker.h>
+#include <RetSpoof/RetSpoofInvoker.h>
 #include <CSGO/Cvar.h>
 #include <CSGO/FileSystem.h>
 #include <CSGO/InputSystem.h>

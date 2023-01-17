@@ -1,7 +1,10 @@
 #pragma once
 
+#include <cstddef>
 #include <span>
 #include <string_view>
+
+#include "BytePattern.h"
 
 enum class OffsetHint : std::size_t {};
 
@@ -12,13 +15,11 @@ public:
     {
     }
 
-    [[nodiscard]] const std::byte* operator()(std::string_view pattern) const noexcept;
-    [[nodiscard]] const std::byte* operator()(std::string_view pattern, OffsetHint offsetHint) const noexcept;
+    [[nodiscard]] const std::byte* operator()(BytePattern pattern) const noexcept;
+    [[nodiscard]] const std::byte* operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept;
 
 private:
+    [[nodiscard]] std::span<const std::byte> getSliceForHint(OffsetHint offsetHint) const noexcept;
+
     std::span<const std::byte> bytes;
 };
-
-[[nodiscard]] bool matchPattern(std::span<const std::byte> bytes, std::string_view pattern) noexcept;
-
-namespace utils { constexpr auto wildcardChar = '?'; }

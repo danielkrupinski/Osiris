@@ -10,7 +10,7 @@
 #include "Platform/Linux/SharedObject.h"
 #endif
 
-#include <RetSpoofGadgets.h>
+#include <RetSpoof/RetSpoofGadgets.h>
 #include <CSGO/Constants/DllNames.h>
 #include <CSGO/Constants/InterfaceNames.h>
 

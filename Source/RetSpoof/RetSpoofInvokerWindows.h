@@ -4,12 +4,9 @@
 
 #include <x86RetSpoof.h>
 
-namespace windows_platform
-{
-
-class RetSpoofInvoker {
+class RetSpoofInvokerWindows {
 public:
-    explicit RetSpoofInvoker(std::uintptr_t gadgetAddress)
+    explicit RetSpoofInvokerWindows(std::uintptr_t gadgetAddress)
         : gadgetAddress{ gadgetAddress }
     {
     }
@@ -41,5 +38,3 @@ public:
 private:
     std::uintptr_t gadgetAddress;
 };
-
-}

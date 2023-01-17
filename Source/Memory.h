@@ -12,7 +12,7 @@
 
 #include "Utils/ReturnAddress.h"
 #include "Utils/SafeAddress.h"
-#include "RetSpoofGadgets.h"
+#include "RetSpoof/RetSpoofGadgets.h"
 #include "Helpers/PatternFinder.h"
 #include "Utils/TypeHint.h"
 
@@ -134,7 +134,7 @@ public:
 #endif
 
 private:
-    void(THISCALL_CONV* makePanoramaSymbolFn)(short* symbol, const char* name);
+    FunctionInvoker<csgo::MakePanoramaSymbol> makePanoramaSymbolFn;
     std::add_pointer_t<csgo::ItemSystemPOD* CDECL_CONV()> itemSystemFn;
 
     csgo::MoveHelperPOD* moveHelperPtr;

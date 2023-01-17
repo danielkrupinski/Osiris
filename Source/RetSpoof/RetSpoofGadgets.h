@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <optional>
 
-#include "Platform/RetSpoofInvoker.h"
+#include <RetSpoof/RetSpoofInvoker.h>
 
 namespace helpers { struct PatternFinder; }
 

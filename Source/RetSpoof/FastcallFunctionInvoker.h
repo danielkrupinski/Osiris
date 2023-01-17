@@ -4,7 +4,7 @@
 #include <tuple>
 #include <utility>
 
-#include <Platform/RetSpoofInvoker.h>
+#include "RetSpoofInvoker.h"
 
 template <typename ReturnType, typename... Args>
 class FastcallFunctionInvoker {

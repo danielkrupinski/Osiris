@@ -5,14 +5,12 @@
 #include "PatternFinderScalar.h"
 #include "PatternFinderSIMD.h"
 
-HybridPatternFinder::HybridPatternFinder(std::span<const std::byte> bytes, std::string_view pattern)
+HybridPatternFinder::HybridPatternFinder(std::span<const std::byte> bytes, BytePattern pattern)
     : bytes{ bytes }, pattern{ pattern }
 {
-    assert(!pattern.empty());
-    assert(pattern.front() != utils::wildcardChar && pattern.back() != utils::wildcardChar);
 }
 
-const std::byte* HybridPatternFinder::operator()() noexcept
+const std::byte* HybridPatternFinder::operator()() const noexcept
 {
     PatternFinderSIMD simdFinder{ bytes, pattern };
     if (const auto foundSIMD = simdFinder())

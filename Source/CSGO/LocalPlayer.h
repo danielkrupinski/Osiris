@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "Entity.h"
-#include <RetSpoofGadgets.h>
+#include <RetSpoof/RetSpoofGadgets.h>
 
 class LocalPlayer {
 public:

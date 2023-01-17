@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EngineInterfacesPODs.h"
-#include <Platform/RetSpoofInvoker.h>
+#include <RetSpoof/RetSpoofInvoker.h>
 
 #include <CSGO/Engine.h>
 #include <CSGO/EngineTrace.h>

@@ -12,7 +12,6 @@ target_sources(OsirisOBJ PRIVATE
   InputUtil.cpp
   Memory.cpp
   Netvars.cpp
-  RetSpoofGadgets.cpp
   Texture.cpp
 )
 
@@ -22,3 +21,4 @@ add_subdirectory(Helpers)
 add_subdirectory(Hooks)
 add_subdirectory(InventoryChanger)
 add_subdirectory(MemorySearch)
+add_subdirectory(RetSpoof)

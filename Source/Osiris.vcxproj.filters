@@ -311,9 +311,6 @@
     <ClCompile Include="GlobalContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RetSpoofGadgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Helpers\PatternFinder.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -346,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp">
       <Filter>MemorySearch</Filter>
+    </ClCompile>
+    <ClCompile Include="RetSpoof\RetSpoofGadgets.cpp">
+      <Filter>RetSpoof</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -664,16 +664,7 @@
     <ClInclude Include="GlobalContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RetSpoofGadgets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\RetSpoofInvoker.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\RetSpoofInvoker.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h">
@@ -1059,6 +1050,21 @@
     </ClInclude>
     <ClInclude Include="CSGO\Constants\GameEventNames.h">
       <Filter>CSGO\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofGadgets.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvoker.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvokerLinux.h">
+      <Filter>RetSpoof</Filter>
+    </ClInclude>
+    <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h">
+      <Filter>RetSpoof</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
