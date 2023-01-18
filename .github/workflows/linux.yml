@@ -5,30 +5,13 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.continue-on-error }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04]
+        os: [ubuntu-22.04]
         compiler: [g++-11, g++-12, clang++-13, clang++-14]
         configuration: [Debug, Release]
-        exclude:
-          - os: ubuntu-20.04
-            compiler: g++-12
-          - os: ubuntu-20.04
-            compiler: clang++-13
-          - os: ubuntu-20.04
-            compiler: clang++-14
-        include:
-          - os: ubuntu-22.04
-            continue-on-error: true
-          - os: ubuntu-20.04
-            continue-on-error: false
     steps:
     - uses: actions/checkout@v2
-    - name: Install g++-11 for minimal required libstdc++
-      run: |
-        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-        sudo apt-get update && sudo apt-get install -y g++-11
     - name: install
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev ${{ matrix.compiler }}
     - name: configure
