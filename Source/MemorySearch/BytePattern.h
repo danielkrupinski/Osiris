@@ -19,7 +19,7 @@ public:
     [[nodiscard]] BytePattern withoutFirstAndLastChar() const noexcept
     {
         if (pattern.size() > 2)
-            return std::string_view{ pattern.data() + 1, pattern.size() - 2 };
+            return BytePattern{ std::string_view{ pattern.data() + 1, pattern.size() - 2 }, true };
         return {};
     }
 
@@ -51,6 +51,11 @@ public:
 
 private:
     BytePattern() = default;
+
+    BytePattern(std::string_view pattern, [[maybe_unused]] bool tag)
+        : pattern{ pattern }
+    {
+    }
 
     std::string_view pattern;
 };
