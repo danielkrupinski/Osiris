@@ -265,17 +265,61 @@ Open git command prompt and enter following command:
 
 ### Compiling from source
 
+<details>
+
+<summary>Windows</summary>
+
 When you have equipped a copy of the source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
 
 Then change build configuration to `Release | x86` and simply press **Build solution**.
 
 If everything went right you should receive `Osiris.dll`  binary file.
 
+</details>
+
+<details>
+
+<summary>Linux</summary>
+
+Install dependencies:
+
+    sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
+
+Configure with CMake:
+
+    cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=g++-11 -S . -B build
+
+Instead of g++-11 you can use g++-12, clang++-13, clang++-14, clang++-15.
+
+Build:
+
+    cmake --build build -j $(nproc --all)
+
+After following these steps you should receive `libOsiris.so` file in `build` directory.
+
+</details>
+
 ### Loading / Injecting into game process
+
+<details>
+
+<summary>Windows</summary>
 
 Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
 
 When injected, menu is openable under `INSERT` key.
+
+</details>
+
+<details>
+
+<summary>Linux</summary>
+
+You can run the following script in the directory containing `libOsiris.so`:
+
+    sudo gdb -batch-silent -p $(pidof csgo_linux64) -ex "call (void*)__libc_dlopen_mode(\"$PWD/libOsiris.so\", 2)"
+
+</details>
 
 ### Further optimizations
 If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
