@@ -1066,6 +1066,9 @@
     <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h">
       <Filter>RetSpoof</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\HexChars.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

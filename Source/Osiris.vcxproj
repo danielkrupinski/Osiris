@@ -411,6 +411,7 @@
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
+    <ClInclude Include="Utils\HexChars.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />
