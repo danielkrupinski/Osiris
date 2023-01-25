@@ -38,6 +38,11 @@ public:
         return pattern.back();
     }
 
+    [[nodiscard]] std::string_view get() const noexcept
+    {
+        return pattern;
+    }
+
     [[nodiscard]] bool matches(std::span<const std::byte> bytes) const noexcept
     {
         assert(bytes.size() == pattern.size());
