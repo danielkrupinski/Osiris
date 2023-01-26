@@ -377,6 +377,7 @@
     <ClInclude Include="JsonForward.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\BytePatternConverter.h" />
+    <ClInclude Include="MemorySearch\BytePatternStorage.h" />
     <ClInclude Include="MemorySearch\HybridPatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
