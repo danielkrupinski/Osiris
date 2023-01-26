@@ -17,7 +17,7 @@ struct BytePatternStorage {
             std::ranges::copy(convertedPattern, pattern.begin());
             size = convertedPattern.size();
         } else {
-            throw "error";
+            errorOccured();
         }
     }
 
@@ -30,4 +30,7 @@ struct BytePatternStorage {
 
     std::array<char, Capacity> pattern{};
     std::size_t size = 0;
+
+private:
+    void errorOccured();
 };
