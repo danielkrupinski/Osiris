@@ -5,9 +5,17 @@
 #include <span>
 #include <string_view>
 
+#include "BytePatternStorage.h"
+
 class BytePattern {
 public:
     static constexpr auto wildcardChar = '?';
+
+    template <std::size_t StorageCapacity>
+    explicit(false) constexpr BytePattern(const BytePatternStorage<StorageCapacity>& patternStorage)
+        : pattern{ patternStorage.pattern.data(), patternStorage.size }
+    {
+    }
 
     explicit(false) BytePattern(std::string_view pattern)
         : pattern{ pattern }
