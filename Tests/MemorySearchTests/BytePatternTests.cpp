@@ -20,23 +20,28 @@ template <std::size_t N>
 }
 
 TEST(BytePatternTest, PatternMatchesMemoryWhenBytesAreTheSame) {
-    EXPECT_TRUE(BytePattern{ "AB CD EF"_pat }.matches(createByteArray({ 0xAB, 0xCD, 0xEF })));
+    constexpr auto pattern = "AB CD EF"_pat;
+    EXPECT_TRUE(BytePattern{ pattern }.matches(createByteArray({ 0xAB, 0xCD, 0xEF })));
 }
 
 TEST(BytePatternTest, PatternDoesNotMatchMemoryWhenBytesAreDifferent) {
-    EXPECT_FALSE(BytePattern{ "AB CD AB"_pat }.matches(createByteArray({ 0xAB, 0xCD, 0xEF })));
+    constexpr auto pattern = "AB CD AB"_pat;
+    EXPECT_FALSE(BytePattern{ pattern }.matches(createByteArray({ 0xAB, 0xCD, 0xEF })));
 }
 
 TEST(BytePatternTest, NullCharsInPatternDoesNotTerminateComparison) {
-    EXPECT_FALSE(BytePattern{ "AB 00 EF 00 13"_pat }.matches(createByteArray({ 0xAB, 0x00, 0xEF, 0x00, 0x12 })));
+    constexpr auto pattern = "AB 00 EF 00 13"_pat;
+    EXPECT_FALSE(BytePattern{ pattern }.matches(createByteArray({ 0xAB, 0x00, 0xEF, 0x00, 0x12 })));
 }
 
 TEST(BytePatternTest, BytesOnWildcardPositionsAreIgnored) {
-    EXPECT_TRUE(BytePattern{ "AB ? EF ? FF"_pat }.matches(createByteArray({ 0xAB, 0xCC, 0xEF, 0xDD, 0xFF })));
+    constexpr auto pattern = "AB ? EF ? FF"_pat;
+    EXPECT_TRUE(BytePattern{ pattern }.matches(createByteArray({ 0xAB, 0xCC, 0xEF, 0xDD, 0xFF })));
 }
 
 TEST(BytePatternTest, WildcardCharInMemoryDoesNotMatchEveryPatternChar) {
-    EXPECT_FALSE(BytePattern{ "AB CC EF DD FF"_pat }.matches(createByteArray({ 0xAB, BytePattern::wildcardChar, 0xEF, BytePattern::wildcardChar, 0xFF })));
+    constexpr auto pattern = "AB CC EF DD FF"_pat;
+    EXPECT_FALSE(BytePattern{ pattern }.matches(createByteArray({ 0xAB, BytePattern::wildcardChar, 0xEF, BytePattern::wildcardChar, 0xFF })));
 }
 
 }
