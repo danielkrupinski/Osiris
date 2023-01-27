@@ -8,6 +8,7 @@
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoof/FunctionInvoker.h>
 #include <CSGO/Functions.h>
+#include <MemorySearch/BytePatternLiteral.h>
 
 namespace csgo { enum class FrameStage; }
 namespace csgo { enum class UserMessageType; }
@@ -24,23 +25,23 @@ public:
     Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
 #if IS_WIN32()
-        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15").get() },
-        submitReport{ retSpoofGadgets->client, clientPatternFinder("\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08").get() }
+        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("53 56 57 8B DA 8B F9 FF 15"_pat).get() },
+        submitReport{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 E4 F8 83 EC 28 8B 4D 08"_pat).get() }
 #elif IS_LINUX()
-        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\xE9????\x66\x0F\x1F\x44??\x48\x8B\x7D\xB0").add(1).relativeToAbsolute().get() },
-        submitReport{ retSpoofGadgets->client, clientPatternFinder("\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58").get() }
+        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? E9 ? ? ? ? 66 0F 1F 44 ? ? 48 8B 7D B0"_pat).add(1).relativeToAbsolute().get() },
+        submitReport{ retSpoofGadgets->client, clientPatternFinder("55 48 89 F7 48 89 E5 41 57 41 56 41 55 41 54 53 48 89 D3 48 83 EC 58"_pat).get() }
 #endif
     {
 #if IS_WIN32()
-        demoOrHLTV = ReturnAddress{ clientPatternFinder("\x84\xC0\x75\x09\x38\x05").get() };
-        money = clientPatternFinder("\x84\xC0\x75\x0C\x5B").get();
-        insertIntoTree = ReturnAddress{ clientPatternFinder("\x56\x52\xFF\x50\x18").add(5).get() };
-        demoFileEndReached = ReturnAddress{ clientPatternFinder("\x8B\xC8\x85\xC9\x74\x1F\x80\x79\x10").get() };
+        demoOrHLTV = ReturnAddress{ clientPatternFinder("84 C0 75 09 38 05"_pat).get() };
+        money = clientPatternFinder("84 C0 75 0C 5B"_pat).get();
+        insertIntoTree = ReturnAddress{ clientPatternFinder("56 52 FF 50 18"_pat).add(5).get() };
+        demoFileEndReached = ReturnAddress{ clientPatternFinder("8B C8 85 C9 74 1F 80 79 10"_pat).get() };
 #elif IS_LINUX()
-        demoOrHLTV = ReturnAddress{ clientPatternFinder("\x0F\xB6\x10\x89\xD0").add(-16).get() };
-        money = clientPatternFinder("\x84\xC0\x75\x9E\xB8????\xEB\xB9").get();
-        insertIntoTree = ReturnAddress{ clientPatternFinder("\x74\x24\x4C\x8B\x10").add(31).get() };
-        demoFileEndReached = ReturnAddress{ clientPatternFinder("\x48\x85\xC0\x0F\x84????\x80\x78\x10?\x74\x7F").get() };
+        demoOrHLTV = ReturnAddress{ clientPatternFinder("0F B6 10 89 D0"_pat).add(-16).get() };
+        money = clientPatternFinder("84 C0 75 9E B8 ? ? ? ? EB B9"_pat).get();
+        insertIntoTree = ReturnAddress{ clientPatternFinder("74 24 4C 8B 10"_pat).add(31).get() };
+        demoFileEndReached = ReturnAddress{ clientPatternFinder("48 85 C0 0F 84 ? ? ? ? 80 78 10 ? 74 7F"_pat).get() };
 #endif
     }
 

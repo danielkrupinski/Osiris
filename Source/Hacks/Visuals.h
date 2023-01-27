@@ -13,6 +13,7 @@
 #include <CSGO/Functions.h>
 #include <CSGO/Recv.h>
 #include <CSGO/ViewRenderBeams.h>
+#include <MemorySearch/BytePatternLiteral.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -24,16 +25,16 @@ public:
     Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) },
 #if IS_WIN32()
-        viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("\xB9????\x0F\x11\x44\x24?\xC7\x44\x24?????\xF3\x0F\x10\x84\x24").add(1).deref().as<csgo::ViewRenderBeamsPOD*>()) },
-        maxFlashAlphaProxy{ retSpoofGadgets->client, clientPatternFinder("\x55\x8B\xEC\x8B\x4D\x0C\x8B\x45\x08\x81\xC1").get() }
+        viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("B9 ? ? ? ? 0F 11 44 24 ? C7 44 24 ? ? ? ? ? F3 0F 10 84 24"_pat).add(1).deref().as<csgo::ViewRenderBeamsPOD*>()) },
+        maxFlashAlphaProxy{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 8B 4D 0C 8B 45 08 81 C1"_pat).get() }
 #elif IS_LINUX()
-        viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("\x4C\x89\xF6\x4C\x8B\x25????\x48\x8D\x05").add(6).relativeToAbsolute().deref<2>().as<csgo::ViewRenderBeamsPOD*>()) }
+        viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("4C 89 F6 4C 8B 25 ? ? ? ? 48 8D 05"_pat).add(6).relativeToAbsolute().deref<2>().as<csgo::ViewRenderBeamsPOD*>()) }
 #endif
     {
 #if IS_WIN32()
-        cameraThink = ReturnAddress{ clientPatternFinder("\x85\xC0\x75\x30\x38\x87").get() };
+        cameraThink = ReturnAddress{ clientPatternFinder("85 C0 75 30 38 87"_pat).get() };
 #elif IS_LINUX()
-        cameraThink = ReturnAddress{ clientPatternFinder("\xFF\x90????\x85\xC0\x75\x64").add(6).get() };
+        cameraThink = ReturnAddress{ clientPatternFinder("FF 90 ? ? ? ? 85 C0 75 64"_pat).add(6).get() };
 #endif
         ResetConfigurator configurator;
         configure(configurator);

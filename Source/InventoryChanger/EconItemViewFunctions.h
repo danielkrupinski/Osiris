@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <Helpers/PatternFinder.h>
+#include <MemorySearch/BytePatternLiteral.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <CSGO/Helpers/EconItemViewFunctions.h>
 
@@ -10,11 +11,11 @@
 {
     return EconItemViewFunctions{
 #if IS_WIN32()
-        .clearInventoryImageRGBA = clientPatternFinder("\x55\x8B\xEC\x81\xEC????\x57\x8B\xF9\xC7\x47").as<csgo::ClearInventoryImageRGBA>(),
-        .getSOCData = clientPatternFinder("\xE8????\x32\xC9").add(1).relativeToAbsolute().as<csgo::GetSOCData>()
+        .clearInventoryImageRGBA = clientPatternFinder("55 8B EC 81 EC ? ? ? ? 57 8B F9 C7 47"_pat).as<csgo::ClearInventoryImageRGBA>(),
+        .getSOCData = clientPatternFinder("E8 ? ? ? ? 32 C9"_pat).add(1).relativeToAbsolute().as<csgo::GetSOCData>()
 #elif IS_LINUX()
-        .clearInventoryImageRGBA = clientPatternFinder("\xE8????\x83\xC3\x01\x49\x83\xC4\x08\x41\x3B\x5D\x50").add(1).relativeToAbsolute().as<csgo::ClearInventoryImageRGBA>(),
-        .getSOCData = clientPatternFinder("\xE8????\x5B\x44\x89\xEE").add(1).relativeToAbsolute().as<csgo::GetSOCData>()
+        .clearInventoryImageRGBA = clientPatternFinder("E8 ? ? ? ? 83 C3 01 49 83 C4 08 41 3B 5D 50"_pat).add(1).relativeToAbsolute().as<csgo::ClearInventoryImageRGBA>(),
+        .getSOCData = clientPatternFinder("E8 ? ? ? ? 5B 44 89 EE"_pat).add(1).relativeToAbsolute().as<csgo::GetSOCData>()
 #endif
     };
 }

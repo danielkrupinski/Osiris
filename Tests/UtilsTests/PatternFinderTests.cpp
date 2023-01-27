@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 
+#include <MemorySearch/BytePatternLiteral.h>
 #include <MemorySearch/PatternFinder.h>
 
 namespace
@@ -29,20 +30,18 @@ template <std::size_t N>
     return arr;
 }
 
-using namespace std::string_view_literals;
-
 TEST(Utils_PatternFinderTest, ShortPatternCanBeFound) {
     constexpr auto bytes = createByteArray({ 0xA0, 0xA1, 0xA2 });
-    EXPECT_EQ(PatternFinder{ bytes }("\xA1"sv), &bytes[1]);
+    EXPECT_EQ(PatternFinder{ bytes }("A1"_pat), &bytes[1]);
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenByteBufferIsEmpty) {
-    EXPECT_EQ(PatternFinder{ {} }("\x01\x02\x03\x04"sv), nullptr);
+    EXPECT_EQ(PatternFinder{ {} }("01 02 03 04"_pat), nullptr);
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenPatternWasNotFound) {
     constexpr auto bytes = createByteArray({ 0xA0 });
-    EXPECT_EQ(PatternFinder{ bytes }("\xAB\xCD\xEF"sv), nullptr);
+    EXPECT_EQ(PatternFinder{ bytes }("AB CD EF"_pat), nullptr);
 }
 
 TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
@@ -54,7 +53,7 @@ TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
     bytes[44] = std::byte{ 0xC0 };
     bytes[45] = std::byte{ 0xDE };
     
-    EXPECT_EQ(PatternFinder{ bytes }("\xDE\xAD?\xC0\xDE"sv), &bytes[41]);
+    EXPECT_EQ(PatternFinder{ bytes }("DE AD ? C0 DE"_pat), &bytes[41]);
 }
 
 }

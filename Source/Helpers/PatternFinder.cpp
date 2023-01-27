@@ -31,16 +31,6 @@
 namespace helpers
 {
 
-SafeAddress PatternFinder::operator()(std::string_view pattern) const noexcept
-{
-    return operator()(BytePattern{ pattern });
-}
-
-SafeAddress PatternFinder::operator()(std::string_view pattern, OffsetHint offsetHint) const noexcept
-{
-    return operator()(BytePattern{ pattern }, offsetHint);
-}
-
 SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
 {
     if (const auto found = ::PatternFinder::operator()(pattern))

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Helpers/PatternFinder.h>
+#include <MemorySearch/BytePatternLiteral.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <Utils/ReturnAddress.h>
 
@@ -40,8 +41,16 @@ private:
 [[nodiscard]] inline ScopeOverlayRemover createScopeOverlayRemover(const helpers::PatternFinder& clientPatternFinder)
 {
 #if IS_WIN32()
-    return ScopeOverlayRemover{ ReturnAddress{ clientPatternFinder("\xFF\x50\x3C\x8B\x4C\x24\x20").add(3).get() }, ReturnAddress{ clientPatternFinder("\x8B\x0D????\xFF\xB7????\x8B\x01\xFF\x90????\x8B\x7C\x24\x1C").get() }, clientPatternFinder("\x0F\x11\x05????\xF3\x0F\x7E\x87").add(3).deref().add(4).as<float*>() };
+    return ScopeOverlayRemover{
+        clientPatternFinder("FF 50 3C 8B 4C 24 20"_pat).add(3).asReturnAddress(),
+        clientPatternFinder("8B 0D ? ? ? ? FF B7 ? ? ? ? 8B 01 FF 90 ? ? ? ? 8B 7C 24 1C"_pat).asReturnAddress(),
+        clientPatternFinder("0F 11 05 ? ? ? ? F3 0F 7E 87"_pat).add(3).deref().add(4).as<float*>()
+    };
 #elif IS_LINUX()
-    return ScopeOverlayRemover{ ReturnAddress{ clientPatternFinder("\x8B\x85????\x43\x8D\x14\x2E").get() }, ReturnAddress{ clientPatternFinder("\x49\x8B\x3C\x24\x8B\xB3????\x48\x8B\x07\xFF\x90????\x49\x8B\x3C\x24\x4C\x89\xEA").get() }, clientPatternFinder("\x48\x8B\x07\x0F\x2F\x05").add(6).relativeToAbsolute().as<float*>() };
+    return ScopeOverlayRemover{
+        clientPatternFinder("8B 85 ? ? ? ? 43 8D 14 2E"_pat).asReturnAddress(),
+        clientPatternFinder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 4C 89 EA"_pat).asReturnAddress(),
+        clientPatternFinder("48 8B 07 0F 2F 05"_pat).add(6).relativeToAbsolute().as<float*>()
+    };
 #endif
 }

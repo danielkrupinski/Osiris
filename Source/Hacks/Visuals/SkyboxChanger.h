@@ -3,12 +3,13 @@
 #include <array>
 
 #include <Config/ResetConfigurator.h>
-#include <RetSpoof/FunctionInvoker.h>
 #include <CSGO/Constants/ConVarNames.h>
 #include <CSGO/Constants/FrameStage.h>
 #include <CSGO/Cvar.h>
 #include <CSGO/Functions.h>
 #include <CSGO/PODs/ConVar.h>
+#include <MemorySearch/BytePatternLiteral.h>
+#include <RetSpoof/FunctionInvoker.h>
 
 class SkyboxChanger {
 public:
@@ -52,8 +53,8 @@ private:
 [[nodiscard]] inline SkyboxChanger createSkyboxChanger(csgo::Cvar cvar, const helpers::PatternFinder& enginePatternFinder)
 {
 #if IS_WIN32()
-    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\x2D\xA1").add(1).relativeToAbsolute().get() } };
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 2D A1"_pat).add(1).relativeToAbsolute().get() } };
 #elif IS_LINUX()
-    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("\xE8????\x84\xC0\x74\xAB").add(1).relativeToAbsolute().get() } };
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 AB"_pat).add(1).relativeToAbsolute().get() } };
 #endif
 }
