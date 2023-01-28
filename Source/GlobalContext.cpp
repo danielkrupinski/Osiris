@@ -284,7 +284,7 @@ void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 
 const csgo::DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(ReturnAddress returnAddress)
 {
-    const auto params = hooks->engine.callOriginal<const csgo::DemoPlaybackParameters*, WIN32_LINUX(218, 219)>();
+    const auto params = hooks->engineHooks.getOriginalGetDemoPlaybackParameters()(engineInterfacesPODs->engine);
 
     if (params)
         return features->misc.getDemoPlaybackParametersHook(returnAddress, *params);
@@ -303,7 +303,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
 
 bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
-    const auto result = hooks->engine.callOriginal<bool, 82>();
+    const auto result = hooks->engineHooks.getOriginalIsPlayingDemo()(engineInterfacesPODs->engine);
 
     if (features->misc.isPlayingDemoHook(returnAddress, frameAddress))
         return true;
@@ -321,7 +321,7 @@ float GlobalContext::getScreenAspectRatioHook(int width, int height)
 {
     if (features->misc.aspectRatio() != 0.0f)
         return features->misc.aspectRatio();
-    return hooks->engine.callOriginal<float, 101>(width, height);
+    return hooks->engineHooks.getOriginalGetScreenAspectRatio()(engineInterfacesPODs->engine, width, height);
 }
 
 void GlobalContext::renderSmokeOverlayHook(bool update)

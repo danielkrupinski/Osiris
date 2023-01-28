@@ -123,14 +123,12 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
     clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
 
-    engine.init(engineInterfaces.getEngine().getPOD());
-    engine.hookAt(82, &isPlayingDemo);
-    engine.hookAt(101, &getScreenAspectRatio);
 #if IS_WIN32()
     keyValuesSystem.init(memory.keyValuesSystem);
     keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
 #endif
-    engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
+
+    engineHooks.install(engineInterfaces.getEngine().getPOD());
 
     inventory.init((void*)memory.inventoryManager.getLocalInventory());
     inventory.hookAt(1, &soUpdated);
@@ -196,7 +194,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     bspQuery.restore();
     client.restore();
     clientMode.restore();
-    engine.restore();
     inventory.restore();
     inventoryManager.restore();
     modelRender.restore();
@@ -205,6 +202,8 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+
+    engineHooks.uninstall();
 
     Netvars::restore();
 

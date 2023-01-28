@@ -1078,6 +1078,9 @@
     <ClInclude Include="MemorySearch\BytePatternLiteral.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\EngineHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
