@@ -309,6 +309,7 @@
     <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Helpers\PatternFinder.h" />
+    <ClInclude Include="Hooks\ClientModeHooks.h" />
     <ClInclude Include="Hooks\EngineHooks.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />

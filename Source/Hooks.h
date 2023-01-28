@@ -20,6 +20,7 @@ union SDL_Event;
 #include "Hooks/VmtSwap.h"
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
+#include "Hooks/ClientModeHooks.h"
 #include "Hooks/EngineHooks.h"
 
 namespace csgo
@@ -70,7 +71,6 @@ public:
 
     HookType bspQuery;
     HookType client;
-    HookType clientMode;
     HookType inventory;
     HookType inventoryManager;
     HookType modelRender;
@@ -85,6 +85,7 @@ public:
 #endif
 
     EngineHooks<HookType> engineHooks;
+    ClientModeHooks<HookType> clientModeHooks;
 
 private:
 #if IS_WIN32()

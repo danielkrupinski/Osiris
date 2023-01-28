@@ -66,7 +66,7 @@ GlobalContext::GlobalContext()
 
 bool GlobalContext::createMoveHook(float inputSampleTime, csgo::UserCmd* cmd)
 {
-    auto result = hooks->clientMode.callOriginal<bool, WIN32_LINUX(24, 25)>(inputSampleTime, cmd);
+    auto result = hooks->clientModeHooks.getOriginalCreateMove()(memory->clientMode, inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
@@ -149,7 +149,7 @@ void GlobalContext::doPostScreenEffectsHook(void* param)
         features->visuals.remove3dSky();
         features->glow.render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, *memory);
     }
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(44, 45)>(param);
+    hooks->clientModeHooks.getOriginalDoPostScreenEffects()(memory->clientMode, param);
 }
 
 float GlobalContext::getViewModelFovHook()
@@ -160,7 +160,7 @@ float GlobalContext::getViewModelFovHook()
             additionalFov = 0.0f;
     }
 
-    return hooks->clientMode.callOriginal<float, WIN32_LINUX(35, 36)>() + additionalFov;
+    return hooks->clientModeHooks.getOriginalGetViewModelFov()(memory->clientMode) + additionalFov;
 }
 
 void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld)
@@ -231,7 +231,7 @@ bool GlobalContext::shouldDrawFogHook(ReturnAddress returnAddress)
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
         if (returnAddress != memory->shouldDrawFogReturnAddress)
-            return hooks->clientMode.callOriginal<bool, 17>();
+            return hooks->clientModeHooks.getOriginalShouldDrawFog()(memory->clientMode);
     }
 #endif
 
@@ -242,7 +242,7 @@ bool GlobalContext::shouldDrawViewModelHook()
 {
     if (features->visuals.isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
         return false;
-    return hooks->clientMode.callOriginal<bool, WIN32_LINUX(27, 28)>();
+    return hooks->clientModeHooks.getOriginalShouldDrawViewModel()(memory->clientMode);
 }
 
 void GlobalContext::lockCursorHook()
@@ -263,7 +263,7 @@ void GlobalContext::overrideViewHook(csgo::ViewSetup* setup)
     if (localPlayer && !localPlayer.get().isScoped())
         setup->fov += features->visuals.fov();
     setup->farZ += features->visuals.farZ() * 10;
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(18, 19)>(setup);
+    hooks->clientModeHooks.getOriginalOverrideView()(memory->clientMode, setup);
 }
 
 int GlobalContext::dispatchSoundHook(csgo::SoundInfo& soundInfo)
@@ -313,7 +313,7 @@ bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_
 
 void GlobalContext::updateColorCorrectionWeightsHook()
 {
-    hooks->clientMode.callOriginal<void, WIN32_LINUX(58, 61)>();
+    hooks->clientModeHooks.getOriginalUpdateColorCorrectionWeights()(memory->clientMode);
     features->visuals.updateColorCorrectionWeightsHook();
 }
 
