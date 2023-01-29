@@ -134,6 +134,21 @@ static bool canScan(const EngineInterfaces& engineInterfaces, const OtherInterfa
     return false;
 }
 
+static void setRandomSeed(int seed) noexcept
+{
+    using randomSeedFn = void(*)(int);
+    static auto randomSeed{ reinterpret_cast<randomSeedFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomSeed")) };
+    randomSeed(seed);
+}
+
+static float getRandom(float min, float max) noexcept
+{
+    using randomFloatFn = float(*)(float, float);
+    static auto randomFloat{ reinterpret_cast<randomFloatFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomFloat")) };
+    return randomFloat(min, max);
+}
+
+
 static bool keyPressed = false;
 
 void Aimbot::updateInput(const Config& config) noexcept
@@ -185,8 +200,25 @@ void Aimbot::run(Misc& misc, const EngineInterfaces& engineInterfaces, const Cli
         csgo::Vector bestTarget{ };
         const auto localPlayerEyePosition = localPlayer.get().getEyePosition();
 
-        const auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch() : csgo::Vector{ };
-
+        auto aimPunch = activeWeapon.requiresRecoilControl() ? localPlayer.get().getAimPunch : Vector{ };
+        if (config.aimbot[weaponIndex].standaloneRCS && !config.aimbot[weaponIndex].silent) {
+            Vector lastAimPunch{ };
+            if (localPlayer.get().getShotsFired() > config.aimbot[weaponIndex].shotsFired) {
+                setRandomSeed(*memory.predictionRandomSeed);
+                Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
+                if (config.aimbot[weaponIndex].randomRCS) {
+                    currentPunch.x *= getRandom(config.aimbot[weaponIndex].recoilControlX, 1.f);
+                    currentPunch.y *= getRandom(config.aimbot[weaponIndex].recoilControlY, 1.f);
+                }
+                else {
+                    currentPunch.x = config.aimbot[weaponIndex].recoilControlX;
+                    currentPunch.y = config.aimbot[weaponIndex].recoilControlY;
+                }
+                cmd->viewangles = currentPunch;
+            }
+            engineInterfaces.getEngine().setViewAngles(cmd->viewangles);
+            lastAimPunch = aimPunch;
+        }
         for (int i = 1; i <= engineInterfaces.getEngine().getMaxClients(); i++) {
             const auto entity = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(i));
             if (entity.getPOD() == nullptr || entity.getPOD() == localPlayer.get().getPOD() || entity.getNetworkable().isDormant() || !entity.isAlive()
