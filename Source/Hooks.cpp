@@ -114,23 +114,13 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     client.hookAt(37, &frameStageNotify);
     client.hookAt(38, &dispatchUserMessage);
 
-    clientMode.init(memory.clientMode);
-    clientMode.hookAt(WIN32_LINUX(17, 18), &shouldDrawFog);
-    clientMode.hookAt(WIN32_LINUX(18, 19), &overrideView);
-    clientMode.hookAt(WIN32_LINUX(24, 25), &createMove);
-    clientMode.hookAt(WIN32_LINUX(27, 28), &shouldDrawViewModel);
-    clientMode.hookAt(WIN32_LINUX(35, 36), &getViewModelFov);
-    clientMode.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects);
-    clientMode.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
-
-    engine.init(engineInterfaces.getEngine().getPOD());
-    engine.hookAt(82, &isPlayingDemo);
-    engine.hookAt(101, &getScreenAspectRatio);
 #if IS_WIN32()
     keyValuesSystem.init(memory.keyValuesSystem);
     keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
 #endif
-    engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
+
+    engineHooks.install(engineInterfaces.getEngine().getPOD());
+    clientModeHooks.install(memory.clientMode);
 
     inventory.init((void*)memory.inventoryManager.getLocalInventory());
     inventory.hookAt(1, &soUpdated);
@@ -195,8 +185,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 
     bspQuery.restore();
     client.restore();
-    clientMode.restore();
-    engine.restore();
     inventory.restore();
     inventoryManager.restore();
     modelRender.restore();
@@ -205,6 +193,9 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+
+    engineHooks.uninstall();
+    clientModeHooks.uninstall();
 
     Netvars::restore();
 

@@ -29,7 +29,7 @@ void VmtHook::restore() const noexcept
 #endif
 }
 
-void VmtHook::hookAt(std::size_t index, void* fun) const noexcept
+std::uintptr_t VmtHook::hookAt(std::size_t index, void* fun) const noexcept
 {
     auto address = *reinterpret_cast<std::uintptr_t**>(base) + index;
 #if IS_WIN32()
@@ -38,4 +38,5 @@ void VmtHook::hookAt(std::size_t index, void* fun) const noexcept
         VirtualProtect(address, sizeof(address), oldProtection, nullptr);
     }
 #endif
+    return oldVmt[index];
 }

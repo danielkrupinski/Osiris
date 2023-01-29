@@ -1066,6 +1066,24 @@
     <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h">
       <Filter>RetSpoof</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\HexChars.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternConverter.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternStorage.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternLiteral.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\EngineHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\ClientModeHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

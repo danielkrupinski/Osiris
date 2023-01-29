@@ -14,7 +14,7 @@ class MinHook {
 public:
     void init(void* base) noexcept;
     void restore() noexcept {}
-    void hookAt(std::size_t index, void* fun) noexcept;
+    std::uintptr_t hookAt(std::size_t index, void* fun) noexcept;
 
     template<typename T, std::size_t Idx, typename ...Args>
     constexpr auto getOriginal(Args...) const noexcept

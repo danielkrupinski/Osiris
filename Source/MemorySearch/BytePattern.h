@@ -5,21 +5,22 @@
 #include <span>
 #include <string_view>
 
+#include "BytePatternStorage.h"
+
 class BytePattern {
 public:
     static constexpr auto wildcardChar = '?';
 
-    explicit(false) BytePattern(std::string_view pattern)
-        : pattern{ pattern }
+    template <std::size_t StorageCapacity>
+    explicit(false) constexpr BytePattern(const BytePatternStorage<StorageCapacity>& patternStorage)
+        : pattern{ patternStorage.pattern.data(), patternStorage.size }
     {
-        assert(!pattern.empty());
-        assert(pattern.front() != wildcardChar && pattern.back() != wildcardChar);
     }
 
     [[nodiscard]] BytePattern withoutFirstAndLastChar() const noexcept
     {
         if (pattern.size() > 2)
-            return std::string_view{ pattern.data() + 1, pattern.size() - 2 };
+            return BytePattern{ std::string_view{ pattern.data() + 1, pattern.size() - 2 } };
         return {};
     }
 
@@ -38,6 +39,11 @@ public:
         return pattern.back();
     }
 
+    [[nodiscard]] std::string_view get() const noexcept
+    {
+        return pattern;
+    }
+
     [[nodiscard]] bool matches(std::span<const std::byte> bytes) const noexcept
     {
         assert(bytes.size() == pattern.size());
@@ -51,6 +57,11 @@ public:
 
 private:
     BytePattern() = default;
+
+    explicit BytePattern(std::string_view pattern)
+        : pattern{ pattern }
+    {
+    }
 
     std::string_view pattern;
 };

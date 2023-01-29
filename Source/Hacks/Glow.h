@@ -8,6 +8,7 @@
 #include "../Memory.h"
 
 #include <Platform/Macros/IsPlatform.h>
+#include <MemorySearch/BytePatternLiteral.h>
 
 class ClientInterfaces;
 class EngineInterfaces;
@@ -17,10 +18,10 @@ public:
     Glow(const helpers::PatternFinder& clientPatternFinder)
         :
 #if IS_WIN32()
-        glowObjectManager{ clientPatternFinder("\x0F\x11\x05????\x83\xC8\x01").add(3).deref().as<csgo::GlowObjectManager*>() },
-        glowObjectAntiCheatCheck{ retSpoofGadgets->client, clientPatternFinder("\xE8????\x8B\x75\xFC\x6A\x04").add(1).relativeToAbsolute().get() }
+        glowObjectManager{ clientPatternFinder("0F 11 05 ? ? ? ? 83 C8 01"_pat).add(3).deref().as<csgo::GlowObjectManager*>() },
+        glowObjectAntiCheatCheck{ retSpoofGadgets->client, clientPatternFinder("E8 ? ? ? ? 8B 75 FC 6A 04"_pat).add(1).relativeToAbsolute().get() }
 #elif IS_LINUX()
-        glowObjectManager{ clientPatternFinder("\xE8????\x4C\x89\xE7\x8B\x70\x20").add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<csgo::GlowObjectManager*>() }
+        glowObjectManager{ clientPatternFinder("E8 ? ? ? ? 4C 89 E7 8B 70 20"_pat).add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<csgo::GlowObjectManager*>() }
 #endif
     {
     }

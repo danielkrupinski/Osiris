@@ -10,6 +10,7 @@
 #include <Interfaces/OtherInterfaces.h>
 #include <RetSpoof/FunctionInvoker.h>
 #include <CSGO/Functions.h>
+#include <MemorySearch/BytePatternLiteral.h>
 
 namespace csgo
 {
@@ -40,13 +41,13 @@ public:
     Inventory(OtherInterfaces interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
         : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) },
 #if IS_WIN32()
-        createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45").add(20).deref().get() },
-        uiComponentInventory{ clientPatternFinder("\xC6\x44\x24??\x83\x3D").add(7).deref().as<csgo::UiComponentInventoryPOD**>() },
-        setItemSessionPropertyValue{ clientPatternFinder("\xE8????\x8B\x4C\x24\x2C\x46").add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
+        createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 EC 1C 8D 45 E4 C7 45"_pat).add(20).deref().get() },
+        uiComponentInventory{ clientPatternFinder("C6 44 24 ? ? 83 3D"_pat).add(7).deref().as<csgo::UiComponentInventoryPOD**>() },
+        setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 8B 4C 24 2C 46"_pat).add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
 #elif IS_LINUX()
-        createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("\x55\x48\x8D\x05????\x31\xD2\x4C\x8D\x0D").add(50).relativeToAbsolute().get() },
-        uiComponentInventory{ clientPatternFinder("\xE8????\x4C\x89\x3D????\x4C\x89\xFF\xEB\x9E").add(8).relativeToAbsolute().as<csgo::UiComponentInventoryPOD**>() },
-        setItemSessionPropertyValue{ clientPatternFinder("\xE8????\x48\x8B\x85????\x41\x83\xC4\x01").add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
+        createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 48 8D 05 ? ? ? ? 31 D2 4C 8D 0D"_pat).add(50).relativeToAbsolute().get() },
+        uiComponentInventory{ clientPatternFinder("E8 ? ? ? ? 4C 89 3D ? ? ? ? 4C 89 FF EB 9E"_pat).add(8).relativeToAbsolute().as<csgo::UiComponentInventoryPOD**>() },
+        setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 48 8B 85 ? ? ? ? 41 83 C4 01"_pat).add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
 #endif
     {
     }

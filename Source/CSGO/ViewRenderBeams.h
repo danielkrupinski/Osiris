@@ -51,10 +51,10 @@ struct Beam {
     float die;
 };
 
-class ViewRenderBeams : private VirtualCallable {
-public:
-    using VirtualCallable::VirtualCallable;
+struct ViewRenderBeamsPOD;
 
+class ViewRenderBeams : public VirtualCallableFromPOD<ViewRenderBeams, ViewRenderBeamsPOD> {
+public:
     VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (&beamInfo))
 };
 
