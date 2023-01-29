@@ -5,19 +5,17 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-  
     strategy:
       matrix:
-             os: [ubuntu-22.04]
+        os: [ubuntu-22.04]
         compiler: [g++-11, g++-12, clang++-13, clang++-14, clang++-15]
         configuration: [Debug, Release]
-      
     steps:
     - uses: actions/checkout@v2
-    -- name: install clang++-15
+    - name: install clang++-15
       if: matrix.compiler == 'clang++-15'
       run: |
-          wget https://apt.llvm.org/llvm.sh
+        wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 15
     - name: install dependencies
