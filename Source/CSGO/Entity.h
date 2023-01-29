@@ -291,6 +291,8 @@ public:
 
     NETVAR2(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
+    NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int);
+
     NETVAR2(thrower, "CBaseGrenade", "m_hThrower", int)
 
     NETVAR2(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
