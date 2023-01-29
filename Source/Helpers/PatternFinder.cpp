@@ -31,26 +31,26 @@
 namespace helpers
 {
 
-SafeAddress PatternFinder::operator()(std::string_view pattern) const noexcept
+SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
 {
     if (const auto found = ::PatternFinder::operator()(pattern))
         return SafeAddress{ std::uintptr_t(found) };
 
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
-    MessageBoxA(nullptr, ("找不到模式:\n" + patternToString(pattern)).c_str(), "QS", MB_OK | MB_ICONWARNING);
+    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern.get())).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return SafeAddress{ 0 };
 }
 
-SafeAddress PatternFinder::operator()(std::string_view pattern, OffsetHint offsetHint) const noexcept
+SafeAddress PatternFinder::operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
 {
     if (const auto found = ::PatternFinder::operator()(pattern, offsetHint))
         return SafeAddress{ std::uintptr_t(found) };
 
-    assert(false && "模式需要更新!");
+    assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
-    MessageBoxA(nullptr, ("找不到模式:\n" + patternToString(pattern)).c_str(), "QS", MB_OK | MB_ICONWARNING);
+    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern.get())).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return SafeAddress{ 0 };
 }
