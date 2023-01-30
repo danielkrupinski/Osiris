@@ -120,7 +120,7 @@ public:
     void updateStatTrak(const csgo::GameEvent& event);
     void overrideHudIcon(const Memory& memory, const csgo::GameEvent& event);
     void getArgAsStringHook(const Memory& memory, const char* string, ReturnAddress returnAddress, void* params);
-    void getNumArgsHook(unsigned numberOfArgs, ReturnAddress returnAddress, void* params);
+    void getNumArgsHook(csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper, unsigned numberOfArgs, ReturnAddress returnAddress, void* params);
     int setResultIntHook(ReturnAddress returnAddress, void* params, int result);
     void onUserTextMsg(const Memory& memory, const void*& data, int& size);
     void onItemEquip(csgo::Team team, int slot, std::uint64_t& itemID);

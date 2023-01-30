@@ -131,11 +131,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     modelRender.init(engineInterfaces.getPODs().modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
-    panoramaMarshallHelper.init(memory.panoramaMarshallHelper);
-    panoramaMarshallHelper.hookAt(1, &getNumArgs);
-    panoramaMarshallHelper.hookAt(5, &getArgAsNumber);
-    panoramaMarshallHelper.hookAt(7, &getArgAsString);
-    panoramaMarshallHelper.hookAt(WIN32_LINUX(14, 11), &setResultInt);
+    panoramaMarshallHelperHooks.install(memory.panoramaMarshallHelper);
 
     sound.init(engineInterfaces.getPODs().sound);
     sound.hookAt(WIN32_LINUX(5, 6), &emitSound);
@@ -188,7 +184,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     inventory.restore();
     inventoryManager.restore();
     modelRender.restore();
-    panoramaMarshallHelper.restore();
     sound.restore();
     surface.restore();
     svCheats.restore();
@@ -196,6 +191,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 
     engineHooks.uninstall();
     clientModeHooks.uninstall();
+    panoramaMarshallHelperHooks.uninstall();
 
     Netvars::restore();
 

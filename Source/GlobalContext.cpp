@@ -332,14 +332,14 @@ void GlobalContext::renderSmokeOverlayHook(bool update)
 
 double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
+    const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetArgAsNumber()(memory->panoramaMarshallHelper, params, index);
     features->inventoryChanger.getArgAsNumberHook(static_cast<int>(result), returnAddress);
     return result;
 }
 
 const char* GlobalContext::getArgAsStringHook(void* params, int index, ReturnAddress returnAddress)
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
+    const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetArgAsString()(memory->panoramaMarshallHelper, params, index);
 
     if (result)
         features->inventoryChanger.getArgAsStringHook(*memory, result, returnAddress, params);
@@ -350,13 +350,13 @@ const char* GlobalContext::getArgAsStringHook(void* params, int index, ReturnAdd
 void GlobalContext::setResultIntHook(void* params, int result, ReturnAddress returnAddress)
 {
     result = features->inventoryChanger.setResultIntHook(returnAddress, params, result);
-    hooks->panoramaMarshallHelper.callOriginal<void, WIN32_LINUX(14, 11)>(params, result);
+    hooks->panoramaMarshallHelperHooks.getOriginalSetResultInt()(memory->panoramaMarshallHelper, params, result);
 }
 
 unsigned GlobalContext::getNumArgsHook(void* params, ReturnAddress returnAddress)
 {
-    const auto result = hooks->panoramaMarshallHelper.callOriginal<unsigned, 1>(params);
-    features->inventoryChanger.getNumArgsHook(result, returnAddress, params);
+    const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetNumArgs()(memory->panoramaMarshallHelper, params);
+    features->inventoryChanger.getNumArgsHook(memory->panoramaMarshallHelper, result, returnAddress, params);
     return result;
 }
 

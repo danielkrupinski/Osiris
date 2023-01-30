@@ -22,6 +22,7 @@ union SDL_Event;
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hooks/ClientModeHooks.h"
 #include "Hooks/EngineHooks.h"
+#include "Hooks/PanoramaMarshallHelperHooks.h"
 
 namespace csgo
 {
@@ -74,7 +75,6 @@ public:
     HookType inventory;
     HookType inventoryManager;
     HookType modelRender;
-    HookType panoramaMarshallHelper;
     HookType sound;
     HookType surface;
     HookType viewRender;
@@ -86,6 +86,7 @@ public:
 
     EngineHooks<HookType> engineHooks;
     ClientModeHooks<HookType> clientModeHooks;
+    PanoramaMarshallHelperHooks<HookType> panoramaMarshallHelperHooks;
 
 private:
 #if IS_WIN32()
