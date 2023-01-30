@@ -24,6 +24,7 @@ union SDL_Event;
 #include "Hooks/ClientModeHooks.h"
 #include "Hooks/EngineHooks.h"
 #include "Hooks/PanoramaMarshallHelperHooks.h"
+#include "Hooks/ViewRenderHooks.h"
 
 namespace csgo
 {
@@ -77,7 +78,6 @@ public:
     HookType modelRender;
     HookType sound;
     HookType surface;
-    HookType viewRender;
     HookType svCheats;
 
 #if IS_WIN32()
@@ -88,6 +88,7 @@ public:
     ClientHooks<HookType> clientHooks;
     ClientModeHooks<HookType> clientModeHooks;
     PanoramaMarshallHelperHooks<HookType> panoramaMarshallHelperHooks;
+    ViewRenderHooks<HookType> viewRenderHooks;
 
 private:
 #if IS_WIN32()

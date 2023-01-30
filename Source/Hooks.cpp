@@ -139,9 +139,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     svCheats.init(interfaces.getCvar().findVar(csgo::sv_cheats));
     svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetInt);
 
-    viewRender.init(memory.viewRender);
-    viewRender.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud);
-    viewRender.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay);
+    viewRenderHooks.install(memory.viewRender);
 
 #if IS_WIN32()
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -183,12 +181,12 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     sound.restore();
     surface.restore();
     svCheats.restore();
-    viewRender.restore();
 
     engineHooks.uninstall();
     clientHooks.uninstall();
     clientModeHooks.uninstall();
     panoramaMarshallHelperHooks.uninstall();
+    viewRenderHooks.uninstall();
 
     Netvars::restore();
 

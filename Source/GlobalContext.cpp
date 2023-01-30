@@ -279,7 +279,7 @@ void GlobalContext::render2dEffectsPreHudHook(void* viewSetup)
 {
     features->visuals.applyScreenEffects();
     features->visuals.hitEffect();
-    hooks->viewRender.callOriginal<void, WIN32_LINUX(39, 40)>(viewSetup);
+    hooks->viewRenderHooks.getOriginalRender2dEffectsPreHud()(memory->viewRender, viewSetup);
 }
 
 const csgo::DemoPlaybackParameters* GlobalContext::getDemoPlaybackParametersHook(ReturnAddress returnAddress)
@@ -324,10 +324,10 @@ float GlobalContext::getScreenAspectRatioHook(int width, int height)
     return hooks->engineHooks.getOriginalGetScreenAspectRatio()(engineInterfacesPODs->engine, width, height);
 }
 
-void GlobalContext::renderSmokeOverlayHook(bool update)
+void GlobalContext::renderSmokeOverlayHook(bool preViewModel)
 {
     if (!features->visuals.renderSmokeOverlayHook())
-        hooks->viewRender.callOriginal<void, WIN32_LINUX(41, 42)>(update);  
+        hooks->viewRenderHooks.getOriginalRenderSmokeOverlay()(memory->viewRender, preViewModel);
 }
 
 double GlobalContext::getArgAsNumberHook(void* params, int index, ReturnAddress returnAddress)
