@@ -214,7 +214,7 @@ void GlobalContext::frameStageNotifyHook(csgo::FrameStage stage)
     }
     features->inventoryChanger.run(*memory, stage);
 
-    hooks->client.callOriginal<void, 37>(stage);
+    hooks->clientHooks.getOriginalFrameStageNotify()(clientInterfaces->client, stage);
 }
 
 int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams)
@@ -298,7 +298,7 @@ bool GlobalContext::dispatchUserMessageHook(csgo::UserMessageType type, int pass
     if (type == csgo::UserMessageType::Text)
         features->inventoryChanger.onUserTextMsg(*memory, data, size);
 
-    return hooks->client.callOriginal<bool, 38>(type, passthroughFlags, size, data);
+    return hooks->clientHooks.getOriginalDispatchUserMessage()(clientInterfaces->client, type, passthroughFlags, size, data);
 }
 
 bool GlobalContext::isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress)

@@ -20,6 +20,7 @@ union SDL_Event;
 #include "Hooks/VmtSwap.h"
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
+#include "Hooks/ClientHooks.h"
 #include "Hooks/ClientModeHooks.h"
 #include "Hooks/EngineHooks.h"
 #include "Hooks/PanoramaMarshallHelperHooks.h"
@@ -71,7 +72,6 @@ public:
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
     HookType bspQuery;
-    HookType client;
     HookType inventory;
     HookType inventoryManager;
     HookType modelRender;
@@ -85,6 +85,7 @@ public:
 #endif
 
     EngineHooks<HookType> engineHooks;
+    ClientHooks<HookType> clientHooks;
     ClientModeHooks<HookType> clientModeHooks;
     PanoramaMarshallHelperHooks<HookType> panoramaMarshallHelperHooks;
 

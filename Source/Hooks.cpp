@@ -110,16 +110,13 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     bspQuery.init(engineInterfaces.getEngine().getBSPTreeQuery());
     bspQuery.hookAt(6, &listLeavesInBox);
 
-    client.init(clientInterface);
-    client.hookAt(37, &frameStageNotify);
-    client.hookAt(38, &dispatchUserMessage);
-
 #if IS_WIN32()
     keyValuesSystem.init(memory.keyValuesSystem);
     keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
 #endif
 
     engineHooks.install(engineInterfaces.getEngine().getPOD());
+    clientHooks.install(clientInterface);
     clientModeHooks.install(memory.clientMode);
 
     inventory.init((void*)memory.inventoryManager.getLocalInventory());
@@ -180,7 +177,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 #endif
 
     bspQuery.restore();
-    client.restore();
     inventory.restore();
     inventoryManager.restore();
     modelRender.restore();
@@ -190,6 +186,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     viewRender.restore();
 
     engineHooks.uninstall();
+    clientHooks.uninstall();
     clientModeHooks.uninstall();
     panoramaMarshallHelperHooks.uninstall();
 
