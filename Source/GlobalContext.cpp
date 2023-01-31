@@ -363,7 +363,7 @@ unsigned GlobalContext::getNumArgsHook(void* params, ReturnAddress returnAddress
 void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap)
 {
     features->inventoryChanger.onItemEquip(team, slot, itemID);
-    hooks->inventoryManager.callOriginal<void, WIN32_LINUX(29, 30)>(inventory, itemID, team, slot, swap);
+    hooks->inventoryManagerHooks.getOriginalUpdateInventoryEquippedState()(memory->inventoryManager.getPOD(), inventory, itemID, team, slot, swap);
 }
 
 void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::SharedObjectPOD* object, int event)

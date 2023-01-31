@@ -1096,6 +1096,9 @@
     <ClInclude Include="Hooks\CSPlayerInventoryHooks.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\InventoryManagerHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -119,9 +119,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     clientHooks.install(clientInterface);
     clientModeHooks.install(memory.clientMode);
     playerInventoryHooks.install(memory.inventoryManager.getLocalInventory());
-
-    inventoryManager.init(memory.inventoryManager.getPOD());
-    inventoryManager.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState);
+    inventoryManagerHooks.install(memory.inventoryManager.getPOD());
 
     modelRender.init(engineInterfaces.getPODs().modelRender);
     modelRender.hookAt(21, &drawModelExecute);
@@ -173,7 +171,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 #endif
 
     bspQuery.restore();
-    inventoryManager.restore();
     modelRender.restore();
     sound.restore();
     surface.restore();
@@ -185,6 +182,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     panoramaMarshallHelperHooks.uninstall();
     viewRenderHooks.uninstall();
     playerInventoryHooks.uninstall();
+    inventoryManagerHooks.uninstall();
 
     Netvars::restore();
 

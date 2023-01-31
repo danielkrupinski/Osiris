@@ -313,6 +313,7 @@
     <ClInclude Include="Hooks\ClientModeHooks.h" />
     <ClInclude Include="Hooks\CSPlayerInventoryHooks.h" />
     <ClInclude Include="Hooks\EngineHooks.h" />
+    <ClInclude Include="Hooks\InventoryManagerHooks.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\PanoramaMarshallHelperHooks.h" />
     <ClInclude Include="Hooks\ViewRenderHooks.h" />
