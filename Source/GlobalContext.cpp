@@ -375,8 +375,8 @@ void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::SharedObjectPOD* objec
 int GlobalContext::listLeavesInBoxHook(const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress)
 {
     if (const auto newVectors = features->misc.listLeavesInBoxHook(returnAddress, frameAddress))
-        return hooks->bspQuery.callOriginal<int, 6>(&newVectors->first, &newVectors->second, list, listMax);
-    return hooks->bspQuery.callOriginal<int, 6>(&mins, &maxs, list, listMax);
+        return hooks->bspQueryHooks.getOriginalListLeavesInBox()(getEngineInterfaces().getEngine().getBSPTreeQuery(), &newVectors->first, &newVectors->second, list, listMax);
+    return hooks->bspQueryHooks.getOriginalListLeavesInBox()(getEngineInterfaces().getEngine().getBSPTreeQuery(), &mins, &maxs, list, listMax);
 }
 
 #if IS_WIN32()

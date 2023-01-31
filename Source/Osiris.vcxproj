@@ -309,6 +309,7 @@
     <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Helpers\PatternFinder.h" />
+    <ClInclude Include="Hooks\BspQueryHooks.h" />
     <ClInclude Include="Hooks\ClientHooks.h" />
     <ClInclude Include="Hooks\ClientModeHooks.h" />
     <ClInclude Include="Hooks\CSPlayerInventoryHooks.h" />

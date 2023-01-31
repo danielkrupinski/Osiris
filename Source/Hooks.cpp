@@ -107,8 +107,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 
 #endif
     
-    bspQuery.init(engineInterfaces.getEngine().getBSPTreeQuery());
-    bspQuery.hookAt(6, &listLeavesInBox);
+    bspQueryHooks.install(engineInterfaces.getEngine().getBSPTreeQuery());
 
 #if IS_WIN32()
     keyValuesSystem.init(memory.keyValuesSystem);
@@ -170,7 +169,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     }
 #endif
 
-    bspQuery.restore();
     modelRender.restore();
     sound.restore();
     surface.restore();
@@ -183,6 +181,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     viewRenderHooks.uninstall();
     playerInventoryHooks.uninstall();
     inventoryManagerHooks.uninstall();
+    bspQueryHooks.uninstall();
 
     Netvars::restore();
 
