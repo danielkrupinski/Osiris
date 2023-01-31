@@ -223,7 +223,7 @@ int GlobalContext::emitSoundHook(void* filter, int entityIndex, int channel, con
     features->misc.autoAccept(soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
-    return hooks->sound.callOriginal<int, WIN32_LINUX(5, 6)>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, &origin, &direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
+    return hooks->engineSoundHooks.getOriginalEmitSound()(engineInterfacesPODs->sound, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, &origin, &direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
 bool GlobalContext::shouldDrawFogHook(ReturnAddress returnAddress)

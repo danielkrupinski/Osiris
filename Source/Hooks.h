@@ -28,6 +28,7 @@ union SDL_Event;
 #include "Hooks/CSPlayerInventoryHooks.h"
 #include "Hooks/InventoryManagerHooks.h"
 #include "Hooks/BspQueryHooks.h"
+#include "Hooks/EngineSoundHooks.h"
 
 namespace csgo
 {
@@ -76,7 +77,6 @@ public:
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
     HookType modelRender;
-    HookType sound;
     HookType surface;
     HookType svCheats;
 
@@ -92,6 +92,7 @@ public:
     ViewRenderHooks<HookType> viewRenderHooks;
     InventoryManagerHooks<HookType> inventoryManagerHooks;
     BspQueryHooks<HookType> bspQueryHooks;
+    EngineSoundHooks<HookType> engineSoundHooks;
 
 private:
 #if IS_WIN32()
