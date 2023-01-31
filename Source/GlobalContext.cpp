@@ -369,7 +369,7 @@ void GlobalContext::updateInventoryEquippedStateHook(std::uintptr_t inventory, c
 void GlobalContext::soUpdatedHook(csgo::SOID owner, csgo::SharedObjectPOD* object, int event)
 {
     features->inventoryChanger.onSoUpdated(csgo::SharedObject::from(retSpoofGadgets->client, object));
-    hooks->inventory.callOriginal<void, 1>(owner, object, event);
+    hooks->playerInventoryHooks.getOriginalSoUpdated()(memory->inventoryManager.getLocalInventory(), owner, object, event);
 }
 
 int GlobalContext::listLeavesInBoxHook(const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax, ReturnAddress returnAddress, std::uintptr_t frameAddress)

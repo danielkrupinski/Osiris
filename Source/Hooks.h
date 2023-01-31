@@ -25,6 +25,7 @@ union SDL_Event;
 #include "Hooks/EngineHooks.h"
 #include "Hooks/PanoramaMarshallHelperHooks.h"
 #include "Hooks/ViewRenderHooks.h"
+#include "Hooks/CSPlayerInventoryHooks.h"
 
 namespace csgo
 {
@@ -73,7 +74,6 @@ public:
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
     HookType bspQuery;
-    HookType inventory;
     HookType inventoryManager;
     HookType modelRender;
     HookType sound;
@@ -87,6 +87,7 @@ public:
     EngineHooks<HookType> engineHooks;
     ClientHooks<HookType> clientHooks;
     ClientModeHooks<HookType> clientModeHooks;
+    CSPlayerInventoryHooks<HookType> playerInventoryHooks;
     PanoramaMarshallHelperHooks<HookType> panoramaMarshallHelperHooks;
     ViewRenderHooks<HookType> viewRenderHooks;
 
