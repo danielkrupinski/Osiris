@@ -29,6 +29,7 @@ union SDL_Event;
 #include "Hooks/InventoryManagerHooks.h"
 #include "Hooks/BspQueryHooks.h"
 #include "Hooks/EngineSoundHooks.h"
+#include "Hooks/SvCheatsHooks.h"
 
 namespace csgo
 {
@@ -78,7 +79,6 @@ public:
 
     HookType modelRender;
     HookType surface;
-    HookType svCheats;
 
 #if IS_WIN32()
     HookType keyValuesSystem;
@@ -93,6 +93,7 @@ public:
     InventoryManagerHooks<HookType> inventoryManagerHooks;
     BspQueryHooks<HookType> bspQueryHooks;
     EngineSoundHooks<HookType> engineSoundHooks;
+    SvCheatsHooks<HookType> svCheatsHooks;
 
 private:
 #if IS_WIN32()

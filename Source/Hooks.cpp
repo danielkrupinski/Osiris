@@ -129,8 +129,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     surface.init(interfaces.getSurface().getPOD());
     surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
     
-    svCheats.init(interfaces.getCvar().findVar(csgo::sv_cheats));
-    svCheats.hookAt(WIN32_LINUX(13, 16), &svCheatsGetInt);
+    svCheatsHooks.install(interfaces.getCvar().findVar(csgo::sv_cheats));
 
     viewRenderHooks.install(memory.viewRender);
 
@@ -169,7 +168,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
 
     modelRender.restore();
     surface.restore();
-    svCheats.restore();
 
     engineHooks.uninstall();
     clientHooks.uninstall();
@@ -180,6 +178,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     inventoryManagerHooks.uninstall();
     bspQueryHooks.uninstall();
     engineSoundHooks.uninstall();
+    svCheatsHooks.uninstall();
 
     Netvars::restore();
 

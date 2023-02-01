@@ -179,7 +179,7 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const csgo::Mod
 
 int GlobalContext::svCheatsGetIntHook(csgo::ConVarPOD* thisptr, ReturnAddress returnAddress)
 {
-    const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(thisptr);
+    const auto original = hooks->svCheatsHooks.getOriginalSvCheatsGetInt()(thisptr);
     if (features->visuals.svCheatsGetBoolHook(returnAddress))
         return 1;
     return original;
