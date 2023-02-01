@@ -16,16 +16,23 @@ class StudioRender;
 }
 
 class ClientInterfaces;
+class EngineInterfaces;
+class OtherInterfaces;
 
 class Chams {
 public:
-    bool render(Backtrack& backtrack, const csgo::Engine& engine, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
+    Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory)
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }
+    {
+    }
+
+    bool render(Backtrack& backtrack, Config& config, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
 private:
-    void renderPlayer(Backtrack& backtrack, const csgo::Engine& engine, const csgo::StudioRender& studioRender, const Memory& memory, Config& config, const csgo::Entity& player) noexcept;
-    void renderWeapons(const csgo::StudioRender& studioRender, const Memory& memory, Config& config) noexcept;
-    void renderHands(const csgo::StudioRender& studioRender, const Memory& memory, Config& config) noexcept;
-    void renderSleeves(const csgo::StudioRender& studioRender, const Memory& memory, Config& config) noexcept;
+    void renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entity& player) noexcept;
+    void renderWeapons(Config& config) noexcept;
+    void renderHands(Config& config) noexcept;
+    void renderSleeves(Config& config) noexcept;
 
     bool appliedChams;
     void* ctx;
@@ -33,5 +40,10 @@ private:
     const csgo::ModelRenderInfo* info;
     csgo::matrix3x4* customBoneToWorld;
 
-    void applyChams(const csgo::StudioRender& studioRender, const Memory& memory, const std::array<Config::Chams::Material, 7>& chams, int health = 0, const csgo::matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, const csgo::matrix3x4* customMatrix = nullptr) noexcept;
+    
+    ClientInterfaces clientInterfaces;
+    EngineInterfaces engineInterfaces;
+    OtherInterfaces interfaces;
+    const Memory& memory;
 };
