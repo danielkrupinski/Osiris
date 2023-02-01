@@ -29,6 +29,7 @@ namespace csgo
     enum class FrameStage;
     enum class UserMessageType;
 
+    struct ConVarPOD;
     struct DemoPlaybackParameters;
     class matrix3x4;
     struct ModelRenderInfo;
@@ -46,7 +47,7 @@ public:
     void doPostScreenEffectsHook(void* param);
     float getViewModelFovHook();
     void drawModelExecuteHook(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld);
-    int svCheatsGetIntHook(void* _this, ReturnAddress returnAddress);
+    int svCheatsGetIntHook(csgo::ConVarPOD* thisptr, ReturnAddress returnAddress);
     void frameStageNotifyHook(csgo::FrameStage stage);
     int emitSoundHook(void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams);
     bool shouldDrawFogHook(ReturnAddress returnAddress);

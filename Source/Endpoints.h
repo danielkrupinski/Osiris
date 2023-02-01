@@ -30,6 +30,7 @@ void swapWindow(SDL_Window* window) noexcept;
 namespace csgo
 {
 
+struct ConVarPOD;
 struct DemoPlaybackParameters;
 class matrix3x4;
 struct ModelRenderInfo;
@@ -50,7 +51,7 @@ bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, 
 void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr, ) void* param) noexcept;
 float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept;
 void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
-int FASTCALL_CONV svCheatsGetInt(void* _this) noexcept;
+int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept;
 void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage stage) noexcept;
 int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr, ) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept;
 bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept;

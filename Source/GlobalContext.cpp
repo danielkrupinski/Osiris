@@ -177,9 +177,9 @@ void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const csgo::Mod
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
 }
 
-int GlobalContext::svCheatsGetIntHook(void* _this, ReturnAddress returnAddress)
+int GlobalContext::svCheatsGetIntHook(csgo::ConVarPOD* thisptr, ReturnAddress returnAddress)
 {
-    const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(_this);
+    const auto original = hooks->svCheats.getOriginal<int, WIN32_LINUX(13, 16)>()(thisptr);
     if (features->visuals.svCheatsGetBoolHook(returnAddress))
         return 1;
     return original;

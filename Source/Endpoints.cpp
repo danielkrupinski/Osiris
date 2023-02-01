@@ -88,9 +88,9 @@ void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* 
     globalContext->drawModelExecuteHook(ctx, state, info, customBoneToWorld);
 }
 
-int FASTCALL_CONV svCheatsGetInt(void* _this) noexcept
+int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept
 {
-    return globalContext->svCheatsGetIntHook(_this, RETURN_ADDRESS());
+    return globalContext->svCheatsGetIntHook(thisptr, RETURN_ADDRESS());
 }
 
 void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage stage) noexcept
