@@ -192,7 +192,7 @@ void Chams::renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entit
         const auto records = backtrack.getRecords(player.getNetworkable().index());
         if (records && !records->empty() && backtrack.valid(engineInterfaces.getEngine(), memory, records->front().simulationTime)) {
             if (!appliedChams)
-                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+                hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfaces.getPODs().modelRender, ctx, state, info, customBoneToWorld);
             applyChams(config.chams["Backtrack"].materials, health, records->back().matrix);
             interfaces.getStudioRender().forcedMaterialOverride(nullptr);
         }
@@ -225,7 +225,7 @@ void Chams::renderSleeves(Config& config) noexcept
     applyChams(config.chams["Sleeves"].materials, localPlayer.get().health());
 }
 
-void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, const csgo::matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, csgo::matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)
@@ -261,7 +261,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
         interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+        hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfaces.getPODs().modelRender, ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         interfaces.getStudioRender().forcedMaterialOverride(nullptr);
     }
 
@@ -297,12 +297,12 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             material.alphaModulate(pulse);
 
         if (cham.cover && !appliedChams)
-            hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+            hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfaces.getPODs().modelRender, ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
         interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+        hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfaces.getPODs().modelRender, ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }
 }

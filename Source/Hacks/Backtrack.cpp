@@ -147,7 +147,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
     }
 }
 
-const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) noexcept
+std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) noexcept
 {
     if (!enabled)
         return nullptr;

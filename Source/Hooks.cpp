@@ -120,9 +120,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     playerInventoryHooks.install(memory.inventoryManager.getLocalInventory());
     inventoryManagerHooks.install(memory.inventoryManager.getPOD());
     engineSoundHooks.install(engineInterfaces.getPODs().sound);
-
-    modelRender.init(engineInterfaces.getPODs().modelRender);
-    modelRender.hookAt(21, &drawModelExecute);
+    modelRenderHooks.install(engineInterfaces.getPODs().modelRender);
 
     panoramaMarshallHelperHooks.install(memory.panoramaMarshallHelper);
 
@@ -166,7 +164,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     }
 #endif
 
-    modelRender.restore();
     surface.restore();
 
     engineHooks.uninstall();
@@ -179,6 +176,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     bspQueryHooks.uninstall();
     engineSoundHooks.uninstall();
     svCheatsHooks.uninstall();
+    modelRenderHooks.uninstall();
 
     Netvars::restore();
 
@@ -203,11 +201,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow) = swapWindow;
 #endif
-}
-
-void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
-{
-    modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
 }
 
 #if !IS_WIN32()

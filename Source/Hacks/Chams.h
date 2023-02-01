@@ -40,7 +40,7 @@ private:
     const csgo::ModelRenderInfo* info;
     csgo::matrix3x4* customBoneToWorld;
 
-    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, const csgo::matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, csgo::matrix3x4* customMatrix = nullptr) noexcept;
     
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;

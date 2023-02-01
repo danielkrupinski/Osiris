@@ -317,6 +317,7 @@
     <ClInclude Include="Hooks\EngineSoundHooks.h" />
     <ClInclude Include="Hooks\InventoryManagerHooks.h" />
     <ClInclude Include="Hooks\MinHook.h" />
+    <ClInclude Include="Hooks\ModelRenderHooks.h" />
     <ClInclude Include="Hooks\PanoramaMarshallHelperHooks.h" />
     <ClInclude Include="Hooks\SvCheatsHooks.h" />
     <ClInclude Include="Hooks\ViewRenderHooks.h" />

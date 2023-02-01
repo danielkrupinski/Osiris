@@ -35,7 +35,7 @@ public:
         csgo::matrix3x4 matrix[256];
     };
 
-    const std::deque<Record>* getRecords(std::size_t index) noexcept;
+    std::deque<Record>* getRecords(std::size_t index) noexcept;
     bool valid(const csgo::Engine& engine, const Memory& memory, float simtime) noexcept;
 
     // GUI

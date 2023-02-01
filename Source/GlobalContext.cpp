@@ -166,13 +166,13 @@ float GlobalContext::getViewModelFovHook()
 void GlobalContext::drawModelExecuteHook(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld)
 {
     if (getOtherInterfaces().getStudioRender().isForcedMaterialOverride())
-        return hooks->modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
+        return hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfacesPODs->modelRender, ctx, state, &info, customBoneToWorld);
 
     if (features->visuals.removeHands(info.model->name) || features->visuals.removeSleeves(info.model->name) || features->visuals.removeWeapons(info.model->name))
         return;
 
     if (!features->chams.render(features->backtrack, *config, ctx, state, info, customBoneToWorld))
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, &info, customBoneToWorld);
+        hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfacesPODs->modelRender, ctx, state, &info, customBoneToWorld);
 
     getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
 }

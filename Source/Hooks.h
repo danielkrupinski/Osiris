@@ -30,6 +30,7 @@ union SDL_Event;
 #include "Hooks/BspQueryHooks.h"
 #include "Hooks/EngineSoundHooks.h"
 #include "Hooks/SvCheatsHooks.h"
+#include "Hooks/ModelRenderHooks.h"
 
 namespace csgo
 {
@@ -73,11 +74,9 @@ public:
 
     void install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
-    void callOriginalDrawModelExecute(void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
 
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
-    HookType modelRender;
     HookType surface;
 
 #if IS_WIN32()
@@ -94,6 +93,7 @@ public:
     BspQueryHooks<HookType> bspQueryHooks;
     EngineSoundHooks<HookType> engineSoundHooks;
     SvCheatsHooks<HookType> svCheatsHooks;
+    ModelRenderHooks<HookType> modelRenderHooks;
 
 private:
 #if IS_WIN32()
