@@ -113,10 +113,12 @@ bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
     return globalContext->shouldDrawViewModelHook();
 }
 
+#if IS_WIN32()
 void STDCALL_CONV lockCursor() noexcept
 {
     globalContext->lockCursorHook();
 }
+#endif
 
 void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr, ) int r, int g, int b, int a) noexcept
 {

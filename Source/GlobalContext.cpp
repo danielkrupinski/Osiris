@@ -245,17 +245,19 @@ bool GlobalContext::shouldDrawViewModelHook()
     return hooks->clientModeHooks.getOriginalShouldDrawViewModel()(memory->clientMode);
 }
 
+#if IS_WIN32()
 void GlobalContext::lockCursorHook()
 {
     if (gui->isOpen())
         return getOtherInterfaces().getSurface().unlockCursor();
-    return hooks->surface.callOriginal<void, 67>();
+    return hooks->surfaceHooks.getOriginalLockCursor()(getOtherInterfaces().getSurface().getPOD());
 }
+#endif
 
 void GlobalContext::setDrawColorHook(int r, int g, int b, int a, ReturnAddress returnAddress)
 {
     features->visuals.setDrawColorHook(returnAddress, a);
-    hooks->surface.callOriginal<void, WIN32_LINUX(15, 14)>(r, g, b, a);
+    hooks->surfaceHooks.getOriginalSetDrawColor()(getOtherInterfaces().getSurface().getPOD(), r, g, b, a);
 }
 
 void GlobalContext::overrideViewHook(csgo::ViewSetup* setup)

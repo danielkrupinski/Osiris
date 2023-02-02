@@ -121,14 +121,9 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     inventoryManagerHooks.install(memory.inventoryManager.getPOD());
     engineSoundHooks.install(engineInterfaces.getPODs().sound);
     modelRenderHooks.install(engineInterfaces.getPODs().modelRender);
-
     panoramaMarshallHelperHooks.install(memory.panoramaMarshallHelper);
-
-    surface.init(interfaces.getSurface().getPOD());
-    surface.hookAt(WIN32_LINUX(15, 14), &setDrawColor);
-    
+    surfaceHooks.install(interfaces.getSurface().getPOD());
     svCheatsHooks.install(interfaces.getCvar().findVar(csgo::sv_cheats));
-
     viewRenderHooks.install(memory.viewRender);
 
 #if IS_WIN32()
@@ -145,8 +140,6 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     }
 
 #if IS_WIN32()
-    surface.hookAt(67, &lockCursor);
-
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
 #endif
@@ -164,8 +157,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     }
 #endif
 
-    surface.restore();
-
     engineHooks.uninstall();
     clientHooks.uninstall();
     clientModeHooks.uninstall();
@@ -177,6 +168,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     engineSoundHooks.uninstall();
     svCheatsHooks.uninstall();
     modelRenderHooks.uninstall();
+    surfaceHooks.uninstall();
 
     Netvars::restore();
 

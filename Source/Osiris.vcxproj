@@ -319,6 +319,7 @@
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\ModelRenderHooks.h" />
     <ClInclude Include="Hooks\PanoramaMarshallHelperHooks.h" />
+    <ClInclude Include="Hooks\SurfaceHooks.h" />
     <ClInclude Include="Hooks\SvCheatsHooks.h" />
     <ClInclude Include="Hooks\ViewRenderHooks.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
