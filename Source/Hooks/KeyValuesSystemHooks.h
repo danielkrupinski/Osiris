@@ -6,6 +6,8 @@
 
 namespace csgo { struct KeyValuesSystemPOD; }
 
+void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept;
+
 template <typename HookImpl>
 class KeyValuesSystemHooks {
 public:

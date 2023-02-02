@@ -7,6 +7,8 @@
 
 namespace csgo { struct ConVarPOD; }
 
+int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept;
+
 template <typename HookImpl>
 class SvCheatsHooks {
 public:

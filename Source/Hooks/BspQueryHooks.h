@@ -2,7 +2,12 @@
 
 #include <Endpoints.h>
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+
+namespace csgo { struct Vector; }
+
+int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept;
 
 template <typename HookImpl>
 class BspQueryHooks {

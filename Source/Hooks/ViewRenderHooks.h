@@ -7,6 +7,9 @@
 
 namespace csgo { struct ViewRender; }
 
+void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr, ) void* viewSetup) noexcept;
+void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr, ) bool update) noexcept;
+
 template <typename HookImpl>
 class ViewRenderHooks {
 public:

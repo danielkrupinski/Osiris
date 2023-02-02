@@ -8,6 +8,11 @@
 
 namespace csgo { struct SurfacePOD; }
 
+void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr, ) int r, int g, int b, int a) noexcept;
+#if IS_WIN32()
+void STDCALL_CONV lockCursor() noexcept;
+#endif
+
 template <typename HookImpl>
 class SurfaceHooks {
 public:

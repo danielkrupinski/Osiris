@@ -5,8 +5,20 @@
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
-namespace csgo { struct ClientMode; }
-namespace csgo { struct ViewSetup; }
+namespace csgo
+{
+    struct ClientMode;
+    struct UserCmd;
+    struct ViewSetup;
+}
+
+bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept;
+void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) csgo::ViewSetup* setup) noexcept;
+bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, csgo::UserCmd* cmd) noexcept;
+bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept;
+float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept;
+void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr, ) void* param) noexcept;
+void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept;
 
 template <typename HookImpl>
 class ClientModeHooks {

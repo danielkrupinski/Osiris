@@ -7,6 +7,11 @@
 
 namespace csgo { struct PanoramaMarshallHelperPOD; }
 
+unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept;
+double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept;
+const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept;
+void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept;
+
 template <typename HookImpl>
 class PanoramaMarshallHelperHooks {
 public:

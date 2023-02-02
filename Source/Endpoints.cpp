@@ -10,6 +10,20 @@
 
 #include <Platform/Macros/CallStack.h>
 
+#include "Hooks/BspQueryHooks.h"
+#include "Hooks/ClientHooks.h"
+#include "Hooks/ClientModeHooks.h"
+#include "Hooks/CSPlayerInventoryHooks.h"
+#include "Hooks/EngineHooks.h"
+#include "Hooks/EngineSoundHooks.h"
+#include "Hooks/InventoryManagerHooks.h"
+#include "Hooks/KeyValuesSystemHooks.h"
+#include "Hooks/ModelRenderHooks.h"
+#include "Hooks/PanoramaMarshallHelperHooks.h"
+#include "Hooks/SurfaceHooks.h"
+#include "Hooks/SvCheatsHooks.h"
+#include "Hooks/ViewRenderHooks.h"
+
 static std::optional<GlobalContext> globalContext;
 
 void initializeGlobalContext()

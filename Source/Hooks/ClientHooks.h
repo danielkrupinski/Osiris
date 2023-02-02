@@ -2,6 +2,7 @@
 
 #include <Endpoints.h>
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
 namespace csgo
@@ -10,6 +11,9 @@ namespace csgo
     enum class FrameStage;
     enum class UserMessageType;
 }
+
+void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage stage) noexcept;
+bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept;
 
 template <typename HookImpl>
 class ClientHooks {

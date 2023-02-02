@@ -11,6 +11,8 @@ namespace csgo
     struct ModelRenderPOD;
 }
 
+void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
+
 template <typename HookImpl>
 class ModelRenderHooks {
 public:

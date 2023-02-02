@@ -2,6 +2,7 @@
 
 #include <Endpoints.h>
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
 namespace csgo
@@ -10,6 +11,8 @@ namespace csgo
     struct SharedObjectPOD;
     struct SOID;
 }
+
+void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
 
 template <typename HookImpl>
 class CSPlayerInventoryHooks {
