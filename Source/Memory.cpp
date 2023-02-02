@@ -99,7 +99,7 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 
     localPlayer.init(clientPatternFinder("A1 ? ? ? ? 89 45 BC 85 C0"_pat).add(1).deref().as<csgo::EntityPOD**>());
 
-    keyValuesSystem = reinterpret_cast<KeyValuesSystem* (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
+    keyValuesSystem = reinterpret_cast<csgo::KeyValuesSystemPOD* (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
     keyValuesAllocEngine = ReturnAddress{ enginePatternFinder("E8 ? ? ? ? 83 C4 08 84 C0 75 10 FF 75 0C"_pat).add(1).relativeToAbsolute().add(0x4A).get() };
     keyValuesAllocClient = ReturnAddress{ clientPatternFinder("E8 ? ? ? ? 83 C4 08 84 C0 75 10"_pat).add(1).relativeToAbsolute().add(0x3E).get() };
 

@@ -388,7 +388,7 @@ void* GlobalContext::allocKeyValuesMemoryHook(int size, ReturnAddress returnAddr
 {
     if (returnAddress == memory->keyValuesAllocEngine || returnAddress == memory->keyValuesAllocClient)
         return nullptr;
-    return hooks->keyValuesSystem.callOriginal<void*, 2>(size);
+    return hooks->keyValuesSystemHooks.getOriginalAllocKeyValuesMemory()(memory->keyValuesSystem, size);
 }
 
 LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)

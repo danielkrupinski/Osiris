@@ -33,6 +33,10 @@ union SDL_Event;
 #include "Hooks/ModelRenderHooks.h"
 #include "Hooks/SurfaceHooks.h"
 
+#if IS_WIN32()
+#include "Hooks/KeyValuesSystemHooks.h"
+#endif
+
 namespace csgo
 {
 
@@ -79,7 +83,7 @@ public:
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
 #if IS_WIN32()
-    HookType keyValuesSystem;
+    KeyValuesSystemHooks<HookType> keyValuesSystemHooks;
 #endif
 
     EngineHooks<HookType> engineHooks;

@@ -110,8 +110,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     bspQueryHooks.install(engineInterfaces.getEngine().getBSPTreeQuery());
 
 #if IS_WIN32()
-    keyValuesSystem.init(memory.keyValuesSystem);
-    keyValuesSystem.hookAt(2, &allocKeyValuesMemory);
+    keyValuesSystemHooks.install(memory.keyValuesSystem);
 #endif
 
     engineHooks.install(engineInterfaces.getEngine().getPOD());
@@ -176,7 +175,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInte
     inventoryChanger.reset(memory);
 
 #if IS_WIN32()
-    keyValuesSystem.restore();
+    keyValuesSystemHooks.uninstall();
 
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;

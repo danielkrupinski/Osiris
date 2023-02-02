@@ -1114,6 +1114,9 @@
     <ClInclude Include="Hooks\SurfaceHooks.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\KeyValuesSystemHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

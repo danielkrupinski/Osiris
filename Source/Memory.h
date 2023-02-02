@@ -51,6 +51,7 @@ struct EconItemPOD;
 struct UiComponentInventoryPOD;
 struct ClientPOD;
 struct PanoramaMarshallHelperPOD;
+struct KeyValuesSystemPOD;
 
 }
 
@@ -126,7 +127,7 @@ public:
     }
 
 #if IS_WIN32()
-    class KeyValuesSystem* keyValuesSystem;
+    csgo::KeyValuesSystemPOD* keyValuesSystem;
     ReturnAddress keyValuesAllocEngine;
     ReturnAddress keyValuesAllocClient;
 
