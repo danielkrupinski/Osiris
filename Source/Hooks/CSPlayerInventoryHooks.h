@@ -12,7 +12,7 @@ namespace csgo
     struct SOID;
 }
 
-void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
+void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
 
 template <typename HookImpl>
 class CSPlayerInventoryHooks {

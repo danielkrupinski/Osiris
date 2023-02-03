@@ -7,7 +7,7 @@
 
 namespace csgo { struct Vector; }
 
-int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept;
+int FASTCALL_CONV listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept;
 
 template <typename HookImpl>
 class BspQueryHooks {

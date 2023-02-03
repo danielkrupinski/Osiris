@@ -2,6 +2,7 @@
 
 #include <Endpoints.h>
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
 namespace csgo
@@ -11,7 +12,7 @@ namespace csgo
     struct ModelRenderPOD;
 }
 
-void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
+void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
 
 template <typename HookImpl>
 class ModelRenderHooks {

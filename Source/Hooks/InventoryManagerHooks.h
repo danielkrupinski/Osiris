@@ -11,7 +11,7 @@ namespace csgo
     enum class Team;
 }
 
-void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
+void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
 
 template <typename HookImpl>
 class InventoryManagerHooks {

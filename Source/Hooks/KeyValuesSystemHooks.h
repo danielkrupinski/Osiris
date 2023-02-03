@@ -2,11 +2,12 @@
 
 #include <Endpoints.h>
 #include <Platform/Macros/CallingConventions.h>
+#include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
 namespace csgo { struct KeyValuesSystemPOD; }
 
-void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept;
+void* FASTCALL_CONV allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept;
 
 template <typename HookImpl>
 class KeyValuesSystemHooks {

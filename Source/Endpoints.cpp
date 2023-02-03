@@ -82,24 +82,24 @@ void swapWindow(SDL_Window* window) noexcept
 
 #endif
 
-bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, csgo::UserCmd* cmd) noexcept
+bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float inputSampleTime, csgo::UserCmd* cmd) noexcept
 {
-    return globalContext->createMoveHook(inputSampleTime, cmd);
+    return globalContext->createMoveHook(thisptr, inputSampleTime, cmd);
 }
 
-void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr, ) void* param) noexcept
+void FASTCALL_CONV doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr), void* param) noexcept
 {
-    globalContext->doPostScreenEffectsHook(param);
+    globalContext->doPostScreenEffectsHook(thisptr, param);
 }
 
-float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
+float FASTCALL_CONV getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
-    return globalContext->getViewModelFovHook();
+    return globalContext->getViewModelFovHook(thisptr);
 }
 
-void STDCALL_CONV drawModelExecute(LINUX_ARGS(void* thisptr, ) void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
+void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
 {
-    globalContext->drawModelExecuteHook(ctx, state, info, customBoneToWorld);
+    globalContext->drawModelExecuteHook(thisptr, ctx, state, info, customBoneToWorld);
 }
 
 int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept
@@ -107,46 +107,46 @@ int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept
     return globalContext->svCheatsGetIntHook(thisptr, RETURN_ADDRESS());
 }
 
-void STDCALL_CONV frameStageNotify(LINUX_ARGS(void* thisptr, ) csgo::FrameStage stage) noexcept
+void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::FrameStage stage) noexcept
 {
-    globalContext->frameStageNotifyHook(stage);
+    globalContext->frameStageNotifyHook(thisptr, stage);
 }
 
-int STDCALL_CONV emitSound(LINUX_ARGS(void* thisptr, ) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
+int FASTCALL_CONV emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    return globalContext->emitSoundHook(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
+    return globalContext->emitSoundHook(thisptr, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
-bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
+bool FASTCALL_CONV shouldDrawFog(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
-    return globalContext->shouldDrawFogHook(RETURN_ADDRESS());
+    return globalContext->shouldDrawFogHook(thisptr, RETURN_ADDRESS());
 }
 
-bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
+bool FASTCALL_CONV shouldDrawViewModel(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
-    return globalContext->shouldDrawViewModelHook();
+    return globalContext->shouldDrawViewModelHook(thisptr);
 }
 
 #if IS_WIN32()
-void STDCALL_CONV lockCursor() noexcept
+void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept
 {
-    globalContext->lockCursorHook();
+    globalContext->lockCursorHook(thisptr);
 }
 #endif
 
-void STDCALL_CONV setDrawColor(LINUX_ARGS(void* thisptr, ) int r, int g, int b, int a) noexcept
+void FASTCALL_CONV setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r, int g, int b, int a) noexcept
 {
-    globalContext->setDrawColorHook(r, g, b, a, RETURN_ADDRESS());
+    globalContext->setDrawColorHook(thisptr, r, g, b, a, RETURN_ADDRESS());
 }
 
-void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) csgo::ViewSetup* setup) noexcept
+void FASTCALL_CONV overrideView(FASTCALL_THIS(csgo::ClientMode* thisptr), csgo::ViewSetup* setup) noexcept
 {
-    globalContext->overrideViewHook(setup);
+    globalContext->overrideViewHook(thisptr, setup);
 }
 
-int STDCALL_CONV listLeavesInBox(LINUX_ARGS(void* thisptr, ) const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept
+int FASTCALL_CONV listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    return globalContext->listLeavesInBoxHook(mins, maxs, list, listMax, RETURN_ADDRESS(), FRAME_ADDRESS());
+    return globalContext->listLeavesInBoxHook(thisptr, mins, maxs, list, listMax, RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
 int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept
@@ -154,76 +154,76 @@ int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept
     return globalContext->dispatchSoundHook(soundInfo);
 }
 
-void STDCALL_CONV render2dEffectsPreHud(LINUX_ARGS(void* thisptr, ) void* viewSetup) noexcept
+void FASTCALL_CONV render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept
 {
-    globalContext->render2dEffectsPreHudHook(viewSetup);
+    globalContext->render2dEffectsPreHudHook(thisptr, viewSetup);
 }
 
-const csgo::DemoPlaybackParameters* STDCALL_CONV getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
+const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
 {
-    return globalContext->getDemoPlaybackParametersHook(RETURN_ADDRESS());
+    return globalContext->getDemoPlaybackParametersHook(thisptr, RETURN_ADDRESS());
 }
 
-bool STDCALL_CONV isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
+bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
 {
-    return globalContext->isPlayingDemoHook(RETURN_ADDRESS(), FRAME_ADDRESS());
+    return globalContext->isPlayingDemoHook(thisptr, RETURN_ADDRESS(), FRAME_ADDRESS());
 }
 
-void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
+void FASTCALL_CONV updateColorCorrectionWeights(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
-    globalContext->updateColorCorrectionWeightsHook();
+    globalContext->updateColorCorrectionWeightsHook(thisptr);
 }
 
-float STDCALL_CONV getScreenAspectRatio(LINUX_ARGS(void* thisptr, ) int width, int height) noexcept
+float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept
 {
-    return globalContext->getScreenAspectRatioHook(width, height);
+    return globalContext->getScreenAspectRatioHook(thisptr, width, height);
 }
 
-void STDCALL_CONV renderSmokeOverlay(LINUX_ARGS(void* thisptr, ) bool update) noexcept
+void FASTCALL_CONV renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool update) noexcept
 {
-    globalContext->renderSmokeOverlayHook(update);
+    globalContext->renderSmokeOverlayHook(thisptr, update);
 }
 
-double STDCALL_CONV getArgAsNumber(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept
+double FASTCALL_CONV getArgAsNumber(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
 {
-    return globalContext->getArgAsNumberHook(params, index, RETURN_ADDRESS());
+    return globalContext->getArgAsNumberHook(thisptr, params, index, RETURN_ADDRESS());
 }
 
-const char* STDCALL_CONV getArgAsString(LINUX_ARGS(void* thisptr, ) void* params, int index) noexcept
+const char* FASTCALL_CONV getArgAsString(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
 {
-    return globalContext->getArgAsStringHook(params, index, RETURN_ADDRESS());
+    return globalContext->getArgAsStringHook(thisptr, params, index, RETURN_ADDRESS());
 }
 
-void STDCALL_CONV setResultInt(LINUX_ARGS(void* thisptr, ) void* params, int result) noexcept
+void FASTCALL_CONV setResultInt(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int result) noexcept
 {
-    return globalContext->setResultIntHook(params, result, RETURN_ADDRESS());
+    return globalContext->setResultIntHook(thisptr, params, result, RETURN_ADDRESS());
 }
 
-unsigned STDCALL_CONV getNumArgs(LINUX_ARGS(void* thisptr, ) void* params) noexcept
+unsigned FASTCALL_CONV getNumArgs(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params) noexcept
 {
-    return globalContext->getNumArgsHook(params, RETURN_ADDRESS());
+    return globalContext->getNumArgsHook(thisptr, params, RETURN_ADDRESS());
 }
 
-void STDCALL_CONV updateInventoryEquippedState(LINUX_ARGS(void* thisptr, ) std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
+void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
 {
-    globalContext->updateInventoryEquippedStateHook(inventory, itemID, team, slot, swap);
+    globalContext->updateInventoryEquippedStateHook(thisptr, inventory, itemID, team, slot, swap);
 }
 
-void STDCALL_CONV soUpdated(LINUX_ARGS(void* thisptr, ) csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept
+void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept
 {
-    globalContext->soUpdatedHook(owner, object, event);
+    globalContext->soUpdatedHook(thisptr, owner, object, event);
 }
 
-bool STDCALL_CONV dispatchUserMessage(LINUX_ARGS(void* thisptr, ) csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
+bool FASTCALL_CONV dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
-    return globalContext->dispatchUserMessageHook(type, passthroughFlags, size, data);
+    return globalContext->dispatchUserMessageHook(thisptr, type, passthroughFlags, size, data);
 }
 
 #if IS_WIN32()
 
-void* STDCALL_CONV allocKeyValuesMemory(LINUX_ARGS(void* thisptr, ) int size) noexcept
+void* FASTCALL_CONV allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept
 {
-    return globalContext->allocKeyValuesMemoryHook(size, RETURN_ADDRESS());
+    return globalContext->allocKeyValuesMemoryHook(thisptr, size, RETURN_ADDRESS());
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);

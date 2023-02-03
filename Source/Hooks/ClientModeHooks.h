@@ -12,13 +12,13 @@ namespace csgo
     struct ViewSetup;
 }
 
-bool STDCALL_CONV shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept;
-void STDCALL_CONV overrideView(LINUX_ARGS(void* thisptr, ) csgo::ViewSetup* setup) noexcept;
-bool STDCALL_CONV createMove(LINUX_ARGS(void* thisptr, ) float inputSampleTime, csgo::UserCmd* cmd) noexcept;
-bool STDCALL_CONV shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept;
-float STDCALL_CONV getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept;
-void STDCALL_CONV doPostScreenEffects(LINUX_ARGS(void* thisptr, ) void* param) noexcept;
-void STDCALL_CONV updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept;
+bool FASTCALL_CONV shouldDrawFog(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept;
+void FASTCALL_CONV overrideView(FASTCALL_THIS(csgo::ClientMode* thisptr), csgo::ViewSetup* setup) noexcept;
+bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float inputSampleTime, csgo::UserCmd* cmd) noexcept;
+bool FASTCALL_CONV shouldDrawViewModel(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept;
+float FASTCALL_CONV getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept;
+void FASTCALL_CONV doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr), void* param) noexcept;
+void FASTCALL_CONV updateColorCorrectionWeights(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept;
 
 template <typename HookImpl>
 class ClientModeHooks {
