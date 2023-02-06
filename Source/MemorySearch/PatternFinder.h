@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "BytePattern.h"
+#include <Utils/SafeAddress.h>
 
 enum class OffsetHint : std::size_t {};
 
@@ -15,8 +16,8 @@ public:
     {
     }
 
-    [[nodiscard]] const std::byte* operator()(BytePattern pattern) const noexcept;
-    [[nodiscard]] const std::byte* operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept;
+    [[nodiscard]] SafeAddress operator()(BytePattern pattern) const noexcept;
+    [[nodiscard]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept;
 
 private:
     [[nodiscard]] std::span<const std::byte> getSliceForHint(OffsetHint offsetHint) const noexcept;

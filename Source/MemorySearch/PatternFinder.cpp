@@ -5,17 +5,17 @@
 #include "PatternFinder.h"
 #include <Utils/SpanSlice.h>
 
-const std::byte* PatternFinder::operator()(BytePattern pattern) const noexcept
+SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
 {
-    return HybridPatternFinder{ bytes, pattern }();
+    return SafeAddress{ std::uintptr_t(HybridPatternFinder{ bytes, pattern }()) };
 }
 
-const std::byte* PatternFinder::operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
+SafeAddress PatternFinder::operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
 {
     const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }();
     if (foundWithHint)
-        return foundWithHint;
-    return HybridPatternFinder{ bytes, pattern }();
+        return SafeAddress{ std::uintptr_t(foundWithHint) };
+    return SafeAddress{ std::uintptr_t(HybridPatternFinder{ bytes, pattern }()) };
 }
 
 std::span<const std::byte> PatternFinder::getSliceForHint(OffsetHint offsetHint) const noexcept

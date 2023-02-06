@@ -32,16 +32,16 @@ template <std::size_t N>
 
 TEST(Utils_PatternFinderTest, ShortPatternCanBeFound) {
     constexpr auto bytes = createByteArray({ 0xA0, 0xA1, 0xA2 });
-    EXPECT_EQ(PatternFinder{ bytes }("A1"_pat), &bytes[1]);
+    EXPECT_EQ(PatternFinder{ bytes }("A1"_pat).get(), std::uintptr_t(&bytes[1]));
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenByteBufferIsEmpty) {
-    EXPECT_EQ(PatternFinder{ {} }("01 02 03 04"_pat), nullptr);
+    EXPECT_EQ(PatternFinder{ {} }("01 02 03 04"_pat).get(), 0);
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenPatternWasNotFound) {
     constexpr auto bytes = createByteArray({ 0xA0 });
-    EXPECT_EQ(PatternFinder{ bytes }("AB CD EF"_pat), nullptr);
+    EXPECT_EQ(PatternFinder{ bytes }("AB CD EF"_pat).get(), 0);
 }
 
 TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
@@ -53,7 +53,7 @@ TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
     bytes[44] = std::byte{ 0xC0 };
     bytes[45] = std::byte{ 0xDE };
     
-    EXPECT_EQ(PatternFinder{ bytes }("DE AD ? C0 DE"_pat), &bytes[41]);
+    EXPECT_EQ(PatternFinder{ bytes }("DE AD ? C0 DE"_pat).get(), std::uintptr_t(&bytes[41]));
 }
 
 }

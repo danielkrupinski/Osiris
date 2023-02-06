@@ -33,8 +33,8 @@ namespace helpers
 
 SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
 {
-    if (const auto found = ::PatternFinder::operator()(pattern))
-        return SafeAddress{ std::uintptr_t(found) };
+    if (const auto found = ::PatternFinder::operator()(pattern); found.get() != 0)
+        return found;
 
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
@@ -45,8 +45,8 @@ SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
 
 SafeAddress PatternFinder::operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
 {
-    if (const auto found = ::PatternFinder::operator()(pattern, offsetHint))
-        return SafeAddress{ std::uintptr_t(found) };
+    if (const auto found = ::PatternFinder::operator()(pattern, offsetHint); found.get() != 0)
+        return found;
 
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
