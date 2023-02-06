@@ -18,9 +18,6 @@
 
 #else
 
-#define WIN32_ARGS(...)
-#define LINUX_ARGS(...)
-#define WIN32_LINUX(win32, linux)
-#define FASTCALL_THIS(thisptr)
+#error "Unsupported platform"
 
 #endif
