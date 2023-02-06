@@ -48,9 +48,9 @@ private:
     };
 #elif IS_LINUX()
     return ScopeOverlayRemover{
-        clientPatternFinder("8B 85 ? ? ? ? 43 8D 14 2E"_pat).asReturnAddress(),
-        clientPatternFinder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 4C 89 EA"_pat).asReturnAddress(),
-        clientPatternFinder("48 8B 07 0F 2F 05"_pat).add(6).relativeToAbsolute().as<float*>()
+        clientPatternFinder("41 FF 51 70 43 8D 14 3E"_pat).add(4).asReturnAddress(),
+        clientPatternFinder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 66 0F EF E4"_pat).asReturnAddress(),
+        clientPatternFinder("F3 0F 10 05 ? ? ? ? FF 50 20 48 8B BB ? ? ? ? 48 85 FF 74 17"_pat).add(4).relativeToAbsolute().add(4).as<float*>()
     };
 #endif
 }

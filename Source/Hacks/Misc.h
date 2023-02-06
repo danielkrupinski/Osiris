@@ -28,7 +28,7 @@ public:
         setClanTag{ retSpoofGadgets->engine, enginePatternFinder("53 56 57 8B DA 8B F9 FF 15"_pat).get() },
         submitReport{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 E4 F8 83 EC 28 8B 4D 08"_pat).get() }
 #elif IS_LINUX()
-        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? E9 ? ? ? ? 66 0F 1F 44 ? ? 48 8B 7D B0"_pat).add(1).relativeToAbsolute().get() },
+        setClanTag{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? E9 ? ? ? ? 0F 1F 44 00 00 48 8B 7D B0"_pat).add(1).relativeToAbsolute().get() },
         submitReport{ retSpoofGadgets->client, clientPatternFinder("55 48 89 F7 48 89 E5 41 57 41 56 41 55 41 54 53 48 89 D3 48 83 EC 58"_pat).get() }
 #endif
     {
@@ -38,10 +38,10 @@ public:
         insertIntoTree = ReturnAddress{ clientPatternFinder("56 52 FF 50 18"_pat).add(5).get() };
         demoFileEndReached = ReturnAddress{ clientPatternFinder("8B C8 85 C9 74 1F 80 79 10"_pat).get() };
 #elif IS_LINUX()
-        demoOrHLTV = ReturnAddress{ clientPatternFinder("0F B6 10 89 D0"_pat).add(-16).get() };
-        money = clientPatternFinder("84 C0 75 9E B8 ? ? ? ? EB B9"_pat).get();
-        insertIntoTree = ReturnAddress{ clientPatternFinder("74 24 4C 8B 10"_pat).add(31).get() };
-        demoFileEndReached = ReturnAddress{ clientPatternFinder("48 85 C0 0F 84 ? ? ? ? 80 78 10 ? 74 7F"_pat).get() };
+        demoOrHLTV = clientPatternFinder("84 C0 75 0A 48 8D 05"_pat).asReturnAddress();
+        money = clientPatternFinder("84 C0 75 C6 B8 ? ? ? ? EB D9"_pat).get();
+        insertIntoTree = clientPatternFinder("41 FF 52 30 89 85"_pat).add(4).asReturnAddress();
+        demoFileEndReached = clientPatternFinder("48 85 C0 74 76 80 78 10 00"_pat).asReturnAddress();
 #endif
     }
 
