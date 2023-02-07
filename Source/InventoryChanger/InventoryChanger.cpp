@@ -1128,7 +1128,7 @@ void InventoryChanger::run(const Memory& memory, csgo::FrameStage stage) noexcep
     backend.run(gameInventory, std::chrono::milliseconds{ 300 });
 }
 
-InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
 {
     auto itemSchema = csgo::ItemSchema::from(retSpoofGadgets->client, memory.itemSystem().getItemSchema());
     game_integration::Items items{ itemSchema, interfaces.getLocalize() };

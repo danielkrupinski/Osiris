@@ -38,7 +38,7 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(OtherInterfaces interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder)
+    Inventory(OtherInterfaces interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
         : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) },
 #if IS_WIN32()
         createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 EC 1C 8D 45 E4 C7 45"_pat).add(20).deref().get() },

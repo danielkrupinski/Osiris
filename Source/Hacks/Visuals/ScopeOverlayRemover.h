@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Helpers/PatternFinder.h>
+#include <MemorySearch/PatternFinder.h>
 #include <MemorySearch/BytePatternLiteral.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <Utils/ReturnAddress.h>
@@ -38,7 +38,7 @@ private:
     float* vignette;
 };
 
-[[nodiscard]] inline ScopeOverlayRemover createScopeOverlayRemover(const helpers::PatternFinder& clientPatternFinder)
+[[nodiscard]] inline ScopeOverlayRemover createScopeOverlayRemover(const PatternFinder& clientPatternFinder)
 {
 #if IS_WIN32()
     return ScopeOverlayRemover{

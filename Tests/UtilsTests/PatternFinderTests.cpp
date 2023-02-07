@@ -30,18 +30,25 @@ template <std::size_t N>
     return arr;
 }
 
+struct DummyPatternNotFoundHandler {
+    void operator()(BytePattern) const {}
+};
+
 TEST(Utils_PatternFinderTest, ShortPatternCanBeFound) {
     constexpr auto bytes = createByteArray({ 0xA0, 0xA1, 0xA2 });
-    EXPECT_EQ(PatternFinder{ bytes }("A1"_pat).get(), std::uintptr_t(&bytes[1]));
+    const PatternFinderImpl finder{ bytes, DummyPatternNotFoundHandler{} };
+    EXPECT_EQ(finder("A1"_pat).get(), std::uintptr_t(&bytes[1]));
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenByteBufferIsEmpty) {
-    EXPECT_EQ(PatternFinder{ {} }("01 02 03 04"_pat).get(), 0);
+    const PatternFinderImpl finder{ {}, DummyPatternNotFoundHandler{} };
+    EXPECT_EQ(finder("01 02 03 04"_pat).get(), 0);
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenPatternWasNotFound) {
     constexpr auto bytes = createByteArray({ 0xA0 });
-    EXPECT_EQ(PatternFinder{ bytes }("AB CD EF"_pat).get(), 0);
+    const PatternFinderImpl finder{ bytes, DummyPatternNotFoundHandler{} };
+    EXPECT_EQ(finder("AB CD EF"_pat).get(), 0);
 }
 
 TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
@@ -53,7 +60,8 @@ TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
     bytes[44] = std::byte{ 0xC0 };
     bytes[45] = std::byte{ 0xDE };
     
-    EXPECT_EQ(PatternFinder{ bytes }("DE AD ? C0 DE"_pat).get(), std::uintptr_t(&bytes[41]));
+    const PatternFinderImpl finder{ bytes, DummyPatternNotFoundHandler{} };
+    EXPECT_EQ(finder("DE AD ? C0 DE"_pat).get(), std::uintptr_t(&bytes[41]));
 }
 
 }

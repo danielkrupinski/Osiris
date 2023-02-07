@@ -53,7 +53,7 @@ struct InventoryChangerReturnAddresses {
     ReturnAddress useToolGetArgAsString;
 };
 
-[[nodiscard]] inline InventoryChangerReturnAddresses createInventoryChangerReturnAddresses(const helpers::PatternFinder& clientPatternFinder)
+[[nodiscard]] inline InventoryChangerReturnAddresses createInventoryChangerReturnAddresses(const PatternFinder& clientPatternFinder)
 {
     return InventoryChangerReturnAddresses{
 #if IS_WIN32()
@@ -92,7 +92,7 @@ struct InventoryChangerReturnAddresses {
 
 class InventoryChanger {
 public:
-    InventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+    InventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
         : engineInterfaces{ engineInterfaces }, clientInterfaces{ clientInterfaces }, otherInterfaces{ interfaces }, backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ createInventoryChangerReturnAddresses(clientPatternFinder) }, gameInventory{ interfaces, memory, clientPatternFinder } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
@@ -160,7 +160,6 @@ private:
     game_integration::Inventory gameInventory;
 };
 
-InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
+InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
 
 }
-

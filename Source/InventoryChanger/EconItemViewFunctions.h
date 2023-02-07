@@ -2,12 +2,12 @@
 
 #include <cstdint>
 
-#include <Helpers/PatternFinder.h>
+#include <MemorySearch/PatternFinder.h>
 #include <MemorySearch/BytePatternLiteral.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <CSGO/Helpers/EconItemViewFunctions.h>
 
-[[nodiscard]] inline EconItemViewFunctions createEconItemViewFunctions(const helpers::PatternFinder& clientPatternFinder)
+[[nodiscard]] inline EconItemViewFunctions createEconItemViewFunctions(const PatternFinder& clientPatternFinder)
 {
     return EconItemViewFunctions{
 #if IS_WIN32()

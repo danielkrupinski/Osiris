@@ -14,6 +14,7 @@
 #include <CSGO/Recv.h>
 #include <CSGO/ViewRenderBeams.h>
 #include <MemorySearch/BytePatternLiteral.h>
+#include <MemorySearch/PatternFinder.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -22,7 +23,7 @@ class EngineInterfaces;
 
 class Visuals {
 public:
-    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
+    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
         : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) },
 #if IS_WIN32()
         viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("B9 ? ? ? ? 0F 11 44 24 ? C7 44 24 ? ? ? ? ? F3 0F 10 84 24"_pat).add(1).deref().as<csgo::ViewRenderBeamsPOD*>()) },

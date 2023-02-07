@@ -2,13 +2,13 @@
 
 #include <cstdint>
 
-#include <Helpers/PatternFinder.h>
+#include <MemorySearch/PatternFinder.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <CSGO/Functions.h>
 #include <CSGO/Helpers/EconItemFunctions.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-[[nodiscard]] inline EconItemFunctions createEconItemFunctions(const helpers::PatternFinder& clientPatternFinder)
+[[nodiscard]] inline EconItemFunctions createEconItemFunctions(const PatternFinder& clientPatternFinder)
 {
     return EconItemFunctions{
 #if IS_WIN32()

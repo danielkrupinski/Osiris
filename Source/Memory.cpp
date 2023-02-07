@@ -39,7 +39,7 @@
 #include <MemorySearch/PatternFinder.h>
 #include "Utils/SafeAddress.h"
 
-Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
+Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
 #if IS_WIN32()
     : lineGoesThroughSmoke{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 8B 4C 24 30 33 D2"_pat).add(1).relativeToAbsolute().get() },
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("8B 35 ? ? ? ? FF 10 0F B7 C0"_pat).add(2).deref().get() },
@@ -57,8 +57,9 @@ Memory::Memory(const helpers::PatternFinder& clientPatternFinder, const helpers:
 #if IS_WIN32()
     const windows_platform::DynamicLibrary gameOverlayRenderer{ windows_platform::DynamicLibraryWrapper{}, "gameoverlayrenderer" };
 
-    present = helpers::PatternFinder{ getCodeSection(gameOverlayRenderer.getView()) }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
-    reset = helpers::PatternFinder{ getCodeSection(gameOverlayRenderer.getView()) }("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B D8"_pat).add(9).get();
+    PatternNotFoundHandler patternNotFoundHandler;
+    present = PatternFinder{ getCodeSection(gameOverlayRenderer.getView()), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
+    reset = PatternFinder{ getCodeSection(gameOverlayRenderer.getView()), patternNotFoundHandler }("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B D8"_pat).add(9).get();
 
     clientMode = **reinterpret_cast<csgo::ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
     input = *reinterpret_cast<csgo::Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);

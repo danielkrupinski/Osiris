@@ -13,7 +13,7 @@
 #include "Utils/ReturnAddress.h"
 #include "Utils/SafeAddress.h"
 #include "RetSpoof/RetSpoofGadgets.h"
-#include "Helpers/PatternFinder.h"
+#include "MemorySearch/PatternFinder.h"
 #include "Utils/TypeHint.h"
 
 #include "Platform/Macros/CallingConventions.h"
@@ -65,7 +65,7 @@ namespace csgo
 
 class Memory {
 public:
-    Memory(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32()
     std::uintptr_t present;

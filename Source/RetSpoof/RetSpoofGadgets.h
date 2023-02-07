@@ -3,12 +3,11 @@
 #include <cstdint>
 #include <optional>
 
+#include <MemorySearch/PatternFinder.h>
 #include <RetSpoof/RetSpoofInvoker.h>
 
-namespace helpers { struct PatternFinder; }
-
 struct RetSpoofGadgets {
-    RetSpoofGadgets(const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder);
+    RetSpoofGadgets(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder);
 
     RetSpoofInvoker client;
     RetSpoofInvoker engine;

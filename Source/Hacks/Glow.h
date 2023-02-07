@@ -9,13 +9,14 @@
 
 #include <Platform/Macros/IsPlatform.h>
 #include <MemorySearch/BytePatternLiteral.h>
+#include <MemorySearch/PatternFinder.h>
 
 class ClientInterfaces;
 class EngineInterfaces;
 
 class Glow {
 public:
-    Glow(const helpers::PatternFinder& clientPatternFinder)
+    Glow(const PatternFinder& clientPatternFinder)
         :
 #if IS_WIN32()
         glowObjectManager{ clientPatternFinder("0F 11 05 ? ? ? ? 83 C8 01"_pat).add(3).deref().as<csgo::GlowObjectManager*>() },

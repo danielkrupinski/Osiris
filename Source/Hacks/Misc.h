@@ -9,6 +9,7 @@
 #include <RetSpoof/FunctionInvoker.h>
 #include <CSGO/Functions.h>
 #include <MemorySearch/BytePatternLiteral.h>
+#include <MemorySearch/PatternFinder.h>
 
 namespace csgo { enum class FrameStage; }
 namespace csgo { enum class UserMessageType; }
@@ -22,7 +23,7 @@ struct DemoPlaybackParameters;
 
 class Misc {
 public:
-    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const helpers::PatternFinder& clientPatternFinder, const helpers::PatternFinder& enginePatternFinder)
+    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
         : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
 #if IS_WIN32()
         setClanTag{ retSpoofGadgets->engine, enginePatternFinder("53 56 57 8B DA 8B F9 FF 15"_pat).get() },

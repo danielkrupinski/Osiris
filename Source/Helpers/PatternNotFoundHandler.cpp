@@ -4,8 +4,8 @@
 #include <string>
 #include <string_view>
 
-#include "PatternFinder.h"
-
+#include <MemorySearch/BytePattern.h>
+#include "PatternNotFoundHandler.h"
 #include <Platform/Macros/IsPlatform.h>
 
 [[nodiscard]] static std::string patternToString(std::string_view pattern)
@@ -28,31 +28,10 @@
     return os.str();
 }
 
-namespace helpers
+void PatternNotFoundHandler::operator()(BytePattern pattern) const
 {
-
-SafeAddress PatternFinder::operator()(BytePattern pattern) const noexcept
-{
-    if (const auto found = ::PatternFinder::operator()(pattern); found.get() != 0)
-        return found;
-
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
     MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern.get())).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
-    return SafeAddress{ 0 };
-}
-
-SafeAddress PatternFinder::operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
-{
-    if (const auto found = ::PatternFinder::operator()(pattern, offsetHint); found.get() != 0)
-        return found;
-
-    assert(false && "Pattern needs to be updated!");
-#if IS_WIN32()
-    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern.get())).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
-#endif
-    return SafeAddress{ 0 };
-}
-
 }

@@ -61,7 +61,8 @@ GlobalContext::GlobalContext()
     const linux_platform::SharedObject engineDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
 #endif
 
-    retSpoofGadgets.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) });
+    PatternNotFoundHandler patternNotFoundHandler;
+    retSpoofGadgets.emplace(PatternFinder{ getCodeSection(clientDLL.getView()), patternNotFoundHandler }, PatternFinder{ getCodeSection(engineDLL.getView()), patternNotFoundHandler });
 }
 
 bool GlobalContext::createMoveHook(csgo::ClientMode* thisptr, float inputSampleTime, csgo::UserCmd* cmd)
@@ -405,7 +406,11 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } });
         interfaces.emplace();
 
-        memory.emplace(helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, clientInterfaces->client, *retSpoofGadgets);
+        PatternNotFoundHandler patternNotFoundHandler;
+        const PatternFinder clientPatternFinder{ getCodeSection(clientDLL.getView()), patternNotFoundHandler };
+        const PatternFinder enginePatternFinder{ getCodeSection(engineDLL.getView()), patternNotFoundHandler };
+
+        memory.emplace(clientPatternFinder, enginePatternFinder, clientInterfaces->client, *retSpoofGadgets);
 
         Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
@@ -414,7 +419,7 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         ImGui_ImplWin32_Init(window);
 
         randomGenerator.emplace();
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ getCodeSection(clientDLL.getView()) }, helpers::PatternFinder{ getCodeSection(engineDLL.getView()) }, *randomGenerator));
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
         config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         gui.emplace();
         hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
@@ -475,7 +480,11 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
 
         interfaces.emplace();
-        memory.emplace(helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, clientInterfaces->client, *retSpoofGadgets);
+        PatternNotFoundHandler patternNotFoundHandler;
+        const PatternFinder clientPatternFinder{ linux_platform::getCodeSection(clientSo.getView()), patternNotFoundHandler };
+        const PatternFinder enginePatternFinder{ linux_platform::getCodeSection(engineSo.getView()), patternNotFoundHandler };
+
+        memory.emplace(clientPatternFinder, enginePatternFinder, clientInterfaces->client, *retSpoofGadgets);
 
         Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
         gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
@@ -483,7 +492,7 @@ int GlobalContext::pollEventHook(SDL_Event* event)
         ImGui::CreateContext();
 
         randomGenerator.emplace();
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), helpers::PatternFinder{ linux_platform::getCodeSection(clientSo.getView()) }, helpers::PatternFinder{ linux_platform::getCodeSection(engineSo.getView()) }, *randomGenerator));
+        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
         config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
         
         gui.emplace();
