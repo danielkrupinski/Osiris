@@ -121,7 +121,7 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     findHudElement = clientPatternFinder("E8 ? ? ? ? 48 8D 50 E0"_pat).add(1).relativeToAbsolute().as<decltype(findHudElement)>();
 
     clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).relativeToAbsolute().add(4).relativeToAbsolute().deref().as<decltype(clientMode)>();
-    input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref<2>().as<csgo::Input*>();
+    input = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[16] }.add(3).relativeToAbsolute().deref().as<csgo::Input*>();
     playerResource = clientPatternFinder("48 8B 15 ? ? ? ? 48 63 C3"_pat).add(3).relativeToAbsolute().as<csgo::PlayerResource**>();
 
     getEventDescriptor = enginePatternFinder("E8 ? ? ? ? 4D 85 F6 74 09"_pat).add(1).relativeToAbsolute().as<csgo::GetEventDescriptor>();
@@ -136,7 +136,7 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     equipWearable = clientPatternFinder("55 48 8D 15 ? ? ? ? 48 89 E5 41 56 41 55 41 54 49 89 F4 53 48 8B 07"_pat).as<decltype(equipWearable)>();
     setAbsOrigin = clientPatternFinder("E8 ? ? ? ? 4D 63 B5"_pat).add(1).relativeToAbsolute().as<decltype(setAbsOrigin)>();
     plantedC4s = clientPatternFinder("48 8D 3D ? ? ? ? 42 C6 44 28"_pat).add(3).relativeToAbsolute().as<decltype(plantedC4s)>();
-    gameRules = clientPatternFinder("48 8D 1D ? ? ? ? 48 8B 3B 48 85 FF 74 06"_pat).add(3).relativeToAbsolute().deref().as<csgo::EntityPOD**>();
+    gameRules = clientPatternFinder("48 8D 1D ? ? ? ? 48 8B 3B 48 85 FF 74 06"_pat).add(3).relativeToAbsolute().as<csgo::EntityPOD**>();
     dispatchSound = enginePatternFinder("74 10 E8 ? ? ? ? 48 8B 35"_pat).add(3).as<int*>();
     predictionRandomSeed = clientPatternFinder("41 8D 56 FF 31 C9"_pat).add(-14).relativeToAbsolute().as<int*>();
     registeredPanoramaEvents = clientPatternFinder("E8 ? ? ? ? 44 0F B7 9D"_pat).add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<decltype(registeredPanoramaEvents)>();
