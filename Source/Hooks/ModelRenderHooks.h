@@ -36,5 +36,5 @@ public:
 private:
     HookImpl hookImpl;
 
-    void (THISCALL_CONV* originalDrawModelExecute)(csgo::ModelRenderPOD* thisptr, void* ctx, void* state, const csgo::ModelRenderInfo* info, csgo::matrix3x4* customBoneToWorld);
+    csgo::DrawModelExecute originalDrawModelExecute;
 };

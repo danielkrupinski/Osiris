@@ -46,4 +46,9 @@ using SetItemSessionPropertyValue = void (THISCALL_CONV*)(UiComponentInventoryPO
 
 using MakePanoramaSymbol = void (THISCALL_CONV*)(short* symbol, const char* name);
 
+struct ModelRenderPOD;
+struct ModelRenderInfo;
+class matrix3x4;
+using DrawModelExecute = void (THISCALL_CONV*)(csgo::ModelRenderPOD* thisptr, void* ctx, void* state, const csgo::ModelRenderInfo* info, csgo::matrix3x4* customBoneToWorld);
+
 }
