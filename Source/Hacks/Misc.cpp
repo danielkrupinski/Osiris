@@ -144,8 +144,6 @@ struct MiscConfig {
     ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
     KeyBind prepareRevolverKey;
     int hitSound{ 0 };
-    int chokedPackets{ 0 };
-    KeyBind chokedPacketsKey;
     int quickHealthshotKey{ 0 };
     float maxAngleDelta{ 255.0f };
     int killSound{ 0 };
@@ -743,12 +741,6 @@ void Misc::autoPistol(csgo::UserCmd* cmd) noexcept
                 cmd->buttons &= ~csgo::UserCmd::IN_ATTACK;
         }
     }
-}
-
-void Misc::chokePackets(const csgo::Engine& engine, bool& sendPacket) noexcept
-{
-    if (!miscConfig.chokedPacketsKey.isSet() || miscConfig.chokedPacketsKey.isDown())
-        sendPacket = engine.getNetworkChannel()->chokedPackets >= miscConfig.chokedPackets;
 }
 
 void Misc::autoReload(csgo::UserCmd* cmd) noexcept
@@ -1477,18 +1469,6 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
             ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
     }
     ImGui::PopID();
-    ImGui::SetNextItemWidth(90.0f);
-    ImGui::InputInt("Choked packets", &miscConfig.chokedPackets, 1, 5);
-    miscConfig.chokedPackets = std::clamp(miscConfig.chokedPackets, 0, 64);
-    ImGui::SameLine();
-    ImGui::PushID("Choked packets Key");
-    ImGui::hotkey("", miscConfig.chokedPacketsKey);
-    ImGui::PopID();
-    /*
-    ImGui::Text("Quick healthshot");
-    ImGui::SameLine();
-    hotkey(miscConfig.quickHealthshotKey);
-    */
     ImGui::Checkbox("Grenade Prediction", &miscConfig.nadePredict);
     ImGui::Checkbox("Fix tablet signal", &miscConfig.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
@@ -1645,8 +1625,6 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Prepare revolver", m.prepareRevolver);
     read(j, "Prepare revolver key", m.prepareRevolverKey);
     read(j, "Hit sound", m.hitSound);
-    read(j, "Choked packets", m.chokedPackets);
-    read(j, "Choked packets key", m.chokedPacketsKey);
     read(j, "Quick healthshot key", m.quickHealthshotKey);
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
@@ -1782,8 +1760,6 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
     WRITE("Hit sound", hitSound);
-    WRITE("Choked packets", chokedPackets);
-    WRITE("Choked packets key", chokedPacketsKey);
     WRITE("Quick healthshot key", quickHealthshotKey);
     WRITE("Grenade predict", nadePredict);
     WRITE("Fix tablet signal", fixTabletSignal);

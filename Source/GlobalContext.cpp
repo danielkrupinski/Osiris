@@ -72,14 +72,6 @@ bool GlobalContext::createMoveHook(csgo::ClientMode* thisptr, float inputSampleT
     if (!cmd->commandNumber)
         return result;
 
-#if IS_WIN32()
-    // bool& sendPacket = *reinterpret_cast<bool*>(*reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS()) - 0x1C);
-    // since 19.02.2022 game update sendPacket is no longer on stack
-    bool sendPacket = true;
-#else
-    bool dummy;
-    bool& sendPacket = dummy;
-#endif
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 
@@ -111,10 +103,6 @@ bool GlobalContext::createMoveHook(csgo::ClientMode* thisptr, float inputSampleT
     features->misc.edgejump(cmd);
     features->misc.moonwalk(cmd);
     features->misc.fastPlant(getEngineInterfaces().engineTrace(), cmd);
-
-    if (!(cmd->buttons & (csgo::UserCmd::IN_ATTACK | csgo::UserCmd::IN_ATTACK2))) {
-        features->misc.chokePackets(getEngineInterfaces().getEngine(), sendPacket);
-    }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
