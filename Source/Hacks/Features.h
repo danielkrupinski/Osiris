@@ -28,6 +28,6 @@ struct Features {
         .glow{ clientPatternFinder },
         .visuals{ memory, otherInterfaces, clientInterfaces, engineInterfaces, clientPatternFinder, enginePatternFinder },
         .inventoryChanger{ inventory_changer::createInventoryChanger(engineInterfaces, clientInterfaces, otherInterfaces, memory, clientPatternFinder, randomGenerator) },
-        .misc{ clientInterfaces, otherInterfaces, memory, clientPatternFinder, enginePatternFinder }
+        .misc{ clientInterfaces, engineInterfaces, otherInterfaces, memory, clientPatternFinder, enginePatternFinder }
     };
 }

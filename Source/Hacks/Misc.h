@@ -23,8 +23,8 @@ struct DemoPlaybackParameters;
 
 class Misc {
 public:
-    Misc(const ClientInterfaces& clientInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
-        : clientInterfaces{ clientInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
+    Misc(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
 #if IS_WIN32()
         setClanTag{ retSpoofGadgets->engine, enginePatternFinder("53 56 57 8B DA 8B F9 FF 15"_pat).get() },
         submitReport{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 E4 F8 83 EC 28 8B 4D 08"_pat).get() }
@@ -58,37 +58,37 @@ public:
     void noscopeCrosshair(ImDrawList* drawlist) noexcept;
     void recoilCrosshair(ImDrawList* drawList) noexcept;
     void watermark() noexcept;
-    void prepareRevolver(const csgo::Engine& engine, csgo::UserCmd*) noexcept;
-    void fastPlant(const csgo::EngineTrace& engineTrace, csgo::UserCmd*) noexcept;
+    void prepareRevolver(csgo::UserCmd*) noexcept;
+    void fastPlant(csgo::UserCmd*) noexcept;
     void fastStop(csgo::UserCmd*) noexcept;
     void drawBombTimer() noexcept;
-    void stealNames(const csgo::Engine& engine) noexcept;
+    void stealNames() noexcept;
     void disablePanoramablur() noexcept;
     void quickReload(csgo::UserCmd*) noexcept;
-    bool changeName(const csgo::Engine& engine, bool, const char*, float) noexcept;
+    bool changeName(bool, const char*, float) noexcept;
     void bunnyHop(csgo::UserCmd*) noexcept;
-    void fakeBan(const csgo::Engine& engine, bool = false) noexcept;
+    void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
     void fixTabletSignal() noexcept;
-    void killMessage(const csgo::Engine& engine, const csgo::GameEvent& event) noexcept;
+    void killMessage(const csgo::GameEvent& event) noexcept;
     void fixMovement(csgo::UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(csgo::UserCmd* cmd) noexcept;
-    void fixAnimationLOD(const csgo::Engine& engine, csgo::FrameStage stage) noexcept;
+    void fixAnimationLOD(csgo::FrameStage stage) noexcept;
     void autoPistol(csgo::UserCmd* cmd) noexcept;
     void autoReload(csgo::UserCmd* cmd) noexcept;
     void revealRanks(csgo::UserCmd* cmd) noexcept;
     void autoStrafe(csgo::UserCmd* cmd) noexcept;
     void removeCrouchCooldown(csgo::UserCmd* cmd) noexcept;
     void moonwalk(csgo::UserCmd* cmd) noexcept;
-    void playHitSound(const csgo::Engine& engine, const csgo::GameEvent& event) noexcept;
-    void killSound(const csgo::Engine& engine, const csgo::GameEvent& event) noexcept;
-    void purchaseList(const csgo::Engine& engine, const csgo::GameEvent* event = nullptr) noexcept;
+    void playHitSound(const csgo::GameEvent& event) noexcept;
+    void killSound(const csgo::GameEvent& event) noexcept;
+    void purchaseList(const csgo::GameEvent* event = nullptr) noexcept;
     void oppositeHandKnife(csgo::FrameStage stage) noexcept;
-    void runReportbot(const csgo::Engine& engine) noexcept;
+    void runReportbot() noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void voteRevealer(const csgo::GameEvent& event) noexcept;
-    void drawOffscreenEnemies(const csgo::Engine& engine, ImDrawList* drawList) noexcept;
+    void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
 
     bool isPlayingDemoHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
@@ -96,13 +96,13 @@ public:
     std::optional<std::pair<csgo::Vector, csgo::Vector>> listLeavesInBoxHook(ReturnAddress returnAddress, std::uintptr_t frameAddress) const;
     void dispatchUserMessageHook(csgo::UserMessageType type, int size, const void* data);
 
-    void updateEventListeners(const EngineInterfaces& engineInterfaces, bool forceRemove = false) noexcept;
+    void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 
     // GUI
     void menuBarItem() noexcept;
-    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces) noexcept;
-    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, const EngineInterfaces& engineInterfaces, bool contentOnly) noexcept;
+    void tabItem(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow) noexcept;
+    void drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, bool contentOnly) noexcept;
 
     // Config
     json toJson() noexcept;
@@ -115,6 +115,7 @@ private:
     void onVoteFailed() noexcept;
 
     ClientInterfaces clientInterfaces;
+    EngineInterfaces engineInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;
 

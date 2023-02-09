@@ -115,17 +115,17 @@ bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float in
     features->misc.nadePredict();
     features->misc.antiAfkKick(cmd);
     features->misc.fastStop(cmd);
-    features->misc.prepareRevolver(globalContext->getEngineInterfaces().getEngine(), cmd);
+    features->misc.prepareRevolver(cmd);
     features->visuals.removeShadows();
-    features->misc.runReportbot(globalContext->getEngineInterfaces().getEngine());
+    features->misc.runReportbot();
     features->misc.bunnyHop(cmd);
     features->misc.autoStrafe(cmd);
     features->misc.removeCrouchCooldown(cmd);
     features->misc.autoPistol(cmd);
     features->misc.autoReload(cmd);
     features->misc.updateClanTag();
-    features->misc.fakeBan(globalContext->getEngineInterfaces().getEngine());
-    features->misc.stealNames(globalContext->getEngineInterfaces().getEngine());
+    features->misc.fakeBan();
+    features->misc.stealNames();
     features->misc.revealRanks(cmd);
     features->misc.quickReload(cmd);
     features->misc.fixTabletSignal();
@@ -138,7 +138,7 @@ bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float in
     features->backtrack.run(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, globalContext->getEngineInterfaces(), globalContext->getOtherInterfaces(), *globalContext->memory, cmd);
     features->misc.edgejump(cmd);
     features->misc.moonwalk(cmd);
-    features->misc.fastPlant(globalContext->getEngineInterfaces().engineTrace(), cmd);
+    features->misc.fastPlant(cmd);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
@@ -216,7 +216,7 @@ void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csg
 {
     auto& features = globalContext->features;
     if (globalContext->getEngineInterfaces().getEngine().isConnected() && !globalContext->getEngineInterfaces().getEngine().isInGame())
-        features->misc.changeName(globalContext->getEngineInterfaces().getEngine(), true, nullptr, 0.0f);
+        features->misc.changeName(true, nullptr, 0.0f);
 
     if (stage == csgo::FrameStage::START)
         GameData::update(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, globalContext->getEngineInterfaces(), globalContext->getOtherInterfaces(), *globalContext->memory);
@@ -225,7 +225,7 @@ void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csg
         features->misc.preserveKillfeed();
         features->misc.disablePanoramablur();
         features->visuals.colorWorld();
-        features->misc.updateEventListeners(globalContext->getEngineInterfaces());
+        features->misc.updateEventListeners();
         features->visuals.updateEventListeners();
     }
     if (globalContext->getEngineInterfaces().getEngine().isInGame()) {
@@ -237,7 +237,7 @@ void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csg
         features->visuals.disablePostProcessing(stage);
         features->visuals.removeVisualRecoil(stage);
         features->visuals.applyZoom(stage);
-        features->misc.fixAnimationLOD(globalContext->getEngineInterfaces().getEngine(), stage);
+        features->misc.fixAnimationLOD(stage);
         features->backtrack.update(globalContext->getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, globalContext->getOtherInterfaces(), *globalContext->memory, stage);
     }
     features->inventoryChanger.run(*globalContext->memory, stage);

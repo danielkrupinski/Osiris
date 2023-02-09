@@ -144,9 +144,9 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 #endif
 }
 
-void Hooks::uninstall(Misc& misc, Glow& glow, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept
+void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept
 {
-    misc.updateEventListeners(engineInterfaces, true);
+    misc.updateEventListeners(true);
     visuals.updateEventListeners(true);
 
 #if IS_WIN32()

@@ -240,16 +240,16 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
         features->misc.preserveKillfeed(true);
         [[fallthrough]];
     case fnv::hash(csgo::round_freeze_end):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);
+        features->misc.purchaseList(&event);
         break;
     case fnv::hash(csgo::player_death):
         features->inventoryChanger.updateStatTrak(event);
         features->inventoryChanger.overrideHudIcon(*memory, event);
-        features->misc.killMessage(getEngineInterfaces().getEngine(), event);
-        features->misc.killSound(getEngineInterfaces().getEngine(), event);
+        features->misc.killMessage(event);
+        features->misc.killSound(event);
         break;
     case fnv::hash(csgo::player_hurt):
-        features->misc.playHitSound(getEngineInterfaces().getEngine(), event);
+        features->misc.playHitSound(event);
         features->visuals.hitEffect(&event);
         features->visuals.hitMarker(&event);
         break;
@@ -260,7 +260,7 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
         features->inventoryChanger.onRoundMVP(event);
         break;
     case fnv::hash(csgo::item_purchase):
-        features->misc.purchaseList(getEngineInterfaces().getEngine(), &event);
+        features->misc.purchaseList(&event);
         break;
     case fnv::hash(csgo::bullet_impact):
         features->visuals.bulletTracer(event);
@@ -274,10 +274,10 @@ void GlobalContext::renderFrame()
 
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         StreamProofESP::render(*memory, *config);
-        features->misc.purchaseList(getEngineInterfaces().getEngine());
+        features->misc.purchaseList();
         features->misc.noscopeCrosshair(ImGui::GetBackgroundDrawList());
         features->misc.recoilCrosshair(ImGui::GetBackgroundDrawList());
-        features->misc.drawOffscreenEnemies(getEngineInterfaces().getEngine(), ImGui::GetBackgroundDrawList());
+        features->misc.drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         features->misc.drawBombTimer();
         features->misc.spectatorList();
         features->visuals.hitMarker(nullptr, ImGui::GetBackgroundDrawList());
