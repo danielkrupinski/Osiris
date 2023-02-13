@@ -1117,6 +1117,12 @@
     <ClInclude Include="Helpers\PatternNotFoundHandler.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\DynamicLibrary.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\DynamicLibraryWrapper.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

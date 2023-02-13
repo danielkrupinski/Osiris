@@ -51,6 +51,9 @@
 
 #include "Interfaces/ClientInterfaces.h"
 
+#include "Platform/DynamicLibrary.h"
+#include "Platform/DynamicLibraryWrapper.h"
+
 GlobalContext::GlobalContext()
 {
 #if IS_WIN32()
@@ -75,31 +78,9 @@ LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM 
         getOtherInterfaces().getInputSystem().enableInput(!gui->isOpen());
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
-
-        const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-        clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientDLL.getView(), retSpoofGadgets->client } });
-        const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
-        engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineDLL.getView(), retSpoofGadgets->client } });
-        interfaces.emplace();
-
-        PatternNotFoundHandler patternNotFoundHandler;
-        const PatternFinder clientPatternFinder{ getCodeSection(clientDLL.getView()), patternNotFoundHandler };
-        const PatternFinder enginePatternFinder{ getCodeSection(engineDLL.getView()), patternNotFoundHandler };
-
-        memory.emplace(clientPatternFinder, enginePatternFinder, clientInterfaces->client, *retSpoofGadgets);
-
-        Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
-        gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
-
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-
-        randomGenerator.emplace();
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
-        config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
-        gui.emplace();
-        hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
-
+        initialize();
         state = GlobalContext::State::Initialized;
     }
 
@@ -149,31 +130,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
             event->type = 0;
     } else if (state == GlobalContext::State::NotInitialized) {
         state = GlobalContext::State::Initializing;
-
-        const linux_platform::SharedObject clientSo{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-        clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
-        const linux_platform::SharedObject engineSo{ linux_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
-        engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
-
-        interfaces.emplace();
-        PatternNotFoundHandler patternNotFoundHandler;
-        const PatternFinder clientPatternFinder{ linux_platform::getCodeSection(clientSo.getView()), patternNotFoundHandler };
-        const PatternFinder enginePatternFinder{ linux_platform::getCodeSection(engineSo.getView()), patternNotFoundHandler };
-
-        memory.emplace(clientPatternFinder, enginePatternFinder, clientInterfaces->client, *retSpoofGadgets);
-
-        Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
-        gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
-
         ImGui::CreateContext();
-
-        randomGenerator.emplace();
-        features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
-        config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
-        
-        gui.emplace();
-        hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
-
+        initialize();
         state = GlobalContext::State::Initialized;
     }
     
@@ -300,4 +258,29 @@ void GlobalContext::renderFrame()
 
     ImGui::EndFrame();
     ImGui::Render();
+}
+
+void GlobalContext::initialize()
+{
+    const DynamicLibrary<DynamicLibraryWrapper> clientSo{ DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
+    clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
+    const DynamicLibrary<DynamicLibraryWrapper> engineSo{ DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
+    engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
+
+    interfaces.emplace();
+    PatternNotFoundHandler patternNotFoundHandler;
+    const PatternFinder clientPatternFinder{ getCodeSection(clientSo.getView()), patternNotFoundHandler };
+    const PatternFinder enginePatternFinder{ getCodeSection(engineSo.getView()), patternNotFoundHandler };
+
+    memory.emplace(clientPatternFinder, enginePatternFinder, clientInterfaces->client, *retSpoofGadgets);
+
+    Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
+    gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
+
+    randomGenerator.emplace();
+    features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
+    config.emplace(features->misc, features->inventoryChanger, features->glow, features->backtrack, features->visuals, getOtherInterfaces(), *memory);
+    
+    gui.emplace();
+    hooks->install(clientInterfaces->client, getEngineInterfaces(), getOtherInterfaces(), *memory);
 }

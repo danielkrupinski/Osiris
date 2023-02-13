@@ -395,7 +395,9 @@
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
+    <ClInclude Include="Platform\DynamicLibraryWrapper.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
