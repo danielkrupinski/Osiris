@@ -143,6 +143,7 @@ enum class WeaponId : short {
     Rio2022ViewerPass = 4850,
     Rio2022BronzeCoin = 4851,
     Rio2022ViewerPassWith3Tokens = 4855,
+    RevolutionCase = 4880,
     GloveStuddedBloodhound = 5027,
     GloveT,
     GloveCT,
