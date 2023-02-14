@@ -13,8 +13,6 @@ namespace csgo
     struct ModelRenderPOD;
 }
 
-void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
-
 class ModelRenderHooks {
 public:
     void install(csgo::ModelRenderPOD* modelRender)
@@ -32,6 +30,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->engine, originalDrawModelExecute };
     }
+
+    static void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
 
 private:
     HookType hookImpl;

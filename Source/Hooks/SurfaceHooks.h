@@ -9,11 +9,6 @@
 
 namespace csgo { struct SurfacePOD; }
 
-void FASTCALL_CONV setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r, int g, int b, int a) noexcept;
-#if IS_WIN32()
-void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept;
-#endif
-
 class SurfaceHooks {
 public:
     void install(csgo::SurfacePOD* surface)
@@ -40,6 +35,11 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalLockCursor };
     }
+#endif
+
+    static void FASTCALL_CONV setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r, int g, int b, int a) noexcept;
+#if IS_WIN32()
+    static void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept;
 #endif
 
 private:

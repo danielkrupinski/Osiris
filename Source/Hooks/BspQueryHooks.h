@@ -8,8 +8,6 @@
 
 namespace csgo { struct Vector; }
 
-int FASTCALL_CONV listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept;
-
 class BspQueryHooks {
 public:
     void install(void* engineSpatialQuery)
@@ -27,6 +25,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalListLeavesInBox };
     }
+
+    static int FASTCALL_CONV listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept;
 
 private:
     HookType hookImpl;

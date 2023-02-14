@@ -100,7 +100,7 @@ void swapWindow(SDL_Window* window) noexcept
 
 #endif
 
-bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float inputSampleTime, csgo::UserCmd* cmd) noexcept
+bool FASTCALL_CONV ClientModeHooks::createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float inputSampleTime, csgo::UserCmd* cmd) noexcept
 {
     auto result = hooks->clientModeHooks.getOriginalCreateMove()(thisptr, inputSampleTime, cmd);
 
@@ -164,7 +164,7 @@ bool FASTCALL_CONV createMove(FASTCALL_THIS(csgo::ClientMode* thisptr), float in
     return false;
 }
 
-void FASTCALL_CONV doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr), void* param) noexcept
+void FASTCALL_CONV ClientModeHooks::doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr), void* param) noexcept
 {
     auto& features = globalContext->features;
     if (globalContext->getEngineInterfaces().getEngine().isInGame()) {
@@ -178,7 +178,7 @@ void FASTCALL_CONV doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr),
     hooks->clientModeHooks.getOriginalDoPostScreenEffects()(thisptr, param);
 }
 
-float FASTCALL_CONV getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
+float FASTCALL_CONV ClientModeHooks::getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
     float additionalFov = globalContext->features->visuals.viewModelFov();
     if (localPlayer) {
@@ -189,7 +189,7 @@ float FASTCALL_CONV getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) no
     return hooks->clientModeHooks.getOriginalGetViewModelFov()(thisptr) + additionalFov;
 }
 
-void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
+void FASTCALL_CONV ModelRenderHooks::drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
 {
     if (globalContext->getOtherInterfaces().getStudioRender().isForcedMaterialOverride())
         return hooks->modelRenderHooks.getOriginalDrawModelExecute()(thisptr, ctx, state, &info, customBoneToWorld);
@@ -204,7 +204,7 @@ void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr)
     globalContext->getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);
 }
 
-int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept
+int FASTCALL_CONV SvCheatsHooks::getInt(csgo::ConVarPOD* thisptr) noexcept
 {
     const auto original = hooks->svCheatsHooks.getOriginalSvCheatsGetInt()(thisptr);
     if (globalContext->features->visuals.svCheatsGetBoolHook(RETURN_ADDRESS()))
@@ -212,7 +212,7 @@ int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept
     return original;
 }
 
-void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::FrameStage stage) noexcept
+void FASTCALL_CONV ClientHooks::frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::FrameStage stage) noexcept
 {
     auto& features = globalContext->features;
     if (globalContext->getEngineInterfaces().getEngine().isConnected() && !globalContext->getEngineInterfaces().getEngine().isInGame())
@@ -245,7 +245,7 @@ void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csg
     hooks->clientHooks.getOriginalFrameStageNotify()(thisptr, stage);
 }
 
-int FASTCALL_CONV emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
+int FASTCALL_CONV EngineSoundHooks::emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
     Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, *globalContext->memory, soundEntry, entityIndex, volume);
     globalContext->features->misc.autoAccept(soundEntry);
@@ -254,7 +254,7 @@ int FASTCALL_CONV emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* 
     return hooks->engineSoundHooks.getOriginalEmitSound()(thisptr, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, &origin, &direction, utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
-bool FASTCALL_CONV shouldDrawFog(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
+bool FASTCALL_CONV ClientModeHooks::shouldDrawFog(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>) {
@@ -266,7 +266,7 @@ bool FASTCALL_CONV shouldDrawFog(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexc
     return !globalContext->features->visuals.shouldRemoveFog();
 }
 
-bool FASTCALL_CONV shouldDrawViewModel(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
+bool FASTCALL_CONV ClientModeHooks::shouldDrawViewModel(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
     if (globalContext->features->visuals.isZoomOn() && localPlayer && localPlayer.get().fov() < 45 && localPlayer.get().fovStart() < 45)
         return false;
@@ -274,7 +274,7 @@ bool FASTCALL_CONV shouldDrawViewModel(FASTCALL_THIS(csgo::ClientMode* thisptr))
 }
 
 #if IS_WIN32()
-void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept
+void FASTCALL_CONV SurfaceHooks::lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept
 {
     if (gui->isOpen())
         return globalContext->getOtherInterfaces().getSurface().unlockCursor();
@@ -282,13 +282,13 @@ void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept
 }
 #endif
 
-void FASTCALL_CONV setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r, int g, int b, int a) noexcept
+void FASTCALL_CONV SurfaceHooks::setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r, int g, int b, int a) noexcept
 {
     globalContext->features->visuals.setDrawColorHook(RETURN_ADDRESS(), a);
     hooks->surfaceHooks.getOriginalSetDrawColor()(thisptr, r, g, b, a);
 }
 
-void FASTCALL_CONV overrideView(FASTCALL_THIS(csgo::ClientMode* thisptr), csgo::ViewSetup* setup) noexcept
+void FASTCALL_CONV ClientModeHooks::overrideView(FASTCALL_THIS(csgo::ClientMode* thisptr), csgo::ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer.get().isScoped())
         setup->fov += globalContext->features->visuals.fov();
@@ -296,7 +296,7 @@ void FASTCALL_CONV overrideView(FASTCALL_THIS(csgo::ClientMode* thisptr), csgo::
     hooks->clientModeHooks.getOriginalOverrideView()(thisptr, setup);
 }
 
-int FASTCALL_CONV listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept
+int FASTCALL_CONV BspQueryHooks::listLeavesInBox(FASTCALL_THIS(void* thisptr), const csgo::Vector& mins, const csgo::Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     if (const auto newVectors = globalContext->features->misc.listLeavesInBoxHook(RETURN_ADDRESS(), FRAME_ADDRESS()))
         return hooks->bspQueryHooks.getOriginalListLeavesInBox()(thisptr, &newVectors->first, &newVectors->second, list, listMax);
@@ -312,14 +312,14 @@ int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept
     return hooks->originalDispatchSound(soundInfo);
 }
 
-void FASTCALL_CONV render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept
+void FASTCALL_CONV ViewRenderHooks::render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept
 {
     globalContext->features->visuals.applyScreenEffects();
     globalContext->features->visuals.hitEffect();
     hooks->viewRenderHooks.getOriginalRender2dEffectsPreHud()(thisptr, viewSetup);
 }
 
-const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
+const csgo::DemoPlaybackParameters* FASTCALL_CONV EngineHooks::getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
 {
     const auto params = hooks->engineHooks.getOriginalGetDemoPlaybackParameters()(thisptr);
 
@@ -329,7 +329,7 @@ const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FAST
     return params;
 }
 
-bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
+bool FASTCALL_CONV EngineHooks::isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept
 {
     const auto result = hooks->engineHooks.getOriginalIsPlayingDemo()(thisptr);
 
@@ -339,33 +339,33 @@ bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexce
     return result;
 }
 
-void FASTCALL_CONV updateColorCorrectionWeights(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
+void FASTCALL_CONV ClientModeHooks::updateColorCorrectionWeights(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept
 {
     hooks->clientModeHooks.getOriginalUpdateColorCorrectionWeights()(thisptr);
     globalContext->features->visuals.updateColorCorrectionWeightsHook();
 }
 
-float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept
+float FASTCALL_CONV EngineHooks::getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept
 {
     if (globalContext->features->misc.aspectRatio() != 0.0f)
         return globalContext->features->misc.aspectRatio();
     return hooks->engineHooks.getOriginalGetScreenAspectRatio()(thisptr, width, height);
 }
 
-void FASTCALL_CONV renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool preViewModel) noexcept
+void FASTCALL_CONV ViewRenderHooks::renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool preViewModel) noexcept
 {
     if (!globalContext->features->visuals.renderSmokeOverlayHook())
         hooks->viewRenderHooks.getOriginalRenderSmokeOverlay()(thisptr, preViewModel);
 }
 
-double FASTCALL_CONV getArgAsNumber(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
+double FASTCALL_CONV PanoramaMarshallHelperHooks::getArgAsNumber(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetArgAsNumber()(thisptr, params, index);
     globalContext->features->inventoryChanger.getArgAsNumberHook(static_cast<int>(result), RETURN_ADDRESS());
     return result;
 }
 
-const char* FASTCALL_CONV getArgAsString(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
+const char* FASTCALL_CONV PanoramaMarshallHelperHooks::getArgAsString(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetArgAsString()(thisptr, params, index);
 
@@ -375,32 +375,32 @@ const char* FASTCALL_CONV getArgAsString(FASTCALL_THIS(csgo::PanoramaMarshallHel
     return result;
 }
 
-void FASTCALL_CONV setResultInt(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int result) noexcept
+void FASTCALL_CONV PanoramaMarshallHelperHooks::setResultInt(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params, int result) noexcept
 {
     result = globalContext->features->inventoryChanger.setResultIntHook(RETURN_ADDRESS(), params, result);
     hooks->panoramaMarshallHelperHooks.getOriginalSetResultInt()(thisptr, params, result);
 }
 
-unsigned FASTCALL_CONV getNumArgs(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params) noexcept
+unsigned FASTCALL_CONV PanoramaMarshallHelperHooks::getNumArgs(FASTCALL_THIS(csgo::PanoramaMarshallHelperPOD* thisptr), void* params) noexcept
 {
     const auto result = hooks->panoramaMarshallHelperHooks.getOriginalGetNumArgs()(globalContext->memory->panoramaMarshallHelper, params);
     globalContext->features->inventoryChanger.getNumArgsHook(thisptr, result, RETURN_ADDRESS(), params);
     return result;
 }
 
-void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
+void FASTCALL_CONV InventoryManagerHooks::updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept
 {
     globalContext->features->inventoryChanger.onItemEquip(team, slot, itemID);
     hooks->inventoryManagerHooks.getOriginalUpdateInventoryEquippedState()(thisptr, inventory, itemID, team, slot, swap);
 }
 
-void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept
+void FASTCALL_CONV CSPlayerInventoryHooks::soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept
 {
     globalContext->features->inventoryChanger.onSoUpdated(csgo::SharedObject::from(retSpoofGadgets->client, object));
     hooks->playerInventoryHooks.getOriginalSoUpdated()(thisptr, owner, object, event);
 }
 
-bool FASTCALL_CONV dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
+bool FASTCALL_CONV ClientHooks::dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept
 {
     globalContext->features->misc.dispatchUserMessageHook(type, size, data);
     if (type == csgo::UserMessageType::Text)
@@ -411,7 +411,7 @@ bool FASTCALL_CONV dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), 
 
 #if IS_WIN32()
 
-void* FASTCALL_CONV allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept
+void* FASTCALL_CONV KeyValuesSystemHooks::allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept
 {
     if (const auto returnAddress = RETURN_ADDRESS(); returnAddress == globalContext->memory->keyValuesAllocEngine || returnAddress == globalContext->memory->keyValuesAllocClient)
         return nullptr;

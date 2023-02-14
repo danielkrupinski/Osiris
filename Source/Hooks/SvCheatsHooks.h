@@ -8,14 +8,12 @@
 
 namespace csgo { struct ConVarPOD; }
 
-int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept;
-
 class SvCheatsHooks {
 public:
     void install(csgo::ConVarPOD* svCheats)
     {
         hookImpl.init(svCheats);
-        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hookAt(WIN32_LINUX(13, 16), &svCheatsGetInt));
+        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hookAt(WIN32_LINUX(13, 16), &getInt));
     }
 
     void uninstall()
@@ -27,6 +25,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalSvCheatsGetInt };
     }
+
+    static int FASTCALL_CONV getInt(csgo::ConVarPOD* thisptr) noexcept;
 
 private:
     HookType hookImpl;

@@ -12,8 +12,6 @@ namespace csgo
     struct Vector;
 }
 
-int FASTCALL_CONV emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept;
-
 class EngineSoundHooks {
 public:
     void install(csgo::EngineSoundPOD* engineSound)
@@ -31,6 +29,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalEmitSound };
     }
+    
+    static int FASTCALL_CONV emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept;
 
 private:
     HookType hookImpl;

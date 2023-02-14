@@ -8,9 +8,6 @@
 
 namespace csgo { struct ViewRender; }
 
-void FASTCALL_CONV render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept;
-void FASTCALL_CONV renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool update) noexcept;
-
 class ViewRenderHooks {
 public:
     void install(csgo::ViewRender* viewRender)
@@ -34,6 +31,9 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalRenderSmokeOverlay };
     }
+    
+    static void FASTCALL_CONV render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept;
+    static void FASTCALL_CONV renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool update) noexcept;
 
 private:
     HookType hookImpl;

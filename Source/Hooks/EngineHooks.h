@@ -8,10 +8,6 @@
 namespace csgo { struct DemoPlaybackParameters; }
 namespace csgo { struct EnginePOD; }
 
-bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
-float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept;
-const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
-
 class EngineHooks {
 public:
     void install(csgo::EnginePOD* engine)
@@ -42,6 +38,10 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalGetDemoPlaybackParameters };
     }
+
+    static bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
+    static float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept;
+    static const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
 
 private:
     HookType hookImpl;

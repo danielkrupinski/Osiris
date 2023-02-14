@@ -8,8 +8,6 @@
 
 namespace csgo { struct KeyValuesSystemPOD; }
 
-void* FASTCALL_CONV allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept;
-
 class KeyValuesSystemHooks {
 public:
     void install(csgo::KeyValuesSystemPOD* keyValuesSystem)
@@ -27,6 +25,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalAllocKeyValuesMemory };
     }
+
+    static void* FASTCALL_CONV allocKeyValuesMemory(FASTCALL_THIS(csgo::KeyValuesSystemPOD* thisptr), int size) noexcept;
 
 private:
     HookType hookImpl;

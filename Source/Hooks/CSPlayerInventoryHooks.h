@@ -13,8 +13,6 @@ namespace csgo
     struct SOID;
 }
 
-void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
-
 class CSPlayerInventoryHooks {
 public:
     void install(csgo::CSPlayerInventoryPOD* inventory)
@@ -32,6 +30,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalSoUpdated };
     }
+
+    static void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
 
 private:
     HookType hookImpl;

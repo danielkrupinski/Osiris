@@ -12,8 +12,6 @@ namespace csgo
     enum class Team;
 }
 
-void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
-
 class InventoryManagerHooks {
 public:
     void install(csgo::InventoryManagerPOD* inventoryManager)
@@ -31,6 +29,8 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalUpdateInventoryEquippedState };
     }
+
+    static void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
 
 private:
     HookType hookImpl;

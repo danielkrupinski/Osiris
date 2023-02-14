@@ -13,9 +13,6 @@ namespace csgo
     enum class UserMessageType;
 }
 
-void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::FrameStage stage) noexcept;
-bool FASTCALL_CONV dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept;
-
 class ClientHooks {
 public:
     void install(csgo::ClientPOD* client)
@@ -39,6 +36,9 @@ public:
     {
         return FunctionInvoker{ retSpoofGadgets->client, originalDispatchUserMessage };
     }
+
+    static void FASTCALL_CONV frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::FrameStage stage) noexcept;
+    static bool FASTCALL_CONV dispatchUserMessage(FASTCALL_THIS(csgo::ClientPOD* thisptr), csgo::UserMessageType type, int passthroughFlags, int size, const void* data) noexcept;
 
 private:
     HookType hookImpl;
