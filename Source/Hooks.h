@@ -37,6 +37,8 @@ union SDL_Event;
 #include "Hooks/KeyValuesSystemHooks.h"
 #endif
 
+#include "HookType.h"
+
 namespace csgo
 {
 
@@ -52,13 +54,6 @@ class OtherInterfaces;
 class Glow;
 class Visuals;
 class Misc;
-
-#if IS_WIN32()
-// Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
-using HookType = MinHook;
-#else
-using HookType = VmtSwap;
-#endif
 
 class Hooks {
 public:
