@@ -203,7 +203,7 @@ void Chams::renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entit
 
 void Chams::renderWeapons(Config& config) noexcept
 {
-    if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().isScoped())
+    if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
     applyChams(config.chams["Weapons"].materials, localPlayer.get().health());
