@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
@@ -20,7 +21,6 @@ float FASTCALL_CONV getViewModelFov(FASTCALL_THIS(csgo::ClientMode* thisptr)) no
 void FASTCALL_CONV doPostScreenEffects(FASTCALL_THIS(csgo::ClientMode* thisptr), void* param) noexcept;
 void FASTCALL_CONV updateColorCorrectionWeights(FASTCALL_THIS(csgo::ClientMode* thisptr)) noexcept;
 
-template <typename HookImpl>
 class ClientModeHooks {
 public:
     void install(csgo::ClientMode* clientMode)
@@ -76,7 +76,7 @@ public:
     }
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     bool (THISCALL_CONV* originalShouldDrawFog)(csgo::ClientMode* thisptr);
     void (THISCALL_CONV* originalOverrideView)(csgo::ClientMode* thisptr, csgo::ViewSetup* setup);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
@@ -11,7 +12,6 @@ bool FASTCALL_CONV isPlayingDemo(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexce
 float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept;
 const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
 
-template <typename HookImpl>
 class EngineHooks {
 public:
     void install(csgo::EnginePOD* engine)
@@ -44,7 +44,7 @@ public:
     }
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     bool (THISCALL_CONV* originalIsPlayingDemo)(csgo::EnginePOD* thisptr);
     float (THISCALL_CONV* originalGetScreenAspectRatio)(csgo::EnginePOD* thisptr, int width, int height);

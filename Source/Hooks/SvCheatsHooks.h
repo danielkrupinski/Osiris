@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
@@ -9,7 +10,6 @@ namespace csgo { struct ConVarPOD; }
 
 int FASTCALL_CONV svCheatsGetInt(csgo::ConVarPOD* thisptr) noexcept;
 
-template <typename HookImpl>
 class SvCheatsHooks {
 public:
     void install(csgo::ConVarPOD* svCheats)
@@ -29,7 +29,7 @@ public:
     }
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     int (THISCALL_CONV* originalSvCheatsGetInt)(csgo::ConVarPOD* thisptr);
 };

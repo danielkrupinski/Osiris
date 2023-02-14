@@ -2,6 +2,7 @@
 
 #include <CSGO/Constants/ItemId.h>
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
 
@@ -13,7 +14,6 @@ namespace csgo
 
 void FASTCALL_CONV updateInventoryEquippedState(FASTCALL_THIS(csgo::InventoryManagerPOD* thisptr), std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap) noexcept;
 
-template <typename HookImpl>
 class InventoryManagerHooks {
 public:
     void install(csgo::InventoryManagerPOD* inventoryManager)
@@ -33,7 +33,7 @@ public:
     }
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     void (THISCALL_CONV* originalUpdateInventoryEquippedState)(csgo::InventoryManagerPOD* thisptr, std::uintptr_t inventory, csgo::ItemId itemID, csgo::Team team, int slot, bool swap);
 };

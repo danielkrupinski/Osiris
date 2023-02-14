@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
@@ -13,7 +14,6 @@ void FASTCALL_CONV setDrawColor(FASTCALL_THIS(csgo::SurfacePOD* thisptr), int r,
 void FASTCALL_CONV lockCursor(FASTCALL_THIS(csgo::SurfacePOD* thisptr)) noexcept;
 #endif
 
-template <typename HookImpl>
 class SurfaceHooks {
 public:
     void install(csgo::SurfacePOD* surface)
@@ -43,7 +43,7 @@ public:
 #endif
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     void (THISCALL_CONV* originalSetDrawColor)(csgo::SurfacePOD* thisptr, int r, int g, int b, int a);
 #if IS_WIN32()

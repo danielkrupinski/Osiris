@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Endpoints.h>
+#include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
@@ -14,7 +15,6 @@ namespace csgo
 
 void FASTCALL_CONV soUpdated(FASTCALL_THIS(csgo::CSPlayerInventoryPOD* thisptr), csgo::SOID owner, csgo::SharedObjectPOD* object, int event) noexcept;
 
-template <typename HookImpl>
 class CSPlayerInventoryHooks {
 public:
     void install(csgo::CSPlayerInventoryPOD* inventory)
@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    HookImpl hookImpl;
+    HookType hookImpl;
 
     void (THISCALL_CONV* originalSoUpdated)(csgo::CSPlayerInventoryPOD* thisptr, csgo::SOID owner, csgo::SharedObjectPOD* object, int event);
 };

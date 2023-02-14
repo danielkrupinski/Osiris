@@ -78,21 +78,21 @@ public:
     std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
 
 #if IS_WIN32()
-    KeyValuesSystemHooks<HookType> keyValuesSystemHooks;
+    KeyValuesSystemHooks keyValuesSystemHooks;
 #endif
 
-    EngineHooks<HookType> engineHooks;
-    ClientHooks<HookType> clientHooks;
-    ClientModeHooks<HookType> clientModeHooks;
-    CSPlayerInventoryHooks<HookType> playerInventoryHooks;
-    PanoramaMarshallHelperHooks<HookType> panoramaMarshallHelperHooks;
-    ViewRenderHooks<HookType> viewRenderHooks;
-    InventoryManagerHooks<HookType> inventoryManagerHooks;
-    BspQueryHooks<HookType> bspQueryHooks;
-    EngineSoundHooks<HookType> engineSoundHooks;
-    SvCheatsHooks<HookType> svCheatsHooks;
-    ModelRenderHooks<HookType> modelRenderHooks;
-    SurfaceHooks<HookType> surfaceHooks;
+    EngineHooks engineHooks;
+    ClientHooks clientHooks;
+    ClientModeHooks clientModeHooks;
+    CSPlayerInventoryHooks playerInventoryHooks;
+    PanoramaMarshallHelperHooks panoramaMarshallHelperHooks;
+    ViewRenderHooks viewRenderHooks;
+    InventoryManagerHooks inventoryManagerHooks;
+    BspQueryHooks bspQueryHooks;
+    EngineSoundHooks engineSoundHooks;
+    SvCheatsHooks svCheatsHooks;
+    ModelRenderHooks modelRenderHooks;
+    SurfaceHooks surfaceHooks;
 
 private:
 #if IS_WIN32()
