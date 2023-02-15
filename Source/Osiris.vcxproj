@@ -266,6 +266,7 @@
     <ClInclude Include="CSGO\Sound.h" />
     <ClInclude Include="CSGO\SoundEmitter.h" />
     <ClInclude Include="CSGO\SoundInfo.h" />
+    <ClInclude Include="CSGO\SplitScreen.h" />
     <ClInclude Include="CSGO\Steam.h" />
     <ClInclude Include="CSGO\StudioRender.h" />
     <ClInclude Include="CSGO\Surface.h" />

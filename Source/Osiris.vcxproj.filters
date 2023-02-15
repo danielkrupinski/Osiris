@@ -1129,6 +1129,9 @@
     <ClInclude Include="CSGO\UtlRbTree.h">
       <Filter>CSGO</Filter>
     </ClInclude>
+    <ClInclude Include="CSGO\SplitScreen.h">
+      <Filter>CSGO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
