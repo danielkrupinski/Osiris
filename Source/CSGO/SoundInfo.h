@@ -15,6 +15,7 @@ struct SoundInfo {
     int pitch;
     int flags;
     int soundIndex;
+    PAD(16);
 };
 
 }
