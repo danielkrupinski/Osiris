@@ -1126,6 +1126,9 @@
     <ClInclude Include="HookType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CSGO\UtlRbTree.h">
+      <Filter>CSGO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

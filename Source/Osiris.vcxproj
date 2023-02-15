@@ -274,6 +274,7 @@
     <ClInclude Include="CSGO\Utils.h" />
     <ClInclude Include="CSGO\UtlMap.h" />
     <ClInclude Include="CSGO\UtlMemory.h" />
+    <ClInclude Include="CSGO\UtlRbTree.h" />
     <ClInclude Include="CSGO\UtlString.h" />
     <ClInclude Include="CSGO\UtlVector.h" />
     <ClInclude Include="CSGO\VarMapping.h" />
