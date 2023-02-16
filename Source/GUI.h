@@ -14,20 +14,20 @@ class Misc;
 class GUI {
 public:
     GUI() noexcept;
-    void render(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
     void handleToggle(Misc& misc, const OtherInterfaces& interfaces) noexcept;
     [[nodiscard]] bool isOpen() const noexcept { return open; }
 private:
     bool open = true;
 
     void updateColors(Config& config) const noexcept;
-    void renderMenuBar(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals) noexcept;
+    void renderMenuBar(Features& features) noexcept;
     void renderAimbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderTriggerbotWindow(Config& config, bool contentOnly = false) noexcept;
     void renderChamsWindow(Config& config, bool contentOnly = false) noexcept;
     void renderStyleWindow(Config& config, bool contentOnly = false) noexcept;
-    void renderConfigWindow(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly = false) noexcept;
-    void renderGuiStyle2(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void renderConfigWindow(const OtherInterfaces& interfaces, const Memory& memory, Config& config, bool contentOnly = false) noexcept;
+    void renderGuiStyle2(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
 
     struct {
         bool aimbot = false;

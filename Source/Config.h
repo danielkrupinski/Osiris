@@ -21,17 +21,18 @@ class Backtrack;
 class Glow;
 class Visuals;
 class Misc;
+struct Features;
 
 class Config {
 public:
-    Config(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, std::size_t, bool incremental) noexcept;
-    void load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept;
-    void save(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, std::size_t) const noexcept;
-    void add(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t*) noexcept;
+    Config(Features& features, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void load(const OtherInterfaces& interfaces, const Memory& memory, std::size_t, bool incremental) noexcept;
+    void load(const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept;
+    void save(const OtherInterfaces& interfaces, const Memory& memory, std::size_t) const noexcept;
+    void add(const OtherInterfaces& interfaces, const Memory& memory, const char8_t*) noexcept;
     void remove(std::size_t) noexcept;
     void rename(std::size_t, std::u8string_view newName) noexcept;
-    void reset(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
+    void reset(const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;
     void openConfigDir() const noexcept;
@@ -125,10 +126,12 @@ public:
     bool loadScheduledFonts() noexcept;
     const auto& getSystemFonts() const noexcept { return systemFonts; }
     const auto& getFonts() const noexcept { return fonts; }
+    Features& getFeatures() const noexcept { return features; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
     std::filesystem::path path;
     std::vector<std::u8string> configs;
+    Features& features;
 };

@@ -248,7 +248,7 @@ void FASTCALL_CONV ClientHooks::frameStageNotify(FASTCALL_THIS(csgo::ClientPOD* 
 
 int FASTCALL_CONV EngineSoundHooks::emitSound(FASTCALL_THIS(csgo::EngineSoundPOD* thisptr), void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const csgo::Vector& origin, const csgo::Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, *globalContext->memory, soundEntry, entityIndex, volume);
+    globalContext->features->sound.modulateSound(soundEntry, entityIndex, volume);
     globalContext->features->misc.autoAccept(soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
@@ -411,7 +411,7 @@ void FASTCALL_CONV ClientStateHooks::packetEnd(FASTCALL_THIS(csgo::ClientState* 
 
             auto& soundInfo = soundMessages->memory[i].element;
             if (const char* soundName = globalContext->getOtherInterfaces().getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
-                Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, *globalContext->memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+                globalContext->features->sound.modulateSound(soundName, soundInfo.entityIndex, soundInfo.volume);
                 soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
             }
         }

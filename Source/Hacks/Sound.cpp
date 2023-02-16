@@ -27,7 +27,7 @@ static struct SoundConfig {
     std::array<Player, 3> players;
 } soundConfig;
 
-void Sound::modulateSound(const ClientInterfaces& clientInterfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept
+void Sound::modulateSound(std::string_view name, int entityIndex, float& volume) noexcept
 {
     auto modulateVolume = [&](int SoundConfig::Player::* proj) {
         if (const auto entity = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(entityIndex)); localPlayer && entity.getPOD() != nullptr && entity.isPlayer()) {

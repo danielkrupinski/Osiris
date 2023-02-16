@@ -32,6 +32,8 @@
 #include <Config/ResetConfigurator.h>
 #include <Config/SaveConfigurator.h>
 
+#include "Hacks/Features.h"
+
 #if IS_WIN32()
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
@@ -82,11 +84,11 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
     return path;
 }
 
-Config::Config(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }
+Config::Config(Features& features, const OtherInterfaces& interfaces, const Memory& memory) noexcept : path{ buildConfigsFolderPath() }, features{ features }
 {
     listConfigs();
 
-    load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, u8"default.json", false);
+    load(interfaces, memory, u8"default.json", false);
 
 #if IS_WIN32()
     LOGFONTW logfont;
@@ -292,12 +294,12 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
-void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
+void Config::load(const OtherInterfaces& interfaces, const Memory& memory, size_t id, bool incremental) noexcept
 {
-    load(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs[id].c_str(), incremental);
+    load(interfaces, memory, configs[id].c_str(), incremental);
 }
 
-void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
+void Config::load(const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name, bool incremental) noexcept
 {
     json j;
 
@@ -310,7 +312,7 @@ void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChan
     }
 
     if (!incremental)
-        reset(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory);
+        reset(interfaces, memory);
 
     read(j, "Aimbot", aimbot);
     read(j, "Aimbot On key", aimbotOnKey);
@@ -332,12 +334,12 @@ void Config::load(Misc& misc, inventory_changer::InventoryChanger& inventoryChan
     read<value_t::object>(j, "Style", style);
 
     LoadConfigurator backtrackConfigurator{ j["Backtrack"] };
-    backtrack.configure(backtrackConfigurator);
-    glow.fromJson(j["Glow"]);
-    visuals.fromJson(j["Visuals"]);
-    fromJson(j["Inventory Changer"], inventoryChanger);
-    Sound::fromJson(j["Sound"]);
-    misc.fromJson(j["Misc"]);
+    features.backtrack.configure(backtrackConfigurator);
+    features.glow.fromJson(j["Glow"]);
+    features.visuals.fromJson(j["Visuals"]);
+    fromJson(j["Inventory Changer"], features.inventoryChanger);
+    features.sound.fromJson(j["Sound"]);
+    features.misc.fromJson(j["Misc"]);
 }
 
 static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
@@ -529,7 +531,7 @@ void removeEmptyObjects(json& j) noexcept
     }
 }
 
-void Config::save(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
+void Config::save(const OtherInterfaces& interfaces, const Memory& memory, size_t id) const noexcept
 {
     json j;
 
@@ -542,18 +544,18 @@ void Config::save(Misc& misc, inventory_changer::InventoryChanger& inventoryChan
     to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
     SaveConfigurator backtrackConfigurator;
-    backtrack.configure(backtrackConfigurator);
+    features.backtrack.configure(backtrackConfigurator);
     j["Backtrack"] = backtrackConfigurator.getJson();
-    j["Glow"] = glow.toJson();
+    j["Glow"] = features.glow.toJson();
     j["Chams"] = chams;
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
-    j["Sound"] = Sound::toJson();
-    j["Visuals"] = visuals.toJson();
-    j["Misc"] = misc.toJson();
+    j["Sound"] = features.sound.toJson();
+    j["Visuals"] = features.visuals.toJson();
+    j["Misc"] = features.misc.toJson();
     j["Style"] = style;
-    j["Inventory Changer"] = toJson(interfaces, memory, inventoryChanger);
+    j["Inventory Changer"] = toJson(interfaces, memory, features.inventoryChanger);
 
     removeEmptyObjects(j);
 
@@ -562,11 +564,11 @@ void Config::save(Misc& misc, inventory_changer::InventoryChanger& inventoryChan
         out << std::setw(2) << j;
 }
 
-void Config::add(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
+void Config::add(const OtherInterfaces& interfaces, const Memory& memory, const char8_t* name) noexcept
 {
     if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
-        save(misc, inventoryChanger, glow, backtrack, visuals, interfaces, memory, configs.size() - 1);
+        save(interfaces, memory, configs.size() - 1);
     }
 }
 
@@ -584,7 +586,7 @@ void Config::rename(size_t item, std::u8string_view newName) noexcept
     configs[item] = newName;
 }
 
-void Config::reset(Misc& misc, inventory_changer::InventoryChanger& inventoryChanger, Glow& glow, Backtrack& backtrack, Visuals& visuals, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Config::reset(const OtherInterfaces& interfaces, const Memory& memory) noexcept
 {
     aimbot = { };
     triggerbot = { };
@@ -593,12 +595,12 @@ void Config::reset(Misc& misc, inventory_changer::InventoryChanger& inventoryCha
     style = { };
 
     ResetConfigurator configurator;
-    backtrack.configure(configurator);
-    glow.resetConfig();
-    visuals.resetConfig();
-    inventoryChanger.reset(memory);
-    Sound::resetConfig();
-    misc.resetConfig();
+    features.backtrack.configure(configurator);
+    features.glow.resetConfig();
+    features.visuals.resetConfig();
+    features.inventoryChanger.reset(memory);
+    features.sound.resetConfig();
+    features.misc.resetConfig();
 }
 
 void Config::listConfigs() noexcept

@@ -5,9 +5,14 @@
 #include "../JsonForward.h"
 #include "../Memory.h"
 
-namespace Sound
-{
-    void modulateSound(const ClientInterfaces& clientInterfaces, const Memory& memory, std::string_view name, int entityIndex, float& volume) noexcept;
+class Sound {
+public:
+    Sound(const ClientInterfaces& clientInterfaces, const Memory& memory)
+        : clientInterfaces{ clientInterfaces }, memory{ memory }
+    {
+    }
+
+    void modulateSound(std::string_view name, int entityIndex, float& volume) noexcept;
 
     // GUI
     void menuBarItem() noexcept;
@@ -18,4 +23,8 @@ namespace Sound
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
-}
+
+private:
+    ClientInterfaces clientInterfaces;
+    const Memory& memory;
+};
