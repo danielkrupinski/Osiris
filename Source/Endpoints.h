@@ -25,10 +25,6 @@ void swapWindow(SDL_Window* window) noexcept;
 
 #endif
 
-namespace csgo { struct SoundInfo; }
-
-int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept;
-
 #if IS_WIN32()
 DWORD WINAPI unload(HMODULE moduleHandle) noexcept;
 #endif

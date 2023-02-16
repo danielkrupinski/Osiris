@@ -116,6 +116,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     engineHooks.install(engineInterfaces.getEngine().getPOD());
     clientHooks.install(clientInterface);
     clientModeHooks.install(memory.clientMode);
+    clientStateHooks.install(&memory.splitScreen->splitScreenPlayers[0]->client);
     playerInventoryHooks.install(memory.inventoryManager.getLocalInventory());
     inventoryManagerHooks.install(memory.inventoryManager.getPOD());
     engineSoundHooks.install(engineInterfaces.getPODs().sound);
@@ -124,19 +125,6 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     surfaceHooks.install(interfaces.getSurface().getPOD());
     svCheatsHooks.install(interfaces.getCvar().findVar(csgo::sv_cheats));
     viewRenderHooks.install(memory.viewRender);
-
-#if IS_WIN32()
-    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
-#else
-    if (const auto addressPageAligned = std::uintptr_t(memory.dispatchSound) - std::uintptr_t(memory.dispatchSound) % sysconf(_SC_PAGESIZE);
-        mprotect((void*)addressPageAligned, 4, PROT_READ | PROT_WRITE | PROT_EXEC) == 0) {
-#endif
-        originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
-        *memory.dispatchSound = uintptr_t(&dispatchSound) - uintptr_t(memory.dispatchSound + 1);
-#if IS_WIN32()
-        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
-#endif
-    }
 
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>)
@@ -159,6 +147,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     engineHooks.uninstall();
     clientHooks.uninstall();
     clientModeHooks.uninstall();
+    clientStateHooks.uninstall();
     panoramaMarshallHelperHooks.uninstall();
     viewRenderHooks.uninstall();
     playerInventoryHooks.uninstall();
@@ -180,11 +169,6 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
-
-    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
-        *memory.dispatchSound = uintptr_t(originalDispatchSound) - uintptr_t(memory.dispatchSound + 1);
-        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
-    }
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
         CloseHandle(thread);

@@ -8,6 +8,9 @@
 #include "CSGO/Functions.h"
 #include "CSGO/ItemSchema.h"
 #include "CSGO/MoveHelper.h"
+#include "CSGO/SoundInfo.h"
+#include "CSGO/SplitScreen.h"
+#include "CSGO/UtlRbTree.h"
 #include "CSGO/WeaponSystem.h"
 
 #include "Utils/ReturnAddress.h"
@@ -72,6 +75,8 @@ public:
     std::uintptr_t reset;
 #endif
 
+    csgo::UtlRbTree<csgo::SoundInfo, int>* soundMessages;
+    csgo::SplitScreen* splitScreen;
     csgo::MemAllocPOD* memAlloc;
     csgo::ClientMode* clientMode;
     csgo::Input* input;
@@ -85,7 +90,6 @@ public:
     int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
     int(THISCALL_CONV* clearHudWeapon)(int*, int);
     void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const csgo::Vector&);
-    int* dispatchSound;
     std::uintptr_t traceToExit;
     csgo::ViewRender* viewRender;
     std::uintptr_t drawScreenEffectMaterial;

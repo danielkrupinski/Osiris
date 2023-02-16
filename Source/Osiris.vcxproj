@@ -311,6 +311,7 @@
     <ClInclude Include="Hooks\BspQueryHooks.h" />
     <ClInclude Include="Hooks\ClientHooks.h" />
     <ClInclude Include="Hooks\ClientModeHooks.h" />
+    <ClInclude Include="Hooks\ClientStateHooks.h" />
     <ClInclude Include="Hooks\CSPlayerInventoryHooks.h" />
     <ClInclude Include="Hooks\EngineHooks.h" />
     <ClInclude Include="Hooks\EngineSoundHooks.h" />

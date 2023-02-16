@@ -21,6 +21,7 @@ union SDL_Event;
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hooks/ClientHooks.h"
+#include "Hooks/ClientStateHooks.h"
 #include "Hooks/ClientModeHooks.h"
 #include "Hooks/EngineHooks.h"
 #include "Hooks/PanoramaMarshallHelperHooks.h"
@@ -75,8 +76,6 @@ public:
     void install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
     void uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
 
-    std::add_pointer_t<int FASTCALL_CONV(csgo::SoundInfo&)> originalDispatchSound;
-
 #if IS_WIN32()
     KeyValuesSystemHooks keyValuesSystemHooks;
 #endif
@@ -84,6 +83,7 @@ public:
     EngineHooks engineHooks;
     ClientHooks clientHooks;
     ClientModeHooks clientModeHooks;
+    ClientStateHooks clientStateHooks;
     CSPlayerInventoryHooks playerInventoryHooks;
     PanoramaMarshallHelperHooks panoramaMarshallHelperHooks;
     ViewRenderHooks viewRenderHooks;

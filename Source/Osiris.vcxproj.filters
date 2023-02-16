@@ -1132,6 +1132,9 @@
     <ClInclude Include="CSGO\SplitScreen.h">
       <Filter>CSGO</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\ClientStateHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

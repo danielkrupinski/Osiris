@@ -13,6 +13,7 @@
 #include "Hooks/BspQueryHooks.h"
 #include "Hooks/ClientHooks.h"
 #include "Hooks/ClientModeHooks.h"
+#include "Hooks/ClientStateHooks.h"
 #include "Hooks/CSPlayerInventoryHooks.h"
 #include "Hooks/EngineHooks.h"
 #include "Hooks/EngineSoundHooks.h"
@@ -303,15 +304,6 @@ int FASTCALL_CONV BspQueryHooks::listLeavesInBox(FASTCALL_THIS(void* thisptr), c
     return hooks->bspQueryHooks.getOriginalListLeavesInBox()(thisptr, &mins, &maxs, list, listMax);
 }
 
-int FASTCALL_CONV dispatchSound(csgo::SoundInfo& soundInfo) noexcept
-{
-    if (const char* soundName = globalContext->getOtherInterfaces().getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
-        Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, *globalContext->memory, soundName, soundInfo.entityIndex, soundInfo.volume);
-        soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
-    }
-    return hooks->originalDispatchSound(soundInfo);
-}
-
 void FASTCALL_CONV ViewRenderHooks::render2dEffectsPreHud(FASTCALL_THIS(csgo::ViewRender* thisptr), void* viewSetup) noexcept
 {
     globalContext->features->visuals.applyScreenEffects();
@@ -407,6 +399,25 @@ bool FASTCALL_CONV ClientHooks::dispatchUserMessage(FASTCALL_THIS(csgo::ClientPO
         globalContext->features->inventoryChanger.onUserTextMsg(*globalContext->memory, data, size);
 
     return hooks->clientHooks.getOriginalDispatchUserMessage()(thisptr, type, passthroughFlags, size, data);
+}
+
+void FASTCALL_CONV ClientStateHooks::packetEnd(FASTCALL_THIS(csgo::ClientState* thisptr)) noexcept
+{
+    const auto soundMessages = globalContext->memory->soundMessages;
+    if (soundMessages->numElements > 0) {
+        for (int i = 0; i <= soundMessages->lastAlloc; ++i) {
+            if (!soundMessages->isIndexUsed(i))
+                continue;
+
+            auto& soundInfo = soundMessages->memory[i].element;
+            if (const char* soundName = globalContext->getOtherInterfaces().getSoundEmitter().getSoundName(soundInfo.soundIndex)) {
+                Sound::modulateSound(ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }, *globalContext->memory, soundName, soundInfo.entityIndex, soundInfo.volume);
+                soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
+            }
+        }
+    }
+
+    FunctionInvoker{ retSpoofGadgets->engine, hooks->clientStateHooks.originalPacketEnd }(thisptr);
 }
 
 #if IS_WIN32()
