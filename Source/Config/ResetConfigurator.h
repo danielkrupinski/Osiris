@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <type_traits>
 
 #include "Configurable.h"
@@ -28,12 +29,36 @@ private:
     bool resetToDefaultConstructed = true;
 };
 
+struct ResetConfigurator;
+
+template <typename T, std::size_t N>
+struct ResetHandler<std::array<T, N>> {
+    explicit ResetHandler(std::array<T, N>& variable)
+        : variable{ variable }
+    {
+    }
+
+    ~ResetHandler() noexcept
+    {
+        for (auto& element : variable) {
+            if constexpr (Configurable<T, ResetConfigurator>) {
+                ResetConfigurator configurator;
+                element.configure(configurator);
+            } else {
+                element = T{};
+            }
+        }
+    }
+
+private:
+    std::array<T, N>& variable;
+};
+
 struct ResetConfigurator {
     template <typename T>
     auto operator()([[maybe_unused]] const char* name, T& variable)
     {
-        if constexpr (std::is_class_v<T>) {
-            static_assert(Configurable<T, ResetConfigurator>, "Class type T must be configurable!");
+        if constexpr (Configurable<T, ResetConfigurator>) {
             ResetConfigurator configurator;
             variable.configure(configurator);
         } else {
