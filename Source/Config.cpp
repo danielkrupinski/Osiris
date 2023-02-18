@@ -338,7 +338,8 @@ void Config::load(const OtherInterfaces& interfaces, const Memory& memory, const
     features.glow.fromJson(j["Glow"]);
     features.visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], features.inventoryChanger);
-    features.sound.fromJson(j["Sound"]);
+    LoadConfigurator soundConfigurator{ j["Sound"] };
+    features.sound.configure(soundConfigurator);
     features.misc.fromJson(j["Misc"]);
 }
 
@@ -551,7 +552,9 @@ void Config::save(const OtherInterfaces& interfaces, const Memory& memory, size_
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
-    j["Sound"] = features.sound.toJson();
+    SaveConfigurator soundConfigurator;
+    features.sound.configure(soundConfigurator);
+    j["Sound"] = soundConfigurator.getJson();
     j["Visuals"] = features.visuals.toJson();
     j["Misc"] = features.misc.toJson();
     j["Style"] = style;
@@ -599,7 +602,7 @@ void Config::reset(const OtherInterfaces& interfaces, const Memory& memory) noex
     features.glow.resetConfig();
     features.visuals.resetConfig();
     features.inventoryChanger.reset(memory);
-    features.sound.resetConfig();
+    features.sound.configure(configurator);
     features.misc.resetConfig();
 }
 

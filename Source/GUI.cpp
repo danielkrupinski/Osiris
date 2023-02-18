@@ -593,7 +593,7 @@ void GUI::renderConfigWindow(const OtherInterfaces& interfaces, const Memory& me
                     case 6: config.streamProofESP = { }; break;
                     case 7: config.getFeatures().visuals.resetConfig(); break;
                     case 8: config.getFeatures().inventoryChanger.reset(memory); config.getFeatures().inventoryChanger.scheduleHudUpdate(); break;
-                    case 9: config.getFeatures().sound.resetConfig(); break;
+                    case 9: config.getFeatures().sound.configure(configurator); break;
                     case 10: config.style = { }; updateColors(config); break;
                     case 11: config.getFeatures().misc.resetConfig(); config.getFeatures().misc.updateClanTag(true); break;
                     }
