@@ -13,15 +13,32 @@ struct SaveHandler {
     {
     }
 
-    void def(const T& defaultValue)
+    SaveHandler& def(const T& defaultValue)
     {
         if (variable == defaultValue)
             variableHasDefaultValue = true;
+        return *this;
+    }
+
+    template <typename Functor>
+    SaveHandler& loadString(Functor&&)
+    {
+        return *this;
+    }
+
+    template <typename Functor>
+    SaveHandler& save(Functor&& functor)
+    {
+        if (!variableHasDefaultValue) {
+            j.emplace(name, functor());
+            saved = true;
+        }
+        return *this;
     }
 
     ~SaveHandler() noexcept
     {
-        if (!variableHasDefaultValue)
+        if (!variableHasDefaultValue && !saved)
             j.emplace(name, variable);
     }
 
@@ -30,6 +47,7 @@ private:
     const T& variable;
     json& j;
     bool variableHasDefaultValue = false;
+    bool saved = false;
 };
 
 template <typename T, std::size_t N>

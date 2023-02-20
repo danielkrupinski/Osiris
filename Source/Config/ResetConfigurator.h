@@ -12,10 +12,23 @@ struct ResetHandler {
     {
     }
 
-    void def(const T& defaultValue)
+    ResetHandler& def(const T& defaultValue)
     {
         variable = defaultValue;
         resetToDefaultConstructed = false;
+        return *this;
+    }
+
+    template <typename Functor>
+    ResetHandler& loadString(Functor&&)
+    {
+        return *this;
+    }
+
+    template <typename Functor>
+    ResetHandler& save(Functor&&)
+    {
+        return *this;
     }
 
     ~ResetHandler() noexcept

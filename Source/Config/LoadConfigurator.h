@@ -29,19 +29,37 @@ struct LoadHandler {
     {
     }
 
-    void def([[maybe_unused]] const T& defaultValue) const noexcept
+    LoadHandler& def(const T& /* defaultValue */) noexcept
     {
+        return *this;
+    }
+
+    template <typename Functor>
+    LoadHandler& loadString(Functor&& functor)
+    {
+        if (j && j->is_string()) {
+            functor(j->get<std::string>());
+            loaded = true;
+        }
+        return *this;
+    }
+
+    template <typename Functor>
+    LoadHandler& save(Functor&&)
+    {
+        return *this;
     }
 
     ~LoadHandler() noexcept
     {
-        if (j && jsonValueTypeMatchesType<T>(j->type()))
+        if (!loaded && j && jsonValueTypeMatchesType<T>(j->type()))
             j->get_to(variable);
     }
 
 private:
     T& variable;
     const json* j;
+    bool loaded = false;
 };
 
 template <typename T, std::size_t N>
