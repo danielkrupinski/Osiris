@@ -44,8 +44,6 @@ private:
     const json* j;
 };
 
-struct LoadConfigurator;
-
 template <typename T, std::size_t N>
 struct LoadHandler<std::array<T, N>> {
     LoadHandler(const json* j, std::array<T, N>& variable)
@@ -57,21 +55,7 @@ struct LoadHandler<std::array<T, N>> {
     {
     }
 
-    ~LoadHandler() noexcept
-    {
-        if (j && j->is_array() && j->size() == N) {
-            std::size_t index = 0;
-            for (const auto& element : *j) {
-                if constexpr (Configurable<T, LoadConfigurator>) {
-                    LoadConfigurator configurator{ element };
-                    variable[index].configure(configurator);
-                } else {
-                    LoadHandler<T>{ &element, variable[index] };
-                }
-                ++index;
-            }
-        }
-    }
+    ~LoadHandler() noexcept;
 
 private:
     const json* j;
@@ -102,3 +86,20 @@ struct LoadConfigurator {
 private:
     const json& j;
 };
+
+template <typename T, std::size_t N>
+LoadHandler<std::array<T, N>>::~LoadHandler() noexcept
+{
+    if (j && j->is_array() && j->size() == N) {
+        std::size_t index = 0;
+        for (const auto& element : *j) {
+            if constexpr (Configurable<T, LoadConfigurator>) {
+                LoadConfigurator configurator{ element };
+                variable[index].configure(configurator);
+            } else {
+                LoadHandler<T>{ &element, variable[index] };
+            }
+            ++index;
+        }
+    }
+}

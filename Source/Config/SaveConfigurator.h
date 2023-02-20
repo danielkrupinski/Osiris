@@ -32,8 +32,6 @@ private:
     bool variableHasDefaultValue = false;
 };
 
-struct SaveConfigurator;
-
 template <typename T, std::size_t N>
 struct SaveHandler<std::array<T, N>> {
     SaveHandler(const char* name, std::array<T, N>& variable, json& j)
@@ -41,26 +39,7 @@ struct SaveHandler<std::array<T, N>> {
     {
     }
 
-    ~SaveHandler() noexcept
-    {
-        auto arr = json::array();
-        bool allEmpty = true;
-        for (auto& element : variable) {
-            if constexpr (Configurable<T, SaveConfigurator>) {
-                SaveConfigurator configurator;
-                element.configure(configurator);
-                auto elementJson = configurator.getJson();
-                if (!elementJson.empty())
-                    allEmpty = false;
-                arr.push_back(std::move(elementJson));
-            } else {
-                arr.push_back(element);
-            }
-        }
-
-        if (!allEmpty)
-            j.emplace(name, std::move(arr));
-    }
+    ~SaveHandler() noexcept;
 
 private:
     const char* name;
@@ -89,3 +68,25 @@ struct SaveConfigurator {
 private:
     json j;
 };
+
+template <typename T, std::size_t N>
+SaveHandler<std::array<T, N>>::~SaveHandler() noexcept
+{
+    auto arr = json::array();
+    bool allEmpty = true;
+    for (auto& element : variable) {
+        if constexpr (Configurable<T, SaveConfigurator>) {
+            SaveConfigurator configurator;
+            element.configure(configurator);
+            auto elementJson = configurator.getJson();
+            if (!elementJson.empty())
+                allEmpty = false;
+            arr.push_back(std::move(elementJson));
+        } else {
+            arr.push_back(element);
+        }
+    }
+
+    if (!allEmpty)
+        j.emplace(name, std::move(arr));
+}

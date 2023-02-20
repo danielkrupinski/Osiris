@@ -29,8 +29,6 @@ private:
     bool resetToDefaultConstructed = true;
 };
 
-struct ResetConfigurator;
-
 template <typename T, std::size_t N>
 struct ResetHandler<std::array<T, N>> {
     explicit ResetHandler(std::array<T, N>& variable)
@@ -38,17 +36,7 @@ struct ResetHandler<std::array<T, N>> {
     {
     }
 
-    ~ResetHandler() noexcept
-    {
-        for (auto& element : variable) {
-            if constexpr (Configurable<T, ResetConfigurator>) {
-                ResetConfigurator configurator;
-                element.configure(configurator);
-            } else {
-                element = T{};
-            }
-        }
-    }
+    ~ResetHandler() noexcept;
 
 private:
     std::array<T, N>& variable;
@@ -66,3 +54,16 @@ struct ResetConfigurator {
         }
     }
 };
+
+template <typename T, std::size_t N>
+ResetHandler<std::array<T, N>>::~ResetHandler() noexcept
+{
+    for (auto& element : variable) {
+        if constexpr (Configurable<T, ResetConfigurator>) {
+            ResetConfigurator configurator;
+            element.configure(configurator);
+        } else {
+            element = T{};
+        }
+    }
+}
