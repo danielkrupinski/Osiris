@@ -98,7 +98,6 @@ public:
     int(THISCALL_CONV* equipWearable)(csgo::EntityPOD* wearable, csgo::EntityPOD* player);
     int* predictionRandomSeed;
     csgo::MoveData* moveData;
-    std::uintptr_t keyValuesFromString;
     KeyValues*(THISCALL_CONV* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(THISCALL_CONV* keyValuesSetString)(KeyValues* keyValues, const char* value);
     csgo::WeaponSystem weaponSystem;

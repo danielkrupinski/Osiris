@@ -84,7 +84,6 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     predictionRandomSeed = clientPatternFinder("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04"_pat).add(2).deref().as<int*>();
     moveData = clientPatternFinder("A1 ? ? ? ? F3 0F 59 CD"_pat).add(1).deref<2>().as<csgo::MoveData*>();
     moveHelperPtr = clientPatternFinder("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01"_pat).add(2).deref<2>().as<csgo::MoveHelperPOD*>();
-    keyValuesFromString = clientPatternFinder("E8 ? ? ? ? 83 C4 04 89 45 D8"_pat).add(1).relativeToAbsolute().get();
     keyValuesFindKey = clientPatternFinder("E8 ? ? ? ? F7 45"_pat).add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
     keyValuesSetString = clientPatternFinder("E8 ? ? ? ? 89 77 38"_pat).add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     getEventDescriptor = enginePatternFinder("E8 ? ? ? ? 8B D8 85 DB 75 27"_pat).add(1).relativeToAbsolute().as<csgo::GetEventDescriptor>();
@@ -131,7 +130,6 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     getEventDescriptor = enginePatternFinder("E8 ? ? ? ? 4D 85 F6 74 09"_pat).add(1).relativeToAbsolute().as<csgo::GetEventDescriptor>();
     activeChannels = enginePatternFinder("48 8D 3D ? ? ? ? 48 89 DE E8 ? ? ? ? 8B BD"_pat).add(3).relativeToAbsolute().as<csgo::ActiveChannels*>();
     channels = enginePatternFinder("48 8D 3D ? ? ? ? 48 0F BF 10"_pat).add(3).relativeToAbsolute().as<csgo::Channel*>();
-    keyValuesFromString = clientPatternFinder("E8 ? ? ? ? 48 89 DF 48 89 45 E0"_pat).add(1).relativeToAbsolute().get();
     keyValuesFindKey = clientPatternFinder("E8 ? ? ? ? 48 85 C0 75 1E"_pat).add(1).relativeToAbsolute().as<decltype(keyValuesFindKey)>();
     keyValuesSetString = clientPatternFinder("E8 ? ? ? ? 48 89 DE 4C 89 FF E8 ? ? ? ? 49 8B 04 24"_pat).add(1).relativeToAbsolute().as<decltype(keyValuesSetString)>();
     // drawScreenEffectMaterial = clientPatternFinder("\x55\x48\x89\xE5\x41\x57\x41\x56\x45\x89\xC6\x41\x55\x41\x54\x53").get();

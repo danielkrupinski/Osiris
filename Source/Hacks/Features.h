@@ -26,7 +26,7 @@ struct Features {
 {
     return Features{
         .backtrack = Backtrack{ otherInterfaces.getCvar() },
-        .chams{ clientInterfaces, engineInterfaces, otherInterfaces, memory },
+        .chams{ clientInterfaces, engineInterfaces, otherInterfaces, memory, clientPatternFinder },
         .glow{ clientPatternFinder },
         .visuals{ memory, otherInterfaces, clientInterfaces, engineInterfaces, clientPatternFinder, enginePatternFinder },
         .inventoryChanger{ inventory_changer::createInventoryChanger(engineInterfaces, clientInterfaces, otherInterfaces, memory, clientPatternFinder, randomGenerator) },

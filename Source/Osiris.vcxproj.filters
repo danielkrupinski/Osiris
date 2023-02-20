@@ -347,6 +347,9 @@
     <ClCompile Include="Helpers\PatternNotFoundHandler.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Helpers\KeyValuesFactory.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -1134,6 +1137,9 @@
     </ClInclude>
     <ClInclude Include="Hooks\ClientStateHooks.h">
       <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\KeyValuesFactory.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

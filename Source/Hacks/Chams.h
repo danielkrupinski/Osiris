@@ -5,6 +5,8 @@
 #include "../Config.h"
 #include "../Memory.h"
 
+#include <Helpers/KeyValuesFactory.h>
+
 namespace csgo
 {
 
@@ -21,14 +23,15 @@ class OtherInterfaces;
 
 class Chams {
 public:
-    Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory)
-        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }
+    Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, keyValuesFactory{ createKeyValuesFactory(clientPatternFinder) }
     {
     }
 
     bool render(Backtrack& backtrack, Config& config, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
 private:
+    void initializeMaterials(const csgo::MaterialSystem& materialSystem) noexcept;
     void renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entity& player) noexcept;
     void renderWeapons(Config& config) noexcept;
     void renderHands(Config& config) noexcept;
@@ -46,4 +49,5 @@ private:
     EngineInterfaces engineInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;
+    KeyValuesFactory keyValuesFactory;
 };
