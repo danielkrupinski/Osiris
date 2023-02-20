@@ -14,9 +14,10 @@
 
 class SkyboxChanger {
 public:
+    bool enabled;
     int skybox;
 
-    static constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
+    static constexpr std::array skyboxList{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
 
     SkyboxChanger(csgo::Cvar cvar, FunctionInvoker<csgo::R_LoadNamedSkys> loadSky) : cvar{ cvar }, loadSky{ loadSky }
     {
@@ -30,7 +31,7 @@ public:
         if (!loadSky)
             return;
 
-        if (stage == csgo::FrameStage::RENDER_START && skybox > 0 && static_cast<std::size_t>(skybox) < skyboxList.size()) {
+        if (stage == csgo::FrameStage::RENDER_START && enabled && static_cast<std::size_t>(skybox) < skyboxList.size()) {
             loadSky(skyboxList[skybox]);
         } else {
             static const auto sv_skyname = cvar.findVar(csgo::sv_skyname);
@@ -41,6 +42,7 @@ public:
     template <typename Configurator>
     void configure(Configurator& configurator)
     {
+        configurator("Enabled", enabled).def(false);
         configurator("Skybox", skybox)
             .def(0)
             .loadString([this](std::string_view s) {

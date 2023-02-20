@@ -704,6 +704,10 @@ void Visuals::drawGUI(bool contentOnly) noexcept
     ImGui::SliderFloat("", &visualsConfig.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
+    ImGui::PushID(6);
+    ImGui::Checkbox("", &skyboxChanger.enabled);
+    ImGui::PopID();
+    ImGui::SameLine();
     ImGui::Combo("Skybox", &skyboxChanger.skybox, SkyboxChanger::skyboxList.data(), SkyboxChanger::skyboxList.size());
     ImGuiCustom::colorPicker("World color", visualsConfig.world);
     ImGuiCustom::colorPicker("Sky color", visualsConfig.sky);
