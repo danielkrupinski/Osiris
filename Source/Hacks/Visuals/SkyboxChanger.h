@@ -20,8 +20,6 @@ public:
 
     SkyboxChanger(csgo::Cvar cvar, FunctionInvoker<csgo::R_LoadNamedSkys> loadSky) : cvar{ cvar }, loadSky{ loadSky }
     {
-        ResetConfigurator configurator;
-        configure(configurator);
     }
 
     void run(csgo::FrameStage stage) noexcept
@@ -43,7 +41,13 @@ public:
     template <typename Configurator>
     void configure(Configurator& configurator)
     {
-        configurator("Skybox", skybox).def(0);
+        configurator("Skybox", skybox)
+            .def(0)
+            .loadString([this](std::string_view s) {
+                if (const auto it = std::ranges::find(skyboxList, s); it != skyboxList.end())
+                    skybox = static_cast<int>(std::distance(skyboxList.begin(), it));
+            })
+            .save([this]() { return skyboxList[skybox]; });
     }
 
 private:
