@@ -750,11 +750,6 @@ json Visuals::toJson() noexcept
     if (const auto saveJson = saveConfigurator.getJson(); saveJson.is_object())
         j.update(saveJson);
 
-    // temporary, until skyboxChanger is saved as a json object
-    SaveConfigurator skyboxChangerConfigurator;
-    skyboxChanger.configure(skyboxChangerConfigurator);
-    if (const auto skyboxJson = skyboxChangerConfigurator.getJson(); skyboxJson.is_object())
-        j.update(skyboxJson);
     return j;
 }
 
@@ -763,7 +758,6 @@ void Visuals::fromJson(const json& j) noexcept
     from_json(j, visualsConfig);
 
     LoadConfigurator configurator{ j };
-    skyboxChanger.configure(configurator);
     configure(configurator);
 }
 
@@ -772,6 +766,4 @@ void Visuals::resetConfig() noexcept
     visualsConfig = {};
     ResetConfigurator resetConfigurator;
     configure(resetConfigurator);
-
-    skyboxChanger.configure(resetConfigurator);
 }

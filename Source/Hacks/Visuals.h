@@ -109,6 +109,7 @@ public:
         configurator("No shadows", noShadows).def(false);
         configurator("Wireframe smoke", wireframeSmoke).def(false);
         configurator("Zoom", zoom).def(false);
+        configurator("Skybox Changer", skyboxChanger);
     }
 
 private:
