@@ -236,6 +236,7 @@
     <ClInclude Include="CSGO\GlowObjectManager.h" />
     <ClInclude Include="CSGO\Helpers\EconItemFunctions.h" />
     <ClInclude Include="CSGO\Helpers\EconItemViewFunctions.h" />
+    <ClInclude Include="CSGO\Helpers\KeyValuesFunctions.h" />
     <ClInclude Include="CSGO\Input.h" />
     <ClInclude Include="CSGO\InputSystem.h" />
     <ClInclude Include="CSGO\ItemSchema.h" />

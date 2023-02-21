@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Memory.h"
+#include "Helpers/KeyValuesFunctions.h"
 #include "VirtualMethod.h"
 
 namespace csgo
@@ -9,16 +9,16 @@ namespace csgo
 struct KeyValuesPOD;
 
 struct KeyValues : VirtualCallableFromPOD<KeyValues, KeyValuesPOD> {
-    KeyValues(VirtualCallableFromPOD base, const Memory& memory)
-    : VirtualCallableFromPOD{ base }, memory{ memory }
+    KeyValues(VirtualCallableFromPOD base, KeyValuesFunctions functions)
+    : VirtualCallableFromPOD{ base }, functions{ functions }
     {
     }
 
-    KeyValuesPOD* findKey(const char* keyName, bool create) noexcept;
-    void setString(const char* keyName, const char* value) noexcept;
+    KeyValuesPOD* findKey(const char* keyName, bool create) const noexcept;
+    void setString(const char* keyName, const char* value) const noexcept;
 
 private:
-    const Memory& memory;
+    KeyValuesFunctions functions;
 };
 
 }

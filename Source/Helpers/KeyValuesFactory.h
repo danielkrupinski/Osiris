@@ -1,18 +1,19 @@
 #pragma once
 
 #include <cstdint>
+#include <CSGO/Helpers/KeyValuesFunctions.h>
+#include <CSGO/KeyValues.h>
 #include <MemorySearch/PatternFinder.h>
 #include <Platform/Macros/IsPlatform.h>
-
-namespace csgo { struct KeyValuesPOD; }
+#include <RetSpoof/RetSpoofInvoker.h>
 
 struct KeyValuesFactory {
-    explicit KeyValuesFactory(std::uintptr_t fromStringFn)
-        : fromStringFn{fromStringFn}
+    explicit KeyValuesFactory(RetSpoofInvoker retSpoofInvoker, std::uintptr_t fromStringFn, KeyValuesFunctions keyValuesFunctions)
+        : retSpoofInvoker{ retSpoofInvoker }, fromStringFn{fromStringFn}, keyValuesFunctions{ keyValuesFunctions }
     {
     }
 
-    csgo::KeyValuesPOD* operator()(const char* name, const char* value)
+    csgo::KeyValues operator()(const char* name, const char* value)
     {
 #if IS_WIN32()
         const auto keyValuesFromString = fromStringFn;
@@ -25,14 +26,16 @@ struct KeyValuesFactory {
                 add esp, 4
                 mov keyValues, eax
         }
-        return keyValues;
+        return csgo::KeyValues::from(retSpoofInvoker, keyValues, keyValuesFunctions);
 #else
-        return reinterpret_cast<csgo::KeyValuesPOD*(*)(const char*, const char*, const char**)>(fromStringFn)(name, value, nullptr);
+        return csgo::KeyValues::from(retSpoofInvoker, reinterpret_cast<csgo::KeyValuesPOD*(*)(const char*, const char*, const char**)>(fromStringFn)(name, value, nullptr), keyValuesFunctions);
 #endif
     }
 
 private:
+    RetSpoofInvoker retSpoofInvoker;
     std::uintptr_t fromStringFn;
+    KeyValuesFunctions keyValuesFunctions;
 };
 
-[[nodiscard]] KeyValuesFactory createKeyValuesFactory(const PatternFinder &clientPatternFinder);
+[[nodiscard]] KeyValuesFactory createKeyValuesFactory(RetSpoofInvoker retSpoofInvoker, const PatternFinder& clientPatternFinder);

@@ -24,7 +24,7 @@ class OtherInterfaces;
 class Chams {
 public:
     Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
-        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, keyValuesFactory{ createKeyValuesFactory(clientPatternFinder) }
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, keyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }
     {
     }
 

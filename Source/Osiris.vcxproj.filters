@@ -1141,6 +1141,9 @@
     <ClInclude Include="Helpers\KeyValuesFactory.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="CSGO\Helpers\KeyValuesFunctions.h">
+      <Filter>CSGO\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

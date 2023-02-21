@@ -1,13 +1,13 @@
 #include "KeyValues.h"
-#include "../Memory.h"
+#include <RetSpoof/FunctionInvoker.h>
 
-csgo::KeyValuesPOD* csgo::KeyValues::findKey(const char* keyName, bool create) noexcept
+csgo::KeyValuesPOD* csgo::KeyValues::findKey(const char* keyName, bool create) const noexcept
 {
-    return memory.keyValuesFindKey(getPOD(), keyName, create);
+    return FunctionInvoker{ getInvoker(), functions.findKey }(getPOD(), keyName, create);
 }
 
-void csgo::KeyValues::setString(const char* keyName, const char* value) noexcept
+void csgo::KeyValues::setString(const char* keyName, const char* value) const noexcept
 {
     if (const auto key = findKey(keyName, true))
-        memory.keyValuesSetString(key, value);
+        FunctionInvoker{ getInvoker(), functions.setString }(key, value);
 }

@@ -51,4 +51,8 @@ struct ModelRenderInfo;
 class matrix3x4;
 using DrawModelExecute = void (THISCALL_CONV*)(csgo::ModelRenderPOD* thisptr, void* ctx, void* state, const csgo::ModelRenderInfo* info, csgo::matrix3x4* customBoneToWorld);
 
+struct KeyValuesPOD;
+using KeyValuesFindKey = KeyValuesPOD* (THISCALL_CONV*)(KeyValuesPOD* thisptr, const char* keyName, bool create);
+using KeyValuesSetString = void (THISCALL_CONV*)(KeyValuesPOD* thisptr, const char* value);
+
 }
