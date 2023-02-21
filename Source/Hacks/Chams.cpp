@@ -82,50 +82,50 @@ void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noex
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
-        kv->setString(memory, "$envmaptint", "[.7 .7 .7]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$envmaptint", "[.7 .7 .7]");
         animated = materialSystem.createMaterial("animated", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture models/player/ct_fbi/ct_fbi_glass $envmap env_cubemap");
-        kv->setString(memory, "$envmaptint", "[.4 .6 .7]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$envmaptint", "[.4 .6 .7]");
         platinum = materialSystem.createMaterial("platinum", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
-        kv->setString(memory, "$color", "[.05 .05 .05]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$color", "[.05 .05 .05]");
         glass = materialSystem.createMaterial("glass", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
-        kv->setString(memory, "$phongtint", "[.2 .35 .6]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongtint", "[.2 .35 .6]");
         crystal = materialSystem.createMaterial("crystal", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
-        kv->setString(memory, "$color2", "[.05 .05 .05]");
-        kv->setString(memory, "$envmaptint", "[.2 .2 .2]");
-        kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
-        kv->setString(memory, "$phongtint", "[.8 .9 1]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$color2", "[.05 .05 .05]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$envmaptint", "[.2 .2 .2]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongfresnelranges", "[.7 .8 1]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongtint", "[.8 .9 1]");
         silver = materialSystem.createMaterial("silver", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 6 $phongexponent 128 $phongdisablehalflambert 1");
-        kv->setString(memory, "$color2", "[.18 .15 .06]");
-        kv->setString(memory, "$envmaptint", "[.6 .5 .2]");
-        kv->setString(memory, "$phongfresnelranges", "[.7 .8 1]");
-        kv->setString(memory, "$phongtint", "[.6 .5 .2]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$color2", "[.18 .15 .06]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$envmaptint", "[.6 .5 .2]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongfresnelranges", "[.7 .8 1]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongtint", "[.6 .5 .2]");
         gold = materialSystem.createMaterial("gold", kv);
     }
 
     {
         const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
-        kv->setString(memory, "$phongfresnelranges", "[.1 .4 1]");
-        kv->setString(memory, "$phongtint", "[.8 .9 1]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongfresnelranges", "[.1 .4 1]");
+        csgo::KeyValues::from(retSpoofGadgets->client, kv, memory).setString("$phongtint", "[.8 .9 1]");
         plastic = materialSystem.createMaterial("plastic", kv);
     }
 }

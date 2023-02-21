@@ -1,13 +1,13 @@
 #include "KeyValues.h"
 #include "../Memory.h"
 
-KeyValues* KeyValues::findKey(const Memory& memory, const char* keyName, bool create) noexcept
+csgo::KeyValuesPOD* csgo::KeyValues::findKey(const char* keyName, bool create) noexcept
 {
-    return memory.keyValuesFindKey(this, keyName, create);
+    return memory.keyValuesFindKey(getPOD(), keyName, create);
 }
 
-void KeyValues::setString(const Memory& memory, const char* keyName, const char* value) noexcept
+void csgo::KeyValues::setString(const char* keyName, const char* value) noexcept
 {
-    if (const auto key = findKey(memory, keyName, true))
+    if (const auto key = findKey(keyName, true))
         memory.keyValuesSetString(key, value);
 }

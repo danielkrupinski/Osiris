@@ -5,12 +5,11 @@
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
-class KeyValues;
-
 namespace csgo
 {
 
 struct GameEventPOD;
+struct KeyValuesPOD;
 
 class GameEvent : public VirtualCallableFromPOD<GameEvent, GameEventPOD> {
 public:
@@ -33,7 +32,7 @@ class GameEventDescriptor {
 public:
     int	eventid;
     int elementIndex;
-    KeyValues* keys;
+    csgo::KeyValuesPOD* keys;
     UtlVector<void*> listeners;
 };
 

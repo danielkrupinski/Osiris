@@ -4,7 +4,7 @@
 #include <MemorySearch/PatternFinder.h>
 #include <Platform/Macros/IsPlatform.h>
 
-class KeyValues;
+namespace csgo { struct KeyValuesPOD; }
 
 struct KeyValuesFactory {
     explicit KeyValuesFactory(std::uintptr_t fromStringFn)
@@ -12,11 +12,11 @@ struct KeyValuesFactory {
     {
     }
 
-    KeyValues* operator()(const char* name, const char* value)
+    csgo::KeyValuesPOD* operator()(const char* name, const char* value)
     {
 #if IS_WIN32()
         const auto keyValuesFromString = fromStringFn;
-        KeyValues *keyValues;
+        csgo::KeyValuesPOD* keyValues;
         __asm {
                 push 0
                 mov edx, value
@@ -27,7 +27,7 @@ struct KeyValuesFactory {
         }
         return keyValues;
 #else
-        return reinterpret_cast<KeyValues *(*)(const char*, const char*, const char**)>(fromStringFn)(name, value, nullptr);
+        return reinterpret_cast<csgo::KeyValuesPOD*(*)(const char*, const char*, const char**)>(fromStringFn)(name, value, nullptr);
 #endif
     }
 
