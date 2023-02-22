@@ -14,7 +14,7 @@ struct KeyValues : VirtualCallableFromPOD<KeyValues, KeyValuesPOD> {
     {
     }
 
-    KeyValuesPOD* findKey(const char* keyName, bool create) const noexcept;
+    KeyValues findKey(const char* keyName, bool create) const noexcept;
     void setString(const char* keyName, const char* value) const noexcept;
 
 private:

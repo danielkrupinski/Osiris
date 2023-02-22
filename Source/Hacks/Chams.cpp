@@ -75,37 +75,103 @@ void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noex
 {
     normal = materialSystem.createMaterial("normal", keyValuesFactory("VertexLitGeneric", nullptr).getPOD());
     flat = materialSystem.createMaterial("flat", keyValuesFactory("UnlitGeneric", nullptr).getPOD());
-    chrome = materialSystem.createMaterial("chrome", keyValuesFactory("VertexLitGeneric", "$envmap env_cubemap").getPOD());
-    glow = materialSystem.createMaterial("glow", keyValuesFactory("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8").getPOD());
-    pearlescent = materialSystem.createMaterial("pearlescent", keyValuesFactory("VertexLitGeneric", "$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1").getPOD());
-    metallic = materialSystem.createMaterial("metallic", keyValuesFactory("VertexLitGeneric", "$basetexture white $ignorez 0 $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1").getPOD());
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$envmap", "env_cubemap");
+        chrome = materialSystem.createMaterial("chrome", kv.getPOD());
+    }
+
+    {
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$additive", "1");
+        kv.setString("$envmap", "models/effects/cube_white");
+        kv.setString("$envmapfresnel", "1");
+        kv.setString("$alpha", ".8");
+        glow = materialSystem.createMaterial("glow", kv.getPOD());
+    }
+
+    {
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$ambientonly", "1");
+        kv.setString("$phong", "1");
+        kv.setString("$pearlescent", "3");
+        kv.setString("$basemapalphaphongmask", "1");
+        pearlescent = materialSystem.createMaterial("pearlescent", kv.getPOD());
+    }
+
+    {
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$basetexture", "white");
+        kv.setString("$ignorez", "0");
+        kv.setString("$envmap", "env_cubemap");
+        kv.setString("$normalmapalphaenvmapmask", "1");
+        kv.setString("$envmapcontrast", "1");
+        kv.setString("$nofog", "1");
+        kv.setString("$model", "1");
+        kv.setString("$nocull", "0");
+        kv.setString("$selfillum", "1");
+        kv.setString("$halfambert", "1");
+        kv.setString("$znearer", "0");
+        kv.setString("$flat", "1");
+        metallic = materialSystem.createMaterial("metallic", kv.getPOD());
+    }
+
+    {
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$envmap", "editor/cube_vertigo");
+        kv.setString("$envmapcontrast", "1");
+        kv.setString("$basetexture", "dev/zone_warning");
+
+        const auto textureScroll = kv.findKey("proxies", true).findKey("texturescroll", true);
+        textureScroll.setString("texturescrollvar", "$basetexturetransform");
+        textureScroll.setString("texturescrollrate", "0.6");
+        textureScroll.setString("texturescrollangle", "90");
+
         kv.setString("$envmaptint", "[.7 .7 .7]");
         animated = materialSystem.createMaterial("animated", kv.getPOD());
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture models/player/ct_fbi/ct_fbi_glass $envmap env_cubemap");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "models/player/ct_fbi/ct_fbi_glass");
+        kv.setString("$envmap", "env_cubemap");
         kv.setString("$envmaptint", "[.4 .6 .7]");
         platinum = materialSystem.createMaterial("platinum", kv.getPOD());
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "detail/dt_metal1");
+        kv.setString("$additive", "1");
+        kv.setString("$envmap", "editor/cube_vertigo");
         kv.setString("$color", "[.05 .05 .05]");
         glass = materialSystem.createMaterial("glass", kv.getPOD());
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "black");
+        kv.setString("$bumpmap", "effects/flat_normal");
+        kv.setString("$translucent", "1");
+        kv.setString("$envmap", "models/effects/crystal_cube_vertigo_hdr");
+        kv.setString("$envmapfresnel", "0");
+        kv.setString("$phong", "1");
+        kv.setString("$phongexponent", "16");
+        kv.setString("$phongboost", "2");
         kv.setString("$phongtint", "[.2 .35 .6]");
         crystal = materialSystem.createMaterial("crystal", kv.getPOD());
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "white");
+        kv.setString("$bumpmap", "effects/flat_normal");
+        kv.setString("$envmap", "editor/cube_vertigo");
+        kv.setString("$envmapfresnel", ".6");
+        kv.setString("$phong", "1");
+        kv.setString("$phongboost", "2");
+        kv.setString("$phongexponent", "8");
         kv.setString("$color2", "[.05 .05 .05]");
         kv.setString("$envmaptint", "[.2 .2 .2]");
         kv.setString("$phongfresnelranges", "[.7 .8 1]");
@@ -114,7 +180,15 @@ void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noex
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 6 $phongexponent 128 $phongdisablehalflambert 1");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "white");
+        kv.setString("$bumpmap", "effects/flat_normal");
+        kv.setString("$envmap", "editor/cube_vertigo");
+        kv.setString("$envmapfresnel", ".6");
+        kv.setString("$phong", "1");
+        kv.setString("$phongboost", "6");
+        kv.setString("$phongexponent", "128");
+        kv.setString("$phongdisablehalflambert", "1");
         kv.setString("$color2", "[.18 .15 .06]");
         kv.setString("$envmaptint", "[.6 .5 .2]");
         kv.setString("$phongfresnelranges", "[.7 .8 1]");
@@ -123,7 +197,17 @@ void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noex
     }
 
     {
-        const auto kv = keyValuesFactory("VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
+        const auto kv = keyValuesFactory("VertexLitGeneric", nullptr);
+        kv.setString("$baseTexture", "black");
+        kv.setString("$bumpmap", "models/inventory_items/trophy_majors/matte_metal_normal");
+        kv.setString("$additive", "1");
+        kv.setString("$envmap", "editor/cube_vertigo");
+        kv.setString("$envmapfresnel", "1");
+        kv.setString("$normalmapalphaenvmapmask", "1");
+        kv.setString("$phong", "1");
+        kv.setString("$phongboost", "20");
+        kv.setString("$phongexponent", "3000");
+        kv.setString("$phongdisablehalflambert", "1");
         kv.setString("$phongfresnelranges", "[.1 .4 1]");
         kv.setString("$phongtint", "[.8 .9 1]");
         plastic = materialSystem.createMaterial("plastic", kv.getPOD());
