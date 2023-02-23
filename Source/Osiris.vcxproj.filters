@@ -99,6 +99,9 @@
     <Filter Include="MemorySearch">
       <UniqueIdentifier>{a463f11e-5e7b-40b4-b955-c60208980d86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hacks\Chams">
+      <UniqueIdentifier>{4e0caedc-d0ab-48f2-8598-a22bbbc1bf6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1143,6 +1146,9 @@
     </ClInclude>
     <ClInclude Include="CSGO\Helpers\KeyValuesFunctions.h">
       <Filter>CSGO\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Chams\ChamsMaterialKeyValuesFactory.h">
+      <Filter>Hacks\Chams</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
