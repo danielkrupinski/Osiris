@@ -30,6 +30,9 @@ public:
 
     bool render(Backtrack& backtrack, Config& config, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
     static void updateInput(Config& config) noexcept;
+
+    static constexpr auto numberOfMaterials = 13;
+
 private:
     void initializeMaterials(const csgo::MaterialSystem& materialSystem) noexcept;
     void renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entity& player) noexcept;
@@ -50,4 +53,6 @@ private:
     OtherInterfaces interfaces;
     const Memory& memory;
     KeyValuesFactory keyValuesFactory;
+
+    std::array<csgo::MaterialPOD*, numberOfMaterials> materials;
 };

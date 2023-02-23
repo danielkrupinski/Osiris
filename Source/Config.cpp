@@ -242,7 +242,9 @@ static void from_json(const json& j, Config::Chams::Material& m)
     read(j, "Wireframe", m.wireframe);
     read(j, "Cover", m.cover);
     read(j, "Ignore-Z", m.ignorez);
-    read(j, "Material", m.material);
+    int material{};
+    read(j, "Material", material);
+    m.material = static_cast<ChamsMaterial>(material);
 }
 
 static void from_json(const json& j, Config::Chams& c)

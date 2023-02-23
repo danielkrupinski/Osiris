@@ -473,7 +473,14 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Checkbox("Health based", &chams.healthBased);
     ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
+
+    int material_ = static_cast<int>(chams.material);
+    ImGui::Combo("Material", &material_, [](void*, int idx, const char** out_text) {
+        *out_text = toString(static_cast<ChamsMaterial>(idx)).data();
+        return true;
+    }, nullptr, Chams::numberOfMaterials);
+    chams.material = static_cast<ChamsMaterial>(material_);
+
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGui::Checkbox("Cover", &chams.cover);
     ImGui::Checkbox("Ignore-Z", &chams.ignorez);

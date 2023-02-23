@@ -32,63 +32,27 @@
 
 #include <Helpers/KeyValuesFactory.h>
 #include "Chams/ChamsMaterialKeyValuesFactory.h"
-
-static csgo::MaterialPOD* normal;
-static csgo::MaterialPOD* flat;
-static csgo::MaterialPOD* animated;
-static csgo::MaterialPOD* platinum;
-static csgo::MaterialPOD* glass;
-static csgo::MaterialPOD* crystal;
-static csgo::MaterialPOD* chrome;
-static csgo::MaterialPOD* silver;
-static csgo::MaterialPOD* gold;
-static csgo::MaterialPOD* plastic;
-static csgo::MaterialPOD* glow;
-static csgo::MaterialPOD* pearlescent;
-static csgo::MaterialPOD* metallic;
-
-static constexpr auto dispatchMaterial_(int id) noexcept
-{
-    switch (id) {
-    default:
-    case 0: return normal;
-    case 1: return flat;
-    case 2: return animated;
-    case 3: return platinum;
-    case 4: return glass;
-    case 5: return chrome;
-    case 6: return crystal;
-    case 7: return silver;
-    case 8: return gold;
-    case 9: return plastic;
-    case 10: return glow;
-    case 11: return pearlescent;
-    case 12: return metallic;
-    }
-}
-
-static auto dispatchMaterial(int id) noexcept
-{
-    return csgo::Material::from(retSpoofGadgets->client, dispatchMaterial_(id));
-}
+#include "Chams/ChamsMaterial.h"
 
 void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noexcept
 {
     ChamsMaterialKeyValuesFactory factory{ keyValuesFactory };
 
-    normal = materialSystem.createMaterial("normal", factory.normal().getPOD());
-    flat = materialSystem.createMaterial("flat", factory.flat().getPOD());
-    chrome = materialSystem.createMaterial("chrome", factory.chrome().getPOD());
-    glow = materialSystem.createMaterial("glow", factory.glow().getPOD());
-    pearlescent = materialSystem.createMaterial("pearlescent", factory.pearlescent().getPOD());
-    metallic = materialSystem.createMaterial("metallic", factory.metallic().getPOD());
-    animated = materialSystem.createMaterial("animated", factory.animated().getPOD());
-    platinum = materialSystem.createMaterial("platinum", factory.platinum().getPOD());
-    glass = materialSystem.createMaterial("glass", factory.glass().getPOD());
-    crystal = materialSystem.createMaterial("crystal", factory.crystal().getPOD());
-    silver = materialSystem.createMaterial("silver", factory.silver().getPOD());
-    gold = materialSystem.createMaterial("gold", factory.gold().getPOD());
-    plastic = materialSystem.createMaterial("plastic", factory.plastic().getPOD());
+    using enum ChamsMaterial;
+
+    materials[static_cast<std::size_t>(Normal)] = materialSystem.createMaterial("normal", factory.normal().getPOD());
+    materials[static_cast<std::size_t>(Flat)] = materialSystem.createMaterial("flat", factory.flat().getPOD());
+    materials[static_cast<std::size_t>(Chrome)] = materialSystem.createMaterial("chrome", factory.chrome().getPOD());
+    materials[static_cast<std::size_t>(Glow)] = materialSystem.createMaterial("glow", factory.glow().getPOD());
+    materials[static_cast<std::size_t>(Pearlescent)] = materialSystem.createMaterial("pearlescent", factory.pearlescent().getPOD());
+    materials[static_cast<std::size_t>(Metallic)] = materialSystem.createMaterial("metallic", factory.metallic().getPOD());
+    materials[static_cast<std::size_t>(Animated)] = materialSystem.createMaterial("animated", factory.animated().getPOD());
+    materials[static_cast<std::size_t>(Platinum)] = materialSystem.createMaterial("platinum", factory.platinum().getPOD());
+    materials[static_cast<std::size_t>(Glass)] = materialSystem.createMaterial("glass", factory.glass().getPOD());
+    materials[static_cast<std::size_t>(Crystal)] = materialSystem.createMaterial("crystal", factory.crystal().getPOD());
+    materials[static_cast<std::size_t>(Silver)] = materialSystem.createMaterial("silver", factory.silver().getPOD());
+    materials[static_cast<std::size_t>(Gold)] = materialSystem.createMaterial("gold", factory.gold().getPOD());
+    materials[static_cast<std::size_t>(Plastic)] = materialSystem.createMaterial("plastic", factory.plastic().getPOD());
 }
 
 void Chams::updateInput(Config& config) noexcept
@@ -194,7 +158,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         if (!cham.enabled || !cham.ignorez)
             continue;
 
-        const auto material = dispatchMaterial(cham.material);
+        const auto material = csgo::Material::from(retSpoofGadgets->client, materials[static_cast<std::size_t>(cham.material)]);
         if (material.getPOD() == nullptr)
             continue;
         
@@ -209,14 +173,23 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             b = cham.color[2];
         }
 
-        if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
+        switch (cham.material) {
+        using enum ChamsMaterial;
+        case Glow:
+        case Chrome:
+        case Plastic:
+        case Glass:
+        case Crystal:
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
-        else
+            break;
+        default:
             material.colorModulate(r, g, b);
+            break;
+        }
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
-        if (material.getPOD() == glow)
+        if (cham.material == ChamsMaterial::Glow)
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);
@@ -232,7 +205,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         if (!cham.enabled || cham.ignorez)
             continue;
 
-        const auto material = dispatchMaterial(cham.material);
+        const auto material = csgo::Material::from(retSpoofGadgets->client, materials[static_cast<std::size_t>(cham.material)]);
         if (material.getPOD() == nullptr)
             continue;
 
@@ -247,14 +220,23 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             b = cham.color[2];
         }
 
-        if (material.getPOD() == glow || material.getPOD() == chrome || material.getPOD() == plastic || material.getPOD() == glass || material.getPOD() == crystal)
+        switch (cham.material) {
+            using enum ChamsMaterial;
+        case Glow:
+        case Chrome:
+        case Plastic:
+        case Glass:
+        case Crystal:
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmaptint")).setVectorValue(r, g, b);
-        else
+            break;
+        default:
             material.colorModulate(r, g, b);
+            break;
+        }
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
-        if (material.getPOD() == glow)
+        if (cham.material == ChamsMaterial::Glow)
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
             material.alphaModulate(pulse);

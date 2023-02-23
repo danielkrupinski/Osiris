@@ -15,6 +15,7 @@
 
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
+#include "Hacks/Chams/ChamsMaterial.h"
 
 struct ImFont;
 class Backtrack;
@@ -90,7 +91,7 @@ public:
             bool wireframe = false;
             bool cover = false;
             bool ignorez = false;
-            int material = 0;
+            ChamsMaterial material = ChamsMaterial::Normal;
         };
         std::array<Material, 7> materials;
     };

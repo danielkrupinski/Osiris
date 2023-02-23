@@ -296,6 +296,7 @@
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
+    <ClInclude Include="Hacks\Chams\ChamsMaterial.h" />
     <ClInclude Include="Hacks\Chams\ChamsMaterialKeyValuesFactory.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Features.h" />
