@@ -13,7 +13,7 @@ constexpr bool jsonValueTypeMatchesType(json::value_t valueType) noexcept
 {
     if constexpr (std::is_same_v<T, bool>) {
         return valueType == json::value_t::boolean;
-    } else if constexpr (std::is_same_v<T, int>) {
+    } else if constexpr (std::is_same_v<T, int> || std::is_enum_v<T>) {
         return valueType == json::value_t::number_integer || valueType == json::value_t::number_unsigned;
     } else if constexpr (std::is_same_v<T, float>) {
         return valueType == json::value_t::number_float;
@@ -69,8 +69,25 @@ struct LoadHandler<std::array<T, N>> {
     {
     }
 
-    void def(const std::array<T, N>& /*defaultValue*/) const noexcept
+    LoadHandler& def(const std::array<T, N>& /*defaultValue*/) noexcept
     {
+        return *this;
+    }
+
+    template <typename Functor>
+    LoadHandler& loadString(Functor&& functor)
+    {
+        if (j && j->is_string()) {
+            functor(j->get<std::string>());
+            loaded = true;
+        }
+        return *this;
+    }
+
+    template <typename Functor>
+    LoadHandler& save(Functor&&)
+    {
+        return *this;
     }
 
     ~LoadHandler() noexcept;
@@ -78,6 +95,7 @@ struct LoadHandler<std::array<T, N>> {
 private:
     const json* j;
     std::array<T, N>& variable;
+    bool loaded = false;
 };
 
 struct LoadConfigurator {
@@ -108,7 +126,7 @@ private:
 template <typename T, std::size_t N>
 LoadHandler<std::array<T, N>>::~LoadHandler() noexcept
 {
-    if (j && j->is_array() && j->size() == N) {
+    if (!loaded && j && j->is_array() && j->size() == N) {
         std::size_t index = 0;
         for (const auto& element : *j) {
             if constexpr (Configurable<T, LoadConfigurator>) {

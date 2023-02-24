@@ -112,7 +112,7 @@ public:
 
     KeyBind() = default;
     explicit KeyBind(KeyCode keyCode) noexcept;
-    explicit KeyBind(const char* keyName) noexcept;
+    explicit KeyBind(std::string_view keyName) noexcept;
 
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
     friend bool operator==(const KeyBind& a, const KeyBind& b) noexcept { return a.keyCode == b.keyCode; }
@@ -123,6 +123,16 @@ public:
     [[nodiscard]] bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
+
+    template <typename Configurator>
+    void configure(Configurator& configurator)
+    {
+        configurator("Key", keyCode)
+            .def(KeyCode::NONE)
+            .loadString([this](std::string_view str) { *this = KeyBind{ str }; })
+            .save([this] { return toString(); });
+    }
+
 private:
     KeyCode keyCode = KeyCode::NONE;
 };

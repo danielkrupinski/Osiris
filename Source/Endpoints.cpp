@@ -199,7 +199,7 @@ void FASTCALL_CONV ModelRenderHooks::drawModelExecute(FASTCALL_THIS(csgo::ModelR
     if (features->visuals.removeHands(info.model->name) || features->visuals.removeSleeves(info.model->name) || features->visuals.removeWeapons(info.model->name))
         return;
 
-    if (!features->chams.render(features->backtrack, *globalContext->config, ctx, state, info, customBoneToWorld))
+    if (!features->chams.render(features->backtrack, ctx, state, info, customBoneToWorld))
         hooks->modelRenderHooks.getOriginalDrawModelExecute()(thisptr, ctx, state, &info, customBoneToWorld);
 
     globalContext->getOtherInterfaces().getStudioRender().forcedMaterialOverride(nullptr);

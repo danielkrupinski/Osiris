@@ -134,7 +134,7 @@ static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept : keyCode{ static_cast<std::size_t>(keyCode) < keyMap.size() ? keyCode : KeyCode::NONE } {}
 
-KeyBind::KeyBind(const char* keyName) noexcept
+KeyBind::KeyBind(std::string_view keyName) noexcept
 {
     if (const auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name); it != keyMap.end() && it->name == keyName)
         keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));

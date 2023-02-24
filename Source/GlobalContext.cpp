@@ -247,7 +247,7 @@ void GlobalContext::renderFrame()
         StreamProofESP::updateInput(*config);
         features->misc.updateInput();
         Triggerbot::updateInput(*config);
-        Chams::updateInput(*config);
+        features->chams.updateInput();
         features->glow.updateInput();
 
         gui->handleToggle(features->misc, getOtherInterfaces());

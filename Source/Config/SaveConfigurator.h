@@ -57,12 +57,45 @@ struct SaveHandler<std::array<T, N>> {
     {
     }
 
+    template <typename Functor>
+    SaveHandler& loadString(Functor&&)
+    {
+        return *this;
+    }
+
+    template <typename Functor>
+    SaveHandler& save(Functor&& functor)
+    {
+        if (!variableHasDefaultValue) {
+            j.emplace(name, functor());
+            saved = true;
+        }
+        return *this;
+    }
+
+    SaveHandler& def(const std::array<T, N>& defaultValue)
+    {
+        bool allDefault = true;
+        for (std::size_t i = 0; i < N; ++i) {
+            if (variable[i] != defaultValue[i]) {
+                allDefault = false;
+                break;
+            }
+        }
+
+        if (allDefault)
+            variableHasDefaultValue = true;
+        return *this;
+    }
+
     ~SaveHandler() noexcept;
 
 private:
     const char* name;
     std::array<T, N>& variable;
     json& j;
+    bool variableHasDefaultValue = false;
+    bool saved = false;
 };
 
 struct SaveConfigurator {
@@ -72,7 +105,9 @@ struct SaveConfigurator {
         if constexpr (Configurable<T, SaveConfigurator>) {
             SaveConfigurator configurator;
             variable.configure(configurator);
-            j.emplace(name, configurator.getJson());
+            auto json = configurator.getJson();
+            if (!json.empty())
+                j.emplace(name, std::move(json));
         } else {
             return SaveHandler<T>{ name, variable, j };
         }
@@ -90,6 +125,9 @@ private:
 template <typename T, std::size_t N>
 SaveHandler<std::array<T, N>>::~SaveHandler() noexcept
 {
+    if (variableHasDefaultValue || saved)
+        return;
+
     auto arr = json::array();
     bool allEmpty = true;
     for (auto& element : variable) {

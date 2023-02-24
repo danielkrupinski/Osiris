@@ -431,8 +431,8 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
         ImGui::Begin("Chams", &window.chams, windowFlags);
     }
 
-    ImGui::hotkey("Toggle Key", config.chamsToggleKey, 80.0f);
-    ImGui::hotkey("Hold Key", config.chamsHoldKey, 80.0f);
+    ImGui::hotkey("Toggle Key", config.getFeatures().chams.toggleKey, 80.0f);
+    ImGui::hotkey("Hold Key", config.getFeatures().chams.holdKey, 80.0f);
     ImGui::Separator();
 
     static int currentCategory{ 0 };
@@ -455,19 +455,16 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
 
     ImGui::SameLine();
     ImGui::Text("%d", material);
-
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
-
     ImGui::SameLine();
 
-    if (material >= int(config.chams[categories[currentCategory]].materials.size()))
+    if (material >= int(config.getFeatures().chams.chamsMaterials[currentCategory].materials.size()))
         ImGuiCustom::arrowButtonDisabled("##right", ImGuiDir_Right);
     else if (ImGui::ArrowButton("##right", ImGuiDir_Right))
         ++material;
 
     ImGui::SameLine();
 
-    auto& chams{ config.chams[categories[currentCategory]].materials[material - 1] };
+    auto& chams{ config.getFeatures().chams.chamsMaterials[currentCategory].materials[material - 1] };
 
     ImGui::Checkbox("Enabled", &chams.enabled);
     ImGui::Separator();
@@ -484,7 +481,7 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGui::Checkbox("Cover", &chams.cover);
     ImGui::Checkbox("Ignore-Z", &chams.ignorez);
-    ImGuiCustom::colorPicker("Color", chams);
+    ImGuiCustom::colorPicker("Color", chams.color);
 
     if (!contentOnly) {
         ImGui::End();
@@ -596,7 +593,7 @@ void GUI::renderConfigWindow(const OtherInterfaces& interfaces, const Memory& me
                     case 2: config.triggerbot = { }; break;
                     case 3: config.getFeatures().backtrack.configure(configurator); break;
                     case 4: config.getFeatures().glow.resetConfig(); break;
-                    case 5: config.chams = { }; break;
+                    case 5: config.getFeatures().chams.configure(configurator); break;
                     case 6: config.streamProofESP = { }; break;
                     case 7: config.getFeatures().visuals.resetConfig(); break;
                     case 8: config.getFeatures().inventoryChanger.reset(memory); config.getFeatures().inventoryChanger.scheduleHudUpdate(); break;

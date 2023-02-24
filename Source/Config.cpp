@@ -232,26 +232,6 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read(j, "Burst Time", t.burstTime);
 }
 
-static void from_json(const json& j, Config::Chams::Material& m)
-{
-    from_json(j, static_cast<Color4&>(m));
-
-    read(j, "Enabled", m.enabled);
-    read(j, "Health based", m.healthBased);
-    read(j, "Blinking", m.blinking);
-    read(j, "Wireframe", m.wireframe);
-    read(j, "Cover", m.cover);
-    read(j, "Ignore-Z", m.ignorez);
-    int material{};
-    read(j, "Material", material);
-    m.material = static_cast<ChamsMaterial>(material);
-}
-
-static void from_json(const json& j, Config::Chams& c)
-{
-    read_array_opt(j, "Materials", c.materials);
-}
-
 template <typename T>
 void read(Config& config, const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
 {
@@ -324,10 +304,6 @@ void Config::load(const OtherInterfaces& interfaces, const Memory& memory, const
     read(j, "Triggerbot", triggerbot);
     read(j, "Triggerbot Key", triggerbotHoldKey);
 
-    read(j, "Chams", chams);
-    read(j["Chams"], "Toggle Key", chamsToggleKey);
-    read(j["Chams"], "Hold Key", chamsHoldKey);
-
     if (j.contains("ESP")) {
         if (const auto& val = j["ESP"]; val.type() == value_t::object)
             from_json(*this, val, streamProofESP);
@@ -337,6 +313,8 @@ void Config::load(const OtherInterfaces& interfaces, const Memory& memory, const
 
     LoadConfigurator backtrackConfigurator{ j["Backtrack"] };
     features.backtrack.configure(backtrackConfigurator);
+    LoadConfigurator chamsConfigurator{ j["Chams"] };
+    features.chams.configure(chamsConfigurator);
     features.glow.fromJson(j["Glow"]);
     features.visuals.fromJson(j["Visuals"]);
     fromJson(j["Inventory Changer"], features.inventoryChanger);
@@ -468,25 +446,6 @@ static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerb
     WRITE("Burst Time", burstTime);
 }
 
-static void to_json(json& j, const Config::Chams::Material& o)
-{
-    const Config::Chams::Material dummy;
-
-    to_json(j, static_cast<const Color4&>(o), dummy);
-    WRITE("Enabled", enabled);
-    WRITE("Health based", healthBased);
-    WRITE("Blinking", blinking);
-    WRITE("Wireframe", wireframe);
-    WRITE("Cover", cover);
-    WRITE("Ignore-Z", ignorez);
-    WRITE("Material", material);
-}
-
-static void to_json(json& j, const Config::Chams& o)
-{
-    j["Materials"] = o.materials;
-}
-
 static void to_json(json& j, const Config::StreamProofESP& o, const Config::StreamProofESP& dummy = {})
 {
     WRITE("Toggle Key", toggleKey);
@@ -550,9 +509,10 @@ void Config::save(const OtherInterfaces& interfaces, const Memory& memory, size_
     features.backtrack.configure(backtrackConfigurator);
     j["Backtrack"] = backtrackConfigurator.getJson();
     j["Glow"] = features.glow.toJson();
-    j["Chams"] = chams;
-    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
-    to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
+
+    SaveConfigurator chamsConfigurator;
+    features.chams.configure(chamsConfigurator);
+    j["Chams"] = chamsConfigurator.getJson();
     j["ESP"] = streamProofESP;
     SaveConfigurator soundConfigurator;
     features.sound.configure(soundConfigurator);
@@ -595,12 +555,12 @@ void Config::reset(const OtherInterfaces& interfaces, const Memory& memory) noex
 {
     aimbot = { };
     triggerbot = { };
-    chams = { };
     streamProofESP = { };
     style = { };
 
     ResetConfigurator configurator;
     features.backtrack.configure(configurator);
+    features.chams.configure(configurator);
     features.glow.resetConfig();
     features.visuals.resetConfig();
     features.inventoryChanger.reset(memory);

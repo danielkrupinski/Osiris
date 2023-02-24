@@ -83,23 +83,6 @@ public:
     std::array<Triggerbot, 40> triggerbot;
     KeyBind triggerbotHoldKey;
 
-    struct Chams {
-        struct Material : Color4 {
-            bool enabled = false;
-            bool healthBased = false;
-            bool blinking = false;
-            bool wireframe = false;
-            bool cover = false;
-            bool ignorez = false;
-            ChamsMaterial material = ChamsMaterial::Normal;
-        };
-        std::array<Material, 7> materials;
-    };
-
-    std::unordered_map<std::string, Chams> chams;
-    KeyBindToggle chamsToggleKey;
-    KeyBind chamsHoldKey;
-
     struct StreamProofESP {
         KeyBindToggle toggleKey;
         KeyBind holdKey;

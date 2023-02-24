@@ -55,17 +55,17 @@ void Chams::initializeMaterials(const csgo::MaterialSystem& materialSystem) noex
     materials[static_cast<std::size_t>(Plastic)] = materialSystem.createMaterial("plastic", factory.plastic().getPOD());
 }
 
-void Chams::updateInput(Config& config) noexcept
+void Chams::updateInput() noexcept
 {
-    config.chamsToggleKey.handleToggle();
+    toggleKey.handleToggle();
 }
 
-bool Chams::render(Backtrack& backtrack, Config& config, void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
+bool Chams::render(Backtrack& backtrack, void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept
 {
-    if (config.chamsToggleKey.isSet()) {
-        if (!config.chamsToggleKey.isToggled() && !config.chamsHoldKey.isDown())
+    if (toggleKey.isSet()) {
+        if (!toggleKey.isToggled() && !holdKey.isDown())
             return false;
-    } else if (config.chamsHoldKey.isSet() && !config.chamsHoldKey.isDown()) {
+    } else if (holdKey.isSet() && !holdKey.isDown()) {
         return false;
     }
 
@@ -84,75 +84,75 @@ bool Chams::render(Backtrack& backtrack, Config& config, void* ctx, void* state,
     if (std::string_view{ info.model->name }.starts_with("models/weapons/v_")) {
         // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
         if (std::strstr(info.model->name + 17, "sleeve"))
-            renderSleeves(config);
+            renderSleeves();
         else if (std::strstr(info.model->name + 17, "arms"))
-            renderHands(config);
+            renderHands();
         else if (!std::strstr(info.model->name + 17, "tablet")
             && !std::strstr(info.model->name + 17, "parachute")
             && !std::strstr(info.model->name + 17, "fists"))
-            renderWeapons(config);
+            renderWeapons();
     } else {
         const auto entity = csgo::Entity::from(retSpoofGadgets->client, clientInterfaces.getEntityList().getEntity(info.entityIndex));
         if (entity.getPOD() != nullptr && !entity.getNetworkable().isDormant() && entity.isPlayer())
-            renderPlayer(backtrack, config, entity);
+            renderPlayer(backtrack, entity);
     }
 
     return appliedChams;
 }
 
-void Chams::renderPlayer(Backtrack& backtrack, Config& config, const csgo::Entity& player) noexcept
+void Chams::renderPlayer(Backtrack& backtrack, const csgo::Entity& player) noexcept
 {
     if (!localPlayer)
         return;
 
     const auto health = player.health();
 
-    if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(config.chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(config.chams["Planting"].materials, health);
-    } else if (player.isDefusing() && std::ranges::any_of(config.chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(config.chams["Defusing"].materials, health);
+    if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Planting)].materials, [](const Material& mat) { return mat.enabled; })) {
+        applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Planting)].materials, health);
+    } else if (player.isDefusing() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Defusing)].materials, [](const Material& mat) { return mat.enabled; })) {
+        applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Defusing)].materials, health);
     } else if (player.getPOD() == localPlayer.get().getPOD()) {
-        applyChams(config.chams["Local player"].materials, health);
+        applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::LocalPlayer)].materials, health);
     } else if (localPlayer.get().isOtherEnemy(memory, player)) {
-        applyChams(config.chams["Enemies"].materials, health);
+        applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Enemies)].materials, health);
 
         const auto records = backtrack.getRecords(player.getNetworkable().index());
         if (records && !records->empty() && backtrack.valid(engineInterfaces.getEngine(), memory, records->front().simulationTime)) {
             if (!appliedChams)
                 hooks->modelRenderHooks.getOriginalDrawModelExecute()(engineInterfaces.getPODs().modelRender, ctx, state, info, customBoneToWorld);
-            applyChams(config.chams["Backtrack"].materials, health, records->back().matrix);
+            applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Backtrack)].materials, health, records->back().matrix);
             interfaces.getStudioRender().forcedMaterialOverride(nullptr);
         }
     } else {
-        applyChams(config.chams["Allies"].materials, health);
+        applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Allies)].materials, health);
     }
 }
 
-void Chams::renderWeapons(Config& config) noexcept
+void Chams::renderWeapons() noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive() || localPlayer.get().isScoped())
         return;
 
-    applyChams(config.chams["Weapons"].materials, localPlayer.get().health());
+    applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Weapons)].materials, localPlayer.get().health());
 }
 
-void Chams::renderHands(Config& config) noexcept
+void Chams::renderHands() noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(config.chams["Hands"].materials, localPlayer.get().health());
+    applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Hands)].materials, localPlayer.get().health());
 }
 
-void Chams::renderSleeves(Config& config) noexcept
+void Chams::renderSleeves() noexcept
 {
     if (!localPlayer || !localPlayer.get().isAlive())
         return;
 
-    applyChams(config.chams["Sleeves"].materials, localPlayer.get().health());
+    applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Sleeves)].materials, localPlayer.get().health());
 }
 
-void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, csgo::matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const std::array<Material, 7>& chams, int health, csgo::matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)
@@ -165,12 +165,12 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         float r, g, b;
         if (cham.healthBased && health) {
             Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), r, g, b);
-        } else if (cham.rainbow) {
-            std::tie(r, g, b) = rainbowColor(memory.globalVars->realtime, cham.rainbowSpeed);
+        } else if (cham.color.rainbow) {
+            std::tie(r, g, b) = rainbowColor(memory.globalVars->realtime, cham.color.rainbowSpeed);
         } else {
-            r = cham.color[0];
-            g = cham.color[1];
-            b = cham.color[2];
+            r = cham.color.color[0];
+            g = cham.color.color[1];
+            b = cham.color.color[2];
         }
 
         switch (cham.material) {
@@ -187,7 +187,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             break;
         }
 
-        const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
+        const auto pulse = cham.color.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (cham.material == ChamsMaterial::Glow)
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);
@@ -212,12 +212,12 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         float r, g, b;
         if (cham.healthBased && health) {
             Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), r, g, b);
-        } else if (cham.rainbow) {
-            std::tie(r, g, b) = rainbowColor(memory.globalVars->realtime, cham.rainbowSpeed);
+        } else if (cham.color.rainbow) {
+            std::tie(r, g, b) = rainbowColor(memory.globalVars->realtime, cham.color.rainbowSpeed);
         } else {
-            r = cham.color[0];
-            g = cham.color[1];
-            b = cham.color[2];
+            r = cham.color.color[0];
+            g = cham.color.color[1];
+            b = cham.color.color[2];
         }
 
         switch (cham.material) {
@@ -234,7 +234,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             break;
         }
 
-        const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
+        const auto pulse = cham.color.color[3] * (cham.blinking ? std::sin(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (cham.material == ChamsMaterial::Glow)
             csgo::MaterialVar::from(retSpoofGadgets->client, material.findVar("$envmapfresnelminmaxexp")).setVecComponentValue(9.0f * (1.2f - pulse), 2);

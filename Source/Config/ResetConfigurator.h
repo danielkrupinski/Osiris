@@ -49,10 +49,30 @@ struct ResetHandler<std::array<T, N>> {
     {
     }
 
+    ResetHandler& def(const std::array<T, N>& defaultValue)
+    {
+        variable = defaultValue;
+        resetToDefaultConstructed = false;
+        return *this;
+    }
+
+    template <typename Functor>
+    ResetHandler& loadString(Functor&&)
+    {
+        return *this;
+    }
+
+    template <typename Functor>
+    ResetHandler& save(Functor&&)
+    {
+        return *this;
+    }
+
     ~ResetHandler() noexcept;
 
 private:
     std::array<T, N>& variable;
+    bool resetToDefaultConstructed = true;
 };
 
 struct ResetConfigurator {
@@ -71,6 +91,9 @@ struct ResetConfigurator {
 template <typename T, std::size_t N>
 ResetHandler<std::array<T, N>>::~ResetHandler() noexcept
 {
+    if (!resetToDefaultConstructed)
+        return;
+
     for (auto& element : variable) {
         if constexpr (Configurable<T, ResetConfigurator>) {
             ResetConfigurator configurator;
