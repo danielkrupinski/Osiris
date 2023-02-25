@@ -6,6 +6,7 @@
 
 #include "Chams/ChamsCategory.h"
 #include "Chams/ChamsMaterial.h"
+#include "Chams/ChamsMaterialFactory.h"
 #include <Helpers/KeyValuesFactory.h>
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/EngineInterfaces.h>
@@ -29,7 +30,7 @@ class Backtrack;
 class Chams {
 public:
     Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
-        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, keyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, materialFactory{ ChamsMaterialKeyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }, interfaces.getMaterialSystem() }
     {
     }
 
@@ -119,7 +120,10 @@ private:
     EngineInterfaces engineInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;
-    KeyValuesFactory keyValuesFactory;
+    ChamsMaterialFactory materialFactory;
 
-    std::array<csgo::MaterialPOD*, numberOfMaterials> materials;
+    [[nodiscard]] csgo::Material getMaterial(ChamsMaterial material);
+
+    std::array<csgo::MaterialPOD*, numberOfMaterials> materials{};
+    std::array<bool, numberOfMaterials> materialsInitialized{};
 };
