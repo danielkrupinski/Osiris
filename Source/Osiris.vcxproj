@@ -520,7 +520,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shell32.lib;ole32.lib;ntdll.lib;</AdditionalDependencies>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
@@ -564,7 +564,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shell32.lib;ole32.lib;ntdll.lib;</AdditionalDependencies>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
     <PostBuildEvent>

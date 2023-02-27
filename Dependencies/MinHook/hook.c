@@ -100,6 +100,20 @@ struct
     UINT        size;       // Actual number of data items
 } g_hooks;
 
+
+LONG NTAPI NtProtectVirtualMemory(
+    HANDLE ProcessHandle,
+    PVOID* BaseAddress,
+    SIZE_T* NumberOfBytesToProtect,
+    ULONG NewAccessProtection,
+    PULONG OldAccessProtection
+);
+
+BOOL WINAPI WrappedVirtualProtect(LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect)
+{
+    return NtProtectVirtualMemory(GetCurrentProcess(), &lpAddress, &dwSize, flNewProtect, lpflOldProtect) >= 0;
+}
+
 //-------------------------------------------------------------------------
 // Returns INVALID_HOOK_POS if not found.
 static UINT FindHookEntry(LPVOID pTarget)
@@ -361,7 +375,7 @@ static MH_STATUS EnableHookLL(UINT pos, BOOL enable)
         patchSize    += sizeof(JMP_REL_SHORT);
     }
 
-    if (!VirtualProtect(pPatchTarget, patchSize, PAGE_EXECUTE_READWRITE, &oldProtect))
+    if (!WrappedVirtualProtect(pPatchTarget, patchSize, PAGE_EXECUTE_READWRITE, &oldProtect))
         return MH_ERROR_MEMORY_PROTECT;
 
     if (enable)
@@ -385,7 +399,7 @@ static MH_STATUS EnableHookLL(UINT pos, BOOL enable)
             memcpy(pPatchTarget, pHook->backup, sizeof(JMP_REL));
     }
 
-    VirtualProtect(pPatchTarget, patchSize, oldProtect, &oldProtect);
+    WrappedVirtualProtect(pPatchTarget, patchSize, oldProtect, &oldProtect);
 
     // Just-in-case measure.
     FlushInstructionCache(GetCurrentProcess(), pPatchTarget, patchSize);

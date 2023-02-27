@@ -64,6 +64,22 @@ typedef struct _MEMORY_BLOCK
 // First element of the memory block list.
 PMEMORY_BLOCK g_pMemoryBlocks;
 
+LONG NTAPI NtAllocateVirtualMemory(
+    HANDLE    ProcessHandle,
+    PVOID*    BaseAddress,
+    ULONG_PTR ZeroBits,
+    PSIZE_T   RegionSize,
+    ULONG     AllocationType,
+    ULONG     Protect
+);
+
+LPVOID WrappedVirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect)
+{
+    if (NtAllocateVirtualMemory(GetCurrentProcess(), &lpAddress, 0, &dwSize, flAllocationType, flProtect) >= 0)
+        return lpAddress;
+    return NULL;
+}
+
 //-------------------------------------------------------------------------
 VOID InitializeBuffer(VOID)
 {
@@ -194,7 +210,7 @@ static PMEMORY_BLOCK GetMemoryBlock(LPVOID pOrigin)
             if (pAlloc == NULL)
                 break;
 
-            pBlock = (PMEMORY_BLOCK)VirtualAlloc(
+            pBlock = (PMEMORY_BLOCK)WrappedVirtualAlloc(
                 pAlloc, MEMORY_BLOCK_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
             if (pBlock != NULL)
                 break;
@@ -211,7 +227,7 @@ static PMEMORY_BLOCK GetMemoryBlock(LPVOID pOrigin)
             if (pAlloc == NULL)
                 break;
 
-            pBlock = (PMEMORY_BLOCK)VirtualAlloc(
+            pBlock = (PMEMORY_BLOCK)WrappedVirtualAlloc(
                 pAlloc, MEMORY_BLOCK_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
             if (pBlock != NULL)
                 break;
@@ -219,7 +235,7 @@ static PMEMORY_BLOCK GetMemoryBlock(LPVOID pOrigin)
     }
 #else
     // In x86 mode, a memory block can be placed anywhere.
-    pBlock = (PMEMORY_BLOCK)VirtualAlloc(
+    pBlock = (PMEMORY_BLOCK)WrappedVirtualAlloc(
         NULL, MEMORY_BLOCK_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 #endif
 

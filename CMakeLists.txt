@@ -51,6 +51,7 @@ if (NOT WIN32)
   target_link_options(Osiris PRIVATE -flto)
 else()
   target_link_options(Osiris PRIVATE /ENTRY:DllEntryPoint)
+  target_link_libraries(Osiris PRIVATE ntdll)
 endif()
 
 option(BUILD_TESTS "Build unit tests" OFF)
