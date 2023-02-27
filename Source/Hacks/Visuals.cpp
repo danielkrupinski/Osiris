@@ -124,6 +124,59 @@ static void to_json(json& j, VisualsConfig& o)
     WRITE("Molotov Hull", molotovHull);
 }
 
+[[nodiscard]] PostProcessingDisabler createPostProcessingDisabler(const PatternFinder& clientPatternFinder)
+{
+#if IS_WIN32()
+    return PostProcessingDisabler{ clientPatternFinder("83 EC 4C 80 3D"_pat).add(5).deref().as<bool*>() };
+#elif IS_LINUX()
+    return PostProcessingDisabler{ clientPatternFinder("0F B6 05 ? ? ? ? 84 C0 0F 85 ? ? ? ? 85 D2"_pat).add(3).relativeToAbsolute().as<bool*>() };
+#endif
+}
+
+[[nodiscard]] ScopeOverlayRemover createScopeOverlayRemover(const PatternFinder& clientPatternFinder)
+{
+#if IS_WIN32()
+    return ScopeOverlayRemover{
+        clientPatternFinder("FF 50 3C 8B 4C 24 20"_pat).add(3).asReturnAddress(),
+        clientPatternFinder("8B 0D ? ? ? ? FF B7 ? ? ? ? 8B 01 FF 90 ? ? ? ? 8B 7C 24 1C"_pat).asReturnAddress(),
+        clientPatternFinder("0F 11 05 ? ? ? ? F3 0F 7E 87"_pat).add(3).deref().add(4).as<float*>()
+};
+#elif IS_LINUX()
+    return ScopeOverlayRemover{
+        clientPatternFinder("41 FF 51 70 43 8D 14 3E"_pat).add(4).asReturnAddress(),
+        clientPatternFinder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 66 0F EF E4"_pat).asReturnAddress(),
+        clientPatternFinder("F3 0F 10 05 ? ? ? ? FF 50 20 48 8B BB ? ? ? ? 48 85 FF 74 17"_pat).add(4).relativeToAbsolute().add(4).as<float*>()
+    };
+#endif
+}
+
+[[nodiscard]] SkyboxChanger createSkyboxChanger(csgo::Cvar cvar, const PatternFinder& enginePatternFinder)
+{
+#if IS_WIN32()
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 2D A1"_pat).add(1).relativeToAbsolute().get() } };
+#elif IS_LINUX()
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("55 4C 8D 05 ? ? ? ? 48 89 E5 41 57"_pat).get() } };
+#endif
+}
+
+Visuals::Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
+    : memory{ memory }, interfaces{ interfaces }, clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) }, postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) }, scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) },
+#if IS_WIN32()
+    viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("B9 ? ? ? ? 0F 11 44 24 ? C7 44 24 ? ? ? ? ? F3 0F 10 84 24"_pat).add(1).deref().as<csgo::ViewRenderBeamsPOD*>()) },
+    maxFlashAlphaProxy{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 8B 4D 0C 8B 45 08 81 C1"_pat).get() }
+#elif IS_LINUX()
+    viewRenderBeams{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("C7 45 ? ? ? ? ? 4C 8D 25 ? ? ? ? 49 8B 3C 24"_pat).add(10).relativeToAbsolute().deref().as<csgo::ViewRenderBeamsPOD*>()) }
+#endif
+{
+#if IS_WIN32()
+    cameraThink = ReturnAddress{ clientPatternFinder("85 C0 75 30 38 87"_pat).get() };
+#elif IS_LINUX()
+    cameraThink = ReturnAddress{ clientPatternFinder("0F 1F 80 ? ? ? ? 85 C0 75 5C"_pat).add(6).get() };
+#endif
+    ResetConfigurator configurator;
+    configure(configurator);
+}
+
 bool Visuals::isZoomOn() noexcept
 {
     return zoom;

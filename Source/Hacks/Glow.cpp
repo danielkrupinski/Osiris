@@ -29,6 +29,17 @@
 
 #include <Interfaces/ClientInterfaces.h>
 
+Glow::Glow(const PatternFinder& clientPatternFinder)
+    :
+#if IS_WIN32()
+    glowObjectManager{ clientPatternFinder("0F 11 05 ? ? ? ? 83 C8 01"_pat).add(3).deref().as<csgo::GlowObjectManager*>() },
+    glowObjectAntiCheatCheck{ retSpoofGadgets->client, clientPatternFinder("E8 ? ? ? ? 8B 75 FC 6A 04"_pat).add(1).relativeToAbsolute().get() }
+#elif IS_LINUX()
+    glowObjectManager{ clientPatternFinder("E8 ? ? ? ? 4C 89 E7 8B 70 20"_pat).add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<csgo::GlowObjectManager*>() }
+#endif
+{
+}
+
 void Glow::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Memory& memory) noexcept
 {
     if (!localPlayer)

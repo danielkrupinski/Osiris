@@ -1,4 +1,6 @@
 target_sources(OsirisOBJ PRIVATE
+  EconItemFunctions.cpp
+  EconItemViewFunctions.cpp
   InventoryChanger.cpp
   InventoryConfig.cpp
   WeaponNames.cpp

@@ -353,6 +353,12 @@
     <ClCompile Include="Helpers\KeyValuesFactory.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="InventoryChanger\EconItemFunctions.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="InventoryChanger\EconItemViewFunctions.cpp">
+      <Filter>InventoryChanger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
