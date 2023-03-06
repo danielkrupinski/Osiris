@@ -311,6 +311,7 @@
     <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
+    <ClInclude Include="Hacks\Visuals\BulletTracers.h" />
     <ClInclude Include="Hacks\Visuals\ColorCorrection.h" />
     <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h" />
     <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h" />

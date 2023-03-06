@@ -6,6 +6,7 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <Config/ResetConfigurator.h>
 #include <Utils/ReturnAddress.h>
+#include "Visuals/BulletTracers.h"
 #include "Visuals/ColorCorrection.h"
 #include "Visuals/SkyboxChanger.h"
 #include "Visuals/PostProcessingDisabler.h"
@@ -94,6 +95,7 @@ public:
         configurator("Wireframe smoke", wireframeSmoke).def(false);
         configurator("Zoom", zoom).def(false);
         configurator("Skybox Changer", skyboxChanger);
+        configurator("Bullet Tracers", bulletTracers);
     }
 
 private:
@@ -106,7 +108,7 @@ private:
     PostProcessingDisabler postProcessingDisabler;
     ScopeOverlayRemover scopeOverlayRemover;
     ReturnAddress cameraThink;
-    csgo::ViewRenderBeams viewRenderBeams;
+    BulletTracers bulletTracers;
 
 #if IS_WIN32()
     FunctionInvoker<csgo::RecvProxy> maxFlashAlphaProxy;
