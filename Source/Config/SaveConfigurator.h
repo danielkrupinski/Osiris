@@ -13,6 +13,11 @@ struct SaveHandler {
     {
     }
 
+    SaveHandler(SaveHandler&&) = delete;
+    SaveHandler(const SaveHandler&) = delete;
+    SaveHandler& operator=(SaveHandler&&) = delete;
+    SaveHandler& operator=(const SaveHandler&) = delete;
+
     SaveHandler& def(const T& defaultValue)
     {
         if (variable == defaultValue)
@@ -56,6 +61,11 @@ struct SaveHandler<std::array<T, N>> {
         : name{ name }, variable{ variable }, j{ j }
     {
     }
+
+    SaveHandler(SaveHandler&&) = delete;
+    SaveHandler(const SaveHandler&) = delete;
+    SaveHandler& operator=(SaveHandler&&) = delete;
+    SaveHandler& operator=(const SaveHandler&) = delete;
 
     template <typename Functor>
     SaveHandler& loadString(Functor&&)
