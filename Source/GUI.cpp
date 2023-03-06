@@ -475,7 +475,7 @@ void GUI::renderChamsWindow(Config& config, bool contentOnly) noexcept
     ImGui::Combo("Material", &material_, [](void*, int idx, const char** out_text) {
         *out_text = toString(static_cast<ChamsMaterial>(idx)).data();
         return true;
-    }, nullptr, Chams::numberOfMaterials);
+    }, nullptr, ChamsMaterials::numberOfMaterials);
     chams.material = static_cast<ChamsMaterial>(material_);
 
     ImGui::Checkbox("Wireframe", &chams.wireframe);

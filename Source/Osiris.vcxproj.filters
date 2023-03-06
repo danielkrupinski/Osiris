@@ -1162,6 +1162,9 @@
     <ClInclude Include="Hacks\Chams\ChamsMaterialFactory.h">
       <Filter>Hacks\Chams</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Chams\ChamsMaterials.h">
+      <Filter>Hacks\Chams</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

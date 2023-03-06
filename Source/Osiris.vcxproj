@@ -301,6 +301,7 @@
     <ClInclude Include="Hacks\Chams\ChamsMaterial.h" />
     <ClInclude Include="Hacks\Chams\ChamsMaterialFactory.h" />
     <ClInclude Include="Hacks\Chams\ChamsMaterialKeyValuesFactory.h" />
+    <ClInclude Include="Hacks\Chams\ChamsMaterials.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Features.h" />
     <ClInclude Include="Hacks\Glow.h" />

@@ -6,6 +6,7 @@
 
 #include "Chams/ChamsCategory.h"
 #include "Chams/ChamsMaterial.h"
+#include "Chams/ChamsMaterials.h"
 #include "Chams/ChamsMaterialFactory.h"
 #include <Helpers/KeyValuesFactory.h>
 #include <Interfaces/ClientInterfaces.h>
@@ -30,14 +31,13 @@ class Backtrack;
 class Chams {
 public:
     Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
-        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, materialFactory{ ChamsMaterialKeyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }, interfaces.getMaterialSystem() }
+        : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, materials{ ChamsMaterialFactory{ ChamsMaterialKeyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }, interfaces.getMaterialSystem() } }
     {
     }
 
     bool render(Backtrack& backtrack, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
     void updateInput() noexcept;
 
-    static constexpr auto numberOfMaterials = 13;
     static constexpr auto numberOfCategories = 9;
 
     struct Material {
@@ -65,7 +65,7 @@ public:
                     if (str.empty())
                         return;
 
-                    for (std::uint8_t i = 0; i < numberOfMaterials; ++i) {
+                    for (std::uint8_t i = 0; i < ChamsMaterials::numberOfMaterials; ++i) {
                         if (toString(ChamsMaterial(i)) == str) {
                             material = ChamsMaterial(i);
                             break;
@@ -102,7 +102,6 @@ public:
     }
 
 private:
-    void initializeMaterials(const csgo::MaterialSystem& materialSystem) noexcept;
     void renderPlayer(Backtrack& backtrack, const csgo::Entity& player) noexcept;
     void renderWeapons() noexcept;
     void renderHands() noexcept;
@@ -120,10 +119,5 @@ private:
     EngineInterfaces engineInterfaces;
     OtherInterfaces interfaces;
     const Memory& memory;
-    ChamsMaterialFactory materialFactory;
-
-    [[nodiscard]] csgo::Material getMaterial(ChamsMaterial material);
-
-    std::array<csgo::MaterialPOD*, numberOfMaterials> materials{};
-    std::array<bool, numberOfMaterials> materialsInitialized{};
+    ChamsMaterials materials;
 };
