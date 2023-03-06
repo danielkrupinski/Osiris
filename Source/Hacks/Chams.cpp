@@ -80,9 +80,9 @@ void Chams::renderPlayer(Backtrack& backtrack, const csgo::Entity& player) noexc
 
     const auto health = player.health();
 
-    if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Planting)].materials, [](const Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = csgo::Entity::from(retSpoofGadgets->client, player.getActiveWeapon()); activeWeapon.getPOD() != nullptr && activeWeapon.getNetworkable().getClientClass()->classId == ClassId::C4 && activeWeapon.c4StartedArming() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Planting)].materials, [](const ChamsLayer& mat) { return mat.enabled; })) {
         applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Planting)].materials, health);
-    } else if (player.isDefusing() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Defusing)].materials, [](const Material& mat) { return mat.enabled; })) {
+    } else if (player.isDefusing() && std::ranges::any_of(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Defusing)].materials, [](const ChamsLayer& mat) { return mat.enabled; })) {
         applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Defusing)].materials, health);
     } else if (player.getPOD() == localPlayer.get().getPOD()) {
         applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::LocalPlayer)].materials, health);
@@ -125,7 +125,7 @@ void Chams::renderSleeves() noexcept
     applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Sleeves)].materials, localPlayer.get().health());
 }
 
-void Chams::applyChams(const std::array<Material, 7>& chams, int health, csgo::matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const std::array<ChamsLayer, 7>& chams, int health, csgo::matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)

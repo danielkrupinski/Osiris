@@ -5,6 +5,7 @@
 #include "../Memory.h"
 
 #include "Chams/ChamsCategory.h"
+#include "Chams/ChamsLayer.h"
 #include "Chams/ChamsMaterial.h"
 #include "Chams/ChamsMaterials.h"
 #include "Chams/ChamsMaterialFactory.h"
@@ -40,45 +41,8 @@ public:
 
     static constexpr auto numberOfCategories = 9;
 
-    struct Material {
-        bool enabled = false;
-        bool healthBased = false;
-        bool blinking = false;
-        bool wireframe = false;
-        bool cover = false;
-        bool ignorez = false;
-        ChamsMaterial material = ChamsMaterial::Normal;
-        Color4 color;
-
-        template <typename Configurator>
-        void configure(Configurator& configurator)
-        {
-            configurator("Enabled", enabled).def(false);
-            configurator("Health based", healthBased).def(false);
-            configurator("Blinking", blinking).def(false);
-            configurator("Wireframe", wireframe).def(false);
-            configurator("Cover", cover).def(false);
-            configurator("Ignore-Z", ignorez).def(false);
-            configurator("Material", material)
-                .def(ChamsMaterial::Normal)
-                .loadString([this](std::string_view str) {
-                    if (str.empty())
-                        return;
-
-                    for (std::uint8_t i = 0; i < ChamsMaterials::numberOfMaterials; ++i) {
-                        if (toString(ChamsMaterial(i)) == str) {
-                            material = ChamsMaterial(i);
-                            break;
-                        }
-                    }
-                })
-                .save([this] { return toString(material); });
-            configurator("Color", color);
-        }
-    };
-
     struct ChamsCategoryMaterials {
-        std::array<Material, 7> materials;
+        std::array<ChamsLayer, 7> materials;
 
         template <typename Configurator>
         void configure(Configurator& configurator)
@@ -113,7 +77,7 @@ private:
     const csgo::ModelRenderInfo* info;
     csgo::matrix3x4* customBoneToWorld;
 
-    void applyChams(const std::array<Material, 7>& chams, int health = 0, csgo::matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const std::array<ChamsLayer, 7>& chams, int health = 0, csgo::matrix3x4* customMatrix = nullptr) noexcept;
     
     ClientInterfaces clientInterfaces;
     EngineInterfaces engineInterfaces;
