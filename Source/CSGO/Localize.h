@@ -10,8 +10,7 @@ namespace csgo
 
 struct LocalizePOD;
 
-class Localize : public VirtualCallableFromPOD<Localize, LocalizePOD> {
-public:
+struct Localize : VirtualCallableFromPOD<Localize, LocalizePOD> {
     VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (tokenName))
     VIRTUAL_METHOD(int, convertAnsiToUnicode, 15, (const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes), (ansi, unicode, unicodeBufferSizeInBytes))

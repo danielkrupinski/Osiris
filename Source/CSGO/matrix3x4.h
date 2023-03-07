@@ -5,11 +5,11 @@
 namespace csgo
 {
 
-class matrix3x4 {
-    float mat[3][4];
-public:
+struct matrix3x4 {
     constexpr auto operator[](int i) const noexcept { return mat[i]; }
     constexpr auto origin() const noexcept;
+private:
+    float mat[3][4];
 };
 
 constexpr auto matrix3x4::origin() const noexcept

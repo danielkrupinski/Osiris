@@ -10,8 +10,7 @@ namespace csgo
 
 struct UiComponentInventoryPOD;
 
-class UiComponentInventory : public VirtualCallableFromPOD<UiComponentInventory, UiComponentInventoryPOD> {
-public:
+struct UiComponentInventory : VirtualCallableFromPOD<UiComponentInventory, UiComponentInventoryPOD> {
     UiComponentInventory(VirtualCallableFromPOD base, csgo::SetItemSessionPropertyValue setItemSessionPropertyValueFn)
         : VirtualCallableFromPOD{ base }, setItemSessionPropertyValueFn{ setItemSessionPropertyValueFn }
     {

@@ -43,7 +43,7 @@ union SDL_Event;
 namespace csgo
 {
 
-class matrix3x4;
+struct matrix3x4;
 struct ModelRenderInfo;
 struct SoundInfo;
 struct ClientPOD;

@@ -4,7 +4,7 @@
 #include <InventoryChanger/GameItems/Storage.h>
 #include <CSGO/Localize.h>
 
-namespace csgo { class ItemSchema; }
+namespace csgo { struct ItemSchema; }
 class OtherInterfaces;
 
 namespace inventory_changer::game_integration

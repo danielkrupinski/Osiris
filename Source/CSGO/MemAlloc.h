@@ -9,8 +9,7 @@ namespace csgo
 
 struct MemAllocPOD;
 
-class MemAlloc : public VirtualCallableFromPOD<MemAlloc, MemAllocPOD> {
-public:
+struct MemAlloc : VirtualCallableFromPOD<MemAlloc, MemAllocPOD> {
     VIRTUAL_METHOD(void*, alloc, 1, (std::size_t size), (size))
 
     [[nodiscard]] void* allocAligned(std::size_t size, std::size_t alignment) const noexcept

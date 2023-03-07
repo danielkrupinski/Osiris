@@ -6,7 +6,7 @@
 namespace csgo
 {
 
-class matrix3x4;
+struct matrix3x4;
 
 struct Model {
     void* handle;

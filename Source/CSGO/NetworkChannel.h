@@ -11,8 +11,7 @@ struct NetworkChannelPOD {
     int chokedPackets;
 };
 
-class NetworkChannel : public VirtualCallableFromPOD<NetworkChannel, NetworkChannelPOD> {
-public:
+struct NetworkChannel : VirtualCallableFromPOD<NetworkChannel, NetworkChannelPOD> {
     VIRTUAL_METHOD(float, getLatency, 9, (int flow), (flow))
 };
 

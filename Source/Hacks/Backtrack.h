@@ -16,7 +16,7 @@ namespace csgo
 {
     enum class FrameStage;
     struct UserCmd;
-    class Cvar;
+    struct Cvar;
 }
 
 class ClientInterfaces;

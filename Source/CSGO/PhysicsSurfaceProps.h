@@ -18,8 +18,7 @@ struct SurfaceData {
 
 struct PhysicsSurfacePropsPOD;
 
-class PhysicsSurfaceProps : public VirtualCallableFromPOD<PhysicsSurfaceProps, PhysicsSurfacePropsPOD> {
-public:
+struct PhysicsSurfaceProps : VirtualCallableFromPOD<PhysicsSurfaceProps, PhysicsSurfacePropsPOD> {
     VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (index))
 };
 

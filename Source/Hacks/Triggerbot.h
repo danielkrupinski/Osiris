@@ -7,7 +7,7 @@ namespace csgo
 {
 
 struct UserCmd;
-class EngineTrace;
+struct EngineTrace;
 
 }
 

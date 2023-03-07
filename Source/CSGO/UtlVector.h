@@ -4,8 +4,7 @@ namespace csgo
 {
 
 template <typename T>
-class UtlVector {
-public:
+struct UtlVector {
     constexpr T& operator[](int i) noexcept { return memory[i]; }
     constexpr const T& operator[](int i) const noexcept { return memory[i]; }
 

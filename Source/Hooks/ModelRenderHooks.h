@@ -8,7 +8,7 @@
 
 namespace csgo
 {
-    class matrix3x4;
+    struct matrix3x4;
     struct ModelRenderInfo;
     struct ModelRenderPOD;
 }

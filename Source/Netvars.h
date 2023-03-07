@@ -18,7 +18,7 @@ struct ProxyHooks {
 };
 
 inline ProxyHooks proxyHooks;
-namespace csgo { class Client; }
+namespace csgo { struct Client; }
 
 namespace Netvars
 {

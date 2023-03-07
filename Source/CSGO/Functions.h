@@ -20,7 +20,7 @@ using FindOrCreateEconItemViewForItemID = EconItemViewPOD* (CDECL_CONV*)(ItemId 
 struct Vector;
 using LineGoesThroughSmoke = bool (CDECL_CONV*)(Vector from, Vector to, short);
 
-class GameEventDescriptor;
+struct GameEventDescriptor;
 struct GameEventManagerPOD;
 using GetEventDescriptor = GameEventDescriptor* (THISCALL_CONV*)(GameEventManagerPOD* thisptr, const char* name, int* cookie);
 
@@ -29,7 +29,7 @@ using GlowObjectAntiCheatCheck = void (THISCALL_CONV*)(void*);
 struct EconItemPOD;
 using SetCustomName = void (THISCALL_CONV*)(EconItemPOD* thisptr, const char* name);
 
-class EconItemAttributeDefinition;
+struct EconItemAttributeDefinition;
 using RemoveDynamicAttribute = void (THISCALL_CONV*)(EconItemPOD* thisptr, EconItemAttributeDefinition* attribute);
 
 using SetDynamicAttributeValue = void (THISCALL_CONV*)(LINUX_ARGS(void*,) EconItemPOD* thisptr, EconItemAttributeDefinition* attribute, void* value);
@@ -48,7 +48,7 @@ using MakePanoramaSymbol = void (THISCALL_CONV*)(short* symbol, const char* name
 
 struct ModelRenderPOD;
 struct ModelRenderInfo;
-class matrix3x4;
+struct matrix3x4;
 using DrawModelExecute = void (THISCALL_CONV*)(csgo::ModelRenderPOD* thisptr, void* ctx, void* state, const csgo::ModelRenderInfo* info, csgo::matrix3x4* customBoneToWorld);
 
 struct KeyValuesPOD;

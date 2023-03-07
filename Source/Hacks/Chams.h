@@ -19,10 +19,10 @@
 namespace csgo
 {
 
-class Entity;
+struct Entity;
 struct ModelRenderInfo;
-class matrix3x4;
-class StudioRender;
+struct matrix3x4;
+struct StudioRender;
 struct MaterialPOD;
 
 }

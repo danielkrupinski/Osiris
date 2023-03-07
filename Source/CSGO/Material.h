@@ -16,15 +16,13 @@ namespace csgo
 struct MaterialPOD;
 struct MaterialVarPOD;
 
-class MaterialVar : public VirtualCallableFromPOD<MaterialVar, MaterialVarPOD> {
-public:
+struct MaterialVar : VirtualCallableFromPOD<MaterialVar, MaterialVarPOD> {
     VIRTUAL_METHOD(void, setValue, 4, (float value), (value))
     VIRTUAL_METHOD(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (x, y, z))
     VIRTUAL_METHOD(void, setVecComponentValue, 26, (float value, int component), (value, component))
 };
 
-class Material : public VirtualCallableFromPOD<Material, MaterialPOD> {
-public:
+struct Material : VirtualCallableFromPOD<Material, MaterialPOD> {
     VIRTUAL_METHOD(const char*, getName, 0, (), ())
     VIRTUAL_METHOD(const char*, getTextureGroupName, 1, (), ())
     VIRTUAL_METHOD(MaterialVarPOD*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (name, found, complain))

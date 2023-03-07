@@ -5,13 +5,11 @@
 namespace csgo
 {
 
-class MoveData;
-
 struct EntityPOD;
 struct GameMovementPOD;
+struct MoveData;
 
-class GameMovement : public VirtualCallableFromPOD<GameMovement, GameMovementPOD> {
-public:
+struct GameMovement : VirtualCallableFromPOD<GameMovement, GameMovementPOD> {
     VIRTUAL_METHOD_V(void, processMovement, 1, (EntityPOD* localPlayer, MoveData* moveData), (localPlayer, moveData))
 };
 

@@ -114,8 +114,7 @@ struct StudioHdr {
 struct Model;
 struct ModelInfoPOD;
 
-class ModelInfo : public VirtualCallableFromPOD<ModelInfo, ModelInfoPOD> {
-public:
+struct ModelInfo : VirtualCallableFromPOD<ModelInfo, ModelInfoPOD> {
     VIRTUAL_METHOD(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (name))
     VIRTUAL_METHOD(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (model))
 };

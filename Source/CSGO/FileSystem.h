@@ -8,8 +8,7 @@ namespace csgo
 
 struct BaseFileSystemPOD;
 
-class BaseFileSystem : public VirtualCallableFromPOD<BaseFileSystem, BaseFileSystemPOD> {
-public:
+struct BaseFileSystem : VirtualCallableFromPOD<BaseFileSystem, BaseFileSystemPOD> {
     VIRTUAL_METHOD(int, read, 0, (void* output, int size, void* handle), (output, size, handle))
     VIRTUAL_METHOD(void*, open, 2, (const char* fileName, const char* options, const char* pathID), (fileName, options, pathID))
     VIRTUAL_METHOD(void, close, 3, (void* handle), (handle))

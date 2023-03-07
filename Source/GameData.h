@@ -77,7 +77,7 @@ struct LocalPlayerData {
     csgo::Vector origin;
 };
 
-namespace csgo { class Entity; }
+namespace csgo { struct Entity; }
 
 struct BaseData {
     BaseData(const csgo::Entity& entity) noexcept;

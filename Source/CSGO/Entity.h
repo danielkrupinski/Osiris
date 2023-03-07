@@ -56,18 +56,16 @@ namespace csgo
 struct Model;
 struct VarMap;
 
-class matrix3x4;
+struct matrix3x4;
 
-class Collideable : private VirtualCallable {
-public:
+struct Collideable : private VirtualCallable {
     using VirtualCallable::VirtualCallable;
 
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), ())
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), ())
 };
 
-class Networkable : private VirtualCallable {
-public:
+struct Networkable : private VirtualCallable {
     using VirtualCallable::VirtualCallable;
 
     VIRTUAL_METHOD(void, release, 1, (), ())
@@ -80,8 +78,7 @@ public:
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), ())
 };
 
-class Renderable : private VirtualCallable {
-public:
+struct Renderable : private VirtualCallable {
     using VirtualCallable::VirtualCallable;
 
 #if IS_WIN32()
@@ -95,8 +92,7 @@ public:
 
 struct EntityPOD;
 
-class Entity : public VirtualCallableFromPOD<Entity, EntityPOD> {
-public:
+struct Entity : VirtualCallableFromPOD<Entity, EntityPOD> {
     [[nodiscard]] auto getNetworkable() const noexcept
     {
         return Networkable{ getInvoker(), getThis() + sizeof(std::uintptr_t) * 2 };

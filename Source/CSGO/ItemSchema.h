@@ -63,8 +63,7 @@ struct EconTool {
 
 struct EconItemDefinitionPOD;
 
-class EconItemDefinition : public VirtualCallableFromPOD<EconItemDefinition, EconItemDefinitionPOD> {
-public:
+struct EconItemDefinition : VirtualCallableFromPOD<EconItemDefinition, EconItemDefinitionPOD> {
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), ())
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), ())
     VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), ())
@@ -184,8 +183,7 @@ struct ItemListEntry {
 
 struct EconLootListDefinitionPOD;
 
-class EconLootListDefinition : public VirtualCallableFromPOD<EconLootListDefinition, EconLootListDefinitionPOD> {
-public:
+struct EconLootListDefinition : VirtualCallableFromPOD<EconLootListDefinition, EconLootListDefinitionPOD> {
     VIRTUAL_METHOD(const char*, getName, 0, (), ())
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), ())
 
@@ -220,12 +218,11 @@ struct EconMusicDefinition {
     const char* inventoryImage;
 };
 
-class EconItemAttributeDefinition;
+struct EconItemAttributeDefinition;
 
 struct ItemSchemaPOD;
 
-class ItemSchema : public VirtualCallableFromPOD<ItemSchema, ItemSchemaPOD> {
-public:
+struct ItemSchema : VirtualCallableFromPOD<ItemSchema, ItemSchemaPOD> {
     VIRTUAL_METHOD(EconItemDefinitionPOD*, getItemDefinitionInterface, 4, (int id), (id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
@@ -243,15 +240,13 @@ public:
 
 struct ItemSystemPOD;
 
-class ItemSystem : public VirtualCallableFromPOD<ItemSystem, ItemSystemPOD> {
-public:
+struct ItemSystem : VirtualCallableFromPOD<ItemSystem, ItemSystemPOD> {
     VIRTUAL_METHOD(ItemSchemaPOD*, getItemSchema, 0, (), ())
 };
 
 struct EconItemPOD;
 
-class EconItem : public VirtualCallableFromPOD<EconItem, EconItemPOD> {
-public:
+struct EconItem : VirtualCallableFromPOD<EconItem, EconItemPOD> {
     EconItem(VirtualCallableFromPOD base, const EconItemFunctions& econItemFunctions)
         : VirtualCallableFromPOD{ base }, functions{ econItemFunctions }
     {
@@ -282,8 +277,7 @@ private:
     const EconItemFunctions& functions;
 };
 
-class EconItemAttributeSetter {
-public:
+struct EconItemAttributeSetter {
     explicit EconItemAttributeSetter(ItemSchema itemSchema)
         : itemSchema{ itemSchema }
     {
@@ -344,23 +338,20 @@ private:
 
 struct SharedObjectPOD;
 
-class SharedObject : public VirtualCallableFromPOD<SharedObject, SharedObjectPOD> {
-public:
+struct SharedObject : VirtualCallableFromPOD<SharedObject, SharedObjectPOD> {
     VIRTUAL_METHOD_V(int, getTypeID, 1, (), ())
 };
 
 struct SharedObjectTypeCachePOD;
 
-class SharedObjectTypeCache : public VirtualCallableFromPOD<SharedObjectTypeCache, SharedObjectTypeCachePOD> {
-public:
+struct SharedObjectTypeCache : VirtualCallableFromPOD<SharedObjectTypeCache, SharedObjectTypeCachePOD> {
     VIRTUAL_METHOD_V(void, addObject, 1, (SharedObjectPOD* object), (object))
     VIRTUAL_METHOD_V(void, removeObject, 3, (SharedObjectPOD* object), (object))
 };
 
 struct ClientSharedObjectCachePOD;
 
-class ClientSharedObjectCache : public VirtualCallableFromPOD<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
-public:
+struct ClientSharedObjectCache : VirtualCallableFromPOD<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
     ClientSharedObjectCache(VirtualCallableFromPOD base, csgo::CreateBaseTypeCache createBaseTypeCache)
         : VirtualCallableFromPOD{ base }, createBaseTypeCache{ createBaseTypeCache }
     {
@@ -378,8 +369,7 @@ private:
 struct InventoryManagerPOD;
 struct CSPlayerInventoryPOD;
 
-class InventoryManager : public VirtualCallableFromPOD<InventoryManager, InventoryManagerPOD> {
-public:
+struct InventoryManager : VirtualCallableFromPOD<InventoryManager, InventoryManagerPOD> {
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (Team team, int slot, ItemId itemID, bool swap = false), (team, slot, itemID, swap))
     VIRTUAL_METHOD_V(CSPlayerInventoryPOD*, getLocalInventory, 23, (), ())
     VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventoryPOD* inventory, ItemId itemID, Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))

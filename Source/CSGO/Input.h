@@ -6,8 +6,7 @@
 namespace csgo
 {
 
-class Input {
-public:
+struct Input {
     PAD(WIN32_LINUX(12, 16));
     bool isTrackIRAvailable;
     bool isMouseInitialized;

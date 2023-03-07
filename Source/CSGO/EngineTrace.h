@@ -105,8 +105,7 @@ struct Trace {
 
 struct EngineTracePOD;
 
-class EngineTrace : public VirtualCallableFromPOD<EngineTrace, EngineTracePOD> {
-public:
+struct EngineTrace : VirtualCallableFromPOD<EngineTrace, EngineTracePOD> {
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (&absPosition, contentsMask, nullptr))
     VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (&ray, mask, &filter, &trace))
 };

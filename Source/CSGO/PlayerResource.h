@@ -8,8 +8,7 @@ namespace csgo
 
 struct Vector;
 
-class IPlayerResource : private VirtualCallable {
-public:
+struct IPlayerResource : private VirtualCallable {
     using VirtualCallable::VirtualCallable;
 
     VIRTUAL_METHOD_V(bool, isAlive, 5, (int index), (index))
@@ -17,8 +16,7 @@ public:
     VIRTUAL_METHOD_V(int, getPlayerHealth, 14, (int index), (index))
 };
 
-class PlayerResource {
-public:
+struct PlayerResource {
     auto getIPlayerResource() noexcept
     {
         return IPlayerResource{ retSpoofGadgets->client, std::uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68) };

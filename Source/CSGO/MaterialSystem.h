@@ -11,8 +11,7 @@ struct MaterialPOD;
 struct MaterialSystemPOD;
 struct KeyValuesPOD;
 
-class MaterialSystem : public VirtualCallableFromPOD<MaterialSystem, MaterialSystemPOD> {
-public:
+struct MaterialSystem : VirtualCallableFromPOD<MaterialSystem, MaterialSystemPOD> {
     VIRTUAL_METHOD(MaterialPOD*, createMaterial, 83, (const char* materialName, KeyValuesPOD* keyValues), (materialName, keyValues))
     VIRTUAL_METHOD(MaterialPOD*, findMaterial, 84, (const char* materialName, const char* textureGroupName = nullptr, bool complain = true, const char* complainPrefix = nullptr), (materialName, textureGroupName, complain, complainPrefix))
     VIRTUAL_METHOD(short, firstMaterial, 86, (), ())

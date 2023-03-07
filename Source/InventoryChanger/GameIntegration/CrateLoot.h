@@ -5,8 +5,8 @@
 namespace csgo
 {
 
-class EconLootListDefinition;
-class ItemSchema;
+struct EconLootListDefinition;
+struct ItemSchema;
 
 }
 

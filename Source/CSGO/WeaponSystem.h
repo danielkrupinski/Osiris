@@ -9,8 +9,7 @@ namespace csgo
 
 struct WeaponInfo;
 
-class WeaponSystem : private VirtualCallable {
-public:
+struct WeaponSystem : private VirtualCallable {
     using VirtualCallable::VirtualCallable;
 
     VIRTUAL_METHOD(WeaponInfo*, getWeaponInfo, 2, (WeaponId weaponId), (weaponId))

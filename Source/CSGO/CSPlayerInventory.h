@@ -15,15 +15,14 @@ struct SOID {
     std::uint32_t padding;
 };
 
-class EconItemView;
+struct EconItemView;
 enum class Team;
 
 struct SharedObjectPOD;
 struct ClientSharedObjectCachePOD;
 struct CSPlayerInventoryPOD;
 
-class CSPlayerInventory : public VirtualCallableFromPOD<CSPlayerInventory, CSPlayerInventoryPOD> {
-public:
+struct CSPlayerInventory : VirtualCallableFromPOD<CSPlayerInventory, CSPlayerInventoryPOD> {
     VIRTUAL_METHOD(void, soCreated, 0, (SOID owner, SharedObjectPOD* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soUpdated, 1, (SOID owner, SharedObjectPOD* object, int event), (owner, object, event))
     VIRTUAL_METHOD(void, soDestroyed, 2, (SOID owner, SharedObjectPOD* object, int event), (owner, object, event))

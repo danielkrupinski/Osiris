@@ -56,8 +56,7 @@ struct DemoPlaybackParameters {
 struct NetworkChannelPOD;
 struct EnginePOD;
 
-class Engine : public VirtualCallableFromPOD<Engine, EnginePOD> {
-public:
+struct Engine : VirtualCallableFromPOD<Engine, EnginePOD> {
     VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (&w, &h))
     VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (entityIndex, &playerInfo))
     VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (userId))

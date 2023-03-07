@@ -10,7 +10,7 @@
 namespace csgo
 {
 
-template <typename T> class UtlVector;
+template <typename T> struct UtlVector;
 
 struct EconItemViewPOD {
     std::uintptr_t getAttributeList() const noexcept
@@ -31,8 +31,7 @@ struct EconItemViewPOD {
 
 struct EconItemPOD;
 
-class EconItemView : public VirtualCallableFromPOD<EconItemView, EconItemViewPOD> {
-public:
+struct EconItemView : VirtualCallableFromPOD<EconItemView, EconItemViewPOD> {
     EconItemView(VirtualCallableFromPOD base, const EconItemViewFunctions& functions)
         : VirtualCallableFromPOD{ base }, functions{ functions }
     {

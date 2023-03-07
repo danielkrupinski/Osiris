@@ -8,7 +8,7 @@ namespace csgo
 
 struct ConVarPOD;
 
-struct ConVar : public VirtualCallableFromPOD<ConVar, ConVarPOD> {
+struct ConVar : VirtualCallableFromPOD<ConVar, ConVarPOD> {
     VIRTUAL_METHOD(float, getFloat, WIN32_LINUX(12, 15), (), ())
     VIRTUAL_METHOD(int, getInt, WIN32_LINUX(13, 16), (), ())
     VIRTUAL_METHOD(void, setValue, WIN32_LINUX(14, 17), (const char* value), (value))

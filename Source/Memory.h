@@ -28,21 +28,21 @@ namespace csgo
 {
 
 struct ClientMode;
-class ClientSharedObjectCache;
-class CSPlayerInventory;
-class EconItem;
-class EconItemAttributeDefinition;
-class Entity;
-class GameEventDescriptor;
-class GameEventManager;
-class Input;
-class MoveData;
+struct ClientSharedObjectCache;
+struct CSPlayerInventory;
+struct EconItem;
+struct EconItemAttributeDefinition;
+struct Entity;
+struct GameEventDescriptor;
+struct GameEventManager;
+struct Input;
+struct MoveData;
 struct PlantedC4POD;
-class PlayerResource;
+struct PlayerResource;
 template <typename Key, typename Value>
 struct UtlMap;
 template <typename T>
-class UtlVector;
+struct UtlVector;
 
 struct ActiveChannels;
 struct Channel;
@@ -55,16 +55,11 @@ struct UiComponentInventoryPOD;
 struct ClientPOD;
 struct PanoramaMarshallHelperPOD;
 struct KeyValuesSystemPOD;
+struct ItemSystemPOD;
+struct MemAllocPOD;
+struct KeyValuesPOD;
+struct ViewRender;
 
-}
-
-namespace csgo { struct ViewRender; }
-
-namespace csgo
-{
-    struct ItemSystemPOD;
-    struct MemAllocPOD;
-    struct KeyValuesPOD;
 }
 
 class Memory {

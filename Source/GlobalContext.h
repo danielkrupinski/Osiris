@@ -31,7 +31,7 @@ namespace csgo
 
     struct ConVarPOD;
     struct DemoPlaybackParameters;
-    class matrix3x4;
+    struct matrix3x4;
     struct ModelRenderInfo;
     struct recvProxyData;
     struct SoundInfo;

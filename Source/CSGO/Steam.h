@@ -10,13 +10,11 @@ namespace csgo
 struct SteamFriendsPOD;
 struct SteamUtilsPOD;
 
-class SteamFriends : public VirtualCallableFromPOD<SteamFriends, SteamFriendsPOD> {
-public:
+struct SteamFriends : VirtualCallableFromPOD<SteamFriends, SteamFriendsPOD> {
     VIRTUAL_METHOD(int, getSmallFriendAvatar, 34, (std::uint64_t steamID), (steamID))
 };
 
-class SteamUtils : public VirtualCallableFromPOD<SteamUtils, SteamUtilsPOD> {
-public:
+struct SteamUtils : VirtualCallableFromPOD<SteamUtils, SteamUtilsPOD> {
     VIRTUAL_METHOD(bool, getImageRGBA, 6, (int image, std::uint8_t* buff, int buffSize), (image, buff, buffSize))
 };
 

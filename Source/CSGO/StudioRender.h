@@ -24,8 +24,7 @@ struct StudioRenderPOD {
     OverrideType overrideType;
 };
 
-class StudioRender : public VirtualCallableFromPOD<StudioRender, StudioRenderPOD> {
-public:
+struct StudioRender : VirtualCallableFromPOD<StudioRender, StudioRenderPOD> {
     VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (MaterialPOD* material, OverrideType type = OverrideType::Normal, int index = -1), (material, type, index))
 
     bool isForcedMaterialOverride() const noexcept
