@@ -119,8 +119,8 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
     clientStateHooks.install(&memory.splitScreen->splitScreenPlayers[0]->client);
     playerInventoryHooks.install(memory.inventoryManager.getLocalInventory());
     inventoryManagerHooks.install(memory.inventoryManager.getPOD());
-    engineSoundHooks.install(engineInterfaces.getPODs().sound);
-    modelRenderHooks.install(engineInterfaces.getPODs().modelRender);
+    engineSoundHooks.install(std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()));
+    modelRenderHooks.install(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()));
     panoramaMarshallHelperHooks.install(memory.panoramaMarshallHelper);
     surfaceHooks.install(interfaces.getSurface().getPOD());
     svCheatsHooks.install(interfaces.getCvar().findVar(csgo::sv_cheats));
