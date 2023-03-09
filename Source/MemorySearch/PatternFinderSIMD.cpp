@@ -1,7 +1,6 @@
-#include <bit>
-#include <cassert>
 #include <emmintrin.h>
 
+#include <Helpers/Bits.h>
 #include "PatternFinderSIMD.h"
 
 PatternFinderSIMD::PatternFinderSIMD(std::span<const std::byte> bytes, BytePattern pattern)
@@ -28,7 +27,7 @@ const std::byte* PatternFinderSIMD::operator()() noexcept
 
         auto mask = static_cast<std::uint16_t>(_mm_movemask_epi8(_mm_and_si128(firstCharMatchPositions, lastCharMatchPositions)));
         while (mask != 0) {
-            if (const auto bitPos = std::countr_zero(mask); patternWithoutFirstAndLastChar.matches(bytes.subspan(currentPos + bitPos + 1, patternWithoutFirstAndLastChar.length()))) {
+            if (const auto bitPos = bits::countrZero(mask); patternWithoutFirstAndLastChar.matches(bytes.subspan(currentPos + bitPos + 1, patternWithoutFirstAndLastChar.length()))) {
                 return &bytes[currentPos + bitPos];
             }
 
