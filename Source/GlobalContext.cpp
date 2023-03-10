@@ -69,23 +69,6 @@ GlobalContext::GlobalContext()
 }
 
 #if IS_WIN32()
-LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-LRESULT GlobalContext::wndProcHook(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (state == GlobalContext::State::Initialized) {
-        ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
-        getOtherInterfaces().getInputSystem().enableInput(!gui->isOpen());
-    } else if (state == GlobalContext::State::NotInitialized) {
-        state = GlobalContext::State::Initializing;
-        ImGui::CreateContext();
-        ImGui_ImplWin32_Init(window);
-        initialize();
-        state = GlobalContext::State::Initialized;
-    }
-
-    return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
-}
 
 HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
 {

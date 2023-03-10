@@ -76,15 +76,9 @@
 
 #if IS_WIN32()
 
-Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
+Hooks::Hooks(HMODULE moduleHandle) noexcept
+    : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }, moduleHandle{ moduleHandle }
 {
-#ifndef __MINGW32__
-    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-    _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
-#endif
-
-    window = FindWindowW(L"Valve001", nullptr);
-    originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
 }
 
 #endif
@@ -165,8 +159,8 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
 
 #if IS_WIN32()
     keyValuesSystemHooks.uninstall();
+    windowProcedureHook.uninstall();
 
-    SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
 

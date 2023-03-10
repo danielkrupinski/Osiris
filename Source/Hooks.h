@@ -36,6 +36,7 @@ union SDL_Event;
 
 #if IS_WIN32()
 #include "Hooks/KeyValuesSystemHooks.h"
+#include "Hooks/WindowProcedureHook.h"
 #endif
 
 #include "HookType.h"
@@ -61,7 +62,7 @@ public:
 #if IS_WIN32()
     Hooks(HMODULE moduleHandle) noexcept;
 
-    WNDPROC originalWndProc;
+    WindowProcedureHook windowProcedureHook;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #else
@@ -97,7 +98,6 @@ public:
 private:
 #if IS_WIN32()
     HMODULE moduleHandle;
-    HWND window;
 #endif
 };
 

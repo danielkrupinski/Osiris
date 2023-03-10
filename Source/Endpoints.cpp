@@ -3,6 +3,8 @@
 #if IS_WIN32()
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
+
+#include "Hooks/WindowProcedureHook.h"
 #endif
 
 #include "EventListener.h"
@@ -72,9 +74,22 @@ void CDECL_CONV spottedHook(csgo::recvProxyData* data, void* outStruct, void* ar
 
 #if IS_WIN32()
 
-LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT __stdcall WindowProcedureHook::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    return globalContext->wndProcHook(window, msg, wParam, lParam);
+    if (globalContext->state == GlobalContext::State::Initialized) {
+        ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+        globalContext->getOtherInterfaces().getInputSystem().enableInput(!gui->isOpen());
+    } else if (globalContext->state == GlobalContext::State::NotInitialized) {
+        globalContext->state = GlobalContext::State::Initializing;
+        ImGui::CreateContext();
+        ImGui_ImplWin32_Init(window);
+        globalContext->initialize();
+        globalContext->state = GlobalContext::State::Initialized;
+    }
+
+    return CallWindowProcW(hooks->windowProcedureHook.originalWndProc, window, msg, wParam, lParam);
 }
 
 HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
