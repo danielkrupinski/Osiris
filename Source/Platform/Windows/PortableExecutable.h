@@ -24,6 +24,24 @@ public:
         return {};
     }
 
+    [[nodiscard]] const void* getExport(const char* name) const noexcept
+    {
+        const auto exportDirectory = getExportDirectory();
+        if (!exportDirectory)
+            return nullptr;
+
+        for (DWORD i = 0; i < exportDirectory->NumberOfNames; ++i) {
+            const auto exportName = reinterpret_cast<const char*>(base + reinterpret_cast<const DWORD*>(base + exportDirectory->AddressOfNames)[i]);
+            if (std::strcmp(exportName, name) == 0) {
+                const auto nameOrdinals = reinterpret_cast<const WORD*>(base + exportDirectory->AddressOfNameOrdinals);
+                const auto functions = reinterpret_cast<const DWORD*>(base + exportDirectory->AddressOfFunctions);
+                return base + functions[nameOrdinals[i]];
+            }
+        }
+
+        return nullptr;
+    }
+
 private:
     [[nodiscard]] std::span<const IMAGE_SECTION_HEADER> getSectionHeaders() const noexcept
     {
@@ -31,6 +49,27 @@ private:
             return { reinterpret_cast<const IMAGE_SECTION_HEADER*>(reinterpret_cast<const std::byte*>(&ntHeaders->OptionalHeader) + ntHeaders->FileHeader.SizeOfOptionalHeader),
                      ntHeaders->FileHeader.NumberOfSections };
         return {};
+    }
+
+    [[nodiscard]] const IMAGE_EXPORT_DIRECTORY* getExportDirectory() const noexcept
+    {
+        if (const auto exportDirectory = getDataDirectory(IMAGE_DIRECTORY_ENTRY_EXPORT); exportDirectory && exportDirectory->Size >= sizeof(IMAGE_EXPORT_DIRECTORY))
+            return reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDirectory->VirtualAddress);
+        return nullptr;
+    }
+
+    [[nodiscard]] const IMAGE_DATA_DIRECTORY* getDataDirectory(std::uint8_t entry) const noexcept
+    {
+        if (const auto optionalHeader = getOptionalHeader(); optionalHeader && optionalHeader->NumberOfRvaAndSizes > entry)
+            return &optionalHeader->DataDirectory[entry];
+        return nullptr;
+    }
+
+    [[nodiscard]] const IMAGE_OPTIONAL_HEADER* getOptionalHeader() const noexcept
+    {
+        if (const auto ntHeaders = getNtHeaders(); ntHeaders && ntHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR_MAGIC)
+            return &ntHeaders->OptionalHeader;
+        return nullptr;
     }
 
     [[nodiscard]] const IMAGE_NT_HEADERS* getNtHeaders() const noexcept

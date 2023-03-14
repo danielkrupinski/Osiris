@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include "PortableExecutable.h"
 
 namespace windows_platform
 {
@@ -13,9 +14,9 @@ public:
     {
     }
 
-    [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] const void* getFunctionAddress(const char* functionName) const noexcept
     {
-        return dl.GetProcAddress(handle, functionName);
+        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
     }
 
     [[nodiscard]] HMODULE getHandle() const noexcept
