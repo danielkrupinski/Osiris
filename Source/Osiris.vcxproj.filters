@@ -676,7 +676,7 @@
     <ClInclude Include="GlobalContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Windows\DynamicLibraryWrapper.h">
+    <ClInclude Include="Platform\Windows\PlatformApi.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h">

@@ -5,7 +5,7 @@
 namespace linux_platform
 {
 
-struct DynamicLibraryWrapper {
+struct PlatformApi {
     void* dlopen(const char* file, int mode) const noexcept
     {
         return ::dlopen(file, mode);

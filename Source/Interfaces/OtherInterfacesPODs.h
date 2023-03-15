@@ -3,10 +3,10 @@
 #include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
-#include "Platform/Windows/DynamicLibraryWrapper.h"
+#include "Platform/Windows/PlatformApi.h"
 #include "Platform/Windows/DynamicLibrary.h"
 #elif IS_LINUX()
-#include "Platform/Linux/DynamicLibraryWrapper.h"
+#include "Platform/Linux/PlatformApi.h"
 #include "Platform/Linux/SharedObject.h"
 #endif
 
@@ -58,10 +58,10 @@ private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
 #if IS_WIN32()
-        const windows_platform::DynamicLibrary dll{ windows_platform::DynamicLibraryWrapper{}, moduleName };
+        const windows_platform::DynamicLibrary dll{ windows_platform::PlatformApi{}, moduleName };
         const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets->client } };
 #else
-        const linux_platform::SharedObject so{ linux_platform::DynamicLibraryWrapper{}, moduleName };
+        const linux_platform::SharedObject so{ linux_platform::PlatformApi{}, moduleName };
         const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets->client } };
 #endif
         return finder(name);

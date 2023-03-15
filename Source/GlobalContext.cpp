@@ -52,16 +52,16 @@
 #include "Interfaces/ClientInterfaces.h"
 
 #include "Platform/DynamicLibrary.h"
-#include "Platform/DynamicLibraryWrapper.h"
+#include "Platform/PlatformApi.h"
 
 GlobalContext::GlobalContext()
 {
 #if IS_WIN32()
-    const windows_platform::DynamicLibrary clientDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-    const windows_platform::DynamicLibrary engineDLL{ windows_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
+    const windows_platform::DynamicLibrary clientDLL{ windows_platform::PlatformApi{}, csgo::CLIENT_DLL };
+    const windows_platform::DynamicLibrary engineDLL{ windows_platform::PlatformApi{}, csgo::ENGINE_DLL };
 #elif IS_LINUX()
-    const linux_platform::SharedObject clientDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
-    const linux_platform::SharedObject engineDLL{ linux_platform::DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
+    const linux_platform::SharedObject clientDLL{ linux_platform::PlatformApi{}, csgo::CLIENT_DLL };
+    const linux_platform::SharedObject engineDLL{ linux_platform::PlatformApi{}, csgo::ENGINE_DLL };
 #endif
 
     PatternNotFoundHandler patternNotFoundHandler;
@@ -245,9 +245,9 @@ void GlobalContext::renderFrame()
 
 void GlobalContext::initialize()
 {
-    const DynamicLibrary<DynamicLibraryWrapper> clientSo{ DynamicLibraryWrapper{}, csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> clientSo{ PlatformApi{}, csgo::CLIENT_DLL };
     clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
-    const DynamicLibrary<DynamicLibraryWrapper> engineSo{ DynamicLibraryWrapper{}, csgo::ENGINE_DLL };
+    const DynamicLibrary<PlatformApi> engineSo{ PlatformApi{}, csgo::ENGINE_DLL };
     engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
 
     interfaces.emplace();

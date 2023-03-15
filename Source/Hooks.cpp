@@ -175,7 +175,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
 #if !IS_WIN32()
 
 Hooks::Hooks() noexcept
-    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::DynamicLibraryWrapper{}, "libSDL2-2.0.so.0" }.getView() }
+    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::PlatformApi{}, "libSDL2-2.0.so.0" }.getView() }
 {
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
