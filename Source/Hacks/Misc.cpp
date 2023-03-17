@@ -139,8 +139,6 @@ struct MiscConfig {
         bool fps = true;
         bool latency = true;
         bool time = true;
-        ImVec2 pos;
-        ImVec2 size{ 200.0f, 200.0f };
     };
     Watermark watermark;
     float aspectratio{ 0 };
