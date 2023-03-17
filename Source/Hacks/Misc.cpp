@@ -135,6 +135,12 @@ struct MiscConfig {
     SpectatorList spectatorList;
     struct Watermark {
         bool enabled = false;
+		bool cheat = true;
+        bool fps = true;
+        bool latency = true;
+        bool time = true;
+        ImVec2 pos;
+        ImVec2 size{ 200.0f, 200.0f };
     };
     Watermark watermark;
     float aspectratio{ 0 };
@@ -415,7 +421,24 @@ void Misc::watermark() noexcept
     static auto frameRate = 1.0f;
     frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
 
-    ImGui::Text("Osiris | %d fps | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
+    static auto lastTime = 0.0f;
+    if (memory.globalVars->realtime - lastTime < 1.0f)
+        return;
+
+    const auto time = std::time(nullptr);
+    const auto localTime = std::localtime(&time);
+
+    if (miscConfig.watermark.cheat)
+        ImGui::Text("Osiris");
+    ImGui::SameLine();
+    if (miscConfig.watermark.fps)
+            ImGui::Text("%d fps", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0);
+    ImGui::SameLine();
+    if (miscConfig.watermark.latency)
+        ImGui::Text("%d ms", GameData::getNetOutgoingLatency());
+    ImGui::SameLine();
+    if (miscConfig.watermark.time)
+        ImGui::Text("%02d:%02d:%02d", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
     ImGui::End();
 }
 
@@ -1417,6 +1440,20 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PopID();
 
     ImGui::Checkbox("Watermark", &miscConfig.watermark.enabled);
+	ImGui::SameLine();
+
+    ImGui::PushID("Watermark");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("Cheat", &miscConfig.watermark.cheat);
+        ImGui::Checkbox("Fps", &miscConfig.watermark.fps);
+        ImGui::Checkbox("Latency", &miscConfig.watermark.latency);
+        ImGui::Checkbox("Time", &miscConfig.watermark.time);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
     ImGuiCustom::colorPicker("Offscreen Enemies", miscConfig.offscreenEnemies.asColor4(), &miscConfig.offscreenEnemies.enabled);
     ImGui::SameLine();
     ImGui::PushID("Offscreen Enemies");
@@ -1594,6 +1631,10 @@ static void from_json(const json& j, MiscConfig::SpectatorList& sl)
 static void from_json(const json& j, MiscConfig::Watermark& o)
 {
     read(j, "Enabled", o.enabled);
+	read(j, "Cheat", o.cheat);
+    read(j, "Fps", o.fps);
+    read(j, "Latency", o.latency);
+    read(j, "Time", o.time);
 }
 
 static void from_json(const json& j, PreserveKillfeed& o)
@@ -1724,6 +1765,10 @@ static void to_json(json& j, const MiscConfig::SpectatorList& o, const MiscConfi
 static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::Watermark& dummy = {})
 {
     WRITE("Enabled", enabled);
+	WRITE("Cheat", cheat);
+    WRITE("Fps", fps);
+    WRITE("Latency", latency);
+    WRITE("Time", time);
 }
 
 static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
