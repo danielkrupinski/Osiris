@@ -428,15 +428,28 @@ void Misc::watermark() noexcept
     const auto time = std::time(nullptr);
     const auto localTime = std::localtime(&time);
 
+    //cheat
     if (miscConfig.watermark.cheat)
         ImGui::Text("Osiris");
     ImGui::SameLine();
-    if (miscConfig.watermark.fps)
-            ImGui::Text("%d fps", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0);
+    if (miscConfig.watermark.cheat && (miscConfig.watermark.fps || miscConfig.watermark.latency || miscConfig.watermark.time))
+        ImGui::Text("|");
     ImGui::SameLine();
+    //fps
+    if (miscConfig.watermark.fps)
+        ImGui::Text("%d fps", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0);
+    ImGui::SameLine();
+    if (miscConfig.watermark.fps && (miscConfig.watermark.latency || miscConfig.watermark.time))
+        ImGui::Text("|");
+    ImGui::SameLine();
+    //latency
     if (miscConfig.watermark.latency)
         ImGui::Text("%d ms", GameData::getNetOutgoingLatency());
     ImGui::SameLine();
+    if (miscConfig.watermark.latency && miscConfig.watermark.time)
+        ImGui::Text("|");
+    ImGui::SameLine();
+    //time
     if (miscConfig.watermark.time)
         ImGui::Text("%02d:%02d:%02d", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
     ImGui::End();
