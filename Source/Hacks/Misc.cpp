@@ -136,9 +136,10 @@ struct MiscConfig {
     struct Watermark {
         bool enabled = false;
 		bool cheat = true;
+        bool user = true;
         bool fps = true;
         bool latency = true;
-        bool time = true;
+        bool wtime = true;
     };
     Watermark watermark;
     float aspectratio{ 0 };
@@ -416,6 +417,8 @@ void Misc::watermark() noexcept
     ImGui::SetNextWindowBgAlpha(0.3f);
     ImGui::Begin("Watermark", nullptr, windowFlags);
 
+    char* username = getenv("username");
+
     static auto frameRate = 1.0f;
     frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
 
@@ -425,30 +428,36 @@ void Misc::watermark() noexcept
 
     const auto time = std::time(nullptr);
     const auto localTime = std::localtime(&time);
-
     //cheat
     if (miscConfig.watermark.cheat)
         ImGui::Text("Osiris");
     ImGui::SameLine();
-    if (miscConfig.watermark.cheat && (miscConfig.watermark.fps || miscConfig.watermark.latency || miscConfig.watermark.time))
+    if (miscConfig.watermark.cheat && (miscConfig.watermark.user || miscConfig.watermark.fps || miscConfig.watermark.latency || miscConfig.watermark.wtime))
+        ImGui::Text("|");
+    ImGui::SameLine();
+    //username
+    if (miscConfig.watermark.user)
+        ImGui::Text(username);
+    ImGui::SameLine();
+    if (miscConfig.watermark.user && (miscConfig.watermark.fps || miscConfig.watermark.latency || miscConfig.watermark.wtime))
         ImGui::Text("|");
     ImGui::SameLine();
     //fps
     if (miscConfig.watermark.fps)
         ImGui::Text("%d fps", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0);
     ImGui::SameLine();
-    if (miscConfig.watermark.fps && (miscConfig.watermark.latency || miscConfig.watermark.time))
+    if (miscConfig.watermark.fps && (miscConfig.watermark.latency || miscConfig.watermark.wtime))
         ImGui::Text("|");
     ImGui::SameLine();
     //latency
     if (miscConfig.watermark.latency)
         ImGui::Text("%d ms", GameData::getNetOutgoingLatency());
     ImGui::SameLine();
-    if (miscConfig.watermark.latency && miscConfig.watermark.time)
+    if (miscConfig.watermark.latency && miscConfig.watermark.wtime)
         ImGui::Text("|");
     ImGui::SameLine();
     //time
-    if (miscConfig.watermark.time)
+    if (miscConfig.watermark.wtime)
         ImGui::Text("%02d:%02d:%02d", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
     ImGui::End();
 }
@@ -1459,9 +1468,10 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
 
     if (ImGui::BeginPopup("")) {
         ImGui::Checkbox("Cheat", &miscConfig.watermark.cheat);
+        ImGui::Checkbox("User", &miscConfig.watermark.user);
         ImGui::Checkbox("Fps", &miscConfig.watermark.fps);
         ImGui::Checkbox("Latency", &miscConfig.watermark.latency);
-        ImGui::Checkbox("Time", &miscConfig.watermark.time);
+        ImGui::Checkbox("Time", &miscConfig.watermark.wtime);
         ImGui::EndPopup();
     }
     ImGui::PopID();
@@ -1643,9 +1653,10 @@ static void from_json(const json& j, MiscConfig::Watermark& o)
 {
     read(j, "Enabled", o.enabled);
 	read(j, "Cheat", o.cheat);
+    read(j, "User", o.user);
     read(j, "Fps", o.fps);
     read(j, "Latency", o.latency);
-    read(j, "Time", o.time);
+    read(j, "Time", o.wtime);
 }
 
 static void from_json(const json& j, PreserveKillfeed& o)
@@ -1777,9 +1788,10 @@ static void to_json(json& j, const MiscConfig::Watermark& o, const MiscConfig::W
 {
     WRITE("Enabled", enabled);
 	WRITE("Cheat", cheat);
+    WRITE("User", user);
     WRITE("Fps", fps);
     WRITE("Latency", latency);
-    WRITE("Time", time);
+    WRITE("Time", wtime);
 }
 
 static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
