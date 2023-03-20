@@ -1183,6 +1183,9 @@
     <ClInclude Include="Platform\Windows\Win.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\PebLdr.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

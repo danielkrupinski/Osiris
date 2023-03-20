@@ -422,6 +422,7 @@
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
+    <ClInclude Include="Platform\Windows\PebLdr.h" />
     <ClInclude Include="Platform\Windows\PlatformApi.h" />
     <ClInclude Include="Platform\Windows\PortableExecutable.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
