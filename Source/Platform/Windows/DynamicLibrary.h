@@ -3,25 +3,26 @@
 #include <Windows.h>
 
 #include "DynamicLibraryView.h"
+#include "PebLdr.h"
 
 namespace windows_platform
 {
 
-template <typename DynamicLibraryWrapper>
+template <typename PlatformApi>
 class DynamicLibrary {
 public:
-    DynamicLibrary(DynamicLibraryWrapper dynamicLibraryWrapper, const char* libraryName)
-        : dl{ dynamicLibraryWrapper }, handle{ dl.GetModuleHandleA(libraryName) }
+    DynamicLibrary(PlatformApi platformApi, const char* libraryName)
+        : platformApi{ platformApi }, handle{ PebLdr{ platformApi.getPeb()->ldr }.getModuleHandle(libraryName) }
     {
     }
 
-    [[nodiscard]] DynamicLibraryView<DynamicLibraryWrapper> getView() const noexcept
+    [[nodiscard]] DynamicLibraryView<PlatformApi> getView() const noexcept
     {
-        return { dl, handle };
+        return { platformApi, handle };
     }
 
 private:
-    [[no_unique_address]] DynamicLibraryWrapper dl;
+    [[no_unique_address]] PlatformApi platformApi;
     HMODULE handle;
 };
 

@@ -9,11 +9,6 @@ namespace windows_platform
 {
 
 struct PlatformApi {
-    HMODULE GetModuleHandleA(LPCSTR moduleName) const noexcept
-    {
-        return ::GetModuleHandleA(moduleName);
-    }
-
     [[nodiscard]] win::Peb* getPeb() const noexcept
     {
 #if IS_WIN32()
