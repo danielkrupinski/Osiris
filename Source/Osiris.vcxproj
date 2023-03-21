@@ -253,7 +253,6 @@
     <ClInclude Include="CSGO\ModelRender.h" />
     <ClInclude Include="CSGO\MoveHelper.h" />
     <ClInclude Include="CSGO\NetworkChannel.h" />
-    <ClInclude Include="CSGO\Pad.h" />
     <ClInclude Include="CSGO\Panorama.h" />
     <ClInclude Include="CSGO\PanoramaMarshallHelper.h" />
     <ClInclude Include="CSGO\PhysicsSurfaceProps.h" />
@@ -414,11 +413,11 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\DynamicLibraryView.h" />
-    <ClInclude Include="Platform\DynamicLibraryWrapper.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
+    <ClInclude Include="Platform\PlatformApi.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrarySection.h" />
     <ClInclude Include="Platform\Windows\DynamicLibraryView.h" />
@@ -447,6 +446,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\HexChars.h" />
+    <ClInclude Include="Utils\Pad.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />

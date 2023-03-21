@@ -1,7 +1,7 @@
 #pragma once
 
-#include <CSGO/Pad.h>
 #include <CSGO/UtlString.h>
+#include <Utils/Pad.h>
 
 namespace csgo
 {

@@ -5,7 +5,7 @@
 
 #include <Platform/Macros/PlatformSpecific.h>
 #include <CSGO/Constants/ItemId.h>
-#include <CSGO/Pad.h>
+#include <Utils/Pad.h>
 
 #include "EconItem.h"
 

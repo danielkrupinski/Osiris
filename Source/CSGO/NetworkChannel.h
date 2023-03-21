@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pad.h"
+#include <Utils/Pad.h>
 #include "VirtualMethod.h"
 
 namespace csgo

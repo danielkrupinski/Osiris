@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Platform/Macros/PlatformSpecific.h>
-#include <CSGO/Pad.h>
+#include <Utils/Pad.h>
 #include <CSGO/UtlMap.h>
 
 namespace csgo

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Platform/Macros/IsPlatform.h>
-#include <CSGO/Pad.h>
+#include <Utils/Pad.h>
 
 namespace win
 {

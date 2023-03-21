@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pad.h"
+#include <Utils/Pad.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
 enum class WeaponType {
