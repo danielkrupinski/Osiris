@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        compiler: [g++-11, g++-12, clang++-13, clang++-14, clang++-15]
+        compiler: [g++-11, g++-12, clang++-13, clang++-14, clang++-15, clang++-16]
         configuration: [Debug, Release]
     steps:
     - uses: actions/checkout@v2
@@ -18,6 +18,12 @@ jobs:
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 15
+    - name: install clang++-16
+      if: matrix.compiler == 'clang++-16'
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 16
     - name: install dependencies
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
