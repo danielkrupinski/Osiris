@@ -7,35 +7,32 @@
 namespace linux_platform
 {
 
-template <typename DynamicLibraryWrapper>
+template <typename PlatformApi>
 class SharedObject {
 public:
-    SharedObject(DynamicLibraryWrapper dynamicLibraryWrapper, const char* libraryName)
-        : dl{ dynamicLibraryWrapper }, handle{ dl.dlopen(libraryName, RTLD_LAZY | RTLD_NOLOAD) } {}
-
-    SharedObject(const SharedObject&) = delete;
-    SharedObject& operator=(const SharedObject&) = delete;
-    SharedObject(SharedObject&&) = delete;
-    SharedObject& operator=(SharedObject&&) = delete;
+    SharedObject(PlatformApi platformApi, const char* libraryName)
+        : platformApi{ platformApi }, handle{ getModuleHandle(libraryName) } {}
 
     [[nodiscard]] bool isValid() const noexcept
     {
         return handle != nullptr;
     }
 
-    [[nodiscard]] DynamicLibraryView<DynamicLibraryWrapper> getView() const noexcept
+    [[nodiscard]] DynamicLibraryView<PlatformApi> getView() const noexcept
     {
-        return { dl, handle };
-    }
-
-    ~SharedObject() noexcept
-    {
-        if (handle != nullptr)
-            dl.dlclose(handle);
+        return { platformApi, handle };
     }
 
 private:
-    [[no_unique_address]] DynamicLibraryWrapper dl;
+    [[nodiscard]] void* getModuleHandle(const char* libraryName)
+    {
+        const auto handle = platformApi.dlopen(libraryName, RTLD_LAZY | RTLD_NOLOAD);
+        if (handle)
+            platformApi.dlclose(handle);
+        return handle;
+    }
+
+    [[no_unique_address]] PlatformApi platformApi;
     void* handle = nullptr;
 };
 
