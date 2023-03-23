@@ -21,6 +21,11 @@ public:
         return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
     }
 
+    [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept
+    {
+        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getCodeSection();
+    }
+
     [[nodiscard]] HMODULE getHandle() const noexcept
     {
         return handle;

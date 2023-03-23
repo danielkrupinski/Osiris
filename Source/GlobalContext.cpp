@@ -3,13 +3,9 @@
 #if IS_WIN32()
 #include <imgui/imgui_impl_dx9.h>
 #include <imgui/imgui_impl_win32.h>
-
-#include "Platform/Windows/DynamicLibrarySection.h"
 #else
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
-
-#include "Platform/Linux/DynamicLibrarySection.h"
 #endif
 
 #include "EventListener.h"
@@ -56,16 +52,11 @@
 
 GlobalContext::GlobalContext()
 {
-#if IS_WIN32()
-    const windows_platform::DynamicLibrary clientDLL{ windows_platform::PlatformApi{}, csgo::CLIENT_DLL };
-    const windows_platform::DynamicLibrary engineDLL{ windows_platform::PlatformApi{}, csgo::ENGINE_DLL };
-#elif IS_LINUX()
-    const linux_platform::SharedObject clientDLL{ linux_platform::PlatformApi{}, csgo::CLIENT_DLL };
-    const linux_platform::SharedObject engineDLL{ linux_platform::PlatformApi{}, csgo::ENGINE_DLL };
-#endif
+    const DynamicLibrary<PlatformApi> clientDLL{ PlatformApi{}, csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> engineDLL{ PlatformApi{}, csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
-    retSpoofGadgets.emplace(PatternFinder{ getCodeSection(clientDLL), patternNotFoundHandler }, PatternFinder{ getCodeSection(engineDLL), patternNotFoundHandler });
+    retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler }, PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler });
 }
 
 #if IS_WIN32()
@@ -252,8 +243,8 @@ void GlobalContext::initialize()
 
     interfaces.emplace();
     PatternNotFoundHandler patternNotFoundHandler;
-    const PatternFinder clientPatternFinder{ getCodeSection(clientSo), patternNotFoundHandler };
-    const PatternFinder enginePatternFinder{ getCodeSection(engineSo), patternNotFoundHandler };
+    const PatternFinder clientPatternFinder{ clientSo.getCodeSection(), patternNotFoundHandler };
+    const PatternFinder enginePatternFinder{ engineSo.getCodeSection(), patternNotFoundHandler };
 
     memory.emplace(clientPatternFinder, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 
