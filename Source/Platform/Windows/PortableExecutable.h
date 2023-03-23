@@ -26,16 +26,23 @@ public:
 
     [[nodiscard]] const void* getExport(const char* name) const noexcept
     {
-        const auto exportDirectory = getExportDirectory();
-        if (!exportDirectory)
+        const auto exportDataDirectory = getExportDataDirectory();
+        if (!exportDataDirectory)
             return nullptr;
+
+        const auto exportDirectory = reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDataDirectory->VirtualAddress);
 
         for (DWORD i = 0; i < exportDirectory->NumberOfNames; ++i) {
             const auto exportName = reinterpret_cast<const char*>(base + reinterpret_cast<const DWORD*>(base + exportDirectory->AddressOfNames)[i]);
             if (std::strcmp(exportName, name) == 0) {
                 const auto nameOrdinals = reinterpret_cast<const WORD*>(base + exportDirectory->AddressOfNameOrdinals);
                 const auto functions = reinterpret_cast<const DWORD*>(base + exportDirectory->AddressOfFunctions);
-                return base + functions[nameOrdinals[i]];
+                const auto functionRva = functions[nameOrdinals[i]];
+                if (isForwardedExport(functionRva, *exportDataDirectory)) {
+                    assert(false && "Forwarded exports are not supported yet!");
+                    return nullptr;
+                }
+                return base + functionRva;
             }
         }
 
@@ -43,6 +50,11 @@ public:
     }
 
 private:
+    [[nodiscard]] static bool isForwardedExport(DWORD functionRva, const IMAGE_DATA_DIRECTORY& exportDataDirectory) noexcept
+    {
+        return functionRva >= exportDataDirectory.VirtualAddress && functionRva - exportDataDirectory.VirtualAddress < exportDataDirectory.Size;
+    }
+
     [[nodiscard]] std::span<const IMAGE_SECTION_HEADER> getSectionHeaders() const noexcept
     {
         if (const auto ntHeaders = getNtHeaders())
@@ -51,11 +63,9 @@ private:
         return {};
     }
 
-    [[nodiscard]] const IMAGE_EXPORT_DIRECTORY* getExportDirectory() const noexcept
+    [[nodiscard]] const IMAGE_DATA_DIRECTORY* getExportDataDirectory() const noexcept
     {
-        if (const auto exportDirectory = getDataDirectory(IMAGE_DIRECTORY_ENTRY_EXPORT); exportDirectory && exportDirectory->Size >= sizeof(IMAGE_EXPORT_DIRECTORY))
-            return reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDirectory->VirtualAddress);
-        return nullptr;
+        return getDataDirectory(IMAGE_DIRECTORY_ENTRY_EXPORT);
     }
 
     [[nodiscard]] const IMAGE_DATA_DIRECTORY* getDataDirectory(std::uint8_t entry) const noexcept
