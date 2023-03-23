@@ -58,8 +58,8 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     const windows_platform::DynamicLibrary gameOverlayRenderer{ windows_platform::PlatformApi{}, "gameoverlayrenderer.dll" };
 
     PatternNotFoundHandler patternNotFoundHandler;
-    present = PatternFinder{ getCodeSection(gameOverlayRenderer.getView()), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
-    reset = PatternFinder{ getCodeSection(gameOverlayRenderer.getView()), patternNotFoundHandler }("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B D8"_pat).add(9).get();
+    present = PatternFinder{ getCodeSection(gameOverlayRenderer), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
+    reset = PatternFinder{ getCodeSection(gameOverlayRenderer), patternNotFoundHandler }("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B D8"_pat).add(9).get();
 
     soundMessages = enginePatternFinder("74 3D 8B 0D ? ? ? ? 56"_pat).add(4).deref().add(-4).as<decltype(soundMessages)>();
     splitScreen = enginePatternFinder("79 23 A1"_pat).add(3).deref().as<csgo::SplitScreen*>();

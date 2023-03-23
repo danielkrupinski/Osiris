@@ -65,7 +65,7 @@ GlobalContext::GlobalContext()
 #endif
 
     PatternNotFoundHandler patternNotFoundHandler;
-    retSpoofGadgets.emplace(PatternFinder{ getCodeSection(clientDLL.getView()), patternNotFoundHandler }, PatternFinder{ getCodeSection(engineDLL.getView()), patternNotFoundHandler });
+    retSpoofGadgets.emplace(PatternFinder{ getCodeSection(clientDLL), patternNotFoundHandler }, PatternFinder{ getCodeSection(engineDLL), patternNotFoundHandler });
 }
 
 #if IS_WIN32()
@@ -246,14 +246,14 @@ void GlobalContext::renderFrame()
 void GlobalContext::initialize()
 {
     const DynamicLibrary<PlatformApi> clientSo{ PlatformApi{}, csgo::CLIENT_DLL };
-    clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo.getView(), retSpoofGadgets->client } });
+    clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo, retSpoofGadgets->client } });
     const DynamicLibrary<PlatformApi> engineSo{ PlatformApi{}, csgo::ENGINE_DLL };
-    engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo.getView(), retSpoofGadgets->client } });
+    engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
 
     interfaces.emplace();
     PatternNotFoundHandler patternNotFoundHandler;
-    const PatternFinder clientPatternFinder{ getCodeSection(clientSo.getView()), patternNotFoundHandler };
-    const PatternFinder enginePatternFinder{ getCodeSection(engineSo.getView()), patternNotFoundHandler };
+    const PatternFinder clientPatternFinder{ getCodeSection(clientSo), patternNotFoundHandler };
+    const PatternFinder enginePatternFinder{ getCodeSection(engineSo), patternNotFoundHandler };
 
     memory.emplace(clientPatternFinder, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 

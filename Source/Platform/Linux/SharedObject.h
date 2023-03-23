@@ -2,7 +2,7 @@
 
 #include <dlfcn.h>
 
-#include "DynamicLibraryView.h"
+struct link_map;
 
 namespace linux_platform
 {
@@ -18,9 +18,16 @@ public:
         return handle != nullptr;
     }
 
-    [[nodiscard]] DynamicLibraryView<PlatformApi> getView() const noexcept
+    [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
     {
-        return { platformApi, handle };
+        return platformApi.dlsym(handle, functionName);
+    }
+
+    [[nodiscard]] link_map* getLinkMap() const noexcept
+    {
+        link_map* map = nullptr;
+        platformApi.dlinfo(handle, RTLD_DI_LINKMAP, &map);
+        return map;
     }
 
 private:

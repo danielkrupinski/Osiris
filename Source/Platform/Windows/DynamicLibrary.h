@@ -2,8 +2,8 @@
 
 #include <Windows.h>
 
-#include "DynamicLibraryView.h"
 #include "PebLdr.h"
+#include "PortableExecutable.h"
 
 namespace windows_platform
 {
@@ -16,9 +16,14 @@ public:
     {
     }
 
-    [[nodiscard]] DynamicLibraryView<PlatformApi> getView() const noexcept
+    [[nodiscard]] const void* getFunctionAddress(const char* functionName) const noexcept
     {
-        return { platformApi, handle };
+        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
+    }
+
+    [[nodiscard]] HMODULE getHandle() const noexcept
+    {
+        return handle;
     }
 
 private:

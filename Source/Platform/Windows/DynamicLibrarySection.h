@@ -4,13 +4,13 @@
 #include <span>
 
 #include "PortableExecutable.h"
-#include "DynamicLibraryView.h"
+#include "DynamicLibrary.h"
 
 namespace windows_platform
 {
 
-template <typename DynamicLibraryWrapper>
-[[nodiscard]] std::span<const std::byte> getCodeSection(DynamicLibraryView<DynamicLibraryWrapper> library)
+template <typename PlatformApi>
+[[nodiscard]] std::span<const std::byte> getCodeSection(DynamicLibrary<PlatformApi> library)
 {
     return PortableExecutable{ reinterpret_cast<const std::byte*>(library.getHandle()) }.getCodeSection();
 }

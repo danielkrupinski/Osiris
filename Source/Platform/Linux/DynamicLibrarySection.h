@@ -9,13 +9,13 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-#include "DynamicLibraryView.h"
+#include "SharedObject.h"
 
 namespace linux_platform
 {
 
 template <typename DynamicLibraryWrapper>
-[[nodiscard]] std::span<const std::byte> getCodeSection(DynamicLibraryView<DynamicLibraryWrapper> library)
+[[nodiscard]] std::span<const std::byte> getCodeSection(SharedObject<DynamicLibraryWrapper> library)
 {
     void* base = nullptr;
     std::size_t size = 0;
