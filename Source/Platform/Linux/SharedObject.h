@@ -44,9 +44,9 @@ public:
 
         const auto linkMap = getLinkMap();
         if (linkMap) {
-            if (const auto fd = open(linkMap->l_name, O_RDONLY); fd >= 0) {
-                if (struct stat st; fstat(fd, &st) == 0) {
-                    if (const auto map = mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
+            if (const auto fd = platformApi.open(linkMap->l_name, O_RDONLY); fd >= 0) {
+                if (struct stat st; platformApi.fstat(fd, &st) == 0) {
+                    if (const auto map = platformApi.mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
                         const auto ehdr = (ElfW(Ehdr)*)map;
                         const auto shdrs = (ElfW(Shdr)*)(std::uintptr_t(ehdr) + ehdr->e_shoff);
                         const auto strTab = (const char*)(std::uintptr_t(ehdr) + shdrs[ehdr->e_shstrndx].sh_offset);
@@ -59,14 +59,14 @@ public:
 
                             base = (void*)(linkMap->l_addr + shdr->sh_offset);
                             size = shdr->sh_size;
-                            munmap(map, st.st_size);
-                            close(fd);
+                            platformApi.munmap(map, st.st_size);
+                            platformApi.close(fd);
                             break;
                         }
-                        munmap(map, st.st_size);
+                        platformApi.munmap(map, st.st_size);
                     }
                 }
-                close(fd);
+                platformApi.close(fd);
             }
         }
         return { reinterpret_cast<const std::byte*>(base), size };
