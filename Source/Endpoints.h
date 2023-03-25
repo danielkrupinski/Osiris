@@ -96,12 +96,33 @@ void EventListener::fireGameEvent(csgo::GameEventPOD* eventPointer)
 
 void CDECL_CONV viewModelSequence(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept
 {
-    globalContext->viewModelSequenceNetvarHook(data, outStruct, arg3);
+    const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(outStruct));
+
+    if (localPlayer && ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.owner()) == localPlayer.get().getPOD()) {
+        if (const auto weapon = csgo::Entity::from(retSpoofGadgets->client, ClientInterfaces{ retSpoofGadgets->client, *globalContext->clientInterfaces }.getEntityList().getEntityFromHandle(viewModel.weapon())); weapon.getPOD() != nullptr) {
+            if (globalContext->features->visuals.isDeagleSpinnerOn() && weapon.getNetworkable().getClientClass()->classId == ClassId::Deagle && data->value._int == 7)
+                data->value._int = 8;
+
+            globalContext->features->inventoryChanger.fixKnifeAnimation(weapon, data->value._int, *globalContext->randomGenerator);
+        }
+    }
+
+    proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
 void CDECL_CONV spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept
 {
-    globalContext->spottedHook(data, outStruct, arg3);
+    if (globalContext->features->misc.isRadarHackOn()) {
+        data->value._int = 1;
+
+        if (localPlayer) {
+            const auto entity = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(outStruct));
+            if (const auto index = localPlayer.get().getNetworkable().index(); index > 0 && index <= 32)
+                entity.spottedByMask() |= 1 << (index - 1);
+        }
+    }
+
+    proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
 #if IS_WIN32()

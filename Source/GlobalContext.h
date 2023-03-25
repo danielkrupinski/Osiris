@@ -55,9 +55,6 @@ public:
     void swapWindowHook(SDL_Window* window);
 #endif
 
-    void viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
-    void spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
-
     PlatformApi platformApi;
 
     std::optional<EventListener> gameEventListener;
