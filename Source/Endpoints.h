@@ -86,12 +86,35 @@ LRESULT __stdcall WindowProcedureHook::wndProc(HWND window, UINT msg, WPARAM wPa
 
 HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
-    return globalContext->resetHook(device, params);
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    globalContext->features->inventoryChanger.clearItemIconTextures();
+    GameData::clearTextures();
+    return hooks->originalReset(device, params);
 }
 
 HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
-    return globalContext->presentHook(device, src, dest, windowOverride, dirtyRegion);
+    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+
+    if (globalContext->config->loadScheduledFonts())
+        ImGui_ImplDX9_DestroyFontsTexture();
+
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+
+    globalContext->renderFrame();
+
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
+
+    //
+    GameData::clearUnusedAvatars();
+    globalContext->features->inventoryChanger.clearUnusedItemIconTextures();
+    //
+
+    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
 #else

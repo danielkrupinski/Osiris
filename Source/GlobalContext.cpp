@@ -61,44 +61,7 @@ GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler }, PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler });
 }
 
-#if IS_WIN32()
-
-template <typename PlatformApi>
-HRESULT GlobalContext<PlatformApi>::presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
-{
-    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
-
-    if (config->loadScheduledFonts())
-        ImGui_ImplDX9_DestroyFontsTexture();
-
-    ImGui_ImplDX9_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-
-    renderFrame();
-
-    if (device->BeginScene() == D3D_OK) {
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-        device->EndScene();
-    }
-
-    //
-    GameData::clearUnusedAvatars();
-    features->inventoryChanger.clearUnusedItemIconTextures();
-    //
-
-    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
-}
-
-template <typename PlatformApi>
-HRESULT GlobalContext<PlatformApi>::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
-{
-    ImGui_ImplDX9_InvalidateDeviceObjects();
-    features->inventoryChanger.clearItemIconTextures();
-    GameData::clearTextures();
-    return hooks->originalReset(device, params);
-}
-
-#else
+#if IS_LINUX()
 template <typename PlatformApi>
 int GlobalContext<PlatformApi>::pollEventHook(SDL_Event* event)
 {

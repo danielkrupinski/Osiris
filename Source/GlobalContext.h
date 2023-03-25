@@ -50,11 +50,7 @@ class GlobalContext {
 public:
     GlobalContext(PlatformApi platformApi);
 
-#if IS_WIN32()
-    HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
-    HRESULT resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params);
-
-#else
+#if IS_LINUX()
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);
 #endif
