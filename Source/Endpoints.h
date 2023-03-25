@@ -29,8 +29,10 @@
 #include "Hooks/SvCheatsHooks.h"
 #include "Hooks/ViewRenderHooks.h"
 
+#include "CSGO/Constants/GameEventNames.h"
 #include "CSGO/Constants/UserMessages.h"
 #include "CSGO/ClientClass.h"
+#include "CSGO/GameEvent.h"
 #include "CSGO/GlobalVars.h"
 #include "CSGO/LocalPlayer.h"
 #include "CSGO/ModelRender.h"
@@ -44,14 +46,52 @@
 #include "Hacks/Triggerbot.h"
 #include "Hooks.h"
 
-void DefaultEventListener::fireGameEvent(csgo::GameEventPOD* eventPointer)
+void fireGameEvent(csgo::GameEventPOD* eventPointer)
 {
-    globalContext->fireGameEventCallback(eventPointer);
+    const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
+
+    switch (fnv::hashRuntime(event.getName())) {
+    case fnv::hash(csgo::round_start):
+        GameData::clearProjectileList();
+        globalContext->features->misc.preserveKillfeed(true);
+        [[fallthrough]];
+    case fnv::hash(csgo::round_freeze_end):
+        globalContext->features->misc.purchaseList(&event);
+        break;
+    case fnv::hash(csgo::player_death):
+        globalContext->features->inventoryChanger.updateStatTrak(event);
+        globalContext->features->inventoryChanger.overrideHudIcon(*globalContext->memory, event);
+        globalContext->features->misc.killMessage(event);
+        globalContext->features->misc.killSound(event);
+        break;
+    case fnv::hash(csgo::player_hurt):
+        globalContext->features->misc.playHitSound(event);
+        globalContext->features->visuals.hitEffect(&event);
+        globalContext->features->visuals.hitMarker(&event);
+        break;
+    case fnv::hash(csgo::vote_cast):
+        globalContext->features->misc.voteRevealer(event);
+        break;
+    case fnv::hash(csgo::round_mvp):
+        globalContext->features->inventoryChanger.onRoundMVP(event);
+        break;
+    case fnv::hash(csgo::item_purchase):
+        globalContext->features->misc.purchaseList(&event);
+        break;
+    case fnv::hash(csgo::bullet_impact):
+        globalContext->features->visuals.bulletTracer(event);
+        break;
+    }
 }
 
-void EventListener::fireGameEvent(csgo::GameEventPOD* event)
+void DefaultEventListener::fireGameEvent(csgo::GameEventPOD* eventPointer)
 {
-    globalContext->fireGameEventCallback(event);
+    ::fireGameEvent(eventPointer);
+}
+
+void EventListener::fireGameEvent(csgo::GameEventPOD* eventPointer)
+{
+    ::fireGameEvent(eventPointer);
 }
 
 void CDECL_CONV viewModelSequence(csgo::recvProxyData* data, void* outStruct, void* arg3) noexcept

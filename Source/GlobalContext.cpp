@@ -134,45 +134,6 @@ void GlobalContext<PlatformApi>::spottedHook(csgo::recvProxyData* data, void* ou
 }
 
 template <typename PlatformApi>
-void GlobalContext<PlatformApi>::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
-{
-    const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
-
-    switch (fnv::hashRuntime(event.getName())) {
-    case fnv::hash(csgo::round_start):
-        GameData::clearProjectileList();
-        features->misc.preserveKillfeed(true);
-        [[fallthrough]];
-    case fnv::hash(csgo::round_freeze_end):
-        features->misc.purchaseList(&event);
-        break;
-    case fnv::hash(csgo::player_death):
-        features->inventoryChanger.updateStatTrak(event);
-        features->inventoryChanger.overrideHudIcon(*memory, event);
-        features->misc.killMessage(event);
-        features->misc.killSound(event);
-        break;
-    case fnv::hash(csgo::player_hurt):
-        features->misc.playHitSound(event);
-        features->visuals.hitEffect(&event);
-        features->visuals.hitMarker(&event);
-        break;
-    case fnv::hash(csgo::vote_cast):
-        features->misc.voteRevealer(event);
-        break;
-    case fnv::hash(csgo::round_mvp):
-        features->inventoryChanger.onRoundMVP(event);
-        break;
-    case fnv::hash(csgo::item_purchase):
-        features->misc.purchaseList(&event);
-        break;
-    case fnv::hash(csgo::bullet_impact):
-        features->visuals.bulletTracer(event);
-        break;
-    }
-}
-
-template <typename PlatformApi>
 void GlobalContext<PlatformApi>::renderFrame()
 {
     ImGui::NewFrame();

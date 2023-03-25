@@ -58,8 +58,6 @@ public:
     void viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
     void spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
 
-    void fireGameEventCallback(csgo::GameEventPOD* eventPointer);
-
     PlatformApi platformApi;
 
     std::optional<EventListener> gameEventListener;
