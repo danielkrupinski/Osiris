@@ -66,7 +66,7 @@ class Memory {
 public:
     Memory(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     std::uintptr_t present;
     std::uintptr_t reset;
 #endif
@@ -123,7 +123,7 @@ public:
         return csgo::MoveHelper::from(retSpoofGadgets->client, moveHelperPtr);
     }
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     csgo::KeyValuesSystemPOD* keyValuesSystem;
     ReturnAddress keyValuesAllocEngine;
     ReturnAddress keyValuesAllocClient;

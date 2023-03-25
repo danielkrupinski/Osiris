@@ -54,7 +54,10 @@ struct StaticAttrib {
     AttributeDataUnion value;
     bool forceGCToGenerate;
 };
+
+#if IS_WIN32() || IS_LINUX()
 static_assert(sizeof(StaticAttrib) == WIN32_LINUX(12, 24));
+#endif
 
 struct EconTool {
     PAD(sizeof(std::uintptr_t));

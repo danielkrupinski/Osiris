@@ -6,7 +6,7 @@
 
 #include <Platform/Macros/IsPlatform.h>
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 #include <d3d9.h>
 #include <Windows.h>
 #elif IS_LINUX()
@@ -34,7 +34,7 @@ union SDL_Event;
 #include "Hooks/ModelRenderHooks.h"
 #include "Hooks/SurfaceHooks.h"
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 #include "Hooks/KeyValuesSystemHooks.h"
 #include "Hooks/WindowProcedureHook.h"
 #endif
@@ -59,13 +59,13 @@ class Misc;
 
 class Hooks {
 public:
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     Hooks(HMODULE moduleHandle) noexcept;
 
     WindowProcedureHook windowProcedureHook;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
-#else
+#elif IS_LINUX()
     Hooks() noexcept;
 
     SdlFunctions sdlFunctions;
@@ -96,7 +96,7 @@ public:
     SurfaceHooks surfaceHooks;
 
 private:
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     HMODULE moduleHandle;
 #endif
 };

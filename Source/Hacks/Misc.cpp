@@ -168,7 +168,7 @@ struct MiscConfig {
 
 Misc::Misc(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
     : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     setClanTag{ retSpoofGadgets->engine, enginePatternFinder("53 56 57 8B DA 8B F9 FF 15"_pat).get() },
     submitReport{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 E4 F8 83 EC 28 8B 4D 08"_pat).get() }
 #elif IS_LINUX()

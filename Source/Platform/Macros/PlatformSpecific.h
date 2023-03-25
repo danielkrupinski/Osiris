@@ -9,6 +9,13 @@
 #define WIN32_LINUX(win32, linux) win32
 #define FASTCALL_THIS(thisptr) thisptr, void*
 
+#elif IS_WIN64()
+
+#define WIN32_ARGS(...)
+#define LINUX_ARGS(...)
+#define WIN32_LINUX(win32, linux) win32
+#define FASTCALL_THIS(thisptr) thisptr
+
 #elif IS_LINUX()
 
 #define WIN32_ARGS(...)

@@ -11,13 +11,13 @@
 #include <utility>
 
 #include "Platform/Macros/IsPlatform.h"
+#include "Platform/PlatformApi.h"
 
 #if IS_WIN32()
 #include <Windows.h>
 #include <Psapi.h>
 
 #include <Platform/Windows/DynamicLibrary.h>
-#include <Platform/Windows/PlatformApi.h>
 #elif IS_LINUX()
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -37,13 +37,13 @@
 #include "Utils/SafeAddress.h"
 
 Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     : lineGoesThroughSmoke{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 8B 4C 24 30 33 D2"_pat).add(1).relativeToAbsolute().get() },
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("8B 35 ? ? ? ? FF 10 0F B7 C0"_pat).add(2).deref().get() },
       inventoryManager{ csgo::InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("8D 44 24 28 B9 ? ? ? ? 50"_pat).add(5).deref().as<csgo::InventoryManagerPOD*>()) },
       findOrCreateEconItemViewForItemID{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 8B CE 83 C4 08"_pat).add(1).relativeToAbsolute().get() },
       makePanoramaSymbolFn{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 0F B7 45 0E 8D 4D 0E"_pat).add(1).relativeToAbsolute().get() }
-#else
+#elif IS_LINUX()
     : lineGoesThroughSmoke{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 44 0F B6 4D ? 84 C0"_pat).add(1).relativeToAbsolute().get() },
       weaponSystem{ retSpoofGadgets.client, clientPatternFinder("48 8B 3D ? ? ? ? 48 8B 4D F8"_pat).add(3).relativeToAbsolute().deref().get() },
       inventoryManager{ csgo::InventoryManager::from(retSpoofGadgets.client, clientPatternFinder("48 8D 3D ? ? ? ? E8 ? ? ? ? 48 8D 15 ? ? ? ? C9"_pat).add(3).relativeToAbsolute().as<csgo::InventoryManagerPOD*>()) },
@@ -51,8 +51,8 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
       makePanoramaSymbolFn{ retSpoofGadgets.client, clientPatternFinder("E8 ? ? ? ? 0F B7 45 A0 31 F6"_pat).add(1).relativeToAbsolute().get() }
 #endif
 {
-#if IS_WIN32()
-    const windows_platform::DynamicLibrary gameOverlayRenderer{ windows_platform::PlatformApi{}, "gameoverlayrenderer.dll" };
+#if IS_WIN32() || IS_WIN64()
+    const windows_platform::DynamicLibrary gameOverlayRenderer{ PlatformApi{}, "gameoverlayrenderer.dll" };
 
     PatternNotFoundHandler patternNotFoundHandler;
     present = PatternFinder{ gameOverlayRenderer.getCodeSection(), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
@@ -100,7 +100,7 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     keyValuesAllocClient = ReturnAddress{ clientPatternFinder("E8 ? ? ? ? 83 C4 08 84 C0 75 10"_pat).add(1).relativeToAbsolute().add(0x3E).get() };
 
     shouldDrawFogReturnAddress = ReturnAddress{ clientPatternFinder("E8 ? ? ? ? 8B 0D ? ? ? ? 0F B6 D0"_pat).add(1).relativeToAbsolute().add(82).get() };
-#else
+#elif IS_LINUX()
     const auto tier0 = dlopen(csgo::TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
     debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));

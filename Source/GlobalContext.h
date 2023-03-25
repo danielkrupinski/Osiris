@@ -7,7 +7,7 @@
 #if IS_WIN32()
 #include <d3d9.h>
 #include <Windows.h>
-#else
+#elif IS_LINUX()
 #include <SDL2/SDL.h>
 #endif
 #include "Config.h"

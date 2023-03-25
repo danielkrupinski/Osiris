@@ -5,7 +5,7 @@
 #include "IsPlatform.h"
 #include <Utils/ReturnAddress.h>
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 
 #include <intrin.h>
 

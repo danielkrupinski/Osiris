@@ -156,7 +156,7 @@ void initSkinEconItem(const Memory& memory, const game_items::Storage& gameItemS
 
 Inventory::Inventory(OtherInterfaces interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
     : interfaces{ interfaces }, memory{ memory }, econItemFunctions{ createEconItemFunctions(clientPatternFinder) }, econItemViewFunctions{ createEconItemViewFunctions(clientPatternFinder) },
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
     createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 EC 1C 8D 45 E4 C7 45"_pat).add(20).deref().get() },
     uiComponentInventory{ clientPatternFinder("C6 44 24 ? ? 83 3D"_pat).add(7).deref().as<csgo::UiComponentInventoryPOD**>() },
     setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 8B 4C 24 2C 46"_pat).add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }

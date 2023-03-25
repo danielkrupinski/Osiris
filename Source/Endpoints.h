@@ -2,7 +2,7 @@
 
 #include <Platform/Macros/IsPlatform.h>
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
@@ -125,7 +125,7 @@ void CDECL_CONV spottedHook(csgo::recvProxyData* data, void* outStruct, void* ar
     proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -178,7 +178,7 @@ HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT*
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
-#else
+#elif IS_LINUX()
 
 int pollEvent(SDL_Event* event) noexcept
 {
