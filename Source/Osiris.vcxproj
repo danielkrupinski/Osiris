@@ -116,7 +116,6 @@
     <ClCompile Include="CSGO\GlobalVars.cpp" />
     <ClCompile Include="CSGO\KeyValues.cpp" />
     <ClCompile Include="CSGO\Utils.cpp" />
-    <ClCompile Include="Endpoints.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GlobalContext.cpp" />

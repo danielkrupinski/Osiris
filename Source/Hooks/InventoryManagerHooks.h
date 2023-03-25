@@ -1,7 +1,6 @@
 #pragma once
 
 #include <CSGO/Constants/ItemId.h>
-#include <Endpoints.h>
 #include <HookType.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>

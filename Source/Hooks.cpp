@@ -72,7 +72,19 @@
 
 #include "GlobalContext.h"
 #include "Interfaces/ClientInterfaces.h"
-#include "Endpoints.h"
+
+#if IS_WIN32()
+
+HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
+HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept;
+
+DWORD WINAPI unload(HMODULE moduleHandle) noexcept;
+#elif IS_LINUX()
+
+int pollEvent(SDL_Event* event) noexcept;
+void swapWindow(SDL_Window* window) noexcept;
+
+#endif
 
 #if IS_WIN32()
 

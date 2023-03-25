@@ -7,8 +7,20 @@
 #include <Windows.h>
 #endif
 
-#include "Endpoints.h"
+#include "GlobalContext.h"
 #include "Hooks.h"
+
+namespace
+{
+    std::optional<GlobalContext> globalContext;
+}
+
+#include "Endpoints.h"
+
+void initializeGlobalContext()
+{
+    globalContext.emplace();
+}
 
 #if IS_WIN32()
 
