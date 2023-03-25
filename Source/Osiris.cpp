@@ -9,18 +9,22 @@
 
 #include "GlobalContext.h"
 #include "Hooks.h"
+#include "Platform/PlatformApi.h"
 
 namespace
 {
-    std::optional<GlobalContext> globalContext;
+    std::optional<GlobalContext<PlatformApi>> globalContext;
 }
 
 #include "Endpoints.h"
 
 void initializeGlobalContext()
 {
-    globalContext.emplace();
+    globalContext.emplace(PlatformApi{});
 }
+
+#include "GlobalContext.cpp"
+template class GlobalContext<PlatformApi>;
 
 #if IS_WIN32()
 

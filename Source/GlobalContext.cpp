@@ -50,10 +50,12 @@
 #include "Platform/DynamicLibrary.h"
 #include "Platform/PlatformApi.h"
 
-GlobalContext::GlobalContext()
+template <typename PlatformApi>
+GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
+    : platformApi{ platformApi }
 {
-    const DynamicLibrary<PlatformApi> clientDLL{ PlatformApi{}, csgo::CLIENT_DLL };
-    const DynamicLibrary<PlatformApi> engineDLL{ PlatformApi{}, csgo::ENGINE_DLL };
+    const DynamicLibrary<PlatformApi> clientDLL{ platformApi, csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> engineDLL{ platformApi, csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler }, PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler });
@@ -61,7 +63,8 @@ GlobalContext::GlobalContext()
 
 #if IS_WIN32()
 
-HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
+template <typename PlatformApi>
+HRESULT GlobalContext<PlatformApi>::presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
 {
     [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
@@ -86,7 +89,8 @@ HRESULT GlobalContext::presentHook(IDirect3DDevice9* device, const RECT* src, co
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
-HRESULT GlobalContext::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
+template <typename PlatformApi>
+HRESULT GlobalContext<PlatformApi>::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
     features->inventoryChanger.clearItemIconTextures();
@@ -95,7 +99,8 @@ HRESULT GlobalContext::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS
 }
 
 #else
-int GlobalContext::pollEventHook(SDL_Event* event)
+template <typename PlatformApi>
+int GlobalContext<PlatformApi>::pollEventHook(SDL_Event* event)
 {
     const auto result = hooks->pollEvent(event);
 
@@ -112,7 +117,8 @@ int GlobalContext::pollEventHook(SDL_Event* event)
     return result;
 }
 
-void GlobalContext::swapWindowHook(SDL_Window* window)
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::swapWindowHook(SDL_Window* window)
 {
     [[maybe_unused]] static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
 
@@ -131,7 +137,8 @@ void GlobalContext::swapWindowHook(SDL_Window* window)
 
 #endif
 
-void GlobalContext::viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3)
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3)
 {
     const auto viewModel = csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(outStruct));
 
@@ -147,7 +154,8 @@ void GlobalContext::viewModelSequenceNetvarHook(csgo::recvProxyData* data, void*
     proxyHooks.viewModelSequence.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3)
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3)
 {
     if (features->misc.isRadarHackOn()) {
         data->value._int = 1;
@@ -162,7 +170,8 @@ void GlobalContext::spottedHook(csgo::recvProxyData* data, void* outStruct, void
     proxyHooks.spotted.originalProxy(data, outStruct, arg3);
 }
 
-void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
 {
     const auto event = csgo::GameEvent::from(retSpoofGadgets->client, eventPointer);
 
@@ -200,7 +209,8 @@ void GlobalContext::fireGameEventCallback(csgo::GameEventPOD* eventPointer)
     }
 }
 
-void GlobalContext::renderFrame()
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::renderFrame()
 {
     ImGui::NewFrame();
 
@@ -234,11 +244,12 @@ void GlobalContext::renderFrame()
     ImGui::Render();
 }
 
-void GlobalContext::initialize()
+template <typename PlatformApi>
+void GlobalContext<PlatformApi>::initialize()
 {
-    const DynamicLibrary<PlatformApi> clientSo{ PlatformApi{}, csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> clientSo{ platformApi, csgo::CLIENT_DLL };
     clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo, retSpoofGadgets->client } });
-    const DynamicLibrary<PlatformApi> engineSo{ PlatformApi{}, csgo::ENGINE_DLL };
+    const DynamicLibrary<PlatformApi> engineSo{ platformApi, csgo::ENGINE_DLL };
     engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
 
     interfaces.emplace();

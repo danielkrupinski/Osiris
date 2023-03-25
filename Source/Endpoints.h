@@ -70,15 +70,15 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 
 LRESULT __stdcall WindowProcedureHook::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (globalContext->state == GlobalContext::State::Initialized) {
+    if (globalContext->state == GlobalContextState::Initialized) {
         ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
         globalContext->getOtherInterfaces().getInputSystem().enableInput(!gui->isOpen());
-    } else if (globalContext->state == GlobalContext::State::NotInitialized) {
-        globalContext->state = GlobalContext::State::Initializing;
+    } else if (globalContext->state == GlobalContextState::NotInitialized) {
+        globalContext->state = GlobalContextState::Initializing;
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
         globalContext->initialize();
-        globalContext->state = GlobalContext::State::Initialized;
+        globalContext->state = GlobalContextState::Initialized;
     }
 
     return CallWindowProcW(hooks->windowProcedureHook.originalWndProc, window, msg, wParam, lParam);
