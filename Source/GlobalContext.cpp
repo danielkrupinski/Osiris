@@ -67,14 +67,14 @@ int GlobalContext<PlatformApi>::pollEventHook(SDL_Event* event)
 {
     const auto result = hooks->pollEvent(event);
 
-    if (state == GlobalContext::State::Initialized) {
+    if (state == GlobalContextState::Initialized) {
         if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->isOpen())
             event->type = 0;
-    } else if (state == GlobalContext::State::NotInitialized) {
-        state = GlobalContext::State::Initializing;
+    } else if (state == GlobalContextState::NotInitialized) {
+        state = GlobalContextState::Initializing;
         ImGui::CreateContext();
         initialize();
-        state = GlobalContext::State::Initialized;
+        state = GlobalContextState::Initialized;
     }
     
     return result;
