@@ -27,10 +27,10 @@ jobs:
     - name: install dependencies
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
-      run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -D BUILD_TESTS=1 -S . -B ${{ matrix.configuration }}
+      run: CXX=${{ matrix.compiler }} cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -B build
     - name: build
-      run: cmake --build ${{ matrix.configuration }} -j $(nproc --all)
+      run: cmake --build build -j $(nproc --all)
     - name: run unit tests
       run: |
-        cd ${{ matrix.configuration }}
+        cd build
         ctest --output-on-failure --schedule-random -j $(nproc --all)
