@@ -8,9 +8,9 @@ namespace csgo
 
 struct KeyValuesPOD;
 
-struct KeyValues : VirtualCallableFromPOD<KeyValues, KeyValuesPOD> {
-    KeyValues(VirtualCallableFromPOD base, KeyValuesFunctions functions)
-    : VirtualCallableFromPOD{ base }, functions{ functions }
+struct KeyValues : GameClass<KeyValues, KeyValuesPOD> {
+    KeyValues(GameClass base, KeyValuesFunctions functions)
+    : GameClass{ base }, functions{ functions }
     {
     }
 

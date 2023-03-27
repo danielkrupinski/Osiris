@@ -66,7 +66,7 @@ struct EconTool {
 
 struct EconItemDefinitionPOD;
 
-struct EconItemDefinition : VirtualCallableFromPOD<EconItemDefinition, EconItemDefinitionPOD> {
+struct EconItemDefinition : GameClass<EconItemDefinition, EconItemDefinitionPOD> {
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), ())
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), ())
     VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), ())
@@ -186,7 +186,7 @@ struct ItemListEntry {
 
 struct EconLootListDefinitionPOD;
 
-struct EconLootListDefinition : VirtualCallableFromPOD<EconLootListDefinition, EconLootListDefinitionPOD> {
+struct EconLootListDefinition : GameClass<EconLootListDefinition, EconLootListDefinitionPOD> {
     VIRTUAL_METHOD(const char*, getName, 0, (), ())
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), ())
 
@@ -225,7 +225,7 @@ struct EconItemAttributeDefinition;
 
 struct ItemSchemaPOD;
 
-struct ItemSchema : VirtualCallableFromPOD<ItemSchema, ItemSchemaPOD> {
+struct ItemSchema : GameClass<ItemSchema, ItemSchemaPOD> {
     VIRTUAL_METHOD(EconItemDefinitionPOD*, getItemDefinitionInterface, 4, (int id), (id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (rarity))
     VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (index))
@@ -243,15 +243,15 @@ struct ItemSchema : VirtualCallableFromPOD<ItemSchema, ItemSchemaPOD> {
 
 struct ItemSystemPOD;
 
-struct ItemSystem : VirtualCallableFromPOD<ItemSystem, ItemSystemPOD> {
+struct ItemSystem : GameClass<ItemSystem, ItemSystemPOD> {
     VIRTUAL_METHOD(ItemSchemaPOD*, getItemSchema, 0, (), ())
 };
 
 struct EconItemPOD;
 
-struct EconItem : VirtualCallableFromPOD<EconItem, EconItemPOD> {
-    EconItem(VirtualCallableFromPOD base, const EconItemFunctions& econItemFunctions)
-        : VirtualCallableFromPOD{ base }, functions{ econItemFunctions }
+struct EconItem : GameClass<EconItem, EconItemPOD> {
+    EconItem(GameClass base, const EconItemFunctions& econItemFunctions)
+        : GameClass{ base }, functions{ econItemFunctions }
     {
     }
 
@@ -341,22 +341,22 @@ private:
 
 struct SharedObjectPOD;
 
-struct SharedObject : VirtualCallableFromPOD<SharedObject, SharedObjectPOD> {
+struct SharedObject : GameClass<SharedObject, SharedObjectPOD> {
     VIRTUAL_METHOD_V(int, getTypeID, 1, (), ())
 };
 
 struct SharedObjectTypeCachePOD;
 
-struct SharedObjectTypeCache : VirtualCallableFromPOD<SharedObjectTypeCache, SharedObjectTypeCachePOD> {
+struct SharedObjectTypeCache : GameClass<SharedObjectTypeCache, SharedObjectTypeCachePOD> {
     VIRTUAL_METHOD_V(void, addObject, 1, (SharedObjectPOD* object), (object))
     VIRTUAL_METHOD_V(void, removeObject, 3, (SharedObjectPOD* object), (object))
 };
 
 struct ClientSharedObjectCachePOD;
 
-struct ClientSharedObjectCache : VirtualCallableFromPOD<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
-    ClientSharedObjectCache(VirtualCallableFromPOD base, csgo::CreateBaseTypeCache createBaseTypeCache)
-        : VirtualCallableFromPOD{ base }, createBaseTypeCache{ createBaseTypeCache }
+struct ClientSharedObjectCache : GameClass<ClientSharedObjectCache, ClientSharedObjectCachePOD> {
+    ClientSharedObjectCache(GameClass base, csgo::CreateBaseTypeCache createBaseTypeCache)
+        : GameClass{ base }, createBaseTypeCache{ createBaseTypeCache }
     {
     }
 
@@ -372,7 +372,7 @@ private:
 struct InventoryManagerPOD;
 struct CSPlayerInventoryPOD;
 
-struct InventoryManager : VirtualCallableFromPOD<InventoryManager, InventoryManagerPOD> {
+struct InventoryManager : GameClass<InventoryManager, InventoryManagerPOD> {
     VIRTUAL_METHOD_V(bool, equipItemInSlot, 20, (Team team, int slot, ItemId itemID, bool swap = false), (team, slot, itemID, swap))
     VIRTUAL_METHOD_V(CSPlayerInventoryPOD*, getLocalInventory, 23, (), ())
     VIRTUAL_METHOD_V(void, updateInventoryEquippedState, 29, (CSPlayerInventoryPOD* inventory, ItemId itemID, Team team, int slot, bool swap), (inventory, itemID, team, slot, swap))

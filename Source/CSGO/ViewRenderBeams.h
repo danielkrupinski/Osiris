@@ -53,7 +53,7 @@ struct Beam {
 
 struct ViewRenderBeamsPOD;
 
-struct ViewRenderBeams : VirtualCallableFromPOD<ViewRenderBeams, ViewRenderBeamsPOD> {
+struct ViewRenderBeams : GameClass<ViewRenderBeams, ViewRenderBeamsPOD> {
     VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (&beamInfo))
 };
 

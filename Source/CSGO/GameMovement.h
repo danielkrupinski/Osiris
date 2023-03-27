@@ -9,7 +9,7 @@ struct EntityPOD;
 struct GameMovementPOD;
 struct MoveData;
 
-struct GameMovement : VirtualCallableFromPOD<GameMovement, GameMovementPOD> {
+struct GameMovement : GameClass<GameMovement, GameMovementPOD> {
     VIRTUAL_METHOD_V(void, processMovement, 1, (EntityPOD* localPlayer, MoveData* moveData), (localPlayer, moveData))
 };
 
