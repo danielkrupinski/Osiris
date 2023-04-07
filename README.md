@@ -289,7 +289,6 @@ Configure with CMake:
 
     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=g++ -S . -B build
 
-Instead of g++-11 you can use g++-12, clang++-13, clang++-14, clang++-15.
 
 Build:
 
