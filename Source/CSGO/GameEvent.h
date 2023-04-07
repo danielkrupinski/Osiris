@@ -11,7 +11,7 @@ namespace csgo
 struct GameEventPOD;
 struct KeyValuesPOD;
 
-struct GameEvent : VirtualCallableFromPOD<GameEvent, GameEventPOD> {
+struct GameEvent : GameClass<GameEvent, GameEventPOD> {
     VIRTUAL_METHOD_V(const char*, getName, 1, (), ())
     VIRTUAL_METHOD_V(int, getInt, 6, (const char* keyName, int defaultValue = 0), (keyName, defaultValue))
     VIRTUAL_METHOD_V(float, getFloat, 8, (const char* keyName, float defaultValue = 0.0f), (keyName, defaultValue))
@@ -35,9 +35,9 @@ struct GameEventDescriptor {
 
 struct GameEventManagerPOD;
 
-struct GameEventManager : VirtualCallableFromPOD<GameEventManager, GameEventManagerPOD> {
-    GameEventManager(VirtualCallableFromPOD base, csgo::GetEventDescriptor getEventDescriptorFn)
-        : VirtualCallableFromPOD{ base }, getEventDescriptorFn{ getEventDescriptorFn }
+struct GameEventManager : GameClass<GameEventManager, GameEventManagerPOD> {
+    GameEventManager(GameClass base, csgo::GetEventDescriptor getEventDescriptorFn)
+        : GameClass{ base }, getEventDescriptorFn{ getEventDescriptorFn }
     {
     }
 

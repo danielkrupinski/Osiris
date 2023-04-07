@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Endpoints.h>
 #include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>

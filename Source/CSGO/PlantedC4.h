@@ -8,7 +8,7 @@ namespace csgo
 
 struct PlantedC4POD;
 
-struct PlantedC4 : VirtualCallableFromPOD<PlantedC4, PlantedC4POD> {
+struct PlantedC4 : GameClass<PlantedC4, PlantedC4POD> {
     [[nodiscard]] Entity getEntity() const
     {
         return Entity::from(getInvoker(), reinterpret_cast<EntityPOD*>(getPOD()));

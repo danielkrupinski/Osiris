@@ -10,7 +10,7 @@ namespace csgo
 
 struct HudChatPOD;
 
-struct HudChat : VirtualCallableFromPOD<HudChat, HudChatPOD> {
+struct HudChat : GameClass<HudChat, HudChatPOD> {
     template <typename... Args>
     void printf(int filter, const char* fmt, Args... args) const noexcept
     {

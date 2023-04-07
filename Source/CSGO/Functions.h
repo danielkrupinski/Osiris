@@ -55,4 +55,6 @@ struct KeyValuesPOD;
 using KeyValuesFindKey = KeyValuesPOD* (THISCALL_CONV*)(KeyValuesPOD* thisptr, const char* keyName, bool create);
 using KeyValuesSetString = void (THISCALL_CONV*)(KeyValuesPOD* thisptr, const char* value);
 
+using CreateInterface = void* (CDECL_CONV*)(const char* name, int* returnCode);
+
 }

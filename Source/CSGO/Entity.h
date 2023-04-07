@@ -92,7 +92,7 @@ struct Renderable : private VirtualCallable {
 
 struct EntityPOD;
 
-struct Entity : VirtualCallableFromPOD<Entity, EntityPOD> {
+struct Entity : GameClass<Entity, EntityPOD> {
     [[nodiscard]] auto getNetworkable() const noexcept
     {
         return Networkable{ getInvoker(), getThis() + sizeof(std::uintptr_t) * 2 };

@@ -7,7 +7,7 @@
 #if IS_WIN32()
 #include <d3d9.h>
 #include <Windows.h>
-#else
+#elif IS_LINUX()
 #include <SDL2/SDL.h>
 #endif
 #include "Config.h"
@@ -39,23 +39,23 @@ namespace csgo
     struct ViewSetup;
 }
 
+enum class GlobalContextState {
+    NotInitialized,
+    Initializing,
+    Initialized
+};
+
+template <typename PlatformApi>
 class GlobalContext {
 public:
-    GlobalContext();
+    GlobalContext(PlatformApi platformApi);
 
-#if IS_WIN32()
-    HRESULT presentHook(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion);
-    HRESULT resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params);
-
-#else
+#if IS_LINUX()
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);
 #endif
 
-    void viewModelSequenceNetvarHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
-    void spottedHook(csgo::recvProxyData* data, void* outStruct, void* arg3);
-
-    void fireGameEventCallback(csgo::GameEventPOD* eventPointer);
+    PlatformApi platformApi;
 
     std::optional<EventListener> gameEventListener;
     std::optional<EngineInterfacesPODs> engineInterfacesPODs;
@@ -73,13 +73,7 @@ public:
 
     void renderFrame();
 
-    enum class State {
-        NotInitialized,
-        Initializing,
-        Initialized
-    };
-
-    State state = State::NotInitialized;
+    GlobalContextState state = GlobalContextState::NotInitialized;
 
     std::optional<Config> config;
     std::optional<ClientInterfacesPODs> clientInterfaces;

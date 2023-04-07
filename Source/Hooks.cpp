@@ -72,9 +72,21 @@
 
 #include "GlobalContext.h"
 #include "Interfaces/ClientInterfaces.h"
-#include "Endpoints.h"
 
 #if IS_WIN32()
+
+HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
+HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept;
+
+DWORD WINAPI unload(HMODULE moduleHandle) noexcept;
+#elif IS_LINUX()
+
+int pollEvent(SDL_Event* event) noexcept;
+void swapWindow(SDL_Window* window) noexcept;
+
+#endif
+
+#if IS_WIN32() || IS_WIN64()
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept
     : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }, moduleHandle{ moduleHandle }
@@ -93,7 +105,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
-#else
+#elif IS_LINUX()
     ImGui_ImplOpenGL3_Init();
 
     swapWindow = *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow);
@@ -166,16 +178,16 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
         CloseHandle(thread);
-#else
+#elif IS_LINUX()
     *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow) = swapWindow;
 #endif
 }
 
-#if !IS_WIN32()
+#if IS_LINUX()
 
 Hooks::Hooks() noexcept
-    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::PlatformApi{}, "libSDL2-2.0.so.0" }.getView() }
+    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::PlatformApi{}, "libSDL2-2.0.so.0" } }
 {
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;

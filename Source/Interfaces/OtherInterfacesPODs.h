@@ -1,14 +1,8 @@
 #pragma once
 
+#include <Platform/DynamicLibrary.h>
 #include <Platform/Macros/IsPlatform.h>
-
-#if IS_WIN32()
-#include "Platform/Windows/PlatformApi.h"
-#include "Platform/Windows/DynamicLibrary.h"
-#elif IS_LINUX()
-#include "Platform/Linux/PlatformApi.h"
-#include "Platform/Linux/SharedObject.h"
-#endif
+#include <Platform/PlatformApi.h>
 
 #include <RetSpoof/RetSpoofGadgets.h>
 #include <CSGO/Constants/DllNames.h>
@@ -17,16 +11,19 @@
 #include "Interfaces/InterfaceFinder.h"
 #include "Interfaces/InterfaceFinderWithLog.h"
 
-namespace csgo { struct BaseFileSystemPOD; }
-namespace csgo { struct CvarPOD; }
-namespace csgo { struct InputSystemPOD; }
-namespace csgo { struct LocalizePOD; }
-namespace csgo { struct MaterialSystemPOD; }
-namespace csgo { struct PanoramaUIEnginePOD; }
-namespace csgo { struct PhysicsSurfacePropsPOD; }
-namespace csgo { struct SoundEmitterPOD; }
-namespace csgo { struct StudioRenderPOD; }
-namespace csgo { struct SurfacePOD; }
+namespace csgo
+{
+    struct BaseFileSystemPOD;
+    struct CvarPOD;
+    struct InputSystemPOD;
+    struct LocalizePOD;
+    struct MaterialSystemPOD;
+    struct PanoramaUIEnginePOD;
+    struct PhysicsSurfacePropsPOD;
+    struct SoundEmitterPOD;
+    struct StudioRenderPOD;
+    struct SurfacePOD;
+}
 
 struct OtherInterfacesPODs {
     OtherInterfacesPODs()
@@ -57,13 +54,8 @@ struct OtherInterfacesPODs {
 private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
-#if IS_WIN32()
-        const windows_platform::DynamicLibrary dll{ windows_platform::PlatformApi{}, moduleName };
-        const InterfaceFinderWithLog finder{ InterfaceFinder { dll.getView(), retSpoofGadgets->client } };
-#else
-        const linux_platform::SharedObject so{ linux_platform::PlatformApi{}, moduleName };
-        const InterfaceFinderWithLog finder{ InterfaceFinder{ so.getView(), retSpoofGadgets->client } };
-#endif
+        const DynamicLibrary<PlatformApi> dll{ PlatformApi{}, moduleName };
+        const InterfaceFinderWithLog finder{ InterfaceFinder{ dll, retSpoofGadgets->client } };
         return finder(name);
     }
 };

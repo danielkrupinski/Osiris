@@ -8,7 +8,7 @@ namespace csgo
 struct EntityPOD;
 struct MoveHelperPOD;
 
-struct MoveHelper : VirtualCallableFromPOD<MoveHelper, MoveHelperPOD> {
+struct MoveHelper : GameClass<MoveHelper, MoveHelperPOD> {
     VIRTUAL_METHOD(void, setHost, 1, (EntityPOD* host), (host))
 };
 

@@ -75,12 +75,6 @@
 
 #include <SortFilter.h>
 
-#if IS_WIN32()
-#include "Platform/Windows/DynamicLibrarySection.h"
-#elif IS_LINUX()
-#include "Platform/Linux/DynamicLibrarySection.h"
-#endif
-
 #include <Interfaces/ClientInterfaces.h>
 #include <Interfaces/OtherInterfaces.h>
 

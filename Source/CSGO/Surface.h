@@ -7,7 +7,7 @@ namespace csgo
 
 struct SurfacePOD;
 
-struct Surface : VirtualCallableFromPOD<Surface, SurfacePOD> {
+struct Surface : GameClass<Surface, SurfacePOD> {
     VIRTUAL_METHOD(void, unlockCursor, 66, (), ())
 };
 

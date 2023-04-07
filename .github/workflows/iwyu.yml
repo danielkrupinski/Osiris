@@ -14,9 +14,9 @@ jobs:
     - name: install
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
-      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+      run: cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
     - name: include what you use
       uses: danielkrupinski/include-what-you-use-action@master
       with:
-        compilation-database-path: './Release/'
+        compilation-database-path: './build/'
         no-error: 'true'

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pad.h"
+#include <Utils/Pad.h>
 #include "VirtualMethod.h"
 
 namespace csgo
@@ -11,7 +11,7 @@ struct NetworkChannelPOD {
     int chokedPackets;
 };
 
-struct NetworkChannel : VirtualCallableFromPOD<NetworkChannel, NetworkChannelPOD> {
+struct NetworkChannel : GameClass<NetworkChannel, NetworkChannelPOD> {
     VIRTUAL_METHOD(float, getLatency, 9, (int flow), (flow))
 };
 

@@ -33,15 +33,15 @@ private:
 };
 
 template <typename T, typename POD>
-class VirtualCallableFromPOD {
+class GameClass {
 public:
-    VirtualCallableFromPOD(RetSpoofInvoker invoker, POD* pod)
+    GameClass(RetSpoofInvoker invoker, POD* pod)
         : invoker{ invoker }, thisptr{ std::uintptr_t(pod) } {}
 
     template <typename... Args>
     [[nodiscard]] static T from(RetSpoofInvoker invoker, POD* pod, Args&&... args) noexcept
     {
-        return T{ VirtualCallableFromPOD{ invoker, pod }, std::forward<Args>(args)... };
+        return T{ GameClass{ invoker, pod }, std::forward<Args>(args)... };
     }
 
     [[nodiscard]] POD* getPOD() const noexcept

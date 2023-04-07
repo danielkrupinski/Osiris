@@ -10,7 +10,7 @@ namespace csgo
 
 struct UIPanelPOD;
 
-struct UIPanel : VirtualCallableFromPOD<UIPanel, UIPanelPOD> {
+struct UIPanel : GameClass<UIPanel, UIPanelPOD> {
     VIRTUAL_METHOD_V(int, getChildCount, 48, (), ())
     VIRTUAL_METHOD_V(UIPanelPOD*, getChild, 49, (int n), (n))
     VIRTUAL_METHOD(bool, hasClass, 139, (const char* name), (name))
@@ -29,13 +29,13 @@ struct PanoramaEventRegistration {
 
 struct UIEnginePOD;
 
-struct UIEngine : VirtualCallableFromPOD<UIEngine, UIEnginePOD> {
+struct UIEngine : GameClass<UIEngine, UIEnginePOD> {
     VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (eventPtr))
 };
 
 struct PanoramaUIEnginePOD;
 
-struct PanoramaUIEngine : VirtualCallableFromPOD<PanoramaUIEngine, PanoramaUIEnginePOD> {
+struct PanoramaUIEngine : GameClass<PanoramaUIEngine, PanoramaUIEnginePOD> {
     VIRTUAL_METHOD(UIEnginePOD*, accessUIEngine, 11, (), ())
 };
 

@@ -314,9 +314,6 @@
     <ClCompile Include="GlobalContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Endpoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CSGO\EconItemView.cpp">
       <Filter>CSGO</Filter>
     </ClCompile>
@@ -679,12 +676,6 @@
     <ClInclude Include="Platform\Windows\PlatformApi.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Windows\DynamicLibraryView.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\DynamicLibraryView.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibrary.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -693,9 +684,6 @@
     </ClInclude>
     <ClInclude Include="Utils\TypeHint.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\DynamicLibrarySection.h">
-      <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Interfaces\InterfaceFinder.h">
       <Filter>Interfaces</Filter>
@@ -934,9 +922,6 @@
     <ClInclude Include="CSGO\NetworkChannel.h">
       <Filter>CSGO</Filter>
     </ClInclude>
-    <ClInclude Include="CSGO\Pad.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
     <ClInclude Include="CSGO\Panorama.h">
       <Filter>CSGO</Filter>
     </ClInclude>
@@ -1132,9 +1117,6 @@
     <ClInclude Include="Platform\DynamicLibrary.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\DynamicLibraryWrapper.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="HookType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1179,6 +1161,18 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\PortableExecutable.h">
       <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\Win.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\PebLdr.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformApi.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Pad.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

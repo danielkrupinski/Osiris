@@ -31,9 +31,9 @@ struct EconItemViewPOD {
 
 struct EconItemPOD;
 
-struct EconItemView : VirtualCallableFromPOD<EconItemView, EconItemViewPOD> {
-    EconItemView(VirtualCallableFromPOD base, const EconItemViewFunctions& functions)
-        : VirtualCallableFromPOD{ base }, functions{ functions }
+struct EconItemView : GameClass<EconItemView, EconItemViewPOD> {
+    EconItemView(GameClass base, const EconItemViewFunctions& functions)
+        : GameClass{ base }, functions{ functions }
     {
     }
 

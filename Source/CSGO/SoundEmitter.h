@@ -7,7 +7,7 @@ namespace csgo
 
 struct SoundEmitterPOD;
 
-struct SoundEmitter : VirtualCallableFromPOD<SoundEmitter, SoundEmitterPOD> {
+struct SoundEmitter : GameClass<SoundEmitter, SoundEmitterPOD> {
     VIRTUAL_METHOD(const char*, getSoundName, 46, (int index), (index))
 };
 

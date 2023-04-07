@@ -589,7 +589,7 @@ void Config::openConfigDir() const noexcept
     createConfigDir();
 #if IS_WIN32()
     ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
-#else
+#elif IS_LINUX()
     if (fork() == 0) {
         constexpr auto xdgPath = "/usr/bin/xdg-open";
         execl(xdgPath, xdgPath, path.string().c_str(), static_cast<char*>(nullptr));

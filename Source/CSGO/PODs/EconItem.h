@@ -4,7 +4,7 @@
 
 #include <CSGO/Constants/ItemId.h>
 #include <CSGO/WeaponId.h>
-#include <CSGO/Pad.h>
+#include <Utils/Pad.h>
 
 namespace csgo
 {

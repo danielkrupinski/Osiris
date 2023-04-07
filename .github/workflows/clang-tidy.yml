@@ -13,6 +13,6 @@ jobs:
     - name: install dependencies
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
-      run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=clang++-14 -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -D CMAKE_DISABLE_PRECOMPILE_HEADERS=1 -S . -B build
+      run: CXX=clang++-14 cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -D CMAKE_DISABLE_PRECOMPILE_HEADERS=1 -B build
     - name: run clang-tidy
       run: run-clang-tidy-14 Source/ -p build/

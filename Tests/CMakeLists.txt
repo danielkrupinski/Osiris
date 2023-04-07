@@ -11,7 +11,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests HelpersTests.cpp SafeAddressTests.cpp SortFilterTests.cpp)
+add_executable(Tests GlobalContextInstance.cpp HelpersTests.cpp SafeAddressTests.cpp SortFilterTests.cpp)
 add_subdirectory(HelpersTests)
 add_subdirectory(InventoryChanger)
 add_subdirectory(MemorySearchTests)

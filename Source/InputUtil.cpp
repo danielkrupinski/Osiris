@@ -6,7 +6,7 @@
 
 #if IS_WIN32()
 #include <Windows.h>
-#else
+#elif IS_LINUX()
 #include <SDL2/SDL.h>
 #endif
 
