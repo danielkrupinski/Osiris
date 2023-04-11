@@ -187,7 +187,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
 #if IS_LINUX()
 
 Hooks::Hooks() noexcept
-    : sdlFunctions{ linux_platform::SharedObject{ linux_platform::PlatformApi{}, "libSDL2-2.0.so.0" } }
+    : sdlFunctions{ linux_platform::SharedObject<PlatformApi>{ "libSDL2-2.0.so.0" } }
 {
     pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
     *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;

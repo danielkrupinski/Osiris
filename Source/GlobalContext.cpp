@@ -54,8 +54,8 @@ template <typename PlatformApi>
 GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
     : platformApi{ platformApi }
 {
-    const DynamicLibrary<PlatformApi> clientDLL{ platformApi, csgo::CLIENT_DLL };
-    const DynamicLibrary<PlatformApi> engineDLL{ platformApi, csgo::ENGINE_DLL };
+    const DynamicLibrary<PlatformApi> clientDLL{ csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> engineDLL{ csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler }, PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler });
@@ -138,9 +138,9 @@ void GlobalContext<PlatformApi>::renderFrame()
 template <typename PlatformApi>
 void GlobalContext<PlatformApi>::initialize()
 {
-    const DynamicLibrary<PlatformApi> clientSo{ platformApi, csgo::CLIENT_DLL };
+    const DynamicLibrary<PlatformApi> clientSo{ csgo::CLIENT_DLL };
     clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo, retSpoofGadgets->client } });
-    const DynamicLibrary<PlatformApi> engineSo{ platformApi, csgo::ENGINE_DLL };
+    const DynamicLibrary<PlatformApi> engineSo{ csgo::ENGINE_DLL };
     engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
 
     interfaces.emplace();

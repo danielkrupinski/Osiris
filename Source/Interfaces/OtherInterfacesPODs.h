@@ -54,7 +54,7 @@ struct OtherInterfacesPODs {
 private:
     static void* find(const char* moduleName, const char* name) noexcept
     {
-        const DynamicLibrary<PlatformApi> dll{ PlatformApi{}, moduleName };
+        const DynamicLibrary<PlatformApi> dll{ moduleName };
         const InterfaceFinderWithLog finder{ InterfaceFinder{ dll, retSpoofGadgets->client } };
         return finder(name);
     }

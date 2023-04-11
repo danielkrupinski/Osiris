@@ -11,8 +11,8 @@ namespace windows_platform
 template <typename PlatformApi>
 class DynamicLibrary {
 public:
-    DynamicLibrary(PlatformApi platformApi, const char* libraryName)
-        : platformApi{ platformApi }, handle{ PebLdr{ platformApi.getPeb()->ldr }.getModuleHandle(libraryName) }
+    DynamicLibrary(const char* libraryName)
+        : handle{ PebLdr{ PlatformApi::getPeb()->ldr }.getModuleHandle(libraryName) }
     {
     }
 
@@ -32,7 +32,6 @@ public:
     }
 
 private:
-    [[no_unique_address]] PlatformApi platformApi;
     HMODULE handle;
 };
 

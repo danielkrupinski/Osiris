@@ -9,7 +9,7 @@ namespace windows_platform
 {
 
 struct PlatformApi {
-    [[nodiscard]] win::Peb* getPeb() const noexcept
+    [[nodiscard]] static win::Peb* getPeb() noexcept
     {
 #if IS_WIN32()
         return reinterpret_cast<win::Peb*>(__readfsdword(0x30));

@@ -11,47 +11,47 @@ namespace linux_platform
 {
 
 struct PlatformApi {
-    void* dlopen(const char* file, int mode) const noexcept
+    static void* dlopen(const char* file, int mode) noexcept
     {
         return ::dlopen(file, mode);
     }
 
-    void* dlsym(void* handle, const char* name) const noexcept
+    static void* dlsym(void* handle, const char* name) noexcept
     {
         return ::dlsym(handle, name);
     }
 
-    int dlclose(void* handle) const noexcept
+    static int dlclose(void* handle) noexcept
     {
         return ::dlclose(handle);
     }
 
-    int dlinfo(void* handle, int request, void* info) const noexcept
+    static int dlinfo(void* handle, int request, void* info) noexcept
     {
         return ::dlinfo(handle, request, info);
     }
 
-    int open(const char* pathname, int flags) const noexcept
+    static int open(const char* pathname, int flags) noexcept
     {
         return ::open(pathname, flags);
     }
 
-    int close(int fd) const noexcept
+    static int close(int fd) noexcept
     {
         return ::close(fd);
     }
 
-    int fstat(int fd, struct stat* buf) const noexcept
+    static int fstat(int fd, struct stat* buf) noexcept
     {
         return ::fstat(fd, buf);
     }
 
-    void* mmap(void* addr, size_t length, int prot, int flags, int fd, off_t offset) const noexcept
+    static void* mmap(void* addr, size_t length, int prot, int flags, int fd, off_t offset) noexcept
     {
         return ::mmap(addr, length, prot, flags, fd, offset);
     }
 
-    int munmap(void* addr, size_t length) const noexcept
+    static int munmap(void* addr, size_t length) noexcept
     {
         return ::munmap(addr, length);
     }

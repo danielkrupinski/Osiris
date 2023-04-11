@@ -52,7 +52,7 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
 #endif
 {
 #if IS_WIN32() || IS_WIN64()
-    const windows_platform::DynamicLibrary gameOverlayRenderer{ PlatformApi{}, "gameoverlayrenderer.dll" };
+    const windows_platform::DynamicLibrary<PlatformApi> gameOverlayRenderer{ "gameoverlayrenderer.dll" };
 
     PatternNotFoundHandler patternNotFoundHandler;
     present = PatternFinder{ gameOverlayRenderer.getCodeSection(), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();
