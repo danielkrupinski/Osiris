@@ -92,6 +92,12 @@ public:
         responseAccumulator(response::StorageUnitModified{ storageUnit });
     }
 
+    void loadStorageUnitContents(ItemIterator storageUnit) const
+    {
+        assert(storageUnit->gameItem().isStorageUnit());
+        responseAccumulator(response::StorageUnitContentsLoaded{ storageUnit });
+    }
+
 private:
     StorageUnitManager& storageUnitManager;
     ItemConstRemover constRemover;

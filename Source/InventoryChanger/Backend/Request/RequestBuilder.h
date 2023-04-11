@@ -83,6 +83,15 @@ public:
         storageUnitHandler.removeFromStorageUnit(*item, *storageUnit);
     }
 
+    void loadStorageUnitContents(ItemId storageUnitItemID)
+    {
+        const auto storageUnit = itemIDMap.get(storageUnitItemID);
+        if (!storageUnit.has_value() || !(*storageUnit)->gameItem().isStorageUnit())
+            return;
+
+        storageUnitHandler.loadStorageUnitContents(*storageUnit);
+    }
+
 private:
     void useToolOnItem(ItemIterator tool, ItemIterator destItem)
     {

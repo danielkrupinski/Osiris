@@ -607,4 +607,9 @@ void Inventory::updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAft
     localInventory.soUpdated(localInventory.getSOID(), (csgo::SharedObjectPOD*)econItem.getPOD(), 4);
 }
 
+void Inventory::storageUnitContentsLoaded(ItemId storageUnitItemID)
+{
+    initItemCustomizationNotification(interfaces, memory, "casket_contents", storageUnitItemID);
+}
+
 }

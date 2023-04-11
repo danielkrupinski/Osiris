@@ -70,6 +70,7 @@ public:
     void itemAddedToStorageUnit(ItemId storageUnitItemID);
     void removeItemFromStorageUnit(ItemId itemID, ItemId storageUnitItemID);
     void updateTradableAfterDate(ItemId itemID, std::uint32_t tradableAfterDate);
+    void storageUnitContentsLoaded(ItemId storageUnitItemID);
 
     [[nodiscard]] const EconItemViewFunctions& getEconItemViewFunctions() const noexcept
     {

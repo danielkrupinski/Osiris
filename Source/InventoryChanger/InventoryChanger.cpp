@@ -1317,6 +1317,8 @@ void InventoryChanger::getArgAsStringHook(const Memory& memory, const char* stri
             getRequestBuilder().addToStorageUnit(ItemId{ stringToUint64(string) }, ItemId{ stringToUint64(storageUnitItemIdString) });
         } else if (operation == -1) {
             getRequestBuilder().removeFromStorageUnit(ItemId{ stringToUint64(string) }, ItemId{ stringToUint64(storageUnitItemIdString) });
+        } else if (operation == 0) {
+            getRequestBuilder().loadStorageUnitContents(ItemId{ stringToUint64(storageUnitItemIdString) });
         }
     }
 }

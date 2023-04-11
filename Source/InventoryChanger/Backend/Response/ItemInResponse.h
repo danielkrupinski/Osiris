@@ -44,6 +44,7 @@ struct ItemInResponse {
     bool operator()(const response::ItemBoundToStorageUnit& response) const { return response.item == item || response.storageUnit == item; }
     bool operator()(const response::ItemAddedToStorageUnit& response) const { return response.storageUnit == item; }
     bool operator()(const response::ItemRemovedFromStorageUnit& response) const { return response.item == item || response.storageUnit == item; }
+    bool operator()(const response::StorageUnitContentsLoaded& response) const { return response.storageUnit == item; }
 
 private:
     ItemIterator item;

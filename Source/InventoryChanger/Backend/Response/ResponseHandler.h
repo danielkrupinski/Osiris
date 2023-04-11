@@ -216,6 +216,12 @@ struct ResponseHandler {
             gameInventory.updateTradableAfterDate(*itemID, response.item->getProperties().common.tradableAfterDate);
     }
 
+    void operator()(const response::StorageUnitContentsLoaded& response) const
+    {
+        if (const auto storageUnitItemID = getItemID(response.storageUnit); storageUnitItemID.has_value())
+            gameInventory.storageUnitContentsLoaded(*storageUnitItemID);
+    }
+
 private:
     [[nodiscard]] auto getItemID(ItemIterator item) const
     {

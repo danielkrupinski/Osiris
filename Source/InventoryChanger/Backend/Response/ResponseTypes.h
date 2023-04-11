@@ -169,4 +169,10 @@ struct ItemRemovedFromStorageUnit {
     ItemIterator storageUnit;
 };
 
+struct StorageUnitContentsLoaded {
+    explicit StorageUnitContentsLoaded(ItemIterator storageUnit) : storageUnit{ storageUnit } {}
+
+    ItemIterator storageUnit;
+};
+
 }
