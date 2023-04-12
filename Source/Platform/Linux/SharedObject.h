@@ -11,6 +11,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+#include <Utils/SafeAddress.h>
+
 namespace linux_platform
 {
 
@@ -25,9 +27,9 @@ public:
         return handle != nullptr;
     }
 
-    [[nodiscard]] void* getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
-        return PlatformApi::dlsym(handle, functionName);
+        return SafeAddress{ std::uintptr_t(PlatformApi::dlsym(handle, functionName)) };
     }
 
     [[nodiscard]] link_map* getLinkMap() const noexcept

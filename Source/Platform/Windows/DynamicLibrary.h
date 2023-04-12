@@ -4,6 +4,7 @@
 
 #include "PebLdr.h"
 #include "PortableExecutable.h"
+#include <Utils/SafeAddress.h>
 
 namespace windows_platform
 {
@@ -16,9 +17,9 @@ public:
     {
     }
 
-    [[nodiscard]] const void* getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
-        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
+        return SafeAddress{ std::uintptr_t(PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName)) };
     }
 
     [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept

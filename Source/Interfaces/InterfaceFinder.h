@@ -8,7 +8,7 @@
 struct InterfaceFinder {
     template <typename PlatformApi>
     explicit InterfaceFinder(DynamicLibrary<PlatformApi> library, RetSpoofInvoker invoker)
-        : createInterface{ invoker, std::uintptr_t(library.getFunctionAddress("CreateInterface")) }
+        : createInterface{ invoker, library.getFunctionAddress("CreateInterface").get() }
     {
     }
 
