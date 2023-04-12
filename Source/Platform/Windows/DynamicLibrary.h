@@ -19,12 +19,16 @@ public:
 
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
-        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
+        if (handle)
+            return portableExecutable().getExport(functionName);
+        return SafeAddress{ 0 };
     }
 
     [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept
     {
-        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getCodeSection();
+        if (handle)
+            return portableExecutable().getCodeSection();
+        return {};
     }
 
     [[nodiscard]] HMODULE getHandle() const noexcept
@@ -33,6 +37,11 @@ public:
     }
 
 private:
+    [[nodiscard]] PortableExecutable portableExecutable() const noexcept
+    {
+        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) };
+    }
+
     HMODULE handle;
 };
 
