@@ -12,14 +12,14 @@ namespace windows_platform
 template <typename PlatformApi>
 class DynamicLibrary {
 public:
-    DynamicLibrary(const char* libraryName)
+    explicit DynamicLibrary(const char* libraryName)
         : handle{ PebLdr{ PlatformApi::getPeb()->ldr }.getModuleHandle(libraryName) }
     {
     }
 
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
-        return SafeAddress{ std::uintptr_t(PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName)) };
+        return PortableExecutable{ reinterpret_cast<const std::byte*>(handle) }.getExport(functionName);
     }
 
     [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept

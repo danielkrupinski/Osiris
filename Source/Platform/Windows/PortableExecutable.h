@@ -7,6 +7,8 @@
 
 #include <Windows.h>
 
+#include <Utils/SafeAddress.h>
+
 class PortableExecutable {
 public:
     explicit PortableExecutable(const std::byte* base)
@@ -24,11 +26,11 @@ public:
         return {};
     }
 
-    [[nodiscard]] const void* getExport(const char* name) const noexcept
+    [[nodiscard]] SafeAddress getExport(const char* name) const noexcept
     {
         const auto exportDataDirectory = getExportDataDirectory();
         if (!exportDataDirectory)
-            return nullptr;
+            return SafeAddress{ 0 };
 
         const auto exportDirectory = reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDataDirectory->VirtualAddress);
 
@@ -40,13 +42,13 @@ public:
                 const auto functionRva = functions[nameOrdinals[i]];
                 if (isForwardedExport(functionRva, *exportDataDirectory)) {
                     assert(false && "Forwarded exports are not supported yet!");
-                    return nullptr;
+                    return SafeAddress{ 0 };
                 }
-                return base + functionRva;
+                return SafeAddress{ std::uintptr_t(base + functionRva) };
             }
         }
 
-        return nullptr;
+        return SafeAddress{ 0 };
     }
 
 private:
