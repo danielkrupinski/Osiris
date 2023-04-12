@@ -1,14 +1,10 @@
 #pragma once
 
 #include <intrin.h>
-#include <Windows.h>
 
 #include "Win.h"
 
-namespace windows_platform
-{
-
-struct PlatformApi {
+struct WindowsPlatformApi {
     [[nodiscard]] static win::Peb* getPeb() noexcept
     {
 #if IS_WIN32()
@@ -20,5 +16,3 @@ struct PlatformApi {
 #endif
     }
 };
-
-}

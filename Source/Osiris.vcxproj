@@ -418,7 +418,7 @@
     <ClInclude Include="Platform\PlatformApi.h" />
     <ClInclude Include="Platform\Windows\DynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
-    <ClInclude Include="Platform\Windows\PlatformApi.h" />
+    <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
     <ClInclude Include="Platform\Windows\PortableExecutable.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
     <ClInclude Include="ProtobufReader.h" />

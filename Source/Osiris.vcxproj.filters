@@ -673,7 +673,7 @@
     <ClInclude Include="GlobalContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Windows\PlatformApi.h">
+    <ClInclude Include="Platform\Windows\WindowsPlatformApi.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\DynamicLibrary.h">
