@@ -7,10 +7,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-namespace linux_platform
-{
-
-struct PlatformApi {
+struct LinuxPlatformApi {
     static void* dlopen(const char* file, int mode) noexcept
     {
         return ::dlopen(file, mode);
@@ -56,5 +53,3 @@ struct PlatformApi {
         return ::munmap(addr, length);
     }
 };
-
-}
