@@ -13,13 +13,10 @@
 
 #include <Utils/SafeAddress.h>
 
-namespace linux_platform
-{
-
 template <typename PlatformApi>
-class SharedObject {
+class LinuxDynamicLibrary {
 public:
-    SharedObject(const char* libraryName)
+    LinuxDynamicLibrary(const char* libraryName)
         : handle{ getModuleHandle(libraryName) } {}
 
     [[nodiscard]] bool isValid() const noexcept
@@ -85,5 +82,3 @@ private:
 
     void* handle = nullptr;
 };
-
-}

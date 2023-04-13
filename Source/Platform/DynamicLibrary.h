@@ -1,13 +1,19 @@
 #pragma once
 
+#include "Macros/IsPlatform.h"
+
 #if IS_WIN32() || IS_WIN64()
+
 #include "Windows/DynamicLibrary.h"
 
-template <typename DynamicLibraryWrapper>
-using DynamicLibrary = windows_platform::DynamicLibrary<DynamicLibraryWrapper>;
-#elif IS_LINUX()
-#include "Linux/SharedObject.h"
+template <typename PlatformApi>
+using DynamicLibrary = windows_platform::DynamicLibrary<PlatformApi>;
 
-template <typename DynamicLibraryWrapper>
-using DynamicLibrary = linux_platform::SharedObject<DynamicLibraryWrapper>;
+#elif IS_LINUX()
+
+#include "Linux/LinuxDynamicLibrary.h"
+
+template <typename PlatformApi>
+using DynamicLibrary = LinuxDynamicLibrary<PlatformApi>;
+
 #endif
