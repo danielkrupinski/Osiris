@@ -16,8 +16,6 @@
 #if IS_WIN32()
 #include <Windows.h>
 #include <Psapi.h>
-
-#include <Platform/Windows/DynamicLibrary.h>
 #elif IS_LINUX()
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -52,7 +50,7 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
 #endif
 {
 #if IS_WIN32() || IS_WIN64()
-    const windows_platform::DynamicLibrary<PlatformApi> gameOverlayRenderer{ "gameoverlayrenderer.dll" };
+    const DynamicLibrary<PlatformApi> gameOverlayRenderer{ "gameoverlayrenderer.dll" };
 
     PatternNotFoundHandler patternNotFoundHandler;
     present = PatternFinder{ gameOverlayRenderer.getCodeSection(), patternNotFoundHandler }("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();

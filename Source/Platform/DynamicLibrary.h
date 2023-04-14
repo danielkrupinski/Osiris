@@ -4,10 +4,10 @@
 
 #if IS_WIN32() || IS_WIN64()
 
-#include "Windows/DynamicLibrary.h"
+#include "Windows/WindowsDynamicLibrary.h"
 
 template <typename PlatformApi>
-using DynamicLibrary = windows_platform::DynamicLibrary<PlatformApi>;
+using DynamicLibrary = WindowsDynamicLibrary<PlatformApi>;
 
 #elif IS_LINUX()
 

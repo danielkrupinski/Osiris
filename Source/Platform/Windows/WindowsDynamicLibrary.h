@@ -6,13 +6,10 @@
 #include "PortableExecutable.h"
 #include <Utils/SafeAddress.h>
 
-namespace windows_platform
-{
-
 template <typename PlatformApi>
-class DynamicLibrary {
+class WindowsDynamicLibrary {
 public:
-    explicit DynamicLibrary(const char* libraryName)
+    explicit WindowsDynamicLibrary(const char* libraryName)
         : handle{ PebLdr{ PlatformApi::getPeb()->ldr }.getModuleHandle(libraryName) }
     {
     }
@@ -44,5 +41,3 @@ private:
 
     HMODULE handle;
 };
-
-}
