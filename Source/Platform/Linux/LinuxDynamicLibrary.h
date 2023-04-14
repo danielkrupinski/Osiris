@@ -26,13 +26,16 @@ public:
 
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
-        return SafeAddress{ std::uintptr_t(PlatformApi::dlsym(handle, functionName)) };
+        if (handle)
+            return SafeAddress{ std::uintptr_t(PlatformApi::dlsym(handle, functionName)) };
+        return SafeAddress{ 0 };
     }
 
     [[nodiscard]] link_map* getLinkMap() const noexcept
     {
         link_map* map = nullptr;
-        PlatformApi::dlinfo(handle, RTLD_DI_LINKMAP, &map);
+        if (handle)
+            PlatformApi::dlinfo(handle, RTLD_DI_LINKMAP, &map);
         return map;
     }
 
