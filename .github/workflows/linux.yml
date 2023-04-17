@@ -11,7 +11,7 @@ jobs:
         compiler: [g++-11, g++-12, clang++-13, clang++-14, clang++-15, clang++-16]
         configuration: [Debug, Release]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: install clang++-15
       if: matrix.compiler == 'clang++-15'
       run: |
