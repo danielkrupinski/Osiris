@@ -446,6 +446,7 @@
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />
+    <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\TypeHint.h" />
   </ItemGroup>
   <ItemGroup>

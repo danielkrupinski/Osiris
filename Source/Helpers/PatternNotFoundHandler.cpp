@@ -1,6 +1,4 @@
 #include <cassert>
-#include <iomanip>
-#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -8,30 +6,38 @@
 #include "PatternNotFoundHandler.h"
 #include <Platform/Macros/IsPlatform.h>
 
-[[nodiscard]] static std::string patternToString(std::string_view pattern)
-{
-    std::ostringstream os;
+#include <Utils/StringBuilder.h>
 
-    bool printedFirst = false;
-    for (auto byte : pattern) {
-        if (printedFirst)
-            os << ' ';
-
-        if (byte != '?')
-            os << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<unsigned>(static_cast<unsigned char>(byte));
-        else
-            os << '?';
-
-        printedFirst = true;
+struct PatternToString {
+    explicit PatternToString(BytePattern pattern)
+        : pattern{ pattern }
+    {
     }
 
-    return os.str();
-}
+    void operator()(StringBuilder& builder) const noexcept
+    {
+        bool printedFirst = false;
+        for (auto byte : pattern.get()) {
+            if (printedFirst)
+                builder.put(' ');
+
+            if (byte != '?')
+                builder.putHex(static_cast<unsigned char>(byte));
+            else
+                builder.put('?');
+
+            printedFirst = true;
+        }
+    }
+
+private:
+    BytePattern pattern;
+};
 
 void PatternNotFoundHandler::operator()(BytePattern pattern) const
 {
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
-    MessageBoxA(nullptr, ("Failed to find pattern:\n" + patternToString(pattern.get())).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+    MessageBoxA(nullptr, StringBuilderStorage<300>{}.builder().put("Failed to find pattern:\n", PatternToString{ pattern }).cstring(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
 }
