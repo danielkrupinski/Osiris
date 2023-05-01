@@ -11,6 +11,7 @@
 #include <CSGO/Constants/EconItemFlags.h>
 
 #include <Utils/FlagsBuilder.h>
+#include <Utils/StringBuilder.h>
 #include <Interfaces/OtherInterfaces.h>
 
 namespace inventory_changer::game_integration
@@ -32,10 +33,8 @@ void initItemCustomizationNotification(const OtherInterfaces& interfaces, const 
     if (idx == -1)
         return;
 
-    using namespace std::string_view_literals;
-    std::string args{ "0,'" }; args += typeStr; args += "','"sv; args += std::to_string(static_cast<csgo::ItemId>(itemID)); args += '\'';
     const char* dummy;
-    if (const auto event = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, args.c_str(), &dummy))
+    if (const auto event = retSpoofGadgets->client.invokeCdecl<void*>(std::uintptr_t(memory.registeredPanoramaEvents->memory[idx].value.createEventFromString), nullptr, StringBuilderStorage<50>{}.builder().put("0,'", typeStr, "','", static_cast<csgo::ItemId>(itemID), '\'').cstring(), &dummy))
         csgo::UIEngine::from(retSpoofGadgets->client, interfaces.getPanoramaUIEngine().accessUIEngine()).dispatchEvent(event);
 }
 

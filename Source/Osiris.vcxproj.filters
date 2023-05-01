@@ -676,9 +676,6 @@
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Windows\DynamicLibrary.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\FlagsBuilder.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -1173,6 +1170,12 @@
     </ClInclude>
     <ClInclude Include="Utils\Pad.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringBuilder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
