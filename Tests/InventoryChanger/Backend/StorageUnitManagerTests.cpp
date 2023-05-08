@@ -25,14 +25,14 @@ class InventoryChanger_Backend_StorageUnitManagerTest : public testing::Test {
 protected:
     [[nodiscard]] ItemIterator createDummyItem()
     {
-        static constexpr game_items::Item sticker{ game_items::Item::Type::Sticker, EconRarity::Red, WeaponId::None, 0, {} };
+        static constexpr game_items::Item sticker{ game_items::Item::Type::Sticker, EconRarity::Red, WeaponId{}, 0, {} };
         itemList.emplace_back(sticker);
         return std::prev(itemList.end());
     }
 
     [[nodiscard]] ItemIterator createDummyStorageUnit()
     {
-        static constexpr game_items::Item storageUnit{ game_items::Item::Type::StorageUnit, EconRarity::Red, WeaponId::None, 0, {} };
+        static constexpr game_items::Item storageUnit{ game_items::Item::Type::StorageUnit, EconRarity::Red, WeaponId{}, 0, {} };
         itemList.emplace_back(storageUnit);
         return std::prev(itemList.end());
     }

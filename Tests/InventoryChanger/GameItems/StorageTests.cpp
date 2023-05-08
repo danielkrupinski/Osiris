@@ -139,20 +139,20 @@ class GameItemsStorageTest : public testing::TestWithParam<ItemType> {};
 
 TEST_P(GameItemsStorageTest, AddingItemIncrementsItemCount) {
     Storage storage;
-    addToStorage(storage, GetParam(), EconRarity::Default, WeaponId::None, 0, {});
+    addToStorage(storage, GetParam(), EconRarity::Default, WeaponId{}, 0, {});
     ASSERT_EQ(storage.getItems().size(), 1);
 }
 
 TEST_P(GameItemsStorageTest, AddedItemHasCorrectType) {
     Storage storage;
-    const auto& item = addToStorage(storage, GetParam(), EconRarity::Default, WeaponId::None, 0, {});
+    const auto& item = addToStorage(storage, GetParam(), EconRarity::Default, WeaponId{}, 0, {});
     ASSERT_TRUE(validateItemType(item, GetParam()));
 }
 
 TEST_P(GameItemsStorageTest, AddingItemCopiesIconPath) {
     Storage storage;
     const std::string iconPath = "image.png";
-    const auto& item = addToStorage(storage, GetParam(), EconRarity::Default, WeaponId::None, 0, iconPath);
+    const auto& item = addToStorage(storage, GetParam(), EconRarity::Default, WeaponId{}, 0, iconPath);
     ASSERT_NE(item.getIconPath().data(), iconPath.c_str());
 }
 
@@ -185,7 +185,7 @@ class GameItemsStorageItemRarityTest : public testing::TestWithParam<std::tuple<
 TEST_P(GameItemsStorageItemRarityTest, AddedItemHasCorrectRarity) {
     Storage storage;
     const auto [type, rarity] = GetParam();
-    const auto& item = addToStorage(storage, type, rarity, WeaponId::None, 0, {});
+    const auto& item = addToStorage(storage, type, rarity, WeaponId{}, 0, {});
     ASSERT_EQ(item.getRarity(), rarity);
 }
 
@@ -216,7 +216,7 @@ class GameItemsStorageItemImagePathTest : public testing::TestWithParam<std::tup
 TEST_P(GameItemsStorageItemImagePathTest, AddedItemHasCorrectImagePath) {
     Storage storage;
     const auto [type, imagePath] = GetParam();
-    const auto& item = addToStorage(storage, type, EconRarity::Default, WeaponId::None, 0, imagePath);
+    const auto& item = addToStorage(storage, type, EconRarity::Default, WeaponId{}, 0, imagePath);
     ASSERT_EQ(item.getIconPath(), imagePath);
 }
 
@@ -269,7 +269,7 @@ INSTANTIATE_TEST_SUITE_P(TypesWithConstantWeaponID, GameItemsStorageWeaponIdTest
 TEST(InventoryChanger_GameItems_StorageTest, FirstAddedItemIsFirstInItemList) {
     Storage storage;
     storage.addNameTag(EconRarity::Gray, WeaponId::NameTag, {});
-    storage.addAgent(EconRarity::Pink, WeaponId::None, {});
+    storage.addAgent(EconRarity::Pink, WeaponId{}, {});
     ASSERT_TRUE(storage.getItems()[0].isNameTag());
 }
 
@@ -277,16 +277,16 @@ Item& addTournamentItem(Storage& storage, ItemType type, csgo::Tournament tourna
 {
     switch (type) {
     case ItemType::Case:
-        storage.addCrate(EconRarity::Blue, WeaponId::None, 0, tournament, {}, false, {});
+        storage.addCrate(EconRarity::Blue, WeaponId{}, 0, tournament, {}, false, {});
         break;
     case ItemType::ViewerPass:
-        storage.addViewerPass(EconRarity::Blue, WeaponId::None, tournament, false, {});
+        storage.addViewerPass(EconRarity::Blue, WeaponId{}, tournament, false, {});
         break;
     case ItemType::SouvenirToken:
-        storage.addSouvenirToken(EconRarity::Blue, WeaponId::None, tournament, {});
+        storage.addSouvenirToken(EconRarity::Blue, WeaponId{}, tournament, {});
         break;
     case ItemType::TournamentCoin:
-        storage.addTournamentCoin(EconRarity::Blue, WeaponId::None, tournament, 0, {});
+        storage.addTournamentCoin(EconRarity::Blue, WeaponId{}, tournament, 0, {});
         break;
     default:
         throw "Unhandled item type!";
@@ -311,7 +311,7 @@ class InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest : publi
 
 TEST_P(InventoryChanger_GameItems_Storage_DefaultTournamentGraffitiIdTest, AddedTournamentCoinHasCorrectDefaultTournamentGraffitiId) {
     Storage storage;
-    storage.addTournamentCoin(EconRarity::Red, WeaponId::None, {}, GetParam(), {});
+    storage.addTournamentCoin(EconRarity::Red, WeaponId{}, {}, GetParam(), {});
     ASSERT_EQ(storage.getDefaultTournamentGraffitiID(storage.getItems().back()), GetParam());
 }
 
@@ -322,7 +322,7 @@ class InventoryChanger_GameItems_Storage_CrateSeriesTest : public testing::TestW
 
 TEST_P(InventoryChanger_GameItems_Storage_CrateSeriesTest, AddedCrateHasCorrectSeriesNumber) {
     Storage storage;
-    storage.addCrate(EconRarity::Blue, WeaponId::None, GetParam(), static_cast<csgo::Tournament>(255), TournamentMap::Vertigo, true, {});
+    storage.addCrate(EconRarity::Blue, WeaponId{}, GetParam(), static_cast<csgo::Tournament>(255), TournamentMap::Vertigo, true, {});
     ASSERT_EQ(storage.getCrateSeries(storage.getItems().back()), GetParam());
 }
 
@@ -333,7 +333,7 @@ class InventoryChanger_GameItems_Storage_TournamentMapTest : public testing::Tes
 
 TEST_P(InventoryChanger_GameItems_Storage_TournamentMapTest, AddedCrateHasCorrectTournamentMap) {
     Storage storage;
-    storage.addCrate(EconRarity::Blue, WeaponId::None, 0xFFFF, static_cast<csgo::Tournament>(0xFF), GetParam(), true, {});
+    storage.addCrate(EconRarity::Blue, WeaponId{}, 0xFFFF, static_cast<csgo::Tournament>(0xFF), GetParam(), true, {});
     ASSERT_EQ(storage.getTournamentMap(storage.getItems().back()), GetParam());
 }
 
@@ -344,7 +344,7 @@ class InventoryChanger_GameItems_Storage_SouvenirPackageTest : public testing::T
 
 TEST_P(InventoryChanger_GameItems_Storage_SouvenirPackageTest, AddedCrateIsSouvenirPackage) {
     Storage storage;
-    storage.addCrate(EconRarity::Blue, WeaponId::None, 1234, csgo::Tournament::EleagueAtlanta2017, TournamentMap::Train, GetParam(), {});
+    storage.addCrate(EconRarity::Blue, WeaponId{}, 1234, csgo::Tournament::EleagueAtlanta2017, TournamentMap::Train, GetParam(), {});
     ASSERT_EQ(storage.isSouvenirPackage(storage.getItems().back()), GetParam());
 }
 INSTANTIATE_TEST_SUITE_P(, InventoryChanger_GameItems_Storage_SouvenirPackageTest,

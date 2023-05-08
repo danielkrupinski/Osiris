@@ -26,7 +26,7 @@ protected:
     template <typename VariantProperties, game_items::Item::Type Type = game_items::Item::Type::Agent>
     [[nodiscard]] ItemIterator createDummyItem()
     {
-        static constexpr game_items::Item dummyGameItem{ Type, EconRarity::Red, WeaponId::None, 0, {} };
+        static constexpr game_items::Item dummyGameItem{ Type, EconRarity::Red, WeaponId{}, 0, {} };
         itemList.emplace_back(dummyGameItem, VariantProperties{});
         return std::prev(itemList.end());
     }

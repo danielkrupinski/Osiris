@@ -61,7 +61,7 @@ template <typename ResponseType>
         static_assert(!std::is_same_v<ResponseType, ResponseType>, "Not implemented!");
 }
 
-constexpr game_items::Item gameItem{ game_items::Item::Type::Agent, EconRarity::Pink, WeaponId::None, 0, {} };
+constexpr game_items::Item gameItem{ game_items::Item::Type::Agent, EconRarity::Pink, WeaponId{}, 0, {} };
 
 [[nodiscard]] static ItemList createItemList()
 {

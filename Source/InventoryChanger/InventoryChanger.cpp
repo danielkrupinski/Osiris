@@ -1123,7 +1123,7 @@ void InventoryChanger::onSoUpdated(const csgo::SharedObject& object) noexcept
         WeaponId& weaponID = *reinterpret_cast<WeaponId*>(std::uintptr_t(object.getPOD()) + WIN32_LINUX(0x10, 0x1C));
         if (const auto it = std::ranges::find(equipRequests, weaponID, &EquipRequest::weaponID); it != equipRequests.end()) {
             ++it->counter;
-            weaponID = WeaponId::None;
+            weaponID = WeaponId{};
         }
     }
 }

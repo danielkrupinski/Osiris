@@ -70,7 +70,7 @@ class InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest
     : public InventoryChanger_ItemGenerator_DefaultGeneratorTest, public testing::WithParamInterface<TradePenalty> {};
 
 TEST_P(InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, CrateKeysAreNotTradableForOneWeek) {
-    gameItemStorage.addCaseKey(EconRarity::Default, WeaponId::None, {});
+    gameItemStorage.addCaseKey(EconRarity::Default, WeaponId{}, {});
     const auto& key = gameItemStorage.getItems().back();
     FakeSystemClock::set(GetParam().now);
     const auto commonProperties = defaultGenerator.createCommonProperties(key);
@@ -78,7 +78,7 @@ TEST_P(InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, CrateKe
 }
 
 TEST_P(InventoryChanger_ItemGenerator_DefaultGenerator_TradePenaltyTest, IemRio2022CratesAreNotTradableForOneWeek) {
-    gameItemStorage.addCrate(EconRarity::Default, WeaponId::None, 0, csgo::Tournament::IemRio2022, {}, false, {});
+    gameItemStorage.addCrate(EconRarity::Default, WeaponId{}, 0, csgo::Tournament::IemRio2022, {}, false, {});
     const auto& crate = gameItemStorage.getItems().back();
     FakeSystemClock::set(GetParam().now);
     const auto commonProperties = defaultGenerator.createCommonProperties(crate);

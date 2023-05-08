@@ -13,7 +13,7 @@ namespace
 class RarityTest : public testing::TestWithParam<EconRarity> {};
 
 TEST_P(RarityTest, CreatedItemHasCorrectRarity) {
-    const auto item = Item{ Item::Type::Skin, GetParam(), WeaponId::None, 0, {} };
+    const auto item = Item{ Item::Type::Skin, GetParam(), WeaponId{}, 0, {} };
     ASSERT_EQ(item.getRarity(), GetParam());
 }
 
@@ -31,7 +31,7 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, WeaponIdTest, testing::Values(WeaponId::D
 class DataIndexTest : public testing::TestWithParam<std::size_t> {};
 
 TEST_P(DataIndexTest, CreatedItemHasCorrectDataIndex) {
-    const auto item = Item{ Item::Type::Skin, EconRarity::Blue, WeaponId::None, GetParam(), {} };
+    const auto item = Item{ Item::Type::Skin, EconRarity::Blue, WeaponId{}, GetParam(), {} };
     ASSERT_EQ(item.getDataIndex(), GetParam());
 }
 
@@ -40,7 +40,7 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, DataIndexTest, testing::Values(0, 123, st
 class IconPathTest : public testing::TestWithParam<std::string_view> {};
 
 TEST_P(IconPathTest, CreatedItemHasCorrectIconPath) {
-    const auto item = Item{ Item::Type::Skin, EconRarity::Blue, WeaponId::None, 0, GetParam() };
+    const auto item = Item{ Item::Type::Skin, EconRarity::Blue, WeaponId{}, 0, GetParam() };
     ASSERT_EQ(item.getIconPath(), GetParam());
 }
 
@@ -48,7 +48,7 @@ INSTANTIATE_TEST_SUITE_P(GameItemTest, IconPathTest, testing::Values(std::string
 
 [[nodiscard]] constexpr Item createItemOfType(Item::Type type) noexcept
 {
-    return Item{ type, EconRarity::Blue, WeaponId::None, 0, {} };
+    return Item{ type, EconRarity::Blue, WeaponId{}, 0, {} };
 }
 
 class TypeTest : public testing::TestWithParam<Item::Type> {};

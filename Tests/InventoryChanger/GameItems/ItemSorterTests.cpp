@@ -282,7 +282,7 @@ protected:
         storage.addPaintKit(1234, {}, 0.0f, 1.0f);
         storage.addSkinWithLastPaintKit(EconRarity::Red, WeaponId::Famas, {});
         storage.addGlovesWithLastPaintKit(EconRarity::Red, WeaponId::GloveStuddedBloodhound, {});
-        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId::None, 0, {});
+        addToStorage(storage, GetParam(), EconRarity::Red, WeaponId{}, 0, {});
     }
 
     [[nodiscard]] const Item& skin() const noexcept { return storage.getItems()[0]; }

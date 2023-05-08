@@ -59,7 +59,7 @@ protected:
     template <ItemType type>
     ItemMutableIterator createDummyItem()
     {
-        static constexpr game_items::Item dummyGameItem{ type, EconRarity::Red, WeaponId::None, 0, {} };
+        static constexpr game_items::Item dummyGameItem{ type, EconRarity::Red, WeaponId{}, 0, {} };
         itemList.emplace_back(dummyGameItem);
         const auto dummyItem = std::prev(itemList.end());
         itemIDMap.add(dummyItemIDs.at(itemList.size() - 1), dummyItem);

@@ -42,7 +42,7 @@ public:
         assert(gameItem.isViewerPass());
 
         const auto coinID = Helpers::bronzeEventCoinFromViewerPass(gameItem.getWeaponID());
-        if (coinID == WeaponId::None)
+        if (coinID == WeaponId{})
             return;
 
         if (const auto eventCoin = gameItemLookup.findItem(coinID)) {
