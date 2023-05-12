@@ -112,7 +112,7 @@ static void to_json(json& j, VisualsConfig& o)
 #if IS_WIN32() || IS_WIN64()
     return PostProcessingDisabler{ clientPatternFinder("83 EC 4C 80 3D"_pat).add(5).deref().as<bool*>() };
 #elif IS_LINUX()
-    return PostProcessingDisabler{ clientPatternFinder("0F B6 05 ? ? ? ? 84 C0 0F 85 ? ? ? ? 85 D2"_pat).add(3).relativeToAbsolute().as<bool*>() };
+    return PostProcessingDisabler{ clientPatternFinder("0F B6 05 ? ? ? ? 84 C0 0F 85 ? ? ? ? 85 D2"_pat).add(3).abs().as<bool*>() };
 #endif
 }
 
@@ -128,7 +128,7 @@ static void to_json(json& j, VisualsConfig& o)
     return ScopeOverlayRemover{
         clientPatternFinder("41 FF 51 70 43 8D 14 3E"_pat).add(4).asReturnAddress(),
         clientPatternFinder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 66 0F EF E4"_pat).asReturnAddress(),
-        clientPatternFinder("F3 0F 10 05 ? ? ? ? FF 50 20 48 8B BB ? ? ? ? 48 85 FF 74 17"_pat).add(4).relativeToAbsolute().add(4).as<float*>()
+        clientPatternFinder("F3 0F 10 05 ? ? ? ? FF 50 20 48 8B BB ? ? ? ? 48 85 FF 74 17"_pat).add(4).abs().add(4).as<float*>()
     };
 #endif
 }
@@ -136,7 +136,7 @@ static void to_json(json& j, VisualsConfig& o)
 [[nodiscard]] SkyboxChanger createSkyboxChanger(csgo::Cvar cvar, const PatternFinder& enginePatternFinder)
 {
 #if IS_WIN32() || IS_WIN64()
-    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 2D A1"_pat).add(1).relativeToAbsolute().get() } };
+    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 2D A1"_pat).add(1).abs().get() } };
 #elif IS_LINUX()
     return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("55 4C 8D 05 ? ? ? ? 48 89 E5 41 57"_pat).get() } };
 #endif
@@ -148,7 +148,7 @@ static void to_json(json& j, VisualsConfig& o)
 #if IS_WIN32() || IS_WIN64()
         csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("B9 ? ? ? ? 0F 11 44 24 ? C7 44 24 ? ? ? ? ? F3 0F 10 84 24"_pat).add(1).deref().as<csgo::ViewRenderBeamsPOD*>()),
 #elif IS_LINUX()
-        csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("C7 45 ? ? ? ? ? 4C 8D 25 ? ? ? ? 49 8B 3C 24"_pat).add(10).relativeToAbsolute().deref().as<csgo::ViewRenderBeamsPOD*>()),
+        csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder("C7 45 ? ? ? ? ? 4C 8D 25 ? ? ? ? 49 8B 3C 24"_pat).add(10).abs().deref().as<csgo::ViewRenderBeamsPOD*>()),
 #endif
         entityList, engine, globalVars
     };

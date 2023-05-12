@@ -158,11 +158,11 @@ Inventory::Inventory(OtherInterfaces interfaces, const Memory& memory, const Pat
 #if IS_WIN32() || IS_WIN64()
     createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 8B EC 83 EC 1C 8D 45 E4 C7 45"_pat).add(20).deref().get() },
     uiComponentInventory{ clientPatternFinder("C6 44 24 ? ? 83 3D"_pat).add(7).deref().as<csgo::UiComponentInventoryPOD**>() },
-    setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 8B 4C 24 2C 46"_pat).add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
+    setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 8B 4C 24 2C 46"_pat).add(1).abs().as<csgo::SetItemSessionPropertyValue>() }
 #elif IS_LINUX()
-    createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 48 8D 05 ? ? ? ? 31 D2 BF"_pat).add(47).relativeToAbsolute().get() },
-    uiComponentInventory{ clientPatternFinder("4C 89 3D ? ? ? ? 4C 89 FF EB 9D 0F 1F 44 00 00"_pat).add(3).relativeToAbsolute().as<csgo::UiComponentInventoryPOD**>() },
-    setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 48 8B 85 ? ? ? ? 41 83 C4 01"_pat).add(1).relativeToAbsolute().as<csgo::SetItemSessionPropertyValue>() }
+    createEconItemSharedObject{ retSpoofGadgets->client, clientPatternFinder("55 48 8D 05 ? ? ? ? 31 D2 BF"_pat).add(47).abs().get() },
+    uiComponentInventory{ clientPatternFinder("4C 89 3D ? ? ? ? 4C 89 FF EB 9D 0F 1F 44 00 00"_pat).add(3).abs().as<csgo::UiComponentInventoryPOD**>() },
+    setItemSessionPropertyValue{ clientPatternFinder("E8 ? ? ? ? 48 8B 85 ? ? ? ? 41 83 C4 01"_pat).add(1).abs().as<csgo::SetItemSessionPropertyValue>() }
 #endif
 {
 }

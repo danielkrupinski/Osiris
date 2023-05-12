@@ -8,8 +8,8 @@
 struct SdlFunctions {
     template <typename PlatformApi>
     SdlFunctions(DynamicLibrary<PlatformApi> libSDL)
-        : pollEvent{ libSDL.getFunctionAddress("SDL_PollEvent").add(2).relativeToAbsolute().get() },
-          swapWindow{ libSDL.getFunctionAddress("SDL_GL_SwapWindow").add(2).relativeToAbsolute().get() }
+        : pollEvent{ libSDL.getFunctionAddress("SDL_PollEvent").add(2).abs().get() },
+          swapWindow{ libSDL.getFunctionAddress("SDL_GL_SwapWindow").add(2).abs().get() }
     {
     }
 

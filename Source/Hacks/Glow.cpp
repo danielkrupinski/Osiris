@@ -33,9 +33,9 @@ Glow::Glow(const PatternFinder& clientPatternFinder)
     :
 #if IS_WIN32() || IS_WIN64()
     glowObjectManager{ clientPatternFinder("0F 11 05 ? ? ? ? 83 C8 01"_pat).add(3).deref().as<csgo::GlowObjectManager*>() },
-    glowObjectAntiCheatCheck{ retSpoofGadgets->client, clientPatternFinder("E8 ? ? ? ? 8B 75 FC 6A 04"_pat).add(1).relativeToAbsolute().get() }
+    glowObjectAntiCheatCheck{ retSpoofGadgets->client, clientPatternFinder("E8 ? ? ? ? 8B 75 FC 6A 04"_pat).add(1).abs().get() }
 #elif IS_LINUX()
-    glowObjectManager{ clientPatternFinder("E8 ? ? ? ? 4C 89 E7 8B 70 20"_pat).add(1).relativeToAbsolute().add(12).relativeToAbsolute().as<csgo::GlowObjectManager*>() }
+    glowObjectManager{ clientPatternFinder("E8 ? ? ? ? 4C 89 E7 8B 70 20"_pat).add(1).abs().add(12).abs().as<csgo::GlowObjectManager*>() }
 #endif
 {
 }

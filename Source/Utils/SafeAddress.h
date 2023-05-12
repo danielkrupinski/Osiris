@@ -37,7 +37,7 @@ public:
         return deref<1>();
     }
 
-    SafeAddress& relativeToAbsolute() noexcept
+    SafeAddress& abs() noexcept
     {
         if (address != 0) {
             using OffsetType = std::int32_t;
