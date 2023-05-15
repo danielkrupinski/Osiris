@@ -12,6 +12,11 @@ public:
     {
     }
 
+    explicit StdcallFunctionInvoker(RetSpoofInvoker invoker, ReturnType(STDCALL_CONV* function)(Args...))
+        : invoker{ invoker }, functionAddress{ std::uintptr_t(function) }
+    {
+    }
+
     ReturnType operator()(Args... args) const noexcept
     {
         return invoker.invokeStdcall<ReturnType, Args...>(functionAddress, args...);
