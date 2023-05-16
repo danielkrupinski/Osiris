@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <MemorySearch/PatternFinder.h>
+#include <BytePatterns/ClientPatternFinder.h>
 #include <CSGO/Helpers/EconItemViewFunctions.h>
 
-[[nodiscard]] EconItemViewFunctions createEconItemViewFunctions(const PatternFinder& clientPatternFinder);
+[[nodiscard]] EconItemViewFunctions createEconItemViewFunctions(const ClientPatternFinder& clientPatternFinder);

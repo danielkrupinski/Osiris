@@ -154,7 +154,7 @@ void GlobalContext<PlatformApi>::initialize()
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
     randomGenerator.emplace();
-    features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), clientPatternFinder, enginePatternFinder, *randomGenerator));
+    features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, *randomGenerator));
     config.emplace(*features, getOtherInterfaces(), *memory);
     
     gui.emplace();

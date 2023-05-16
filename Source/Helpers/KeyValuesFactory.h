@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <BytePatterns/ClientPatternFinder.h>
 #include <CSGO/Helpers/KeyValuesFunctions.h>
 #include <CSGO/KeyValues.h>
 #include <MemorySearch/PatternFinder.h>
@@ -38,4 +39,4 @@ private:
     KeyValuesFunctions keyValuesFunctions;
 };
 
-[[nodiscard]] KeyValuesFactory createKeyValuesFactory(RetSpoofInvoker retSpoofInvoker, const PatternFinder& clientPatternFinder);
+[[nodiscard]] KeyValuesFactory createKeyValuesFactory(RetSpoofInvoker retSpoofInvoker, const ClientPatternFinder& clientPatternFinder);

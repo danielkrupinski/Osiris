@@ -196,6 +196,9 @@
     <ClInclude Include="..\Dependencies\MinHook\MinHook.h" />
     <ClInclude Include="..\Dependencies\MinHook\trampoline.h" />
     <ClInclude Include="..\Dependencies\nlohmann\json.hpp" />
+    <ClInclude Include="BytePatterns\ClientPatternFinder.h" />
+    <ClInclude Include="BytePatterns\LinuxClientPatternFinder.h" />
+    <ClInclude Include="BytePatterns\WindowsClientPatternFinder.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="Config\Configurable.h" />

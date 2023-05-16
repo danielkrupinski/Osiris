@@ -11,6 +11,7 @@
 #include <RetSpoof/FunctionInvoker.h>
 #include <CSGO/Functions.h>
 #include <MemorySearch/BytePatternLiteral.h>
+#include <BytePatterns/ClientPatternFinder.h>
 
 namespace csgo
 {
@@ -38,7 +39,7 @@ namespace inventory_changer::game_integration
 
 class Inventory {
 public:
-    Inventory(OtherInterfaces interfaces, const Memory& memory, const PatternFinder& clientPatternFinder);
+    Inventory(OtherInterfaces interfaces, const Memory& memory, const ClientPatternFinder& clientPatternFinder);
 
     ItemId createSOCItem(const game_items::Storage& gameItemStorage, const inventory::Item& inventoryItem, bool asUnacknowledged);
     [[nodiscard]] ItemId assingNewItemID(ItemId itemID);

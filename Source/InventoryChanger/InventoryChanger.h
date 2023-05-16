@@ -8,6 +8,7 @@
 #include "Backend/Request/RequestBuilder.h"
 #include "Backend/Request/ItemActivationHandler.h"
 #include "Backend/Request/XRayScannerHandler.h"
+#include <BytePatterns/ClientPatternFinder.h>
 #include "GameIntegration/Inventory.h"
 #include "GameItems/Lookup.h"
 #include "GameItems/CrateLootLookup.h"
@@ -53,11 +54,11 @@ struct InventoryChangerReturnAddresses {
     ReturnAddress useToolGetArgAsString;
 };
 
-[[nodiscard]] InventoryChangerReturnAddresses createInventoryChangerReturnAddresses(const PatternFinder& clientPatternFinder);
+[[nodiscard]] InventoryChangerReturnAddresses createInventoryChangerReturnAddresses(const ClientPatternFinder& clientPatternFinder);
 
 class InventoryChanger {
 public:
-    InventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
+    InventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, game_items::Lookup gameItemLookup, game_items::CrateLootLookup crateLootLookup, const ClientPatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator)
         : engineInterfaces{ engineInterfaces }, clientInterfaces{ clientInterfaces }, otherInterfaces{ interfaces }, backend{ std::move(gameItemLookup), std::move(crateLootLookup), memory, randomGenerator }, returnAddresses{ createInventoryChangerReturnAddresses(clientPatternFinder) }, gameInventory{ interfaces, memory, clientPatternFinder } {}
 
     [[nodiscard]] const game_items::Lookup& getGameItemLookup() const noexcept
@@ -125,6 +126,6 @@ private:
     game_integration::Inventory gameInventory;
 };
 
-InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
+InventoryChanger createInventoryChanger(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const ClientPatternFinder& clientPatternFinder, Helpers::RandomGenerator& randomGenerator);
 
 }

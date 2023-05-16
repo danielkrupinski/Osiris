@@ -22,7 +22,7 @@ struct Features {
     Sound sound;
 };
 
-[[nodiscard]] inline Features createFeatures(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, Helpers::RandomGenerator& randomGenerator)
+[[nodiscard]] inline Features createFeatures(const Memory& memory, const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const ClientPatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, Helpers::RandomGenerator& randomGenerator)
 {
     return Features{
         .backtrack = Backtrack{ otherInterfaces.getCvar() },

@@ -10,13 +10,14 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <MemorySearch/BytePatternLiteral.h>
 #include <MemorySearch/PatternFinder.h>
+#include <BytePatterns/ClientPatternFinder.h>
 
 class ClientInterfaces;
 class EngineInterfaces;
 
 class Glow {
 public:
-    Glow(const PatternFinder& clientPatternFinder);
+    Glow(const ClientPatternFinder& clientPatternFinder);
 
     void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const Memory& memory) noexcept;
     void clearCustomObjects() noexcept;

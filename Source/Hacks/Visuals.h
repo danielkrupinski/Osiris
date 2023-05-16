@@ -16,6 +16,7 @@
 #include <CSGO/ViewRenderBeams.h>
 #include <MemorySearch/BytePatternLiteral.h>
 #include <MemorySearch/PatternFinder.h>
+#include <BytePatterns/ClientPatternFinder.h>
 
 namespace csgo { enum class FrameStage; }
 class GameEvent;
@@ -24,7 +25,7 @@ class EngineInterfaces;
 
 class Visuals {
 public:
-    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder);
+    Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const ClientPatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder);
 
     bool isZoomOn() noexcept;
     bool isDeagleSpinnerOn() noexcept;

@@ -31,7 +31,7 @@ class Backtrack;
 
 class Chams {
 public:
-    Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const PatternFinder& clientPatternFinder)
+    Chams(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory, const ClientPatternFinder& clientPatternFinder)
         : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ interfaces }, memory{ memory }, materials{ ChamsMaterialFactory{ ChamsMaterialKeyValuesFactory{ createKeyValuesFactory(retSpoofGadgets->client, clientPatternFinder) }, interfaces.getMaterialSystem() } }
     {
     }
