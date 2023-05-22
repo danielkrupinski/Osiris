@@ -61,9 +61,9 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     clientMode = **reinterpret_cast<csgo::ClientMode***>((*reinterpret_cast<uintptr_t**>(clientInterface))[10] + 5);
     input = *reinterpret_cast<csgo::Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
     globalVars = **reinterpret_cast<csgo::GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
-    isOtherEnemy = clientPatternFinder("8B CE E8 ? ? ? ? 02 C0"_pat).add(3).abs().as<decltype(isOtherEnemy)>();
+    isOtherEnemy = clientPatternFinder("8B CE E8 ? ? ? ? 02 C0"_pat).add(3).abs().as<csgo::IsOtherEnemy>();
     auto temp = clientPatternFinder("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08"_pat).add(1);
-    hud = SafeAddress{ temp }.deref().get();
+    hud = SafeAddress{ temp }.deref().as<csgo::HudPOD*>();
     findHudElement = temp.add(5).abs().as<decltype(findHudElement)>();
     clearHudWeapon = clientPatternFinder("E8 ? ? ? ? 8B F0 C6 44 24 ? ? C6 44 24"_pat).add(1).abs().as<decltype(clearHudWeapon)>();
     itemSystemFn = clientPatternFinder("E8 ? ? ? ? 0F B7 0F"_pat).add(1).abs().as<decltype(itemSystemFn)>();
@@ -110,10 +110,10 @@ Memory::Memory(const PatternFinder& clientPatternFinder, const PatternFinder& en
     globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t**>(clientInterface))[11] + 16 }.abs().deref().as<csgo::GlobalVars*>();
     itemSystemFn = clientPatternFinder("E8 ? ? ? ? 44 39 78 44"_pat).add(1).abs().as<decltype(itemSystemFn)>();
 
-    isOtherEnemy = clientPatternFinder("E8 ? ? ? ? 84 C0 75 94"_pat).add(1).abs().as<decltype(isOtherEnemy)>();
+    isOtherEnemy = clientPatternFinder("E8 ? ? ? ? 84 C0 75 94"_pat).add(1).abs().as<csgo::IsOtherEnemy>();
     getDecoratedPlayerName = clientPatternFinder("E8 ? ? ? ? 41 8B 17 85 D2"_pat).add(1).abs().as<decltype(getDecoratedPlayerName)>();
 
-    hud = clientPatternFinder("48 8D 3D ? ? ? ? 48 83 EC 10 E8 ? ? ? ? 41 8B 5C 24"_pat).add(3).abs().get();
+    hud = clientPatternFinder("48 8D 3D ? ? ? ? 48 83 EC 10 E8 ? ? ? ? 41 8B 5C 24"_pat).add(3).abs().as<csgo::HudPOD*>();
     findHudElement = clientPatternFinder("E8 ? ? ? ? 48 8D 50 E0"_pat).add(1).abs().as<decltype(findHudElement)>();
 
     clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t**>(clientInterface))[10] }.add(12).abs().add(4).abs().deref().as<decltype(clientMode)>();

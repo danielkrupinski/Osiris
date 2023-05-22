@@ -59,6 +59,7 @@ struct ItemSystemPOD;
 struct MemAllocPOD;
 struct KeyValuesPOD;
 struct ViewRender;
+struct HudPOD;
 
 }
 
@@ -81,17 +82,17 @@ public:
     csgo::UtlMap<short, csgo::PanoramaEventRegistration>* registeredPanoramaEvents;
 
     FunctionInvoker<csgo::LineGoesThroughSmoke> lineGoesThroughSmoke;
-    bool(THISCALL_CONV* isOtherEnemy)(std::uintptr_t, std::uintptr_t);
-    std::uintptr_t hud;
-    int*(THISCALL_CONV* findHudElement)(std::uintptr_t, const char*);
-    int(THISCALL_CONV* clearHudWeapon)(int*, int);
-    void(THISCALL_CONV* setAbsOrigin)(std::uintptr_t, const csgo::Vector&);
+    csgo::IsOtherEnemy isOtherEnemy;
+    csgo::HudPOD* hud;
+    csgo::FindHudElement findHudElement;
+    csgo::ClearHudWeapon clearHudWeapon;
+    csgo::SetAbsOrigin setAbsOrigin;
     std::uintptr_t traceToExit;
     csgo::ViewRender* viewRender;
     std::uintptr_t drawScreenEffectMaterial;
-    std::add_pointer_t<void CDECL_CONV(const char* msg, ...)> debugMsg;
-    std::add_pointer_t<void CDECL_CONV(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
-    int(THISCALL_CONV* equipWearable)(csgo::EntityPOD* wearable, csgo::EntityPOD* player);
+    csgo::DebugMsg debugMsg;
+    csgo::ConColorMsg conColorMsg;
+    csgo::EquipWearable equipWearable;
     int* predictionRandomSeed;
     csgo::MoveData* moveData;
     csgo::WeaponSystem weaponSystem;
@@ -99,7 +100,7 @@ public:
     csgo::ActiveChannels* activeChannels;
     csgo::Channel* channels;
     csgo::PlayerResource** playerResource;
-    const wchar_t*(THISCALL_CONV* getDecoratedPlayerName)(csgo::PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    csgo::GetDecoratedPlayerName getDecoratedPlayerName;
     csgo::EntityPOD** gameRules;
     csgo::InventoryManager inventoryManager;
     csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper;
@@ -133,7 +134,7 @@ public:
 
 private:
     FunctionInvoker<csgo::MakePanoramaSymbol> makePanoramaSymbolFn;
-    std::add_pointer_t<csgo::ItemSystemPOD* CDECL_CONV()> itemSystemFn;
+    csgo::GetItemSystem itemSystemFn;
 
     csgo::MoveHelperPOD* moveHelperPtr;
 };

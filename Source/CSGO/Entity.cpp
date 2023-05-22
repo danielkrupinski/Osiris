@@ -42,7 +42,7 @@ bool Entity::isVisible(const EngineTrace& engineTrace, const Vector& position) c
 
 bool Entity::isOtherEnemy(const Memory& memory, const Entity& other) const noexcept
 {
-    return memory.isOtherEnemy(getThis(), other.getThis());
+    return memory.isOtherEnemy(getPOD(), other.getPOD());
 }
 
 float Entity::getMaxDesyncAngle() const noexcept

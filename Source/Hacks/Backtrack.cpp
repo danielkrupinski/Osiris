@@ -142,7 +142,7 @@ void Backtrack::run(const ClientInterfaces& clientInterfaces, const EngineInterf
 
     if (bestRecord) {
         const auto& record = records[bestTargetIndex][bestRecord];
-        memory.setAbsOrigin(std::uintptr_t(bestTarget), record.origin);
+        memory.setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(memory, record.simulationTime + getLerp());
     }
 }
