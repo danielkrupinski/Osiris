@@ -183,14 +183,3 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     *reinterpret_cast<decltype(swapWindow)*>(sdlFunctions.swapWindow) = swapWindow;
 #endif
 }
-
-#if IS_LINUX()
-
-Hooks::Hooks() noexcept
-    : sdlFunctions{ DynamicLibrary<PlatformApi>{ "libSDL2-2.0.so.0" } }
-{
-    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
-    *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
-}
-
-#endif

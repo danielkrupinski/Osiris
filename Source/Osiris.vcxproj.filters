@@ -113,9 +113,6 @@
     <ClCompile Include="Hooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1167,9 +1164,6 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\PebLdr.h">
       <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\PlatformApi.h">
-      <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Pad.h">
       <Filter>Utils</Filter>

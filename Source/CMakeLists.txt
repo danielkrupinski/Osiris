@@ -53,7 +53,6 @@ target_sources(OsirisOBJ PRIVATE
   Hooks.cpp
   imguiCustom.cpp
   InputUtil.cpp
-  Memory.cpp
   Netvars.cpp
   Texture.cpp
 )

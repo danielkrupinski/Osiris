@@ -48,7 +48,6 @@
 #include "Interfaces/ClientInterfaces.h"
 
 #include "Platform/DynamicLibrary.h"
-#include "Platform/PlatformApi.h"
 
 template <typename PlatformApi>
 GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
@@ -143,12 +142,12 @@ void GlobalContext<PlatformApi>::initialize()
     const DynamicLibrary<PlatformApi> engineSo{ csgo::ENGINE_DLL };
     engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
 
-    interfaces.emplace();
+    interfaces.emplace(PlatformApi{});
     PatternNotFoundHandler patternNotFoundHandler;
     const PatternFinder clientPatternFinder{ clientSo.getCodeSection(), patternNotFoundHandler };
     const PatternFinder enginePatternFinder{ engineSo.getCodeSection(), patternNotFoundHandler };
 
-    memory.emplace(ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
+    memory.emplace(PlatformApi{}, ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 
     Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));

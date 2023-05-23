@@ -9,7 +9,14 @@
 
 #include "GlobalContext.h"
 #include "Hooks.h"
-#include "Platform/PlatformApi.h"
+
+#if IS_WIN32() || IS_WIN64()
+#include "Platform/Windows/WindowsPlatformApi.h"
+using PlatformApi = WindowsPlatformApi;
+#elif IS_LINUX()
+#include "Platform/Linux/LinuxPlatformApi.h"
+using PlatformApi = LinuxPlatformApi;
+#endif
 
 namespace
 {
@@ -48,7 +55,7 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 void __attribute__((constructor)) DllEntryPoint()
 {
     initializeGlobalContext();
-    hooks.emplace(Hooks{});
+    hooks.emplace(PlatformApi{});
 }
 
 #endif

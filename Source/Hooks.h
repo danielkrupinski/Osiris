@@ -57,6 +57,12 @@ class Glow;
 class Visuals;
 class Misc;
 
+#if IS_LINUX()
+
+int pollEvent(SDL_Event* event) noexcept;
+
+#endif
+
 class Hooks {
 public:
 #if IS_WIN32() || IS_WIN64()
@@ -66,7 +72,13 @@ public:
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #elif IS_LINUX()
-    Hooks() noexcept;
+    template <typename PlatformApi>
+    Hooks(PlatformApi) noexcept
+        : sdlFunctions{ DynamicLibrary<PlatformApi>{ "libSDL2-2.0.so.0" } }
+    {
+        pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
+        *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
+    }
 
     SdlFunctions sdlFunctions;
 
