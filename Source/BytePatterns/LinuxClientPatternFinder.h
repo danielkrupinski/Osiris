@@ -9,6 +9,15 @@
 namespace csgo
 {
     struct GlowObjectManager;
+    struct InventoryManagerPOD;
+    struct MoveData;
+    struct MoveHelperPOD;
+    struct PanoramaEventRegistration;
+    struct PanoramaMarshallHelperPOD;
+    struct PlantedC4POD;
+    template <typename Key, typename Value> struct UtlMap;
+    template <typename T> struct UtlVector;
+    struct ViewRender;
     struct ViewRenderBeamsPOD;
 }
 
@@ -201,6 +210,136 @@ struct LinuxClientPatternFinder {
     [[nodiscard]] csgo::SetItemSessionPropertyValue setItemSessionPropertyValue() const noexcept
     {
         return finder("E8 ? ? ? ? 48 8B 85 ? ? ? ? 41 83 C4 01"_pat).add(1).abs().as<csgo::SetItemSessionPropertyValue>();
+    }
+
+    [[nodiscard]] csgo::LineGoesThroughSmoke lineGoesThroughSmoke() const noexcept
+    {
+        return finder("E8 ? ? ? ? 44 0F B6 4D ? 84 C0"_pat).add(1).abs().as<csgo::LineGoesThroughSmoke>();
+    }
+
+    [[nodiscard]] std::uintptr_t weaponSystem() const noexcept
+    {
+        return finder("48 8B 3D ? ? ? ? 48 8B 4D F8"_pat).add(3).abs().deref().get();
+    }
+
+    [[nodiscard]] csgo::InventoryManagerPOD* inventoryManager() const noexcept
+    {
+        return finder("48 8D 3D ? ? ? ? E8 ? ? ? ? 48 8D 15 ? ? ? ? C9"_pat).add(3).abs().as<csgo::InventoryManagerPOD*>();
+    }
+
+    [[nodiscard]] csgo::FindOrCreateEconItemViewForItemID findOrCreateEconItemViewForItemID() const noexcept
+    {
+        return finder("E8 ? ? ? ? 49 89 C5 4D 85 E4"_pat).add(1).abs().as<csgo::FindOrCreateEconItemViewForItemID>();
+    }
+
+    [[nodiscard]] csgo::MakePanoramaSymbol makePanoramaSymbol() const noexcept
+    {
+        return finder("E8 ? ? ? ? 0F B7 45 A0 31 F6"_pat).add(1).abs().as<csgo::MakePanoramaSymbol>();
+    }
+
+    [[nodiscard]] csgo::IsOtherEnemy isOtherEnemy() const noexcept
+    {
+        return finder("E8 ? ? ? ? 84 C0 75 94"_pat).add(1).abs().as<csgo::IsOtherEnemy>();
+    }
+
+    [[nodiscard]] csgo::HudPOD* hud() const noexcept
+    {
+        return finder("48 8D 3D ? ? ? ? 48 83 EC 10 E8 ? ? ? ? 41 8B 5C 24"_pat).add(3).abs().as<csgo::HudPOD*>();
+    }
+
+    [[nodiscard]] csgo::FindHudElement findHudElement() const noexcept
+    {
+        return finder("E8 ? ? ? ? 48 8D 50 E0"_pat).add(1).abs().as<csgo::FindHudElement>();
+    }
+
+    [[nodiscard]] csgo::ClearHudWeapon clearHudWeapon() const noexcept
+    {
+        return finder("E8 ? ? ? ? C6 45 AE 01"_pat).add(1).abs().as<csgo::ClearHudWeapon>();
+    }
+
+    [[nodiscard]] csgo::GetItemSystem getItemSystem() const noexcept
+    {
+        return finder("E8 ? ? ? ? 44 39 78 44"_pat).add(1).abs().as<csgo::GetItemSystem>();
+    }
+
+    [[nodiscard]] csgo::SetAbsOrigin setAbsOrigin() const noexcept
+    {
+        return finder("E8 ? ? ? ? 4D 63 B5"_pat).add(1).abs().as<csgo::SetAbsOrigin>();
+    }
+
+    [[nodiscard]] std::uintptr_t traceToExit() const noexcept
+    {
+        return 0;
+    }
+
+    [[nodiscard]] csgo::ViewRender* viewRender() const noexcept
+    {
+        return finder("0F 85 ? ? ? ? 48 8D 05 ? ? ? ? 45 89 F8"_pat).add(9).abs().deref().as<csgo::ViewRender*>();
+    }
+
+    [[nodiscard]] std::uintptr_t drawScreenEffectMaterial() const noexcept
+    {
+        return 0;
+    }
+
+    [[nodiscard]] csgo::EquipWearable equipWearable() const noexcept
+    {
+        return finder("55 48 8D 15 ? ? ? ? 48 89 E5 41 56 41 55 41 54 49 89 F4 53 48 8B 07"_pat).as<csgo::EquipWearable>();
+    }
+
+    [[nodiscard]] int* predictionRandomSeed() const noexcept
+    {
+        return finder("41 8D 56 FF 31 C9"_pat).add(-14).abs().as<int*>();
+    }
+
+    [[nodiscard]] csgo::MoveData* moveData() const noexcept
+    {
+        return finder("48 8D 0D ? ? ? ? 48 89 DE 4C 89 FF"_pat).add(3).abs().deref().as<csgo::MoveData*>();
+    }
+
+    [[nodiscard]] csgo::MoveHelperPOD* moveHelper() const noexcept
+    {
+        return finder("48 8D 05 ? ? ? ? 48 8B 38 48 8B 07 FF 50 58 41 0F B7 F7"_pat).add(3).abs().deref().as<csgo::MoveHelperPOD*>();
+    }
+
+    [[nodiscard]] csgo::PlayerResource** playerResource() const noexcept
+    {
+        return finder("48 8B 15 ? ? ? ? 48 63 C3"_pat).add(3).abs().as<csgo::PlayerResource**>();
+    }
+
+    [[nodiscard]] csgo::GetDecoratedPlayerName getDecoratedPlayerName() const noexcept
+    {
+        return finder("E8 ? ? ? ? 41 8B 17 85 D2"_pat).add(1).abs().as<csgo::GetDecoratedPlayerName>();
+    }
+
+    [[nodiscard]] csgo::UtlVector<csgo::PlantedC4POD*>* plantedC4s() const noexcept
+    {
+        return finder("48 8D 3D ? ? ? ? 42 C6 44 28"_pat).add(3).abs().as<csgo::UtlVector<csgo::PlantedC4POD*>*>();
+    }
+
+    [[nodiscard]] csgo::EntityPOD** gameRules() const noexcept
+    {
+        return finder("48 8D 1D ? ? ? ? 48 8B 3B 48 85 FF 74 06"_pat).add(3).abs().as<csgo::EntityPOD**>();
+    }
+
+    [[nodiscard]] csgo::UtlMap<short, csgo::PanoramaEventRegistration>* registeredPanoramaEvents() const noexcept
+    {
+        return finder("E8 ? ? ? ? 44 0F B7 9D"_pat).add(1).abs().add(12).abs().as<csgo::UtlMap<short, csgo::PanoramaEventRegistration>*>();
+    }
+
+    [[nodiscard]] csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper() const noexcept
+    {
+        return finder("48 89 05 ? ? ? ? 48 C7 05 ? ? ? ? ? ? ? ? 48 8D 15"_pat).add(3).abs().as<csgo::PanoramaMarshallHelperPOD*>();
+    }
+
+    [[nodiscard]] csgo::CreateBaseTypeCache createBaseTypeCache() const noexcept
+    {
+        return finder("E8 ? ? ? ? 48 89 DE 5B 48 8B 10"_pat).add(1).abs().as<csgo::CreateBaseTypeCache>();
+    }
+
+    [[nodiscard]] csgo::EntityPOD** localPlayer() const noexcept
+    {
+        return finder("83 FF FF 48 8B 05"_pat).add(6).abs().as<csgo::EntityPOD**>();
     }
 
 private:

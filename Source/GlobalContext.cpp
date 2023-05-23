@@ -148,7 +148,7 @@ void GlobalContext<PlatformApi>::initialize()
     const PatternFinder clientPatternFinder{ clientSo.getCodeSection(), patternNotFoundHandler };
     const PatternFinder enginePatternFinder{ engineSo.getCodeSection(), patternNotFoundHandler };
 
-    memory.emplace(clientPatternFinder, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
+    memory.emplace(ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 
     Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));

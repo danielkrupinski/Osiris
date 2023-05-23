@@ -22,6 +22,8 @@
 #include "Platform/Macros/CallingConventions.h"
 #include "RetSpoof/FunctionInvoker.h"
 
+#include "BytePatterns/ClientPatternFinder.h"
+
 class KeyValues;
 
 namespace csgo
@@ -65,7 +67,7 @@ struct HudPOD;
 
 class Memory {
 public:
-    Memory(const PatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const ClientPatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32() || IS_WIN64()
     std::uintptr_t present;
