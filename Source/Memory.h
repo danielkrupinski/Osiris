@@ -5,6 +5,7 @@
 #include <optional>
 #include <type_traits>
 
+#include "CSGO/Constants/DllNames.h"
 #include "CSGO/Functions.h"
 #include "CSGO/ItemSchema.h"
 #include "CSGO/LocalPlayer.h"
@@ -20,6 +21,7 @@
 #include "MemorySearch/PatternFinder.h"
 #include "Utils/TypeHint.h"
 
+#include "Platform/DynamicLibrary.h"
 #include "Platform/Macros/CallingConventions.h"
 #include "RetSpoof/FunctionInvoker.h"
 
@@ -183,10 +185,10 @@ Memory::Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, cons
     input = *reinterpret_cast<csgo::Input**>((*reinterpret_cast<uintptr_t**>(clientInterface))[16] + 1);
     globalVars = **reinterpret_cast<csgo::GlobalVars***>((*reinterpret_cast<uintptr_t**>(clientInterface))[11] + 10);
 
-    const auto tier0 = GetModuleHandleW(L"tier0");
-    debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
-    conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
-    memAlloc = *reinterpret_cast<csgo::MemAllocPOD**>(GetProcAddress(tier0, "g_pMemAlloc"));
+    const DynamicLibrary<PlatformApi> tier0{ csgo::TIER0_DLL };
+    debugMsg = tier0.getFunctionAddress("Msg").as<decltype(debugMsg)>();
+    conColorMsg = tier0.getFunctionAddress("?ConColorMsg@@YAXABVColor@@PBDZZ").as<decltype(conColorMsg)>();
+    memAlloc = tier0.getFunctionAddress("g_pMemAlloc").deref().as<csgo::MemAllocPOD*>();
 
     moveHelperPtr = clientPatternFinder.moveHelper();
     getEventDescriptor = enginePatternFinder("E8 ? ? ? ? 8B D8 85 DB 75 27"_pat).add(1).abs().as<csgo::GetEventDescriptor>();
@@ -200,10 +202,9 @@ Memory::Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, cons
     keyValuesAllocClient = clientPatternFinder.keyValuesAlloc();
     shouldDrawFogReturnAddress = clientPatternFinder.shouldDrawFog();
 #elif IS_LINUX()
-    const auto tier0 = dlopen(csgo::TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
-    debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));
-    conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
-    dlclose(tier0);
+    const DynamicLibrary<PlatformApi> tier0{ csgo::TIER0_DLL };
+    debugMsg = tier0.getFunctionAddress("Msg").as<decltype(debugMsg)>();
+    conColorMsg = tier0.getFunctionAddress("_Z11ConColorMsgRK5ColorPKcz").as<decltype(conColorMsg)>();
 
     soundMessages = enginePatternFinder("41 5C 5D E9 ? ? ? ? 8B 48 08"_pat).add(-4).abs().as<decltype(soundMessages)>();
     splitScreen = enginePatternFinder("C6 05 ? ? ? ? ? 48 89 05 ? ? ? ? 0F 84"_pat).add(10).abs().as<csgo::SplitScreen*>();
