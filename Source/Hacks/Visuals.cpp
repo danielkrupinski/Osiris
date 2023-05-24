@@ -109,39 +109,15 @@ static void to_json(json& j, VisualsConfig& o)
     WRITE("Molotov Hull", molotovHull);
 }
 
-[[nodiscard]] PostProcessingDisabler createPostProcessingDisabler(const ClientPatternFinder& clientPatternFinder)
-{
-    return PostProcessingDisabler{ clientPatternFinder.disablePostProcessing() };
-}
-
-[[nodiscard]] ScopeOverlayRemover createScopeOverlayRemover(const ClientPatternFinder& clientPatternFinder)
-{
-    return ScopeOverlayRemover{ clientPatternFinder.scopeDust(), clientPatternFinder.scopeArc(), clientPatternFinder.vignette() };
-}
-
-[[nodiscard]] SkyboxChanger createSkyboxChanger(csgo::Cvar cvar, const PatternFinder& enginePatternFinder)
-{
-#if IS_WIN32() || IS_WIN64()
-    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("E8 ? ? ? ? 84 C0 74 2D A1"_pat).add(1).abs().get() } };
-#elif IS_LINUX()
-    return SkyboxChanger{ cvar, FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder("55 4C 8D 05 ? ? ? ? 48 89 E5 41 57"_pat).get() } };
-#endif
-}
-
-[[nodiscard]] BulletTracers createBulletTracers(csgo::EntityList entityList, csgo::Engine engine, csgo::GlobalVars* globalVars, const ClientPatternFinder& clientPatternFinder)
-{
-    return BulletTracers{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder.viewRenderBeams()), entityList, engine, globalVars };
-}
-
-Visuals::Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const ClientPatternFinder& clientPatternFinder, const PatternFinder& enginePatternFinder)
+Visuals::Visuals(const Memory& memory, OtherInterfaces interfaces, ClientInterfaces clientInterfaces, EngineInterfaces engineInterfaces, const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder)
     : memory{ memory },
     interfaces{ interfaces },
     clientInterfaces{ clientInterfaces },
     engineInterfaces{ engineInterfaces },
-    skyboxChanger{ createSkyboxChanger(interfaces.getCvar(), enginePatternFinder) },
-    postProcessingDisabler{ createPostProcessingDisabler(clientPatternFinder) },
-    scopeOverlayRemover{ createScopeOverlayRemover(clientPatternFinder) },
-    bulletTracers{ createBulletTracers(clientInterfaces.getEntityList(), engineInterfaces.getEngine(), memory.globalVars, clientPatternFinder) },
+    skyboxChanger{ interfaces.getCvar(), FunctionInvoker<csgo::R_LoadNamedSkys>{ retSpoofGadgets->engine, enginePatternFinder.loadNamedSkys() } },
+    postProcessingDisabler{ clientPatternFinder.disablePostProcessing() },
+    scopeOverlayRemover{ clientPatternFinder.scopeDust(), clientPatternFinder.scopeArc(), clientPatternFinder.vignette() },
+    bulletTracers{ csgo::ViewRenderBeams::from(retSpoofGadgets->client, clientPatternFinder.viewRenderBeams()), clientInterfaces.getEntityList(), engineInterfaces.getEngine(), memory.globalVars },
     cameraThink{ clientPatternFinder.cameraThink() }
 #if IS_WIN32()
     , maxFlashAlphaProxy{ retSpoofGadgets->client, clientPatternFinder.maxFlashAlphaProxy() }

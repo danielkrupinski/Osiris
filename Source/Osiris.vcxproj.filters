@@ -1183,6 +1183,15 @@
     <ClInclude Include="BytePatterns\LinuxClientPatternFinder.h">
       <Filter>BytePatterns</Filter>
     </ClInclude>
+    <ClInclude Include="BytePatterns\LinuxEnginePatternFinder.h">
+      <Filter>BytePatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="BytePatterns\EnginePatternFinder.h">
+      <Filter>BytePatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="BytePatterns\WindowsEnginePatternFinder.h">
+      <Filter>BytePatterns</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

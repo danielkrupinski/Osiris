@@ -147,13 +147,13 @@ void GlobalContext<PlatformApi>::initialize()
     const PatternFinder clientPatternFinder{ clientSo.getCodeSection(), patternNotFoundHandler };
     const PatternFinder enginePatternFinder{ engineSo.getCodeSection(), patternNotFoundHandler };
 
-    memory.emplace(PlatformApi{}, ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
+    memory.emplace(PlatformApi{}, ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 
     Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
 
     randomGenerator.emplace();
-    features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), ClientPatternFinder{ clientPatternFinder }, enginePatternFinder, *randomGenerator));
+    features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, *randomGenerator));
     config.emplace(*features, getOtherInterfaces(), *memory);
     
     gui.emplace();
