@@ -325,7 +325,7 @@ BaseData::BaseData(const csgo::Entity& entity) noexcept
     distanceToLocal = entity.getAbsOrigin().distTo(localPlayerData.origin);
  
     if (entity.isPlayer()) {
-        const csgo::Collideable collideable{ retSpoofGadgets->client, entity.getCollideable() };
+        const auto collideable{ csgo::Collideable::from(retSpoofGadgets->client, entity.getCollideable()) };
         obbMins = collideable.obbMins();
         obbMaxs = collideable.obbMaxs();
     } else if (const auto model = entity.getRenderable().getModel()) {

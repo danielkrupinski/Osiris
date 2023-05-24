@@ -164,7 +164,7 @@ Memory::Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, cons
     equipWearable{ clientPatternFinder.equipWearable() },
     predictionRandomSeed{ clientPatternFinder.predictionRandomSeed() },
     moveData{ clientPatternFinder.moveData() },
-    weaponSystem{ retSpoofGadgets.client, clientPatternFinder.weaponSystem() },
+    weaponSystem{ csgo::WeaponSystem::from(retSpoofGadgets.client, clientPatternFinder.weaponSystem()) },
     getEventDescriptor{ enginePatternFinder.getEventDescriptor() },
     activeChannels{ enginePatternFinder.activeChannels() },
     channels{ enginePatternFinder.channels() },

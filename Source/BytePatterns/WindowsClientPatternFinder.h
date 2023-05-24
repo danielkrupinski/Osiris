@@ -19,6 +19,7 @@ namespace csgo
     template <typename T> struct UtlVector;
     struct ViewRender;
     struct ViewRenderBeamsPOD;
+    struct WeaponSystemPOD;
 }
 
 struct WindowsClientPatternFinder {
@@ -227,9 +228,9 @@ struct WindowsClientPatternFinder {
         return finder("E8 ? ? ? ? 8B 4C 24 30 33 D2"_pat).add(1).abs().as<csgo::LineGoesThroughSmoke>();
     }
 
-    [[nodiscard]] std::uintptr_t weaponSystem() const noexcept
+    [[nodiscard]] csgo::WeaponSystemPOD* weaponSystem() const noexcept
     {
-        return finder("8B 35 ? ? ? ? FF 10 0F B7 C0"_pat).add(2).deref().get();
+        return finder("8B 35 ? ? ? ? FF 10 0F B7 C0"_pat).add(2).deref().as<csgo::WeaponSystemPOD*>();
     }
 
     [[nodiscard]] csgo::InventoryManagerPOD* inventoryManager() const noexcept

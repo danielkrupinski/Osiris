@@ -57,17 +57,16 @@ struct Model;
 struct VarMap;
 
 struct matrix3x4;
+struct CollideablePOD;
+struct NetworkablePOD;
+struct RenderablePOD;
 
-struct Collideable : private VirtualCallable {
-    using VirtualCallable::VirtualCallable;
-
+struct Collideable : GameClass<Collideable, CollideablePOD> {
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), ())
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), ())
 };
 
-struct Networkable : private VirtualCallable {
-    using VirtualCallable::VirtualCallable;
-
+struct Networkable : GameClass<Networkable, NetworkablePOD> {
     VIRTUAL_METHOD(void, release, 1, (), ())
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), ())
     VIRTUAL_METHOD(void, onDataChanged, 5, (int updateType), (updateType))
@@ -78,9 +77,7 @@ struct Networkable : private VirtualCallable {
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), ())
 };
 
-struct Renderable : private VirtualCallable {
-    using VirtualCallable::VirtualCallable;
-
+struct Renderable : GameClass<Renderable, RenderablePOD> {
 #if IS_WIN32()
     VIRTUAL_METHOD(bool, shouldDraw, 3, (), ())
 #endif
@@ -95,12 +92,12 @@ struct EntityPOD;
 struct Entity : GameClass<Entity, EntityPOD> {
     [[nodiscard]] auto getNetworkable() const noexcept
     {
-        return Networkable{ getInvoker(), getThis() + sizeof(std::uintptr_t) * 2 };
+        return Networkable::from(getInvoker(), reinterpret_cast<NetworkablePOD*>(getThis() + sizeof(std::uintptr_t) * 2));
     }
 
     [[nodiscard]] auto getRenderable() const noexcept
     {
-        return Renderable{ getInvoker(), getThis() + sizeof(std::uintptr_t) };
+        return Renderable::from(getInvoker(), reinterpret_cast<RenderablePOD*>(getThis() + sizeof(std::uintptr_t)));
     }
 
     bool shouldDraw() const
@@ -113,7 +110,7 @@ struct Entity : GameClass<Entity, EntityPOD> {
     }
 
     VIRTUAL_METHOD_V(int&, handle, 2, (), ())
-    VIRTUAL_METHOD_V(std::uintptr_t, getCollideable, 3, (), ())
+    VIRTUAL_METHOD_V(CollideablePOD*, getCollideable, 3, (), ())
 
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), ())
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (index))

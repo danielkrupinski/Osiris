@@ -1297,7 +1297,8 @@ std::optional<std::pair<csgo::Vector, csgo::Vector>> Misc::listLeavesInBoxHook(R
     if (!info || !info->renderable)
         return {};
 
-    const auto ent = VirtualCallable{ retSpoofGadgets->client, std::uintptr_t(info->renderable) - sizeof(std::uintptr_t) }.call<csgo::EntityPOD*, WIN32_LINUX(7, 8)>();
+    struct Dummy : GameClass<Dummy, Dummy> {};
+    const auto ent = Dummy::from(retSpoofGadgets->client, reinterpret_cast<Dummy*>(std::uintptr_t(info->renderable) - sizeof(std::uintptr_t))).call<csgo::EntityPOD*, WIN32_LINUX(7, 8)>();
     if (!ent || !csgo::Entity::from(retSpoofGadgets->client, ent).isPlayer())
         return {};
 

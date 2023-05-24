@@ -6,32 +6,6 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <RetSpoof/RetSpoofInvoker.h>
 
-class VirtualCallable {
-public:
-    VirtualCallable(RetSpoofInvoker invoker, std::uintptr_t thisptr)
-        : invoker{ invoker }, thisptr{ thisptr } {}
-
-    template <typename ReturnType, std::size_t Idx, typename... Args>
-    constexpr ReturnType call(Args... args) const noexcept
-    {
-        return invoker.invokeThiscall<ReturnType, Args...>(thisptr, (*reinterpret_cast<std::uintptr_t**>(thisptr))[Idx], args...);
-    }
-
-    [[nodiscard]] std::uintptr_t getThis() const noexcept
-    {
-        return thisptr;
-    }
-
-    [[nodiscard]] RetSpoofInvoker getInvoker() const noexcept
-    {
-        return invoker;
-    }
-
-private:
-    RetSpoofInvoker invoker;
-    std::uintptr_t thisptr;
-};
-
 template <typename T, typename POD>
 class GameClass {
 public:
