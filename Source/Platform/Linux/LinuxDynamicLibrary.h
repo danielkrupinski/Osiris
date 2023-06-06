@@ -19,7 +19,7 @@ public:
     LinuxDynamicLibrary(const char* libraryName)
         : handle{ getModuleHandle(libraryName) } {}
 
-    [[nodiscard]] bool isValid() const noexcept
+    [[nodiscard]] explicit operator bool() const noexcept
     {
         return handle != nullptr;
     }

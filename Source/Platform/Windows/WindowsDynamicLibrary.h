@@ -14,6 +14,11 @@ public:
     {
     }
 
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return handle != nullptr;
+    }
+
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
