@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "Constants/ItemId.h"
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
@@ -69,7 +71,7 @@ using FindHudElement = int* (THISCALL_CONV*)(HudPOD* thisptr, const char* elemen
 using ClearHudWeapon = int (THISCALL_CONV*)(int*, int);
 
 using DebugMsg = void (CDECL_CONV*)(const char* msg, ...);
-using ConColorMsg = void (CDECL_CONV*)(const std::array<std::uint8_t, 4>& color, const char* msg, ...);
+using ConColorMsg = void (CDECL_CONV*)(const std::uint8_t color[4], const char* msg, ...);
 
 using EquipWearable = int (THISCALL_CONV*)(EntityPOD* wearable, EntityPOD* player);
 
