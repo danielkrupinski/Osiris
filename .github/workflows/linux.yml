@@ -8,10 +8,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        compiler: [g++-11, g++-12, clang++-13, clang++-14, clang++-15, clang++-16]
+        compiler: [g++-11, g++-12, g++-13, clang++-13, clang++-14, clang++-15, clang++-16]
         configuration: [Debug, Release]
     steps:
     - uses: actions/checkout@v3
+    - name: install g++-13
+      if: matrix.compiler == 'g++-13'
+      run: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt-get update && sudo apt-get install -y g++-13
     - name: install clang++-15
       if: matrix.compiler == 'clang++-15'
       run: |
