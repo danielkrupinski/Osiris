@@ -5,13 +5,11 @@
 void MinHook::init(void* base) noexcept
 {
     this->base = base;
-    originals = std::make_unique<uintptr_t[]>(Helpers::calculateVmtLength(*reinterpret_cast<uintptr_t**>(base)));
 }
 
 std::uintptr_t MinHook::hookAt(std::size_t index, void* fun) noexcept
 {
     void* orig;
     MH_CreateHook((*reinterpret_cast<void***>(base))[index], fun, &orig);
-    originals[index] = uintptr_t(orig);
     return std::uintptr_t(orig);
 }

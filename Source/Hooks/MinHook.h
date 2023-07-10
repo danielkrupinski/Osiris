@@ -14,5 +14,4 @@ public:
 
 private:
     void* base;
-    std::unique_ptr<uintptr_t[]> originals;
 };
