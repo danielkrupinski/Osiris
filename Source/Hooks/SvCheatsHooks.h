@@ -4,11 +4,17 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ConVarPOD; }
 
 class SvCheatsHooks {
 public:
+    explicit SvCheatsHooks(std::span<const std::byte> engineCodeSection)
+        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    {
+    }
+
     void install(csgo::ConVarPOD* svCheats)
     {
         hookImpl.init(svCheats);

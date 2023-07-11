@@ -3,12 +3,18 @@
 #include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct DemoPlaybackParameters; }
 namespace csgo { struct EnginePOD; }
 
 class EngineHooks {
 public:
+    explicit EngineHooks(std::span<const std::byte> engineCodeSection)
+        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    {
+    }
+    
     void install(csgo::EnginePOD* engine)
     {
         hookImpl.init(engine);

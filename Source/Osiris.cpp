@@ -45,7 +45,7 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
     if (reason == DLL_PROCESS_ATTACH) {
         std::setlocale(LC_CTYPE, ".utf8");
         initializeGlobalContext();
-        hooks.emplace(moduleHandle);
+        hooks.emplace(moduleHandle, DynamicLibrary<PlatformApi>{ csgo::CLIENT_DLL }, DynamicLibrary<PlatformApi>{ csgo::ENGINE_DLL }, DynamicLibrary<PlatformApi>{ csgo::VSTDLIB_DLL }, DynamicLibrary<PlatformApi>{ csgo::VGUIMATSURFACE_DLL });
     }
     return TRUE;
 }
@@ -55,7 +55,7 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 void __attribute__((constructor)) DllEntryPoint()
 {
     initializeGlobalContext();
-    hooks.emplace(PlatformApi{});
+    hooks.emplace(DynamicLibrary<PlatformApi>{ csgo::CLIENT_DLL }, DynamicLibrary<PlatformApi>{ csgo::ENGINE_DLL }, DynamicLibrary<PlatformApi>{ csgo::VSTDLIB_DLL }, DynamicLibrary<PlatformApi>{ csgo::VGUIMATSURFACE_DLL });
 }
 
 #endif

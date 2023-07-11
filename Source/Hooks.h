@@ -65,15 +65,47 @@ int pollEvent(SDL_Event* event) noexcept;
 class Hooks {
 public:
 #if IS_WIN32() || IS_WIN64()
-    Hooks(HMODULE moduleHandle) noexcept;
+    template <typename PlatformApi>
+    Hooks(HMODULE moduleHandle, DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
+        : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
+        , keyValuesSystemHooks{ vstdlibDll.getCodeSection() }
+        , engineHooks{ engineDll.getCodeSection() }
+        , clientHooks{ clientDll.getCodeSection() }
+        , clientModeHooks{ clientDll.getCodeSection() }
+        , clientStateHooks{ engineDll.getCodeSection() }
+        , playerInventoryHooks{ clientDll.getCodeSection() }
+        , panoramaMarshallHelperHooks{ clientDll.getCodeSection() }
+        , viewRenderHooks{ clientDll.getCodeSection() }
+        , inventoryManagerHooks{ clientDll.getCodeSection() }
+        , bspQueryHooks{ engineDll.getCodeSection() }
+        , engineSoundHooks{ engineDll.getCodeSection() }
+        , svCheatsHooks{ engineDll.getCodeSection() }
+        , modelRenderHooks{ engineDll.getCodeSection() }
+        , surfaceHooks{ vguiMatSurfaceDll.getCodeSection() }
+        , moduleHandle{ moduleHandle }
+    {
+    }
 
     WindowProcedureHook windowProcedureHook;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #elif IS_LINUX()
     template <typename PlatformApi>
-    Hooks(PlatformApi) noexcept
+    Hooks(DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
         : sdlFunctions{ DynamicLibrary<PlatformApi>{ "libSDL2-2.0.so.0" } }
+        , engineHooks{ engineDll.getCodeSection() }
+        , clientHooks{ clientDll.getCodeSection() }
+        , clientModeHooks{ clientDll.getCodeSection() }
+        , clientStateHooks{ engineDll.getCodeSection() }
+        , playerInventoryHooks{ clientDll.getCodeSection() }
+        , panoramaMarshallHelperHooks{ clientDll.getCodeSection() }
+        , viewRenderHooks{ clientDll.getCodeSection() }
+        , inventoryManagerHooks{ clientDll.getCodeSection() }
+        , bspQueryHooks{ engineDll.getCodeSection() }
+        , engineSoundHooks{ engineDll.getCodeSection() }
+        , svCheatsHooks{ engineDll.getCodeSection() }
+        , modelRenderHooks{ engineDll.getCodeSection() }
+        , surfaceHooks{ vguiMatSurfaceDll.getCodeSection() }
     {
         pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
         *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;

@@ -4,11 +4,17 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct Vector; }
 
 class BspQueryHooks {
 public:
+    explicit BspQueryHooks(std::span<const std::byte> engineCodeSection)
+        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    {
+    }
+
     void install(void* engineSpatialQuery)
     {
         hookImpl.init(engineSpatialQuery);

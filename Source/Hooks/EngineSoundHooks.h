@@ -4,6 +4,7 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo
 {
@@ -13,6 +14,11 @@ namespace csgo
 
 class EngineSoundHooks {
 public:
+    explicit EngineSoundHooks(std::span<const std::byte> engineCodeSection)
+        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    {
+    }
+
     void install(csgo::EngineSoundPOD* engineSound)
     {
         hookImpl.init(engineSound);

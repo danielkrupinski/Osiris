@@ -4,11 +4,17 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ClientState; }
 
 class ClientStateHooks {
 public:
+    explicit ClientStateHooks(std::span<const std::byte> engineCodeSection)
+        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    {
+    }
+
     void install(csgo::ClientState* clientState)
     {
         hookImpl.init(clientState);

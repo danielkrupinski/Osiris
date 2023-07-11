@@ -6,9 +6,15 @@
 
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 class VmtSwap {
 public:
+    explicit VmtSwap(VmtLengthCalculator vmtLengthCalculator)
+        : vmtLengthCalculator{ vmtLengthCalculator }
+    {
+    }
+
     void init(void* base) noexcept;
     void restore() noexcept
     {
@@ -25,6 +31,7 @@ public:
 private:
     static constexpr auto dynamicCastInfoLength = WIN32_LINUX(1, 2);
 
+    VmtLengthCalculator vmtLengthCalculator;
     void* base = nullptr;
     std::uintptr_t* oldVmt = nullptr;
     std::unique_ptr<std::uintptr_t[]> newVmt;

@@ -105,6 +105,9 @@
     <Filter Include="BytePatterns">
       <UniqueIdentifier>{725dc9cb-6df9-4b2c-8095-bb88f2061822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vmt">
+      <UniqueIdentifier>{cf4fc922-308a-4d3c-8448-4e4002e85dc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1185,6 +1188,12 @@
     </ClInclude>
     <ClInclude Include="BytePatterns\WindowsEnginePatternFinder.h">
       <Filter>BytePatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtLength.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtLengthCalculator.h">
+      <Filter>Vmt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

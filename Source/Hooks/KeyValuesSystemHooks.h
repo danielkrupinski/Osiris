@@ -4,11 +4,17 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct KeyValuesSystemPOD; }
 
 class KeyValuesSystemHooks {
 public:
+    explicit KeyValuesSystemHooks(std::span<const std::byte> vstdlibCodeSection)
+        : hookImpl{ VmtLengthCalculator{ vstdlibCodeSection } }
+    {
+    }
+
     void install(csgo::KeyValuesSystemPOD* keyValuesSystem)
     {
         hookImpl.init(keyValuesSystem);

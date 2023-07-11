@@ -450,6 +450,8 @@
     <ClInclude Include="Utils\SpanSlice.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\TypeHint.h" />
+    <ClInclude Include="Vmt\VmtLength.h" />
+    <ClInclude Include="Vmt\VmtLengthCalculator.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -4,11 +4,17 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ViewRender; }
 
 class ViewRenderHooks {
 public:
+    explicit ViewRenderHooks(std::span<const std::byte> clientCodeSection)
+        : hookImpl{ VmtLengthCalculator{ clientCodeSection } }
+    {
+    }
+
     void install(csgo::ViewRender* viewRender)
     {
         hookImpl.init(viewRender);
