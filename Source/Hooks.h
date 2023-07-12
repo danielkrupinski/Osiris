@@ -68,7 +68,9 @@ public:
     template <typename PlatformApi>
     Hooks(HMODULE moduleHandle, DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
         : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
+#if IS_WIN32()
         , keyValuesSystemHooks{ vstdlibDll.getCodeSection() }
+#endif
         , engineHooks{ engineDll.getCodeSection() }
         , clientHooks{ clientDll.getCodeSection() }
         , clientModeHooks{ clientDll.getCodeSection() }

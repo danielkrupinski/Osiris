@@ -15,7 +15,7 @@ namespace csgo
 
 class ClientHooks {
 public:
-    explicit ClientHooks(std::span<const std::byte> clientCodeSection)
+    explicit ClientHooks(MemorySection clientCodeSection)
         : hookImpl{ VmtLengthCalculator{ clientCodeSection } }
     {
     }

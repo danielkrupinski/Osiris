@@ -4,13 +4,14 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct Vector; }
 
 class BspQueryHooks {
 public:
-    explicit BspQueryHooks(std::span<const std::byte> engineCodeSection)
+    explicit BspQueryHooks(MemorySection engineCodeSection)
         : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
     {
     }

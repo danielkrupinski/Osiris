@@ -7,6 +7,7 @@
 
 #include <Windows.h>
 
+#include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 
 class PortableExecutable {
@@ -17,11 +18,11 @@ public:
         assert(base);
     }
 
-    [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept
+    [[nodiscard]] MemorySection getCodeSection() const noexcept
     {
         for (const auto& section : getSectionHeaders()) {
             if ((section.Characteristics & IMAGE_SCN_MEM_EXECUTE) != 0 && std::memcmp(section.Name, ".text", 5) == 0)
-                return { base + section.VirtualAddress, section.Misc.VirtualSize };
+                return MemorySection{ std::span{ base + section.VirtualAddress, section.Misc.VirtualSize } };
         }
         return {};
     }

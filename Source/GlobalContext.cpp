@@ -57,7 +57,7 @@ GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
     const DynamicLibrary<PlatformApi> engineDLL{ csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
-    retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler }, PatternFinder{ clientDLL.getCodeSection(), patternNotFoundHandler });
+    retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler}, PatternFinder{clientDLL.getCodeSection().raw(), patternNotFoundHandler});
 }
 
 #if IS_LINUX()
@@ -144,8 +144,8 @@ void GlobalContext<PlatformApi>::initialize()
 
     interfaces.emplace(PlatformApi{});
     PatternNotFoundHandler patternNotFoundHandler;
-    const PatternFinder clientPatternFinder{ clientSo.getCodeSection(), patternNotFoundHandler };
-    const PatternFinder enginePatternFinder{ engineSo.getCodeSection(), patternNotFoundHandler };
+    const PatternFinder clientPatternFinder{ clientSo.getCodeSection().raw(), patternNotFoundHandler };
+    const PatternFinder enginePatternFinder{ engineSo.getCodeSection().raw(), patternNotFoundHandler };
 
     memory.emplace(PlatformApi{}, ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 

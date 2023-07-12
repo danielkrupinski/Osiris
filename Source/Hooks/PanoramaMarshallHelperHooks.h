@@ -4,13 +4,14 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct PanoramaMarshallHelperPOD; }
 
 class PanoramaMarshallHelperHooks {
 public:
-    explicit PanoramaMarshallHelperHooks(std::span<const std::byte> clientCodeSection)
+    explicit PanoramaMarshallHelperHooks(MemorySection clientCodeSection)
         : hookImpl{ VmtLengthCalculator{ clientCodeSection } }
     {
     }

@@ -4,9 +4,10 @@
 #include <span>
 
 #include "VmtLength.h"
+#include <Utils/MemorySection.h>
 
 struct VmtLengthCalculator {
-    explicit VmtLengthCalculator(std::span<const std::byte> codeSection)
+    explicit VmtLengthCalculator(MemorySection codeSection)
         : codeSection{ codeSection }
     {
     }
@@ -14,11 +15,11 @@ struct VmtLengthCalculator {
     [[nodiscard]] VmtLength operator()(const std::uintptr_t* vmt) const noexcept
     {
         std::size_t length = 0;
-        while (vmt[length] >= std::uintptr_t(codeSection.data()) && vmt[length] < std::uintptr_t(codeSection.data() + codeSection.size()))
+        while (codeSection.contains(vmt[length]))
             ++length;
         return VmtLength{ length };
     }
 
 private:
-    std::span<const std::byte> codeSection;
+    MemorySection codeSection;
 };

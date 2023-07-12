@@ -5,13 +5,14 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct SurfacePOD; }
 
 class SurfaceHooks {
 public:
-    explicit SurfaceHooks(std::span<const std::byte> vguiMatSurfaceCodeSection)
+    explicit SurfaceHooks(MemorySection vguiMatSurfaceCodeSection)
         : hookImpl{ VmtLengthCalculator{ vguiMatSurfaceCodeSection } }
     {
     }

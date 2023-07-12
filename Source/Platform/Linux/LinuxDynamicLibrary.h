@@ -11,6 +11,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+#include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 
 template <typename PlatformApi>
@@ -39,7 +40,7 @@ public:
         return map;
     }
 
-    [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept
+    [[nodiscard]] MemorySection getCodeSection() const noexcept
     {
         void* base = nullptr;
         std::size_t size = 0;
@@ -71,7 +72,7 @@ public:
                 PlatformApi::close(fd);
             }
         }
-        return { reinterpret_cast<const std::byte*>(base), size };
+        return MemorySection{ std::span{ reinterpret_cast<const std::byte*>(base), size } };
     }
 
 private:

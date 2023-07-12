@@ -4,6 +4,7 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo
@@ -15,7 +16,7 @@ namespace csgo
 
 class ModelRenderHooks {
 public:
-    explicit ModelRenderHooks(std::span<const std::byte> engineCodeSection)
+    explicit ModelRenderHooks(MemorySection engineCodeSection)
         : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
     {
     }

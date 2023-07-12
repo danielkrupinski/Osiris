@@ -4,6 +4,7 @@
 
 #include "PebLdr.h"
 #include "PortableExecutable.h"
+#include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 
 template <typename PlatformApi>
@@ -26,7 +27,7 @@ public:
         return SafeAddress{ 0 };
     }
 
-    [[nodiscard]] std::span<const std::byte> getCodeSection() const noexcept
+    [[nodiscard]] MemorySection getCodeSection() const noexcept
     {
         if (handle)
             return portableExecutable().getCodeSection();
