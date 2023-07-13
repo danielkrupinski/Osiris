@@ -27,6 +27,15 @@ public:
         return {};
     }
 
+    [[nodiscard]] MemorySection getVmtSection() const noexcept
+    {
+        for (const auto& section : getSectionHeaders()) {
+            if ((section.Characteristics & IMAGE_SCN_MEM_READ) != 0 && std::memcmp(section.Name, ".rdata", 6) == 0)
+                return MemorySection{ std::span{ base + section.VirtualAddress, section.Misc.VirtualSize } };
+        }
+        return {};
+    }
+
     [[nodiscard]] SafeAddress getExport(const char* name) const noexcept
     {
         const auto exportDataDirectory = getExportDataDirectory();

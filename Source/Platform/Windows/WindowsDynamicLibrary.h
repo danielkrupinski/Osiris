@@ -34,6 +34,13 @@ public:
         return {};
     }
 
+    [[nodiscard]] MemorySection getVmtSection() const noexcept
+    {
+        if (handle)
+            return portableExecutable().getVmtSection();
+        return {};
+    }
+
     [[nodiscard]] HMODULE getHandle() const noexcept
     {
         return handle;

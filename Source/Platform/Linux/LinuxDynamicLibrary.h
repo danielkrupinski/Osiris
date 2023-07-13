@@ -42,6 +42,17 @@ public:
 
     [[nodiscard]] MemorySection getCodeSection() const noexcept
     {
+        return getSection(".text");
+    }
+
+    [[nodiscard]] MemorySection getVmtSection() const noexcept
+    {
+        return getSection(".data.rel.ro");
+    }
+
+private:
+    [[nodiscard]] MemorySection getSection(const char* sectionName) const noexcept
+    {
         void* base = nullptr;
         std::size_t size = 0;
 
@@ -57,7 +68,7 @@ public:
                         for (auto i = 0; i < ehdr->e_shnum; ++i) {
                             const auto shdr = (ElfW(Shdr)*)(std::uintptr_t(shdrs) + i * ehdr->e_shentsize);
 
-                            if (std::strcmp(strTab + shdr->sh_name, ".text") != 0)
+                            if (std::strcmp(strTab + shdr->sh_name, sectionName) != 0)
                                 continue;
 
                             base = (void*)(linkMap->l_addr + shdr->sh_offset);
@@ -75,7 +86,6 @@ public:
         return MemorySection{ std::span{ reinterpret_cast<const std::byte*>(base), size } };
     }
 
-private:
     [[nodiscard]] void* getModuleHandle(const char* libraryName)
     {
         const auto handle = PlatformApi::dlopen(libraryName, RTLD_LAZY | RTLD_NOLOAD);
