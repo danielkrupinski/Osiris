@@ -1201,6 +1201,9 @@
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Vmt\VmtCopy.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -7,11 +8,12 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <Platform/TypeInfoPrecedingVmt.h>
+#include <Vmt/VmtCopy.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 class VmtSwap {
 public:
-    explicit VmtSwap(VmtLengthCalculator vmtLengthCalculator)
+    explicit VmtSwap(const VmtLengthCalculator& vmtLengthCalculator)
         : vmtLengthCalculator{ vmtLengthCalculator }
     {
     }
@@ -19,20 +21,20 @@ public:
     void init(void* base) noexcept;
     void restore() noexcept
     {
-        *reinterpret_cast<std::uintptr_t**>(base) = oldVmt;
+        assert(vmtCopy.has_value());
+        *reinterpret_cast<std::uintptr_t**>(base) = vmtCopy->getOriginalVmt();
     }
 
     template <typename T>
     std::uintptr_t hookAt(std::size_t index, T fun) const noexcept
     {
-        newVmt[index + platform::lengthOfTypeInfoPrecedingVmt] = reinterpret_cast<std::uintptr_t>(fun);
-        return oldVmt[index];
+        assert(vmtCopy.has_value());
+        vmtCopy->getReplacementVmt()[index] = reinterpret_cast<std::uintptr_t>(fun);
+        return vmtCopy->getOriginalVmt()[index];
     }
 
 private:
     VmtLengthCalculator vmtLengthCalculator;
     void* base = nullptr;
-    std::uintptr_t* oldVmt = nullptr;
-    std::unique_ptr<std::uintptr_t[]> newVmt;
-    std::size_t length = 0;
+    std::optional<VmtCopy> vmtCopy;
 };

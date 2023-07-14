@@ -452,6 +452,7 @@
     <ClInclude Include="Utils\SpanSlice.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\TypeHint.h" />
+    <ClInclude Include="Vmt\VmtCopy.h" />
     <ClInclude Include="Vmt\VmtLength.h" />
     <ClInclude Include="Vmt\VmtLengthCalculator.h" />
   </ItemGroup>
