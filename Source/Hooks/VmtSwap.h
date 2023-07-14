@@ -6,6 +6,7 @@
 
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <Platform/TypeInfoPrecedingVmt.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 class VmtSwap {
@@ -24,13 +25,11 @@ public:
     template <typename T>
     std::uintptr_t hookAt(std::size_t index, T fun) const noexcept
     {
-        newVmt[index + dynamicCastInfoLength] = reinterpret_cast<std::uintptr_t>(fun);
+        newVmt[index + platform::lengthOfTypeInfoPrecedingVmt] = reinterpret_cast<std::uintptr_t>(fun);
         return oldVmt[index];
     }
 
 private:
-    static constexpr auto dynamicCastInfoLength = WIN32_LINUX(1, 2);
-
     VmtLengthCalculator vmtLengthCalculator;
     void* base = nullptr;
     std::uintptr_t* oldVmt = nullptr;

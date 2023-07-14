@@ -418,6 +418,7 @@
     <ClInclude Include="Platform\Macros\CallStack.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
+    <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />

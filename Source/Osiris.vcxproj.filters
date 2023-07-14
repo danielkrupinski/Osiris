@@ -1198,6 +1198,9 @@
     <ClInclude Include="Utils\MemorySection.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\TypeInfoPrecedingVmt.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
