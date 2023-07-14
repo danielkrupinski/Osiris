@@ -3,7 +3,6 @@
 #include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
-#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct DemoPlaybackParameters; }
@@ -11,8 +10,8 @@ namespace csgo { struct EnginePOD; }
 
 class EngineHooks {
 public:
-    explicit EngineHooks(MemorySection engineCodeSection)
-        : hookImpl{ VmtLengthCalculator{ engineCodeSection } }
+    explicit EngineHooks(VmtLengthCalculator vmtLengthCalculator)
+        : hookImpl{ vmtLengthCalculator }
     {
     }
     

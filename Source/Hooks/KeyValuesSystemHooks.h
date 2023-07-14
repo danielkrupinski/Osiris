@@ -4,15 +4,14 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
-#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct KeyValuesSystemPOD; }
 
 class KeyValuesSystemHooks {
 public:
-    explicit KeyValuesSystemHooks(MemorySection vstdlibCodeSection)
-        : hookImpl{ VmtLengthCalculator{ vstdlibCodeSection } }
+    explicit KeyValuesSystemHooks(VmtLengthCalculator vmtLengthCalculator)
+        : hookImpl{ vmtLengthCalculator }
     {
     }
 

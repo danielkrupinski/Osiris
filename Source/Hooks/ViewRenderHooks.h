@@ -4,15 +4,14 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
-#include <Utils/MemorySection.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ViewRender; }
 
 class ViewRenderHooks {
 public:
-    explicit ViewRenderHooks(MemorySection clientCodeSection)
-        : hookImpl{ VmtLengthCalculator{ clientCodeSection } }
+    explicit ViewRenderHooks(VmtLengthCalculator vmtLengthCalculator)
+        : hookImpl{ vmtLengthCalculator }
     {
     }
 

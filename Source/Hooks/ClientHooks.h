@@ -15,8 +15,8 @@ namespace csgo
 
 class ClientHooks {
 public:
-    explicit ClientHooks(MemorySection clientCodeSection)
-        : hookImpl{ VmtLengthCalculator{ clientCodeSection } }
+    explicit ClientHooks(VmtLengthCalculator vmtLengthCalculator)
+        : hookImpl{ vmtLengthCalculator }
     {
     }
 

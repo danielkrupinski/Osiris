@@ -69,21 +69,21 @@ public:
     Hooks(HMODULE moduleHandle, DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
         : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
 #if IS_WIN32()
-        , keyValuesSystemHooks{ vstdlibDll.getCodeSection() }
+        , keyValuesSystemHooks{ VmtLengthCalculator{ vstdlibDll.getCodeSection(), vstdlibDll.getVmtSection() } }
 #endif
-        , engineHooks{ engineDll.getCodeSection() }
-        , clientHooks{ clientDll.getCodeSection() }
-        , clientModeHooks{ clientDll.getCodeSection() }
-        , clientStateHooks{ engineDll.getCodeSection() }
-        , playerInventoryHooks{ clientDll.getCodeSection() }
-        , panoramaMarshallHelperHooks{ clientDll.getCodeSection() }
-        , viewRenderHooks{ clientDll.getCodeSection() }
-        , inventoryManagerHooks{ clientDll.getCodeSection() }
-        , bspQueryHooks{ engineDll.getCodeSection() }
-        , engineSoundHooks{ engineDll.getCodeSection() }
-        , svCheatsHooks{ engineDll.getCodeSection() }
-        , modelRenderHooks{ engineDll.getCodeSection() }
-        , surfaceHooks{ vguiMatSurfaceDll.getCodeSection() }
+        , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() } }
         , moduleHandle{ moduleHandle }
     {
     }
@@ -95,19 +95,19 @@ public:
     template <typename PlatformApi>
     Hooks(DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
         : sdlFunctions{ DynamicLibrary<PlatformApi>{ "libSDL2-2.0.so.0" } }
-        , engineHooks{ engineDll.getCodeSection() }
-        , clientHooks{ clientDll.getCodeSection() }
-        , clientModeHooks{ clientDll.getCodeSection() }
-        , clientStateHooks{ engineDll.getCodeSection() }
-        , playerInventoryHooks{ clientDll.getCodeSection() }
-        , panoramaMarshallHelperHooks{ clientDll.getCodeSection() }
-        , viewRenderHooks{ clientDll.getCodeSection() }
-        , inventoryManagerHooks{ clientDll.getCodeSection() }
-        , bspQueryHooks{ engineDll.getCodeSection() }
-        , engineSoundHooks{ engineDll.getCodeSection() }
-        , svCheatsHooks{ engineDll.getCodeSection() }
-        , modelRenderHooks{ engineDll.getCodeSection() }
-        , surfaceHooks{ vguiMatSurfaceDll.getCodeSection() }
+        , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
+        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
+        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() } }
     {
         pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
         *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
