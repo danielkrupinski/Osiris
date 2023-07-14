@@ -71,7 +71,7 @@ private:
                             if (std::strcmp(strTab + shdr->sh_name, sectionName) != 0)
                                 continue;
 
-                            base = (void*)(linkMap->l_addr + shdr->sh_offset);
+                            base = (void*)(linkMap->l_addr + shdr->sh_addr);
                             size = shdr->sh_size;
                             PlatformApi::munmap(map, st.st_size);
                             PlatformApi::close(fd);
