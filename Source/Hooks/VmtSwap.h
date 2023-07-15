@@ -10,31 +10,28 @@
 #include <Platform/TypeInfoPrecedingVmt.h>
 #include <Vmt/VmtCopy.h>
 #include <Vmt/VmtLengthCalculator.h>
+#include <Vmt/VmtSwapper.h>
 
 class VmtSwap {
 public:
     explicit VmtSwap(const VmtLengthCalculator& vmtLengthCalculator)
-        : vmtLengthCalculator{ vmtLengthCalculator }
+        : swapper{ vmtLengthCalculator }
     {
     }
 
     void init(void* base) noexcept;
     void restore() noexcept
     {
-        assert(vmtCopy.has_value());
-        *reinterpret_cast<std::uintptr_t**>(base) = vmtCopy->getOriginalVmt();
+        swapper.uninstall(*reinterpret_cast<std::uintptr_t**>(base));
     }
 
     template <typename T>
     std::uintptr_t hookAt(std::size_t index, T fun) const noexcept
     {
-        assert(vmtCopy.has_value());
-        vmtCopy->getReplacementVmt()[index] = reinterpret_cast<std::uintptr_t>(fun);
-        return vmtCopy->getOriginalVmt()[index];
+        return swapper.hook(index, std::uintptr_t(fun));
     }
 
 private:
-    VmtLengthCalculator vmtLengthCalculator;
     void* base = nullptr;
-    std::optional<VmtCopy> vmtCopy;
+    VmtSwapper swapper;
 };

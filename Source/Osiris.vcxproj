@@ -455,6 +455,7 @@
     <ClInclude Include="Vmt\VmtCopy.h" />
     <ClInclude Include="Vmt\VmtLength.h" />
     <ClInclude Include="Vmt\VmtLengthCalculator.h" />
+    <ClInclude Include="Vmt\VmtSwapper.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

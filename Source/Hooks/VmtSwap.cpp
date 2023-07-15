@@ -5,7 +5,5 @@
 void VmtSwap::init(void* base) noexcept
 {
     this->base = base;
-    const auto vmt = *reinterpret_cast<std::uintptr_t**>(base);
-    vmtCopy.emplace(vmt, vmtLengthCalculator(vmt));
-    *reinterpret_cast<std::uintptr_t**>(base) = vmtCopy->getReplacementVmt();
+    swapper.install(*reinterpret_cast<std::uintptr_t**>(base));
 }
