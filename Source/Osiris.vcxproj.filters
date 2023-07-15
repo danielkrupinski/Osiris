@@ -155,9 +155,6 @@
     <ClCompile Include="EventListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Hooks\VmtSwap.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="Hooks\MinHook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
@@ -405,9 +402,6 @@
     </ClInclude>
     <ClInclude Include="ConfigStructs.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\VmtSwap.h">
-      <Filter>Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Hooks\MinHook.h">
       <Filter>Hooks</Filter>

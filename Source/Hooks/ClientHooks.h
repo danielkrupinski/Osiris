@@ -15,21 +15,21 @@ namespace csgo
 
 class ClientHooks {
 public:
-    explicit ClientHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit ClientHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ClientPOD* client)
     {
-        hookImpl.init(client);
-        originalFrameStageNotify = reinterpret_cast<decltype(originalFrameStageNotify)>(hookImpl.hookAt(37, &frameStageNotify));
-        originalDispatchUserMessage = reinterpret_cast<decltype(originalDispatchUserMessage)>(hookImpl.hookAt(38, &dispatchUserMessage));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(client));
+        originalFrameStageNotify = reinterpret_cast<decltype(originalFrameStageNotify)>(hookImpl.hook(37, std::uintptr_t(&frameStageNotify)));
+        originalDispatchUserMessage = reinterpret_cast<decltype(originalDispatchUserMessage)>(hookImpl.hook(38, std::uintptr_t(&dispatchUserMessage)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ClientPOD* client)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(client));
     }
 
     [[nodiscard]] auto getOriginalFrameStageNotify() const

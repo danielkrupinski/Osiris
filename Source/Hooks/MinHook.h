@@ -13,10 +13,10 @@ public:
     {
     }
 
-    void init(void* base) noexcept;
-    void restore() noexcept {}
-    std::uintptr_t hookAt(std::size_t index, void* fun) noexcept;
+    void install(std::uintptr_t*& vmt) noexcept;
+    void uninstall(std::uintptr_t*&) noexcept {}
+    [[nodiscard]] std::uintptr_t hook(std::size_t index, std::uintptr_t fun) noexcept;
 
 private:
-    void* base;
+    std::uintptr_t** vmt = nullptr;
 };

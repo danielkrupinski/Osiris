@@ -10,20 +10,20 @@ namespace csgo { struct KeyValuesSystemPOD; }
 
 class KeyValuesSystemHooks {
 public:
-    explicit KeyValuesSystemHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit KeyValuesSystemHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::KeyValuesSystemPOD* keyValuesSystem)
     {
-        hookImpl.init(keyValuesSystem);
-        originalAllocKeyValuesMemory = reinterpret_cast<decltype(originalAllocKeyValuesMemory)>(hookImpl.hookAt(2, &allocKeyValuesMemory));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(keyValuesSystem));
+        originalAllocKeyValuesMemory = reinterpret_cast<decltype(originalAllocKeyValuesMemory)>(hookImpl.hook(2, std::uintptr_t(&allocKeyValuesMemory)));
     }
 
-    void uninstall()
+    void uninstall(csgo::KeyValuesSystemPOD* keyValuesSystem)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(keyValuesSystem));
     }
 
     [[nodiscard]] auto getOriginalAllocKeyValuesMemory() const

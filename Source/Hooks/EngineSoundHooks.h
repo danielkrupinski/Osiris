@@ -14,20 +14,20 @@ namespace csgo
 
 class EngineSoundHooks {
 public:
-    explicit EngineSoundHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit EngineSoundHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::EngineSoundPOD* engineSound)
     {
-        hookImpl.init(engineSound);
-        originalEmitSound = reinterpret_cast<decltype(originalEmitSound)>(hookImpl.hookAt(WIN32_LINUX(5, 6), &emitSound));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engineSound));
+        originalEmitSound = reinterpret_cast<decltype(originalEmitSound)>(hookImpl.hook(WIN32_LINUX(5, 6), std::uintptr_t(&emitSound)));
     }
 
-    void uninstall()
+    void uninstall(csgo::EngineSoundPOD* engineSound)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(engineSound));
     }
 
     [[nodiscard]] auto getOriginalEmitSound() const

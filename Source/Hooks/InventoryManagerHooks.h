@@ -14,20 +14,20 @@ namespace csgo
 
 class InventoryManagerHooks {
 public:
-    explicit InventoryManagerHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit InventoryManagerHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::InventoryManagerPOD* inventoryManager)
     {
-        hookImpl.init(inventoryManager);
-        originalUpdateInventoryEquippedState = reinterpret_cast<decltype(originalUpdateInventoryEquippedState)>(hookImpl.hookAt(WIN32_LINUX(29, 30), &updateInventoryEquippedState));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(inventoryManager));
+        originalUpdateInventoryEquippedState = reinterpret_cast<decltype(originalUpdateInventoryEquippedState)>(hookImpl.hook(WIN32_LINUX(29, 30), std::uintptr_t(&updateInventoryEquippedState)));
     }
 
-    void uninstall()
+    void uninstall(csgo::InventoryManagerPOD* inventoryManager)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(inventoryManager));
     }
 
     [[nodiscard]] auto getOriginalUpdateInventoryEquippedState() const

@@ -10,20 +10,20 @@ namespace csgo { struct Vector; }
 
 class BspQueryHooks {
 public:
-    explicit BspQueryHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit BspQueryHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(void* engineSpatialQuery)
     {
-        hookImpl.init(engineSpatialQuery);
-        originalListLeavesInBox = reinterpret_cast<decltype(originalListLeavesInBox)>(hookImpl.hookAt(6, &listLeavesInBox));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engineSpatialQuery));
+        originalListLeavesInBox = reinterpret_cast<decltype(originalListLeavesInBox)>(hookImpl.hook(6, std::uintptr_t(&listLeavesInBox)));
     }
 
-    void uninstall()
+    void uninstall(void* engineSpatialQuery)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(engineSpatialQuery));
     }
 
     [[nodiscard]] auto getOriginalListLeavesInBox() const

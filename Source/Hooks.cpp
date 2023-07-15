@@ -129,7 +129,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 #endif
 }
 
-void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept
+void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces) noexcept
 {
     misc.updateEventListeners(true);
     visuals.updateEventListeners(true);
@@ -141,19 +141,19 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     }
 #endif
 
-    engineHooks.uninstall();
-    clientHooks.uninstall();
-    clientModeHooks.uninstall();
-    clientStateHooks.uninstall();
-    panoramaMarshallHelperHooks.uninstall();
-    viewRenderHooks.uninstall();
-    playerInventoryHooks.uninstall();
-    inventoryManagerHooks.uninstall();
-    bspQueryHooks.uninstall();
-    engineSoundHooks.uninstall();
-    svCheatsHooks.uninstall();
-    modelRenderHooks.uninstall();
-    surfaceHooks.uninstall();
+    engineHooks.uninstall(engineInterfaces.getEngine().getPOD());
+    clientHooks.uninstall(clientInterface);
+    clientModeHooks.uninstall(memory.clientMode);
+    clientStateHooks.uninstall(&memory.splitScreen->splitScreenPlayers[0]->client);
+    panoramaMarshallHelperHooks.uninstall(memory.panoramaMarshallHelper);
+    viewRenderHooks.uninstall(memory.viewRender);
+    playerInventoryHooks.uninstall(memory.inventoryManager.getLocalInventory());
+    inventoryManagerHooks.uninstall(memory.inventoryManager.getPOD());
+    bspQueryHooks.uninstall(engineInterfaces.getEngine().getBSPTreeQuery());
+    engineSoundHooks.uninstall(std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()));
+    svCheatsHooks.uninstall(interfaces.getCvar().findVar(csgo::sv_cheats));
+    modelRenderHooks.uninstall(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()));
+    surfaceHooks.uninstall(interfaces.getSurface().getPOD());
 
     Netvars::restore();
 
@@ -161,7 +161,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     inventoryChanger.reset(memory);
 
 #if IS_WIN32()
-    keyValuesSystemHooks.uninstall();
+    keyValuesSystemHooks.uninstall(memory.keyValuesSystem);
     windowProcedureHook.uninstall();
 
     **reinterpret_cast<void***>(memory.present) = originalPresent;

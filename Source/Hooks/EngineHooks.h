@@ -10,23 +10,23 @@ namespace csgo { struct EnginePOD; }
 
 class EngineHooks {
 public:
-    explicit EngineHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit EngineHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
     
     void install(csgo::EnginePOD* engine)
     {
-        hookImpl.init(engine);
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engine));
 
-        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hookAt(82, &isPlayingDemo));
-        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hookAt(101, &getScreenAspectRatio));
-        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters));
+        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hook(82, std::uintptr_t(&isPlayingDemo)));
+        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hook(101, std::uintptr_t(&getScreenAspectRatio)));
+        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hook(WIN32_LINUX(218, 219), std::uintptr_t(&getDemoPlaybackParameters)));
     }
 
-    void uninstall()
+    void uninstall(csgo::EnginePOD* engine)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(engine));
     }
 
     [[nodiscard]] auto getOriginalIsPlayingDemo() const

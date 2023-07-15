@@ -15,20 +15,20 @@ namespace csgo
 
 class CSPlayerInventoryHooks {
 public:
-    explicit CSPlayerInventoryHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit CSPlayerInventoryHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::CSPlayerInventoryPOD* inventory)
     {
-        hookImpl.init(inventory);
-        originalSoUpdated = reinterpret_cast<decltype(originalSoUpdated)>(hookImpl.hookAt(1, &soUpdated));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(inventory));
+        originalSoUpdated = reinterpret_cast<decltype(originalSoUpdated)>(hookImpl.hook(1, std::uintptr_t(&soUpdated)));
     }
 
-    void uninstall()
+    void uninstall(csgo::CSPlayerInventoryPOD* inventory)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(inventory));
     }
 
     [[nodiscard]] auto getOriginalSoUpdated() const

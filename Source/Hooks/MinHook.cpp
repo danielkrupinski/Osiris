@@ -2,14 +2,14 @@
 #include <MinHook/MinHook.h>
 #include "../Helpers.h"
 
-void MinHook::init(void* base) noexcept
+void MinHook::install(std::uintptr_t*& vmt) noexcept
 {
-    this->base = base;
+    this->vmt = &vmt;
 }
 
-std::uintptr_t MinHook::hookAt(std::size_t index, void* fun) noexcept
+std::uintptr_t MinHook::hook(std::size_t index, std::uintptr_t fun) noexcept
 {
     void* orig;
-    MH_CreateHook((*reinterpret_cast<void***>(base))[index], fun, &orig);
+    MH_CreateHook((void*)(*vmt)[index], (void*)fun, &orig);
     return std::uintptr_t(orig);
 }

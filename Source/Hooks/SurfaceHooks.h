@@ -11,23 +11,23 @@ namespace csgo { struct SurfacePOD; }
 
 class SurfaceHooks {
 public:
-    explicit SurfaceHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit SurfaceHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::SurfacePOD* surface)
     {
-        hookImpl.init(surface);
-        originalSetDrawColor = reinterpret_cast<decltype(originalSetDrawColor)>(hookImpl.hookAt(WIN32_LINUX(15, 14), &setDrawColor));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(surface));
+        originalSetDrawColor = reinterpret_cast<decltype(originalSetDrawColor)>(hookImpl.hook(WIN32_LINUX(15, 14), std::uintptr_t(&setDrawColor)));
 #if IS_WIN32()
-        originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(hookImpl.hookAt(67, &lockCursor));
+        originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(hookImpl.hook(67, std::uintptr_t(&lockCursor)));
 #endif
     }
 
-    void uninstall()
+    void uninstall(csgo::SurfacePOD* surface)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(surface));
     }
 
     [[nodiscard]] auto getOriginalSetDrawColor() const

@@ -10,21 +10,21 @@ namespace csgo { struct ViewRender; }
 
 class ViewRenderHooks {
 public:
-    explicit ViewRenderHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit ViewRenderHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ViewRender* viewRender)
     {
-        hookImpl.init(viewRender);
-        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hookAt(WIN32_LINUX(39, 40), &render2dEffectsPreHud));
-        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hookAt(WIN32_LINUX(41, 42), &renderSmokeOverlay));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(viewRender));
+        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hook(WIN32_LINUX(39, 40), std::uintptr_t(&render2dEffectsPreHud)));
+        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hook(WIN32_LINUX(41, 42), std::uintptr_t(&renderSmokeOverlay)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ViewRender* viewRender)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(viewRender));
     }
 
     [[nodiscard]] auto getOriginalRender2dEffectsPreHud() const

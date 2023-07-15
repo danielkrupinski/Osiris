@@ -15,8 +15,9 @@ public:
     {
     }
 
-    [[nodiscard]] bool isInstalled(const std::uintptr_t*& vmt) const noexcept
+    [[nodiscard]] bool isInstalled(const std::uintptr_t* vmt) const noexcept
     {
+        assert(vmtCopy.has_value());
         return vmt == vmtCopy->getReplacementVmt();
     }
 

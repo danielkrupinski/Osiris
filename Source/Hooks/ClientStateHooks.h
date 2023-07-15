@@ -10,20 +10,20 @@ namespace csgo { struct ClientState; }
 
 class ClientStateHooks {
 public:
-    explicit ClientStateHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit ClientStateHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ClientState* clientState)
     {
-        hookImpl.init(clientState);
-        originalPacketEnd = reinterpret_cast<decltype(originalPacketEnd)>(hookImpl.hookAt(WIN32_LINUX(6, 7), &packetEnd));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(clientState));
+        originalPacketEnd = reinterpret_cast<decltype(originalPacketEnd)>(hookImpl.hook(WIN32_LINUX(6, 7), std::uintptr_t(&packetEnd)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ClientState* clientState)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(clientState));
     }
 
     static void FASTCALL_CONV packetEnd(FASTCALL_THIS(csgo::ClientState* thisptr)) noexcept;

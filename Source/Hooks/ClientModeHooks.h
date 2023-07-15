@@ -15,26 +15,26 @@ namespace csgo
 
 class ClientModeHooks {
 public:
-    explicit ClientModeHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit ClientModeHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ClientMode* clientMode)
     {
-        hookImpl.init(clientMode);
-        originalShouldDrawFog = reinterpret_cast<decltype(originalShouldDrawFog)>(hookImpl.hookAt(WIN32_LINUX(17, 18), &shouldDrawFog));
-        originalOverrideView = reinterpret_cast<decltype(originalOverrideView)>(hookImpl.hookAt(WIN32_LINUX(18, 19), &overrideView));
-        originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(hookImpl.hookAt(WIN32_LINUX(24, 25), &createMove));
-        originalShouldDrawViewModel = reinterpret_cast<decltype(originalShouldDrawViewModel)>(hookImpl.hookAt(WIN32_LINUX(27, 28), &shouldDrawViewModel));
-        originalGetViewModelFov = reinterpret_cast<decltype(originalGetViewModelFov)>(hookImpl.hookAt(WIN32_LINUX(35, 36), &getViewModelFov));
-        originalDoPostScreenEffects = reinterpret_cast<decltype(originalDoPostScreenEffects)>(hookImpl.hookAt(WIN32_LINUX(44, 45), &doPostScreenEffects));
-        originalUpdateColorCorrectionWeights = reinterpret_cast<decltype(originalUpdateColorCorrectionWeights)>(hookImpl.hookAt(WIN32_LINUX(58, 61), &updateColorCorrectionWeights));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(clientMode));
+        originalShouldDrawFog = reinterpret_cast<decltype(originalShouldDrawFog)>(hookImpl.hook(WIN32_LINUX(17, 18), std::uintptr_t(&shouldDrawFog)));
+        originalOverrideView = reinterpret_cast<decltype(originalOverrideView)>(hookImpl.hook(WIN32_LINUX(18, 19), std::uintptr_t(&overrideView)));
+        originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(hookImpl.hook(WIN32_LINUX(24, 25), std::uintptr_t(&createMove)));
+        originalShouldDrawViewModel = reinterpret_cast<decltype(originalShouldDrawViewModel)>(hookImpl.hook(WIN32_LINUX(27, 28), std::uintptr_t(&shouldDrawViewModel)));
+        originalGetViewModelFov = reinterpret_cast<decltype(originalGetViewModelFov)>(hookImpl.hook(WIN32_LINUX(35, 36), std::uintptr_t(&getViewModelFov)));
+        originalDoPostScreenEffects = reinterpret_cast<decltype(originalDoPostScreenEffects)>(hookImpl.hook(WIN32_LINUX(44, 45), std::uintptr_t(&doPostScreenEffects)));
+        originalUpdateColorCorrectionWeights = reinterpret_cast<decltype(originalUpdateColorCorrectionWeights)>(hookImpl.hook(WIN32_LINUX(58, 61), std::uintptr_t(&updateColorCorrectionWeights)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ClientMode* clientMode)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(clientMode));
     }
 
     [[nodiscard]] auto getOriginalShouldDrawFog() const

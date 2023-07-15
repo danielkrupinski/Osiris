@@ -16,7 +16,6 @@ union SDL_Event;
 #endif
 
 #include "Hooks/MinHook.h"
-#include "Hooks/VmtSwap.h"
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hooks/ClientHooks.h"
@@ -120,7 +119,7 @@ public:
 #endif
 
     void install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
+    void uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces) noexcept;
 
 #if IS_WIN32()
     KeyValuesSystemHooks keyValuesSystemHooks;

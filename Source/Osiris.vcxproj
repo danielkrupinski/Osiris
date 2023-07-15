@@ -132,7 +132,6 @@
     <ClCompile Include="Helpers\KeyValuesFactory.cpp" />
     <ClCompile Include="Helpers\PatternNotFoundHandler.cpp" />
     <ClCompile Include="Hooks\MinHook.cpp" />
-    <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="InputUtil.cpp" />
     <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp" />
@@ -337,7 +336,6 @@
     <ClInclude Include="Hooks\SurfaceHooks.h" />
     <ClInclude Include="Hooks\SvCheatsHooks.h" />
     <ClInclude Include="Hooks\ViewRenderHooks.h" />
-    <ClInclude Include="Hooks\VmtSwap.h" />
     <ClInclude Include="Hooks\WindowProcedureHook.h" />
     <ClInclude Include="HookType.h" />
     <ClInclude Include="imguiCustom.h" />

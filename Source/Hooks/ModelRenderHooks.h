@@ -15,20 +15,20 @@ namespace csgo
 
 class ModelRenderHooks {
 public:
-    explicit ModelRenderHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit ModelRenderHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ModelRenderPOD* modelRender)
     {
-        hookImpl.init(modelRender);
-        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hookAt(21, &drawModelExecute));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(modelRender));
+        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hook(21, std::uintptr_t(&drawModelExecute)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ModelRenderPOD* modelRender)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(modelRender));
     }
 
     [[nodiscard]] auto getOriginalDrawModelExecute() const

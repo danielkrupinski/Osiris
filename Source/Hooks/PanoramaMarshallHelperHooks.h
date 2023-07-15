@@ -10,23 +10,23 @@ namespace csgo { struct PanoramaMarshallHelperPOD; }
 
 class PanoramaMarshallHelperHooks {
 public:
-    explicit PanoramaMarshallHelperHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit PanoramaMarshallHelperHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper)
     {
-        hookImpl.init(panoramaMarshallHelper);
-        originalGetNumArgs = reinterpret_cast<decltype(originalGetNumArgs)>(hookImpl.hookAt(1, &getNumArgs));
-        originalGetArgAsNumber = reinterpret_cast<decltype(originalGetArgAsNumber)>(hookImpl.hookAt(5, &getArgAsNumber));
-        originalGetArgAsString = reinterpret_cast<decltype(originalGetArgAsString)>(hookImpl.hookAt(7, &getArgAsString));
-        originalSetResultInt = reinterpret_cast<decltype(originalSetResultInt)>(hookImpl.hookAt(WIN32_LINUX(14, 11), &setResultInt));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(panoramaMarshallHelper));
+        originalGetNumArgs = reinterpret_cast<decltype(originalGetNumArgs)>(hookImpl.hook(1, std::uintptr_t(&getNumArgs)));
+        originalGetArgAsNumber = reinterpret_cast<decltype(originalGetArgAsNumber)>(hookImpl.hook(5, std::uintptr_t(&getArgAsNumber)));
+        originalGetArgAsString = reinterpret_cast<decltype(originalGetArgAsString)>(hookImpl.hook(7, std::uintptr_t(&getArgAsString)));
+        originalSetResultInt = reinterpret_cast<decltype(originalSetResultInt)>(hookImpl.hook(WIN32_LINUX(14, 11), std::uintptr_t(&setResultInt)));
     }
 
-    void uninstall()
+    void uninstall(csgo::PanoramaMarshallHelperPOD* panoramaMarshallHelper)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(panoramaMarshallHelper));
     }
 
     [[nodiscard]] auto getOriginalGetNumArgs() const

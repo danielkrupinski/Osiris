@@ -10,20 +10,20 @@ namespace csgo { struct ConVarPOD; }
 
 class SvCheatsHooks {
 public:
-    explicit SvCheatsHooks(VmtLengthCalculator vmtLengthCalculator)
+    explicit SvCheatsHooks(const VmtLengthCalculator& vmtLengthCalculator)
         : hookImpl{ vmtLengthCalculator }
     {
     }
 
     void install(csgo::ConVarPOD* svCheats)
     {
-        hookImpl.init(svCheats);
-        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hookAt(WIN32_LINUX(13, 16), &getInt));
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(svCheats));
+        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hook(WIN32_LINUX(13, 16), std::uintptr_t(&getInt)));
     }
 
-    void uninstall()
+    void uninstall(csgo::ConVarPOD* svCheats)
     {
-        hookImpl.restore();
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(svCheats));
     }
 
     [[nodiscard]] auto getOriginalSvCheatsGetInt() const
