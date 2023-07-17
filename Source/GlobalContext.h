@@ -45,17 +45,14 @@ enum class GlobalContextState {
     Initialized
 };
 
-template <typename PlatformApi>
 class GlobalContext {
 public:
-    GlobalContext(PlatformApi platformApi);
+    GlobalContext();
 
 #if IS_LINUX()
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);
 #endif
-
-    PlatformApi platformApi;
 
     std::optional<EventListener> gameEventListener;
     std::optional<EngineInterfacesPODs> engineInterfacesPODs;

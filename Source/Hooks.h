@@ -64,8 +64,7 @@ int pollEvent(SDL_Event* event) noexcept;
 class Hooks {
 public:
 #if IS_WIN32() || IS_WIN64()
-    template <typename PlatformApi>
-    Hooks(HMODULE moduleHandle, DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
+    Hooks(HMODULE moduleHandle, DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
         : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
 #if IS_WIN32()
         , keyValuesSystemHooks{ VmtLengthCalculator{ vstdlibDll.getCodeSection(), vstdlibDll.getVmtSection() } }
@@ -91,9 +90,8 @@ public:
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #elif IS_LINUX()
-    template <typename PlatformApi>
-    Hooks(DynamicLibrary<PlatformApi> clientDll, DynamicLibrary<PlatformApi> engineDll, DynamicLibrary<PlatformApi> vstdlibDll, DynamicLibrary<PlatformApi> vguiMatSurfaceDll) noexcept
-        : sdlFunctions{ DynamicLibrary<PlatformApi>{ "libSDL2-2.0.so.0" } }
+    Hooks(DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
+        : sdlFunctions{ DynamicLibrary{ "libSDL2-2.0.so.0" } }
         , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
         , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
         , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }

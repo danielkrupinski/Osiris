@@ -11,30 +11,15 @@ using testing::Return;
 using testing::Values;
 
 struct MockLinuxPlatformApi {
-    MOCK_METHOD(void*, dlopen_, (const char* file, int mode), (const noexcept));
-    MOCK_METHOD(void*, dlsym_, (void* handle, const char* name), (const noexcept));
-    MOCK_METHOD(int, dlclose_, (void* handle), (const noexcept));
-    MOCK_METHOD(int, dlinfo_, (void* handle, int request, void* info), (const noexcept));
-
-    static void* dlopen(const char* file, int mode) noexcept
-    {
-        return instance->dlopen_(file, mode);
-    }
-
-    static void* dlsym(void* handle, const char* name) noexcept
-    {
-        return instance->dlsym_(handle, name);
-    }
-
-    static int dlclose(void* handle) noexcept
-    {
-        return instance->dlclose_(handle);
-    }
-
-    static int dlinfo(void* handle, int request, void* info) noexcept
-    {
-        return instance->dlinfo_(handle, request, info);
-    }
+    MOCK_METHOD(void*, dlopen, (const char* file, int mode), (const noexcept));
+    MOCK_METHOD(void*, dlsym, (void* handle, const char* name), (const noexcept));
+    MOCK_METHOD(int, dlclose, (void* handle), (const noexcept));
+    MOCK_METHOD(int, dlinfo, (void* handle, int request, void* info), (const noexcept));
+    MOCK_METHOD(int, open, (const char* pathname, int flags), (const noexcept));
+    MOCK_METHOD(int, close, (int fd), (const noexcept));
+    MOCK_METHOD(int, fstat, (int fd, struct stat* buf), (const noexcept));
+    MOCK_METHOD(void*, mmap, (void* addr, size_t length, int prot, int flags, int fd, off_t offset), (const noexcept));
+    MOCK_METHOD(int, munmap, (void* addr, size_t length), (const noexcept));
 
     static inline testing::StrictMock<MockLinuxPlatformApi>* instance = nullptr;
 };
@@ -52,37 +37,37 @@ protected:
 
     auto createSharedObject(const char* name)
     {
-        return LinuxDynamicLibrary<MockLinuxPlatformApi>{ name };
+        return LinuxDynamicLibrary{ name };
     }
 };
 
 TEST_F(TestLinuxDynamicLibrary, LibraryIsOpenedWithCorrectFlags) {
-    EXPECT_CALL(platformApi, dlopen_(_, RTLD_LAZY | RTLD_NOLOAD)).WillOnce(Return(dummyHandleValue));
-    EXPECT_CALL(platformApi, dlclose_(dummyHandleValue));
+    EXPECT_CALL(platformApi, dlopen(_, RTLD_LAZY | RTLD_NOLOAD)).WillOnce(Return(dummyHandleValue));
+    EXPECT_CALL(platformApi, dlclose(dummyHandleValue));
 
     createSharedObject(dummyLibraryName);
 }
 
 TEST_F(TestLinuxDynamicLibrary, LibraryIsNotBeingClosedWhenOpeningFailed) {
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(nullptr));
-    EXPECT_CALL(platformApi, dlclose_(_)).Times(0);
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(nullptr));
+    EXPECT_CALL(platformApi, dlclose(_)).Times(0);
 
     createSharedObject(dummyLibraryName);
 }
 
 TEST_F(TestLinuxDynamicLibrary, GetFunctionAddressReturnsZeroIfOpeningFailed) {
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(nullptr));
-    EXPECT_CALL(platformApi, dlclose_(_)).Times(0);
-    EXPECT_CALL(platformApi, dlsym_(_, _)).Times(0);
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(nullptr));
+    EXPECT_CALL(platformApi, dlclose(_)).Times(0);
+    EXPECT_CALL(platformApi, dlsym(_, _)).Times(0);
 
     const auto dll = createSharedObject(dummyLibraryName);
     EXPECT_EQ(dll.getFunctionAddress("functionA").get(), 0);
 }
 
 TEST_F(TestLinuxDynamicLibrary, GetLinkMapReturnsNullIfOpeningFailed) {
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(nullptr));
-    EXPECT_CALL(platformApi, dlclose_(_)).Times(0);
-    EXPECT_CALL(platformApi, dlinfo_(_, _, _)).Times(0);
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(nullptr));
+    EXPECT_CALL(platformApi, dlclose(_)).Times(0);
+    EXPECT_CALL(platformApi, dlinfo(_, _, _)).Times(0);
 
     const auto dll = createSharedObject(dummyLibraryName);
     EXPECT_EQ(dll.getLinkMap(), nullptr);
@@ -92,8 +77,8 @@ class TestLinuxDynamicLibrary_Handle
     : public TestLinuxDynamicLibrary, public testing::WithParamInterface<std::uintptr_t> {};
 
 TEST_P(TestLinuxDynamicLibrary_Handle, LibraryIsClosedWithTheHandleThatWasOpened) {
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(reinterpret_cast<void*>(GetParam())));
-    EXPECT_CALL(platformApi, dlclose_(reinterpret_cast<void*>(GetParam())));
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(reinterpret_cast<void*>(GetParam())));
+    EXPECT_CALL(platformApi, dlclose(reinterpret_cast<void*>(GetParam())));
 
     createSharedObject(dummyLibraryName);
 }
@@ -106,11 +91,11 @@ class TestLinuxDynamicLibrary_FunctionAddress
 TEST_P(TestLinuxDynamicLibrary_FunctionAddress, GetFunctionAddressReturnsCorrectAddress) {
     const auto [handle, functionName, functionAddress] = GetParam();
 
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(handle));
-    EXPECT_CALL(platformApi, dlclose_(handle));
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(handle));
+    EXPECT_CALL(platformApi, dlclose(handle));
 
     const auto dll = createSharedObject(dummyLibraryName);
-    EXPECT_CALL(platformApi, dlsym_(handle, testing::StrEq(functionName))).WillOnce(Return(functionAddress));
+    EXPECT_CALL(platformApi, dlsym(handle, testing::StrEq(functionName))).WillOnce(Return(functionAddress));
     EXPECT_EQ(dll.getFunctionAddress(functionName).as<void*>(), functionAddress);
 }
 
@@ -136,11 +121,11 @@ struct SetLinkMap {
 TEST_P(TestLinuxDynamicLibrary_LinkMap, GetLinkMapReturnsCorrectPointer) {
     const auto [handle, linkMap] = GetParam();
 
-    EXPECT_CALL(platformApi, dlopen_(_, _)).WillOnce(Return(handle));
-    EXPECT_CALL(platformApi, dlclose_(handle));
+    EXPECT_CALL(platformApi, dlopen(_, _)).WillOnce(Return(handle));
+    EXPECT_CALL(platformApi, dlclose(handle));
 
     const auto dll = createSharedObject(dummyLibraryName);
-    EXPECT_CALL(platformApi, dlinfo_(handle, RTLD_DI_LINKMAP, _)).WillOnce(SetLinkMap{ linkMap });
+    EXPECT_CALL(platformApi, dlinfo(handle, RTLD_DI_LINKMAP, _)).WillOnce(SetLinkMap{ linkMap });
     EXPECT_EQ(dll.getLinkMap(), linkMap);
 }
 
@@ -153,12 +138,57 @@ class TestLinuxDynamicLibrary_String
     : public TestLinuxDynamicLibrary, public testing::WithParamInterface<const char*> {};
 
 TEST_P(TestLinuxDynamicLibrary_String, LibraryWithCorrectNameIsOpened) {
-    EXPECT_CALL(platformApi, dlopen_(testing::StrEq(GetParam()), _)).WillOnce(Return(dummyHandleValue));
-    EXPECT_CALL(platformApi, dlclose_(dummyHandleValue));
+    EXPECT_CALL(platformApi, dlopen(testing::StrEq(GetParam()), _)).WillOnce(Return(dummyHandleValue));
+    EXPECT_CALL(platformApi, dlclose(dummyHandleValue));
 
     createSharedObject(GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(, TestLinuxDynamicLibrary_String, testing::Values("client.so", "engine.so"));
 
+}
+
+void* LinuxPlatformApi::dlopen(const char* file, int mode) noexcept
+{
+    return MockLinuxPlatformApi::instance->dlopen(file, mode);
+}
+
+void* LinuxPlatformApi::dlsym(void* handle, const char* name) noexcept
+{
+    return MockLinuxPlatformApi::instance->dlsym(handle, name);
+}
+
+int LinuxPlatformApi::dlclose(void* handle) noexcept
+{
+    return MockLinuxPlatformApi::instance->dlclose(handle);
+}
+
+int LinuxPlatformApi::dlinfo(void* handle, int request, void* info) noexcept
+{
+    return MockLinuxPlatformApi::instance->dlinfo(handle, request, info);
+}
+
+int LinuxPlatformApi::open(const char* pathname, int flags) noexcept
+{
+    return MockLinuxPlatformApi::instance->open(pathname, flags);
+}
+
+int LinuxPlatformApi::close(int fd) noexcept
+{
+    return MockLinuxPlatformApi::instance->close(fd);
+}
+
+int LinuxPlatformApi::fstat(int fd, struct stat* buf) noexcept
+{
+    return MockLinuxPlatformApi::instance->fstat(fd, buf);
+}
+
+void* LinuxPlatformApi::mmap(void* addr, size_t length, int prot, int flags, int fd, off_t offset) noexcept
+{
+    return MockLinuxPlatformApi::instance->mmap(addr, length, prot, flags, fd, offset);
+}
+
+int LinuxPlatformApi::munmap(void* addr, size_t length) noexcept
+{
+    return MockLinuxPlatformApi::instance->munmap(addr, length);
 }

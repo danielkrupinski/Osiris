@@ -6,14 +6,12 @@
 
 #include "Windows/WindowsDynamicLibrary.h"
 
-template <typename PlatformApi>
-using DynamicLibrary = WindowsDynamicLibrary<PlatformApi>;
+using DynamicLibrary = WindowsDynamicLibrary;
 
 #elif IS_LINUX()
 
 #include "Linux/LinuxDynamicLibrary.h"
 
-template <typename PlatformApi>
-using DynamicLibrary = LinuxDynamicLibrary<PlatformApi>;
+using DynamicLibrary = LinuxDynamicLibrary;
 
 #endif

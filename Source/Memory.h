@@ -71,8 +71,7 @@ struct HudPOD;
 
 class Memory {
 public:
-    template <typename PlatformApi>
-    Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
+    Memory(const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept;
 
 #if IS_WIN32() || IS_WIN64()
     std::uintptr_t present;
@@ -146,8 +145,7 @@ private:
     csgo::MoveHelperPOD* moveHelperPtr;
 };
 
-template <typename PlatformApi>
-Memory::Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
+inline Memory::Memory(const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder, csgo::ClientPOD* clientInterface, const RetSpoofGadgets& retSpoofGadgets) noexcept
     : soundMessages{ enginePatternFinder.soundMessages() },
     splitScreen{ enginePatternFinder.splitScreen() },
     plantedC4s{ clientPatternFinder.plantedC4s() },
@@ -179,11 +177,11 @@ Memory::Memory(PlatformApi, const ClientPatternFinder& clientPatternFinder, cons
     itemSystemFn{ clientPatternFinder.getItemSystem() },
     moveHelperPtr{ clientPatternFinder.moveHelper() }
 {
-    const DynamicLibrary<PlatformApi> tier0{ csgo::TIER0_DLL };
+    const DynamicLibrary tier0{ csgo::TIER0_DLL };
     debugMsg = tier0.getFunctionAddress("Msg").template as<decltype(debugMsg)>();
 
 #if IS_WIN32() || IS_WIN64()
-    const DynamicLibrary<PlatformApi> gameOverlayRenderer{ "gameoverlayrenderer.dll" };
+    const DynamicLibrary gameOverlayRenderer{ "gameoverlayrenderer.dll" };
 
     PatternNotFoundHandler patternNotFoundHandler;
     present = PatternFinder{ gameOverlayRenderer.getCodeSection().raw(), patternNotFoundHandler}("FF 15 ? ? ? ? 8B F0 85 FF"_pat).add(2).get();

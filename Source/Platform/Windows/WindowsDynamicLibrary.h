@@ -6,12 +6,12 @@
 #include "PortableExecutable.h"
 #include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
+#include "WindowsPlatformApi.h"
 
-template <typename PlatformApi>
 class WindowsDynamicLibrary {
 public:
     explicit WindowsDynamicLibrary(const char* libraryName)
-        : handle{ PebLdr{ PlatformApi::getPeb()->ldr }.getModuleHandle(libraryName) }
+        : handle{ PebLdr{ WindowsPlatformApi::getPeb()->ldr }.getModuleHandle(libraryName) }
     {
     }
 

@@ -14,7 +14,8 @@
 #include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 
-template <typename PlatformApi>
+#include "LinuxPlatformApi.h"
+
 class LinuxDynamicLibrary {
 public:
     LinuxDynamicLibrary(const char* libraryName)
@@ -28,7 +29,7 @@ public:
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
-            return SafeAddress{ std::uintptr_t(PlatformApi::dlsym(handle, functionName)) };
+            return SafeAddress{ std::uintptr_t(LinuxPlatformApi::dlsym(handle, functionName)) };
         return SafeAddress{ 0 };
     }
 
@@ -36,7 +37,7 @@ public:
     {
         link_map* map = nullptr;
         if (handle)
-            PlatformApi::dlinfo(handle, RTLD_DI_LINKMAP, &map);
+            LinuxPlatformApi::dlinfo(handle, RTLD_DI_LINKMAP, &map);
         return map;
     }
 
@@ -58,9 +59,9 @@ private:
 
         const auto linkMap = getLinkMap();
         if (linkMap) {
-            if (const auto fd = PlatformApi::open(linkMap->l_name, O_RDONLY); fd >= 0) {
-                if (struct stat st; PlatformApi::fstat(fd, &st) == 0) {
-                    if (const auto map = PlatformApi::mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
+            if (const auto fd = LinuxPlatformApi::open(linkMap->l_name, O_RDONLY); fd >= 0) {
+                if (struct stat st; LinuxPlatformApi::fstat(fd, &st) == 0) {
+                    if (const auto map = LinuxPlatformApi::mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
                         const auto ehdr = (ElfW(Ehdr)*)map;
                         const auto shdrs = (ElfW(Shdr)*)(std::uintptr_t(ehdr) + ehdr->e_shoff);
                         const auto strTab = (const char*)(std::uintptr_t(ehdr) + shdrs[ehdr->e_shstrndx].sh_offset);
@@ -73,14 +74,14 @@ private:
 
                             base = (void*)(linkMap->l_addr + shdr->sh_addr);
                             size = shdr->sh_size;
-                            PlatformApi::munmap(map, st.st_size);
-                            PlatformApi::close(fd);
+                            LinuxPlatformApi::munmap(map, st.st_size);
+                            LinuxPlatformApi::close(fd);
                             break;
                         }
-                        PlatformApi::munmap(map, st.st_size);
+                        LinuxPlatformApi::munmap(map, st.st_size);
                     }
                 }
-                PlatformApi::close(fd);
+                LinuxPlatformApi::close(fd);
             }
         }
         return MemorySection{ std::span{ reinterpret_cast<const std::byte*>(base), size } };
@@ -88,9 +89,9 @@ private:
 
     [[nodiscard]] void* getModuleHandle(const char* libraryName)
     {
-        const auto handle = PlatformApi::dlopen(libraryName, RTLD_LAZY | RTLD_NOLOAD);
+        const auto handle = LinuxPlatformApi::dlopen(libraryName, RTLD_LAZY | RTLD_NOLOAD);
         if (handle)
-            PlatformApi::dlclose(handle);
+            LinuxPlatformApi::dlclose(handle);
         return handle;
     }
 

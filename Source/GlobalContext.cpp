@@ -49,20 +49,17 @@
 
 #include "Platform/DynamicLibrary.h"
 
-template <typename PlatformApi>
-GlobalContext<PlatformApi>::GlobalContext(PlatformApi platformApi)
-    : platformApi{ platformApi }
+GlobalContext::GlobalContext()
 {
-    const DynamicLibrary<PlatformApi> clientDLL{ csgo::CLIENT_DLL };
-    const DynamicLibrary<PlatformApi> engineDLL{ csgo::ENGINE_DLL };
+    const DynamicLibrary clientDLL{ csgo::CLIENT_DLL };
+    const DynamicLibrary engineDLL{ csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler}, PatternFinder{clientDLL.getCodeSection().raw(), patternNotFoundHandler});
 }
 
 #if IS_LINUX()
-template <typename PlatformApi>
-int GlobalContext<PlatformApi>::pollEventHook(SDL_Event* event)
+int GlobalContext::pollEventHook(SDL_Event* event)
 {
     const auto result = hooks->pollEvent(event);
 
@@ -79,8 +76,7 @@ int GlobalContext<PlatformApi>::pollEventHook(SDL_Event* event)
     return result;
 }
 
-template <typename PlatformApi>
-void GlobalContext<PlatformApi>::swapWindowHook(SDL_Window* window)
+void GlobalContext::swapWindowHook(SDL_Window* window)
 {
     [[maybe_unused]] static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
 
@@ -99,8 +95,7 @@ void GlobalContext<PlatformApi>::swapWindowHook(SDL_Window* window)
 
 #endif
 
-template <typename PlatformApi>
-void GlobalContext<PlatformApi>::renderFrame()
+void GlobalContext::renderFrame()
 {
     ImGui::NewFrame();
 
@@ -134,20 +129,19 @@ void GlobalContext<PlatformApi>::renderFrame()
     ImGui::Render();
 }
 
-template <typename PlatformApi>
-void GlobalContext<PlatformApi>::initialize()
+void GlobalContext::initialize()
 {
-    const DynamicLibrary<PlatformApi> clientSo{ csgo::CLIENT_DLL };
+    const DynamicLibrary clientSo{ csgo::CLIENT_DLL };
     clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo, retSpoofGadgets->client } });
-    const DynamicLibrary<PlatformApi> engineSo{ csgo::ENGINE_DLL };
+    const DynamicLibrary engineSo{ csgo::ENGINE_DLL };
     engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
 
-    interfaces.emplace(PlatformApi{});
+    interfaces.emplace();
     PatternNotFoundHandler patternNotFoundHandler;
     const PatternFinder clientPatternFinder{ clientSo.getCodeSection().raw(), patternNotFoundHandler };
     const PatternFinder enginePatternFinder{ engineSo.getCodeSection().raw(), patternNotFoundHandler };
 
-    memory.emplace(PlatformApi{}, ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
+    memory.emplace(ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
 
     Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
