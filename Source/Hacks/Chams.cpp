@@ -92,7 +92,7 @@ void Chams::renderPlayer(Backtrack& backtrack, const csgo::Entity& player) noexc
         const auto records = backtrack.getRecords(player.getNetworkable().index());
         if (records && !records->empty() && backtrack.valid(engineInterfaces.getEngine(), memory, records->front().simulationTime)) {
             if (!appliedChams)
-                hooks->modelRenderHooks.getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customBoneToWorld);
+                modelRenderHooks->getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customBoneToWorld);
             applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Backtrack)].materials, health, records->back().matrix);
             interfaces.getStudioRender().forcedMaterialOverride(nullptr);
         }
@@ -170,7 +170,7 @@ void Chams::applyChams(const std::array<ChamsLayer, 7>& chams, int health, csgo:
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
         interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
-        hooks->modelRenderHooks.getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+        modelRenderHooks->getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         interfaces.getStudioRender().forcedMaterialOverride(nullptr);
     }
 
@@ -215,12 +215,12 @@ void Chams::applyChams(const std::array<ChamsLayer, 7>& chams, int health, csgo:
             material.alphaModulate(pulse);
 
         if (cham.cover && !appliedChams)
-            hooks->modelRenderHooks.getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+            modelRenderHooks->getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
 
         material.setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
         material.setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
         interfaces.getStudioRender().forcedMaterialOverride(material.getPOD());
-        hooks->modelRenderHooks.getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+        modelRenderHooks->getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
         appliedChams = true;
     }
 }

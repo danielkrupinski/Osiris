@@ -28,6 +28,7 @@ struct MaterialPOD;
 }
 
 class Backtrack;
+class ModelRenderHooks;
 
 class Chams {
 public:
@@ -38,6 +39,11 @@ public:
 
     bool render(Backtrack& backtrack, void*, void*, const csgo::ModelRenderInfo&, csgo::matrix3x4*) noexcept;
     void updateInput() noexcept;
+
+    void setModelRenderHooks(const ModelRenderHooks* modelRenderHooks) noexcept
+    {
+        this->modelRenderHooks = modelRenderHooks;
+    }
 
     static constexpr auto numberOfCategories = 9;
 
@@ -84,4 +90,5 @@ private:
     OtherInterfaces interfaces;
     const Memory& memory;
     ChamsMaterials materials;
+    const ModelRenderHooks* modelRenderHooks = nullptr;
 };

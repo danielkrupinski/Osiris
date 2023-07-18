@@ -49,13 +49,20 @@
 
 #include "Platform/DynamicLibrary.h"
 
+#if IS_WIN32() || IS_WIN64()
+GlobalContext::GlobalContext(HMODULE moduleHandle)
+    : moduleHandle{ moduleHandle }
+#elif IS_LINUX()
 GlobalContext::GlobalContext()
+#endif
 {
     const DynamicLibrary clientDLL{ csgo::CLIENT_DLL };
     const DynamicLibrary engineDLL{ csgo::ENGINE_DLL };
 
     PatternNotFoundHandler patternNotFoundHandler;
-    retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler}, PatternFinder{clientDLL.getCodeSection().raw(), patternNotFoundHandler});
+    retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler }, PatternFinder{ engineDLL.getCodeSection().raw(), patternNotFoundHandler });
+
+    hooks.emplace(clientDLL, engineDLL, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
 }
 
 #if IS_LINUX()
@@ -122,7 +129,7 @@ void GlobalContext::renderFrame()
         gui->handleToggle(features->misc, getOtherInterfaces());
 
         if (gui->isOpen())
-            gui->render(getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
+            gui->render(*hooks, getEngineInterfaces(), ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getOtherInterfaces(), *memory, *config);
     }
 
     ImGui::EndFrame();

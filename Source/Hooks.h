@@ -64,7 +64,7 @@ int pollEvent(SDL_Event* event) noexcept;
 class Hooks {
 public:
 #if IS_WIN32() || IS_WIN64()
-    Hooks(HMODULE moduleHandle, DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
+    Hooks(DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
         : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
 #if IS_WIN32()
         , keyValuesSystemHooks{ VmtLengthCalculator{ vstdlibDll.getCodeSection(), vstdlibDll.getVmtSection() } }
@@ -82,7 +82,6 @@ public:
         , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
         , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
         , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() } }
-        , moduleHandle{ moduleHandle }
     {
     }
 
@@ -136,11 +135,4 @@ public:
     SvCheatsHooks svCheatsHooks;
     ModelRenderHooks modelRenderHooks;
     SurfaceHooks surfaceHooks;
-
-private:
-#if IS_WIN32() || IS_WIN64()
-    HMODULE moduleHandle;
-#endif
 };
-
-inline std::optional<Hooks> hooks;

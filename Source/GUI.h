@@ -9,12 +9,13 @@
 class Visuals;
 struct ImFont;
 class ClientInterfaces;
+class Hooks;
 class Misc;
 
 class GUI {
 public:
     GUI() noexcept;
-    void render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
+    void render(Hooks& hooks, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept;
     void handleToggle(Misc& misc, const OtherInterfaces& interfaces) noexcept;
     [[nodiscard]] bool isOpen() const noexcept { return open; }
 private:

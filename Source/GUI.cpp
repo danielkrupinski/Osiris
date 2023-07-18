@@ -33,6 +33,8 @@
 #include <Config/ResetConfigurator.h>
 #include "Hacks/Features.h"
 
+#include "Hooks.h"
+
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
@@ -94,24 +96,29 @@ GUI::GUI() noexcept
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 17.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
-void GUI::render(const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
+void GUI::render(Hooks& hooks, const EngineInterfaces& engineInterfaces, const ClientInterfaces& clientInterfaces, const OtherInterfaces& interfaces, const Memory& memory, Config& config) noexcept
 {
+    auto& features = config.getFeatures();
     if (!config.style.menuStyle) {
-        renderMenuBar(config.getFeatures());
+        renderMenuBar(features);
         renderAimbotWindow(config);
         renderTriggerbotWindow(config);
-        config.getFeatures().backtrack.drawGUI(false);
-        config.getFeatures().glow.drawGUI(false);
+        features.backtrack.drawGUI(false);
+        features.glow.drawGUI(false);
         renderChamsWindow(config);
         StreamProofESP::drawGUI(config, false);
-        config.getFeatures().visuals.drawGUI(false);
-        config.getFeatures().inventoryChanger.drawGUI(memory, false);
-        config.getFeatures().sound.drawGUI(false);
+        features.visuals.drawGUI(false);
+        features.inventoryChanger.drawGUI(memory, false);
+        features.sound.drawGUI(false);
         renderStyleWindow(config);
-        config.getFeatures().misc.drawGUI(config.getFeatures().visuals, config.getFeatures().inventoryChanger, config.getFeatures().glow, false);
+        features.misc.drawGUI(features.visuals, features.inventoryChanger, features.glow, false);
         renderConfigWindow(interfaces, memory, config);
     } else {
         renderGuiStyle2(engineInterfaces, clientInterfaces, interfaces, memory, config);
+    }
+    if (features.misc.unhook) {
+        hooks.uninstall(features.misc, features.glow, memory, features.visuals, features.inventoryChanger, clientInterfaces.getClient().getPOD(), engineInterfaces, interfaces);
+        features.misc.unhook = false;
     }
 }
 

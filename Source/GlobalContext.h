@@ -23,6 +23,7 @@
 #include "Utils/ReturnAddress.h"
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Features.h"
+#include "Hooks.h"
 
 namespace csgo
 {
@@ -47,13 +48,18 @@ enum class GlobalContextState {
 
 class GlobalContext {
 public:
+#if IS_WIN32() || IS_WIN64()
+    GlobalContext(HMODULE moduleHandle);
+
+    HMODULE moduleHandle;
+#elif IS_LINUX()
     GlobalContext();
 
-#if IS_LINUX()
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);
 #endif
 
+    std::optional<Hooks> hooks;
     std::optional<EventListener> gameEventListener;
     std::optional<EngineInterfacesPODs> engineInterfacesPODs;
     std::optional<Features> features;

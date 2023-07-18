@@ -1547,7 +1547,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
-        hooks->uninstall(*this, glow, memory, visuals, inventoryChanger, clientInterfaces.getClient().getPOD(), engineInterfaces, interfaces);
+        unhook = true;
 
     ImGui::Columns(1);
     if (!contentOnly)

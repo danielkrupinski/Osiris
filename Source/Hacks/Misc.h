@@ -90,6 +90,8 @@ public:
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
+    bool unhook = false;
+
 private:
     void onVoteStart(const void* data, int size) noexcept;
     void onVotePass() noexcept;

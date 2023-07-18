@@ -78,7 +78,7 @@
 HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept;
 HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept;
 
-DWORD WINAPI unload(HMODULE moduleHandle) noexcept;
+DWORD WINAPI unload(LPVOID) noexcept;
 #elif IS_LINUX()
 
 int pollEvent(SDL_Event* event) noexcept;
@@ -167,7 +167,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
 
-    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
+    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), 0, 0, nullptr))
         CloseHandle(thread);
 #elif IS_LINUX()
     *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent) = pollEvent;

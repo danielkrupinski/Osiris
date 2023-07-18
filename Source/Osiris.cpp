@@ -22,9 +22,10 @@ namespace
 
 #include "Endpoints.h"
 
-void initializeGlobalContext()
+template <typename... Args>
+void initializeGlobalContext(Args&&... args)
 {
-    globalContext.emplace();
+    globalContext.emplace(std::forward<Args>(args)...);
 }
 
 #if IS_WIN32() || IS_WIN64()
@@ -38,8 +39,8 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 
     if (reason == DLL_PROCESS_ATTACH) {
         std::setlocale(LC_CTYPE, ".utf8");
-        initializeGlobalContext();
-        hooks.emplace(moduleHandle, DynamicLibrary{ csgo::CLIENT_DLL }, DynamicLibrary{ csgo::ENGINE_DLL }, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
+        initializeGlobalContext(moduleHandle);
+     //   hooks.emplace(DynamicLibrary{ csgo::CLIENT_DLL }, DynamicLibrary{ csgo::ENGINE_DLL }, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
     }
     return TRUE;
 }
@@ -58,7 +59,6 @@ win::Peb* WindowsPlatformApi::getPeb() noexcept
 void __attribute__((constructor)) DllEntryPoint()
 {
     initializeGlobalContext();
-    hooks.emplace(DynamicLibrary{ csgo::CLIENT_DLL }, DynamicLibrary{ csgo::ENGINE_DLL }, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
 }
 
 void* LinuxPlatformApi::dlopen(const char* file, int mode) noexcept
