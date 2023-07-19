@@ -117,7 +117,7 @@ void GUI::render(Hooks& hooks, const EngineInterfaces& engineInterfaces, const C
         renderGuiStyle2(engineInterfaces, clientInterfaces, interfaces, memory, config);
     }
     if (features.misc.unhook) {
-        hooks.uninstall(features.misc, features.glow, memory, features.visuals, features.inventoryChanger, clientInterfaces.getClient().getPOD(), engineInterfaces, interfaces);
+        hooks.uninstall(features.misc, features.glow, features.visuals, features.inventoryChanger);
         features.misc.unhook = false;
     }
 }

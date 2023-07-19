@@ -1201,6 +1201,9 @@
     <ClInclude Include="Vmt\VmtSwapper.h">
       <Filter>Vmt</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\RefCountedHook.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

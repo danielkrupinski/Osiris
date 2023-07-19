@@ -52,8 +52,11 @@ public:
     GlobalContext(HMODULE moduleHandle);
 
     HMODULE moduleHandle;
+    WindowProcedureHook windowProcedureHook;
 #elif IS_LINUX()
     GlobalContext();
+
+    std::add_pointer_t<int(SDL_Event*)> pollEvent;
 
     int pollEventHook(SDL_Event* event);
     void swapWindowHook(SDL_Window* window);

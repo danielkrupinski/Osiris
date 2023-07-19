@@ -142,7 +142,7 @@ LRESULT __stdcall WindowProcedureHook::wndProc(HWND window, UINT msg, WPARAM wPa
         globalContext->state = GlobalContextState::Initialized;
     }
 
-    return CallWindowProcW(globalContext->hooks->windowProcedureHook.originalWndProc, window, msg, wParam, lParam);
+    return CallWindowProcW(globalContext->windowProcedureHook.originalWndProc, window, msg, wParam, lParam);
 }
 
 HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
@@ -524,6 +524,8 @@ extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID rese
 
 DWORD WINAPI unload(LPVOID) noexcept
 {
+    globalContext->windowProcedureHook.uninstall();
+
     Sleep(100);
 
     globalContext->getOtherInterfaces().getInputSystem().enableInput(true);

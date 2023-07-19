@@ -86,7 +86,7 @@ void swapWindow(SDL_Window* window) noexcept;
 
 #endif
 
-void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept
+void Hooks::install() noexcept
 {
 #if IS_WIN32()
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
@@ -104,24 +104,37 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 
 #endif
     
-    bspQueryHooks.install(engineInterfaces.getEngine().getBSPTreeQuery());
+    bspQueryHooks.incrementReferenceCount();
+    bspQueryHooks.update();
+    clientHooks.incrementReferenceCount();
+    clientHooks.update();
+    clientModeHooks.incrementReferenceCount();
+    clientModeHooks.update();
+    clientStateHooks.incrementReferenceCount();
+    clientStateHooks.update();
+    playerInventoryHooks.incrementReferenceCount();
+    playerInventoryHooks.update();
+    engineHooks.incrementReferenceCount();
+    engineHooks.update();
+    engineSoundHooks.incrementReferenceCount();
+    engineSoundHooks.update();
+    inventoryManagerHooks.incrementReferenceCount();
+    inventoryManagerHooks.update();
+    modelRenderHooks.incrementReferenceCount();
+    modelRenderHooks.update();
+    panoramaMarshallHelperHooks.incrementReferenceCount();
+    panoramaMarshallHelperHooks.update();
+    surfaceHooks.incrementReferenceCount();
+    surfaceHooks.update();
+    svCheatsHooks.incrementReferenceCount();
+    svCheatsHooks.update();
+    viewRenderHooks.incrementReferenceCount();
+    viewRenderHooks.update();
 
 #if IS_WIN32()
-    keyValuesSystemHooks.install(memory.keyValuesSystem);
+    keyValuesSystemHooks.incrementReferenceCount();
+    keyValuesSystemHooks.update();
 #endif
-
-    engineHooks.install(engineInterfaces.getEngine().getPOD());
-    clientHooks.install(clientInterface);
-    clientModeHooks.install(memory.clientMode);
-    clientStateHooks.install(&memory.splitScreen->splitScreenPlayers[0]->client);
-    playerInventoryHooks.install(memory.inventoryManager.getLocalInventory());
-    inventoryManagerHooks.install(memory.inventoryManager.getPOD());
-    engineSoundHooks.install(std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()));
-    modelRenderHooks.install(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()));
-    panoramaMarshallHelperHooks.install(memory.panoramaMarshallHelper);
-    surfaceHooks.install(interfaces.getSurface().getPOD());
-    svCheatsHooks.install(interfaces.getCvar().findVar(csgo::sv_cheats));
-    viewRenderHooks.install(memory.viewRender);
 
 #if IS_WIN32()
     if constexpr (std::is_same_v<HookType, MinHook>)
@@ -129,7 +142,7 @@ void Hooks::install(csgo::ClientPOD* clientInterface, const EngineInterfaces& en
 #endif
 }
 
-void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces) noexcept
+void Hooks::uninstall(Misc& misc, Glow& glow, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept
 {
     misc.updateEventListeners(true);
     visuals.updateEventListeners(true);
@@ -141,19 +154,19 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     }
 #endif
 
-    engineHooks.uninstall(engineInterfaces.getEngine().getPOD());
-    clientHooks.uninstall(clientInterface);
-    clientModeHooks.uninstall(memory.clientMode);
-    clientStateHooks.uninstall(&memory.splitScreen->splitScreenPlayers[0]->client);
-    panoramaMarshallHelperHooks.uninstall(memory.panoramaMarshallHelper);
-    viewRenderHooks.uninstall(memory.viewRender);
-    playerInventoryHooks.uninstall(memory.inventoryManager.getLocalInventory());
-    inventoryManagerHooks.uninstall(memory.inventoryManager.getPOD());
-    bspQueryHooks.uninstall(engineInterfaces.getEngine().getBSPTreeQuery());
-    engineSoundHooks.uninstall(std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()));
-    svCheatsHooks.uninstall(interfaces.getCvar().findVar(csgo::sv_cheats));
-    modelRenderHooks.uninstall(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()));
-    surfaceHooks.uninstall(interfaces.getSurface().getPOD());
+    engineHooks.forceUninstall();
+    clientHooks.forceUninstall();
+    clientModeHooks.forceUninstall();
+    clientStateHooks.forceUninstall();
+    panoramaMarshallHelperHooks.forceUninstall();
+    viewRenderHooks.forceUninstall();
+    playerInventoryHooks.forceUninstall();
+    inventoryManagerHooks.forceUninstall();
+    bspQueryHooks.forceUninstall();
+    engineSoundHooks.forceUninstall();
+    svCheatsHooks.forceUninstall();
+    modelRenderHooks.forceUninstall();
+    surfaceHooks.forceUninstall();
 
     Netvars::restore();
 
@@ -161,8 +174,7 @@ void Hooks::uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& vis
     inventoryChanger.reset(memory);
 
 #if IS_WIN32()
-    keyValuesSystemHooks.uninstall(memory.keyValuesSystem);
-    windowProcedureHook.uninstall();
+    keyValuesSystemHooks.forceUninstall();
 
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;

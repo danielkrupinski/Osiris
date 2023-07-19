@@ -445,6 +445,7 @@
     <ClInclude Include="Utils\HexChars.h" />
     <ClInclude Include="Utils\MemorySection.h" />
     <ClInclude Include="Utils\Pad.h" />
+    <ClInclude Include="Utils\RefCountedHook.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />

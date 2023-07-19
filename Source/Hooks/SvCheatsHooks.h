@@ -4,26 +4,16 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/RefCountedHook.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ConVarPOD; }
 
-class SvCheatsHooks {
+class SvCheatsHooks : public RefCountedHook<SvCheatsHooks> {
 public:
-    explicit SvCheatsHooks(const VmtLengthCalculator& vmtLengthCalculator)
-        : hookImpl{ vmtLengthCalculator }
+    explicit SvCheatsHooks(const VmtLengthCalculator& vmtLengthCalculator, csgo::ConVarPOD* svCheats)
+        : hookImpl{ vmtLengthCalculator }, svCheats{ svCheats }
     {
-    }
-
-    void install(csgo::ConVarPOD* svCheats)
-    {
-        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(svCheats));
-        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hook(WIN32_LINUX(13, 16), std::uintptr_t(&getInt)));
-    }
-
-    void uninstall(csgo::ConVarPOD* svCheats)
-    {
-        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(svCheats));
     }
 
     [[nodiscard]] auto getOriginalSvCheatsGetInt() const
@@ -34,7 +24,26 @@ public:
     static int FASTCALL_CONV getInt(csgo::ConVarPOD* thisptr) noexcept;
 
 private:
+    void install()
+    {
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(svCheats));
+        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hook(WIN32_LINUX(13, 16), std::uintptr_t(&getInt)));
+    }
+
+    void uninstall()
+    {
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(svCheats));
+    }
+
+    [[nodiscard]] bool isInstalled() const noexcept
+    {
+        return hookImpl.isInstalled(*reinterpret_cast<std::uintptr_t**>(svCheats));
+    }
+
+    friend RefCountedHook;
+
     HookType hookImpl;
+    csgo::ConVarPOD* svCheats;
 
     int (THISCALL_CONV* originalSvCheatsGetInt)(csgo::ConVarPOD* thisptr);
 };

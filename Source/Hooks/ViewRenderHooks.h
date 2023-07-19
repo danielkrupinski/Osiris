@@ -4,27 +4,16 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/RefCountedHook.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct ViewRender; }
 
-class ViewRenderHooks {
+class ViewRenderHooks : public RefCountedHook<ViewRenderHooks> {
 public:
-    explicit ViewRenderHooks(const VmtLengthCalculator& vmtLengthCalculator)
-        : hookImpl{ vmtLengthCalculator }
+    explicit ViewRenderHooks(const VmtLengthCalculator& vmtLengthCalculator, csgo::ViewRender* viewRender)
+        : hookImpl{ vmtLengthCalculator }, viewRender{ viewRender }
     {
-    }
-
-    void install(csgo::ViewRender* viewRender)
-    {
-        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(viewRender));
-        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hook(WIN32_LINUX(39, 40), std::uintptr_t(&render2dEffectsPreHud)));
-        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hook(WIN32_LINUX(41, 42), std::uintptr_t(&renderSmokeOverlay)));
-    }
-
-    void uninstall(csgo::ViewRender* viewRender)
-    {
-        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(viewRender));
     }
 
     [[nodiscard]] auto getOriginalRender2dEffectsPreHud() const
@@ -41,7 +30,27 @@ public:
     static void FASTCALL_CONV renderSmokeOverlay(FASTCALL_THIS(csgo::ViewRender* thisptr), bool update) noexcept;
 
 private:
+    void install()
+    {
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(viewRender));
+        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hook(WIN32_LINUX(39, 40), std::uintptr_t(&render2dEffectsPreHud)));
+        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hook(WIN32_LINUX(41, 42), std::uintptr_t(&renderSmokeOverlay)));
+    }
+
+    void uninstall()
+    {
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(viewRender));
+    }
+
+    [[nodiscard]] bool isInstalled() const noexcept
+    {
+        return hookImpl.isInstalled(*reinterpret_cast<std::uintptr_t**>(viewRender));
+    }
+
+    friend RefCountedHook;
+
     HookType hookImpl;
+    csgo::ViewRender* viewRender;
 
     void (THISCALL_CONV* originalRender2dEffectsPreHud)(csgo::ViewRender* thisptr, void* viewSetup);
     void (THISCALL_CONV* originalRenderSmokeOverlay)(csgo::ViewRender* thisptr, bool preViewModel);

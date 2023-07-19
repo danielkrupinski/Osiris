@@ -4,6 +4,7 @@
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/RefCountedHook.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo
@@ -13,22 +14,11 @@ namespace csgo
     struct ModelRenderPOD;
 }
 
-class ModelRenderHooks {
+class ModelRenderHooks : public RefCountedHook<ModelRenderHooks> {
 public:
-    explicit ModelRenderHooks(const VmtLengthCalculator& vmtLengthCalculator)
-        : hookImpl{ vmtLengthCalculator }
+    explicit ModelRenderHooks(const VmtLengthCalculator& vmtLengthCalculator, csgo::ModelRenderPOD* modelRender)
+        : hookImpl{ vmtLengthCalculator }, modelRender{ modelRender }
     {
-    }
-
-    void install(csgo::ModelRenderPOD* modelRender)
-    {
-        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(modelRender));
-        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hook(21, std::uintptr_t(&drawModelExecute)));
-    }
-
-    void uninstall(csgo::ModelRenderPOD* modelRender)
-    {
-        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(modelRender));
     }
 
     [[nodiscard]] auto getOriginalDrawModelExecute() const
@@ -39,7 +29,26 @@ public:
     static void FASTCALL_CONV drawModelExecute(FASTCALL_THIS(csgo::ModelRenderPOD* thisptr), void* ctx, void* state, const csgo::ModelRenderInfo& info, csgo::matrix3x4* customBoneToWorld) noexcept;
 
 private:
+    void install()
+    {
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(modelRender));
+        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hook(21, std::uintptr_t(&drawModelExecute)));
+    }
+
+    void uninstall()
+    {
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(modelRender));
+    }
+
+    [[nodiscard]] bool isInstalled() const noexcept
+    {
+        return hookImpl.isInstalled(*reinterpret_cast<std::uintptr_t**>(modelRender));
+    }
+
+    friend RefCountedHook;
+
     HookType hookImpl;
+    csgo::ModelRenderPOD* modelRender;
 
     csgo::DrawModelExecute originalDrawModelExecute;
 };

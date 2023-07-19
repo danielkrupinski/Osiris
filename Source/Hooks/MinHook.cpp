@@ -5,6 +5,7 @@
 void MinHook::install(std::uintptr_t*& vmt) noexcept
 {
     this->vmt = &vmt;
+    installed = true;
 }
 
 std::uintptr_t MinHook::hook(std::size_t index, std::uintptr_t fun) noexcept

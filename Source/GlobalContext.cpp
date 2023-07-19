@@ -6,6 +6,8 @@
 #else
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
+
+#include "SdlFunctions.h"
 #endif
 
 #include "EventListener.h"
@@ -49,9 +51,15 @@
 
 #include "Platform/DynamicLibrary.h"
 
+#if IS_LINUX()
+
+int pollEvent(SDL_Event* event) noexcept;
+
+#endif
+
 #if IS_WIN32() || IS_WIN64()
 GlobalContext::GlobalContext(HMODULE moduleHandle)
-    : moduleHandle{ moduleHandle }
+    : moduleHandle{ moduleHandle }, windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
 #elif IS_LINUX()
 GlobalContext::GlobalContext()
 #endif
@@ -62,13 +70,17 @@ GlobalContext::GlobalContext()
     PatternNotFoundHandler patternNotFoundHandler;
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler }, PatternFinder{ engineDLL.getCodeSection().raw(), patternNotFoundHandler });
 
-    hooks.emplace(clientDLL, engineDLL, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
+#if IS_LINUX()
+    SdlFunctions sdlFunctions{ DynamicLibrary{ "libSDL2-2.0.so.0" } };
+    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
+    *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
+#endif
 }
 
 #if IS_LINUX()
 int GlobalContext::pollEventHook(SDL_Event* event)
 {
-    const auto result = hooks->pollEvent(event);
+    const auto result = pollEvent(event);
 
     if (state == GlobalContextState::Initialized) {
         if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->isOpen())
@@ -138,17 +150,23 @@ void GlobalContext::renderFrame()
 
 void GlobalContext::initialize()
 {
-    const DynamicLibrary clientSo{ csgo::CLIENT_DLL };
-    clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientSo, retSpoofGadgets->client } });
-    const DynamicLibrary engineSo{ csgo::ENGINE_DLL };
-    engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineSo, retSpoofGadgets->client } });
+    const DynamicLibrary clientDll{ csgo::CLIENT_DLL };
+    clientInterfaces = createClientInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ clientDll, retSpoofGadgets->client } });
+    const DynamicLibrary engineDll{ csgo::ENGINE_DLL };
+    engineInterfacesPODs = createEngineInterfacesPODs(InterfaceFinderWithLog{ InterfaceFinder{ engineDll, retSpoofGadgets->client } });
 
     interfaces.emplace();
     PatternNotFoundHandler patternNotFoundHandler;
-    const PatternFinder clientPatternFinder{ clientSo.getCodeSection().raw(), patternNotFoundHandler };
-    const PatternFinder enginePatternFinder{ engineSo.getCodeSection().raw(), patternNotFoundHandler };
+    const PatternFinder clientPatternFinder{ clientDll.getCodeSection().raw(), patternNotFoundHandler };
+    const PatternFinder enginePatternFinder{ engineDll.getCodeSection().raw(), patternNotFoundHandler };
 
     memory.emplace(ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, std::get<csgo::ClientPOD*>(*clientInterfaces), *retSpoofGadgets);
+
+    hooks.emplace(
+#if IS_LINUX()
+        pollEvent,
+#endif
+        *memory, std::get<csgo::ClientPOD*>(*clientInterfaces), getEngineInterfaces(), getOtherInterfaces(), clientDll, engineDll, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
 
     Netvars::init(ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }.getClient());
     gameEventListener.emplace(getEngineInterfaces().getGameEventManager(memory->getEventDescriptor));
@@ -158,5 +176,5 @@ void GlobalContext::initialize()
     config.emplace(*features, getOtherInterfaces(), *memory);
     
     gui.emplace();
-    hooks->install(std::get<csgo::ClientPOD*>(*clientInterfaces), getEngineInterfaces(), getOtherInterfaces(), *memory);
+    hooks->install();
 }

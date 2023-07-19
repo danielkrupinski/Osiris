@@ -40,7 +40,6 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
     if (reason == DLL_PROCESS_ATTACH) {
         std::setlocale(LC_CTYPE, ".utf8");
         initializeGlobalContext(moduleHandle);
-     //   hooks.emplace(DynamicLibrary{ csgo::CLIENT_DLL }, DynamicLibrary{ csgo::ENGINE_DLL }, DynamicLibrary{ csgo::VSTDLIB_DLL }, DynamicLibrary{ csgo::VGUIMATSURFACE_DLL });
     }
     return TRUE;
 }

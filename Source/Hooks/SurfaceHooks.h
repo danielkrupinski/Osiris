@@ -5,29 +5,16 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <RetSpoof/FunctionInvoker.h>
+#include <Utils/RefCountedHook.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct SurfacePOD; }
 
-class SurfaceHooks {
+class SurfaceHooks : public RefCountedHook<SurfaceHooks> {
 public:
-    explicit SurfaceHooks(const VmtLengthCalculator& vmtLengthCalculator)
-        : hookImpl{ vmtLengthCalculator }
+    explicit SurfaceHooks(const VmtLengthCalculator& vmtLengthCalculator, csgo::SurfacePOD* surface)
+        : hookImpl{ vmtLengthCalculator }, surface{ surface }
     {
-    }
-
-    void install(csgo::SurfacePOD* surface)
-    {
-        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(surface));
-        originalSetDrawColor = reinterpret_cast<decltype(originalSetDrawColor)>(hookImpl.hook(WIN32_LINUX(15, 14), std::uintptr_t(&setDrawColor)));
-#if IS_WIN32()
-        originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(hookImpl.hook(67, std::uintptr_t(&lockCursor)));
-#endif
-    }
-
-    void uninstall(csgo::SurfacePOD* surface)
-    {
-        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(surface));
     }
 
     [[nodiscard]] auto getOriginalSetDrawColor() const
@@ -48,7 +35,29 @@ public:
 #endif
 
 private:
+    void install()
+    {
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(surface));
+        originalSetDrawColor = reinterpret_cast<decltype(originalSetDrawColor)>(hookImpl.hook(WIN32_LINUX(15, 14), std::uintptr_t(&setDrawColor)));
+#if IS_WIN32()
+        originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(hookImpl.hook(67, std::uintptr_t(&lockCursor)));
+#endif
+    }
+
+    void uninstall()
+    {
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(surface));
+    }
+
+    [[nodiscard]] bool isInstalled() const noexcept
+    {
+        return hookImpl.isInstalled(*reinterpret_cast<std::uintptr_t**>(surface));
+    }
+
+    friend RefCountedHook;
+
     HookType hookImpl;
+    csgo::SurfacePOD* surface;
 
     void (THISCALL_CONV* originalSetDrawColor)(csgo::SurfacePOD* thisptr, int r, int g, int b, int a);
 #if IS_WIN32()

@@ -3,30 +3,17 @@
 #include <HookType.h>
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <Utils/RefCountedHook.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 namespace csgo { struct DemoPlaybackParameters; }
 namespace csgo { struct EnginePOD; }
 
-class EngineHooks {
+class EngineHooks : public RefCountedHook<EngineHooks> {
 public:
-    explicit EngineHooks(const VmtLengthCalculator& vmtLengthCalculator)
-        : hookImpl{ vmtLengthCalculator }
+    explicit EngineHooks(const VmtLengthCalculator& vmtLengthCalculator, csgo::EnginePOD* engine)
+        : hookImpl{ vmtLengthCalculator }, engine{ engine }
     {
-    }
-    
-    void install(csgo::EnginePOD* engine)
-    {
-        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engine));
-
-        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hook(82, std::uintptr_t(&isPlayingDemo)));
-        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hook(101, std::uintptr_t(&getScreenAspectRatio)));
-        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hook(WIN32_LINUX(218, 219), std::uintptr_t(&getDemoPlaybackParameters)));
-    }
-
-    void uninstall(csgo::EnginePOD* engine)
-    {
-        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(engine));
     }
 
     [[nodiscard]] auto getOriginalIsPlayingDemo() const
@@ -48,8 +35,30 @@ public:
     static float FASTCALL_CONV getScreenAspectRatio(FASTCALL_THIS(csgo::EnginePOD* thisptr), int width, int height) noexcept;
     static const csgo::DemoPlaybackParameters* FASTCALL_CONV getDemoPlaybackParameters(FASTCALL_THIS(csgo::EnginePOD* thisptr)) noexcept;
 
-private:
+private:    
+    void install()
+    {
+        hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engine));
+
+        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hook(82, std::uintptr_t(&isPlayingDemo)));
+        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hook(101, std::uintptr_t(&getScreenAspectRatio)));
+        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hook(WIN32_LINUX(218, 219), std::uintptr_t(&getDemoPlaybackParameters)));
+    }
+
+    void uninstall()
+    {
+        hookImpl.uninstall(*reinterpret_cast<std::uintptr_t**>(engine));
+    }
+
+    [[nodiscard]] bool isInstalled() const noexcept
+    {
+        return hookImpl.isInstalled(*reinterpret_cast<std::uintptr_t**>(engine));
+    }
+
+    friend RefCountedHook;
+
     HookType hookImpl;
+    csgo::EnginePOD* engine;
 
     bool (THISCALL_CONV* originalIsPlayingDemo)(csgo::EnginePOD* thisptr);
     float (THISCALL_CONV* originalGetScreenAspectRatio)(csgo::EnginePOD* thisptr, int width, int height);

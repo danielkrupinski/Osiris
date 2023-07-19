@@ -15,6 +15,8 @@ struct SDL_Window;
 union SDL_Event;
 #endif
 
+#include "CSGO/Constants/ConVarNames.h"
+
 #include "Hooks/MinHook.h"
 #include "Memory.h"
 #include "InventoryChanger/InventoryChanger.h"
@@ -55,72 +57,60 @@ class Glow;
 class Visuals;
 class Misc;
 
-#if IS_LINUX()
-
-int pollEvent(SDL_Event* event) noexcept;
-
-#endif
-
 class Hooks {
 public:
 #if IS_WIN32() || IS_WIN64()
-    Hooks(DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
-        : windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
+    Hooks(const Memory& memory, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
+        : engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, engineInterfaces.getEngine().getPOD() }
+        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, clientInterface }
+        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.clientMode }
+        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, &memory.splitScreen->splitScreenPlayers[0]->client }
+        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.inventoryManager.getLocalInventory() }
+        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.panoramaMarshallHelper }
+        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.viewRender }
+        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.inventoryManager.getPOD() }
+        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, engineInterfaces.getEngine().getBSPTreeQuery() }
+        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()) }
+        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, interfaces.getCvar().findVar(csgo::sv_cheats) }
+        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()) }
+        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() }, interfaces.getSurface().getPOD() }
 #if IS_WIN32()
-        , keyValuesSystemHooks{ VmtLengthCalculator{ vstdlibDll.getCodeSection(), vstdlibDll.getVmtSection() } }
+        , keyValuesSystemHooks{ VmtLengthCalculator{ vstdlibDll.getCodeSection(), vstdlibDll.getVmtSection() }, memory.keyValuesSystem }
 #endif
-        , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() } }
+        , memory{ memory }
     {
     }
 
-    WindowProcedureHook windowProcedureHook;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #elif IS_LINUX()
-    Hooks(DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
+    Hooks(std::add_pointer_t<int(SDL_Event*)> pollEvent, const Memory& memory, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, DynamicLibrary clientDll, DynamicLibrary engineDll, DynamicLibrary vstdlibDll, DynamicLibrary vguiMatSurfaceDll) noexcept
         : sdlFunctions{ DynamicLibrary{ "libSDL2-2.0.so.0" } }
-        , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() } }
-        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() } }
-        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() } }
+        , pollEvent{ pollEvent }
+        , engineHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, engineInterfaces.getEngine().getPOD() }
+        , clientHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, clientInterface }
+        , clientModeHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.clientMode }
+        , clientStateHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, &memory.splitScreen->splitScreenPlayers[0]->client }
+        , playerInventoryHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.inventoryManager.getLocalInventory() }
+        , panoramaMarshallHelperHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.panoramaMarshallHelper }
+        , viewRenderHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.viewRender }
+        , inventoryManagerHooks{ VmtLengthCalculator{ clientDll.getCodeSection(), clientDll.getVmtSection() }, memory.inventoryManager.getPOD() }
+        , bspQueryHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, engineInterfaces.getEngine().getBSPTreeQuery() }
+        , engineSoundHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, std::get<csgo::EngineSoundPOD*>(engineInterfaces.getPODs()) }
+        , svCheatsHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, interfaces.getCvar().findVar(csgo::sv_cheats) }
+        , modelRenderHooks{ VmtLengthCalculator{ engineDll.getCodeSection(), engineDll.getVmtSection() }, std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()) }
+        , surfaceHooks{ VmtLengthCalculator{ vguiMatSurfaceDll.getCodeSection(), vguiMatSurfaceDll.getVmtSection() }, interfaces.getSurface().getPOD() }
+        , memory{ memory }
     {
-        pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
-        *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
     }
 
     SdlFunctions sdlFunctions;
-
     std::add_pointer_t<int(SDL_Event*)> pollEvent;
     std::add_pointer_t<void(SDL_Window*)> swapWindow;
 #endif
 
-    void install(csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces, const Memory& memory) noexcept;
-    void uninstall(Misc& misc, Glow& glow, const Memory& memory, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger, csgo::ClientPOD* clientInterface, const EngineInterfaces& engineInterfaces, const OtherInterfaces& interfaces) noexcept;
-
-#if IS_WIN32()
-    KeyValuesSystemHooks keyValuesSystemHooks;
-#endif
+    void install() noexcept;
+    void uninstall(Misc& misc, Glow& glow, Visuals& visuals, inventory_changer::InventoryChanger& inventoryChanger) noexcept;
 
     EngineHooks engineHooks;
     ClientHooks clientHooks;
@@ -135,4 +125,9 @@ public:
     SvCheatsHooks svCheatsHooks;
     ModelRenderHooks modelRenderHooks;
     SurfaceHooks surfaceHooks;
+#if IS_WIN32()
+    KeyValuesSystemHooks keyValuesSystemHooks;
+#endif
+
+    const Memory& memory;
 };
