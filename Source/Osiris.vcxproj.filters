@@ -108,6 +108,9 @@
     <Filter Include="Vmt">
       <UniqueIdentifier>{cf4fc922-308a-4d3c-8448-4e4002e85dc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemoryAllocation">
+      <UniqueIdentifier>{d969ab9e-3c43-4920-9b63-a03cb992bd03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1203,6 +1206,9 @@
     </ClInclude>
     <ClInclude Include="Utils\RefCountedHook.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryAllocation\MemoryAllocator.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -401,6 +401,7 @@
     <ClInclude Include="InventoryChanger\ItemId.h" />
     <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="MemoryAllocation\MemoryAllocator.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\BytePatternConverter.h" />
     <ClInclude Include="MemorySearch\BytePatternLiteral.h" />

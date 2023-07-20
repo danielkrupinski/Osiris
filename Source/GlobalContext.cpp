@@ -59,7 +59,7 @@ int pollEvent(SDL_Event* event) noexcept;
 
 #if IS_WIN32() || IS_WIN64()
 GlobalContext::GlobalContext(HMODULE moduleHandle)
-    : moduleHandle{ moduleHandle }, windowProcedureHook{ FindWindowW(L"Valve001", nullptr) }
+    : moduleHandle{ moduleHandle }
 #elif IS_LINUX()
 GlobalContext::GlobalContext()
 #endif
@@ -69,12 +69,6 @@ GlobalContext::GlobalContext()
 
     PatternNotFoundHandler patternNotFoundHandler;
     retSpoofGadgets.emplace(PatternFinder{ clientDLL.getCodeSection().raw(), patternNotFoundHandler }, PatternFinder{ engineDLL.getCodeSection().raw(), patternNotFoundHandler });
-
-#if IS_LINUX()
-    SdlFunctions sdlFunctions{ DynamicLibrary{ "libSDL2-2.0.so.0" } };
-    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
-    *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
-#endif
 }
 
 #if IS_LINUX()
@@ -148,6 +142,17 @@ void GlobalContext::renderFrame()
     ImGui::Render();
 }
 
+void GlobalContext::enable()
+{
+#if IS_WIN32() || IS_WIN64()
+    windowProcedureHook.emplace(FindWindowW(L"Valve001", nullptr));
+#elif IS_LINUX()
+    SdlFunctions sdlFunctions{ DynamicLibrary{ "libSDL2-2.0.so.0" } };
+    pollEvent = *reinterpret_cast<decltype(pollEvent)*>(sdlFunctions.pollEvent);
+    *reinterpret_cast<decltype(::pollEvent)**>(sdlFunctions.pollEvent) = ::pollEvent;
+#endif
+}
+
 void GlobalContext::initialize()
 {
     const DynamicLibrary clientDll{ csgo::CLIENT_DLL };
@@ -174,7 +179,8 @@ void GlobalContext::initialize()
     randomGenerator.emplace();
     features.emplace(createFeatures(*memory, ClientInterfaces{ retSpoofGadgets->client, *clientInterfaces }, getEngineInterfaces(), getOtherInterfaces(), ClientPatternFinder{ clientPatternFinder }, EnginePatternFinder{ enginePatternFinder }, *randomGenerator));
     config.emplace(*features, getOtherInterfaces(), *memory);
-    
+    features->chams.setModelRenderHooks(&hooks->modelRenderHooks);
+
     gui.emplace();
     hooks->install();
 }

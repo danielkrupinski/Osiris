@@ -21,11 +21,23 @@ namespace
 }
 
 #include "Endpoints.h"
+#include "MemoryAllocation/MemoryAllocator.h"
 
 template <typename... Args>
 void initializeGlobalContext(Args&&... args)
 {
     globalContext.emplace(std::forward<Args>(args)...);
+    globalContext->enable();
+}
+
+std::byte* MemoryAllocator::allocate(std::size_t size) noexcept
+{
+    return static_cast<std::byte*>(std::malloc(size));
+}
+
+void MemoryAllocator::deallocate(std::byte* memory, std::size_t) noexcept
+{
+    std::free(memory);
 }
 
 #if IS_WIN32() || IS_WIN64()

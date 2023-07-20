@@ -52,7 +52,7 @@ public:
     GlobalContext(HMODULE moduleHandle);
 
     HMODULE moduleHandle;
-    WindowProcedureHook windowProcedureHook;
+    std::optional<WindowProcedureHook> windowProcedureHook;
 #elif IS_LINUX()
     GlobalContext();
 
@@ -77,6 +77,7 @@ public:
         return OtherInterfaces{ retSpoofGadgets->client, *interfaces };
     }
 
+    void enable();
     void renderFrame();
 
     GlobalContextState state = GlobalContextState::NotInitialized;

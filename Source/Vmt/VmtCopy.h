@@ -3,9 +3,8 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstddef>
-#include <memory>
-#include <new>
 
+#include <MemoryAllocation/MemoryAllocator.h>
 #include <Platform/TypeInfoPrecedingVmt.h>
 #include "VmtLength.h"
 
@@ -22,7 +21,7 @@ public:
     [[nodiscard]] std::uintptr_t* getReplacementVmt() const noexcept
     {
         if (replacementVmtWithTypeInfo) [[likely]]
-            return replacementVmtWithTypeInfo.get() + platform::lengthOfTypeInfoPrecedingVmt;
+            return replacementVmtWithTypeInfo + platform::lengthOfTypeInfoPrecedingVmt;
         return nullptr;
     }
 
@@ -31,16 +30,22 @@ public:
         return originalVmt;
     }
 
+    ~VmtCopy() noexcept
+    {
+        if (replacementVmtWithTypeInfo)
+            MemoryAllocator::deallocate(reinterpret_cast<std::byte*>(replacementVmtWithTypeInfo), sizeof(std::uintptr_t) * lengthWithTypeInfo());
+    }
+
 private:
     [[nodiscard]] std::uintptr_t* allocateReplacementVmtWithTypeInfo() const noexcept
     {
-        return new (std::nothrow) std::uintptr_t[lengthWithTypeInfo()];
+        return new (MemoryAllocator::allocate(sizeof(std::uintptr_t) * lengthWithTypeInfo())) std::uintptr_t[lengthWithTypeInfo()];
     }
 
     void copyOriginalVmt() const noexcept
     {
         if (replacementVmtWithTypeInfo) [[likely]]
-            std::copy_n(originalVmt - platform::lengthOfTypeInfoPrecedingVmt, lengthWithTypeInfo(), replacementVmtWithTypeInfo.get());
+            std::copy_n(originalVmt - platform::lengthOfTypeInfoPrecedingVmt, lengthWithTypeInfo(), replacementVmtWithTypeInfo);
     }
 
     [[nodiscard]] std::size_t lengthWithTypeInfo() const noexcept
@@ -50,5 +55,5 @@ private:
 
     std::uintptr_t* originalVmt;
     std::size_t length;
-    std::unique_ptr<std::uintptr_t[]> replacementVmtWithTypeInfo;
+    std::uintptr_t* replacementVmtWithTypeInfo;
 };
