@@ -1210,6 +1210,18 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocator.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryAllocation\FixedAllocator.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegionFinder.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

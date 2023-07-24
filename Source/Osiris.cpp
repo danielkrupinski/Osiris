@@ -32,12 +32,12 @@ void initializeGlobalContext(Args&&... args)
 
 std::byte* MemoryAllocator::allocate(std::size_t size) noexcept
 {
-    return static_cast<std::byte*>(std::malloc(size));
+    return globalContext->fixedAllocator.allocate(size);
 }
 
-void MemoryAllocator::deallocate(std::byte* memory, std::size_t) noexcept
+void MemoryAllocator::deallocate(std::byte* memory, std::size_t size) noexcept
 {
-    std::free(memory);
+    globalContext->fixedAllocator.deallocate(memory, size);
 }
 
 #if IS_WIN32() || IS_WIN64()

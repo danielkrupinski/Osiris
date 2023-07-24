@@ -24,6 +24,7 @@
 #include "InventoryChanger/InventoryChanger.h"
 #include "Hacks/Features.h"
 #include "Hooks.h"
+#include "MemoryAllocation/FixedAllocator.h"
 
 namespace csgo
 {
@@ -62,6 +63,7 @@ public:
     void swapWindowHook(SDL_Window* window);
 #endif
 
+    FixedAllocator<10'000> fixedAllocator;
     std::optional<Hooks> hooks;
     std::optional<EventListener> gameEventListener;
     std::optional<EngineInterfacesPODs> engineInterfacesPODs;

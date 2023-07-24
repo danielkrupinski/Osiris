@@ -401,6 +401,10 @@
     <ClInclude Include="InventoryChanger\ItemId.h" />
     <ClInclude Include="InventoryChanger\WeaponNames.h" />
     <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="MemoryAllocation\FixedAllocator.h" />
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h" />
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegionFinder.h" />
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h" />
     <ClInclude Include="MemoryAllocation\MemoryAllocator.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\BytePatternConverter.h" />

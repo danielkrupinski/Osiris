@@ -33,13 +33,13 @@ public:
     ~VmtCopy() noexcept
     {
         if (replacementVmtWithTypeInfo)
-            MemoryAllocator::deallocate(reinterpret_cast<std::byte*>(replacementVmtWithTypeInfo), sizeof(std::uintptr_t) * lengthWithTypeInfo());
+            MemoryAllocator::deallocate(reinterpret_cast<std::byte*>(replacementVmtWithTypeInfo), MemoryAllocator::memoryFor<std::uintptr_t[]>(lengthWithTypeInfo()));
     }
 
 private:
     [[nodiscard]] std::uintptr_t* allocateReplacementVmtWithTypeInfo() const noexcept
     {
-        return new (MemoryAllocator::allocate(sizeof(std::uintptr_t) * lengthWithTypeInfo())) std::uintptr_t[lengthWithTypeInfo()];
+        return new (MemoryAllocator::allocate(MemoryAllocator::memoryFor<std::uintptr_t[]>(lengthWithTypeInfo()))) std::uintptr_t[lengthWithTypeInfo()];
     }
 
     void copyOriginalVmt() const noexcept
