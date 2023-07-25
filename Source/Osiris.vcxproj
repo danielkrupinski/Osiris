@@ -424,6 +424,7 @@
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
+    <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
     <ClInclude Include="Platform\Windows\PortableExecutable.h" />
     <ClInclude Include="Platform\Windows\Win.h" />

@@ -1222,6 +1222,9 @@
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsMessageBox.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

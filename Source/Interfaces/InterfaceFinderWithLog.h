@@ -3,7 +3,8 @@
 #include <Platform/Macros/IsPlatform.h>
 
 #if IS_WIN32()
-#include <Windows.h>
+#include <string>
+#include <Platform/Windows/WindowsMessageBox.h>
 #endif
 
 #include "InterfaceFinder.h"
@@ -20,7 +21,7 @@ struct InterfaceFinderWithLog {
             return foundInterface;
 
 #if IS_WIN32()
-        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
+        WindowsMessageBox{}.showError("Osiris", ("Failed to find " + std::string{ name } + " interface!").c_str());
 #endif
         std::exit(EXIT_FAILURE);
     }

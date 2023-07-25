@@ -8,6 +8,10 @@
 
 #include <Utils/StringBuilder.h>
 
+#if IS_WIN32()
+#include <Platform/Windows/WindowsMessageBox.h>
+#endif
+
 struct PatternToString {
     explicit PatternToString(BytePattern pattern)
         : pattern{ pattern }
@@ -38,6 +42,6 @@ void PatternNotFoundHandler::operator()(BytePattern pattern) const
 {
     assert(false && "Pattern needs to be updated!");
 #if IS_WIN32()
-    MessageBoxA(nullptr, StringBuilderStorage<300>{}.builder().put("Failed to find pattern:\n", PatternToString{ pattern }).cstring(), "Osiris", MB_OK | MB_ICONWARNING);
+    WindowsMessageBox{}.showWarning("Osiris", StringBuilderStorage<300>{}.builder().put("Failed to find pattern:\n", PatternToString{ pattern }).cstring());
 #endif
 }
