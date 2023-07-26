@@ -5,12 +5,9 @@
 #include <MemorySearch/BytePattern.h>
 #include "PatternNotFoundHandler.h"
 #include <Platform/Macros/IsPlatform.h>
+#include <Platform/SimpleMessageBox.h>
 
 #include <Utils/StringBuilder.h>
-
-#if IS_WIN32()
-#include <Platform/Windows/WindowsMessageBox.h>
-#endif
 
 struct PatternToString {
     explicit PatternToString(BytePattern pattern)
@@ -41,7 +38,5 @@ private:
 void PatternNotFoundHandler::operator()(BytePattern pattern) const
 {
     assert(false && "Pattern needs to be updated!");
-#if IS_WIN32()
-    WindowsMessageBox{}.showWarning("Osiris", StringBuilderStorage<300>{}.builder().put("Failed to find pattern:\n", PatternToString{ pattern }).cstring());
-#endif
+    SimpleMessageBox{}.showWarning("Osiris", StringBuilderStorage<300>{}.builder().put("Failed to find pattern:\n", PatternToString{ pattern }).cstring());
 }

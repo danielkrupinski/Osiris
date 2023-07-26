@@ -1225,6 +1225,9 @@
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\SimpleMessageBox.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
