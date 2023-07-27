@@ -4,3 +4,7 @@ win::Peb* WindowsPlatformApi::getPeb() noexcept
 {
     return nullptr;
 }
+
+void WindowsPlatformApi::debugBreak() noexcept
+{
+}

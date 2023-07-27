@@ -2,7 +2,7 @@
 
 #include "Platform/Macros/IsPlatform.h"
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 #include <clocale>
 #include <Windows.h>
 
@@ -10,6 +10,10 @@
 #include "Platform/Windows/Win.h"
 #include "Platform/Windows/WindowsPlatformApi.h"
 
+#endif
+
+#if IS_LINUX()
+#include <signal.h>
 #endif
 
 #include "GlobalContext.h"
@@ -58,11 +62,17 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
 
 win::Peb* WindowsPlatformApi::getPeb() noexcept
 {
+    static_assert(IS_WIN32() || IS_WIN64());
 #if IS_WIN32()
     return reinterpret_cast<win::Peb*>(__readfsdword(0x30));
 #elif IS_WIN64()
     return reinterpret_cast<win::Peb*>(__readgsqword(0x60));
 #endif
+}
+
+void WindowsPlatformApi::debugBreak() noexcept
+{
+    __debugbreak();
 }
 
 #elif IS_LINUX()
@@ -115,6 +125,11 @@ void* LinuxPlatformApi::mmap(void* addr, size_t length, int prot, int flags, int
 int LinuxPlatformApi::munmap(void* addr, size_t length) noexcept
 {
     return ::munmap(addr, length);
+}
+
+void LinuxPlatformApi::debugBreak() noexcept
+{
+    raise(SIGTRAP);
 }
 
 #endif

@@ -17,4 +17,6 @@ struct LinuxPlatformApi {
     static int fstat(int fd, struct stat* buf) noexcept;
     static void* mmap(void* addr, size_t length, int prot, int flags, int fd, off_t offset) noexcept;
     static int munmap(void* addr, size_t length) noexcept;
+
+    static void debugBreak() noexcept;
 };
