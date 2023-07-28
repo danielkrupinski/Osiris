@@ -30,14 +30,14 @@ namespace Netvars
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 [[nodiscard]] auto funcname() noexcept \
 { \
-    static auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
+    static const auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
     return reinterpret_cast<std::add_pointer_t<type>>(std::uintptr_t(this) + netvarOffset + offset); \
 }
 
 #define PNETVAR_OFFSET2(funcname, class_name, var_name, offset, type) \
 [[nodiscard]] auto funcname() const noexcept \
 { \
-    static auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
+    static const auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
     return reinterpret_cast<std::add_pointer_t<type>>(getThis() + netvarOffset + offset); \
 }
 
@@ -50,14 +50,14 @@ namespace Netvars
 #define NETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 [[nodiscard]] std::add_lvalue_reference_t<type> funcname() noexcept \
 { \
-    static auto netvarOffset =  Netvars::get(fnv::hash(class_name "->" var_name)); \
+    static const auto netvarOffset =  Netvars::get(fnv::hash(class_name "->" var_name)); \
     return *reinterpret_cast<std::add_pointer_t<type>>(std::uintptr_t(this) + netvarOffset + offset); \
 }
 
 #define NETVAR_OFFSET2(funcname, class_name, var_name, offset, type) \
 [[nodiscard]] std::add_lvalue_reference_t<type> funcname() const noexcept \
 { \
-    static auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
+    static const auto netvarOffset = Netvars::get(fnv::hash(class_name "->" var_name)); \
     return *reinterpret_cast<std::add_pointer_t<type>>(getThis() + netvarOffset + offset); \
 }
 
