@@ -421,6 +421,7 @@
     <ClInclude Include="Platform\Macros\CallStack.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
+    <ClInclude Include="Platform\PlatformApi.h" />
     <ClInclude Include="Platform\SimpleMessageBox.h" />
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />

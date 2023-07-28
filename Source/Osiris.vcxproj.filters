@@ -1228,6 +1228,9 @@
     <ClInclude Include="Platform\SimpleMessageBox.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\PlatformApi.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
