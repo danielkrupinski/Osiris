@@ -6,6 +6,7 @@
 #include <charconv>
 #include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <system_error>
 #include <span>
 #include <string_view>
@@ -23,6 +24,12 @@ public:
     StringBuilder& put(Args&&... args)
     {
         (putSingle(std::forward<Args>(args)), ...);
+        return *this;
+    }
+
+    StringBuilder& putPointer(const void* pointer)
+    {
+        putSingleWithBase(reinterpret_cast<std::uintptr_t>(pointer), 16);
         return *this;
     }
 
@@ -48,6 +55,18 @@ private:
     void putSingle(Invocable invocable)
     {
         invocable(*this);
+    }
+
+    void putSingle(const char* str)
+    {
+        while (writePosition != writeEndPosition() && *str != '\0')
+            *writePosition++ = *str++;
+    }
+
+    template <typename T>
+    void putSingle(const T* pointer)
+    {
+        putPointer(pointer);
     }
 
     void putSingle(std::integral auto value)
