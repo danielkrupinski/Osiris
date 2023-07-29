@@ -111,6 +111,9 @@
     <Filter Include="MemoryAllocation">
       <UniqueIdentifier>{d969ab9e-3c43-4920-9b63-a03cb992bd03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Verification">
+      <UniqueIdentifier>{632357e8-8179-49cd-9cd4-c724a0a406e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1230,6 +1233,12 @@
     </ClInclude>
     <ClInclude Include="Platform\PlatformApi.h">
       <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Verification\Verifier.h">
+      <Filter>Verification</Filter>
+    </ClInclude>
+    <ClInclude Include="Verification\VerifyMacros.h">
+      <Filter>Verification</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
