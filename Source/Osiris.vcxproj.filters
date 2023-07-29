@@ -1240,6 +1240,9 @@
     <ClInclude Include="Verification\VerifyMacros.h">
       <Filter>Verification</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\CharUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/CharUtils.h>
 #include <Utils/Pad.h>
 
 namespace win
@@ -39,10 +40,10 @@ struct UnicodeString {
         return length / sizeof(wchar_t);
     }
 
-    [[nodiscard]] bool equals(const char* otherString) const noexcept
+    [[nodiscard]] bool equalsCaseInsensitive(const char* otherString) const noexcept
     {
         for (std::size_t i = 0; i < lengthInChars(); ++i) {
-            if (buffer[i] != otherString[i] || otherString[i] == '\0')
+            if (utils::toUpper(buffer[i]) != utils::toUpper(otherString[i]) || otherString[i] == '\0')
                 return false;
         }
         return true;

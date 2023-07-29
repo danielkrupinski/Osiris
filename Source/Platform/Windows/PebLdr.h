@@ -17,7 +17,7 @@ public:
         for (auto currentLink = head->fLink; currentLink != head; currentLink = currentLink->fLink) {
             const auto& entry = *CONTAINING_RECORD(currentLink, win::LdrDataTableEntry, inLoadOrderLinks);
 
-            if (entry.baseDllName.equals(moduleName))
+            if (entry.baseDllName.equalsCaseInsensitive(moduleName))
                 return HMODULE(entry.dllBase);
         }
         return {};

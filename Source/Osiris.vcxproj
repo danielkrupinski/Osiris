@@ -449,6 +449,7 @@
     <ClInclude Include="SmallVariant.h" />
     <ClInclude Include="SortFilter.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Utils\CharUtils.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\HexChars.h" />
     <ClInclude Include="Utils\MemorySection.h" />
