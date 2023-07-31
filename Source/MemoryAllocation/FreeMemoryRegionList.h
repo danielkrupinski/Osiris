@@ -77,6 +77,14 @@ public:
             (*nearestRegion)->tryMergeWithNextRegion();
     }
 
+    [[nodiscard]] std::size_t getFreeSpace() const noexcept
+    {
+        std::size_t freeSpace = 0;
+        for (const FreeMemoryRegion* region = firstFreeRegion; region != nullptr; region = region->nextFreeRegion)
+            freeSpace += region->size;
+        return freeSpace;
+    }
+
 private:
     [[nodiscard]] static FreeMemoryRegion* createInitialFreeRegion(std::span<std::byte> memory) noexcept
     {

@@ -25,6 +25,11 @@ public:
         freeRegionList.deallocate(pointer, size);
     }
 
+    [[nodiscard]] std::size_t getFreeSpace() const noexcept
+    {
+        return freeRegionList.getFreeSpace();
+    }
+
 private:
     alignas(FreeMemoryRegionList::minimumAlignment()) std::byte storage[Capacity];
     FreeMemoryRegionList freeRegionList{ storage };
