@@ -114,6 +114,9 @@
     <Filter Include="Verification">
       <UniqueIdentifier>{632357e8-8179-49cd-9cd4-c724a0a406e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windows\DLLs">
+      <UniqueIdentifier>{6d627371-1fe5-4a39-9bcd-ec33550ce53f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -1242,6 +1245,18 @@
     </ClInclude>
     <ClInclude Include="Utils\CharUtils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h">
+      <Filter>Platform\Windows\DLLs</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h">
+      <Filter>Platform\Windows\DLLs</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

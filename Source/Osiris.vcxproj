@@ -424,6 +424,10 @@
     <ClInclude Include="Platform\PlatformApi.h" />
     <ClInclude Include="Platform\SimpleMessageBox.h" />
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
+    <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h" />
+    <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h" />
+    <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h" />
+    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />

@@ -12,6 +12,8 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <ShlObj.h>
+
+#include <Platform/Windows/UserDocumentsFolderPath.h>
 #elif IS_LINUX()
 #include <unistd.h>
 #endif
@@ -71,10 +73,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 {
     std::filesystem::path path;
 #if IS_WIN32()
-    if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
-        path = pathToDocuments;
-        CoTaskMemFree(pathToDocuments);
-    }
+    path = UserDocumentsFolderPath{}.get();
 #else
     if (const char* homeDir = getenv("HOME"))
         path = homeDir;
