@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstddef>
 
-#include <MemoryAllocation/MemoryAllocator.h>
+#include <MemoryAllocation/UniquePtr.h>
 #include <Platform/TypeInfoPrecedingVmt.h>
 #include "VmtLength.h"
 
@@ -12,8 +12,7 @@ class VmtCopy {
 public:
     VmtCopy(std::uintptr_t* vmt, VmtLength length) noexcept
         : originalVmt{ vmt }
-        , length{ static_cast<std::size_t>(length) }
-        , replacementVmtWithTypeInfo{ allocateReplacementVmtWithTypeInfo() }
+        , replacementVmtWithTypeInfo{ mem::makeUniqueForOverwrite<std::uintptr_t[]>(static_cast<std::size_t>(length) + platform::lengthOfTypeInfoPrecedingVmt) }
     {
         copyOriginalVmt();
     }
@@ -21,7 +20,7 @@ public:
     [[nodiscard]] std::uintptr_t* getReplacementVmt() const noexcept
     {
         if (replacementVmtWithTypeInfo) [[likely]]
-            return replacementVmtWithTypeInfo + platform::lengthOfTypeInfoPrecedingVmt;
+            return replacementVmtWithTypeInfo.get() + platform::lengthOfTypeInfoPrecedingVmt;
         return nullptr;
     }
 
@@ -30,30 +29,18 @@ public:
         return originalVmt;
     }
 
-    ~VmtCopy() noexcept
-    {
-        if (replacementVmtWithTypeInfo)
-            MemoryAllocator::deallocate(reinterpret_cast<std::byte*>(replacementVmtWithTypeInfo), MemoryAllocator::memoryFor<std::uintptr_t[]>(lengthWithTypeInfo()));
-    }
-
 private:
-    [[nodiscard]] std::uintptr_t* allocateReplacementVmtWithTypeInfo() const noexcept
-    {
-        return new (MemoryAllocator::allocate(MemoryAllocator::memoryFor<std::uintptr_t[]>(lengthWithTypeInfo()))) std::uintptr_t[lengthWithTypeInfo()];
-    }
-
     void copyOriginalVmt() const noexcept
     {
         if (replacementVmtWithTypeInfo) [[likely]]
-            std::copy_n(originalVmt - platform::lengthOfTypeInfoPrecedingVmt, lengthWithTypeInfo(), replacementVmtWithTypeInfo);
+            std::copy_n(originalVmt - platform::lengthOfTypeInfoPrecedingVmt, lengthWithTypeInfo(), replacementVmtWithTypeInfo.get());
     }
 
     [[nodiscard]] std::size_t lengthWithTypeInfo() const noexcept
     {
-        return length + platform::lengthOfTypeInfoPrecedingVmt;
+        return replacementVmtWithTypeInfo.get_deleter().getNumberOfElements();
     }
 
     std::uintptr_t* originalVmt;
-    std::size_t length;
-    std::uintptr_t* replacementVmtWithTypeInfo;
+    UniquePtr<std::uintptr_t[]> replacementVmtWithTypeInfo;
 };
