@@ -1258,6 +1258,9 @@
     <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryAllocation\MemoryDeleter.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">
