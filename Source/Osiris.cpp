@@ -132,4 +132,9 @@ void LinuxPlatformApi::debugBreak() noexcept
     raise(SIGTRAP);
 }
 
+char* LinuxPlatformApi::getenv(const char* name) noexcept
+{
+    return ::getenv(name);
+}
+
 #endif

@@ -20,6 +20,7 @@ struct MockLinuxPlatformApi {
     MOCK_METHOD(int, fstat, (int fd, struct stat* buf), (const noexcept));
     MOCK_METHOD(void*, mmap, (void* addr, size_t length, int prot, int flags, int fd, off_t offset), (const noexcept));
     MOCK_METHOD(int, munmap, (void* addr, size_t length), (const noexcept));
+    MOCK_METHOD(char*, getenv, (const char* name), (const noexcept));
 
     static inline testing::StrictMock<MockLinuxPlatformApi>* instance = nullptr;
 };
@@ -191,4 +192,9 @@ void* LinuxPlatformApi::mmap(void* addr, size_t length, int prot, int flags, int
 int LinuxPlatformApi::munmap(void* addr, size_t length) noexcept
 {
     return MockLinuxPlatformApi::instance->munmap(addr, length);
+}
+
+char* LinuxPlatformApi::getenv(const char* name) noexcept
+{
+    return MockLinuxPlatformApi::instance->getenv(name);
 }
