@@ -319,6 +319,7 @@
     <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Helpers\Bits.h" />
+    <ClInclude Include="Helpers\ConstString.h" />
     <ClInclude Include="Helpers\KeyValuesFactory.h" />
     <ClInclude Include="Helpers\PatternNotFoundHandler.h" />
     <ClInclude Include="Hooks\BspQueryHooks.h" />
