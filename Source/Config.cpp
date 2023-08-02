@@ -8,7 +8,7 @@
 
 #include <Platform/Macros/IsPlatform.h>
 
-#if IS_WIN32()
+#if IS_WIN32() || IS_WIN64()
 #include <Windows.h>
 #include <shellapi.h>
 #include <ShlObj.h>
