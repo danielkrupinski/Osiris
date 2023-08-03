@@ -1267,6 +1267,9 @@
     <ClInclude Include="Helpers\ConstString.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h">
+      <Filter>MemoryAllocation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

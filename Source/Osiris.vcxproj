@@ -407,6 +407,7 @@
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionFinder.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h" />
     <ClInclude Include="MemoryAllocation\MemoryAllocator.h" />
+    <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h" />
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />

@@ -25,7 +25,7 @@ namespace
 }
 
 #include "Endpoints.h"
-#include "MemoryAllocation/MemoryAllocator.h"
+#include "MemoryAllocation/MemoryAllocatorBase.h"
 
 template <typename... Args>
 void initializeGlobalContext(Args&&... args)
@@ -34,12 +34,12 @@ void initializeGlobalContext(Args&&... args)
     globalContext->enable();
 }
 
-std::byte* MemoryAllocator::allocate(std::size_t size) noexcept
+std::byte* MemoryAllocatorBase::allocate(std::size_t size) noexcept
 {
     return globalContext->fixedAllocator.allocate(size);
 }
 
-void MemoryAllocator::deallocate(std::byte* memory, std::size_t size) noexcept
+void MemoryAllocatorBase::deallocate(std::byte* memory, std::size_t size) noexcept
 {
     globalContext->fixedAllocator.deallocate(memory, size);
 }

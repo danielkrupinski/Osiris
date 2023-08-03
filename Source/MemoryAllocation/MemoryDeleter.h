@@ -11,7 +11,7 @@ struct MemoryDeleter {
     {
         if (memory) {
             std::destroy_at(memory);
-            MemoryAllocator::deallocate(memory);
+            MemoryAllocator<T>::deallocate(memory);
         }
     }
 };
@@ -29,7 +29,7 @@ struct MemoryDeleter<T[]> {
     {
         if (memory) {
             std::destroy_n(memory, numberOfElements);
-            MemoryAllocator::deallocate<T[]>(memory, numberOfElements);
+            MemoryAllocator<T[]>::deallocate(memory, numberOfElements);
         }
     }
 

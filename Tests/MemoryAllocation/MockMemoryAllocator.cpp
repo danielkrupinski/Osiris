@@ -1,5 +1,5 @@
 #include "MockMemoryAllocator.h"
-#include "MemoryAllocation/MemoryAllocator.h"
+#include "MemoryAllocation/MemoryAllocatorBase.h"
 
 namespace
 {
@@ -16,14 +16,14 @@ namespace
     return mock;
 }
 
-std::byte* MemoryAllocator::allocate(std::size_t size) noexcept
+std::byte* MemoryAllocatorBase::allocate(std::size_t size) noexcept
 {
     if (const auto mock = mockMemoryAllocator.lock())
         return mock->allocate(size);
     return nullptr;
 }
 
-void MemoryAllocator::deallocate(std::byte* memory, std::size_t size) noexcept
+void MemoryAllocatorBase::deallocate(std::byte* memory, std::size_t size) noexcept
 {
     if (const auto mock = mockMemoryAllocator.lock())
         mock->deallocate(memory, size);
