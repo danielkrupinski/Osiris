@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <type_traits>
@@ -25,7 +26,7 @@ private:
     [[nodiscard]] static auto memoryFor() noexcept
     {
         static_assert(alignof(T) <= FreeMemoryRegionList::minimumAlignment(), "Unsupported alignment");
-        return utils::align<sizeof(T), FreeMemoryRegionList::minimumAlignment()>();
+        return (std::max)(utils::align<sizeof(T), FreeMemoryRegionList::minimumAlignment()>(), FreeMemoryRegionList::minimumAllocationSize());
     }
 };
 
@@ -46,6 +47,6 @@ private:
     {
         static_assert(alignof(T) <= FreeMemoryRegionList::minimumAlignment(), "Unsupported alignment");
         assert(numberOfElements <= (std::numeric_limits<std::size_t>::max)() / sizeof(std::remove_extent_t<T>));
-        return utils::align(numberOfElements * sizeof(std::remove_extent_t<T>), FreeMemoryRegionList::minimumAlignment());
+        return (std::max)(utils::align(numberOfElements * sizeof(std::remove_extent_t<T>), FreeMemoryRegionList::minimumAlignment()), FreeMemoryRegionList::minimumAllocationSize());
     }
 };
