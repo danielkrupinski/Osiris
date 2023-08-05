@@ -14,7 +14,7 @@ jobs:
     - name: install
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
-      run: cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
+      run: cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
     - name: include what you use
       uses: danielkrupinski/include-what-you-use-action@master
       with:
