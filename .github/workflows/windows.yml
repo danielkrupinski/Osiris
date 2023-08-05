@@ -44,5 +44,5 @@ jobs:
       run: cmake -D BUILD_TESTS=1 -A ${{ matrix.arch }} ${{ env.toolset }} -B build
     - name: build
       run: cmake --build build --config ${{ matrix.configuration }}
-    - name: Run unit tests
-      run: cd build && ctest --output-on-failure --schedule-random -j $env:NUMBER_OF_PROCESSORS
+    - name: run unit tests
+      run: ctest --test-dir build --output-on-failure --schedule-random -j $env:NUMBER_OF_PROCESSORS

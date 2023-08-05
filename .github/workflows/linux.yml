@@ -41,6 +41,4 @@ jobs:
     - name: build
       run: cmake --build build -j $(nproc --all)
     - name: run unit tests
-      run: |
-        cd build
-        ctest --output-on-failure --schedule-random -j $(nproc --all)
+      run: ctest --test-dir build --output-on-failure --schedule-random -j $(nproc --all)
