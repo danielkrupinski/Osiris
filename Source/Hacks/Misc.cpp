@@ -126,6 +126,7 @@ struct MiscConfig {
     KeyBind slowwalkKey;
     ColorToggleThickness noscopeCrosshair;
     ColorToggleThickness recoilCrosshair;
+    ColorToggleThickness headshotLine;
 
     struct SpectatorList {
         bool enabled = false;
@@ -388,6 +389,37 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 
     if (ImVec2 pos; Helpers::worldToScreenPixelAligned(localPlayerData.aimPunch, pos))
         drawCrosshair(drawList, pos, Helpers::calculateColor(memory.globalVars->realtime, miscConfig.recoilCrosshair.asColorToggle().asColor4()));
+}
+
+static void drawGapLine(ImDrawList* drawList, const ImVec2& pos, ImU32 color) noexcept
+{
+    // left
+    drawList->AddRectFilled(ImVec2{ pos.x - 21, pos.y - 1 }, ImVec2{ pos.x - 4, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x - 20, pos.y }, ImVec2{ pos.x - 5, pos.y + 1 }, color);
+
+    // right
+    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y - 1 }, ImVec2{ pos.x + 22, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x + 6, pos.y }, ImVec2{ pos.x + 21, pos.y + 1 }, color);
+}
+
+void Misc::headshotLine(ImDrawList* drawList) noexcept
+{
+
+    if (!miscConfig.headshotLine.asColorToggle().enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& localPlayerData = GameData::local();
+
+    if (!localPlayerData.exists || !localPlayerData.alive)
+        return;
+
+    const auto& displaySize = ImGui::GetIO().DisplaySize;
+    ImVec2 pos;
+    pos.x = displaySize.x / 2.0f;
+    pos.y = displaySize.y / 2.0f - displaySize.y / (2.0f * std::sin((localPlayer.get().fovStart()) / 2.0f * M_PI / 180.0f) / std::sin(90.0f * M_PI / 180.0f)) * std::sin(engineInterfaces.getEngine().getViewAngles().x * M_PI / 180.0f) / std::sin(90.0f * M_PI / 180.0f);//I know that in mathematical theory, I can directly replace something with std::tan, but according to my test, such a calculation method causes it to deviate A LOT from the correct position sometimes, I am not major in computer science so I can only explain it in this way
+    const auto color = Helpers::calculateColor(memory.globalVars->realtime, miscConfig.headshotLine.asColorToggle().asColor4());
+    drawGapLine(drawList, pos, color);
 }
 
 void Misc::watermark() noexcept
@@ -1387,6 +1419,7 @@ void Misc::drawGUI(Visuals& visuals, inventory_changer::InventoryChanger& invent
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", miscConfig.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", miscConfig.recoilCrosshair);
+    ImGuiCustom::colorPicker("Aim position line", miscConfig.headshotLine);
     ImGui::Checkbox("Auto pistol", &miscConfig.autoPistol);
     ImGui::Checkbox("Auto reload", &miscConfig.autoReload);
     ImGui::Checkbox("Auto accept", &miscConfig.autoAccept);
@@ -1613,6 +1646,7 @@ static void from_json(const json& j, MiscConfig& m)
     read(j, "Slowwalk key", m.slowwalkKey);
     read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::object>(j, "Recoil crosshair", m.recoilCrosshair);
+    read<value_t::object>(j, "Headshot line", m.headshotLine);
     read(j, "Auto pistol", m.autoPistol);
     read(j, "Auto reload", m.autoReload);
     read(j, "Auto accept", m.autoAccept);
@@ -1748,6 +1782,7 @@ static void to_json(json& j, const MiscConfig& o)
     WRITE("Slowwalk key", slowwalkKey);
     WRITE("Noscope crosshair", noscopeCrosshair);
     WRITE("Recoil crosshair", recoilCrosshair);
+    WRITE("Headshot line", headshotLine);
     WRITE("Auto pistol", autoPistol);
     WRITE("Auto reload", autoReload);
     WRITE("Auto accept", autoAccept);

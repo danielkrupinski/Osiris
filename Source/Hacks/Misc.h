@@ -38,6 +38,7 @@ public:
     void spectatorList() noexcept;
     void noscopeCrosshair(ImDrawList* drawlist) noexcept;
     void recoilCrosshair(ImDrawList* drawList) noexcept;
+    void headshotLine(ImDrawList* drawList) noexcept;
     void watermark() noexcept;
     void prepareRevolver(csgo::UserCmd*) noexcept;
     void fastPlant(csgo::UserCmd*) noexcept;

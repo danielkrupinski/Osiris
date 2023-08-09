@@ -117,6 +117,7 @@ void GlobalContext::renderFrame()
         features->misc.purchaseList();
         features->misc.noscopeCrosshair(ImGui::GetBackgroundDrawList());
         features->misc.recoilCrosshair(ImGui::GetBackgroundDrawList());
+        features->misc.headshotLine(ImGui::GetBackgroundDrawList());
         features->misc.drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         features->misc.drawBombTimer();
         features->misc.spectatorList();
