@@ -7,7 +7,7 @@
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
 Free open-source cross-platform cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game. Available for Windows and Linux systems.
-
+666666666666666
 ## Features
 *   **Aimbot** - aim assistance
 *   **Triggerbot** - automatically fires when crosshair is on enemy
