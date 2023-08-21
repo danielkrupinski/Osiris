@@ -93,7 +93,9 @@ void Chams::renderPlayer(Backtrack& backtrack, const csgo::Entity& player) noexc
         if (records && !records->empty() && backtrack.valid(engineInterfaces.getEngine(), memory, records->front().simulationTime)) {
             if (!appliedChams)
                 modelRenderHooks->getOriginalDrawModelExecute()(std::get<csgo::ModelRenderPOD*>(engineInterfaces.getPODs()), ctx, state, info, customBoneToWorld);
-            applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Backtrack)].materials, health, records->back().matrix);
+            for (uint32_t i = 0; i < records->size(); i++) {
+                applyChams(chamsMaterials[static_cast<std::size_t>(ChamsCategory::Backtrack)].materials, health, records->at(i).matrix);
+            }
             interfaces.getStudioRender().forcedMaterialOverride(nullptr);
         }
     } else {
