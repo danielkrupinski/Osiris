@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <type_traits>
 
 #include "ReturnAddress.h"
@@ -42,7 +43,9 @@ public:
         if (address != 0) {
             using OffsetType = std::int32_t;
             const auto addressOfNextInstruction = address + sizeof(OffsetType);
-            address = addressOfNextInstruction + *reinterpret_cast<OffsetType*>(address);
+            OffsetType offset;
+            std::memcpy(&offset, reinterpret_cast<const void*>(address), sizeof(OffsetType));
+            address = addressOfNextInstruction + offset;
         }
         return *this;
     }
