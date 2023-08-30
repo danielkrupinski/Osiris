@@ -3,6 +3,7 @@
 #include "Platform/Macros/IsPlatform.h"
 
 #if IS_WIN32() || IS_WIN64()
+#include <bit>
 #include <clocale>
 #include <Windows.h>
 
@@ -64,9 +65,9 @@ win::Peb* WindowsPlatformApi::getPeb() noexcept
 {
     static_assert(IS_WIN32() || IS_WIN64());
 #if IS_WIN32()
-    return reinterpret_cast<win::Peb*>(__readfsdword(0x30));
+    return std::bit_cast<win::Peb*>(__readfsdword(0x30));
 #elif IS_WIN64()
-    return reinterpret_cast<win::Peb*>(__readgsqword(0x60));
+    return std::bit_cast<win::Peb*>(__readgsqword(0x60));
 #endif
 }
 
