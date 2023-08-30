@@ -26,7 +26,7 @@ public:
     {
         if constexpr (N != 0) {
             if (address != 0) {
-                address = *reinterpret_cast<std::uintptr_t*>(address);
+                address = derefAddress<std::uintptr_t>();
                 return deref<N - 1>();
             }
         }
@@ -43,8 +43,7 @@ public:
         if (address != 0) {
             using OffsetType = std::int32_t;
             const auto addressOfNextInstruction = address + sizeof(OffsetType);
-            OffsetType offset;
-            std::memcpy(&offset, reinterpret_cast<const void*>(address), sizeof(OffsetType));
+            const auto offset = derefAddress<OffsetType>();
             address = addressOfNextInstruction + offset;
         }
         return *this;
@@ -68,5 +67,13 @@ public:
     }
 
 private:
+    template <typename T>
+    [[nodiscard]] T derefAddress() const noexcept
+    {
+        T value;
+        std::memcpy(&value, reinterpret_cast<const void*>(address), sizeof(T));
+        return value;
+    }
+
     std::uintptr_t address;
 };
