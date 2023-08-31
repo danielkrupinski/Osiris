@@ -49,11 +49,6 @@ public:
         return *this;
     }
 
-    [[nodiscard]] std::uintptr_t get() const noexcept
-    {
-        return address;
-    }
-
     [[nodiscard]] ReturnAddress asReturnAddress() const noexcept
     {
         return ReturnAddress{ address };
@@ -62,8 +57,7 @@ public:
     template <typename T>
     [[nodiscard]] T as() const noexcept
     {
-        static_assert(std::is_pointer_v<T>, "T must be a pointer type!");
-        return reinterpret_cast<T>(address);
+        return T(address);
     }
 
 private:

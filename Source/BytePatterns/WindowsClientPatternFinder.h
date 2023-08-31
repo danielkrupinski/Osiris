@@ -75,7 +75,7 @@ struct WindowsClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t keyValuesFromString() const noexcept
     {
-        return finder("E8 ? ? ? ? 83 C4 04 89 45 D8"_pat).add(1).abs().get();
+        return finder("E8 ? ? ? ? 83 C4 04 89 45 D8"_pat).add(1).abs().as<std::uintptr_t>();
     }
 
     [[nodiscard]] csgo::GlowObjectManager* glowObjectManager() const noexcept
@@ -100,7 +100,7 @@ struct WindowsClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t money() const noexcept
     {
-        return finder("84 C0 75 0C 5B"_pat).get();
+        return finder("84 C0 75 0C 5B"_pat).as<std::uintptr_t>();
     }
 
     [[nodiscard]] ReturnAddress insertIntoTree() const noexcept
@@ -280,7 +280,7 @@ struct WindowsClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t traceToExit() const noexcept
     {
-        return finder("55 8B EC 83 EC 4C F3 0F 10 75"_pat).get();
+        return finder("55 8B EC 83 EC 4C F3 0F 10 75"_pat).as<std::uintptr_t>();
     }
 
     [[nodiscard]] csgo::ViewRender* viewRender() const noexcept
@@ -290,7 +290,7 @@ struct WindowsClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t drawScreenEffectMaterial() const noexcept
     {
-        return finder("E8 ? ? ? ? 83 C4 0C 8D 4D F8"_pat).add(1).abs().get();
+        return finder("E8 ? ? ? ? 83 C4 0C 8D 4D F8"_pat).add(1).abs().as<std::uintptr_t>();
     }
 
     [[nodiscard]] csgo::EquipWearable equipWearable() const noexcept

@@ -62,7 +62,7 @@ TEST_F(TestLinuxDynamicLibrary, GetFunctionAddressReturnsZeroIfOpeningFailed) {
     EXPECT_CALL(platformApi, dlsym(_, _)).Times(0);
 
     const auto dll = createSharedObject(dummyLibraryName);
-    EXPECT_EQ(dll.getFunctionAddress("functionA").get(), 0);
+    EXPECT_EQ(dll.getFunctionAddress("functionA").as<std::uintptr_t>(), 0);
 }
 
 TEST_F(TestLinuxDynamicLibrary, GetLinkMapReturnsNullIfOpeningFailed) {

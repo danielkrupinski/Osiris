@@ -7,7 +7,7 @@
 
 struct InterfaceFinder {
     explicit InterfaceFinder(DynamicLibrary library, RetSpoofInvoker invoker)
-        : createInterface{ invoker, library.getFunctionAddress("CreateInterface").get() }
+        : createInterface{ invoker, library.getFunctionAddress("CreateInterface").as<csgo::CreateInterface>() }
     {
     }
 

@@ -7,8 +7,8 @@
 
 struct SdlFunctions {
     SdlFunctions(DynamicLibrary libSDL)
-        : pollEvent{ libSDL.getFunctionAddress("SDL_PollEvent").add(2).abs().get() },
-          swapWindow{ libSDL.getFunctionAddress("SDL_GL_SwapWindow").add(2).abs().get() }
+        : pollEvent{ libSDL.getFunctionAddress("SDL_PollEvent").add(2).abs().as<std::uintptr_t>() },
+          swapWindow{ libSDL.getFunctionAddress("SDL_GL_SwapWindow").add(2).abs().as<std::uintptr_t>() }
     {
     }
 

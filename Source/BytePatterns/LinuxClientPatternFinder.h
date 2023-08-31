@@ -70,7 +70,7 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t keyValuesFromString() const noexcept
     {
-        return finder("E8 ? ? ? ? 48 89 DF 48 89 45 E0"_pat).add(1).abs().get();
+        return finder("E8 ? ? ? ? 48 89 DF 48 89 45 E0"_pat).add(1).abs().as<std::uintptr_t>();
     }
 
     [[nodiscard]] csgo::GlowObjectManager* glowObjectManager() const noexcept
@@ -90,7 +90,7 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] std::uintptr_t money() const noexcept
     {
-        return finder("84 C0 75 C6 B8 ? ? ? ? EB D9"_pat).get();
+        return finder("84 C0 75 C6 B8 ? ? ? ? EB D9"_pat).as<std::uintptr_t>();
     }
 
     [[nodiscard]] ReturnAddress insertIntoTree() const noexcept
