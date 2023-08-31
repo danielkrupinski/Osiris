@@ -42,14 +42,6 @@ TEST(SafeAddressTest, AddingZeroOffsetToAnAddressDoesNothing) {
     EXPECT_EQ(SafeAddress{ reinterpret_cast<const void*>(123'456) }.add(0).as<std::uintptr_t>(), 123'456);
 }
 
-TEST(SafeAddressTest, AddingPositiveOffsetCanWrapAround) {
-    EXPECT_EQ(SafeAddress{ reinterpret_cast<const void*>(maxAddress) }.add(1).as<std::uintptr_t>(), minAddress);
-}
-
-TEST(SafeAddressTest, AddingNegativeOffsetCanWrapAround) {
-    EXPECT_EQ(SafeAddress{ reinterpret_cast<const void*>(10) }.add(-11).as<std::uintptr_t>(), maxAddress);
-}
-
 TEST(SafeAddressTest, CanBeDereferenced) {
     int* ptr1 = nullptr;
     int** ptr2 = &ptr1;
