@@ -54,7 +54,7 @@ public:
                     assert(false && "Forwarded exports are not supported yet!");
                     return SafeAddress{ 0 };
                 }
-                return SafeAddress{ std::uintptr_t(base + functionRva) };
+                return SafeAddress{ base + functionRva };
             }
         }
 

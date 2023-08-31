@@ -9,15 +9,15 @@
 
 class SafeAddress {
 public:
-    explicit SafeAddress(std::uintptr_t address)
+    explicit SafeAddress(const void* address) noexcept
         : address{ address }
     {
     }
 
     SafeAddress& add(std::ptrdiff_t offset) noexcept
     {
-        if (address != 0)
-            address += offset;
+        if (address != nullptr)
+            address = static_cast<const std::byte*>(address) + offset;
         return *this;
     }
 
@@ -25,8 +25,8 @@ public:
     SafeAddress& deref() noexcept
     {
         if constexpr (N != 0) {
-            if (address != 0) {
-                address = derefAddress<std::uintptr_t>();
+            if (address != nullptr) {
+                address = derefAddress<const void*>();
                 return deref<N - 1>();
             }
         }
@@ -40,9 +40,9 @@ public:
 
     SafeAddress& abs() noexcept
     {
-        if (address != 0) {
+        if (address != nullptr) {
             using OffsetType = std::int32_t;
-            const auto addressOfNextInstruction = address + sizeof(OffsetType);
+            const auto addressOfNextInstruction = static_cast<const std::byte*>(address) + sizeof(OffsetType);
             const auto offset = derefAddress<OffsetType>();
             address = addressOfNextInstruction + offset;
         }
@@ -51,7 +51,7 @@ public:
 
     [[nodiscard]] ReturnAddress asReturnAddress() const noexcept
     {
-        return ReturnAddress{ address };
+        return ReturnAddress{ reinterpret_cast<std::uintptr_t>(address) };
     }
 
     template <typename T>
@@ -65,9 +65,9 @@ private:
     [[nodiscard]] T derefAddress() const noexcept
     {
         T value;
-        std::memcpy(&value, reinterpret_cast<const void*>(address), sizeof(T));
+        std::memcpy(&value, address, sizeof(T));
         return value;
     }
 
-    std::uintptr_t address;
+    const void* address;
 };

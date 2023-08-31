@@ -29,7 +29,7 @@ public:
     [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
-            return SafeAddress{ std::uintptr_t(LinuxPlatformApi::dlsym(handle, functionName)) };
+            return SafeAddress{ LinuxPlatformApi::dlsym(handle, functionName) };
         return SafeAddress{ 0 };
     }
 

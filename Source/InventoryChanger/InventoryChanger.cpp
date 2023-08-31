@@ -100,7 +100,7 @@ static csgo::EntityPOD* createGloves(const ClientInterfaces& clientInterfaces, c
 
     std::memset(econWearable, 0, sizeOfEconWearable);
 
-    const auto econWearableConstructor = SafeAddress{ std::uintptr_t(createWearable) + 61 }.abs().as<std::uintptr_t>();
+    const auto econWearableConstructor = SafeAddress{ reinterpret_cast<std::byte*>(createWearable) + 61 }.abs().as<std::uintptr_t>();
     retSpoofGadgets->client.invokeThiscall<void>(std::uintptr_t(econWearable), econWearableConstructor);
 
     csgo::Entity::from(retSpoofGadgets->client, static_cast<csgo::EntityPOD*>(econWearable)).initializeAsClientEntity(nullptr, false);

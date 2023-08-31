@@ -25,14 +25,14 @@ public:
         const auto found = HybridPatternFinder{ bytes, pattern }();
         if (!found)
             notFoundHandler(pattern);
-        return SafeAddress{ std::uintptr_t(found) };
+        return SafeAddress{ found };
     }
 
     [[nodiscard]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
     {
         const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }();
         if (foundWithHint)
-            return SafeAddress{ std::uintptr_t(foundWithHint) };
+            return SafeAddress{ foundWithHint };
         return operator()(pattern);
     }
 
