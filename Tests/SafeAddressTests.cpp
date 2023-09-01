@@ -17,7 +17,7 @@ TEST_P(SafeAddress_AddressTest, AfterConstructionHasAddressPassedToTheConstructo
 }
 
 TEST_P(SafeAddress_AddressTest, ReturnsCorrectAddressWhenConvertedToReturnAddress) {
-    EXPECT_EQ(static_cast<std::uintptr_t>(SafeAddress{ reinterpret_cast<const void*>(GetParam()) }.asReturnAddress()), GetParam());
+    EXPECT_EQ(SafeAddress{ reinterpret_cast<const void*>(GetParam()) }.asReturnAddress(), ReturnAddress{reinterpret_cast<const void*>(GetParam())});
 }
 
 TEST_P(SafeAddress_AddressTest, ReturnsCorrectAddressWhenConvertedToPointer) {

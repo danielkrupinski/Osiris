@@ -51,7 +51,7 @@ public:
 
     [[nodiscard]] ReturnAddress asReturnAddress() const noexcept
     {
-        return ReturnAddress{ reinterpret_cast<std::uintptr_t>(address) };
+        return ReturnAddress{ address };
     }
 
     template <typename T>
