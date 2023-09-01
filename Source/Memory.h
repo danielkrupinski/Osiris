@@ -176,6 +176,11 @@ inline Memory::Memory(const ClientPatternFinder& clientPatternFinder, const Engi
     makePanoramaSymbolFn{ retSpoofGadgets.client, clientPatternFinder.makePanoramaSymbol() },
     itemSystemFn{ clientPatternFinder.getItemSystem() },
     moveHelperPtr{ clientPatternFinder.moveHelper() }
+#if IS_WIN32() || IS_WIN64()
+    , keyValuesAllocEngine{ enginePatternFinder.keyValuesAlloc() }
+    , keyValuesAllocClient{ clientPatternFinder.keyValuesAlloc() }
+    , shouldDrawFogReturnAddress{ clientPatternFinder.shouldDrawFog() }
+#endif
 {
     const DynamicLibrary tier0{ csgo::TIER0_DLL };
     debugMsg = tier0.getFunctionAddress("Msg").template as<decltype(debugMsg)>();
@@ -197,9 +202,6 @@ inline Memory::Memory(const ClientPatternFinder& clientPatternFinder, const Engi
     localPlayer.init(clientPatternFinder.localPlayer());
 
     keyValuesSystem = reinterpret_cast<csgo::KeyValuesSystemPOD * (STDCALL_CONV*)()>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "KeyValuesSystem"))();
-    keyValuesAllocEngine = enginePatternFinder.keyValuesAlloc();
-    keyValuesAllocClient = clientPatternFinder.keyValuesAlloc();
-    shouldDrawFogReturnAddress = clientPatternFinder.shouldDrawFog();
 #elif IS_LINUX()
     conColorMsg = tier0.getFunctionAddress("_Z11ConColorMsgRK5ColorPKcz").template as<decltype(conColorMsg)>();
 

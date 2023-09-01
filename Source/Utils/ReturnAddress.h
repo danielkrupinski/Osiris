@@ -1,10 +1,6 @@
 #pragma once
 
-#include <cstdint>
-
 struct ReturnAddress {
-    ReturnAddress() = default;
-
     explicit ReturnAddress(const void* returnAddress) noexcept
         : returnAddress{ returnAddress }
     {

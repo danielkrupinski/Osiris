@@ -169,14 +169,17 @@ struct MiscConfig {
 } miscConfig;
 
 Misc::Misc(const ClientInterfaces& clientInterfaces, const EngineInterfaces& engineInterfaces, const OtherInterfaces& otherInterfaces, const Memory& memory, const ClientPatternFinder& clientPatternFinder, const EnginePatternFinder& enginePatternFinder)
-    : clientInterfaces{ clientInterfaces }, engineInterfaces{ engineInterfaces }, interfaces{ otherInterfaces }, memory{ memory },
-    setClanTag{ retSpoofGadgets->engine, enginePatternFinder.sendClanTag() },
-    submitReport{ retSpoofGadgets->client, clientPatternFinder.submitReport() }
-{
-    demoOrHLTV = clientPatternFinder.demoOrHLTV();
+    : clientInterfaces{ clientInterfaces }
+    , engineInterfaces{ engineInterfaces }
+    , interfaces{ otherInterfaces }
+    , memory{ memory }
+    , setClanTag{ retSpoofGadgets->engine, enginePatternFinder.sendClanTag() }
+    , submitReport{ retSpoofGadgets->client, clientPatternFinder.submitReport() }
+    , demoOrHLTV{ clientPatternFinder.demoOrHLTV() }
+    , insertIntoTree{ clientPatternFinder.insertIntoTree() }
+    , demoFileEndReached{ clientPatternFinder.demoFileEndReached() }
+{ 
     money = clientPatternFinder.money();
-    insertIntoTree = clientPatternFinder.insertIntoTree();
-    demoFileEndReached = clientPatternFinder.demoFileEndReached();
 }
 
 bool Misc::isRadarHackOn() noexcept
