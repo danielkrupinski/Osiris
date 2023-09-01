@@ -3,9 +3,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
-#include <type_traits>
-
-#include "ReturnAddress.h"
 
 class SafeAddress {
 public:
@@ -47,11 +44,6 @@ public:
             address = addressOfNextInstruction + offset;
         }
         return *this;
-    }
-
-    [[nodiscard]] ReturnAddress asReturnAddress() const noexcept
-    {
-        return ReturnAddress{ address };
     }
 
     template <typename T>

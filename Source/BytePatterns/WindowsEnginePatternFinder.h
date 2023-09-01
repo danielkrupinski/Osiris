@@ -56,7 +56,7 @@ struct WindowsEnginePatternFinder {
 
     [[nodiscard]] ReturnAddress keyValuesAlloc() const noexcept
     {
-        return finder("E8 ? ? ? ? 83 C4 08 84 C0 75 10 FF 75 0C"_pat).add(1).abs().add(0x4A).asReturnAddress();
+        return finder("E8 ? ? ? ? 83 C4 08 84 C0 75 10 FF 75 0C"_pat).add(1).abs().add(0x4A).as<ReturnAddress>();
     }
 
 private:

@@ -35,12 +35,12 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] ReturnAddress scopeDust() const noexcept
     {
-        return finder("41 FF 51 70 43 8D 14 3E"_pat).add(4).asReturnAddress();
+        return finder("41 FF 51 70 43 8D 14 3E"_pat).add(4).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress scopeArc() const noexcept
     {
-        return finder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 66 0F EF E4"_pat).asReturnAddress();
+        return finder("49 8B 3C 24 8B B3 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 3C 24 66 0F EF E4"_pat).as<ReturnAddress>();
     }
 
     [[nodiscard]] float* vignette() const noexcept
@@ -55,7 +55,7 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] ReturnAddress cameraThink() const noexcept
     {
-        return finder("0F 1F 80 ? ? ? ? 85 C0 75 5C"_pat).add(6).asReturnAddress();
+        return finder("0F 1F 80 ? ? ? ? 85 C0 75 5C"_pat).add(6).as<ReturnAddress>();
     }
 
     [[nodiscard]] csgo::KeyValuesFindKey keyValuesFindKey() const noexcept
@@ -85,7 +85,7 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] ReturnAddress demoOrHLTV() const noexcept
     {
-        return finder("84 C0 75 0A 48 8D 05"_pat).asReturnAddress();
+        return finder("84 C0 75 0A 48 8D 05"_pat).as<ReturnAddress>();
     }
 
     [[nodiscard]] std::uintptr_t money() const noexcept
@@ -95,82 +95,82 @@ struct LinuxClientPatternFinder {
 
     [[nodiscard]] ReturnAddress insertIntoTree() const noexcept
     {
-        return finder("41 FF 52 30 89 85"_pat).add(4).asReturnAddress();
+        return finder("41 FF 52 30 89 85"_pat).add(4).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress demoFileEndReached() const noexcept
     {
-        return finder("48 85 C0 74 76 80 78 10 00"_pat).asReturnAddress();
+        return finder("48 85 C0 74 76 80 78 10 00"_pat).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setStickerToolSlotGetArgAsNumber() const noexcept
     {
-        return finder("F2 44 0F 2C E8 45 85 ED"_pat, OffsetHint{ 11247132 }).asReturnAddress();
+        return finder("F2 44 0F 2C E8 45 85 ED"_pat, OffsetHint{ 11247132 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress wearItemStickerGetArgAsString() const noexcept
     {
-        return finder("49 8B 47 18 BA"_pat, OffsetHint{ 11225783 }).add(-131).asReturnAddress();
+        return finder("49 8B 47 18 BA"_pat, OffsetHint{ 11225783 }).add(-131).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setNameToolStringGetArgAsString() const noexcept
     {
-        return finder("BA ? ? ? ? 4C 89 F6 48 89 C7 49 89 C4"_pat, OffsetHint{ 11252637 }).asReturnAddress();
+        return finder("BA ? ? ? ? 4C 89 F6 48 89 C7 49 89 C4"_pat, OffsetHint{ 11252637 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress clearCustomNameGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 74 E5 48 89 C7 E8 ? ? ? ? 49 89 C4"_pat, OffsetHint{ 11247366 }).asReturnAddress();
+        return finder("48 85 C0 74 E5 48 89 C7 E8 ? ? ? ? 49 89 C4"_pat, OffsetHint{ 11247366 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress deleteItemGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 74 DE 48 89 C7 E8 ? ? ? ? 48 89 C3 E8 ? ? ? ? 48 89 DE"_pat, OffsetHint{ 11248886 }).asReturnAddress();
+        return finder("48 85 C0 74 DE 48 89 C7 E8 ? ? ? ? 48 89 C3 E8 ? ? ? ? 48 89 DE"_pat, OffsetHint{ 11248886 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setStatTrakSwapToolItemsGetArgAsString() const noexcept
     {
-        return finder("74 84 4C 89 EE 4C 89 F7 E8 ? ? ? ? 48 85 C0"_pat, OffsetHint{ 11246916 }).add(-86).asReturnAddress();
+        return finder("74 84 4C 89 EE 4C 89 F7 E8 ? ? ? ? 48 85 C0"_pat, OffsetHint{ 11246916 }).add(-86).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress acknowledgeNewItemByItemIDGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 74 DE 48 89 C7 E8 ? ? ? ? 4C 89 EF 48 89 C6 E8 ? ? ? ? 4C 89 E6 48 89 DF 0F B6 D0"_pat, OffsetHint{ 11221963 }).asReturnAddress();
+        return finder("48 85 C0 74 DE 48 89 C7 E8 ? ? ? ? 4C 89 EF 48 89 C6 E8 ? ? ? ? 4C 89 E6 48 89 DF 0F B6 D0"_pat, OffsetHint{ 11221963 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setItemAttributeValueAsyncGetArgAsString() const noexcept
     {
-        return finder("FF 50 38 48 85 C0 74 C2"_pat, OffsetHint{ 11228494 }).add(3).asReturnAddress();
+        return finder("FF 50 38 48 85 C0 74 C2"_pat, OffsetHint{ 11228494 }).add(3).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setMyPredictionUsingItemIdGetNumArgs() const noexcept
     {
-        return finder("83 F8 01 89 85 ? ? ? ? 7E 1A"_pat, OffsetHint{ 11613975 }).asReturnAddress();
+        return finder("83 F8 01 89 85 ? ? ? ? 7E 1A"_pat, OffsetHint{ 11613975 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress getMyPredictionTeamIDGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 48 89 C7 74 C2 E8 ? ? ? ? 41 BF"_pat, OffsetHint{ 11606770 }).add(-20).asReturnAddress();
+        return finder("48 85 C0 48 89 C7 74 C2 E8 ? ? ? ? 41 BF"_pat, OffsetHint{ 11606770 }).add(-20).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress setInventorySortAndFiltersGetArgAsString() const noexcept
     {
-        return finder("49 89 C5 E9 ? ? ? ? 0F 1F 44 00 00 BA"_pat, OffsetHint{ 11312157 }).asReturnAddress();
+        return finder("49 89 C5 E9 ? ? ? ? 0F 1F 44 00 00 BA"_pat, OffsetHint{ 11312157 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress getInventoryCountSetResultInt() const noexcept
     {
-        return finder("48 8B 08 48 89 DE 48 89 C7 41 8B 96 38 02"_pat, OffsetHint{ 11404345 }).add(19).asReturnAddress();
+        return finder("48 8B 08 48 89 DE 48 89 C7 41 8B 96 38 02"_pat, OffsetHint{ 11404345 }).add(19).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress performItemCasketTransactionGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 0F 84 ? ? ? ? 48 89 C7 E8 ? ? ? ? F2 0F 10 85"_pat, OffsetHint{ 11300702 }).asReturnAddress();
+        return finder("48 85 C0 0F 84 ? ? ? ? 48 89 C7 E8 ? ? ? ? F2 0F 10 85"_pat, OffsetHint{ 11300702 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] ReturnAddress useToolGetArgAsString() const noexcept
     {
-        return finder("48 85 C0 74 DA 48 89 C7 E8 ? ? ? ? BA"_pat, OffsetHint{ 11246382 }).asReturnAddress();
+        return finder("48 85 C0 74 DA 48 89 C7 E8 ? ? ? ? BA"_pat, OffsetHint{ 11246382 }).as<ReturnAddress>();
     }
 
     [[nodiscard]] csgo::SetDynamicAttributeValue setDynamicAttributeValue() const noexcept
