@@ -5,6 +5,7 @@
 
 #include <Platform/Macros/CallingConventions.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/GenericFunctionPointer.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 class MinHook {
@@ -21,7 +22,7 @@ public:
         return installed;
     }
 
-    [[nodiscard]] std::uintptr_t hook(std::size_t index, std::uintptr_t fun) noexcept;
+    [[nodiscard]] std::uintptr_t hook(std::size_t index, GenericFunctionPointer fun) noexcept;
 
 private:
     std::uintptr_t** vmt = nullptr;

@@ -8,9 +8,9 @@ void MinHook::install(std::uintptr_t*& vmt) noexcept
     installed = true;
 }
 
-std::uintptr_t MinHook::hook(std::size_t index, std::uintptr_t fun) noexcept
+std::uintptr_t MinHook::hook(std::size_t index, GenericFunctionPointer fun) noexcept
 {
     void* orig;
-    MH_CreateHook((void*)(*vmt)[index], (void*)fun, &orig);
+    MH_CreateHook((void*)(*vmt)[index], (void*)static_cast<void(*)()>(fun), &orig);
     return std::uintptr_t(orig);
 }
