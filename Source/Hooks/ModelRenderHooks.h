@@ -32,7 +32,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(modelRender));
-        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hook(21, std::uintptr_t(&drawModelExecute)));
+        originalDrawModelExecute = reinterpret_cast<decltype(originalDrawModelExecute)>(hookImpl.hook(21, &drawModelExecute));
     }
 
     void uninstall()

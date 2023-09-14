@@ -33,8 +33,8 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(viewRender));
-        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hook(WIN32_LINUX(39, 40), std::uintptr_t(&render2dEffectsPreHud)));
-        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hook(WIN32_LINUX(41, 42), std::uintptr_t(&renderSmokeOverlay)));
+        originalRender2dEffectsPreHud = reinterpret_cast<decltype(originalRender2dEffectsPreHud)>(hookImpl.hook(WIN32_LINUX(39, 40), &render2dEffectsPreHud));
+        originalRenderSmokeOverlay = reinterpret_cast<decltype(originalRenderSmokeOverlay)>(hookImpl.hook(WIN32_LINUX(41, 42), &renderSmokeOverlay));
     }
 
     void uninstall()

@@ -22,7 +22,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(clientState));
-        originalPacketEnd = reinterpret_cast<decltype(originalPacketEnd)>(hookImpl.hook(WIN32_LINUX(6, 7), std::uintptr_t(&packetEnd)));
+        originalPacketEnd = reinterpret_cast<decltype(originalPacketEnd)>(hookImpl.hook(WIN32_LINUX(6, 7), &packetEnd));
     }
 
     void uninstall()

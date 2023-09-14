@@ -8,6 +8,8 @@
 #include "VmtCopy.h"
 #include "VmtLengthCalculator.h"
 
+#include <Utils/GenericFunctionPointer.h>
+
 class VmtSwapper {
 public:
     explicit VmtSwapper(const VmtLengthCalculator& lengthCalculator) noexcept
@@ -33,10 +35,10 @@ public:
         vmt = vmtCopy->getOriginalVmt();
     }
 
-    [[nodiscard]] std::uintptr_t hook(std::size_t index, std::uintptr_t replacementFunction) const noexcept
+    [[nodiscard]] std::uintptr_t hook(std::size_t index, GenericFunctionPointer replacementFunction) const noexcept
     {
         assert(vmtCopy.has_value());
-        vmtCopy->getReplacementVmt()[index] = replacementFunction;
+        vmtCopy->getReplacementVmt()[index] = std::uintptr_t(static_cast<void(*)()>(replacementFunction));
         return vmtCopy->getOriginalVmt()[index];
     }
 

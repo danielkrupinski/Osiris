@@ -45,10 +45,10 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(panoramaMarshallHelper));
-        originalGetNumArgs = reinterpret_cast<decltype(originalGetNumArgs)>(hookImpl.hook(1, std::uintptr_t(&getNumArgs)));
-        originalGetArgAsNumber = reinterpret_cast<decltype(originalGetArgAsNumber)>(hookImpl.hook(5, std::uintptr_t(&getArgAsNumber)));
-        originalGetArgAsString = reinterpret_cast<decltype(originalGetArgAsString)>(hookImpl.hook(7, std::uintptr_t(&getArgAsString)));
-        originalSetResultInt = reinterpret_cast<decltype(originalSetResultInt)>(hookImpl.hook(WIN32_LINUX(14, 11), std::uintptr_t(&setResultInt)));
+        originalGetNumArgs = reinterpret_cast<decltype(originalGetNumArgs)>(hookImpl.hook(1, &getNumArgs));
+        originalGetArgAsNumber = reinterpret_cast<decltype(originalGetArgAsNumber)>(hookImpl.hook(5, &getArgAsNumber));
+        originalGetArgAsString = reinterpret_cast<decltype(originalGetArgAsString)>(hookImpl.hook(7, &getArgAsString));
+        originalSetResultInt = reinterpret_cast<decltype(originalSetResultInt)>(hookImpl.hook(WIN32_LINUX(14, 11), &setResultInt));
     }
 
     void uninstall()

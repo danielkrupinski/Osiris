@@ -31,7 +31,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(inventoryManager));
-        originalUpdateInventoryEquippedState = reinterpret_cast<decltype(originalUpdateInventoryEquippedState)>(hookImpl.hook(WIN32_LINUX(29, 30), std::uintptr_t(&updateInventoryEquippedState)));
+        originalUpdateInventoryEquippedState = reinterpret_cast<decltype(originalUpdateInventoryEquippedState)>(hookImpl.hook(WIN32_LINUX(29, 30), &updateInventoryEquippedState));
     }
 
     void uninstall()

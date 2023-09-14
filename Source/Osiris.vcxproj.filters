@@ -1270,6 +1270,9 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\GenericFunctionPointer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\default_vs.hlsl">

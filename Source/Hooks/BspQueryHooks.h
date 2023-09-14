@@ -27,7 +27,7 @@ private:
     void install() noexcept
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engineSpatialQuery));
-        originalListLeavesInBox = reinterpret_cast<decltype(originalListLeavesInBox)>(hookImpl.hook(6, std::uintptr_t(&listLeavesInBox)));
+        originalListLeavesInBox = reinterpret_cast<decltype(originalListLeavesInBox)>(hookImpl.hook(6, &listLeavesInBox));
     }
 
     void uninstall() noexcept

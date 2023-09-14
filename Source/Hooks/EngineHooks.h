@@ -40,9 +40,9 @@ private:
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engine));
 
-        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hook(82, std::uintptr_t(&isPlayingDemo)));
-        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hook(101, std::uintptr_t(&getScreenAspectRatio)));
-        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hook(WIN32_LINUX(218, 219), std::uintptr_t(&getDemoPlaybackParameters)));
+        originalIsPlayingDemo = reinterpret_cast<decltype(originalIsPlayingDemo)>(hookImpl.hook(82, &isPlayingDemo));
+        originalGetScreenAspectRatio = reinterpret_cast<decltype(originalGetScreenAspectRatio)>(hookImpl.hook(101, &getScreenAspectRatio));
+        originalGetDemoPlaybackParameters = reinterpret_cast<decltype(originalGetDemoPlaybackParameters)>(hookImpl.hook(WIN32_LINUX(218, 219), &getDemoPlaybackParameters));
     }
 
     void uninstall()

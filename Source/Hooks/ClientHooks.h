@@ -38,8 +38,8 @@ private:
     void install() noexcept
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(client));
-        originalFrameStageNotify = reinterpret_cast<decltype(originalFrameStageNotify)>(hookImpl.hook(37, std::uintptr_t(&frameStageNotify)));
-        originalDispatchUserMessage = reinterpret_cast<decltype(originalDispatchUserMessage)>(hookImpl.hook(38, std::uintptr_t(&dispatchUserMessage)));
+        originalFrameStageNotify = reinterpret_cast<decltype(originalFrameStageNotify)>(hookImpl.hook(37, &frameStageNotify));
+        originalDispatchUserMessage = reinterpret_cast<decltype(originalDispatchUserMessage)>(hookImpl.hook(38, &dispatchUserMessage));
     }
 
     void uninstall() noexcept
