@@ -205,7 +205,7 @@ inline Memory::Memory(const ClientPatternFinder& clientPatternFinder, const Engi
 #elif IS_LINUX()
     conColorMsg = tier0.getFunctionAddress("_Z11ConColorMsgRK5ColorPKcz").template as<decltype(conColorMsg)>();
 
-    globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t***>(clientInterface))[11] + 16 }.abs().deref().as<csgo::GlobalVars*>();
+    globalVars = SafeAddress{ (*reinterpret_cast<std::uintptr_t***>(clientInterface))[11] + 2 }.abs().deref().as<csgo::GlobalVars*>();
     clientMode = SafeAddress{ (*reinterpret_cast<uintptr_t***>(clientInterface))[10] }.add(12).abs().add(4).abs().deref().as<decltype(clientMode)>();
     input = SafeAddress{ (*reinterpret_cast<uintptr_t***>(clientInterface))[16] }.add(3).abs().deref().as<csgo::Input*>();
 
