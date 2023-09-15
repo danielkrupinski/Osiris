@@ -32,7 +32,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(inventory));
-        originalSoUpdated = reinterpret_cast<decltype(originalSoUpdated)>(hookImpl.hook(1, &soUpdated));
+        originalSoUpdated = hookImpl.hook(1, &soUpdated);
     }
 
     void uninstall()

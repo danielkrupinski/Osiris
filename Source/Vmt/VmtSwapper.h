@@ -35,11 +35,11 @@ public:
         vmt = vmtCopy->getOriginalVmt();
     }
 
-    [[nodiscard]] std::uintptr_t hook(std::size_t index, GenericFunctionPointer replacementFunction) const noexcept
+    [[nodiscard]] GenericFunctionPointer hook(std::size_t index, GenericFunctionPointer replacementFunction) const noexcept
     {
         assert(vmtCopy.has_value());
         vmtCopy->getReplacementVmt()[index] = std::uintptr_t(static_cast<void(*)()>(replacementFunction));
-        return vmtCopy->getOriginalVmt()[index];
+        return reinterpret_cast<void(*)()>(vmtCopy->getOriginalVmt()[index]);
     }
 
 private:

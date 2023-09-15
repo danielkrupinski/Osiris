@@ -31,7 +31,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(engineSound));
-        originalEmitSound = reinterpret_cast<decltype(originalEmitSound)>(hookImpl.hook(WIN32_LINUX(5, 6), &emitSound));
+        originalEmitSound = hookImpl.hook(WIN32_LINUX(5, 6), &emitSound);
     }
 
     void uninstall()

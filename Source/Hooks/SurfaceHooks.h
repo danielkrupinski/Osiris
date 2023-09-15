@@ -38,9 +38,9 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(surface));
-        originalSetDrawColor = reinterpret_cast<decltype(originalSetDrawColor)>(hookImpl.hook(WIN32_LINUX(15, 14), &setDrawColor));
+        originalSetDrawColor = hookImpl.hook(WIN32_LINUX(15, 14), &setDrawColor);
 #if IS_WIN32()
-        originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(hookImpl.hook(67, &lockCursor));
+        originalLockCursor = hookImpl.hook(67, &lockCursor);
 #endif
     }
 

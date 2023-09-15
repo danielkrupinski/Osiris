@@ -27,7 +27,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(svCheats));
-        originalSvCheatsGetInt = reinterpret_cast<decltype(originalSvCheatsGetInt)>(hookImpl.hook(WIN32_LINUX(13, 16), &getInt));
+        originalSvCheatsGetInt = hookImpl.hook(WIN32_LINUX(13, 16), &getInt);
     }
 
     void uninstall()

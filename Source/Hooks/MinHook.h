@@ -22,7 +22,7 @@ public:
         return installed;
     }
 
-    [[nodiscard]] std::uintptr_t hook(std::size_t index, GenericFunctionPointer fun) noexcept;
+    [[nodiscard]] GenericFunctionPointer hook(std::size_t index, GenericFunctionPointer fun) noexcept;
 
 private:
     std::uintptr_t** vmt = nullptr;

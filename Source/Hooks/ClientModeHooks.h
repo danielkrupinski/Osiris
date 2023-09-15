@@ -68,13 +68,13 @@ private:
     void install() noexcept
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(clientMode));
-        originalShouldDrawFog = reinterpret_cast<decltype(originalShouldDrawFog)>(hookImpl.hook(WIN32_LINUX(17, 18), &shouldDrawFog));
-        originalOverrideView = reinterpret_cast<decltype(originalOverrideView)>(hookImpl.hook(WIN32_LINUX(18, 19), &overrideView));
-        originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(hookImpl.hook(WIN32_LINUX(24, 25), &createMove));
-        originalShouldDrawViewModel = reinterpret_cast<decltype(originalShouldDrawViewModel)>(hookImpl.hook(WIN32_LINUX(27, 28), &shouldDrawViewModel));
-        originalGetViewModelFov = reinterpret_cast<decltype(originalGetViewModelFov)>(hookImpl.hook(WIN32_LINUX(35, 36), &getViewModelFov));
-        originalDoPostScreenEffects = reinterpret_cast<decltype(originalDoPostScreenEffects)>(hookImpl.hook(WIN32_LINUX(44, 45), &doPostScreenEffects));
-        originalUpdateColorCorrectionWeights = reinterpret_cast<decltype(originalUpdateColorCorrectionWeights)>(hookImpl.hook(WIN32_LINUX(58, 61), &updateColorCorrectionWeights));
+        originalShouldDrawFog = hookImpl.hook(WIN32_LINUX(17, 18), &shouldDrawFog);
+        originalOverrideView = hookImpl.hook(WIN32_LINUX(18, 19), &overrideView);
+        originalCreateMove = hookImpl.hook(WIN32_LINUX(24, 25), &createMove);
+        originalShouldDrawViewModel = hookImpl.hook(WIN32_LINUX(27, 28), &shouldDrawViewModel);
+        originalGetViewModelFov = hookImpl.hook(WIN32_LINUX(35, 36), &getViewModelFov);
+        originalDoPostScreenEffects = hookImpl.hook(WIN32_LINUX(44, 45), &doPostScreenEffects);
+        originalUpdateColorCorrectionWeights = hookImpl.hook(WIN32_LINUX(58, 61), &updateColorCorrectionWeights);
     }
 
     void uninstall() noexcept

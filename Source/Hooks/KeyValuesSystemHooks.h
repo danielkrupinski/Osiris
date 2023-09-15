@@ -27,7 +27,7 @@ private:
     void install()
     {
         hookImpl.install(*reinterpret_cast<std::uintptr_t**>(keyValuesSystem));
-        originalAllocKeyValuesMemory = reinterpret_cast<decltype(originalAllocKeyValuesMemory)>(hookImpl.hook(2, &allocKeyValuesMemory));
+        originalAllocKeyValuesMemory = hookImpl.hook(2, &allocKeyValuesMemory);
     }
 
     void uninstall()
