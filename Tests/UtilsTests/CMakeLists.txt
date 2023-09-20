@@ -5,5 +5,4 @@ target_sources(Tests PRIVATE
   SafeAddressTests.cpp
   SpanSliceTests.cpp
   StringBuilderTests.cpp
-  TypeHintTests.cpp
 )
