@@ -468,7 +468,6 @@
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
-    <ClInclude Include="Utils\TypeHint.h" />
     <ClInclude Include="Verification\Verifier.h" />
     <ClInclude Include="Verification\VerifyMacros.h" />
     <ClInclude Include="Vmt\VmtCopy.h" />

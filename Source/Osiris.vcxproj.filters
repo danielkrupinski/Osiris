@@ -679,9 +679,6 @@
     <ClInclude Include="Utils\FlagsBuilder.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\TypeHint.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Interfaces\InterfaceFinder.h">
       <Filter>Interfaces</Filter>
     </ClInclude>

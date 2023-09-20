@@ -19,7 +19,6 @@
 #include "Utils/SafeAddress.h"
 #include "RetSpoof/RetSpoofGadgets.h"
 #include "MemorySearch/PatternFinder.h"
-#include "Utils/TypeHint.h"
 
 #include "Platform/DynamicLibrary.h"
 #include "Platform/Macros/CallingConventions.h"
