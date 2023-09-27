@@ -3,37 +3,112 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
+#include <span>
 
-struct FreeMemoryRegion {
-    std::size_t size;
-    FreeMemoryRegion* nextFreeRegion;
-
-    [[nodiscard]] bool isLargeEnoughForAllocation(std::size_t allocationSize) const noexcept
+class FreeMemoryRegion {
+public:
+    [[nodiscard]] static FreeMemoryRegion* create(std::span<std::byte> region) noexcept
     {
-        if (size < allocationSize)
-            return false;
+        return new (region.data()) FreeMemoryRegion{ region.size(), nullptr };
+    }
 
-        const auto sizeAfterAllocation = size - allocationSize;
-        return sizeAfterAllocation == 0 || sizeAfterAllocation >= sizeof(FreeMemoryRegion);
+    [[nodiscard]] std::size_t getSize() const noexcept
+    {
+        return size;
+    }
+
+    [[nodiscard]] FreeMemoryRegion* getNextFreeRegion() const noexcept
+    {
+        return nextFreeRegion;
+    }
+
+    [[nodiscard]] FreeMemoryRegion* addFreeRegion(std::span<std::byte> region) noexcept
+    {
+        if (shouldPrepend(region.data()))
+            return prependRegion(region);
+        findRegionToAppendTo(region.data()).appendRegion(region);
+        return this;
+    }
+
+    struct MemoryClaimResult {
+        FreeMemoryRegion* claimedRegion{nullptr};
+        FreeMemoryRegion* regionToReplaceClaimed{nullptr};
+    };
+
+    [[nodiscard]] MemoryClaimResult claimMemory(std::size_t claimSize) noexcept
+    {
+        if (claimMemoryFromSelf(claimSize))
+            return MemoryClaimResult{ .claimedRegion = this, .regionToReplaceClaimed = nextFreeRegion };
+
+        for (FreeMemoryRegion* region = this; region->nextFreeRegion != nullptr; region = region->nextFreeRegion) {
+            if (region->nextFreeRegion->claimMemoryFromSelf(claimSize)) {
+                const auto claimedRegion = region->nextFreeRegion;
+                region->nextFreeRegion = claimedRegion->nextFreeRegion;
+                return MemoryClaimResult{ .claimedRegion = claimedRegion, .regionToReplaceClaimed = region->nextFreeRegion };
+            }
+        }
+
+        return {};
+    }
+
+private:
+    [[nodiscard]] bool claimMemoryFromSelf(std::size_t allocationSize) noexcept
+    {
+        if (size == allocationSize) {
+           return true;
+        } else if (size > allocationSize && size - allocationSize >= sizeof(FreeMemoryRegion)) {
+            nextFreeRegion = new (reinterpret_cast<std::byte*>(this) + allocationSize) FreeMemoryRegion{ size - allocationSize, nextFreeRegion };
+            return true;
+        }
+        return false;
+    }
+
+    [[nodiscard]] FreeMemoryRegion* prependRegion(std::span<std::byte> region) noexcept
+    {
+        if (region.data() + region.size() == reinterpret_cast<std::byte*>(this))
+            return new (region.data()) FreeMemoryRegion{ region.size() + size, nextFreeRegion };
+        else
+            return new (region.data()) FreeMemoryRegion{ region.size(), this };
+    }
+
+    void appendRegion(std::span<std::byte> region) noexcept
+    {
+        if (reinterpret_cast<std::byte*>(this) + size == region.data()) {
+            size += region.size();
+            tryMergeWithNextRegion();
+        } else {
+            nextFreeRegion = new (region.data()) FreeMemoryRegion{ region.size(), nextFreeRegion};
+            nextFreeRegion->tryMergeWithNextRegion();
+        }
+    }
+
+    [[nodiscard]] FreeMemoryRegion& findRegionToAppendTo(std::byte* newRegionPointer) noexcept
+    {
+        FreeMemoryRegion* region = this;
+        while (region != nullptr && region->getNextFreeRegion() != nullptr && std::less{}(reinterpret_cast<std::byte*>(region->getNextFreeRegion()), newRegionPointer))
+            region = region->getNextFreeRegion();
+        return *region;
+    }
+
+    [[nodiscard]] bool shouldPrepend(const std::byte* newRegionPointer) const noexcept
+    {
+        return std::less{}(newRegionPointer, reinterpret_cast<const std::byte*>(this));
     }
 
     void tryMergeWithNextRegion() noexcept
     {
-        assert(nextFreeRegion == nullptr || reinterpret_cast<std::uintptr_t>(nextFreeRegion) > reinterpret_cast<std::uintptr_t>(this));
-        if (nextFreeRegion && reinterpret_cast<std::uintptr_t>(nextFreeRegion) - reinterpret_cast<std::uintptr_t>(this) == size) {
+        if (reinterpret_cast<std::byte*>(this) + size == reinterpret_cast<std::byte*>(nextFreeRegion)) {
             size += nextFreeRegion->size;
             nextFreeRegion = nextFreeRegion->nextFreeRegion;
         }
     }
 
-    void appendRegion(std::byte* newRegionPointer, std::size_t newRegionSize) noexcept
+    FreeMemoryRegion(std::size_t size, FreeMemoryRegion* nextFreeRegion) noexcept
+        : size{ size }, nextFreeRegion{ nextFreeRegion }
     {
-        assert(newRegionPointer != nullptr);
-        assert(reinterpret_cast<std::uintptr_t>(newRegionPointer) > reinterpret_cast<std::uintptr_t>(this));
-        assert(newRegionSize >= sizeof(FreeMemoryRegion));
-
-        nextFreeRegion = new (newRegionPointer) FreeMemoryRegion{ newRegionSize, nextFreeRegion };
-        nextFreeRegion->tryMergeWithNextRegion();
-        tryMergeWithNextRegion();
     }
+
+    std::size_t size;
+    FreeMemoryRegion* nextFreeRegion;
 };

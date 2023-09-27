@@ -1219,9 +1219,6 @@
     <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryAllocation\FreeMemoryRegionFinder.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>

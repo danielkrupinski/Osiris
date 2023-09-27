@@ -6,7 +6,6 @@
 #include <span>
 
 #include "FreeMemoryRegion.h"
-#include "FreeMemoryRegionFinder.h"
 
 #ifndef NDEBUG
 #include <Utils/MemorySection.h>
@@ -40,7 +39,7 @@ public:
 #ifndef NDEBUG
     ~FreeMemoryRegionList() noexcept
     {
-        assert(firstFreeRegion != nullptr && firstFreeRegion->size == memory.size() && firstFreeRegion->nextFreeRegion == nullptr && "Memory leak detected");
+        assert(firstFreeRegion != nullptr && firstFreeRegion->getSize() == memory.size() && firstFreeRegion->getNextFreeRegion() == nullptr && "Memory leak detected");
     }
 #endif
 
@@ -49,48 +48,44 @@ public:
         assert(size >= minimumAllocationSize());
         assert(size % minimumAlignment() == 0);
 
-        const auto freeRegion = FreeMemoryRegionFinder{ &firstFreeRegion }.findFreeRegion(size);
-        if (freeRegion == nullptr) [[unlikely]]
+        if (firstFreeRegion == nullptr) [[unlikely]]
             return nullptr;
 
-        const auto result = reinterpret_cast<std::byte*>(*freeRegion);
-        if ((*freeRegion)->size != size)
-            *freeRegion = new (result + size) FreeMemoryRegion{ (*freeRegion)->size - size, (*freeRegion)->nextFreeRegion };
-        else
-            *freeRegion = (*freeRegion)->nextFreeRegion;
-        return result;
+        const auto [claimedRegion, regionToReplaceClaimed] = firstFreeRegion->claimMemory(size);
+        if (claimedRegion == firstFreeRegion)
+            firstFreeRegion = regionToReplaceClaimed;
+        return reinterpret_cast<std::byte*>(claimedRegion);
     }
 
     void deallocate(std::byte* pointer, std::size_t size) noexcept
     {
         assert(MemorySection{ memory }.contains(reinterpret_cast<std::uintptr_t>(pointer), size) && "Invalid pointer or size provided for deallocation");
-
-        const auto nearestRegion = FreeMemoryRegionFinder{ &firstFreeRegion }.findNearestFreeRegion(reinterpret_cast<std::uintptr_t>(pointer));
-        const auto noFreeRegionsBeforeDeallocation = (*nearestRegion == nullptr);
-        if (noFreeRegionsBeforeDeallocation || reinterpret_cast<std::uintptr_t>(*nearestRegion) > reinterpret_cast<std::uintptr_t>(pointer)) {
-            *nearestRegion = new (pointer) FreeMemoryRegion{ size, *nearestRegion };
-        } else {
-            (*nearestRegion)->appendRegion(pointer, size);
-        }
-
-        if (!noFreeRegionsBeforeDeallocation)
-            (*nearestRegion)->tryMergeWithNextRegion();
+        firstFreeRegion = createOrAddRegion({ pointer, size });
     }
 
     [[nodiscard]] std::size_t getFreeSpace() const noexcept
     {
         std::size_t freeSpace = 0;
-        for (const FreeMemoryRegion* region = firstFreeRegion; region != nullptr; region = region->nextFreeRegion)
-            freeSpace += region->size;
+        for (const FreeMemoryRegion* region = firstFreeRegion; region != nullptr; region = region->getNextFreeRegion())
+            freeSpace += region->getSize();
         return freeSpace;
     }
 
 private:
+    [[nodiscard]] FreeMemoryRegion* createOrAddRegion(std::span<std::byte> region) const noexcept
+    {
+        if (firstFreeRegion == nullptr) [[unlikely]] {
+            return FreeMemoryRegion::create(region);
+        } else {
+            return firstFreeRegion->addFreeRegion(region);
+        }
+    }
+
     [[nodiscard]] static FreeMemoryRegion* createInitialFreeRegion(std::span<std::byte> memory) noexcept
     {
         assert(memory.size() >= minimumAllocationSize());
         assert(std::uintptr_t(memory.data()) % minimumAlignment() == 0);
-        return new (memory.data()) FreeMemoryRegion{ memory.size(), nullptr };
+        return FreeMemoryRegion::create(memory);
     }
 
     FreeMemoryRegion* firstFreeRegion;
