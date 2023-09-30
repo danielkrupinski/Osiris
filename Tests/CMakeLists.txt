@@ -11,15 +11,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests GlobalContextInstance.cpp HelpersTests.cpp SortFilterTests.cpp)
+add_executable(Tests "")
 add_subdirectory(HelpersTests)
-add_subdirectory(InventoryChanger)
 add_subdirectory(MemoryAllocation)
 add_subdirectory(MemorySearchTests)
 add_subdirectory(Platform)
 add_subdirectory(UtilsTests)
-target_link_libraries(Tests gtest_main gmock Threads::Threads OsirisOBJ)
-target_include_directories(Tests PRIVATE .)
+target_link_libraries(Tests gtest_main gmock Threads::Threads)
+target_include_directories(Tests PRIVATE . "${CMAKE_SOURCE_DIR}/Source")
 
 include(GoogleTest)
 gtest_discover_tests(Tests DISCOVERY_TIMEOUT 60)

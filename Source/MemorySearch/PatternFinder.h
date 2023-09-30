@@ -5,7 +5,7 @@
 #include <string_view>
 
 #include "BytePattern.h"
-#include <Helpers/PatternNotFoundHandler.h>
+#include <Helpers/PatternNotFoundLogger.h>
 #include "HybridPatternFinder.h"
 #include <Utils/SafeAddress.h>
 #include <Utils/SpanSlice.h>
@@ -13,9 +13,9 @@
 enum class OffsetHint : std::size_t {};
 
 template <typename NotFoundHandler>
-struct PatternFinderImpl {
+struct PatternFinder {
 public:
-    PatternFinderImpl(std::span<const std::byte> bytes, NotFoundHandler notFoundHandler)
+    PatternFinder(std::span<const std::byte> bytes, NotFoundHandler notFoundHandler)
         : bytes{ bytes }, notFoundHandler{ notFoundHandler }
     {
     }
@@ -24,7 +24,7 @@ public:
     {
         const auto found = HybridPatternFinder{ bytes, pattern }();
         if (!found)
-            notFoundHandler(pattern);
+            notFoundHandler(pattern, bytes);
         return SafeAddress{ found };
     }
 
@@ -45,5 +45,3 @@ private:
     std::span<const std::byte> bytes;
     NotFoundHandler notFoundHandler;
 };
-
-using PatternFinder = PatternFinderImpl<PatternNotFoundHandler>;

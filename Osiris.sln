@@ -1,25 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31605.320
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Osiris", "Source\Osiris.vcxproj", "{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Osiris", "Source\Osiris.vcxproj", "{DD077013-2B61-4122-970E-63E63055EAA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Debug|x86.ActiveCfg = Debug|Win32
-		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Debug|x86.Build.0 = Debug|Win32
-		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Release|x86.ActiveCfg = Release|Win32
-		{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}.Release|x86.Build.0 = Release|Win32
+		{DD077013-2B61-4122-970E-63E63055EAA8}.Debug|x64.ActiveCfg = Debug|x64
+		{DD077013-2B61-4122-970E-63E63055EAA8}.Debug|x64.Build.0 = Debug|x64
+		{DD077013-2B61-4122-970E-63E63055EAA8}.Release|x64.ActiveCfg = Release|x64
+		{DD077013-2B61-4122-970E-63E63055EAA8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5D19EC35-7F55-4342-9454-22163FADE56D}
+		SolutionGuid = {8983F957-671F-4A13-B67E-5585161828A9}
 	EndGlobalSection
 EndGlobal
