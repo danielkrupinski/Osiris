@@ -1,8 +1,6 @@
 name: IWYU
 
-on:
-  schedule:
-    - cron: '0 0 * * WED'
+on: workflow_dispatch
 
 jobs:
   linux:
