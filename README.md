@@ -6,9 +6,11 @@
 Free open-source cross-platform cheat software for **Counter-Strike 2** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game. Available for Windows and Linux systems.
 
 ## Technical features
+
 * C++ runtime library (CRT) is not used in release builds
 * No dynamic memory allocation
-* No static imports (IAT)
+* No static imports in release build on Windows
+
 ## Compiling
 
 ### Prerequisites
