@@ -72,7 +72,7 @@ public:
         }
 
         if (*string == '.')
-            *string++;
+            ++string;
 
         FloatType fraction = 1.0f;
         while (*string >= '0' && *string <= '9') {
