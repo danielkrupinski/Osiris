@@ -8,7 +8,7 @@ Free open-source cross-platform cheat software for **Counter-Strike 2** game. De
 ## Technical features
 
 * C++ runtime library (CRT) is not used in release builds
-* No dynamic memory allocation
+* No heap memory allocations
 * No static imports in release build on Windows
 
 ## Compiling
