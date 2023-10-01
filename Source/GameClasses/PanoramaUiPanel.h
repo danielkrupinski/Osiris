@@ -3,7 +3,6 @@
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/Implementation/PanoramaUiPanelImpl.h>
 #include <GameClasses/PanelStyle.h>
-#include <Verification/VerifyMacros.h>
 
 struct PanoramaUiPanel {
     explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
