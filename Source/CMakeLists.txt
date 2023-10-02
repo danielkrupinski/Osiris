@@ -17,7 +17,7 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   if(UNIX)
-    target_compile_options(Osiris PRIVATE -fno-stack-protector -fno-exceptions)
+    target_compile_options(Osiris PRIVATE -fno-stack-protector -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables)
     target_link_options(Osiris PRIVATE -nostdlib LINKER:--no-undefined)
     target_link_libraries(Osiris PRIVATE c)
   endif()
