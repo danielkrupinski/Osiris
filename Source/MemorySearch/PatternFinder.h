@@ -10,6 +10,8 @@
 #include <Utils/SafeAddress.h>
 #include <Utils/SpanSlice.h>
 
+#include <Platform/Macros/FunctionAttributes.h>
+
 enum class OffsetHint : std::size_t {};
 
 template <typename NotFoundHandler>
@@ -20,7 +22,7 @@ public:
     {
     }
 
-    [[nodiscard]] SafeAddress operator()(BytePattern pattern) const noexcept
+    [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern) const noexcept
     {
         const auto found = HybridPatternFinder{ bytes, pattern }();
         if (!found)
@@ -28,7 +30,7 @@ public:
         return SafeAddress{ found };
     }
 
-    [[nodiscard]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
+    [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
     {
         const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }();
         if (foundWithHint)
