@@ -467,6 +467,9 @@
     </ClInclude>
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="GlobalContext.h" />
+    <ClInclude Include="Platform\Macros\IsCompiler.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
