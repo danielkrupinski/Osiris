@@ -65,6 +65,7 @@ After following these steps you should receive `libOsiris.so` file in `build` di
 <summary>Windows</summary>
 
 You need a **DLL injector** to inject (load) `Osiris.dll` into game process.
+Counter-Strike 2 blocks LoadLibrary injection method, so you have to use a manual mapping (aka reflective DLL injection) injector.
 
 </details>
 
