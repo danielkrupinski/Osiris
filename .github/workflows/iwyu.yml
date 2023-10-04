@@ -1,8 +1,6 @@
 name: IWYU
 
-on:
-  schedule:
-    - cron: '0 0 * * WED'
+on: workflow_dispatch
 
 jobs:
   linux:
@@ -11,8 +9,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
       run: cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
     - name: include what you use

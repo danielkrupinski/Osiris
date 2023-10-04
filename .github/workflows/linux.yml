@@ -34,8 +34,6 @@ jobs:
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 17
-    - name: install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libfreetype-dev
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -B build
     - name: build

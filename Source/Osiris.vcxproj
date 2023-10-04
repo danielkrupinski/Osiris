@@ -1,407 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
+    <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
+    <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dependencies\freetype\src\autofit\autofit.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftbase.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftbitmap.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftdebug.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftglyph.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftinit.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftsynth.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftsystem.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\cff\cff.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\psaux\psaux.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\pshinter\pshinter.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\psnames\psnames.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\raster\raster.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\sfnt\sfnt.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\smooth\smooth.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\truetype\truetype.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_freetype.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\Dependencies\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="..\Dependencies\MinHook\buffer.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hde\hde32.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hde\hde64.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hook.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\trampoline.c">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="ConfigStructs.cpp" />
-    <ClCompile Include="CSGO\EconItemView.cpp" />
-    <ClCompile Include="CSGO\Entity.cpp" />
-    <ClCompile Include="CSGO\GlobalVars.cpp" />
-    <ClCompile Include="CSGO\KeyValues.cpp" />
-    <ClCompile Include="CSGO\Utils.cpp" />
-    <ClCompile Include="EventListener.cpp" />
-    <ClCompile Include="GameData.cpp" />
-    <ClCompile Include="GlobalContext.cpp" />
-    <ClCompile Include="Hacks\Aimbot.cpp" />
-    <ClCompile Include="Hacks\Backtrack.cpp" />
-    <ClCompile Include="Hacks\Chams.cpp" />
-    <ClCompile Include="Hacks\EnginePrediction.cpp" />
-    <ClCompile Include="Hacks\Glow.cpp" />
-    <ClCompile Include="Hacks\Sound.cpp" />
-    <ClCompile Include="Hacks\StreamProofESP.cpp" />
-    <ClCompile Include="Hacks\Triggerbot.cpp" />
-    <ClCompile Include="Hacks\Visuals.cpp" />
-    <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="Helpers\KeyValuesFactory.cpp" />
-    <ClCompile Include="Helpers\PatternNotFoundHandler.cpp" />
-    <ClCompile Include="Hooks\MinHook.cpp" />
-    <ClCompile Include="imguiCustom.cpp" />
-    <ClCompile Include="InputUtil.cpp" />
-    <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp" />
-    <ClCompile Include="InventoryChanger\EconItemFunctions.cpp" />
-    <ClCompile Include="InventoryChanger\EconItemViewFunctions.cpp" />
-    <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp" />
-    <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp" />
-    <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp" />
-    <ClCompile Include="InventoryChanger\GameItems\Storage.cpp" />
-    <ClCompile Include="InventoryChanger\InventoryChanger.cpp" />
-    <ClCompile Include="InventoryChanger\InventoryConfig.cpp" />
-    <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp" />
-    <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp" />
-    <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp" />
-    <ClCompile Include="InventoryChanger\WeaponNames.cpp" />
-    <ClCompile Include="MemorySearch\HybridPatternFinder.cpp" />
-    <ClCompile Include="MemorySearch\PatternFinder.cpp" />
-    <ClCompile Include="MemorySearch\PatternFinderScalar.cpp" />
-    <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp" />
-    <ClCompile Include="Netvars.cpp" />
-    <ClCompile Include="Osiris.cpp" />
-    <ClCompile Include="GUI.cpp" />
-    <ClCompile Include="Hacks\Misc.cpp" />
-    <ClCompile Include="Hooks.cpp" />
-    <ClCompile Include="pch-c.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)-c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="RetSpoof\RetSpoofGadgets.cpp" />
-    <ClCompile Include="Texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h" />
-    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftoption.h" />
-    <ClInclude Include="..\Dependencies\imgui\imconfig.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui_freetype.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui_impl_dx9.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui_internal.h" />
-    <ClInclude Include="..\Dependencies\imgui\imgui_stdlib.h" />
-    <ClInclude Include="..\Dependencies\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\Dependencies\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\Dependencies\imgui\imstb_truetype.h" />
-    <ClInclude Include="..\Dependencies\MinHook\buffer.h" />
-    <ClInclude Include="..\Dependencies\MinHook\hde\hde32.h" />
-    <ClInclude Include="..\Dependencies\MinHook\hde\hde64.h" />
-    <ClInclude Include="..\Dependencies\MinHook\hde\pstdint.h" />
-    <ClInclude Include="..\Dependencies\MinHook\hde\table32.h" />
-    <ClInclude Include="..\Dependencies\MinHook\hde\table64.h" />
-    <ClInclude Include="..\Dependencies\MinHook\MinHook.h" />
-    <ClInclude Include="..\Dependencies\MinHook\trampoline.h" />
-    <ClInclude Include="..\Dependencies\nlohmann\json.hpp" />
-    <ClInclude Include="BytePatterns\ClientPatternFinder.h" />
-    <ClInclude Include="BytePatterns\EnginePatternFinder.h" />
-    <ClInclude Include="BytePatterns\LinuxClientPatternFinder.h" />
-    <ClInclude Include="BytePatterns\LinuxEnginePatternFinder.h" />
-    <ClInclude Include="BytePatterns\WindowsClientPatternFinder.h" />
-    <ClInclude Include="BytePatterns\WindowsEnginePatternFinder.h" />
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="ConfigStructs.h" />
-    <ClInclude Include="Config\Configurable.h" />
-    <ClInclude Include="Config\LoadConfigurator.h" />
-    <ClInclude Include="Config\ResetConfigurator.h" />
-    <ClInclude Include="Config\SaveConfigurator.h" />
-    <ClInclude Include="CSGO\AnimState.h" />
-    <ClInclude Include="CSGO\Client.h" />
-    <ClInclude Include="CSGO\ClientClass.h" />
-    <ClInclude Include="CSGO\ClientMode.h" />
-    <ClInclude Include="CSGO\Constants\ClassId.h" />
-    <ClInclude Include="CSGO\Constants\ConVarNames.h" />
-    <ClInclude Include="CSGO\Constants\DllNames.h" />
-    <ClInclude Include="CSGO\Constants\EconItemFlags.h" />
-    <ClInclude Include="CSGO\Constants\FrameStage.h" />
-    <ClInclude Include="CSGO\Constants\GameEventNames.h" />
-    <ClInclude Include="CSGO\Constants\ItemId.h" />
-    <ClInclude Include="CSGO\Constants\PaintkitConditionChances.h" />
-    <ClInclude Include="CSGO\Constants\PaintkitWear.h" />
-    <ClInclude Include="CSGO\Constants\ProPlayer.h" />
-    <ClInclude Include="CSGO\Constants\StickerId.h" />
-    <ClInclude Include="CSGO\Constants\Tournament.h" />
-    <ClInclude Include="CSGO\Constants\TournamentStage.h" />
-    <ClInclude Include="CSGO\Constants\TournamentTeam.h" />
-    <ClInclude Include="CSGO\Constants\UserMessages.h" />
-    <ClInclude Include="CSGO\ConVar.h" />
-    <ClInclude Include="CSGO\CSPlayerInventory.h" />
-    <ClInclude Include="CSGO\Cvar.h" />
-    <ClInclude Include="CSGO\EconItemView.h" />
-    <ClInclude Include="CSGO\Engine.h" />
-    <ClInclude Include="CSGO\EngineTrace.h" />
-    <ClInclude Include="CSGO\Entity.h" />
-    <ClInclude Include="CSGO\EntityList.h" />
-    <ClInclude Include="CSGO\FileSystem.h" />
-    <ClInclude Include="CSGO\Functions.h" />
-    <ClInclude Include="CSGO\GameEvent.h" />
-    <ClInclude Include="CSGO\GameMovement.h" />
-    <ClInclude Include="CSGO\GlobalVars.h" />
-    <ClInclude Include="CSGO\GlowObjectManager.h" />
-    <ClInclude Include="CSGO\Helpers\EconItemFunctions.h" />
-    <ClInclude Include="CSGO\Helpers\EconItemViewFunctions.h" />
-    <ClInclude Include="CSGO\Helpers\KeyValuesFunctions.h" />
-    <ClInclude Include="CSGO\Input.h" />
-    <ClInclude Include="CSGO\InputSystem.h" />
-    <ClInclude Include="CSGO\ItemSchema.h" />
-    <ClInclude Include="CSGO\KeyValues.h" />
-    <ClInclude Include="CSGO\Localize.h" />
-    <ClInclude Include="CSGO\LocalPlayer.h" />
-    <ClInclude Include="CSGO\Material.h" />
-    <ClInclude Include="CSGO\MaterialSystem.h" />
-    <ClInclude Include="CSGO\matrix3x4.h" />
-    <ClInclude Include="CSGO\MemAlloc.h" />
-    <ClInclude Include="CSGO\ModelInfo.h" />
-    <ClInclude Include="CSGO\ModelRender.h" />
-    <ClInclude Include="CSGO\MoveHelper.h" />
-    <ClInclude Include="CSGO\NetworkChannel.h" />
-    <ClInclude Include="CSGO\Panorama.h" />
-    <ClInclude Include="CSGO\PanoramaMarshallHelper.h" />
-    <ClInclude Include="CSGO\PhysicsSurfaceProps.h" />
-    <ClInclude Include="CSGO\PlantedC4.h" />
-    <ClInclude Include="CSGO\PlayerResource.h" />
-    <ClInclude Include="CSGO\PODs\ConVar.h" />
-    <ClInclude Include="CSGO\PODs\EconItem.h" />
-    <ClInclude Include="CSGO\PODs\ItemSchema.h" />
-    <ClInclude Include="CSGO\PODs\PaintKit.h" />
-    <ClInclude Include="CSGO\PODs\RenderableInfo.h" />
-    <ClInclude Include="CSGO\PODs\SharedObjectTypeCache.h" />
-    <ClInclude Include="CSGO\Prediction.h" />
-    <ClInclude Include="CSGO\Recv.h" />
-    <ClInclude Include="CSGO\Sound.h" />
-    <ClInclude Include="CSGO\SoundEmitter.h" />
-    <ClInclude Include="CSGO\SoundInfo.h" />
-    <ClInclude Include="CSGO\SplitScreen.h" />
-    <ClInclude Include="CSGO\Steam.h" />
-    <ClInclude Include="CSGO\StudioRender.h" />
-    <ClInclude Include="CSGO\Surface.h" />
-    <ClInclude Include="CSGO\UiComponentInventory.h" />
-    <ClInclude Include="CSGO\UserCmd.h" />
-    <ClInclude Include="CSGO\Utils.h" />
-    <ClInclude Include="CSGO\UtlMap.h" />
-    <ClInclude Include="CSGO\UtlMemory.h" />
-    <ClInclude Include="CSGO\UtlRbTree.h" />
-    <ClInclude Include="CSGO\UtlString.h" />
-    <ClInclude Include="CSGO\UtlVector.h" />
-    <ClInclude Include="CSGO\VarMapping.h" />
-    <ClInclude Include="CSGO\Vector.h" />
-    <ClInclude Include="CSGO\ViewRender.h" />
-    <ClInclude Include="CSGO\ViewRenderBeams.h" />
-    <ClInclude Include="CSGO\ViewSetup.h" />
-    <ClInclude Include="CSGO\VirtualMethod.h" />
-    <ClInclude Include="CSGO\WeaponData.h" />
-    <ClInclude Include="CSGO\WeaponId.h" />
-    <ClInclude Include="CSGO\WeaponSystem.h" />
+    <ClInclude Include="CS2\Classes\ClientModeCSNormal.h" />
+    <ClInclude Include="CS2\Classes\CLoopModeGame.h" />
+    <ClInclude Include="CS2\Classes\Color.h" />
+    <ClInclude Include="CS2\Classes\CPlantedC4.h" />
+    <ClInclude Include="CS2\Classes\CUtlVector.h" />
+    <ClInclude Include="CS2\Classes\C_CSGameRules.h" />
+    <ClInclude Include="CS2\Classes\GlobalVars.h" />
+    <ClInclude Include="CS2\Classes\Panorama.h" />
+    <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
+    <ClInclude Include="CS2\Constants\DllNames.h" />
+    <ClInclude Include="CS2\Constants\EntityHandle.h" />
+    <ClInclude Include="CS2\Constants\PanelIDs.h" />
     <ClInclude Include="Endpoints.h" />
-    <ClInclude Include="EventListener.h" />
-    <ClInclude Include="GameData.h" />
+    <ClInclude Include="Features\Features.h" />
+    <ClInclude Include="Features\Hud\BombTimer.h" />
+    <ClInclude Include="Features\Hud\DefusingAlert.h" />
+    <ClInclude Include="Features\Hud\HudFeatures.h" />
+    <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
+    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h" />
+    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h" />
+    <ClInclude Include="Features\Visuals\VisualFeatures.h" />
+    <ClInclude Include="GameClasses\ClientMode.h" />
+    <ClInclude Include="GameClasses\GameRules.h" />
+    <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h" />
+    <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h" />
+    <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanoramaImagePanelImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanoramaLabelImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\ClientModeOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
+    <ClInclude Include="GameClasses\PanelStyle.h" />
+    <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
+    <ClInclude Include="GameClasses\PanoramaLabel.h" />
+    <ClInclude Include="GameClasses\PanoramaUiEngine.h" />
+    <ClInclude Include="GameClasses\PanoramaUiPanel.h" />
+    <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GlobalContext.h" />
-    <ClInclude Include="Hacks\Aimbot.h" />
-    <ClInclude Include="Hacks\Backtrack.h" />
-    <ClInclude Include="Hacks\Chams.h" />
-    <ClInclude Include="Hacks\Chams\ChamsLayer.h" />
-    <ClInclude Include="Hacks\Chams\ChamsMaterial.h" />
-    <ClInclude Include="Hacks\Chams\ChamsMaterialFactory.h" />
-    <ClInclude Include="Hacks\Chams\ChamsMaterialKeyValuesFactory.h" />
-    <ClInclude Include="Hacks\Chams\ChamsMaterials.h" />
-    <ClInclude Include="Hacks\EnginePrediction.h" />
-    <ClInclude Include="Hacks\Features.h" />
-    <ClInclude Include="Hacks\Glow.h" />
-    <ClInclude Include="Hacks\Misc.h" />
-    <ClInclude Include="Hacks\Sound.h" />
-    <ClInclude Include="Hacks\StreamProofESP.h" />
-    <ClInclude Include="Hacks\Triggerbot.h" />
-    <ClInclude Include="Hacks\Visuals.h" />
-    <ClInclude Include="Hacks\Visuals\BulletTracers.h" />
-    <ClInclude Include="Hacks\Visuals\ColorCorrection.h" />
-    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h" />
-    <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h" />
-    <ClInclude Include="Hacks\Visuals\SkyboxChanger.h" />
-    <ClInclude Include="Helpers.h" />
     <ClInclude Include="Helpers\Bits.h" />
-    <ClInclude Include="Helpers\ConstString.h" />
-    <ClInclude Include="Helpers\KeyValuesFactory.h" />
-    <ClInclude Include="Helpers\PatternNotFoundHandler.h" />
-    <ClInclude Include="Hooks\BspQueryHooks.h" />
-    <ClInclude Include="Hooks\ClientHooks.h" />
-    <ClInclude Include="Hooks\ClientModeHooks.h" />
-    <ClInclude Include="Hooks\ClientStateHooks.h" />
-    <ClInclude Include="Hooks\CSPlayerInventoryHooks.h" />
-    <ClInclude Include="Hooks\EngineHooks.h" />
-    <ClInclude Include="Hooks\EngineSoundHooks.h" />
-    <ClInclude Include="Hooks\InventoryManagerHooks.h" />
-    <ClInclude Include="Hooks\KeyValuesSystemHooks.h" />
-    <ClInclude Include="Hooks\MinHook.h" />
-    <ClInclude Include="Hooks\ModelRenderHooks.h" />
-    <ClInclude Include="Hooks\PanoramaMarshallHelperHooks.h" />
-    <ClInclude Include="Hooks\SurfaceHooks.h" />
-    <ClInclude Include="Hooks\SvCheatsHooks.h" />
-    <ClInclude Include="Hooks\ViewRenderHooks.h" />
-    <ClInclude Include="Hooks\WindowProcedureHook.h" />
-    <ClInclude Include="HookType.h" />
-    <ClInclude Include="imguiCustom.h" />
-    <ClInclude Include="InputUtil.h" />
-    <ClInclude Include="Interfaces\ClientInterfaces.h" />
-    <ClInclude Include="Interfaces\ClientInterfacesPODs.h" />
-    <ClInclude Include="Interfaces\EngineInterfaces.h" />
-    <ClInclude Include="Interfaces\EngineInterfacesPODs.h" />
-    <ClInclude Include="Interfaces\InterfaceFinder.h" />
-    <ClInclude Include="Interfaces\InterfaceFinderWithLog.h" />
-    <ClInclude Include="Interfaces\OtherInterfaces.h" />
-    <ClInclude Include="Interfaces\OtherInterfacesPODs.h" />
-    <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h" />
-    <ClInclude Include="InventoryChanger\Backend\Item.h" />
-    <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h" />
-    <ClInclude Include="InventoryChanger\Backend\Items.h" />
-    <ClInclude Include="InventoryChanger\Backend\Loadout.h" />
-    <ClInclude Include="InventoryChanger\Backend\PickEm.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\InventoryHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemActivationHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemModificationHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemRemovalHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\LoadoutHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\PickEmHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\StorageUnitHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Request\XRayScannerHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\Response.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseAccumulator.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h" />
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h" />
-    <ClInclude Include="InventoryChanger\Backend\StorageUnitManager.h" />
-    <ClInclude Include="InventoryChanger\Backend\XRayScanner.h" />
-    <ClInclude Include="InventoryChanger\EconItemFunctions.h" />
-    <ClInclude Include="InventoryChanger\EconItemViewFunctions.h" />
-    <ClInclude Include="InventoryChanger\EconRarities.h" />
-    <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h" />
-    <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h" />
-    <ClInclude Include="InventoryChanger\GameIntegration\Items.h" />
-    <ClInclude Include="InventoryChanger\GameIntegration\Misc.h" />
-    <ClInclude Include="InventoryChanger\GameItems\CrateLoot.h" />
-    <ClInclude Include="InventoryChanger\GameItems\CrateLootLookup.h" />
-    <ClInclude Include="InventoryChanger\GameItems\Enums.h" />
-    <ClInclude Include="InventoryChanger\GameItems\Item.h" />
-    <ClInclude Include="InventoryChanger\GameItems\ItemSorter.h" />
-    <ClInclude Include="InventoryChanger\GameItems\Lookup.h" />
-    <ClInclude Include="InventoryChanger\GameItems\Storage.h" />
-    <ClInclude Include="InventoryChanger\GameItems\Structs.h" />
-    <ClInclude Include="InventoryChanger\InventoryChanger.h" />
-    <ClInclude Include="InventoryChanger\InventoryConfig.h" />
-    <ClInclude Include="InventoryChanger\Inventory\Item.h" />
-    <ClInclude Include="InventoryChanger\Inventory\Structs.h" />
-    <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\AttributeGenerator.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\DefaultGenerator.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\DropGenerator.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h" />
-    <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h" />
-    <ClInclude Include="InventoryChanger\ItemId.h" />
-    <ClInclude Include="InventoryChanger\WeaponNames.h" />
-    <ClInclude Include="JsonForward.h" />
+    <ClInclude Include="Helpers\HudProvider.h" />
+    <ClInclude Include="Helpers\PanoramaPanelPointer.h" />
+    <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
+    <ClInclude Include="Helpers\PlantedC4Provider.h" />
+    <ClInclude Include="Helpers\UnloadFlag.h" />
+    <ClInclude Include="Hooks\LoopModeGameHook.h" />
+    <ClInclude Include="Hooks\PeepEventsHook.h" />
     <ClInclude Include="MemoryAllocation\FixedAllocator.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h" />
@@ -409,6 +69,32 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h" />
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
+    <ClInclude Include="MemoryPatterns\ClientModePatterns.h" />
+    <ClInclude Include="MemoryPatterns\ClientPatterns.h" />
+    <ClInclude Include="MemoryPatterns\GameRulesPatterns.h" />
+    <ClInclude Include="MemoryPatterns\Linux\ClientModePatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\GameRulesPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaImagePanelPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaLabelPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiEnginePatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiPanelPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PlantedC4PatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\PanoramaImagePanelPatterns.h" />
+    <ClInclude Include="MemoryPatterns\PanoramaLabelPatterns.h" />
+    <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h" />
+    <ClInclude Include="MemoryPatterns\PanoramaUiPanelPatterns.h" />
+    <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h" />
+    <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaImagePanelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaLabelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\BytePatternConverter.h" />
     <ClInclude Include="MemorySearch\BytePatternLiteral.h" />
@@ -417,11 +103,15 @@
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
-    <ClInclude Include="Netvars.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
+    <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
+    <ClInclude Include="Platform\Linux\LinuxMessageBox.h" />
+    <ClInclude Include="Platform\Linux\LinuxPlatformApi.h" />
+    <ClInclude Include="Platform\Linux\UserHomeFolderPath.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />
+    <ClInclude Include="Platform\Macros\FunctionAttributes.h" />
+    <ClInclude Include="Platform\Macros\IsCompiler.h" />
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
     <ClInclude Include="Platform\PlatformApi.h" />
@@ -430,36 +120,23 @@
     <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h" />
     <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h" />
     <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h" />
-    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
-    <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
+    <ClInclude Include="Platform\Windows\PortableExecutable.h" />
+    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
+    <ClInclude Include="Platform\Windows\Win.h" />
+    <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
-    <ClInclude Include="Platform\Windows\PortableExecutable.h" />
-    <ClInclude Include="Platform\Windows\Win.h" />
-    <ClInclude Include="ProtobufReader.h" />
-    <ClInclude Include="Resources\avatar_ct.h" />
-    <ClInclude Include="Resources\avatar_tt.h" />
-    <ClInclude Include="Resources\Resource.h" />
-    <ClInclude Include="RetSpoof\CdeclFunctionInvoker.h" />
-    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h" />
-    <ClInclude Include="RetSpoof\FunctionInvoker.h" />
-    <ClInclude Include="RetSpoof\RetSpoofGadgets.h" />
-    <ClInclude Include="RetSpoof\RetSpoofInvoker.h" />
-    <ClInclude Include="RetSpoof\RetSpoofInvokerLinux.h" />
-    <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h" />
-    <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h" />
-    <ClInclude Include="GUI.h" />
-    <ClInclude Include="Hooks.h" />
-    <ClInclude Include="Memory.h" />
-    <ClInclude Include="RetSpoof\ThiscallFunctionInvoker.h" />
-    <ClInclude Include="SmallVariant.h" />
-    <ClInclude Include="SortFilter.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
+    <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
+    <ClInclude Include="UI\Panorama\SetCommandHandler.h" />
+    <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\CharUtils.h" />
+    <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\HexChars.h" />
+    <ClInclude Include="Utils\ManuallyDestructible.h" />
     <ClInclude Include="Utils\MemorySection.h" />
     <ClInclude Include="Utils\Pad.h" />
     <ClInclude Include="Utils\RefCountedHook.h" />
@@ -467,6 +144,7 @@
     <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
+    <ClInclude Include="Utils\StringParser.h" />
     <ClInclude Include="Verification\Verifier.h" />
     <ClInclude Include="Verification\VerifyMacros.h" />
     <ClInclude Include="Vmt\VmtCopy.h" />
@@ -475,132 +153,99 @@
     <ClInclude Include="Vmt\VmtSwapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
-      <ShaderType>Vertex</ShaderType>
-      <ShaderModel>2.0</ShaderModel>
-      <VariableName>default_vs</VariableName>
-      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\default_vs.h</HeaderFileOutput>
-      <ObjectFileOutput>
-      </ObjectFileOutput>
-      <DisableOptimizations>false</DisableOptimizations>
-      <EnableDebuggingInformation>false</EnableDebuggingInformation>
-    </FxCompile>
+    <None Include="UI\Panorama\CreateGUI.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Intrinsics.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}</ProjectGuid>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{dd077013-2b61-4122-970e-63e63055eaa8}</ProjectGuid>
     <RootNamespace>Osiris</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Dependencies\range-v3;$(SolutionDir)Dependencies;$(ProjectDir)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(SolutionDir)Dependencies\freetype;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Dependencies\range-v3;$(SolutionDir)Dependencies;$(ProjectDir)</IncludePath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;_DEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <CallingConvention>VectorCall</CallingConvention>
-      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib;ntdll.lib;</AdditionalDependencies>
-      <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
+      <EnableUAC>false</EnableUAC>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;NOMINMAX;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;NDEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <DebugInformationFormat>None</DebugInformationFormat>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <StringPooling>true</StringPooling>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <FloatingPointExceptions>false</FloatingPointExceptions>
-      <CreateHotpatchableImage>false</CreateHotpatchableImage>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalOptions>/Gw /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <ControlFlowGuard>false</ControlFlowGuard>
       <ExceptionHandling>false</ExceptionHandling>
-      <CallingConvention>VectorCall</CallingConvention>
-      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib;ntdll.lib;</AdditionalDependencies>
-      <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
+      <EnableUAC>false</EnableUAC>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <EntryPointSymbol>DllMain</EntryPointSymbol>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

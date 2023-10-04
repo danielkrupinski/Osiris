@@ -8,6 +8,11 @@
 
 class FreeMemoryRegion {
 public:
+    FreeMemoryRegion(const FreeMemoryRegion&) = delete;
+    FreeMemoryRegion(FreeMemoryRegion&&) = delete;
+    FreeMemoryRegion& operator=(const FreeMemoryRegion&) = delete;
+    FreeMemoryRegion& operator=(FreeMemoryRegion&&) = delete;
+
     [[nodiscard]] static FreeMemoryRegion* create(std::span<std::byte> region) noexcept
     {
         return new (region.data()) FreeMemoryRegion{ region.size(), nullptr };

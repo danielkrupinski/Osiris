@@ -40,7 +40,7 @@ public:
     {
         const auto exportDataDirectory = getExportDataDirectory();
         if (!exportDataDirectory)
-            return SafeAddress{ 0 };
+            return SafeAddress{ nullptr };
 
         const auto exportDirectory = reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDataDirectory->VirtualAddress);
 
@@ -52,13 +52,13 @@ public:
                 const auto functionRva = functions[nameOrdinals[i]];
                 if (isForwardedExport(functionRva, *exportDataDirectory)) {
                     assert(false && "Forwarded exports are not supported yet!");
-                    return SafeAddress{ 0 };
+                    return SafeAddress{ nullptr };
                 }
                 return SafeAddress{ base + functionRva };
             }
         }
 
-        return SafeAddress{ 0 };
+        return SafeAddress{ nullptr };
     }
 
 private:

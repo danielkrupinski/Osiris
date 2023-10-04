@@ -9,6 +9,7 @@
 template <typename Lhs, typename Rhs>
 class Verifier {
 public:
+    // TODO: do not use std::source_location as its unsupported on clang-cl and clang < 16
     Verifier(const std::source_location& location, const char* message, const char* lhsString, const char* rhsString, const Lhs& lhs, const Rhs& rhs) noexcept
         : location{ location }, message{ message }, lhsString{ lhsString }, rhsString{ rhsString }, lhs{ lhs }, rhs{ rhs }
     {

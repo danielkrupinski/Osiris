@@ -1,1013 +1,376 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="CS2">
+      <UniqueIdentifier>{fe899935-4774-4b30-ac9c-b1a6055666e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="CS2\Classes">
+      <UniqueIdentifier>{5f3eb65d-765c-423a-81bb-84527b157b71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Hacks">
-      <UniqueIdentifier>{f60a2d6f-e07f-4f71-8db1-6ec82cf1f6d4}</UniqueIdentifier>
+    <Filter Include="CS2\Constants">
+      <UniqueIdentifier>{d999d684-295e-4c04-b949-35386439cd84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MinHook">
-      <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
+    <Filter Include="Features">
+      <UniqueIdentifier>{bdcd13b6-e67e-43e7-b6b5-9898375770d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Hooks">
-      <UniqueIdentifier>{8899dcd1-0468-4bfa-b60d-c2af1c97a39e}</UniqueIdentifier>
+    <Filter Include="Features\Hud">
+      <UniqueIdentifier>{d08ceb16-76e5-49ed-865a-f74883b720c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="nlohmann">
-      <UniqueIdentifier>{44d5d3e3-0072-4a5a-b725-1b9807c24a06}</UniqueIdentifier>
+    <Filter Include="Features\Visuals">
+      <UniqueIdentifier>{3ee30a31-8dbf-4608-8064-4c996ce05980}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{ad9f0ad1-ce71-4bc4-b5eb-dd6a018f4fae}</UniqueIdentifier>
+    <Filter Include="Features\Visuals\ScopeOverlayRemover">
+      <UniqueIdentifier>{ef89bed2-4c4f-4578-ab77-a71419bcaf71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="freetype">
-      <UniqueIdentifier>{15481d2e-5516-4ece-9b00-79e32710804c}</UniqueIdentifier>
+    <Filter Include="GameClasses">
+      <UniqueIdentifier>{8f279e18-4344-42fb-8c01-6c773341568d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Shaders">
-      <UniqueIdentifier>{6f1f2a48-d1e6-4e87-b967-4b7e41157a5b}</UniqueIdentifier>
+    <Filter Include="GameClasses\Implementation">
+      <UniqueIdentifier>{9d1f0b22-77bd-4a76-95aa-dc397050c4d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="InventoryChanger">
-      <UniqueIdentifier>{2d9b89c7-c323-4423-a60d-412e3bd1637f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\GameItems">
-      <UniqueIdentifier>{4bde1f1b-2fcb-40ca-ad3c-31ce0fbab3d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{b1414ace-e5da-40a5-8ad7-f44d19c9c430}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\Inventory">
-      <UniqueIdentifier>{270217aa-a98f-429f-8f75-6afc8c109b1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\Backend">
-      <UniqueIdentifier>{4d2a3734-8406-4a2b-8393-a5c4264a4e46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\Backend\Response">
-      <UniqueIdentifier>{ae9e3dc7-2b8a-4e8e-8cb2-ee9cfc972084}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\GameIntegration">
-      <UniqueIdentifier>{2bf8116d-2e4c-473a-a00e-a32ac7e88ad0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\ItemGenerator">
-      <UniqueIdentifier>{8a9faacf-088e-412b-b6b2-e72f4237c282}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InventoryChanger\Backend\Request">
-      <UniqueIdentifier>{f7214d3f-4cd4-4d69-8c0d-b3b579db52d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform">
-      <UniqueIdentifier>{5b374e7e-04e3-430e-bd54-02300b034b28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\Windows">
-      <UniqueIdentifier>{9d72c449-86f4-4c33-8e45-d88047d888eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{861c156a-293c-443e-aaab-2ca4847b6143}</UniqueIdentifier>
+    <Filter Include="GameClasses\OffsetTypes">
+      <UniqueIdentifier>{329c6712-55b5-4e74-a86b-9ec2134ff40a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Helpers">
-      <UniqueIdentifier>{91bf4578-bff7-4d46-965e-3991ce345331}</UniqueIdentifier>
+      <UniqueIdentifier>{eaf12914-2d12-4935-aab3-1491b8021bd6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interfaces">
-      <UniqueIdentifier>{7ff80fe4-c5eb-4eef-b792-75c87aa46dc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Config">
-      <UniqueIdentifier>{571171a8-ca62-48a5-91c2-9b837e642a80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hacks\Visuals">
-      <UniqueIdentifier>{b06cfa86-3590-4502-9bed-468e781c19cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RetSpoof">
-      <UniqueIdentifier>{17172044-e24f-46ec-90cf-e556a1d707aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CSGO">
-      <UniqueIdentifier>{289891d4-9350-4f67-92bf-f53fc9ebb683}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CSGO\Constants">
-      <UniqueIdentifier>{fb1c5b6e-7774-4ac9-97ea-1cd637cf1539}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CSGO\Helpers">
-      <UniqueIdentifier>{3661f08f-221b-48b7-ad38-fed870f2e75d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CSGO\PODs">
-      <UniqueIdentifier>{8514249c-6b12-4d2a-b904-919d1d0b0e5c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\Macros">
-      <UniqueIdentifier>{debcafb0-2338-4015-a582-96cf480e9d5c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MemorySearch">
-      <UniqueIdentifier>{a463f11e-5e7b-40b4-b955-c60208980d86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hacks\Chams">
-      <UniqueIdentifier>{4e0caedc-d0ab-48f2-8598-a22bbbc1bf6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BytePatterns">
-      <UniqueIdentifier>{725dc9cb-6df9-4b2c-8095-bb88f2061822}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Vmt">
-      <UniqueIdentifier>{cf4fc922-308a-4d3c-8448-4e4002e85dc4}</UniqueIdentifier>
+    <Filter Include="Hooks">
+      <UniqueIdentifier>{1ee84f1c-3411-4068-816f-186260cb390d}</UniqueIdentifier>
     </Filter>
     <Filter Include="MemoryAllocation">
-      <UniqueIdentifier>{d969ab9e-3c43-4920-9b63-a03cb992bd03}</UniqueIdentifier>
+      <UniqueIdentifier>{a7c6f0cc-33af-4b84-bc2e-b475218c32db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Verification">
-      <UniqueIdentifier>{632357e8-8179-49cd-9cd4-c724a0a406e9}</UniqueIdentifier>
+    <Filter Include="MemoryPatterns">
+      <UniqueIdentifier>{7ab4346b-d402-48a8-9590-aca3b0f0be40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryPatterns\Windows">
+      <UniqueIdentifier>{cf6b4008-917e-4941-ba38-2e6810674d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryPatterns\Linux">
+      <UniqueIdentifier>{ec0543de-bdca-4e9a-9a8b-68c6f3d2d7e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{5d3b276e-b98d-470f-be8c-733cb1e03f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Linux">
+      <UniqueIdentifier>{e6253e28-e425-407b-b7d6-96249af4e192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{151d7c38-8452-494d-aef9-a83eb5c3e654}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows\DLLs">
-      <UniqueIdentifier>{6d627371-1fe5-4a39-9bcd-ec33550ce53f}</UniqueIdentifier>
+      <UniqueIdentifier>{f55814bc-f553-43fb-9618-c44c4123147c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Macros">
+      <UniqueIdentifier>{b9abe2b4-4d35-4caa-9dc3-048c23269180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{2bc1aec8-532c-4e08-91ab-fef64934fdcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Panorama">
+      <UniqueIdentifier>{dc1b255e-c46b-4a72-a232-f6fdcc600f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{db8414f0-eeaf-42ef-86d3-9f0ae024684a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Verification">
+      <UniqueIdentifier>{16a25d9c-a41e-4392-919b-8705cd5259cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vmt">
+      <UniqueIdentifier>{55a59ab3-797b-4ca6-b4aa-307861d4ae1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemorySearch">
+      <UniqueIdentifier>{28ecac3b-05f9-44d1-86cb-50d8fe91ff36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Misc.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Osiris.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Glow.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Triggerbot.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Chams.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Aimbot.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Netvars.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Visuals.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Backtrack.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="imguiCustom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\EnginePrediction.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="EventListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks\MinHook.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="GameData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\StreamProofESP.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hacks\Sound.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch-c.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConfigStructs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\InventoryChanger.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\InventoryConfig.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_freetype.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_impl_dx9.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_stdlib.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\GameItems\Storage.cpp">
-      <Filter>InventoryChanger\GameItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\buffer.c">
-      <Filter>MinHook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hook.c">
-      <Filter>MinHook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\trampoline.c">
-      <Filter>MinHook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hde\hde32.c">
-      <Filter>MinHook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\MinHook\hde\hde64.c">
-      <Filter>MinHook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\autofit\autofit.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\cff\cff.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftbase.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftsystem.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftsynth.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftinit.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftglyph.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftdebug.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\base\ftbitmap.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\psaux\psaux.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\pshinter\pshinter.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\psnames\psnames.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\raster\raster.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\sfnt\sfnt.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\smooth\smooth.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\freetype\src\truetype\truetype.c">
-      <Filter>freetype</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\Inventory\StructsFromJson.cpp">
-      <Filter>InventoryChanger\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\GameIntegration\Inventory.cpp">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\GameIntegration\Items.cpp">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\ItemGenerator\ItemGenerator.cpp">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\ItemGenerator\TournamentMatches.cpp">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\GameIntegration\CrateLoot.cpp">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\Backend\Request\RequestHandler.cpp">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\WeaponNames.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalContext.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO\EconItemView.cpp">
-      <Filter>CSGO</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO\Entity.cpp">
-      <Filter>CSGO</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO\GlobalVars.cpp">
-      <Filter>CSGO</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO\KeyValues.cpp">
-      <Filter>CSGO</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO\Utils.cpp">
-      <Filter>CSGO</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySearch\HybridPatternFinder.cpp">
-      <Filter>MemorySearch</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySearch\PatternFinder.cpp">
-      <Filter>MemorySearch</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySearch\PatternFinderScalar.cpp">
-      <Filter>MemorySearch</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySearch\PatternFinderSIMD.cpp">
-      <Filter>MemorySearch</Filter>
-    </ClCompile>
-    <ClCompile Include="RetSpoof\RetSpoofGadgets.cpp">
-      <Filter>RetSpoof</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers\PatternNotFoundHandler.cpp">
+    <ClInclude Include="CS2\Classes\C_CSGameRules.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\ClientModeCSNormal.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CLoopModeGame.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Color.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CPlantedC4.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CUtlVector.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\GlobalVars.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Panorama.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\BombSiteIndex.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\DllNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\EntityHandle.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\PanelIDs.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Features.h">
+      <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\HudFeatures.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\VisualFeatures.h">
+      <Filter>Features\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h">
+      <Filter>Features\Visuals\ScopeOverlayRemover</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h">
+      <Filter>Features\Visuals\ScopeOverlayRemover</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\ClientMode.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GameRules.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelStyle.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaImagePanel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaLabel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiEngine.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PlantedC4.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanoramaImagePanelImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanoramaLabelImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\ClientModeOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\Bits.h">
       <Filter>Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers\KeyValuesFactory.cpp">
+    </ClInclude>
+    <ClInclude Include="Helpers\HudProvider.h">
       <Filter>Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\EconItemFunctions.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
-    <ClCompile Include="InventoryChanger\EconItemViewFunctions.cpp">
-      <Filter>InventoryChanger</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GUI.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hooks.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Helpers\PanoramaPanelPointer.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Helpers\PatternNotFoundLogger.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Config.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Helpers\PlantedC4Provider.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Misc.h">
-      <Filter>Hacks</Filter>
+    <ClInclude Include="Helpers\UnloadFlag.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Glow.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Triggerbot.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Aimbot.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Netvars.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Backtrack.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="imguiCustom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\EnginePrediction.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="EventListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfigStructs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\MinHook.h">
+    <ClInclude Include="Hooks\LoopModeGameHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="GameData.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Hooks\PeepEventsHook.h">
+      <Filter>Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\StreamProofESP.h">
-      <Filter>Hacks</Filter>
+    <ClInclude Include="MemoryAllocation\FixedAllocator.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="InputUtil.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryAllocation\MemoryAllocator.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Resource.h">
-      <Filter>Resources</Filter>
+    <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\avatar_ct.h">
-      <Filter>Resources</Filter>
+    <ClInclude Include="MemoryAllocation\MemoryDeleter.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\avatar_tt.h">
-      <Filter>Resources</Filter>
+    <ClInclude Include="MemoryAllocation\UniquePtr.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Sound.h">
-      <Filter>Hacks</Filter>
+    <ClInclude Include="MemoryPatterns\ClientModePatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="JsonForward.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryPatterns\ClientPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryPatterns\GameRulesPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\InventoryChanger.h">
-      <Filter>InventoryChanger</Filter>
+    <ClInclude Include="MemoryPatterns\PanoramaImagePanelPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="ProtobufReader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MemoryPatterns\PanoramaLabelPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\InventoryConfig.h">
-      <Filter>InventoryChanger</Filter>
+    <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\Item.h">
-      <Filter>InventoryChanger\GameItems</Filter>
+    <ClInclude Include="MemoryPatterns\PanoramaUiPanelPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\Storage.h">
-      <Filter>InventoryChanger\GameItems</Filter>
+    <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\Lookup.h">
-      <Filter>InventoryChanger\GameItems</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\Structs.h">
-      <Filter>InventoryChanger\GameItems</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imconfig.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaImagePanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui_freetype.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaLabelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui_impl_dx9.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imgui_stdlib.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\ClientModePatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\GameRulesPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\nlohmann\json.hpp">
-      <Filter>nlohmann</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\buffer.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaImagePanelPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\MinHook.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaLabelPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\trampoline.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiEnginePatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\hde\hde32.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiPanelPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\hde\hde64.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="MemoryPatterns\Linux\PlantedC4PatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\hde\pstdint.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h">
+      <Filter>Platform\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\hde\table32.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="Platform\Linux\LinuxMessageBox.h">
+      <Filter>Platform\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\MinHook\hde\table64.h">
-      <Filter>MinHook</Filter>
+    <ClInclude Include="Platform\Linux\LinuxPlatformApi.h">
+      <Filter>Platform\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Inventory\Item.h">
-      <Filter>InventoryChanger\Inventory</Filter>
+    <ClInclude Include="Platform\Linux\UserHomeFolderPath.h">
+      <Filter>Platform\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Inventory\Structs.h">
-      <Filter>InventoryChanger\Inventory</Filter>
+    <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftmodule.h">
-      <Filter>freetype</Filter>
+    <ClInclude Include="Platform\Windows\PebLdr.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\freetype\freetype\config\ftoption.h">
-      <Filter>freetype</Filter>
+    <ClInclude Include="Platform\Windows\PortableExecutable.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Inventory\StructsFromJson.h">
-      <Filter>InventoryChanger\Inventory</Filter>
+    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Loadout.h">
-      <Filter>InventoryChanger\Backend</Filter>
+    <ClInclude Include="Platform\Windows\Win.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\BackendSimulator.h">
-      <Filter>InventoryChanger\Backend</Filter>
+    <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\ItemIDMap.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Item.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="SmallVariant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\Response.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseQueue.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\ItemInResponse.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseTypes.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\ItemSorter.h">
-      <Filter>InventoryChanger\GameItems</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameIntegration\Inventory.h">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseHandler.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameIntegration\Items.h">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\PickEm.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator\ItemGenerator.h">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator\TournamentMatches.h">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameIntegration\Misc.h">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\Enums.h">
-      <Filter>InventoryChanger\GameItems</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\CrateLoot.h">
-      <Filter>InventoryChanger\GameItems</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameItems\CrateLootLookup.h">
-      <Filter>InventoryChanger\GameItems</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\EconRarities.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\GameIntegration\CrateLoot.h">
-      <Filter>InventoryChanger\GameIntegration</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestBuilder.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestTypes.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\RequestHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\WeaponNames.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="SortFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\XRayScanner.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\StorageUnitManager.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator\DefaultGenerator.h">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator\AttributeGenerator.h">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemGenerator\DropGenerator.h">
-      <Filter>InventoryChanger\ItemGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\PickEmHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\LoadoutHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Response\ResponseAccumulator.h">
-      <Filter>InventoryChanger\Backend\Response</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\InventoryHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\StorageUnitHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemRemovalHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\XRayScannerHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemModificationHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Request\ItemActivationHandler.h">
-      <Filter>InventoryChanger\Backend\Request</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\Backend\Items.h">
-      <Filter>InventoryChanger\Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\ItemId.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalContext.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Platform\Windows\WindowsMessageBox.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\FlagsBuilder.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\InterfaceFinder.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\InterfaceFinderWithLog.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\ClientInterfaces.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\EngineInterfaces.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\ClientInterfacesPODs.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\EngineInterfacesPODs.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\EconItemFunctions.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\OtherInterfacesPODs.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\OtherInterfaces.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="InventoryChanger\EconItemViewFunctions.h">
-      <Filter>InventoryChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\SafeAddress.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Config\ResetConfigurator.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Config\LoadConfigurator.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Config\SaveConfigurator.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals\ColorCorrection.h">
-      <Filter>Hacks\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals\SkyboxChanger.h">
-      <Filter>Hacks\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Config\Configurable.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals\PostProcessingDisabler.h">
-      <Filter>Hacks\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals\ScopeOverlayRemover.h">
-      <Filter>Hacks\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\ReturnAddress.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Features.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Endpoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\FastcallFunctionInvoker.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\FunctionInvoker.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\StdcallFunctionInvoker.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\ClassId.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\ConVarNames.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\DllNames.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\EconItemFlags.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\FrameStage.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\ItemId.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\PaintkitConditionChances.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\PaintkitWear.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\ProPlayer.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\StickerId.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\Tournament.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\TournamentStage.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\TournamentTeam.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\UserMessages.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Helpers\EconItemFunctions.h">
-      <Filter>CSGO\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Helpers\EconItemViewFunctions.h">
-      <Filter>CSGO\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\ConVar.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\EconItem.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\ItemSchema.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\PaintKit.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\RenderableInfo.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PODs\SharedObjectTypeCache.h">
-      <Filter>CSGO\PODs</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\AnimState.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Client.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ClientClass.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ClientMode.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ConVar.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\CSPlayerInventory.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Cvar.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\EconItemView.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Engine.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\EngineTrace.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Entity.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\EntityList.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\FileSystem.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Functions.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\GameEvent.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\GameMovement.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\GlobalVars.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\GlowObjectManager.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Input.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\InputSystem.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ItemSchema.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\KeyValues.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Localize.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\LocalPlayer.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Material.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\MaterialSystem.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\matrix3x4.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\MemAlloc.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ModelInfo.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ModelRender.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\MoveHelper.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\NetworkChannel.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Panorama.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PanoramaMarshallHelper.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PhysicsSurfaceProps.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PlantedC4.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\PlayerResource.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Prediction.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Recv.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Sound.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\SoundEmitter.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\SoundInfo.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Steam.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\StudioRender.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Surface.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UiComponentInventory.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UserCmd.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Utils.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UtlMap.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UtlMemory.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UtlString.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UtlVector.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\VarMapping.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Vector.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ViewRender.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ViewRenderBeams.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\ViewSetup.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\VirtualMethod.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\WeaponData.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\WeaponId.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\WeaponSystem.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\CdeclFunctionInvoker.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\ThiscallFunctionInvoker.h">
-      <Filter>RetSpoof</Filter>
+    <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h">
+      <Filter>Platform\Windows\DLLs</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h">
+      <Filter>Platform\Windows\DLLs</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Macros\CallingConventions.h">
       <Filter>Platform\Macros</Filter>
@@ -1021,6 +384,110 @@
     <ClInclude Include="Platform\Macros\PlatformSpecific.h">
       <Filter>Platform\Macros</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\DynamicLibrary.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformApi.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\SimpleMessageBox.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\TypeInfoPrecedingVmt.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\PanoramaGUI.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\SetCommandHandler.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Align.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CharUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FieldOffset.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FlagsBuilder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\GenericFunctionPointer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HexChars.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ManuallyDestructible.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\MemorySection.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Pad.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\RefCountedHook.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ReturnAddress.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafeAddress.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SpanSlice.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringBuilder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringParser.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Verification\Verifier.h">
+      <Filter>Verification</Filter>
+    </ClInclude>
+    <ClInclude Include="Verification\VerifyMacros.h">
+      <Filter>Verification</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtCopy.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtLength.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtLengthCalculator.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Vmt\VmtSwapper.h">
+      <Filter>Vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Endpoints.h" />
+    <ClInclude Include="GlobalContext.h" />
+    <ClInclude Include="Platform\Macros\IsCompiler.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Macros\FunctionAttributes.h">
+      <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternConverter.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternLiteral.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternStorage.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
     <ClInclude Include="MemorySearch\HybridPatternFinder.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
@@ -1033,244 +500,14 @@
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\SpanSlice.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Constants\GameEventNames.h">
-      <Filter>CSGO\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySearch\BytePattern.h">
-      <Filter>MemorySearch</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\RetSpoofGadgets.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\RetSpoofInvoker.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\RetSpoofInvokerLinux.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="RetSpoof\RetSpoofInvokerWindows.h">
-      <Filter>RetSpoof</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\HexChars.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySearch\BytePatternConverter.h">
-      <Filter>MemorySearch</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySearch\BytePatternStorage.h">
-      <Filter>MemorySearch</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySearch\BytePatternLiteral.h">
-      <Filter>MemorySearch</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\EngineHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\ClientModeHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\PanoramaMarshallHelperHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\ClientHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\ViewRenderHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\CSPlayerInventoryHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\InventoryManagerHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\BspQueryHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\EngineSoundHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\SvCheatsHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\ModelRenderHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\SurfaceHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\KeyValuesSystemHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\PatternNotFoundHandler.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\DynamicLibrary.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="HookType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\UtlRbTree.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\SplitScreen.h">
-      <Filter>CSGO</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\ClientStateHooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\KeyValuesFactory.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO\Helpers\KeyValuesFunctions.h">
-      <Filter>CSGO\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams\ChamsMaterialKeyValuesFactory.h">
-      <Filter>Hacks\Chams</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams\ChamsMaterial.h">
-      <Filter>Hacks\Chams</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams\ChamsMaterialFactory.h">
-      <Filter>Hacks\Chams</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams\ChamsMaterials.h">
-      <Filter>Hacks\Chams</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Chams\ChamsLayer.h">
-      <Filter>Hacks\Chams</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals\BulletTracers.h">
-      <Filter>Hacks\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\Bits.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Hooks\WindowProcedureHook.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\PortableExecutable.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\Win.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\PebLdr.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Pad.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\StringBuilder.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\ClientPatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\WindowsClientPatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\LinuxClientPatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\LinuxEnginePatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\EnginePatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="BytePatterns\WindowsEnginePatternFinder.h">
-      <Filter>BytePatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="Vmt\VmtLength.h">
-      <Filter>Vmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Vmt\VmtLengthCalculator.h">
-      <Filter>Vmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\MemorySection.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\TypeInfoPrecedingVmt.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Vmt\VmtCopy.h">
-      <Filter>Vmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Vmt\VmtSwapper.h">
-      <Filter>Vmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\RefCountedHook.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\MemoryAllocator.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\FixedAllocator.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\WindowsMessageBox.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\SimpleMessageBox.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\PlatformApi.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Verification\Verifier.h">
-      <Filter>Verification</Filter>
-    </ClInclude>
-    <ClInclude Include="Verification\VerifyMacros.h">
-      <Filter>Verification</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\CharUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h">
-      <Filter>Platform\Windows\DLLs</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h">
-      <Filter>Platform\Windows\DLLs</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\MemoryDeleter.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\UniquePtr.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\ConstString.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\GenericFunctionPointer.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
-      <Filter>Resources\Shaders</Filter>
-    </FxCompile>
+    <None Include="UI\Panorama\CreateGUI.js">
+      <Filter>UI\Panorama</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Intrinsics.cpp" />
   </ItemGroup>
 </Project>

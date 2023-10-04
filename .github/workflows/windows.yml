@@ -4,15 +4,11 @@ on: [push, pull_request]
 
 jobs:
   msbuild:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-2022
     strategy:
       matrix:
-        os: [windows-2019, windows-2022]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
-        exclude:
-          - os: windows-2019
-            toolset: ClangCL
     steps:
     - uses: actions/checkout@v3
     - name: Add msbuild to PATH
@@ -22,26 +18,21 @@ jobs:
       run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Build
       shell: cmd
-      run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
+      run: msbuild Osiris.sln /p:Platform=x64 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
 
   cmake:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-2022
     strategy:
       matrix:
-        os: [windows-2019, windows-2022]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
-        arch: [Win32, x64]
-        exclude:
-          - os: windows-2019
-            toolset: ClangCL
     steps:
     - uses: actions/checkout@v3
     - name: Set toolset
       if: matrix.toolset == 'ClangCL'
       run: echo "toolset=-T ${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: configure
-      run: cmake -Werror=dev -D BUILD_TESTS=1 -A ${{ matrix.arch }} ${{ env.toolset }} -B build
+      run: cmake -Werror=dev -D BUILD_TESTS=1 -A x64 ${{ env.toolset }} -B build
     - name: build
       run: cmake --build build --config ${{ matrix.configuration }}
     - name: run unit tests
