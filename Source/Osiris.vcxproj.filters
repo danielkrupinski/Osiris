@@ -79,6 +79,9 @@
     <Filter Include="Vmt">
       <UniqueIdentifier>{55a59ab3-797b-4ca6-b4aa-307861d4ae1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemorySearch">
+      <UniqueIdentifier>{28ecac3b-05f9-44d1-86cb-50d8fe91ff36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -472,6 +475,30 @@
     </ClInclude>
     <ClInclude Include="Platform\Macros\FunctionAttributes.h">
       <Filter>Platform\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternConverter.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternLiteral.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\BytePatternStorage.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\HybridPatternFinder.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternFinder.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternFinderScalar.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternFinderSIMD.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

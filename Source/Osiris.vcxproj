@@ -95,6 +95,14 @@
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h" />
+    <ClInclude Include="MemorySearch\BytePattern.h" />
+    <ClInclude Include="MemorySearch\BytePatternConverter.h" />
+    <ClInclude Include="MemorySearch\BytePatternLiteral.h" />
+    <ClInclude Include="MemorySearch\BytePatternStorage.h" />
+    <ClInclude Include="MemorySearch\HybridPatternFinder.h" />
+    <ClInclude Include="MemorySearch\PatternFinder.h" />
+    <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
+    <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxMessageBox.h" />
