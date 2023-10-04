@@ -33,7 +33,6 @@ $.Osiris = (function () {
     addCommand: function (command, value = '') {
       var existingCommands = this.rootPanel.GetAttributeString('cmd', '');
       this.rootPanel.SetAttributeString('cmd', existingCommands + command + ' ' + value);
-      $.Msg('Commandline: ' + this.rootPanel.GetAttributeString('cmd', ''));
     },
     navigateToTab: function (tabID) {
       if (activeTab === tabID)
