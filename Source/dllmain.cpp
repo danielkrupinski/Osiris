@@ -8,17 +8,18 @@
 #endif
 
 constinit ManuallyDestructible<GlobalContext> GlobalContext::globalContext;
+alignas(FreeMemoryRegionList::minimumAlignment()) constinit std::byte GlobalContext::storage[1'000'000];
 
 #include "MemoryAllocation/MemoryAllocatorBase.h"
 
 std::byte* MemoryAllocatorBase::allocate(std::size_t size) noexcept
 {
-    return GlobalContext::instance().fixedAllocator.allocate(size);
+    return GlobalContext::instance().freeRegionList.allocate(size);
 }
 
 void MemoryAllocatorBase::deallocate(std::byte* memory, std::size_t size) noexcept
 {
-    return GlobalContext::instance().fixedAllocator.deallocate(memory, size);
+    return GlobalContext::instance().freeRegionList.deallocate(memory, size);
 }
 
 void operator delete(void*, std::size_t) noexcept
