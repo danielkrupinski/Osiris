@@ -1,6 +1,7 @@
 ﻿#include "Utils/ManuallyDestructible.h"
 #include "Platform/Macros/IsPlatform.h"
 
+#include "BuildConfig.h"
 #include "GlobalContext.h"
 
 #if IS_LINUX()
@@ -8,7 +9,7 @@
 #endif
 
 constinit ManuallyDestructible<GlobalContext> GlobalContext::globalContext;
-alignas(FreeMemoryRegionList::minimumAlignment()) constinit std::byte GlobalContext::storage[1'000'000];
+alignas(FreeMemoryRegionList::minimumAlignment()) constinit std::byte GlobalContext::storage[build::MEMORY_CAPACITY];
 
 #include "MemoryAllocation/MemoryAllocatorBase.h"
 

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuildConfig.h" />
     <ClInclude Include="CS2\Classes\ClientModeCSNormal.h" />
     <ClInclude Include="CS2\Classes\CLoopModeGame.h" />
     <ClInclude Include="CS2\Classes\Color.h" />

@@ -13,6 +13,8 @@
 #include "GameClasses/Implementation/GameClassImplementations.h"
 #include "Helpers/UnloadFlag.h"
 
+#include "BuildConfig.h"
+
 struct GlobalContext {
     PeepEventsHook peepEventsHook{ DynamicLibrary{cs2::SDL_DLL}.getFunctionAddress("SDL_PeepEvents").add(WIN32_LINUX(3, 2)).abs().as<cs2::SDL_PeepEvents*>() };
     UnloadFlag unloadFlag;
@@ -64,5 +66,5 @@ struct GlobalContext {
 private:
     bool initializedFromGameThread = false;
     static constinit ManuallyDestructible<GlobalContext> globalContext;
-    alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[1'000'000];
+    alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
 };

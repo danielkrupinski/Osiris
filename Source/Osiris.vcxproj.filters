@@ -231,9 +231,6 @@
     <ClInclude Include="Hooks\PeepEventsHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryAllocation\FixedAllocator.h">
-      <Filter>MemoryAllocation</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
@@ -500,6 +497,7 @@
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
+    <ClInclude Include="BuildConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
