@@ -7,7 +7,7 @@
 struct PanoramaUiEngineImpl {
     [[nodiscard]] static const PanoramaUiEngineImpl& instance() noexcept;
 
-    cs2::CUIEngine* thisptr{ ClientPatterns::uiEngine() };
+    cs2::CUIEngine** thisptr{ ClientPatterns::uiEngine() };
 
     cs2::CUIEngine::getPanelHandle getPanelHandle{ PanoramaUiEnginePatterns::getPanelHandle() };
     cs2::CUIEngine::getPanelPointer getPanelPointer{ PanoramaUiEnginePatterns::getPanelPointer() };

@@ -9,9 +9,9 @@ inline cs2::CPanel2D** ClientPatterns::hudScope() noexcept
     return GlobalContext::instance().clientPatternFinder("48 8B 05 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 44 38 60"_pat).add(3).abs().as<cs2::CPanel2D**>();
 }
 
-inline cs2::CUIEngine* ClientPatterns::uiEngine() noexcept
+inline cs2::CUIEngine** ClientPatterns::uiEngine() noexcept
 {
-    return GlobalContext::instance().clientPatternFinder("74 25 48 8B 0D ? ? ? ? 4C 8B C2"_pat).add(5).abs().deref().as<cs2::CUIEngine*>();
+    return GlobalContext::instance().clientPatternFinder("74 25 48 8B 0D ? ? ? ? 4C 8B C2"_pat).add(5).abs().as<cs2::CUIEngine**>();
 }
 
 inline cs2::CPanel2D* ClientPatterns::mainMenuPanel() noexcept
