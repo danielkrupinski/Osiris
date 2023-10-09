@@ -51,5 +51,5 @@ inline ReturnAddress ClientPatterns::getWorldSessionInClientMode() noexcept
 
 inline cs2::C_CSGameRules** ClientPatterns::gameRules() noexcept
 {
-    return GlobalContext::instance().clientPatternFinder("4C 8B 2D ? ? ? ? 4D 85 ED 74 5F"_pat).add(3).abs().as<cs2::C_CSGameRules**>();
+    return GlobalContext::instance().clientPatternFinder("4C 8D 35 ? ? ? ? 49 8B 3E 48 85 FF 0F 84 ? ? ? ? 41 80 BC 24"_pat).add(3).abs().as<cs2::C_CSGameRules**>();
 }
