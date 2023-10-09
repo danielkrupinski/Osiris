@@ -27,9 +27,6 @@ public:
     }
 
 private:
-    TogglableFeature() = default;
-    friend Feature;
-
     void callOnEnable() noexcept
     {
         if constexpr (requires (Feature& feature) { { feature.onEnable() } -> std::same_as<void>; })

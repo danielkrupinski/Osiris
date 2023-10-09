@@ -27,7 +27,7 @@ public:
 
     void run() noexcept
     {
-        if (!enabled)
+        if (!isEnabled())
             return;
 
         updatePanelHandles();
