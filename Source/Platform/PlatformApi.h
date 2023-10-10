@@ -2,7 +2,7 @@
 
 #include "Macros/IsPlatform.h"
 
-#if IS_WIN32() || IS_WIN64()
+#if IS_WIN64()
 
 #include "Windows/WindowsPlatformApi.h"
 

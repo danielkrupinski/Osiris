@@ -12,21 +12,15 @@ struct ListEntry {
     ListEntry* bLink;
 };
 
+static_assert(IS_WIN64());
+
 struct PebLdrData {
-#if IS_WIN32()
-    PAD(0xC);
-#elif IS_WIN64()
     PAD(0x10);
-#endif
     ListEntry inLoadOrderModuleList;
 };
 
 struct Peb {
-#if IS_WIN32()
-    PAD(0xC);
-#elif IS_WIN64()
     PAD(0x18);
-#endif
     PebLdrData* ldr;
 };
 
