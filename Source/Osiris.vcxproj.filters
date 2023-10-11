@@ -498,6 +498,24 @@
       <Filter>MemorySearch</Filter>
     </ClInclude>
     <ClInclude Include="BuildConfig.h" />
+    <ClInclude Include="GameClasses\MemAlloc.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\MemAllocPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\IMemAlloc.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Linux\MemAllocPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -2,6 +2,7 @@
 
 #include "ClientModeImpl.h"
 #include "GameRulesImpl.h"
+#include "MemAllocImpl.h"
 #include "PanoramaImagePanelImpl.h"
 #include "PanoramaLabelImpl.h"
 #include "PanoramaUiEngineImpl.h"
@@ -18,6 +19,11 @@ inline const ClientModeImpl& ClientModeImpl::instance() noexcept
 inline const GameRulesImpl& GameRulesImpl::instance() noexcept
 {
     return GlobalContext::instance().gameClasses->gameRules;
+}
+
+inline const MemAllocImpl& MemAllocImpl::instance() noexcept
+{
+    return GlobalContext::instance().gameClasses->memAlloc;
 }
 
 inline const PanoramaImagePanelImpl& PanoramaImagePanelImpl::instance() noexcept
