@@ -23,9 +23,9 @@ public:
         if (settings)
             settingsPanelPtr = settings;
 
-        PanoramaUiEngine::runScript(settings,
+        PanoramaUiEngine::runScript(settings, reinterpret_cast<const char*>(
 #include "CreateGUI.js"
-, "", 0);
+), "", 0);
 
         PanoramaUiEngine::runScript(mainMenu, R"(
 (function () {

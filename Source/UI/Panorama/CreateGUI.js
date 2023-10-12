@@ -1,4 +1,4 @@
-R"(
+u8R"(
 $.Osiris = (function () {
   var activeTab;
 
