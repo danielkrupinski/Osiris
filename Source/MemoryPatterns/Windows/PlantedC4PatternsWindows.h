@@ -7,7 +7,7 @@
 inline BombSiteOffset PlantedC4Patterns::m_nBombSite() noexcept
 {
     return BombSiteOffset{
-        GlobalContext::instance().clientPatternFinder("E8 ? ? ? ? 84 C0 74 1D 41 83"_pat).add(1).abs().add(2).as<std::int32_t*>()
+        GlobalContext::instance().clientPatternFinder("01 75 ? 48 8B 0D ? ? ? ? 48 8B 09 E8 ? ? ? ? 84 C0 74"_pat).add(14).abs().add(2).as<std::int32_t*>()
     };
 }
 
