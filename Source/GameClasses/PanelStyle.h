@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <CS2/Classes/Color.h>
+#include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/Panorama.h>
 
 struct PanelStyle {
@@ -20,6 +21,12 @@ struct PanelStyle {
     {
         // FIXME: hardcoded virtual method index
         reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(thisptr))[54])(thisptr, &color);
+    }
+
+    void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
+    {
+        // FIXME: hardcoded virtual method index
+        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::CUtlVector<cs2::CTransform3D*>* transforms)>((*reinterpret_cast<void(***)()>(thisptr))[17])(thisptr, &transforms);
     }
 
 private:
