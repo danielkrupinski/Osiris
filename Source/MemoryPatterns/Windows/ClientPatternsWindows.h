@@ -58,3 +58,8 @@ inline const void* ClientPatterns::transformTranslate3dVMT() noexcept
 {
     return GlobalContext::instance().clientPatternFinder("48 8D 05 ? ? ? ? 48 C7 42 ? 00"_pat).add(3).abs().as<const void*>();
 }
+
+inline cs2::VMatrix* ClientPatterns::worldToProjectionMatrix() noexcept
+{
+    return GlobalContext::instance().clientPatternFinder("48 8D 05 ? ? ? ? 48 8B D3 4C 8D 05"_pat).add(3).abs().as<cs2::VMatrix*>();
+}

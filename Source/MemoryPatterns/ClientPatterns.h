@@ -4,6 +4,7 @@
 #include <CS2/Classes/GlobalVars.h>
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Classes/CUtlVector.h>
+#include <CS2/Classes/VMatrix.h>
 #include <Utils/ReturnAddress.h>
 
 namespace cs2
@@ -25,4 +26,5 @@ struct ClientPatterns {
     [[nodiscard]] static ReturnAddress getWorldSessionInClientMode() noexcept;
     [[nodiscard]] static cs2::C_CSGameRules** gameRules() noexcept;
     [[nodiscard]] static const void* transformTranslate3dVMT() noexcept;
+    [[nodiscard]] static cs2::VMatrix* worldToProjectionMatrix() noexcept;
 };
