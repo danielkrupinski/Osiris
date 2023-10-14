@@ -12,6 +12,7 @@ namespace cs2
     struct C_CSGameRules;
     struct ClientModeCSNormal;
     struct CLoopModeGame;
+    struct CViewRender;
 }
 
 struct ClientPatterns {
@@ -27,4 +28,5 @@ struct ClientPatterns {
     [[nodiscard]] static cs2::C_CSGameRules** gameRules() noexcept;
     [[nodiscard]] static const void* transformTranslate3dVMT() noexcept;
     [[nodiscard]] static cs2::VMatrix* worldToProjectionMatrix() noexcept;
+    [[nodiscard]] static cs2::CViewRender** viewRender() noexcept;
 };
