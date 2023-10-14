@@ -53,3 +53,8 @@ inline cs2::C_CSGameRules** ClientPatterns::gameRules() noexcept
 {
     return GlobalContext::instance().clientPatternFinder("48 8B 0D ? ? ? ? 48 85 C9 0F 84 ? ? ? ? 80 BE"_pat).add(3).abs().as<cs2::C_CSGameRules**>();
 }
+
+inline const void* ClientPatterns::transformTranslate3dVMT() noexcept
+{
+    return GlobalContext::instance().clientPatternFinder("48 8D 05 ? ? ? ? 48 C7 42 ? 00"_pat).add(3).abs().as<const void*>();
+}

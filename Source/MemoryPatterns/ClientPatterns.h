@@ -24,4 +24,5 @@ struct ClientPatterns {
     [[nodiscard]] static cs2::ClientModeCSNormal* clientMode() noexcept;
     [[nodiscard]] static ReturnAddress getWorldSessionInClientMode() noexcept;
     [[nodiscard]] static cs2::C_CSGameRules** gameRules() noexcept;
+    [[nodiscard]] static const void* transformTranslate3dVMT() noexcept;
 };
