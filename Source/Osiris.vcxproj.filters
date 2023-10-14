@@ -519,6 +519,9 @@
     <ClInclude Include="Helpers\PanoramaTransformFactory.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\CViewRender.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
