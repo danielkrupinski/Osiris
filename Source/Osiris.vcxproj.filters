@@ -516,6 +516,9 @@
     <ClInclude Include="MemoryPatterns\Linux\MemAllocPatternsLinux.h">
       <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\PanoramaTransformFactory.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
