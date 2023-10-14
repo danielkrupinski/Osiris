@@ -35,7 +35,6 @@ struct CUIEngine {
     using onDeletePanel = void (*)(CUIEngine* thisptr, PanelHandle* panelHandle);
 };
 
-
 struct CPanel2D {
     const void* vmt;
     CUIPanel* uiPanel;
@@ -63,6 +62,27 @@ struct CUIPanel {
 
 struct CImagePanel : CPanel2D {
     using setImage = void (*)(CImagePanel* thisptr, const char* imageUrl);
+};
+
+struct CUILength {
+    enum EUILengthTypes {
+        k_EUILengthUnset,
+        k_EUILengthLength,
+        k_EUILengthPercent
+    };
+
+    float m_flValue;
+    EUILengthTypes m_eType;
+};
+
+struct CTransform3D {
+    const void* vmt;
+};
+
+struct CTransformTranslate3D : CTransform3D {
+    CUILength m_x;
+    CUILength m_y;
+    CUILength m_z;
 };
 
 }
