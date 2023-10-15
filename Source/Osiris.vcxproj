@@ -22,6 +22,7 @@
     <ClInclude Include="CS2\Classes\GlobalVars.h" />
     <ClInclude Include="CS2\Classes\IMemAlloc.h" />
     <ClInclude Include="CS2\Classes\Panorama.h" />
+    <ClInclude Include="CS2\Classes\Vector.h" />
     <ClInclude Include="CS2\Classes\VMatrix.h" />
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
