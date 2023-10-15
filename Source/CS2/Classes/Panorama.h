@@ -5,6 +5,7 @@
 #include <Platform/Macros/IsPlatform.h>
 
 #include "CUtlVector.h"
+#include "Vector.h"
 
 namespace cs2
 {
@@ -83,6 +84,10 @@ struct CTransformTranslate3D : CTransform3D {
     CUILength m_x;
     CUILength m_y;
     CUILength m_z;
+};
+
+struct CTransformScale3D : CTransform3D {
+    Vector m_VecScale;
 };
 
 }
