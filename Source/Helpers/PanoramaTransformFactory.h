@@ -22,9 +22,12 @@ private:
     {
         if constexpr (std::is_same_v<T, cs2::CTransformTranslate3D>)
             return transformTranslate3dVmt;
+        else if constexpr (std::is_same_v<T, cs2::CTransformScale3D>)
+            return transformScale3dVmt;
         else
             static_assert(!std::is_same_v<T, T>, "Unsupported type");
     }
 
     const void* transformTranslate3dVmt{ ClientPatterns::transformTranslate3dVMT() };
+    const void* transformScale3dVmt{ ClientPatterns::transformScale3dVMT() };
 };
