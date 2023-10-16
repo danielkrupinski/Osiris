@@ -528,6 +528,9 @@
     <ClInclude Include="CS2\Classes\Vector.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\ViewRenderHook.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

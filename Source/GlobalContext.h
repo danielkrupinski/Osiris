@@ -4,6 +4,7 @@
 
 #include "CS2/Constants/DllNames.h"
 #include "Hooks/PeepEventsHook.h"
+#include "Hooks/ViewRenderHook.h"
 
 #include <MemorySearch/PatternFinder.h>
 #include <Features/Features.h>
@@ -23,6 +24,7 @@ struct GlobalContext {
     PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{ DynamicLibrary{cs2::PANORAMA_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     std::optional<GameClassImplementations> gameClasses;
     std::optional<LoopModeGameHook> loopModeGameHook;
+    std::optional<ViewRenderHook> viewRenderHook;
     std::optional<Features> features;
     std::optional<PanoramaGUI> panoramaGUI;
 
@@ -51,6 +53,7 @@ struct GlobalContext {
 
         gameClasses.emplace();
         loopModeGameHook.emplace(VmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() });
+        viewRenderHook.emplace(VmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() });
         features.emplace(HudProvider{}, *loopModeGameHook);
         panoramaGUI.emplace(*features, unloadFlag);
 

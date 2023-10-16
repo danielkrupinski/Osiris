@@ -70,6 +70,7 @@
     <ClInclude Include="Helpers\UnloadFlag.h" />
     <ClInclude Include="Hooks\LoopModeGameHook.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
+    <ClInclude Include="Hooks\ViewRenderHook.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h" />
     <ClInclude Include="MemoryAllocation\MemoryAllocator.h" />
