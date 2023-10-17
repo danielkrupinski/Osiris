@@ -3,6 +3,7 @@
 #include <optional>
 
 #include "CS2/Constants/DllNames.h"
+#include "Hooks/Hooks.h"
 #include "Hooks/PeepEventsHook.h"
 #include "Hooks/ViewRenderHook.h"
 
@@ -23,8 +24,7 @@ struct GlobalContext {
     PatternFinder<PatternNotFoundLogger> clientPatternFinder{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{ DynamicLibrary{cs2::PANORAMA_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     std::optional<GameClassImplementations> gameClasses;
-    std::optional<LoopModeGameHook> loopModeGameHook;
-    std::optional<ViewRenderHook> viewRenderHook;
+    std::optional<Hooks> hooks;
     std::optional<Features> features;
     std::optional<PanoramaGUI> panoramaGUI;
 
@@ -52,9 +52,9 @@ struct GlobalContext {
             return;
 
         gameClasses.emplace();
-        loopModeGameHook.emplace(VmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() });
-        viewRenderHook.emplace(VmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() });
-        features.emplace(HudProvider{}, *loopModeGameHook);
+        const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
+        hooks.emplace(clientVmtLengthCalculator);
+        features.emplace(HudProvider{}, hooks->loopModeGameHook);
         panoramaGUI.emplace(*features, unloadFlag);
 
         initializedFromGameThread = true;

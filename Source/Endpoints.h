@@ -30,15 +30,15 @@ inline int PeepEventsHook::SDL_PeepEvents(void* events, int numevents,
     hudFeatures().killfeedPreserver.run();
 
     GlobalContext::instance().panoramaGUI->run();
-    GlobalContext::instance().loopModeGameHook->update();
-    GlobalContext::instance().viewRenderHook->update();
+    GlobalContext::instance().hooks->loopModeGameHook.update();
+    GlobalContext::instance().hooks->viewRenderHook.update();
     visuals().scopeOverlayRemover.updatePanelVisibility();
 
     if (GlobalContext::instance().unloadFlag) {
         const auto originalPeepEvents = GlobalContext::instance().peepEventsHook.original;
         GlobalContext::instance().peepEventsHook.disable();
-        GlobalContext::instance().loopModeGameHook->forceUninstall();
-        GlobalContext::instance().viewRenderHook->forceUninstall();
+        GlobalContext::instance().hooks->loopModeGameHook.forceUninstall();
+        GlobalContext::instance().hooks->viewRenderHook.forceUninstall();
         GlobalContext::destroyInstance();
         return originalPeepEvents(events, numevents, action, minType, maxType);
     }
@@ -48,10 +48,10 @@ inline int PeepEventsHook::SDL_PeepEvents(void* events, int numevents,
 inline void* LoopModeGameHook::getWorldSession(cs2::CLoopModeGame* thisptr) noexcept
 {
     visuals().scopeOverlayRemover.getWorldSessionHook(RETURN_ADDRESS());
-    return GlobalContext::instance().loopModeGameHook->originalGetWorldSession(thisptr);
+    return GlobalContext::instance().hooks->loopModeGameHook.originalGetWorldSession(thisptr);
 }
 
 inline void ViewRenderHook::onRenderStart(cs2::CViewRender* thisptr) noexcept
 {
-    GlobalContext::instance().viewRenderHook->originalOnRenderStart(thisptr);
+    GlobalContext::instance().hooks->viewRenderHook.originalOnRenderStart(thisptr);
 }

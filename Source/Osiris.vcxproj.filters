@@ -531,6 +531,9 @@
     <ClInclude Include="Hooks\ViewRenderHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\Hooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

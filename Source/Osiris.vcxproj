@@ -68,6 +68,7 @@
     <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
     <ClInclude Include="Helpers\PlantedC4Provider.h" />
     <ClInclude Include="Helpers\UnloadFlag.h" />
+    <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="Hooks\LoopModeGameHook.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
     <ClInclude Include="Hooks\ViewRenderHook.h" />
