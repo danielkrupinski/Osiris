@@ -10,3 +10,4 @@
 #include "PanoramaUiEnginePatternsWindows.h"
 #include "PanoramaUiPanelPatternsWindows.h"
 #include "PlantedC4PatternsWindows.h"
+#include "SoundSystemPatternsWindows.h"

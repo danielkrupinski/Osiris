@@ -10,3 +10,4 @@
 #include "PanoramaUiEnginePatternsLinux.h"
 #include "PanoramaUiPanelPatternsLinux.h"
 #include "PlantedC4PatternsLinux.h"
+#include "SoundSystemPatternsLinux.h"
