@@ -564,6 +564,9 @@
     <ClInclude Include="GameClasses\FileSystem.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\Sound.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
