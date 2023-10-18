@@ -534,6 +534,9 @@
     <ClInclude Include="Hooks\Hooks.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
