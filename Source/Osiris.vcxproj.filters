@@ -82,6 +82,9 @@
     <Filter Include="MemorySearch">
       <UniqueIdentifier>{28ecac3b-05f9-44d1-86cb-50d8fe91ff36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameDLLs">
+      <UniqueIdentifier>{b8552b92-9c5f-4168-bd92-43404a4af17e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -536,6 +539,9 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h">
       <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDLLs\Tier0Dll.h">
+      <Filter>GameDLLs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -61,6 +61,7 @@
     <ClInclude Include="GameClasses\PanoramaUiEngine.h" />
     <ClInclude Include="GameClasses\PanoramaUiPanel.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
+    <ClInclude Include="GameDLLs\Tier0Dll.h" />
     <ClInclude Include="GlobalContext.h" />
     <ClInclude Include="Helpers\Bits.h" />
     <ClInclude Include="Helpers\HudProvider.h" />
