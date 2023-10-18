@@ -2,6 +2,7 @@
 
 #include "ClientModePatternsWindows.h"
 #include "ClientPatternsWindows.h"
+#include "FileSystemPatternsWindows.h"
 #include "GameRulesPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"
 #include "PanoramaImagePanelPatternsWindows.h"

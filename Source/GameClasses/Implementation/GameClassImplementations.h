@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClientModeImpl.h"
+#include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
 #include "PanoramaImagePanelImpl.h"
@@ -11,6 +12,7 @@
 
 struct GameClassImplementations {
     ClientModeImpl clientMode;
+    FileSystemImpl fileSystem;
     GameRulesImpl gameRules;
     MemAllocImpl memAlloc;
     PanoramaImagePanelImpl imagePanel;
