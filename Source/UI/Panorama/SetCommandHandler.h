@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Features/Features.h>
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 #include <Utils/StringParser.h>
 
 struct SetCommandHandler {

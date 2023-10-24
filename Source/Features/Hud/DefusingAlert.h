@@ -2,7 +2,7 @@
 
 #include <CS2/Constants/PanelIDs.h>
 
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 #include <Helpers/PlantedC4Provider.h>
 #include <Helpers/HudProvider.h>
 

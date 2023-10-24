@@ -2,7 +2,7 @@
 
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Constants/PanelIDs.h>
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <Helpers/PanoramaPanelPointer.h>
 #include <Utils/StringParser.h>

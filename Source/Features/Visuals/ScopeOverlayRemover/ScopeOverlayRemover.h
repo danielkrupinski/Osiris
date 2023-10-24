@@ -8,7 +8,7 @@
 #include <GameClasses/PanoramaUiPanel.h>
 #include <GameClasses/ClientMode.h>
 
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 
 #include "HudScopePanels.h"
 

@@ -6,7 +6,7 @@
 #include <string_view>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 
 #include "PanoramaCommandDispatcher.h"
 

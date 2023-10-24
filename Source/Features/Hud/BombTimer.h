@@ -3,7 +3,7 @@
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
-#include <Features/TogglableFeature.h>
+#include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <MemoryPatterns/ClientPatterns.h>
