@@ -11,8 +11,10 @@ struct PanoramaTransformFactory {
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept
     {
-        if (const auto memory = MemAlloc::allocate(sizeof(T)))
-            return new (memory) T{ getVmt<T>(), std::forward<Args>(args)... };
+        if (const auto vmt = getVmt<T>()) {
+            if (const auto memory = MemAlloc::allocate(sizeof(T)))
+                return new (memory) T{ vmt, std::forward<Args>(args)... };
+        }
         return nullptr;
     }
 
