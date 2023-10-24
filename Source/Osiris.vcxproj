@@ -32,6 +32,7 @@
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
     <ClInclude Include="Endpoints.h" />
+    <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\Hud\BombTimer.h" />

@@ -582,6 +582,9 @@
     <ClInclude Include="FeatureHelpers\TogglableFeature.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
