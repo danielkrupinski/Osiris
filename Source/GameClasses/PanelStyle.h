@@ -29,6 +29,12 @@ struct PanelStyle {
         reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::CUtlVector<cs2::CTransform3D*>* transforms)>((*reinterpret_cast<void(***)()>(thisptr))[17])(thisptr, &transforms);
     }
 
+    void setOpacity(float opacity) const noexcept
+    {
+        // FIXME: hardcoded virtual method index
+        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, float opacity)>((*reinterpret_cast<void(***)()>(thisptr))[22])(thisptr, opacity);
+    }
+
 private:
     cs2::CPanelStyle* thisptr;
 };
