@@ -591,6 +591,9 @@
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\PlayedSound.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

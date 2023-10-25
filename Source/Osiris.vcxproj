@@ -34,6 +34,7 @@
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\PlayedSound.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
