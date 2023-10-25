@@ -35,6 +35,7 @@
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
+    <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\Hud\BombTimer.h" />
     <ClInclude Include="Features\Hud\DefusingAlert.h" />
