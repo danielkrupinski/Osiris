@@ -585,6 +585,9 @@
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
