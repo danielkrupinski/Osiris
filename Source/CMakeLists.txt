@@ -16,6 +16,7 @@ if(MSVC)
 endif()
 
 if(UNIX)
+  target_compile_options(Osiris PRIVATE -Wall)
   target_link_options(Osiris PRIVATE LINKER:--no-undefined)
 endif()
 
