@@ -31,6 +31,7 @@
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
+    <ClInclude Include="CS2\Constants\SoundNames.h" />
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />

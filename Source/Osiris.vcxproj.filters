@@ -594,6 +594,9 @@
     <ClInclude Include="FeatureHelpers\PlayedSound.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Constants\SoundNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
