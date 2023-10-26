@@ -603,6 +603,9 @@
     <ClInclude Include="GameClasses\FileNameSymbolTable.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\PlayedSounds.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
