@@ -597,6 +597,12 @@
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\FileNameSymbolTable.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/FileSystem.h>
+#include "FileNameSymbolTable.h"
 #include "Implementation/FileSystemImpl.h"
 
 struct FileSystem {
@@ -14,9 +15,9 @@ struct FileSystem {
         return thisptr != nullptr;
     }
 
-    [[nodiscard]] cs2::CBaseFileSystem::m_FileNames* fileNames() const noexcept
+    [[nodiscard]] FileNameSymbolTable fileNames() const noexcept
     {
-        return FileSystemImpl::instance().fileNamesOffset.of(thisptr).get();
+        return FileNameSymbolTable{FileSystemImpl::instance().fileNamesOffset.of(thisptr).get()};
     }
 
 private:

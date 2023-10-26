@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClientModeImpl.h"
+#include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
@@ -12,6 +13,7 @@
 
 struct GameClassImplementations {
     ClientModeImpl clientMode;
+    FileNameSymbolTableImpl fileNameSymbolTable;
     FileSystemImpl fileSystem;
     GameRulesImpl gameRules;
     MemAllocImpl memAlloc;

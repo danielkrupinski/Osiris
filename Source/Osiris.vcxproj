@@ -47,9 +47,11 @@
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="GameClasses\ClientMode.h" />
+    <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
     <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileSystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h" />
     <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h" />
