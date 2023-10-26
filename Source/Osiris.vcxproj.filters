@@ -88,6 +88,9 @@
     <Filter Include="FeatureHelpers">
       <UniqueIdentifier>{60a8534c-f923-48e7-a211-854c06b1456e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Sound">
+      <UniqueIdentifier>{432df53f-506f-470e-af2c-7155e3d4f03c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -605,6 +608,12 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\PlayedSounds.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\FootstepVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\SoundFeatures.h">
+      <Filter>Features\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
