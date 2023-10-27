@@ -12,6 +12,12 @@
 #include "PlantedC4Impl.h"
 
 struct GameClassImplementations {
+    explicit GameClassImplementations(Tier0Dll tier0Dll) noexcept
+        : fileNameSymbolTable{ tier0Dll }
+        , memAlloc{ tier0Dll }
+    {
+    }
+
     ClientModeImpl clientMode;
     FileNameSymbolTableImpl fileNameSymbolTable;
     FileSystemImpl fileSystem;

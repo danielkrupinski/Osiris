@@ -54,7 +54,7 @@ struct GlobalContext {
         if (initializedFromGameThread)
             return;
 
-        gameClasses.init();
+        gameClasses.init(Tier0Dll{});
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
         hooks.init(clientVmtLengthCalculator);
         features.init(HudProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
