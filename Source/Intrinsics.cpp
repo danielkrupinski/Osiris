@@ -53,6 +53,16 @@ inline unsigned char* memmove(unsigned char* dest, const unsigned char* src, std
     return dest;
 }
 
+inline std::size_t strlen(const char* str) noexcept
+{
+    std::size_t length = 0;
+    while (*str) {
+        ++length;
+        ++str;
+    }
+    return length;
+}
+
 }
 
 #pragma function(memcpy)
@@ -83,4 +93,10 @@ void* memset(void* dest, int ch, size_t count)
 int strcmp(const char* s1, const char* s2)
 {
     return intrinsics::strcmp(reinterpret_cast<const unsigned char*>(s1), reinterpret_cast<const unsigned char*>(s2));
+}
+
+#pragma function(strlen)
+std::size_t strlen(const char* str)
+{
+    return intrinsics::strlen(str);
 }

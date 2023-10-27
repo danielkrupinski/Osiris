@@ -100,6 +100,14 @@ $.Osiris = (function () {
     });
 
     $.CreatePanel('Label', visualsTabButton, '', { text: "Visuals" });
+    
+    var soundTabButton = $.CreatePanel('RadioButton', centerContainer, 'sound_button', {
+      group: "SettingsNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToTab('sound');"
+    });
+
+    $.CreatePanel('Label', soundTabButton, '', { text: "Sound" });
   };
 
   createNavbar();
@@ -190,6 +198,10 @@ $.Osiris = (function () {
   var visuals = createTab('visuals');
   var weapons = createSection(visuals, 'Weapons');
   createYesNoDropDown(weapons, "Remove Scope Overlay", 'visuals', 'remove_scope_overlay');
+
+  var sound = createTab('sound');
+  var visualization = createSection(sound, 'Visualization');
+  createYesNoDropDown(visualization, "Visualize Player Footsteps", 'sound', 'visualize_player_footsteps');
 
   $.Osiris.navigateToTab('hud');
 })();

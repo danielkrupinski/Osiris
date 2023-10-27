@@ -10,5 +10,6 @@ constexpr auto ScopeDust = "ScopeDust";
 constexpr auto ScoreAndTimeAndBomb = "ScoreAndTimeAndBomb";
 constexpr auto HudDeathNotice = "HudDeathNotice";
 constexpr auto VisibleNotices = "VisibleNotices";
+constexpr auto HudReticle = "HudReticle";
 
 }

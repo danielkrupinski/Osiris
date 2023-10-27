@@ -16,6 +16,8 @@ struct SetCommandHandler {
             handleHudSection();
         } else if (section == "visuals") {
             handleVisualsSection();
+        } else if (section == "sound") {
+            handleSoundSection();
         }
     }
 
@@ -28,6 +30,13 @@ private:
             handleTogglableFeature(features.hudFeatures.defusingAlert);
         } else if (feature == "preserve_killfeed") {
             handleTogglableFeature(features.hudFeatures.killfeedPreserver);
+        }
+    }
+
+    void handleSoundSection() const noexcept
+    {
+        if (const auto feature = parser.getLine('/'); feature == "visualize_player_footsteps") {
+            handleTogglableFeature(features.soundFeatures.footstepVisualizer);
         }
     }
 

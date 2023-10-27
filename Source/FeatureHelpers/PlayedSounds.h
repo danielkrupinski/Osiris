@@ -6,6 +6,8 @@
 #include <string_view>
 #include <utility>
 
+#include <CS2/Classes/Sound.h>
+#include <GameClasses/FileSystem.h>
 #include <MemoryPatterns/FileSystemPatterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"

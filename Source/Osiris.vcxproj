@@ -44,6 +44,8 @@
     <ClInclude Include="Features\Hud\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\HudFeatures.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
+    <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
+    <ClInclude Include="Features\Sound\SoundFeatures.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
