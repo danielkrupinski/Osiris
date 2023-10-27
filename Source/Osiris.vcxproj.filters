@@ -615,6 +615,9 @@
     <ClInclude Include="Features\Sound\SoundFeatures.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\LazyInitialized.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -172,6 +172,7 @@
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\HexChars.h" />
+    <ClInclude Include="Utils\LazyInitialized.h" />
     <ClInclude Include="Utils\ManuallyDestructible.h" />
     <ClInclude Include="Utils\MemorySection.h" />
     <ClInclude Include="Utils\Pad.h" />

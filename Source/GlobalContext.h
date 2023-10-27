@@ -14,6 +14,7 @@
 
 #include "GameClasses/Implementation/GameClassImplementations.h"
 #include "Helpers/UnloadFlag.h"
+#include "Utils/LazyInitialized.h"
 
 #include "BuildConfig.h"
 
@@ -25,10 +26,10 @@ struct GlobalContext {
     PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{ DynamicLibrary{cs2::PANORAMA_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     PatternFinder<PatternNotFoundLogger> soundSystemPatternFinder{ DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{ DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
-    std::optional<GameClassImplementations> gameClasses;
-    std::optional<Hooks> hooks;
-    std::optional<Features> features;
-    std::optional<PanoramaGUI> panoramaGUI;
+    LazyInitialized<GameClassImplementations> gameClasses;
+    LazyInitialized<Hooks> hooks;
+    LazyInitialized<Features> features;
+    LazyInitialized<PanoramaGUI> panoramaGUI;
 
     static void initializeInstance() noexcept
     {
@@ -53,11 +54,11 @@ struct GlobalContext {
         if (initializedFromGameThread)
             return;
 
-        gameClasses.emplace();
+        gameClasses.init();
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
-        hooks.emplace(clientVmtLengthCalculator);
-        features.emplace(HudProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
-        panoramaGUI.emplace(*features, unloadFlag);
+        hooks.init(clientVmtLengthCalculator);
+        features.init(HudProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
+        panoramaGUI.init(*features, unloadFlag);
 
         initializedFromGameThread = true;
     }
