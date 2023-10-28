@@ -34,6 +34,7 @@
     <ClInclude Include="CS2\Constants\SoundNames.h" />
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\PlayedSound.h" />
     <ClInclude Include="FeatureHelpers\PlayedSounds.h" />

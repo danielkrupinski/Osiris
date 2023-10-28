@@ -3,6 +3,7 @@
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
+#include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
@@ -20,8 +21,10 @@
 
 class BombTimer : public TogglableFeature<BombTimer> {
 public:
-    BombTimer(PlantedC4Provider plantedC4Provider, HudProvider hudProvider) noexcept
-        : plantedC4Provider{ plantedC4Provider }, hudProvider{ hudProvider }
+    BombTimer(PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
+        : plantedC4Provider{ plantedC4Provider }
+        , hudProvider{ hudProvider }
+        , globalVarsProvider{ globalVarsProvider }
     {
     }
 
@@ -35,12 +38,12 @@ public:
 
         const PlantedC4 bomb{ plantedC4Provider.getPlantedC4() };
 
-        if (!bomb || !globalVars || !*globalVars) {
+        if (!bomb || !globalVarsProvider || !globalVarsProvider.getGlobalVars()) {
             hideBombTimerPanel();
             return;
         }
 
-        if (const auto timeToExplosion = bomb.getTimeToExplosion((*globalVars)->curtime); timeToExplosion > 0.0f) {
+        if (const auto timeToExplosion = bomb.getTimeToExplosion(globalVarsProvider.getGlobalVars()->curtime); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
             restorePanels();
@@ -180,7 +183,7 @@ R"(
 
     PlantedC4Provider plantedC4Provider;
     HudProvider hudProvider;
-    cs2::GlobalVars** globalVars{ ClientPatterns::globalVars() };
+    GlobalVarsProvider globalVarsProvider;
 
     PanoramaPanelPointer scoreAndTimeAndBombPanel;
     PanoramaPanelPointer bombStatusPanel;

@@ -57,7 +57,7 @@ struct GlobalContext {
         gameClasses.init(Tier0Dll{});
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
         hooks.init(clientVmtLengthCalculator);
-        features.init(HudProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
+        features.init(HudProvider{}, GlobalVarsProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
         panoramaGUI.init(*features, unloadFlag);
 
         initializedFromGameThread = true;

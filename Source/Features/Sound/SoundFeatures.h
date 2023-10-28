@@ -5,8 +5,8 @@
 #include <Hooks/ViewRenderHook.h>
 
 struct SoundFeatures {
-    explicit SoundFeatures(HudProvider hudProvider, ViewRenderHook& viewRenderHook) noexcept
-        : footstepVisualizer{ hudProvider, viewRenderHook }
+    SoundFeatures(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook) noexcept
+        : footstepVisualizer{ hudProvider, globalVarsProvider, viewRenderHook }
     {
     }
     

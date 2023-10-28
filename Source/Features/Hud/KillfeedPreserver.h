@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Constants/PanelIDs.h>
+#include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <Helpers/PanoramaPanelPointer.h>
@@ -10,8 +11,9 @@
 
 class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
 public:
-    explicit KillfeedPreserver(HudProvider hudProvider) noexcept
+    KillfeedPreserver(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
         : hudProvider{ hudProvider }
+        , globalVarsProvider{ globalVarsProvider }
     {
     }
 
@@ -21,6 +23,9 @@ public:
             return;
 
         if (!gameRules || !*gameRules)
+            return;
+
+        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
             return;
 
         const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
@@ -44,7 +49,7 @@ public:
             StringParser{ spawnTimeString }.parseFloat(spawnTime);
 
             if (spawnTime > roundStartTime) {
-                panel.setAttributeString(spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>((*globalVars)->curtime), '.', '0').cstring());
+                panel.setAttributeString(spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(globalVarsProvider.getGlobalVars()->curtime), '.', '0').cstring());
             }
         }
     }
@@ -81,7 +86,7 @@ private:
     friend TogglableFeature;
 
     HudProvider hudProvider;
-    cs2::GlobalVars** globalVars{ ClientPatterns::globalVars() };
+    GlobalVarsProvider globalVarsProvider;
     cs2::C_CSGameRules** gameRules{ ClientPatterns::gameRules() };
 
     cs2::CPanoramaSymbol deathNoticeKillerSymbol{ -1 };

@@ -618,6 +618,9 @@
     <ClInclude Include="Utils\LazyInitialized.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

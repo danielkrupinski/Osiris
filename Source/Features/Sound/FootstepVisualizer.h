@@ -16,8 +16,9 @@
 
 class FootstepVisualizer : public TogglableFeature<FootstepVisualizer> {
 public:
-    explicit FootstepVisualizer(HudProvider hudProvider, ViewRenderHook& viewRenderHook) noexcept
+    explicit FootstepVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook) noexcept
         : hudProvider{ hudProvider }
+        , globalVarsProvider{ globalVarsProvider }
         , viewRenderHook{ viewRenderHook }
     {
     }
@@ -33,15 +34,15 @@ public:
         if (!isEnabled())
             return;
 
-        if (!globalVars || !*globalVars)
+        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
             return;
 
         if (!worldtoClipSpaceConverter)
             return;
 
         createFootstepPanels();
-        removeOldFootsteps(**globalVars);
-        collectFootsteps(**globalVars);
+        removeOldFootsteps(*globalVarsProvider.getGlobalVars());
+        collectFootsteps(*globalVarsProvider.getGlobalVars());
 
         std::size_t currentIndex = 0;
         footsteps.forEach([this, &currentIndex] (const PlayedSound& sound) {
@@ -58,7 +59,7 @@ public:
             if (!style)
                 return;
 
-            const auto timeAlive = sound.getTimeAlive((*globalVars)->curtime);
+            const auto timeAlive = sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime);
             if (timeAlive >= kFootstepLifespan - kFootstepFadeAwayDuration) {
                 style.setOpacity((kFootstepLifespan - timeAlive) / kFootstepFadeAwayDuration);
             } else {
@@ -175,7 +176,7 @@ $.CreatePanel('Image', footstepPanel, '', {
 
     HudProvider hudProvider;
     PanoramaPanelPointer footstepContainerPanelPointer;
-    cs2::GlobalVars** globalVars{ ClientPatterns::globalVars() };
+    GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;
     ViewRenderHook& viewRenderHook;
 
