@@ -624,6 +624,9 @@
     <ClInclude Include="Utils\DynamicArray.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\BitFlags.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
