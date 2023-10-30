@@ -621,6 +621,9 @@
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\DynamicArray.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

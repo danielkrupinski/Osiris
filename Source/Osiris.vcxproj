@@ -169,6 +169,7 @@
     <ClInclude Include="UI\Panorama\SetCommandHandler.h" />
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\CharUtils.h" />
+    <ClInclude Include="Utils\DynamicArray.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />

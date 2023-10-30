@@ -11,12 +11,13 @@
 #include <MemoryPatterns/FileSystemPatterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"
+#include <Utils/DynamicArray.h>
 
 class PlayedSounds {
 public:
     void removeExpiredSounds(float curtime, float lifetime) noexcept
     {
-        for (std::size_t i = 0; i < numberOfSounds;) {
+        for (std::size_t i = 0; i < sounds.getSize();) {
             auto& sound = sounds[i];
             if (!sound.isAlive(curtime, lifetime))
                 removeSound(sound);
@@ -53,29 +54,27 @@ public:
             if (!predicate(std::string_view{buffer.data()}))
                 continue;
 
-            if (std::ranges::find(sounds.begin(), sounds.begin() + numberOfSounds, channel.guid, &PlayedSound::guid) != sounds.begin() + numberOfSounds)
+            if (std::ranges::find(sounds, channel.guid, &PlayedSound::guid) != sounds.end())
                 continue;
 
-            if (numberOfSounds < sounds.size())
-                sounds[numberOfSounds++] = PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin };
+            sounds.pushBack(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
         }
     }
 
     template <typename F>
     void forEach(F&& f) const noexcept
     {
-        std::for_each_n(sounds.cbegin(), numberOfSounds, std::forward<F>(f));
+        std::ranges::for_each(sounds, std::forward<F>(f));
     }
 
 private:
     void removeSound(PlayedSound& sound) noexcept
     {
-        sound = sounds[numberOfSounds - 1];
-        --numberOfSounds;
+        sound = sounds.back();
+        sounds.popBack();
     }
 
     cs2::SoundChannels** soundChannels{ SoundSystemPatterns::soundChannels() };
     cs2::CBaseFileSystem** fileSystem{ FileSystemPatterns::fileSystem() };
-    std::array<PlayedSound, 100> sounds; // TODO: dynamically allocate
-    std::size_t numberOfSounds{0};
+    DynamicArray<PlayedSound> sounds;
 };
