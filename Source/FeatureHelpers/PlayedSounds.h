@@ -11,24 +11,59 @@
 #include <MemoryPatterns/FileSystemPatterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"
+#include "Sound/WatchedSounds.h"
+#include "Sound/WatchedSoundType.h"
+#include <Utils/BitFlags.h>
 #include <Utils/DynamicArray.h>
 
 class PlayedSounds {
 public:
-    void removeExpiredSounds(float curtime, float lifetime) noexcept
+    static constexpr auto kFootstepLifespan = 2.0f;
+
+    template <WatchedSoundType soundType>
+    void startWatching() noexcept
     {
-        for (std::size_t i = 0; i < sounds.getSize();) {
-            auto& sound = sounds[i];
-            if (!sound.isAlive(curtime, lifetime))
-                removeSound(sound);
-            else
-                ++i;
+        assert(!watchedSounds.has<soundType>());
+        watchedSounds.set<soundType>();
+    }
+
+    template <WatchedSoundType soundType>
+    void stopWatching() noexcept
+    {
+        assert(watchedSounds.has<soundType>());
+        watchedSounds.unset<soundType>();
+    }
+
+    void update(float curtime) noexcept
+    {
+        if (watchedSounds.has<WatchedSoundType::Footsteps>()) {
+            getSounds<WatchedSoundType::Footsteps>().removeExpiredSounds(curtime, kFootstepLifespan);
+            collectSounds(curtime);
         }
     }
 
-    template <typename Predicate>
-    void collectSounds(float curtime, Predicate&& predicate) noexcept
+    template <typename F>
+    void forEach(F&& f) const noexcept
     {
+        footsteps.forEach(std::forward<F>(f));
+    }
+
+private:
+    template <WatchedSoundType soundType>
+    [[nodiscard]] WatchedSounds& getSounds() noexcept
+    {
+        if constexpr (soundType == WatchedSoundType::Footsteps) {
+            return footsteps;
+        } else {
+            static_assert(soundType != soundType, "Unknown sound type!");
+        }
+    }
+
+    void collectSounds(float curtime) noexcept
+    {
+        if (!watchedSounds)
+            return;
+
         if (!soundChannels || !*soundChannels)
             return;
 
@@ -51,30 +86,29 @@ public:
             fileNames.getString(channel.sfx->fileNameHandle, buffer);
             buffer.back() = '\0';
 
-            if (!predicate(std::string_view{buffer.data()}))
-                continue;
+            if (watchedSounds.has<WatchedSoundType::Footsteps>()) {
+                if (!isFootstepSound(std::string_view{buffer.data()}))
+                    continue;
 
-            if (std::ranges::find(sounds, channel.guid, &PlayedSound::guid) != sounds.end())
-                continue;
+                if (footsteps.hasSound(channel.guid))
+                    continue;
 
-            sounds.pushBack(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
+                footsteps.addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
+            }
         }
     }
 
-    template <typename F>
-    void forEach(F&& f) const noexcept
+    [[nodiscard]] static bool isFootstepSound(std::string_view soundName) noexcept
     {
-        std::ranges::for_each(sounds, std::forward<F>(f));
-    }
-
-private:
-    void removeSound(PlayedSound& sound) noexcept
-    {
-        sound = sounds.back();
-        sounds.popBack();
+        if (soundName.starts_with(cs2::kPlayerFootstepSoundsPath)) {
+            return !std::string_view{ soundName.data() + cs2::kPlayerFootstepSoundsPath.length(), soundName.length() - cs2::kPlayerFootstepSoundsPath.length() }.starts_with(cs2::kPlayerSuitSoundPrefix);
+        }
+        return false;
     }
 
     cs2::SoundChannels** soundChannels{ SoundSystemPatterns::soundChannels() };
     cs2::CBaseFileSystem** fileSystem{ FileSystemPatterns::fileSystem() };
-    DynamicArray<PlayedSound> sounds;
+
+    BitFlags<WatchedSoundType, std::uint8_t> watchedSounds;
+    WatchedSounds footsteps;
 };

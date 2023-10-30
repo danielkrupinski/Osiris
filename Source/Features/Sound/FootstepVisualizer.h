@@ -41,8 +41,7 @@ public:
             return;
 
         createFootstepPanels();
-        removeOldFootsteps(*globalVarsProvider.getGlobalVars());
-        collectFootsteps(*globalVarsProvider.getGlobalVars());
+        footsteps.update(globalVarsProvider.getGlobalVars()->curtime);
 
         std::size_t currentIndex = 0;
         footsteps.forEach([this, &currentIndex] (const PlayedSound& sound) {
@@ -60,8 +59,8 @@ public:
                 return;
 
             const auto timeAlive = sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime);
-            if (timeAlive >= kFootstepLifespan - kFootstepFadeAwayDuration) {
-                style.setOpacity((kFootstepLifespan - timeAlive) / kFootstepFadeAwayDuration);
+            if (timeAlive >= PlayedSounds::kFootstepLifespan - kFootstepFadeAwayDuration) {
+                style.setOpacity((PlayedSounds::kFootstepLifespan - timeAlive) / kFootstepFadeAwayDuration);
             } else {
                 style.setOpacity(1.0f);
             }
@@ -90,14 +89,16 @@ public:
 private:
     friend TogglableFeature;
 
-    void onEnable() const noexcept
+    void onEnable() noexcept
     {
         viewRenderHook.incrementReferenceCount();
+        footsteps.startWatching<WatchedSoundType::Footsteps>();
     }
 
-    void onDisable() const noexcept
+    void onDisable() noexcept
     {
         viewRenderHook.decrementReferenceCount();
+        footsteps.stopWatching<WatchedSoundType::Footsteps>();
         hidePanels(0);
     }
 
@@ -132,21 +133,6 @@ $.CreatePanel('Image', footstepPanel, '', {
 });
 })();)", "", 0);
         }
-    }
-
-    void removeOldFootsteps(const cs2::GlobalVars& globalVars) noexcept
-    {
-        footsteps.removeExpiredSounds(globalVars.curtime, kFootstepLifespan);
-    }
-
-    void collectFootsteps(const cs2::GlobalVars& globalVars) noexcept
-    {
-        footsteps.collectSounds(globalVars.curtime, [](std::string_view soundName) {
-            if (soundName.starts_with(cs2::kPlayerFootstepSoundsPath)) {
-                return !std::string_view{ soundName.data() + cs2::kPlayerFootstepSoundsPath.length(), soundName.length() - cs2::kPlayerFootstepSoundsPath.length() }.starts_with(cs2::kPlayerSuitSoundPrefix);
-            }
-            return false;
-        });
     }
 
     [[nodiscard]] PanoramaUiPanel getFootstepPanel(std::size_t index) const noexcept
@@ -184,6 +170,5 @@ $.CreatePanel('Image', footstepPanel, '', {
     PlayedSounds footsteps;
 
     static constexpr auto kMaxNumberOfFootstepsToDraw = 100;
-    static constexpr auto kFootstepLifespan = 2.0f;
     static constexpr auto kFootstepFadeAwayDuration = 0.4f;
 };

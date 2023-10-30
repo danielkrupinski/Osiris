@@ -91,6 +91,9 @@
     <Filter Include="Features\Sound">
       <UniqueIdentifier>{432df53f-506f-470e-af2c-7155e3d4f03c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FeatureHelpers\Sound">
+      <UniqueIdentifier>{19a86d00-8a7b-4184-9119-96ec0b26c501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -626,6 +629,12 @@
     </ClInclude>
     <ClInclude Include="Utils\BitFlags.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\WatchedSoundType.h">
+      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
