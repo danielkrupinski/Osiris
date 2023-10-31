@@ -16,7 +16,7 @@ if(MSVC)
 endif()
 
 if(UNIX)
-  target_compile_options(Osiris PRIVATE -Wall)
+  target_compile_options(Osiris PRIVATE -Wall -Wno-missing-braces)
   target_link_options(Osiris PRIVATE LINKER:--no-undefined)
 endif()
 
