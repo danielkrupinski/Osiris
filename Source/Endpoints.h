@@ -54,5 +54,7 @@ inline void* LoopModeGameHook::getWorldSession(cs2::CLoopModeGame* thisptr) noex
 inline void ViewRenderHook::onRenderStart(cs2::CViewRender* thisptr) noexcept
 {
     GlobalContext::instance().hooks->viewRenderHook.originalOnRenderStart(thisptr);
+    GlobalContext::instance().soundWatcher->update();
     features().soundFeatures.footstepVisualizer.run();
+    features().soundFeatures.bombPlantVisualizer.run();
 }

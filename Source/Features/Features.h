@@ -7,10 +7,10 @@
 #include "Visuals/VisualFeatures.h"
 
 struct Features {
-    Features(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook) noexcept
+    Features(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
         : hudFeatures{ PlantedC4Provider{}, hudProvider, globalVarsProvider }
         , visuals{ hudProvider, loopModeGameHook }
-        , soundFeatures{ hudProvider, globalVarsProvider, viewRenderHook }
+        , soundFeatures{ hudProvider, globalVarsProvider, viewRenderHook, soundWatcher }
     {
     }
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <array>
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
@@ -13,9 +12,9 @@
 #include <Helpers/PanoramaTransformFactory.h>
 #include <Hooks/ViewRenderHook.h>
 
-class FootstepVisualizer : public TogglableFeature<FootstepVisualizer> {
+class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
 public:
-    explicit FootstepVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
+    explicit BombPlantVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
         : hudProvider{ hudProvider }
         , globalVarsProvider{ globalVarsProvider }
         , viewRenderHook{ viewRenderHook }
@@ -23,10 +22,10 @@ public:
     {
     }
 
-    ~FootstepVisualizer() noexcept
+    ~BombPlantVisualizer() noexcept
     {
-        if (footstepContainerPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(footstepContainerPanelPointer.getHandle());
+        if (bombPlantContainerPanelPointer.getHandle().isValid())
+            PanoramaUiEngine::onDeletePanel(bombPlantContainerPanelPointer.getHandle());
     }
 
     void run() noexcept
@@ -40,16 +39,16 @@ public:
         if (!worldtoClipSpaceConverter)
             return;
 
-        createFootstepPanels();
+        createBombPlantPanels();
 
         std::size_t currentIndex = 0;
-        soundWatcher.forEach<WatchedSoundType::Footsteps>([this, &currentIndex] (const PlayedSound& sound) {
+        soundWatcher.forEach<WatchedSoundType::BombPlant>([this, &currentIndex] (const PlayedSound& sound) {
             const auto soundInClipSpace = worldtoClipSpaceConverter.toClipSpace(sound.origin);
             if (!soundInClipSpace.onScreen())
                 return;
             
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
-            const auto panel = getFootstepPanel(currentIndex);
+            const auto panel = getBombPlantPanel(currentIndex);
             if (!panel)
                 return;
 
@@ -58,14 +57,14 @@ public:
                 return;
 
             const auto timeAlive = sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime);
-            if (timeAlive >= SoundWatcher::kFootstepLifespan - kFootstepFadeAwayDuration) {
-                style.setOpacity((SoundWatcher::kFootstepLifespan - timeAlive) / kFootstepFadeAwayDuration);
+            if (timeAlive >= SoundWatcher::kBombPlantLifespan - kBombPlantFadeAwayDuration) {
+                style.setOpacity((SoundWatcher::kBombPlantLifespan - timeAlive) / kBombPlantFadeAwayDuration);
             } else {
                 style.setOpacity(1.0f);
             }
 
             cs2::CTransform3D* transformations[]{ transformFactory.create<cs2::CTransformScale3D>(
-                (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.3f), (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.3f), 1.0f
+                (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.4f), (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.4f), 1.0f
             ), transformFactory.create<cs2::CTransformTranslate3D>(
                 deviceCoordinates.getX(),
                 deviceCoordinates.getY(),
@@ -91,19 +90,19 @@ private:
     void onEnable() noexcept
     {
         viewRenderHook.incrementReferenceCount();
-        soundWatcher.startWatching<WatchedSoundType::Footsteps>();
+        soundWatcher.startWatching<WatchedSoundType::BombPlant>();
     }
 
     void onDisable() noexcept
     {
         viewRenderHook.decrementReferenceCount();
-        soundWatcher.stopWatching<WatchedSoundType::Footsteps>();
+        soundWatcher.stopWatching<WatchedSoundType::BombPlant>();
         hidePanels(0);
     }
 
-    void createFootstepPanels() noexcept
+    void createBombPlantPanels() noexcept
     {
-        if (footstepContainerPanelPointer.get())
+        if (bombPlantContainerPanelPointer.get())
             return;
 
         const auto hudReticle = hudProvider.findChildInLayoutFile(cs2::HudReticle);
@@ -112,35 +111,36 @@ private:
 
         PanoramaUiEngine::runScript(hudReticle,
             R"(
-$.CreatePanel('Panel', $.GetContextPanel(), 'FootstepContainer', {
+$.CreatePanel('Panel', $.GetContextPanel(), 'BombPlantContainer', {
   style: 'width: 100%; height: 100%;'
 });)", "", 0);
 
-        footstepContainerPanelPointer = hudReticle.findChildInLayoutFile("FootstepContainer");
+        bombPlantContainerPanelPointer = hudReticle.findChildInLayoutFile("BombPlantContainer");
 
-        for (std::size_t i = 0; i < kMaxNumberOfFootstepsToDraw; ++i) {
+        for (std::size_t i = 0; i < kMaxNumberOfBombPlantsToDraw; ++i) {
             PanoramaUiEngine::runScript(hudReticle,
                 R"(
 (function() {
-var footstepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("FootstepContainer"), '', {
-  style: 'width: 50px; height: 50px; x: -25px; y: -25px;'
+var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombPlantContainer"), '', {
+  style: 'width: 100px; height: 100px; x: -50px; y: -50px;'
 });
 
-$.CreatePanel('Image', footstepPanel, '', {
-  src: "s2r://panorama/images/icons/equipment/stomp_damage.svg",
-  style: "horizontal-align: center; vertical-align: center; img-shadow: 0px 0px 1px 3 #000000;"
+$.CreatePanel('Image', bombPlantPanel, '', {
+  src: "s2r://panorama/images/icons/ui/chatwheel_bombat.svg",
+  style: "horizontal-align: center; vertical-align: center; img-shadow: 0px 0px 1px 3 #000000;",
+  textureheight: "64"
 });
 })();)", "", 0);
         }
     }
 
-    [[nodiscard]] PanoramaUiPanel getFootstepPanel(std::size_t index) const noexcept
+    [[nodiscard]] PanoramaUiPanel getBombPlantPanel(std::size_t index) const noexcept
     {
-        const auto footstepContainerPanel = footstepContainerPanelPointer.get();
-        if (!footstepContainerPanel)
+        const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
+        if (!bombPlantContainerPanel)
             return PanoramaUiPanel{nullptr};
 
-        if (const auto children = footstepContainerPanel.children()) {
+        if (const auto children = bombPlantContainerPanel.children()) {
             if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
                 return PanoramaUiPanel{ children->memory[index] };
         }
@@ -149,8 +149,8 @@ $.CreatePanel('Image', footstepPanel, '', {
 
     void hidePanels(std::size_t fromPanelIndex) const noexcept
     {
-        for (std::size_t i = fromPanelIndex; i < kMaxNumberOfFootstepsToDraw; ++i) {
-            const auto panel = getFootstepPanel(i);
+        for (std::size_t i = fromPanelIndex; i < kMaxNumberOfBombPlantsToDraw; ++i) {
+            const auto panel = getBombPlantPanel(i);
             if (!panel)
                 break;
 
@@ -160,14 +160,13 @@ $.CreatePanel('Image', footstepPanel, '', {
     }
 
     HudProvider hudProvider;
-    PanoramaPanelPointer footstepContainerPanelPointer;
+    PanoramaPanelPointer bombPlantContainerPanelPointer;
     GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;
     ViewRenderHook& viewRenderHook;
-
-    WorldToClipSpaceConverter worldtoClipSpaceConverter;
     SoundWatcher& soundWatcher;
+    WorldToClipSpaceConverter worldtoClipSpaceConverter;
 
-    static constexpr auto kMaxNumberOfFootstepsToDraw = 100;
-    static constexpr auto kFootstepFadeAwayDuration = 0.4f;
+    static constexpr auto kMaxNumberOfBombPlantsToDraw = 5;
+    static constexpr auto kBombPlantFadeAwayDuration = 0.4f;
 };

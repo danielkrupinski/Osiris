@@ -37,7 +37,9 @@ private:
     {
         if (const auto feature = parser.getLine('/'); feature == "visualize_player_footsteps") {
             handleTogglableFeature(features.soundFeatures.footstepVisualizer);
-        }
+        } else if (feature == "visualize_bomb_plant") {
+            handleTogglableFeature(features.soundFeatures.bombPlantVisualizer);
+        } 
     }
 
     void handleVisualsSection() const noexcept

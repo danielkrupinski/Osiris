@@ -11,14 +11,20 @@
 #include <MemoryPatterns/FileSystemPatterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"
-#include "Sound/WatchedSounds.h"
-#include "Sound/WatchedSoundType.h"
+#include "WatchedSounds.h"
+#include "WatchedSoundType.h"
 #include <Utils/BitFlags.h>
 #include <Utils/DynamicArray.h>
 
-class PlayedSounds {
+class SoundWatcher {
 public:
     static constexpr auto kFootstepLifespan = 2.0f;
+    static constexpr auto kBombPlantLifespan = 2.5f;
+
+    explicit SoundWatcher(GlobalVarsProvider globalVarsProvider) noexcept
+        : globalVarsProvider{ globalVarsProvider }
+    {
+    }
 
     template <WatchedSoundType soundType>
     void startWatching() noexcept
@@ -34,26 +40,49 @@ public:
         watchedSounds.unset<soundType>();
     }
 
-    void update(float curtime) noexcept
+    void update() noexcept
     {
+        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+            return;
+
         if (watchedSounds.has<WatchedSoundType::Footsteps>()) {
-            getSounds<WatchedSoundType::Footsteps>().removeExpiredSounds(curtime, kFootstepLifespan);
-            collectSounds(curtime);
+            getSounds<WatchedSoundType::Footsteps>().removeExpiredSounds(globalVarsProvider.getGlobalVars()->curtime, kFootstepLifespan);
         }
+
+        if (watchedSounds.has<WatchedSoundType::BombPlant>()) {
+            getSounds<WatchedSoundType::BombPlant>().removeExpiredSounds(globalVarsProvider.getGlobalVars()->curtime, kBombPlantLifespan);
+        }
+
+        if (watchedSounds)
+            collectSounds(globalVarsProvider.getGlobalVars()->curtime);
     }
 
-    template <typename F>
+    template <WatchedSoundType soundType, typename F>
     void forEach(F&& f) const noexcept
     {
-        footsteps.forEach(std::forward<F>(f));
+        getSounds<soundType>().forEach(std::forward<F>(f));
     }
 
 private:
+    template <WatchedSoundType soundType>
+    [[nodiscard]] const WatchedSounds& getSounds() const noexcept
+    {
+        if constexpr (soundType == WatchedSoundType::Footsteps) {
+            return footsteps;
+        } else if constexpr (soundType == WatchedSoundType::BombPlant) {
+            return bombPlants;
+        } else {
+            static_assert(soundType != soundType, "Unknown sound type!");
+        }
+    }
+
     template <WatchedSoundType soundType>
     [[nodiscard]] WatchedSounds& getSounds() noexcept
     {
         if constexpr (soundType == WatchedSoundType::Footsteps) {
             return footsteps;
+        } else if constexpr (soundType == WatchedSoundType::BombPlant) {
+            return bombPlants;
         } else {
             static_assert(soundType != soundType, "Unknown sound type!");
         }
@@ -61,9 +90,6 @@ private:
 
     void collectSounds(float curtime) noexcept
     {
-        if (!watchedSounds)
-            return;
-
         if (!soundChannels || !*soundChannels)
             return;
 
@@ -86,16 +112,24 @@ private:
             fileNames.getString(channel.sfx->fileNameHandle, buffer);
             buffer.back() = '\0';
 
-            if (watchedSounds.has<WatchedSoundType::Footsteps>()) {
-                if (!isFootstepSound(std::string_view{buffer.data()}))
-                    continue;
-
-                if (footsteps.hasSound(channel.guid))
-                    continue;
-
-                footsteps.addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
-            }
+            if (const auto sounds = getSoundsToAddTo(std::string_view{buffer.data()}, channel.guid))
+                sounds->addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
         }
+    }
+
+    [[nodiscard]] WatchedSounds* getSoundsToAddTo(std::string_view soundName, int guid) noexcept
+    {
+        if (watchedSounds.has<WatchedSoundType::Footsteps>()) {
+            if (isFootstepSound(soundName) && !footsteps.hasSound(guid))
+                return &footsteps;
+        }
+
+        if (watchedSounds.has<WatchedSoundType::BombPlant>()) {
+            if (isBombPlantSound(soundName) && !bombPlants.hasSound(guid))
+                return &bombPlants;
+        }
+
+        return nullptr;
     }
 
     [[nodiscard]] static bool isFootstepSound(std::string_view soundName) noexcept
@@ -106,9 +140,16 @@ private:
         return false;
     }
 
+    [[nodiscard]] static bool isBombPlantSound(std::string_view soundName) noexcept
+    {
+        return soundName == cs2::kBombPlantSoundPath;
+    }
+
     cs2::SoundChannels** soundChannels{ SoundSystemPatterns::soundChannels() };
     cs2::CBaseFileSystem** fileSystem{ FileSystemPatterns::fileSystem() };
+    GlobalVarsProvider globalVarsProvider;
 
     BitFlags<WatchedSoundType, std::uint8_t> watchedSounds;
     WatchedSounds footsteps;
+    WatchedSounds bombPlants;
 };

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <FeatureHelpers/PlayedSound.h>
+#include "PlayedSound.h"
 #include <Utils/DynamicArray.h>
 
 class WatchedSounds {
