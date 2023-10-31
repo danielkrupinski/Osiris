@@ -5,6 +5,10 @@
 
 Free and open-source game hack for **Counter-Strike 2**. Compatible with the latest Steam version of the game. Cross-platform - available for Windows and Linux systems.
 
+## What's new
+
+* 27 October 2023 - "Visualize Player Footsteps" function was added
+
 ## Technical features
 
 * C++ runtime library (CRT) is not used in release builds
