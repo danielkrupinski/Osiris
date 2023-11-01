@@ -597,9 +597,6 @@
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\PlayedSound.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -608,9 +605,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\FileNameSymbolTable.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\PlayedSounds.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="Features\Sound\FootstepVisualizer.h">
       <Filter>Features\Sound</Filter>
@@ -634,6 +628,15 @@
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\WatchedSoundType.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\BombPlantVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,8 +36,8 @@
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
-    <ClInclude Include="FeatureHelpers\PlayedSound.h" />
-    <ClInclude Include="FeatureHelpers\PlayedSounds.h" />
+    <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSoundType.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
@@ -47,6 +47,7 @@
     <ClInclude Include="Features\Hud\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\HudFeatures.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
+    <ClInclude Include="Features\Sound\BombPlantVisualizer.h" />
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
     <ClInclude Include="Features\Sound\SoundFeatures.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h" />

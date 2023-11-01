@@ -9,6 +9,7 @@
 
 #include <MemorySearch/PatternFinder.h>
 #include <Features/Features.h>
+#include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include "Platform/DynamicLibrary.h"
 
@@ -28,6 +29,7 @@ struct GlobalContext {
     PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{ DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     LazyInitialized<GameClassImplementations> gameClasses;
     LazyInitialized<Hooks> hooks;
+    LazyInitialized<SoundWatcher> soundWatcher;
     LazyInitialized<Features> features;
     LazyInitialized<PanoramaGUI> panoramaGUI;
 
@@ -57,7 +59,9 @@ struct GlobalContext {
         gameClasses.init(Tier0Dll{});
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
         hooks.init(clientVmtLengthCalculator);
-        features.init(HudProvider{}, GlobalVarsProvider{}, hooks->loopModeGameHook, hooks->viewRenderHook);
+        GlobalVarsProvider globalVarsProvider;
+        soundWatcher.init(globalVarsProvider);
+        features.init(HudProvider{}, globalVarsProvider, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
         panoramaGUI.init(*features, unloadFlag);
 
         initializedFromGameThread = true;

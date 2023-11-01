@@ -1,5 +1,6 @@
 #pragma once
 
 enum class WatchedSoundType {
-    Footsteps
+    Footsteps,
+    BombPlant
 };
