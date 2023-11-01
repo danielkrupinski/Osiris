@@ -7,7 +7,8 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
-* 27 October 2023 - "Visualize Player Footsteps" function was added
+* 1 November 2023 - **Visualize Bomb Plant** function was added to **Sound**
+* 27 October 2023 - **Visualize Player Footsteps** function was added to **Sound**
 
 ## Technical features
 
@@ -24,11 +25,11 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 #### Windows
 
-* Microsoft Visual Studio 2022 with Windows SDK
+* **Microsoft Visual Studio 2022** with **Desktop development with C++** workload
 
 #### Linux
 
-* CMake 3.16 or newer
+* **CMake 3.16** or newer
 * **g++ 11 or newer** or **clang++ 15 or newer**
 
 ### Compiling from source
