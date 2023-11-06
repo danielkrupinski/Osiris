@@ -38,7 +38,7 @@ void operator delete(void*, std::size_t) noexcept
 #include <intrin.h>
 #include <Windows.h>
 
-BOOL APIENTRY DllMain(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
+BOOL APIENTRY DllMain(HMODULE, DWORD reason, LPVOID)
 {
     if (reason == DLL_PROCESS_ATTACH)
         GlobalContext::initializeInstance();

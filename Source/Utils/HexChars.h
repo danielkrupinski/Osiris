@@ -26,6 +26,6 @@ constexpr auto hexCharsInByte = 2;
     const auto lowFourBits = hexDigitToDecimal(chars[1]);
 
     if (isValidOneDigitHexNumber(highFourBits) && isValidOneDigitHexNumber(lowFourBits))
-        return highFourBits << 4 | lowFourBits;
+        return static_cast<char>(highFourBits << 4 | lowFourBits);
     return {};
 }

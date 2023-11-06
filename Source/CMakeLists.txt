@@ -11,7 +11,7 @@ target_link_libraries(Osiris PRIVATE ${CMAKE_DL_LIBS})
 if(MSVC)
   string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
   target_sources(Osiris PRIVATE $<$<CONFIG:Release>:Intrinsics.cpp>)
-  target_compile_options(Osiris PRIVATE $<$<CONFIG:Release>:/sdl- /GS->)
+  target_compile_options(Osiris PRIVATE /W4 $<$<CONFIG:Release>:/sdl- /GS->)
   target_link_options(Osiris PRIVATE $<$<CONFIG:Release>:/nodefaultlib /ENTRY:"DllMain">)
 endif()
 
