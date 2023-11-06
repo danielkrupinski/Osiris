@@ -20,7 +20,7 @@ struct PanoramaUiEngine {
 
     static cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
     {
-        cs2::PanelHandle handle;
+        cs2::PanelHandle handle{};
         if (impl().getPanelHandle && impl().thisptr) {
 #if IS_WIN64()
             impl().getPanelHandle(*impl().thisptr, &handle, panel);
