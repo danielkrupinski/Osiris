@@ -35,7 +35,7 @@ jobs:
         chmod +x llvm.sh
         sudo ./llvm.sh 17
     - name: configure
-      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -B build
+      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
     - name: build
       run: cmake --build build -j $(nproc --all)
     - name: run unit tests
