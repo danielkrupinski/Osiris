@@ -15,9 +15,13 @@ if(MSVC)
   target_link_options(Osiris PRIVATE $<$<CONFIG:Release>:/nodefaultlib /ENTRY:"DllMain">)
 endif()
 
-if(UNIX)
-  target_compile_options(Osiris PRIVATE -Wall -Wno-missing-braces)
-  target_link_options(Osiris PRIVATE LINKER:--no-undefined)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    target_compile_options(Osiris PRIVATE -Wall)
+    target_link_options(Osiris PRIVATE LINKER:--no-undefined)
+  endif()
+
+  target_compile_options(Osiris PRIVATE -Wno-missing-braces)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
