@@ -32,7 +32,7 @@ struct PatternNotFoundLogger {
 
         builder.put('\n');
 
-        messageBox.showError("Error", builder.cstring());
+        messageBox.showError("Osiris", builder.cstring());
     }
 
 private:
