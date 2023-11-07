@@ -29,7 +29,7 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 #### Linux
 
-* **CMake 3.16** or newer
+* **CMake 3.24** or newer
 * **g++ 11 or newer** or **clang++ 15 or newer**
 
 ### Compiling from source
