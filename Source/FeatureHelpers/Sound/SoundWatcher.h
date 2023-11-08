@@ -113,7 +113,7 @@ private:
             buffer.back() = '\0';
 
             if (const auto sounds = getSoundsToAddTo(std::string_view{buffer.data()}, channel.guid))
-                sounds->addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = channelInfo2.memory[i].origin });
+                sounds->addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = correctSoundOrigin(channelInfo2.memory[i].origin) });
         }
     }
 
@@ -143,6 +143,12 @@ private:
     [[nodiscard]] static bool isBombPlantSound(std::string_view soundName) noexcept
     {
         return soundName == cs2::kBombPlantSoundPath;
+    }
+
+    [[nodiscard]] static cs2::Vector correctSoundOrigin(cs2::Vector origin) noexcept
+    {
+        constexpr auto heightDifference = -18.0f;
+        return cs2::Vector{ origin.x, origin.y, origin.z + heightDifference };
     }
 
     cs2::SoundChannels** soundChannels{ SoundSystemPatterns::soundChannels() };

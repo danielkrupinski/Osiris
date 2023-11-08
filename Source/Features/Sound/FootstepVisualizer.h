@@ -123,7 +123,7 @@ $.CreatePanel('Panel', $.GetContextPanel(), 'FootstepContainer', {
                 R"(
 (function() {
 var footstepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("FootstepContainer"), '', {
-  style: 'width: 50px; height: 50px; x: -25px; y: -25px;'
+  style: 'width: 50px; height: 50px; x: -25px; y: -50px; transform-origin: 50% 100%;'
 });
 
 $.CreatePanel('Image', footstepPanel, '', {

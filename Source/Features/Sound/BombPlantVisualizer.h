@@ -122,7 +122,7 @@ $.CreatePanel('Panel', $.GetContextPanel(), 'BombPlantContainer', {
                 R"(
 (function() {
 var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombPlantContainer"), '', {
-  style: 'width: 100px; height: 100px; x: -50px; y: -50px;'
+  style: 'width: 100px; height: 100px; x: -50px; y: -100px; transform-origin: 50% 100%;'
 });
 
 $.CreatePanel('Image', bombPlantPanel, '', {
