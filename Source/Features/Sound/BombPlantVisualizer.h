@@ -109,13 +109,17 @@ private:
         if (!hudReticle)
             return;
 
-        PanoramaUiEngine::runScript(hudReticle,
-            R"(
-$.CreatePanel('Panel', $.GetContextPanel(), 'BombPlantContainer', {
-  style: 'width: 100%; height: 100%;'
-});)", "", 0);
+        PanoramaUiEngine::runScript(hudReticle, "$.CreatePanel('Panel', $.GetContextPanel(), 'BombPlantContainer', {});", "", 0);
 
         bombPlantContainerPanelPointer = hudReticle.findChildInLayoutFile("BombPlantContainer");
+        const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
+        if (!bombPlantContainerPanel)
+            return;
+
+        if (const auto style = bombPlantContainerPanel.getStyle()) {
+            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+        }
 
         for (std::size_t i = 0; i < kMaxNumberOfBombPlantsToDraw; ++i) {
             PanoramaUiEngine::runScript(hudReticle,

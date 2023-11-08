@@ -110,13 +110,17 @@ private:
         if (!hudReticle)
             return;
 
-        PanoramaUiEngine::runScript(hudReticle,
-            R"(
-$.CreatePanel('Panel', $.GetContextPanel(), 'FootstepContainer', {
-  style: 'width: 100%; height: 100%;'
-});)", "", 0);
+        PanoramaUiEngine::runScript(hudReticle, "$.CreatePanel('Panel', $.GetContextPanel(), 'FootstepContainer', {});", "", 0);
 
         footstepContainerPanelPointer = hudReticle.findChildInLayoutFile("FootstepContainer");
+        const auto footstepContainerPanel = footstepContainerPanelPointer.get();
+        if (!footstepContainerPanel)
+            return;
+
+        if (const auto style = footstepContainerPanel.getStyle()) {
+            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+        }
 
         for (std::size_t i = 0; i < kMaxNumberOfFootstepsToDraw; ++i) {
             PanoramaUiEngine::runScript(hudReticle,
