@@ -64,6 +64,7 @@
     <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h" />
     <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h" />
     <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaImagePanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaLabelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h" />
@@ -75,6 +76,7 @@
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
+    <ClInclude Include="GameClasses\Panel.h" />
     <ClInclude Include="GameClasses\PanelStyle.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaLabel.h" />
@@ -110,6 +112,7 @@
     <ClInclude Include="MemoryPatterns\Linux\GameRulesPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h" />
     <ClInclude Include="MemoryPatterns\Linux\MemAllocPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaImagePanelPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaLabelPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaUiEnginePatternsLinux.h" />
@@ -117,6 +120,7 @@
     <ClInclude Include="MemoryPatterns\Linux\PlantedC4PatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\SoundSystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\MemAllocPatterns.h" />
+    <ClInclude Include="MemoryPatterns\PanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaImagePanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaLabelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h" />
@@ -128,6 +132,7 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaImagePanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaLabelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />

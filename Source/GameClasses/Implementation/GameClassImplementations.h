@@ -5,6 +5,7 @@
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
+#include "PanelImpl.h"
 #include "PanoramaImagePanelImpl.h"
 #include "PanoramaLabelImpl.h"
 #include "PanoramaUiEngineImpl.h"
@@ -23,6 +24,7 @@ struct GameClassImplementations {
     FileSystemImpl fileSystem;
     GameRulesImpl gameRules;
     MemAllocImpl memAlloc;
+    PanelImpl panel;
     PanoramaImagePanelImpl imagePanel;
     PanoramaLabelImpl panoramaLabel;
     PanoramaUiEngineImpl uiEngine;

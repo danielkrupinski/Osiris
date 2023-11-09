@@ -639,6 +639,21 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\Panel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PanelPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanelImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

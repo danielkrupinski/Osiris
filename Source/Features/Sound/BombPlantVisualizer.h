@@ -7,6 +7,7 @@
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
@@ -109,9 +110,11 @@ private:
         if (!hudReticle)
             return;
 
-        PanoramaUiEngine::runScript(hudReticle, "$.CreatePanel('Panel', $.GetContextPanel(), 'BombPlantContainer', {});", "", 0);
+        const auto bombPlantContainer = Panel::create("BombPlantContainer", hudReticle);
+        if (!bombPlantContainer)
+            return;
 
-        bombPlantContainerPanelPointer = hudReticle.findChildInLayoutFile("BombPlantContainer");
+        bombPlantContainerPanelPointer = bombPlantContainer->uiPanel;
         const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
         if (!bombPlantContainerPanel)
             return;

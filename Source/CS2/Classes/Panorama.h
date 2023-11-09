@@ -39,6 +39,8 @@ struct CUIEngine {
 struct CPanel2D {
     const void* vmt;
     CUIPanel* uiPanel;
+
+    using Create = CPanel2D*(const char* id, CUIPanel* parent);
 };
 
 struct CLabel : CPanel2D {
