@@ -4,6 +4,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
+#include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
@@ -16,7 +17,7 @@
 class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
 public:
     explicit BombPlantVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : hudProvider{ hudProvider }
+        : inWorldPanelFactory{ hudProvider }
         , globalVarsProvider{ globalVarsProvider }
         , viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
@@ -106,26 +107,14 @@ private:
         if (bombPlantContainerPanelPointer.get())
             return;
 
-        const auto hudReticle = hudProvider.findChildInLayoutFile(cs2::HudReticle);
-        if (!hudReticle)
-            return;
-
-        const auto bombPlantContainer = Panel::create("BombPlantContainer", hudReticle);
+        const auto bombPlantContainer = inWorldPanelFactory.createPanel("BombPlantContainer");
         if (!bombPlantContainer)
             return;
 
         bombPlantContainerPanelPointer = bombPlantContainer->uiPanel;
-        const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
-        if (!bombPlantContainerPanel)
-            return;
-
-        if (const auto style = bombPlantContainerPanel.getStyle()) {
-            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-        }
 
         for (std::size_t i = 0; i < kMaxNumberOfBombPlantsToDraw; ++i) {
-            PanoramaUiEngine::runScript(hudReticle,
+            PanoramaUiEngine::runScript(bombPlantContainer->uiPanel,
                 R"(
 (function() {
 var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombPlantContainer"), '', {
@@ -166,7 +155,7 @@ $.CreatePanel('Image', bombPlantPanel, '', {
         }
     }
 
-    HudProvider hudProvider;
+    HudInWorldPanelFactory inWorldPanelFactory;
     PanoramaPanelPointer bombPlantContainerPanelPointer;
     GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;

@@ -35,6 +35,7 @@
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />

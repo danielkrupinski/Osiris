@@ -5,6 +5,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
+#include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
@@ -16,7 +17,7 @@
 class FootstepVisualizer : public TogglableFeature<FootstepVisualizer> {
 public:
     explicit FootstepVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : hudProvider{ hudProvider }
+        : inWorldPanelFactory{ hudProvider }
         , globalVarsProvider{ globalVarsProvider }
         , viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
@@ -106,23 +107,14 @@ private:
         if (footstepContainerPanelPointer.get())
             return;
 
-        const auto hudReticle = hudProvider.findChildInLayoutFile(cs2::HudReticle);
-        if (!hudReticle)
-            return;
-
-        const auto footstepContainer = Panel::create("FootstepContainer", hudReticle);
+        const auto footstepContainer = inWorldPanelFactory.createPanel("FootstepContainer");
         if (!footstepContainer)
             return;
 
         footstepContainerPanelPointer = footstepContainer->uiPanel;
 
-        if (const auto style = PanoramaUiPanel{ footstepContainer->uiPanel }.getStyle()) {
-            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-        }
-
         for (std::size_t i = 0; i < kMaxNumberOfFootstepsToDraw; ++i) {
-            PanoramaUiEngine::runScript(hudReticle,
+            PanoramaUiEngine::runScript(footstepContainer->uiPanel,
                 R"(
 (function() {
 var footstepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("FootstepContainer"), '', {
@@ -162,7 +154,7 @@ $.CreatePanel('Image', footstepPanel, '', {
         }
     }
 
-    HudProvider hudProvider;
+    HudInWorldPanelFactory inWorldPanelFactory;
     PanoramaPanelPointer footstepContainerPanelPointer;
     GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;

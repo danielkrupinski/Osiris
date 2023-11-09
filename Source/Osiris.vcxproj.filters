@@ -654,6 +654,9 @@
     <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h">
       <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
