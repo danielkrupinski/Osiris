@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstddef>
 #include <string_view>
+#include <tuple>
 #include <utility>
 
 #include <CS2/Classes/Sound.h>
@@ -104,7 +105,7 @@ private:
     [[nodiscard]] WatchedSounds* getSoundsToAddTo(std::string_view soundName, int guid) noexcept
     {
         WatchedSounds* result = nullptr;
-        (getSoundsToAddTo<Sounds>(soundName, guid, result) || ...);
+        std::ignore = (getSoundsToAddTo<Sounds>(soundName, guid, result) || ...);
         return result;
     }
 
