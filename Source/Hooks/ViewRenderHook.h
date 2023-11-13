@@ -12,6 +12,11 @@ public:
     {
     }
 
+    [[nodiscard]] cs2::CViewRender::OnRenderStart* getOriginalOnRenderStart() const noexcept
+    {
+        return originalOnRenderStart;
+    }
+
 private:
     static void onRenderStart(cs2::CViewRender* thisptr) noexcept;
 

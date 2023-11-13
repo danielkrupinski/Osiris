@@ -3,6 +3,7 @@
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Constants/PanelIDs.h>
 #include <FeatureHelpers/GlobalVarsProvider.h>
+#include <FeatureHelpers/Hud/KillfeedPreserverHelpers.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <Helpers/PanoramaPanelPointer.h>
@@ -11,13 +12,7 @@
 
 class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
 public:
-    KillfeedPreserver(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
-        : hudProvider{ hudProvider }
-        , globalVarsProvider{ globalVarsProvider }
-    {
-    }
-
-    void run() noexcept
+    void run(const KillfeedPreserverHelpers& params) noexcept
     {
         if (!isEnabled())
             return;
@@ -25,14 +20,14 @@ public:
         if (!gameRules || !*gameRules)
             return;
 
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
             return;
 
         const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
 
         initSymbols();
 
-        const auto deathNotices = getDeathNotices();
+        const auto deathNotices = getDeathNotices(params.hudProvider);
         if (!deathNotices)
             return;
 
@@ -49,14 +44,14 @@ public:
             StringParser{ spawnTimeString }.parseFloat(spawnTime);
 
             if (spawnTime > roundStartTime) {
-                panel.setAttributeString(spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(globalVarsProvider.getGlobalVars()->curtime), '.', '0').cstring());
+                panel.setAttributeString(spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(params.globalVarsProvider.getGlobalVars()->curtime), '.', '0').cstring());
             }
         }
     }
 
 
 private:
-    [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel() noexcept
+    [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel(HudProvider hudProvider) noexcept
     {
         if (const auto deathNoticesPanel = deathNoticesPointer.get())
             return deathNoticesPanel;
@@ -67,9 +62,9 @@ private:
         return deathNoticesPointer.get();
     }
 
-    [[nodiscard]] cs2::CUIPanel::childrenVector* getDeathNotices() noexcept
+    [[nodiscard]] cs2::CUIPanel::childrenVector* getDeathNotices(HudProvider hudProvider) noexcept
     {
-        if (const auto visibleDeathNoticesPanel = getDeathNoticesPanel())
+        if (const auto visibleDeathNoticesPanel = getDeathNoticesPanel(hudProvider))
             return visibleDeathNoticesPanel.children();
         return nullptr;
     }
@@ -85,8 +80,6 @@ private:
 
     friend TogglableFeature;
 
-    HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
     cs2::C_CSGameRules** gameRules{ ClientPatterns::gameRules() };
 
     cs2::CPanoramaSymbol deathNoticeKillerSymbol{ -1 };

@@ -12,7 +12,7 @@ public:
         return sounds.pushBack(sound);
     }
 
-    [[nodiscard]] bool hasSound(int guid) noexcept
+    [[nodiscard]] bool hasSound(int guid) const noexcept
     {
         return std::ranges::find(sounds, guid, &PlayedSound::guid) != sounds.end();
     }

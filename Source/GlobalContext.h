@@ -10,6 +10,7 @@
 #include <MemorySearch/PatternFinder.h>
 #include <Features/Features.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
+#include <FeatureHelpers/FeatureHelpers.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include "Platform/DynamicLibrary.h"
 
@@ -30,6 +31,7 @@ struct GlobalContext {
     LazyInitialized<GameClassImplementations> gameClasses;
     LazyInitialized<Hooks> hooks;
     LazyInitialized<SoundWatcher> soundWatcher;
+    LazyInitialized<FeatureHelpers> featureHelpers;
     LazyInitialized<Features> features;
     LazyInitialized<PanoramaGUI> panoramaGUI;
 
@@ -59,9 +61,9 @@ struct GlobalContext {
         gameClasses.init(Tier0Dll{});
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
         hooks.init(clientVmtLengthCalculator);
-        GlobalVarsProvider globalVarsProvider;
-        soundWatcher.init(globalVarsProvider);
-        features.init(HudProvider{}, globalVarsProvider, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
+        soundWatcher.init();
+        featureHelpers.init();
+        features.init(hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
         panoramaGUI.init(*features, unloadFlag);
 
         initializedFromGameThread = true;
@@ -71,6 +73,15 @@ struct GlobalContext {
     {
         if (peepEventsHook.isValid())
             peepEventsHook.enable();
+    }
+
+    void onRenderStart(cs2::CViewRender* thisptr) noexcept
+    {
+        hooks->viewRenderHook.getOriginalOnRenderStart()(thisptr);
+        if (featureHelpers->globalVarsProvider && featureHelpers->globalVarsProvider.getGlobalVars())
+            soundWatcher->update(featureHelpers->globalVarsProvider.getGlobalVars()->curtime);
+        features->soundFeatures.footstepVisualizer.run(featureHelpers->getFootstepVisualizerHelpers());
+        features->soundFeatures.bombPlantVisualizer.run(featureHelpers->getBombPlantVisualizerHelpers());
     }
 
 private:

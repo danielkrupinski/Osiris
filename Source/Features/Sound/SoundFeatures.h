@@ -6,9 +6,9 @@
 #include <Hooks/ViewRenderHook.h>
 
 struct SoundFeatures {
-    SoundFeatures(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : footstepVisualizer{ hudProvider, globalVarsProvider, viewRenderHook, soundWatcher }
-        , bombPlantVisualizer{ hudProvider, globalVarsProvider, viewRenderHook, soundWatcher }
+    SoundFeatures(ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
+        : footstepVisualizer{ viewRenderHook, soundWatcher }
+        , bombPlantVisualizer{ viewRenderHook, soundWatcher }
     {
     }
     

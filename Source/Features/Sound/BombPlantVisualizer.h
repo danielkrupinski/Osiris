@@ -5,6 +5,7 @@
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
+#include <FeatureHelpers/Sound/BombPlantVisualizerHelpers.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
@@ -14,100 +15,15 @@
 #include <Helpers/PanoramaTransformFactory.h>
 #include <Hooks/ViewRenderHook.h>
 
-class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
-public:
-    explicit BombPlantVisualizer(HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : inWorldPanelFactory{ hudProvider }
-        , globalVarsProvider{ globalVarsProvider }
-        , viewRenderHook{ viewRenderHook }
-        , soundWatcher{ soundWatcher }
-    {
-    }
+#include "FootstepVisualizer.h"
 
-    ~BombPlantVisualizer() noexcept
-    {
-        if (bombPlantContainerPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(bombPlantContainerPanelPointer.getHandle());
-    }
-
-    void run() noexcept
-    {
-        if (!isEnabled())
-            return;
-
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
-            return;
-
-        if (!worldtoClipSpaceConverter)
-            return;
-
-        createBombPlantPanels();
-
-        std::size_t currentIndex = 0;
-        soundWatcher.forEach<WatchedSoundType::BombPlant>([this, &currentIndex] (const PlayedSound& sound) {
-            const auto soundInClipSpace = worldtoClipSpaceConverter.toClipSpace(sound.origin);
-            if (!soundInClipSpace.onScreen())
-                return;
-            
-            const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
-            const auto panel = getBombPlantPanel(currentIndex);
-            if (!panel)
-                return;
-
-            const auto style = panel.getStyle();
-            if (!style)
-                return;
-
-            const auto timeAlive = sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime);
-            if (timeAlive >= SoundWatcher::kBombPlantLifespan - kBombPlantFadeAwayDuration) {
-                style.setOpacity((SoundWatcher::kBombPlantLifespan - timeAlive) / kBombPlantFadeAwayDuration);
-            } else {
-                style.setOpacity(1.0f);
-            }
-
-            cs2::CTransform3D* transformations[]{ transformFactory.create<cs2::CTransformScale3D>(
-                (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.4f), (std::max)(1.0f - soundInClipSpace.z / 1000.0f, 0.4f), 1.0f
-            ), transformFactory.create<cs2::CTransformTranslate3D>(
-                deviceCoordinates.getX(),
-                deviceCoordinates.getY(),
-                cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength }
-            ) };
-
-            cs2::CUtlVector<cs2::CTransform3D*> dummyVector;
-            dummyVector.allocationCount = 2;
-            dummyVector.memory = transformations;
-            dummyVector.growSize = 0;
-            dummyVector.size = 2;
-
-            style.setTransform3D(dummyVector);
-            ++currentIndex;
-        });
-
-        hidePanels(currentIndex);
-    }
-
-private:
-    friend TogglableFeature;
-
-    void onEnable() noexcept
-    {
-        viewRenderHook.incrementReferenceCount();
-        soundWatcher.startWatching<WatchedSoundType::BombPlant>();
-    }
-
-    void onDisable() noexcept
-    {
-        viewRenderHook.decrementReferenceCount();
-        soundWatcher.stopWatching<WatchedSoundType::BombPlant>();
-        hidePanels(0);
-    }
-
-    void createBombPlantPanels() noexcept
+struct BombPlantPanels {
+    void createBombPlantPanels(const HudInWorldPanelFactory& inWorldFactory) noexcept
     {
         if (bombPlantContainerPanelPointer.get())
             return;
 
-        const auto bombPlantContainer = inWorldPanelFactory.createPanel("BombPlantContainer");
+        const auto bombPlantContainer = inWorldFactory.createPanel("BombPlantContainer");
         if (!bombPlantContainer)
             return;
 
@@ -134,13 +50,13 @@ $.CreatePanel('Image', bombPlantPanel, '', {
     {
         const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
         if (!bombPlantContainerPanel)
-            return PanoramaUiPanel{nullptr};
+            return PanoramaUiPanel{ nullptr };
 
         if (const auto children = bombPlantContainerPanel.children()) {
             if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
                 return PanoramaUiPanel{ children->memory[index] };
         }
-        return PanoramaUiPanel{nullptr};
+        return PanoramaUiPanel{ nullptr };
     }
 
     void hidePanels(std::size_t fromPanelIndex) const noexcept
@@ -155,14 +71,94 @@ $.CreatePanel('Image', bombPlantPanel, '', {
         }
     }
 
-    HudInWorldPanelFactory inWorldPanelFactory;
     PanoramaPanelPointer bombPlantContainerPanelPointer;
-    GlobalVarsProvider globalVarsProvider;
-    PanoramaTransformFactory transformFactory;
+
+private:
+    static constexpr auto kMaxNumberOfBombPlantsToDraw = 5;
+};
+
+class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
+public:
+    explicit BombPlantVisualizer(ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
+        : viewRenderHook{ viewRenderHook }
+        , soundWatcher{ soundWatcher }
+    {
+    }
+
+    ~BombPlantVisualizer() noexcept
+    {
+        if (panels.bombPlantContainerPanelPointer.getHandle().isValid())
+            PanoramaUiEngine::onDeletePanel(panels.bombPlantContainerPanelPointer.getHandle());
+    }
+
+    void run(const BombPlantVisualizerHelpers& params) noexcept
+    {
+        if (!isEnabled())
+            return;
+
+        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
+            return;
+
+        if (!params.worldtoClipSpaceConverter)
+            return;
+
+        panels.createBombPlantPanels(params.hudInWorldPanelFactory);
+
+        std::size_t currentIndex = 0;
+        std::as_const(soundWatcher).getSoundsOfType<BombPlantSound>().forEach([this, &currentIndex, params] (const PlayedSound& sound) {
+            const auto soundInClipSpace = params.worldtoClipSpaceConverter.toClipSpace(sound.origin);
+            if (!soundInClipSpace.onScreen())
+                return;
+            
+            const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
+            const auto panel = panels.getBombPlantPanel(currentIndex);
+            if (!panel)
+                return;
+
+            const auto style = panel.getStyle();
+            if (!style)
+                return;
+
+            style.setOpacity(BombPlantSound::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime)));
+
+            cs2::CTransform3D* transformations[]{ params.transformFactory.create<cs2::CTransformScale3D>(
+                BombPlantSound::getScale(soundInClipSpace.z), BombPlantSound::getScale(soundInClipSpace.z), 1.0f
+            ), params.transformFactory.create<cs2::CTransformTranslate3D>(
+                deviceCoordinates.getX(),
+                deviceCoordinates.getY(),
+                cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength }
+            ) };
+
+            cs2::CUtlVector<cs2::CTransform3D*> dummyVector;
+            dummyVector.allocationCount = 2;
+            dummyVector.memory = transformations;
+            dummyVector.growSize = 0;
+            dummyVector.size = 2;
+
+            style.setTransform3D(dummyVector);
+            ++currentIndex;
+        });
+
+        panels.hidePanels(currentIndex);
+    }
+
+private:
+    friend TogglableFeature;
+
+    void onEnable() noexcept
+    {
+        viewRenderHook.incrementReferenceCount();
+        soundWatcher.startWatching<BombPlantSound>();
+    }
+
+    void onDisable() noexcept
+    {
+        viewRenderHook.decrementReferenceCount();
+        soundWatcher.stopWatching<BombPlantSound>();
+        panels.hidePanels(0);
+    }
+
+    BombPlantPanels panels;
     ViewRenderHook& viewRenderHook;
     SoundWatcher& soundWatcher;
-    WorldToClipSpaceConverter worldtoClipSpaceConverter;
-
-    static constexpr auto kMaxNumberOfBombPlantsToDraw = 5;
-    static constexpr auto kBombPlantFadeAwayDuration = 0.4f;
 };

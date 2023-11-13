@@ -5,8 +5,8 @@
 class LoopModeGameHook;
 
 struct VisualFeatures {
-    VisualFeatures(HudProvider hudProvider, LoopModeGameHook& loopModeGameHook) noexcept
-        : scopeOverlayRemover{ hudProvider, loopModeGameHook }
+    VisualFeatures(LoopModeGameHook& loopModeGameHook) noexcept
+        : scopeOverlayRemover{ loopModeGameHook }
     {
     }
 

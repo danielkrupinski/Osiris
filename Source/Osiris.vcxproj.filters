@@ -94,6 +94,9 @@
     <Filter Include="FeatureHelpers\Sound">
       <UniqueIdentifier>{19a86d00-8a7b-4184-9119-96ec0b26c501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FeatureHelpers\Hud">
+      <UniqueIdentifier>{7a55ce58-0ac3-4a7f-817d-46121c678167}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -627,9 +630,6 @@
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\WatchedSoundType.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
@@ -656,6 +656,39 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombPlantSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\FootstepSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Hud\BombTimerHelpers.h">
+      <Filter>FeatureHelpers\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h">
+      <Filter>FeatureHelpers\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h">
+      <Filter>FeatureHelpers\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\FootstepVisualizerHelpers.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombPlantVisualizerHelpers.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TypeBitFlags.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TypeIndex.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

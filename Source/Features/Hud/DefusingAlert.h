@@ -3,6 +3,7 @@
 #include <CS2/Constants/PanelIDs.h>
 
 #include <FeatureHelpers/GlobalVarsProvider.h>
+#include <FeatureHelpers/Hud/DefusingAlertHelpers.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Helpers/PlantedC4Provider.h>
 #include <Helpers/HudProvider.h>
@@ -21,30 +22,23 @@ private:
 
 class DefusingAlert : public TogglableFeature<DefusingAlert> {
 public:
-    DefusingAlert(PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
-        : plantedC4Provider{ plantedC4Provider }
-        , hudProvider{ hudProvider }
-        , globalVarsProvider{ globalVarsProvider }
-    {
-    }
-
-    void run() noexcept
+    void run(const DefusingAlertHelpers& params) noexcept
     {
         if (!isEnabled())
             return;
 
-        updatePanelHandles();
+        updatePanelHandles(params.hudProvider);
       
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
             return;
 
-        const PlantedC4 bomb{ plantedC4Provider.getPlantedC4() };
+        const PlantedC4 bomb{ params.plantedC4Provider.getPlantedC4() };
         if (!bomb || !bomb.isBeingDefused()) {
             hideDefusingAlert();
             return;
         }
 
-        const auto timeToEnd = bomb.getTimeToDefuseEnd(globalVarsProvider.getGlobalVars()->curtime);
+        const auto timeToEnd = bomb.getTimeToDefuseEnd(params.globalVarsProvider.getGlobalVars()->curtime);
         if (timeToEnd > 0.0f) {
             if (const auto defusingAlertContainer = defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
@@ -80,7 +74,7 @@ private:
             defusingAlertContainer.setVisible(false);
     }
 
-    void updatePanelHandles() noexcept
+    void updatePanelHandles(HudProvider hudProvider) noexcept
     {
         if (defusingTimerPanel.get())
             return;
@@ -127,12 +121,7 @@ R"(
         hideDefusingAlert();
     }
 
-
     friend TogglableFeature;
-
-    PlantedC4Provider plantedC4Provider;
-    HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
 
     PanoramaPanelPointer defusingAlertContainerPanel;
     PanoramaPanelPointer defusingTimerPanel;

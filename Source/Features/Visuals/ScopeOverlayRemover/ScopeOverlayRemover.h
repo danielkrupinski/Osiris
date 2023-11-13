@@ -14,8 +14,8 @@
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(HudProvider hudProvider, LoopModeGameHook& loopModeGameHook) noexcept
-        : hudScopePanels{ hudProvider }, loopModeGameHook{ loopModeGameHook }
+    explicit ScopeOverlayRemover(LoopModeGameHook& loopModeGameHook) noexcept
+        : loopModeGameHook{ loopModeGameHook }
     {
     }
         
@@ -25,10 +25,10 @@ public:
             clientMode.removeZoomedSniperEffect();
     }
 
-    void updatePanelVisibility() noexcept
+    void updatePanelVisibility(HudProvider hudProvider) noexcept
     {
         if (isEnabled()) {
-            hidePanels();
+            hidePanels(hudProvider);
             removeScopeStencil();
         }
     }
@@ -52,9 +52,9 @@ private:
         restorePanels();
     }
 
-    void hidePanels() noexcept
+    void hidePanels(HudProvider hudProvider) noexcept
     {
-        hudScopePanels.updatePanelPointers();
+        hudScopePanels.updatePanelPointers(hudProvider);
         hudScopePanels.setPanelsVisible(false);
     }
 

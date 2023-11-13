@@ -25,14 +25,14 @@ inline int PeepEventsHook::SDL_PeepEvents(void* events, int numevents,
 {
     GlobalContext::instance().initializeFromGameThread();
 
-    hudFeatures().bombTimer.run();
-    hudFeatures().defusingAlert.run();
-    hudFeatures().killfeedPreserver.run();
+    hudFeatures().bombTimer.run(GlobalContext::instance().featureHelpers->getBombTimerHelpers());
+    hudFeatures().defusingAlert.run(GlobalContext::instance().featureHelpers->getDefusingAlertHelpers());
+    hudFeatures().killfeedPreserver.run(GlobalContext::instance().featureHelpers->getKillfeedPreserverHelpers());
 
     GlobalContext::instance().panoramaGUI->run();
     GlobalContext::instance().hooks->loopModeGameHook.update();
     GlobalContext::instance().hooks->viewRenderHook.update();
-    visuals().scopeOverlayRemover.updatePanelVisibility();
+    visuals().scopeOverlayRemover.updatePanelVisibility(GlobalContext::instance().featureHelpers->hudProvider);
 
     if (GlobalContext::instance().unloadFlag) {
         const auto originalPeepEvents = GlobalContext::instance().peepEventsHook.original;
@@ -53,8 +53,5 @@ inline void* LoopModeGameHook::getWorldSession(cs2::CLoopModeGame* thisptr) noex
 
 inline void ViewRenderHook::onRenderStart(cs2::CViewRender* thisptr) noexcept
 {
-    GlobalContext::instance().hooks->viewRenderHook.originalOnRenderStart(thisptr);
-    GlobalContext::instance().soundWatcher->update();
-    features().soundFeatures.footstepVisualizer.run();
-    features().soundFeatures.bombPlantVisualizer.run();
+    GlobalContext::instance().onRenderStart(thisptr);
 }

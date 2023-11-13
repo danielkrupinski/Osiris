@@ -4,6 +4,7 @@
 #include <Helpers/PanoramaPanelPointer.h>
 
 #include <FeatureHelpers/GlobalVarsProvider.h>
+#include <FeatureHelpers/Hud/BombTimerHelpers.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
@@ -21,29 +22,22 @@
 
 class BombTimer : public TogglableFeature<BombTimer> {
 public:
-    BombTimer(PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
-        : plantedC4Provider{ plantedC4Provider }
-        , hudProvider{ hudProvider }
-        , globalVarsProvider{ globalVarsProvider }
-    {
-    }
-
-    void run() noexcept
+    void run(const BombTimerHelpers& params) noexcept
     {
         if (!isEnabled())
             return;
 
-        updatePanelHandles();
+        updatePanelHandles(params.hudProvider);
         hideBombStatusPanel();
 
-        const PlantedC4 bomb{ plantedC4Provider.getPlantedC4() };
+        const PlantedC4 bomb{ params.plantedC4Provider.getPlantedC4() };
 
-        if (!bomb || !globalVarsProvider || !globalVarsProvider.getGlobalVars()) {
+        if (!bomb || !params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars()) {
             hideBombTimerPanel();
             return;
         }
 
-        if (const auto timeToExplosion = bomb.getTimeToExplosion(globalVarsProvider.getGlobalVars()->curtime); timeToExplosion > 0.0f) {
+        if (const auto timeToExplosion = bomb.getTimeToExplosion(params.globalVarsProvider.getGlobalVars()->curtime); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
             restorePanels();
@@ -102,7 +96,7 @@ private:
         }
     }
 
-    void updatePanelHandles() noexcept
+    void updatePanelHandles(HudProvider hudProvider) noexcept
     {
         if (scoreAndTimeAndBombPanel.get())
             return;
@@ -180,10 +174,6 @@ R"(
                 bombStatus.setParent(scoreAndTimeAndBomb);
         }
     }
-
-    PlantedC4Provider plantedC4Provider;
-    HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
 
     PanoramaPanelPointer scoreAndTimeAndBombPanel;
     PanoramaPanelPointer bombStatusPanel;
