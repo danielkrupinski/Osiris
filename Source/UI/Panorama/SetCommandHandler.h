@@ -39,7 +39,9 @@ private:
             handleTogglableFeature(features.soundFeatures.footstepVisualizer);
         } else if (feature == "visualize_bomb_plant") {
             handleTogglableFeature(features.soundFeatures.bombPlantVisualizer);
-        } 
+        } else if (feature == "visualize_bomb_beep") {
+            handleTogglableFeature(features.soundFeatures.bombBeepVisualizer);
+        }
     }
 
     void handleVisualsSection() const noexcept

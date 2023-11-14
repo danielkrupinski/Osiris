@@ -204,6 +204,8 @@ $.Osiris = (function () {
   createYesNoDropDown(visualization, "Visualize Player Footsteps", 'sound', 'visualize_player_footsteps');
   $.CreatePanel('Panel', visualization, '', { class: "horizontal-separator" });
   createYesNoDropDown(visualization, "Visualize Bomb Plant", 'sound', 'visualize_bomb_plant');
+  $.CreatePanel('Panel', visualization, '', { class: "horizontal-separator" });
+  createYesNoDropDown(visualization, "Visualize Bomb Beep", 'sound', 'visualize_bomb_beep');
 
   $.Osiris.navigateToTab('hud');
 })();
