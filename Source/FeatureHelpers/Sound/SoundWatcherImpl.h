@@ -125,7 +125,7 @@ private:
 
     [[nodiscard]] static cs2::Vector correctSoundOrigin(cs2::Vector origin) noexcept
     {
-        constexpr auto heightDifference = -18.0f;
+        constexpr auto heightDifference = -20.0f;
         return cs2::Vector{ origin.x, origin.y, origin.z + heightDifference };
     }
 
