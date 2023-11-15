@@ -17,11 +17,12 @@ public:
         return std::ranges::find(sounds, guid, &PlayedSound::guid) != sounds.end();
     }
 
-    void removeExpiredSounds(float curtime, float lifespan) noexcept
+    template <typename Predicate>
+    void removeExpiredSounds(Predicate&& predicate) noexcept
     {
         for (std::size_t i = 0; i < sounds.getSize();) {
             auto& sound = sounds[i];
-            if (!sound.isAlive(curtime, lifespan))
+            if (predicate(std::as_const(sound)))
                 removeSound(sound);
             else
                 ++i;

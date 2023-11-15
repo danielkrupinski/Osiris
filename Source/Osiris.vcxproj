@@ -46,6 +46,7 @@
     <ClInclude Include="FeatureHelpers\Sound\FootstepSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\FootstepVisualizerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
+    <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />

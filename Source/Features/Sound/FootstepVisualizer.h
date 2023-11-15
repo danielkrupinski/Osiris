@@ -107,7 +107,10 @@ public:
             if (!soundInClipSpace.onScreen())
                 return;
             
-            const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
+            const auto opacity = FootstepSound::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime));
+            if (opacity <= 0.0f)
+                return;
+
             const auto panel = panels.getPanel(currentIndex);
             if (!panel)
                 return;
@@ -116,8 +119,9 @@ public:
             if (!style)
                 return;
 
-            style.setOpacity(FootstepSound::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime))); 
+            style.setOpacity(opacity);
 
+            const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
             cs2::CTransform3D* transformations[]{ params.transformFactory.create<cs2::CTransformScale3D>(
                 FootstepSound::getScale(soundInClipSpace.z), FootstepSound::getScale(soundInClipSpace.z), 1.0f
             ), params.transformFactory.create<cs2::CTransformTranslate3D>(

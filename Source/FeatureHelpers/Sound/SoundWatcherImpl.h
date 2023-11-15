@@ -20,6 +20,7 @@
 #include <Utils/TypeIndex.h>
 
 #include "BombPlantSound.h"
+#include "SoundExpiryChecker.h"
 
 template <typename... Sounds>
 class SoundWatcherImpl {
@@ -54,8 +55,12 @@ private:
     template <typename Sound>
     void removeExpiredSounds(float curtime) noexcept
     {
-        if (isWatching<Sound>())
-            getSoundsOfType<Sound>().removeExpiredSounds(curtime, Sound::kLifespan);
+        if (isWatching<Sound>()) {
+            if (!soundChannels || !*soundChannels)
+                return;
+
+            getSoundsOfType<Sound>().removeExpiredSounds(SoundExpiryChecker{(*soundChannels)->channelInfo1, curtime, Sound::kFadeAwayStart + Sound::kFadeAwayDuration});
+        }
     }
 
     template <typename Sound>
