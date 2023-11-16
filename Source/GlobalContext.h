@@ -82,6 +82,7 @@ struct GlobalContext {
             soundWatcher->update(featureHelpers->globalVarsProvider.getGlobalVars()->curtime);
         features->soundFeatures.footstepVisualizer.run(featureHelpers->getFootstepVisualizerHelpers());
         features->soundFeatures.bombPlantVisualizer.run(featureHelpers->getBombPlantVisualizerHelpers());
+        features->soundFeatures.bombBeepVisualizer.run(featureHelpers->getBombBeepVisualizerHelpers());
     }
 
 private:

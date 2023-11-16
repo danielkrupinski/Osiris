@@ -693,6 +693,15 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombBeepSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\BombBeepVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
