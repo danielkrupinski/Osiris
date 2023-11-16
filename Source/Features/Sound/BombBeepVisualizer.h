@@ -82,7 +82,6 @@ public:
         : viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
     {
-        enable();
     }
 
     ~BombBeepVisualizer() noexcept
