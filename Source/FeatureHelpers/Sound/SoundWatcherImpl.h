@@ -103,7 +103,7 @@ private:
             buffer.back() = '\0';
 
             if (const auto sounds = getSoundsToAddTo(std::string_view{buffer.data()}, channel.guid))
-                sounds->addSound(PlayedSound{ .guid = channel.guid, .spawnTime = curtime, .origin = correctSoundOrigin(channelInfo2.memory[i].origin) });
+                sounds->addSound(channel.guid, PlayedSound{ .spawnTime = curtime, .origin = correctSoundOrigin(channelInfo2.memory[i].origin) });
         }
     }
 

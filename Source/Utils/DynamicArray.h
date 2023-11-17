@@ -52,8 +52,7 @@ public:
 
     [[nodiscard]] T& operator[](std::size_t index) noexcept
     {
-        assert(index < size);
-        return memory.get()[index];
+        return elementAt(index);
     }
 
     bool pushBack(const T& value) noexcept
@@ -69,7 +68,7 @@ public:
     [[nodiscard]] T& back() noexcept
     {
         assert(size > 0);
-        return memory.get()[size - 1];
+        return elementAt(size - 1);
     }
 
     void popBack() noexcept
@@ -79,10 +78,22 @@ public:
         --size;
     }
 
+    void fastRemoveAt(std::size_t index) noexcept
+    {
+        elementAt(index) = back();
+        popBack();
+    }
+
 private:
     [[nodiscard]] static std::size_t calculateNewCapacity(std::size_t currentCapacity) noexcept
     {
         return currentCapacity + currentCapacity / 2 + 1;
+    }
+
+    [[nodiscard]] T& elementAt(std::size_t index) noexcept
+    {
+        assert(index < size);
+        return memory.get()[index];
     }
 
     [[nodiscard]] std::size_t calculateNewCapacity() const noexcept

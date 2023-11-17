@@ -5,7 +5,6 @@
 #include <CS2/Classes/Vector.h>
 
 struct PlayedSound {
-    int guid;
     float spawnTime;
     cs2::Vector origin;
 

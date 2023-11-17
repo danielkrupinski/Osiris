@@ -15,17 +15,24 @@ struct SoundExpiryChecker {
 
     [[nodiscard]] bool operator()(const PlayedSound& sound) const noexcept
     {
-        if (sound.isAlive(curtime, lifeSpan))
-            return false;
+        return !sound.isAlive(curtime, lifeSpan);
+    }
 
-        for (int i = 0; i < channelInfo.size; ++i) {
-            if (const auto& channel = channelInfo.memory[i]; channel.sfx && channel.guid == sound.guid)
-                return false;
-        }
-        return true;
+    [[nodiscard]] bool operator()(int guid) const noexcept
+    {
+        return !hasChannelWithGuid(guid);
     }
 
 private:
+    [[nodiscard]] bool hasChannelWithGuid(int guid) const noexcept
+    {
+        for (int i = 0; i < channelInfo.size; ++i) {
+            if (const auto& channel = channelInfo.memory[i]; channel.sfx && channel.guid == guid)
+                return true;
+        }
+        return false;
+    }
+
     const cs2::CUtlVector<cs2::ChannelInfo1>& channelInfo;
     float curtime;
     float lifeSpan;
