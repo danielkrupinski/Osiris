@@ -117,6 +117,7 @@ public:
                 return;
 
             style.setOpacity(opacity);
+            style.setZIndex(-soundInClipSpace.z);
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
             cs2::CTransform3D* transformations[]{ params.transformFactory.create<cs2::CTransformScale3D>(
