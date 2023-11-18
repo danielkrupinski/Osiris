@@ -5,42 +5,36 @@
 #include <GameClasses/Panel.h>
 #include <Helpers/HudProvider.h>
 
+#include "HudInWorldPanelContainer.h"
+#include "HudInWorldPanelZOrder.h"
+
 class HudInWorldPanelFactory {
 public:
-    explicit HudInWorldPanelFactory(HudProvider hudProvider) noexcept
-        : hudProvider{ hudProvider }
+    HudInWorldPanelFactory(HudInWorldPanelContainer& container, HudProvider hudProvider) noexcept
+        : container{ container }
+        , hudProvider{ hudProvider }
     {
     }
 
-    [[nodiscard]] cs2::CPanel2D* createPanel(const char* id) const noexcept
+    [[nodiscard]] cs2::CPanel2D* createPanel(const char* id, HudInWorldPanelZOrder zIndex) const noexcept
     {
-        if (const auto hudReticle = getHudReticle())
-            return createChild(id, hudReticle);
+        if (const auto containerPanel = container.get(hudProvider))
+            return createChild(id, containerPanel, zIndex);
         return nullptr;
     }
 
 private:
-    [[nodiscard]] cs2::CPanel2D* createChild(const char* id, cs2::CUIPanel* hudReticle) const noexcept
+    [[nodiscard]] cs2::CPanel2D* createChild(const char* id, cs2::CUIPanel* hudReticle, HudInWorldPanelZOrder zIndex) const noexcept
     {
         if (const auto panel = Panel::create(id, hudReticle)) {
-            fitParent(PanoramaUiPanel{ panel->uiPanel });
+            PanoramaUiPanel{ panel->uiPanel }.fitParent();
+            if (const auto style = PanoramaUiPanel{ panel->uiPanel }.getStyle())
+                style.setZIndex(static_cast<float>(zIndex));
             return panel;
         }
         return nullptr;
     }
 
-    [[nodiscard]] cs2::CUIPanel* getHudReticle() const noexcept
-    {
-        return hudProvider.findChildInLayoutFile(cs2::HudReticle);
-    }
-
-    static void fitParent(PanoramaUiPanel panel) noexcept
-    {
-        if (const auto style = panel.getStyle()) {
-            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-        }
-    }
-
+    HudInWorldPanelContainer& container;
     HudProvider hudProvider;
 };

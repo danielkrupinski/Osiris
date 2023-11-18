@@ -702,6 +702,12 @@
     <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

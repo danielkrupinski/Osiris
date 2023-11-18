@@ -5,6 +5,7 @@
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
+#include <FeatureHelpers/HudInWorldPanelZOrder.h>
 #include <FeatureHelpers/Sound/BombBeepVisualizerHelpers.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
@@ -22,7 +23,7 @@ struct BombBeepPanels {
         if (bombBeepContainerPanelPointer.get())
             return;
 
-        const auto bombBeepContainer = inWorldFactory.createPanel("BombBeepContainer");
+        const auto bombBeepContainer = inWorldFactory.createPanel("BombBeepContainer", HudInWorldPanelZOrder::BombBeep);
         if (!bombBeepContainer)
             return;
 
@@ -82,12 +83,6 @@ public:
         : viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
     {
-    }
-
-    ~BombBeepVisualizer() noexcept
-    {
-        if (panels.bombBeepContainerPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(panels.bombBeepContainerPanelPointer.getHandle());
     }
 
     void run(const BombBeepVisualizerHelpers& params) noexcept

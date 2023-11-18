@@ -23,7 +23,7 @@ struct BombPlantPanels {
         if (bombPlantContainerPanelPointer.get())
             return;
 
-        const auto bombPlantContainer = inWorldFactory.createPanel("BombPlantContainer");
+        const auto bombPlantContainer = inWorldFactory.createPanel("BombPlantContainer", HudInWorldPanelZOrder::BombPlant);
         if (!bombPlantContainer)
             return;
 
@@ -83,12 +83,6 @@ public:
         : viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
     {
-    }
-
-    ~BombPlantVisualizer() noexcept
-    {
-        if (panels.bombPlantContainerPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(panels.bombPlantContainerPanelPointer.getHandle());
     }
 
     void run(const BombPlantVisualizerHelpers& params) noexcept

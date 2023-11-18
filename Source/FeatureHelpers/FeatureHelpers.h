@@ -13,19 +13,19 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    [[nodiscard]] BombBeepVisualizerHelpers getBombBeepVisualizerHelpers() const noexcept
+    [[nodiscard]] BombBeepVisualizerHelpers getBombBeepVisualizerHelpers() noexcept
     {
-        return BombBeepVisualizerHelpers{ HudInWorldPanelFactory{hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
+        return BombBeepVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
     }
 
-    [[nodiscard]] BombPlantVisualizerHelpers getBombPlantVisualizerHelpers() const noexcept
+    [[nodiscard]] BombPlantVisualizerHelpers getBombPlantVisualizerHelpers() noexcept
     {
-        return BombPlantVisualizerHelpers{ HudInWorldPanelFactory{hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
+        return BombPlantVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
     }
 
-    [[nodiscard]] FootstepVisualizerHelpers getFootstepVisualizerHelpers() const noexcept
+    [[nodiscard]] FootstepVisualizerHelpers getFootstepVisualizerHelpers() noexcept
     {
-        return FootstepVisualizerHelpers{ HudInWorldPanelFactory{hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
+        return FootstepVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
     }
 
     [[nodiscard]] BombTimerHelpers getBombTimerHelpers() const noexcept
@@ -48,4 +48,5 @@ struct FeatureHelpers {
     PanoramaTransformFactory transformFactory;
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
     PlantedC4Provider plantedC4Provider;
+    HudInWorldPanelContainer hudInWorldPanelContainer;
 };

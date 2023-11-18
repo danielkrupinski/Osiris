@@ -65,6 +65,14 @@ struct PanoramaUiPanel {
         return false;
     }
 
+    void fitParent() const noexcept
+    {
+        if (const auto style = getStyle()) {
+            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
+        }
+    }
+
     [[nodiscard]] PanelStyle getStyle() const noexcept
     {
         return PanelStyle{ impl().panelStyle.of(thisptr).get() };

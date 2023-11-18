@@ -36,7 +36,9 @@
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h" />
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h" />
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h" />
     <ClInclude Include="FeatureHelpers\Hud\BombTimerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h" />
     <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h" />

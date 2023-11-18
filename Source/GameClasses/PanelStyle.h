@@ -47,6 +47,12 @@ struct PanelStyle {
         reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, cs2::CUILength height)>((*reinterpret_cast<void(***)()>(thisptr))[71])(thisptr, height);
     }
 
+    void setZIndex(float zIndex) const noexcept
+    {
+        // FIXME: hardcoded virtual method index
+        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, float zIndex)>((*reinterpret_cast<void(***)()>(thisptr))[14])(thisptr, zIndex);
+    }
+
 private:
     cs2::CPanelStyle* thisptr;
 };

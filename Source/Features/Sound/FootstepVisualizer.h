@@ -24,7 +24,7 @@ struct FootstepPanels {
         if (footstepContainerPanelPointer.get())
             return;
 
-        const auto footstepContainer = inWorldFactory.createPanel("FootstepContainer");
+        const auto footstepContainer = inWorldFactory.createPanel("FootstepContainer", HudInWorldPanelZOrder::Footstep);
         if (!footstepContainer)
             return;
 
@@ -80,12 +80,6 @@ public:
         : viewRenderHook{ viewRenderHook }
         , soundWatcher{ soundWatcher }
     {
-    }
-
-    ~FootstepVisualizer() noexcept
-    {
-        if (panels.footstepContainerPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(panels.footstepContainerPanelPointer.getHandle());
     }
 
     void run(const FootstepVisualizerHelpers& params) noexcept
