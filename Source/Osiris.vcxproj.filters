@@ -708,6 +708,9 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\HudInWorldPanels.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -4,6 +4,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
+#include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/Sound/BombPlantVisualizerHelpers.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
@@ -18,19 +19,15 @@
 #include "FootstepVisualizer.h"
 
 struct BombPlantPanels {
-    void createBombPlantPanels(const HudInWorldPanelFactory& inWorldFactory) noexcept
+    [[nodiscard]] static cs2::CPanel2D* createContainerPanel(const HudInWorldPanelFactory& inWorldFactory) noexcept
     {
-        if (bombPlantContainerPanelPointer.get())
-            return;
+        return inWorldFactory.createPanel("BombPlantContainer", HudInWorldPanelZOrder::BombPlant);
+    }
 
-        const auto bombPlantContainer = inWorldFactory.createPanel("BombPlantContainer", HudInWorldPanelZOrder::BombPlant);
-        if (!bombPlantContainer)
-            return;
-
-        bombPlantContainerPanelPointer = bombPlantContainer->uiPanel;
-
-        for (std::size_t i = 0; i < kMaxNumberOfBombPlantsToDraw; ++i) {
-            PanoramaUiEngine::runScript(bombPlantContainer->uiPanel,
+    static void createContentPanels(cs2::CUIPanel& containerPanel) noexcept
+    {
+        for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
+            PanoramaUiEngine::runScript(&containerPanel,
                 R"(
 (function() {
 var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombPlantContainer"), '', {
@@ -46,35 +43,7 @@ $.CreatePanel('Image', bombPlantPanel, '', {
         }
     }
 
-    [[nodiscard]] PanoramaUiPanel getBombPlantPanel(std::size_t index) const noexcept
-    {
-        const auto bombPlantContainerPanel = bombPlantContainerPanelPointer.get();
-        if (!bombPlantContainerPanel)
-            return PanoramaUiPanel{ nullptr };
-
-        if (const auto children = bombPlantContainerPanel.children()) {
-            if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
-                return PanoramaUiPanel{ children->memory[index] };
-        }
-        return PanoramaUiPanel{ nullptr };
-    }
-
-    void hidePanels(std::size_t fromPanelIndex) const noexcept
-    {
-        for (std::size_t i = fromPanelIndex; i < kMaxNumberOfBombPlantsToDraw; ++i) {
-            const auto panel = getBombPlantPanel(i);
-            if (!panel)
-                break;
-
-            if (const auto style = panel.getStyle())
-                style.setOpacity(0.0f);
-        }
-    }
-
-    PanoramaPanelPointer bombPlantContainerPanelPointer;
-
-private:
-    static constexpr auto kMaxNumberOfBombPlantsToDraw = 5;
+    static constexpr auto kMaxNumberOfPanels = 5;
 };
 
 class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
@@ -96,7 +65,7 @@ public:
         if (!params.worldtoClipSpaceConverter)
             return;
 
-        panels.createBombPlantPanels(params.hudInWorldPanelFactory);
+        panels.createPanels(params.hudInWorldPanelFactory);
 
         std::size_t currentIndex = 0;
         std::as_const(soundWatcher).getSoundsOfType<BombPlantSound>().forEach([this, &currentIndex, params] (const PlayedSound& sound) {
@@ -108,7 +77,7 @@ public:
             if (opacity <= 0.0f)
                 return;
 
-            const auto panel = panels.getBombPlantPanel(currentIndex);
+            const auto panel = panels.getPanel(currentIndex);
             if (!panel)
                 return;
 
@@ -157,7 +126,7 @@ private:
         panels.hidePanels(0);
     }
 
-    BombPlantPanels panels;
+    HudInWorldPanels<BombPlantPanels> panels;
     ViewRenderHook& viewRenderHook;
     SoundWatcher& soundWatcher;
 };

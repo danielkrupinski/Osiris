@@ -4,6 +4,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
+#include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/HudInWorldPanelZOrder.h>
 #include <FeatureHelpers/Sound/BombBeepVisualizerHelpers.h>
@@ -18,19 +19,15 @@
 #include <Hooks/ViewRenderHook.h>
 
 struct BombBeepPanels {
-    void createPanels(const HudInWorldPanelFactory& inWorldFactory) noexcept
+    [[nodiscard]] static cs2::CPanel2D* createContainerPanel(const HudInWorldPanelFactory& inWorldFactory) noexcept
     {
-        if (bombBeepContainerPanelPointer.get())
-            return;
+        return inWorldFactory.createPanel("BombBeepContainer", HudInWorldPanelZOrder::BombBeep);
+    }
 
-        const auto bombBeepContainer = inWorldFactory.createPanel("BombBeepContainer", HudInWorldPanelZOrder::BombBeep);
-        if (!bombBeepContainer)
-            return;
-
-        bombBeepContainerPanelPointer = bombBeepContainer->uiPanel;
-
-        for (std::size_t i = 0; i < kMaxNumberOfBombBeepsToDraw; ++i) {
-            PanoramaUiEngine::runScript(bombBeepContainer->uiPanel,
+    static void createContentPanels(cs2::CUIPanel& containerPanel) noexcept
+    {
+        for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
+            PanoramaUiEngine::runScript(&containerPanel,
                 R"(
 (function() {
 var bombBeepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombBeepContainer"), '', {
@@ -46,35 +43,7 @@ $.CreatePanel('Image', bombBeepPanel, '', {
         }
     }
 
-    [[nodiscard]] PanoramaUiPanel getPanel(std::size_t index) const noexcept
-    {
-        const auto containerPanel = bombBeepContainerPanelPointer.get();
-        if (!containerPanel)
-            return PanoramaUiPanel{ nullptr };
-
-        if (const auto children = containerPanel.children()) {
-            if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
-                return PanoramaUiPanel{ children->memory[index] };
-        }
-        return PanoramaUiPanel{ nullptr };
-    }
-
-    void hidePanels(std::size_t fromPanelIndex) const noexcept
-    {
-        for (std::size_t i = fromPanelIndex; i < kMaxNumberOfBombBeepsToDraw; ++i) {
-            const auto panel = getPanel(i);
-            if (!panel)
-                break;
-
-            if (const auto style = panel.getStyle())
-                style.setOpacity(0.0f);
-        }
-    }
-
-    PanoramaPanelPointer bombBeepContainerPanelPointer;
-
-private:
-    static constexpr auto kMaxNumberOfBombBeepsToDraw = 5;
+    static constexpr auto kMaxNumberOfPanels = 5;
 };
 
 class BombBeepVisualizer : public TogglableFeature<BombBeepVisualizer> {
@@ -157,7 +126,7 @@ private:
         panels.hidePanels(0);
     }
 
-    BombBeepPanels panels;
+    HudInWorldPanels<BombBeepPanels> panels;
     ViewRenderHook& viewRenderHook;
     SoundWatcher& soundWatcher;
 };

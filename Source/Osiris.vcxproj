@@ -38,6 +38,7 @@
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h" />
+    <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h" />
     <ClInclude Include="FeatureHelpers\Hud\BombTimerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h" />

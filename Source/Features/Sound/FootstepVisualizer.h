@@ -5,6 +5,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/SoundNames.h>
+#include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/Sound/FootstepSound.h>
 #include <FeatureHelpers/Sound/FootstepVisualizerHelpers.h>
@@ -17,21 +18,17 @@
 #include <Hooks/ViewRenderHook.h>
 
 struct FootstepPanels {
-    static constexpr auto kMaxNumberOfFootstepsToDraw = 100;
+    static constexpr auto kMaxNumberOfPanels = 100;
 
-    void create(const HudInWorldPanelFactory& inWorldFactory) noexcept
+    [[nodiscard]] static cs2::CPanel2D* createContainerPanel(const HudInWorldPanelFactory& inWorldFactory) noexcept
     {
-        if (footstepContainerPanelPointer.get())
-            return;
+        return inWorldFactory.createPanel("FootstepContainer", HudInWorldPanelZOrder::Footstep);
+    }
 
-        const auto footstepContainer = inWorldFactory.createPanel("FootstepContainer", HudInWorldPanelZOrder::Footstep);
-        if (!footstepContainer)
-            return;
-
-        footstepContainerPanelPointer = footstepContainer->uiPanel;
-
-        for (std::size_t i = 0; i < kMaxNumberOfFootstepsToDraw; ++i) {
-            PanoramaUiEngine::runScript(footstepContainer->uiPanel,
+    static void createContentPanels(cs2::CUIPanel& containerPanel) noexcept
+    {
+        for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
+            PanoramaUiEngine::runScript(&containerPanel,
                 R"(
 (function() {
 var footstepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("FootstepContainer"), '', {
@@ -45,33 +42,6 @@ $.CreatePanel('Image', footstepPanel, '', {
 })();)", "", 0);
         }
     }
-
-    [[nodiscard]] PanoramaUiPanel getPanel(std::size_t index) const noexcept
-    {
-        const auto footstepContainerPanel = footstepContainerPanelPointer.get();
-        if (!footstepContainerPanel)
-            return PanoramaUiPanel{ nullptr };
-
-        if (const auto children = footstepContainerPanel.children()) {
-            if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
-                return PanoramaUiPanel{ children->memory[index] };
-        }
-        return PanoramaUiPanel{ nullptr };
-    }
-
-    void hidePanels(std::size_t fromPanelIndex) const noexcept
-    {
-        for (std::size_t i = fromPanelIndex; i < kMaxNumberOfFootstepsToDraw; ++i) {
-            const auto panel = getPanel(i);
-            if (!panel)
-                break;
-
-            if (const auto style = panel.getStyle())
-                style.setOpacity(0.0f);
-        }
-    }
-
-    PanoramaPanelPointer footstepContainerPanelPointer;
 };
 
 class FootstepVisualizer : public TogglableFeature<FootstepVisualizer> {
@@ -93,7 +63,7 @@ public:
         if (!params.worldtoClipSpaceConverter)
             return;
 
-        panels.create(params.hudInWorldPanelFactory);
+        panels.createPanels(params.hudInWorldPanelFactory);
 
         std::size_t currentIndex = 0;
         std::as_const(soundWatcher).getSoundsOfType<FootstepSound>().forEach([this, &currentIndex, params] (const PlayedSound& sound) {
@@ -154,7 +124,7 @@ private:
         panels.hidePanels(0);
     }
 
-    FootstepPanels panels;
+    HudInWorldPanels<FootstepPanels> panels;
     ViewRenderHook& viewRenderHook;
     SoundWatcher& soundWatcher;
 };
