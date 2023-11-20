@@ -37,7 +37,7 @@ var footstepPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayout
 
 $.CreatePanel('Image', footstepPanel, '', {
   src: "s2r://panorama/images/icons/equipment/stomp_damage.svg",
-  style: "horizontal-align: center; vertical-align: center; img-shadow: 0px 0px 1px 3 #000000;"
+  style: "horizontal-align: center; vertical-align: bottom; img-shadow: 0px 0px 1px 3 #000000;"
 });
 })();)", "", 0);
         }

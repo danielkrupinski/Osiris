@@ -36,7 +36,7 @@ var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayou
 
 $.CreatePanel('Image', bombPlantPanel, '', {
   src: "s2r://panorama/images/icons/ui/chatwheel_bombat.svg",
-  style: "horizontal-align: center; vertical-align: center; img-shadow: 0px 0px 1px 3 #000000;",
+  style: "horizontal-align: center; vertical-align: bottom; img-shadow: 0px 0px 1px 3 #000000;",
   textureheight: "64"
 });
 })();)", "", 0);
