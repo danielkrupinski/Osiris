@@ -20,7 +20,8 @@ public:
     bool install(const VmtLengthCalculator& vmtLengthCalculator, std::uintptr_t*& vmt) noexcept
     {
         const auto justInitialized = initializeVmtCopy(vmtLengthCalculator, vmt);
-        vmt = vmtCopy->getReplacementVmt();
+        if (const auto replacementVmt = vmtCopy->getReplacementVmt())
+            vmt = replacementVmt;
         return justInitialized;
     }
 
@@ -33,7 +34,8 @@ public:
     [[nodiscard]] GenericFunctionPointer hook(std::size_t index, GenericFunctionPointer replacementFunction) const noexcept
     {
         assert(vmtCopy.has_value());
-        vmtCopy->getReplacementVmt()[index] = std::uintptr_t(static_cast<void(*)()>(replacementFunction));
+        if (const auto replacementVmt = vmtCopy->getReplacementVmt())
+            replacementVmt[index] = std::uintptr_t(static_cast<void(*)()>(replacementFunction));
         return reinterpret_cast<void(*)()>(vmtCopy->getOriginalVmt()[index]);
     }
 
