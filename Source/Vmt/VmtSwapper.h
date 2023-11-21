@@ -12,19 +12,14 @@
 
 class VmtSwapper {
 public:
-    explicit VmtSwapper(const VmtLengthCalculator& lengthCalculator) noexcept
-        : lengthCalculator{ lengthCalculator }
-    {
-    }
-
     [[nodiscard]] bool isInstalled(const std::uintptr_t* vmt) const noexcept
     {
         return vmtCopy.has_value() && vmt == vmtCopy->getReplacementVmt();
     }
 
-    bool install(std::uintptr_t*& vmt) noexcept
+    bool install(const VmtLengthCalculator& vmtLengthCalculator, std::uintptr_t*& vmt) noexcept
     {
-        const auto justInitialized = initializeVmtCopy(vmt);
+        const auto justInitialized = initializeVmtCopy(vmtLengthCalculator, vmt);
         vmt = vmtCopy->getReplacementVmt();
         return justInitialized;
     }
@@ -43,15 +38,14 @@ public:
     }
 
 private:
-    [[nodiscard]] bool initializeVmtCopy(std::uintptr_t* vmt) noexcept
+    [[nodiscard]] bool initializeVmtCopy(const VmtLengthCalculator& vmtLengthCalculator, std::uintptr_t* vmt) noexcept
     {
         if (!vmtCopy.has_value()) {
-            vmtCopy.emplace(vmt, lengthCalculator(vmt));
+            vmtCopy.emplace(vmt, vmtLengthCalculator(vmt));
             return true;
         }
         return false;
     }
 
-    VmtLengthCalculator lengthCalculator;
     std::optional<VmtCopy> vmtCopy;
 };

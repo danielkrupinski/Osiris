@@ -8,7 +8,7 @@
 class ViewRenderHook : public RefCountedHook<ViewRenderHook> {
 public:
     explicit ViewRenderHook(const VmtLengthCalculator& vmtLengthCalculator) noexcept
-        : hook{ vmtLengthCalculator }
+        : vmtLengthCalculator{ vmtLengthCalculator }
     {
     }
 
@@ -33,7 +33,7 @@ private:
 
     void install() noexcept
     {
-        if (viewRender && *viewRender && hook.install(*reinterpret_cast<std::uintptr_t**>(*viewRender))) {
+        if (viewRender && *viewRender && hook.install(vmtLengthCalculator, *reinterpret_cast<std::uintptr_t**>(*viewRender))) {
             originalOnRenderStart = hook.hook(4, &onRenderStart);
         }
     }
@@ -41,6 +41,7 @@ private:
     friend class RefCountedHook;
 
     cs2::CViewRender** viewRender{ ClientPatterns::viewRender() };
+    VmtLengthCalculator vmtLengthCalculator;
     VmtSwapper hook;
     cs2::CViewRender::OnRenderStart* originalOnRenderStart{ nullptr };
 };

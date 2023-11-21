@@ -8,7 +8,7 @@
 class LoopModeGameHook : public RefCountedHook<LoopModeGameHook> {
 public:
     explicit LoopModeGameHook(const VmtLengthCalculator& vmtLengthCalculator) noexcept
-        : hook{ vmtLengthCalculator }
+        : vmtLengthCalculator{ vmtLengthCalculator }
     {
     }
 
@@ -28,7 +28,7 @@ private:
 
     void install() noexcept
     {
-        if (loopModeGame && *loopModeGame && hook.install(*reinterpret_cast<std::uintptr_t**>(*loopModeGame))) {
+        if (loopModeGame && *loopModeGame && hook.install(vmtLengthCalculator, *reinterpret_cast<std::uintptr_t**>(*loopModeGame))) {
             originalGetWorldSession = hook.hook(0, &getWorldSession);
         }
     }
@@ -36,6 +36,7 @@ private:
     friend class RefCountedHook;
 
     cs2::CLoopModeGame** loopModeGame{ ClientPatterns::loopModeGame() };
+    VmtLengthCalculator vmtLengthCalculator;
     VmtSwapper hook;
     cs2::CLoopModeGame::getWorldSession originalGetWorldSession{ nullptr };
 };
