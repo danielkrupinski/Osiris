@@ -28,7 +28,7 @@ private:
 
     [[nodiscard]] bool isInstalled() const noexcept
     {
-        return viewRender && *viewRender && hook.isInstalled(*reinterpret_cast<std::uintptr_t**>(*viewRender));
+        return hook.wasEverInstalled() && viewRender && *viewRender && hook.isInstalled(*reinterpret_cast<std::uintptr_t**>(*viewRender));
     }
 
     void install() noexcept

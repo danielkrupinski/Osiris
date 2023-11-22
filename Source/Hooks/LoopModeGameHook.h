@@ -23,7 +23,7 @@ private:
 
     [[nodiscard]] bool isInstalled() const noexcept
     {
-        return loopModeGame && *loopModeGame && hook.isInstalled(*reinterpret_cast<std::uintptr_t**>(*loopModeGame));
+        return hook.wasEverInstalled() && loopModeGame && *loopModeGame && hook.isInstalled(*reinterpret_cast<std::uintptr_t**>(*loopModeGame));
     }
 
     void install() noexcept

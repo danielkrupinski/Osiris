@@ -12,9 +12,15 @@
 
 class VmtSwapper {
 public:
+    [[nodiscard]] bool wasEverInstalled() const noexcept
+    {
+        return vmtCopy.has_value();
+    }
+
     [[nodiscard]] bool isInstalled(const std::uintptr_t* vmt) const noexcept
     {
-        return vmtCopy.has_value() && vmt == vmtCopy->getReplacementVmt();
+        assert(wasEverInstalled());
+        return vmt == vmtCopy->getReplacementVmt();
     }
 
     bool install(const VmtLengthCalculator& vmtLengthCalculator, std::uintptr_t*& vmt) noexcept
@@ -27,13 +33,13 @@ public:
 
     void uninstall(std::uintptr_t*& vmt) const noexcept
     {
-        assert(vmtCopy.has_value());
+        assert(wasEverInstalled());
         vmt = vmtCopy->getOriginalVmt();
     }
 
     [[nodiscard]] GenericFunctionPointer hook(std::size_t index, GenericFunctionPointer replacementFunction) const noexcept
     {
-        assert(vmtCopy.has_value());
+        assert(wasEverInstalled());
         if (const auto replacementVmt = vmtCopy->getReplacementVmt())
             replacementVmt[index] = std::uintptr_t(static_cast<void(*)()>(replacementFunction));
         return reinterpret_cast<void(*)()>(vmtCopy->getOriginalVmt()[index]);
