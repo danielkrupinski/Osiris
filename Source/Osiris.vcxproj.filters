@@ -711,6 +711,15 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombDefuseSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\BombDefuseVisualizerHelpers.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

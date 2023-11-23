@@ -83,6 +83,7 @@ struct GlobalContext {
         features->soundFeatures.footstepVisualizer.run(featureHelpers->getFootstepVisualizerHelpers());
         features->soundFeatures.bombPlantVisualizer.run(featureHelpers->getBombPlantVisualizerHelpers());
         features->soundFeatures.bombBeepVisualizer.run(featureHelpers->getBombBeepVisualizerHelpers());
+        features->soundFeatures.bombDefuseVisualizer.run(featureHelpers->getBombDefuseVisualizerHelpers());
     }
 
 private:

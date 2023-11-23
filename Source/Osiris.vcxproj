@@ -46,6 +46,8 @@
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h" />
+    <ClInclude Include="FeatureHelpers\Sound\BombDefuseSound.h" />
+    <ClInclude Include="FeatureHelpers\Sound\BombDefuseVisualizerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombPlantSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombPlantVisualizerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Sound\FootstepSound.h" />
@@ -63,6 +65,7 @@
     <ClInclude Include="Features\Hud\HudFeatures.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h" />
+    <ClInclude Include="Features\Sound\BombDefuseVisualizer.h" />
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h" />
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
     <ClInclude Include="Features\Sound\SoundFeatures.h" />

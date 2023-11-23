@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BombBeepVisualizer.h"
+#include "BombDefuseVisualizer.h"
 #include "BombPlantVisualizer.h"
 #include "FootstepVisualizer.h"
 #include <Helpers/HudProvider.h>
@@ -11,10 +12,12 @@ struct SoundFeatures {
         : footstepVisualizer{ viewRenderHook, soundWatcher }
         , bombPlantVisualizer{ viewRenderHook, soundWatcher }
         , bombBeepVisualizer{ viewRenderHook, soundWatcher }
+        , bombDefuseVisualizer{ viewRenderHook, soundWatcher }
     {
     }
     
     FootstepVisualizer footstepVisualizer;
     BombPlantVisualizer bombPlantVisualizer;
     BombBeepVisualizer bombBeepVisualizer;
+    BombDefuseVisualizer bombDefuseVisualizer;
 };

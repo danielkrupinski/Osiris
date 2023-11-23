@@ -19,5 +19,6 @@ constexpr std::string_view kBombSoundsPath = "sounds/weapons/c4/";
 
 constexpr std::string_view kPlayerSuitSoundPrefix = "suit";
 constexpr std::string_view kBombBeepSoundsPrefix = "c4_beep";
+constexpr std::string_view kBombDefuseStartSoundName = "c4_disarmstart.vsnd";
 
 }

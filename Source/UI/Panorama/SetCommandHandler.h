@@ -41,6 +41,8 @@ private:
             handleTogglableFeature(features.soundFeatures.bombPlantVisualizer);
         } else if (feature == "visualize_bomb_beep") {
             handleTogglableFeature(features.soundFeatures.bombBeepVisualizer);
+        } else if (feature == "visualize_bomb_defuse") {
+            handleTogglableFeature(features.soundFeatures.bombDefuseVisualizer);
         }
     }
 
