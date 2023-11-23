@@ -3,5 +3,6 @@
 enum class HudInWorldPanelZOrder {
     Footstep,
     BombBeep,
-    BombPlant
+    BombPlant,
+    BombDefuse
 };
