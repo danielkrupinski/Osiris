@@ -7,6 +7,7 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 23 November 2023 - **Visualize Bomb Defuse** function was added to **Sound**
 * 16 November 2023 - **Visualize Bomb Beep** function was added to **Sound**
 * 8 November 2023 - Adjusted positions of sound visualizations to be closer to the sound source
 * 1 November 2023 - **Visualize Bomb Plant** function was added to **Sound**
