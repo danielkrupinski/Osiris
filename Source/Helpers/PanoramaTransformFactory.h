@@ -8,6 +8,17 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct PanoramaTransformFactory {
+    [[nodiscard]] cs2::CTransform3D* scale(float scale) const noexcept
+    {
+        return create<cs2::CTransformScale3D>(scale, scale, 1.0f);
+    }
+
+    [[nodiscard]] cs2::CTransform3D* translate(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        return create<cs2::CTransformTranslate3D>(x, y, cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength });
+    }
+
+private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept
     {
@@ -18,7 +29,6 @@ struct PanoramaTransformFactory {
         return nullptr;
     }
 
-private:
     template <typename T>
     [[nodiscard]] const void* getVmt() const noexcept
     {

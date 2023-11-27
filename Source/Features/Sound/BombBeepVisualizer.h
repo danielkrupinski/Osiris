@@ -90,13 +90,11 @@ public:
             style.setZIndex(-soundInClipSpace.z);
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
-            PanoramaTransformations{ params.transformFactory.create<cs2::CTransformScale3D>(
-                BombBeepSound::getScale(soundInClipSpace.z), BombBeepSound::getScale(soundInClipSpace.z), 1.0f
-            ), params.transformFactory.create<cs2::CTransformTranslate3D>(
-                deviceCoordinates.getX(),
-                deviceCoordinates.getY(),
-                cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength }
-            ) }.applyTo(style);
+
+            PanoramaTransformations{
+                params.transformFactory.scale(BombBeepSound::getScale(soundInClipSpace.z)),
+                params.transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
+            }.applyTo(style);
 
             ++currentIndex;
         });
