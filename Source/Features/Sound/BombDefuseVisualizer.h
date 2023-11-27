@@ -3,6 +3,7 @@
 #include <CS2/Classes/Panorama.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
+#include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/Sound/BombDefuseSound.h>
 #include <FeatureHelpers/Sound/BombDefuseVisualizerHelpers.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
@@ -81,21 +82,14 @@ public:
             style.setZIndex(-soundInClipSpace.z);
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
-            cs2::CTransform3D* transformations[]{ params.transformFactory.create<cs2::CTransformScale3D>(
+            PanoramaTransformations{ params.transformFactory.create<cs2::CTransformScale3D>(
                 BombDefuseSound::getScale(soundInClipSpace.z), BombDefuseSound::getScale(soundInClipSpace.z), 1.0f
             ), params.transformFactory.create<cs2::CTransformTranslate3D>(
                 deviceCoordinates.getX(),
                 deviceCoordinates.getY(),
                 cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength }
-            ) };
+            ) }.applyTo(style);
 
-            cs2::CUtlVector<cs2::CTransform3D*> dummyVector;
-            dummyVector.allocationCount = 2;
-            dummyVector.memory = transformations;
-            dummyVector.growSize = 0;
-            dummyVector.size = 2;
-
-            style.setTransform3D(dummyVector);
             ++currentIndex;
         });
 

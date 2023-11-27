@@ -44,6 +44,7 @@
     <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h" />
     <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombDefuseSound.h" />

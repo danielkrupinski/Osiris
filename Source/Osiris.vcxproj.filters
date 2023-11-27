@@ -720,6 +720,9 @@
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\PanoramaTransformations.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
