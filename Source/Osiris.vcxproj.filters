@@ -675,12 +675,6 @@
     <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h">
       <Filter>FeatureHelpers\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\FootstepVisualizerHelpers.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombPlantVisualizerHelpers.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypeBitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -714,14 +708,17 @@
     <ClInclude Include="FeatureHelpers\Sound\BombDefuseSound.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombDefuseVisualizerHelpers.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundVisualizationFeature.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundVisualizationHelpers.h">
+      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

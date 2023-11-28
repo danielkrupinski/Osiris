@@ -7,7 +7,7 @@
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
-#include <FeatureHelpers/Sound/BombPlantVisualizerHelpers.h>
+#include <FeatureHelpers/Sound/SoundVisualizationFeature.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
@@ -47,77 +47,4 @@ $.CreatePanel('Image', bombPlantPanel, '', {
     static constexpr auto kMaxNumberOfPanels = 5;
 };
 
-class BombPlantVisualizer : public TogglableFeature<BombPlantVisualizer> {
-public:
-    explicit BombPlantVisualizer(ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : viewRenderHook{ viewRenderHook }
-        , soundWatcher{ soundWatcher }
-    {
-    }
-
-    void run(const BombPlantVisualizerHelpers& params) noexcept
-    {
-        if (!isEnabled())
-            return;
-
-        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
-            return;
-
-        if (!params.worldtoClipSpaceConverter)
-            return;
-
-        panels.createPanels(params.hudInWorldPanelFactory);
-
-        std::size_t currentIndex = 0;
-        std::as_const(soundWatcher).getSoundsOfType<BombPlantSound>().forEach([this, &currentIndex, params] (const PlayedSound& sound) {
-            const auto soundInClipSpace = params.worldtoClipSpaceConverter.toClipSpace(sound.origin);
-            if (!soundInClipSpace.onScreen())
-                return;
-            
-            const auto opacity = BombPlantSound::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime));
-            if (opacity <= 0.0f)
-                return;
-
-            const auto panel = panels.getPanel(currentIndex);
-            if (!panel)
-                return;
-
-            const auto style = panel.getStyle();
-            if (!style)
-                return;
-
-            style.setOpacity(opacity);
-            style.setZIndex(-soundInClipSpace.z);
-
-            const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
-            PanoramaTransformations{
-                params.transformFactory.scale(BombPlantSound::getScale(soundInClipSpace.z)),
-                params.transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
-            }.applyTo(style);
-
-            ++currentIndex;
-        });
-
-        panels.hidePanels(currentIndex);
-    }
-
-private:
-    friend TogglableFeature;
-
-    void onEnable() noexcept
-    {
-        viewRenderHook.incrementReferenceCount();
-        soundWatcher.startWatching<BombPlantSound>();
-    }
-
-    void onDisable() noexcept
-    {
-        viewRenderHook.decrementReferenceCount();
-        soundWatcher.stopWatching<BombPlantSound>();
-        panels.hidePanels(0);
-    }
-
-    HudInWorldPanels<BombPlantPanels> panels;
-    ViewRenderHook& viewRenderHook;
-    SoundWatcher& soundWatcher;
-};
+using BombPlantVisualizer = SoundVisualizationFeature<BombPlantPanels, BombPlantSound>;

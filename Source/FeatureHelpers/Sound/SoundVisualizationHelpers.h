@@ -5,7 +5,7 @@
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
 #include <Helpers/PanoramaTransformFactory.h>
 
-struct BombPlantVisualizerHelpers {
+struct SoundVisualizationHelpers {
     HudInWorldPanelFactory hudInWorldPanelFactory;
     GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;

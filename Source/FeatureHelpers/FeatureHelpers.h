@@ -7,31 +7,13 @@
 #include "Hud/BombTimerHelpers.h"
 #include "Hud/DefusingAlertHelpers.h"
 #include "Hud/KillfeedPreserverHelpers.h"
-#include "Sound/BombBeepVisualizerHelpers.h"
-#include "Sound/BombDefuseVisualizerHelpers.h"
-#include "Sound/BombPlantVisualizerHelpers.h"
-#include "Sound/FootstepVisualizerHelpers.h"
+#include "Sound/SoundVisualizationHelpers.h"
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    [[nodiscard]] BombDefuseVisualizerHelpers getBombDefuseVisualizerHelpers() noexcept
+    [[nodiscard]] SoundVisualizationHelpers getSoundVisualizationHelpers() noexcept
     {
-        return BombDefuseVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
-    }
-
-    [[nodiscard]] BombBeepVisualizerHelpers getBombBeepVisualizerHelpers() noexcept
-    {
-        return BombBeepVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
-    }
-
-    [[nodiscard]] BombPlantVisualizerHelpers getBombPlantVisualizerHelpers() noexcept
-    {
-        return BombPlantVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
-    }
-
-    [[nodiscard]] FootstepVisualizerHelpers getFootstepVisualizerHelpers() noexcept
-    {
-        return FootstepVisualizerHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
+        return SoundVisualizationHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
     }
 
     [[nodiscard]] BombTimerHelpers getBombTimerHelpers() const noexcept
