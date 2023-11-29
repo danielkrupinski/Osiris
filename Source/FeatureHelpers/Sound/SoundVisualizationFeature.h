@@ -3,6 +3,7 @@
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Hooks/ViewRenderHook.h>
+#include "SoundVisualization.h"
 #include "SoundVisualizationHelpers.h"
 #include "SoundWatcher.h"
 
@@ -34,7 +35,7 @@ public:
             if (!soundInClipSpace.onScreen())
                 return;
 
-            const auto opacity = SoundType::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime));
+            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime));
             if (opacity <= 0.0f)
                 return;
 
@@ -52,7 +53,7 @@ public:
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
             PanoramaTransformations{
-                params.transformFactory.scale(SoundType::getScale(soundInClipSpace.z)),
+                params.transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z)),
                 params.transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(style);
 

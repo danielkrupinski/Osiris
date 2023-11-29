@@ -9,20 +9,7 @@
 struct FootstepSound {
     static constexpr auto kFadeAwayStart = 1.6f;
     static constexpr auto kFadeAwayDuration = 0.4f;
-
-    [[nodiscard]] static constexpr float getScale(float clipSpaceZ) noexcept
-    {
-        return (std::max)(1.0f - clipSpaceZ / 1000.0f, 0.3f);
-    }
-
-    [[nodiscard]] static constexpr float getOpacity(float timeAlive) noexcept
-    {
-        if (timeAlive >= kFadeAwayStart) {
-            return 1.0f - (std::min)((timeAlive - kFadeAwayStart) / kFadeAwayDuration, 1.0f);
-        } else {
-            return 1.0f;
-        }
-    }
+    static constexpr auto kMinScale = 0.3f;
 
     [[nodiscard]] static constexpr bool isSound(std::string_view soundName) noexcept
     {
