@@ -64,7 +64,7 @@ struct GlobalContext {
         soundWatcher.init();
         featureHelpers.init();
         features.init(hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
-        panoramaGUI.init(*features, unloadFlag);
+        panoramaGUI.init();
 
         initializedFromGameThread = true;
     }

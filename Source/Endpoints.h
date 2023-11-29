@@ -29,7 +29,7 @@ inline int PeepEventsHook::SDL_PeepEvents(void* events, int numevents,
     hudFeatures().defusingAlert.run(GlobalContext::instance().featureHelpers->getDefusingAlertHelpers());
     hudFeatures().killfeedPreserver.run(GlobalContext::instance().featureHelpers->getKillfeedPreserverHelpers());
 
-    GlobalContext::instance().panoramaGUI->run();
+    GlobalContext::instance().panoramaGUI->run(features(), GlobalContext::instance().unloadFlag);
     GlobalContext::instance().hooks->loopModeGameHook.update();
     GlobalContext::instance().hooks->viewRenderHook.update();
     visuals().scopeOverlayRemover.updatePanelVisibility(GlobalContext::instance().featureHelpers->hudProvider);

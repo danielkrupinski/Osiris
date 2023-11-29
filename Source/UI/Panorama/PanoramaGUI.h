@@ -12,9 +12,7 @@
 
 class PanoramaGUI {
 public:
-    PanoramaGUI(Features& features, UnloadFlag& unloadFlag)
-        : features{ features }
-        , unloadFlag{ unloadFlag }
+    PanoramaGUI() noexcept
     {
         const PanoramaUiPanel mainMenu{ ClientPatterns::mainMenuPanel()->uiPanel};
         PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.PreloadSettings();", "", 0);
@@ -51,7 +49,7 @@ public:
             guiPanelPointer = guiPanel;
     }
 
-    ~PanoramaGUI()
+    ~PanoramaGUI() noexcept
     {
         if (guiButtonPointer.getHandle().isValid())
             PanoramaUiEngine::onDeletePanel(guiButtonPointer.getHandle());
@@ -63,7 +61,7 @@ public:
             PanoramaUiEngine::runScript(settingsPanel, "delete $.Osiris", "", 0);
     }
 
-    void run()
+    void run(Features& features, UnloadFlag& unloadFlag) const noexcept
     {
         const auto guiPanel = guiPanelPointer.get();
         if (!guiPanel)
@@ -79,6 +77,4 @@ private:
     PanoramaPanelPointer guiPanelPointer;
     PanoramaPanelPointer guiButtonPointer;
     PanoramaPanelPointer settingsPanelPtr;
-    Features& features;
-    UnloadFlag& unloadFlag;
 };
