@@ -29,10 +29,8 @@ public:
 private:
     void showMessageBox(const char* title, const char* message, unsigned int flags) const noexcept
     {
-        /* NOTE: doesn't work after game devs switched SDL to prefer Wayland, need to wait until they fix it
         if (showSimpleMessageBox)
             showSimpleMessageBox(flags, title, message, nullptr);
-        */
     }
 
     sdl3::SDL_ShowSimpleMessageBox* showSimpleMessageBox = LinuxDynamicLibrary{ cs2::SDL_DLL }.getFunctionAddress("SDL_ShowSimpleMessageBox").as<sdl3::SDL_ShowSimpleMessageBox*>();
