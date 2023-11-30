@@ -16,6 +16,14 @@ struct SoundFeatures {
     {
     }
     
+    void runOnViewMatrixUpdate(const SoundVisualizationHelpers& soundVisualizationHelpers) noexcept
+    {
+        footstepVisualizer.run(soundVisualizationHelpers);
+        bombPlantVisualizer.run(soundVisualizationHelpers);
+        bombBeepVisualizer.run(soundVisualizationHelpers);
+        bombDefuseVisualizer.run(soundVisualizationHelpers);
+    }
+
     FootstepVisualizer footstepVisualizer;
     BombPlantVisualizer bombPlantVisualizer;
     BombBeepVisualizer bombBeepVisualizer;

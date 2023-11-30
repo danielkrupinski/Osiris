@@ -80,10 +80,7 @@ struct GlobalContext {
         hooks->viewRenderHook.getOriginalOnRenderStart()(thisptr);
         if (featureHelpers->globalVarsProvider && featureHelpers->globalVarsProvider.getGlobalVars())
             soundWatcher->update(featureHelpers->globalVarsProvider.getGlobalVars()->curtime);
-        features->soundFeatures.footstepVisualizer.run(featureHelpers->getSoundVisualizationHelpers());
-        features->soundFeatures.bombPlantVisualizer.run(featureHelpers->getSoundVisualizationHelpers());
-        features->soundFeatures.bombBeepVisualizer.run(featureHelpers->getSoundVisualizationHelpers());
-        features->soundFeatures.bombDefuseVisualizer.run(featureHelpers->getSoundVisualizationHelpers());
+        features->soundFeatures.runOnViewMatrixUpdate(featureHelpers->getSoundVisualizationHelpers());
     }
 
 private:
