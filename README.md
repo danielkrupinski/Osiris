@@ -30,26 +30,39 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 * **Microsoft Visual Studio 2022** with **Desktop development with C++** workload
 
+or
+* **CMake 3.24** or **newer**
+* **MSVC 19** or **newer**
+
 #### Linux
 
-* **CMake 3.24** or newer
+* **CMake 3.24** or **newer**
 * **g++ 11 or newer** or **clang++ 15 or newer**
 
 ### Compiling from source
 
 #### Windows
 
-Open **Osiris.sln** in Visual Studio 2022, set build configuration to **Release | x64**. Press *Build solution* and you should receive **Osiris.dll** file.
+Configure with Visual Studio 2022:
+Open **Osiris.sln**, set build configuration to **Release | x64**. Press *Build solution* and you should receive **Osiris.dll** file.
+
+or
+
+Configure with CMake & Build:
+
+`cmd`
+
+    rmdir /s /q build && cmake -DCMAKE_BUILD_TYPE=Release -B build && cmake --build build/ -j %NUMBER_OF_PROCESSORS%
+
+`powershell`
+
+    rm -r -fo build && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build/ -j $env:NUMBER_OF_PROCESSORS
 
 #### Linux
 
-Configure with CMake:
+Configure with CMake & Build:
 
-    cmake -DCMAKE_BUILD_TYPE=Release -B build
-
-Build:
-
-    cmake --build build -j $(nproc --all)
+    rm -rf build && cmake -DCMAKE_BUILD_TYPE=Release -B build && cmake --build build -j $(nproc --all)
 
 After following these steps you should receive **libOsiris.so** file in **build/Source/** directory.
 
