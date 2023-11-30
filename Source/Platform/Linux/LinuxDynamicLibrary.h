@@ -11,6 +11,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+#include <Platform/Macros/FunctionAttributes.h>
 #include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 
@@ -52,7 +53,7 @@ public:
     }
 
 private:
-    [[nodiscard]] MemorySection getSection(const char* sectionName) const noexcept
+    [[nodiscard]] [[NOINLINE]] MemorySection getSection(const char* sectionName) const noexcept
     {
         void* base = nullptr;
         std::size_t size = 0;
