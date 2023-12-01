@@ -4,9 +4,10 @@
 
 template <typename SoundType>
 struct SoundVisualization {
-    [[nodiscard]] static constexpr float getScale(float clipSpaceZ) noexcept
+    [[nodiscard]] static constexpr float getScale(float z) noexcept
     {
-        return (std::max)(1.0f - clipSpaceZ / 1000.0f, SoundType::kMinScale);
+        constexpr auto kMaxScale{1.0f};
+        return std::clamp(500.0f / (z + 400.0f), SoundType::kMinScale, kMaxScale);
     }
 
     [[nodiscard]] static constexpr float getOpacity(float timeAlive) noexcept
