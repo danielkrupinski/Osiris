@@ -4,7 +4,7 @@
 #include "BombDefuseVisualizer.h"
 #include "BombPlantVisualizer.h"
 #include "FootstepVisualizer.h"
-#include <Helpers/HudProvider.h>
+#include "WeaponScopeVisualizer.h"
 #include <Hooks/ViewRenderHook.h>
 
 struct SoundFeatures {
@@ -13,6 +13,7 @@ struct SoundFeatures {
         , bombPlantVisualizer{ viewRenderHook, soundWatcher }
         , bombBeepVisualizer{ viewRenderHook, soundWatcher }
         , bombDefuseVisualizer{ viewRenderHook, soundWatcher }
+        , weaponScopeVisualizer{ viewRenderHook, soundWatcher }
     {
     }
     
@@ -22,10 +23,12 @@ struct SoundFeatures {
         bombPlantVisualizer.run(soundVisualizationHelpers);
         bombBeepVisualizer.run(soundVisualizationHelpers);
         bombDefuseVisualizer.run(soundVisualizationHelpers);
+        weaponScopeVisualizer.run(soundVisualizationHelpers);
     }
 
     FootstepVisualizer footstepVisualizer;
     BombPlantVisualizer bombPlantVisualizer;
     BombBeepVisualizer bombBeepVisualizer;
     BombDefuseVisualizer bombDefuseVisualizer;
+    WeaponScopeVisualizer weaponScopeVisualizer;
 };

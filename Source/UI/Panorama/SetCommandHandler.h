@@ -43,6 +43,8 @@ private:
             handleTogglableFeature(features.soundFeatures.bombBeepVisualizer);
         } else if (feature == "visualize_bomb_defuse") {
             handleTogglableFeature(features.soundFeatures.bombDefuseVisualizer);
+        } else if (feature == "visualize_scope_sound") {
+            handleTogglableFeature(features.soundFeatures.weaponScopeVisualizer);
         }
     }
 
