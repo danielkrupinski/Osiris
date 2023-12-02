@@ -63,6 +63,15 @@ inline std::size_t strlen(const char* str) noexcept
     return length;
 }
 
+inline const unsigned char* memchr(const unsigned char* ptr, unsigned char ch, std::size_t count) noexcept
+{
+    for (std::size_t i = 0; i < count; ++i) {
+        if (ptr[i] == ch)
+            return &ptr[i];
+    }
+    return nullptr;
+}
+
 }
 
 #pragma function(memcpy)
@@ -99,4 +108,10 @@ int strcmp(const char* s1, const char* s2)
 std::size_t strlen(const char* str)
 {
     return intrinsics::strlen(str);
+}
+
+#pragma function(memchr)
+const void* memchr(const void* ptr, int ch, std::size_t count)
+{
+    return intrinsics::memchr(reinterpret_cast<const unsigned char*>(ptr), static_cast<unsigned char>(ch), count);
 }

@@ -723,6 +723,12 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundVisualization.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\WeaponScopeSound.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
