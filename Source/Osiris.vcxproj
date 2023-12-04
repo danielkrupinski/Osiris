@@ -27,6 +27,7 @@
     <ClInclude Include="CS2\Classes\Sound.h" />
     <ClInclude Include="CS2\Classes\Vector.h" />
     <ClInclude Include="CS2\Classes\VMatrix.h" />
+    <ClInclude Include="CS2\Constants\AspectRatio.h" />
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
     <ClInclude Include="FeatureHelpers\Sound\WeaponScopeSound.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
+    <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\Hud\BombTimer.h" />

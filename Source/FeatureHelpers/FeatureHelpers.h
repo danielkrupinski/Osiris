@@ -8,12 +8,13 @@
 #include "Hud/DefusingAlertHelpers.h"
 #include "Hud/KillfeedPreserverHelpers.h"
 #include "Sound/SoundVisualizationHelpers.h"
+#include "ViewToProjectionMatrix.h"
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
     [[nodiscard]] SoundVisualizationHelpers getSoundVisualizationHelpers() noexcept
     {
-        return SoundVisualizationHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter };
+        return SoundVisualizationHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter, viewToProjectionMatrix };
     }
 
     [[nodiscard]] BombTimerHelpers getBombTimerHelpers() const noexcept
@@ -37,4 +38,5 @@ struct FeatureHelpers {
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
     PlantedC4Provider plantedC4Provider;
     HudInWorldPanelContainer hudInWorldPanelContainer;
+    ViewToProjectionMatrix viewToProjectionMatrix;
 };

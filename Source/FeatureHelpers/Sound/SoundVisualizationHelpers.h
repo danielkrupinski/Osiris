@@ -2,6 +2,7 @@
 
 #include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
+#include <FeatureHelpers/ViewToProjectionMatrix.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
 #include <Helpers/PanoramaTransformFactory.h>
 
@@ -10,4 +11,5 @@ struct SoundVisualizationHelpers {
     GlobalVarsProvider globalVarsProvider;
     PanoramaTransformFactory transformFactory;
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
+    ViewToProjectionMatrix viewToProjectionMatrix;
 };

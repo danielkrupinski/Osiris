@@ -53,7 +53,7 @@ public:
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
             PanoramaTransformations{
-                params.transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z)),
+                params.transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, params.viewToProjectionMatrix.getFovScale())),
                 params.transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(style);
 

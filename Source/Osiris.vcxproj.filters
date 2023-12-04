@@ -729,6 +729,12 @@
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\AspectRatio.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

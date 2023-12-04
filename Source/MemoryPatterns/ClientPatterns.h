@@ -29,5 +29,6 @@ struct ClientPatterns {
     [[nodiscard]] static const void* transformTranslate3dVMT() noexcept;
     [[nodiscard]] static const void* transformScale3dVMT() noexcept;
     [[nodiscard]] static cs2::VMatrix* worldToProjectionMatrix() noexcept;
+    [[nodiscard]] static cs2::VMatrix* viewToProjectionMatrix() noexcept;
     [[nodiscard]] static cs2::CViewRender** viewRender() noexcept;
 };

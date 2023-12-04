@@ -69,6 +69,11 @@ inline cs2::VMatrix* ClientPatterns::worldToProjectionMatrix() noexcept
     return GlobalContext::instance().clientPatternFinder("48 8D 05 ? ? ? ? 48 8B D3 4C 8D 05"_pat).add(3).abs().as<cs2::VMatrix*>();
 }
 
+inline cs2::VMatrix* ClientPatterns::viewToProjectionMatrix() noexcept
+{
+    return GlobalContext::instance().clientPatternFinder("4C 8D 0D ? ? ? ? 48 8D 05 ? ? ? ? 48 8B D3"_pat).add(3).abs().as<cs2::VMatrix*>();
+}
+
 inline cs2::CViewRender** ClientPatterns::viewRender() noexcept
 {
     return GlobalContext::instance().clientPatternFinder("48 89 05 ? ? ? ? 48 8B C8 48 85 C0"_pat).add(3).abs().as<cs2::CViewRender**>();
