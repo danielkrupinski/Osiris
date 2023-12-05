@@ -172,6 +172,7 @@
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
+    <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxMessageBox.h" />

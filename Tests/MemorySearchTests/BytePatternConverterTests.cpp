@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <MemorySearch/BytePatternConverter.h>
+#include <MemorySearch/PatternStringWildcard.h>
 
 namespace
 {
@@ -41,7 +42,7 @@ TEST(BytePatternConverterTest, PatternCannotEndWithWildcard) {
 }
 
 TEST(BytePatternConverterTest, NumericValueOfWildcardCharCannotBeUsed) {
-    static_assert(BytePatternConverter<1>::wildcardChar == 0x3F);
+    static_assert(kPatternStringWildcard == 0x3F);
 
     BytePatternConverter converter{ "AA BB 3F CC" };
     const auto [converted, error] = converter();

@@ -2,25 +2,23 @@
 
 #include <cassert>
 #include <cstddef>
+#include <optional>
 #include <span>
 #include <string_view>
 
-#include "BytePatternStorage.h"
-
 class BytePattern {
 public:
-    static constexpr auto wildcardChar = '?';
-
-    template <std::size_t StorageCapacity>
-    explicit(false) constexpr BytePattern(const BytePatternStorage<StorageCapacity>& patternStorage)
-        : pattern{ patternStorage.pattern.data(), patternStorage.size }
+    constexpr BytePattern(std::string_view pattern, std::optional<char> wildcardChar = {}) noexcept
+        : pattern{pattern}
+        , wildcardChar{wildcardChar}
     {
+        assert(!pattern.empty());
     }
 
     [[nodiscard]] BytePattern withoutFirstAndLastChar() const noexcept
     {
         if (pattern.size() > 2)
-            return BytePattern{ std::string_view{ pattern.data() + 1, pattern.size() - 2 } };
+            return BytePattern{ std::string_view{ pattern.data() + 1, pattern.size() - 2 }, wildcardChar };
         return {};
     }
 
@@ -39,7 +37,7 @@ public:
         return pattern.back();
     }
 
-    [[nodiscard]] std::string_view get() const noexcept
+    [[nodiscard]] std::string_view raw() const noexcept
     {
         return pattern;
     }
@@ -55,13 +53,14 @@ public:
         return true;
     }
 
+    [[nodiscard]] std::optional<char> getWildcardChar() const noexcept
+    {
+        return wildcardChar;
+    }
+
 private:
     BytePattern() = default;
 
-    explicit BytePattern(std::string_view pattern)
-        : pattern{ pattern }
-    {
-    }
-
     std::string_view pattern;
+    std::optional<char> wildcardChar;
 };

@@ -735,6 +735,9 @@
     <ClInclude Include="CS2\Constants\AspectRatio.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="MemorySearch\PatternStringWildcard.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

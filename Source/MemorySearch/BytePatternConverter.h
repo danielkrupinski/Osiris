@@ -6,6 +6,7 @@
 #include <string_view>
 #include <utility>
 
+#include "PatternStringWildcard.h"
 #include <Utils/HexChars.h>
 
 enum class BytePatternConverterError {
@@ -17,14 +18,11 @@ enum class BytePatternConverterError {
 };
 
 template <std::size_t N>
+    requires (N > 0)
 struct BytePatternConverter {
-    static constexpr auto wildcardChar = '?';
-
-    static_assert(N > 0);
-
-    explicit constexpr BytePatternConverter(const char(&pattern)[N])
+    explicit constexpr BytePatternConverter(const char(&patternString)[N])
     {
-        std::ranges::copy(pattern, buffer.begin());
+        std::ranges::copy(patternString, buffer.begin());
     }
 
     using Error = BytePatternConverterError;
@@ -75,12 +73,12 @@ private:
 
     [[nodiscard]] static constexpr bool isWildcardChar(char c) noexcept
     {
-        return c == wildcardChar;
+        return c == kPatternStringWildcard;
     }
 
     [[nodiscard]] constexpr bool isNextCharWildcard() const
     {
-        return peekNextChar() == wildcardChar;
+        return isWildcardChar(peekNextChar());
     }
 
     [[nodiscard]] constexpr bool isNextCharSpace() const
@@ -140,7 +138,7 @@ private:
             error = Error::EndsWithWildcard;
         } else {
             advanceReadPosition();
-            putChar(wildcardChar);
+            putChar(kPatternStringWildcard);
         }
     }
 
