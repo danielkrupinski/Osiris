@@ -213,8 +213,9 @@ $.Osiris = (function () {
   createYesNoDropDown(bombSoundVisualization, "Visualize Bomb Defuse", 'sound', 'visualize_bomb_defuse');
 
   var weaponSoundVisualization = createSection(sound, 'Weapon Sound Visualization');
-  $.CreatePanel('Panel', weaponSoundVisualization, '', { class: "horizontal-separator" });
   createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Scope Sound", 'sound', 'visualize_scope_sound');
+  $.CreatePanel('Panel', weaponSoundVisualization, '', { class: "horizontal-separator" });
+  createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Reload Sound", 'sound', 'visualize_reload_sound');
 
   $.Osiris.navigateToTab('hud');
 })();

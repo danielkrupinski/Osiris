@@ -5,6 +5,7 @@
 #include "BombPlantSound.h"
 #include "FootstepSound.h"
 #include "SoundWatcherImpl.h"
+#include "WeaponReloadSound.h"
 #include "WeaponScopeSound.h"
 
 using SoundWatcher = SoundWatcherImpl<
@@ -12,5 +13,6 @@ using SoundWatcher = SoundWatcherImpl<
     BombPlantSound,
     BombBeepSound,
     BombDefuseSound,
-    WeaponScopeSound
+    WeaponScopeSound,
+    WeaponReloadSound
 >;
