@@ -45,6 +45,8 @@ private:
             handleTogglableFeature(features.soundFeatures.bombDefuseVisualizer);
         } else if (feature == "visualize_scope_sound") {
             handleTogglableFeature(features.soundFeatures.weaponScopeVisualizer);
+        } else if (feature == "visualize_reload_sound") {
+            handleTogglableFeature(features.soundFeatures.weaponReloadVisualizer);
         }
     }
 

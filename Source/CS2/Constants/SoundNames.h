@@ -23,5 +23,7 @@ constexpr std::string_view kZoomSoundNamePart = "zoom";
 constexpr std::string_view kPlayerSuitSoundPrefix = "suit";
 constexpr std::string_view kBombBeepSoundsPrefix = "c4_beep";
 constexpr std::string_view kBombDefuseStartSoundName = "c4_disarmstart.vsnd";
+constexpr std::string_view kClipOutSoundSuffix = "clipout.vsnd";
+constexpr std::string_view kCoverUpSoundSuffix = "coverup.vsnd";
 
 }
