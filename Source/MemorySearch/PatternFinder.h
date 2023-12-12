@@ -24,7 +24,7 @@ public:
 
     [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern) const noexcept
     {
-        const auto found = HybridPatternFinder{ bytes, pattern }();
+        const auto found = HybridPatternFinder{ bytes, pattern }.findNextOccurrence();
         if (!found)
             notFoundHandler(pattern, bytes);
         return SafeAddress{ found };
@@ -32,7 +32,7 @@ public:
 
     [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
     {
-        const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }();
+        const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }.findNextOccurrence();
         if (foundWithHint)
             return SafeAddress{ foundWithHint };
         return operator()(pattern);
