@@ -164,6 +164,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h" />
+    <ClInclude Include="MemorySearch\BinaryBytePattern.h" />
     <ClInclude Include="MemorySearch\BytePattern.h" />
     <ClInclude Include="MemorySearch\BytePatternConverter.h" />
     <ClInclude Include="MemorySearch\BytePatternLiteral.h" />

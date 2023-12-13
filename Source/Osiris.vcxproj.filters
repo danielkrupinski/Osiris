@@ -738,6 +738,9 @@
     <ClInclude Include="MemorySearch\PatternStringWildcard.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
+    <ClInclude Include="MemorySearch\BinaryBytePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
