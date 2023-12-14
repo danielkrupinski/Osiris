@@ -7,26 +7,28 @@
 struct MemorySection {
     MemorySection() = default;
 
-    explicit MemorySection(std::span<const std::byte> section)
-        : section{ section }
+    explicit MemorySection(std::span<const std::byte> section) noexcept
+        : base{reinterpret_cast<std::uintptr_t>(section.data())}
+        , size{section.size()}
     {
     }
 
     [[nodiscard]] std::span<const std::byte> raw() const noexcept
     {
-        return section;
+        return {reinterpret_cast<const std::byte*>(base), size};
     }
 
-    [[nodiscard]] bool contains(std::uintptr_t address, std::size_t size) const noexcept
+    [[nodiscard]] bool contains(std::uintptr_t address, std::size_t objectSize) const noexcept
     {
-        return address >= std::uintptr_t(section.data()) && section.size() >= size && (address - std::uintptr_t(section.data())) <= section.size() - size;
+        return address >= base && size >= objectSize && (address - base) <= size - objectSize;
     }
 
     [[nodiscard]] bool contains(std::uintptr_t address) const noexcept
     {
-        return address >= std::uintptr_t(section.data()) && address - std::uintptr_t(section.data()) < section.size();
+        return address >= base && address - base < size;
     }
 
 private:
-    std::span<const std::byte> section{};
+    std::uintptr_t base{0};
+    std::size_t size{0};
 };
