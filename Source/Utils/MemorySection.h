@@ -28,6 +28,12 @@ struct MemorySection {
         return address >= base && address - base < size;
     }
 
+    [[nodiscard]] std::size_t offsetOf(std::uintptr_t address) const noexcept
+    {
+        assert(contains(address));
+        return address - base;
+    }
+
 private:
     std::uintptr_t base{0};
     std::size_t size{0};

@@ -193,6 +193,11 @@
     <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
     <ClInclude Include="Platform\Windows\PortableExecutable.h" />
+    <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h" />
+    <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocatorFinder.h" />
+    <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptor.h" />
+    <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptorFinder.h" />
+    <ClInclude Include="Platform\Windows\RTTI\ToRvaConverter.h" />
     <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />

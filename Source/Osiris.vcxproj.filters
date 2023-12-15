@@ -97,6 +97,9 @@
     <Filter Include="FeatureHelpers\Hud">
       <UniqueIdentifier>{7a55ce58-0ac3-4a7f-817d-46121c678167}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windows\RTTI">
+      <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -740,6 +743,21 @@
     </ClInclude>
     <ClInclude Include="MemorySearch\BinaryBytePattern.h">
       <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocatorFinder.h">
+      <Filter>Platform\Windows\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptor.h">
+      <Filter>Platform\Windows\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptorFinder.h">
+      <Filter>Platform\Windows\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RTTI\ToRvaConverter.h">
+      <Filter>Platform\Windows\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h">
+      <Filter>Platform\Windows\RTTI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
