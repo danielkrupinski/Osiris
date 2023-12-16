@@ -62,6 +62,7 @@
     <ClInclude Include="FeatureHelpers\Sound\WeaponScopeSound.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
+    <ClInclude Include="FeatureHelpers\Visuals\SniperScopeBlurRemover.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\Hud\BombTimer.h" />
@@ -76,6 +77,7 @@
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h" />
+    <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="GameClasses\ClientMode.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />

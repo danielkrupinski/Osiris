@@ -47,7 +47,7 @@ inline int PeepEventsHook::SDL_PeepEvents(void* events, int numevents,
 
 inline void* LoopModeGameHook::getWorldSession(cs2::CLoopModeGame* thisptr) noexcept
 {
-    visuals().scopeOverlayRemover.getWorldSessionHook(RETURN_ADDRESS());
+    GlobalContext::instance().featureHelpers->sniperScopeBlurRemover.getWorldSessionHook(RETURN_ADDRESS());
     return GlobalContext::instance().hooks->loopModeGameHook.originalGetWorldSession(thisptr);
 }
 

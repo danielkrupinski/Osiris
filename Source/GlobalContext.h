@@ -63,7 +63,7 @@ struct GlobalContext {
         hooks.init(clientVmtLengthCalculator);
         soundWatcher.init();
         featureHelpers.init();
-        features.init(hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
+        features.init(featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
         panoramaGUI.init();
 
         initializedFromGameThread = true;

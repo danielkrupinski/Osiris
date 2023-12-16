@@ -197,6 +197,8 @@ $.Osiris = (function () {
 
   var visuals = createTab('visuals');
   var weapons = createSection(visuals, 'Weapons');
+  createYesNoDropDown(weapons, "Remove Sniper Scope Blur", 'visuals', 'remove_scope_blur');
+  $.CreatePanel('Panel', weapons, '', { class: "horizontal-separator" });
   createYesNoDropDown(weapons, "Remove Scope Overlay", 'visuals', 'remove_scope_overlay');
 
   var sound = createTab('sound');

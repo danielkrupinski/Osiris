@@ -54,6 +54,8 @@ private:
     {
         if (const auto feature = parser.getLine('/'); feature == "remove_scope_overlay") {
             handleTogglableFeature(features.visuals.scopeOverlayRemover);
+        } else if (feature == "remove_scope_blur") {
+            handleTogglableFeature(features.visuals.sniperScopeBlurRemoval);
         }
     }
 
