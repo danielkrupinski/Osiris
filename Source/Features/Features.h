@@ -6,9 +6,11 @@
 #include "Sound/SoundFeatures.h"
 #include "Visuals/VisualFeatures.h"
 
+class SniperScopeBlurRemover;
+
 struct Features {
-    Features(LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : visuals{ loopModeGameHook }
+    Features(SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
+        : visuals{sniperScopeBlurRemover, loopModeGameHook }
         , soundFeatures{ viewRenderHook, soundWatcher }
     {
     }

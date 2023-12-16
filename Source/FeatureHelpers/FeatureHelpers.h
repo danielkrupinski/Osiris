@@ -9,6 +9,7 @@
 #include "Hud/KillfeedPreserverHelpers.h"
 #include "Sound/SoundVisualizationHelpers.h"
 #include "ViewToProjectionMatrix.h"
+#include "Visuals/SniperScopeBlurRemover.h"
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
@@ -39,4 +40,5 @@ struct FeatureHelpers {
     PlantedC4Provider plantedC4Provider;
     HudInWorldPanelContainer hudInWorldPanelContainer;
     ViewToProjectionMatrix viewToProjectionMatrix;
+    SniperScopeBlurRemover sniperScopeBlurRemover;
 };

@@ -100,6 +100,9 @@
     <Filter Include="Platform\Windows\RTTI">
       <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FeatureHelpers\Visuals">
+      <UniqueIdentifier>{1511f056-4a2b-4e6c-b5dc-3706343f42f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -758,6 +761,12 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h">
       <Filter>Platform\Windows\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Visuals\SniperScopeBlurRemover.h">
+      <Filter>FeatureHelpers\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h">
+      <Filter>Features\Visuals</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

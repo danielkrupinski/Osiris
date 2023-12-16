@@ -9,20 +9,16 @@
 #include <GameClasses/ClientMode.h>
 
 #include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/Visuals/SniperScopeBlurRemover.h>
 
 #include "HudScopePanels.h"
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    explicit ScopeOverlayRemover(LoopModeGameHook& loopModeGameHook) noexcept
-        : loopModeGameHook{ loopModeGameHook }
+    ScopeOverlayRemover(LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+        : loopModeGameHook{loopModeGameHook}
+        , sniperScopeBlurRemover{sniperScopeBlurRemover}
     {
-    }
-        
-    void getWorldSessionHook(ReturnAddress returnAddress) const noexcept
-    {
-        if (shouldRemoveZoomedSniperEffect(returnAddress))
-            clientMode.removeZoomedSniperEffect();
     }
 
     void updatePanelVisibility(HudProvider hudProvider) noexcept
@@ -43,12 +39,12 @@ private:
 
     void onEnable() const noexcept
     {
-        loopModeGameHook.incrementReferenceCount();
+        sniperScopeBlurRemover.incrementReferenceCount(loopModeGameHook);
     }
 
     void onDisable() const noexcept
     {
-        loopModeGameHook.decrementReferenceCount();
+        sniperScopeBlurRemover.decrementReferenceCount(loopModeGameHook);
         restorePanels();
     }
 
@@ -64,20 +60,13 @@ private:
             *hudScope = nullptr;
     }
 
-    [[nodiscard]] bool shouldRemoveZoomedSniperEffect(ReturnAddress returnAddress) const noexcept
-    {
-        return isEnabled() && returnAddress == getWorldSessionInClientMode && clientMode;
-    }
-
     void restorePanels() const noexcept
     {
         hudScopePanels.setPanelsVisible(true);
     }
 
     cs2::CPanel2D** hudScope{ ClientPatterns::hudScope() };
-    ReturnAddress getWorldSessionInClientMode{ ClientPatterns::getWorldSessionInClientMode() };
-    ClientMode clientMode{ ClientPatterns::clientMode() };
-
-    HudScopePanels hudScopePanels;
     LoopModeGameHook& loopModeGameHook;
+    SniperScopeBlurRemover& sniperScopeBlurRemover;
+    HudScopePanels hudScopePanels;
 };
