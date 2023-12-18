@@ -7,11 +7,11 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 16 December 2023 - **Remove Sniper Scope Blur** function was added to **Visuals**
 * 6 December 2023 - **Visualize Weapon Reload Sound** function was added to **Sound**
 * 2 December 2023 - **Visualize Weapon Scope Sound** function was added to **Sound**
 * 23 November 2023 - **Visualize Bomb Defuse** function was added to **Sound**
 * 16 November 2023 - **Visualize Bomb Beep** function was added to **Sound**
-* 8 November 2023 - Adjusted positions of sound visualizations to be closer to the sound source
 
 ## Technical features
 
