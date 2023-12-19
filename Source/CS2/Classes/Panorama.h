@@ -47,7 +47,11 @@ struct CLabel : CPanel2D {
     using setTextInternal = void (*)(CLabel* thisptr, const char* value, int textType, bool trustedSource);
 };
 
-struct CPanelStyle {};
+struct CStyleProperty;
+
+struct CPanelStyle {
+    using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
+};
 
 struct CUIPanel {
     const void* vmt;

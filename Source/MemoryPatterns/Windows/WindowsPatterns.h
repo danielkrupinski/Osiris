@@ -6,6 +6,7 @@
 #include "GameRulesPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"
 #include "PanelPatternsWindows.h"
+#include "PanelStylePatternsWindows.h"
 #include "PanoramaImagePanelPatternsWindows.h"
 #include "PanoramaLabelPatternsWindows.h"
 #include "PanoramaUiEnginePatternsWindows.h"

@@ -139,6 +139,7 @@
     <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h" />
     <ClInclude Include="MemoryPatterns\Linux\MemAllocPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\PanelStylePatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaImagePanelPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaLabelPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\PanoramaUiEnginePatternsLinux.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="MemoryPatterns\Linux\SoundSystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\MemAllocPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanelPatterns.h" />
+    <ClInclude Include="MemoryPatterns\PanelStylePatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaImagePanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaLabelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaImagePanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaLabelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />

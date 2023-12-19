@@ -6,6 +6,7 @@
 #include "GameRulesPatternsLinux.h"
 #include "MemAllocPatternsLinux.h"
 #include "PanelPatternsLinux.h"
+#include "PanelStylePatternsLinux.h"
 #include "PanoramaImagePanelPatternsLinux.h"
 #include "PanoramaLabelPatternsLinux.h"
 #include "PanoramaUiEnginePatternsLinux.h"

@@ -768,6 +768,15 @@
     <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h">
       <Filter>Features\Visuals</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryPatterns\PanelStylePatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Linux\PanelStylePatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
