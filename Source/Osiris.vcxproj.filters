@@ -777,6 +777,9 @@
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\CUtlString.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

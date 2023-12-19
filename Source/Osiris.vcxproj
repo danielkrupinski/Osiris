@@ -17,6 +17,7 @@
     <ClInclude Include="CS2\Classes\Color.h" />
     <ClInclude Include="CS2\Classes\CPlantedC4.h" />
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h" />
+    <ClInclude Include="CS2\Classes\CUtlString.h" />
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
     <ClInclude Include="CS2\Classes\CViewRender.h" />
     <ClInclude Include="CS2\Classes\C_CSGameRules.h" />
