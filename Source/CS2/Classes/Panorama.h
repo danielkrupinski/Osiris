@@ -47,6 +47,17 @@ struct CLabel : CPanel2D {
     using setTextInternal = void (*)(CLabel* thisptr, const char* value, int textType, bool trustedSource);
 };
 
+struct CStyleSymbol {
+    static constexpr auto kInvalidId{0xFF};
+
+    [[nodiscard]] bool isValid() const noexcept
+    {
+        return m_Id != kInvalidId;
+    }
+
+    std::uint8_t m_Id{kInvalidId};
+};
+
 struct CStyleProperty;
 
 struct CPanelStyle {
