@@ -6,6 +6,8 @@
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/Panorama.h>
 
+#include <GameClasses/Implementation/PanelStyleImpl.h>
+
 struct PanelStyle {
     explicit PanelStyle(cs2::CPanelStyle* thisptr) noexcept
         : thisptr{ thisptr }
@@ -15,6 +17,12 @@ struct PanelStyle {
     explicit operator bool() const noexcept
     {
         return thisptr != nullptr;
+    }
+
+    void setProperty(cs2::CStyleProperty* styleProperty) const noexcept
+    {
+        if (const auto setPropertyFn{PanelStyleImpl::instance().setProperty})
+            setPropertyFn(thisptr, styleProperty, true);
     }
 
     void setSimpleForegroundColor(cs2::Color color) const noexcept

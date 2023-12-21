@@ -8,14 +8,22 @@
 #include "Hud/DefusingAlertHelpers.h"
 #include "Hud/KillfeedPreserverHelpers.h"
 #include "Sound/SoundVisualizationHelpers.h"
+#include "StylePropertiesSymbols.h"
+#include "StylePropertiesVMTs.h"
+#include "StylePropertySymbolMap.h"
 #include "ViewToProjectionMatrix.h"
 #include "Visuals/SniperScopeBlurRemover.h"
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
+    explicit FeatureHelpers(const VmtFinder& panoramaVmtFinder) noexcept
+        : stylePropertiesVMTs{panoramaVmtFinder}
+    {
+    }
+
     [[nodiscard]] SoundVisualizationHelpers getSoundVisualizationHelpers() noexcept
     {
-        return SoundVisualizationHelpers{ HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter, viewToProjectionMatrix };
+        return SoundVisualizationHelpers{HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter, viewToProjectionMatrix};
     }
 
     [[nodiscard]] BombTimerHelpers getBombTimerHelpers() const noexcept
@@ -41,4 +49,6 @@ struct FeatureHelpers {
     HudInWorldPanelContainer hudInWorldPanelContainer;
     ViewToProjectionMatrix viewToProjectionMatrix;
     SniperScopeBlurRemover sniperScopeBlurRemover;
+    StylePropertiesVMTs stylePropertiesVMTs;
+    StylePropertiesSymbols stylePropertiesSymbols{StylePropertySymbolMap{PanelStylePatterns::stylePropertiesSymbols()}};
 };

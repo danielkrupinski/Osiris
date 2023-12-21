@@ -6,16 +6,19 @@
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
 #include "PanelImpl.h"
+#include "PanelStyleImpl.h"
 #include "PanoramaImagePanelImpl.h"
 #include "PanoramaLabelImpl.h"
 #include "PanoramaUiEngineImpl.h"
 #include "PanoramaUiPanelImpl.h"
 #include "PlantedC4Impl.h"
 
+#include <Platform/VmtFinder.h>
+
 struct GameClassImplementations {
     explicit GameClassImplementations(Tier0Dll tier0Dll) noexcept
-        : fileNameSymbolTable{ tier0Dll }
-        , memAlloc{ tier0Dll }
+        : fileNameSymbolTable{tier0Dll}
+        , memAlloc{tier0Dll}
     {
     }
 
@@ -25,6 +28,7 @@ struct GameClassImplementations {
     GameRulesImpl gameRules;
     MemAllocImpl memAlloc;
     PanelImpl panel;
+    PanelStyleImpl panelStyle;
     PanoramaImagePanelImpl imagePanel;
     PanoramaLabelImpl panoramaLabel;
     PanoramaUiEngineImpl uiEngine;

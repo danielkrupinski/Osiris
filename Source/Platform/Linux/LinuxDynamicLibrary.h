@@ -16,6 +16,7 @@
 #include <Utils/SafeAddress.h>
 
 #include "LinuxPlatformApi.h"
+#include "LinuxVmtFinderParams.h"
 
 class LinuxDynamicLibrary {
 public:
@@ -50,6 +51,11 @@ public:
     [[nodiscard]] MemorySection getVmtSection() const noexcept
     {
         return getSection(".data.rel.ro");
+    }
+
+    [[nodiscard]] LinuxVmtFinderParams getVmtFinderParams() const noexcept
+    {
+        return {getSection(".rodata"), getSection(".data.rel.ro")};
     }
 
 private:

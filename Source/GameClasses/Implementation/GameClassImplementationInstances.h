@@ -6,6 +6,7 @@
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
 #include "PanelImpl.h"
+#include "PanelStyleImpl.h"
 #include "PanoramaImagePanelImpl.h"
 #include "PanoramaLabelImpl.h"
 #include "PanoramaUiEngineImpl.h"
@@ -42,6 +43,11 @@ inline const MemAllocImpl& MemAllocImpl::instance() noexcept
 inline const PanelImpl& PanelImpl::instance() noexcept
 {
     return GlobalContext::instance().gameClasses->panel;
+}
+
+inline const PanelStyleImpl& PanelStyleImpl::instance() noexcept
+{
+    return GlobalContext::instance().gameClasses->panelStyle;
 }
 
 inline const PanoramaImagePanelImpl& PanoramaImagePanelImpl::instance() noexcept

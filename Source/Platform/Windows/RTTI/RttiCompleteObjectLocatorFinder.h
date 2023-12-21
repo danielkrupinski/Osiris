@@ -5,6 +5,7 @@
 
 #include "RttiCompleteObjectLocator.h"
 #include "ToRvaConverter.h"
+#include <MemorySearch/BinaryBytePattern.h>
 #include <Utils/MemorySection.h>
 
 struct RttiTypeDescriptor;

@@ -7,6 +7,9 @@
 #include "CUtlVector.h"
 #include "Vector.h"
 
+#include "CUtlMap.h"
+#include "CUtlString.h"
+
 namespace cs2
 {
 
@@ -58,10 +61,41 @@ struct CStyleSymbol {
     std::uint8_t m_Id{kInvalidId};
 };
 
-struct CStyleProperty;
+struct CStyleProperty {
+    const void* vmt;
+    CStyleSymbol m_symPropertyName;
+    bool m_bDisallowTransition;
+};
+
+struct CUILength {
+    enum EUILengthTypes {
+        k_EUILengthUnset,
+        k_EUILengthLength,
+        k_EUILengthPercent
+    };
+
+    float m_flValue;
+    EUILengthTypes m_eType;
+};
+
+struct CStylePropertyWidth : CStyleProperty {
+    static constexpr auto kName{"width"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyWidth@panorama@@", "N8panorama19CStylePropertyWidthE")};
+
+    CUILength m_Length;
+};
+
+struct CStylePropertyOpacity : CStyleProperty {
+    static constexpr auto kName{"opacity"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyOpacity@panorama@@", "N8panorama21CStylePropertyOpacityE")};
+
+    float opacity;
+};
 
 struct CPanelStyle {
     using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
+
+    using StylePropertySymbols = CUtlMap<CUtlString, CStyleSymbol>;
 };
 
 struct CUIPanel {
@@ -80,17 +114,6 @@ struct CUIPanel {
 
 struct CImagePanel : CPanel2D {
     using setImage = void (*)(CImagePanel* thisptr, const char* imageUrl);
-};
-
-struct CUILength {
-    enum EUILengthTypes {
-        k_EUILengthUnset,
-        k_EUILengthLength,
-        k_EUILengthPercent
-    };
-
-    float m_flValue;
-    EUILengthTypes m_eType;
 };
 
 struct CTransform3D {

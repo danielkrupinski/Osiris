@@ -17,6 +17,7 @@
     <ClInclude Include="CS2\Classes\Color.h" />
     <ClInclude Include="CS2\Classes\CPlantedC4.h" />
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h" />
+    <ClInclude Include="CS2\Classes\CUtlMap.h" />
     <ClInclude Include="CS2\Classes\CUtlString.h" />
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
     <ClInclude Include="CS2\Classes\CViewRender.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h" />
     <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h" />
@@ -61,6 +63,9 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
     <ClInclude Include="FeatureHelpers\Sound\WeaponScopeSound.h" />
+    <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h" />
+    <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h" />
+    <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
     <ClInclude Include="FeatureHelpers\Visuals\SniperScopeBlurRemover.h" />
@@ -92,6 +97,7 @@
     <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h" />
     <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanelImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaImagePanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaLabelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h" />
@@ -184,6 +190,11 @@
     <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxMessageBox.h" />
     <ClInclude Include="Platform\Linux\LinuxPlatformApi.h" />
+    <ClInclude Include="Platform\Linux\LinuxVmt.h" />
+    <ClInclude Include="Platform\Linux\LinuxVmtFinder.h" />
+    <ClInclude Include="Platform\Linux\LinuxVmtFinderParams.h" />
+    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptor.h" />
+    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptorFinder.h" />
     <ClInclude Include="Platform\Linux\UserHomeFolderPath.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />
@@ -194,6 +205,7 @@
     <ClInclude Include="Platform\PlatformApi.h" />
     <ClInclude Include="Platform\SimpleMessageBox.h" />
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
+    <ClInclude Include="Platform\VmtFinder.h" />
     <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h" />
     <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h" />
     <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h" />
@@ -209,6 +221,8 @@
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
+    <ClInclude Include="Platform\Windows\WindowsVmtFinder.h" />
+    <ClInclude Include="Platform\Windows\WindowsVmtFinderParams.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
     <ClInclude Include="UI\Panorama\SetCommandHandler.h" />

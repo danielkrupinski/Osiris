@@ -7,6 +7,7 @@
 #include <Utils/MemorySection.h>
 #include <Utils/SafeAddress.h>
 #include "WindowsPlatformApi.h"
+#include "WindowsVmtFinderParams.h"
 
 class WindowsDynamicLibrary {
 public:
@@ -39,6 +40,18 @@ public:
         if (handle)
             return portableExecutable().getVmtSection();
         return {};
+    }
+
+    [[nodiscard]] MemorySection getDataSection() const noexcept
+    {
+        if (handle)
+            return portableExecutable().getDataSection();
+        return {};
+    }
+
+    [[nodiscard]] WindowsVmtFinderParams getVmtFinderParams() const noexcept
+    {
+        return {getDataSection(), getVmtSection(), handle};
     }
 
     [[nodiscard]] HMODULE getHandle() const noexcept

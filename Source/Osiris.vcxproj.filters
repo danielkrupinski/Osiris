@@ -103,6 +103,9 @@
     <Filter Include="FeatureHelpers\Visuals">
       <UniqueIdentifier>{1511f056-4a2b-4e6c-b5dc-3706343f42f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Linux\RTTI">
+      <UniqueIdentifier>{210e5c32-88c9-4a2e-9bb7-ccd158c7d715}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -779,6 +782,48 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\CUtlString.h">
       <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CUtlMap.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptor.h">
+      <Filter>Platform\Linux\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptorFinder.h">
+      <Filter>Platform\Linux\RTTI</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Linux\LinuxVmt.h">
+      <Filter>Platform\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Linux\LinuxVmtFinder.h">
+      <Filter>Platform\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Linux\LinuxVmtFinderParams.h">
+      <Filter>Platform\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsVmtFinder.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsVmtFinderParams.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\VmtFinder.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,7 @@
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include "Platform/DynamicLibrary.h"
+#include "Platform/VmtFinder.h"
 
 #include "GameClasses/Implementation/GameClassImplementations.h"
 #include "Helpers/UnloadFlag.h"
@@ -62,7 +63,8 @@ struct GlobalContext {
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
         hooks.init(clientVmtLengthCalculator);
         soundWatcher.init();
-        featureHelpers.init();
+        const DynamicLibrary panoramaDLL{cs2::PANORAMA_DLL};
+        featureHelpers.init(VmtFinder{panoramaDLL.getVmtFinderParams()});
         features.init(featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
         panoramaGUI.init();
 
