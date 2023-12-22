@@ -59,14 +59,26 @@ struct GlobalContext {
         if (initializedFromGameThread)
             return;
 
-        gameClasses.init(Tier0Dll{});
+        gameClasses.init(ClientModePatterns{},
+                         ClientPatterns{},
+                         FileSystemPatterns{},
+                         GameRulesPatterns{},
+                         MemAllocPatterns{},
+                         PanelPatterns{},
+                         PanelStylePatterns{},
+                         PanoramaImagePanelPatterns{},
+                         PanoramaLabelPatterns{},
+                         PanoramaUiEnginePatterns{},
+                         PanoramaUiPanelPatterns{},
+                         PlantedC4Patterns{},
+                         Tier0Dll{});
         const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
-        hooks.init(clientVmtLengthCalculator);
-        soundWatcher.init();
+        hooks.init(ClientPatterns{}, clientVmtLengthCalculator);
+        soundWatcher.init(FileSystemPatterns{}, SoundSystemPatterns{});
         const DynamicLibrary panoramaDLL{cs2::PANORAMA_DLL};
-        featureHelpers.init(VmtFinder{panoramaDLL.getVmtFinderParams()});
-        features.init(featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
-        panoramaGUI.init();
+        featureHelpers.init(ClientPatterns{}, PanelStylePatterns{}, VmtFinder{panoramaDLL.getVmtFinderParams()});
+        features.init(ClientPatterns{}, featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
+        panoramaGUI.init(ClientPatterns{});
 
         initializedFromGameThread = true;
     }

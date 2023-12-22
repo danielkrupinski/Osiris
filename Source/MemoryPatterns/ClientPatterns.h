@@ -16,19 +16,19 @@ namespace cs2
 }
 
 struct ClientPatterns {
-    [[nodiscard]] static cs2::CPanel2D** hudScope() noexcept;
-    [[nodiscard]] static cs2::CUIEngine** uiEngine() noexcept;
-    [[nodiscard]] static cs2::CPanel2D* mainMenuPanel() noexcept;
-    [[nodiscard]] static cs2::CPanel2D** hudPanel() noexcept;
-    [[nodiscard]] static cs2::CLoopModeGame** loopModeGame() noexcept;
-    [[nodiscard]] static cs2::GlobalVars** globalVars() noexcept;
-    [[nodiscard]] static cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() noexcept;
-    [[nodiscard]] static cs2::ClientModeCSNormal* clientMode() noexcept;
-    [[nodiscard]] static ReturnAddress getWorldSessionInClientMode() noexcept;
-    [[nodiscard]] static cs2::C_CSGameRules** gameRules() noexcept;
-    [[nodiscard]] static const void* transformTranslate3dVMT() noexcept;
-    [[nodiscard]] static const void* transformScale3dVMT() noexcept;
-    [[nodiscard]] static cs2::VMatrix* worldToProjectionMatrix() noexcept;
-    [[nodiscard]] static cs2::VMatrix* viewToProjectionMatrix() noexcept;
-    [[nodiscard]] static cs2::CViewRender** viewRender() noexcept;
+    [[nodiscard]] cs2::CPanel2D** hudScope() const noexcept;
+    [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept;
+    [[nodiscard]] cs2::CPanel2D* mainMenuPanel() const noexcept;
+    [[nodiscard]] cs2::CPanel2D** hudPanel() const noexcept;
+    [[nodiscard]] cs2::CLoopModeGame** loopModeGame() const noexcept;
+    [[nodiscard]] cs2::GlobalVars** globalVars() const noexcept;
+    [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept;
+    [[nodiscard]] cs2::ClientModeCSNormal* clientMode() const noexcept;
+    [[nodiscard]] ReturnAddress getWorldSessionInClientMode() const noexcept;
+    [[nodiscard]] cs2::C_CSGameRules** gameRules() const noexcept;
+    [[nodiscard]] const void* transformTranslate3dVMT() const noexcept;
+    [[nodiscard]] const void* transformScale3dVMT() const noexcept;
+    [[nodiscard]] cs2::VMatrix* worldToProjectionMatrix() const noexcept;
+    [[nodiscard]] cs2::VMatrix* viewToProjectionMatrix() const noexcept;
+    [[nodiscard]] cs2::CViewRender** viewRender() const noexcept;
 };

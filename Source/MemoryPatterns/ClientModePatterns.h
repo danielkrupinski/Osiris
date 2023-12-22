@@ -9,6 +9,6 @@ using ZoomedSniperEffectWeightOffset = ClientModeOffset<cs2::ClientModeCSNormal:
 using ZoomedMovingSniperEffectWeightOffset = ClientModeOffset<cs2::ClientModeCSNormal::zoomedMovingSniperEffectWeight, std::int32_t>;
 
 struct ClientModePatterns {
-    [[nodiscard]] static ZoomedSniperEffectWeightOffset zoomedSniperEffectWeightOffset() noexcept;
-    [[nodiscard]] static ZoomedMovingSniperEffectWeightOffset zoomedMovingSniperEffectWeightOffset() noexcept;
+    [[nodiscard]] ZoomedSniperEffectWeightOffset zoomedSniperEffectWeightOffset() const noexcept;
+    [[nodiscard]] ZoomedMovingSniperEffectWeightOffset zoomedMovingSniperEffectWeightOffset() const noexcept;
 };

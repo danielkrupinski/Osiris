@@ -6,5 +6,5 @@
 using RoundStartTimeOffset = GameRulesOffset<cs2::C_CSGameRules::m_fRoundStartTime, std::int8_t>;
 
 struct GameRulesPatterns {
-    [[nodiscard]] static RoundStartTimeOffset roundStartTimeOffset() noexcept;
+    [[nodiscard]] RoundStartTimeOffset roundStartTimeOffset() const noexcept;
 };

@@ -8,6 +8,6 @@
 using FileNamesOffset = FileSystemOffset<cs2::CBaseFileSystem::m_FileNames, std::int32_t>;
 
 struct FileSystemPatterns {
-    [[nodiscard]] static cs2::CBaseFileSystem** fileSystem() noexcept;
-    [[nodiscard]] static FileNamesOffset fileNamesOffset() noexcept;
+    [[nodiscard]] cs2::CBaseFileSystem** fileSystem() const noexcept;
+    [[nodiscard]] FileNamesOffset fileNamesOffset() const noexcept;
 };

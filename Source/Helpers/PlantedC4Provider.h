@@ -6,6 +6,11 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct PlantedC4Provider {
+    explicit PlantedC4Provider(const ClientPatterns& clientPatterns) noexcept
+        : plantedC4s{clientPatterns.plantedC4s()}
+    {
+    }
+
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
         if (plantedC4s && plantedC4s->size > 0)
@@ -14,5 +19,5 @@ struct PlantedC4Provider {
     }
 
 private:
-    cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s{ ClientPatterns::plantedC4s() };
+    cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s;
 };

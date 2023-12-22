@@ -16,9 +16,31 @@
 #include <Platform/VmtFinder.h>
 
 struct GameClassImplementations {
-    explicit GameClassImplementations(Tier0Dll tier0Dll) noexcept
-        : fileNameSymbolTable{tier0Dll}
-        , memAlloc{tier0Dll}
+    GameClassImplementations(const ClientModePatterns& clientModePatterns,
+                             const ClientPatterns& clientPatterns,
+                             const FileSystemPatterns& fileSystemPatterns,
+                             const GameRulesPatterns& gameRulesPatterns,
+                             const MemAllocPatterns& memAllocPatterns,
+                             const PanelPatterns& panelPatterns,
+                             const PanelStylePatterns& panelStylePatterns,
+                             const PanoramaImagePanelPatterns& panoramaImagePanelPatterns,
+                             const PanoramaLabelPatterns& panoramaLabelPatterns,
+                             const PanoramaUiEnginePatterns& panoramaUiEnginePatterns,
+                             const PanoramaUiPanelPatterns& panoramaUiPanelPatterns,
+                             const PlantedC4Patterns& plantedC4Patterns,
+                             Tier0Dll tier0Dll) noexcept
+        : clientMode{clientModePatterns}
+        , fileNameSymbolTable{tier0Dll}
+        , fileSystem{fileSystemPatterns}
+        , gameRules{gameRulesPatterns}
+        , memAlloc{tier0Dll, memAllocPatterns}
+        , panel{panelPatterns}
+        , panelStyle{panelStylePatterns}
+        , imagePanel{panoramaImagePanelPatterns}
+        , panoramaLabel{panoramaLabelPatterns}
+        , uiEngine{clientPatterns, panoramaUiEnginePatterns}
+        , panoramaUiPanelOffsets{panoramaUiPanelPatterns}
+        , plantedC4{plantedC4Patterns}
     {
     }
 

@@ -16,8 +16,16 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    explicit FeatureHelpers(const VmtFinder& panoramaVmtFinder) noexcept
-        : stylePropertiesVMTs{panoramaVmtFinder}
+    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const VmtFinder& panoramaVmtFinder) noexcept
+        : hudProvider{clientPatterns}
+        , globalVarsProvider{clientPatterns}
+        , transformFactory{clientPatterns}
+        , worldtoClipSpaceConverter{clientPatterns}
+        , plantedC4Provider{clientPatterns}
+        , viewToProjectionMatrix{clientPatterns}
+        , sniperScopeBlurRemover{clientPatterns}
+        , stylePropertiesVMTs{panoramaVmtFinder}
+        , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
     {
     }
 
@@ -50,5 +58,5 @@ struct FeatureHelpers {
     ViewToProjectionMatrix viewToProjectionMatrix;
     SniperScopeBlurRemover sniperScopeBlurRemover;
     StylePropertiesVMTs stylePropertiesVMTs;
-    StylePropertiesSymbols stylePropertiesSymbols{StylePropertySymbolMap{PanelStylePatterns::stylePropertiesSymbols()}};
+    StylePropertiesSymbols stylePropertiesSymbols;
 };

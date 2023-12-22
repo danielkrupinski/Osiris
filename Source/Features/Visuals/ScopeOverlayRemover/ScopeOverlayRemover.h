@@ -15,9 +15,11 @@
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
-        : loopModeGameHook{loopModeGameHook}
+    ScopeOverlayRemover(const ClientPatterns& clientPatterns, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+        : hudScope{clientPatterns.hudScope()}
+        , loopModeGameHook{loopModeGameHook}
         , sniperScopeBlurRemover{sniperScopeBlurRemover}
+        , hudScopePanels{clientPatterns}
     {
     }
 
@@ -65,7 +67,7 @@ private:
         hudScopePanels.setPanelsVisible(true);
     }
 
-    cs2::CPanel2D** hudScope{ ClientPatterns::hudScope() };
+    cs2::CPanel2D** hudScope;
     LoopModeGameHook& loopModeGameHook;
     SniperScopeBlurRemover& sniperScopeBlurRemover;
     HudScopePanels hudScopePanels;

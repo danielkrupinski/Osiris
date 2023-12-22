@@ -5,5 +5,5 @@
 #include <CS2/Classes/IMemAlloc.h>
 
 struct MemAllocPatterns {
-    [[nodiscard]] static std::int8_t* allocOffset() noexcept;
+    [[nodiscard]] std::int8_t* allocOffset() const noexcept;
 };

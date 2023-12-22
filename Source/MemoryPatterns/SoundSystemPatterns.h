@@ -6,5 +6,5 @@ namespace cs2
 }
 
 struct SoundSystemPatterns {
-    [[nodiscard]] static cs2::SoundChannels** soundChannels() noexcept;
+    [[nodiscard]] cs2::SoundChannels** soundChannels() const noexcept;
 };

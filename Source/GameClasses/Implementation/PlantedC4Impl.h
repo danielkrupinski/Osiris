@@ -3,11 +3,20 @@
 #include <MemoryPatterns/PlantedC4Patterns.h>
 
 struct PlantedC4Impl {
+    explicit PlantedC4Impl(const PlantedC4Patterns& plantedC4Patterns) noexcept
+        : bombSite{plantedC4Patterns.m_nBombSite()}
+        , ticking{plantedC4Patterns.m_bBombTicking()}
+        , blowTime{plantedC4Patterns.m_flC4Blow()}
+        , defuser{plantedC4Patterns.m_hBombDefuser()}
+        , defuseEndTime{plantedC4Patterns.m_flDefuseCountDown()}
+    {
+    }
+
     [[nodiscard]] static const PlantedC4Impl& instance() noexcept;
 
-    BombSiteOffset bombSite{ PlantedC4Patterns::m_nBombSite() };
-    BombTickingOffset ticking{ PlantedC4Patterns::m_bBombTicking() };
-    BombBlowTimeOffset blowTime{ PlantedC4Patterns::m_flC4Blow() };
-    BombDefuserOffset defuser{ PlantedC4Patterns::m_hBombDefuser() };
-    BombDefuseEndTimeOffset defuseEndTime{ PlantedC4Patterns::m_flDefuseCountDown() };
+    BombSiteOffset bombSite;
+    BombTickingOffset ticking;
+    BombBlowTimeOffset blowTime;
+    BombDefuserOffset defuser;
+    BombDefuseEndTimeOffset defuseEndTime;
 };

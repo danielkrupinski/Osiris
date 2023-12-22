@@ -5,6 +5,11 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct ViewToProjectionMatrix {
+    explicit ViewToProjectionMatrix(const ClientPatterns& clientPatterns) noexcept
+        : viewToProjectionMatrix{clientPatterns.viewToProjectionMatrix()}
+    {
+    }
+
     [[nodiscard]] float getFovScale() const noexcept
     {
         if (viewToProjectionMatrix)
@@ -13,5 +18,5 @@ struct ViewToProjectionMatrix {
     }
 
 private:
-    const cs2::VMatrix* viewToProjectionMatrix{ClientPatterns::viewToProjectionMatrix()};
+    const cs2::VMatrix* viewToProjectionMatrix;
 };

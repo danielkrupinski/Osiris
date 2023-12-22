@@ -6,9 +6,9 @@
 #include <Vmt/VmtLengthCalculator.h>
 
 struct Hooks {
-    explicit Hooks(const VmtLengthCalculator& clientVmtLengthCalculator) noexcept
-        : loopModeGameHook{ clientVmtLengthCalculator }
-        , viewRenderHook{ clientVmtLengthCalculator }
+    explicit Hooks(const ClientPatterns& clientPatterns, const VmtLengthCalculator& clientVmtLengthCalculator) noexcept
+        : loopModeGameHook{clientPatterns, clientVmtLengthCalculator}
+        , viewRenderHook{clientPatterns, clientVmtLengthCalculator}
     {
     }
 

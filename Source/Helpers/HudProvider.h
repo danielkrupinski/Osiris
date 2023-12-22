@@ -7,6 +7,11 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct HudProvider {
+    explicit HudProvider(const ClientPatterns& clientPatterns) noexcept
+        : hud{clientPatterns.hudPanel()}
+    {
+    }
+
     [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
     {
         if (hud && *hud)
@@ -20,5 +25,5 @@ struct HudProvider {
     }
 
 private:
-    cs2::CPanel2D** hud{ ClientPatterns::hudPanel() };
+    cs2::CPanel2D** hud;
 };

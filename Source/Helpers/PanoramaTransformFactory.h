@@ -8,6 +8,12 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct PanoramaTransformFactory {
+    explicit PanoramaTransformFactory(const ClientPatterns& clientPatterns) noexcept
+        : transformTranslate3dVmt{clientPatterns.transformTranslate3dVMT()}
+        , transformScale3dVmt{clientPatterns.transformScale3dVMT()}
+    {
+    }
+
     [[nodiscard]] cs2::CTransform3D* scale(float scale) const noexcept
     {
         return create<cs2::CTransformScale3D>(scale, scale, 1.0f);
@@ -40,6 +46,6 @@ private:
             static_assert(!std::is_same_v<T, T>, "Unsupported type");
     }
 
-    const void* transformTranslate3dVmt{ ClientPatterns::transformTranslate3dVMT() };
-    const void* transformScale3dVmt{ ClientPatterns::transformScale3dVMT() };
+    const void* transformTranslate3dVmt;
+    const void* transformScale3dVmt;
 };

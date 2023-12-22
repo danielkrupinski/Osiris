@@ -12,6 +12,11 @@
 
 class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
 public:
+    explicit KillfeedPreserver(const ClientPatterns& clientPatterns) noexcept
+        : gameRules{clientPatterns.gameRules()}
+    {
+    }
+
     void run(const KillfeedPreserverHelpers& params) noexcept
     {
         if (!isEnabled())
@@ -80,7 +85,7 @@ private:
 
     friend TogglableFeature;
 
-    cs2::C_CSGameRules** gameRules{ ClientPatterns::gameRules() };
+    cs2::C_CSGameRules** gameRules;
 
     cs2::CPanoramaSymbol deathNoticeKillerSymbol{ -1 };
     cs2::CPanoramaSymbol spawnTimeSymbol{ -1 };

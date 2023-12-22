@@ -4,8 +4,14 @@
 #include <MemoryPatterns/ClientModePatterns.h>
 
 struct ClientModeImpl {
+    explicit ClientModeImpl(const ClientModePatterns& clientModePatterns) noexcept
+        : zoomedSniperEffectWeight{clientModePatterns.zoomedSniperEffectWeightOffset()}
+        , zoomedMovingSniperEffectWeight{clientModePatterns.zoomedMovingSniperEffectWeightOffset()}
+    {
+    }
+
     [[nodiscard]] static const ClientModeImpl& instance() noexcept;
 
-    ZoomedSniperEffectWeightOffset zoomedSniperEffectWeight{ ClientModePatterns::zoomedSniperEffectWeightOffset() };
-    ZoomedMovingSniperEffectWeightOffset zoomedMovingSniperEffectWeight{ ClientModePatterns::zoomedMovingSniperEffectWeightOffset() };
+    ZoomedSniperEffectWeightOffset zoomedSniperEffectWeight;
+    ZoomedMovingSniperEffectWeightOffset zoomedMovingSniperEffectWeight;
 };

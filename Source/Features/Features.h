@@ -9,9 +9,10 @@
 class SniperScopeBlurRemover;
 
 struct Features {
-    Features(SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : visuals{sniperScopeBlurRemover, loopModeGameHook }
-        , soundFeatures{ viewRenderHook, soundWatcher }
+    Features(const ClientPatterns& clientPatterns, SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook, ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
+        : hudFeatures{clientPatterns}
+        , visuals{clientPatterns, sniperScopeBlurRemover, loopModeGameHook}
+        , soundFeatures{viewRenderHook, soundWatcher}
     {
     }
 

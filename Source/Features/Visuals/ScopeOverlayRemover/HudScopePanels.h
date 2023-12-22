@@ -5,6 +5,11 @@
 #include <Helpers/PanoramaPanelPointer.h>
 
 struct HudScopePanels {
+    explicit HudScopePanels(const ClientPatterns& clientPatterns) noexcept
+        : mainMenu{clientPatterns.mainMenuPanel()->uiPanel}
+    {
+    }
+
     void updatePanelPointers(HudProvider hudProvider) noexcept
     {
         if (!shouldUpdatePanelPointers())
@@ -38,7 +43,7 @@ private:
         return mainMenu.findChildInLayoutFile(cs2::HudScope);
     }
 
-    PanoramaUiPanel mainMenu{ ClientPatterns::mainMenuPanel()->uiPanel };
+    PanoramaUiPanel mainMenu;
     PanoramaPanelPointer scopeCirclePointer;
     PanoramaPanelPointer scopeDustPointer;
 };

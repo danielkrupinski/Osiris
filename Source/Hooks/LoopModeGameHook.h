@@ -7,8 +7,9 @@
 
 class LoopModeGameHook : public RefCountedHook<LoopModeGameHook> {
 public:
-    explicit LoopModeGameHook(const VmtLengthCalculator& vmtLengthCalculator) noexcept
-        : vmtLengthCalculator{ vmtLengthCalculator }
+    LoopModeGameHook(const ClientPatterns& clientPatterns, const VmtLengthCalculator& vmtLengthCalculator) noexcept
+        : loopModeGame{clientPatterns.loopModeGame()}
+        , vmtLengthCalculator{vmtLengthCalculator}
     {
     }
 
@@ -35,7 +36,7 @@ private:
 
     friend class RefCountedHook;
 
-    cs2::CLoopModeGame** loopModeGame{ ClientPatterns::loopModeGame() };
+    cs2::CLoopModeGame** loopModeGame;
     VmtLengthCalculator vmtLengthCalculator;
     VmtSwapper hook;
     cs2::CLoopModeGame::getWorldSession originalGetWorldSession{ nullptr };

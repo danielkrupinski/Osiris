@@ -8,6 +8,11 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct WorldToClipSpaceConverter {
+    explicit WorldToClipSpaceConverter(const ClientPatterns& clientPatterns) noexcept
+        : worldToProjectionMatrix{clientPatterns.worldToProjectionMatrix()}
+    {
+    }
+
     [[nodiscard]] explicit operator bool() const noexcept
     {
         return worldToProjectionMatrix != nullptr;
@@ -27,5 +32,5 @@ struct WorldToClipSpaceConverter {
     }
 
 private:
-    const cs2::VMatrix* worldToProjectionMatrix{ ClientPatterns::worldToProjectionMatrix() };
+    const cs2::VMatrix* worldToProjectionMatrix;
 };

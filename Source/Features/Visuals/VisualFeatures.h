@@ -7,8 +7,8 @@ class LoopModeGameHook;
 class SniperScopeBlurRemover;
 
 struct VisualFeatures {
-    VisualFeatures(SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook) noexcept
-        : scopeOverlayRemover{loopModeGameHook, sniperScopeBlurRemover}
+    VisualFeatures(const ClientPatterns& clientPatterns, SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook) noexcept
+        : scopeOverlayRemover{clientPatterns, loopModeGameHook, sniperScopeBlurRemover}
         , sniperScopeBlurRemoval{loopModeGameHook, sniperScopeBlurRemover}
     {
     }

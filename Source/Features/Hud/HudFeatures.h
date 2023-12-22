@@ -5,6 +5,11 @@
 #include "KillfeedPreserver.h"
 
 struct HudFeatures {
+    explicit HudFeatures(const ClientPatterns& clientPatterns) noexcept
+        : killfeedPreserver{clientPatterns}
+    {
+    }
+
     BombTimer bombTimer;
     DefusingAlert defusingAlert;
     KillfeedPreserver killfeedPreserver;

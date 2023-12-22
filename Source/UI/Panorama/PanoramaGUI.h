@@ -12,9 +12,9 @@
 
 class PanoramaGUI {
 public:
-    PanoramaGUI() noexcept
+    PanoramaGUI(const ClientPatterns& clientPatterns) noexcept
     {
-        const PanoramaUiPanel mainMenu{ ClientPatterns::mainMenuPanel()->uiPanel};
+        const PanoramaUiPanel mainMenu{ clientPatterns.mainMenuPanel()->uiPanel};
         PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.PreloadSettings();", "", 0);
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");

@@ -9,13 +9,14 @@
 #include <Utils/FieldOffset.h>
 
 struct MemAllocImpl {
-    explicit MemAllocImpl(Tier0Dll tier0Dll) noexcept
-        : thisptr{ tier0Dll.memAlloc() }
+    MemAllocImpl(Tier0Dll tier0Dll, const MemAllocPatterns& memAllocPatterns) noexcept
+        : thisptr{tier0Dll.memAlloc()}
+        , alloc{memAllocPatterns.allocOffset()}
     {
     }
 
     [[nodiscard]] static const MemAllocImpl& instance() noexcept;
 
     cs2::IMemAlloc** thisptr;
-    FieldOffset<const void, cs2::IMemAlloc::Alloc*, std::int8_t> alloc{ MemAllocPatterns::allocOffset() };
+    FieldOffset<const void, cs2::IMemAlloc::Alloc*, std::int8_t> alloc;
 };

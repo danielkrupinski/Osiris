@@ -10,9 +10,9 @@ using BombDefuserOffset = PlantedC4Offset<cs2::CPlantedC4::m_hBombDefuser, std::
 using BombDefuseEndTimeOffset = PlantedC4Offset<cs2::CPlantedC4::m_flDefuseCountDown, std::int32_t>;
 
 struct PlantedC4Patterns {
-    [[nodiscard]] static BombSiteOffset m_nBombSite() noexcept;
-    [[nodiscard]] static BombTickingOffset m_bBombTicking() noexcept;
-    [[nodiscard]] static BombBlowTimeOffset m_flC4Blow() noexcept;
-    [[nodiscard]] static BombDefuserOffset m_hBombDefuser() noexcept;
-    [[nodiscard]] static BombDefuseEndTimeOffset m_flDefuseCountDown() noexcept;
+    [[nodiscard]] BombSiteOffset m_nBombSite() const noexcept;
+    [[nodiscard]] BombTickingOffset m_bBombTicking() const noexcept;
+    [[nodiscard]] BombBlowTimeOffset m_flC4Blow() const noexcept;
+    [[nodiscard]] BombDefuserOffset m_hBombDefuser() const noexcept;
+    [[nodiscard]] BombDefuseEndTimeOffset m_flDefuseCountDown() const noexcept;
 };

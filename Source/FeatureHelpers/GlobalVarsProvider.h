@@ -6,6 +6,11 @@
 #include <MemoryPatterns/ClientPatterns.h>
 
 struct GlobalVarsProvider {
+    explicit GlobalVarsProvider(const ClientPatterns& clientPatterns) noexcept
+        : globalVars{clientPatterns.globalVars()}
+    {
+    }
+
     [[nodiscard]] explicit operator bool() const noexcept
     {
         return globalVars != nullptr;
@@ -18,5 +23,5 @@ struct GlobalVarsProvider {
     }
 
 private:
-    cs2::GlobalVars** globalVars{ ClientPatterns::globalVars() };
+    cs2::GlobalVars** globalVars;
 };

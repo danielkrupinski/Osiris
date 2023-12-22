@@ -11,6 +11,12 @@
 
 class SniperScopeBlurRemover {
 public:
+    explicit SniperScopeBlurRemover(const ClientPatterns& clientPatterns) noexcept
+        : getWorldSessionInClientMode{clientPatterns.getWorldSessionInClientMode()}
+        , clientMode{clientPatterns.clientMode()}
+    {
+    }
+        
     void incrementReferenceCount(LoopModeGameHook& loopModeGameHook) noexcept
     {
         assert(referenceCount < (std::numeric_limits<std::size_t>::max)());
@@ -42,7 +48,7 @@ private:
         return referenceCount > 0;
     }
 
-    ReturnAddress getWorldSessionInClientMode{ClientPatterns::getWorldSessionInClientMode()};
-    ClientMode clientMode{ClientPatterns::clientMode()};
+    ReturnAddress getWorldSessionInClientMode;
+    ClientMode clientMode;
     std::size_t referenceCount{0};
 };

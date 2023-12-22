@@ -25,6 +25,12 @@
 template <typename... Sounds>
 class SoundWatcherImpl {
 public:
+    explicit SoundWatcherImpl(const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns) noexcept
+        : soundChannels{soundSystemPatterns.soundChannels()}
+        , fileSystem{fileSystemPatterns.fileSystem()}
+    {
+    }
+
     template <typename Sound>
     void startWatching() noexcept
     {
@@ -140,8 +146,8 @@ private:
         return utils::typeIndex<Sound, std::tuple<Sounds...>>();
     }
 
-    cs2::SoundChannels** soundChannels{ SoundSystemPatterns::soundChannels() };
-    cs2::CBaseFileSystem** fileSystem{ FileSystemPatterns::fileSystem() };
+    cs2::SoundChannels** soundChannels;
+    cs2::CBaseFileSystem** fileSystem;
 
     TypeBitFlags<Sounds...> soundsToWatch;
     std::array<WatchedSounds, sizeof...(Sounds)> watchedSounds;
