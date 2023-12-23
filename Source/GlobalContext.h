@@ -25,10 +25,6 @@ struct GlobalContext {
     PeepEventsHook peepEventsHook{ DynamicLibrary{cs2::SDL_DLL}.getFunctionAddress("SDL_PeepEvents").add(WIN32_LINUX(3, 2)).abs().as<cs2::SDL_PeepEvents*>() };
     UnloadFlag unloadFlag;
     FreeMemoryRegionList freeRegionList{ storage };
-    PatternFinder<PatternNotFoundLogger> clientPatternFinder{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
-    PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{ DynamicLibrary{cs2::PANORAMA_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
-    PatternFinder<PatternNotFoundLogger> soundSystemPatternFinder{ DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
-    PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{ DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{} };
     LazyInitialized<GameClassImplementations> gameClasses;
     LazyInitialized<Hooks> hooks;
     LazyInitialized<SoundWatcher> soundWatcher;
@@ -59,26 +55,35 @@ struct GlobalContext {
         if (initializedFromGameThread)
             return;
 
-        gameClasses.init(ClientModePatterns{},
-                         ClientPatterns{},
-                         FileSystemPatterns{},
-                         GameRulesPatterns{},
-                         MemAllocPatterns{},
-                         PanelPatterns{},
-                         PanelStylePatterns{},
-                         PanoramaImagePanelPatterns{},
-                         PanoramaLabelPatterns{},
-                         PanoramaUiEnginePatterns{},
-                         PanoramaUiPanelPatterns{},
-                         PlantedC4Patterns{},
-                         Tier0Dll{});
-        const VmtLengthCalculator clientVmtLengthCalculator{ DynamicLibrary{cs2::CLIENT_DLL}.getCodeSection(), DynamicLibrary{cs2::CLIENT_DLL}.getVmtSection() };
-        hooks.init(ClientPatterns{}, clientVmtLengthCalculator);
-        soundWatcher.init(FileSystemPatterns{}, SoundSystemPatterns{});
         const DynamicLibrary panoramaDLL{cs2::PANORAMA_DLL};
-        featureHelpers.init(ClientPatterns{}, PanelStylePatterns{}, VmtFinder{panoramaDLL.getVmtFinderParams()});
-        features.init(ClientPatterns{}, featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
-        panoramaGUI.init(ClientPatterns{});
+        const DynamicLibrary clientDLL{cs2::CLIENT_DLL};
+
+        const PatternFinder clientPatternFinder{clientDLL.getCodeSection().raw(), PatternNotFoundLogger{}};
+        const PatternFinder panoramaPatternFinder{panoramaDLL.getCodeSection().raw(), PatternNotFoundLogger{}};
+        const PatternFinder soundSystemPatternFinder{DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{}};
+        const PatternFinder fileSystemPatternFinder{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{}};
+
+        const FileSystemPatterns fileSystemPatterns{soundSystemPatternFinder, fileSystemPatternFinder};
+        gameClasses.init(ClientModePatterns{clientPatternFinder},
+                         ClientPatterns{clientPatternFinder},
+                         fileSystemPatterns,
+                         GameRulesPatterns{clientPatternFinder},
+                         MemAllocPatterns{clientPatternFinder},
+                         PanelPatterns{clientPatternFinder},
+                         PanelStylePatterns{panoramaPatternFinder},
+                         PanoramaImagePanelPatterns{clientPatternFinder},
+                         PanoramaLabelPatterns{clientPatternFinder},
+                         PanoramaUiEnginePatterns{panoramaPatternFinder},
+                         PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder},
+                         PlantedC4Patterns{clientPatternFinder},
+                         Tier0Dll{});
+
+        const VmtLengthCalculator clientVmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()};
+        hooks.init(ClientPatterns{clientPatternFinder}, clientVmtLengthCalculator);
+        soundWatcher.init(fileSystemPatterns, SoundSystemPatterns{soundSystemPatternFinder});
+        featureHelpers.init(ClientPatterns{clientPatternFinder}, PanelStylePatterns{panoramaPatternFinder}, VmtFinder{panoramaDLL.getVmtFinderParams()});
+        features.init(ClientPatterns{clientPatternFinder}, featureHelpers->sniperScopeBlurRemover, hooks->loopModeGameHook, hooks->viewRenderHook, *soundWatcher);
+        panoramaGUI.init(ClientPatterns{clientPatternFinder});
 
         initializedFromGameThread = true;
     }

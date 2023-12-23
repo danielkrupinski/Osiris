@@ -5,6 +5,8 @@
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/VMatrix.h>
+#include <Helpers/PatternNotFoundLogger.h>
+#include <MemorySearch/PatternFinder.h>
 #include <Utils/ReturnAddress.h>
 
 namespace cs2
@@ -31,4 +33,6 @@ struct ClientPatterns {
     [[nodiscard]] cs2::VMatrix* worldToProjectionMatrix() const noexcept;
     [[nodiscard]] cs2::VMatrix* viewToProjectionMatrix() const noexcept;
     [[nodiscard]] cs2::CViewRender** viewRender() const noexcept;
+
+    const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };
