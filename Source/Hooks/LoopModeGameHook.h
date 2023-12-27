@@ -39,5 +39,6 @@ private:
     cs2::CLoopModeGame** loopModeGame;
     VmtLengthCalculator vmtLengthCalculator;
     VmtSwapper hook;
-    cs2::CLoopModeGame::getWorldSession originalGetWorldSession{ nullptr };
+public:
+    cs2::CLoopModeGame::getWorldSession originalGetWorldSession{nullptr};
 };

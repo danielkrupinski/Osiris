@@ -12,7 +12,7 @@
 
 class PanoramaGUI {
 public:
-    PanoramaGUI(const ClientPatterns& clientPatterns) noexcept
+    void init(const ClientPatterns& clientPatterns) noexcept
     {
         const PanoramaUiPanel mainMenu{ clientPatterns.mainMenuPanel()->uiPanel};
         PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.PreloadSettings();", "", 0);

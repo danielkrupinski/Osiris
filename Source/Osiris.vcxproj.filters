@@ -106,6 +106,9 @@
     <Filter Include="Platform\Linux\RTTI">
       <UniqueIdentifier>{210e5c32-88c9-4a2e-9bb7-ccd158c7d715}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GlobalContext">
+      <UniqueIdentifier>{f7503469-198c-4672-8e52-aa5473f130ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -490,7 +493,6 @@
       <Filter>Vmt</Filter>
     </ClInclude>
     <ClInclude Include="Endpoints.h" />
-    <ClInclude Include="GlobalContext.h" />
     <ClInclude Include="Platform\Macros\IsCompiler.h">
       <Filter>Platform\Macros</Filter>
     </ClInclude>
@@ -824,6 +826,18 @@
     </ClInclude>
     <ClInclude Include="Platform\VmtFinder.h">
       <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\FullGlobalContext.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\GlobalContext.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\PartialGlobalContext.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\PeepEventsHookResult.h">
+      <Filter>GlobalContext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

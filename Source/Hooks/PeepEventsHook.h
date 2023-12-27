@@ -38,7 +38,6 @@ public:
         *peepEventsPointer = original;
     }
 
-private:
     cs2::SDL_PeepEvents* peepEventsPointer{nullptr};
     cs2::SDL_PeepEvents original{nullptr};
 };

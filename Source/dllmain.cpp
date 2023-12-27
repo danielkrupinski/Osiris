@@ -2,25 +2,24 @@
 #include "Platform/Macros/IsPlatform.h"
 
 #include "BuildConfig.h"
-#include "GlobalContext.h"
+#include "GlobalContext/GlobalContext.h"
 
 #if IS_LINUX()
 #include <signal.h>
 #endif
 
 constinit ManuallyDestructible<GlobalContext> GlobalContext::globalContext;
-alignas(FreeMemoryRegionList::minimumAlignment()) constinit std::byte GlobalContext::storage[build::MEMORY_CAPACITY];
 
 #include "MemoryAllocation/MemoryAllocatorBase.h"
 
 std::byte* MemoryAllocatorBase::allocate(std::size_t size) noexcept
 {
-    return GlobalContext::instance().freeRegionList.allocate(size);
+    return GlobalContext::instance().freeRegionList().allocate(size);
 }
 
 void MemoryAllocatorBase::deallocate(std::byte* memory, std::size_t size) noexcept
 {
-    return GlobalContext::instance().freeRegionList.deallocate(memory, size);
+    return GlobalContext::instance().freeRegionList().deallocate(memory, size);
 }
 
 void operator delete(void*, std::size_t) noexcept

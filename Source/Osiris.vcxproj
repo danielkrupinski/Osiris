@@ -117,7 +117,10 @@
     <ClInclude Include="GameClasses\PanoramaUiPanel.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameDLLs\Tier0Dll.h" />
-    <ClInclude Include="GlobalContext.h" />
+    <ClInclude Include="GlobalContext\FullGlobalContext.h" />
+    <ClInclude Include="GlobalContext\GlobalContext.h" />
+    <ClInclude Include="GlobalContext\PartialGlobalContext.h" />
+    <ClInclude Include="GlobalContext\PeepEventsHookResult.h" />
     <ClInclude Include="Helpers\Bits.h" />
     <ClInclude Include="Helpers\HudProvider.h" />
     <ClInclude Include="Helpers\PanoramaPanelPointer.h" />
