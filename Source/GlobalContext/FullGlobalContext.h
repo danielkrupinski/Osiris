@@ -51,19 +51,18 @@ struct FullGlobalContext {
             peepEventsHook,
             ClientPatterns{clientPatternFinder},
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
-        , soundWatcher{
-            fileSystemPatterns,
-            SoundSystemPatterns{soundSystemPatternFinder}}
         , featureHelpers{
             ClientPatterns{clientPatternFinder},
             PanelStylePatterns{panoramaPatternFinder},
+            fileSystemPatterns,
+            SoundSystemPatterns{soundSystemPatternFinder},
             VmtFinder{panoramaDLL.getVmtFinderParams()}}
         , features{
             ClientPatterns{clientPatternFinder},
             featureHelpers.sniperScopeBlurRemover,
             hooks.loopModeGameHook,
             hooks.viewRenderHook,
-            soundWatcher}
+            featureHelpers.soundWatcher}
     {
     }
 
@@ -76,7 +75,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
         if (featureHelpers.globalVarsProvider && featureHelpers.globalVarsProvider.getGlobalVars())
-            soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
+            featureHelpers.soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
         features.soundFeatures.runOnViewMatrixUpdate(featureHelpers.getSoundVisualizationHelpers());
     }
 
@@ -106,7 +105,6 @@ struct FullGlobalContext {
 private:
     GameClassImplementations _gameClasses;
     Hooks hooks;
-    SoundWatcher soundWatcher;
     FeatureHelpers featureHelpers;
     Features features;
 public:

@@ -8,6 +8,7 @@
 #include "Hud/DefusingAlertHelpers.h"
 #include "Hud/KillfeedPreserverHelpers.h"
 #include "Sound/SoundVisualizationHelpers.h"
+#include "Sound/SoundWatcher.h"
 #include "StylePropertiesSymbols.h"
 #include "StylePropertiesVMTs.h"
 #include "StylePropertySymbolMap.h"
@@ -16,7 +17,7 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const VmtFinder& panoramaVmtFinder) noexcept
+    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns, const VmtFinder& panoramaVmtFinder) noexcept
         : hudProvider{clientPatterns}
         , globalVarsProvider{clientPatterns}
         , transformFactory{clientPatterns}
@@ -26,6 +27,7 @@ struct FeatureHelpers {
         , sniperScopeBlurRemover{clientPatterns}
         , stylePropertiesVMTs{panoramaVmtFinder}
         , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
+        , soundWatcher{fileSystemPatterns, soundSystemPatterns}
     {
     }
 
@@ -59,4 +61,5 @@ struct FeatureHelpers {
     SniperScopeBlurRemover sniperScopeBlurRemover;
     StylePropertiesVMTs stylePropertiesVMTs;
     StylePropertiesSymbols stylePropertiesSymbols;
+    SoundWatcher soundWatcher;
 };
