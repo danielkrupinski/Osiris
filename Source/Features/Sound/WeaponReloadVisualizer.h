@@ -34,4 +34,5 @@ $.CreatePanel('Image', weaponReloadPanel, '', {
     static constexpr auto kMaxNumberOfPanels = 10;
 };
 
+using WeaponReloadVisualizerState = SoundVisualizationFeatureState<WeaponReloadPanels>;
 using WeaponReloadVisualizer = SoundVisualizationFeature<WeaponReloadPanels, WeaponReloadSound>;

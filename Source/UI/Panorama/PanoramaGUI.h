@@ -61,7 +61,7 @@ public:
             PanoramaUiEngine::runScript(settingsPanel, "delete $.Osiris", "", 0);
     }
 
-    void run(Features& features, UnloadFlag& unloadFlag) const noexcept
+    void run(Features features, UnloadFlag& unloadFlag) const noexcept
     {
         const auto guiPanel = guiPanelPointer.get();
         if (!guiPanel)
@@ -69,7 +69,7 @@ public:
 
         const auto cmdSymbol = PanoramaUiEngine::makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
-        PanoramaCommandDispatcher{ cmd, features, unloadFlag }();
+        PanoramaCommandDispatcher{cmd, features, unloadFlag}();
         guiPanel.setAttributeString(cmdSymbol, "");
     }
 

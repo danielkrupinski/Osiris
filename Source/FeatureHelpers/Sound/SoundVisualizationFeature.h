@@ -4,42 +4,63 @@
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Hooks/ViewRenderHook.h>
 #include "SoundVisualization.h"
-#include "SoundVisualizationHelpers.h"
 #include "SoundWatcher.h"
+
+template <typename PanelsType>
+struct SoundVisualizationFeatureState {
+    bool enabled{false};
+
+    HudInWorldPanels<PanelsType> panels;
+};
 
 template <typename PanelsType, typename SoundType>
 class SoundVisualizationFeature : public TogglableFeature<SoundVisualizationFeature<PanelsType, SoundType>> {
 public:
-    SoundVisualizationFeature(ViewRenderHook& viewRenderHook, SoundWatcher& soundWatcher) noexcept
-        : viewRenderHook{ viewRenderHook }
-        , soundWatcher{ soundWatcher }
+    SoundVisualizationFeature(
+        SoundVisualizationFeatureState<PanelsType>& state,
+        ViewRenderHook& viewRenderHook,
+        SoundWatcher& soundWatcher,
+        HudInWorldPanelFactory hudInWorldPanelFactory,
+        GlobalVarsProvider globalVarsProvider,
+        PanoramaTransformFactory transformFactory,
+        WorldToClipSpaceConverter worldtoClipSpaceConverter,
+        ViewToProjectionMatrix viewToProjectionMatrix) noexcept
+        : SoundVisualizationFeature::TogglableFeature{state.enabled}
+        , state{state}
+        , viewRenderHook{viewRenderHook}
+        , soundWatcher{soundWatcher}
+        , hudInWorldPanelFactory{hudInWorldPanelFactory}
+        , globalVarsProvider{globalVarsProvider}
+        , transformFactory{transformFactory}
+        , worldtoClipSpaceConverter{worldtoClipSpaceConverter}
+        , viewToProjectionMatrix{viewToProjectionMatrix}
     {
     }
 
-    void run(const SoundVisualizationHelpers& params) noexcept
+    void run() noexcept
     {
         if (!this->isEnabled())
             return;
 
-        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
+        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
             return;
 
-        if (!params.worldtoClipSpaceConverter)
+        if (!worldtoClipSpaceConverter)
             return;
 
-        panels.createPanels(params.hudInWorldPanelFactory);
+        state.panels.createPanels(hudInWorldPanelFactory);
 
         std::size_t currentIndex = 0;
-        std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex, params](const PlayedSound& sound) {
-            const auto soundInClipSpace = params.worldtoClipSpaceConverter.toClipSpace(sound.origin);
+        std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex](const PlayedSound& sound) {
+            const auto soundInClipSpace = worldtoClipSpaceConverter.toClipSpace(sound.origin);
             if (!soundInClipSpace.onScreen())
                 return;
 
-            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(params.globalVarsProvider.getGlobalVars()->curtime));
+            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime));
             if (opacity <= 0.0f)
                 return;
 
-            const auto panel = panels.getPanel(currentIndex);
+            const auto panel = state.panels.getPanel(currentIndex);
             if (!panel)
                 return;
 
@@ -53,14 +74,14 @@ public:
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
             PanoramaTransformations{
-                params.transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, params.viewToProjectionMatrix.getFovScale())),
-                params.transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
+                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, viewToProjectionMatrix.getFovScale())),
+                transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(style);
 
             ++currentIndex;
         });
 
-        panels.hidePanels(currentIndex);
+        state.panels.hidePanels(currentIndex);
     }
 
 private:
@@ -76,10 +97,15 @@ private:
     {
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
-        panels.hidePanels(0);
+        state.panels.hidePanels(0);
     }
 
-    HudInWorldPanels<PanelsType> panels;
+    SoundVisualizationFeatureState<PanelsType>& state;
     ViewRenderHook& viewRenderHook;
     SoundWatcher& soundWatcher;
+    HudInWorldPanelFactory hudInWorldPanelFactory;
+    GlobalVarsProvider globalVarsProvider;
+    PanoramaTransformFactory transformFactory;
+    WorldToClipSpaceConverter worldtoClipSpaceConverter;
+    ViewToProjectionMatrix viewToProjectionMatrix;
 };

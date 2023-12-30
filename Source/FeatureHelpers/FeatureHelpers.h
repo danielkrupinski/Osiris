@@ -4,10 +4,7 @@
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
 #include <Helpers/PlantedC4Provider.h>
-#include "Hud/BombTimerHelpers.h"
-#include "Hud/DefusingAlertHelpers.h"
-#include "Hud/KillfeedPreserverHelpers.h"
-#include "Sound/SoundVisualizationHelpers.h"
+#include "HudInWorldPanelContainer.h"
 #include "Sound/SoundWatcher.h"
 #include "StylePropertiesSymbols.h"
 #include "StylePropertiesVMTs.h"
@@ -28,27 +25,10 @@ struct FeatureHelpers {
         , stylePropertiesVMTs{panoramaVmtFinder}
         , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
         , soundWatcher{fileSystemPatterns, soundSystemPatterns}
+        , gameRules{clientPatterns.gameRules()}
+        , hudScope{clientPatterns.hudScope()}
+        , mainMenu{clientPatterns.mainMenuPanel()->uiPanel}
     {
-    }
-
-    [[nodiscard]] SoundVisualizationHelpers getSoundVisualizationHelpers() noexcept
-    {
-        return SoundVisualizationHelpers{HudInWorldPanelFactory{hudInWorldPanelContainer, hudProvider}, globalVarsProvider, transformFactory, worldtoClipSpaceConverter, viewToProjectionMatrix};
-    }
-
-    [[nodiscard]] BombTimerHelpers getBombTimerHelpers() const noexcept
-    {
-        return BombTimerHelpers{ plantedC4Provider, hudProvider, globalVarsProvider };
-    }
-
-    [[nodiscard]] DefusingAlertHelpers getDefusingAlertHelpers() const noexcept
-    {
-        return DefusingAlertHelpers{ plantedC4Provider, hudProvider, globalVarsProvider };
-    }
-
-    [[nodiscard]] KillfeedPreserverHelpers getKillfeedPreserverHelpers() const noexcept
-    {
-        return KillfeedPreserverHelpers{ hudProvider, globalVarsProvider };
     }
 
     HudProvider hudProvider;
@@ -62,4 +42,7 @@ struct FeatureHelpers {
     StylePropertiesVMTs stylePropertiesVMTs;
     StylePropertiesSymbols stylePropertiesSymbols;
     SoundWatcher soundWatcher;
+    cs2::C_CSGameRules** gameRules;
+    cs2::CPanel2D** hudScope;
+    PanoramaUiPanel mainMenu;
 };

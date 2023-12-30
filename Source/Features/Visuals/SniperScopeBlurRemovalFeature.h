@@ -5,10 +5,16 @@
 
 class LoopModeGameHook;
 
+struct SniperScopeBlurRemovalFeatureState {
+    bool enabled{false};
+};
+
 class SniperScopeBlurRemovalFeature : public TogglableFeature<SniperScopeBlurRemovalFeature> {
 public:
-    SniperScopeBlurRemovalFeature(LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
-        : loopModeGameHook{loopModeGameHook}
+    SniperScopeBlurRemovalFeature(SniperScopeBlurRemovalFeatureState& state, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+        : TogglableFeature{state.enabled}
+        , state{state}
+        , loopModeGameHook{loopModeGameHook}
         , sniperScopeBlurRemover{sniperScopeBlurRemover}
     {
     }
@@ -26,6 +32,7 @@ private:
         sniperScopeBlurRemover.decrementReferenceCount(loopModeGameHook);
     }
 
+    SniperScopeBlurRemovalFeatureState& state;
     LoopModeGameHook& loopModeGameHook;
     SniperScopeBlurRemover& sniperScopeBlurRemover;
 };

@@ -45,4 +45,5 @@ $.CreatePanel('Image', footstepPanel, '', {
     }
 };
 
+using FootstepVisualizerState = SoundVisualizationFeatureState<FootstepPanels>;
 using FootstepVisualizer = SoundVisualizationFeature<FootstepPanels, FootstepSound>;

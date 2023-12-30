@@ -3,7 +3,6 @@
 #include <CS2/Constants/PanelIDs.h>
 
 #include <FeatureHelpers/GlobalVarsProvider.h>
-#include <FeatureHelpers/Hud/DefusingAlertHelpers.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Helpers/PlantedC4Provider.h>
 #include <Helpers/HudProvider.h>
@@ -20,30 +19,52 @@ private:
     StringBuilderStorage<10> storage;
 };
 
+struct DefusingAlertState {
+    bool enabled{false};
+
+    PanoramaPanelPointer defusingAlertContainerPanel;
+    PanoramaPanelPointer defusingTimerPanel;
+
+    ~DefusingAlertState() noexcept
+    {
+        if (defusingAlertContainerPanel.getHandle().isValid())
+            PanoramaUiEngine::onDeletePanel(defusingAlertContainerPanel.getHandle());
+    }
+};
+
 class DefusingAlert : public TogglableFeature<DefusingAlert> {
 public:
-    void run(const DefusingAlertHelpers& params) noexcept
+    DefusingAlert(DefusingAlertState& state, PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
+        : TogglableFeature{state.enabled}
+        , state{state}
+        , plantedC4Provider{plantedC4Provider}
+        , hudProvider{hudProvider}
+        , globalVarsProvider{globalVarsProvider}
+    {
+    }
+
+    void run() noexcept
     {
         if (!isEnabled())
             return;
 
-        updatePanelHandles(params.hudProvider);
+        updatePanelHandles();
       
-        if (!params.globalVarsProvider || !params.globalVarsProvider.getGlobalVars())
+        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
             return;
 
-        const PlantedC4 bomb{ params.plantedC4Provider.getPlantedC4() };
+        const PlantedC4 bomb{plantedC4Provider.getPlantedC4()};
         if (!bomb || !bomb.isBeingDefused()) {
             hideDefusingAlert();
             return;
         }
 
-        const auto timeToEnd = bomb.getTimeToDefuseEnd(params.globalVarsProvider.getGlobalVars()->curtime);
+        const auto timeToEnd = bomb.getTimeToDefuseEnd(globalVarsProvider.getGlobalVars()->curtime);
         if (timeToEnd > 0.0f) {
-            if (const auto defusingAlertContainer = defusingAlertContainerPanel.get())
+            if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
 
-            if (const auto defusingTimer = defusingTimerPanel.get()) {
+            if (const auto defusingTimer = state.defusingTimerPanel.get()) {
                 PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(timeToEnd), 0, true);
                 if (const auto style = defusingTimer.getStyle())
                     style.setSimpleForegroundColor(getTimerColor(bomb));
@@ -53,12 +74,6 @@ public:
         }
     }
 
-    ~DefusingAlert() noexcept
-    {
-        if (defusingAlertContainerPanel.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(defusingAlertContainerPanel.getHandle());
-    }
-    
 private:
     [[nodiscard]] static cs2::Color getTimerColor(PlantedC4 bomb) noexcept
     {
@@ -70,13 +85,13 @@ private:
 
     void hideDefusingAlert() const noexcept
     {
-        if (const auto defusingAlertContainer = defusingAlertContainerPanel.get())
+        if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
             defusingAlertContainer.setVisible(false);
     }
 
-    void updatePanelHandles(HudProvider hudProvider) noexcept
+    void updatePanelHandles() noexcept
     {
-        if (defusingTimerPanel.get())
+        if (state.defusingTimerPanel.get())
             return;
 
         const auto hudTeamCounter = hudProvider.findChildInLayoutFile(cs2::HudTeamCounter);
@@ -112,8 +127,8 @@ R"(
             return;
 
         defusingAlertContainer.setVisible(false);
-        defusingAlertContainerPanel = defusingAlertContainer;
-        defusingTimerPanel = defusingTimer; 
+        state.defusingAlertContainerPanel = defusingAlertContainer;
+        state.defusingTimerPanel = defusingTimer; 
     }
 
     void onDisable() const noexcept
@@ -123,6 +138,8 @@ R"(
 
     friend TogglableFeature;
 
-    PanoramaPanelPointer defusingAlertContainerPanel;
-    PanoramaPanelPointer defusingTimerPanel;
+    DefusingAlertState& state;
+    PlantedC4Provider plantedC4Provider;
+    HudProvider hudProvider;
+    GlobalVarsProvider globalVarsProvider;
 };

@@ -47,4 +47,5 @@ $.CreatePanel('Image', bombPlantPanel, '', {
     static constexpr auto kMaxNumberOfPanels = 5;
 };
 
+using BombPlantVisualizerState = SoundVisualizationFeatureState<BombPlantPanels>;
 using BombPlantVisualizer = SoundVisualizationFeature<BombPlantPanels, BombPlantSound>;

@@ -1,18 +1,24 @@
 #pragma once
 
+#include <FeatureHelpers/FeatureHelpers.h>
 #include "ScopeOverlayRemover/ScopeOverlayRemover.h"
 #include "SniperScopeBlurRemovalFeature.h"
+#include "VisualFeaturesStates.h"
 
 class LoopModeGameHook;
-class SniperScopeBlurRemover;
 
 struct VisualFeatures {
-    VisualFeatures(const ClientPatterns& clientPatterns, SniperScopeBlurRemover& sniperScopeBlurRemover, LoopModeGameHook& loopModeGameHook) noexcept
-        : scopeOverlayRemover{clientPatterns, loopModeGameHook, sniperScopeBlurRemover}
-        , sniperScopeBlurRemoval{loopModeGameHook, sniperScopeBlurRemover}
+    [[nodiscard]] ScopeOverlayRemover scopeOverlayRemover() const noexcept
     {
+        return ScopeOverlayRemover{states.scopeOverlayRemoverState, helpers.mainMenu, helpers.hudScope, loopModeGameHook, helpers.sniperScopeBlurRemover};
     }
 
-    ScopeOverlayRemover scopeOverlayRemover;
-    SniperScopeBlurRemovalFeature sniperScopeBlurRemoval;
+    [[nodiscard]] SniperScopeBlurRemovalFeature sniperScopeBlurRemoval() const noexcept
+    {
+        return SniperScopeBlurRemovalFeature{states.sniperScopeBlurRemovalFeatureState, loopModeGameHook, helpers.sniperScopeBlurRemover};
+    }
+
+    VisualFeaturesStates& states;
+    FeatureHelpers& helpers;
+    LoopModeGameHook& loopModeGameHook;
 };

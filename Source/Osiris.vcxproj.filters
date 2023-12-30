@@ -94,9 +94,6 @@
     <Filter Include="FeatureHelpers\Sound">
       <UniqueIdentifier>{19a86d00-8a7b-4184-9119-96ec0b26c501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FeatureHelpers\Hud">
-      <UniqueIdentifier>{7a55ce58-0ac3-4a7f-817d-46121c678167}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\Windows\RTTI">
       <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
     </Filter>
@@ -164,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\HudScopePanels.h">
-      <Filter>Features\Visuals\ScopeOverlayRemover</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h">
       <Filter>Features\Visuals\ScopeOverlayRemover</Filter>
@@ -677,15 +671,6 @@
     <ClInclude Include="FeatureHelpers\Sound\FootstepSound.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Hud\BombTimerHelpers.h">
-      <Filter>FeatureHelpers\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Hud\DefusingAlertHelpers.h">
-      <Filter>FeatureHelpers\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Hud\KillfeedPreserverHelpers.h">
-      <Filter>FeatureHelpers\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypeBitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -726,9 +711,6 @@
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundVisualizationFeature.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundVisualizationHelpers.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundVisualization.h">
@@ -838,6 +820,18 @@
     </ClInclude>
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h">
       <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\VisualFeaturesStates.h">
+      <Filter>Features\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\FeaturesStates.h">
+      <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\SoundFeaturesStates.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\HudFeaturesStates.h">
+      <Filter>Features\Hud</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

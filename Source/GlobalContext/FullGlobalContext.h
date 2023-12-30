@@ -6,6 +6,7 @@
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <Features/Features.h>
+#include <Features/FeaturesStates.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <Helpers/UnloadFlag.h>
 #include <Hooks/Hooks.h>
@@ -57,12 +58,6 @@ struct FullGlobalContext {
             fileSystemPatterns,
             SoundSystemPatterns{soundSystemPatternFinder},
             VmtFinder{panoramaDLL.getVmtFinderParams()}}
-        , features{
-            ClientPatterns{clientPatternFinder},
-            featureHelpers.sniperScopeBlurRemover,
-            hooks.loopModeGameHook,
-            hooks.viewRenderHook,
-            featureHelpers.soundWatcher}
     {
     }
 
@@ -76,19 +71,19 @@ struct FullGlobalContext {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
         if (featureHelpers.globalVarsProvider && featureHelpers.globalVarsProvider.getGlobalVars())
             featureHelpers.soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
-        features.soundFeatures.runOnViewMatrixUpdate(featureHelpers.getSoundVisualizationHelpers());
+        features().soundFeatures().runOnViewMatrixUpdate();
     }
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
     {
-        features.hudFeatures.bombTimer.run(featureHelpers.getBombTimerHelpers());
-        features.hudFeatures.defusingAlert.run(featureHelpers.getDefusingAlertHelpers());
-        features.hudFeatures.killfeedPreserver.run(featureHelpers.getKillfeedPreserverHelpers());
+        features().hudFeatures().bombTimer().run();
+        features().hudFeatures().defusingAlert().run();
+        features().hudFeatures().killfeedPreserver().run();
 
         UnloadFlag unloadFlag;
-        panoramaGUI.run(features, unloadFlag);
+        panoramaGUI.run(features(), unloadFlag);
         hooks.update();
-        features.visuals.scopeOverlayRemover.updatePanelVisibility(featureHelpers.hudProvider);
+        features().visualFeatures().scopeOverlayRemover().updatePanelVisibility(featureHelpers.hudProvider);
 
         if (unloadFlag)
             hooks.forceUninstall();
@@ -103,10 +98,15 @@ struct FullGlobalContext {
     }
 
 private:
+    [[nodiscard]] Features features() noexcept
+    {
+        return Features{featuresStates, featureHelpers, hooks};
+    }
+
     GameClassImplementations _gameClasses;
     Hooks hooks;
     FeatureHelpers featureHelpers;
-    Features features;
+    FeaturesStates featuresStates;
 public:
     PanoramaGUI panoramaGUI;
 };

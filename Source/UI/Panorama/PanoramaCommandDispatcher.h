@@ -9,10 +9,10 @@
 #include "SetCommandHandler.h"
 
 struct PanoramaCommandDispatcher {
-    PanoramaCommandDispatcher(const char* commandline, Features& features, UnloadFlag& unloadFlag) noexcept
-        : parser{ commandline }
-        , features{ features }
-        , unloadFlag{ unloadFlag }
+    PanoramaCommandDispatcher(const char* commandline, Features features, UnloadFlag& unloadFlag) noexcept
+        : parser{commandline}
+        , features{features}
+        , unloadFlag{unloadFlag}
     {
     }
 
@@ -36,11 +36,11 @@ private:
         if (command == "unload") {
             unloadFlag.set();
         } else if (command == "set") {
-            SetCommandHandler{ parser, features }();
+            SetCommandHandler{parser, features}();
         }
     }
 
     StringParser parser;
-    Features& features;
+    Features features;
     UnloadFlag& unloadFlag;
 };

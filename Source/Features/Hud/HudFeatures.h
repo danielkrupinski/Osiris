@@ -1,16 +1,28 @@
 #pragma once
 
+#include <FeatureHelpers/FeatureHelpers.h>
+
 #include "BombTimer.h"
 #include "DefusingAlert.h"
+#include "HudFeaturesStates.h"
 #include "KillfeedPreserver.h"
 
 struct HudFeatures {
-    explicit HudFeatures(const ClientPatterns& clientPatterns) noexcept
-        : killfeedPreserver{clientPatterns}
+    [[nodiscard]] BombTimer bombTimer() const noexcept
     {
+        return BombTimer{states.bombTimerState, helpers.plantedC4Provider, helpers.hudProvider, helpers.globalVarsProvider};
     }
 
-    BombTimer bombTimer;
-    DefusingAlert defusingAlert;
-    KillfeedPreserver killfeedPreserver;
+    [[nodiscard]] DefusingAlert defusingAlert() const noexcept
+    {
+        return DefusingAlert{states.defusingAlertState, helpers.plantedC4Provider, helpers.hudProvider, helpers.globalVarsProvider};
+    }
+    
+    [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
+    {
+        return KillfeedPreserver{states.killfeedPreserverState, helpers.hudProvider, helpers.globalVarsProvider, helpers.gameRules};
+    }
+
+    HudFeaturesStates& states;
+    FeatureHelpers& helpers;
 };

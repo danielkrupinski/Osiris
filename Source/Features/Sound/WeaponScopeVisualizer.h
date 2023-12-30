@@ -38,4 +38,5 @@ $.CreatePanel('Image', weaponScopePanel, '', {
     static constexpr auto kMaxNumberOfPanels = 5;
 };
 
+using WeaponScopeVisualizerState = SoundVisualizationFeatureState<WeaponScopePanels>;
 using WeaponScopeVisualizer = SoundVisualizationFeature<WeaponScopePanels, WeaponScopeSound>;

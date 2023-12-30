@@ -5,6 +5,11 @@
 template <typename Feature>
 class TogglableFeature {
 public:
+    explicit TogglableFeature(bool& enabled) noexcept
+        : enabled{enabled}
+    {
+    }
+
     void enable() noexcept
     {
         if (!enabled) {
@@ -39,5 +44,5 @@ private:
             static_cast<Feature&>(*this).onDisable();
     }
 
-    bool enabled = false;
+    bool& enabled;
 };
