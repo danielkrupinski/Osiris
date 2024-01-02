@@ -106,6 +106,9 @@
     <Filter Include="GlobalContext">
       <UniqueIdentifier>{f7503469-198c-4672-8e52-aa5473f130ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CS2\Classes\EntitySystem">
+      <UniqueIdentifier>{debf5712-df61-49be-b7b5-69adf565d500}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -832,6 +835,21 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityIdentity.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CGameEntitySystem.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityIndex.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

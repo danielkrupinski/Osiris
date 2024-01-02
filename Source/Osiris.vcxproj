@@ -22,6 +22,11 @@
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
     <ClInclude Include="CS2\Classes\CViewRender.h" />
     <ClInclude Include="CS2\Classes\C_CSGameRules.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityIdentity.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityIndex.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CGameEntitySystem.h" />
     <ClInclude Include="CS2\Classes\FileSystem.h" />
     <ClInclude Include="CS2\Classes\GlobalVars.h" />
     <ClInclude Include="CS2\Classes\IMemAlloc.h" />
