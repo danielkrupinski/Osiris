@@ -2,6 +2,7 @@
 
 #include "ClientModePatternsLinux.h"
 #include "ClientPatternsLinux.h"
+#include "EntitySystemPatternsLinux.h"
 #include "FileSystemPatternsLinux.h"
 #include "GameRulesPatternsLinux.h"
 #include "MemAllocPatternsLinux.h"

@@ -2,6 +2,7 @@
 
 #include "ClientModePatternsWindows.h"
 #include "ClientPatternsWindows.h"
+#include "EntitySystemPatternsWindows.h"
 #include "FileSystemPatternsWindows.h"
 #include "GameRulesPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"

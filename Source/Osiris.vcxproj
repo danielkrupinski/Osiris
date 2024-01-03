@@ -109,6 +109,7 @@
     <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
     <ClInclude Include="GameClasses\OffsetTypes\ClientModeOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\FileSystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
@@ -144,10 +145,12 @@
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemoryPatterns\ClientModePatterns.h" />
     <ClInclude Include="MemoryPatterns\ClientPatterns.h" />
+    <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\GameRulesPatterns.h" />
     <ClInclude Include="MemoryPatterns\Linux\ClientModePatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h" />
+    <ClInclude Include="MemoryPatterns\Linux\EntitySystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\FileSystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\GameRulesPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />

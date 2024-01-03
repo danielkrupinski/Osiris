@@ -851,6 +851,18 @@
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIndex.h">
       <Filter>CS2\Classes\EntitySystem</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Linux\EntitySystemPatternsLinux.h">
+      <Filter>MemoryPatterns\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
