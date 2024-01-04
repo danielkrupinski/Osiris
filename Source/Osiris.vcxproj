@@ -90,10 +90,12 @@
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="GameClasses\ClientMode.h" />
+    <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
     <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileSystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h" />

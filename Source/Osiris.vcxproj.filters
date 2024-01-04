@@ -863,6 +863,12 @@
     <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\EntitySystem.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

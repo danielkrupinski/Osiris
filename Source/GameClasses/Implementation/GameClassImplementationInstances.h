@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClientModeImpl.h"
+#include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
@@ -18,6 +19,11 @@
 inline const ClientModeImpl& ClientModeImpl::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameClasses().clientMode;
+}
+
+inline const EntitySystemImpl& EntitySystemImpl::instance() noexcept
+{
+    return GlobalContext::instance().fullContext().gameClasses().entitySystem;
 }
 
 inline const FileNameSymbolTableImpl& FileNameSymbolTableImpl::instance() noexcept

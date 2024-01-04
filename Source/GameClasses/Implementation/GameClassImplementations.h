@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClientModeImpl.h"
+#include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
@@ -28,8 +29,10 @@ struct GameClassImplementations {
                              const PanoramaUiEnginePatterns& panoramaUiEnginePatterns,
                              const PanoramaUiPanelPatterns& panoramaUiPanelPatterns,
                              const PlantedC4Patterns& plantedC4Patterns,
+                             const EntitySystemPatterns& entitySystemPatterns,
                              Tier0Dll tier0Dll) noexcept
         : clientMode{clientModePatterns}
+        , entitySystem{entitySystemPatterns}
         , fileNameSymbolTable{tier0Dll}
         , fileSystem{fileSystemPatterns}
         , gameRules{gameRulesPatterns}
@@ -45,6 +48,7 @@ struct GameClassImplementations {
     }
 
     ClientModeImpl clientMode;
+    EntitySystemImpl entitySystem;
     FileNameSymbolTableImpl fileNameSymbolTable;
     FileSystemImpl fileSystem;
     GameRulesImpl gameRules;

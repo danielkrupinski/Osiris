@@ -47,6 +47,7 @@ struct FullGlobalContext {
             PanoramaUiEnginePatterns{panoramaPatternFinder},
             PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder},
             PlantedC4Patterns{clientPatternFinder},
+            EntitySystemPatterns{clientPatternFinder},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
