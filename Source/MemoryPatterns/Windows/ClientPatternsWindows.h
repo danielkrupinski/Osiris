@@ -15,7 +15,7 @@ inline cs2::CUIEngine** ClientPatterns::uiEngine() const noexcept
 
 inline cs2::CPanel2D* ClientPatterns::mainMenuPanel() const noexcept
 {
-    return clientPatternFinder("48 89 ? ? ? ? ? 4C 89 ? ? ? ? ? 48 89 ? ? ? ? ? 48 8B"_pat).add(17).abs().deref().as<cs2::CPanel2D*>();
+    return clientPatternFinder("48 83 EC ? 48 8B 05 ? ? ? ? 48 8D 15"_pat).add(7).abs().deref().as<cs2::CPanel2D*>();
 }
 
 inline cs2::CPanel2D** ClientPatterns::hudPanel() const noexcept
