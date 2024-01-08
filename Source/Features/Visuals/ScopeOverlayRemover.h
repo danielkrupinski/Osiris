@@ -39,24 +39,24 @@ struct ScopeOverlayRemoverState {
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(ScopeOverlayRemoverState& state, PanoramaUiPanel mainMenu, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+    ScopeOverlayRemover(ScopeOverlayRemoverState& state, PanoramaUiPanel mainMenu, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
         , mainMenu{mainMenu}
+        , hudProvider{hudProvider}
         , hudScope{hudScope}
         , loopModeGameHook{loopModeGameHook}
         , sniperScopeBlurRemover{sniperScopeBlurRemover}
     {
     }
 
-    void updatePanelVisibility(HudProvider hudProvider) noexcept
+    void updatePanelVisibility() noexcept
     {
         if (isEnabled()) {
-            hidePanels(hudProvider);
+            hidePanels();
             removeScopeStencil();
         }
     }
-
 
 private:    
     friend TogglableFeature;
@@ -72,9 +72,9 @@ private:
         state.restorePanels();
     }
 
-    void hidePanels(HudProvider hudProvider) noexcept
+    void hidePanels() noexcept
     {
-        updatePanelPointers(hudProvider);
+        updatePanelPointers();
         state.setPanelsVisible(false);
     }
 
@@ -84,12 +84,12 @@ private:
             *hudScope = nullptr;
     }
 
-    void updatePanelPointers(HudProvider hudProvider) noexcept
+    void updatePanelPointers() noexcept
     {
         if (!shouldUpdatePanelPointers())
             return;
 
-        if (const auto hudScopePanel = getHudScopePanel(hudProvider)) {
+        if (const auto hudScopePanel = getHudScopePanel()) {
             state.scopeCirclePointer = hudScopePanel.findChildInLayoutFile(cs2::ScopeCircle);
             state.scopeDustPointer = hudScopePanel.findChildInLayoutFile(cs2::ScopeDust);
         }
@@ -100,7 +100,7 @@ private:
         return !state.scopeCirclePointer.get();
     }
 
-    [[nodiscard]] PanoramaUiPanel getHudScopePanel(HudProvider hudProvider) const noexcept
+    [[nodiscard]] PanoramaUiPanel getHudScopePanel() const noexcept
     {
         if (auto hudScopePanel = hudProvider.findChildInLayoutFile(cs2::HudScope))
             return hudScopePanel;
@@ -109,6 +109,7 @@ private:
 
     ScopeOverlayRemoverState& state;
     PanoramaUiPanel mainMenu;
+    HudProvider hudProvider;
     cs2::CPanel2D** hudScope;
     LoopModeGameHook& loopModeGameHook;
     SniperScopeBlurRemover& sniperScopeBlurRemover;

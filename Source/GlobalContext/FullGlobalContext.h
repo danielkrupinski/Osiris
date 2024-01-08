@@ -84,7 +84,7 @@ struct FullGlobalContext {
         UnloadFlag unloadFlag;
         panoramaGUI.run(features(), unloadFlag);
         hooks.update();
-        features().visualFeatures().scopeOverlayRemover().updatePanelVisibility(featureHelpers.hudProvider);
+        features().visualFeatures().scopeOverlayRemover().updatePanelVisibility();
 
         if (unloadFlag)
             hooks.forceUninstall();
