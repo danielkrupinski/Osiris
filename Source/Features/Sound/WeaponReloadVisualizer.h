@@ -3,8 +3,8 @@
 #include <CS2/Classes/Panorama.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/HudInWorldPanelZOrder.h>
-#include <FeatureHelpers/Sound/WeaponReloadSound.h>
-#include <FeatureHelpers/Sound/SoundVisualizationFeature.h>
+#include "Details/WeaponReloadSound.h"
+#include "Details/SoundVisualizationFeature.h"
 #include <GameClasses/PanoramaUiEngine.h>
 
 struct WeaponReloadPanels {

@@ -8,8 +8,8 @@
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
-#include <FeatureHelpers/Sound/FootstepSound.h>
-#include <FeatureHelpers/Sound/SoundVisualizationFeature.h>
+#include "Details/FootstepSound.h"
+#include "Details/SoundVisualizationFeature.h"
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>

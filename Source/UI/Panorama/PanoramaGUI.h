@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <Features/Visuals/ScopeOverlayRemover/ScopeOverlayRemover.h>
+#include <Features/Visuals/ScopeOverlayRemover.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <string_view>
 #include <Utils/StringParser.h>

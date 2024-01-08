@@ -1,12 +1,13 @@
 #pragma once
 
-#include "BombBeepSound.h"
-#include "BombDefuseSound.h"
-#include "BombPlantSound.h"
-#include "FootstepSound.h"
+#include <Features/Sound/Details/BombBeepSound.h>
+#include <Features/Sound/Details/BombDefuseSound.h>
+#include <Features/Sound/Details/BombPlantSound.h>
+#include <Features/Sound/Details/FootstepSound.h>
+#include <Features/Sound/Details/WeaponReloadSound.h>
+#include <Features/Sound/Details/WeaponScopeSound.h>
+
 #include "SoundWatcherImpl.h"
-#include "WeaponReloadSound.h"
-#include "WeaponScopeSound.h"
 
 using SoundWatcher = SoundWatcherImpl<
     FootstepSound,

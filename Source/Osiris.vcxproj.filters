@@ -19,9 +19,6 @@
     <Filter Include="Features\Visuals">
       <UniqueIdentifier>{3ee30a31-8dbf-4608-8064-4c996ce05980}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\Visuals\ScopeOverlayRemover">
-      <UniqueIdentifier>{ef89bed2-4c4f-4578-ab77-a71419bcaf71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameClasses">
       <UniqueIdentifier>{8f279e18-4344-42fb-8c01-6c773341568d}</UniqueIdentifier>
     </Filter>
@@ -112,6 +109,9 @@
     <Filter Include="Platform\Windows\Syscalls">
       <UniqueIdentifier>{47030bf1-e7cd-4f68-936f-1481aa0916d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Sound\Details">
+      <UniqueIdentifier>{9420a2f8-4f10-4cfc-9196-5f3290dd58eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -167,9 +167,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ScopeOverlayRemover\ScopeOverlayRemover.h">
-      <Filter>Features\Visuals\ScopeOverlayRemover</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\ClientMode.h">
       <Filter>GameClasses</Filter>
@@ -671,12 +668,6 @@
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombPlantSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\FootstepSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypeBitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -689,14 +680,8 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombBeepSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h">
       <Filter>Features\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombBeepVisualizerHelpers.h">
-      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h">
       <Filter>FeatureHelpers</Filter>
@@ -707,23 +692,11 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\BombDefuseSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h">
       <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundVisualizationFeature.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundVisualization.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\WeaponScopeSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h">
       <Filter>Features\Sound</Filter>
@@ -874,6 +847,33 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h">
       <Filter>Platform\Windows\Syscalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h">
+      <Filter>Features\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\BombBeepSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\BombDefuseSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\BombPlantSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\FootstepSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundVisualization.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundVisualizationFeature.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\WeaponReloadSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h">
+      <Filter>Features\Sound\Details</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

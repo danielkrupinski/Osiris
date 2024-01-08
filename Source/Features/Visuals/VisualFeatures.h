@@ -1,7 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
-#include "ScopeOverlayRemover/ScopeOverlayRemover.h"
+#include "ScopeOverlayRemover.h"
 #include "SniperScopeBlurRemovalFeature.h"
 #include "VisualFeaturesStates.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ScopeOverlayRemover/ScopeOverlayRemover.h"
+#include "ScopeOverlayRemover.h"
 #include "SniperScopeBlurRemovalFeature.h"
 
 struct VisualFeaturesStates {

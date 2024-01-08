@@ -4,8 +4,8 @@
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
-#include <FeatureHelpers/Sound/BombDefuseSound.h>
-#include <FeatureHelpers/Sound/SoundVisualizationFeature.h>
+#include "Details/BombDefuseSound.h"
+#include "Details/SoundVisualizationFeature.h"
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaUiEngine.h>

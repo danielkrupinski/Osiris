@@ -4,7 +4,7 @@
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Hooks/ViewRenderHook.h>
 #include "SoundVisualization.h"
-#include "SoundWatcher.h"
+#include <FeatureHelpers/Sound/SoundWatcher.h>
 
 template <typename PanelsType>
 struct SoundVisualizationFeatureState {
