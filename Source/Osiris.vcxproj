@@ -229,6 +229,7 @@
     <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptor.h" />
     <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptorFinder.h" />
     <ClInclude Include="Platform\Windows\RTTI\ToRvaConverter.h" />
+    <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h" />
     <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
@@ -278,6 +279,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Platform\Windows\Syscalls\WindowsSyscall.asm" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -301,6 +305,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -363,5 +368,6 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

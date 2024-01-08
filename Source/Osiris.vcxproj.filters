@@ -109,6 +109,9 @@
     <Filter Include="CS2\Classes\EntitySystem">
       <UniqueIdentifier>{debf5712-df61-49be-b7b5-69adf565d500}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windows\Syscalls">
+      <UniqueIdentifier>{47030bf1-e7cd-4f68-936f-1481aa0916d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -869,6 +872,9 @@
     <ClInclude Include="GameClasses\EntitySystem.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h">
+      <Filter>Platform\Windows\Syscalls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
@@ -878,5 +884,10 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Intrinsics.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Platform\Windows\Syscalls\WindowsSyscall.asm">
+      <Filter>Platform\Windows\Syscalls</Filter>
+    </MASM>
   </ItemGroup>
 </Project>
