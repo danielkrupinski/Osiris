@@ -49,7 +49,9 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\PanelConfigurator.h" />
     <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />
+    <ClInclude Include="FeatureHelpers\PanelStyleSetter.h" />
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h" />
@@ -117,7 +119,6 @@
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
     <ClInclude Include="GameClasses\Panel.h" />
-    <ClInclude Include="GameClasses\PanelStyle.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaLabel.h" />
     <ClInclude Include="GameClasses\PanoramaUiEngine.h" />

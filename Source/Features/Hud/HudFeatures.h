@@ -15,7 +15,13 @@ struct HudFeatures {
 
     [[nodiscard]] DefusingAlert defusingAlert() const noexcept
     {
-        return DefusingAlert{states.defusingAlertState, helpers.plantedC4Provider, helpers.hudProvider, helpers.globalVarsProvider};
+        return DefusingAlert{
+            states.defusingAlertState,
+            helpers.plantedC4Provider,
+            helpers.hudProvider,
+            helpers.globalVarsProvider,
+            helpers.panelConfigurator()
+        };
     }
     
     [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept

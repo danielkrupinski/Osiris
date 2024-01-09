@@ -24,7 +24,8 @@ public:
         GlobalVarsProvider globalVarsProvider,
         PanoramaTransformFactory transformFactory,
         WorldToClipSpaceConverter worldtoClipSpaceConverter,
-        ViewToProjectionMatrix viewToProjectionMatrix) noexcept
+        ViewToProjectionMatrix viewToProjectionMatrix,
+        PanelConfigurator panelConfigurator) noexcept
         : SoundVisualizationFeature::TogglableFeature{state.enabled}
         , state{state}
         , viewRenderHook{viewRenderHook}
@@ -34,6 +35,7 @@ public:
         , transformFactory{transformFactory}
         , worldtoClipSpaceConverter{worldtoClipSpaceConverter}
         , viewToProjectionMatrix{viewToProjectionMatrix}
+        , panelConfigurator{panelConfigurator}
     {
     }
 
@@ -68,20 +70,21 @@ public:
             if (!style)
                 return;
 
-            style.setOpacity(opacity);
-            style.setZIndex(-soundInClipSpace.z);
+            const auto styleSetter{panelConfigurator.panelStyle(*style)};
+            styleSetter.setOpacity(opacity);
+            styleSetter.setZIndex(-soundInClipSpace.z);
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
             PanoramaTransformations{
                 transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, viewToProjectionMatrix.getFovScale())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
-            }.applyTo(style);
+            }.applyTo(styleSetter);
 
             ++currentIndex;
         });
 
-        state.panels.hidePanels(currentIndex);
+        state.panels.hidePanels(currentIndex, panelConfigurator);
     }
 
 private:
@@ -97,7 +100,7 @@ private:
     {
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
-        state.panels.hidePanels(0);
+        state.panels.hidePanels(0, panelConfigurator);
     }
 
     SoundVisualizationFeatureState<PanelsType>& state;
@@ -108,4 +111,5 @@ private:
     PanoramaTransformFactory transformFactory;
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
     ViewToProjectionMatrix viewToProjectionMatrix;
+    PanelConfigurator panelConfigurator;
 };

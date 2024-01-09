@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HudInWorldPanelFactory.h"
+#include "PanelConfigurator.h"
 
 template <typename T>
 class HudInWorldPanels {
@@ -31,7 +32,7 @@ public:
         return PanoramaUiPanel{ nullptr };
     }
 
-    void hidePanels(std::size_t fromPanelIndex) const noexcept
+    void hidePanels(std::size_t fromPanelIndex, PanelConfigurator panelConfigurator) const noexcept
     {
         for (std::size_t i = fromPanelIndex; i < T::kMaxNumberOfPanels; ++i) {
             const auto panel = getPanel(i);
@@ -39,7 +40,7 @@ public:
                 break;
 
             if (const auto style = panel.getStyle())
-                style.setOpacity(0.0f);
+                panelConfigurator.panelStyle(*style).setOpacity(0.0f);
         }
     }
 

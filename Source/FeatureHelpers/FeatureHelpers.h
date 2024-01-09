@@ -5,6 +5,7 @@
 #include <Helpers/PanoramaTransformFactory.h>
 #include <Helpers/PlantedC4Provider.h>
 #include "HudInWorldPanelContainer.h"
+#include "PanelConfigurator.h"
 #include "Sound/SoundWatcher.h"
 #include "StylePropertiesSymbols.h"
 #include "StylePropertiesVMTs.h"
@@ -29,6 +30,11 @@ struct FeatureHelpers {
         , hudScope{clientPatterns.hudScope()}
         , mainMenu{clientPatterns.mainMenuPanel()->uiPanel}
     {
+    }
+
+    [[nodiscard]] PanelConfigurator panelConfigurator() const noexcept
+    {
+        return PanelConfigurator{PanelStylePropertyFactory{stylePropertiesVMTs, stylePropertiesSymbols}};    
     }
 
     HudProvider hudProvider;

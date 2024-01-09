@@ -6,6 +6,7 @@
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Helpers/PlantedC4Provider.h>
 #include <Helpers/HudProvider.h>
+#include <FeatureHelpers/PanelConfigurator.h>
 
 struct DefusingCountdownStringBuilder {
     [[nodiscard]] const char* operator()(float timeToDefuseEnd) noexcept
@@ -34,12 +35,13 @@ struct DefusingAlertState {
 
 class DefusingAlert : public TogglableFeature<DefusingAlert> {
 public:
-    DefusingAlert(DefusingAlertState& state, PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
+    DefusingAlert(DefusingAlertState& state, PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, PanelConfigurator panelConfigurator) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
         , plantedC4Provider{plantedC4Provider}
         , hudProvider{hudProvider}
         , globalVarsProvider{globalVarsProvider}
+        , panelConfigurator{panelConfigurator}
     {
     }
 
@@ -67,7 +69,7 @@ public:
             if (const auto defusingTimer = state.defusingTimerPanel.get()) {
                 PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(timeToEnd), 0, true);
                 if (const auto style = defusingTimer.getStyle())
-                    style.setSimpleForegroundColor(getTimerColor(bomb));
+                    panelConfigurator.panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
             }
         } else {
             hideDefusingAlert();
@@ -142,4 +144,5 @@ R"(
     PlantedC4Provider plantedC4Provider;
     HudProvider hudProvider;
     GlobalVarsProvider globalVarsProvider;
+    PanelConfigurator panelConfigurator;
 };

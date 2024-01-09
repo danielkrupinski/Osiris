@@ -174,9 +174,6 @@
     <ClInclude Include="GameClasses\GameRules.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\PanelStyle.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\PanoramaImagePanel.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
@@ -874,6 +871,12 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h">
       <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\PanelConfigurator.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\PanelStyleSetter.h">
+      <Filter>FeatureHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

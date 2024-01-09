@@ -4,6 +4,7 @@
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaPanelPointer.h>
+#include "PanelConfigurator.h"
 
 class HudInWorldPanelContainer {
 public:
@@ -19,19 +20,20 @@ public:
             PanoramaUiEngine::onDeletePanel(containerPanel.getHandle());
     }
 
-    [[nodiscard]] PanoramaUiPanel get(HudProvider hudProvider) noexcept
+    [[nodiscard]] PanoramaUiPanel get(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
     {
         if (const auto container = containerPanel.get())
             return container;
-        return createPanel(hudProvider);
+        return createPanel(hudProvider, panelConfigurator);
     }
 
 private:
-    [[nodiscard]] PanoramaUiPanel createPanel(HudProvider hudProvider) noexcept
+    [[nodiscard]] PanoramaUiPanel createPanel(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
     {
         if (const auto hudReticle = hudProvider.getHudReticle()) {
             if (const auto panel = Panel::create("", hudReticle)) {
-                PanoramaUiPanel{ panel->uiPanel }.fitParent();
+                if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()})
+                    panelConfigurator.panelStyle(*style).fitParent();
                 containerPanel = panel->uiPanel;
                 return PanoramaUiPanel{ panel->uiPanel };
             }

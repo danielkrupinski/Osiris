@@ -1,28 +1,28 @@
 #pragma once
 
-#include <cstdint>
-
 #include <CS2/Classes/Color.h>
-#include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/Panorama.h>
+#include "GameClasses/Implementation/PanelStyleImpl.h"
+#include "PanelStylePropertyFactory.h"
 
-#include <GameClasses/Implementation/PanelStyleImpl.h>
-
-struct PanelStyle {
-    explicit PanelStyle(cs2::CPanelStyle* thisptr) noexcept
-        : thisptr{ thisptr }
+class PanelStyleSetter {
+public:
+    PanelStyleSetter(cs2::CPanelStyle& style, PanelStylePropertyFactory propertyFactory) noexcept
+        : thisptr{&style}
+        , propertyFactory{propertyFactory}
     {
-    }
-
-    explicit operator bool() const noexcept
-    {
-        return thisptr != nullptr;
     }
 
     void setProperty(cs2::CStyleProperty* styleProperty) const noexcept
     {
         if (const auto setPropertyFn{PanelStyleImpl::instance().setProperty})
             setPropertyFn(thisptr, styleProperty, true);
+    }
+
+    void fitParent() const noexcept
+    {
+        setWidth(cs2::CUILength{100.0f, cs2::CUILength::k_EUILengthPercent});
+        setHeight(cs2::CUILength{100.0f, cs2::CUILength::k_EUILengthPercent});
     }
 
     void setSimpleForegroundColor(cs2::Color color) const noexcept
@@ -63,4 +63,5 @@ struct PanelStyle {
 
 private:
     cs2::CPanelStyle* thisptr;
+    PanelStylePropertyFactory propertyFactory;
 };

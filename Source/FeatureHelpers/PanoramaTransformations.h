@@ -5,11 +5,12 @@
 
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/Panorama.h>
-#include <GameClasses/PanelStyle.h>
+
+#include "PanelStyleSetter.h"
 
 template <std::size_t N>
 struct PanoramaTransformations {
-    void applyTo(PanelStyle style) noexcept
+    void applyTo(const PanelStyleSetter& style) noexcept
     {
         cs2::CUtlVector<cs2::CTransform3D*> dummyVector;
         dummyVector.allocationCount = N;

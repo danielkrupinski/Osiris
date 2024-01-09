@@ -2,7 +2,6 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/Implementation/PanoramaUiPanelImpl.h>
-#include <GameClasses/PanelStyle.h>
 
 struct PanoramaUiPanel {
     explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
@@ -65,17 +64,9 @@ struct PanoramaUiPanel {
         return false;
     }
 
-    void fitParent() const noexcept
+    [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
     {
-        if (const auto style = getStyle()) {
-            style.setWidth(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-            style.setHeight(cs2::CUILength{ 100.0f, cs2::CUILength::k_EUILengthPercent });
-        }
-    }
-
-    [[nodiscard]] PanelStyle getStyle() const noexcept
-    {
-        return PanelStyle{ impl().panelStyle.of(thisptr).get() };
+        return impl().panelStyle.of(thisptr).get();
     }
 
     explicit(false) operator cs2::CUIPanel*() const noexcept
