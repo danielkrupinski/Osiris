@@ -15,6 +15,9 @@ public:
 
     void setProperty(cs2::CStyleProperty* styleProperty) const noexcept
     {
+        if (!styleProperty)
+            return;
+
         if (const auto setPropertyFn{PanelStyleImpl::instance().setProperty})
             setPropertyFn(thisptr, styleProperty, true);
     }
@@ -39,14 +42,12 @@ public:
 
     void setOpacity(float opacity) const noexcept
     {
-        // FIXME: hardcoded virtual method index
-        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, float opacity)>((*reinterpret_cast<void(***)()>(thisptr))[22])(thisptr, opacity);
+        setProperty(propertyFactory.opacity(opacity));
     }
 
     void setWidth(cs2::CUILength width) const noexcept
     {
-        // FIXME: hardcoded virtual method index
-        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, cs2::CUILength width)>((*reinterpret_cast<void(***)()>(thisptr))[68])(thisptr, width);
+        setProperty(propertyFactory.width(width));
     }
 
     void setHeight(cs2::CUILength height) const noexcept

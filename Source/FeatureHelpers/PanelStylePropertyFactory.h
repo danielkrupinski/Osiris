@@ -12,11 +12,10 @@ struct PanelStylePropertyFactory {
     {
     }
 
-    [[nodiscard]] cs2::CStylePropertyWidth* width(cs2::CUILength width) noexcept
+    [[nodiscard]] cs2::CStylePropertyWidth* width(cs2::CUILength width) const noexcept
     {
         return create<cs2::CStylePropertyWidth>(VMTs.widthPropertyVmt, symbols.width, width);
     }
-
 
     [[nodiscard]] cs2::CStylePropertyOpacity* opacity(float opacity) const noexcept
     {
