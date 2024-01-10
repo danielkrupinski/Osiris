@@ -8,9 +8,11 @@ struct StylePropertiesSymbols {
     explicit StylePropertiesSymbols(StylePropertySymbolMap symbolMap) noexcept
         : width{symbolMap.findSymbol(cs2::CStylePropertyWidth::kName)}
         , opacity{symbolMap.findSymbol(cs2::CStylePropertyOpacity::kName)}
+        , zIndex{symbolMap.findSymbol(cs2::CStylePropertyZIndex::kName)}
     {
     }
 
     cs2::CStyleSymbol width;
     cs2::CStyleSymbol opacity;
+    cs2::CStyleSymbol zIndex;
 };

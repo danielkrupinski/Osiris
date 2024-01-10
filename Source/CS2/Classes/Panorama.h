@@ -92,6 +92,13 @@ struct CStylePropertyOpacity : CStyleProperty {
     float opacity;
 };
 
+struct CStylePropertyZIndex : CStyleProperty {
+    static constexpr auto kName{"z-index"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyZIndex@panorama@@", "N8panorama20CStylePropertyZIndexE")};
+
+    float zindex;
+};
+
 struct CPanelStyle {
     using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
 

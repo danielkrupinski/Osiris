@@ -58,8 +58,7 @@ public:
 
     void setZIndex(float zIndex) const noexcept
     {
-        // FIXME: hardcoded virtual method index
-        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, float zIndex)>((*reinterpret_cast<void(***)()>(thisptr))[14])(thisptr, zIndex);
+        setProperty(propertyFactory.zIndex(zIndex));
     }
 
 private:
