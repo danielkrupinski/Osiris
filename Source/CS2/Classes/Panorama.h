@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <Platform/Macros/IsPlatform.h>
+#include <Platform/Macros/PlatformSpecific.h>
 
 #include "CUtlVector.h"
 #include "Vector.h"
@@ -97,6 +98,13 @@ struct CStylePropertyZIndex : CStyleProperty {
     static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyZIndex@panorama@@", "N8panorama20CStylePropertyZIndexE")};
 
     float zindex;
+};
+
+struct CStylePropertyHeight : CStyleProperty {
+    static constexpr auto kName{"height"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyHeight@panorama@@", "N8panorama20CStylePropertyHeightE")};
+
+    CUILength m_Height;
 };
 
 struct CPanelStyle {

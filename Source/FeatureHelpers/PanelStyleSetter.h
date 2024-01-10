@@ -52,8 +52,7 @@ public:
 
     void setHeight(cs2::CUILength height) const noexcept
     {
-        // FIXME: hardcoded virtual method index
-        reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, cs2::CUILength height)>((*reinterpret_cast<void(***)()>(thisptr))[71])(thisptr, height);
+        setProperty(propertyFactory.height(height));
     }
 
     void setZIndex(float zIndex) const noexcept
