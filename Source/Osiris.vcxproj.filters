@@ -112,6 +112,12 @@
     <Filter Include="Features\Sound\Details">
       <UniqueIdentifier>{9420a2f8-4f10-4cfc-9196-5f3290dd58eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Hud\States">
+      <UniqueIdentifier>{8e2aed33-7890-4e79-82f4-cbfe0db9b418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\States">
+      <UniqueIdentifier>{ca87a54c-9021-4f2a-a75c-847ea7116ba8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -797,17 +803,11 @@
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h">
       <Filter>GlobalContext</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\VisualFeaturesStates.h">
-      <Filter>Features\Visuals</Filter>
-    </ClInclude>
     <ClInclude Include="Features\FeaturesStates.h">
       <Filter>Features</Filter>
     </ClInclude>
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h">
       <Filter>Features\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\HudFeaturesStates.h">
-      <Filter>Features\Hud</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h">
       <Filter>CS2\Classes\EntitySystem</Filter>
@@ -883,6 +883,27 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\States\BombTimerState.h">
+      <Filter>Features\Hud\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\States\DefusingAlertState.h">
+      <Filter>Features\Hud\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\States\HudFeaturesStates.h">
+      <Filter>Features\Hud\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\States\KillfeedPreserverState.h">
+      <Filter>Features\Hud\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h">
+      <Filter>Features\Visuals\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\States\SniperScopeBlurRemovalFeatureState.h">
+      <Filter>Features\Visuals\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
+      <Filter>Features\Visuals\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

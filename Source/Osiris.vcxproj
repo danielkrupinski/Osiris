@@ -70,8 +70,11 @@
     <ClInclude Include="Features\Hud\BombTimer.h" />
     <ClInclude Include="Features\Hud\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\HudFeatures.h" />
-    <ClInclude Include="Features\Hud\HudFeaturesStates.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
+    <ClInclude Include="Features\Hud\States\BombTimerState.h" />
+    <ClInclude Include="Features\Hud\States\DefusingAlertState.h" />
+    <ClInclude Include="Features\Hud\States\HudFeaturesStates.h" />
+    <ClInclude Include="Features\Hud\States\KillfeedPreserverState.h" />
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h" />
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h" />
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h" />
@@ -89,8 +92,10 @@
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h" />
     <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h" />
+    <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h" />
+    <ClInclude Include="Features\Visuals\States\SniperScopeBlurRemovalFeatureState.h" />
+    <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
-    <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="GameClasses\ClientMode.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />

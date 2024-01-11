@@ -3,11 +3,9 @@
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/Visuals/SniperScopeBlurRemover.h>
 
-class LoopModeGameHook;
+#include "States/SniperScopeBlurRemovalFeatureState.h"
 
-struct SniperScopeBlurRemovalFeatureState {
-    bool enabled{false};
-};
+class LoopModeGameHook;
 
 class SniperScopeBlurRemovalFeature : public TogglableFeature<SniperScopeBlurRemovalFeature> {
 public:

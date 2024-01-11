@@ -1,8 +1,8 @@
 #pragma once
 
-#include "BombTimer.h"
-#include "DefusingAlert.h"
-#include "KillfeedPreserver.h"
+#include "BombTimerState.h"
+#include "DefusingAlertState.h"
+#include "KillfeedPreserverState.h"
 
 struct HudFeaturesStates {
     BombTimerState bombTimerState;

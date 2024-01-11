@@ -9,13 +9,7 @@
 #include <Utils/StringParser.h>
 #include <GameClasses/GameRules.h>
 
-struct KillfeedPreserverState {
-    bool enabled{false};
-
-    cs2::CPanoramaSymbol deathNoticeKillerSymbol{-1};
-    cs2::CPanoramaSymbol spawnTimeSymbol{-1};
-    PanoramaPanelPointer deathNoticesPointer;
-};
+#include "States/KillfeedPreserverState.h"
 
 class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
 public:

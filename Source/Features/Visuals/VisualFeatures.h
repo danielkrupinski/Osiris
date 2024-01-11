@@ -3,7 +3,7 @@
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "ScopeOverlayRemover.h"
 #include "SniperScopeBlurRemovalFeature.h"
-#include "VisualFeaturesStates.h"
+#include "States/VisualFeaturesStates.h"
 
 class LoopModeGameHook;
 

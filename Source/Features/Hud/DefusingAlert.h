@@ -8,6 +8,8 @@
 #include <Helpers/HudProvider.h>
 #include <FeatureHelpers/PanelConfigurator.h>
 
+#include "States/DefusingAlertState.h"
+
 struct DefusingCountdownStringBuilder {
     [[nodiscard]] const char* operator()(float timeToDefuseEnd) noexcept
     {
@@ -18,19 +20,6 @@ struct DefusingCountdownStringBuilder {
 
 private:
     StringBuilderStorage<10> storage;
-};
-
-struct DefusingAlertState {
-    bool enabled{false};
-
-    PanoramaPanelPointer defusingAlertContainerPanel;
-    PanoramaPanelPointer defusingTimerPanel;
-
-    ~DefusingAlertState() noexcept
-    {
-        if (defusingAlertContainerPanel.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(defusingAlertContainerPanel.getHandle());
-    }
 };
 
 class DefusingAlert : public TogglableFeature<DefusingAlert> {
