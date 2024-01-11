@@ -6,7 +6,7 @@ namespace cs2
 {
 
 struct Color {
-    Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 255) noexcept
+    constexpr Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 255) noexcept
         : rgba{ r, g, b, a }
     {
     }
