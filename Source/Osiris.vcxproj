@@ -204,6 +204,7 @@
     <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxMessageBox.h" />
     <ClInclude Include="Platform\Linux\LinuxPlatformApi.h" />
+    <ClInclude Include="Platform\Linux\LinuxPlatformApiImpl.h" />
     <ClInclude Include="Platform\Linux\LinuxVmt.h" />
     <ClInclude Include="Platform\Linux\LinuxVmtFinder.h" />
     <ClInclude Include="Platform\Linux\LinuxVmtFinderParams.h" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
+    <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h" />
     <ClInclude Include="Platform\Windows\WindowsVmtFinder.h" />
     <ClInclude Include="Platform\Windows\WindowsVmtFinderParams.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />

@@ -878,6 +878,12 @@
     <ClInclude Include="FeatureHelpers\PanelStyleSetter.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Linux\LinuxPlatformApiImpl.h">
+      <Filter>Platform\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
