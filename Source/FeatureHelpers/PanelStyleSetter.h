@@ -5,6 +5,8 @@
 #include "GameClasses/Implementation/PanelStyleImpl.h"
 #include "PanelStylePropertyFactory.h"
 
+struct ImageShadowParams;
+
 class PanelStyleSetter {
 public:
     PanelStyleSetter(cs2::CPanelStyle& style, PanelStylePropertyFactory propertyFactory) noexcept
@@ -58,6 +60,11 @@ public:
     void setZIndex(float zIndex) const noexcept
     {
         setProperty(propertyFactory.zIndex(zIndex));
+    }
+
+    void setImageShadow(const ImageShadowParams& params) const noexcept
+    {
+        setProperty(propertyFactory.imageShadow(params));
     }
 
 private:

@@ -10,6 +10,7 @@ struct StylePropertiesSymbols {
         , opacity{symbolMap.findSymbol(cs2::CStylePropertyOpacity::kName)}
         , zIndex{symbolMap.findSymbol(cs2::CStylePropertyZIndex::kName)}
         , height{symbolMap.findSymbol(cs2::CStylePropertyHeight::kName)}
+        , imageShadow{symbolMap.findSymbol(cs2::CStylePropertyImageShadow::kName)}
     {
     }
 
@@ -17,4 +18,5 @@ struct StylePropertiesSymbols {
     cs2::CStyleSymbol opacity;
     cs2::CStyleSymbol zIndex;
     cs2::CStyleSymbol height;
+    cs2::CStyleSymbol imageShadow;
 };

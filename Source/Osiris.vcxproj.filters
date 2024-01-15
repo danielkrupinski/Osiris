@@ -905,6 +905,9 @@
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
       <Filter>Features\Visuals\States</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\ImageShadowParams.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

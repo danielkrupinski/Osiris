@@ -5,11 +5,11 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
-#include "CUtlVector.h"
-#include "Vector.h"
-
+#include "Color.h"
 #include "CUtlMap.h"
 #include "CUtlString.h"
+#include "CUtlVector.h"
+#include "Vector.h"
 
 namespace cs2
 {
@@ -105,6 +105,18 @@ struct CStylePropertyHeight : CStyleProperty {
     static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyHeight@panorama@@", "N8panorama20CStylePropertyHeightE")};
 
     CUILength m_Height;
+};
+
+struct CStylePropertyImageShadow : CStyleProperty {
+    static constexpr auto kName{"img-shadow"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyImageShadow@panorama@@", "N8panorama25CStylePropertyImageShadowE")};
+
+    bool fullySet;
+    CUILength horizontalOffset;
+    CUILength verticalOffset;
+    CUILength blurRadius;
+    float strength;
+    Color color;
 };
 
 struct CPanelStyle {

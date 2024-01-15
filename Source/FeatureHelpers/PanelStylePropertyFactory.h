@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/MemAlloc.h>
+#include "ImageShadowParams.h"
 #include "StylePropertiesSymbols.h"
 #include "StylePropertiesVMTs.h"
 
@@ -30,6 +31,11 @@ struct PanelStylePropertyFactory {
     [[nodiscard]] cs2::CStylePropertyHeight* height(cs2::CUILength height) const noexcept
     {
         return create<cs2::CStylePropertyHeight>(VMTs.heightPropertyVmt, symbols.height, height);
+    }
+
+    [[nodiscard]] cs2::CStylePropertyImageShadow* imageShadow(const ImageShadowParams& params) const noexcept
+    {
+        return create<cs2::CStylePropertyImageShadow>(VMTs.imageShadowPropertyVmt, symbols.imageShadow, true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color);
     }
 
 private:

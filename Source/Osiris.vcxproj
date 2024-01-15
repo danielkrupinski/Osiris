@@ -48,6 +48,7 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h" />
+    <ClInclude Include="FeatureHelpers\ImageShadowParams.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\PanelConfigurator.h" />
     <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />

@@ -9,6 +9,7 @@ struct StylePropertiesVMTs {
         , opacityPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyOpacity::kMangledTypeName)}
         , zIndexPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyZIndex::kMangledTypeName)}
         , heightPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyHeight::kMangledTypeName)}
+        , imageShadowPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyImageShadow::kMangledTypeName)}
     {
     }
 
@@ -16,4 +17,5 @@ struct StylePropertiesVMTs {
     const void* opacityPropertyVmt;
     const void* zIndexPropertyVmt;
     const void* heightPropertyVmt;
+    const void* imageShadowPropertyVmt;
 };
