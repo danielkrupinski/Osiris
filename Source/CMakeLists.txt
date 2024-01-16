@@ -9,7 +9,7 @@ target_include_directories(Osiris PRIVATE "${CMAKE_SOURCE_DIR}/Source")
 target_link_libraries(Osiris PRIVATE ${CMAKE_DL_LIBS})
 
 if(WIN32)
-  target_sources(Osiris PRIVATE Platform/Windows/Syscalls/WindowsSyscall.asm)
+  target_sources(Osiris PRIVATE Platform/Windows/Syscalls/WindowsSyscall.asm WindowsEndpoints.asm)
 endif()
 
 if(MSVC)

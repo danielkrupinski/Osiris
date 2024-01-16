@@ -922,5 +922,6 @@
     <MASM Include="Platform\Windows\Syscalls\WindowsSyscall.asm">
       <Filter>Platform\Windows\Syscalls</Filter>
     </MASM>
+    <MASM Include="WindowsEndpoints.asm" />
   </ItemGroup>
 </Project>

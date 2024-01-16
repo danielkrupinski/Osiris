@@ -290,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="Platform\Windows\Syscalls\WindowsSyscall.asm" />
+    <MASM Include="WindowsEndpoints.asm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

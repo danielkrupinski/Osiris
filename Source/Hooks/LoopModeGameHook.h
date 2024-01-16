@@ -5,6 +5,8 @@
 #include <Utils/RefCountedHook.h>
 #include <Vmt/VmtSwapper.h>
 
+extern "C" void* LoopModeGameHook_getWorldSession_asm(cs2::CLoopModeGame* thisptr) noexcept;
+
 class LoopModeGameHook : public RefCountedHook<LoopModeGameHook> {
 public:
     LoopModeGameHook(const ClientPatterns& clientPatterns, const VmtLengthCalculator& vmtLengthCalculator) noexcept
@@ -14,8 +16,6 @@ public:
     }
 
 private:
-    static void* getWorldSession(cs2::CLoopModeGame* thisptr) noexcept;
-
     void uninstall() const noexcept
     {
         if (loopModeGame && *loopModeGame)
@@ -30,7 +30,7 @@ private:
     void install() noexcept
     {
         if (loopModeGame && *loopModeGame && hook.install(vmtLengthCalculator, *reinterpret_cast<std::uintptr_t**>(*loopModeGame))) {
-            originalGetWorldSession = hook.hook(0, &getWorldSession);
+            originalGetWorldSession = hook.hook(0, &LoopModeGameHook_getWorldSession_asm);
         }
     }
 

@@ -9,12 +9,10 @@ using SDL_PeepEvents = int(*)(void* events, int numevents, int action, unsigned 
 
 }
 
+extern "C" int SDLHook_PeepEvents_asm(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept;
+
 class PeepEventsHook {
 public:
-    static int SDL_PeepEvents(void* events, int numevents,
-        int action,
-        unsigned minType, unsigned maxType) noexcept;
-
     explicit PeepEventsHook(cs2::SDL_PeepEvents* peepEvents) noexcept
         : peepEventsPointer{peepEvents}
     {
@@ -29,7 +27,7 @@ public:
     {
         assert(isValid());
         original = *peepEventsPointer;
-        *peepEventsPointer = &SDL_PeepEvents;
+        *peepEventsPointer = &SDLHook_PeepEvents_asm;
     }
 
     void disable() const noexcept
