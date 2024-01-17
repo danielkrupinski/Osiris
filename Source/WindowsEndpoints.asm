@@ -2,7 +2,7 @@ EXTERN SDLHook_PeepEvents_cpp:PROC
 EXTERN LoopModeGameHook_getWorldSession_cpp:PROC
 EXTERN ViewRenderHook_onRenderStart_cpp:PROC
 
-.CODE
+.CODE endpts
 
 SDLHook_PeepEvents_asm PROC
     push rcx ; backup volatile registers
