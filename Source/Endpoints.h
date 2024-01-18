@@ -42,7 +42,7 @@ cs2::SDL_PeepEvents SDLHook_PeepEvents_cpp() noexcept
     return original;
 }
 
-cs2::CLoopModeGame::getWorldSession LoopModeGameHook_getWorldSession_cpp(cs2::CLoopModeGame* /* thisptr */, const void* returnAddress) noexcept
+cs2::CLoopModeGame::getWorldSession LoopModeGameHook_getWorldSession_cpp(const void* returnAddress) noexcept
 {
     return GlobalContext::instance().fullContext().getWorldSessionHook(ReturnAddress{returnAddress});
 }
