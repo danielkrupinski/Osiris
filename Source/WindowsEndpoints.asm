@@ -10,7 +10,7 @@ OPTION DOTNAME
 
 .DATA
 textSectionLength QWORD 0
-textSectionReferenceCount QWORD 0
+textSectionReferenceCount QWORD -1
 textSectionLock DWORD 0
 
 .CODE .text$a
@@ -38,8 +38,7 @@ makeTextSectionExecutable:
     jz return
     call lockTextSection
     inc textSectionReferenceCount
-    cmp textSectionReferenceCount, 1
-    jne unlockTextSection
+    jnz unlockTextSection
     mov r9, 20h ; PAGE_EXECUTE_READ
     jmp changeTextSectionProtection
 
@@ -48,10 +47,12 @@ makeTextSectionNotExecutable:
     jz return
     call lockTextSection
     dec textSectionReferenceCount
-    cmp textSectionReferenceCount, 0
-    jne unlockTextSection
+    jns unlockTextSection
     mov r9, 4h ; PAGE_READWRITE
     jmp changeTextSectionProtection
+
+return:
+    ret
 
 changeTextSectionProtection:
     ; expects protection constant (e.g. PAGE_EXECUTE_READ) in r9 register
@@ -71,8 +72,6 @@ changeTextSectionProtection:
 
 unlockTextSection:
     mov textSectionLock, 0
-
-return:
     ret
 
 DllMain PROC
