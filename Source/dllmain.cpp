@@ -2,20 +2,9 @@
 #include "Platform/Macros/IsPlatform.h"
 
 #include "GlobalContext/GlobalContext.h"
+#include "MemoryAllocation/MemoryAllocatorBaseImpl.h"
 
 constinit ManuallyDestructible<GlobalContext> GlobalContext::globalContext;
-
-#include "MemoryAllocation/MemoryAllocatorBase.h"
-
-std::byte* MemoryAllocatorBase::allocate(std::size_t size) noexcept
-{
-    return GlobalContext::instance().freeRegionList().allocate(size);
-}
-
-void MemoryAllocatorBase::deallocate(std::byte* memory, std::size_t size) noexcept
-{
-    return GlobalContext::instance().freeRegionList().deallocate(memory, size);
-}
 
 #include "Endpoints.h"
 #include "GameClasses/Implementation/GameClassImplementationInstances.h"
