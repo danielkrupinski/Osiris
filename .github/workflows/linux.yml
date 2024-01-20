@@ -16,12 +16,6 @@ jobs:
       run: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update && sudo apt-get install -y g++-13
-    - name: install clang++-15
-      if: matrix.compiler == 'clang++-15'
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 15
     - name: install clang++-16
       if: matrix.compiler == 'clang++-16'
       run: |
