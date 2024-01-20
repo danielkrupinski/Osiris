@@ -12,6 +12,10 @@ if(WIN32)
   target_sources(Osiris PRIVATE Platform/Windows/Syscalls/WindowsSyscall.asm WindowsEndpoints.asm)
 endif()
 
+if(UNIX)
+  target_sources(Osiris PRIVATE LinuxEndpoints.s)
+endif()
+
 if(MSVC)
   string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
   target_sources(Osiris PRIVATE $<$<CONFIG:Release>:Intrinsics.cpp>)
@@ -21,7 +25,7 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-    target_compile_options(Osiris PRIVATE -Wall)
+    target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wall>)
     target_link_options(Osiris PRIVATE LINKER:--no-undefined)
   endif()
 
@@ -30,7 +34,7 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   if(UNIX)
-    target_compile_options(Osiris PRIVATE -fno-stack-protector -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables)
+    target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-stack-protector -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables>)
     target_link_options(Osiris PRIVATE -nostdlib)
     target_link_libraries(Osiris PRIVATE c)
   endif()
