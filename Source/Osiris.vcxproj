@@ -238,6 +238,8 @@
     <ClInclude Include="Platform\Windows\RTTI\RttiTypeDescriptorFinder.h" />
     <ClInclude Include="Platform\Windows\RTTI\ToRvaConverter.h" />
     <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h" />
+    <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscallIndex.h" />
+    <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscalls.h" />
     <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />

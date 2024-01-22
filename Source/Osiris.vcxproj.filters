@@ -908,6 +908,12 @@
     <ClInclude Include="FeatureHelpers\ImageShadowParams.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscallIndex.h">
+      <Filter>Platform\Windows\Syscalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscalls.h">
+      <Filter>Platform\Windows\Syscalls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
