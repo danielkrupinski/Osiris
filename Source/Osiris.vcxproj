@@ -230,6 +230,9 @@
     <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h" />
     <ClInclude Include="Platform\Windows\DLLs\CombaseDll.h" />
     <ClInclude Include="Platform\Windows\DLLs\Shell32Dll.h" />
+    <ClInclude Include="Platform\Windows\FileSystem\WindowsFileSystem.h" />
+    <ClInclude Include="Platform\Windows\FileSystem\WindowsInputFile.h" />
+    <ClInclude Include="Platform\Windows\NtHandle.h" />
     <ClInclude Include="Platform\Windows\PebLdr.h" />
     <ClInclude Include="Platform\Windows\PortableExecutable.h" />
     <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h" />

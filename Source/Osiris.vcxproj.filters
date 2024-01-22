@@ -118,6 +118,9 @@
     <Filter Include="Features\Visuals\States">
       <UniqueIdentifier>{ca87a54c-9021-4f2a-a75c-847ea7116ba8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windows\FileSystem">
+      <UniqueIdentifier>{a12f576a-08be-49f6-9ed7-10f1fe8a4737}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -913,6 +916,15 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscalls.h">
       <Filter>Platform\Windows\Syscalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\FileSystem\WindowsFileSystem.h">
+      <Filter>Platform\Windows\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\FileSystem\WindowsInputFile.h">
+      <Filter>Platform\Windows\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\NtHandle.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
