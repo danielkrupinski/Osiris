@@ -33,6 +33,11 @@ int LinuxPlatformApi::open(const char* pathname, int flags) noexcept
     return ::open(pathname, flags);
 }
 
+ssize_t LinuxPlatformApi::pread(int fd, void* buf, size_t count, off_t offset) noexcept
+{
+    return ::pread(fd, buf, count, offset);
+}
+
 int LinuxPlatformApi::close(int fd) noexcept
 {
     return ::close(fd);
