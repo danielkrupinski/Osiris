@@ -121,6 +121,9 @@
     <Filter Include="Platform\Windows\FileSystem">
       <UniqueIdentifier>{a12f576a-08be-49f6-9ed7-10f1fe8a4737}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FileUtils">
+      <UniqueIdentifier>{a7381a05-bea7-4723-8a3e-9b755a56595a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -925,6 +928,9 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\NtHandle.h">
       <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils\FileSlice.h">
+      <Filter>FileUtils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

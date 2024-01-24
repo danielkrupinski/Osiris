@@ -97,6 +97,7 @@
     <ClInclude Include="Features\Visuals\States\SniperScopeBlurRemovalFeatureState.h" />
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
+    <ClInclude Include="FileUtils\FileSlice.h" />
     <ClInclude Include="GameClasses\ClientMode.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
