@@ -6,7 +6,7 @@
 inline BombSiteOffset PlantedC4Patterns::m_nBombSite() const noexcept
 {
     return BombSiteOffset{
-        clientPatternFinder("E8 ? ? ? ? 8B 55 A8 84 C0"_pat).add(1).abs().add(2).as<std::int32_t*>()
+        clientPatternFinder("83 BF ? ? ? ? 01 0F 94 C0 C3"_pat).add(2).as<std::int32_t*>()
     };
 }
 
