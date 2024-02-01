@@ -83,7 +83,7 @@ private:
             fileSystemPatterns
         );
 
-        fullContext().panoramaGUI.init(ClientPatterns{clientPatternFinder});
+        fullContext().panoramaGUI.init(fullContext().getFeatureHelpers().mainMenuProvider);
     }
 
     FreeMemoryRegionList _freeRegionList;

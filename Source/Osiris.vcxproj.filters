@@ -932,6 +932,9 @@
     <ClInclude Include="FileUtils\FileSlice.h">
       <Filter>FileUtils</Filter>
     </ClInclude>
+    <ClInclude Include="FeatureHelpers\MainMenuProvider.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

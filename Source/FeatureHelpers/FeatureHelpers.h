@@ -5,6 +5,7 @@
 #include <Helpers/PanoramaTransformFactory.h>
 #include <Helpers/PlantedC4Provider.h>
 #include "HudInWorldPanelContainer.h"
+#include "MainMenuProvider.h"
 #include "PanelConfigurator.h"
 #include "Sound/SoundWatcher.h"
 #include "StylePropertiesSymbols.h"
@@ -28,7 +29,7 @@ struct FeatureHelpers {
         , soundWatcher{fileSystemPatterns, soundSystemPatterns}
         , gameRules{clientPatterns.gameRules()}
         , hudScope{clientPatterns.hudScope()}
-        , mainMenu{clientPatterns.mainMenuPanel()->uiPanel}
+        , mainMenuProvider{clientPatterns}
     {
     }
 
@@ -50,5 +51,5 @@ struct FeatureHelpers {
     SoundWatcher soundWatcher;
     cs2::C_CSGameRules** gameRules;
     cs2::CPanel2D** hudScope;
-    PanoramaUiPanel mainMenu;
+    MainMenuProvider mainMenuProvider;
 };

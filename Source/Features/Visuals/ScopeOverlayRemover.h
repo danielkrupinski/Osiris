@@ -8,6 +8,7 @@
 #include <GameClasses/PanoramaUiPanel.h>
 #include <GameClasses/ClientMode.h>
 
+#include <FeatureHelpers/MainMenuProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/Visuals/SniperScopeBlurRemover.h>
 
@@ -15,10 +16,10 @@
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(ScopeOverlayRemoverState& state, PanoramaUiPanel mainMenu, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+    ScopeOverlayRemover(ScopeOverlayRemoverState& state, MainMenuProvider mainMenuProvider, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
-        , mainMenu{mainMenu}
+        , mainMenuProvider{mainMenuProvider}
         , hudProvider{hudProvider}
         , hudScope{hudScope}
         , loopModeGameHook{loopModeGameHook}
@@ -80,11 +81,13 @@ private:
     {
         if (auto hudScopePanel = hudProvider.findChildInLayoutFile(cs2::HudScope))
             return hudScopePanel;
-        return mainMenu.findChildInLayoutFile(cs2::HudScope);
+        if (const auto mainMenu{mainMenuProvider.getMainMenuPanel()})
+            return mainMenu.findChildInLayoutFile(cs2::HudScope);
+        return PanoramaUiPanel{nullptr};
     }
 
     ScopeOverlayRemoverState& state;
-    PanoramaUiPanel mainMenu;
+    MainMenuProvider mainMenuProvider;
     HudProvider hudProvider;
     cs2::CPanel2D** hudScope;
     LoopModeGameHook& loopModeGameHook;

@@ -66,6 +66,11 @@ struct FullGlobalContext {
     {
         return _gameClasses;
     }
+
+    [[nodiscard]] const FeatureHelpers& getFeatureHelpers() const noexcept
+    {
+        return featureHelpers;
+    }
     
     void onRenderStart(cs2::CViewRender* thisptr) noexcept
     {

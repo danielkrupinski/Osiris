@@ -13,9 +13,9 @@ inline cs2::CUIEngine** ClientPatterns::uiEngine() const noexcept
     return clientPatternFinder("48 89 E5 48 89 3D ? ? ? ? E8"_pat).add(6).abs().as<cs2::CUIEngine**>();
 }
 
-inline cs2::CPanel2D* ClientPatterns::mainMenuPanel() const noexcept
+inline cs2::CPanel2D** ClientPatterns::mainMenuPanel() const noexcept
 {
-    return clientPatternFinder("83 FB ? 75 ? 48 8D 05 ? ? ? ? 48 8B 00"_pat).add(8).abs().deref().as<cs2::CPanel2D*>();
+    return clientPatternFinder("83 FB ? 75 ? 48 8D 05 ? ? ? ? 48 8B 00"_pat).add(8).abs().as<cs2::CPanel2D**>();
 }
 
 inline cs2::CPanel2D** ClientPatterns::hudPanel() const noexcept

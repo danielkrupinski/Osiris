@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
+#include <FeatureHelpers/MainMenuProvider.h>
 #include <Features/Visuals/ScopeOverlayRemover.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <string_view>
@@ -12,9 +13,11 @@
 
 class PanoramaGUI {
 public:
-    void init(const ClientPatterns& clientPatterns) noexcept
+    void init(MainMenuProvider mainMenuProvider) noexcept
     {
-        const PanoramaUiPanel mainMenu{ clientPatterns.mainMenuPanel()->uiPanel};
+        const PanoramaUiPanel mainMenu{mainMenuProvider.getMainMenuPanel()};
+        if (!mainMenu)
+            return;
         PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.PreloadSettings();", "", 0);
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");

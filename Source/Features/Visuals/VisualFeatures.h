@@ -10,7 +10,7 @@ class LoopModeGameHook;
 struct VisualFeatures {
     [[nodiscard]] ScopeOverlayRemover scopeOverlayRemover() const noexcept
     {
-        return ScopeOverlayRemover{states.scopeOverlayRemoverState, helpers.mainMenu, helpers.hudProvider, helpers.hudScope, loopModeGameHook, helpers.sniperScopeBlurRemover};
+        return ScopeOverlayRemover{states.scopeOverlayRemoverState, helpers.mainMenuProvider, helpers.hudProvider, helpers.hudScope, loopModeGameHook, helpers.sniperScopeBlurRemover};
     }
 
     [[nodiscard]] SniperScopeBlurRemovalFeature sniperScopeBlurRemoval() const noexcept
