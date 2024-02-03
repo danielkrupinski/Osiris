@@ -52,36 +52,6 @@ TEST(PatternSearchResultTest, AddingNegativeOffsetToNonZeroAddressWorks) {
     EXPECT_EQ(PatternSearchResult{&array[7]}.add(-4).as<void*>(), &array[3]);
 }
 
-TEST(PatternSearchResultTest, CanBeDereferenced) {
-    int* ptr1 = nullptr;
-    int** ptr2 = &ptr1;
-    int*** ptr3 = &ptr2;
-    int**** ptr4 = &ptr3;
-
-    EXPECT_EQ(PatternSearchResult{ptr4}.deref<2>().as<int**>(), &ptr1);
-}
-
-TEST(PatternSearchResultTest, DereferenceStopsWhenReachedZeroAddress) {
-    int*** ptr3 = nullptr;
-    int**** ptr4 = &ptr3;
-    int***** ptr5 = &ptr4;
-
-    EXPECT_EQ(PatternSearchResult{ptr5}.deref<10>().as<void*>(), nullptr);
-}
-
-TEST(PatternSearchResultTest, DereferencingZeroAddressDoesNothing) {
-    EXPECT_EQ(PatternSearchResult{nullptr}.deref<2>().as<void*>(), nullptr);
-    EXPECT_EQ(PatternSearchResult{nullptr}.deref().as<void*>(), nullptr);
-}
-
-TEST(PatternSearchResultTest, NonTemplateDerefMethodDereferencesOnce) {
-    int* ptr1 = nullptr;
-    int** ptr2 = &ptr1;
-    int*** ptr3 = &ptr2;
-
-    EXPECT_EQ(PatternSearchResult{ptr3}.deref().as<int**>(), &ptr1);
-}
-
 TEST(PatternSearchResultTest, ConvertingNullPointerToAbsoluteDoesNothing) {
     EXPECT_EQ(PatternSearchResult{nullptr}.abs().as<void*>(), nullptr);
 }

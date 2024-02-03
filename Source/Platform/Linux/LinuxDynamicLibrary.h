@@ -13,7 +13,7 @@
 
 #include <Platform/Macros/FunctionAttributes.h>
 #include <Utils/MemorySection.h>
-#include <Utils/SafeAddress.h>
+#include <MemorySearch/PatternSearchResult.h>
 
 #include "LinuxPlatformApi.h"
 #include "LinuxVmtFinderParams.h"

@@ -18,23 +18,6 @@ public:
         return *this;
     }
 
-    template <std::size_t N>
-    PatternSearchResult& deref() noexcept
-    {
-        if constexpr (N != 0) {
-            if (address != nullptr) {
-                address = derefAddress<const void*>();
-                return deref<N - 1>();
-            }
-        }
-        return *this;
-    }
-
-    PatternSearchResult& deref() noexcept
-    {
-        return deref<1>();
-    }
-
     PatternSearchResult& abs() noexcept
     {
         if (address != nullptr) {
