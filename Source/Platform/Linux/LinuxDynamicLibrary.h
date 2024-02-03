@@ -28,11 +28,11 @@ public:
         return handle != nullptr;
     }
 
-    [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] PatternSearchResult getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
-            return SafeAddress{ LinuxPlatformApi::dlsym(handle, functionName) };
-        return SafeAddress{ 0 };
+            return PatternSearchResult{ LinuxPlatformApi::dlsym(handle, functionName) };
+        return PatternSearchResult{ 0 };
     }
 
     [[nodiscard]] link_map* getLinkMap() const noexcept

@@ -8,7 +8,7 @@
 #include <Windows.h>
 
 #include <Utils/MemorySection.h>
-#include <Utils/SafeAddress.h>
+#include <MemorySearch/PatternSearchResult.h>
 
 class PortableExecutable {
 public:
@@ -45,11 +45,11 @@ public:
         return {};
     }
 
-    [[nodiscard]] SafeAddress getExport(const char* name) const noexcept
+    [[nodiscard]] PatternSearchResult getExport(const char* name) const noexcept
     {
         const auto exportDataDirectory = getExportDataDirectory();
         if (!exportDataDirectory)
-            return SafeAddress{ nullptr };
+            return PatternSearchResult{ nullptr };
 
         const auto exportDirectory = reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDataDirectory->VirtualAddress);
 
@@ -61,13 +61,13 @@ public:
                 const auto functionRva = functions[nameOrdinals[i]];
                 if (isForwardedExport(functionRva, *exportDataDirectory)) {
                     assert(false && "Forwarded exports are not supported yet!");
-                    return SafeAddress{ nullptr };
+                    return PatternSearchResult{ nullptr };
                 }
-                return SafeAddress{ base + functionRva };
+                return PatternSearchResult{ base + functionRva };
             }
         }
 
-        return SafeAddress{ nullptr };
+        return PatternSearchResult{ nullptr };
     }
 
 private:

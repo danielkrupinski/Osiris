@@ -5,7 +5,7 @@
 #include "PebLdr.h"
 #include "PortableExecutable.h"
 #include <Utils/MemorySection.h>
-#include <Utils/SafeAddress.h>
+#include <MemorySearch/PatternSearchResult.h>
 #include "WindowsPlatformApi.h"
 #include "WindowsVmtFinderParams.h"
 
@@ -21,11 +21,11 @@ public:
         return handle != nullptr;
     }
 
-    [[nodiscard]] SafeAddress getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] PatternSearchResult getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
             return portableExecutable().getExport(functionName);
-        return SafeAddress{ 0 };
+        return PatternSearchResult{ 0 };
     }
 
     [[nodiscard]] MemorySection getCodeSection() const noexcept

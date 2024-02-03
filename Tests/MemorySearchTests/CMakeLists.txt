@@ -4,4 +4,5 @@ target_sources(Tests PRIVATE
   BytePatternStorageTests.cpp
   BytePatternTests.cpp
   PatternFinderSIMDTests.cpp
+  PatternSearchResultTests.cpp
 )

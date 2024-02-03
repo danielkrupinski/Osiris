@@ -4,14 +4,14 @@
 #include <cstdint>
 #include <cstring>
 
-class SafeAddress {
+class PatternSearchResult {
 public:
-    explicit SafeAddress(const void* address) noexcept
+    explicit PatternSearchResult(const void* address) noexcept
         : address{ address }
     {
     }
 
-    SafeAddress& add(std::ptrdiff_t offset) noexcept
+    PatternSearchResult& add(std::ptrdiff_t offset) noexcept
     {
         if (address != nullptr)
             address = static_cast<const std::byte*>(address) + offset;
@@ -19,7 +19,7 @@ public:
     }
 
     template <std::size_t N>
-    SafeAddress& deref() noexcept
+    PatternSearchResult& deref() noexcept
     {
         if constexpr (N != 0) {
             if (address != nullptr) {
@@ -30,12 +30,12 @@ public:
         return *this;
     }
 
-    SafeAddress& deref() noexcept
+    PatternSearchResult& deref() noexcept
     {
         return deref<1>();
     }
 
-    SafeAddress& abs() noexcept
+    PatternSearchResult& abs() noexcept
     {
         if (address != nullptr) {
             using OffsetType = std::int32_t;

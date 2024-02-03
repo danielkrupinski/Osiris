@@ -3,7 +3,6 @@ target_sources(Tests PRIVATE
   PatternFinderTests.cpp
   RefCountedHookTests.cpp
   ReturnAddressTests.cpp
-  SafeAddressTests.cpp
   SpanSliceTests.cpp
   StringBuilderTests.cpp
 )

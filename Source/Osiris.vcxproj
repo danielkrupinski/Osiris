@@ -207,6 +207,7 @@
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
+    <ClInclude Include="MemorySearch\PatternSearchResult.h" />
     <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h" />
@@ -270,7 +271,6 @@
     <ClInclude Include="Utils\Pad.h" />
     <ClInclude Include="Utils\RefCountedHook.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
-    <ClInclude Include="Utils\SafeAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />

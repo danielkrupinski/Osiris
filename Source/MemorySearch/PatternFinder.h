@@ -7,7 +7,7 @@
 #include "BytePattern.h"
 #include <Helpers/PatternNotFoundLogger.h>
 #include "HybridPatternFinder.h"
-#include <Utils/SafeAddress.h>
+#include <MemorySearch/PatternSearchResult.h>
 #include <Utils/SpanSlice.h>
 
 #include <Platform/Macros/FunctionAttributes.h>
@@ -22,19 +22,19 @@ public:
     {
     }
 
-    [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern) const noexcept
+    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern) const noexcept
     {
         const auto found = HybridPatternFinder{ bytes, pattern }.findNextOccurrence();
         if (!found)
             notFoundHandler(pattern, bytes);
-        return SafeAddress{ found };
+        return PatternSearchResult{ found };
     }
 
-    [[nodiscard]] [[NOINLINE]] SafeAddress operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
+    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
     {
         const auto foundWithHint = HybridPatternFinder{ getSliceForHint(offsetHint), pattern }.findNextOccurrence();
         if (foundWithHint)
-            return SafeAddress{ foundWithHint };
+            return PatternSearchResult{ foundWithHint };
         return operator()(pattern);
     }
 

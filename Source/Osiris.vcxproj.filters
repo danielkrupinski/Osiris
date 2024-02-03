@@ -468,9 +468,6 @@
     <ClInclude Include="Utils\ReturnAddress.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\SafeAddress.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\SpanSlice.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -934,6 +931,9 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\MainMenuProvider.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternSearchResult.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
