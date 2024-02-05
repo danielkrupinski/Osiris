@@ -66,10 +66,10 @@ private:
         const DynamicLibrary panoramaDLL{cs2::PANORAMA_DLL};
         const DynamicLibrary clientDLL{cs2::CLIENT_DLL};
 
-        const PatternFinder clientPatternFinder{clientDLL.getCodeSection().raw(), PatternNotFoundLogger{}};
-        const PatternFinder panoramaPatternFinder{panoramaDLL.getCodeSection().raw(), PatternNotFoundLogger{}};
-        const PatternFinder soundSystemPatternFinder{DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{}};
-        const PatternFinder fileSystemPatternFinder{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw(), PatternNotFoundLogger{}};
+        const PatternFinder<PatternNotFoundLogger> clientPatternFinder{clientDLL.getCodeSection().raw()};
+        const PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{panoramaDLL.getCodeSection().raw()};
+        const PatternFinder<PatternNotFoundLogger> soundSystemPatternFinder{DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw()};
+        const PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw()};
 
         const FileSystemPatterns fileSystemPatterns{soundSystemPatternFinder, fileSystemPatternFinder};
 

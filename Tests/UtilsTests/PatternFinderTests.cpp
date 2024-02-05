@@ -31,23 +31,23 @@ template <std::size_t N>
 }
 
 struct DummyPatternNotFoundHandler {
-    void operator()(BytePattern, std::span<const std::byte>) const {}
+    static void onPatternNotFound(BytePattern) {}
 };
 
 TEST(Utils_PatternFinderTest, ShortPatternCanBeFound) {
     constexpr auto bytes = createByteArray({ 0xA0, 0xA1, 0xA2 });
-    const PatternFinder finder{ bytes, DummyPatternNotFoundHandler{} };
+    const PatternFinder<DummyPatternNotFoundHandler> finder{bytes};
     EXPECT_EQ(finder("A1"_pat).as<std::uintptr_t>(), std::uintptr_t(&bytes[1]));
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenByteBufferIsEmpty) {
-    const PatternFinder finder{ {}, DummyPatternNotFoundHandler{} };
+    const PatternFinder<DummyPatternNotFoundHandler> finder{{}};
     EXPECT_EQ(finder("01 02 03 04"_pat).as<std::uintptr_t>(), 0);
 }
 
 TEST(Utils_PatternFinderTest, ReturnsNullptrWhenPatternWasNotFound) {
     constexpr auto bytes = createByteArray({ 0xA0 });
-    const PatternFinder finder{ bytes, DummyPatternNotFoundHandler{} };
+    const PatternFinder<DummyPatternNotFoundHandler> finder{bytes};
     EXPECT_EQ(finder("AB CD EF"_pat).as<std::uintptr_t>(), 0);
 }
 
@@ -60,7 +60,7 @@ TEST(Utils_PatternFinderTest, PatternCanBeFoundWithSIMD) {
     bytes[44] = std::byte{ 0xC0 };
     bytes[45] = std::byte{ 0xDE };
     
-    const PatternFinder finder{ bytes, DummyPatternNotFoundHandler{} };
+    const PatternFinder<DummyPatternNotFoundHandler> finder{bytes};
     EXPECT_EQ(finder("DE AD ? C0 DE"_pat).as<std::uintptr_t>(), std::uintptr_t(&bytes[41]));
 }
 
