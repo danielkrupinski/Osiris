@@ -2,18 +2,13 @@
 
 #include <cassert>
 
-namespace cs2
-{
-
-using SDL_PeepEvents = int(*)(void* events, int numevents, int action, unsigned minType, unsigned maxType);
-
-}
+#include <SDL/SdlFunctions.h>
 
 extern "C" int SDLHook_PeepEvents_asm(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept;
 
 class PeepEventsHook {
 public:
-    explicit PeepEventsHook(cs2::SDL_PeepEvents* peepEvents) noexcept
+    explicit PeepEventsHook(sdl3::SDL_PeepEvents** peepEvents) noexcept
         : peepEventsPointer{peepEvents}
     {
     }
@@ -36,6 +31,6 @@ public:
         *peepEventsPointer = original;
     }
 
-    cs2::SDL_PeepEvents* peepEventsPointer{nullptr};
-    cs2::SDL_PeepEvents original{nullptr};
+    sdl3::SDL_PeepEvents** peepEventsPointer{nullptr};
+    sdl3::SDL_PeepEvents* original{nullptr};
 };

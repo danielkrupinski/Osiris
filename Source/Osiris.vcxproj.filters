@@ -124,6 +124,9 @@
     <Filter Include="FileUtils">
       <UniqueIdentifier>{a7381a05-bea7-4723-8a3e-9b755a56595a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDL">
+      <UniqueIdentifier>{23614f08-44a8-4cb7-a21a-13d32b93bd86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -934,6 +937,12 @@
     </ClInclude>
     <ClInclude Include="MemorySearch\PatternSearchResult.h">
       <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\SdlConstants.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\SdlFunctions.h">
+      <Filter>SDL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

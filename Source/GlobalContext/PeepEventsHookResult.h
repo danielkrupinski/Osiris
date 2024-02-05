@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Hooks/PeepEventsHook.h"
+#include <SDL/SdlFunctions.h>
 
 struct PeepEventsHookResult {
-    cs2::SDL_PeepEvents original;
+    sdl3::SDL_PeepEvents* original;
     bool shouldUnload;
 };

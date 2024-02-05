@@ -7,7 +7,7 @@
 extern "C"
 {
 
-cs2::SDL_PeepEvents SDLHook_PeepEvents_cpp() noexcept
+sdl3::SDL_PeepEvents* SDLHook_PeepEvents_cpp() noexcept
 {
     const auto [original, shouldUnload] {GlobalContext::instance().peepEventsHook()};
     if (shouldUnload)

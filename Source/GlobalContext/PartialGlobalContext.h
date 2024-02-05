@@ -6,7 +6,7 @@
 #include <Platform/Macros/PlatformSpecific.h>
 
 struct PartialGlobalContext {
-    PeepEventsHook peepEventsHook{DynamicLibrary{cs2::SDL_DLL}.getFunctionAddress("SDL_PeepEvents").add(WIN32_LINUX(3, 2)).abs().as<cs2::SDL_PeepEvents*>()};
+    PeepEventsHook peepEventsHook{DynamicLibrary{cs2::SDL_DLL}.getFunctionAddress("SDL_PeepEvents").add(WIN32_LINUX(3, 2)).abs().as<sdl3::SDL_PeepEvents**>()};
 
     void enableIfValid() noexcept
     {
