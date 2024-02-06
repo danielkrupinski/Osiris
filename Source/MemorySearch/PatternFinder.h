@@ -38,10 +38,24 @@ public:
         return operator()(pattern);
     }
 
+    [[nodiscard]] PatternSearchResult matchPatternAtAddress(const void* address, BytePattern pattern) const noexcept
+    {
+        if (matchesPatternAtAddress(address, pattern))
+            return PatternSearchResult{address};
+        return PatternSearchResult{nullptr};
+    }
+
 private:
     [[nodiscard]] std::span<const std::byte> getSliceForHint(OffsetHint offsetHint) const noexcept
     {
         return SpanSlice<20'000, const std::byte>{bytes, static_cast<std::size_t>(offsetHint)}();
+    }
+
+    [[nodiscard]] bool matchesPatternAtAddress(const void* address, BytePattern pattern) const noexcept
+    {
+        if (MemorySection{bytes}.contains(reinterpret_cast<std::uintptr_t>(address), pattern.length()))
+            return pattern.matches(std::span{static_cast<const std::byte*>(address), pattern.length()});
+        return false;
     }
 
     std::span<const std::byte> bytes;

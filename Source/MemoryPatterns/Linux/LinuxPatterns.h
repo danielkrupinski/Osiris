@@ -13,4 +13,5 @@
 #include "PanoramaUiEnginePatternsLinux.h"
 #include "PanoramaUiPanelPatternsLinux.h"
 #include "PlantedC4PatternsLinux.h"
+#include "SdlPatternsLinux.h"
 #include "SoundSystemPatternsLinux.h"

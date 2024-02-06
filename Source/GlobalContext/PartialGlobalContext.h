@@ -4,9 +4,15 @@
 #include <Hooks/PeepEventsHook.h>
 #include <Platform/DynamicLibrary.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <MemoryPatterns/SdlPatterns.h>
 
 struct PartialGlobalContext {
-    PeepEventsHook peepEventsHook{DynamicLibrary{cs2::SDL_DLL}.getFunctionAddress("SDL_PeepEvents").add(WIN32_LINUX(3, 2)).abs().as<sdl3::SDL_PeepEvents**>()};
+    explicit PartialGlobalContext(DynamicLibrary sdlDll, SdlPatterns sdlPatterns) noexcept
+        : peepEventsHook{sdlPatterns.peepEventsPointer(sdlDll.getFunctionAddress("SDL_PeepEvents").as<sdl3::SDL_PeepEvents*>())}
+    {
+    }
+
+    PeepEventsHook peepEventsHook;
 
     void enableIfValid() noexcept
     {

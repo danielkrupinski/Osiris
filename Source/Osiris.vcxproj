@@ -182,6 +182,7 @@
     <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaUiPanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h" />
+    <ClInclude Include="MemoryPatterns\SdlPatterns.h" />
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h" />
     <ClInclude Include="MemorySearch\BinaryBytePattern.h" />

@@ -26,7 +26,9 @@ public:
         if (!globalContext.isInitialized()) {
             alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
             globalContext.initialize(storage);
-            globalContext->variantContext.emplace<PartialGlobalContext>().enableIfValid();
+            const DynamicLibrary sdlDll{cs2::SDL_DLL};
+            const PatternFinder<PatternNotFoundLogger> sdlPatternFinder{sdlDll.getCodeSection().raw()};
+            globalContext->variantContext.emplace<PartialGlobalContext>(sdlDll, SdlPatterns{sdlPatternFinder}).enableIfValid();
         }
     }
 
