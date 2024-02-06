@@ -10,6 +10,7 @@
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
 #include <Platform/DynamicLibrary.h>
+#include <SDL/SdlDll.h>
 
 #include "FullGlobalContext.h"
 #include "PartialGlobalContext.h"
@@ -26,7 +27,7 @@ public:
         if (!globalContext.isInitialized()) {
             alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
             globalContext.initialize(storage);
-            const DynamicLibrary sdlDll{cs2::SDL_DLL};
+            const SdlDll sdlDll;
             const PatternFinder<PatternNotFoundLogger> sdlPatternFinder{sdlDll.getCodeSection().raw()};
             globalContext->variantContext.emplace<PartialGlobalContext>(sdlDll, SdlPatterns{sdlPatternFinder}).enableIfValid();
         }

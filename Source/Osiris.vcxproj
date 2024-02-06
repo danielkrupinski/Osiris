@@ -257,6 +257,7 @@
     <ClInclude Include="Platform\Windows\WindowsVmtFinder.h" />
     <ClInclude Include="Platform\Windows\WindowsVmtFinderParams.h" />
     <ClInclude Include="SDL\SdlConstants.h" />
+    <ClInclude Include="SDL\SdlDll.h" />
     <ClInclude Include="SDL\SdlFunctions.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />

@@ -2,6 +2,7 @@
 
 #include <CS2/Constants/DllNames.h>
 #include <SDL/SdlConstants.h>
+#include <SDL/SdlDll.h>
 #include <SDL/SdlFunctions.h>
 #include "LinuxDynamicLibrary.h"
 
@@ -24,5 +25,5 @@ private:
             showSimpleMessageBox(flags, title, message, nullptr);
     }
 
-    sdl3::SDL_ShowSimpleMessageBox* showSimpleMessageBox = LinuxDynamicLibrary{ cs2::SDL_DLL }.getFunctionAddress("SDL_ShowSimpleMessageBox").as<sdl3::SDL_ShowSimpleMessageBox*>();
+    sdl3::SDL_ShowSimpleMessageBox* showSimpleMessageBox{SdlDll{}.showSimpleMessageBox()};
 };
