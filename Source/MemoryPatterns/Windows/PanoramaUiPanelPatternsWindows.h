@@ -10,7 +10,7 @@ inline std::int32_t* PanoramaUiPanelPatterns::setParent() const noexcept
 
 inline std::int32_t* PanoramaUiPanelPatterns::setVisible() const noexcept
 {
-    return clientPatternFinder("FF 90 ? ? ? ? 45 33 C0 33 D2 ? 8B CE"_pat).add(2).as<std::int32_t*>();
+    return clientPatternFinder("FF 90 ? ? ? ? 45 33 C0 33 D2 ? 8B ? E8"_pat).add(2).as<std::int32_t*>();
 }
 
 inline std::int32_t* PanoramaUiPanelPatterns::findChildInLayoutFile() const noexcept

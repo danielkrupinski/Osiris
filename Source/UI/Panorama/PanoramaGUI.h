@@ -18,7 +18,10 @@ public:
         const PanoramaUiPanel mainMenu{mainMenuProvider.getMainMenuPanel()};
         if (!mainMenu)
             return;
-        PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.PreloadSettings();", "", 0);
+
+        // ensure settings tab is loaded because we use CSS classes from settings
+        // TODO: replace use of settings CSS classes with raw style properties
+        PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');", "", 0);
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");
         if (settings)
@@ -42,6 +45,8 @@ public:
     class: "mainmenu-top-navbar__radio-btn__icon",
     src: "s2r://panorama/images/icons/ui/bug.vsvg"
   });
+
+  $.DispatchEvent('Activated', $.GetContextPanel().FindChildTraverse("MainMenuNavBarHome"), 'mouse');
 })();
 )", "", 0);
 
