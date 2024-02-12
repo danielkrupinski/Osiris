@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <concepts>
 
 #include <Platform/Macros/IsPlatform.h>
 
@@ -21,6 +22,12 @@ namespace bits
 #elif IS_LINUX()
     return __builtin_ctz(x);
 #endif
+}
+
+template <std::unsigned_integral T>
+[[nodiscard]] constexpr T clearRightmostSetBit(T value) noexcept
+{
+    return value & (value - 1);
 }
 
 }

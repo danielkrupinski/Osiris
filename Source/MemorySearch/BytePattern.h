@@ -12,14 +12,20 @@ public:
         : pattern{pattern}
         , wildcardChar{wildcardChar}
     {
-        assert(!pattern.empty());
     }
 
-    [[nodiscard]] BytePattern withoutFirstAndLastChar() const noexcept
+    [[nodiscard]] std::size_t indexOfFirstNonWildcardChar() const noexcept
     {
-        if (pattern.size() > 2)
-            return BytePattern{ std::string_view{ pattern.data() + 1, pattern.size() - 2 }, wildcardChar };
-        return {};
+        if (wildcardChar)
+            return pattern.find_first_not_of(*wildcardChar);
+        return 0;
+    }
+
+    [[nodiscard]] std::size_t indexOfLastNonWildcardChar() const noexcept
+    {
+        if (wildcardChar)
+            return pattern.find_last_not_of(*wildcardChar);
+        return pattern.size() - 1;
     }
 
     [[nodiscard]] std::size_t length() const noexcept
@@ -59,8 +65,6 @@ public:
     }
 
 private:
-    BytePattern() = default;
-
     std::string_view pattern;
     std::optional<char> wildcardChar;
 };

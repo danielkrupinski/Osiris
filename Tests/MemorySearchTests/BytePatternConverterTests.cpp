@@ -27,18 +27,18 @@ TEST(BytePatternConverterTest, PatternIsConvertedUntilAnErrorHappens) {
     EXPECT_EQ(error, BytePatternConverterError::UnexpectedChar);
 }
 
-TEST(BytePatternConverterTest, PatternCannotStartWithWildcard) {
-    BytePatternConverter converter{ "? AA BB" };
+TEST(BytePatternConverterTest, PatternCanStartWithWildcard) {
+    BytePatternConverter converter{"? AA BB"};
     const auto [converted, error] = converter();
-    EXPECT_EQ(converted, "");
-    EXPECT_EQ(error, BytePatternConverterError::StartsWithWildcard);
+    EXPECT_EQ(converted, "?\xAA\xBB");
+    EXPECT_EQ(error, BytePatternConverterError::NoError);
 }
 
-TEST(BytePatternConverterTest, PatternCannotEndWithWildcard) {
-    BytePatternConverter converter{ "AA BB ?" };
+TEST(BytePatternConverterTest, PatternCanEndWithWildcard) {
+    BytePatternConverter converter{"AA BB ?"};
     const auto [converted, error] = converter();
-    EXPECT_EQ(converted, "\xAA\xBB");
-    EXPECT_EQ(error, BytePatternConverterError::EndsWithWildcard);
+    EXPECT_EQ(converted, "\xAA\xBB?");
+    EXPECT_EQ(error, BytePatternConverterError::NoError);
 }
 
 TEST(BytePatternConverterTest, NumericValueOfWildcardCharCannotBeUsed) {

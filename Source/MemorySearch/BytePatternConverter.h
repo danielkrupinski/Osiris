@@ -11,8 +11,6 @@
 
 enum class BytePatternConverterError {
     NoError,
-    StartsWithWildcard,
-    EndsWithWildcard,
     WildcardUsedAsByte,
     UnexpectedChar
 };
@@ -132,14 +130,8 @@ private:
     {
         assert(isNextCharWildcard());
 
-        if (readPosition == 0) {
-            error = Error::StartsWithWildcard;
-        } else if (charsToConvert() <= 2) {
-            error = Error::EndsWithWildcard;
-        } else {
-            advanceReadPosition();
-            putChar(kPatternStringWildcard);
-        }
+        advanceReadPosition();
+        putChar(kPatternStringWildcard);
     }
 
     [[nodiscard]] constexpr bool canConvertByte() const noexcept
