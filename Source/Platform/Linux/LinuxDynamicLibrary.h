@@ -12,8 +12,8 @@
 #include <sys/stat.h>
 
 #include <Platform/Macros/FunctionAttributes.h>
+#include <Utils/GenericPointer.h>
 #include <Utils/MemorySection.h>
-#include <MemorySearch/PatternSearchResult.h>
 
 #include "LinuxPlatformApi.h"
 #include "LinuxVmtFinderParams.h"
@@ -28,11 +28,11 @@ public:
         return handle != nullptr;
     }
 
-    [[nodiscard]] PatternSearchResult getFunctionAddress(const char* functionName) const noexcept
+    [[nodiscard]] GenericPointer getFunctionAddress(const char* functionName) const noexcept
     {
         if (handle)
-            return PatternSearchResult{ LinuxPlatformApi::dlsym(handle, functionName) };
-        return PatternSearchResult{ 0 };
+            return LinuxPlatformApi::dlsym(handle, functionName);
+        return {};
     }
 
     [[nodiscard]] link_map* getLinkMap() const noexcept

@@ -269,6 +269,7 @@
     <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
+    <ClInclude Include="Utils\GenericPointer.h" />
     <ClInclude Include="Utils\HexChars.h" />
     <ClInclude Include="Utils\LazyInitialized.h" />
     <ClInclude Include="Utils\ManuallyDestructible.h" />

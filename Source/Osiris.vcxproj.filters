@@ -953,6 +953,9 @@
     <ClInclude Include="SDL\SdlDll.h">
       <Filter>SDL</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\GenericPointer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

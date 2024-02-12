@@ -7,8 +7,8 @@
 
 #include <Windows.h>
 
+#include <Utils/GenericPointer.h>
 #include <Utils/MemorySection.h>
-#include <MemorySearch/PatternSearchResult.h>
 
 class PortableExecutable {
 public:
@@ -45,11 +45,11 @@ public:
         return {};
     }
 
-    [[nodiscard]] PatternSearchResult getExport(const char* name) const noexcept
+    [[nodiscard]] GenericPointer getExport(const char* name) const noexcept
     {
         const auto exportDataDirectory = getExportDataDirectory();
         if (!exportDataDirectory)
-            return PatternSearchResult{ nullptr };
+            return {};
 
         const auto exportDirectory = reinterpret_cast<const IMAGE_EXPORT_DIRECTORY*>(base + exportDataDirectory->VirtualAddress);
 
@@ -61,13 +61,13 @@ public:
                 const auto functionRva = functions[nameOrdinals[i]];
                 if (isForwardedExport(functionRva, *exportDataDirectory)) {
                     assert(false && "Forwarded exports are not supported yet!");
-                    return PatternSearchResult{ nullptr };
+                    return {};
                 }
-                return PatternSearchResult{ base + functionRva };
+                return base + functionRva;
             }
         }
 
-        return PatternSearchResult{ nullptr };
+        return {};
     }
 
 private:
