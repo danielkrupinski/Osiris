@@ -119,6 +119,15 @@ struct CStylePropertyImageShadow : CStyleProperty {
     Color color;
 };
 
+struct CStylePropertyPosition : CStyleProperty {
+    static constexpr auto kName{"position"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyPosition@panorama@@", "N8panorama22CStylePropertyPositionE")};
+
+    CUILength x;
+    CUILength y;
+    CUILength z;
+};
+
 struct CPanelStyle {
     using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
 

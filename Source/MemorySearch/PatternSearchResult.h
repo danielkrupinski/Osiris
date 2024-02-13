@@ -46,7 +46,7 @@ public:
     {
         if (base)
             return T(base.as<const std::byte*>() + patternFoundOffset + extraOffset);
-        return T(nullptr);
+        return T(base.as<void*>());
     }
 
 private:
