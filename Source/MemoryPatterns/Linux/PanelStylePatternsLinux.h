@@ -10,5 +10,5 @@ inline cs2::CPanelStyle::SetProperty* PanelStylePatterns::setProperty() const no
 
 inline cs2::CPanelStyle::StylePropertySymbols* PanelStylePatterns::stylePropertiesSymbols() const noexcept
 {
-    return panoramaPatternFinder("48 89 75 ? E8 ? ? ? ? ? 89 ? 4C 89 ? 48 C7"_pat).add(5).abs().add(14).abs().as<cs2::CPanelStyle::StylePropertySymbols*>();
+    return panoramaPatternFinder.matchPatternAtAddress(panoramaPatternFinder("48 89 75 ? E8 ? ? ? ? ? 89 ? 4C 89 ? 48 C7"_pat).add(5).abs().as<void*>(), "0F B6 05 ? ? ? ? 84 C0 74 0D 48 8D 05 ? ? ? ?"_pat).add(14).abs().as<cs2::CPanelStyle::StylePropertySymbols*>();
 }

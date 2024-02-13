@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cstring>
 
+#include <Utils/GenericPointer.h>
+
 class PatternSearchResult {
 public:
     explicit PatternSearchResult(const void* address) noexcept
@@ -18,15 +20,15 @@ public:
         return *this;
     }
 
-    PatternSearchResult& abs() noexcept
+    [[nodiscard]] GenericPointer abs() const noexcept
     {
         if (address != nullptr) {
             using OffsetType = std::int32_t;
             const auto addressOfNextInstruction = static_cast<const std::byte*>(address) + sizeof(OffsetType);
             const auto offset = derefAddress<OffsetType>();
-            address = addressOfNextInstruction + offset;
+            return addressOfNextInstruction + offset;
         }
-        return *this;
+        return {};
     }
 
     template <typename T>
