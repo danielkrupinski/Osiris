@@ -9,6 +9,11 @@ struct GenericPointer {
 
     GenericPointer() = default;
 
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return value != nullptr;
+    }
+
     template <typename T>
     [[nodiscard]] T as() const noexcept
     {

@@ -1,6 +1,7 @@
 #include <array>
 #include <cstddef>
 #include <cstring>
+#include <tuple>
 
 #include <gtest/gtest.h>
 
@@ -9,63 +10,55 @@
 namespace
 {
 
-class PatternSearchResult_AddressTest : public testing::TestWithParam<void*> {};
-
-TEST_P(PatternSearchResult_AddressTest, AfterConstructionHasAddressPassedToTheConstructor) {
-    EXPECT_EQ(PatternSearchResult{GetParam()}.as<void*>(), GetParam());
+TEST(PatternSearchResultDefaultConstructedTest, HasNullPointer) {
+    EXPECT_EQ(PatternSearchResult{}.as<void*>(), nullptr);
 }
 
-TEST_P(PatternSearchResult_AddressTest, ReturnsCorrectAddressWhenConvertedToPointer) {
-    EXPECT_EQ(PatternSearchResult{GetParam()}.as<int*>(), GetParam());
+TEST(PatternSearchResultDefaultConstructedTest, AddMethodDoesNothing) {
+    EXPECT_EQ(PatternSearchResult{}.add(5).as<void*>(), nullptr);
 }
 
-INSTANTIATE_TEST_SUITE_P(, PatternSearchResult_AddressTest, testing::Values(
-    nullptr,
-    reinterpret_cast<void*>(123),
-    reinterpret_cast<void*>(-1)
-));
-
-TEST(PatternSearchResultTest, AddingPositiveOffsetToZeroAddressDoesNothing) {
-    EXPECT_EQ(PatternSearchResult{nullptr}.add(1'000).as<void*>(), nullptr);
+TEST(PatternSearchResultDefaultConstructedTest, AbsMethodReturnsNullPointer) {
+    EXPECT_EQ(PatternSearchResult{}.add(7).abs().as<void*>(), nullptr);
 }
 
-TEST(PatternSearchResultTest, AddingZeroOffsetToZeroAddressDoesNothing) {
-    EXPECT_EQ(PatternSearchResult{nullptr}.add(0).as<void*>(), nullptr);
+class PatternSearchResultTest : public testing::Test {
+protected:
+    std::array<std::byte, 50> runtimeMemory;
+    std::array<std::byte, 60> foundPatternMemory;
+};
+
+class PatternSearchResultToAbsoluteTest : public PatternSearchResultTest, public testing::WithParamInterface<std::tuple<std::size_t, std::int32_t>> {
+protected:
+    static constexpr auto kRuntimeMemoryOffset{3};
+
+    PatternSearchResultToAbsoluteTest() noexcept
+    {
+        const auto relativeOffset{getRelativeOffset()};
+        std::memcpy(foundPatternMemory.data(), &relativeOffset, sizeof(relativeOffset));
+    }
+
+    [[nodiscard]] std::size_t getFoundPatternOffset() const noexcept
+    {
+        return std::get<0>(GetParam());
+    }
+
+    [[nodiscard]] std::int32_t getRelativeOffset() const noexcept
+    {
+        return std::get<1>(GetParam());
+    }
+
+    [[nodiscard]] PatternSearchResult patternSearchResult() const noexcept
+    {
+        return PatternSearchResult{runtimeMemory.data() + kRuntimeMemoryOffset, getFoundPatternOffset(), foundPatternMemory};
+    }
+};
+
+TEST_P(PatternSearchResultToAbsoluteTest, ToAbsoluteReturnsCorrectAddress) {
+    EXPECT_EQ(patternSearchResult().abs().as<void*>(), &runtimeMemory.at(kRuntimeMemoryOffset + getFoundPatternOffset() + sizeof(std::int32_t) + getRelativeOffset()));
 }
 
-TEST(PatternSearchResultTest, AddingNegativeOffsetToZeroAddressDoesNothing) {
-    EXPECT_EQ(PatternSearchResult{nullptr}.add(-1'000).as<void*>(), nullptr);
-}
-
-TEST(PatternSearchResultTest, AddingPositiveOffsetToNonZeroAddressWorks) {
-    std::byte array[10];
-    EXPECT_EQ(PatternSearchResult{&array}.add(5).as<void*>(), &array[5]);
-}
-
-TEST(PatternSearchResultTest, AddingZeroOffsetToNonZeroAddressDoesNothing) {
-    std::byte array[10];
-    EXPECT_EQ(PatternSearchResult{&array[4]}.add(0).as<void*>(), &array[4]);
-}
-
-TEST(PatternSearchResultTest, AddingNegativeOffsetToNonZeroAddressWorks) {
-    std::byte array[10];
-    EXPECT_EQ(PatternSearchResult{&array[7]}.add(-4).as<void*>(), &array[3]);
-}
-
-TEST(PatternSearchResultTest, ConvertingNullPointerToAbsoluteDoesNothing) {
-    EXPECT_EQ(PatternSearchResult{nullptr}.abs().as<void*>(), nullptr);
-}
-
-class PatternSearchResultToAbsoluteTest : public testing::TestWithParam<std::int32_t> {};
-
-TEST_P(PatternSearchResultToAbsoluteTest, RelativeAddressIsCorrectlyConvertedToAbsolute) {
-    std::array<std::byte, 100> array;
-    const std::int32_t offset = GetParam();
-    constexpr auto offsetIndex = 30;
-    std::memcpy(&array.at(offsetIndex), &offset, sizeof(offset));
-    EXPECT_EQ(PatternSearchResult{&array.at(offsetIndex)}.abs().as<std::byte*>(), &array.at(offsetIndex + sizeof(offset) + offset));
-}
-
-INSTANTIATE_TEST_SUITE_P(, PatternSearchResultToAbsoluteTest, testing::Values(-12, 0, 50));
+INSTANTIATE_TEST_SUITE_P(, PatternSearchResultToAbsoluteTest,
+    testing::Combine(testing::Values(0, 1, 5), testing::Values(-5, 0, 7)));
 
 }

@@ -1,32 +1,42 @@
 #pragma once
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <span>
 
 #include <Utils/GenericPointer.h>
 
 class PatternSearchResult {
 public:
-    explicit PatternSearchResult(const void* address) noexcept
-        : address{ address }
+    PatternSearchResult(GenericPointer base, std::size_t patternFoundOffset, std::span<const std::byte> foundPatternBytes) noexcept
+        : base{base}
+        , patternFoundOffset{patternFoundOffset}
+        , foundPatternBytes{foundPatternBytes}
     {
+        assert(base);
     }
 
-    PatternSearchResult& add(std::ptrdiff_t offset) noexcept
+    PatternSearchResult() = default;
+
+    PatternSearchResult& add(std::size_t offset) noexcept
     {
-        if (address != nullptr)
-            address = static_cast<const std::byte*>(address) + offset;
+        if (base) {
+            extraOffset += offset;
+            assert(extraOffset < foundPatternBytes.size());
+        }
         return *this;
     }
 
     [[nodiscard]] GenericPointer abs() const noexcept
     {
-        if (address != nullptr) {
+        if (base) {
             using OffsetType = std::int32_t;
-            const auto addressOfNextInstruction = static_cast<const std::byte*>(address) + sizeof(OffsetType);
-            const auto offset = derefAddress<OffsetType>();
-            return addressOfNextInstruction + offset;
+            OffsetType offset;
+            assert(foundPatternBytes.size() - extraOffset >= sizeof(OffsetType));
+            std::memcpy(&offset, foundPatternBytes.data() + extraOffset, sizeof(OffsetType));
+            return base.as<const std::byte*>() + patternFoundOffset + extraOffset + sizeof(OffsetType) + offset;
         }
         return {};
     }
@@ -34,17 +44,14 @@ public:
     template <typename T>
     [[nodiscard]] T as() const noexcept
     {
-        return T(address);
+        if (base)
+            return T(base.as<const std::byte*>() + patternFoundOffset + extraOffset);
+        return T(nullptr);
     }
 
 private:
-    template <typename T>
-    [[nodiscard]] T derefAddress() const noexcept
-    {
-        T value;
-        std::memcpy(&value, address, sizeof(T));
-        return value;
-    }
-
-    const void* address;
+    GenericPointer base{};
+    std::size_t patternFoundOffset;
+    std::span<const std::byte> foundPatternBytes;
+    std::size_t extraOffset{0};
 };
