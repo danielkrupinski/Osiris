@@ -50,7 +50,7 @@ public:
         if (!worldtoClipSpaceConverter)
             return;
 
-        state.panels.createPanels(hudInWorldPanelFactory);
+        state.panels.createPanels(hudInWorldPanelFactory, panelConfigurator);
 
         std::size_t currentIndex = 0;
         std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex](const PlayedSound& sound) {

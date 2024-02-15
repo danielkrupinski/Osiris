@@ -9,6 +9,17 @@ struct PanoramaImagePanel {
     {
     }
 
+    [[nodiscard]] static cs2::CImagePanel* create(const char* id, cs2::CUIPanel* parent) noexcept
+    {
+        if (!PanoramaImagePanelImpl::instance().constructor || !PanoramaImagePanelImpl::instance().size)
+            return nullptr;
+
+        const auto memory{static_cast<cs2::CImagePanel*>(MemAlloc::allocate(*PanoramaImagePanelImpl::instance().size))};
+        if (memory)
+            PanoramaImagePanelImpl::instance().constructor(memory, parent->clientPanel, id);
+        return memory;
+    }
+
     void setImage(const char* imageUrl) const noexcept
     {
         if (PanoramaImagePanelImpl::instance().setImage)

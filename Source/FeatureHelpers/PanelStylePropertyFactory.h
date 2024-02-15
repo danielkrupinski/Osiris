@@ -15,27 +15,42 @@ struct PanelStylePropertyFactory {
 
     [[nodiscard]] cs2::CStylePropertyWidth* width(cs2::CUILength width) const noexcept
     {
-        return create<cs2::CStylePropertyWidth>(VMTs.widthPropertyVmt, symbols.width, width);
+        return create<cs2::CStylePropertyWidth>(VMTs.widthPropertyVmt, symbols.widthSymbol, width);
     }
 
     [[nodiscard]] cs2::CStylePropertyOpacity* opacity(float opacity) const noexcept
     {
-        return create<cs2::CStylePropertyOpacity>(VMTs.opacityPropertyVmt, symbols.opacity, opacity);
+        return create<cs2::CStylePropertyOpacity>(VMTs.opacityPropertyVmt, symbols.opacitySymbol, opacity);
     }
 
     [[nodiscard]] cs2::CStylePropertyZIndex* zIndex(float zIndex) const noexcept
     {
-        return create<cs2::CStylePropertyZIndex>(VMTs.zIndexPropertyVmt, symbols.zIndex, zIndex);
+        return create<cs2::CStylePropertyZIndex>(VMTs.zIndexPropertyVmt, symbols.zIndexSymbol, zIndex);
     }
 
     [[nodiscard]] cs2::CStylePropertyHeight* height(cs2::CUILength height) const noexcept
     {
-        return create<cs2::CStylePropertyHeight>(VMTs.heightPropertyVmt, symbols.height, height);
+        return create<cs2::CStylePropertyHeight>(VMTs.heightPropertyVmt, symbols.heightSymbol, height);
     }
 
     [[nodiscard]] cs2::CStylePropertyImageShadow* imageShadow(const ImageShadowParams& params) const noexcept
     {
-        return create<cs2::CStylePropertyImageShadow>(VMTs.imageShadowPropertyVmt, symbols.imageShadow, true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color);
+        return create<cs2::CStylePropertyImageShadow>(VMTs.imageShadowPropertyVmt, symbols.imageShadowSymbol, true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color);
+    }
+
+    [[nodiscard]] cs2::CStylePropertyPosition* position(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        return create<cs2::CStylePropertyPosition>(VMTs.positionPropertyVmt, symbols.positionSymbol, x, y, cs2::CUILength::pixels(0));
+    }
+
+    [[nodiscard]] cs2::CStylePropertyTransformOrigin* transformOrigin(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        return create<cs2::CStylePropertyTransformOrigin>(VMTs.transformOriginPropertyVmt, symbols.transformOriginSymbol, x, y, false);
+    }
+
+    [[nodiscard]] cs2::CStylePropertyAlign* align(cs2::EHorizontalAlignment horizontalAlignment, cs2::EVerticalAlignment verticalAlignment) const noexcept
+    {
+        return create<cs2::CStylePropertyAlign>(VMTs.alignPropertyVmt, symbols.alignSymbol, horizontalAlignment, verticalAlignment);
     }
 
 private:

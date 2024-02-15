@@ -10,6 +10,9 @@ struct StylePropertiesVMTs {
         , zIndexPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyZIndex::kMangledTypeName)}
         , heightPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyHeight::kMangledTypeName)}
         , imageShadowPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyImageShadow::kMangledTypeName)}
+        , positionPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyPosition::kMangledTypeName)}
+        , transformOriginPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyTransformOrigin::kMangledTypeName)}
+        , alignPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyAlign::kMangledTypeName)}
     {
     }
 
@@ -18,4 +21,7 @@ struct StylePropertiesVMTs {
     const void* zIndexPropertyVmt;
     const void* heightPropertyVmt;
     const void* imageShadowPropertyVmt;
+    const void* positionPropertyVmt;
+    const void* transformOriginPropertyVmt;
+    const void* alignPropertyVmt;
 };

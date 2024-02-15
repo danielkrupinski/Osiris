@@ -25,7 +25,7 @@ struct BombBeepPanels {
         return inWorldFactory.createPanel("BombBeepContainer", HudInWorldPanelZOrder::BombBeep);
     }
 
-    static void createContentPanels(cs2::CUIPanel& containerPanel) noexcept
+    static void createContentPanels(cs2::CUIPanel& containerPanel, [[maybe_unused]] PanelConfigurator panelConfigurator) noexcept
     {
         for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
             PanoramaUiEngine::runScript(&containerPanel,

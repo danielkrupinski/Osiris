@@ -6,7 +6,7 @@
 template <typename T>
 class HudInWorldPanels {
 public:
-    void createPanels(const HudInWorldPanelFactory& inWorldFactory) noexcept
+    void createPanels(const HudInWorldPanelFactory& inWorldFactory, PanelConfigurator panelConfigurator) noexcept
     {
         if (containerPanelPointer.get())
             return;
@@ -16,7 +16,7 @@ public:
             return;
 
         containerPanelPointer = containerPanel->uiPanel;
-        T::createContentPanels(*containerPanel->uiPanel);
+        T::createContentPanels(*containerPanel->uiPanel, panelConfigurator);
     }
 
     [[nodiscard]] PanoramaUiPanel getPanel(std::size_t index) const noexcept

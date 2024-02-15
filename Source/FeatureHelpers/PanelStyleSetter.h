@@ -67,6 +67,21 @@ public:
         setProperty(propertyFactory.imageShadow(params));
     }
 
+    void setPosition(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        setProperty(propertyFactory.position(x, y));
+    }
+
+    void setTransformOrigin(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        setProperty(propertyFactory.transformOrigin(x, y));
+    }
+
+    void setAlign(cs2::EHorizontalAlignment horizontalAlignment, cs2::EVerticalAlignment verticalAlignment) const noexcept
+    {
+        setProperty(propertyFactory.align(horizontalAlignment, verticalAlignment));
+    }
+
 private:
     cs2::CPanelStyle* thisptr;
     PanelStylePropertyFactory propertyFactory;
