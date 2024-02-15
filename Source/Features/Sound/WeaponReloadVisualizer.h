@@ -39,7 +39,7 @@ struct WeaponReloadPanels {
                     .horizontalOffset{cs2::CUILength::pixels(0)},
                     .verticalOffset{cs2::CUILength::pixels(0)},
                     .blurRadius{cs2::CUILength::pixels(1)},
-                    .strength{3},
+                    .strength = 3,
                     .color{0, 0, 0}
                 });
             }
