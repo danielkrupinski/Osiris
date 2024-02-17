@@ -22,7 +22,7 @@ struct Features {
 
     [[nodiscard]] VisualFeatures visualFeatures() const noexcept
     {
-        return VisualFeatures{states.visualFeaturesStates, helpers, hooks.loopModeGameHook};
+        return VisualFeatures{states.visualFeaturesStates, helpers};
     }
 
     FeaturesStates& states;

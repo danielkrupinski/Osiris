@@ -14,13 +14,12 @@
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(ScopeOverlayRemoverState& state, MainMenuProvider mainMenuProvider, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook) noexcept
+    ScopeOverlayRemover(ScopeOverlayRemoverState& state, MainMenuProvider mainMenuProvider, HudProvider hudProvider, cs2::CPanel2D** hudScope) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
         , mainMenuProvider{mainMenuProvider}
         , hudProvider{hudProvider}
         , hudScope{hudScope}
-        , loopModeGameHook{loopModeGameHook}
     {
     }
 
@@ -81,5 +80,4 @@ private:
     MainMenuProvider mainMenuProvider;
     HudProvider hudProvider;
     cs2::CPanel2D** hudScope;
-    LoopModeGameHook& loopModeGameHook;
 };
