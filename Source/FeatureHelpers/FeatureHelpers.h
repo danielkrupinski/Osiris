@@ -12,7 +12,6 @@
 #include "StylePropertiesVMTs.h"
 #include "StylePropertySymbolMap.h"
 #include "ViewToProjectionMatrix.h"
-#include "Visuals/SniperScopeBlurRemover.h"
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
@@ -23,7 +22,6 @@ struct FeatureHelpers {
         , worldtoClipSpaceConverter{clientPatterns}
         , plantedC4Provider{clientPatterns}
         , viewToProjectionMatrix{clientPatterns}
-        , sniperScopeBlurRemover{clientPatterns}
         , stylePropertiesVMTs{panoramaVmtFinder}
         , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
         , soundWatcher{fileSystemPatterns, soundSystemPatterns}
@@ -45,7 +43,6 @@ struct FeatureHelpers {
     PlantedC4Provider plantedC4Provider;
     HudInWorldPanelContainer hudInWorldPanelContainer;
     ViewToProjectionMatrix viewToProjectionMatrix;
-    SniperScopeBlurRemover sniperScopeBlurRemover;
     StylePropertiesVMTs stylePropertiesVMTs;
     StylePropertiesSymbols stylePropertiesSymbols;
     SoundWatcher soundWatcher;

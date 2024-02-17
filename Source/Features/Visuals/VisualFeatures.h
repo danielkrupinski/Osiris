@@ -2,7 +2,6 @@
 
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "ScopeOverlayRemover.h"
-#include "SniperScopeBlurRemovalFeature.h"
 #include "States/VisualFeaturesStates.h"
 
 class LoopModeGameHook;
@@ -10,12 +9,7 @@ class LoopModeGameHook;
 struct VisualFeatures {
     [[nodiscard]] ScopeOverlayRemover scopeOverlayRemover() const noexcept
     {
-        return ScopeOverlayRemover{states.scopeOverlayRemoverState, helpers.mainMenuProvider, helpers.hudProvider, helpers.hudScope, loopModeGameHook, helpers.sniperScopeBlurRemover};
-    }
-
-    [[nodiscard]] SniperScopeBlurRemovalFeature sniperScopeBlurRemoval() const noexcept
-    {
-        return SniperScopeBlurRemovalFeature{states.sniperScopeBlurRemovalFeatureState, loopModeGameHook, helpers.sniperScopeBlurRemover};
+        return ScopeOverlayRemover{states.scopeOverlayRemoverState, helpers.mainMenuProvider, helpers.hudProvider, helpers.hudScope, loopModeGameHook};
     }
 
     VisualFeaturesStates& states;

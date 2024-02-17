@@ -6,24 +6,21 @@
 #include <Hooks/LoopModeGameHook.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <GameClasses/ClientMode.h>
 
 #include <FeatureHelpers/MainMenuProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
-#include <FeatureHelpers/Visuals/SniperScopeBlurRemover.h>
 
 #include "States/ScopeOverlayRemoverState.h"
 
 class ScopeOverlayRemover : public TogglableFeature<ScopeOverlayRemover> {
 public:
-    ScopeOverlayRemover(ScopeOverlayRemoverState& state, MainMenuProvider mainMenuProvider, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook, SniperScopeBlurRemover& sniperScopeBlurRemover) noexcept
+    ScopeOverlayRemover(ScopeOverlayRemoverState& state, MainMenuProvider mainMenuProvider, HudProvider hudProvider, cs2::CPanel2D** hudScope, LoopModeGameHook& loopModeGameHook) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
         , mainMenuProvider{mainMenuProvider}
         , hudProvider{hudProvider}
         , hudScope{hudScope}
         , loopModeGameHook{loopModeGameHook}
-        , sniperScopeBlurRemover{sniperScopeBlurRemover}
     {
     }
 
@@ -38,14 +35,8 @@ public:
 private:    
     friend TogglableFeature;
 
-    void onEnable() const noexcept
-    {
-        sniperScopeBlurRemover.incrementReferenceCount(loopModeGameHook);
-    }
-
     void onDisable() const noexcept
     {
-        sniperScopeBlurRemover.decrementReferenceCount(loopModeGameHook);
         state.restorePanels();
     }
 
@@ -91,5 +82,4 @@ private:
     HudProvider hudProvider;
     cs2::CPanel2D** hudScope;
     LoopModeGameHook& loopModeGameHook;
-    SniperScopeBlurRemover& sniperScopeBlurRemover;
 };

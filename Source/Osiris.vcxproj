@@ -65,7 +65,6 @@
     <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
-    <ClInclude Include="FeatureHelpers\Visuals\SniperScopeBlurRemover.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
@@ -93,18 +92,14 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h" />
-    <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h" />
     <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h" />
-    <ClInclude Include="Features\Visuals\States\SniperScopeBlurRemovalFeatureState.h" />
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
-    <ClInclude Include="GameClasses\ClientMode.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
-    <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h" />
     <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileSystemImpl.h" />
@@ -120,7 +115,6 @@
     <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
-    <ClInclude Include="GameClasses\OffsetTypes\ClientModeOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\FileSystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
@@ -154,12 +148,10 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBase.h" />
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
-    <ClInclude Include="MemoryPatterns\ClientModePatterns.h" />
     <ClInclude Include="MemoryPatterns\ClientPatterns.h" />
     <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\GameRulesPatterns.h" />
-    <ClInclude Include="MemoryPatterns\Linux\ClientModePatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\EntitySystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\FileSystemPatternsLinux.h" />
@@ -184,7 +176,6 @@
     <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h" />
     <ClInclude Include="MemoryPatterns\SdlPatterns.h" />
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
-    <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />

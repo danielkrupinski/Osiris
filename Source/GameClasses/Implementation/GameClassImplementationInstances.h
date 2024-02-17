@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ClientModeImpl.h"
 #include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
@@ -15,11 +14,6 @@
 #include "PlantedC4Impl.h"
 
 #include <GlobalContext/GlobalContext.h>
-
-inline const ClientModeImpl& ClientModeImpl::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameClasses().clientMode;
-}
 
 inline const EntitySystemImpl& EntitySystemImpl::instance() noexcept
 {

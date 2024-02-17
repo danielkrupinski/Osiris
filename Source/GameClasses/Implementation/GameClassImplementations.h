@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ClientModeImpl.h"
 #include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
@@ -17,8 +16,7 @@
 #include <Platform/VmtFinder.h>
 
 struct GameClassImplementations {
-    GameClassImplementations(const ClientModePatterns& clientModePatterns,
-                             const ClientPatterns& clientPatterns,
+    GameClassImplementations(const ClientPatterns& clientPatterns,
                              const FileSystemPatterns& fileSystemPatterns,
                              const GameRulesPatterns& gameRulesPatterns,
                              const MemAllocPatterns& memAllocPatterns,
@@ -31,8 +29,7 @@ struct GameClassImplementations {
                              const PlantedC4Patterns& plantedC4Patterns,
                              const EntitySystemPatterns& entitySystemPatterns,
                              Tier0Dll tier0Dll) noexcept
-        : clientMode{clientModePatterns}
-        , entitySystem{entitySystemPatterns}
+        : entitySystem{entitySystemPatterns}
         , fileNameSymbolTable{tier0Dll}
         , fileSystem{fileSystemPatterns}
         , gameRules{gameRulesPatterns}
@@ -47,7 +44,6 @@ struct GameClassImplementations {
     {
     }
 
-    ClientModeImpl clientMode;
     EntitySystemImpl entitySystem;
     FileNameSymbolTableImpl fileNameSymbolTable;
     FileSystemImpl fileSystem;

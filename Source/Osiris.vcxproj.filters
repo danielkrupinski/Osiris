@@ -94,9 +94,6 @@
     <Filter Include="Platform\Windows\RTTI">
       <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FeatureHelpers\Visuals">
-      <UniqueIdentifier>{1511f056-4a2b-4e6c-b5dc-3706343f42f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\Linux\RTTI">
       <UniqueIdentifier>{210e5c32-88c9-4a2e-9bb7-ccd158c7d715}</UniqueIdentifier>
     </Filter>
@@ -183,9 +180,6 @@
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\ClientMode.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\GameRules.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
@@ -203,9 +197,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PlantedC4.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\ClientModeImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h">
       <Filter>GameClasses\Implementation</Filter>
@@ -230,9 +221,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h">
       <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\ClientModeOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -285,9 +273,6 @@
     <ClInclude Include="MemoryAllocation\UniquePtr.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\ClientModePatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\ClientPatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
@@ -308,9 +293,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h">
       <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Windows\ClientModePatternsWindows.h">
-      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -335,9 +317,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\ClientModePatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h">
       <Filter>MemoryPatterns\Linux</Filter>
@@ -737,12 +716,6 @@
     <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h">
       <Filter>Platform\Windows\RTTI</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Visuals\SniperScopeBlurRemover.h">
-      <Filter>FeatureHelpers\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\SniperScopeBlurRemovalFeature.h">
-      <Filter>Features\Visuals</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\PanelStylePatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
@@ -903,9 +876,6 @@
       <Filter>Features\Hud\States</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h">
-      <Filter>Features\Visuals\States</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\States\SniperScopeBlurRemovalFeatureState.h">
       <Filter>Features\Visuals\States</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
