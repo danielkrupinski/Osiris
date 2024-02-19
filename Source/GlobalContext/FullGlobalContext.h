@@ -23,6 +23,7 @@
 #include <MemoryPatterns/PanoramaUiPanelPatterns.h>
 #include <MemoryPatterns/PlantedC4Patterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
+#include <MemoryPatterns/TopLevelWindowPatterns.h>
 #include <MemorySearch/PatternFinder.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <Platform/DynamicLibrary.h>
@@ -46,6 +47,7 @@ struct FullGlobalContext {
             PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder},
             PlantedC4Patterns{clientPatternFinder},
             EntitySystemPatterns{clientPatternFinder},
+            TopLevelWindowPatterns{panoramaPatternFinder},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,

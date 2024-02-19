@@ -14,3 +14,4 @@
 #include "PlantedC4PatternsWindows.h"
 #include "SdlPatternWindows.h"
 #include "SoundSystemPatternsWindows.h"
+#include "TopLevelWindowPatternsWindows.h"

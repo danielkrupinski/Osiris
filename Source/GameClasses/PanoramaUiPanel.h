@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/Implementation/PanoramaUiPanelImpl.h>
+#include <GameClasses/TopLevelWindow.h>
 
 struct PanoramaUiPanel {
     explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
@@ -67,6 +68,11 @@ struct PanoramaUiPanel {
     [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
     {
         return impl().panelStyle.of(thisptr).get();
+    }
+
+    [[nodiscard]] auto getParentWindow() const noexcept
+    {
+        return TopLevelWindow{impl().parentWindowOffset.of(thisptr).valueOr(nullptr)};
     }
 
     explicit(false) operator cs2::CUIPanel*() const noexcept

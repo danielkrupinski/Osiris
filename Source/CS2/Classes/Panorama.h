@@ -4,6 +4,7 @@
 
 #include <Platform/Macros/IsPlatform.h>
 #include <Platform/Macros/PlatformSpecific.h>
+#include <Utils/Pad.h>
 
 #include "Color.h"
 #include "CUtlMap.h"
@@ -189,10 +190,16 @@ struct CUIPanel {
     using classesVector = CUtlVector<CPanoramaSymbol>;
 };
 
-struct CImagePanel : CPanel2D {
-    using setImage = void (*)(CImagePanel* thisptr, const char* imageUrl);
+struct ImageProperties {
+    PAD(16);
+    int textureWidth;
+    int textureHeight;
+    float scale;
+};
 
+struct CImagePanel : CPanel2D {
     using Constructor = void(CImagePanel* thisptr, CPanel2D* parent, const char* id);
+    using SetImage = void(CImagePanel* thisptr, const char* imageUrl, const char* defaultImageUrl, ImageProperties* properties);
 };
 
 struct CTransform3D {
@@ -207,6 +214,10 @@ struct CTransformTranslate3D : CTransform3D {
 
 struct CTransformScale3D : CTransform3D {
     Vector m_VecScale;
+};
+
+struct CTopLevelWindow {
+    using m_flScaleFactor = float;
 };
 
 }

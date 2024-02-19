@@ -48,3 +48,10 @@ inline PanelStyleOffset PanoramaUiPanelPatterns::panelStyleOffset() const noexce
         panoramaPatternFinder("D2 E8 ? ? ? ? 48 8D 43 ? 48"_pat).add(9).as<std::int8_t*>()
     };
 }
+
+inline ParentWindowOffset PanoramaUiPanelPatterns::parentWindowOffset() const noexcept
+{
+    return ParentWindowOffset{
+        panoramaPatternFinder("48 89 77 ? 48 85 F6 75"_pat).add(3).as<std::int8_t*>()
+    };
+}

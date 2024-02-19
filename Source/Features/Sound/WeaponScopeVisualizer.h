@@ -35,7 +35,7 @@ struct WeaponScopePanels {
             if (!imagePanel)
                 continue;
 
-            PanoramaImagePanel{imagePanel}.setImage("s2r://panorama/images/icons/ui/chatwheel_sniperspotted.svg");
+            PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/chatwheel_sniperspotted.svg");
             if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
                 const auto styleSetter{panelConfigurator.panelStyle(*style)};
                 styleSetter.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentCenter);

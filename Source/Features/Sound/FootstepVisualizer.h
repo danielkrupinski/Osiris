@@ -45,7 +45,7 @@ struct FootstepPanels {
             if (!imagePanel)
                 continue;
 
-            PanoramaImagePanel{imagePanel}.setImage("s2r://panorama/images/icons/equipment/stomp_damage.svg");
+            PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/equipment/stomp_damage.svg");
             if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
                 const auto styleSetter{panelConfigurator.panelStyle(*style)};
                 styleSetter.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentBottom);

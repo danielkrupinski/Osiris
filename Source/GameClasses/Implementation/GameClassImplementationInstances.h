@@ -12,6 +12,7 @@
 #include "PanoramaUiEngineImpl.h"
 #include "PanoramaUiPanelImpl.h"
 #include "PlantedC4Impl.h"
+#include "TopLevelWindowImpl.h"
 
 #include <GlobalContext/GlobalContext.h>
 
@@ -73,4 +74,9 @@ inline const PanoramaUiPanelImpl& PanoramaUiPanelImpl::instance() noexcept
 inline const PlantedC4Impl& PlantedC4Impl::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameClasses().plantedC4;
+}
+
+inline const TopLevelWindowImpl& TopLevelWindowImpl::instance() noexcept
+{
+    return GlobalContext::instance().fullContext().gameClasses().topLevelWindow;
 }

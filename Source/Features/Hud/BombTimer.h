@@ -81,7 +81,7 @@ private:
 
         if (bombsiteIconUrl) {
             if (const auto bombSiteIcon = state.bombSiteIconPanel.get())
-                PanoramaImagePanel{ static_cast<cs2::CImagePanel*>(bombSiteIcon.getClientPanel()) }.setImage(bombsiteIconUrl);
+                PanoramaImagePanel{ static_cast<cs2::CImagePanel*>(bombSiteIcon.getClientPanel()) }.setImageSvg(bombsiteIconUrl);
         }
 
         if (const auto bombTimer = state.bombTimerPanel.get()) {

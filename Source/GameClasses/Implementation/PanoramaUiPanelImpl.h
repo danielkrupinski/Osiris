@@ -14,6 +14,7 @@ struct PanoramaUiPanelImpl {
         , childPanels{panoramaUiPanelPatterns.childPanelsVectorOffset()}
         , classes{panoramaUiPanelPatterns.classesVectorOffset()}
         , panelStyle{panoramaUiPanelPatterns.panelStyleOffset()}
+        , parentWindowOffset{panoramaUiPanelPatterns.parentWindowOffset()}
     {
     }
 
@@ -31,4 +32,5 @@ struct PanoramaUiPanelImpl {
     ChildPanelsVectorOffset childPanels;
     PanelClassesVectorOffset classes;
     PanelStyleOffset panelStyle;
+    ParentWindowOffset parentWindowOffset;
 };

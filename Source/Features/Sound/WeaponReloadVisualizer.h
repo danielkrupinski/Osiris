@@ -31,7 +31,7 @@ struct WeaponReloadPanels {
             if (!imagePanel)
                 continue;
 
-            PanoramaImagePanel{imagePanel}.setImage("s2r://panorama/images/icons/ui/switch_teams_dead.svg");
+            PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/switch_teams_dead.svg");
             if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
                 const auto styleSetter{panelConfigurator.panelStyle(*style)};
                 styleSetter.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentCenter);

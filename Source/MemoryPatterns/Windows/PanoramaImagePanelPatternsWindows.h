@@ -3,9 +3,9 @@
 #include <MemoryPatterns/PanoramaImagePanelPatterns.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline cs2::CImagePanel::setImage PanoramaImagePanelPatterns::setImage() const noexcept
+inline cs2::CImagePanel::SetImage* PanoramaImagePanelPatterns::setImage() const noexcept
 {
-    return clientPatternFinder("C0 48 0F 45 D0 E8 ? ? ? ? ? 39 75"_pat).add(6).abs().as<cs2::CImagePanel::setImage>();
+    return clientPatternFinder("7C 07 48 8D 15 ? ? ? ? E8 ? ? ? ?"_pat).add(10).abs().as<cs2::CImagePanel::SetImage*>();
 }
 
 inline cs2::CImagePanel::Constructor* PanoramaImagePanelPatterns::constructor() const noexcept
@@ -16,4 +16,11 @@ inline cs2::CImagePanel::Constructor* PanoramaImagePanelPatterns::constructor() 
 inline std::uint32_t* PanoramaImagePanelPatterns::size() const noexcept
 {
     return clientPatternFinder("FF 90 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 4C 8B E8"_pat).add(7).as<std::uint32_t*>();
+}
+
+inline ImagePropertiesOffset PanoramaImagePanelPatterns::imagePropertiesOffset() const noexcept
+{
+    return ImagePropertiesOffset{
+        clientPatternFinder("EB 08 41 C7 47 ? 00 00 80 BF ? 8D ? ?"_pat).add(13).as<std::int8_t*>()
+    };
 }
