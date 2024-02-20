@@ -6,41 +6,37 @@
 template <typename T>
 class HudInWorldPanels {
 public:
-    void createPanels(const HudInWorldPanelFactory& inWorldFactory, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] PanoramaUiPanel getPanel(int index, const HudInWorldPanelFactory& inWorldFactory, PanelConfigurator panelConfigurator) noexcept
     {
-        if (containerPanelPointer.get())
-            return;
+        auto containerPanel = containerPanelPointer.get();
+        if (!containerPanel) {
+            if (const auto container{T::createContainerPanel(inWorldFactory)}) {
+                containerPanelPointer = containerPanel = PanoramaUiPanel{container->uiPanel};
+            }
+        }
 
-        const auto containerPanel = T::createContainerPanel(inWorldFactory);
         if (!containerPanel)
-            return;
+            return PanoramaUiPanel{nullptr};
 
-        containerPanelPointer = containerPanel->uiPanel;
-        T::createContentPanels(*containerPanel->uiPanel, panelConfigurator);
+        if (const auto children{containerPanel.children()}) {
+            if (index >= 0 && index < children->size)
+                return PanoramaUiPanel{children->memory[index]};
+            return T::createContentPanel(containerPanel, panelConfigurator);
+        }
+        return PanoramaUiPanel{nullptr};
     }
 
-    [[nodiscard]] PanoramaUiPanel getPanel(std::size_t index) const noexcept
+    void hidePanels(int fromPanelIndex, PanelConfigurator panelConfigurator) const noexcept
     {
         const auto containerPanel = containerPanelPointer.get();
         if (!containerPanel)
-            return PanoramaUiPanel{ nullptr };
+            return;
 
-        if (const auto children = containerPanel.children()) {
-            if (children->size > 0 && static_cast<std::size_t>(children->size) > index)
-                return PanoramaUiPanel{ children->memory[index] };
-        }
-        return PanoramaUiPanel{ nullptr };
-    }
-
-    void hidePanels(std::size_t fromPanelIndex, PanelConfigurator panelConfigurator) const noexcept
-    {
-        for (std::size_t i = fromPanelIndex; i < T::kMaxNumberOfPanels; ++i) {
-            const auto panel = getPanel(i);
-            if (!panel)
-                break;
-
-            if (const auto style = panel.getStyle())
-                panelConfigurator.panelStyle(*style).setOpacity(0.0f);
+        if (const auto children{containerPanel.children()}) {
+            for (int i{fromPanelIndex}; i < children->size; ++i) {
+                if (const auto style{PanoramaUiPanel{children->memory[i]}.getStyle()})
+                    panelConfigurator.panelStyle(*style).setOpacity(0.0f);
+            }
         }
     }
 

@@ -19,32 +19,26 @@
 #include <Hooks/ViewRenderHook.h>
 
 struct FootstepPanels {
-    static constexpr auto kMaxNumberOfPanels = 100;
-
     [[nodiscard]] static cs2::CPanel2D* createContainerPanel(const HudInWorldPanelFactory& inWorldFactory) noexcept
     {
         return inWorldFactory.createPanel("FootstepContainer", HudInWorldPanelZOrder::Footstep);
     }
 
-    static void createContentPanels(cs2::CUIPanel& containerPanel, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] static PanoramaUiPanel createContentPanel(cs2::CUIPanel* containerPanel, PanelConfigurator panelConfigurator) noexcept
     {
-        for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
-            const auto panel = Panel::create("", &containerPanel);
-            if (!panel)
-                continue;
+        const auto panel = Panel::create("", containerPanel);
+        if (!panel)
+            return PanoramaUiPanel{nullptr};
 
-            if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
-                const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
-                styleConfigurator.setWidth(cs2::CUILength::pixels(50));
-                styleConfigurator.setHeight(cs2::CUILength::pixels(50));
-                styleConfigurator.setPosition(cs2::CUILength::pixels(-25), cs2::CUILength::pixels(-50));
-                styleConfigurator.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
-            }
+        if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
+            const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
+            styleConfigurator.setWidth(cs2::CUILength::pixels(50));
+            styleConfigurator.setHeight(cs2::CUILength::pixels(50));
+            styleConfigurator.setPosition(cs2::CUILength::pixels(-25), cs2::CUILength::pixels(-50));
+            styleConfigurator.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
+        }
 
-            const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)};
-            if (!imagePanel)
-                continue;
-
+        if (const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)}) {
             PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/equipment/stomp_damage.svg");
             if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
                 const auto styleSetter{panelConfigurator.panelStyle(*style)};
@@ -58,6 +52,8 @@ struct FootstepPanels {
                 });
             }
         }
+
+        return PanoramaUiPanel{panel->uiPanel};
     }
 };
 

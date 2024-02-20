@@ -17,24 +17,20 @@ struct WeaponScopePanels {
         return inWorldFactory.createPanel("WeaponScopeContainer", HudInWorldPanelZOrder::WeaponScope);
     }
 
-    static void createContentPanels(cs2::CUIPanel& containerPanel, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] static PanoramaUiPanel createContentPanel(cs2::CUIPanel* containerPanel, PanelConfigurator panelConfigurator) noexcept
     {
-        for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
-            const auto panel{Panel::create("", &containerPanel)};
-            if (!panel)
-                continue;
+        const auto panel{Panel::create("", containerPanel)};
+        if (!panel)
+            return PanoramaUiPanel{nullptr};
 
-            if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
-                const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
-                styleConfigurator.setWidth(cs2::CUILength::pixels(100));
-                styleConfigurator.setHeight(cs2::CUILength::pixels(100));
-                styleConfigurator.setPosition(cs2::CUILength::pixels(-50), cs2::CUILength::pixels(-50));
-            }
+        if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
+            const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
+            styleConfigurator.setWidth(cs2::CUILength::pixels(100));
+            styleConfigurator.setHeight(cs2::CUILength::pixels(100));
+            styleConfigurator.setPosition(cs2::CUILength::pixels(-50), cs2::CUILength::pixels(-50));
+        }
 
-            const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)};
-            if (!imagePanel)
-                continue;
-
+        if (const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)}) {
             PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/chatwheel_sniperspotted.svg");
             if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
                 const auto styleSetter{panelConfigurator.panelStyle(*style)};
@@ -48,9 +44,9 @@ struct WeaponScopePanels {
                 });
             }
         }
-    }
 
-    static constexpr auto kMaxNumberOfPanels = 5;
+        return PanoramaUiPanel{panel->uiPanel};
+    }
 };
 
 using WeaponScopeVisualizerState = SoundVisualizationFeatureState<WeaponScopePanels>;

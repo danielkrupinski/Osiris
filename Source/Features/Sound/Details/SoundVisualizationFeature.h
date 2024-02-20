@@ -50,9 +50,7 @@ public:
         if (!worldtoClipSpaceConverter)
             return;
 
-        state.panels.createPanels(hudInWorldPanelFactory, panelConfigurator);
-
-        std::size_t currentIndex = 0;
+        int currentIndex = 0;
         std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex](const PlayedSound& sound) {
             const auto soundInClipSpace = worldtoClipSpaceConverter.toClipSpace(sound.origin);
             if (!soundInClipSpace.onScreen())
@@ -62,7 +60,7 @@ public:
             if (opacity <= 0.0f)
                 return;
 
-            const auto panel = state.panels.getPanel(currentIndex);
+            const auto panel = state.panels.getPanel(currentIndex, hudInWorldPanelFactory, panelConfigurator);
             if (!panel)
                 return;
 
