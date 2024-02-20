@@ -25,22 +25,37 @@ struct BombPlantPanels {
         return inWorldFactory.createPanel("BombPlantContainer", HudInWorldPanelZOrder::BombPlant);
     }
 
-    static void createContentPanels(cs2::CUIPanel& containerPanel, [[maybe_unused]] PanelConfigurator panelConfigurator) noexcept
+    static void createContentPanels(cs2::CUIPanel& containerPanel, PanelConfigurator panelConfigurator) noexcept
     {
         for (std::size_t i = 0; i < kMaxNumberOfPanels; ++i) {
-            PanoramaUiEngine::runScript(&containerPanel,
-                R"(
-(function() {
-var bombPlantPanel = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile("BombPlantContainer"), '', {
-  style: 'width: 100px; height: 100px; x: -50px; y: -100px; transform-origin: 50% 100%;'
-});
+            const auto panel = Panel::create("", &containerPanel);
+            if (!panel)
+                continue;
 
-$.CreatePanel('Image', bombPlantPanel, '', {
-  src: "s2r://panorama/images/icons/ui/chatwheel_bombat.svg",
-  style: "horizontal-align: center; vertical-align: bottom; img-shadow: 0px 0px 1px 3 #000000;",
-  textureheight: "64"
-});
-})();)", "", 0);
+            if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
+                const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
+                styleConfigurator.setWidth(cs2::CUILength::pixels(100));
+                styleConfigurator.setHeight(cs2::CUILength::pixels(100));
+                styleConfigurator.setPosition(cs2::CUILength::pixels(-50), cs2::CUILength::pixels(-100));
+                styleConfigurator.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
+            }
+
+            const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)};
+            if (!imagePanel)
+                continue;
+
+            PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/chatwheel_bombat.svg", 64);
+            if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
+                const auto styleSetter{panelConfigurator.panelStyle(*style)};
+                styleSetter.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentBottom);
+                styleSetter.setImageShadow(ImageShadowParams{
+                    .horizontalOffset{cs2::CUILength::pixels(0)},
+                    .verticalOffset{cs2::CUILength::pixels(0)},
+                    .blurRadius{cs2::CUILength::pixels(1)},
+                    .strength = 3,
+                    .color{0, 0, 0}
+                });
+            }
         }
     }
 
