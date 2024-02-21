@@ -1,10 +1,11 @@
 #pragma once
 
 #include <FeatureHelpers/HudInWorldPanels.h>
+#include <FeatureHelpers/PanoramaTransformations.h>
+#include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <Hooks/ViewRenderHook.h>
 #include "SoundVisualization.h"
-#include <FeatureHelpers/Sound/SoundWatcher.h>
 
 template <typename PanelsType>
 struct SoundVisualizationFeatureState {

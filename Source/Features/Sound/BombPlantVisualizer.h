@@ -1,23 +1,11 @@
 #pragma once
 
-#include <algorithm>
-
 #include <CS2/Classes/Panorama.h>
-#include <CS2/Constants/SoundNames.h>
-#include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/HudInWorldPanelFactory.h>
-#include <FeatureHelpers/PanoramaTransformations.h>
-#include "Details/SoundVisualizationFeature.h"
-#include <FeatureHelpers/Sound/SoundWatcher.h>
-#include <FeatureHelpers/TogglableFeature.h>
-#include <FeatureHelpers/WorldToClipSpaceConverter.h>
-#include <GameClasses/Panel.h>
-#include <GameClasses/PanoramaUiEngine.h>
-#include <Helpers/HudProvider.h>
-#include <Helpers/PanoramaTransformFactory.h>
-#include <Hooks/ViewRenderHook.h>
+#include <FeatureHelpers/HudInWorldPanelZOrder.h>
 
-#include "FootstepVisualizer.h"
+#include "Details/SoundVisualizationFeature.h"
+#include "Details/SoundVisualizationPanelProperties.h"
 
 struct BombPlantPanels {
     [[nodiscard]] static cs2::CPanel2D* createContainerPanel(const HudInWorldPanelFactory& inWorldFactory) noexcept
@@ -25,36 +13,12 @@ struct BombPlantPanels {
         return inWorldFactory.createPanel("BombPlantContainer", HudInWorldPanelZOrder::BombPlant);
     }
 
-    [[nodiscard]] static PanoramaUiPanel createContentPanel(cs2::CUIPanel* containerPanel, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
-        const auto panel = Panel::create("", containerPanel);
-        if (!panel)
-            return PanoramaUiPanel{nullptr};
-
-        if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
-            const auto styleConfigurator{panelConfigurator.panelStyle(*style)};
-            styleConfigurator.setWidth(cs2::CUILength::pixels(100));
-            styleConfigurator.setHeight(cs2::CUILength::pixels(100));
-            styleConfigurator.setPosition(cs2::CUILength::pixels(-50), cs2::CUILength::pixels(-100));
-            styleConfigurator.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
-        }
-
-        if (const auto imagePanel{PanoramaImagePanel::create("", panel->uiPanel)}) {
-            PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/chatwheel_bombat.svg", 64);
-            if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
-                const auto styleSetter{panelConfigurator.panelStyle(*style)};
-                styleSetter.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentBottom);
-                styleSetter.setImageShadow(ImageShadowParams{
-                    .horizontalOffset{cs2::CUILength::pixels(0)},
-                    .verticalOffset{cs2::CUILength::pixels(0)},
-                    .blurRadius{cs2::CUILength::pixels(1)},
-                    .strength = 3,
-                    .color{0, 0, 0}
-                });
-            }
-        }
-
-        return PanoramaUiPanel{panel->uiPanel};
+        return SoundVisualizationPanelProperties{
+            .svgImagePath = "s2r://panorama/images/icons/ui/chatwheel_bombat.svg",
+            .svgTextureHeight = 64,
+            .position = SoundVisualizationPosition::AboveOrigin};
     }
 };
 

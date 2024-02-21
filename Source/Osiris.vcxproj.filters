@@ -944,6 +944,15 @@
     <ClInclude Include="MemoryPatterns\TopLevelWindowPatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelFactory.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelProperties.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

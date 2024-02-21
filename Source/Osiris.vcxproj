@@ -85,11 +85,14 @@
     <ClInclude Include="Features\Sound\Details\FootstepSound.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualization.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualizationFeature.h" />
+    <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelFactory.h" />
+    <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelProperties.h" />
     <ClInclude Include="Features\Sound\Details\WeaponReloadSound.h" />
     <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h" />
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
     <ClInclude Include="Features\Sound\SoundFeatures.h" />
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
+    <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h" />
     <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h" />

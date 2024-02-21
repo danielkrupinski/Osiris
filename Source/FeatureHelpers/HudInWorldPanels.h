@@ -2,6 +2,7 @@
 
 #include "HudInWorldPanelFactory.h"
 #include "PanelConfigurator.h"
+#include <Features/Sound/Details/SoundVisualizationPanelFactory.h>
 
 template <typename T>
 class HudInWorldPanels {
@@ -21,7 +22,7 @@ public:
         if (const auto children{containerPanel.children()}) {
             if (index >= 0 && index < children->size)
                 return PanoramaUiPanel{children->memory[index]};
-            return T::createContentPanel(containerPanel, panelConfigurator);
+            return SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createSoundVisualizationPanel(T::soundVisualizationPanelProperties());
         }
         return PanoramaUiPanel{nullptr};
     }
