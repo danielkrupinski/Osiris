@@ -1,46 +1,30 @@
 #pragma once
 
-#include "HudInWorldPanelFactory.h"
-#include "PanelConfigurator.h"
-#include <Features/Sound/Details/SoundVisualizationPanelFactory.h>
+#include <cassert>
+#include <limits>
+#include <utility>
 
-template <typename T>
-class HudInWorldPanels {
-public:
-    [[nodiscard]] PanoramaUiPanel getPanel(int index, const HudInWorldPanelFactory& inWorldFactory, PanelConfigurator panelConfigurator) noexcept
+#include <CS2/Classes/Panorama.h>
+#include <GameClasses/PanoramaUiPanel.h>
+
+#include "HudInWorldPanelIndex.h"
+
+struct HudInWorldPanels {
+    [[nodiscard]] PanoramaUiPanel getPanel(HudInWorldPanelIndex index) const noexcept
     {
-        auto containerPanel = containerPanelPointer.get();
-        if (!containerPanel) {
-            if (const auto container{T::createContainerPanel(inWorldFactory)}) {
-                containerPanelPointer = containerPanel = PanoramaUiPanel{container->uiPanel};
-            }
-        }
-
-        if (!containerPanel)
-            return PanoramaUiPanel{nullptr};
-
-        if (const auto children{containerPanel.children()}) {
-            if (index >= 0 && index < children->size)
-                return PanoramaUiPanel{children->memory[index]};
-            return SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createSoundVisualizationPanel(T::soundVisualizationPanelProperties());
-        }
+        if (std::cmp_less(index, containerPanelChildren.size))
+            return PanoramaUiPanel{containerPanelChildren.memory[index]};
         return PanoramaUiPanel{nullptr};
     }
 
-    void hidePanels(int fromPanelIndex, PanelConfigurator panelConfigurator) const noexcept
+    [[nodiscard]] HudInWorldPanelIndex getIndexOfLastPanel() const noexcept
     {
-        const auto containerPanel = containerPanelPointer.get();
-        if (!containerPanel)
-            return;
-
-        if (const auto children{containerPanel.children()}) {
-            for (int i{fromPanelIndex}; i < children->size; ++i) {
-                if (const auto style{PanoramaUiPanel{children->memory[i]}.getStyle()})
-                    panelConfigurator.panelStyle(*style).setOpacity(0.0f);
-            }
+        if (containerPanelChildren.size > 0) {
+            assert(containerPanelChildren.size <= (std::numeric_limits<HudInWorldPanelIndex>::max)());
+            return static_cast<HudInWorldPanelIndex>(containerPanelChildren.size - 1);
         }
+        return 0;
     }
 
-private:
-    PanoramaPanelPointer containerPanelPointer;
+    const cs2::CUIPanel::childrenVector& containerPanelChildren;
 };

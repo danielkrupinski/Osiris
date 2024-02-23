@@ -62,12 +62,13 @@ private:
             state,
             viewRenderHook,
             helpers.soundWatcher,
-            HudInWorldPanelFactory{helpers.hudInWorldPanelContainer, helpers.hudProvider, helpers.panelConfigurator()},
+            helpers.hudInWorldPanelContainer,
             helpers.globalVarsProvider,
             helpers.transformFactory,
             helpers.worldtoClipSpaceConverter,
             helpers.viewToProjectionMatrix,
-            helpers.panelConfigurator()
+            helpers.panelConfigurator(),
+            helpers.hudProvider
         };
     }
 };

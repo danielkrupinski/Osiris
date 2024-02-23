@@ -83,6 +83,12 @@ public:
         elementAt(index) = back();
         popBack();
     }
+    
+    void clear() noexcept
+    {
+        std::destroy_n(memory.get(), size);
+        size = 0;
+    }
 
 private:
     [[nodiscard]] static std::size_t calculateNewCapacity(std::size_t currentCapacity) noexcept

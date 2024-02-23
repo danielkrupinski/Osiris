@@ -650,9 +650,6 @@
     <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h">
       <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelFactory.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -672,9 +669,6 @@
       <Filter>Features\Sound</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelZOrder.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h">
@@ -952,6 +946,9 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h">
       <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h">
+      <Filter>FeatureHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

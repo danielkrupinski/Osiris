@@ -25,6 +25,8 @@ struct PanelHandle {
     {
         return panelIndex != -1;
     }
+
+    [[nodiscard]] constexpr bool operator==(const PanelHandle&) const = default;
 };
 
 struct CUIPanel;
