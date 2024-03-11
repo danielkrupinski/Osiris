@@ -10,7 +10,7 @@ jobs:
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
     - name: Set toolset
@@ -27,7 +27,7 @@ jobs:
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set toolset
       if: matrix.toolset == 'ClangCL'
       run: echo "toolset=-T ${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append

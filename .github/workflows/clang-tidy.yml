@@ -9,7 +9,7 @@ jobs:
       matrix:
         configuration: [Debug, Release]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: configure
       run: CXX=clang++-14 cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -D CMAKE_DISABLE_PRECOMPILE_HEADERS=1 -B build
     - name: run clang-tidy
