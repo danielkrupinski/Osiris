@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
@@ -15,11 +14,6 @@
 #include "TopLevelWindowImpl.h"
 
 #include <GlobalContext/GlobalContext.h>
-
-inline const EntitySystemImpl& EntitySystemImpl::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameClasses().entitySystem;
-}
 
 inline const FileNameSymbolTableImpl& FileNameSymbolTableImpl::instance() noexcept
 {

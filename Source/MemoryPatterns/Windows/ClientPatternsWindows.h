@@ -77,3 +77,8 @@ inline cs2::CViewRender** ClientPatterns::viewRender() const noexcept
 {
     return clientPatternFinder("48 89 05 ? ? ? ? 48 8B C8 48 85 C0"_pat).add(3).abs().as<cs2::CViewRender**>();
 }
+
+inline cs2::CCSPlayerController** ClientPatterns::localPlayerController() const noexcept
+{
+    return clientPatternFinder("48 63 C1 48 8D 0D ? ? ? ? 48 8B 0C"_pat).add(6).abs().as<cs2::CCSPlayerController**>();
+}

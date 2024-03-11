@@ -1,5 +1,6 @@
 #pragma once
 
+#include "EntitiesVMTs.h"
 #include "GlobalVarsProvider.h"
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
@@ -15,7 +16,7 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns, const VmtFinder& panoramaVmtFinder) noexcept
+    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns, const VmtFinder& panoramaVmtFinder, const VmtFinder& clientVmtFinder) noexcept
         : hudProvider{clientPatterns}
         , globalVarsProvider{clientPatterns}
         , transformFactory{clientPatterns}
@@ -28,6 +29,8 @@ struct FeatureHelpers {
         , gameRules{clientPatterns.gameRules()}
         , hudScope{clientPatterns.hudScope()}
         , mainMenuProvider{clientPatterns}
+        , localPlayerController{clientPatterns.localPlayerController()}
+        , entitiesVMTs{clientVmtFinder}
     {
     }
 
@@ -49,4 +52,6 @@ struct FeatureHelpers {
     cs2::C_CSGameRules** gameRules;
     cs2::CPanel2D** hudScope;
     MainMenuProvider mainMenuProvider;
+    cs2::CCSPlayerController** localPlayerController;
+    EntitiesVMTs entitiesVMTs;
 };

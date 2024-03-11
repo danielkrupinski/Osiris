@@ -32,6 +32,8 @@
 
 #include "PeepEventsHookResult.h"
 
+#include <FeatureHelpers/EntityForRenderingDispatcher.h>
+
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept
         : _gameClasses{
@@ -47,7 +49,10 @@ struct FullGlobalContext {
             PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder},
             PlantedC4Patterns{clientPatternFinder},
             EntitySystemPatterns{clientPatternFinder},
+            PlayerControllerPatterns{clientPatternFinder},
             TopLevelWindowPatterns{panoramaPatternFinder},
+            EntityPatterns{clientPatternFinder},
+            GameSceneNodePatterns{clientPatternFinder},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
@@ -58,7 +63,8 @@ struct FullGlobalContext {
             PanelStylePatterns{panoramaPatternFinder},
             fileSystemPatterns,
             SoundSystemPatterns{soundSystemPatternFinder},
-            VmtFinder{panoramaDLL.getVmtFinderParams()}}
+            VmtFinder{panoramaDLL.getVmtFinderParams()},
+            VmtFinder{clientDLL.getVmtFinderParams()}}
     {
     }
 
@@ -78,6 +84,11 @@ struct FullGlobalContext {
         if (featureHelpers.globalVarsProvider && featureHelpers.globalVarsProvider.getGlobalVars())
             featureHelpers.soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
         features().soundFeatures().runOnViewMatrixUpdate();
+
+        HookDependencies dependencies{HookDependenciesBuilder{getRenderingHookDependenciesMask(), _gameClasses, featureHelpers}};
+        PlayerPositionThroughWalls playerPositionThroughWalls{featuresStates.visualFeaturesStates.playerPositionThroughWallsState, dependencies};
+        RenderingHookEntityLoop{dependencies, playerPositionThroughWalls}.run();
+        playerPositionThroughWalls.hideUnusedPanels();
     }
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
@@ -106,6 +117,14 @@ private:
     [[nodiscard]] Features features() noexcept
     {
         return Features{featuresStates, featureHelpers, hooks};
+    }
+
+    [[nodiscard]] HookDependenciesMask getRenderingHookDependenciesMask() const noexcept
+    {
+        HookDependenciesMask dependencies;
+        dependencies |= featuresStates.visualFeaturesStates.playerPositionThroughWallsState.getRenderingHookDependencies();
+        dependencies |= RenderingHookEntityLoopDependencies{featuresStates.visualFeaturesStates.playerPositionThroughWallsState}.getRenderingHookDependencies();
+        return dependencies;
     }
 
     GameClassImplementations _gameClasses;

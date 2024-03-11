@@ -1,0 +1,17 @@
+#pragma once
+
+#include <cstdint>
+
+#include "CEntityInstance.h"
+
+namespace cs2
+{
+
+struct CGameSceneNode;
+
+struct C_BaseEntity : CEntityInstance {
+    using m_pGameSceneNode = CGameSceneNode*;
+    using m_iHealth = std::int32_t;
+};
+
+}

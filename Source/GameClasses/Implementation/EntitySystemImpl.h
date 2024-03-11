@@ -11,8 +11,6 @@ struct EntitySystemImpl {
     {
     }
 
-    [[nodiscard]] static const EntitySystemImpl& instance() noexcept;
-
     cs2::CGameEntitySystem** thisptr;
     HighestEntityIndexOffset highestEntityIndexOffset;
     EntityListOffset entityListOffset;

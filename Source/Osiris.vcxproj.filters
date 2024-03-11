@@ -124,6 +124,9 @@
     <Filter Include="SDL">
       <UniqueIdentifier>{23614f08-44a8-4cb7-a21a-13d32b93bd86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CS2\Classes\Entities">
+      <UniqueIdentifier>{ac0c1599-a345-44a2-8521-ea4eb53655df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -812,9 +815,6 @@
     <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h">
       <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\EntitySystem.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h">
       <Filter>Platform\Windows\Syscalls</Filter>
     </ClInclude>
@@ -949,6 +949,57 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PlayerControllerPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\PlayerControllerOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\EntityPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerPositionThroughWalls.h">
+      <Filter>Features\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\States\PlayerPositionThroughWallsState.h">
+      <Filter>Features\Visuals\States</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CGameSceneNode.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\EntityForRenderingDispatcher.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\EntityListWalker.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\EntitiesVMTs.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\EntityPatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

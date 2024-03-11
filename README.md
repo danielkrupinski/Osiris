@@ -73,6 +73,6 @@ However, this injection method might be detected by VAC as gdb is visible under 
 
 ## License
 
-> Copyright (c) 2018-2023 Daniel Krupiński
+> Copyright (c) 2018-2024 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.

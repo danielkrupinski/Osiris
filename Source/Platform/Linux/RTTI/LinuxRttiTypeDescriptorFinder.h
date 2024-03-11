@@ -27,7 +27,11 @@ public:
 private:
     [[nodiscard]] const std::byte* findTypeName(std::string_view mangledTypeName) const noexcept
     {
-        return HybridPatternFinder{rodataSection.raw(), BytePattern{mangledTypeName}}.findNextOccurrence();
+        HybridPatternFinder finder{rodataSection.raw(), BytePattern{mangledTypeName}};
+        const std::byte* result = finder.findNextOccurrence();
+        while (result && reinterpret_cast<std::uintptr_t>(result) % 16 != 0)
+            result = finder.findNextOccurrence();
+        return result;
     }
 
     [[nodiscard]] const std::byte* findTypeDescriptorName(const std::byte* typeNameAddress) const noexcept

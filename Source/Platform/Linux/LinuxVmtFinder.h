@@ -32,6 +32,7 @@ public:
         if (typeDescriptorReference)
             return typeDescriptorReference - LinuxVmt::offsetOfTypeDescriptorPointer + LinuxVmt::offsetOfFirstMethodPointer;
 
+        assert(false && "Failed to find VMT!");
         return nullptr;
     }
 
