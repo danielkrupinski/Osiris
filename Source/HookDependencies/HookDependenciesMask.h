@@ -28,5 +28,6 @@ using HookDependenciesMask = TypeBitFlags<
     PanelConfigurator,
     HudProvider,
     PanoramaTransformFactory,
-    OffsetToHealth
+    OffsetToHealth,
+    OffsetToTeamNumber
 >;

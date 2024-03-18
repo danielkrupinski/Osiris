@@ -13,7 +13,7 @@ struct PlayerPositionThroughWallsState {
     [[nodiscard]] HookDependenciesMask getRenderingHookDependencies() const noexcept
     {
         if (enabled)
-            return kCrucialDependencies;
+            return kCrucialDependencies | kExtraDependencies;
         return {};
     }
 
@@ -26,4 +26,6 @@ struct PlayerPositionThroughWallsState {
             .set<HudProvider>()
             .set<PanelConfigurator>()
             .set<PanoramaTransformFactory>()};
+
+    static constexpr auto kExtraDependencies{HookDependenciesMask{}.set<OffsetToTeamNumber>()};
 };

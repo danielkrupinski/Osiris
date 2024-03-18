@@ -4,6 +4,7 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/TeamNumber.h>
 #include <MemoryPatterns/EntityPatterns.h>
 #include <MemoryPatterns/PlayerControllerPatterns.h>
 
@@ -44,14 +45,26 @@ private:
         if (!imagePanel)
             return;
 
-        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/hud/reticle/overhead_arrow.vsvg", 24);
+        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 32);
         if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setImageShadow(imageShadowParams());
             PanoramaTransformations{
                 panoramaTransformFactory.scale(1.0f, -1.0f),
             }.applyTo(styler);
         }
+    }
+
+    [[nodiscard]] static ImageShadowParams imageShadowParams() noexcept
+    {
+        return ImageShadowParams{
+            .horizontalOffset{cs2::CUILength::pixels(0)},
+            .verticalOffset{cs2::CUILength::pixels(0)},
+            .blurRadius{cs2::CUILength::pixels(1)},
+            .strength = 3,
+            .color{0, 0, 0}
+        };
     }
 
     static constexpr auto kWidth{256};
@@ -115,14 +128,16 @@ public:
     {
     }
 
-    [[nodiscard]] bool isEnabled() const noexcept
-    {
-        return state.enabled;
-    }
-
     void run(cs2::C_CSPlayerPawn& nonLocalPlayerPawn) noexcept
     {
+        if (!state.enabled)
+            return;
+
         if (!hasCrucialDependencies())
+            return;
+
+        const auto teamNumber = getTeamNumber(nonLocalPlayerPawn);
+        if (teamNumber != TeamNumber::TT && teamNumber != TeamNumber::CT)
             return;
 
         const auto gameSceneNode = *dependencies.getDependency<OffsetToGameSceneNode>().of(&nonLocalPlayerPawn).get();
@@ -153,6 +168,8 @@ public:
         const auto panel = getPanel(containerPanel, panels, dependencies.getDependency<PanelConfigurator>());
         if (!panel)
             return;
+
+        setArrowColor(panel, getArrowColor(teamNumber));
 
         const auto style = panel.getStyle();
         if (!style)
@@ -199,6 +216,38 @@ public:
     }
 
 private:
+    void setArrowColor(PanoramaUiPanel parentPanel, cs2::Color color) const noexcept
+    {
+        const auto children = parentPanel.children();
+        if (!children || children->size < 1)
+            return;
+
+        const PanoramaUiPanel arrowPanel{children->memory[0]};
+        const auto style = arrowPanel.getStyle();
+        if (!style)
+            return;
+
+        const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+        styleSetter.setWashColor(color);
+    }
+
+    [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept
+    {
+        if (dependencies.hasDependency<OffsetToTeamNumber>())
+            return TeamNumber{*dependencies.getDependency<OffsetToTeamNumber>().of(&entity).get()};
+        return {};
+    }
+
+    [[nodiscard]] static cs2::Color getArrowColor(TeamNumber teamNumber) noexcept
+    {
+        switch (teamNumber) {
+            using enum TeamNumber;
+            case TT: return cs2::Color{234, 190, 84};
+            case CT: return cs2::Color{150, 200, 250};
+            default: return cs2::Color{255, 255, 255};
+        }
+    }
+
     [[nodiscard]] bool hasCrucialDependencies() const noexcept
     {
         return dependencies.hasDependencies(PlayerPositionThroughWallsState::kCrucialDependencies);

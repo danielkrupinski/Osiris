@@ -60,6 +60,9 @@ struct HookDependencies {
         if (gameClassImplementations.entity.offsetToHealth)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToHealth>();
 
+        if (gameClassImplementations.entity.offsetToTeamNumber)
+            presentDependencies |= HookDependenciesMask{}.set<OffsetToTeamNumber>();
+
         if (gameClassImplementations.gameSceneNode.offsetToAbsOrigin)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToAbsOrigin>();
 
@@ -102,6 +105,8 @@ struct HookDependencies {
             return gameClassImplementations.entity.offsetToGameSceneNode;
         } else if constexpr (std::is_same_v<Dependency, OffsetToHealth>) {
             return gameClassImplementations.entity.offsetToHealth;
+        } else if constexpr (std::is_same_v<Dependency, OffsetToTeamNumber>) {
+            return gameClassImplementations.entity.offsetToTeamNumber;
         } else if constexpr (std::is_same_v<Dependency, OffsetToAbsOrigin>) {
             return gameClassImplementations.gameSceneNode.offsetToAbsOrigin;
         } else if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {

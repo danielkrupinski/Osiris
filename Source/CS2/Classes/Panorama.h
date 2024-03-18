@@ -172,6 +172,14 @@ struct CStylePropertyAlign : CStyleProperty {
     EVerticalAlignment m_eVerticalAlignment;
 };
 
+struct CStylePropertyWashColor : CStyleProperty {
+    static constexpr auto kName{"wash-color"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyWashColor@panorama@@", "N8panorama23CStylePropertyWashColorE")};
+
+    Color color;
+    bool fullySet;
+};
+
 struct CPanelStyle {
     using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
 

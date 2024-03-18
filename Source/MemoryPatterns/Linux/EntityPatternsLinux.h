@@ -16,3 +16,10 @@ inline OffsetToHealth EntityPatterns::offsetToHealth() const noexcept
         clientPatternFinder("8B 87 ? ? ? ? 85 C0 7E ? C7"_pat).add(2).as<std::int32_t*>()
     };
 }
+
+inline OffsetToTeamNumber EntityPatterns::offsetToTeamNumber() const noexcept
+{
+    return OffsetToTeamNumber{
+        clientPatternFinder("41 0F B6 84 24 ? ? ? ? 3C 03"_pat).add(5).as<std::int32_t*>()
+    };
+}
