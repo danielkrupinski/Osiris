@@ -85,7 +85,7 @@ struct FullGlobalContext {
             featureHelpers.soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
         features().soundFeatures().runOnViewMatrixUpdate();
 
-        HookDependencies dependencies{HookDependenciesBuilder{getRenderingHookDependenciesMask(), _gameClasses, featureHelpers}};
+        HookDependencies dependencies{_gameClasses, featureHelpers};
         PlayerPositionThroughWalls playerPositionThroughWalls{featuresStates.visualFeaturesStates.playerPositionThroughWallsState, dependencies};
         RenderingHookEntityLoop{dependencies, playerPositionThroughWalls}.run();
         playerPositionThroughWalls.hideUnusedPanels();
@@ -117,14 +117,6 @@ private:
     [[nodiscard]] Features features() noexcept
     {
         return Features{featuresStates, featureHelpers, hooks};
-    }
-
-    [[nodiscard]] HookDependenciesMask getRenderingHookDependenciesMask() const noexcept
-    {
-        HookDependenciesMask dependencies;
-        dependencies |= featuresStates.visualFeaturesStates.playerPositionThroughWallsState.getRenderingHookDependencies();
-        dependencies |= RenderingHookEntityLoopDependencies{featuresStates.visualFeaturesStates.playerPositionThroughWallsState}.getRenderingHookDependencies();
-        return dependencies;
     }
 
     GameClassImplementations _gameClasses;

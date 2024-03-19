@@ -127,6 +127,9 @@
     <Filter Include="CS2\Classes\Entities">
       <UniqueIdentifier>{ac0c1599-a345-44a2-8521-ea4eb53655df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HookDependencies">
+      <UniqueIdentifier>{29bbfcc9-029d-4d7d-947f-8bd7bee5b36a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1000,6 +1003,12 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\EntityPatterns.h">
       <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="HookDependencies\HookDependencies.h">
+      <Filter>HookDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="HookDependencies\HookDependenciesMask.h">
+      <Filter>HookDependencies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,16 +39,14 @@ struct HookDependenciesBuilder {
 
     HookDependenciesMask requiredDependencies;
     const GameClassImplementations& gameClassImplementations;
-    FeatureHelpers& featureHelpers;
+    const FeatureHelpers& featureHelpers;
 };
 
 struct HookDependencies {
-    HookDependencies(HookDependenciesBuilder builder) noexcept
-        : gameClassImplementations{builder.gameClassImplementations}
-        , featureHelpers{builder.featureHelpers}
+    HookDependencies(const GameClassImplementations& gameClassImplementations, FeatureHelpers& featureHelpers) noexcept
+        : gameClassImplementations{gameClassImplementations}
+        , featureHelpers{featureHelpers}
     {
-        presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
-        presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
         presentDependencies |= HookDependenciesMask{}.set<EntitiesVMTs>();
 
         if (gameClassImplementations.playerController.offsetToPlayerPawnHandle)
@@ -75,15 +73,18 @@ struct HookDependencies {
         presentDependencies |= HookDependenciesMask{}.set<PanoramaTransformFactory>();
     }
 
-    [[nodiscard]] bool hasDependencies(HookDependenciesMask requiredDependencies) const noexcept
+    [[nodiscard]] bool requestDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
+        prepareDependencies(requiredDependencies.difference(presentDependencies));
         return presentDependencies.contains(requiredDependencies);
     }
 
     template <typename Dependency>
-    [[nodiscard]] bool hasDependency() const noexcept
+    [[nodiscard]] bool requestDependency() noexcept
     {
-        return presentDependencies.has<Dependency>();
+        if (!hasDependency<Dependency>())
+            prepareDependencies(HookDependenciesMask{}.set<Dependency>());
+        return hasDependency<Dependency>();
     }
 
     template <typename Dependency>
@@ -125,6 +126,20 @@ struct HookDependencies {
     }
 
 private:
+    template <typename Dependency>
+    [[nodiscard]] bool hasDependency() const noexcept
+    {
+        return presentDependencies.has<Dependency>();
+    }
+
+    void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
+    {
+        const HookDependenciesBuilder builder{requiredDependencies, gameClassImplementations, featureHelpers};
+
+        presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
+        presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
+    }
+
     const GameClassImplementations& gameClassImplementations;
     FeatureHelpers& featureHelpers;
 

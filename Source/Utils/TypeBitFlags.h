@@ -41,6 +41,11 @@ public:
         return TypeBitFlags{static_cast<UnderlyingType>(a.flags | b.flags)};
     }
 
+    [[nodiscard]] constexpr TypeBitFlags difference(TypeBitFlags other) const noexcept
+    {
+        return TypeBitFlags{static_cast<UnderlyingType>(flags & ~other.flags)};
+    }
+
     [[nodiscard]] constexpr bool contains(TypeBitFlags other) const noexcept
     {
         return (flags & other.flags) == other.flags;

@@ -122,7 +122,7 @@ private:
 
 class PlayerPositionThroughWalls {
 public:
-    PlayerPositionThroughWalls(PlayerPositionThroughWallsState& state, const HookDependencies& dependencies) noexcept
+    PlayerPositionThroughWalls(PlayerPositionThroughWallsState& state, HookDependencies& dependencies) noexcept
         : state{state}
         , dependencies{dependencies}
     {
@@ -133,7 +133,7 @@ public:
         if (!state.enabled)
             return;
 
-        if (!hasCrucialDependencies())
+        if (!requestCrucialDependencies())
             return;
 
         const auto teamNumber = getTeamNumber(nonLocalPlayerPawn);
@@ -194,7 +194,7 @@ public:
 
     void hideUnusedPanels() const noexcept
     {
-        if (!hasCrucialDependencies())
+        if (!requestCrucialDependencies())
             return;
 
         const auto containerPanel{dependencies.getDependency<HudInWorldPanelContainer>().get(dependencies.getDependency<HudProvider>(), dependencies.getDependency<PanelConfigurator>())};
@@ -233,7 +233,7 @@ private:
 
     [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept
     {
-        if (dependencies.hasDependency<OffsetToTeamNumber>())
+        if (dependencies.requestDependency<OffsetToTeamNumber>())
             return TeamNumber{*dependencies.getDependency<OffsetToTeamNumber>().of(&entity).get()};
         return {};
     }
@@ -248,9 +248,9 @@ private:
         }
     }
 
-    [[nodiscard]] bool hasCrucialDependencies() const noexcept
+    [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
-        return dependencies.hasDependencies(PlayerPositionThroughWallsState::kCrucialDependencies);
+        return dependencies.requestDependencies(kCrucialDependencies);
     }
 
     [[nodiscard]] PanoramaUiPanel getPanel(PanoramaUiPanel containerPanel, HudInWorldPanels inWorldPanels, PanelConfigurator panelConfigurator) const noexcept
@@ -267,7 +267,17 @@ private:
         return PanoramaUiPanel{nullptr};
     }
 
+    static constexpr auto kCrucialDependencies{
+        HookDependenciesMask{}
+            .set<OffsetToGameSceneNode>()
+            .set<OffsetToAbsOrigin>()
+            .set<WorldToClipSpaceConverter>()
+            .set<HudInWorldPanelContainer>()
+            .set<HudProvider>()
+            .set<PanelConfigurator>()
+            .set<PanoramaTransformFactory>()};
+
     PlayerPositionThroughWallsState& state;
-    const HookDependencies& dependencies;
+    HookDependencies& dependencies;
     std::size_t currentIndex{0};
 };
