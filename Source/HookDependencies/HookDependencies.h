@@ -5,6 +5,15 @@
 #include <FeatureHelpers/EntityListWalker.h>
 
 struct HookDependenciesBuilder {
+    [[nodiscard]] HookDependenciesMask getFovScale(float* fovScale) const noexcept
+    {
+        if (requiredDependencies.has<FovScale>()) {
+            *fovScale = featureHelpers.viewToProjectionMatrix.getFovScale();
+            return HookDependenciesMask{}.set<FovScale>();
+        }
+        return {};
+    }
+
     [[nodiscard]] HookDependenciesMask getLocalPlayerController(cs2::CCSPlayerController** localPlayerController) const noexcept
     {
         if (requiredDependencies.has<LocalPlayerController>() && featureHelpers.localPlayerController) {
@@ -120,6 +129,8 @@ struct HookDependencies {
             return featureHelpers.panelConfigurator();
         } else if constexpr (std::is_same_v<Dependency, PanoramaTransformFactory>) {
             return featureHelpers.transformFactory;
+        } else if constexpr (std::is_same_v<Dependency, FovScale>) {
+            return fovScale;
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -138,6 +149,7 @@ private:
 
         presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
         presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
+        presentDependencies |= builder.getFovScale(&fovScale);
     }
 
     const GameClassImplementations& gameClassImplementations;
@@ -146,5 +158,6 @@ private:
     cs2::CCSPlayerController* localPlayerController;
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};
+    float fovScale;
     HookDependenciesMask presentDependencies;
 };

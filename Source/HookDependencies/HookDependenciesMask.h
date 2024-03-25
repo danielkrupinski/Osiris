@@ -8,6 +8,7 @@
 struct EntitiesVMTs;
 class EntityFromHandleFinder;
 class EntityListWalker;
+struct FovScale;
 class HudInWorldPanelContainer;
 struct HudProvider;
 struct LocalPlayerController;
@@ -29,5 +30,6 @@ using HookDependenciesMask = TypeBitFlags<
     HudProvider,
     PanoramaTransformFactory,
     OffsetToHealth,
-    OffsetToTeamNumber
+    OffsetToTeamNumber,
+    FovScale
 >;

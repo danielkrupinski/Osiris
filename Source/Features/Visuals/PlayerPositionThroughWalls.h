@@ -182,7 +182,7 @@ public:
         const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
         constexpr auto kMaxScale{1.0f};
-        const auto scale = std::clamp(500.0f / (soundInClipSpace.z / 1.0f + 400.0f), 0.3f, kMaxScale);
+        const auto scale = std::clamp(500.0f / (soundInClipSpace.z / getFovScale() + 400.0f), 0.3f, kMaxScale);
 
         PanoramaTransformations{
             dependencies.getDependency<PanoramaTransformFactory>().scale(scale),
@@ -251,6 +251,13 @@ private:
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
         return dependencies.requestDependencies(kCrucialDependencies);
+    }
+
+    [[nodiscard]] float getFovScale() const noexcept
+    {
+        if (dependencies.requestDependency<FovScale>())
+            return dependencies.getDependency<FovScale>();
+        return 1.0f;
     }
 
     [[nodiscard]] PanoramaUiPanel getPanel(PanoramaUiPanel containerPanel, HudInWorldPanels inWorldPanels, PanelConfigurator panelConfigurator) const noexcept
