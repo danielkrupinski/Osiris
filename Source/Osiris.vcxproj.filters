@@ -977,9 +977,6 @@
     <ClInclude Include="CS2\Classes\CGameSceneNode.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\EntityForRenderingDispatcher.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -1009,6 +1006,30 @@
     </ClInclude>
     <ClInclude Include="HookDependencies\HookDependenciesMask.h">
       <Filter>HookDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="HookDependencies\HookDependenciesBuilder.h">
+      <Filter>HookDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\TeamNumberConstants.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\TeamNumber.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\EntityImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\GameSceneNodeImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\GameSceneNodePatterns.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
