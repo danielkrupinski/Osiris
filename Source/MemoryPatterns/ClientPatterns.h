@@ -19,7 +19,6 @@ namespace cs2
 }
 
 struct ClientPatterns {
-    [[nodiscard]] cs2::CPanel2D** hudScope() const noexcept;
     [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept;
     [[nodiscard]] cs2::CPanel2D** mainMenuPanel() const noexcept;
     [[nodiscard]] cs2::CPanel2D** hudPanel() const noexcept;

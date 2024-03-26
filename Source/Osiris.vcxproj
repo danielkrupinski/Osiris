@@ -104,9 +104,7 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
-    <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h" />
     <ClInclude Include="Features\Visuals\PlayerPositionThroughWalls.h" />
-    <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h" />
     <ClInclude Include="Features\Visuals\States\PlayerPositionThroughWallsState.h" />
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />

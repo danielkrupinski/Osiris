@@ -27,7 +27,6 @@ struct FeatureHelpers {
         , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
         , soundWatcher{fileSystemPatterns, soundSystemPatterns}
         , gameRules{clientPatterns.gameRules()}
-        , hudScope{clientPatterns.hudScope()}
         , mainMenuProvider{clientPatterns}
         , localPlayerController{clientPatterns.localPlayerController()}
         , entitiesVMTs{clientVmtFinder}
@@ -50,7 +49,6 @@ struct FeatureHelpers {
     StylePropertiesSymbols stylePropertiesSymbols;
     SoundWatcher soundWatcher;
     cs2::C_CSGameRules** gameRules;
-    cs2::CPanel2D** hudScope;
     MainMenuProvider mainMenuProvider;
     cs2::CCSPlayerController** localPlayerController;
     EntitiesVMTs entitiesVMTs;

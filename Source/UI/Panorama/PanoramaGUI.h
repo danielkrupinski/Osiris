@@ -2,7 +2,6 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <FeatureHelpers/MainMenuProvider.h>
-#include <Features/Visuals/ScopeOverlayRemover.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <string_view>
 #include <Utils/StringParser.h>

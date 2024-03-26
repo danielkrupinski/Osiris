@@ -201,10 +201,6 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', players, '', { class: "horizontal-separator" });
   createYesNoDropDown(players, "Show Player Positions Through Walls", 'visuals', 'player_positions_through_walls');
 
-  var weapons = createSection(visuals, 'Weapons');
-  $.CreatePanel('Panel', weapons, '', { class: "horizontal-separator" });
-  createYesNoDropDown(weapons, "Remove Sniper Rifle Scope Overlay", 'visuals', 'remove_scope_overlay');
-
   var sound = createTab('sound');
   
   var playerSoundVisualization = createSection(sound, 'Player Sound Visualization');
