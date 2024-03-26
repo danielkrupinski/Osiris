@@ -21,6 +21,10 @@ public:
     [[nodiscard]] const void* findVmt(std::string_view mangledTypeName) const noexcept
     {
         const auto typeDescriptor{findTypeDescriptor(mangledTypeName)};
+        if (!typeDescriptor) {
+            assert(typeDescriptor != nullptr && "Failed to find type descriptor!");
+            return nullptr;
+        }
 
         const BinaryBytePattern typeDescriptorPointerPattern{typeDescriptor};
         HybridPatternFinder typeDescriptorCrossReferenceFinder{dataRelRoSection.raw(), typeDescriptorPointerPattern};

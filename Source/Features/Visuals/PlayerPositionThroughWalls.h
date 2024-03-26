@@ -3,8 +3,12 @@
 #include <CS2/Classes/CGameSceneNode.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <FeatureHelpers/HudInWorldPanels.h>
+#include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <GameClasses/PanoramaImagePanel.h>
+#include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/EntityPatterns.h>
 #include <MemoryPatterns/PlayerControllerPatterns.h>
 
@@ -13,9 +17,9 @@
 #include <HookDependencies/HookDependencies.h>
 #include <HookDependencies/HookDependenciesMask.h>
 
-class PlayerESPPanelFactory {
+class PlayerInformationThroughWallsPanelFactory {
 public:
-    PlayerESPPanelFactory(cs2::CUIPanel& parentPanel, PanelConfigurator panelConfigurator) noexcept
+    PlayerInformationThroughWallsPanelFactory(cs2::CUIPanel& parentPanel, PanelConfigurator panelConfigurator) noexcept
         : parentPanel{parentPanel}
         , panelConfigurator{panelConfigurator}
     {
@@ -267,7 +271,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(currentIndex);
         }
-        if (const auto panel{PlayerESPPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
+        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }

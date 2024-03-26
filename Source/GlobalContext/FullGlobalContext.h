@@ -4,6 +4,7 @@
 #include <GameClasses/Implementation/GameClassImplementations.h>
 #include <GameDLLs/Tier0Dll.h>
 #include <FeatureHelpers/FeatureHelpers.h>
+#include <FeatureHelpers/RenderingHookEntityLoop.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
@@ -31,8 +32,6 @@
 #include <Vmt/VmtLengthCalculator.h>
 
 #include "PeepEventsHookResult.h"
-
-#include <FeatureHelpers/EntityForRenderingDispatcher.h>
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept

@@ -26,8 +26,6 @@ public:
 private:
     static constexpr auto kCrucialDependencies{
         HookDependenciesMask{}
-        .set<OffsetToPlayerPawnHandle>()
-        .set<EntityFromHandleFinder>()
         .set<EntitiesVMTs>()
         .set<EntityListWalker>()
     };
@@ -46,11 +44,6 @@ private:
         if (dependencies.requestDependency<OffsetToHealth>())
             return *dependencies.getDependency<OffsetToHealth>().of(&entity).get() > 0;
         return true;
-    }
-
-    [[nodiscard]] bool isLocalPlayerController(cs2::CCSPlayerController& playerController) const noexcept
-    {
-        return dependencies.requestDependency<LocalPlayerController>() && dependencies.getDependency<LocalPlayerController>() == &playerController;
     }
 
     HookDependencies& dependencies;
