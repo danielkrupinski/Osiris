@@ -5,15 +5,13 @@
 
 struct EntitySystemImpl {
     explicit EntitySystemImpl(const EntitySystemPatterns& entitySystemPatterns) noexcept
-        : thisptr{entitySystemPatterns.entitySystem()}
+        : entitySystem{entitySystemPatterns.entitySystem()}
         , highestEntityIndexOffset{entitySystemPatterns.highestEntityIndexOffset()}
         , entityListOffset{entitySystemPatterns.entityListOffset()}
     {
     }
 
-    [[nodiscard]] static const EntitySystemImpl& instance() noexcept;
-
-    cs2::CGameEntitySystem** thisptr;
+    cs2::CGameEntitySystem** entitySystem;
     HighestEntityIndexOffset highestEntityIndexOffset;
     EntityListOffset entityListOffset;
 };

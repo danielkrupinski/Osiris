@@ -18,6 +18,6 @@ inline HighestEntityIndexOffset EntitySystemPatterns::highestEntityIndexOffset()
 inline EntityListOffset EntitySystemPatterns::entityListOffset() const noexcept
 {
     return EntityListOffset{
-        clientPatternFinder("4C 8D 6F ? 41 54 53 48 89 FB 48 83 EC ? 48 89 07"_pat).add(3).as<std::int8_t*>()
+        clientPatternFinder("4C 8D 6F ? 41 54 53 48 89 FB 48 83 EC ? 48 89 07 48"_pat).add(3).as<std::int8_t*>()
     };
 }

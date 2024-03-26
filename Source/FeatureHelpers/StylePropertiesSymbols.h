@@ -14,6 +14,7 @@ struct StylePropertiesSymbols {
         , positionSymbol{symbolMap.findSymbol(cs2::CStylePropertyPosition::kName)}
         , transformOriginSymbol{symbolMap.findSymbol(cs2::CStylePropertyTransformOrigin::kName)}
         , alignSymbol{symbolMap.findSymbol(cs2::CStylePropertyAlign::kName)}
+        , washColorSymbol{symbolMap.findSymbol(cs2::CStylePropertyWashColor::kName)}
     {
     }
 
@@ -25,4 +26,5 @@ struct StylePropertiesSymbols {
     cs2::CStyleSymbol positionSymbol;
     cs2::CStyleSymbol transformOriginSymbol;
     cs2::CStyleSymbol alignSymbol;
+    cs2::CStyleSymbol washColorSymbol;
 };

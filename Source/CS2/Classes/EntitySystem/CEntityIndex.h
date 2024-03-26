@@ -4,12 +4,16 @@ namespace cs2
 {
 
 struct CEntityIndex {
-    [[nodiscard]] static consteval CEntityIndex maxValid() noexcept
-    {
-        return CEntityIndex{0x7FFE};
-    }
+    [[nodiscard]] constexpr bool isValid() const noexcept;
 
     int value;
 };
+
+constexpr CEntityIndex kMaxValidEntityIndex{0x7FFE};
+
+constexpr bool CEntityIndex::isValid() const noexcept
+{
+    return value >= 0 && value <= kMaxValidEntityIndex.value;
+}
 
 }

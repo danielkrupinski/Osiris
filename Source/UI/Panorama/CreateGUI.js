@@ -196,6 +196,11 @@ $.Osiris = (function () {
   createYesNoDropDown(killfeed, "Preserve My Killfeed During The Round", 'hud', 'preserve_killfeed');
 
   var visuals = createTab('visuals');
+
+  var players = createSection(visuals, 'Players');
+  $.CreatePanel('Panel', players, '', { class: "horizontal-separator" });
+  createYesNoDropDown(players, "Show Player Positions Through Walls", 'visuals', 'player_positions_through_walls');
+
   var weapons = createSection(visuals, 'Weapons');
   $.CreatePanel('Panel', weapons, '', { class: "horizontal-separator" });
   createYesNoDropDown(weapons, "Remove Sniper Rifle Scope Overlay", 'visuals', 'remove_scope_overlay');

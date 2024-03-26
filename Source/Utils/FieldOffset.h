@@ -38,6 +38,11 @@ struct FieldOffset {
     {
     }
 
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return offset != OffsetType{};
+    }
+
     [[nodiscard]] FieldValueProxy<FieldType> of(ClassType* thisptr) const noexcept
     {
         using BytePointer = std::byte*;

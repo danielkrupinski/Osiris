@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildConfig.h" />
+    <ClInclude Include="CS2\Classes\CGameSceneNode.h" />
     <ClInclude Include="CS2\Classes\ClientModeCSNormal.h" />
     <ClInclude Include="CS2\Classes\CLoopModeGame.h" />
     <ClInclude Include="CS2\Classes\Color.h" />
@@ -22,6 +23,10 @@
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
     <ClInclude Include="CS2\Classes\CViewRender.h" />
     <ClInclude Include="CS2\Classes\C_CSGameRules.h" />
+    <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h" />
+    <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIdentity.h" />
@@ -40,8 +45,12 @@
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
     <ClInclude Include="CS2\Constants\SoundNames.h" />
+    <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\EntitiesVMTs.h" />
+    <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h" />
+    <ClInclude Include="FeatureHelpers\EntityListWalker.h" />
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h" />
     <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
@@ -54,6 +63,7 @@
     <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />
     <ClInclude Include="FeatureHelpers\PanelStyleSetter.h" />
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
+    <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />
@@ -62,6 +72,7 @@
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h" />
     <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h" />
     <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h" />
+    <ClInclude Include="FeatureHelpers\TeamNumber.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
@@ -94,20 +105,23 @@
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h" />
+    <ClInclude Include="Features\Visuals\PlayerPositionThroughWalls.h" />
     <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h" />
+    <ClInclude Include="Features\Visuals\States\PlayerPositionThroughWallsState.h" />
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
-    <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
+    <ClInclude Include="GameClasses\Implementation\EntityImpl.h" />
     <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileSystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h" />
     <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h" />
     <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\GameSceneNodeImpl.h" />
     <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h" />
@@ -116,6 +130,7 @@
     <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h" />
+    <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h" />
     <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
     <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h" />
@@ -124,6 +139,7 @@
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaImagePanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\PlayerControllerOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\TopLevelWindowOffset.h" />
     <ClInclude Include="GameClasses\Panel.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
@@ -144,6 +160,9 @@
     <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
     <ClInclude Include="Helpers\PlantedC4Provider.h" />
     <ClInclude Include="Helpers\UnloadFlag.h" />
+    <ClInclude Include="HookDependencies\HookDependencies.h" />
+    <ClInclude Include="HookDependencies\HookDependenciesBuilder.h" />
+    <ClInclude Include="HookDependencies\HookDependenciesMask.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="Hooks\LoopModeGameHook.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
@@ -155,9 +174,11 @@
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemoryPatterns\ClientPatterns.h" />
+    <ClInclude Include="MemoryPatterns\EntityPatterns.h" />
     <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\GameRulesPatterns.h" />
+    <ClInclude Include="MemoryPatterns\GameSceneNodePatterns.h" />
     <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\EntitySystemPatternsLinux.h" />
     <ClInclude Include="MemoryPatterns\Linux\FileSystemPatternsLinux.h" />
@@ -180,13 +201,16 @@
     <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h" />
     <ClInclude Include="MemoryPatterns\PanoramaUiPanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h" />
+    <ClInclude Include="MemoryPatterns\PlayerControllerPatterns.h" />
     <ClInclude Include="MemoryPatterns\SdlPatterns.h" />
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\TopLevelWindowPatterns.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\EntityPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />
@@ -195,6 +219,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />

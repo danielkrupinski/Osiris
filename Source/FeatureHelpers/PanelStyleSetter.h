@@ -82,6 +82,11 @@ public:
         setProperty(propertyFactory.align(horizontalAlignment, verticalAlignment));
     }
 
+    void setWashColor(cs2::Color color) const noexcept
+    {
+        setProperty(propertyFactory.washColor(color));
+    }
+
 private:
     cs2::CPanelStyle* thisptr;
     PanelStylePropertyFactory propertyFactory;

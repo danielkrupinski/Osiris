@@ -19,21 +19,22 @@ public:
 
     [[nodiscard]] const LinuxRttiTypeDescriptor* findTypeDescriptor(std::string_view mangledTypeName) const noexcept
     {
-        if (const auto typeDescriptorName{findTypeDescriptorName(findTypeName(mangledTypeName))}; isPartOfTypeDescriptor(typeDescriptorName))
+        if (const auto typeDescriptorName{findTypeDescriptorName(mangledTypeName)}; isPartOfTypeDescriptor(typeDescriptorName))
             return toTypeDescriptorPointer(typeDescriptorName);
         return nullptr;
     }
 
 private:
-    [[nodiscard]] const std::byte* findTypeName(std::string_view mangledTypeName) const noexcept
+    [[nodiscard]] const std::byte* findTypeDescriptorName(std::string_view mangledTypeName) const noexcept
     {
-        return HybridPatternFinder{rodataSection.raw(), BytePattern{mangledTypeName}}.findNextOccurrence();
-    }
-
-    [[nodiscard]] const std::byte* findTypeDescriptorName(const std::byte* typeNameAddress) const noexcept
-    {
-        if (typeNameAddress)
-            return HybridPatternFinder{dataRelRoSection.raw(), BinaryBytePattern{typeNameAddress}}.findNextOccurrence();
+        HybridPatternFinder typeNameFinder{rodataSection.raw(), BytePattern{mangledTypeName}};
+        auto typeNameAddress = typeNameFinder.findNextOccurrence();
+        while (typeNameAddress) {
+            const auto typeNameReference = HybridPatternFinder{dataRelRoSection.raw(), BinaryBytePattern{typeNameAddress}}.findNextOccurrence();
+            if (typeNameReference && reinterpret_cast<std::uintptr_t>(typeNameReference) % alignof(void*) == 0)
+                return typeNameReference;
+            typeNameAddress = typeNameFinder.findNextOccurrence();
+        }
         return nullptr;
     }
 

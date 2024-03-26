@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CPlantedC4.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Classes/CUtlVector.h>
@@ -33,6 +34,7 @@ struct ClientPatterns {
     [[nodiscard]] cs2::VMatrix* worldToProjectionMatrix() const noexcept;
     [[nodiscard]] cs2::VMatrix* viewToProjectionMatrix() const noexcept;
     [[nodiscard]] cs2::CViewRender** viewRender() const noexcept;
+    [[nodiscard]] cs2::CCSPlayerController** localPlayerController() const noexcept;
 
     const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };

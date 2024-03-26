@@ -19,6 +19,11 @@ struct PanoramaTransformFactory {
         return create<cs2::CTransformScale3D>(scale, scale, 1.0f);
     }
 
+    [[nodiscard]] cs2::CTransform3D* scale(float scaleX, float scaleY) const noexcept
+    {
+        return create<cs2::CTransformScale3D>(scaleX, scaleY, 1.0f);
+    }
+
     [[nodiscard]] cs2::CTransform3D* translate(cs2::CUILength x, cs2::CUILength y) const noexcept
     {
         return create<cs2::CTransformTranslate3D>(x, y, cs2::CUILength{ 0.0f, cs2::CUILength::k_EUILengthLength });

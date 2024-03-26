@@ -53,6 +53,11 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyAlign>(VMTs.alignPropertyVmt, symbols.alignSymbol, horizontalAlignment, verticalAlignment);
     }
 
+    [[nodiscard]] cs2::CStylePropertyWashColor* washColor(cs2::Color color) const noexcept
+    {
+        return create<cs2::CStylePropertyWashColor>(VMTs.washColorVmt, symbols.washColorSymbol, color, true);
+    }
+
 private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(const void* vmt, cs2::CStyleSymbol symbol, Args&&... args) const noexcept

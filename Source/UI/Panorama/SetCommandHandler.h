@@ -55,6 +55,8 @@ private:
     {
         if (const auto feature = parser.getLine('/'); feature == "remove_scope_overlay") {
             handleTogglableFeature(features.visualFeatures().scopeOverlayRemover());
+        } else if (feature == "player_positions_through_walls") {
+            handleTogglableFeature(features.visualFeatures().playerPositionThroughWalls());
         }
     }
 
