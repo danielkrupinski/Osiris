@@ -692,9 +692,6 @@
     <ClInclude Include="MemorySearch\PatternStringWildcard.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
-    <ClInclude Include="MemorySearch\BinaryBytePattern.h">
-      <Filter>MemorySearch</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocatorFinder.h">
       <Filter>Platform\Windows\RTTI</Filter>
     </ClInclude>

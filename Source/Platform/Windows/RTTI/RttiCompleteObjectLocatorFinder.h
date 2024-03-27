@@ -5,7 +5,6 @@
 
 #include "RttiCompleteObjectLocator.h"
 #include "ToRvaConverter.h"
-#include <MemorySearch/BinaryBytePattern.h>
 #include <Utils/MemorySection.h>
 
 struct RttiTypeDescriptor;
@@ -20,8 +19,8 @@ public:
     
     [[nodiscard]] const RttiCompleteObjectLocator* findCompleteObjectLocator(const RttiTypeDescriptor* typeDescriptor) const noexcept
     {
-        const BinaryBytePattern typeDescriptorRvaPattern{toRvaConverter.toRva(reinterpret_cast<std::uintptr_t>(typeDescriptor))};
-        HybridPatternFinder typeDescriptorCrossReferenceFinder{rdataSection.raw(), typeDescriptorRvaPattern};
+        const auto typeDescriptorRva{toRvaConverter.toRva(reinterpret_cast<std::uintptr_t>(typeDescriptor))};
+        HybridPatternFinder typeDescriptorCrossReferenceFinder{rdataSection.raw(), BytePattern{&typeDescriptorRva}};
 
         auto typeDescriptorReference{typeDescriptorCrossReferenceFinder.findNextOccurrence()};
         while (typeDescriptorReference && (!isCompleteObjectLocator(reinterpret_cast<std::uintptr_t>(typeDescriptorReference)) || !isCompleteObjectLocatorOfCompleteClass(typeDescriptorReference)))
@@ -43,7 +42,8 @@ private:
 
     [[nodiscard]] bool isCompleteObjectLocator(std::uintptr_t typeDescriptorReference) const noexcept
     {
-        return hasNoCrossReferences(BinaryBytePattern{toRvaConverter.toRva(typeDescriptorReference)}) && rdataSection.offsetOf(typeDescriptorReference) >= RttiCompleteObjectLocator::kOffsetOfTypeDescriptorRva;
+        const auto rva{toRvaConverter.toRva(typeDescriptorReference)};
+        return hasNoCrossReferences(BytePattern{&rva}) && rdataSection.offsetOf(typeDescriptorReference) >= RttiCompleteObjectLocator::kOffsetOfTypeDescriptorRva;
     }
 
     [[nodiscard]] bool hasNoCrossReferences(BytePattern pattern) const noexcept

@@ -14,6 +14,12 @@ public:
     {
     }
 
+    template <typename T>
+    explicit BytePattern(const T* value) noexcept
+        : BytePattern{std::string_view{reinterpret_cast<const char*>(value), sizeof(T)}}
+    {
+    }
+
     [[nodiscard]] std::size_t indexOfFirstNonWildcardChar() const noexcept
     {
         if (wildcardChar)

@@ -2,7 +2,6 @@
 
 #include <string_view>
 
-#include <MemorySearch/BinaryBytePattern.h>
 #include <MemorySearch/HybridPatternFinder.h>
 #include <Utils/MemorySection.h>
 
@@ -50,7 +49,7 @@ private:
     [[nodiscard]] const std::byte* findCompleteObjectLocatorReference(const RttiCompleteObjectLocator* completeObjectLocator) const noexcept
     {
         if (completeObjectLocator)
-            return HybridPatternFinder{vmtSection.raw(), BinaryBytePattern{completeObjectLocator}}.findNextOccurrence();
+            return HybridPatternFinder{vmtSection.raw(), BytePattern{&completeObjectLocator}}.findNextOccurrence();
         return nullptr;
     }
 
