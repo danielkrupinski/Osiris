@@ -80,11 +80,12 @@ struct FullGlobalContext {
     void onRenderStart(cs2::CViewRender* thisptr) noexcept
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
-        if (featureHelpers.globalVarsProvider && featureHelpers.globalVarsProvider.getGlobalVars())
-            featureHelpers.soundWatcher.update(featureHelpers.globalVarsProvider.getGlobalVars()->curtime);
-        features().soundFeatures().runOnViewMatrixUpdate();
 
         HookDependencies dependencies{_gameClasses, featureHelpers};
+        SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
+        soundWatcher.update();
+        features(dependencies).soundFeatures().runOnViewMatrixUpdate();
+
         PlayerPositionThroughWalls playerPositionThroughWalls{featuresStates.visualFeaturesStates.playerPositionThroughWallsState, dependencies};
         RenderingHookEntityLoop{dependencies, playerPositionThroughWalls}.run();
         playerPositionThroughWalls.hideUnusedPanels();
@@ -92,12 +93,14 @@ struct FullGlobalContext {
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
     {
-        features().hudFeatures().bombTimer().run();
-        features().hudFeatures().defusingAlert().run();
-        features().hudFeatures().killfeedPreserver().run();
+        HookDependencies dependencies{_gameClasses, featureHelpers};
+
+        features(dependencies).hudFeatures().bombTimer().run();
+        features(dependencies).hudFeatures().defusingAlert().run();
+        features(dependencies).hudFeatures().killfeedPreserver().run();
 
         UnloadFlag unloadFlag;
-        panoramaGUI.run(features(), unloadFlag);
+        panoramaGUI.run(features(dependencies), unloadFlag);
         hooks.update();
 
         if (unloadFlag)
@@ -112,9 +115,9 @@ struct FullGlobalContext {
     }
 
 private:
-    [[nodiscard]] Features features() noexcept
+    [[nodiscard]] Features features(HookDependencies& dependencies) noexcept
     {
-        return Features{featuresStates, featureHelpers, hooks};
+        return Features{featuresStates, featureHelpers, hooks, dependencies};
     }
 
     GameClassImplementations _gameClasses;

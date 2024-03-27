@@ -10,6 +10,7 @@
 
 #include <CS2/Classes/Sound.h>
 #include <GameClasses/FileSystem.h>
+#include <HookDependencies/HookDependencies.h>
 #include <MemoryPatterns/FileSystemPatterns.h>
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"
@@ -20,13 +21,17 @@
 #include <Utils/TypeIndex.h>
 
 #include "SoundExpiryChecker.h"
+#include "SoundWatcherImplState.h"
+
+template <typename Sounds>
+class SoundWatcherImpl;
 
 template <typename... Sounds>
-class SoundWatcherImpl {
+class SoundWatcherImpl<SoundWatcherImplState<Sounds...>> {
 public:
-    explicit SoundWatcherImpl(const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns) noexcept
-        : soundChannels{soundSystemPatterns.soundChannels()}
-        , fileSystem{fileSystemPatterns.fileSystem()}
+    explicit SoundWatcherImpl(SoundWatcherImplState<Sounds...>& state, HookDependencies& hookDependencies) noexcept
+        : state{state}
+        , hookDependencies{hookDependencies}
     {
     }
 
@@ -34,69 +39,68 @@ public:
     void startWatching() noexcept
     {
         assert(!isWatching<Sound>());
-        soundsToWatch.template set<Sound>();
+        state.soundsToWatch.template set<Sound>();
     }
 
     template <typename Sound>
     void stopWatching() noexcept
     {
         assert(isWatching<Sound>());
-        soundsToWatch.template unset<Sound>();
+        state.soundsToWatch.template unset<Sound>();
     }
 
-    void update(float curtime) noexcept
+    void update() noexcept
     {
-        (removeExpiredSounds<Sounds>(curtime), ...);
-        collectNewSounds(curtime);
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<CurTime>().set<SoundChannels>()};
+        if (!hookDependencies.requestDependencies(kCrucialDependencies))
+            return;
+
+        const auto curtime = hookDependencies.getDependency<CurTime>();
+        auto& soundChannels = hookDependencies.getDependency<SoundChannels>();
+        (removeExpiredSounds<Sounds>(soundChannels, curtime), ...);
+        collectNewSounds(soundChannels, curtime);
     }
 
     template <typename Sound>
     [[nodiscard]] const WatchedSounds& getSoundsOfType() const noexcept
     {
-        return watchedSounds[indexOf<Sound>()];
+        return state.watchedSounds[indexOf<Sound>()];
     }
 
 private:
     template <typename Sound>
-    void removeExpiredSounds(float curtime) noexcept
+    void removeExpiredSounds(cs2::SoundChannels& soundChannels, float curtime) noexcept
     {
-        if (isWatching<Sound>()) {
-            if (!soundChannels || !*soundChannels)
-                return;
-
-            getSoundsOfType<Sound>().removeExpiredSounds(SoundExpiryChecker{(*soundChannels)->channelInfo1, curtime, Sound::kFadeAwayStart + Sound::kFadeAwayDuration});
-        }
+        if (isWatching<Sound>())
+            getSoundsOfType<Sound>().removeExpiredSounds(SoundExpiryChecker{soundChannels.channelInfo1, curtime, Sound::kFadeAwayStart + Sound::kFadeAwayDuration});
     }
 
     template <typename Sound>
     [[nodiscard]] bool isWatching() const noexcept
     {
-        return soundsToWatch.template has<Sound>();
+        return state.soundsToWatch.template has<Sound>();
     }
 
     template <typename Sound>
     [[nodiscard]] WatchedSounds& getSoundsOfType() noexcept
     {
-        return watchedSounds[indexOf<Sound>()];
+        return state.watchedSounds[indexOf<Sound>()];
     }
 
-    void collectNewSounds(float curtime) noexcept
+    void collectNewSounds(cs2::SoundChannels& soundChannels, float curtime) noexcept
     {
-        if (!soundsToWatch)
+        if (!state.soundsToWatch)
             return;
 
-        if (!soundChannels || !*soundChannels)
+        if (!hookDependencies.requestDependency<FileSystem>())
             return;
 
-        if (!fileSystem || !*fileSystem)
-            return;
-
-        const auto fileNames = FileSystem{*fileSystem}.fileNames();
+        const auto fileNames = hookDependencies.getDependency<FileSystem>().fileNames();
         if (!fileNames)
             return;
 
-        const auto& channelInfo1 = (*soundChannels)->channelInfo1;
-        const auto& channelInfo2 = (*soundChannels)->channelInfo2;
+        const auto& channelInfo1 = soundChannels.channelInfo1;
+        const auto& channelInfo2 = soundChannels.channelInfo2;
 
         for (int i = 0; i < channelInfo1.size; ++i) {
             const auto& channel = channelInfo1.memory[i];
@@ -145,9 +149,6 @@ private:
         return utils::typeIndex<Sound, std::tuple<Sounds...>>();
     }
 
-    cs2::SoundChannels** soundChannels;
-    cs2::CBaseFileSystem** fileSystem;
-
-    TypeBitFlags<Sounds...> soundsToWatch;
-    std::array<WatchedSounds, sizeof...(Sounds)> watchedSounds;
+    SoundWatcherImplState<Sounds...>& state;
+    HookDependencies& hookDependencies;
 };

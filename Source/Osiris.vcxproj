@@ -52,7 +52,6 @@
     <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h" />
     <ClInclude Include="FeatureHelpers\EntityListWalker.h" />
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h" />
-    <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
@@ -68,6 +67,8 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h" />
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h" />
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h" />
     <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h" />
@@ -156,7 +157,6 @@
     <ClInclude Include="Helpers\PanoramaPanelPointer.h" />
     <ClInclude Include="Helpers\PanoramaTransformFactory.h" />
     <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
-    <ClInclude Include="Helpers\PlantedC4Provider.h" />
     <ClInclude Include="Helpers\UnloadFlag.h" />
     <ClInclude Include="HookDependencies\HookDependencies.h" />
     <ClInclude Include="HookDependencies\HookDependenciesBuilder.h" />

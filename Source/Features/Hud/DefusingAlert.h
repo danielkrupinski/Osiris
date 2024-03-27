@@ -2,9 +2,7 @@
 
 #include <CS2/Constants/PanelIDs.h>
 
-#include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
-#include <Helpers/PlantedC4Provider.h>
 #include <Helpers/HudProvider.h>
 #include <FeatureHelpers/PanelConfigurator.h>
 
@@ -24,12 +22,11 @@ private:
 
 class DefusingAlert : public TogglableFeature<DefusingAlert> {
 public:
-    DefusingAlert(DefusingAlertState& state, PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, PanelConfigurator panelConfigurator) noexcept
+    DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies, HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
-        , plantedC4Provider{plantedC4Provider}
+        , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
-        , globalVarsProvider{globalVarsProvider}
         , panelConfigurator{panelConfigurator}
     {
     }
@@ -41,16 +38,16 @@ public:
 
         updatePanelHandles();
       
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+        if (!hookDependencies.requestDependencies(HookDependenciesMask{}.set<CurTime>().set<PlantedC4>()))
             return;
 
-        const PlantedC4 bomb{plantedC4Provider.getPlantedC4()};
-        if (!bomb || !bomb.isBeingDefused()) {
+        const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
+        if (!bomb.isBeingDefused()) {
             hideDefusingAlert();
             return;
         }
 
-        const auto timeToEnd = bomb.getTimeToDefuseEnd(globalVarsProvider.getGlobalVars()->curtime);
+        const auto timeToEnd = bomb.getTimeToDefuseEnd(hookDependencies.getDependency<CurTime>());
         if (timeToEnd > 0.0f) {
             if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
@@ -133,8 +130,7 @@ R"(
     friend TogglableFeature;
 
     DefusingAlertState& state;
-    PlantedC4Provider plantedC4Provider;
+    HookDependencies& hookDependencies;
     HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
     PanelConfigurator panelConfigurator;
 };

@@ -3,7 +3,6 @@
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
-#include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
@@ -13,7 +12,6 @@
 #include <GameClasses/PanoramaImagePanel.h>
 
 #include <Utils/StringBuilder.h>
-#include <Helpers/PlantedC4Provider.h>
 
 #include <CS2/Constants/PanelIDs.h>
 
@@ -23,12 +21,11 @@
 
 class BombTimer : public TogglableFeature<BombTimer> {
 public:
-    BombTimer(BombTimerState& state, PlantedC4Provider plantedC4Provider, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider) noexcept
+    BombTimer(BombTimerState& state, HookDependencies& hookDependencies, HudProvider hudProvider) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
-        , plantedC4Provider{plantedC4Provider}
+        , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
-        , globalVarsProvider{globalVarsProvider}
     {
     }
 
@@ -40,14 +37,14 @@ public:
         updatePanelHandles();
         hideBombStatusPanel();
 
-        const PlantedC4 bomb{plantedC4Provider.getPlantedC4()};
-
-        if (!bomb || !globalVarsProvider || !globalVarsProvider.getGlobalVars()) {
+        if (!hookDependencies.requestDependency<PlantedC4>() || !hookDependencies.requestDependency<CurTime>()) {
             hideBombTimerPanel();
             return;
         }
 
-        if (const auto timeToExplosion = bomb.getTimeToExplosion(globalVarsProvider.getGlobalVars()->curtime); timeToExplosion > 0.0f) {
+        const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
+
+        if (const auto timeToExplosion = bomb.getTimeToExplosion(hookDependencies.getDependency<CurTime>()); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
             restorePanels();
@@ -164,7 +161,6 @@ R"(
     }
 
     BombTimerState& state;
-    PlantedC4Provider plantedC4Provider;
+    HookDependencies& hookDependencies;
     HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
 };

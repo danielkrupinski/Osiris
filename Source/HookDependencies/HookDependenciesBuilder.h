@@ -6,6 +6,44 @@
 #include "HookDependenciesMask.h"
 
 struct HookDependenciesBuilder {
+    [[nodiscard]] HookDependenciesMask getFileSystem(cs2::CBaseFileSystem** fileSystem) const noexcept
+    {
+        if (requiredDependencies.has<FileSystem>() && featureHelpers.fileSystem) {
+            if ((*fileSystem = *featureHelpers.fileSystem) != nullptr)
+                return HookDependenciesMask{}.set<FileSystem>();
+        }
+        return {};
+    }
+
+    [[nodiscard]] HookDependenciesMask getSoundChannels(cs2::SoundChannels** soundChannels) const noexcept
+    {
+        if (requiredDependencies.has<SoundChannels>() && featureHelpers.soundChannels) {
+            if ((*soundChannels = *featureHelpers.soundChannels) != nullptr)
+                return HookDependenciesMask{}.set<SoundChannels>();
+        }
+        return {};
+    }
+
+    [[nodiscard]] HookDependenciesMask getPlantedC4(cs2::CPlantedC4** plantedC4) const noexcept
+    {
+        if (requiredDependencies.has<PlantedC4>() && featureHelpers.plantedC4s && featureHelpers.plantedC4s->size > 0) {
+            if ((*plantedC4 = featureHelpers.plantedC4s->memory[0]) != nullptr)
+                return HookDependenciesMask{}.set<PlantedC4>();
+        }
+        return {};
+    }
+
+    [[nodiscard]] HookDependenciesMask getCurTime(float* curTime) const noexcept
+    {
+        if (requiredDependencies.has<CurTime>() && featureHelpers.globalVars) {
+            if (const auto globalVars = *featureHelpers.globalVars) {
+                *curTime = globalVars->curtime;
+                return HookDependenciesMask{}.set<CurTime>();
+            }
+        }
+        return {};
+    }
+
     [[nodiscard]] HookDependenciesMask getFovScale(float* fovScale) const noexcept
     {
         if (requiredDependencies.has<FovScale>()) {

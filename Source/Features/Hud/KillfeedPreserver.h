@@ -2,7 +2,6 @@
 
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Constants/PanelIDs.h>
-#include <FeatureHelpers/GlobalVarsProvider.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <MemoryPatterns/ClientPatterns.h>
 #include <Helpers/PanoramaPanelPointer.h>
@@ -13,11 +12,11 @@
 
 class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
 public:
-    KillfeedPreserver(KillfeedPreserverState& state, HudProvider hudProvider, GlobalVarsProvider globalVarsProvider, cs2::C_CSGameRules** gameRules) noexcept
+    KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& hookDependencies, HudProvider hudProvider, cs2::C_CSGameRules** gameRules) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
+        , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
-        , globalVarsProvider{globalVarsProvider}
         , gameRules{gameRules}
     {
     }
@@ -30,7 +29,7 @@ public:
         if (!gameRules || !*gameRules)
             return;
 
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+        if (!hookDependencies.requestDependency<CurTime>())
             return;
 
         const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
@@ -54,7 +53,7 @@ public:
             StringParser{ spawnTimeString }.parseFloat(spawnTime);
 
             if (spawnTime > roundStartTime) {
-                panel.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(globalVarsProvider.getGlobalVars()->curtime), '.', '0').cstring());
+                panel.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(hookDependencies.getDependency<CurTime>()), '.', '0').cstring());
             }
         }
     }
@@ -91,7 +90,7 @@ private:
     friend TogglableFeature;
 
     KillfeedPreserverState& state;
+    HookDependencies& hookDependencies;
     HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
     cs2::C_CSGameRules** gameRules;
 };

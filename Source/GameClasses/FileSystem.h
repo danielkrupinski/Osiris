@@ -5,21 +5,18 @@
 #include "Implementation/FileSystemImpl.h"
 
 struct FileSystem {
-    explicit FileSystem(cs2::CBaseFileSystem* thisptr) noexcept
-        : thisptr{ thisptr }
+    explicit FileSystem(cs2::CBaseFileSystem& thisptr, const FileSystemImpl& impl) noexcept
+        : thisptr{thisptr}
+        , impl{impl}
     {
-    }
-
-    explicit operator bool() const noexcept
-    {
-        return thisptr != nullptr;
     }
 
     [[nodiscard]] FileNameSymbolTable fileNames() const noexcept
     {
-        return FileNameSymbolTable{FileSystemImpl::instance().fileNamesOffset.of(thisptr).get()};
+        return FileNameSymbolTable{impl.fileNamesOffset.of(&thisptr).get()};
     }
 
 private:
-    cs2::CBaseFileSystem* thisptr;
+    cs2::CBaseFileSystem& thisptr;
+    const FileSystemImpl& impl;
 };

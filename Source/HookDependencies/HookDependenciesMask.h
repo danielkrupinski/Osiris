@@ -5,15 +5,19 @@
 #include <MemoryPatterns/PlayerControllerPatterns.h>
 #include <Utils/TypeBitFlags.h>
 
+struct CurTime;
 struct EntitiesVMTs;
 class EntityFromHandleFinder;
 class EntityListWalker;
+struct FileSystem;
 struct FovScale;
 class HudInWorldPanelContainer;
 struct HudProvider;
 struct LocalPlayerController;
 struct PanelConfigurator;
 struct PanoramaTransformFactory;
+struct PlantedC4;
+struct SoundChannels;
 struct WorldToClipSpaceConverter;
 
 using HookDependenciesMask = TypeBitFlags<
@@ -31,5 +35,9 @@ using HookDependenciesMask = TypeBitFlags<
     PanoramaTransformFactory,
     OffsetToHealth,
     OffsetToTeamNumber,
-    FovScale
+    FovScale,
+    CurTime,
+    PlantedC4,
+    SoundChannels,
+    FileSystem
 >;

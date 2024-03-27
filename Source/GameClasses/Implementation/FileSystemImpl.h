@@ -8,7 +8,5 @@ struct FileSystemImpl {
     {
     }
 
-    [[nodiscard]] static const FileSystemImpl& instance() noexcept;
-
     FileNamesOffset fileNamesOffset;
 };

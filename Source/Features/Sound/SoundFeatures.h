@@ -53,6 +53,7 @@ struct SoundFeatures {
     SoundFeaturesStates& states;
     FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;
+    HookDependencies& hookDependencies;
 
 private:
     template <typename SoundVisualizationFeature>
@@ -60,11 +61,10 @@ private:
     {
         return SoundVisualizationFeature{
             state,
+            hookDependencies,
             viewRenderHook,
-            helpers.soundWatcher,
+            SoundWatcher{helpers.soundWatcherState, hookDependencies},
             helpers.hudInWorldPanelContainer,
-            helpers.globalVarsProvider,
-            helpers.transformFactory,
             helpers.worldtoClipSpaceConverter,
             helpers.viewToProjectionMatrix,
             helpers.panelConfigurator(),

@@ -21,22 +21,20 @@ class SoundVisualizationFeature : public TogglableFeature<SoundVisualizationFeat
 public:
     SoundVisualizationFeature(
         SoundVisualizationFeatureState& state,
+        HookDependencies& hookDependencies,
         ViewRenderHook& viewRenderHook,
-        SoundWatcher& soundWatcher,
+        SoundWatcher soundWatcher,
         HudInWorldPanelContainer& hudInWorldPanelContainer,
-        GlobalVarsProvider globalVarsProvider,
-        PanoramaTransformFactory transformFactory,
         WorldToClipSpaceConverter worldtoClipSpaceConverter,
         ViewToProjectionMatrix viewToProjectionMatrix,
         PanelConfigurator panelConfigurator,
         HudProvider hudProvider) noexcept
         : SoundVisualizationFeature::TogglableFeature{state.enabled}
         , state{state}
+        , hookDependencies{hookDependencies}
         , viewRenderHook{viewRenderHook}
         , soundWatcher{soundWatcher}
         , hudInWorldPanelContainer{hudInWorldPanelContainer}
-        , globalVarsProvider{globalVarsProvider}
-        , transformFactory{transformFactory}
         , worldtoClipSpaceConverter{worldtoClipSpaceConverter}
         , viewToProjectionMatrix{viewToProjectionMatrix}
         , panelConfigurator{panelConfigurator}
@@ -49,7 +47,8 @@ public:
         if (!this->isEnabled())
             return;
 
-        if (!globalVarsProvider || !globalVarsProvider.getGlobalVars())
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<CurTime>()};
+        if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
         if (!worldtoClipSpaceConverter)
@@ -76,7 +75,7 @@ public:
             if (!soundInClipSpace.onScreen())
                 return;
 
-            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(globalVarsProvider.getGlobalVars()->curtime));
+            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(hookDependencies.getDependency<CurTime>()));
             if (opacity <= 0.0f)
                 return;
 
@@ -94,6 +93,7 @@ public:
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
+            const auto& transformFactory = hookDependencies.getDependency<PanoramaTransformFactory>();
             PanoramaTransformations{
                 transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, viewToProjectionMatrix.getFovScale())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
@@ -149,11 +149,10 @@ private:
     }
 
     SoundVisualizationFeatureState& state;
+    HookDependencies& hookDependencies;
     ViewRenderHook& viewRenderHook;
-    SoundWatcher& soundWatcher;
+    SoundWatcher soundWatcher;
     HudInWorldPanelContainer& hudInWorldPanelContainer;
-    GlobalVarsProvider globalVarsProvider;
-    PanoramaTransformFactory transformFactory;
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
     ViewToProjectionMatrix viewToProjectionMatrix;
     PanelConfigurator panelConfigurator;

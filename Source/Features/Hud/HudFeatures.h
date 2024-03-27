@@ -10,25 +10,25 @@
 struct HudFeatures {
     [[nodiscard]] BombTimer bombTimer() const noexcept
     {
-        return BombTimer{states.bombTimerState, helpers.plantedC4Provider, helpers.hudProvider, helpers.globalVarsProvider};
+        return BombTimer{states.bombTimerState, hookDependencies, helpers.hudProvider};
     }
 
     [[nodiscard]] DefusingAlert defusingAlert() const noexcept
     {
         return DefusingAlert{
             states.defusingAlertState,
-            helpers.plantedC4Provider,
+            hookDependencies,
             helpers.hudProvider,
-            helpers.globalVarsProvider,
             helpers.panelConfigurator()
         };
     }
     
     [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{states.killfeedPreserverState, helpers.hudProvider, helpers.globalVarsProvider, helpers.gameRules};
+        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, helpers.hudProvider, helpers.gameRules};
     }
 
     HudFeaturesStates& states;
     FeatureHelpers& helpers;
+    HookDependencies& hookDependencies;
 };

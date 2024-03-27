@@ -249,9 +249,6 @@
     <ClInclude Include="Helpers\PatternNotFoundLogger.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\PlantedC4Provider.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Helpers\UnloadFlag.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -620,9 +617,6 @@
     <ClInclude Include="Utils\LazyInitialized.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\GlobalVarsProvider.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\DynamicArray.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -821,9 +815,6 @@
     <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h">
       <Filter>Platform\Windows\Syscalls</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\ScopeOverlayRemover.h">
-      <Filter>Features\Visuals</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\Details\BombBeepSound.h">
       <Filter>Features\Sound\Details</Filter>
     </ClInclude>
@@ -871,9 +862,6 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\States\KillfeedPreserverState.h">
       <Filter>Features\Hud\States</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\States\ScopeOverlayRemoverState.h">
-      <Filter>Features\Visuals\States</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
       <Filter>Features\Visuals\States</Filter>
@@ -1030,6 +1018,12 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\GameSceneNodePatterns.h">
       <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h">
+      <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h">
+      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

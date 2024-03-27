@@ -4,6 +4,8 @@
 #include "HookDependenciesMask.h"
 #include <FeatureHelpers/EntityFromHandleFinder.h>
 #include <FeatureHelpers/EntityListWalker.h>
+#include <GameClasses/FileSystem.h>
+#include <GameClasses/PlantedC4.h>
 
 struct HookDependencies {
     HookDependencies(const GameClassImplementations& gameClassImplementations, FeatureHelpers& featureHelpers) noexcept
@@ -82,9 +84,17 @@ struct HookDependencies {
         } else if constexpr (std::is_same_v<Dependency, PanelConfigurator>) {
             return featureHelpers.panelConfigurator();
         } else if constexpr (std::is_same_v<Dependency, PanoramaTransformFactory>) {
-            return featureHelpers.transformFactory;
+            return (featureHelpers.transformFactory);
         } else if constexpr (std::is_same_v<Dependency, FovScale>) {
             return fovScale;
+        } else if constexpr (std::is_same_v<Dependency, CurTime>) {
+            return curTime;
+        } else if constexpr (std::is_same_v<Dependency, PlantedC4>) {
+            return PlantedC4{*plantedC4, gameClassImplementations.plantedC4};
+        } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
+            return (*soundChannels);
+        } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
+            return FileSystem{*fileSystem, gameClassImplementations.fileSystem};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -104,6 +114,10 @@ private:
         presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
         presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
         presentDependencies |= builder.getFovScale(&fovScale);
+        presentDependencies |= builder.getCurTime(&curTime);
+        presentDependencies |= builder.getPlantedC4(&plantedC4);
+        presentDependencies |= builder.getSoundChannels(&soundChannels);
+        presentDependencies |= builder.getFileSystem(&fileSystem);
     }
 
     const GameClassImplementations& gameClassImplementations;
@@ -113,5 +127,9 @@ private:
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};
     float fovScale;
+    float curTime;
+    cs2::CPlantedC4* plantedC4;
+    cs2::SoundChannels* soundChannels;
+    cs2::CBaseFileSystem* fileSystem;
     HookDependenciesMask presentDependencies;
 };

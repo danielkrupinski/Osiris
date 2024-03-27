@@ -6,7 +6,7 @@
 #include "TypeIndex.h"
 
 template <typename... Types>
-    requires (sizeof...(Types) <= std::numeric_limits<std::uint16_t>::digits)
+    requires (sizeof...(Types) <= std::numeric_limits<std::uint32_t>::digits)
 class TypeBitFlags {
 public:
     TypeBitFlags() = default;
@@ -57,11 +57,14 @@ public:
     }
 
 private:
-    using UnderlyingType = std::conditional_t<
-        sizeof...(Types) <= std::numeric_limits<std::uint8_t>::digits,
-        std::uint8_t,
-        std::uint16_t
-    >;
+    using UnderlyingType = 
+        std::conditional_t<sizeof...(Types) <= std::numeric_limits<std::uint8_t>::digits,
+            std::uint8_t,
+            std::conditional_t<sizeof...(Types) <= std::numeric_limits<std::uint16_t>::digits,
+                std::uint16_t,
+                std::uint32_t
+            >
+        >;
 
     explicit constexpr TypeBitFlags(UnderlyingType flags) noexcept
         : flags{flags}

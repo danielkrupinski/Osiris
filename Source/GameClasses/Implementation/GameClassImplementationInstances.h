@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FileNameSymbolTableImpl.h"
-#include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
 #include "MemAllocImpl.h"
 #include "PanelImpl.h"
@@ -10,7 +9,6 @@
 #include "PanoramaLabelImpl.h"
 #include "PanoramaUiEngineImpl.h"
 #include "PanoramaUiPanelImpl.h"
-#include "PlantedC4Impl.h"
 #include "TopLevelWindowImpl.h"
 
 #include <GlobalContext/GlobalContext.h>
@@ -18,11 +16,6 @@
 inline const FileNameSymbolTableImpl& FileNameSymbolTableImpl::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameClasses().fileNameSymbolTable;
-}
-
-inline const FileSystemImpl& FileSystemImpl::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameClasses().fileSystem;
 }
 
 inline const GameRulesImpl& GameRulesImpl::instance() noexcept
@@ -63,11 +56,6 @@ inline const PanoramaUiEngineImpl& PanoramaUiEngineImpl::instance() noexcept
 inline const PanoramaUiPanelImpl& PanoramaUiPanelImpl::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameClasses().panoramaUiPanelOffsets;
-}
-
-inline const PlantedC4Impl& PlantedC4Impl::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameClasses().plantedC4;
 }
 
 inline const TopLevelWindowImpl& TopLevelWindowImpl::instance() noexcept

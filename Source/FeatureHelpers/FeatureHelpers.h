@@ -1,14 +1,13 @@
 #pragma once
 
 #include "EntitiesVMTs.h"
-#include "GlobalVarsProvider.h"
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
-#include <Helpers/PlantedC4Provider.h>
 #include "HudInWorldPanelContainer.h"
 #include "MainMenuProvider.h"
+#include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PanelConfigurator.h"
-#include "Sound/SoundWatcher.h"
+#include "Sound/SoundWatcherState.h"
 #include "StylePropertiesSymbols.h"
 #include "StylePropertiesVMTs.h"
 #include "StylePropertySymbolMap.h"
@@ -18,18 +17,19 @@
 struct FeatureHelpers {
     explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns, const VmtFinder& panoramaVmtFinder, const VmtFinder& clientVmtFinder) noexcept
         : hudProvider{clientPatterns}
-        , globalVarsProvider{clientPatterns}
+        , globalVars{clientPatterns.globalVars()}
         , transformFactory{clientPatterns}
         , worldtoClipSpaceConverter{clientPatterns}
-        , plantedC4Provider{clientPatterns}
         , viewToProjectionMatrix{clientPatterns}
         , stylePropertiesVMTs{panoramaVmtFinder}
         , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
-        , soundWatcher{fileSystemPatterns, soundSystemPatterns}
         , gameRules{clientPatterns.gameRules()}
         , mainMenuProvider{clientPatterns}
         , localPlayerController{clientPatterns.localPlayerController()}
         , entitiesVMTs{clientVmtFinder}
+        , plantedC4s{clientPatterns.plantedC4s()}
+        , soundChannels{soundSystemPatterns.soundChannels()}
+        , fileSystem{fileSystemPatterns.fileSystem()}
     {
     }
 
@@ -39,17 +39,19 @@ struct FeatureHelpers {
     }
 
     HudProvider hudProvider;
-    GlobalVarsProvider globalVarsProvider;
+    cs2::GlobalVars** globalVars;
     PanoramaTransformFactory transformFactory;
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
-    PlantedC4Provider plantedC4Provider;
     HudInWorldPanelContainer hudInWorldPanelContainer;
     ViewToProjectionMatrix viewToProjectionMatrix;
     StylePropertiesVMTs stylePropertiesVMTs;
     StylePropertiesSymbols stylePropertiesSymbols;
-    SoundWatcher soundWatcher;
+    SoundWatcherState soundWatcherState;
     cs2::C_CSGameRules** gameRules;
     MainMenuProvider mainMenuProvider;
     cs2::CCSPlayerController** localPlayerController;
     EntitiesVMTs entitiesVMTs;
+    cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s;
+    cs2::SoundChannels** soundChannels;
+    cs2::CBaseFileSystem** fileSystem;
 };

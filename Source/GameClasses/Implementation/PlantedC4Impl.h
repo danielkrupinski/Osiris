@@ -12,8 +12,6 @@ struct PlantedC4Impl {
     {
     }
 
-    [[nodiscard]] static const PlantedC4Impl& instance() noexcept;
-
     BombSiteOffset bombSite;
     BombTickingOffset ticking;
     BombBlowTimeOffset blowTime;

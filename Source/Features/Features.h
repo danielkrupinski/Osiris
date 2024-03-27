@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Helpers/PlantedC4Provider.h>
 #include <Hooks/Hooks.h>
 
 #include "Hud/HudFeatures.h"
@@ -12,12 +11,12 @@
 struct Features {
     [[nodiscard]] HudFeatures hudFeatures() const noexcept
     {
-        return HudFeatures{states.hudFeaturesStates, helpers};
+        return HudFeatures{states.hudFeaturesStates, helpers, hookDependencies};
     }
 
     [[nodiscard]] SoundFeatures soundFeatures() const noexcept
     {
-        return SoundFeatures{states.soundFeaturesStates, helpers, hooks.viewRenderHook};
+        return SoundFeatures{states.soundFeaturesStates, helpers, hooks.viewRenderHook, hookDependencies};
     }
 
     [[nodiscard]] VisualFeatures visualFeatures() const noexcept
@@ -28,4 +27,5 @@ struct Features {
     FeaturesStates& states;
     FeatureHelpers& helpers;
     Hooks& hooks;
+    HookDependencies& hookDependencies;
 };
