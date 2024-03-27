@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <string_view>
 
-#include <MemorySearch/BinaryBytePattern.h>
 #include <MemorySearch/HybridPatternFinder.h>
 #include <Utils/MemorySection.h>
 
@@ -30,7 +29,7 @@ private:
         HybridPatternFinder typeNameFinder{rodataSection.raw(), BytePattern{mangledTypeName}};
         auto typeNameAddress = typeNameFinder.findNextOccurrence();
         while (typeNameAddress) {
-            const auto typeNameReference = HybridPatternFinder{dataRelRoSection.raw(), BinaryBytePattern{typeNameAddress}}.findNextOccurrence();
+            const auto typeNameReference = HybridPatternFinder{dataRelRoSection.raw(), BytePattern{&typeNameAddress}}.findNextOccurrence();
             if (typeNameReference && reinterpret_cast<std::uintptr_t>(typeNameReference) % alignof(void*) == 0)
                 return typeNameReference;
             typeNameAddress = typeNameFinder.findNextOccurrence();
