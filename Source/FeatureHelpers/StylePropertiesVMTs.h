@@ -14,6 +14,7 @@ struct StylePropertiesVMTs {
         , transformOriginPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyTransformOrigin::kMangledTypeName)}
         , alignPropertyVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyAlign::kMangledTypeName)}
         , washColorVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyWashColor::kMangledTypeName)}
+        , flowChildrenVmt{panoramaVmtFinder.findVmt(cs2::CStylePropertyFlowChildren::kMangledTypeName)}
     {
     }
 
@@ -26,4 +27,5 @@ struct StylePropertiesVMTs {
     const void* transformOriginPropertyVmt;
     const void* alignPropertyVmt;
     const void* washColorVmt;
+    const void* flowChildrenVmt;
 };

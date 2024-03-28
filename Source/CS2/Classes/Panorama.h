@@ -180,6 +180,19 @@ struct CStylePropertyWashColor : CStyleProperty {
     bool fullySet;
 };
 
+enum EFlowDirection : std::uint8_t {
+    k_EFlowNone = 1,
+    k_EFlowDown,
+    k_EFlowRight
+};
+
+struct CStylePropertyFlowChildren : CStyleProperty {
+    static constexpr auto kName{"flow-children"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyFlowChildren@panorama@@", "N8panorama26CStylePropertyFlowChildrenE")};
+
+    EFlowDirection m_eFlowDirection;
+};
+
 struct CPanelStyle {
     using SetProperty = void(CPanelStyle* thisptr, CStyleProperty* styleProperty, bool transition);
 

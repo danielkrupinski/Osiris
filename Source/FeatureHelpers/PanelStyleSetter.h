@@ -87,6 +87,11 @@ public:
         setProperty(propertyFactory.washColor(color));
     }
 
+    void setFlowChildren(cs2::EFlowDirection flowDirection) const noexcept
+    {
+        setProperty(propertyFactory.flowChildren(flowDirection));
+    }
+
 private:
     cs2::CPanelStyle* thisptr;
     PanelStylePropertyFactory propertyFactory;
