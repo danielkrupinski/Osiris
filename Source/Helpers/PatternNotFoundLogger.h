@@ -32,6 +32,6 @@ struct PatternNotFoundLogger {
 
         builder.put('\n');
 
-        SimpleMessageBox{}.showError("Osiris", builder.cstring());
+        SimpleMessageBox{}.showWarning("Osiris", builder.cstring());
     }
 };
