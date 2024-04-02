@@ -53,9 +53,9 @@ private:
         }
     }
 
-    [[nodiscard]] static ImageShadowParams imageShadowParams() noexcept
+    [[nodiscard]] static PanelShadowParams imageShadowParams() noexcept
     {
-        return ImageShadowParams{
+        return PanelShadowParams{
             .horizontalOffset{cs2::CUILength::pixels(0)},
             .verticalOffset{cs2::CUILength::pixels(0)},
             .blurRadius{cs2::CUILength::pixels(1)},

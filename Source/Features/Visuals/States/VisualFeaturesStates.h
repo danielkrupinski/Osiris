@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PlayerPositionThroughWallsState.h"
+#include "PlayerInformationThroughWallsState.h"
 
 struct VisualFeaturesStates {
-    PlayerPositionThroughWallsState playerPositionThroughWallsState;
+    PlayerInformationThroughWallsState playerInformationThroughWallsState;
 };

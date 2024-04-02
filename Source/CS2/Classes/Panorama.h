@@ -51,6 +51,7 @@ struct CPanel2D {
 };
 
 struct CLabel : CPanel2D {
+    using Constructor = void(CLabel* thisptr, CPanel2D* parent, const char* id);
     using setTextInternal = void (*)(CLabel* thisptr, const char* value, int textType, bool trustedSource);
 };
 
@@ -191,6 +192,65 @@ struct CStylePropertyFlowChildren : CStyleProperty {
     static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyFlowChildren@panorama@@", "N8panorama26CStylePropertyFlowChildrenE")};
 
     EFlowDirection m_eFlowDirection;
+};
+
+enum EFontStyle : std::int8_t {
+    k_EFontStyleUnset = -1,
+    k_EFontStyleNormal = 0,
+    k_EFontStyleItalic = 2,
+};
+
+enum EFontWeight : std::int8_t {
+    k_EFontWeightUnset = -1,
+    k_EFontWeightNormal = 0,
+    k_EFontWeightMedium = 1,
+    k_EFontWeightBold = 2,
+    k_EFontWeightBlack = 3,
+    k_EFontWeightThin = 4,
+    k_EFontWeightLight = 5,
+    k_EFontWeightSemiBold = 6,
+};
+
+enum EFontStretch : std::int8_t {
+    k_EFontStretchUnset = -1,
+    k_EFontStretchNormal = 0,
+    k_EFontStretchCondensed = 1,
+    k_EFontStretchExpanded = 2
+};
+
+struct CStylePropertyFont : CStyleProperty {
+    static constexpr auto kName{"font"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyFont@panorama@@", "N8panorama18CStylePropertyFontE")};
+
+    CUtlString m_strFontFamily;
+    float m_flFontSize;
+    EFontStyle m_eFontStyle;
+    EFontWeight m_eFontWeight;
+    EFontStretch m_eFontStretch;
+};
+
+struct CStylePropertyTextShadow : CStyleProperty {
+    static constexpr auto kName{"text-shadow"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyTextShadow@panorama@@", "N8panorama24CStylePropertyTextShadowE")};
+
+    bool fullySet;
+    CUILength horizontalOffset;
+    CUILength verticalOffset;
+    CUILength blurRadius;
+    float strength;
+    Color color;
+};
+
+struct CStylePropertyDimensionsBase : CStyleProperty {
+    CUILength m_left;
+    CUILength m_top;
+    CUILength m_right;
+    CUILength m_bottom;
+};
+
+struct CStylePropertyMargin : CStylePropertyDimensionsBase {
+    static constexpr auto kName{"margin"};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyMargin@panorama@@", "N8panorama21CStylePropertyPaddingE")};
 };
 
 struct CPanelStyle {

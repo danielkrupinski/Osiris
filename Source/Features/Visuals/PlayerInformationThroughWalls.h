@@ -4,23 +4,26 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
+#include <FeatureHelpers/PanoramaLabelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/TogglableFeature.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaImagePanel.h>
 #include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/EntityPatterns.h>
 #include <MemoryPatterns/PlayerControllerPatterns.h>
 
-#include "States/PlayerPositionThroughWallsState.h"
+#include "States/PlayerInformationThroughWallsState.h"
 
 #include <HookDependencies/HookDependencies.h>
 #include <HookDependencies/HookDependenciesMask.h>
 
 class PlayerInformationThroughWallsPanelFactory {
 public:
-    PlayerInformationThroughWallsPanelFactory(cs2::CUIPanel& parentPanel, PanelConfigurator panelConfigurator) noexcept
+    PlayerInformationThroughWallsPanelFactory(cs2::CUIPanel& parentPanel, HookDependencies& dependencies, PanelConfigurator panelConfigurator) noexcept
         : parentPanel{parentPanel}
+        , dependencies{dependencies}
         , panelConfigurator{panelConfigurator}
     {
     }
@@ -37,22 +40,74 @@ public:
             styler.setHeight(cs2::CUILength::pixels(kHeight));
             styler.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(0.0f));
             styler.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(0));
+            styler.setFlowChildren(cs2::k_EFlowDown);
         }
 
         applyStyleToImagePanel(PanoramaImagePanel::create("", containerPanel->uiPanel), panoramaTransformFactory);
+        createHealthPanel(containerPanel->uiPanel);
         return PanoramaUiPanel{containerPanel->uiPanel};
     }
 
 private:
+    void createHealthPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto healthPanel{Panel::create("", containerPanel)};
+        if (!healthPanel)
+            return;
+
+        if (const auto style{PanoramaUiPanel{healthPanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setFlowChildren(cs2::k_EFlowRight);
+        }
+
+        createHealthIconPanel(healthPanel->uiPanel);
+        createHealthTextPanel(healthPanel->uiPanel);
+    }
+
+    void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
+    {
+        const auto healthIconPanel = PanoramaImagePanel::create("", containerPanel);
+        if (!healthIconPanel)
+            return;
+
+        PanoramaImagePanel{healthIconPanel}.setImageSvg("s2r://panorama/images/hud/health_cross.vsvg", 24);
+        if (const auto style{PanoramaUiPanel{healthIconPanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
+            styler.setImageShadow(imageShadowParams());
+        }
+    }
+
+    void createHealthTextPanel(cs2::CUIPanel* containerPanel) const
+    {
+        if (!dependencies.requestDependency<PanoramaLabelFactory>())
+            return;
+
+        const auto label = dependencies.getDependency<PanoramaLabelFactory>().createLabelPanel(containerPanel);
+        if (!label)
+            return;
+
+        if (const auto style{PanoramaUiPanel{label->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
+            styler.setTextShadow(textShadowParams());
+        }
+    }
+
     void applyStyleToImagePanel(cs2::CImagePanel* imagePanel, PanoramaTransformFactory panoramaTransformFactory) const noexcept
     {
         if (!imagePanel)
             return;
 
-        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 32);
+        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 24);
         if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(1));
             styler.setImageShadow(imageShadowParams());
             PanoramaTransformations{
                 panoramaTransformFactory.scale(1.0f, -1.0f),
@@ -60,9 +115,20 @@ private:
         }
     }
 
-    [[nodiscard]] static ImageShadowParams imageShadowParams() noexcept
+    [[nodiscard]] static PanelShadowParams textShadowParams() noexcept
     {
-        return ImageShadowParams{
+        return PanelShadowParams{
+            .horizontalOffset{cs2::CUILength::pixels(1)},
+            .verticalOffset{cs2::CUILength::pixels(1)},
+            .blurRadius{cs2::CUILength::pixels(0)},
+            .strength = 2,
+            .color{0, 0, 0}
+        };
+    }
+
+    [[nodiscard]] static PanelShadowParams imageShadowParams() noexcept
+    {
+        return PanelShadowParams{
             .horizontalOffset{cs2::CUILength::pixels(0)},
             .verticalOffset{cs2::CUILength::pixels(0)},
             .blurRadius{cs2::CUILength::pixels(1)},
@@ -75,11 +141,26 @@ private:
     static constexpr auto kHeight{256};
 
     cs2::CUIPanel& parentPanel;
+    HookDependencies& dependencies;
     PanelConfigurator panelConfigurator;
 };
 
-struct PlayerPositionThroughWallsToggle : public TogglableFeature<PlayerPositionThroughWallsToggle> {
-    PlayerPositionThroughWallsToggle(PlayerPositionThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
+struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
+    explicit PlayerPositionToggle(PlayerInformationThroughWallsState& state) noexcept
+        : TogglableFeature{state.showPlayerPosition}
+    {
+    }
+};
+
+struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
+    explicit PlayerHealthToggle(PlayerInformationThroughWallsState& state) noexcept
+        : TogglableFeature{state.showPlayerHealth}
+    {
+    }
+};
+
+struct PlayerInformationThroughWallsToggle : public TogglableFeature<PlayerInformationThroughWallsToggle> {
+    PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
         , hudInWorldPanelContainer{hudInWorldPanelContainer}
@@ -117,16 +198,16 @@ private:
         }
     }
 
-    PlayerPositionThroughWallsState& state;
+    PlayerInformationThroughWallsState& state;
     HudInWorldPanelContainer& hudInWorldPanelContainer;
     ViewRenderHook& viewRenderHook;
     PanelConfigurator panelConfigurator;
     HudProvider hudProvider;
 };
 
-class PlayerPositionThroughWalls {
+class PlayerInformationThroughWalls {
 public:
-    PlayerPositionThroughWalls(PlayerPositionThroughWallsState& state, HookDependencies& dependencies) noexcept
+    PlayerInformationThroughWalls(PlayerInformationThroughWallsState& state, HookDependencies& dependencies) noexcept
         : state{state}
         , dependencies{dependencies}
     {
@@ -144,14 +225,19 @@ public:
         if (teamNumber != TeamNumber::TT && teamNumber != TeamNumber::CT)
             return;
 
+        const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
+        const auto health = hasHealth ? *dependencies.getDependency<OffsetToHealth>().of(&nonLocalPlayerPawn).get() : 100;
+        if (health <= 0)
+            return;
+
         const auto gameSceneNode = *dependencies.getDependency<OffsetToGameSceneNode>().of(&nonLocalPlayerPawn).get();
         if (!gameSceneNode)
             return;
 
         const auto absOrigin = *dependencies.getDependency<OffsetToAbsOrigin>().of(gameSceneNode).get();
 
-        const auto soundInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin);
-        if (!soundInClipSpace.onScreen())
+        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin);
+        if (!positionInClipSpace.onScreen())
             return;
 
         const auto containerPanel{dependencies.getDependency<HudInWorldPanelContainer>().get(dependencies.getDependency<HudProvider>(), dependencies.getDependency<PanelConfigurator>())};
@@ -174,6 +260,8 @@ public:
             return;
 
         setArrowColor(panel, getArrowColor(teamNumber));
+        if (hasHealth)
+            setHealth(panel, health);
 
         const auto style = panel.getStyle();
         if (!style)
@@ -181,12 +269,12 @@ public:
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
         styleSetter.setOpacity(1.0f);
-        styleSetter.setZIndex(-soundInClipSpace.z);
+        styleSetter.setZIndex(-positionInClipSpace.z);
 
-        const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
+        const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
 
         constexpr auto kMaxScale{1.0f};
-        const auto scale = std::clamp(500.0f / (soundInClipSpace.z / getFovScale() + 400.0f), 0.3f, kMaxScale);
+        const auto scale = std::clamp(500.0f / (positionInClipSpace.z / getFovScale() + 400.0f), 0.4f, kMaxScale);
 
         PanoramaTransformations{
             dependencies.getDependency<PanoramaTransformFactory>().scale(scale),
@@ -227,12 +315,38 @@ private:
             return;
 
         const PanoramaUiPanel arrowPanel{children->memory[0]};
+        if (!state.showPlayerPosition) {
+            arrowPanel.setVisible(false);
+            return;
+        }
+
+        arrowPanel.setVisible(true);
         const auto style = arrowPanel.getStyle();
         if (!style)
             return;
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
         styleSetter.setWashColor(color);
+    }
+
+    void setHealth(PanoramaUiPanel parentPanel, int health) const noexcept
+    {
+        const auto children = parentPanel.children();
+        if (!children || children->size < 2)
+            return;
+
+        const PanoramaUiPanel healthPanel{children->memory[1]};
+        if (!state.showPlayerHealth) {
+            healthPanel.setVisible(false);
+            return;
+        }
+
+        healthPanel.setVisible(true);
+        const auto healthPanelChildren = healthPanel.children();
+        if (!healthPanelChildren || healthPanelChildren->size < 2)
+            return;
+
+        PanoramaLabel{static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel)}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
     }
 
     [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept
@@ -271,7 +385,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(currentIndex);
         }
-        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
+        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), dependencies, panelConfigurator}.createPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
@@ -288,7 +402,7 @@ private:
             .set<PanelConfigurator>()
             .set<PanoramaTransformFactory>()};
 
-    PlayerPositionThroughWallsState& state;
+    PlayerInformationThroughWallsState& state;
     HookDependencies& dependencies;
     std::size_t currentIndex{0};
 };

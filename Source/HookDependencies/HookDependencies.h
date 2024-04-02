@@ -36,6 +36,9 @@ struct HookDependencies {
         presentDependencies |= HookDependenciesMask{}.set<HudProvider>();
         presentDependencies |= HookDependenciesMask{}.set<PanelConfigurator>();
         presentDependencies |= HookDependenciesMask{}.set<PanoramaTransformFactory>();
+
+        if (gameClassImplementations.panoramaLabel.constructor && gameClassImplementations.panoramaLabel.size)
+            presentDependencies |= HookDependenciesMask{}.set<PanoramaLabelFactory>();
     }
 
     [[nodiscard]] bool requestDependencies(HookDependenciesMask requiredDependencies) noexcept
@@ -95,6 +98,8 @@ struct HookDependencies {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
             return FileSystem{*fileSystem, gameClassImplementations.fileSystem};
+        } else if constexpr (std::is_same_v<Dependency, PanoramaLabelFactory>) {
+            return PanoramaLabelFactory{gameClassImplementations.panoramaLabel.constructor, gameClassImplementations.panoramaLabel.size};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }

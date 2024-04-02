@@ -197,9 +197,12 @@ $.Osiris = (function () {
 
   var visuals = createTab('visuals');
 
-  var players = createSection(visuals, 'Players');
-  $.CreatePanel('Panel', players, '', { class: "horizontal-separator" });
-  createYesNoDropDown(players, "Show Player Positions Through Walls", 'visuals', 'player_positions_through_walls');
+  var playerInfo = createSection(visuals, 'Player Information Through Walls');
+  createYesNoDropDown(playerInfo, "Enabled", 'visuals', 'player_information_through_walls');
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position');
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health');
 
   var sound = createTab('sound');
   

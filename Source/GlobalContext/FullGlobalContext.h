@@ -86,9 +86,9 @@ struct FullGlobalContext {
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
 
-        PlayerPositionThroughWalls playerPositionThroughWalls{featuresStates.visualFeaturesStates.playerPositionThroughWallsState, dependencies};
-        RenderingHookEntityLoop{dependencies, playerPositionThroughWalls}.run();
-        playerPositionThroughWalls.hideUnusedPanels();
+        PlayerInformationThroughWalls playerInformationThroughWalls{featuresStates.visualFeaturesStates.playerInformationThroughWallsState, dependencies};
+        RenderingHookEntityLoop{dependencies, playerInformationThroughWalls}.run();
+        playerInformationThroughWalls.hideUnusedPanels();
     }
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept

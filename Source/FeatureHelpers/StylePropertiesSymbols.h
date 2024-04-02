@@ -16,6 +16,9 @@ struct StylePropertiesSymbols {
         , alignSymbol{symbolMap.findSymbol(cs2::CStylePropertyAlign::kName)}
         , washColorSymbol{symbolMap.findSymbol(cs2::CStylePropertyWashColor::kName)}
         , flowChildrenSymbol{symbolMap.findSymbol(cs2::CStylePropertyFlowChildren::kName)}
+        , fontSymbol{symbolMap.findSymbol(cs2::CStylePropertyFont::kName)}
+        , textShadowSymbol{symbolMap.findSymbol(cs2::CStylePropertyTextShadow::kName)}
+        , marginSymbol{symbolMap.findSymbol(cs2::CStylePropertyMargin::kName)}
     {
     }
 
@@ -29,4 +32,7 @@ struct StylePropertiesSymbols {
     cs2::CStyleSymbol alignSymbol;
     cs2::CStyleSymbol washColorSymbol;
     cs2::CStyleSymbol flowChildrenSymbol;
+    cs2::CStyleSymbol fontSymbol;
+    cs2::CStyleSymbol textShadowSymbol;
+    cs2::CStyleSymbol marginSymbol;
 };

@@ -55,12 +55,13 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
-    <ClInclude Include="FeatureHelpers\ImageShadowParams.h" />
+    <ClInclude Include="FeatureHelpers\PanelShadowParams.h" />
     <ClInclude Include="FeatureHelpers\MainMenuProvider.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\PanelConfigurator.h" />
     <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />
     <ClInclude Include="FeatureHelpers\PanelStyleSetter.h" />
+    <ClInclude Include="FeatureHelpers\PanoramaLabelFactory.h" />
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
     <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
@@ -105,8 +106,8 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
-    <ClInclude Include="Features\Visuals\PlayerPositionThroughWalls.h" />
-    <ClInclude Include="Features\Visuals\States\PlayerPositionThroughWallsState.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls.h" />
+    <ClInclude Include="Features\Visuals\States\PlayerInformationThroughWallsState.h" />
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />

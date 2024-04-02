@@ -62,7 +62,7 @@ public:
         setProperty(propertyFactory.zIndex(zIndex));
     }
 
-    void setImageShadow(const ImageShadowParams& params) const noexcept
+    void setImageShadow(const PanelShadowParams& params) const noexcept
     {
         setProperty(propertyFactory.imageShadow(params));
     }
@@ -90,6 +90,21 @@ public:
     void setFlowChildren(cs2::EFlowDirection flowDirection) const noexcept
     {
         setProperty(propertyFactory.flowChildren(flowDirection));
+    }
+
+    void setFont(std::string_view fontFamily, float fontSize, cs2::EFontWeight fontWeight) const noexcept
+    {
+        setProperty(propertyFactory.font(fontFamily, fontSize, fontWeight));
+    }
+
+    void setTextShadow(const PanelShadowParams& params) const noexcept
+    {
+        setProperty(propertyFactory.textShadow(params));
+    }
+
+    void setMargin(cs2::CUILength left, cs2::CUILength top, cs2::CUILength right, cs2::CUILength bottom) const noexcept
+    {
+        setProperty(propertyFactory.margin(left, top, right, bottom));
     }
 
 private:
