@@ -1,15 +1,25 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
-#include "PlayerPositionThroughWalls.h"
+#include "PlayerInformationThroughWalls.h"
 #include "States/VisualFeaturesStates.h"
 
 class LoopModeGameHook;
 
 struct VisualFeatures {
-    [[nodiscard]] PlayerPositionThroughWallsToggle playerPositionThroughWalls() const noexcept
+    [[nodiscard]] PlayerInformationThroughWallsToggle playerInformationThroughWalls() const noexcept
     {
-        return PlayerPositionThroughWallsToggle{states.playerPositionThroughWallsState, helpers.hudInWorldPanelContainer, viewRenderHook, helpers.panelConfigurator(), helpers.hudProvider};
+        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, helpers.hudInWorldPanelContainer, viewRenderHook, helpers.panelConfigurator(), helpers.hudProvider};
+    }
+
+    [[nodiscard]] PlayerPositionToggle playerPositionToggle() const noexcept
+    {
+        return PlayerPositionToggle{states.playerInformationThroughWallsState};
+    }
+
+    [[nodiscard]] PlayerHealthToggle playerHealthToggle() const noexcept
+    {
+        return PlayerHealthToggle{states.playerInformationThroughWallsState};
     }
 
     VisualFeaturesStates& states;

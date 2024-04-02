@@ -15,6 +15,7 @@ class HudInWorldPanelContainer;
 struct HudProvider;
 struct LocalPlayerController;
 struct PanelConfigurator;
+struct PanoramaLabelFactory;
 struct PanoramaTransformFactory;
 struct PlantedC4;
 struct SoundChannels;
@@ -39,5 +40,6 @@ using HookDependenciesMask = TypeBitFlags<
     CurTime,
     PlantedC4,
     SoundChannels,
-    FileSystem
+    FileSystem,
+    PanoramaLabelFactory
 >;

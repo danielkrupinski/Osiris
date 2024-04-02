@@ -863,7 +863,7 @@
     <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
       <Filter>Features\Visuals\States</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\ImageShadowParams.h">
+    <ClInclude Include="FeatureHelpers\PanelShadowParams.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscallIndex.h">
@@ -953,10 +953,10 @@
     <ClInclude Include="MemoryPatterns\Windows\EntityPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerPositionThroughWalls.h">
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls.h">
       <Filter>Features\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\States\PlayerPositionThroughWallsState.h">
+    <ClInclude Include="Features\Visuals\States\PlayerInformationThroughWallsState.h">
       <Filter>Features\Visuals\States</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\CGameSceneNode.h">
@@ -1021,6 +1021,9 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h">
       <Filter>FeatureHelpers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\PanoramaLabelFactory.h">
+      <Filter>FeatureHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

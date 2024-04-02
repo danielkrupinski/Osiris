@@ -3,7 +3,7 @@
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Panorama.h>
 
-struct ImageShadowParams {
+struct PanelShadowParams {
     cs2::CUILength horizontalOffset;
     cs2::CUILength verticalOffset;
     cs2::CUILength blurRadius;
