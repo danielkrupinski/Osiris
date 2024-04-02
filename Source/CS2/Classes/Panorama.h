@@ -250,7 +250,7 @@ struct CStylePropertyDimensionsBase : CStyleProperty {
 
 struct CStylePropertyMargin : CStylePropertyDimensionsBase {
     static constexpr auto kName{"margin"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyMargin@panorama@@", "N8panorama21CStylePropertyPaddingE")};
+    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyMargin@panorama@@", "N8panorama20CStylePropertyMarginE")};
 };
 
 struct CPanelStyle {
