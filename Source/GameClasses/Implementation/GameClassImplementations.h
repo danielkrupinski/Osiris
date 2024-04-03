@@ -15,6 +15,7 @@
 #include "PanoramaUiPanelImpl.h"
 #include "PlantedC4Impl.h"
 #include "PlayerControllerImpl.h"
+#include "PlayerPawnImpl.h"
 #include "TopLevelWindowImpl.h"
 
 #include <Platform/VmtFinder.h>
@@ -36,6 +37,7 @@ struct GameClassImplementations {
                              const TopLevelWindowPatterns& topLevelWindowPatterns,
                              const EntityPatterns& entityPatterns,
                              const GameSceneNodePatterns& gameSceneNodePatterns,
+                             const PlayerPawnPatterns& playerPawnPatterns,
                              Tier0Dll tier0Dll) noexcept
         : entity{entityPatterns}
         , entitySystem{entitySystemPatterns}
@@ -52,6 +54,7 @@ struct GameClassImplementations {
         , panoramaUiPanelOffsets{panoramaUiPanelPatterns}
         , plantedC4{plantedC4Patterns}
         , playerController{playerControllerPatterns}
+        , playerPawn{playerPawnPatterns}
         , topLevelWindow{topLevelWindowPatterns}
     {
     }
@@ -71,5 +74,6 @@ struct GameClassImplementations {
     PanoramaUiPanelImpl panoramaUiPanelOffsets;
     PlantedC4Impl plantedC4;
     PlayerControllerImpl playerController;
+    PlayerPawnImpl playerPawn;
     TopLevelWindowImpl topLevelWindow;
 };

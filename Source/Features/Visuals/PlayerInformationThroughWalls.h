@@ -268,7 +268,7 @@ public:
             return;
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
-        styleSetter.setOpacity(1.0f);
+        styleSetter.setOpacity(hasImmunity(nonLocalPlayerPawn) ? 0.5f : 1.0f);
         styleSetter.setZIndex(-positionInClipSpace.z);
 
         const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
@@ -369,6 +369,13 @@ private:
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
         return dependencies.requestDependencies(kCrucialDependencies);
+    }
+
+    [[nodiscard]] bool hasImmunity(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (dependencies.requestDependency<OffsetToPlayerPawnImmunity>())
+            return *dependencies.getDependency<OffsetToPlayerPawnImmunity>().of(&playerPawn).get();
+        return false;
     }
 
     [[nodiscard]] float getFovScale() const noexcept

@@ -52,6 +52,7 @@ struct FullGlobalContext {
             TopLevelWindowPatterns{panoramaPatternFinder},
             EntityPatterns{clientPatternFinder},
             GameSceneNodePatterns{clientPatternFinder},
+            PlayerPawnPatterns{clientPatternFinder},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,

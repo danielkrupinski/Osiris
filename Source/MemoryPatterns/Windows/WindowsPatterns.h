@@ -15,6 +15,7 @@
 #include "PanoramaUiPanelPatternsWindows.h"
 #include "PlantedC4PatternsWindows.h"
 #include "PlayerControllerPatternsWindows.h"
+#include "PlayerPawnPatternsWindows.h"
 #include "SdlPatternWindows.h"
 #include "SoundSystemPatternsWindows.h"
 #include "TopLevelWindowPatternsWindows.h"

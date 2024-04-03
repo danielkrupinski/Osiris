@@ -3,6 +3,7 @@
 #include <GameClasses/OffsetTypes/EntityOffset.h>
 #include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 #include <GameClasses/OffsetTypes/PlayerControllerOffset.h>
+#include <GameClasses/OffsetTypes/PlayerPawnOffset.h>
 #include <Utils/TypeBitFlags.h>
 
 struct CurTime;
@@ -41,5 +42,6 @@ using HookDependenciesMask = TypeBitFlags<
     PlantedC4,
     SoundChannels,
     FileSystem,
-    PanoramaLabelFactory
+    PanoramaLabelFactory,
+    OffsetToPlayerPawnImmunity
 >;

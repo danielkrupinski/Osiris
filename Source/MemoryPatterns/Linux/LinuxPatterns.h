@@ -15,6 +15,7 @@
 #include "PanoramaUiPanelPatternsLinux.h"
 #include "PlantedC4PatternsLinux.h"
 #include "PlayerControllerPatternsLinux.h"
+#include "PlayerPawnPatternsLinux.h"
 #include "SdlPatternsLinux.h"
 #include "SoundSystemPatternsLinux.h"
 #include "TopLevelWindowPatternsLinux.h"

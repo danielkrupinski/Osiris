@@ -1025,6 +1025,9 @@
     <ClInclude Include="FeatureHelpers\PanoramaLabelFactory.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

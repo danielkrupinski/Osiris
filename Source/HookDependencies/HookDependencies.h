@@ -29,6 +29,9 @@ struct HookDependencies {
         if (gameClassImplementations.gameSceneNode.offsetToAbsOrigin)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToAbsOrigin>();
 
+        if (gameClassImplementations.playerPawn.offsetToPlayerPawnImmunity)
+            presentDependencies |= HookDependenciesMask{}.set<OffsetToPlayerPawnImmunity>();
+
         if (featureHelpers.worldtoClipSpaceConverter)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
 
@@ -100,6 +103,8 @@ struct HookDependencies {
             return FileSystem{*fileSystem, gameClassImplementations.fileSystem};
         } else if constexpr (std::is_same_v<Dependency, PanoramaLabelFactory>) {
             return PanoramaLabelFactory{gameClassImplementations.panoramaLabel.constructor, gameClassImplementations.panoramaLabel.size};
+        } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnImmunity>) {
+            return gameClassImplementations.playerPawn.offsetToPlayerPawnImmunity;
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }

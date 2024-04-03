@@ -219,6 +219,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
