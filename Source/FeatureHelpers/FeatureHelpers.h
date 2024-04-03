@@ -8,8 +8,7 @@
 #include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PanelConfigurator.h"
 #include "Sound/SoundWatcherState.h"
-#include "StylePropertiesSymbols.h"
-#include "StylePropertiesVMTs.h"
+#include "StylePropertiesSymbolsAndVMTs.h"
 #include "StylePropertySymbolMap.h"
 #include "ViewToProjectionMatrix.h"
 #include "WorldToClipSpaceConverter.h"
@@ -21,8 +20,7 @@ struct FeatureHelpers {
         , transformFactory{clientPatterns}
         , worldtoClipSpaceConverter{clientPatterns}
         , viewToProjectionMatrix{clientPatterns}
-        , stylePropertiesVMTs{panoramaVmtFinder}
-        , stylePropertiesSymbols{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}}
+        , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}, panoramaVmtFinder}
         , gameRules{clientPatterns.gameRules()}
         , mainMenuProvider{clientPatterns}
         , localPlayerController{clientPatterns.localPlayerController()}
@@ -35,7 +33,7 @@ struct FeatureHelpers {
 
     [[nodiscard]] PanelConfigurator panelConfigurator() const noexcept
     {
-        return PanelConfigurator{PanelStylePropertyFactory{stylePropertiesVMTs, stylePropertiesSymbols}};    
+        return PanelConfigurator{PanelStylePropertyFactory{stylePropertiesSymbolsAndVMTs}};    
     }
 
     HudProvider hudProvider;
@@ -44,8 +42,7 @@ struct FeatureHelpers {
     WorldToClipSpaceConverter worldtoClipSpaceConverter;
     HudInWorldPanelContainer hudInWorldPanelContainer;
     ViewToProjectionMatrix viewToProjectionMatrix;
-    StylePropertiesVMTs stylePropertiesVMTs;
-    StylePropertiesSymbols stylePropertiesSymbols;
+    StylePropertiesSymbolsAndVMTs stylePropertiesSymbolsAndVMTs;
     SoundWatcherState soundWatcherState;
     cs2::C_CSGameRules** gameRules;
     MainMenuProvider mainMenuProvider;

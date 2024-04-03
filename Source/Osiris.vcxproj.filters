@@ -728,12 +728,6 @@
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h">
       <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
@@ -1027,6 +1021,9 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\StylePropertiesSymbolsAndVMTs.h">
+      <Filter>FeatureHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

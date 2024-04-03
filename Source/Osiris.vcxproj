@@ -71,9 +71,8 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h" />
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h" />
     <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
+    <ClInclude Include="FeatureHelpers\StylePropertiesSymbolsAndVMTs.h" />
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h" />
-    <ClInclude Include="FeatureHelpers\StylePropertiesSymbols.h" />
-    <ClInclude Include="FeatureHelpers\StylePropertiesVMTs.h" />
     <ClInclude Include="FeatureHelpers\TeamNumber.h" />
     <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
