@@ -1,11 +1,11 @@
 #pragma once
 
+#include <cstdint>
+
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/OffsetTypes/PanoramaImagePanelOffset.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <MemorySearch/PatternFinder.h>
-
-using ImagePropertiesOffset = PanoramaImagePanelOffset<cs2::ImageProperties, std::int8_t>;
 
 struct PanoramaImagePanelPatterns {
     [[nodiscard]] cs2::CImagePanel::SetImage* setImage() const noexcept;

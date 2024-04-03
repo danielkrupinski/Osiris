@@ -1,8 +1,8 @@
 #pragma once
 
-#include <MemoryPatterns/EntityPatterns.h>
-#include <MemoryPatterns/GameSceneNodePatterns.h>
-#include <MemoryPatterns/PlayerControllerPatterns.h>
+#include <GameClasses/OffsetTypes/EntityOffset.h>
+#include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
+#include <GameClasses/OffsetTypes/PlayerControllerOffset.h>
 #include <Utils/TypeBitFlags.h>
 
 struct CurTime;
