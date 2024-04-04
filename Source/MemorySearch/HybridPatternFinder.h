@@ -4,6 +4,8 @@
 #include <span>
 #include <string_view>
 
+#include <Platform/Macros/FunctionAttributes.h>
+
 #include "BytePattern.h"
 #include "PatternFinderScalar.h"
 #include "PatternFinderSIMD.h"
@@ -15,7 +17,7 @@ public:
     {
     }
 
-    [[nodiscard]] const std::byte* findNextOccurrence() noexcept
+    [[nodiscard]] [[NOINLINE]] const std::byte* findNextOccurrence() noexcept
     {
         PatternFinderSIMD simdFinder{bytes, pattern};
         if (const auto foundSIMD = simdFinder()) {

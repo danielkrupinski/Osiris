@@ -2,9 +2,10 @@
 
 #include <cstring>
 #include <CS2/Classes/Panorama.h>
+#include <Platform/Macros/FunctionAttributes.h>
 
 struct StylePropertySymbolMap {
-    [[nodiscard]] cs2::CStyleSymbol findSymbol(const char* stylePropertyName) const noexcept
+    [[nodiscard]] [[NOINLINE]] cs2::CStyleSymbol findSymbol(const char* stylePropertyName) const noexcept
     {
         if (!symbols)
             return {};
