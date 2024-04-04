@@ -41,6 +41,18 @@ public:
         return {};
     }
 
+    template <typename FieldOffsetType>
+    [[nodiscard]] FieldOffsetType readOffset() const noexcept
+    {
+        if (base) {
+            typename FieldOffsetType::OffsetType result;
+            assert(foundPatternBytes.size() - extraOffset >= sizeof(result));
+            std::memcpy(&result, foundPatternBytes.data() + extraOffset, sizeof(result));
+            return FieldOffsetType{result};
+        }
+        return {};
+    }
+
     template <typename T>
     [[nodiscard]] T as() const noexcept
     {

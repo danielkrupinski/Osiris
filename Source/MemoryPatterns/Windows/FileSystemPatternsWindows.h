@@ -10,7 +10,5 @@ inline cs2::CBaseFileSystem** FileSystemPatterns::fileSystem() const noexcept
 
 inline FileNamesOffset FileSystemPatterns::fileNamesOffset() const noexcept
 {
-    return FileNamesOffset{
-        fileSystemPatternFinder("E8 ? ? ? ? 48 8D 8B ? ? ? ? FF 15"_pat).add(8).as<std::int32_t*>()
-    };
+    return fileSystemPatternFinder("E8 ? ? ? ? 48 8D 8B ? ? ? ? FF 15"_pat).add(8).readOffset<FileNamesOffset>();
 }

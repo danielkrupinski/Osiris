@@ -30,28 +30,20 @@ inline std::int32_t* PanoramaUiPanelPatterns::setAttributeString() const noexcep
 
 inline ChildPanelsVectorOffset PanoramaUiPanelPatterns::childPanelsVectorOffset() const noexcept
 {
-    return ChildPanelsVectorOffset{
-        panoramaPatternFinder("0F 85 ? ? ? ? 8B 57 ? 85"_pat).add(8).as<std::int8_t*>()
-    };
+    return panoramaPatternFinder("0F 85 ? ? ? ? 8B 57 ? 85"_pat).add(8).readOffset<ChildPanelsVectorOffset>();
 }
 
 inline PanelClassesVectorOffset PanoramaUiPanelPatterns::classesVectorOffset() const noexcept
 {
-    return PanelClassesVectorOffset{
-        panoramaPatternFinder("74 33 8B 97 ? ? ? ? 85"_pat).add(4).as<std::int32_t*>()
-    };
+    return panoramaPatternFinder("74 33 8B 97 ? ? ? ? 85"_pat).add(4).readOffset<PanelClassesVectorOffset>();
 }
 
 inline PanelStyleOffset PanoramaUiPanelPatterns::panelStyleOffset() const noexcept
 {
-    return PanelStyleOffset{
-        panoramaPatternFinder("E8 ? ? ? ? 48 8D 43 ? 48 8B"_pat).add(8).as<std::int8_t*>()
-    };
+    return panoramaPatternFinder("E8 ? ? ? ? 48 8D 43 ? 48 8B"_pat).add(8).readOffset<PanelStyleOffset>();
 }
 
 inline ParentWindowOffset PanoramaUiPanelPatterns::parentWindowOffset() const noexcept
 {
-    return ParentWindowOffset{
-        panoramaPatternFinder("4D 89 5C 24 ?"_pat).add(4).as<std::int8_t*>()
-    };
+    return panoramaPatternFinder("4D 89 5C 24 ?"_pat).add(4).readOffset<ParentWindowOffset>();
 }

@@ -31,10 +31,19 @@ private:
     FieldType* field;
 };
 
-template <typename ClassType, typename FieldType, std::integral OffsetType>
+template <typename ClassType, typename FieldType, std::integral TOffset>
 struct FieldOffset {
+    using OffsetType = TOffset;
+
+    FieldOffset() = default;
+
     explicit FieldOffset(const OffsetType* offsetPtr) noexcept
-        : offset{ offsetPtr ? *offsetPtr : OffsetType{} }
+        : offset{offsetPtr ? *offsetPtr : OffsetType{}}
+    {
+    }
+
+    explicit FieldOffset(OffsetType offset) noexcept
+        : offset{offset}
     {
     }
 
@@ -53,5 +62,5 @@ struct FieldOffset {
     }
 
 private:
-    OffsetType offset;
+    OffsetType offset{};
 };

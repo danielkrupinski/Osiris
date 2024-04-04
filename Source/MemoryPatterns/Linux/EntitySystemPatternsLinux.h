@@ -10,14 +10,10 @@ inline cs2::CGameEntitySystem** EntitySystemPatterns::entitySystem() const noexc
 
 inline HighestEntityIndexOffset EntitySystemPatterns::highestEntityIndexOffset() const noexcept
 {
-    return HighestEntityIndexOffset{
-        clientPatternFinder("39 97 ? ? ? ? 7D 06"_pat).add(2).as<std::int32_t*>()
-    };
+    return clientPatternFinder("39 97 ? ? ? ? 7D 06"_pat).add(2).readOffset<HighestEntityIndexOffset>();
 }
 
 inline EntityListOffset EntitySystemPatterns::entityListOffset() const noexcept
 {
-    return EntityListOffset{
-        clientPatternFinder("4C 8D 6F ? 41 54 53 48 89 FB 48 83 EC ? 48 89 07 48"_pat).add(3).as<std::int8_t*>()
-    };
+    return clientPatternFinder("4C 8D 6F ? 41 54 53 48 89 FB 48 83 EC ? 48 89 07 48"_pat).add(3).readOffset<EntityListOffset>();
 }

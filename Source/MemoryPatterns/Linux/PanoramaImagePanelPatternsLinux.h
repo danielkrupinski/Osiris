@@ -20,7 +20,5 @@ inline std::uint32_t* PanoramaImagePanelPatterns::size() const noexcept
 
 inline ImagePropertiesOffset PanoramaImagePanelPatterns::imagePropertiesOffset() const noexcept
 {
-    return ImagePropertiesOffset{
-        clientPatternFinder("4C 89 E7 49 8D 4C 24 ?"_pat).add(7).as<std::int8_t*>()
-    };
+    return clientPatternFinder("4C 89 E7 49 8D 4C 24 ?"_pat).add(7).readOffset<ImagePropertiesOffset>();
 }
