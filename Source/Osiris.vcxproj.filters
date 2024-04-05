@@ -43,14 +43,8 @@
     <Filter Include="MemoryPatterns\Windows">
       <UniqueIdentifier>{cf6b4008-917e-4941-ba38-2e6810674d66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MemoryPatterns\Linux">
-      <UniqueIdentifier>{ec0543de-bdca-4e9a-9a8b-68c6f3d2d7e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{5d3b276e-b98d-470f-be8c-733cb1e03f76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\Linux">
-      <UniqueIdentifier>{e6253e28-e425-407b-b7d6-96249af4e192}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{151d7c38-8452-494d-aef9-a83eb5c3e654}</UniqueIdentifier>
@@ -93,9 +87,6 @@
     </Filter>
     <Filter Include="Platform\Windows\RTTI">
       <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\Linux\RTTI">
-      <UniqueIdentifier>{210e5c32-88c9-4a2e-9bb7-ccd158c7d715}</UniqueIdentifier>
     </Filter>
     <Filter Include="GlobalContext">
       <UniqueIdentifier>{f7503469-198c-4672-8e52-aa5473f130ca}</UniqueIdentifier>
@@ -321,42 +312,6 @@
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\ClientPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\GameRulesPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\LinuxPatterns.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanoramaImagePanelPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanoramaLabelPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiEnginePatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanoramaUiPanelPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PlantedC4PatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxDynamicLibrary.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxMessageBox.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxPlatformApi.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\UserHomeFolderPath.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\CoTaskMemDeleter.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -527,9 +482,6 @@
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\MemAllocPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="Helpers\PanoramaTransformFactory.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -560,9 +512,6 @@
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\FileSystemPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -583,9 +532,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\SoundSystemPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\TogglableFeature.h">
       <Filter>FeatureHelpers</Filter>
@@ -647,9 +593,6 @@
     <ClInclude Include="GameClasses\Implementation\PanelImpl.h">
       <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanelPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -710,9 +653,6 @@
     <ClInclude Include="MemoryPatterns\PanelStylePatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\PanelStylePatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -730,21 +670,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h">
       <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptor.h">
-      <Filter>Platform\Linux\RTTI</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\RTTI\LinuxRttiTypeDescriptorFinder.h">
-      <Filter>Platform\Linux\RTTI</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxVmt.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxVmtFinder.h">
-      <Filter>Platform\Linux</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxVmtFinderParams.h">
-      <Filter>Platform\Linux</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsVmtFinder.h">
       <Filter>Platform\Windows</Filter>
@@ -791,9 +716,6 @@
     <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Linux\EntitySystemPatternsLinux.h">
-      <Filter>MemoryPatterns\Linux</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -835,9 +757,6 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\PanelStyleSetter.h">
       <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Linux\LinuxPlatformApiImpl.h">
-      <Filter>Platform\Linux</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
