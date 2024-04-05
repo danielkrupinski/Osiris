@@ -148,6 +148,7 @@
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDLLs\Tier0Dll.h" />
+    <ClInclude Include="GlobalContext\DeferredCompleteObject.h" />
     <ClInclude Include="GlobalContext\FullGlobalContext.h" />
     <ClInclude Include="GlobalContext\GlobalContext.h" />
     <ClInclude Include="GlobalContext\PartialGlobalContext.h" />

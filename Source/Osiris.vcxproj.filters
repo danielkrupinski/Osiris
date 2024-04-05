@@ -1025,6 +1025,9 @@
     <ClInclude Include="FeatureHelpers\StylePropertiesSymbolsAndVMTs.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalContext\DeferredCompleteObject.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
