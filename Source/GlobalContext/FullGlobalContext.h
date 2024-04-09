@@ -36,23 +36,9 @@
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept
         : _gameClasses{
-            ClientPatterns{clientPatternFinder},
+            clientPatternFinder,
+            panoramaPatternFinder,
             fileSystemPatterns,
-            GameRulesPatterns{clientPatternFinder},
-            MemAllocPatterns{clientPatternFinder},
-            PanelPatterns{clientPatternFinder},
-            PanelStylePatterns{panoramaPatternFinder},
-            PanoramaImagePanelPatterns{clientPatternFinder},
-            PanoramaLabelPatterns{clientPatternFinder},
-            PanoramaUiEnginePatterns{panoramaPatternFinder},
-            PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder},
-            PlantedC4Patterns{clientPatternFinder},
-            EntitySystemPatterns{clientPatternFinder},
-            PlayerControllerPatterns{clientPatternFinder},
-            TopLevelWindowPatterns{panoramaPatternFinder},
-            EntityPatterns{clientPatternFinder},
-            GameSceneNodePatterns{clientPatternFinder},
-            PlayerPawnPatterns{clientPatternFinder},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,

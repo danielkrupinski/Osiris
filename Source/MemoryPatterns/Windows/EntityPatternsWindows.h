@@ -17,3 +17,8 @@ inline OffsetToTeamNumber EntityPatterns::offsetToTeamNumber() const noexcept
 {
     return clientPatternFinder("80 BB ? ? ? ? 03 75"_pat).add(2).readOffset<OffsetToTeamNumber>();
 }
+
+inline OffsetToVData EntityPatterns::offsetToVData() const noexcept
+{
+    return clientPatternFinder("49 8B 86 ? ? ? ? 48 85 C0 74 ? 48 8B 40"_pat).add(3).readOffset<OffsetToVData>();
+}

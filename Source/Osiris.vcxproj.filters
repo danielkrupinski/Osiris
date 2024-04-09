@@ -947,6 +947,33 @@
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h">
       <Filter>GlobalContext</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryPatterns\PlayerPawnPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\WeaponServicesPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\WeaponVDataPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CString.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CEntitySubclassVDataBase.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

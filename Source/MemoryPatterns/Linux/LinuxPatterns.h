@@ -19,3 +19,5 @@
 #include "SdlPatternsLinux.h"
 #include "SoundSystemPatternsLinux.h"
 #include "TopLevelWindowPatternsLinux.h"
+#include "WeaponServicesPatternsLinux.h"
+#include "WeaponVDataPatternsLinux.h"

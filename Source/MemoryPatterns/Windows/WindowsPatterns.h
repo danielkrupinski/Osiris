@@ -19,3 +19,5 @@
 #include "SdlPatternWindows.h"
 #include "SoundSystemPatternsWindows.h"
 #include "TopLevelWindowPatternsWindows.h"
+#include "WeaponServicesPatternsWindows.h"
+#include "WeaponVDataPatternsWindows.h"

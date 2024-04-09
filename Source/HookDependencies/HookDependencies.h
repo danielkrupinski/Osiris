@@ -110,6 +110,11 @@ struct HookDependencies {
         }
     }
 
+    [[nodiscard]] const GameClassImplementations& offsets() const noexcept
+    {
+        return gameClassImplementations;
+    }
+
 private:
     template <typename Dependency>
     [[nodiscard]] bool hasDependency() const noexcept

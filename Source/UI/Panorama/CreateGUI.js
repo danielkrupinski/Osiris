@@ -203,6 +203,8 @@ $.Osiris = (function () {
   createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position');
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health');
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon');
 
   var sound = createTab('sound');
   

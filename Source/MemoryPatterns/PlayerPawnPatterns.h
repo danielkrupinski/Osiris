@@ -6,6 +6,7 @@
 
 struct PlayerPawnPatterns {
     [[nodiscard]] OffsetToPlayerPawnImmunity offsetToPlayerPawnImmunity() const noexcept;
+    [[nodiscard]] OffsetToWeaponServices offsetToWeaponServices() const noexcept;
 
     const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };
