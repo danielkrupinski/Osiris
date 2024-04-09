@@ -13,6 +13,7 @@
 #include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/EntityPatterns.h>
 #include <MemoryPatterns/PlayerControllerPatterns.h>
+#include <Utils/CString.h>
 
 #include "States/PlayerInformationThroughWallsState.h"
 
@@ -43,12 +44,27 @@ public:
             styler.setFlowChildren(cs2::k_EFlowDown);
         }
 
-        applyStyleToImagePanel(PanoramaImagePanel::create("", containerPanel->uiPanel), panoramaTransformFactory);
+        createPositionArrowPanel(containerPanel->uiPanel, panoramaTransformFactory);
         createHealthPanel(containerPanel->uiPanel);
+        createActiveWeaponIconPanel(containerPanel->uiPanel);
         return PanoramaUiPanel{containerPanel->uiPanel};
     }
 
 private:
+    void createActiveWeaponIconPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto weaponIconPanel = PanoramaImagePanel::create("", containerPanel);
+        if (!weaponIconPanel)
+            return;
+
+        if (const auto style{PanoramaUiPanel{weaponIconPanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+            styler.setImageShadow(shadowParams());
+        }
+    }
+
     void createHealthPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
         const auto healthPanel{Panel::create("", containerPanel)};
@@ -58,6 +74,7 @@ private:
         if (const auto style{PanoramaUiPanel{healthPanel->uiPanel}.getStyle()}) {
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
             styler.setFlowChildren(cs2::k_EFlowRight);
         }
 
@@ -76,7 +93,7 @@ private:
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
             styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
-            styler.setImageShadow(imageShadowParams());
+            styler.setImageShadow(shadowParams());
         }
     }
 
@@ -94,12 +111,13 @@ private:
             styler.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
             styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
             styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
-            styler.setTextShadow(textShadowParams());
+            styler.setTextShadow(shadowParams());
         }
     }
 
-    void applyStyleToImagePanel(cs2::CImagePanel* imagePanel, PanoramaTransformFactory panoramaTransformFactory) const noexcept
+    void createPositionArrowPanel(cs2::CUIPanel* containerPanel, PanoramaTransformFactory panoramaTransformFactory) const noexcept
     {
+        const auto imagePanel = PanoramaImagePanel::create("", containerPanel);
         if (!imagePanel)
             return;
 
@@ -107,31 +125,19 @@ private:
         if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(1));
-            styler.setImageShadow(imageShadowParams());
+            styler.setImageShadow(shadowParams());
             PanoramaTransformations{
                 panoramaTransformFactory.scale(1.0f, -1.0f),
             }.applyTo(styler);
         }
     }
 
-    [[nodiscard]] static PanelShadowParams textShadowParams() noexcept
-    {
-        return PanelShadowParams{
-            .horizontalOffset{cs2::CUILength::pixels(1)},
-            .verticalOffset{cs2::CUILength::pixels(1)},
-            .blurRadius{cs2::CUILength::pixels(0)},
-            .strength = 2,
-            .color{0, 0, 0}
-        };
-    }
-
-    [[nodiscard]] static PanelShadowParams imageShadowParams() noexcept
+    [[nodiscard]] static PanelShadowParams shadowParams() noexcept
     {
         return PanelShadowParams{
             .horizontalOffset{cs2::CUILength::pixels(0)},
             .verticalOffset{cs2::CUILength::pixels(0)},
-            .blurRadius{cs2::CUILength::pixels(1)},
+            .blurRadius{cs2::CUILength::pixels(3)},
             .strength = 3,
             .color{0, 0, 0}
         };
@@ -155,6 +161,13 @@ struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
 struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
     explicit PlayerHealthToggle(PlayerInformationThroughWallsState& state) noexcept
         : TogglableFeature{state.showPlayerHealth}
+    {
+    }
+};
+
+struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponToggle> {
+    explicit PlayerActiveWeaponToggle(PlayerInformationThroughWallsState& state) noexcept
+        : TogglableFeature{state.showPlayerActiveWeapon}
     {
     }
 };
@@ -262,6 +275,7 @@ public:
         setArrowColor(panel, getArrowColor(teamNumber));
         if (hasHealth)
             setHealth(panel, health);
+        setActiveWeapon(panel, nonLocalPlayerPawn);
 
         const auto style = panel.getStyle();
         if (!style)
@@ -329,6 +343,32 @@ private:
         styleSetter.setWashColor(color);
     }
 
+    [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!dependencies.offsets().playerPawn.offsetToWeaponServices
+         || !dependencies.offsets().weaponServices.offsetToActiveWeapon
+         || !dependencies.offsets().entity.offsetToVData
+         || !dependencies.offsets().weaponVData.offsetToWeaponName)
+            return nullptr;
+
+        if (!dependencies.requestDependency<EntityFromHandleFinder>())
+            return nullptr;
+
+        const auto weaponServices = *dependencies.offsets().playerPawn.offsetToWeaponServices.of(&playerPawn).get();
+        if (!weaponServices)
+            return nullptr;
+
+        const auto activeWeapon = dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(*dependencies.offsets().weaponServices.offsetToActiveWeapon.of(weaponServices).get());
+        if (!activeWeapon)
+            return nullptr;
+
+        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(*dependencies.offsets().entity.offsetToVData.of(static_cast<cs2::C_BaseEntity*>(activeWeapon)).get());
+        if (!vData)
+            return nullptr;
+
+        return *dependencies.offsets().weaponVData.offsetToWeaponName.of(vData).get();
+    }
+
     void setHealth(PanoramaUiPanel parentPanel, int health) const noexcept
     {
         const auto children = parentPanel.children();
@@ -347,6 +387,27 @@ private:
             return;
 
         PanoramaLabel{static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel)}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
+    }
+
+    void setActiveWeapon(PanoramaUiPanel parentPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        const auto children = parentPanel.children();
+        if (!children || children->size < 3)
+            return;
+
+        const PanoramaUiPanel weaponIconPanel{children->memory[2]};
+        if (!state.showPlayerActiveWeapon) {
+            weaponIconPanel.setVisible(false);
+            return;
+        }
+            
+        auto weaponName = CString{getActiveWeaponName(playerPawn)};
+        if (!weaponName.string)
+            return;
+        weaponName.skipPrefix("weapon_");
+
+        weaponIconPanel.setVisible(true);
+        PanoramaImagePanel{static_cast<cs2::CImagePanel*>(weaponIconPanel.getClientPanel())}.setImageSvg(StringBuilderStorage<100>{}.builder().put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg").cstring(), 24);
     }
 
     [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept

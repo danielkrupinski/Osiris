@@ -22,6 +22,11 @@ struct VisualFeatures {
         return PlayerHealthToggle{states.playerInformationThroughWallsState};
     }
 
+    [[nodiscard]] PlayerActiveWeaponToggle playerActiveWeaponToggle() const noexcept
+    {
+        return PlayerActiveWeaponToggle{states.playerInformationThroughWallsState};
+    }
+
     VisualFeaturesStates& states;
     FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;

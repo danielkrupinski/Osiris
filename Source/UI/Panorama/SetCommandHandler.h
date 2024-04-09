@@ -59,6 +59,8 @@ private:
             handleTogglableFeature(features.visualFeatures().playerPositionToggle());
         } else if (feature == "player_info_health") {
             handleTogglableFeature(features.visualFeatures().playerHealthToggle());
+        } else if (feature == "player_info_weapon") {
+            handleTogglableFeature(features.visualFeatures().playerActiveWeaponToggle());
         }
     }
 

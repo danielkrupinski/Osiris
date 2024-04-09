@@ -8,6 +8,7 @@ struct PlayerInformationThroughWallsState {
     bool enabled{false};
     bool showPlayerPosition{false};
     bool showPlayerHealth{false};
+    bool showPlayerActiveWeapon{false};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

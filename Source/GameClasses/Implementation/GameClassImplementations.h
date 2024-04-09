@@ -17,45 +17,35 @@
 #include "PlayerControllerImpl.h"
 #include "PlayerPawnImpl.h"
 #include "TopLevelWindowImpl.h"
+#include "WeaponServicesImpl.h"
+#include "WeaponVDataImpl.h"
 
 #include <Platform/VmtFinder.h>
 
 struct GameClassImplementations {
-    GameClassImplementations(const ClientPatterns& clientPatterns,
+    GameClassImplementations(const PatternFinder<PatternNotFoundLogger>& clientPatternFinder,
+                             const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder,
                              const FileSystemPatterns& fileSystemPatterns,
-                             const GameRulesPatterns& gameRulesPatterns,
-                             const MemAllocPatterns& memAllocPatterns,
-                             const PanelPatterns& panelPatterns,
-                             const PanelStylePatterns& panelStylePatterns,
-                             const PanoramaImagePanelPatterns& panoramaImagePanelPatterns,
-                             const PanoramaLabelPatterns& panoramaLabelPatterns,
-                             const PanoramaUiEnginePatterns& panoramaUiEnginePatterns,
-                             const PanoramaUiPanelPatterns& panoramaUiPanelPatterns,
-                             const PlantedC4Patterns& plantedC4Patterns,
-                             const EntitySystemPatterns& entitySystemPatterns,
-                             const PlayerControllerPatterns& playerControllerPatterns,
-                             const TopLevelWindowPatterns& topLevelWindowPatterns,
-                             const EntityPatterns& entityPatterns,
-                             const GameSceneNodePatterns& gameSceneNodePatterns,
-                             const PlayerPawnPatterns& playerPawnPatterns,
                              Tier0Dll tier0Dll) noexcept
-        : entity{entityPatterns}
-        , entitySystem{entitySystemPatterns}
+        : entity{EntityPatterns{clientPatternFinder}}
+        , entitySystem{EntitySystemPatterns{clientPatternFinder}}
         , fileNameSymbolTable{tier0Dll}
         , fileSystem{fileSystemPatterns}
-        , gameRules{gameRulesPatterns}
-        , gameSceneNode{gameSceneNodePatterns}
-        , memAlloc{tier0Dll, memAllocPatterns}
-        , panel{panelPatterns}
-        , panelStyle{panelStylePatterns}
-        , imagePanel{panoramaImagePanelPatterns}
-        , panoramaLabel{panoramaLabelPatterns}
-        , uiEngine{clientPatterns, panoramaUiEnginePatterns}
-        , panoramaUiPanelOffsets{panoramaUiPanelPatterns}
-        , plantedC4{plantedC4Patterns}
-        , playerController{playerControllerPatterns}
-        , playerPawn{playerPawnPatterns}
-        , topLevelWindow{topLevelWindowPatterns}
+        , gameRules{GameRulesPatterns{clientPatternFinder}}
+        , gameSceneNode{GameSceneNodePatterns{clientPatternFinder}}
+        , memAlloc{tier0Dll, MemAllocPatterns{clientPatternFinder}}
+        , panel{PanelPatterns{clientPatternFinder}}
+        , panelStyle{PanelStylePatterns{panoramaPatternFinder}}
+        , imagePanel{PanoramaImagePanelPatterns{clientPatternFinder}}
+        , panoramaLabel{PanoramaLabelPatterns{clientPatternFinder}}
+        , uiEngine{ClientPatterns{clientPatternFinder}, PanoramaUiEnginePatterns{panoramaPatternFinder}}
+        , panoramaUiPanelOffsets{PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder}}
+        , plantedC4{PlantedC4Patterns{clientPatternFinder}}
+        , playerController{PlayerControllerPatterns{clientPatternFinder}}
+        , playerPawn{PlayerPawnPatterns{clientPatternFinder}}
+        , topLevelWindow{TopLevelWindowPatterns{panoramaPatternFinder}}
+        , weaponServices{WeaponServicesPatterns{clientPatternFinder}}
+        , weaponVData{WeaponVDataPatterns{clientPatternFinder}}
     {
     }
 
@@ -76,4 +66,6 @@ struct GameClassImplementations {
     PlayerControllerImpl playerController;
     PlayerPawnImpl playerPawn;
     TopLevelWindowImpl topLevelWindow;
+    WeaponServicesImpl weaponServices;
+    WeaponVDataImpl weaponVData;
 };
