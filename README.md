@@ -7,6 +7,7 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 9 April 2024 - Added an option to **show players' active weapon** to **Visuals**
 * 2 April 2024 - Added an option to show players' health to **Visuals**
 * 26 March 2024 - **Show Player Positions Through Walls** function was added to **Visuals**
 
