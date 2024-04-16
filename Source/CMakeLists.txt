@@ -37,5 +37,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-stack-protector -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables>)
     target_link_options(Osiris PRIVATE -nostdlib)
     target_link_libraries(Osiris PRIVATE c)
+
+    add_custom_command(TARGET Osiris POST_BUILD COMMAND ${CMAKE_STRIP} "$<TARGET_FILE:Osiris>")
   endif()
 endif()
