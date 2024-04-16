@@ -23,18 +23,6 @@ struct BytePatternStorage {
         }
     }
 
-    template <std::size_t OtherCapacity>
-    explicit consteval BytePatternStorage(BytePatternStorage<OtherCapacity> storage)
-        : size{ storage.size }
-    {
-        std::copy_n(storage.pattern.begin(), storage.size, pattern.begin());
-    }
-
-    [[nodiscard]] explicit(false) operator BytePattern() const noexcept
-    {
-        return BytePattern{{pattern.data(), size}, kPatternStringWildcard};
-    }
-
     std::array<char, Capacity> pattern{};
     std::size_t size{0};
 

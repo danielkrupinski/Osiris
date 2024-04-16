@@ -26,7 +26,7 @@ public:
             return nullptr;
         }
 
-        HybridPatternFinder typeDescriptorCrossReferenceFinder{dataRelRoSection.raw(), BytePattern{&typeDescriptor}};
+        HybridPatternFinder typeDescriptorCrossReferenceFinder{dataRelRoSection.raw(), BytePattern::ofObject(typeDescriptor)};
 
         auto typeDescriptorReference{typeDescriptorCrossReferenceFinder.findNextOccurrence()};
         while (typeDescriptorReference && (!canPrecedeVmt(reinterpret_cast<std::uintptr_t>(typeDescriptorReference)) || !isPrecedingVmtOfCompleteClass(typeDescriptorReference)))

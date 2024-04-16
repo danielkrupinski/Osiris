@@ -29,7 +29,7 @@ private:
         HybridPatternFinder typeNameFinder{rodataSection.raw(), BytePattern{mangledTypeName}};
         auto typeNameAddress = typeNameFinder.findNextOccurrence();
         while (typeNameAddress) {
-            const auto typeNameReference = HybridPatternFinder{dataRelRoSection.raw(), BytePattern{&typeNameAddress}}.findNextOccurrence();
+            const auto typeNameReference = HybridPatternFinder{dataRelRoSection.raw(), BytePattern::ofObject(typeNameAddress)}.findNextOccurrence();
             if (typeNameReference && reinterpret_cast<std::uintptr_t>(typeNameReference) % alignof(void*) == 0)
                 return typeNameReference;
             typeNameAddress = typeNameFinder.findNextOccurrence();

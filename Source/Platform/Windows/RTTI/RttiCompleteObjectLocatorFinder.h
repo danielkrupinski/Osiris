@@ -20,7 +20,7 @@ public:
     [[nodiscard]] const RttiCompleteObjectLocator* findCompleteObjectLocator(const RttiTypeDescriptor* typeDescriptor) const noexcept
     {
         const auto typeDescriptorRva{toRvaConverter.toRva(reinterpret_cast<std::uintptr_t>(typeDescriptor))};
-        HybridPatternFinder typeDescriptorCrossReferenceFinder{rdataSection.raw(), BytePattern{&typeDescriptorRva}};
+        HybridPatternFinder typeDescriptorCrossReferenceFinder{rdataSection.raw(), BytePattern::ofObject(typeDescriptorRva)};
 
         auto typeDescriptorReference{typeDescriptorCrossReferenceFinder.findNextOccurrence()};
         while (typeDescriptorReference && (!isCompleteObjectLocator(reinterpret_cast<std::uintptr_t>(typeDescriptorReference)) || !isCompleteObjectLocatorOfCompleteClass(typeDescriptorReference)))
@@ -43,7 +43,7 @@ private:
     [[nodiscard]] bool isCompleteObjectLocator(std::uintptr_t typeDescriptorReference) const noexcept
     {
         const auto rva{toRvaConverter.toRva(typeDescriptorReference)};
-        return hasNoCrossReferences(BytePattern{&rva}) && rdataSection.offsetOf(typeDescriptorReference) >= RttiCompleteObjectLocator::kOffsetOfTypeDescriptorRva;
+        return hasNoCrossReferences(BytePattern::ofObject(rva)) && rdataSection.offsetOf(typeDescriptorReference) >= RttiCompleteObjectLocator::kOffsetOfTypeDescriptorRva;
     }
 
     [[nodiscard]] bool hasNoCrossReferences(BytePattern pattern) const noexcept

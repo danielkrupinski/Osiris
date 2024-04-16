@@ -21,13 +21,4 @@ TEST(BytePatternStorageTest, PatternConversionIsPerformedInConstructor) {
     EXPECT_EQ(actualPattern, expectedPattern);
 }
 
-TEST(BytePatternStorageTest, StorageCapacityCanBeShrunk) {
-    constexpr BytePatternStorage storage{ "A1 ? ? ? ? 89 45" };
-    constexpr BytePatternStorage<storage.size> shrunkStorage{ storage };
-
-    constexpr auto expectedPattern = "\xA1????\x89\x45"sv;
-    const auto actualPattern = std::string_view{ shrunkStorage.pattern.data(), shrunkStorage.size };
-    EXPECT_EQ(actualPattern, expectedPattern);
-}
-
 }

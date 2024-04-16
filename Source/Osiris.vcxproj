@@ -228,6 +228,7 @@
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
     <ClInclude Include="MemorySearch\PatternSearchResult.h" />
     <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
+    <ClInclude Include="MemorySearch\BytePatternView.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />

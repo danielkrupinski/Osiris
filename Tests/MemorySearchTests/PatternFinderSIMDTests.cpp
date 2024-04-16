@@ -9,7 +9,7 @@
 namespace
 {
 
-constexpr auto dummyPattern = "AA BB"_pat;
+constexpr BytePattern dummyPattern{"\xAA\xBB"};
 
 TEST(PatternFinderSIMD_NoBytesTest, NotCheckedBytesAreEmptySpan) {
     PatternFinderSIMD finder{ {}, dummyPattern };
@@ -23,8 +23,7 @@ TEST(PatternFinderSIMD_NoBytesTest, FinderReturnsNullptr) {
 
 TEST(PatternFinderSIMDTest, NoBytesAreCheckedUntilFinderIsInvoked) {
     std::array<std::byte, 1000> bytes{};
-    constexpr auto pattern = "AA"_pat;
-    PatternFinderSIMD finder{ bytes, pattern };
+    PatternFinderSIMD finder{bytes, BytePattern{"\xAA"}};
     const auto notCheckedBytes = finder.getNotCheckedBytes();
     ASSERT_EQ(notCheckedBytes.size(), bytes.size());
     EXPECT_EQ(&notCheckedBytes.front(), &bytes.front());
@@ -35,8 +34,7 @@ TEST(PatternFinderSIMDTest, OneBytePatternCanBeMatched) {
     std::array<std::byte, 64> bytes{};
     bytes[20] = std::byte{ 0x12 };
 
-    constexpr auto pattern = "12"_pat;
-    PatternFinderSIMD finder{ bytes, pattern };
+    PatternFinderSIMD finder{bytes, BytePattern{"\x12"}};
     EXPECT_EQ(finder(), &bytes[20]);
 }
 
@@ -49,8 +47,7 @@ TEST(PatternFinderSIMDTest, FirstAndLastCharOfPatternAreCheckedCorrectly) {
     bytes[24] = std::byte{ 0xAA };
     bytes[25] = std::byte{ 0xBB };
 
-    constexpr auto pattern = "AA BB"_pat;
-    PatternFinderSIMD finder{ bytes, pattern };
+    PatternFinderSIMD finder{bytes, BytePattern{"\xAA\xBB"}};
     EXPECT_EQ(finder(), &bytes[24]);
 }
 
@@ -63,16 +60,14 @@ TEST(PatternFinderSIMDTest, PatternWithoutFirstAndLastCharIsCheckedCorrectly) {
     bytes[24] = std::byte{ 0x12 };
     bytes[25] = std::byte{ 0xBB };
 
-    constexpr auto pattern = "AA 12 BB"_pat;
-    PatternFinderSIMD finder{ bytes, pattern };
+    PatternFinderSIMD finder{bytes, BytePattern{"\xAA\x12\xBB"}};
     EXPECT_EQ(finder(), &bytes[23]);
 }
 
 TEST(PatternFinderSIMDTest, BytesInTheLastXmmwordAreChecked) {
     std::array<std::byte, 64> bytes{};
     bytes[62] = std::byte{ 0xAA };
-    constexpr auto pattern = "AA"_pat;
-    PatternFinderSIMD finder{ bytes, pattern };
+    PatternFinderSIMD finder{bytes, BytePattern{"\xAA"}};
     EXPECT_EQ(finder(), &bytes[62]);
 }
 

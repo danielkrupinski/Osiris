@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "BytePattern.h"
+#include "BytePatternView.h"
 #include <Helpers/PatternNotFoundLogger.h>
 #include "HybridPatternFinder.h"
 #include <MemorySearch/PatternSearchResult.h>
@@ -12,6 +13,7 @@
 #include <Utils/SpanSlice.h>
 
 #include <Platform/Macros/FunctionAttributes.h>
+#include "PatternStringWildcard.h"
 
 enum class OffsetHint : std::size_t {};
 
@@ -21,6 +23,12 @@ public:
     explicit PatternFinder(std::span<const std::byte> bytes) noexcept
         : bytes{bytes}
     {
+    }
+
+    template <std::size_t PatternLength>
+    [[nodiscard]] PatternSearchResult operator()(BytePatternView<PatternLength> patternView) const noexcept
+    {
+        return operator()(patternView.data(), PatternLength);
     }
 
     [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern) const noexcept
@@ -39,6 +47,12 @@ public:
         return operator()(pattern);
     }
 
+    template <std::size_t PatternLength>
+    [[nodiscard]] PatternSearchResult matchPatternAtAddress(GenericPointer address, BytePatternView<PatternLength> patternView) const noexcept
+    {
+        return matchPatternAtAddress(address, BytePattern{{patternView.data(), PatternLength}, kPatternStringWildcard});
+    }
+
     [[nodiscard]] PatternSearchResult matchPatternAtAddress(GenericPointer address, BytePattern pattern) const noexcept
     {
         if (matchesPatternAtAddress(address, pattern))
@@ -47,6 +61,11 @@ public:
     }
 
 private:
+    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(const char* pattern, std::size_t size) const noexcept
+    {
+        return operator()(BytePattern{{pattern, size}, kPatternStringWildcard});
+    }
+
     [[nodiscard]] std::span<const std::byte> getSliceForHint(OffsetHint offsetHint) const noexcept
     {
         return SpanSlice<20'000, const std::byte>{bytes, static_cast<std::size_t>(offsetHint)}();

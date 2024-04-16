@@ -1,9 +1,17 @@
 #pragma once
 
 #include "BytePatternStorage.h"
+#include "BytePatternView.h"
+#include "PatternStringWildcard.h"
 
-template <BytePatternStorage storage>
-consteval auto operator"" _pat()
+template <BytePatternStorage Storage>
+auto operator"" _pat()
 {
-    return BytePatternStorage<storage.size>{ storage };
+    static constexpr std::array<char, Storage.size> pattern{[]{
+        std::array<char, Storage.size> truncatedPattern;
+        std::copy_n(Storage.pattern.begin(), Storage.size, truncatedPattern.begin());
+        return truncatedPattern;
+    }()};
+
+    return BytePatternView<Storage.size>{pattern};
 }

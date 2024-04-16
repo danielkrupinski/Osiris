@@ -49,7 +49,7 @@ private:
     [[nodiscard]] const std::byte* findCompleteObjectLocatorReference(const RttiCompleteObjectLocator* completeObjectLocator) const noexcept
     {
         if (completeObjectLocator)
-            return HybridPatternFinder{vmtSection.raw(), BytePattern{&completeObjectLocator}}.findNextOccurrence();
+            return HybridPatternFinder{vmtSection.raw(), BytePattern::ofObject(completeObjectLocator)}.findNextOccurrence();
         return nullptr;
     }
 
