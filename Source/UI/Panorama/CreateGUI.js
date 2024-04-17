@@ -150,7 +150,7 @@ $.Osiris = (function () {
     return content;
   };
 
-  var createEnableDisableDropDown = function (parent, labelText, section, feature, enableString, disableString) {
+  var createDropDown = function (parent, labelText, section, feature, options, defaultIndex = 1) {
     var container = $.CreatePanel('Panel', parent, '', {
       class: "SettingsMenuDropdownContainer"
     });
@@ -165,26 +165,23 @@ $.Osiris = (function () {
       oninputsubmit: `$.Osiris.dropDownUpdated('${section}', '${feature}');`
     });
 
-    dropdown.AddOption($.CreatePanel('Label', dropdown, '1', {
-      value: "1",
-      text: enableString
-    }));
+    for (let i = 0; i < options.length; ++i) {
+      dropdown.AddOption($.CreatePanel('Label', dropdown, i, {
+      value: i,
+      text: options[i]
+      }));
+    }
 
-    dropdown.AddOption($.CreatePanel('Label', dropdown, '0', {
-      value: "0",
-      text: disableString
-    }));
-
-    dropdown.SetSelectedIndex(1);
+    dropdown.SetSelectedIndex(defaultIndex);
     dropdown.RefreshDisplay();
   };
 
   var createOnOffDropDown = function (parent, labelText, section, feature) {
-    createEnableDisableDropDown(parent, labelText, section, feature, "On", "Off");
+    createDropDown(parent, labelText, section, feature, ["On", "Off"]);
   };
 
   var createYesNoDropDown = function (parent, labelText, section, feature) {
-    createEnableDisableDropDown(parent, labelText, section, feature, "Yes", "No");
+    createDropDown(parent, labelText, section, feature, ["Yes", "No"]);
   };
 
   var hud = createTab('hud');
@@ -203,6 +200,8 @@ $.Osiris = (function () {
   createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position');
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health');
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon');
 

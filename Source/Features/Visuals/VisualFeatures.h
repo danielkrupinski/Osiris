@@ -22,6 +22,11 @@ struct VisualFeatures {
         return PlayerHealthToggle{states.playerInformationThroughWallsState};
     }
 
+    [[nodiscard]] PlayerHealthTextColorToggle playerHealthTextColorToggle() const noexcept
+    {
+        return PlayerHealthTextColorToggle{states.playerInformationThroughWallsState.playerHealthTextColor};
+    }
+
     [[nodiscard]] PlayerActiveWeaponToggle playerActiveWeaponToggle() const noexcept
     {
         return PlayerActiveWeaponToggle{states.playerInformationThroughWallsState};

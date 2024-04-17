@@ -13,6 +13,7 @@
 #include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/EntityPatterns.h>
 #include <MemoryPatterns/PlayerControllerPatterns.h>
+#include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
 
 #include "States/PlayerInformationThroughWallsState.h"
@@ -110,7 +111,6 @@ private:
             const auto styler{panelConfigurator.panelStyle(*style)};
             styler.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
             styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-            styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
             styler.setTextShadow(shadowParams());
         }
     }
@@ -163,6 +163,24 @@ struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
         : TogglableFeature{state.showPlayerHealth}
     {
     }
+};
+
+struct PlayerHealthTextColorToggle {
+    explicit PlayerHealthTextColorToggle(PlayerHealthTextColor& color) noexcept
+        : color{color}
+    {
+    }
+
+    void update(char option) const noexcept
+    {
+        switch (option) {
+        case '0': color = PlayerHealthTextColor::HealthBased; break;
+        case '1': color = PlayerHealthTextColor::White; break;
+        }
+    }
+
+private:
+    PlayerHealthTextColor& color;
 };
 
 struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponToggle> {
@@ -386,7 +404,27 @@ private:
         if (!healthPanelChildren || healthPanelChildren->size < 2)
             return;
 
-        PanoramaLabel{static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel)}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
+        const auto healthText = static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel);
+
+        if (const auto style{PanoramaUiPanel{healthText->uiPanel}.getStyle()}) {
+            const auto styler{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+            if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
+                styler.setSimpleForegroundColor(getHealthBasedColor(health));
+            else
+                styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
+        }
+
+        PanoramaLabel{healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
+    }
+
+    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
+    {
+        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);
+    }
+
+    [[nodiscard]] static cs2::Color getHealthBasedColor(int health) noexcept
+    {
+        return getColorOfHealthFraction(std::clamp(health, 0, 100) / 100.0f);
     }
 
     void setActiveWeapon(PanoramaUiPanel parentPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
