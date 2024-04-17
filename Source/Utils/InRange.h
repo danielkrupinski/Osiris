@@ -1,8 +1,30 @@
 #pragma once
 
+#include <array>
+#include <bit>
 #include <cassert>
+#include <cstddef>
 
-template <typename T, T min, T max>
+// workaround for clang < 18 not supporting float non-type template parameters
+template <typename T>
+struct BinaryRepresentationTemplateParameter {
+    std::array<std::byte, sizeof(T)> binaryRepresentation;
+
+    explicit(false) constexpr BinaryRepresentationTemplateParameter(T value) noexcept
+        : binaryRepresentation{std::bit_cast<decltype(binaryRepresentation)>(value)}
+    {
+    }
+
+    template <typename U>
+    BinaryRepresentationTemplateParameter(U) = delete;
+
+    constexpr operator T() const noexcept
+    {
+        return std::bit_cast<T>(binaryRepresentation);
+    }
+};
+
+template <typename T, BinaryRepresentationTemplateParameter<T> min, BinaryRepresentationTemplateParameter<T> max>
     requires (min <= max)
 struct InRange {
     explicit(false) constexpr InRange(T value) noexcept
