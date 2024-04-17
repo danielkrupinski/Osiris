@@ -59,19 +59,27 @@ private:
             handleTogglableFeature(features.visualFeatures().playerPositionToggle());
         } else if (feature == "player_info_health") {
             handleTogglableFeature(features.visualFeatures().playerHealthToggle());
+        } else if (feature == "player_info_health_color") {
+            handleFeature(features.visualFeatures().playerHealthTextColorToggle());
         } else if (feature == "player_info_weapon") {
             handleTogglableFeature(features.visualFeatures().playerActiveWeaponToggle());
         }
     }
 
     template <typename Feature>
+    void handleFeature(Feature&& feature) const noexcept
+    {
+        feature.update(parser.getChar());
+    }
+
+    template <typename Feature>
     void handleTogglableFeature(TogglableFeature<Feature>&& feature) const noexcept
     {
         switch (parser.getChar()) {
-        case '0':
+        case '1':
             feature.disable();
             break;
-        case '1':
+        case '0':
             feature.enable();
             break;
         default:

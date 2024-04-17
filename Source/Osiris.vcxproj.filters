@@ -977,6 +977,12 @@
     <ClInclude Include="MemorySearch\BytePatternView.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\ColorUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\InRange.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

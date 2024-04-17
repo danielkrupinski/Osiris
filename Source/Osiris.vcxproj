@@ -273,6 +273,7 @@
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\BitFlags.h" />
     <ClInclude Include="Utils\CharUtils.h" />
+    <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\CString.h" />
     <ClInclude Include="Utils\DynamicArray.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
@@ -280,6 +281,7 @@
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\GenericPointer.h" />
     <ClInclude Include="Utils\HexChars.h" />
+    <ClInclude Include="Utils\InRange.h" />
     <ClInclude Include="Utils\LazyInitialized.h" />
     <ClInclude Include="Utils\ManuallyDestructible.h" />
     <ClInclude Include="Utils\MemorySection.h" />
