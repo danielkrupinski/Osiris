@@ -445,7 +445,25 @@ private:
         weaponName.skipPrefix("weapon_");
 
         weaponIconPanel.setVisible(true);
-        PanoramaImagePanel{static_cast<cs2::CImagePanel*>(weaponIconPanel.getClientPanel())}.setImageSvg(StringBuilderStorage<100>{}.builder().put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg").cstring(), 24);
+
+        const auto weaponIconImagePanel = static_cast<cs2::CImagePanel*>(weaponIconPanel.getClientPanel());
+
+        StringBuilderStorage<100> weaponIconPathStorage;
+        auto weaponIconPathBuilder = weaponIconPathStorage.builder();
+        weaponIconPathBuilder.put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg");
+        const auto weaponIconPath = weaponIconPathBuilder.cstring();
+
+        if (shouldUpdateImagePanel(weaponIconImagePanel, weaponIconPath))
+            PanoramaImagePanel{weaponIconImagePanel}.setImageSvg(weaponIconPath, 24);
+    }
+
+    [[nodiscard]] bool shouldUpdateImagePanel(cs2::CImagePanel* imagePanel, const char* newImagePath) const noexcept
+    {
+        if (!dependencies.offsets().imagePanel.offsetToImagePath)
+            return true;
+
+        const auto existingImagePath = *dependencies.offsets().imagePanel.offsetToImagePath.of(imagePanel).get();
+        return !existingImagePath.m_pString || std::strcmp(existingImagePath.m_pString, newImagePath) != 0;
     }
 
     [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept

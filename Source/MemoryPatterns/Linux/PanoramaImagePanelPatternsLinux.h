@@ -22,3 +22,8 @@ inline ImagePropertiesOffset PanoramaImagePanelPatterns::imagePropertiesOffset()
 {
     return clientPatternFinder("4C 89 E7 49 8D 4C 24 ?"_pat).add(7).readOffset<ImagePropertiesOffset>();
 }
+
+inline OffsetToImagePath PanoramaImagePanelPatterns::offsetToImagePath() const noexcept
+{
+    return clientPatternFinder("48 81 C7 ? ? ? ? 53 89 F3 48"_pat).add(3).readOffset<OffsetToImagePath>();
+}

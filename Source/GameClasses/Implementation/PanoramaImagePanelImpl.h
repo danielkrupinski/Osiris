@@ -9,6 +9,7 @@ struct PanoramaImagePanelImpl {
         , constructor{panoramaImagePanelPatterns.constructor()}
         , size{panoramaImagePanelPatterns.size()}
         , imagePropertiesOffset{panoramaImagePanelPatterns.imagePropertiesOffset()}
+        , offsetToImagePath{panoramaImagePanelPatterns.offsetToImagePath()}
     {
     }
 
@@ -18,4 +19,5 @@ struct PanoramaImagePanelImpl {
     cs2::CImagePanel::Constructor* constructor;
     std::uint32_t* size;
     ImagePropertiesOffset imagePropertiesOffset;
+    OffsetToImagePath offsetToImagePath;
 };

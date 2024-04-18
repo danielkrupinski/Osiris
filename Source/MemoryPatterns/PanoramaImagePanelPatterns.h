@@ -12,6 +12,7 @@ struct PanoramaImagePanelPatterns {
     [[nodiscard]] cs2::CImagePanel::Constructor* constructor() const noexcept;
     [[nodiscard]] std::uint32_t* size() const noexcept;
     [[nodiscard]] ImagePropertiesOffset imagePropertiesOffset() const noexcept;
+    [[nodiscard]] OffsetToImagePath offsetToImagePath() const noexcept;
 
     const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };
