@@ -59,7 +59,7 @@ struct HookDependencies {
     }
 
     template <typename Dependency>
-    [[nodiscard]] decltype(auto) getDependency() const noexcept
+    [[nodiscard]] decltype(auto) getDependency() noexcept
     {
         assert(hasDependency<Dependency>());
 
@@ -105,6 +105,8 @@ struct HookDependencies {
             return PanoramaLabelFactory{gameClassImplementations.panoramaLabel.constructor, gameClassImplementations.panoramaLabel.size};
         } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnImmunity>) {
             return gameClassImplementations.playerPawn.offsetToPlayerPawnImmunity;
+        } else if constexpr (std::is_same_v<Dependency, ConVarAccessor>) {
+            return ConVarAccessor{*featureHelpers.conVars, gameClassImplementations.conVar, conVarAccessorState};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -133,6 +135,7 @@ private:
         presentDependencies |= builder.getPlantedC4(&plantedC4);
         presentDependencies |= builder.getSoundChannels(&soundChannels);
         presentDependencies |= builder.getFileSystem(&fileSystem);
+        presentDependencies |= builder.getConVarAccessor();
     }
 
     const GameClassImplementations& gameClassImplementations;
@@ -146,5 +149,6 @@ private:
     cs2::CPlantedC4* plantedC4;
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;
+    ConVarAccessorState conVarAccessorState;
     HookDependenciesMask presentDependencies;
 };

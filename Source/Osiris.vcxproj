@@ -14,13 +14,17 @@
     <ClInclude Include="BuildConfig.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
+    <ClInclude Include="CS2\Classes\CCvar.h" />
     <ClInclude Include="CS2\Classes\CEntitySubclassVDataBase.h" />
     <ClInclude Include="CS2\Classes\CGameSceneNode.h" />
     <ClInclude Include="CS2\Classes\ClientModeCSNormal.h" />
     <ClInclude Include="CS2\Classes\CLoopModeGame.h" />
     <ClInclude Include="CS2\Classes\Color.h" />
+    <ClInclude Include="CS2\Classes\ConVar.h" />
+    <ClInclude Include="CS2\Classes\ConVarTypes.h" />
     <ClInclude Include="CS2\Classes\CPlantedC4.h" />
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h" />
+    <ClInclude Include="CS2\Classes\CUtlLinkedList.h" />
     <ClInclude Include="CS2\Classes\CUtlMap.h" />
     <ClInclude Include="CS2\Classes\CUtlString.h" />
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
@@ -51,6 +55,10 @@
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
     <ClInclude Include="Endpoints.h" />
     <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
+    <ClInclude Include="FeatureHelpers\ConVarAccessor.h" />
+    <ClInclude Include="FeatureHelpers\ConVarFinder.h" />
+    <ClInclude Include="FeatureHelpers\ConVars.h" />
+    <ClInclude Include="FeatureHelpers\ConVarsBase.h" />
     <ClInclude Include="FeatureHelpers\EntitiesVMTs.h" />
     <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h" />
     <ClInclude Include="FeatureHelpers\EntityListWalker.h" />
@@ -116,6 +124,8 @@
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
+    <ClInclude Include="GameClasses\Implementation\ConVarImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\CvarImpl.h" />
     <ClInclude Include="GameClasses\Implementation\EntityImpl.h" />
     <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h" />
     <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h" />
@@ -135,6 +145,8 @@
     <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h" />
     <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\CvarOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\FileSystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
@@ -178,6 +190,8 @@
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemoryPatterns\ClientPatterns.h" />
+    <ClInclude Include="MemoryPatterns\ConVarPatterns.h" />
+    <ClInclude Include="MemoryPatterns\CvarPatterns.h" />
     <ClInclude Include="MemoryPatterns\EntityPatterns.h" />
     <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h" />
@@ -197,6 +211,8 @@
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\TopLevelWindowPatterns.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\EntityPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />

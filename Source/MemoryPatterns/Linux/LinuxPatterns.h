@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ClientPatternsLinux.h"
+#include "ConVarPatternsLinux.h"
+#include "CvarPatternsLinux.h"
 #include "EntityPatternsLinux.h"
 #include "EntitySystemPatternsLinux.h"
 #include "FileSystemPatternsLinux.h"

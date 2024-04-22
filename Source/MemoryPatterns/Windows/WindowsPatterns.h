@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ClientPatternsWindows.h"
+#include "ConVarPatternsWindows.h"
+#include "CvarPatternsWindows.h"
 #include "EntityPatternsWindows.h"
 #include "EntitySystemPatternsWindows.h"
 #include "FileSystemPatternsWindows.h"

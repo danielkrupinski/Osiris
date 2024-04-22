@@ -1,5 +1,6 @@
 #pragma once
 
+#include <FeatureHelpers/ConVarAccessor.h>
 #include <GameClasses/OffsetTypes/EntityOffset.h>
 #include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 #include <GameClasses/OffsetTypes/PlayerControllerOffset.h>
@@ -43,5 +44,6 @@ using HookDependenciesMask = TypeBitFlags<
     SoundChannels,
     FileSystem,
     PanoramaLabelFactory,
-    OffsetToPlayerPawnImmunity
+    OffsetToPlayerPawnImmunity,
+    ConVarAccessor
 >;
