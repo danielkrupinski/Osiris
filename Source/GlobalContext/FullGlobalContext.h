@@ -33,11 +33,14 @@
 
 #include "PeepEventsHookResult.h"
 
+#include <CS2/Classes/ConVarTypes.h>
+
 struct FullGlobalContext {
-    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept
+    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const PatternFinder<PatternNotFoundLogger>& tier0PatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept
         : _gameClasses{
             clientPatternFinder,
             panoramaPatternFinder,
+            tier0PatternFinder,
             fileSystemPatterns,
             Tier0Dll{}}
         , hooks{

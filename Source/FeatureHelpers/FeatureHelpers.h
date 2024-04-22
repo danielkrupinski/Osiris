@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ConVars.h"
 #include "EntitiesVMTs.h"
 #include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
@@ -51,4 +52,5 @@ struct FeatureHelpers {
     cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s;
     cs2::SoundChannels** soundChannels;
     cs2::CBaseFileSystem** fileSystem;
+    std::optional<ConVars> conVars;
 };

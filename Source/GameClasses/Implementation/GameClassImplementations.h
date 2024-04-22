@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ConVarImpl.h"
+#include "CvarImpl.h"
 #include "EntityImpl.h"
 #include "EntitySystemImpl.h"
 #include "FileNameSymbolTableImpl.h"
@@ -25,9 +27,12 @@
 struct GameClassImplementations {
     GameClassImplementations(const PatternFinder<PatternNotFoundLogger>& clientPatternFinder,
                              const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder,
+                             const PatternFinder<PatternNotFoundLogger>& tier0PatternFinder,
                              const FileSystemPatterns& fileSystemPatterns,
                              Tier0Dll tier0Dll) noexcept
-        : entity{EntityPatterns{clientPatternFinder}}
+        : conVar{ConVarPatterns{tier0PatternFinder}}
+        , cvar{CvarPatterns{clientPatternFinder, tier0PatternFinder}}
+        , entity{EntityPatterns{clientPatternFinder}}
         , entitySystem{EntitySystemPatterns{clientPatternFinder}}
         , fileNameSymbolTable{tier0Dll}
         , fileSystem{fileSystemPatterns}
@@ -49,6 +54,8 @@ struct GameClassImplementations {
     {
     }
 
+    ConVarImpl conVar;
+    CvarImpl cvar;
     EntityImpl entity;
     EntitySystemImpl entitySystem;
     FileNameSymbolTableImpl fileNameSymbolTable;

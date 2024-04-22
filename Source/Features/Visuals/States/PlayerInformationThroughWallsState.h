@@ -13,6 +13,7 @@ enum class PlayerHealthTextColor : std::uint8_t {
 
 struct PlayerInformationThroughWallsState {
     bool enabled{false};
+    bool showOnlyEnemies{false};
     bool showPlayerPosition{false};
     bool showPlayerHealth{false};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};

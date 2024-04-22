@@ -1,11 +1,28 @@
 #pragma once
 
+#include <FeatureHelpers/ConVarFinder.h>
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <GameClasses/Implementation/GameClassImplementations.h>
 
 #include "HookDependenciesMask.h"
 
 struct HookDependenciesBuilder {
+    [[nodiscard]] HookDependenciesMask getConVarAccessor() const noexcept
+    {
+        if (requiredDependencies.has<ConVarAccessor>()) {
+            if (featureHelpers.conVars.has_value())
+                return HookDependenciesMask{}.set<ConVarAccessor>();
+
+            if (gameClassImplementations.cvar.cvar && gameClassImplementations.cvar.offsetToConVarList) {
+                if (const auto cvar = *gameClassImplementations.cvar.cvar) {
+                    featureHelpers.conVars.emplace(ConVarFinder{*gameClassImplementations.cvar.offsetToConVarList.of(cvar).get()});
+                    return HookDependenciesMask{}.set<ConVarAccessor>();
+                }
+            }
+        }
+        return {};
+    }
+
     [[nodiscard]] HookDependenciesMask getFileSystem(cs2::CBaseFileSystem** fileSystem) const noexcept
     {
         if (requiredDependencies.has<FileSystem>() && featureHelpers.fileSystem) {
@@ -87,5 +104,5 @@ struct HookDependenciesBuilder {
 
     HookDependenciesMask requiredDependencies;
     const GameClassImplementations& gameClassImplementations;
-    const FeatureHelpers& featureHelpers;
+    FeatureHelpers& featureHelpers;
 };

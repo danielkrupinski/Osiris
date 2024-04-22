@@ -31,6 +31,22 @@ private:
     FieldType* field;
 };
 
+template <>
+struct FieldValueProxy<void> {
+    explicit FieldValueProxy(void* field) noexcept
+        : field{field}
+    {
+    }
+
+    [[nodiscard]] void* get() const noexcept
+    {
+        return field;
+    }
+
+private:
+    void* field;
+};
+
 template <typename ClassType, typename FieldType, std::integral TOffset>
 struct FieldOffset {
     using OffsetType = TOffset;

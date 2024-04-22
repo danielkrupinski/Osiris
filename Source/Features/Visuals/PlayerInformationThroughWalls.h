@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CGameSceneNode.h>
+#include <CS2/Classes/ConVarTypes.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
@@ -190,7 +191,7 @@ struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponTogg
     }
 };
 
-struct PlayerInformationThroughWallsToggle : public TogglableFeature<PlayerInformationThroughWallsToggle> {
+struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
         : TogglableFeature{state.enabled}
         , state{state}
@@ -199,6 +200,15 @@ struct PlayerInformationThroughWallsToggle : public TogglableFeature<PlayerInfor
         , panelConfigurator{panelConfigurator}
         , hudProvider{hudProvider}
     {
+    }
+
+    void update(char option) noexcept
+    {
+        switch (option) {
+        case '0': enable(); state.showOnlyEnemies = true; break;
+        case '1': enable(); state.showOnlyEnemies = false; break;
+        case '2': disable(); break;
+        }
     }
 
 private:
@@ -254,6 +264,9 @@ public:
 
         const auto teamNumber = getTeamNumber(nonLocalPlayerPawn);
         if (teamNumber != TeamNumber::TT && teamNumber != TeamNumber::CT)
+            return;
+
+        if (state.showOnlyEnemies && !isEnemyTeam(teamNumber))
             return;
 
         const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
@@ -340,6 +353,33 @@ public:
     }
 
 private:
+    [[nodiscard]] bool isEnemyTeam(TeamNumber team) const noexcept
+    {
+        return team != getLocalPlayerTeam() || teammatesAreEnemies();
+    }
+
+    [[nodiscard]] bool teammatesAreEnemies() const noexcept
+    {
+        if (!dependencies.requestDependency<ConVarAccessor>())
+            return true;
+
+        auto conVarAccessor = dependencies.getDependency<ConVarAccessor>();
+        if (!conVarAccessor.requestConVar<cs2::mp_teammates_are_enemies>())
+            return true;
+        return conVarAccessor.getConVarValue<cs2::mp_teammates_are_enemies>();
+    }
+
+    [[nodiscard]] TeamNumber getLocalPlayerTeam() const noexcept
+    {
+        if (!dependencies.offsets().entity.offsetToTeamNumber)
+            return {};
+
+        if (!dependencies.requestDependency<LocalPlayerController>())
+            return {};
+
+        return TeamNumber{*dependencies.offsets().entity.offsetToTeamNumber.of(dependencies.getDependency<LocalPlayerController>()).get()};
+    }
+
     void setArrowColor(PanoramaUiPanel parentPanel, cs2::Color color) const noexcept
     {
         const auto children = parentPanel.children();
