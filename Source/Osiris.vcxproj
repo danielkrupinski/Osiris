@@ -50,6 +50,7 @@
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
+    <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
     <ClInclude Include="CS2\Constants\SoundNames.h" />
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
@@ -66,6 +67,7 @@
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
+    <ClInclude Include="FeatureHelpers\LifeState.h" />
     <ClInclude Include="FeatureHelpers\PanelShadowParams.h" />
     <ClInclude Include="FeatureHelpers\MainMenuProvider.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />

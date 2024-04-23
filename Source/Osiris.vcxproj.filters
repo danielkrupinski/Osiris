@@ -1031,6 +1031,12 @@
     <ClInclude Include="MemoryPatterns\ConVarPatterns.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Constants\LifeStateConstants.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\LifeState.h">
+      <Filter>FeatureHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

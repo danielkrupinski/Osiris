@@ -13,6 +13,11 @@ inline OffsetToHealth EntityPatterns::offsetToHealth() const noexcept
     return clientPatternFinder("8B 87 ? ? ? ? 85 C0 7E ? C7"_pat).add(2).readOffset<OffsetToHealth>();
 }
 
+inline OffsetToLifeState EntityPatterns::offsetToLifeState() const noexcept
+{
+    return clientPatternFinder("0F B6 97 ? ? ? ? 39 F2"_pat).add(3).readOffset<OffsetToLifeState>();
+}
+
 inline OffsetToTeamNumber EntityPatterns::offsetToTeamNumber() const noexcept
 {
     return clientPatternFinder("41 0F B6 84 24 ? ? ? ? 3C 03"_pat).add(5).readOffset<OffsetToTeamNumber>();

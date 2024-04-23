@@ -5,6 +5,7 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
+#include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaLabelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/TogglableFeature.h>
@@ -269,6 +270,9 @@ public:
         if (state.showOnlyEnemies && !isEnemyTeam(teamNumber))
             return;
 
+        if (!isAlive(nonLocalPlayerPawn))
+            return;
+
         const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
         const auto health = hasHealth ? *dependencies.getDependency<OffsetToHealth>().of(&nonLocalPlayerPawn).get() : 100;
         if (health <= 0)
@@ -353,6 +357,13 @@ public:
     }
 
 private:
+    [[nodiscard]] bool isAlive(cs2::C_BaseEntity& entity) const noexcept
+    {
+        if (!dependencies.offsets().entity.offsetToLifeState)
+            return true;
+        return LifeState{*dependencies.offsets().entity.offsetToLifeState.of(&entity).get()} == LifeState::Alive;
+    }
+
     [[nodiscard]] bool isEnemyTeam(TeamNumber team) const noexcept
     {
         return team != getLocalPlayerTeam() || teammatesAreEnemies();
