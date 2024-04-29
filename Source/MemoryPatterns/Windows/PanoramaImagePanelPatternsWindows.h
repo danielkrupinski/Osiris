@@ -5,7 +5,7 @@
 
 inline cs2::CImagePanel::SetImage* PanoramaImagePanelPatterns::setImage() const noexcept
 {
-    return clientPatternFinder("7C 07 48 8D 15 ? ? ? ? E8 ? ? ? ?"_pat).add(10).abs().as<cs2::CImagePanel::SetImage*>();
+    return clientPatternFinder("C7 44 24 ? ? ? ? ? E8 ? ? ? ? 48 83 7C 24 ? ? 0F 84"_pat).add(9).abs().as<cs2::CImagePanel::SetImage*>();
 }
 
 inline cs2::CImagePanel::Constructor* PanoramaImagePanelPatterns::constructor() const noexcept
