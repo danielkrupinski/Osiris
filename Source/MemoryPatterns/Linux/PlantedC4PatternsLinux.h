@@ -10,7 +10,7 @@ inline BombSiteOffset PlantedC4Patterns::m_nBombSite() const noexcept
 
 inline BombTickingOffset PlantedC4Patterns::m_bBombTicking() const noexcept
 {
-    return clientPatternFinder("74 EB 41 80 BC 24 ? ? ? ? ? 0F"_pat).add(6).readOffset<BombTickingOffset>();
+    return clientPatternFinder("00 84 C0 74 ? 80 BB ? ? ? ? 00 74 ? 80"_pat).add(7).readOffset<BombTickingOffset>();
 }
 
 inline BombBlowTimeOffset PlantedC4Patterns::m_flC4Blow() const noexcept
