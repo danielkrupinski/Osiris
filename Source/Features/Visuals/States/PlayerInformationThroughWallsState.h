@@ -14,10 +14,10 @@ enum class PlayerHealthTextColor : std::uint8_t {
 struct PlayerInformationThroughWallsState {
     bool enabled{false};
     bool showOnlyEnemies{false};
-    bool showPlayerPosition{false};
-    bool showPlayerHealth{false};
+    bool showPlayerPosition{true};
+    bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
-    bool showPlayerActiveWeapon{false};
+    bool showPlayerActiveWeapon{true};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

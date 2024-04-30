@@ -180,8 +180,8 @@ $.Osiris = (function () {
     createDropDown(parent, labelText, section, feature, ["On", "Off"]);
   };
 
-  var createYesNoDropDown = function (parent, labelText, section, feature) {
-    createDropDown(parent, labelText, section, feature, ["Yes", "No"]);
+  var createYesNoDropDown = function (parent, labelText, section, feature, defaultIndex = 1) {
+    createDropDown(parent, labelText, section, feature, ["Yes", "No"], defaultIndex);
   };
 
   var hud = createTab('hud');
@@ -197,13 +197,13 @@ $.Osiris = (function () {
   var playerInfo = createSection(visuals, 'Player Information Through Walls');
   createDropDown(playerInfo, "Enabled", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position');
+  createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health');
+  createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon');
+  createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon', 0);
 
   var sound = createTab('sound');
   
