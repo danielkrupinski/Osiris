@@ -307,10 +307,14 @@ public:
         if (!panel)
             return;
 
-        setArrowColor(panel, getArrowColor(teamNumber));
+        PlayerInformationPanel playerInformationPanel{panel};
+        if (!playerInformationPanel.isValid())
+            return;
+
+        setArrowColor(PanoramaUiPanel{playerInformationPanel.positionArrowPanel}, getArrowColor(teamNumber));
         if (hasHealth)
-            setHealth(panel, health);
-        setActiveWeapon(panel, nonLocalPlayerPawn);
+            setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
+        setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, nonLocalPlayerPawn);
 
         const auto style = panel.getStyle();
         if (!style)
@@ -391,13 +395,36 @@ private:
         return TeamNumber{*dependencies.offsets().entity.offsetToTeamNumber.of(dependencies.getDependency<LocalPlayerController>()).get()};
     }
 
-    void setArrowColor(PanoramaUiPanel parentPanel, cs2::Color color) const noexcept
-    {
-        const auto children = parentPanel.children();
-        if (!children || children->size < 1)
-            return;
+    struct PlayerInformationPanel {
+        explicit PlayerInformationPanel(PanoramaUiPanel parentPanel) noexcept
+        {
+            retrieveChildren(parentPanel);
+        }
 
-        const PanoramaUiPanel arrowPanel{children->memory[0]};
+        [[nodiscard]] bool isValid() const noexcept
+        {
+            return positionArrowPanel != nullptr;
+        }
+
+        cs2::CUIPanel* positionArrowPanel{};
+        cs2::CUIPanel* healthPanel;
+        cs2::CUIPanel* weaponIconPanel;
+
+    private:
+        void retrieveChildren(PanoramaUiPanel parentPanel) noexcept
+        {
+            const auto children = parentPanel.children();
+            if (!children || children->size != 3)
+                return;
+
+            positionArrowPanel = children->memory[0];
+            healthPanel = children->memory[1];
+            weaponIconPanel = children->memory[2];
+        }
+    };
+
+    void setArrowColor(PanoramaUiPanel arrowPanel, cs2::Color color) const noexcept
+    {
         if (!state.showPlayerPosition) {
             arrowPanel.setVisible(false);
             return;
@@ -438,13 +465,8 @@ private:
         return *dependencies.offsets().weaponVData.offsetToWeaponName.of(vData).get();
     }
 
-    void setHealth(PanoramaUiPanel parentPanel, int health) const noexcept
+    void setHealth(PanoramaUiPanel healthPanel, int health) const noexcept
     {
-        const auto children = parentPanel.children();
-        if (!children || children->size < 2)
-            return;
-
-        const PanoramaUiPanel healthPanel{children->memory[1]};
         if (!state.showPlayerHealth) {
             healthPanel.setVisible(false);
             return;
@@ -478,18 +500,13 @@ private:
         return getColorOfHealthFraction(std::clamp(health, 0, 100) / 100.0f);
     }
 
-    void setActiveWeapon(PanoramaUiPanel parentPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    void setActiveWeapon(PanoramaUiPanel weaponIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
     {
-        const auto children = parentPanel.children();
-        if (!children || children->size < 3)
-            return;
-
-        const PanoramaUiPanel weaponIconPanel{children->memory[2]};
         if (!state.showPlayerActiveWeapon) {
             weaponIconPanel.setVisible(false);
             return;
         }
-            
+
         auto weaponName = CString{getActiveWeaponName(playerPawn)};
         if (!weaponName.string)
             return;
