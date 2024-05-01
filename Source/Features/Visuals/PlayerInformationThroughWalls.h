@@ -4,6 +4,7 @@
 #include <CS2/Classes/ConVarTypes.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaLabelFactory.h>
@@ -522,7 +523,7 @@ private:
             if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
                 styler.setSimpleForegroundColor(getHealthBasedColor(health));
             else
-                styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
+                styler.setSimpleForegroundColor(cs2::kColorWhite);
         }
 
         PanoramaLabel{healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
@@ -584,25 +585,17 @@ private:
         if (!dependencies.offsets().playerController.offsetToPlayerColor)
             return false;
 
-        constexpr std::array playerColors = std::to_array<cs2::Color>({
-            {136, 206, 245},
-            {29, 162, 132},
-            {248, 246, 45},
-            {255, 155, 37},
-            {192, 54, 153}
-        });
-
         const auto playerColorIndex = *dependencies.offsets().playerController.offsetToPlayerColor.of(&playerController).get();
-        if (playerColorIndex < 0 || std::cmp_greater_equal(playerColorIndex, playerColors.size()))
+        if (playerColorIndex < 0 || std::cmp_greater_equal(playerColorIndex, cs2::kPlayerColors.size()))
             return false;
 
-        *color = playerColors[playerColorIndex];
+        *color = cs2::kPlayerColors[playerColorIndex];
         return true;
     }
 
     [[nodiscard]] cs2::Color getArrowColor(cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
     {
-        if (cs2::Color color{255, 255, 255}; state.playerPositionArrowColor == PlayerPositionArrowColor::PlayerOrTeamColor && getPlayerColor(playerController, &color))
+        if (cs2::Color color{cs2::kColorWhite}; state.playerPositionArrowColor == PlayerPositionArrowColor::PlayerOrTeamColor && getPlayerColor(playerController, &color))
             return color;
         return getTeamColor(teamNumber);
     }
@@ -613,7 +606,7 @@ private:
             using enum TeamNumber;
             case TT: return cs2::Color{234, 190, 84};
             case CT: return cs2::Color{150, 200, 250};
-            default: return cs2::Color{255, 255, 255};
+            default: return cs2::kColorWhite;
         }
     }
 

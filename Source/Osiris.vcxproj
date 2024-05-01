@@ -48,6 +48,7 @@
     <ClInclude Include="CS2\Classes\VMatrix.h" />
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
+    <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
