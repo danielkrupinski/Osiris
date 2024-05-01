@@ -7,6 +7,9 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 1 May 2024 - Added player position arrow color based on player color
+![Player position arrow with player color](https://github.com/danielkrupinski/Osiris/assets/34515229/024e7fe4-e039-4c8d-b45e-11d20fdbab54)
+
 * 22 April 2024 - Added an option to draw player information only on enemies
 * 17 April 2024 - Added player health text color based on health value
 
@@ -14,7 +17,6 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 * 9 April 2024 - Added an option to **show players' active weapon** to **Visuals**
 * 2 April 2024 - Added an option to show players' health to **Visuals**
-* 26 March 2024 - **Show Player Positions Through Walls** function was added to **Visuals**
 
 ## Technical features
 
