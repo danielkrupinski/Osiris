@@ -255,7 +255,7 @@ public:
     {
     }
 
-    void run(cs2::C_CSPlayerPawn& nonLocalPlayerPawn) noexcept
+    void run(cs2::C_CSPlayerPawn& playerPawn) noexcept
     {
         if (!state.enabled)
             return;
@@ -263,22 +263,26 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        const auto teamNumber = getTeamNumber(nonLocalPlayerPawn);
+        const auto teamNumber = getTeamNumber(playerPawn);
         if (teamNumber != TeamNumber::TT && teamNumber != TeamNumber::CT)
             return;
 
         if (state.showOnlyEnemies && !isEnemyTeam(teamNumber))
             return;
 
-        if (!isAlive(nonLocalPlayerPawn))
+        if (!isAlive(playerPawn))
+            return;
+
+        const auto playerController = getPlayerController(playerPawn);
+        if (isLocalPlayerController(playerController))
             return;
 
         const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
-        const auto health = hasHealth ? *dependencies.getDependency<OffsetToHealth>().of(&nonLocalPlayerPawn).get() : 100;
+        const auto health = hasHealth ? *dependencies.getDependency<OffsetToHealth>().of(&playerPawn).get() : 100;
         if (health <= 0)
             return;
 
-        const auto gameSceneNode = *dependencies.getDependency<OffsetToGameSceneNode>().of(&nonLocalPlayerPawn).get();
+        const auto gameSceneNode = *dependencies.getDependency<OffsetToGameSceneNode>().of(&playerPawn).get();
         if (!gameSceneNode)
             return;
 
@@ -314,14 +318,14 @@ public:
         setArrowColor(PanoramaUiPanel{playerInformationPanel.positionArrowPanel}, getArrowColor(teamNumber));
         if (hasHealth)
             setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
-        setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, nonLocalPlayerPawn);
+        setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, playerPawn);
 
         const auto style = panel.getStyle();
         if (!style)
             return;
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
-        styleSetter.setOpacity(hasImmunity(nonLocalPlayerPawn) ? 0.5f : 1.0f);
+        styleSetter.setOpacity(hasImmunity(playerPawn) ? 0.5f : 1.0f);
         styleSetter.setZIndex(-positionInClipSpace.z);
 
         const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
@@ -361,6 +365,22 @@ public:
     }
 
 private:
+    [[nodiscard]] cs2::CCSPlayerController* getPlayerController(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!dependencies.offsets().playerPawn.offsetToPlayerController)
+            return nullptr;
+
+        if (!dependencies.requestDependency<EntityFromHandleFinder>())
+            return nullptr;
+
+        return static_cast<cs2::CCSPlayerController*>(dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(*dependencies.offsets().playerPawn.offsetToPlayerController.of(&playerPawn).get()));
+    }
+
+    [[nodiscard]] bool isLocalPlayerController(cs2::CCSPlayerController* playerController) const noexcept
+    {
+        return dependencies.requestDependency<LocalPlayerController>() && dependencies.getDependency<LocalPlayerController>() == playerController;
+    }
+
     [[nodiscard]] bool isAlive(cs2::C_BaseEntity& entity) const noexcept
     {
         if (!dependencies.offsets().entity.offsetToLifeState)

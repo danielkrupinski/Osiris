@@ -12,3 +12,8 @@ inline OffsetToWeaponServices PlayerPawnPatterns::offsetToWeaponServices() const
 {
     return clientPatternFinder("48 8B BE ? ? ? ? 48 8D 35 ? ? ? ? E8 ? ? ? ? 48 89 C2"_pat).add(3).readOffset<OffsetToWeaponServices>();
 }
+
+inline OffsetToPlayerController PlayerPawnPatterns::offsetToPlayerController() const noexcept
+{
+    return clientPatternFinder("49 8D BD ? ? ? ? E8 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 48"_pat).add(3).readOffset<OffsetToPlayerController>();
+}

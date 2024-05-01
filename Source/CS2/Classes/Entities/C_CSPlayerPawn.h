@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
 #include "C_BaseEntity.h"
@@ -14,6 +15,7 @@ struct C_CSPlayerPawn : C_BaseEntity {
 
     using m_bGunGameImmunity = bool;
     using m_pWeaponServices = CCSPlayer_WeaponServices*;
+    using m_hController = CEntityHandle;
 };
 
 }
