@@ -15,7 +15,7 @@ inline cs2::CUIEngine::getPanelPointer PanoramaUiEnginePatterns::getPanelPointer
 
 inline cs2::CUIEngine::runScript PanoramaUiEnginePatterns::runScript() const noexcept
 {
-    return panoramaPatternFinder("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 4C 8B F1"_pat).as<cs2::CUIEngine::runScript>();
+    return panoramaPatternFinder("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 4C 8B"_pat).as<cs2::CUIEngine::runScript>();
 }
 
 inline cs2::CUIEngine::makeSymbol PanoramaUiEnginePatterns::makeSymbol() const noexcept
