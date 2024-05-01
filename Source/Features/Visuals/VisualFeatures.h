@@ -17,6 +17,11 @@ struct VisualFeatures {
         return PlayerPositionToggle{states.playerInformationThroughWallsState};
     }
 
+    [[nodiscard]] PlayerPositionArrowColorToggle playerPositionArrowColorToggle() const noexcept
+    {
+        return PlayerPositionArrowColorToggle{states.playerInformationThroughWallsState.playerPositionArrowColor};
+    }
+
     [[nodiscard]] PlayerHealthToggle playerHealthToggle() const noexcept
     {
         return PlayerHealthToggle{states.playerInformationThroughWallsState};

@@ -57,6 +57,8 @@ private:
             handleFeature(features.visualFeatures().playerInformationThroughWalls());
         } else if (feature == "player_info_position") {
             handleTogglableFeature(features.visualFeatures().playerPositionToggle());
+        } else if (feature == "player_info_position_color") {
+            handleFeature(features.visualFeatures().playerPositionArrowColorToggle());
         } else if (feature == "player_info_health") {
             handleTogglableFeature(features.visualFeatures().playerHealthToggle());
         } else if (feature == "player_info_health_color") {
