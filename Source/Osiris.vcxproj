@@ -48,6 +48,7 @@
     <ClInclude Include="CS2\Classes\VMatrix.h" />
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
+    <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h" />
     <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\PlayerPawnImpl.h" />
     <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
     <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h" />
@@ -156,6 +158,7 @@
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlayerControllerOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\PlayerPawnOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\TopLevelWindowOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h" />

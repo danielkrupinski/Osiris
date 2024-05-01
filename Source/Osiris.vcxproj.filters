@@ -1037,6 +1037,15 @@
     <ClInclude Include="FeatureHelpers\LifeState.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\PlayerPawnOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\PlayerPawnImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\ColorConstants.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

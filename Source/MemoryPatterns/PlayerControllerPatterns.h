@@ -6,6 +6,7 @@
 
 struct PlayerControllerPatterns {
     [[nodiscard]] OffsetToPlayerPawnHandle offsetToPlayerPawnHandle() const noexcept;
+    [[nodiscard]] OffsetToPlayerColor offsetToPlayerColor() const noexcept;
 
     const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };

@@ -4,6 +4,7 @@
 #include <CS2/Classes/ConVarTypes.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaLabelFactory.h>
@@ -160,6 +161,24 @@ struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
     }
 };
 
+struct PlayerPositionArrowColorToggle {
+    explicit PlayerPositionArrowColorToggle(PlayerPositionArrowColor& color) noexcept
+        : color{color}
+    {
+    }
+
+    void update(char option) const noexcept
+    {
+        switch (option) {
+        case '0': color = PlayerPositionArrowColor::PlayerOrTeamColor; break;
+        case '1': color = PlayerPositionArrowColor::TeamColor; break;
+        }
+    }
+
+private:
+    PlayerPositionArrowColor& color;
+};
+
 struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
     explicit PlayerHealthToggle(PlayerInformationThroughWallsState& state) noexcept
         : TogglableFeature{state.showPlayerHealth}
@@ -274,7 +293,7 @@ public:
             return;
 
         const auto playerController = getPlayerController(playerPawn);
-        if (isLocalPlayerController(playerController))
+        if (!playerController || isLocalPlayerController(playerController))
             return;
 
         const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
@@ -315,7 +334,7 @@ public:
         if (!playerInformationPanel.isValid())
             return;
 
-        setArrowColor(PanoramaUiPanel{playerInformationPanel.positionArrowPanel}, getArrowColor(teamNumber));
+        setArrowColor(PanoramaUiPanel{playerInformationPanel.positionArrowPanel}, *playerController, teamNumber);
         if (hasHealth)
             setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
         setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, playerPawn);
@@ -443,7 +462,7 @@ private:
         }
     };
 
-    void setArrowColor(PanoramaUiPanel arrowPanel, cs2::Color color) const noexcept
+    void setArrowColor(PanoramaUiPanel arrowPanel, cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
     {
         if (!state.showPlayerPosition) {
             arrowPanel.setVisible(false);
@@ -456,7 +475,7 @@ private:
             return;
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
-        styleSetter.setWashColor(color);
+        styleSetter.setWashColor(getArrowColor(playerController, teamNumber));
     }
 
     [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
@@ -504,7 +523,7 @@ private:
             if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
                 styler.setSimpleForegroundColor(getHealthBasedColor(health));
             else
-                styler.setSimpleForegroundColor(cs2::Color{255, 255, 255});
+                styler.setSimpleForegroundColor(cs2::kColorWhite);
         }
 
         PanoramaLabel{healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
@@ -561,13 +580,33 @@ private:
         return {};
     }
 
-    [[nodiscard]] static cs2::Color getArrowColor(TeamNumber teamNumber) noexcept
+    [[nodiscard]] bool getPlayerColor(cs2::CCSPlayerController& playerController, cs2::Color* color) const noexcept
+    {
+        if (!dependencies.offsets().playerController.offsetToPlayerColor)
+            return false;
+
+        const auto playerColorIndex = *dependencies.offsets().playerController.offsetToPlayerColor.of(&playerController).get();
+        if (playerColorIndex < 0 || std::cmp_greater_equal(playerColorIndex, cs2::kPlayerColors.size()))
+            return false;
+
+        *color = cs2::kPlayerColors[playerColorIndex];
+        return true;
+    }
+
+    [[nodiscard]] cs2::Color getArrowColor(cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
+    {
+        if (cs2::Color color{cs2::kColorWhite}; state.playerPositionArrowColor == PlayerPositionArrowColor::PlayerOrTeamColor && getPlayerColor(playerController, &color))
+            return color;
+        return getTeamColor(teamNumber);
+    }
+
+    [[nodiscard]] static cs2::Color getTeamColor(TeamNumber teamNumber) noexcept
     {
         switch (teamNumber) {
             using enum TeamNumber;
             case TT: return cs2::Color{234, 190, 84};
             case CT: return cs2::Color{150, 200, 250};
-            default: return cs2::Color{255, 255, 255};
+            default: return cs2::kColorWhite;
         }
     }
 

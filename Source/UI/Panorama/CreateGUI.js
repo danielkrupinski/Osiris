@@ -199,6 +199,8 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createDropDown(playerInfo, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color'], 0);
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
