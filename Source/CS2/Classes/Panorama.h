@@ -55,7 +55,7 @@ struct CLabel : CPanel2D {
     using setTextInternal = void (*)(CLabel* thisptr, const char* value, int textType, bool trustedSource);
 };
 
-struct CStyleSymbol {
+struct LINUX_ARGS([[gnu::packed]]) CStyleSymbol {
     static constexpr auto kInvalidId{0xFF};
 
     [[nodiscard]] bool isValid() const noexcept
@@ -66,7 +66,7 @@ struct CStyleSymbol {
     std::uint8_t m_Id{kInvalidId};
 };
 
-struct CStyleProperty {
+struct LINUX_ARGS([[gnu::packed]]) CStyleProperty {
     const void* vmt;
     CStyleSymbol m_symPropertyName;
     bool m_bDisallowTransition;
