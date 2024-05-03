@@ -65,13 +65,9 @@ public:
 private:
     [[nodiscard]] static cs2::Color getTimerColor(PlantedC4 bomb) noexcept
     {
-        constexpr cs2::Color green{0, 180, 0, 255};
-        constexpr cs2::Color red{255, 0, 0, 255};
-        constexpr cs2::Color white{255, 255, 255, 255};
-
         if (const auto canDefuse = bomb.canBeDefused(); canDefuse.has_value())
-            return *canDefuse ? green : red;
-        return white;
+            return *canDefuse ? cs2::kColorGreen : cs2::kColorRed;
+        return cs2::kColorWhite;
     }
 
     void hideDefusingAlert() const noexcept

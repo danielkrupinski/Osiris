@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/PanelConfigurator.h>
 #include <HookDependencies/HookDependencies.h>
 
@@ -121,7 +122,7 @@ private:
             .verticalOffset{cs2::CUILength::pixels(0)},
             .blurRadius{cs2::CUILength::pixels(3)},
             .strength = 3,
-            .color{0, 0, 0}
+            .color{cs2::kColorBlack}
         };
     }
 

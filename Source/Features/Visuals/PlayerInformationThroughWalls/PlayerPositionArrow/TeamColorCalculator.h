@@ -9,8 +9,8 @@ struct TeamColorCalculator {
     {
         switch (teamNumber) {
             using enum TeamNumber;
-            case TT: return cs2::Color{234, 190, 84};
-            case CT: return cs2::Color{150, 200, 250};
+            case TT: return cs2::kColorTeamTT;
+            case CT: return cs2::kColorTeamCT;
             default: return cs2::kColorWhite;
         }
     }

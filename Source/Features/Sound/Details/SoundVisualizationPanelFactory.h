@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include <CS2/Classes/Panorama.h>
+#include <CS2/Constants/ColorConstants.h>
 #include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 
@@ -60,7 +61,7 @@ private:
             .verticalOffset{cs2::CUILength::pixels(0)},
             .blurRadius{cs2::CUILength::pixels(1)},
             .strength = 3,
-            .color{0, 0, 0}
+            .color{cs2::kColorBlack}
         };
     }
 
