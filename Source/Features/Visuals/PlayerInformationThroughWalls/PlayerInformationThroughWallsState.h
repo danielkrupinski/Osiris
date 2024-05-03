@@ -6,21 +6,18 @@
 #include <FeatureHelpers/HudInWorldPanelIndex.h>
 #include <Utils/DynamicArray.h>
 
+#include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
+
 enum class PlayerHealthTextColor : std::uint8_t {
     HealthBased,
     White
-};
-
-enum class PlayerPositionArrowColor : std::uint8_t {
-    PlayerOrTeamColor,
-    TeamColor
 };
 
 struct PlayerInformationThroughWallsState {
     bool enabled{false};
     bool showOnlyEnemies{false};
     bool showPlayerPosition{true};
-    PlayerPositionArrowColor playerPositionArrowColor{PlayerPositionArrowColor::PlayerOrTeamColor};
+    PlayerPositionArrowColorType playerPositionArrowColor{PlayerPositionArrowColorType::PlayerOrTeamColor};
     bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
     bool showPlayerActiveWeapon{true};

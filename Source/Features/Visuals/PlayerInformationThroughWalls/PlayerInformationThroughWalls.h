@@ -19,140 +19,16 @@
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
 
-#include "States/PlayerInformationThroughWallsState.h"
+#include "PlayerPositionArrow/PlayerColorCalculator.h"
+#include "PlayerPositionArrow/PlayerColorIndexAccessor.h"
+#include "PlayerInformationPanel.h"
+#include "PlayerPositionArrow/PlayerPositionArrowColorCalculator.h"
+#include "PlayerPositionArrow/TeamColorCalculator.h"
+#include "PlayerInformationThroughWallsPanelFactory.h"
+#include "PlayerInformationThroughWallsState.h"
 
 #include <HookDependencies/HookDependencies.h>
 #include <HookDependencies/HookDependenciesMask.h>
-
-class PlayerInformationThroughWallsPanelFactory {
-public:
-    PlayerInformationThroughWallsPanelFactory(cs2::CUIPanel& parentPanel, HookDependencies& dependencies, PanelConfigurator panelConfigurator) noexcept
-        : parentPanel{parentPanel}
-        , dependencies{dependencies}
-        , panelConfigurator{panelConfigurator}
-    {
-    }
-
-    [[nodiscard]] PanoramaUiPanel createPanel(PanoramaTransformFactory panoramaTransformFactory) const noexcept
-    {
-        const auto containerPanel{Panel::create("", &parentPanel)};
-        if (!containerPanel)
-            return PanoramaUiPanel{nullptr};
-
-        if (const auto style{PanoramaUiPanel{containerPanel->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setWidth(cs2::CUILength::pixels(kWidth));
-            styler.setHeight(cs2::CUILength::pixels(kHeight));
-            styler.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(0.0f));
-            styler.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(0));
-            styler.setFlowChildren(cs2::k_EFlowDown);
-        }
-
-        createPositionArrowPanel(containerPanel->uiPanel, panoramaTransformFactory);
-        createHealthPanel(containerPanel->uiPanel);
-        createActiveWeaponIconPanel(containerPanel->uiPanel);
-        return PanoramaUiPanel{containerPanel->uiPanel};
-    }
-
-private:
-    void createActiveWeaponIconPanel(cs2::CUIPanel* containerPanel) const noexcept
-    {
-        const auto weaponIconPanel = PanoramaImagePanel::create("", containerPanel);
-        if (!weaponIconPanel)
-            return;
-
-        if (const auto style{PanoramaUiPanel{weaponIconPanel->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-            styler.setImageShadow(shadowParams());
-        }
-    }
-
-    void createHealthPanel(cs2::CUIPanel* containerPanel) const noexcept
-    {
-        const auto healthPanel{Panel::create("", containerPanel)};
-        if (!healthPanel)
-            return;
-
-        if (const auto style{PanoramaUiPanel{healthPanel->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-            styler.setFlowChildren(cs2::k_EFlowRight);
-        }
-
-        createHealthIconPanel(healthPanel->uiPanel);
-        createHealthTextPanel(healthPanel->uiPanel);
-    }
-
-    void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
-    {
-        const auto healthIconPanel = PanoramaImagePanel::create("", containerPanel);
-        if (!healthIconPanel)
-            return;
-
-        PanoramaImagePanel{healthIconPanel}.setImageSvg("s2r://panorama/images/hud/health_cross.vsvg", 24);
-        if (const auto style{PanoramaUiPanel{healthIconPanel->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
-            styler.setImageShadow(shadowParams());
-        }
-    }
-
-    void createHealthTextPanel(cs2::CUIPanel* containerPanel) const
-    {
-        if (!dependencies.requestDependency<PanoramaLabelFactory>())
-            return;
-
-        const auto label = dependencies.getDependency<PanoramaLabelFactory>().createLabelPanel(containerPanel);
-        if (!label)
-            return;
-
-        if (const auto style{PanoramaUiPanel{label->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
-            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-            styler.setTextShadow(shadowParams());
-        }
-    }
-
-    void createPositionArrowPanel(cs2::CUIPanel* containerPanel, PanoramaTransformFactory panoramaTransformFactory) const noexcept
-    {
-        const auto imagePanel = PanoramaImagePanel::create("", containerPanel);
-        if (!imagePanel)
-            return;
-
-        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 24);
-        if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
-            const auto styler{panelConfigurator.panelStyle(*style)};
-            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-            styler.setImageShadow(shadowParams());
-            PanoramaTransformations{
-                panoramaTransformFactory.scale(1.0f, -1.0f),
-            }.applyTo(styler);
-        }
-    }
-
-    [[nodiscard]] static PanelShadowParams shadowParams() noexcept
-    {
-        return PanelShadowParams{
-            .horizontalOffset{cs2::CUILength::pixels(0)},
-            .verticalOffset{cs2::CUILength::pixels(0)},
-            .blurRadius{cs2::CUILength::pixels(3)},
-            .strength = 3,
-            .color{0, 0, 0}
-        };
-    }
-
-    static constexpr auto kWidth{256};
-    static constexpr auto kHeight{256};
-
-    cs2::CUIPanel& parentPanel;
-    HookDependencies& dependencies;
-    PanelConfigurator panelConfigurator;
-};
 
 struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
     explicit PlayerPositionToggle(PlayerInformationThroughWallsState& state) noexcept
@@ -162,7 +38,7 @@ struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
 };
 
 struct PlayerPositionArrowColorToggle {
-    explicit PlayerPositionArrowColorToggle(PlayerPositionArrowColor& color) noexcept
+    explicit PlayerPositionArrowColorToggle(PlayerPositionArrowColorType& color) noexcept
         : color{color}
     {
     }
@@ -170,13 +46,13 @@ struct PlayerPositionArrowColorToggle {
     void update(char option) const noexcept
     {
         switch (option) {
-        case '0': color = PlayerPositionArrowColor::PlayerOrTeamColor; break;
-        case '1': color = PlayerPositionArrowColor::TeamColor; break;
+        case '0': color = PlayerPositionArrowColorType::PlayerOrTeamColor; break;
+        case '1': color = PlayerPositionArrowColorType::TeamColor; break;
         }
     }
 
 private:
-    PlayerPositionArrowColor& color;
+    PlayerPositionArrowColorType& color;
 };
 
 struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
@@ -274,7 +150,7 @@ public:
     {
     }
 
-    void run(cs2::C_CSPlayerPawn& playerPawn) noexcept
+    void drawPlayerInformation(cs2::C_CSPlayerPawn& playerPawn) noexcept
     {
         if (!state.enabled)
             return;
@@ -434,33 +310,15 @@ private:
         return TeamNumber{*dependencies.offsets().entity.offsetToTeamNumber.of(dependencies.getDependency<LocalPlayerController>()).get()};
     }
 
-    struct PlayerInformationPanel {
-        explicit PlayerInformationPanel(PanoramaUiPanel parentPanel) noexcept
-        {
-            retrieveChildren(parentPanel);
-        }
+    [[nodiscard]] auto getPlayerColorCalculator(cs2::CCSPlayerController& playerController) const noexcept
+    {
+        return PlayerColorCalculator{PlayerColorIndexAccessor{playerController, dependencies.offsets().playerController.offsetToPlayerColor}};
+    }
 
-        [[nodiscard]] bool isValid() const noexcept
-        {
-            return positionArrowPanel != nullptr;
-        }
-
-        cs2::CUIPanel* positionArrowPanel{};
-        cs2::CUIPanel* healthPanel;
-        cs2::CUIPanel* weaponIconPanel;
-
-    private:
-        void retrieveChildren(PanoramaUiPanel parentPanel) noexcept
-        {
-            const auto children = parentPanel.children();
-            if (!children || children->size != 3)
-                return;
-
-            positionArrowPanel = children->memory[0];
-            healthPanel = children->memory[1];
-            weaponIconPanel = children->memory[2];
-        }
-    };
+    [[nodiscard]] auto getPlayerPositionArrowColorCalculator(cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
+    {
+        return PlayerPositionArrowColorCalculator{getPlayerColorCalculator(playerController), TeamColorCalculator{teamNumber}};
+    }
 
     void setArrowColor(PanoramaUiPanel arrowPanel, cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
     {
@@ -475,7 +333,7 @@ private:
             return;
 
         const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
-        styleSetter.setWashColor(getArrowColor(playerController, teamNumber));
+        styleSetter.setWashColor(getPlayerPositionArrowColorCalculator(playerController, teamNumber).getArrowColor(state.playerPositionArrowColor));
     }
 
     [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
@@ -580,36 +438,6 @@ private:
         return {};
     }
 
-    [[nodiscard]] bool getPlayerColor(cs2::CCSPlayerController& playerController, cs2::Color* color) const noexcept
-    {
-        if (!dependencies.offsets().playerController.offsetToPlayerColor)
-            return false;
-
-        const auto playerColorIndex = *dependencies.offsets().playerController.offsetToPlayerColor.of(&playerController).get();
-        if (playerColorIndex < 0 || std::cmp_greater_equal(playerColorIndex, cs2::kPlayerColors.size()))
-            return false;
-
-        *color = cs2::kPlayerColors[playerColorIndex];
-        return true;
-    }
-
-    [[nodiscard]] cs2::Color getArrowColor(cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
-    {
-        if (cs2::Color color{cs2::kColorWhite}; state.playerPositionArrowColor == PlayerPositionArrowColor::PlayerOrTeamColor && getPlayerColor(playerController, &color))
-            return color;
-        return getTeamColor(teamNumber);
-    }
-
-    [[nodiscard]] static cs2::Color getTeamColor(TeamNumber teamNumber) noexcept
-    {
-        switch (teamNumber) {
-            using enum TeamNumber;
-            case TT: return cs2::Color{234, 190, 84};
-            case CT: return cs2::Color{150, 200, 250};
-            default: return cs2::kColorWhite;
-        }
-    }
-
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
         return dependencies.requestDependencies(kCrucialDependencies);
@@ -636,7 +464,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(currentIndex);
         }
-        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), dependencies, panelConfigurator}.createPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
+        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), dependencies, panelConfigurator}.createPlayerInformationPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }

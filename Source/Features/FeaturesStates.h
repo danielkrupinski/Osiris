@@ -2,7 +2,7 @@
 
 #include "Hud/States/HudFeaturesStates.h"
 #include "Sound/SoundFeaturesStates.h"
-#include "Visuals/States/VisualFeaturesStates.h"
+#include "Visuals/VisualFeaturesStates.h"
 
 struct FeaturesStates {
     HudFeaturesStates hudFeaturesStates;

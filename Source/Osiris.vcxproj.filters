@@ -103,9 +103,6 @@
     <Filter Include="Features\Hud\States">
       <UniqueIdentifier>{8e2aed33-7890-4e79-82f4-cbfe0db9b418}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\Visuals\States">
-      <UniqueIdentifier>{ca87a54c-9021-4f2a-a75c-847ea7116ba8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\Windows\FileSystem">
       <UniqueIdentifier>{a12f576a-08be-49f6-9ed7-10f1fe8a4737}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,12 @@
     </Filter>
     <Filter Include="HookDependencies">
       <UniqueIdentifier>{29bbfcc9-029d-4d7d-947f-8bd7bee5b36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls">
+      <UniqueIdentifier>{ba484b80-1889-45a7-bb1d-7c08bcb458dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow">
+      <UniqueIdentifier>{8aa2f864-29ba-4c27-bcc1-575eda8edcbe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -773,9 +776,6 @@
     <ClInclude Include="Features\Hud\States\KillfeedPreserverState.h">
       <Filter>Features\Hud\States</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\States\VisualFeaturesStates.h">
-      <Filter>Features\Visuals\States</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\PanelShadowParams.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -865,12 +865,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\EntityPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls.h">
-      <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\States\PlayerInformationThroughWallsState.h">
-      <Filter>Features\Visuals\States</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\CGameSceneNode.h">
       <Filter>CS2\Classes</Filter>
@@ -1045,6 +1039,36 @@
     </ClInclude>
     <ClInclude Include="CS2\Constants\ColorConstants.h">
       <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationPanel.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWalls.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsPanelFactory.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsState.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorCalculator.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorIndexAccessor.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorCalculator.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorType.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\TeamColorCalculator.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\VisualFeaturesStates.h">
+      <Filter>Features\Visuals</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

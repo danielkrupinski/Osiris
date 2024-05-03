@@ -1,8 +1,8 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
-#include "PlayerInformationThroughWalls.h"
-#include "States/VisualFeaturesStates.h"
+#include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
+#include "VisualFeaturesStates.h"
 
 class LoopModeGameHook;
 
