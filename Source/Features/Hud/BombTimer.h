@@ -123,16 +123,16 @@ private:
 R"(
 (function() {
   var bombTimerContainer = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile('ScoreAndTimeAndBomb'), 'BombTimerContainer', {
-    style: 'flow-children: right; height: 27px; width: 100%; margin-right: 7px; margin-left: 7px;'
+    style: 'flow-children: right; height: 32px; width: 100%;'
   });
 
   $.CreatePanel('Image', bombTimerContainer, 'BombSiteIcon', {
-    style: "width: 22px; height: 22px; vertical-align: center;"
+    style: "width: 26px; height: 26px; vertical-align: center; margin-left: 5px;"
   });
 
   $.CreatePanel('Label', bombTimerContainer, 'BombTimer', {
     class: 'additive stratum-bold-tf',
-    style: 'width: fill-parent-flow(1.0); font-size: 22px; color: white; vertical-align: center; margin-top: 2px; text-align: center;'
+    style: 'width: fill-parent-flow(1.0); font-size: 22px; color: white; vertical-align: center; text-align: center;'
   });
 })();
 )"
