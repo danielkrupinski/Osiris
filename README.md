@@ -7,6 +7,10 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 6 May 2024 - Adjusted "Bomb timer" appearance. Implemented showing an icon on player defusing the bomb
+
+![Player defusing icon](https://github.com/danielkrupinski/Osiris/assets/34515229/4addfc99-27d8-4f9d-a1b7-eb2b7c7565bd)
+
 * 1 May 2024 - Added player position arrow color based on player color
 
 ![Player position arrow with player color](https://github.com/danielkrupinski/Osiris/assets/34515229/024e7fe4-e039-4c8d-b45e-11d20fdbab54)
@@ -17,7 +21,6 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 ![Health-based color](https://github.com/danielkrupinski/Osiris/assets/34515229/59ae3422-c0ae-4361-bdfd-7967e57e639a)
 
 * 9 April 2024 - Added an option to **show players' active weapon** to **Visuals**
-* 2 April 2024 - Added an option to show players' health to **Visuals**
 
 ## Technical features
 
