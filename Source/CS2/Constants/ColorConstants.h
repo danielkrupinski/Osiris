@@ -29,4 +29,6 @@ constexpr auto kPlayerColors = std::to_array<Color>({
     kColorPlayerPurple
 });
 
+constexpr Color kColorDefuseKit{119, 221, 255};
+
 }

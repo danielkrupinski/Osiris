@@ -87,6 +87,23 @@ struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponTogg
     }
 };
 
+struct PlayerDefuseIconToggle {
+    explicit PlayerDefuseIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
+        : playerStateIconsToShow{playerStateIconsToShow}
+    {
+    }
+
+    void update(char option) noexcept
+    {
+        switch (option) {
+        case '0': playerStateIconsToShow.set<DefuseIconPanel>(); break;
+        case '1': playerStateIconsToShow.unset<DefuseIconPanel>(); break;
+        }
+    }
+
+    PlayerStateIconsToShow& playerStateIconsToShow;
+};
+
 struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
         : TogglableFeature{state.enabled}
@@ -214,6 +231,7 @@ public:
         if (hasHealth)
             setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
         setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, playerPawn);
+        setPlayerStateIcons(PanoramaUiPanel{playerInformationPanel.playerStateIconsPanel}, playerPawn);
 
         const auto style = panel.getStyle();
         if (!style)
@@ -395,6 +413,27 @@ private:
     [[nodiscard]] static cs2::Color getHealthBasedColor(int health) noexcept
     {
         return getColorOfHealthFraction(std::clamp(health, 0, 100) / 100.0f);
+    }
+
+    void setPlayerStateIcons(PanoramaUiPanel playerStateIconsPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!state.playerStateIconsToShow) {
+            playerStateIconsPanel.setVisible(false);
+            return;
+        }
+
+        playerStateIconsPanel.setVisible(true);
+        
+        const auto playerStateChildren = playerStateIconsPanel.children();
+        if (!playerStateChildren || playerStateChildren->size != 1)
+            return;
+
+        PanoramaUiPanel{playerStateChildren->memory[0]}.setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && isDefusing(playerPawn));
+    }
+
+    [[nodiscard]] bool isDefusing(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        return dependencies.offsets().playerPawn.offsetToIsDefusing.of(&playerPawn).valueOr(false);
     }
 
     void setActiveWeapon(PanoramaUiPanel weaponIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept

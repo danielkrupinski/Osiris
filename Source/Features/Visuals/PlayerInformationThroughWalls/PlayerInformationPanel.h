@@ -17,16 +17,18 @@ struct PlayerInformationPanel {
     cs2::CUIPanel* positionArrowPanel{};
     cs2::CUIPanel* healthPanel;
     cs2::CUIPanel* weaponIconPanel;
+    cs2::CUIPanel* playerStateIconsPanel;
 
 private:
     void retrieveChildren(PanoramaUiPanel parentPanel) noexcept
     {
         const auto children = parentPanel.children();
-        if (!children || children->size != 3)
+        if (!children || children->size != 4)
             return;
 
         positionArrowPanel = children->memory[0];
         healthPanel = children->memory[1];
         weaponIconPanel = children->memory[2];
+        playerStateIconsPanel = children->memory[3];
     }
 };

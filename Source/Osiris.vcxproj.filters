@@ -124,6 +124,9 @@
     <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow">
       <UniqueIdentifier>{8aa2f864-29ba-4c27-bcc1-575eda8edcbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons">
+      <UniqueIdentifier>{0298df1f-2c8f-45a5-b252-88eb2bdabc58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1069,6 +1072,9 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h">
       <Filter>Features\Visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
