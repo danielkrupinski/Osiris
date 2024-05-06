@@ -7,6 +7,7 @@
 #include <Utils/DynamicArray.h>
 
 #include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
+#include "PlayerStateIcons/PlayerStateIconsToShow.h"
 
 enum class PlayerHealthTextColor : std::uint8_t {
     HealthBased,
@@ -21,6 +22,7 @@ struct PlayerInformationThroughWallsState {
     bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
     bool showPlayerActiveWeapon{true};
+    PlayerStateIconsToShow playerStateIconsToShow{PlayerStateIconsToShow{}.set<DefuseIconPanel>()};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

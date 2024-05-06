@@ -206,6 +206,8 @@ $.Osiris = (function () {
   createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon', 0);
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
 
   var sound = createTab('sound');
   

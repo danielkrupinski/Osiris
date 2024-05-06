@@ -31,10 +31,42 @@ public:
         createPositionArrowPanel(containerPanel->uiPanel, panoramaTransformFactory);
         createHealthPanel(containerPanel->uiPanel);
         createActiveWeaponIconPanel(containerPanel->uiPanel);
+        createStateIconsPanel(containerPanel->uiPanel);
         return PanoramaUiPanel{containerPanel->uiPanel};
     }
 
 private:
+    void createStateIconsPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto panel{Panel::create("", containerPanel)};
+        if (!panel)
+            return;
+
+        if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+            styler.setFlowChildren(cs2::k_EFlowRight);
+        }
+
+        createDefuseIconPanel(panel->uiPanel);
+    }
+
+    void createDefuseIconPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto imagePanel = PanoramaImagePanel::create("", containerPanel);
+        if (!imagePanel)
+            return;
+
+        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/equipment/defuser.vsvg", 24);
+        if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setImageShadow(shadowParams());
+            styler.setWashColor(cs2::kColorDefuseKit);
+        }
+    }
+
     void createActiveWeaponIconPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
         const auto weaponIconPanel = PanoramaImagePanel::create("", containerPanel);

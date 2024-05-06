@@ -17,3 +17,8 @@ inline OffsetToPlayerController PlayerPawnPatterns::offsetToPlayerController() c
 {
     return clientPatternFinder("8B 89 ? ? ? ? 4C 89 60"_pat).add(2).readOffset<OffsetToPlayerController>();
 }
+
+inline OffsetToIsDefusing PlayerPawnPatterns::offsetToIsDefusing() const noexcept
+{
+    return clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(2).readOffset<OffsetToIsDefusing>();
+}

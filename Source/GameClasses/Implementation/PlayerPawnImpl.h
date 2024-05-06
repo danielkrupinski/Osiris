@@ -7,10 +7,12 @@ struct PlayerPawnImpl {
         : offsetToPlayerPawnImmunity{playerPawnPatterns.offsetToPlayerPawnImmunity()}
         , offsetToWeaponServices{playerPawnPatterns.offsetToWeaponServices()}
         , offsetToPlayerController{playerPawnPatterns.offsetToPlayerController()}
+        , offsetToIsDefusing{playerPawnPatterns.offsetToIsDefusing()}
     {
     }
 
     OffsetToPlayerPawnImmunity offsetToPlayerPawnImmunity;
     OffsetToWeaponServices offsetToWeaponServices;
     OffsetToPlayerController offsetToPlayerController;
+    OffsetToIsDefusing offsetToIsDefusing;
 };
