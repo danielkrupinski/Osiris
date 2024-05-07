@@ -42,6 +42,11 @@ struct VisualFeatures {
         return PlayerDefuseIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
     }
 
+    [[nodiscard]] HostagePickupIconToggle hostagePickupIconToggle() const noexcept
+    {
+        return HostagePickupIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+    }
+
     VisualFeaturesStates& states;
     FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;

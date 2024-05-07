@@ -50,6 +50,7 @@ private:
         }
 
         createDefuseIconPanel(panel->uiPanel);
+        createHostagePickupPanel(panel->uiPanel);
     }
 
     void createDefuseIconPanel(cs2::CUIPanel* containerPanel) const noexcept
@@ -64,6 +65,22 @@ private:
             styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
             styler.setImageShadow(shadowParams());
             styler.setWashColor(cs2::kColorDefuseKit);
+        }
+    }
+
+    void createHostagePickupPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto imagePanel = PanoramaImagePanel::create("", containerPanel);
+        if (!imagePanel)
+            return;
+
+        PanoramaImagePanel{imagePanel}.setImageSvg("s2r://panorama/images/icons/ui/hostage_transit.svg", 32);
+        if (const auto style{PanoramaUiPanel{imagePanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+            styler.setImageShadow(shadowParams());
+            styler.setWashColor(cs2::kColorYellow);
         }
     }
 

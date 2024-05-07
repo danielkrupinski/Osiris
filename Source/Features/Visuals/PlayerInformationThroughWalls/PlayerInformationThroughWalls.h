@@ -104,6 +104,23 @@ struct PlayerDefuseIconToggle {
     PlayerStateIconsToShow& playerStateIconsToShow;
 };
 
+struct HostagePickupIconToggle {
+    explicit HostagePickupIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
+        : playerStateIconsToShow{playerStateIconsToShow}
+    {
+    }
+
+    void update(char option) noexcept
+    {
+        switch (option) {
+        case '0': playerStateIconsToShow.set<HostagePickupPanel>(); break;
+        case '1': playerStateIconsToShow.unset<HostagePickupPanel>(); break;
+        }
+    }
+
+    PlayerStateIconsToShow& playerStateIconsToShow;
+};
+
 struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
         : TogglableFeature{state.enabled}
@@ -425,10 +442,16 @@ private:
         playerStateIconsPanel.setVisible(true);
         
         const auto playerStateChildren = playerStateIconsPanel.children();
-        if (!playerStateChildren || playerStateChildren->size != 1)
+        if (!playerStateChildren || playerStateChildren->size != 2)
             return;
 
         PanoramaUiPanel{playerStateChildren->memory[0]}.setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && isDefusing(playerPawn));
+        PanoramaUiPanel{playerStateChildren->memory[1]}.setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && isPickingUpHostage(playerPawn));
+    }
+
+    [[nodiscard]] bool isPickingUpHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        return dependencies.offsets().playerPawn.offsetToIsPickingUpHostage.of(&playerPawn).valueOr(false);
     }
 
     [[nodiscard]] bool isDefusing(cs2::C_CSPlayerPawn& playerPawn) const noexcept

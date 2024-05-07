@@ -22,3 +22,8 @@ inline OffsetToIsDefusing PlayerPawnPatterns::offsetToIsDefusing() const noexcep
 {
     return clientPatternFinder("78 ? 00 75 ? 80 BB ? ? ? ?"_pat).add(7).readOffset<OffsetToIsDefusing>();
 }
+
+inline OffsetToIsPickingUpHostage PlayerPawnPatterns::offsetToIsPickingUpHostage() const noexcept
+{
+    return clientPatternFinder("75 ? 41 C6 84 24 ? ? ? ? 01 49 8B 45"_pat).add(6).readOffset<OffsetToIsPickingUpHostage>();
+}

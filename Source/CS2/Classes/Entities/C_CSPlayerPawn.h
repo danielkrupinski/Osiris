@@ -17,6 +17,7 @@ struct C_CSPlayerPawn : C_BaseEntity {
     using m_pWeaponServices = CCSPlayer_WeaponServices*;
     using m_hController = CEntityHandle;
     using m_bIsDefusing = bool;
+    using m_bIsGrabbingHostage = bool;
 };
 
 }
