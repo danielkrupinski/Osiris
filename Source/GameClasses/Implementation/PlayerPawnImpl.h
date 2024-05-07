@@ -8,6 +8,7 @@ struct PlayerPawnImpl {
         , offsetToWeaponServices{playerPawnPatterns.offsetToWeaponServices()}
         , offsetToPlayerController{playerPawnPatterns.offsetToPlayerController()}
         , offsetToIsDefusing{playerPawnPatterns.offsetToIsDefusing()}
+        , offsetToIsPickingUpHostage{playerPawnPatterns.offsetToIsPickingUpHostage()}
     {
     }
 
@@ -15,4 +16,5 @@ struct PlayerPawnImpl {
     OffsetToWeaponServices offsetToWeaponServices;
     OffsetToPlayerController offsetToPlayerController;
     OffsetToIsDefusing offsetToIsDefusing;
+    OffsetToIsPickingUpHostage offsetToIsPickingUpHostage;
 };

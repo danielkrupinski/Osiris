@@ -9,6 +9,7 @@ struct PlayerPawnPatterns {
     [[nodiscard]] OffsetToWeaponServices offsetToWeaponServices() const noexcept;
     [[nodiscard]] OffsetToPlayerController offsetToPlayerController() const noexcept;
     [[nodiscard]] OffsetToIsDefusing offsetToIsDefusing() const noexcept;
+    [[nodiscard]] OffsetToIsPickingUpHostage offsetToIsPickingUpHostage() const noexcept;
 
     const PatternFinder<PatternNotFoundLogger>& clientPatternFinder;
 };

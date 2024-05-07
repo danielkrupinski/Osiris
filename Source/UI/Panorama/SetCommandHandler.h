@@ -67,6 +67,8 @@ private:
             handleTogglableFeature(features.visualFeatures().playerActiveWeaponToggle());
         } else if (feature == "player_info_defuse") {
             handleFeature(features.visualFeatures().playerDefuseIconToggle());
+        } else if (feature == "player_info_hostage_pickup") {
+            handleFeature(features.visualFeatures().hostagePickupIconToggle());
         }
     }
 
