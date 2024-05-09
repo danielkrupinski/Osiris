@@ -25,7 +25,7 @@ inline std::int32_t* PanoramaUiPanelPatterns::getAttributeString() const noexcep
 
 inline std::int32_t* PanoramaUiPanelPatterns::setAttributeString() const noexcept
 {
-    return clientPatternFinder("FF 90 ? ? ? ? 48 83 C6 ? 48 3B"_pat).add(2).as<std::int32_t*>();
+    return clientPatternFinder("FF 90 ? ? ? ? 48 83 C6 ? 48 3B ? 75 ? 4C"_pat).add(2).as<std::int32_t*>();
 }
 
 inline ChildPanelsVectorOffset PanoramaUiPanelPatterns::childPanelsVectorOffset() const noexcept
