@@ -7,6 +7,14 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 14 May 2024 - Implemented showing an icon on player rescuing a hostage
+
+![Player rescuing hostage](https://github.com/danielkrupinski/Osiris/assets/34515229/057b6dc7-1b54-44c0-9443-6917d2394335)
+
+* 7 May 2024 - Implemented showing an icon on player pickup up a hostage
+
+![Player picking up hostage](https://github.com/danielkrupinski/Osiris/assets/34515229/d3a27f1a-dd79-4d18-bfbb-d8bb8c47ae2d)
+
 * 6 May 2024 - Adjusted "Bomb timer" appearance. Implemented showing an icon on player defusing the bomb
 
 ![Player defusing icon](https://github.com/danielkrupinski/Osiris/assets/34515229/4addfc99-27d8-4f9d-a1b7-eb2b7c7565bd)
@@ -16,11 +24,6 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 ![Player position arrow with player color](https://github.com/danielkrupinski/Osiris/assets/34515229/024e7fe4-e039-4c8d-b45e-11d20fdbab54)
 
 * 22 April 2024 - Added an option to draw player information only on enemies
-* 17 April 2024 - Added player health text color based on health value
-
-![Health-based color](https://github.com/danielkrupinski/Osiris/assets/34515229/59ae3422-c0ae-4361-bdfd-7967e57e639a)
-
-* 9 April 2024 - Added an option to **show players' active weapon** to **Visuals**
 
 ## Technical features
 
