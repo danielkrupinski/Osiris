@@ -51,6 +51,7 @@ private:
 
         createDefuseIconPanel(panel->uiPanel);
         createHostagePickupPanel(panel->uiPanel);
+        createHostageRescuePanel(panel->uiPanel);
     }
 
     void createDefuseIconPanel(cs2::CUIPanel* containerPanel) const noexcept
@@ -70,6 +71,16 @@ private:
 
     void createHostagePickupPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
+        createHostageIconPanel(containerPanel, cs2::kColorYellow);
+    }
+
+    void createHostageRescuePanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        createHostageIconPanel(containerPanel, cs2::kColorLightGreen);
+    }
+
+    void createHostageIconPanel(cs2::CUIPanel* containerPanel, cs2::Color color) const noexcept
+    {
         const auto imagePanel = PanoramaImagePanel::create("", containerPanel);
         if (!imagePanel)
             return;
@@ -80,7 +91,7 @@ private:
             styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
             styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
             styler.setImageShadow(shadowParams());
-            styler.setWashColor(cs2::kColorYellow);
+            styler.setWashColor(color);
         }
     }
 

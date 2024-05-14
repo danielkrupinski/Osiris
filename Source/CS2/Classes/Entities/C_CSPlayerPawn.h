@@ -8,6 +8,7 @@
 namespace cs2
 {
 
+struct CCSPlayer_HostageServices;
 struct CCSPlayer_WeaponServices;
 
 struct C_CSPlayerPawn : C_BaseEntity {
@@ -18,6 +19,7 @@ struct C_CSPlayerPawn : C_BaseEntity {
     using m_hController = CEntityHandle;
     using m_bIsDefusing = bool;
     using m_bIsGrabbingHostage = bool;
+    using m_pHostageServices = CCSPlayer_HostageServices*;
 };
 
 }

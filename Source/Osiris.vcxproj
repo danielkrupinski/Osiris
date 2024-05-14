@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildConfig.h" />
+    <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
     <ClInclude Include="CS2\Classes\CCvar.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h" />
     <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h" />
     <ClInclude Include="GameClasses\Implementation\GameSceneNodeImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\HostageServicesImpl.h" />
     <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanelImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h" />
@@ -156,12 +158,15 @@
     <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PlayerPawnImpl.h" />
     <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\WeaponServicesImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\WeaponVDataImpl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
     <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\CvarOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\FileSystemOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\HostageServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaImagePanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlantedC4Offset.h" />
@@ -210,6 +215,7 @@
     <ClInclude Include="MemoryPatterns\FileSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\GameRulesPatterns.h" />
     <ClInclude Include="MemoryPatterns\GameSceneNodePatterns.h" />
+    <ClInclude Include="MemoryPatterns\HostageServicesPatterns.h" />
     <ClInclude Include="MemoryPatterns\MemAllocPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanelPatterns.h" />
     <ClInclude Include="MemoryPatterns\PanelStylePatterns.h" />
@@ -223,6 +229,8 @@
     <ClInclude Include="MemoryPatterns\SdlPatterns.h" />
     <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h" />
     <ClInclude Include="MemoryPatterns\TopLevelWindowPatterns.h" />
+    <ClInclude Include="MemoryPatterns\WeaponServicesPatterns.h" />
+    <ClInclude Include="MemoryPatterns\WeaponVDataPatterns.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h" />
@@ -231,6 +239,7 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />

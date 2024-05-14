@@ -87,8 +87,9 @@ struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponTogg
     }
 };
 
-struct PlayerDefuseIconToggle {
-    explicit PlayerDefuseIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
+template <typename IconPanel>
+struct PlayerStateIconToggle {
+    explicit PlayerStateIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
         : playerStateIconsToShow{playerStateIconsToShow}
     {
     }
@@ -96,30 +97,17 @@ struct PlayerDefuseIconToggle {
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': playerStateIconsToShow.set<DefuseIconPanel>(); break;
-        case '1': playerStateIconsToShow.unset<DefuseIconPanel>(); break;
+        case '0': playerStateIconsToShow.set<IconPanel>(); break;
+        case '1': playerStateIconsToShow.unset<IconPanel>(); break;
         }
     }
 
     PlayerStateIconsToShow& playerStateIconsToShow;
 };
 
-struct HostagePickupIconToggle {
-    explicit HostagePickupIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
-        : playerStateIconsToShow{playerStateIconsToShow}
-    {
-    }
-
-    void update(char option) noexcept
-    {
-        switch (option) {
-        case '0': playerStateIconsToShow.set<HostagePickupPanel>(); break;
-        case '1': playerStateIconsToShow.unset<HostagePickupPanel>(); break;
-        }
-    }
-
-    PlayerStateIconsToShow& playerStateIconsToShow;
-};
+using PlayerDefuseIconToggle = PlayerStateIconToggle<DefuseIconPanel>;
+using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
+using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 
 struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
@@ -442,11 +430,24 @@ private:
         playerStateIconsPanel.setVisible(true);
         
         const auto playerStateChildren = playerStateIconsPanel.children();
-        if (!playerStateChildren || playerStateChildren->size != 2)
+        if (!playerStateChildren || playerStateChildren->size != 3)
             return;
 
         PanoramaUiPanel{playerStateChildren->memory[0]}.setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && isDefusing(playerPawn));
         PanoramaUiPanel{playerStateChildren->memory[1]}.setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && isPickingUpHostage(playerPawn));
+        PanoramaUiPanel{playerStateChildren->memory[2]}.setVisible(state.playerStateIconsToShow.has<HostageRescuePanel>() && isRescuingHostage(playerPawn));
+    }
+
+    [[nodiscard]] bool isRescuingHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        const auto hostageServices = dependencies.offsets().playerPawn.offsetToHostageServices.of(&playerPawn).valueOr(nullptr);
+        if (!hostageServices)
+            return false;
+
+        if (!dependencies.requestDependency<EntityFromHandleFinder>())
+            return false;
+
+        return dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(dependencies.offsets().hostageServicesImpl.offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
     }
 
     [[nodiscard]] bool isPickingUpHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept

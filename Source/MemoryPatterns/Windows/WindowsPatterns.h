@@ -6,6 +6,7 @@
 #include "EntityPatternsWindows.h"
 #include "EntitySystemPatternsWindows.h"
 #include "FileSystemPatternsWindows.h"
+#include "HostageServicesPatternsWindows.h"
 #include "GameRulesPatternsWindows.h"
 #include "GameSceneNodePatternsWindows.h"
 #include "MemAllocPatternsWindows.h"
