@@ -95,35 +95,35 @@ struct CUILength {
 
 struct CStylePropertyWidth : CStyleProperty {
     static constexpr auto kName{"width"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyWidth@panorama@@", "N8panorama19CStylePropertyWidthE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyWidth@panorama@@", "N8panorama19CStylePropertyWidthE")};
 
     CUILength m_Length;
 };
 
 struct CStylePropertyOpacity : CStyleProperty {
     static constexpr auto kName{"opacity"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyOpacity@panorama@@", "N8panorama21CStylePropertyOpacityE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyOpacity@panorama@@", "N8panorama21CStylePropertyOpacityE")};
 
     float opacity;
 };
 
 struct CStylePropertyZIndex : CStyleProperty {
     static constexpr auto kName{"z-index"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyZIndex@panorama@@", "N8panorama20CStylePropertyZIndexE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyZIndex@panorama@@", "N8panorama20CStylePropertyZIndexE")};
 
     float zindex;
 };
 
 struct CStylePropertyHeight : CStyleProperty {
     static constexpr auto kName{"height"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyHeight@panorama@@", "N8panorama20CStylePropertyHeightE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyHeight@panorama@@", "N8panorama20CStylePropertyHeightE")};
 
     CUILength m_Height;
 };
 
 struct CStylePropertyImageShadow : CStyleProperty {
     static constexpr auto kName{"img-shadow"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyImageShadow@panorama@@", "N8panorama25CStylePropertyImageShadowE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyImageShadow@panorama@@", "N8panorama25CStylePropertyImageShadowE")};
 
     bool fullySet;
     CUILength horizontalOffset;
@@ -135,7 +135,7 @@ struct CStylePropertyImageShadow : CStyleProperty {
 
 struct CStylePropertyPosition : CStyleProperty {
     static constexpr auto kName{"position"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyPosition@panorama@@", "N8panorama22CStylePropertyPositionE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyPosition@panorama@@", "N8panorama22CStylePropertyPositionE")};
 
     CUILength x;
     CUILength y;
@@ -144,7 +144,7 @@ struct CStylePropertyPosition : CStyleProperty {
 
 struct CStylePropertyTransformOrigin : CStyleProperty {
     static constexpr auto kName{"transform-origin"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyTransformOrigin@panorama@@", "N8panorama29CStylePropertyTransformOriginE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyTransformOrigin@panorama@@", "N8panorama29CStylePropertyTransformOriginE")};
 
     CUILength x;
     CUILength y;
@@ -167,7 +167,7 @@ enum EVerticalAlignment : std::uint8_t {
 
 struct CStylePropertyAlign : CStyleProperty {
     static constexpr auto kName{"align"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyAlign@panorama@@", "N8panorama19CStylePropertyAlignE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyAlign@panorama@@", "N8panorama19CStylePropertyAlignE")};
 
     EHorizontalAlignment m_eHorizontalAlignment;
     EVerticalAlignment m_eVerticalAlignment;
@@ -175,7 +175,7 @@ struct CStylePropertyAlign : CStyleProperty {
 
 struct CStylePropertyWashColor : CStyleProperty {
     static constexpr auto kName{"wash-color"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyWashColor@panorama@@", "N8panorama23CStylePropertyWashColorE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyWashColor@panorama@@", "N8panorama23CStylePropertyWashColorE")};
 
     Color color;
     bool fullySet;
@@ -189,7 +189,7 @@ enum EFlowDirection : std::uint8_t {
 
 struct CStylePropertyFlowChildren : CStyleProperty {
     static constexpr auto kName{"flow-children"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyFlowChildren@panorama@@", "N8panorama26CStylePropertyFlowChildrenE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyFlowChildren@panorama@@", "N8panorama26CStylePropertyFlowChildrenE")};
 
     EFlowDirection m_eFlowDirection;
 };
@@ -220,7 +220,7 @@ enum EFontStretch : std::int8_t {
 
 struct CStylePropertyFont : CStyleProperty {
     static constexpr auto kName{"font"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyFont@panorama@@", "N8panorama18CStylePropertyFontE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyFont@panorama@@", "N8panorama18CStylePropertyFontE")};
 
     CUtlString m_strFontFamily;
     float m_flFontSize;
@@ -231,7 +231,7 @@ struct CStylePropertyFont : CStyleProperty {
 
 struct CStylePropertyTextShadow : CStyleProperty {
     static constexpr auto kName{"text-shadow"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyTextShadow@panorama@@", "N8panorama24CStylePropertyTextShadowE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyTextShadow@panorama@@", "N8panorama24CStylePropertyTextShadowE")};
 
     bool fullySet;
     CUILength horizontalOffset;
@@ -250,7 +250,7 @@ struct CStylePropertyDimensionsBase : CStyleProperty {
 
 struct CStylePropertyMargin : CStylePropertyDimensionsBase {
     static constexpr auto kName{"margin"};
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCStylePropertyMargin@panorama@@", "N8panorama20CStylePropertyMarginE")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyMargin@panorama@@", "N8panorama20CStylePropertyMarginE")};
 };
 
 struct CPanelStyle {

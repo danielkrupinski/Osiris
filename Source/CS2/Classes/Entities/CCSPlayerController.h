@@ -11,7 +11,7 @@ namespace cs2
 {
 
 struct CCSPlayerController : C_BaseEntity {
-    static constexpr auto kMangledTypeName{WIN32_LINUX(".?AVCCSPlayerController@@", "19CCSPlayerController")};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCCSPlayerController@@", "19CCSPlayerController")};
 
     using m_hPawn = CEntityHandle;
     using m_iCompTeammateColor = std::int32_t;

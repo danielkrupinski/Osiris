@@ -4,5 +4,5 @@
 
 namespace platform
 {
-    constexpr auto lengthOfTypeInfoPrecedingVmt = WIN32_LINUX(1, 2);
+    constexpr auto lengthOfTypeInfoPrecedingVmt = WIN64_LINUX(1, 2);
 }
