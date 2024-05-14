@@ -8,6 +8,7 @@
 #include "FileSystemPatternsLinux.h"
 #include "GameRulesPatternsLinux.h"
 #include "GameSceneNodePatternsLinux.h"
+#include "HostageServicesPatternsLinux.h"
 #include "MemAllocPatternsLinux.h"
 #include "PanelPatternsLinux.h"
 #include "PanelStylePatternsLinux.h"

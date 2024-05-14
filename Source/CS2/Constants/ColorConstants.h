@@ -10,6 +10,7 @@ namespace cs2
 constexpr Color kColorBlack{0, 0, 0};
 constexpr Color kColorWhite{255, 255, 255};
 constexpr Color kColorGreen{0, 180, 0};
+constexpr Color kColorLightGreen{144, 238, 144};
 constexpr Color kColorRed{255, 0, 0};
 constexpr Color kColorYellow{255, 255, 0};
 

@@ -13,3 +13,4 @@ using OffsetToWeaponServices = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_pWeaponSe
 using OffsetToPlayerController = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_hController, std::int32_t>;
 using OffsetToIsDefusing = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsDefusing, std::int32_t>;
 using OffsetToIsPickingUpHostage = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsGrabbingHostage, std::int32_t>;
+using OffsetToHostageServices = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_pHostageServices, std::int32_t>;

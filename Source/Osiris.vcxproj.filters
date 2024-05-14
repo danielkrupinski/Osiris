@@ -1076,6 +1076,33 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h">
       <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\HostageServicesPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\WeaponServicesPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\WeaponVDataPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\HostageServicesOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\WeaponServicesImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\WeaponVDataImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\HostageServicesImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

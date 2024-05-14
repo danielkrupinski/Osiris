@@ -69,6 +69,8 @@ private:
             handleFeature(features.visualFeatures().playerDefuseIconToggle());
         } else if (feature == "player_info_hostage_pickup") {
             handleFeature(features.visualFeatures().hostagePickupIconToggle());
+        } else if (feature == "player_info_hostage_rescue") {
+            handleFeature(features.visualFeatures().hostageRescueIconToggle());
         }
     }
 

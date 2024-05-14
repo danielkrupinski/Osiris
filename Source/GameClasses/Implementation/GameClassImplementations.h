@@ -8,6 +8,7 @@
 #include "FileSystemImpl.h"
 #include "GameRulesImpl.h"
 #include "GameSceneNodeImpl.h"
+#include "HostageServicesImpl.h"
 #include "MemAllocImpl.h"
 #include "PanelImpl.h"
 #include "PanelStyleImpl.h"
@@ -21,6 +22,8 @@
 #include "TopLevelWindowImpl.h"
 #include "WeaponServicesImpl.h"
 #include "WeaponVDataImpl.h"
+
+#include <MemoryPatterns/HostageServicesPatterns.h>
 
 #include <Platform/VmtFinder.h>
 
@@ -38,6 +41,7 @@ struct GameClassImplementations {
         , fileSystem{fileSystemPatterns}
         , gameRules{GameRulesPatterns{clientPatternFinder}}
         , gameSceneNode{GameSceneNodePatterns{clientPatternFinder}}
+        , hostageServicesImpl{HostageServicesPatterns{clientPatternFinder}}
         , memAlloc{tier0Dll, MemAllocPatterns{clientPatternFinder}}
         , panel{PanelPatterns{clientPatternFinder}}
         , panelStyle{PanelStylePatterns{panoramaPatternFinder}}
@@ -62,6 +66,7 @@ struct GameClassImplementations {
     FileSystemImpl fileSystem;
     GameRulesImpl gameRules;
     GameSceneNodeImpl gameSceneNode;
+    HostageServicesImpl hostageServicesImpl;
     MemAllocImpl memAlloc;
     PanelImpl panel;
     PanelStyleImpl panelStyle;

@@ -27,3 +27,8 @@ inline OffsetToIsPickingUpHostage PlayerPawnPatterns::offsetToIsPickingUpHostage
 {
     return clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(15).readOffset<OffsetToIsPickingUpHostage>();
 }
+
+inline OffsetToHostageServices PlayerPawnPatterns::offsetToHostageServices() const noexcept
+{
+    return clientPatternFinder("E8 ? ? ? ? 48 8B 87 ? ? ? ? 33 ? 4C"_pat).add(8).readOffset<OffsetToHostageServices>();
+}

@@ -4,5 +4,6 @@
 
 struct DefuseIconPanel;
 struct HostagePickupPanel;
+struct HostageRescuePanel;
 
-using PlayerStateIconsToShow = TypeBitFlags<DefuseIconPanel, HostagePickupPanel>;
+using PlayerStateIconsToShow = TypeBitFlags<DefuseIconPanel, HostagePickupPanel, HostageRescuePanel>;
