@@ -108,6 +108,7 @@ struct PlayerStateIconToggle {
 using PlayerDefuseIconToggle = PlayerStateIconToggle<DefuseIconPanel>;
 using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
 using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
+using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
 struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
@@ -430,12 +431,52 @@ private:
         playerStateIconsPanel.setVisible(true);
         
         const auto playerStateChildren = playerStateIconsPanel.children();
-        if (!playerStateChildren || playerStateChildren->size != 3)
+        if (!playerStateChildren || playerStateChildren->size != 4)
             return;
 
         PanoramaUiPanel{playerStateChildren->memory[0]}.setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && isDefusing(playerPawn));
         PanoramaUiPanel{playerStateChildren->memory[1]}.setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && isPickingUpHostage(playerPawn));
         PanoramaUiPanel{playerStateChildren->memory[2]}.setVisible(state.playerStateIconsToShow.has<HostageRescuePanel>() && isRescuingHostage(playerPawn));
+        updateBlindedIconPanel(PanoramaUiPanel{playerStateChildren->memory[3]}, playerPawn);
+    }
+
+    void updateBlindedIconPanel(PanoramaUiPanel blindedIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!state.playerStateIconsToShow.has<BlindedIconPanel>()) {
+            blindedIconPanel.setVisible(false);
+            return;
+        }
+
+        const auto remainingFlashBangTime = getRemainingFlashBangTime(playerPawn);
+        constexpr auto kFullBlindEnd{3.0f};
+        constexpr auto kBlindEnd{1.0f};
+        constexpr auto kPartiallyBlindDuration{kFullBlindEnd - kBlindEnd};
+        if (remainingFlashBangTime <= kBlindEnd) {
+            blindedIconPanel.setVisible(false);
+            return;
+        }
+
+        blindedIconPanel.setVisible(true);
+        const auto opacity = remainingFlashBangTime >= kFullBlindEnd ? 1.0f : (remainingFlashBangTime - kBlindEnd) / kPartiallyBlindDuration;
+        if (const auto style{blindedIconPanel.getStyle()}) {
+            const auto styler{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+            styler.setOpacity(opacity);
+        }
+    }
+
+    [[nodiscard]] float getRemainingFlashBangTime(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!dependencies.requestDependency<CurTime>())
+            return 0.0f;
+
+        if (!dependencies.offsets().playerPawn.offsetToFlashBangEndTime)
+            return 0.0f;
+
+        const auto curTime = dependencies.getDependency<CurTime>();
+        const auto flashBangEndTime = *dependencies.offsets().playerPawn.offsetToFlashBangEndTime.of(&playerPawn).get();
+        if (flashBangEndTime <= curTime)
+            return 0.0f;
+        return flashBangEndTime - curTime;
     }
 
     [[nodiscard]] bool isRescuingHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept

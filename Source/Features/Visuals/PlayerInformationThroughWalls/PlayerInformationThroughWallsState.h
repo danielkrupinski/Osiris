@@ -22,7 +22,12 @@ struct PlayerInformationThroughWallsState {
     bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
     bool showPlayerActiveWeapon{true};
-    PlayerStateIconsToShow playerStateIconsToShow{PlayerStateIconsToShow{}.set<DefuseIconPanel>().set<HostagePickupPanel>().set<HostageRescuePanel>()};
+    PlayerStateIconsToShow playerStateIconsToShow{
+        PlayerStateIconsToShow{}
+            .set<DefuseIconPanel>()
+            .set<HostagePickupPanel>()
+            .set<HostageRescuePanel>()
+            .set<BlindedIconPanel>()};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

@@ -14,3 +14,4 @@ using OffsetToPlayerController = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_hContro
 using OffsetToIsDefusing = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsDefusing, std::int32_t>;
 using OffsetToIsPickingUpHostage = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsGrabbingHostage, std::int32_t>;
 using OffsetToHostageServices = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_pHostageServices, std::int32_t>;
+using OffsetToFlashBangEndTime = PlayerPawnOffset<cs2::C_CSPlayerPawn::m_flFlashBangTime, std::int32_t>;
