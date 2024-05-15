@@ -212,6 +212,8 @@ $.Osiris = (function () {
   createYesNoDropDown(playerInfo, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
 
   var sound = createTab('sound');
   

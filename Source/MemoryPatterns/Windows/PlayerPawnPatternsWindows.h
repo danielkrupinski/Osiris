@@ -32,3 +32,8 @@ inline OffsetToHostageServices PlayerPawnPatterns::offsetToHostageServices() con
 {
     return clientPatternFinder("E8 ? ? ? ? 48 8B 87 ? ? ? ? 33 ? 4C"_pat).add(8).readOffset<OffsetToHostageServices>();
 }
+
+inline OffsetToFlashBangEndTime PlayerPawnPatterns::offsetToFlashBangEndTime() const noexcept
+{
+    return clientPatternFinder("0F 2F 86 ? ? ? ? 48 8B 7C 24"_pat).add(3).readOffset<OffsetToFlashBangEndTime>();
+}

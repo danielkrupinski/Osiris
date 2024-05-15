@@ -10,6 +10,7 @@ struct PlayerPawnImpl {
         , offsetToIsDefusing{playerPawnPatterns.offsetToIsDefusing()}
         , offsetToIsPickingUpHostage{playerPawnPatterns.offsetToIsPickingUpHostage()}
         , offsetToHostageServices{playerPawnPatterns.offsetToHostageServices()}
+        , offsetToFlashBangEndTime{playerPawnPatterns.offsetToFlashBangEndTime()}
     {
     }
 
@@ -19,4 +20,5 @@ struct PlayerPawnImpl {
     OffsetToIsDefusing offsetToIsDefusing;
     OffsetToIsPickingUpHostage offsetToIsPickingUpHostage;
     OffsetToHostageServices offsetToHostageServices;
+    OffsetToFlashBangEndTime offsetToFlashBangEndTime;
 };

@@ -20,6 +20,7 @@ struct C_CSPlayerPawn : C_BaseEntity {
     using m_bIsDefusing = bool;
     using m_bIsGrabbingHostage = bool;
     using m_pHostageServices = CCSPlayer_HostageServices*;
+    using m_flFlashBangTime = float;
 };
 
 }
