@@ -7,6 +7,10 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ## What's new
 
+* 15 May 2024 - Implemented showing an icon on player blinded by a flashbang
+
+![Player blinded by flashbang](https://github.com/danielkrupinski/Osiris/assets/34515229/18b10e66-545a-449f-8783-691d5c1b2003)
+
 * 14 May 2024 - Implemented showing an icon on player rescuing a hostage
 
 ![Player rescuing hostage](https://github.com/danielkrupinski/Osiris/assets/34515229/057b6dc7-1b54-44c0-9443-6917d2394335)
@@ -23,7 +27,6 @@ Free and open-source game hack for **Counter-Strike 2**. Compatible with the lat
 
 ![Player position arrow with player color](https://github.com/danielkrupinski/Osiris/assets/34515229/024e7fe4-e039-4c8d-b45e-11d20fdbab54)
 
-* 22 April 2024 - Added an option to draw player information only on enemies
 
 ## Technical features
 
