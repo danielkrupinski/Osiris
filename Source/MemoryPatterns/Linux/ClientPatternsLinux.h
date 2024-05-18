@@ -1,6 +1,8 @@
 #pragma once
 
+#include <CS2/Classes/ClientModeCSNormal.h>
 #include <CS2/Classes/CPlantedC4.h>
+#include <CS2/Classes/CViewRender.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
 #include <CS2/Classes/Panorama.h>
