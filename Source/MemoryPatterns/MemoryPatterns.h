@@ -14,7 +14,7 @@ struct MemoryPatterns {
 #define MEMORY_PATTERNS(type, name) \
 [[nodiscard]] auto name() const noexcept \
 { \
-    return type{patternFinders}; \
+    return type<PatternFinders>{patternFinders}; \
 }
 
     MEMORY_PATTERNS(ClientPatterns, clientPatterns)
