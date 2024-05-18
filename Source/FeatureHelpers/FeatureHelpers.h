@@ -6,7 +6,6 @@
 #include <Helpers/PanoramaTransformFactory.h>
 #include "HudInWorldPanelContainer.h"
 #include "MainMenuProvider.h"
-#include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PanelConfigurator.h"
 #include "Sound/SoundWatcherState.h"
 #include "StylePropertiesSymbolsAndVMTs.h"
@@ -15,20 +14,20 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    explicit FeatureHelpers(const ClientPatterns& clientPatterns, const PanelStylePatterns& panelStylePatterns, const FileSystemPatterns& fileSystemPatterns, const SoundSystemPatterns& soundSystemPatterns, const VmtFinder& panoramaVmtFinder, const VmtFinder& clientVmtFinder) noexcept
-        : hudProvider{clientPatterns}
-        , globalVars{clientPatterns.globalVars()}
-        , transformFactory{clientPatterns}
-        , worldtoClipSpaceConverter{clientPatterns}
-        , viewToProjectionMatrix{clientPatterns}
-        , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{panelStylePatterns.stylePropertiesSymbols()}, panoramaVmtFinder}
-        , gameRules{clientPatterns.gameRules()}
-        , mainMenuProvider{clientPatterns}
-        , localPlayerController{clientPatterns.localPlayerController()}
+    explicit FeatureHelpers(const MemoryPatterns& memoryPatterns, const VmtFinder& panoramaVmtFinder, const VmtFinder& clientVmtFinder) noexcept
+        : hudProvider{memoryPatterns.clientPatterns()}
+        , globalVars{memoryPatterns.clientPatterns().globalVars()}
+        , transformFactory{memoryPatterns.clientPatterns()}
+        , worldtoClipSpaceConverter{memoryPatterns.clientPatterns()}
+        , viewToProjectionMatrix{memoryPatterns.clientPatterns()}
+        , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, panoramaVmtFinder}
+        , gameRules{memoryPatterns.clientPatterns().gameRules()}
+        , mainMenuProvider{memoryPatterns.clientPatterns()}
+        , localPlayerController{memoryPatterns.clientPatterns().localPlayerController()}
         , entitiesVMTs{clientVmtFinder}
-        , plantedC4s{clientPatterns.plantedC4s()}
-        , soundChannels{soundSystemPatterns.soundChannels()}
-        , fileSystem{fileSystemPatterns.fileSystem()}
+        , plantedC4s{memoryPatterns.clientPatterns().plantedC4s()}
+        , soundChannels{memoryPatterns.soundSystemPatterns().soundChannels()}
+        , fileSystem{memoryPatterns.fileSystemPatterns().fileSystem()}
     {
     }
 

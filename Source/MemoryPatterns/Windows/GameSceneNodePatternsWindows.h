@@ -1,9 +1,14 @@
 #pragma once
 
-#include <MemoryPatterns/GameSceneNodePatterns.h>
+#include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline OffsetToAbsOrigin GameSceneNodePatterns::offsetToAbsOrigin() const noexcept
-{
-    return clientPatternFinder("F3 0F 11 97 ? ? ? ? 0F 28 C2"_pat).add(4).readOffset<OffsetToAbsOrigin>();
-}
+template <typename PatternFinders>
+struct GameSceneNodePatterns {
+    const PatternFinders& patternFinders;
+
+    [[nodiscard]] OffsetToAbsOrigin offsetToAbsOrigin() const noexcept
+    {
+        return patternFinders.clientPatternFinder("F3 0F 11 97 ? ? ? ? 0F 28 C2"_pat).add(4).template readOffset<OffsetToAbsOrigin>();
+    }
+};

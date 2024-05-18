@@ -5,9 +5,9 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/MemAlloc.h>
-#include <MemoryPatterns/ClientPatterns.h>
 
 struct PanoramaTransformFactory {
+    template <typename ClientPatterns>
     explicit PanoramaTransformFactory(const ClientPatterns& clientPatterns) noexcept
         : transformTranslate3dVmt{clientPatterns.transformTranslate3dVMT()}
         , transformScale3dVmt{clientPatterns.transformScale3dVMT()}

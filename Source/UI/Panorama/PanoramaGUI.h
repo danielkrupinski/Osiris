@@ -2,8 +2,6 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <FeatureHelpers/MainMenuProvider.h>
-#include <MemoryPatterns/ClientPatterns.h>
-#include <string_view>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
 #include <FeatureHelpers/TogglableFeature.h>

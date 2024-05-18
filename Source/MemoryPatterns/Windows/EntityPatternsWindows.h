@@ -1,29 +1,34 @@
 #pragma once
 
-#include <MemoryPatterns/EntityPatterns.h>
+#include <GameClasses/OffsetTypes/EntityOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline OffsetToGameSceneNode EntityPatterns::offsetToGameSceneNode() const noexcept
-{
-    return clientPatternFinder("48 8B 8B ? ? ? ? 48 8B D7 48 8B 5C"_pat).add(3).readOffset<OffsetToGameSceneNode>();
-}
+template <typename PatternFinders>
+struct EntityPatterns {
+    const PatternFinders& patternFinders;
 
-inline OffsetToHealth EntityPatterns::offsetToHealth() const noexcept
-{
-    return clientPatternFinder("83 B9 ? ? ? ? 00 48 8B D9 7E ? C7"_pat).add(2).readOffset<OffsetToHealth>();
-}
+    [[nodiscard]] OffsetToGameSceneNode offsetToGameSceneNode() const noexcept
+    {
+        return patternFinders.clientPatternFinder("48 8B 8B ? ? ? ? 48 8B D7 48 8B 5C"_pat).add(3).template readOffset<OffsetToGameSceneNode>();
+    }
 
-inline OffsetToLifeState EntityPatterns::offsetToLifeState() const noexcept
-{
-    return clientPatternFinder("0F B6 81 ? ? ? ? 3B C2"_pat).add(3).readOffset<OffsetToLifeState>();
-}
+    [[nodiscard]] OffsetToHealth offsetToHealth() const noexcept
+    {
+        return patternFinders.clientPatternFinder("83 B9 ? ? ? ? 00 48 8B D9 7E ? C7"_pat).add(2).template readOffset<OffsetToHealth>();
+    }
 
-inline OffsetToTeamNumber EntityPatterns::offsetToTeamNumber() const noexcept
-{
-    return clientPatternFinder("80 BB ? ? ? ? 03 75"_pat).add(2).readOffset<OffsetToTeamNumber>();
-}
+    [[nodiscard]] OffsetToLifeState offsetToLifeState() const noexcept
+    {
+        return patternFinders.clientPatternFinder("0F B6 81 ? ? ? ? 3B C2"_pat).add(3).template readOffset<OffsetToLifeState>();
+    }
 
-inline OffsetToVData EntityPatterns::offsetToVData() const noexcept
-{
-    return clientPatternFinder("49 8B 86 ? ? ? ? 48 85 C0 74 ? 48 8B 40"_pat).add(3).readOffset<OffsetToVData>();
-}
+    [[nodiscard]] OffsetToTeamNumber offsetToTeamNumber() const noexcept
+    {
+        return patternFinders.clientPatternFinder("80 BB ? ? ? ? 03 75"_pat).add(2).template readOffset<OffsetToTeamNumber>();
+    }
+
+    [[nodiscard]] OffsetToVData offsetToVData() const noexcept
+    {
+        return patternFinders.clientPatternFinder("49 8B 86 ? ? ? ? 48 85 C0 74 ? 48 8B 40"_pat).add(3).template readOffset<OffsetToVData>();
+    }
+};

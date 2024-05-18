@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/GameSceneNodePatterns.h>
+#include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 
 struct GameSceneNodeImpl {
+    template <typename GameSceneNodePatterns>
     explicit GameSceneNodeImpl(const GameSceneNodePatterns& gameSceneNodePatterns) noexcept
         : offsetToAbsOrigin{gameSceneNodePatterns.offsetToAbsOrigin()}
     {

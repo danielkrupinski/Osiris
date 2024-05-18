@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/PanelStylePatterns.h>
+#include <CS2/Classes/Panorama.h>
 
 struct PanelStyleImpl {
+    template <typename PanelStylePatterns>
     explicit PanelStyleImpl(const PanelStylePatterns& panelStylePatterns) noexcept
         : setProperty{panelStylePatterns.setProperty()}
     {

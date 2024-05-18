@@ -1,10 +1,11 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <MemoryPatterns/PanoramaUiPanelPatterns.h>
+#include <GameClasses/OffsetTypes/PanoramaUiPanelOffset.h>
 #include <Utils/FieldOffset.h>
 
 struct PanoramaUiPanelImpl {
+    template <typename PanoramaUiPanelPatterns>
     explicit PanoramaUiPanelImpl(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
         : setParent{panoramaUiPanelPatterns.setParent()}
         , setVisible{panoramaUiPanelPatterns.setVisible()}

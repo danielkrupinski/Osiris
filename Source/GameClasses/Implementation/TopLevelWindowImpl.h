@@ -1,9 +1,10 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <MemoryPatterns/TopLevelWindowPatterns.h>
+#include <GameClasses/OffsetTypes/TopLevelWindowOffset.h>
 
 struct TopLevelWindowImpl {
+    template <typename TopLevelWindowPatterns>
     explicit TopLevelWindowImpl(const TopLevelWindowPatterns& topLevelWindowPatterns) noexcept
         : uiScaleFactorOffset{topLevelWindowPatterns.uiScaleFactorOffset()}
     {

@@ -23,38 +23,34 @@
 #include "WeaponServicesImpl.h"
 #include "WeaponVDataImpl.h"
 
-#include <MemoryPatterns/HostageServicesPatterns.h>
+#include <MemoryPatterns/MemoryPatterns.h>
 
 #include <Platform/VmtFinder.h>
 
 struct GameClassImplementations {
-    GameClassImplementations(const PatternFinder<PatternNotFoundLogger>& clientPatternFinder,
-                             const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder,
-                             const PatternFinder<PatternNotFoundLogger>& tier0PatternFinder,
-                             const FileSystemPatterns& fileSystemPatterns,
-                             Tier0Dll tier0Dll) noexcept
-        : conVar{ConVarPatterns{tier0PatternFinder}}
-        , cvar{CvarPatterns{clientPatternFinder, tier0PatternFinder}}
-        , entity{EntityPatterns{clientPatternFinder}}
-        , entitySystem{EntitySystemPatterns{clientPatternFinder}}
+    GameClassImplementations(const MemoryPatterns& memoryPatterns, Tier0Dll tier0Dll) noexcept
+        : conVar{memoryPatterns.conVarPatterns()}
+        , cvar{memoryPatterns.cvarPatterns()}
+        , entity{memoryPatterns.entityPatterns()}
+        , entitySystem{memoryPatterns.entitySystemPatterns()}
         , fileNameSymbolTable{tier0Dll}
-        , fileSystem{fileSystemPatterns}
-        , gameRules{GameRulesPatterns{clientPatternFinder}}
-        , gameSceneNode{GameSceneNodePatterns{clientPatternFinder}}
-        , hostageServicesImpl{HostageServicesPatterns{clientPatternFinder}}
-        , memAlloc{tier0Dll, MemAllocPatterns{clientPatternFinder}}
-        , panel{PanelPatterns{clientPatternFinder}}
-        , panelStyle{PanelStylePatterns{panoramaPatternFinder}}
-        , imagePanel{PanoramaImagePanelPatterns{clientPatternFinder}}
-        , panoramaLabel{PanoramaLabelPatterns{clientPatternFinder}}
-        , uiEngine{ClientPatterns{clientPatternFinder}, PanoramaUiEnginePatterns{panoramaPatternFinder}}
-        , panoramaUiPanelOffsets{PanoramaUiPanelPatterns{clientPatternFinder, panoramaPatternFinder}}
-        , plantedC4{PlantedC4Patterns{clientPatternFinder}}
-        , playerController{PlayerControllerPatterns{clientPatternFinder}}
-        , playerPawn{PlayerPawnPatterns{clientPatternFinder}}
-        , topLevelWindow{TopLevelWindowPatterns{panoramaPatternFinder}}
-        , weaponServices{WeaponServicesPatterns{clientPatternFinder}}
-        , weaponVData{WeaponVDataPatterns{clientPatternFinder}}
+        , fileSystem{memoryPatterns.fileSystemPatterns()}
+        , gameRules{memoryPatterns.gameRulesPatterns()}
+        , gameSceneNode{memoryPatterns.gameSceneNodePatterns()}
+        , hostageServicesImpl{memoryPatterns.hostageServicesPatterns()}
+        , memAlloc{tier0Dll, memoryPatterns.memAllocPatterns()}
+        , panel{memoryPatterns.panelPatterns()}
+        , panelStyle{memoryPatterns.panelStylePatterns()}
+        , imagePanel{memoryPatterns.panoramaImagePanelPatterns()}
+        , panoramaLabel{memoryPatterns.panoramaLabelPatterns()}
+        , uiEngine{memoryPatterns.clientPatterns(), memoryPatterns.panoramaUiEnginePatterns()}
+        , panoramaUiPanelOffsets{memoryPatterns.panoramaUiPanelPatterns()}
+        , plantedC4{memoryPatterns.plantedC4Patterns()}
+        , playerController{memoryPatterns.playerControllerPatterns()}
+        , playerPawn{memoryPatterns.playerPawnPatterns()}
+        , topLevelWindow{memoryPatterns.topLevelWindowPatterns()}
+        , weaponServices{memoryPatterns.weaponServicesPatterns()}
+        , weaponVData{memoryPatterns.weaponVDataPatterns()}
     {
     }
 

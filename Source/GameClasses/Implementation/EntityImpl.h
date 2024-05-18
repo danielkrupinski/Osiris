@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/EntityPatterns.h>
+#include <GameClasses/OffsetTypes/EntityOffset.h>
 
 struct EntityImpl {
+    template <typename EntityPatterns>
     explicit EntityImpl(const EntityPatterns& entityPatterns) noexcept
         : offsetToGameSceneNode{entityPatterns.offsetToGameSceneNode()}
         , offsetToHealth{entityPatterns.offsetToHealth()}

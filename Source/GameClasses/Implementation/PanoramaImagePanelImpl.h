@@ -1,9 +1,10 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <MemoryPatterns/PanoramaImagePanelPatterns.h>
+#include <GameClasses/OffsetTypes/PanoramaImagePanelOffset.h>
 
 struct PanoramaImagePanelImpl {
+    template <typename PanoramaImagePanelPatterns>
     explicit PanoramaImagePanelImpl(const PanoramaImagePanelPatterns& panoramaImagePanelPatterns) noexcept
         : setImage{panoramaImagePanelPatterns.setImage()}
         , constructor{panoramaImagePanelPatterns.constructor()}

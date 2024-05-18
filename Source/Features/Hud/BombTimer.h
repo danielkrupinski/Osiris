@@ -6,8 +6,6 @@
 #include <FeatureHelpers/TogglableFeature.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <MemoryPatterns/ClientPatterns.h>
-
 #include <GameClasses/PlantedC4.h>
 #include <GameClasses/PanoramaImagePanel.h>
 

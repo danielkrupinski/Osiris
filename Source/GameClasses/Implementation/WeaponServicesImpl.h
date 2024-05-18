@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/WeaponServicesPatterns.h>
+#include <GameClasses/OffsetTypes/WeaponServicesOffset.h>
 
 struct WeaponServicesImpl {
+    template <typename WeaponServicesPatterns>
     explicit WeaponServicesImpl(const WeaponServicesPatterns& weaponServicesPatterns) noexcept
         : offsetToActiveWeapon{weaponServicesPatterns.offsetToActiveWeapon()}
     {

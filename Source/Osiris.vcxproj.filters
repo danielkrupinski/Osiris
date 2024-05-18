@@ -273,27 +273,6 @@
     <ClInclude Include="MemoryAllocation\UniquePtr.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\ClientPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\GameRulesPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanoramaImagePanelPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanoramaLabelPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanoramaUiEnginePatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanoramaUiPanelPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PlantedC4Patterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -479,9 +458,6 @@
     <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h">
       <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\MemAllocPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\IMemAlloc.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
@@ -515,9 +491,6 @@
     <ClInclude Include="CS2\Classes\FileSystem.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\FileSystemPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -532,9 +505,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\Sound.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\SoundSystemPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -589,9 +559,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\Panel.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanelPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -655,9 +622,6 @@
     </ClInclude>
     <ClInclude Include="Platform\Windows\RTTI\RttiCompleteObjectLocator.h">
       <Filter>Platform\Windows\RTTI</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PanelStylePatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -724,9 +688,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\EntitySystemPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h">
       <Filter>GameClasses\Implementation</Filter>
@@ -815,9 +776,6 @@
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\SdlPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="SDL\SdlDll.h">
       <Filter>SDL</Filter>
     </ClInclude>
@@ -839,9 +797,6 @@
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\TopLevelWindowPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelFactory.h">
       <Filter>Features\Sound\Details</Filter>
     </ClInclude>
@@ -856,9 +811,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h">
       <Filter>CS2\Classes\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PlayerControllerPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\PlayerControllerOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -893,9 +845,6 @@
     <ClInclude Include="FeatureHelpers\EntitiesVMTs.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\EntityPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="HookDependencies\HookDependencies.h">
       <Filter>HookDependencies</Filter>
     </ClInclude>
@@ -923,9 +872,6 @@
     <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h">
       <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\GameSceneNodePatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
@@ -943,9 +889,6 @@
     </ClInclude>
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h">
       <Filter>GlobalContext</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\PlayerPawnPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\WeaponServicesPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -979,9 +922,6 @@
     </ClInclude>
     <ClInclude Include="Utils\InRange.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\CvarPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -1024,9 +964,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\ConVarPatterns.h">
-      <Filter>MemoryPatterns</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\LifeStateConstants.h">
       <Filter>CS2\Constants</Filter>
@@ -1079,15 +1016,6 @@
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\HostageServicesPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\WeaponServicesPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\WeaponVDataPatterns.h">
-      <Filter>MemoryPatterns</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\HostageServicesOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
@@ -1102,6 +1030,12 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\MemoryPatterns.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternFinders.h">
+      <Filter>MemoryPatterns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
