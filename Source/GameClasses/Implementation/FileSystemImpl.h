@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/FileSystemPatterns.h>
+#include <GameClasses/OffsetTypes/FileSystemOffset.h>
 
 struct FileSystemImpl {
+    template <typename FileSystemPatterns>
     explicit FileSystemImpl(const FileSystemPatterns& fileSystemPatterns) noexcept
         : fileNamesOffset{fileSystemPatterns.fileNamesOffset()}
     {

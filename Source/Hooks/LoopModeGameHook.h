@@ -1,7 +1,6 @@
 #pragma once
 
 #include <CS2/Classes/CLoopModeGame.h>
-#include <MemoryPatterns/ClientPatterns.h>
 #include <Utils/RefCountedHook.h>
 #include <Vmt/VmtSwapper.h>
 
@@ -9,6 +8,7 @@ extern "C" void* LoopModeGameHook_getWorldSession_asm(cs2::CLoopModeGame* thispt
 
 class LoopModeGameHook : public RefCountedHook<LoopModeGameHook> {
 public:
+    template <typename ClientPatterns>
     LoopModeGameHook(const ClientPatterns& clientPatterns, const VmtLengthCalculator& vmtLengthCalculator) noexcept
         : loopModeGame{clientPatterns.loopModeGame()}
         , vmtLengthCalculator{vmtLengthCalculator}

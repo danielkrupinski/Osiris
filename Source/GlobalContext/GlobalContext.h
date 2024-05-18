@@ -17,6 +17,7 @@
 
 class GlobalContext {
 public:
+    template <typename SdlPatterns>
     explicit GlobalContext(std::span<std::byte> memoryStorage, SdlDll sdlDll, SdlPatterns sdlPatterns) noexcept
         : _freeRegionList{memoryStorage}
         , deferredCompleteContext{sdlDll, sdlPatterns}
@@ -29,7 +30,7 @@ public:
             alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
             const SdlDll sdlDll;
             const PatternFinder<PatternNotFoundLogger> sdlPatternFinder{sdlDll.getCodeSection().raw()};
-            globalContext.initialize(storage, sdlDll, SdlPatterns{sdlPatternFinder});
+            globalContext.initialize(storage, sdlDll, SdlPatterns<PatternFinder<PatternNotFoundLogger>>{sdlPatternFinder});
             globalContext->deferredCompleteContext.partial().enableIfValid();
         }
     }
@@ -75,17 +76,13 @@ private:
         const PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw()};
         const PatternFinder<PatternNotFoundLogger> tier0PatternFinder{DynamicLibrary{cs2::TIER0_DLL}.getCodeSection().raw()};
 
-        const FileSystemPatterns fileSystemPatterns{soundSystemPatternFinder, fileSystemPatternFinder};
+        const PatternFinders patternFinders{clientPatternFinder, tier0PatternFinder, soundSystemPatternFinder, fileSystemPatternFinder, panoramaPatternFinder};
 
         deferredCompleteContext.makeComplete(
             deferredCompleteContext.partial().peepEventsHook,
             clientDLL,
             panoramaDLL,
-            clientPatternFinder,
-            panoramaPatternFinder,
-            soundSystemPatternFinder,
-            tier0PatternFinder,
-            fileSystemPatterns
+            MemoryPatterns{patternFinders}
         );
 
         fullContext().panoramaGUI.init(fullContext().getFeatureHelpers().mainMenuProvider);

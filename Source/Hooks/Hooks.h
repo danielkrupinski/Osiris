@@ -7,6 +7,7 @@
 #include <Vmt/VmtLengthCalculator.h>
 
 struct Hooks {
+    template <typename ClientPatterns>
     Hooks(PeepEventsHook peepEventsHook, const ClientPatterns& clientPatterns, const VmtLengthCalculator& clientVmtLengthCalculator) noexcept
         : peepEventsHook{peepEventsHook}
         , loopModeGameHook{clientPatterns, clientVmtLengthCalculator}

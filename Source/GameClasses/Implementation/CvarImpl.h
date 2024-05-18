@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/CvarPatterns.h>
+#include <GameClasses/OffsetTypes/CvarOffset.h>
 
 struct CvarImpl {
+    template <typename CvarPatterns>
     explicit CvarImpl(const CvarPatterns& cvarPatterns) noexcept
         : cvar{cvarPatterns.cvar()}
         , offsetToConVarList{cvarPatterns.offsetToConVarList()}

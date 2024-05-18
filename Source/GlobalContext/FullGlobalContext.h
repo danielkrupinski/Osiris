@@ -12,19 +12,6 @@
 #include <Helpers/UnloadFlag.h>
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
-#include <MemoryPatterns/ClientPatterns.h>
-#include <MemoryPatterns/FileSystemPatterns.h>
-#include <MemoryPatterns/GameRulesPatterns.h>
-#include <MemoryPatterns/MemAllocPatterns.h>
-#include <MemoryPatterns/PanelPatterns.h>
-#include <MemoryPatterns/PanelStylePatterns.h>
-#include <MemoryPatterns/PanoramaImagePanelPatterns.h>
-#include <MemoryPatterns/PanoramaLabelPatterns.h>
-#include <MemoryPatterns/PanoramaUiEnginePatterns.h>
-#include <MemoryPatterns/PanoramaUiPanelPatterns.h>
-#include <MemoryPatterns/PlantedC4Patterns.h>
-#include <MemoryPatterns/SoundSystemPatterns.h>
-#include <MemoryPatterns/TopLevelWindowPatterns.h>
 #include <MemorySearch/PatternFinder.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <Platform/DynamicLibrary.h>
@@ -36,22 +23,16 @@
 #include <CS2/Classes/ConVarTypes.h>
 
 struct FullGlobalContext {
-    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const PatternFinder<PatternNotFoundLogger>& clientPatternFinder, const PatternFinder<PatternNotFoundLogger>& panoramaPatternFinder, const PatternFinder<PatternNotFoundLogger>& soundSystemPatternFinder, const PatternFinder<PatternNotFoundLogger>& tier0PatternFinder, const FileSystemPatterns& fileSystemPatterns) noexcept
+    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
         : _gameClasses{
-            clientPatternFinder,
-            panoramaPatternFinder,
-            tier0PatternFinder,
-            fileSystemPatterns,
+            memoryPatterns,
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            ClientPatterns{clientPatternFinder},
+            memoryPatterns.clientPatterns(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
         , featureHelpers{
-            ClientPatterns{clientPatternFinder},
-            PanelStylePatterns{panoramaPatternFinder},
-            fileSystemPatterns,
-            SoundSystemPatterns{soundSystemPatternFinder},
+            memoryPatterns,
             VmtFinder{panoramaDLL.getVmtFinderParams()},
             VmtFinder{clientDLL.getVmtFinderParams()}}
     {

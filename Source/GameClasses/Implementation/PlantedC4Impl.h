@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/PlantedC4Patterns.h>
+#include <GameClasses/OffsetTypes/PlantedC4Offset.h>
 
 struct PlantedC4Impl {
+    template <typename PlantedC4Patterns>
     explicit PlantedC4Impl(const PlantedC4Patterns& plantedC4Patterns) noexcept
         : bombSite{plantedC4Patterns.m_nBombSite()}
         , ticking{plantedC4Patterns.m_bBombTicking()}

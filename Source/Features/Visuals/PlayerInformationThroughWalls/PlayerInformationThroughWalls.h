@@ -14,8 +14,6 @@
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaImagePanel.h>
 #include <Hooks/ViewRenderHook.h>
-#include <MemoryPatterns/EntityPatterns.h>
-#include <MemoryPatterns/PlayerControllerPatterns.h>
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
 

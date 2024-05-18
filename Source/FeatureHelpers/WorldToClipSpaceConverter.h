@@ -5,9 +5,9 @@
 #include "ClipSpaceCoordinates.h"
 #include <CS2/Classes/Vector.h>
 #include <CS2/Classes/VMatrix.h>
-#include <MemoryPatterns/ClientPatterns.h>
 
 struct WorldToClipSpaceConverter {
+    template <typename ClientPatterns>
     explicit WorldToClipSpaceConverter(const ClientPatterns& clientPatterns) noexcept
         : worldToProjectionMatrix{clientPatterns.worldToProjectionMatrix()}
     {

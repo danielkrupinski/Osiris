@@ -2,17 +2,22 @@
 
 #include <cstddef>
 
-#include <MemoryPatterns/PanelStylePatterns.h>
+#include <CS2/Classes/Panorama.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline cs2::CPanelStyle::SetProperty* PanelStylePatterns::setProperty() const noexcept
-{
-    return panoramaPatternFinder("E8 ? ? ? ? 8B 45 B8"_pat).add(1).abs().as<cs2::CPanelStyle::SetProperty*>();
-}
+template <typename PatternFinders>
+struct PanelStylePatterns {
+    const PatternFinders& patternFinders;
 
-inline cs2::CPanelStyle::StylePropertySymbols* PanelStylePatterns::stylePropertiesSymbols() const noexcept
-{
-    if (const auto pointerToStylePropertySymbolsMemory{panoramaPatternFinder("48 8B 05 ? ? ? ? 48 63 FB"_pat).add(3).abs().as<std::byte*>()})
-        return reinterpret_cast<cs2::CPanelStyle::StylePropertySymbols*>(pointerToStylePropertySymbolsMemory - offsetof(cs2::CPanelStyle::StylePropertySymbols, memory));
-    return nullptr;
-}
+    [[nodiscard]] cs2::CPanelStyle::SetProperty* setProperty() const noexcept
+    {
+        return patternFinders.panoramaPatternFinder("E8 ? ? ? ? 8B 45 B8"_pat).add(1).abs().template as<cs2::CPanelStyle::SetProperty*>();
+    }
+
+    [[nodiscard]] cs2::CPanelStyle::StylePropertySymbols* stylePropertiesSymbols() const noexcept
+    {
+        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("48 8B 05 ? ? ? ? 48 63 FB"_pat).add(3).abs().template as<std::byte*>()})
+            return reinterpret_cast<cs2::CPanelStyle::StylePropertySymbols*>(pointerToStylePropertySymbolsMemory - offsetof(cs2::CPanelStyle::StylePropertySymbols, memory));
+        return nullptr;
+    }
+};

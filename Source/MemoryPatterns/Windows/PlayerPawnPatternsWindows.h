@@ -1,39 +1,44 @@
 #pragma once
 
-#include <MemoryPatterns/PlayerPawnPatterns.h>
+#include <GameClasses/OffsetTypes/PlayerPawnOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline OffsetToPlayerPawnImmunity PlayerPawnPatterns::offsetToPlayerPawnImmunity() const noexcept
-{
-    return clientPatternFinder("0F B6 83 ? ? ? ? 84 C0 75 ? 41"_pat).add(3).readOffset<OffsetToPlayerPawnImmunity>();
-}
+template <typename PatternFinders>
+struct PlayerPawnPatterns {
+    const PatternFinders& patternFinders;
 
-inline OffsetToWeaponServices PlayerPawnPatterns::offsetToWeaponServices() const noexcept
-{
-    return clientPatternFinder("48 8B 88 ? ? ? ? 48 8D 15 ? ? ? ? E8 ? ? ? ? 48"_pat).add(3).readOffset<OffsetToWeaponServices>();
-}
+    [[nodiscard]] OffsetToPlayerPawnImmunity offsetToPlayerPawnImmunity() const noexcept
+    {
+        return patternFinders.clientPatternFinder("0F B6 83 ? ? ? ? 84 C0 75 ? 41"_pat).add(3).template readOffset<OffsetToPlayerPawnImmunity>();
+    }
 
-inline OffsetToPlayerController PlayerPawnPatterns::offsetToPlayerController() const noexcept
-{
-    return clientPatternFinder("8B 89 ? ? ? ? 4C 89 60"_pat).add(2).readOffset<OffsetToPlayerController>();
-}
+    [[nodiscard]] OffsetToWeaponServices offsetToWeaponServices() const noexcept
+    {
+        return patternFinders.clientPatternFinder("48 8B 88 ? ? ? ? 48 8D 15 ? ? ? ? E8 ? ? ? ? 48"_pat).add(3).template readOffset<OffsetToWeaponServices>();
+    }
 
-inline OffsetToIsDefusing PlayerPawnPatterns::offsetToIsDefusing() const noexcept
-{
-    return clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(2).readOffset<OffsetToIsDefusing>();
-}
+    [[nodiscard]] OffsetToPlayerController offsetToPlayerController() const noexcept
+    {
+        return patternFinders.clientPatternFinder("8B 89 ? ? ? ? 4C 89 60"_pat).add(2).template readOffset<OffsetToPlayerController>();
+    }
 
-inline OffsetToIsPickingUpHostage PlayerPawnPatterns::offsetToIsPickingUpHostage() const noexcept
-{
-    return clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(15).readOffset<OffsetToIsPickingUpHostage>();
-}
+    [[nodiscard]] OffsetToIsDefusing offsetToIsDefusing() const noexcept
+    {
+        return patternFinders.clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(2).template readOffset<OffsetToIsDefusing>();
+    }
 
-inline OffsetToHostageServices PlayerPawnPatterns::offsetToHostageServices() const noexcept
-{
-    return clientPatternFinder("E8 ? ? ? ? 48 8B 87 ? ? ? ? 33 ? 4C"_pat).add(8).readOffset<OffsetToHostageServices>();
-}
+    [[nodiscard]] OffsetToIsPickingUpHostage offsetToIsPickingUpHostage() const noexcept
+    {
+        return patternFinders.clientPatternFinder("80 BF ? ? ? ? ? 0F 85 ? ? ? ? 80 BF ? ? ? ? ? 75"_pat).add(15).template readOffset<OffsetToIsPickingUpHostage>();
+    }
 
-inline OffsetToFlashBangEndTime PlayerPawnPatterns::offsetToFlashBangEndTime() const noexcept
-{
-    return clientPatternFinder("0F 2F 86 ? ? ? ? 48 8B 7C 24"_pat).add(3).readOffset<OffsetToFlashBangEndTime>();
-}
+    [[nodiscard]] OffsetToHostageServices offsetToHostageServices() const noexcept
+    {
+        return patternFinders.clientPatternFinder("E8 ? ? ? ? 48 8B 87 ? ? ? ? 33 ? 4C"_pat).add(8).template readOffset<OffsetToHostageServices>();
+    }
+
+    [[nodiscard]] OffsetToFlashBangEndTime offsetToFlashBangEndTime() const noexcept
+    {
+        return patternFinders.clientPatternFinder("0F 2F 86 ? ? ? ? 48 8B 7C 24"_pat).add(3).template readOffset<OffsetToFlashBangEndTime>();
+    }
+};

@@ -1,10 +1,9 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <MemoryPatterns/ClientPatterns.h>
-#include <MemoryPatterns/PanoramaUiEnginePatterns.h>
 
 struct PanoramaUiEngineImpl {
+    template <typename ClientPatterns, typename PanoramaUiEnginePatterns>
     explicit PanoramaUiEngineImpl(const ClientPatterns& clientPatterns, const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
         : thisptr{clientPatterns.uiEngine()}
         , getPanelHandle{panoramaUiEnginePatterns.getPanelHandle()}

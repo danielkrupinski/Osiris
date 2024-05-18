@@ -1,29 +1,34 @@
 #pragma once
 
-#include <MemoryPatterns/PlantedC4Patterns.h>
+#include <GameClasses/OffsetTypes/PlantedC4Offset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline BombSiteOffset PlantedC4Patterns::m_nBombSite() const noexcept
-{
-    return clientPatternFinder("83 B9 ? ? ? ? 01 0F 94 C0 C3"_pat).add(2).readOffset<BombSiteOffset>();
-}
+template <typename PatternFinders>
+struct PlantedC4Patterns {
+    const PatternFinders& patternFinders;
 
-inline BombTickingOffset PlantedC4Patterns::m_bBombTicking() const noexcept
-{
-    return clientPatternFinder("74 ? 44 38 AE ? ? ? ? 74 ? 49"_pat).add(5).readOffset<BombTickingOffset>();
-}
+    [[nodiscard]] BombSiteOffset m_nBombSite() const noexcept
+    {
+        return patternFinders.clientPatternFinder("83 B9 ? ? ? ? 01 0F 94 C0 C3"_pat).add(2).template readOffset<BombSiteOffset>();
+    }
 
-inline BombBlowTimeOffset PlantedC4Patterns::m_flC4Blow() const noexcept
-{
-    return clientPatternFinder("F3 0F 10 ? ? ? ? ? BB FF"_pat).add(4).readOffset<BombBlowTimeOffset>();
-}
+    [[nodiscard]] BombTickingOffset m_bBombTicking() const noexcept
+    {
+        return patternFinders.clientPatternFinder("74 ? 44 38 AE ? ? ? ? 74 ? 49"_pat).add(5).template readOffset<BombTickingOffset>();
+    }
 
-inline BombDefuserOffset PlantedC4Patterns::m_hBombDefuser() const noexcept
-{
-    return clientPatternFinder("E8 ? ? ? ? 8B ? ? ? ? ? 45 33 ? 4C 8B ? ? ? ? ? 83"_pat).add(7).readOffset<BombDefuserOffset>();
-}
+    [[nodiscard]] BombBlowTimeOffset m_flC4Blow() const noexcept
+    {
+        return patternFinders.clientPatternFinder("F3 0F 10 ? ? ? ? ? BB FF"_pat).add(4).template readOffset<BombBlowTimeOffset>();
+    }
 
-inline BombDefuseEndTimeOffset PlantedC4Patterns::m_flDefuseCountDown() const noexcept
-{
-    return clientPatternFinder("74 11 F3 0F 10 B7 ? ? ? ? 48"_pat).add(6).readOffset<BombDefuseEndTimeOffset>();
-}
+    [[nodiscard]] BombDefuserOffset m_hBombDefuser() const noexcept
+    {
+        return patternFinders.clientPatternFinder("E8 ? ? ? ? 8B ? ? ? ? ? 45 33 ? 4C 8B ? ? ? ? ? 83"_pat).add(7).template readOffset<BombDefuserOffset>();
+    }
+
+    [[nodiscard]] BombDefuseEndTimeOffset m_flDefuseCountDown() const noexcept
+    {
+        return patternFinders.clientPatternFinder("74 11 F3 0F 10 B7 ? ? ? ? 48"_pat).add(6).template readOffset<BombDefuseEndTimeOffset>();
+    }
+};

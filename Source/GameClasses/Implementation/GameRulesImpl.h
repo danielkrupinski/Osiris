@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/GameRulesPatterns.h>
+#include <GameClasses/OffsetTypes/GameRulesOffset.h>
 
 struct GameRulesImpl {
+    template <typename GameRulesPatterns>
     explicit GameRulesImpl(const GameRulesPatterns& gameRulesPatterns) noexcept
         : roundStartTimeOffset{gameRulesPatterns.roundStartTimeOffset()}
     {

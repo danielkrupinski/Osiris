@@ -1,8 +1,9 @@
 #pragma once
 
-#include <MemoryPatterns/PanelPatterns.h>
+#include <CS2/Classes/Panorama.h>
 
 struct PanelImpl {
+    template <typename PanelPatterns>
     explicit PanelImpl(const PanelPatterns& panelPatterns) noexcept
         : create{panelPatterns.create()}
     {

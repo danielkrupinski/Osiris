@@ -2,9 +2,9 @@
 
 #include <CS2/Classes/VMatrix.h>
 #include <CS2/Constants/AspectRatio.h>
-#include <MemoryPatterns/ClientPatterns.h>
 
 struct ViewToProjectionMatrix {
+    template <typename ClientPatterns>
     explicit ViewToProjectionMatrix(const ClientPatterns& clientPatterns) noexcept
         : viewToProjectionMatrix{clientPatterns.viewToProjectionMatrix()}
     {

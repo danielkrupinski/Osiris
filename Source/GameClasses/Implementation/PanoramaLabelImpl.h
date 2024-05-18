@@ -1,8 +1,11 @@
 #pragma once
 
-#include <MemoryPatterns/PanoramaLabelPatterns.h>
+#include <cstdint>
+
+#include <CS2/Classes/Panorama.h>
 
 struct PanoramaLabelImpl {
+    template <typename PanoramaLabelPatterns>
     explicit PanoramaLabelImpl(const PanoramaLabelPatterns& panoramaLabelPatterns) noexcept
         : setTextInternal{panoramaLabelPatterns.setTextInternal()}
         , constructor{panoramaLabelPatterns.constructor()}

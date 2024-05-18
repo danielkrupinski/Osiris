@@ -1,29 +1,37 @@
 #pragma once
 
-#include <MemoryPatterns/PanoramaImagePanelPatterns.h>
+#include <cstdint>
+
+#include <CS2/Classes/Panorama.h>
+#include <GameClasses/OffsetTypes/PanoramaImagePanelOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
-inline cs2::CImagePanel::SetImage* PanoramaImagePanelPatterns::setImage() const noexcept
-{
-    return clientPatternFinder("88 85 ? ? ? ? E8 ? ? ? ? 48 83 BD ? ? ? ? ? 74 08 4C 89 EF E8 ? ? ? ? 48 83 BD ? ? ? ? ? 0F 84"_pat).add(7).abs().as<cs2::CImagePanel::SetImage*>();
-}
+template <typename PatternFinders>
+struct PanoramaImagePanelPatterns {
+    const PatternFinders& patternFinders;
 
-inline cs2::CImagePanel::Constructor* PanoramaImagePanelPatterns::constructor() const noexcept
-{
-    return clientPatternFinder("E8 ? ? ? ? 4C 8B 85 ? ? ? ? 4C 89 E6 48 8B BD"_pat).add(1).abs().as<cs2::CImagePanel::Constructor*>();
-}
+    [[nodiscard]] cs2::CImagePanel::SetImage* setImage() const noexcept
+    {
+        return patternFinders.clientPatternFinder("88 85 ? ? ? ? E8 ? ? ? ? 48 83 BD ? ? ? ? ? 74 08 4C 89 EF E8 ? ? ? ? 48 83 BD ? ? ? ? ? 0F 84"_pat).add(7).abs().template as<cs2::CImagePanel::SetImage*>();
+    }
 
-inline std::uint32_t* PanoramaImagePanelPatterns::size() const noexcept
-{
-    return clientPatternFinder("BF ? ? ? ? 4C 89 85 ? ? ? ? E8 ? ? ? ? 48 8B B5"_pat).add(1).as<std::uint32_t*>();
-}
+    [[nodiscard]] cs2::CImagePanel::Constructor* constructor() const noexcept
+    {
+        return patternFinders.clientPatternFinder("E8 ? ? ? ? 4C 8B 85 ? ? ? ? 4C 89 E6 48 8B BD"_pat).add(1).abs().template as<cs2::CImagePanel::Constructor*>();
+    }
 
-inline ImagePropertiesOffset PanoramaImagePanelPatterns::imagePropertiesOffset() const noexcept
-{
-    return clientPatternFinder("4C 89 E7 49 8D 4C 24 ?"_pat).add(7).readOffset<ImagePropertiesOffset>();
-}
+    [[nodiscard]] std::uint32_t* size() const noexcept
+    {
+        return patternFinders.clientPatternFinder("BF ? ? ? ? 4C 89 85 ? ? ? ? E8 ? ? ? ? 48 8B B5"_pat).add(1).template as<std::uint32_t*>();
+    }
 
-inline OffsetToImagePath PanoramaImagePanelPatterns::offsetToImagePath() const noexcept
-{
-    return clientPatternFinder("48 81 C7 ? ? ? ? 53 89 F3 48"_pat).add(3).readOffset<OffsetToImagePath>();
-}
+    [[nodiscard]] ImagePropertiesOffset imagePropertiesOffset() const noexcept
+    {
+        return patternFinders.clientPatternFinder("4C 89 E7 49 8D 4C 24 ?"_pat).add(7).template readOffset<ImagePropertiesOffset>();
+    }
+
+    [[nodiscard]] OffsetToImagePath offsetToImagePath() const noexcept
+    {
+        return patternFinders.clientPatternFinder("48 81 C7 ? ? ? ? 53 89 F3 48"_pat).add(3).template readOffset<OffsetToImagePath>();
+    }
+};

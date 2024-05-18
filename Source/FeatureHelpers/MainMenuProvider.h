@@ -2,9 +2,9 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <MemoryPatterns/ClientPatterns.h>
 
 struct MainMenuProvider {
+    template <typename ClientPatterns>
     explicit MainMenuProvider(const ClientPatterns& clientPatterns) noexcept
         : mainMenu{clientPatterns.mainMenuPanel()}
     {

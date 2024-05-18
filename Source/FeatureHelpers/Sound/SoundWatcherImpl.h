@@ -11,8 +11,6 @@
 #include <CS2/Classes/Sound.h>
 #include <GameClasses/FileSystem.h>
 #include <HookDependencies/HookDependencies.h>
-#include <MemoryPatterns/FileSystemPatterns.h>
-#include <MemoryPatterns/SoundSystemPatterns.h>
 #include "PlayedSound.h"
 #include "WatchedSounds.h"
 #include <Utils/BitFlags.h>

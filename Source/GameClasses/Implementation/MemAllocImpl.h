@@ -4,11 +4,11 @@
 
 #include <CS2/Classes/IMemAlloc.h>
 #include <GameDLLs/Tier0Dll.h>
-#include <MemoryPatterns/MemAllocPatterns.h>
 #include <Platform/DynamicLibrary.h>
 #include <Utils/FieldOffset.h>
 
 struct MemAllocImpl {
+    template <typename MemAllocPatterns>
     MemAllocImpl(Tier0Dll tier0Dll, const MemAllocPatterns& memAllocPatterns) noexcept
         : thisptr{tier0Dll.memAlloc()}
         , alloc{memAllocPatterns.allocOffset()}

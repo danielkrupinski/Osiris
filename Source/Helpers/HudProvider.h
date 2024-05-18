@@ -4,9 +4,9 @@
 #include <CS2/Constants/PanelIDs.h>
 
 #include <GameClasses/PanoramaUiPanel.h>
-#include <MemoryPatterns/ClientPatterns.h>
 
 struct HudProvider {
+    template <typename ClientPatterns>
     explicit HudProvider(const ClientPatterns& clientPatterns) noexcept
         : hud{clientPatterns.hudPanel()}
     {
