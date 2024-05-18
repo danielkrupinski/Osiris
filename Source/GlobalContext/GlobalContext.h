@@ -30,7 +30,7 @@ public:
             alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
             const SdlDll sdlDll;
             const PatternFinder<PatternNotFoundLogger> sdlPatternFinder{sdlDll.getCodeSection().raw()};
-            globalContext.initialize(storage, sdlDll, SdlPatterns{sdlPatternFinder});
+            globalContext.initialize(storage, sdlDll, SdlPatterns<PatternFinder<PatternNotFoundLogger>>{sdlPatternFinder});
             globalContext->deferredCompleteContext.partial().enableIfValid();
         }
     }
