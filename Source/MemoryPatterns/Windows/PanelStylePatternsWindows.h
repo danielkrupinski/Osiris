@@ -16,7 +16,7 @@ struct PanelStylePatterns {
 
     [[nodiscard]] cs2::CPanelStyle::StylePropertySymbols* stylePropertiesSymbols() const noexcept
     {
-        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("48 8B 05 ? ? ? ? 48 63 FB"_pat).add(3).abs().as<std::byte*>()})
+        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("48 8B 05 ? ? ? ? 48 63 FB"_pat).add(3).abs().template as<std::byte*>()})
             return reinterpret_cast<cs2::CPanelStyle::StylePropertySymbols*>(pointerToStylePropertySymbolsMemory - offsetof(cs2::CPanelStyle::StylePropertySymbols, memory));
         return nullptr;
     }
