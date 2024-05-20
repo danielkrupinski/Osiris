@@ -17,10 +17,9 @@
 
 class GlobalContext {
 public:
-    template <typename SdlPatterns>
-    explicit GlobalContext(std::span<std::byte> memoryStorage, SdlDll sdlDll, SdlPatterns sdlPatterns) noexcept
+    explicit GlobalContext(std::span<std::byte> memoryStorage, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, SdlDll sdlDll) noexcept
         : _freeRegionList{memoryStorage}
-        , deferredCompleteContext{sdlDll, sdlPatterns}
+        , deferredCompleteContext{clientDLL, panoramaDLL, sdlDll}
     {
     }
 
@@ -28,9 +27,7 @@ public:
     {
         if (!globalContext.isInitialized()) {
             alignas(FreeMemoryRegionList::minimumAlignment()) static constinit std::byte storage[build::MEMORY_CAPACITY];
-            const SdlDll sdlDll;
-            const PatternFinder<PatternNotFoundLogger> sdlPatternFinder{sdlDll.getCodeSection().raw()};
-            globalContext.initialize(storage, sdlDll, SdlPatterns<PatternFinder<PatternNotFoundLogger>>{sdlPatternFinder});
+            globalContext.initialize(storage, DynamicLibrary{cs2::CLIENT_DLL}, DynamicLibrary{cs2::PANORAMA_DLL}, SdlDll{});
             globalContext->deferredCompleteContext.partial().enableIfValid();
         }
     }
@@ -67,22 +64,13 @@ private:
         if (deferredCompleteContext.isComplete())
             return;
 
-        const DynamicLibrary panoramaDLL{cs2::PANORAMA_DLL};
-        const DynamicLibrary clientDLL{cs2::CLIENT_DLL};
-
-        const PatternFinder<PatternNotFoundLogger> clientPatternFinder{clientDLL.getCodeSection().raw()};
-        const PatternFinder<PatternNotFoundLogger> panoramaPatternFinder{panoramaDLL.getCodeSection().raw()};
-        const PatternFinder<PatternNotFoundLogger> soundSystemPatternFinder{DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw()};
-        const PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw()};
-        const PatternFinder<PatternNotFoundLogger> tier0PatternFinder{DynamicLibrary{cs2::TIER0_DLL}.getCodeSection().raw()};
-
-        const PatternFinders patternFinders{clientPatternFinder, tier0PatternFinder, soundSystemPatternFinder, fileSystemPatternFinder, panoramaPatternFinder};
+        const auto partialContext = deferredCompleteContext.partial();
 
         deferredCompleteContext.makeComplete(
-            deferredCompleteContext.partial().peepEventsHook,
-            clientDLL,
-            panoramaDLL,
-            MemoryPatterns{patternFinders}
+            partialContext.peepEventsHook,
+            partialContext.clientDLL,
+            partialContext.panoramaDLL,
+            MemoryPatterns{partialContext.patternFinders}
         );
 
         fullContext().panoramaGUI.init(fullContext().getFeatureHelpers().mainMenuProvider);

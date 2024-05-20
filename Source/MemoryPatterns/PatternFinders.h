@@ -9,4 +9,5 @@ struct PatternFinders {
     PatternFinder<PatternNotFoundLogger> soundSystemPatternFinder;
     PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder;
     PatternFinder<PatternNotFoundLogger> panoramaPatternFinder;
+    PatternFinder<PatternNotFoundLogger> sdlPatternFinder;
 };

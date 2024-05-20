@@ -36,6 +36,7 @@ struct MemoryPatterns {
     MEMORY_PATTERNS(PlantedC4Patterns, plantedC4Patterns)
     MEMORY_PATTERNS(PlayerControllerPatterns, playerControllerPatterns)
     MEMORY_PATTERNS(PlayerPawnPatterns, playerPawnPatterns)
+    MEMORY_PATTERNS(SdlPatterns, sdlPatterns)
     MEMORY_PATTERNS(SoundSystemPatterns, soundSystemPatterns)
     MEMORY_PATTERNS(TopLevelWindowPatterns, topLevelWindowPatterns)
     MEMORY_PATTERNS(WeaponServicesPatterns, weaponServicesPatterns)
