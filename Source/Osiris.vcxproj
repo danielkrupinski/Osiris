@@ -35,6 +35,7 @@
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h" />
     <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIdentity.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h" />
     <ClInclude Include="GameClasses\Implementation\PlayerPawnImpl.h" />
     <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h" />
+    <ClInclude Include="GameClasses\Implementation\WeaponImpl.h" />
     <ClInclude Include="GameClasses\Implementation\WeaponServicesImpl.h" />
     <ClInclude Include="GameClasses\Implementation\WeaponVDataImpl.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="GameClasses\OffsetTypes\PlayerControllerOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\PlayerPawnOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\TopLevelWindowOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\WeaponOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h" />
     <ClInclude Include="GameClasses\Panel.h" />
@@ -231,6 +234,7 @@
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponServicesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponVDataPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WindowsPatterns.h" />

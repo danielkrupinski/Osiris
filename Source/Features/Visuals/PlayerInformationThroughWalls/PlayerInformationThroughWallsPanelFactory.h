@@ -31,11 +31,62 @@ public:
         createPositionArrowPanel(containerPanel->uiPanel, panoramaTransformFactory);
         createHealthPanel(containerPanel->uiPanel);
         createActiveWeaponIconPanel(containerPanel->uiPanel);
+        createActiveWeaponAmmoPanel(containerPanel->uiPanel);
         createStateIconsPanel(containerPanel->uiPanel);
         return PanoramaUiPanel{containerPanel->uiPanel};
     }
 
 private:
+    void createActiveWeaponAmmoPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        const auto ammoPanel{Panel::create("", containerPanel)};
+        if (!ammoPanel)
+            return;
+
+        if (const auto style{PanoramaUiPanel{ammoPanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+            styler.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+            styler.setFlowChildren(cs2::k_EFlowRight);
+        }
+
+        createActiveWeaponAmmoTextPanel(ammoPanel->uiPanel);
+        createActiveWeaponAmmoIconPanel(ammoPanel->uiPanel);
+    }
+
+    void createActiveWeaponAmmoTextPanel(cs2::CUIPanel* containerPanel) const
+    {
+        if (!dependencies.requestDependency<PanoramaLabelFactory>())
+            return;
+
+        const auto label = dependencies.getDependency<PanoramaLabelFactory>().createLabelPanel(containerPanel);
+        if (!label)
+            return;
+
+        if (const auto style{PanoramaUiPanel{label->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setTextShadow(shadowParams());
+            styler.setSimpleForegroundColor(cs2::kColorWhite);
+        }
+    }
+
+    void createActiveWeaponAmmoIconPanel(cs2::CUIPanel* containerPanel) const
+    {
+        const auto activeWeaponAmmoIconPanel = PanoramaImagePanel::create("", containerPanel);
+        if (!activeWeaponAmmoIconPanel)
+            return;
+
+        PanoramaImagePanel{activeWeaponAmmoIconPanel}.setImageSvg("s2r://panorama/images/hud/bullet_single.vsvg", 20);
+        if (const auto style{PanoramaUiPanel{activeWeaponAmmoIconPanel->uiPanel}.getStyle()}) {
+            const auto styler{panelConfigurator.panelStyle(*style)};
+            styler.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+            styler.setMargin(cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+            styler.setImageShadow(shadowParams());
+        }
+    }
+
     void createStateIconsPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
         const auto panel{Panel::create("", containerPanel)};

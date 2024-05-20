@@ -65,6 +65,8 @@ private:
             handleFeature(features.visualFeatures().playerHealthTextColorToggle());
         } else if (feature == "player_info_weapon") {
             handleTogglableFeature(features.visualFeatures().playerActiveWeaponToggle());
+        } else if (feature == "player_info_weapon_clip") {
+            handleTogglableFeature(features.visualFeatures().playerActiveWeaponAmmoToggle());
         } else if (feature == "player_info_defuse") {
             handleFeature(features.visualFeatures().playerDefuseIconToggle());
         } else if (feature == "player_info_hostage_pickup") {

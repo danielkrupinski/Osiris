@@ -39,6 +39,7 @@ struct MemoryPatterns {
     MEMORY_PATTERNS(SdlPatterns, sdlPatterns)
     MEMORY_PATTERNS(SoundSystemPatterns, soundSystemPatterns)
     MEMORY_PATTERNS(TopLevelWindowPatterns, topLevelWindowPatterns)
+    MEMORY_PATTERNS(WeaponPatterns, weaponPatterns)
     MEMORY_PATTERNS(WeaponServicesPatterns, weaponServicesPatterns)
     MEMORY_PATTERNS(WeaponVDataPatterns, weaponVDataPatterns)
 

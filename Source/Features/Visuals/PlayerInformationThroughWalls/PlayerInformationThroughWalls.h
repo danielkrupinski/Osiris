@@ -85,6 +85,13 @@ struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponTogg
     }
 };
 
+struct PlayerActiveWeaponAmmoToggle : public TogglableFeature<PlayerActiveWeaponAmmoToggle> {
+    explicit PlayerActiveWeaponAmmoToggle(PlayerInformationThroughWallsState& state) noexcept
+        : TogglableFeature{state.showPlayerActiveWeaponAmmo}
+    {
+    }
+};
+
 template <typename IconPanel>
 struct PlayerStateIconToggle {
     explicit PlayerStateIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
@@ -235,6 +242,7 @@ public:
         if (hasHealth)
             setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
         setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, playerPawn);
+        setActiveWeaponAmmo(PanoramaUiPanel{playerInformationPanel.weaponAmmoPanel}, playerPawn);
         setPlayerStateIcons(PanoramaUiPanel{playerInformationPanel.playerStateIconsPanel}, playerPawn);
 
         const auto style = panel.getStyle();
@@ -358,22 +366,34 @@ private:
         styleSetter.setWashColor(getPlayerPositionArrowColorCalculator(playerController, teamNumber).getArrowColor(state.playerPositionArrowColor));
     }
 
-    [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon(cs2::C_CSPlayerPawn& playerPawn) const noexcept
     {
-        if (!dependencies.offsets().playerPawn.offsetToWeaponServices
-         || !dependencies.offsets().weaponServices.offsetToActiveWeapon
-         || !dependencies.offsets().entity.offsetToVData
-         || !dependencies.offsets().weaponVData.offsetToWeaponName)
-            return nullptr;
-
         if (!dependencies.requestDependency<EntityFromHandleFinder>())
             return nullptr;
 
-        const auto weaponServices = *dependencies.offsets().playerPawn.offsetToWeaponServices.of(&playerPawn).get();
+        const auto weaponServices = dependencies.offsets().playerPawn.offsetToWeaponServices.of(&playerPawn).valueOr(nullptr);
         if (!weaponServices)
             return nullptr;
 
-        const auto activeWeapon = dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(*dependencies.offsets().weaponServices.offsetToActiveWeapon.of(weaponServices).get());
+        return static_cast<cs2::C_CSWeaponBase*>(dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(dependencies.offsets().weaponServices.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
+    }
+
+    [[nodiscard]] cs2::C_CSWeaponBase::m_iClip1 getActiveWeaponClip(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        const auto activeWeapon = getActiveWeapon(playerPawn);
+        if (!activeWeapon)
+            return -1;
+
+        return dependencies.offsets().weapon.offsetToClipAmmo.of(activeWeapon).valueOr(-1);
+    }
+
+    [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!dependencies.offsets().entity.offsetToVData
+         || !dependencies.offsets().weaponVData.offsetToWeaponName)
+            return nullptr;
+
+        const auto activeWeapon = getActiveWeapon(playerPawn);
         if (!activeWeapon)
             return nullptr;
 
@@ -497,6 +517,29 @@ private:
     [[nodiscard]] bool isDefusing(cs2::C_CSPlayerPawn& playerPawn) const noexcept
     {
         return dependencies.offsets().playerPawn.offsetToIsDefusing.of(&playerPawn).valueOr(false);
+    }
+
+    void setActiveWeaponAmmo(PanoramaUiPanel weaponAmmoPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    {
+        if (!state.showPlayerActiveWeaponAmmo) {
+            weaponAmmoPanel.setVisible(false);
+            return;
+        }
+
+        const auto ammo = getActiveWeaponClip(playerPawn);
+        if (ammo < 0) {
+            weaponAmmoPanel.setVisible(false);
+            return;
+        }
+
+        const auto children = weaponAmmoPanel.children();
+        if (!children || children->size < 1)
+            return;
+
+        weaponAmmoPanel.setVisible(true);
+
+        const auto ammoText = static_cast<cs2::CLabel*>(children->memory[0]->clientPanel);
+        PanoramaLabel{ammoText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(ammo).cstring(), 0, true);
     }
 
     void setActiveWeapon(PanoramaUiPanel weaponIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
