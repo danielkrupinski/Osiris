@@ -3,11 +3,11 @@
 ![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-Free and open-source game hack for **Counter-Strike 2**. Compatible with the latest Steam version of the game. Cross-platform - available for Windows and Linux systems.
+Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and rendering based on game's Panorama UI. Compatible with the latest game update on Steam.
 
 ## What's new
 
-* 20 May 2024 - Implement showing players' active weapon ammo
+* 20 May 2024 - Implemented showing players' active weapon ammo
 
 ![Player active weapon ammo](https://github.com/danielkrupinski/Osiris/assets/34515229/9a6dfc37-ee9f-4b70-9b1f-0e4465bf58fb)
 
