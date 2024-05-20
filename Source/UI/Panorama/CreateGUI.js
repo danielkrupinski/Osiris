@@ -205,7 +205,9 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Active Weapon", 'visuals', 'player_info_weapon', 0);
+  createYesNoDropDown(playerInfo, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });

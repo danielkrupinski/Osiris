@@ -37,6 +37,11 @@ struct VisualFeatures {
         return PlayerActiveWeaponToggle{states.playerInformationThroughWallsState};
     }
 
+    [[nodiscard]] PlayerActiveWeaponAmmoToggle playerActiveWeaponAmmoToggle() const noexcept
+    {
+        return PlayerActiveWeaponAmmoToggle{states.playerInformationThroughWallsState};
+    }
+
     [[nodiscard]] PlayerDefuseIconToggle playerDefuseIconToggle() const noexcept
     {
         return PlayerDefuseIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};

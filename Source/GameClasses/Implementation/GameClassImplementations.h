@@ -20,6 +20,7 @@
 #include "PlayerControllerImpl.h"
 #include "PlayerPawnImpl.h"
 #include "TopLevelWindowImpl.h"
+#include "WeaponImpl.h"
 #include "WeaponServicesImpl.h"
 #include "WeaponVDataImpl.h"
 
@@ -49,6 +50,7 @@ struct GameClassImplementations {
         , playerController{memoryPatterns.playerControllerPatterns()}
         , playerPawn{memoryPatterns.playerPawnPatterns()}
         , topLevelWindow{memoryPatterns.topLevelWindowPatterns()}
+        , weapon{memoryPatterns.weaponPatterns()}
         , weaponServices{memoryPatterns.weaponServicesPatterns()}
         , weaponVData{memoryPatterns.weaponVDataPatterns()}
     {
@@ -74,6 +76,7 @@ struct GameClassImplementations {
     PlayerControllerImpl playerController;
     PlayerPawnImpl playerPawn;
     TopLevelWindowImpl topLevelWindow;
+    WeaponImpl weapon;
     WeaponServicesImpl weaponServices;
     WeaponVDataImpl weaponVData;
 };

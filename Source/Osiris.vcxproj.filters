@@ -1037,6 +1037,18 @@
     <ClInclude Include="MemoryPatterns\PatternFinders.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\WeaponOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Implementation\WeaponImpl.h">
+      <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

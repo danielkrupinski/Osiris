@@ -22,6 +22,7 @@ struct PlayerInformationThroughWallsState {
     bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
     bool showPlayerActiveWeapon{true};
+    bool showPlayerActiveWeaponAmmo{true};
     PlayerStateIconsToShow playerStateIconsToShow{
         PlayerStateIconsToShow{}
             .set<DefuseIconPanel>()
