@@ -1,8 +1,10 @@
 #pragma once
 
 #include <CS2/Classes/ClientModeCSNormal.h>
+#include <CS2/Classes/CLoopModeGame.h>
 #include <CS2/Classes/CPlantedC4.h>
 #include <CS2/Classes/CViewRender.h>
+#include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
 #include <CS2/Classes/Panorama.h>
@@ -14,11 +16,6 @@
 template <typename PatternFinders>
 struct ClientPatterns {
     const PatternFinders& patternFinders;
-
-    [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept
-    {
-        return patternFinders.clientPatternFinder("48 89 78 ? 48 89 0D ? ? ? ?"_pat).add(7).abs().template as<cs2::CUIEngine**>();
-    }
 
     [[nodiscard]] cs2::CPanel2D** mainMenuPanel() const noexcept
     {

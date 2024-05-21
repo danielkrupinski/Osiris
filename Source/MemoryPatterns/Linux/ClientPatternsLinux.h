@@ -15,11 +15,6 @@ template <typename PatternFinders>
 struct ClientPatterns {
     const PatternFinders& patternFinders;
 
-    [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept
-    {
-        return patternFinders.clientPatternFinder("48 89 E5 48 89 3D ? ? ? ? E8"_pat).add(6).abs().template as<cs2::CUIEngine**>();
-    }
-
     [[nodiscard]] cs2::CPanel2D** mainMenuPanel() const noexcept
     {
         return patternFinders.clientPatternFinder("83 FB ? 75 ? 48 8D 05 ? ? ? ? 48 8B 00"_pat).add(8).abs().template as<cs2::CPanel2D**>();

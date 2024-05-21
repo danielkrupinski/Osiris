@@ -44,7 +44,7 @@ struct GameClassImplementations {
         , panelStyle{memoryPatterns.panelStylePatterns()}
         , imagePanel{memoryPatterns.panoramaImagePanelPatterns()}
         , panoramaLabel{memoryPatterns.panoramaLabelPatterns()}
-        , uiEngine{memoryPatterns.clientPatterns(), memoryPatterns.panoramaUiEnginePatterns()}
+        , uiEngine{memoryPatterns.panoramaUiEnginePatterns()}
         , panoramaUiPanelOffsets{memoryPatterns.panoramaUiPanelPatterns()}
         , plantedC4{memoryPatterns.plantedC4Patterns()}
         , playerController{memoryPatterns.playerControllerPatterns()}

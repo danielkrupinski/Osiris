@@ -3,9 +3,9 @@
 #include <CS2/Classes/Panorama.h>
 
 struct PanoramaUiEngineImpl {
-    template <typename ClientPatterns, typename PanoramaUiEnginePatterns>
-    explicit PanoramaUiEngineImpl(const ClientPatterns& clientPatterns, const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
-        : thisptr{clientPatterns.uiEngine()}
+    template <typename PanoramaUiEnginePatterns>
+    explicit PanoramaUiEngineImpl(const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
+        : thisptr{panoramaUiEnginePatterns.uiEngine()}
         , getPanelHandle{panoramaUiEnginePatterns.getPanelHandle()}
         , getPanelPointer{panoramaUiEnginePatterns.getPanelPointer()}
         , runScript{panoramaUiEnginePatterns.runScript()}

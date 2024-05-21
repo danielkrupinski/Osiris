@@ -7,6 +7,11 @@ template <typename PatternFinders>
 struct PanoramaUiEnginePatterns {
     const PatternFinders& patternFinders;
 
+    [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept
+    {
+        return patternFinders.clientPatternFinder("48 89 E5 48 89 3D ? ? ? ? E8"_pat).add(6).abs().template as<cs2::CUIEngine**>();
+    }
+
     [[nodiscard]] cs2::CUIEngine::getPanelHandle getPanelHandle() const noexcept
     {
         return patternFinders.panoramaPatternFinder("8B 97 ? ? ? ? 83 FA FF 74 2E"_pat).template as<cs2::CUIEngine::getPanelHandle>();
