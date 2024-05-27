@@ -10,17 +10,17 @@ namespace cs2
 {
 
 struct CSfxTable {
-    PAD(48);
+    PAD(40); // TODO: get dynamically, was broken: 2024.05.23
     FileNameHandle_t fileNameHandle;
 };
 
 struct ChannelInfo1 {
     CSfxTable* sfx;
     int guid;
-    PAD(116); // TODO: get sizeof dynamically, was broken: 2024.02.07
+    PAD(60); // TODO: get sizeof dynamically, was broken: 2024.02.07, broken again (reverted to previous) 2024.05.23
 };
 
-static_assert(sizeof(ChannelInfo1) == 128);
+static_assert(sizeof(ChannelInfo1) == 72);
 
 struct ChannelInfo2 {
     Vector origin;

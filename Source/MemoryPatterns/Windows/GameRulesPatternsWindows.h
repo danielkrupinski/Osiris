@@ -9,6 +9,6 @@ struct GameRulesPatterns {
 
     [[nodiscard]] RoundStartTimeOffset roundStartTimeOffset() const noexcept
     {
-        return patternFinders.clientPatternFinder("F3 0F 5C C8 F3 0F 10 43 ? F3"_pat).add(8).template readOffset<RoundStartTimeOffset>();
+        return patternFinders.clientPatternFinder("F3 0F 10 43 ? 0F 5B C9"_pat).add(4).template readOffset<RoundStartTimeOffset>();
     }
 };

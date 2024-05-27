@@ -29,6 +29,6 @@ struct EntityPatterns {
 
     [[nodiscard]] OffsetToVData offsetToVData() const noexcept
     {
-        return patternFinders.clientPatternFinder("49 8B 86 ? ? ? ? 48 85 C0 74 ? 48 8B 40"_pat).add(3).template readOffset<OffsetToVData>();
+        return patternFinders.clientPatternFinder("49 8B 86 ? ? ? ? 48 85 C0 74 ? 48 8B 40 ? 48 85 C0 74 ? 80"_pat).add(3).template readOffset<OffsetToVData>();
     }
 };

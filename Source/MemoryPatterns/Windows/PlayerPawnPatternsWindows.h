@@ -9,7 +9,7 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToPlayerPawnImmunity offsetToPlayerPawnImmunity() const noexcept
     {
-        return patternFinders.clientPatternFinder("0F B6 83 ? ? ? ? 84 C0 75 ? 41"_pat).add(3).template readOffset<OffsetToPlayerPawnImmunity>();
+        return patternFinders.clientPatternFinder("0F B6 83 ? ? ? ? 84 C0 75 ? ? 80"_pat).add(3).template readOffset<OffsetToPlayerPawnImmunity>();
     }
 
     [[nodiscard]] OffsetToWeaponServices offsetToWeaponServices() const noexcept

@@ -6,7 +6,7 @@ namespace cs2
 {
 
 struct GlobalVars {
-    PAD(44);
+    PAD(52); // FIXME: get offset to curtime dynamically
     float curtime;
 };
 

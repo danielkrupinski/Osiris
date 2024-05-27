@@ -34,7 +34,7 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::GlobalVars** globalVars() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 8B 05 ? ? ? ? 0F 57 C0 8B 48 40"_pat).add(3).abs().template as<cs2::GlobalVars**>();
+        return patternFinders.clientPatternFinder("48 8B 05 ? ? ? ? 0F 57 C0 8B 48"_pat).add(3).abs().template as<cs2::GlobalVars**>();
     }
 
     [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept
@@ -69,12 +69,12 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::VMatrix* worldToProjectionMatrix() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 48 8B D3 4C 8D 05"_pat).add(3).abs().template as<cs2::VMatrix*>();
+        return patternFinders.clientPatternFinder("48 8D 0D ? ? ? ? 48 C1 E0 06"_pat).add(3).abs().template as<cs2::VMatrix*>();
     }
 
     [[nodiscard]] cs2::VMatrix* viewToProjectionMatrix() const noexcept
     {
-        return patternFinders.clientPatternFinder("4C 8D 0D ? ? ? ? 48 8D 05 ? ? ? ? 48 8B D3"_pat).add(3).abs().template as<cs2::VMatrix*>();
+        return patternFinders.clientPatternFinder("48 89 4C 24 ? 4C 8D 0D ? ? ? ? 48 8B 0D"_pat).add(8).abs().template as<cs2::VMatrix*>();
     }
 
     [[nodiscard]] cs2::CViewRender** viewRender() const noexcept
