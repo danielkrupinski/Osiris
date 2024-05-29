@@ -19,7 +19,7 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToPlayerController offsetToPlayerController() const noexcept
     {
-        return patternFinders.clientPatternFinder("49 8D BD ? ? ? ? E8 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 48"_pat).add(3).template readOffset<OffsetToPlayerController>();
+        return patternFinders.clientPatternFinder("77 ? 8B 8B ? ? ? ? 83"_pat).add(4).template readOffset<OffsetToPlayerController>();
     }
 
     [[nodiscard]] OffsetToIsDefusing offsetToIsDefusing() const noexcept
@@ -29,7 +29,7 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToIsPickingUpHostage offsetToIsPickingUpHostage() const noexcept
     {
-        return patternFinders.clientPatternFinder("75 ? 41 C6 84 24 ? ? ? ? 01 49 8B 45"_pat).add(6).template readOffset<OffsetToIsPickingUpHostage>();
+        return patternFinders.clientPatternFinder("45 0F B6 AE ? ? ? ? 45 84 ED"_pat).add(4).template readOffset<OffsetToIsPickingUpHostage>();
     }
 
     [[nodiscard]] OffsetToHostageServices offsetToHostageServices() const noexcept

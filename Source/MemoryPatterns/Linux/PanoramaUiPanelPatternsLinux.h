@@ -21,7 +21,7 @@ struct PanoramaUiPanelPatterns {
 
     [[nodiscard]] std::int32_t* findChildInLayoutFile() const noexcept
     {
-        return patternFinders.clientPatternFinder("FF 90 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 48 89 C7 48 8B 00 FF 50 50 49 89 C6 48 8D 05 ? ? ? ? 0F B7 18"_pat).add(2).template as<std::int32_t*>();
+        return patternFinders.clientPatternFinder("49 89 84 24 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 7C 24 ? 48 8D 35 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 48 89 C7 48 8B 00 FF 50 50 49 89 C6 48 8D 05 ? ? ? ? 0F B7 18"_pat).add(34).template as<std::int32_t*>();
     }
 
     [[nodiscard]] std::int32_t* getAttributeString() const noexcept

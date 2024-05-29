@@ -9,7 +9,7 @@ struct FileSystemPatterns {
 
     [[nodiscard]] cs2::CBaseFileSystem** fileSystem() const noexcept
     {
-        return patternFinders.soundSystemPatternFinder("48 8D 05 ? ? ? ? 48 89 DA 4C 8B 00"_pat).add(3).abs().template as<cs2::CBaseFileSystem**>();
+        return patternFinders.soundSystemPatternFinder("48 8D 05 ? ? ? ? 48 89 DA 4C 8B 00 49"_pat).add(3).abs().template as<cs2::CBaseFileSystem**>();
     }
 
     [[nodiscard]] FileNamesOffset fileNamesOffset() const noexcept

@@ -9,6 +9,6 @@ struct GameSceneNodePatterns {
 
     [[nodiscard]] OffsetToAbsOrigin offsetToAbsOrigin() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 89 83 ? ? ? ? 8B 83 ? ? ? ? 41 0F 2E 04 24"_pat).add(3).template readOffset<OffsetToAbsOrigin>();
+        return patternFinders.clientPatternFinder("43 ? F3 0F 10 83 ? ? ? ? 66"_pat).add(6).template readOffset<OffsetToAbsOrigin>();
     }
 };

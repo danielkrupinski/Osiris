@@ -32,7 +32,7 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::GlobalVars** globalVars() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 89 35 ? ? ? ? 48 89 46 20"_pat).add(3).abs().template as<cs2::GlobalVars**>();
+        return patternFinders.clientPatternFinder("48 89 35 ? ? ? ? 48 89 46"_pat).add(3).abs().template as<cs2::GlobalVars**>();
     }
 
     [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept
@@ -52,7 +52,7 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::C_CSGameRules** gameRules() const noexcept
     {
-        return patternFinders.clientPatternFinder("4C 8D 35 ? ? ? ? 49 8B 3E 48 85 FF 0F 84 ? ? ? ? 41 80 BC 24"_pat).add(3).abs().template as<cs2::C_CSGameRules**>();
+        return patternFinders.clientPatternFinder("4C 8D ? ? ? ? ? 49 8B ? 48 85 FF 0F 84 ? ? ? ? 41 80 BC 24"_pat).add(3).abs().template as<cs2::C_CSGameRules**>();
     }
 
     [[nodiscard]] const void* transformTranslate3dVMT() const noexcept
@@ -67,21 +67,25 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::VMatrix* worldToProjectionMatrix() const noexcept
     {
-        return patternFinders.clientPatternFinder("4C 8D 05 ? ? ? ? 48 8B 38 48 8D 0D"_pat).add(3).abs().template as<cs2::VMatrix*>();
+        return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 4C 8D 05 ? ? ? ? 48 8D 0D"_pat).add(10).abs().template as<cs2::VMatrix*>();
     }
 
     [[nodiscard]] cs2::VMatrix* viewToProjectionMatrix() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 8B 38 48 8D 0D ? ? ? ? E8"_pat).add(6).abs().template as<cs2::VMatrix*>();
+        return patternFinders.clientPatternFinder("48 8D 0D ? ? ? ? 48 8B 38 E8"_pat).add(3).abs().template as<cs2::VMatrix*>();
     }
 
     [[nodiscard]] cs2::CViewRender** viewRender() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 48 89 38"_pat).add(3).abs().template as<cs2::CViewRender**>();
+        return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 48 89 38 48 85"_pat).add(3).abs().template as<cs2::CViewRender**>();
     }
 
     [[nodiscard]] cs2::CCSPlayerController** localPlayerController() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 48 63 FF 48 8B 04 F8 48"_pat).add(3).abs().template as<cs2::CCSPlayerController**>();
+        // fixme: add support for abs(offset)
+        const auto result = patternFinders.clientPatternFinder("48 83 3D ? ? ? ? ? 0F 95 C0 C3"_pat).add(3).abs().template as<std::byte*>();
+        if (result)
+            return reinterpret_cast<cs2::CCSPlayerController**>(result + 1);
+        return nullptr;
     }
 };
