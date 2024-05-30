@@ -20,6 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: install g++-13
+      if: matrix.compiler == 'g++-13' || matrix.compiler == 'clang++-18'
       run: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update && sudo apt-get install -y g++-13
