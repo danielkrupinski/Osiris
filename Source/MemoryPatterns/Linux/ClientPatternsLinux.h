@@ -82,10 +82,6 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::CCSPlayerController** localPlayerController() const noexcept
     {
-        // fixme: add support for abs(offset)
-        const auto result = patternFinders.clientPatternFinder("48 83 3D ? ? ? ? ? 0F 95 C0 C3"_pat).add(3).abs().template as<std::byte*>();
-        if (result)
-            return reinterpret_cast<cs2::CCSPlayerController**>(result + 1);
-        return nullptr;
+        return patternFinders.clientPatternFinder("48 83 3D ? ? ? ? ? 0F 95 C0 C3"_pat).add(3).abs(5).template as<cs2::CCSPlayerController**>();
     }
 };

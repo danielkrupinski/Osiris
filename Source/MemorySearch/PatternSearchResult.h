@@ -29,14 +29,15 @@ public:
         return *this;
     }
 
-    [[nodiscard]] GenericPointer abs() const noexcept
+    [[nodiscard]] GenericPointer abs(std::size_t offsetToNextInstruction = 4) const noexcept
     {
         if (base) {
             using OffsetType = std::int32_t;
             OffsetType offset;
+            assert(offsetToNextInstruction >= sizeof(OffsetType));
             assert(foundPatternBytes.size() - extraOffset >= sizeof(OffsetType));
             std::memcpy(&offset, foundPatternBytes.data() + extraOffset, sizeof(OffsetType));
-            return base.as<const std::byte*>() + patternFoundOffset + extraOffset + sizeof(OffsetType) + offset;
+            return base.as<const std::byte*>() + patternFoundOffset + extraOffset + offsetToNextInstruction + offset;
         }
         return {};
     }
