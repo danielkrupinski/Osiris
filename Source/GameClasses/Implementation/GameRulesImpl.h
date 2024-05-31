@@ -5,11 +5,13 @@
 struct GameRulesImpl {
     template <typename GameRulesPatterns>
     explicit GameRulesImpl(const GameRulesPatterns& gameRulesPatterns) noexcept
-        : roundStartTimeOffset{gameRulesPatterns.roundStartTimeOffset()}
+        : gameRules{gameRulesPatterns.gameRules()}
+        , roundStartTimeOffset{gameRulesPatterns.roundStartTimeOffset()}
     {
     }
 
     [[nodiscard]] static const GameRulesImpl& instance() noexcept;
 
+    cs2::C_CSGameRules** gameRules;
     RoundStartTimeOffset roundStartTimeOffset;
 };

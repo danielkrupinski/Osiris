@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
+#include <HookDependencies/HookDependencies.h>
 
 #include "BombTimer.h"
 #include "DefusingAlert.h"
@@ -25,7 +26,7 @@ struct HudFeatures {
     
     [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, helpers.hudProvider, helpers.gameRules};
+        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, helpers.hudProvider, hookDependencies.offsets().gameRules.gameRules};
     }
 
     HudFeaturesStates& states;
