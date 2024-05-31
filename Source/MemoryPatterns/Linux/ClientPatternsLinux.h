@@ -50,11 +50,6 @@ struct ClientPatterns {
         return patternFinders.clientPatternFinder("FF 10 49 89 C5 48 85 C0 0F 84"_pat).add(2).template as<ReturnAddress>();
     }
 
-    [[nodiscard]] cs2::C_CSGameRules** gameRules() const noexcept
-    {
-        return patternFinders.clientPatternFinder("4C 8D ? ? ? ? ? 49 8B ? 48 85 FF 0F 84 ? ? ? ? 41 80 BC 24"_pat).add(3).abs().template as<cs2::C_CSGameRules**>();
-    }
-
     [[nodiscard]] const void* transformTranslate3dVMT() const noexcept
     {
         return patternFinders.clientPatternFinder("48 8D 0D ? ? ? ? 48 89 08 48 89 50 08 48 8B 53 10"_pat).add(3).abs().template as<const void*>();

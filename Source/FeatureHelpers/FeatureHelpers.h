@@ -21,7 +21,7 @@ struct FeatureHelpers {
         , worldtoClipSpaceConverter{memoryPatterns.clientPatterns()}
         , viewToProjectionMatrix{memoryPatterns.clientPatterns()}
         , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, panoramaVmtFinder}
-        , gameRules{memoryPatterns.clientPatterns().gameRules()}
+        , gameRules{memoryPatterns.gameRulesPatterns().gameRules()}
         , mainMenuProvider{memoryPatterns.clientPatterns()}
         , localPlayerController{memoryPatterns.clientPatterns().localPlayerController()}
         , entitiesVMTs{clientVmtFinder}
