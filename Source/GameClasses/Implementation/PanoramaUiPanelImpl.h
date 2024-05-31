@@ -12,10 +12,10 @@ struct PanoramaUiPanelImpl {
         , getAttributeString{panoramaUiPanelPatterns.getAttributeString()}
         , setAttributeString{panoramaUiPanelPatterns.setAttributeString()}
         , childPanels{panoramaUiPanelPatterns.childPanelsVectorOffset()}
-        , classes{panoramaUiPanelPatterns.classesVectorOffset()}
         , panelStyle{panoramaUiPanelPatterns.panelStyleOffset()}
         , parentWindowOffset{panoramaUiPanelPatterns.parentWindowOffset()}
         , offsetToPanelId{panoramaUiPanelPatterns.offsetToPanelId()}
+        , classes{panoramaUiPanelPatterns.classesVectorOffset()}
         , offsetToPanelFlags{panoramaUiPanelPatterns.offsetToPanelFlags()}
     {
     }
@@ -31,9 +31,9 @@ struct PanoramaUiPanelImpl {
     Offset<cs2::CUIPanel::setAttributeString> setAttributeString;
 
     ChildPanelsVectorOffset childPanels;
-    PanelClassesVectorOffset classes;
     PanelStyleOffset panelStyle;
     ParentWindowOffset parentWindowOffset;
     OffsetToPanelId offsetToPanelId;
+    PanelClassesVectorOffset classes;
     OffsetToPanelFlags offsetToPanelFlags;
 };
