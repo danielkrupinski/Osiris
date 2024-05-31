@@ -19,11 +19,6 @@ struct PanoramaUiPanelPatterns {
         return patternFinders.clientPatternFinder("F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? ? 8D"_pat).add(10).template as<std::int32_t*>();
     }
 
-    [[nodiscard]] std::int32_t* findChildInLayoutFile() const noexcept
-    {
-        return patternFinders.clientPatternFinder("49 89 84 24 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 49 8B 7C 24 ? 48 8D 35 ? ? ? ? 48 8B 07 FF 90 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 48 89 C7 48 8B 00 FF 50 50 49 89 C6 48 8D 05 ? ? ? ? 0F B7 18"_pat).add(34).template as<std::int32_t*>();
-    }
-
     [[nodiscard]] std::int32_t* getAttributeString() const noexcept
     {
         return patternFinders.clientPatternFinder("FF 90 ? ? ? ? 41 80 BC 24 ? ? ? ? ? 48 89 C2"_pat).add(2).template as<std::int32_t*>();
@@ -53,5 +48,14 @@ struct PanoramaUiPanelPatterns {
     {
         return patternFinders.panoramaPatternFinder("4D 89 ? 24 ? 4D 85 ? 0F 84 ? ? ? ? 4C"_pat).add(4).template readOffset<ParentWindowOffset>();
     }
-};
+    
+    [[nodiscard]] OffsetToPanelId offsetToPanelId() const noexcept
+    {
+        return patternFinders.panoramaPatternFinder("00 48 83 7B ? 00 74 ? 48 8D 7B ? 5B 41 5C 41"_pat).add(4).template readOffset<OffsetToPanelId>();
+    }
 
+    [[nodiscard]] OffsetToPanelFlags offsetToPanelFlags() const noexcept
+    {
+        return patternFinders.panoramaPatternFinder("D8 41 F6 85 ? ? ? ?"_pat).add(4).template readOffset<OffsetToPanelFlags>();
+    }
+};

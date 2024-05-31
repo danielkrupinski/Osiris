@@ -9,13 +9,14 @@ struct PanoramaUiPanelImpl {
     explicit PanoramaUiPanelImpl(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
         : setParent{panoramaUiPanelPatterns.setParent()}
         , setVisible{panoramaUiPanelPatterns.setVisible()}
-        , findChildInLayoutFile{panoramaUiPanelPatterns.findChildInLayoutFile()}
         , getAttributeString{panoramaUiPanelPatterns.getAttributeString()}
         , setAttributeString{panoramaUiPanelPatterns.setAttributeString()}
         , childPanels{panoramaUiPanelPatterns.childPanelsVectorOffset()}
         , classes{panoramaUiPanelPatterns.classesVectorOffset()}
         , panelStyle{panoramaUiPanelPatterns.panelStyleOffset()}
         , parentWindowOffset{panoramaUiPanelPatterns.parentWindowOffset()}
+        , offsetToPanelId{panoramaUiPanelPatterns.offsetToPanelId()}
+        , offsetToPanelFlags{panoramaUiPanelPatterns.offsetToPanelFlags()}
     {
     }
 
@@ -26,7 +27,6 @@ struct PanoramaUiPanelImpl {
 
     Offset<cs2::CUIPanel::setParent> setParent;
     Offset<cs2::CUIPanel::setVisible> setVisible;
-    Offset<cs2::CUIPanel::findChildInLayoutFile> findChildInLayoutFile;
     Offset<cs2::CUIPanel::getAttributeString> getAttributeString;
     Offset<cs2::CUIPanel::setAttributeString> setAttributeString;
 
@@ -34,4 +34,6 @@ struct PanoramaUiPanelImpl {
     PanelClassesVectorOffset classes;
     PanelStyleOffset panelStyle;
     ParentWindowOffset parentWindowOffset;
+    OffsetToPanelId offsetToPanelId;
+    OffsetToPanelFlags offsetToPanelFlags;
 };

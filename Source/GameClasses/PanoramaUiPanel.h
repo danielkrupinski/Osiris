@@ -29,9 +29,9 @@ struct PanoramaUiPanel {
 
     [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
     {
-        if (const auto fn = impl().findChildInLayoutFile.of(thisptr->vmt).get())
-            return PanoramaUiPanel{ (*fn)(thisptr, childId) };
-        return PanoramaUiPanel{ nullptr };
+        if (!impl().offsetToPanelFlags || !impl().offsetToPanelId)
+            return PanoramaUiPanel{nullptr};
+        return PanoramaUiPanel{findChildInLayoutFileInternal(thisptr, childId)};
     }
 
     [[nodiscard]] const char* getAttributeString(cs2::CPanoramaSymbol attributeName, const char* defaultValue) const noexcept
@@ -86,6 +86,31 @@ struct PanoramaUiPanel {
     }
 
 private:
+    [[nodiscard]] cs2::CUIPanel* findChildInLayoutFileInternal(cs2::CUIPanel* parentPanel, const char* idToFind) const noexcept
+    {
+        const auto children = impl().childPanels.of(parentPanel).get();
+        if (!children)
+            return nullptr;
+
+        for (int i = 0; i < children->size; ++i) {
+            const auto panel = children->memory[i];
+            const auto panelId = impl().offsetToPanelId.of(panel).get()->m_pString;
+            if (panelId && std::strcmp(panelId, idToFind) == 0)
+                return panel;
+        }
+
+        for (int i = 0; i < children->size; ++i) {
+            const auto panel = children->memory[i];
+            const auto panelFlags = *impl().offsetToPanelFlags.of(panel).get();
+            if ((panelFlags & cs2::k_EPanelFlag_HasOwnLayoutFile) == 0) {
+                if (const auto found = findChildInLayoutFileInternal(panel, idToFind))
+                    return found;
+            }
+        }
+
+        return nullptr;
+    }
+
     [[nodiscard]] static const PanoramaUiPanelImpl& impl() noexcept
     {
         return PanoramaUiPanelImpl::instance();
