@@ -85,6 +85,20 @@ You can simply run the following script in the directory containing **libOsiris.
 
 However, this injection method might be detected by VAC as gdb is visible under **TracerPid** in `/proc/$(pidof cs2)/status` for the duration of the injection.
 
+It's possible to hide the TracerPid by applying the following patch to your kernel sources:
+
+    --- a/fs/proc/array.c
+    +++ b/fs/proc/array.c
+    @@ -162,7 +162,7 @@
+     
+     	tracer = ptrace_parent(p);
+     	if (tracer)
+    -		tpid = task_pid_nr_ns(tracer, ns);
+    +		tpid = 0;
+     
+     	tgid = task_tgid_nr_ns(p, ns);
+     	ngid = task_numa_group_id(p);
+
 ## License
 
 > Copyright (c) 2018-2024 Daniel Krupiński
