@@ -40,6 +40,36 @@ struct SoundFeatures {
         return soundVisualizationFeature<WeaponReloadVisualizer>(states.weaponReloadVisualizerState);
     }
 
+    [[nodiscard]] auto footstepVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<FootstepSound>(states.footstepVisualizerState);
+    }
+
+    [[nodiscard]] auto bombPlantVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<BombPlantSound>(states.bombPlantVisualizerState);
+    }
+
+    [[nodiscard]] auto bombBeepVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<BombBeepSound>(states.bombBeepVisualizerState);
+    }
+
+    [[nodiscard]] auto bombDefuseVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<BombDefuseSound>(states.bombDefuseVisualizerState);
+    }
+
+    [[nodiscard]] auto weaponScopeVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<WeaponScopeSound>(states.weaponScopeVisualizerState);
+    }
+
+    [[nodiscard]] auto weaponReloadVisualizerToggle() const noexcept
+    {
+        return soundVisualizationFeatureToggle<WeaponReloadSound>(states.weaponReloadVisualizerState);
+    }
+
     void runOnViewMatrixUpdate() noexcept
     {
         footstepVisualizer().run();
@@ -67,6 +97,19 @@ private:
             helpers.hudInWorldPanelContainer,
             helpers.worldtoClipSpaceConverter,
             helpers.viewToProjectionMatrix,
+            helpers.panelConfigurator(),
+            helpers.hudProvider
+        };
+    }
+
+    template <typename SoundType>
+    [[nodiscard]] SoundVisualizationFeatureToggle<SoundType> soundVisualizationFeatureToggle(auto& state) const noexcept
+    {
+        return SoundVisualizationFeatureToggle<SoundType>{
+            state,
+            SoundWatcher{helpers.soundWatcherState, hookDependencies},
+            viewRenderHook,
+            helpers.hudInWorldPanelContainer,
             helpers.panelConfigurator(),
             helpers.hudProvider
         };

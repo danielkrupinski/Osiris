@@ -3,7 +3,7 @@
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <GameClasses/PlantedC4.h>
@@ -17,11 +17,30 @@
 
 #include "States/BombTimerState.h"
 
-class BombTimer : public TogglableFeature<BombTimer> {
+struct BombTimerToggle : FeatureToggleOff<BombTimerToggle> {
+    BombTimerToggle(BombTimerState& state) noexcept
+        : state{state}
+    {
+    }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.enabled;
+    }
+
+    void onDisable(ToggleMethod) const noexcept
+    {
+        state.restorePanels();
+    }
+
+private:
+    BombTimerState& state;
+};
+
+class BombTimer {
 public:
     BombTimer(BombTimerState& state, HookDependencies& hookDependencies, HudProvider hudProvider) noexcept
-        : TogglableFeature{state.enabled}
-        , state{state}
+        : state{state}
         , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
     {
@@ -29,14 +48,14 @@ public:
 
     void run() noexcept
     {
-        if (!isEnabled())
+        if (!state.enabled)
             return;
 
         updatePanelHandles();
         hideBombStatusPanel();
 
         if (!hookDependencies.requestDependency<PlantedC4>() || !hookDependencies.requestDependency<CurTime>()) {
-            hideBombTimerPanel();
+            state.hideBombTimerPanel();
             return;
         }
 
@@ -45,30 +64,11 @@ public:
         if (const auto timeToExplosion = bomb.getTimeToExplosion(hookDependencies.getDependency<CurTime>()); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
-            restorePanels();
+            state.restorePanels();
         }
     }
 
 private:
-    void onDisable() const noexcept
-    {
-        restorePanels();
-    }
-
-    friend TogglableFeature;
-
-    void restorePanels() const noexcept
-    {
-        hideBombTimerPanel();
-        state.restoreBombStatusPanel();
-    }
-
-    void hideBombTimerPanel() const noexcept
-    {
-        if (const auto bombTimerContainer = state.bombTimerContainerPanel.get())
-            bombTimerContainer.setVisible(false);
-    }
-
     void showBombTimerPanel(const char* bombsiteIconUrl, float timeToExplosion) const noexcept
     {
         if (const auto bombTimerContainer = state.bombTimerContainerPanel.get())

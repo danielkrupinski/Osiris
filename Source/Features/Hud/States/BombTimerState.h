@@ -35,4 +35,16 @@ struct BombTimerState {
                 bombStatus.setParent(scoreAndTimeAndBomb);
         }
     }
+
+    void restorePanels() const noexcept
+    {
+        hideBombTimerPanel();
+        restoreBombStatusPanel();
+    }
+
+    void hideBombTimerPanel() const noexcept
+    {
+        if (const auto bombTimerContainer = bombTimerContainerPanel.get())
+            bombTimerContainer.setVisible(false);
+    }
 };

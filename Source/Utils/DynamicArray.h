@@ -55,6 +55,11 @@ public:
         return elementAt(index);
     }
 
+    [[nodiscard]] const T& operator[](std::size_t index) const noexcept
+    {
+        return elementAt(index);
+    }
+
     bool pushBack(const T& value) noexcept
     {
         if (ensureCapacityForNewElement()) [[likely]] {
@@ -97,6 +102,12 @@ private:
     }
 
     [[nodiscard]] T& elementAt(std::size_t index) noexcept
+    {
+        assert(index < size);
+        return memory.get()[index];
+    }
+
+    [[nodiscard]] const T& elementAt(std::size_t index) const noexcept
     {
         assert(index < size);
         return memory.get()[index];

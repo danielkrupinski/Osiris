@@ -9,7 +9,7 @@
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaLabelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaImagePanel.h>
@@ -28,11 +28,18 @@
 #include <HookDependencies/HookDependencies.h>
 #include <HookDependencies/HookDependenciesMask.h>
 
-struct PlayerPositionToggle : public TogglableFeature<PlayerPositionToggle> {
+struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
     explicit PlayerPositionToggle(PlayerInformationThroughWallsState& state) noexcept
-        : TogglableFeature{state.showPlayerPosition}
+        : state{state}
     {
     }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showPlayerPosition;
+    }
+
+    PlayerInformationThroughWallsState& state;
 };
 
 struct PlayerPositionArrowColorToggle {
@@ -53,11 +60,18 @@ private:
     PlayerPositionArrowColorType& color;
 };
 
-struct PlayerHealthToggle : public TogglableFeature<PlayerHealthToggle> {
+struct PlayerHealthToggle : public FeatureToggle<PlayerHealthToggle> {
     explicit PlayerHealthToggle(PlayerInformationThroughWallsState& state) noexcept
-        : TogglableFeature{state.showPlayerHealth}
+        : state{state}
     {
     }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showPlayerHealth;
+    }
+
+    PlayerInformationThroughWallsState& state;
 };
 
 struct PlayerHealthTextColorToggle {
@@ -78,18 +92,32 @@ private:
     PlayerHealthTextColor& color;
 };
 
-struct PlayerActiveWeaponToggle : public TogglableFeature<PlayerActiveWeaponToggle> {
+struct PlayerActiveWeaponToggle : public FeatureToggle<PlayerActiveWeaponToggle> {
     explicit PlayerActiveWeaponToggle(PlayerInformationThroughWallsState& state) noexcept
-        : TogglableFeature{state.showPlayerActiveWeapon}
+        : state{state}
     {
     }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showPlayerActiveWeapon;
+    }
+
+    PlayerInformationThroughWallsState& state;
 };
 
-struct PlayerActiveWeaponAmmoToggle : public TogglableFeature<PlayerActiveWeaponAmmoToggle> {
+struct PlayerActiveWeaponAmmoToggle : public FeatureToggle<PlayerActiveWeaponAmmoToggle> {
     explicit PlayerActiveWeaponAmmoToggle(PlayerInformationThroughWallsState& state) noexcept
-        : TogglableFeature{state.showPlayerActiveWeaponAmmo}
+        : state{state}
     {
     }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showPlayerActiveWeaponAmmo;
+    }
+
+    PlayerInformationThroughWallsState& state;
 };
 
 template <typename IconPanel>
@@ -115,10 +143,9 @@ using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
 using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
-struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInformationThroughWallsToggle> {
+struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformationThroughWallsToggle> {
     PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook, PanelConfigurator panelConfigurator, HudProvider hudProvider) noexcept
-        : TogglableFeature{state.enabled}
-        , state{state}
+        : state{state}
         , hudInWorldPanelContainer{hudInWorldPanelContainer}
         , viewRenderHook{viewRenderHook}
         , panelConfigurator{panelConfigurator}
@@ -135,15 +162,17 @@ struct PlayerInformationThroughWallsToggle : private TogglableFeature<PlayerInfo
         }
     }
 
-private:
-    friend TogglableFeature;
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.enabled;
+    }
 
-    void onEnable() noexcept
+    void onEnable(ToggleMethod) noexcept
     {
         viewRenderHook.incrementReferenceCount();
     }
 
-    void onDisable() noexcept
+    void onDisable(ToggleMethod) noexcept
     {
         viewRenderHook.decrementReferenceCount();
 
@@ -153,6 +182,7 @@ private:
         }
     }
 
+private:
     void hideRemainingPanels(HudInWorldPanels inWorldPanels, std::size_t firstIndexToHide) const noexcept
     {
         for (std::size_t i = firstIndexToHide; i < state.panelIndices.getSize(); ++i) {

@@ -2,7 +2,7 @@
 
 #include <CS2/Constants/PanelIDs.h>
 
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <Helpers/HudProvider.h>
 #include <FeatureHelpers/PanelConfigurator.h>
 
@@ -20,11 +20,29 @@ private:
     StringBuilderStorage<10> storage;
 };
 
-class DefusingAlert : public TogglableFeature<DefusingAlert> {
+struct DefusingAlertToggle : FeatureToggleOff<DefusingAlertToggle> {
+    explicit DefusingAlertToggle(DefusingAlertState& state) noexcept
+        : state{state}
+    {
+    }
+
+    DefusingAlertState& state;
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.enabled;
+    }
+
+    void onDisable(ToggleMethod) const noexcept
+    {
+        state.hideDefusingAlert();
+    }
+};
+
+class DefusingAlert {
 public:
     DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies, HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
-        : TogglableFeature{state.enabled}
-        , state{state}
+        : state{state}
         , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
         , panelConfigurator{panelConfigurator}
@@ -33,7 +51,7 @@ public:
 
     void run() noexcept
     {
-        if (!isEnabled())
+        if (!state.enabled)
             return;
 
         updatePanelHandles();
@@ -43,7 +61,7 @@ public:
 
         const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
         if (!bomb.isBeingDefused()) {
-            hideDefusingAlert();
+            state.hideDefusingAlert();
             return;
         }
 
@@ -58,7 +76,7 @@ public:
                     panelConfigurator.panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
             }
         } else {
-            hideDefusingAlert();
+            state.hideDefusingAlert();
         }
     }
 
@@ -68,12 +86,6 @@ private:
         if (const auto canDefuse = bomb.canBeDefused(); canDefuse.has_value())
             return *canDefuse ? cs2::kColorGreen : cs2::kColorRed;
         return cs2::kColorWhite;
-    }
-
-    void hideDefusingAlert() const noexcept
-    {
-        if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
-            defusingAlertContainer.setVisible(false);
     }
 
     void updatePanelHandles() noexcept
@@ -117,13 +129,6 @@ R"(
         state.defusingAlertContainerPanel = defusingAlertContainer;
         state.defusingTimerPanel = defusingTimer; 
     }
-
-    void onDisable() const noexcept
-    {
-        hideDefusingAlert();
-    }
-
-    friend TogglableFeature;
 
     DefusingAlertState& state;
     HookDependencies& hookDependencies;

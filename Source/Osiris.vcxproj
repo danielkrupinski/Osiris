@@ -67,6 +67,7 @@
     <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h" />
     <ClInclude Include="FeatureHelpers\EntityListWalker.h" />
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h" />
+    <ClInclude Include="FeatureHelpers\FeatureToggle.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h" />
     <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
@@ -90,7 +91,6 @@
     <ClInclude Include="FeatureHelpers\StylePropertiesSymbolsAndVMTs.h" />
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h" />
     <ClInclude Include="FeatureHelpers\TeamNumber.h" />
-    <ClInclude Include="FeatureHelpers\TogglableFeature.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
     <ClInclude Include="Features\Features.h" />
@@ -306,6 +306,7 @@
     <ClInclude Include="Utils\ManuallyDestructible.h" />
     <ClInclude Include="Utils\MemorySection.h" />
     <ClInclude Include="Utils\Pad.h" />
+    <ClInclude Include="Utils\PrivateTag.h" />
     <ClInclude Include="Utils\RefCountedHook.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\SpanSlice.h" />

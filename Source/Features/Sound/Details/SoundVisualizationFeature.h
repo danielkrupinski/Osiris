@@ -4,7 +4,7 @@
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <Hooks/ViewRenderHook.h>
 #include "SoundVisualization.h"
 #include "SoundVisualizationPanelFactory.h"
@@ -14,10 +14,67 @@ struct SoundVisualizationFeatureState {
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;
+
+    void hideRemainingPanels(PanelConfigurator panelConfigurator, HudInWorldPanels inWorldPanels, std::size_t firstIndexToHide) const noexcept
+    {
+        for (std::size_t i = firstIndexToHide; i < panelIndices.getSize(); ++i) {
+            if (const auto panel{inWorldPanels.getPanel(panelIndices[i])}) {
+                if (const auto style{panel.getStyle()})
+                    panelConfigurator.panelStyle(*style).setOpacity(0.0f);
+            }
+        }
+    }
+};
+
+template <typename SoundType>
+struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFeatureToggle<SoundType>> {
+    SoundVisualizationFeatureToggle(SoundVisualizationFeatureState& state,
+        SoundWatcher soundWatcher,
+        ViewRenderHook& viewRenderHook,
+        HudInWorldPanelContainer& hudInWorldPanelContainer,
+        PanelConfigurator panelConfigurator,
+        HudProvider hudProvider)
+        : state{state}
+        , soundWatcher{soundWatcher}
+        , viewRenderHook{viewRenderHook}
+        , hudInWorldPanelContainer{hudInWorldPanelContainer}
+        , panelConfigurator{panelConfigurator}
+        , hudProvider{hudProvider}
+    {
+    }
+
+    [[nodiscard]] auto& enabledVariable(typename SoundVisualizationFeatureToggle::ToggleMethod) const noexcept
+    {
+        return state.enabled;
+    }
+
+    void onEnable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
+    {
+        viewRenderHook.incrementReferenceCount();
+        soundWatcher.startWatching<SoundType>();
+    }
+
+    void onDisable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
+    {
+        viewRenderHook.decrementReferenceCount();
+        soundWatcher.stopWatching<SoundType>();
+        if (const auto containerPanel{hudInWorldPanelContainer.get(hudProvider, panelConfigurator)}) {
+            if (const auto containerPanelChildren{containerPanel.children()})
+                state.hideRemainingPanels(panelConfigurator, HudInWorldPanels{*containerPanelChildren}, 0);
+        }
+    }
+
+private:
+    SoundVisualizationFeatureState& state;
+    SoundWatcher soundWatcher;
+    ViewRenderHook& viewRenderHook;
+    HudInWorldPanelContainer& hudInWorldPanelContainer;
+    PanelConfigurator panelConfigurator;
+    HudProvider hudProvider;
 };
 
 template <typename PanelsType, typename SoundType>
-class SoundVisualizationFeature : public TogglableFeature<SoundVisualizationFeature<PanelsType, SoundType>> {
+class SoundVisualizationFeature {
 public:
     SoundVisualizationFeature(
         SoundVisualizationFeatureState& state,
@@ -29,8 +86,7 @@ public:
         ViewToProjectionMatrix viewToProjectionMatrix,
         PanelConfigurator panelConfigurator,
         HudProvider hudProvider) noexcept
-        : SoundVisualizationFeature::TogglableFeature{state.enabled}
-        , state{state}
+        : state{state}
         , hookDependencies{hookDependencies}
         , viewRenderHook{viewRenderHook}
         , soundWatcher{soundWatcher}
@@ -44,7 +100,7 @@ public:
 
     void run() noexcept
     {
-        if (!this->isEnabled())
+        if (!state.enabled)
             return;
 
         constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<CurTime>()};
@@ -102,28 +158,10 @@ public:
             ++currentIndex;
         });
 
-        hideRemainingPanels(panels, currentIndex);
+        state.hideRemainingPanels(panelConfigurator, panels, currentIndex);
     }
 
 private:
-    friend TogglableFeature<SoundVisualizationFeature<PanelsType, SoundType>>;
-
-    void onEnable() noexcept
-    {
-        viewRenderHook.incrementReferenceCount();
-        soundWatcher.startWatching<SoundType>();
-    }
-
-    void onDisable() noexcept
-    {
-        viewRenderHook.decrementReferenceCount();
-        soundWatcher.stopWatching<SoundType>();
-        if (const auto containerPanel{hudInWorldPanelContainer.get(hudProvider, panelConfigurator)}) {
-            if (const auto containerPanelChildren{containerPanel.children()})
-                hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
-        }
-    }
-
     [[nodiscard]] PanoramaUiPanel getPanel(PanoramaUiPanel containerPanel, HudInWorldPanels inWorldPanels, std::size_t index) const noexcept
     {
         if (index < state.panelIndices.getSize()) {
@@ -136,16 +174,6 @@ private:
             return panel;
         }
         return PanoramaUiPanel{nullptr};
-    }
-
-    void hideRemainingPanels(HudInWorldPanels inWorldPanels, std::size_t firstIndexToHide) const noexcept
-    {
-        for (std::size_t i = firstIndexToHide; i < state.panelIndices.getSize(); ++i) {
-            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[i])}) {
-                if (const auto style{panel.getStyle()})
-                    panelConfigurator.panelStyle(*style).setOpacity(0.0f);
-            }
-        }
     }
 
     SoundVisualizationFeatureState& state;

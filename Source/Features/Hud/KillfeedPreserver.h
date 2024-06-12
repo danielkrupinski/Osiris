@@ -2,18 +2,31 @@
 
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Constants/PanelIDs.h>
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <Helpers/PanoramaPanelPointer.h>
 #include <Utils/StringParser.h>
 #include <GameClasses/GameRules.h>
 
 #include "States/KillfeedPreserverState.h"
 
-class KillfeedPreserver : public TogglableFeature<KillfeedPreserver> {
+struct KillfeedPreserveToggle : FeatureToggle<KillfeedPreserveToggle> {
+    explicit KillfeedPreserveToggle(KillfeedPreserverState& state) noexcept
+        : state{state}
+    {
+    }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.enabled;
+    }
+
+    KillfeedPreserverState& state;
+};
+
+class KillfeedPreserver {
 public:
     KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& hookDependencies, HudProvider hudProvider, cs2::C_CSGameRules** gameRules) noexcept
-        : TogglableFeature{state.enabled}
-        , state{state}
+        : state{state}
         , hookDependencies{hookDependencies}
         , hudProvider{hudProvider}
         , gameRules{gameRules}
@@ -22,7 +35,7 @@ public:
 
     void run() noexcept
     {
-        if (!isEnabled())
+        if (!state.enabled)
             return;
 
         if (!gameRules || !*gameRules)
@@ -57,7 +70,6 @@ public:
         }
     }
 
-
 private:
     [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel() noexcept
     {
@@ -85,8 +97,6 @@ private:
         if (state.spawnTimeSymbol == -1)
             state.spawnTimeSymbol = PanoramaUiEngine::makeSymbol(0, "SpawnTime");
     }
-
-    friend TogglableFeature;
 
     KillfeedPreserverState& state;
     HookDependencies& hookDependencies;

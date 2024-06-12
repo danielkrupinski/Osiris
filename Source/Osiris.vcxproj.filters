@@ -509,9 +509,6 @@
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\TogglableFeature.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -1048,6 +1045,12 @@
     </ClInclude>
     <ClInclude Include="GameClasses\Implementation\WeaponImpl.h">
       <Filter>GameClasses\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PrivateTag.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureHelpers\FeatureToggle.h">
+      <Filter>FeatureHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
