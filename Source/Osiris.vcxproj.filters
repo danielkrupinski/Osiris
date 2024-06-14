@@ -22,9 +22,6 @@
     <Filter Include="GameClasses">
       <UniqueIdentifier>{8f279e18-4344-42fb-8c01-6c773341568d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameClasses\Implementation">
-      <UniqueIdentifier>{9d1f0b22-77bd-4a76-95aa-dc397050c4d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameClasses\OffsetTypes">
       <UniqueIdentifier>{329c6712-55b5-4e74-a86b-9ec2134ff40a}</UniqueIdentifier>
     </Filter>
@@ -127,6 +124,12 @@
     <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons">
       <UniqueIdentifier>{0298df1f-2c8f-45a5-b252-88eb2bdabc58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameClasses\GlobalVars">
+      <UniqueIdentifier>{8c159c05-e8c8-4299-8007-989109d14751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameDependencies">
+      <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -200,30 +203,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PlantedC4.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\GameClassImplementationInstances.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\GameClassImplementations.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\GameRulesImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanoramaImagePanelImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanoramaLabelImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanoramaUiEngineImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanoramaUiPanelImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PlantedC4Impl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -455,9 +434,6 @@
     <ClInclude Include="GameClasses\MemAlloc.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\MemAllocImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\IMemAlloc.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
@@ -497,9 +473,6 @@
     <ClInclude Include="GameClasses\OffsetTypes\FileSystemOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\FileSystemImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\FileSystem.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
@@ -520,9 +493,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\FileNameSymbolTableImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\FileNameSymbolTable.h">
       <Filter>GameClasses</Filter>
@@ -559,9 +529,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanelImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
       <Filter>FeatureHelpers</Filter>
@@ -635,9 +602,6 @@
     <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PanelStyleImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsVmtFinder.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -685,9 +649,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\EntitySystemImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\SyscallParams.h">
       <Filter>Platform\Windows\Syscalls</Filter>
@@ -782,9 +743,6 @@
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaImagePanelOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\TopLevelWindowImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\TopLevelWindowOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
@@ -860,15 +818,6 @@
     <ClInclude Include="FeatureHelpers\TeamNumber.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\EntityImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\GameSceneNodeImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PlayerControllerImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
@@ -923,9 +872,6 @@
     <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\CvarImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\CUtlLinkedList.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
@@ -953,9 +899,6 @@
     <ClInclude Include="FeatureHelpers\ConVarsBase.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\ConVarImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
@@ -970,9 +913,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\PlayerPawnOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\PlayerPawnImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\ColorConstants.h">
       <Filter>CS2\Constants</Filter>
@@ -1016,15 +956,6 @@
     <ClInclude Include="GameClasses\OffsetTypes\HostageServicesOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\WeaponServicesImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\WeaponVDataImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\HostageServicesImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -1043,14 +974,104 @@
     <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Implementation\WeaponImpl.h">
-      <Filter>GameClasses\Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\PrivateTag.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="FeatureHelpers\FeatureToggle.h">
       <Filter>FeatureHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GlobalVars\GlobalVars.h">
+      <Filter>GameClasses\GlobalVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GlobalVars\GlobalVarsCache.h">
+      <Filter>GameClasses\GlobalVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GlobalVars\GlobalVarsOptional.h">
+      <Filter>GameClasses\GlobalVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\ConVarDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\ConVars.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\ConVarsBase.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\CvarDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\DepsInstances.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\EntitiesVMTs.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\EntityDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\EntitySystemDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\FileSystemDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GameDependencies.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GameRulesDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GameSceneNodeDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\HostageServicesDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\MemAllocDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanelDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanelStyleDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanoramaImagePanelDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanoramaLabelDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanoramaUiEngineDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PanoramaUiPanelDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PlantedC4Deps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PlayerControllerDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\PlayerPawnDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\TopLevelWindowDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\WeaponDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\WeaponServicesDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\WeaponVDataDeps.h">
+      <Filter>GameDependencies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

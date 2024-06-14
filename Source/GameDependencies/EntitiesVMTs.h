@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <Platform/VmtFinder.h>
 
 struct EntitiesVMTs {
     explicit EntitiesVMTs(const VmtFinder& clientVmtFinder) noexcept

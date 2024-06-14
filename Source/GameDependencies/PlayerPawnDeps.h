@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/PlayerPawnOffset.h>
 
-struct PlayerPawnImpl {
+struct PlayerPawnDeps {
     template <typename PlayerPawnPatterns>
-    explicit PlayerPawnImpl(const PlayerPawnPatterns& playerPawnPatterns) noexcept
+    explicit PlayerPawnDeps(const PlayerPawnPatterns& playerPawnPatterns) noexcept
         : offsetToPlayerPawnImmunity{playerPawnPatterns.offsetToPlayerPawnImmunity()}
         , offsetToWeaponServices{playerPawnPatterns.offsetToWeaponServices()}
         , offsetToPlayerController{playerPawnPatterns.offsetToPlayerController()}

@@ -5,25 +5,48 @@
 
 #include <GameClasses/PanoramaUiPanel.h>
 
-struct HudProvider {
-    template <typename ClientPatterns>
-    explicit HudProvider(const ClientPatterns& clientPatterns) noexcept
-        : hud{clientPatterns.hudPanel()}
-    {
-    }
+struct HudCache {
+    cs2::CPanel2D* hudPanel{nullptr};
+};
+
+struct Hud {
+    HudCache& cache;
 
     [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
     {
-        if (hud && *hud)
-            return PanoramaUiPanel{ (*hud)->uiPanel }.findChildInLayoutFile(childId);
-        return PanoramaUiPanel{ nullptr };
+        return PanoramaUiPanel{cache.hudPanel->uiPanel}.findChildInLayoutFile(childId);
     }
 
     [[nodiscard]] cs2::CUIPanel* getHudReticle() const noexcept
     {
         return findChildInLayoutFile(cs2::HudReticle);
     }
+};
+
+struct HudOptional {
+    HudOptional(cs2::CPanel2D** pointerToHud, HudCache& hudCache) noexcept
+        : pointerToHud{pointerToHud}
+        , hud{hudCache}
+    {
+    }
+
+    cs2::CPanel2D** pointerToHud;
+    Hud hud;
+
+    [[nodiscard]] operator bool() const noexcept
+    {
+        return hud.cache.hudPanel || readHudPanel();
+    }
+
+    [[nodiscard]] const Hud* operator->() const noexcept
+    {
+        assert(static_cast<bool>(*this));
+        return &hud;
+    }
 
 private:
-    cs2::CPanel2D** hud;
+    [[nodiscard]] bool readHudPanel() const noexcept
+    {
+        return pointerToHud && ((hud.cache.hudPanel = *pointerToHud) != nullptr);
+    }
 };

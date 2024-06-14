@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/WeaponVDataOffset.h>
 
-struct WeaponVDataImpl {
+struct WeaponVDataDeps {
     template <typename WeaponVDataPatterns>
-    explicit WeaponVDataImpl(const WeaponVDataPatterns& weaponVDataPatterns) noexcept
+    explicit WeaponVDataDeps(const WeaponVDataPatterns& weaponVDataPatterns) noexcept
         : offsetToWeaponName{weaponVDataPatterns.offsetToWeaponName()}
     {
     }

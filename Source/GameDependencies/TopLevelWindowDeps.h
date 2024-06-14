@@ -3,14 +3,14 @@
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/OffsetTypes/TopLevelWindowOffset.h>
 
-struct TopLevelWindowImpl {
+struct TopLevelWindowDeps {
     template <typename TopLevelWindowPatterns>
-    explicit TopLevelWindowImpl(const TopLevelWindowPatterns& topLevelWindowPatterns) noexcept
+    explicit TopLevelWindowDeps(const TopLevelWindowPatterns& topLevelWindowPatterns) noexcept
         : uiScaleFactorOffset{topLevelWindowPatterns.uiScaleFactorOffset()}
     {
     }
 
-    [[nodiscard]] static const TopLevelWindowImpl& instance() noexcept;
+    [[nodiscard]] static const TopLevelWindowDeps& instance() noexcept;
 
     UiScaleFactorOffset uiScaleFactorOffset;
 };

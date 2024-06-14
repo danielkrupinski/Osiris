@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/ConVarOffset.h>
 
-struct ConVarImpl {
+struct ConVarDeps {
     template <typename ConVarPatterns>
-    explicit ConVarImpl(const ConVarPatterns& conVarPatterns) noexcept
+    explicit ConVarDeps(const ConVarPatterns& conVarPatterns) noexcept
         : offsetToConVarValueType{conVarPatterns.offsetToConVarValueType()}
         , offsetToConVarValue{conVarPatterns.offsetToConVarValue()}
     {

@@ -94,11 +94,7 @@ private:
             hookDependencies,
             viewRenderHook,
             SoundWatcher{helpers.soundWatcherState, hookDependencies},
-            helpers.hudInWorldPanelContainer,
-            helpers.worldtoClipSpaceConverter,
-            helpers.viewToProjectionMatrix,
-            helpers.panelConfigurator(),
-            helpers.hudProvider
+            helpers.hudInWorldPanelContainer
         };
     }
 
@@ -107,11 +103,10 @@ private:
     {
         return SoundVisualizationFeatureToggle<SoundType>{
             state,
+            hookDependencies,
             SoundWatcher{helpers.soundWatcherState, hookDependencies},
             viewRenderHook,
-            helpers.hudInWorldPanelContainer,
-            helpers.panelConfigurator(),
-            helpers.hudProvider
+            helpers.hudInWorldPanelContainer
         };
     }
 };

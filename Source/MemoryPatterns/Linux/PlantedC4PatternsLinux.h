@@ -7,6 +7,11 @@ template <typename PatternFinders>
 struct PlantedC4Patterns {
     const PatternFinders& patternFinders;
 
+    [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept
+    {
+        return patternFinders.clientPatternFinder("0F 85 ? ? ? ? 48 8D 05 ? ? ? ? 8B 10"_pat).add(9).abs().template as<cs2::CUtlVector<cs2::CPlantedC4*>*>();
+    }
+
     [[nodiscard]] BombSiteOffset m_nBombSite() const noexcept
     {
         return patternFinders.clientPatternFinder("83 BF ? ? ? ? 01 0F 94 C0 C3"_pat).add(2).template readOffset<BombSiteOffset>();

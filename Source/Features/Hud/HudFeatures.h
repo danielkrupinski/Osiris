@@ -11,7 +11,7 @@
 struct HudFeatures {
     [[nodiscard]] BombTimer bombTimer() const noexcept
     {
-        return BombTimer{states.bombTimerState, hookDependencies, helpers.hudProvider};
+        return BombTimer{states.bombTimerState, hookDependencies, hookDependencies.hud()};
     }
 
     [[nodiscard]] BombTimerToggle bombTimerToggle() const noexcept
@@ -24,8 +24,7 @@ struct HudFeatures {
         return DefusingAlert{
             states.defusingAlertState,
             hookDependencies,
-            helpers.hudProvider,
-            helpers.panelConfigurator()
+            hookDependencies.hud()
         };
     }
 
@@ -36,7 +35,7 @@ struct HudFeatures {
     
     [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, helpers.hudProvider, hookDependencies.offsets().gameRules.gameRules};
+        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, hookDependencies.hud()};
     }
 
     [[nodiscard]] KillfeedPreserveToggle killfeedPreserveToggle() const noexcept

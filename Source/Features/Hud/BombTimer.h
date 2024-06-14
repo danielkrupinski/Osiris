@@ -39,10 +39,10 @@ private:
 
 class BombTimer {
 public:
-    BombTimer(BombTimerState& state, HookDependencies& hookDependencies, HudProvider hudProvider) noexcept
+    BombTimer(BombTimerState& state, HookDependencies& hookDependencies, HudOptional hud) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
-        , hudProvider{hudProvider}
+        , hud{hud}
     {
     }
 
@@ -54,14 +54,21 @@ public:
         updatePanelHandles();
         hideBombStatusPanel();
 
-        if (!hookDependencies.requestDependency<PlantedC4>() || !hookDependencies.requestDependency<CurTime>()) {
+        const auto globalVars = hookDependencies.globalVars();
+        if (!globalVars || !hookDependencies.requestDependency<PlantedC4>()) {
+            state.hideBombTimerPanel();
+            return;
+        }
+
+        const auto curtime = globalVars->curtime();
+        if (!curtime) {
             state.hideBombTimerPanel();
             return;
         }
 
         const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
 
-        if (const auto timeToExplosion = bomb.getTimeToExplosion(hookDependencies.getDependency<CurTime>()); timeToExplosion > 0.0f) {
+        if (const auto timeToExplosion = bomb.getTimeToExplosion(*curtime); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
             state.restorePanels();
@@ -92,7 +99,10 @@ private:
         if (state.scoreAndTimeAndBombPanel.get())
             return;
  
-        const auto hudTeamCounter = hudProvider.findChildInLayoutFile(cs2::HudTeamCounter);
+        if (!hud)
+            return;
+
+        const auto hudTeamCounter = hud->findChildInLayoutFile(cs2::HudTeamCounter);
         if (!hudTeamCounter)
             return;
 
@@ -160,5 +170,5 @@ R"(
 
     BombTimerState& state;
     HookDependencies& hookDependencies;
-    HudProvider hudProvider;
+    HudOptional hud;
 };

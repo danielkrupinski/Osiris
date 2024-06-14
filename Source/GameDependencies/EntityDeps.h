@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/EntityOffset.h>
 
-struct EntityImpl {
+struct EntityDeps {
     template <typename EntityPatterns>
-    explicit EntityImpl(const EntityPatterns& entityPatterns) noexcept
+    explicit EntityDeps(const EntityPatterns& entityPatterns) noexcept
         : offsetToGameSceneNode{entityPatterns.offsetToGameSceneNode()}
         , offsetToHealth{entityPatterns.offsetToHealth()}
         , offsetToLifeState{entityPatterns.offsetToLifeState()}

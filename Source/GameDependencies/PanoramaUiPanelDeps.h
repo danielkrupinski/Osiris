@@ -4,9 +4,9 @@
 #include <GameClasses/OffsetTypes/PanoramaUiPanelOffset.h>
 #include <Utils/FieldOffset.h>
 
-struct PanoramaUiPanelImpl {
+struct PanoramaUiPanelDeps {
     template <typename PanoramaUiPanelPatterns>
-    explicit PanoramaUiPanelImpl(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
+    explicit PanoramaUiPanelDeps(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
         : setParent{panoramaUiPanelPatterns.setParent()}
         , setVisible{panoramaUiPanelPatterns.setVisible()}
         , getAttributeString{panoramaUiPanelPatterns.getAttributeString()}
@@ -20,7 +20,7 @@ struct PanoramaUiPanelImpl {
     {
     }
 
-    [[nodiscard]] static const PanoramaUiPanelImpl& instance() noexcept;
+    [[nodiscard]] static const PanoramaUiPanelDeps& instance() noexcept;
 
     template <typename T>
     using Offset = FieldOffset<const void, T, std::int32_t>;

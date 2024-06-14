@@ -73,7 +73,7 @@ private:
             MemoryPatterns{partialContext.patternFinders}
         );
 
-        fullContext().panoramaGUI.init(fullContext().getFeatureHelpers().mainMenuProvider);
+        fullContext().panoramaGUI.init(fullContext().gameDependencies().mainMenuProvider);
     }
 
     FreeMemoryRegionList _freeRegionList;

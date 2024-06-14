@@ -7,9 +7,8 @@
 #include <CS2/Classes/VMatrix.h>
 
 struct WorldToClipSpaceConverter {
-    template <typename ClientPatterns>
-    explicit WorldToClipSpaceConverter(const ClientPatterns& clientPatterns) noexcept
-        : worldToProjectionMatrix{clientPatterns.worldToProjectionMatrix()}
+    explicit WorldToClipSpaceConverter(const cs2::VMatrix* worldToProjectionMatrix) noexcept
+        : worldToProjectionMatrix{worldToProjectionMatrix}
     {
     }
 

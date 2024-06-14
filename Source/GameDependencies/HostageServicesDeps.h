@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/HostageServicesOffset.h>
 
-struct HostageServicesImpl {
+struct HostageServicesDeps {
     template <typename HostageServicesPatterns>
-    explicit HostageServicesImpl(const HostageServicesPatterns& hostageServicesPatterns) noexcept
+    explicit HostageServicesDeps(const HostageServicesPatterns& hostageServicesPatterns) noexcept
         : offsetToCarriedHostage{hostageServicesPatterns.offsetToCarriedHostage()}
     {
     }

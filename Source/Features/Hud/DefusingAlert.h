@@ -41,11 +41,10 @@ struct DefusingAlertToggle : FeatureToggleOff<DefusingAlertToggle> {
 
 class DefusingAlert {
 public:
-    DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies, HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
+    DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies, HudOptional hud) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
-        , hudProvider{hudProvider}
-        , panelConfigurator{panelConfigurator}
+        , hud{hud}
     {
     }
 
@@ -56,7 +55,7 @@ public:
 
         updatePanelHandles();
       
-        if (!hookDependencies.requestDependencies(HookDependenciesMask{}.set<CurTime>().set<PlantedC4>()))
+        if (!hookDependencies.requestDependencies(HookDependenciesMask{}.set<PlantedC4>()))
             return;
 
         const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
@@ -65,7 +64,19 @@ public:
             return;
         }
 
-        const auto timeToEnd = bomb.getTimeToDefuseEnd(hookDependencies.getDependency<CurTime>());
+        const auto globalVars = hookDependencies.globalVars();
+        if (!globalVars) {
+            state.hideDefusingAlert();
+            return;
+        }
+
+        const auto curtime = globalVars->curtime();
+        if (!curtime) {
+            state.hideDefusingAlert();
+            return;
+        }
+
+        const auto timeToEnd = bomb.getTimeToDefuseEnd(*curtime);
         if (timeToEnd > 0.0f) {
             if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
@@ -73,7 +84,7 @@ public:
             if (const auto defusingTimer = state.defusingTimerPanel.get()) {
                 PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(timeToEnd), 0, true);
                 if (const auto style = defusingTimer.getStyle())
-                    panelConfigurator.panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
+                    hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
             }
         } else {
             state.hideDefusingAlert();
@@ -93,7 +104,10 @@ private:
         if (state.defusingTimerPanel.get())
             return;
 
-        const auto hudTeamCounter = hudProvider.findChildInLayoutFile(cs2::HudTeamCounter);
+        if (!hud)
+            return;
+
+        const auto hudTeamCounter = hud->findChildInLayoutFile(cs2::HudTeamCounter);
         if (!hudTeamCounter)
             return;
 
@@ -132,6 +146,5 @@ R"(
 
     DefusingAlertState& state;
     HookDependencies& hookDependencies;
-    HudProvider hudProvider;
-    PanelConfigurator panelConfigurator;
+    HudOptional hud;
 };

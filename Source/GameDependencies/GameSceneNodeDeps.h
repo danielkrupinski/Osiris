@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 
-struct GameSceneNodeImpl {
+struct GameSceneNodeDeps {
     template <typename GameSceneNodePatterns>
-    explicit GameSceneNodeImpl(const GameSceneNodePatterns& gameSceneNodePatterns) noexcept
+    explicit GameSceneNodeDeps(const GameSceneNodePatterns& gameSceneNodePatterns) noexcept
         : offsetToAbsOrigin{gameSceneNodePatterns.offsetToAbsOrigin()}
     {
     }

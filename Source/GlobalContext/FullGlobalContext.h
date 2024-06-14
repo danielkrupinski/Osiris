@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CLoopModeGame.h>
-#include <GameClasses/Implementation/GameClassImplementations.h>
+#include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <FeatureHelpers/RenderingHookEntityLoop.h>
@@ -24,35 +24,29 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
-        : _gameClasses{
+        : _gameDependencies{
             memoryPatterns,
+            VmtFinder{clientDLL.getVmtFinderParams()},
+            VmtFinder{panoramaDLL.getVmtFinderParams()},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            memoryPatterns.clientPatterns(),
+            _gameDependencies.loopModeGame,
+            _gameDependencies.viewRender,
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
-        , featureHelpers{
-            memoryPatterns,
-            VmtFinder{panoramaDLL.getVmtFinderParams()},
-            VmtFinder{clientDLL.getVmtFinderParams()}}
     {
     }
 
-    [[nodiscard]] const GameClassImplementations& gameClasses() const noexcept
+    [[nodiscard]] const GameDependencies& gameDependencies() const noexcept
     {
-        return _gameClasses;
-    }
-
-    [[nodiscard]] const FeatureHelpers& getFeatureHelpers() const noexcept
-    {
-        return featureHelpers;
+        return _gameDependencies;
     }
     
     void onRenderStart(cs2::CViewRender* thisptr) noexcept
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameClasses, featureHelpers};
+        HookDependencies dependencies{_gameDependencies, featureHelpers};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -64,7 +58,7 @@ struct FullGlobalContext {
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
     {
-        HookDependencies dependencies{_gameClasses, featureHelpers};
+        HookDependencies dependencies{_gameDependencies, featureHelpers};
 
         features(dependencies).hudFeatures().bombTimer().run();
         features(dependencies).hudFeatures().defusingAlert().run();
@@ -91,7 +85,7 @@ private:
         return Features{featuresStates, featureHelpers, hooks, dependencies};
     }
 
-    GameClassImplementations _gameClasses;
+    GameDependencies _gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;
     FeaturesStates featuresStates;

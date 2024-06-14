@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/WeaponServicesOffset.h>
 
-struct WeaponServicesImpl {
+struct WeaponServicesDeps {
     template <typename WeaponServicesPatterns>
-    explicit WeaponServicesImpl(const WeaponServicesPatterns& weaponServicesPatterns) noexcept
+    explicit WeaponServicesDeps(const WeaponServicesPatterns& weaponServicesPatterns) noexcept
         : offsetToActiveWeapon{weaponServicesPatterns.offsetToActiveWeapon()}
     {
     }

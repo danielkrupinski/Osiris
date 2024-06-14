@@ -2,14 +2,14 @@
 
 #include <CS2/Classes/Panorama.h>
 
-struct PanelStyleImpl {
+struct PanelStyleDeps {
     template <typename PanelStylePatterns>
-    explicit PanelStyleImpl(const PanelStylePatterns& panelStylePatterns) noexcept
+    explicit PanelStyleDeps(const PanelStylePatterns& panelStylePatterns) noexcept
         : setProperty{panelStylePatterns.setProperty()}
     {
     }
 
-    [[nodiscard]] static const PanelStyleImpl& instance() noexcept;
+    [[nodiscard]] static const PanelStyleDeps& instance() noexcept;
 
     cs2::CPanelStyle::SetProperty* setProperty;
 };

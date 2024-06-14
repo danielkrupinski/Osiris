@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/FileSystemOffset.h>
 
-struct FileSystemImpl {
+struct FileSystemDeps {
     template <typename FileSystemPatterns>
-    explicit FileSystemImpl(const FileSystemPatterns& fileSystemPatterns) noexcept
+    explicit FileSystemDeps(const FileSystemPatterns& fileSystemPatterns) noexcept
         : fileNamesOffset{fileSystemPatterns.fileNamesOffset()}
     {
     }

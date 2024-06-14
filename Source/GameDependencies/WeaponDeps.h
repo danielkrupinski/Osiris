@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/WeaponOffset.h>
 
-struct WeaponImpl {
+struct WeaponDeps {
     template <typename WeaponPatterns>
-    explicit WeaponImpl(const WeaponPatterns& weaponPatterns) noexcept
+    explicit WeaponDeps(const WeaponPatterns& weaponPatterns) noexcept
         : offsetToClipAmmo{weaponPatterns.offsetToClipAmmo()}
     {
     }

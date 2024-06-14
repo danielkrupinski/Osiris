@@ -2,7 +2,7 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <Platform/Macros/IsPlatform.h>
-#include "Implementation/PanoramaUiEngineImpl.h"
+#include <GameDependencies/PanoramaUiEngineDeps.h>
 
 struct PanoramaUiEngine {
     static void runScript(cs2::CUIPanel* contextPanel, const char* scriptSource, const char* originFile, std::uint64_t line) noexcept
@@ -45,8 +45,8 @@ struct PanoramaUiEngine {
     }
 
 private:
-    [[nodiscard]] static const PanoramaUiEngineImpl& impl() noexcept
+    [[nodiscard]] static const PanoramaUiEngineDeps& impl() noexcept
     {
-        return PanoramaUiEngineImpl::instance();
+        return PanoramaUiEngineDeps::instance();
     }
 };

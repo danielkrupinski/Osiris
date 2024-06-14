@@ -2,21 +2,21 @@
 
 #include <CS2/Classes/FileSystem.h>
 #include "FileNameSymbolTable.h"
-#include "Implementation/FileSystemImpl.h"
+#include <GameDependencies/FileSystemDeps.h>
 
 struct FileSystem {
-    explicit FileSystem(cs2::CBaseFileSystem& thisptr, const FileSystemImpl& impl) noexcept
+    explicit FileSystem(cs2::CBaseFileSystem& thisptr, const FileSystemDeps& deps) noexcept
         : thisptr{thisptr}
-        , impl{impl}
+        , deps{deps}
     {
     }
 
     [[nodiscard]] FileNameSymbolTable fileNames() const noexcept
     {
-        return FileNameSymbolTable{impl.fileNamesOffset.of(&thisptr).get()};
+        return FileNameSymbolTable{deps.fileNamesOffset.of(&thisptr).get()};
     }
 
 private:
     cs2::CBaseFileSystem& thisptr;
-    const FileSystemImpl& impl;
+    const FileSystemDeps& deps;
 };

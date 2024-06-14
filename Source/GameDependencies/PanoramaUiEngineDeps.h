@@ -2,9 +2,9 @@
 
 #include <CS2/Classes/Panorama.h>
 
-struct PanoramaUiEngineImpl {
+struct PanoramaUiEngineDeps {
     template <typename PanoramaUiEnginePatterns>
-    explicit PanoramaUiEngineImpl(const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
+    explicit PanoramaUiEngineDeps(const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
         : thisptr{panoramaUiEnginePatterns.uiEngine()}
         , getPanelHandle{panoramaUiEnginePatterns.getPanelHandle()}
         , getPanelPointer{panoramaUiEnginePatterns.getPanelPointer()}
@@ -14,7 +14,7 @@ struct PanoramaUiEngineImpl {
     {
     }
 
-    [[nodiscard]] static const PanoramaUiEngineImpl& instance() noexcept;
+    [[nodiscard]] static const PanoramaUiEngineDeps& instance() noexcept;
 
     cs2::CUIEngine** thisptr;
 

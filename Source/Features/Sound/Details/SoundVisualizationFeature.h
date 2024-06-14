@@ -29,17 +29,15 @@ struct SoundVisualizationFeatureState {
 template <typename SoundType>
 struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFeatureToggle<SoundType>> {
     SoundVisualizationFeatureToggle(SoundVisualizationFeatureState& state,
+        HookDependencies& hookDependencies,
         SoundWatcher soundWatcher,
         ViewRenderHook& viewRenderHook,
-        HudInWorldPanelContainer& hudInWorldPanelContainer,
-        PanelConfigurator panelConfigurator,
-        HudProvider hudProvider)
+        HudInWorldPanelContainer& hudInWorldPanelContainer)
         : state{state}
+        , hookDependencies{hookDependencies}
         , soundWatcher{soundWatcher}
         , viewRenderHook{viewRenderHook}
         , hudInWorldPanelContainer{hudInWorldPanelContainer}
-        , panelConfigurator{panelConfigurator}
-        , hudProvider{hudProvider}
     {
     }
 
@@ -58,19 +56,18 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
     {
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
-        if (const auto containerPanel{hudInWorldPanelContainer.get(hudProvider, panelConfigurator)}) {
+        if (const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.getDependency<PanelConfigurator>())}) {
             if (const auto containerPanelChildren{containerPanel.children()})
-                state.hideRemainingPanels(panelConfigurator, HudInWorldPanels{*containerPanelChildren}, 0);
+                state.hideRemainingPanels(hookDependencies.getDependency<PanelConfigurator>(), HudInWorldPanels{*containerPanelChildren}, 0);
         }
     }
 
 private:
     SoundVisualizationFeatureState& state;
+    HookDependencies& hookDependencies;
     SoundWatcher soundWatcher;
     ViewRenderHook& viewRenderHook;
     HudInWorldPanelContainer& hudInWorldPanelContainer;
-    PanelConfigurator panelConfigurator;
-    HudProvider hudProvider;
 };
 
 template <typename PanelsType, typename SoundType>
@@ -81,20 +78,12 @@ public:
         HookDependencies& hookDependencies,
         ViewRenderHook& viewRenderHook,
         SoundWatcher soundWatcher,
-        HudInWorldPanelContainer& hudInWorldPanelContainer,
-        WorldToClipSpaceConverter worldtoClipSpaceConverter,
-        ViewToProjectionMatrix viewToProjectionMatrix,
-        PanelConfigurator panelConfigurator,
-        HudProvider hudProvider) noexcept
+        HudInWorldPanelContainer& hudInWorldPanelContainer) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
         , viewRenderHook{viewRenderHook}
         , soundWatcher{soundWatcher}
         , hudInWorldPanelContainer{hudInWorldPanelContainer}
-        , worldtoClipSpaceConverter{worldtoClipSpaceConverter}
-        , viewToProjectionMatrix{viewToProjectionMatrix}
-        , panelConfigurator{panelConfigurator}
-        , hudProvider{hudProvider}
     {
     }
 
@@ -103,14 +92,19 @@ public:
         if (!state.enabled)
             return;
 
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<CurTime>()};
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<WorldToClipSpaceConverter>().set<FovScale>()};
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
-        if (!worldtoClipSpaceConverter)
+        const auto globalVars = hookDependencies.globalVars();
+        if (!globalVars)
             return;
 
-        const auto containerPanel{hudInWorldPanelContainer.get(hudProvider, panelConfigurator)};
+        const auto curtime = globalVars->curtime();
+        if (!curtime)
+            return;
+
+        const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.getDependency<PanelConfigurator>())};
         if (!containerPanel)
             return;
 
@@ -126,12 +120,12 @@ public:
         }
 
         std::size_t currentIndex = 0;
-        std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex, containerPanel, panels](const PlayedSound& sound) {
-            const auto soundInClipSpace = worldtoClipSpaceConverter.toClipSpace(sound.origin);
+        std::as_const(soundWatcher).getSoundsOfType<SoundType>().forEach([this, &currentIndex, containerPanel, panels, curtime](const PlayedSound& sound) {
+            const auto soundInClipSpace = hookDependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(sound.origin);
             if (!soundInClipSpace.onScreen())
                 return;
 
-            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(hookDependencies.getDependency<CurTime>()));
+            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(*curtime));
             if (opacity <= 0.0f)
                 return;
 
@@ -143,7 +137,7 @@ public:
             if (!style)
                 return;
 
-            const auto styleSetter{panelConfigurator.panelStyle(*style)};
+            const auto styleSetter{hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
             styleSetter.setOpacity(opacity);
             styleSetter.setZIndex(-soundInClipSpace.z);
 
@@ -151,14 +145,14 @@ public:
 
             const auto& transformFactory = hookDependencies.getDependency<PanoramaTransformFactory>();
             PanoramaTransformations{
-                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, viewToProjectionMatrix.getFovScale())),
+                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, hookDependencies.getDependency<FovScale>())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(styleSetter);
 
             ++currentIndex;
         });
 
-        state.hideRemainingPanels(panelConfigurator, panels, currentIndex);
+        state.hideRemainingPanels(hookDependencies.getDependency<PanelConfigurator>(), panels, currentIndex);
     }
 
 private:
@@ -169,7 +163,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(index);
         }
-        if (const auto panel{SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), panelConfigurator}.createSoundVisualizationPanel(PanelsType::soundVisualizationPanelProperties())}) {
+        if (const auto panel{SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), hookDependencies.getDependency<PanelConfigurator>()}.createSoundVisualizationPanel(PanelsType::soundVisualizationPanelProperties())}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
@@ -181,8 +175,4 @@ private:
     ViewRenderHook& viewRenderHook;
     SoundWatcher soundWatcher;
     HudInWorldPanelContainer& hudInWorldPanelContainer;
-    WorldToClipSpaceConverter worldtoClipSpaceConverter;
-    ViewToProjectionMatrix viewToProjectionMatrix;
-    PanelConfigurator panelConfigurator;
-    HudProvider hudProvider;
 };

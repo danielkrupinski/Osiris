@@ -25,11 +25,10 @@ struct KillfeedPreserveToggle : FeatureToggle<KillfeedPreserveToggle> {
 
 class KillfeedPreserver {
 public:
-    KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& hookDependencies, HudProvider hudProvider, cs2::C_CSGameRules** gameRules) noexcept
+    KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& hookDependencies, HudOptional hud) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
-        , hudProvider{hudProvider}
-        , gameRules{gameRules}
+        , hud{hud}
     {
     }
 
@@ -38,10 +37,16 @@ public:
         if (!state.enabled)
             return;
 
+        const auto gameRules = hookDependencies.gameDependencies().gameRulesDeps.gameRules;
         if (!gameRules || !*gameRules)
             return;
 
-        if (!hookDependencies.requestDependency<CurTime>())
+        const auto globalVars = hookDependencies.globalVars();
+        if (!globalVars)
+            return;
+
+        const auto curtime = globalVars->curtime();
+        if (!curtime)
             return;
 
         const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
@@ -65,7 +70,7 @@ public:
             StringParser{ spawnTimeString }.parseFloat(spawnTime);
 
             if (spawnTime > roundStartTime) {
-                panel.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(hookDependencies.getDependency<CurTime>()), '.', '0').cstring());
+                panel.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(*curtime), '.', '0').cstring());
             }
         }
     }
@@ -76,8 +81,10 @@ private:
         if (const auto deathNoticesPanel = state.deathNoticesPointer.get())
             return deathNoticesPanel;
 
-        if (const auto hudDeathNotice = hudProvider.findChildInLayoutFile(cs2::HudDeathNotice))
+        if (hud) {
+            if (const auto hudDeathNotice = hud->findChildInLayoutFile(cs2::HudDeathNotice))
             state.deathNoticesPointer = hudDeathNotice.findChildInLayoutFile(cs2::VisibleNotices);
+        }
 
         return state.deathNoticesPointer.get();
     }
@@ -100,6 +107,5 @@ private:
 
     KillfeedPreserverState& state;
     HookDependencies& hookDependencies;
-    HudProvider hudProvider;
-    cs2::C_CSGameRules** gameRules;
+    HudOptional hud;
 };

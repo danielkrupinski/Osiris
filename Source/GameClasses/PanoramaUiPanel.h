@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include <GameClasses/Implementation/PanoramaUiPanelImpl.h>
+#include <GameDependencies/PanoramaUiPanelDeps.h>
 #include <GameClasses/TopLevelWindow.h>
 
 struct PanoramaUiPanel {
@@ -111,9 +111,9 @@ private:
         return nullptr;
     }
 
-    [[nodiscard]] static const PanoramaUiPanelImpl& impl() noexcept
+    [[nodiscard]] static const PanoramaUiPanelDeps& impl() noexcept
     {
-        return PanoramaUiPanelImpl::instance();
+        return PanoramaUiPanelDeps::instance();
     }
     
     cs2::CUIPanel* thisptr;

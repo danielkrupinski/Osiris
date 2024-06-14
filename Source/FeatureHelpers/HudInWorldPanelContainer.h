@@ -20,17 +20,20 @@ public:
             PanoramaUiEngine::onDeletePanel(containerPanel.getHandle());
     }
 
-    [[nodiscard]] PanoramaUiPanel get(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] PanoramaUiPanel get(HudOptional hud, PanelConfigurator panelConfigurator) noexcept
     {
         if (const auto container = containerPanel.get())
             return container;
-        return createPanel(hudProvider, panelConfigurator);
+        return createPanel(hud, panelConfigurator);
     }
 
 private:
-    [[nodiscard]] PanoramaUiPanel createPanel(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] PanoramaUiPanel createPanel(HudOptional hud, PanelConfigurator panelConfigurator) noexcept
     {
-        if (const auto hudReticle = hudProvider.getHudReticle()) {
+        if (!hud)
+            return PanoramaUiPanel{nullptr};
+
+        if (const auto hudReticle = hud->getHudReticle()) {
             if (const auto panel = Panel::create("", hudReticle)) {
                 if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()})
                     panelConfigurator.panelStyle(*style).fitParent();

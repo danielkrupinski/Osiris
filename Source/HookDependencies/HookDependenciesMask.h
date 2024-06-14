@@ -7,14 +7,12 @@
 #include <GameClasses/OffsetTypes/PlayerPawnOffset.h>
 #include <Utils/TypeBitFlags.h>
 
-struct CurTime;
 struct EntitiesVMTs;
 class EntityFromHandleFinder;
 class EntityListWalker;
 struct FileSystem;
 struct FovScale;
 class HudInWorldPanelContainer;
-struct HudProvider;
 struct LocalPlayerController;
 struct PanelConfigurator;
 struct PanoramaLabelFactory;
@@ -34,12 +32,10 @@ using HookDependenciesMask = TypeBitFlags<
     WorldToClipSpaceConverter,
     HudInWorldPanelContainer,
     PanelConfigurator,
-    HudProvider,
     PanoramaTransformFactory,
     OffsetToHealth,
     OffsetToTeamNumber,
     FovScale,
-    CurTime,
     PlantedC4,
     SoundChannels,
     FileSystem,

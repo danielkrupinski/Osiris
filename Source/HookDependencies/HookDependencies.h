@@ -6,41 +6,41 @@
 #include <FeatureHelpers/EntityListWalker.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/PlantedC4.h>
+#include <GameClasses/GlobalVars/GlobalVarsOptional.h>
 
 struct HookDependencies {
-    HookDependencies(const GameClassImplementations& gameClassImplementations, FeatureHelpers& featureHelpers) noexcept
-        : gameClassImplementations{gameClassImplementations}
+    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers) noexcept
+        : _gameDependencies{gameDependencies}
         , featureHelpers{featureHelpers}
     {
         presentDependencies |= HookDependenciesMask{}.set<EntitiesVMTs>();
 
-        if (gameClassImplementations.playerController.offsetToPlayerPawnHandle)
+        if (gameDependencies.playerControllerDeps.offsetToPlayerPawnHandle)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToPlayerPawnHandle>();
 
-        if (gameClassImplementations.entity.offsetToGameSceneNode)
+        if (gameDependencies.entityDeps.offsetToGameSceneNode)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToGameSceneNode>();
 
-        if (gameClassImplementations.entity.offsetToHealth)
+        if (gameDependencies.entityDeps.offsetToHealth)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToHealth>();
 
-        if (gameClassImplementations.entity.offsetToTeamNumber)
+        if (gameDependencies.entityDeps.offsetToTeamNumber)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToTeamNumber>();
 
-        if (gameClassImplementations.gameSceneNode.offsetToAbsOrigin)
+        if (gameDependencies.gameSceneNodeDeps.offsetToAbsOrigin)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToAbsOrigin>();
 
-        if (gameClassImplementations.playerPawn.offsetToPlayerPawnImmunity)
+        if (gameDependencies.playerPawnDeps.offsetToPlayerPawnImmunity)
             presentDependencies |= HookDependenciesMask{}.set<OffsetToPlayerPawnImmunity>();
 
-        if (featureHelpers.worldtoClipSpaceConverter)
+        if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
 
         presentDependencies |= HookDependenciesMask{}.set<HudInWorldPanelContainer>();
-        presentDependencies |= HookDependenciesMask{}.set<HudProvider>();
         presentDependencies |= HookDependenciesMask{}.set<PanelConfigurator>();
         presentDependencies |= HookDependenciesMask{}.set<PanoramaTransformFactory>();
 
-        if (gameClassImplementations.panoramaLabel.constructor && gameClassImplementations.panoramaLabel.size)
+        if (gameDependencies.panoramaLabelDeps.constructor && gameDependencies.panoramaLabelDeps.size)
             presentDependencies |= HookDependenciesMask{}.set<PanoramaLabelFactory>();
     }
 
@@ -66,55 +66,61 @@ struct HookDependencies {
         if constexpr (std::is_same_v<Dependency, EntityListWalker>) {
             return EntityListWalker{*entityList, highestEntityIndex};
         } else if constexpr (std::is_same_v<Dependency, EntitiesVMTs>) {
-            return (featureHelpers.entitiesVMTs);
+            return (_gameDependencies.entitiesVMTs);
         } else if constexpr (std::is_same_v<Dependency, LocalPlayerController>) {
             return localPlayerController;
         } else if constexpr (std::is_same_v<Dependency, EntityFromHandleFinder>) {
             return EntityFromHandleFinder{*entityList};
         } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnHandle>) {
-            return gameClassImplementations.playerController.offsetToPlayerPawnHandle;
+            return _gameDependencies.playerControllerDeps.offsetToPlayerPawnHandle;
         } else if constexpr (std::is_same_v<Dependency, OffsetToGameSceneNode>) {
-            return gameClassImplementations.entity.offsetToGameSceneNode;
+            return _gameDependencies.entityDeps.offsetToGameSceneNode;
         } else if constexpr (std::is_same_v<Dependency, OffsetToHealth>) {
-            return gameClassImplementations.entity.offsetToHealth;
+            return _gameDependencies.entityDeps.offsetToHealth;
         } else if constexpr (std::is_same_v<Dependency, OffsetToTeamNumber>) {
-            return gameClassImplementations.entity.offsetToTeamNumber;
+            return _gameDependencies.entityDeps.offsetToTeamNumber;
         } else if constexpr (std::is_same_v<Dependency, OffsetToAbsOrigin>) {
-            return gameClassImplementations.gameSceneNode.offsetToAbsOrigin;
+            return _gameDependencies.gameSceneNodeDeps.offsetToAbsOrigin;
         } else if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
-            return featureHelpers.worldtoClipSpaceConverter;
+            return WorldToClipSpaceConverter{_gameDependencies.worldToProjectionMatrix};
         } else if constexpr (std::is_same_v<Dependency, HudInWorldPanelContainer>) {
             return (featureHelpers.hudInWorldPanelContainer);
-        } else if constexpr (std::is_same_v<Dependency, HudProvider>) {
-            return (featureHelpers.hudProvider);
         } else if constexpr (std::is_same_v<Dependency, PanelConfigurator>) {
-            return featureHelpers.panelConfigurator();
+            return _gameDependencies.panelConfigurator();
         } else if constexpr (std::is_same_v<Dependency, PanoramaTransformFactory>) {
-            return (featureHelpers.transformFactory);
+            return PanoramaTransformFactory{_gameDependencies.transformTranslate3dVmt, _gameDependencies.transformScale3dVmt};
         } else if constexpr (std::is_same_v<Dependency, FovScale>) {
             return fovScale;
-        } else if constexpr (std::is_same_v<Dependency, CurTime>) {
-            return curTime;
         } else if constexpr (std::is_same_v<Dependency, PlantedC4>) {
-            return PlantedC4{*plantedC4, gameClassImplementations.plantedC4};
+            return PlantedC4{*plantedC4, _gameDependencies.plantedC4Deps};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
-            return FileSystem{*fileSystem, gameClassImplementations.fileSystem};
+            return FileSystem{*fileSystem, _gameDependencies.fileSystemDeps};
         } else if constexpr (std::is_same_v<Dependency, PanoramaLabelFactory>) {
-            return PanoramaLabelFactory{gameClassImplementations.panoramaLabel.constructor, gameClassImplementations.panoramaLabel.size};
+            return PanoramaLabelFactory{_gameDependencies.panoramaLabelDeps.constructor, _gameDependencies.panoramaLabelDeps.size};
         } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnImmunity>) {
-            return gameClassImplementations.playerPawn.offsetToPlayerPawnImmunity;
+            return _gameDependencies.playerPawnDeps.offsetToPlayerPawnImmunity;
         } else if constexpr (std::is_same_v<Dependency, ConVarAccessor>) {
-            return ConVarAccessor{*featureHelpers.conVars, gameClassImplementations.conVar, conVarAccessorState};
+            return ConVarAccessor{*_gameDependencies.conVars, _gameDependencies.conVarDeps, conVarAccessorState};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
     }
 
-    [[nodiscard]] const GameClassImplementations& offsets() const noexcept
+    [[nodiscard]] const GameDependencies& gameDependencies() const noexcept
     {
-        return gameClassImplementations;
+        return _gameDependencies;
+    }
+
+    [[nodiscard]] auto hud() noexcept
+    {
+        return HudOptional{_gameDependencies.hud, hudCache};
+    }
+
+    [[nodiscard]] auto globalVars() noexcept
+    {
+        return GlobalVarsOptional{_gameDependencies.globalVars, globalVarsCache};
     }
 
 private:
@@ -126,29 +132,29 @@ private:
 
     void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
-        const HookDependenciesBuilder builder{requiredDependencies, gameClassImplementations, featureHelpers};
+        const HookDependenciesBuilder builder{requiredDependencies, _gameDependencies};
 
         presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
         presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
         presentDependencies |= builder.getFovScale(&fovScale);
-        presentDependencies |= builder.getCurTime(&curTime);
         presentDependencies |= builder.getPlantedC4(&plantedC4);
         presentDependencies |= builder.getSoundChannels(&soundChannels);
         presentDependencies |= builder.getFileSystem(&fileSystem);
         presentDependencies |= builder.getConVarAccessor();
     }
 
-    const GameClassImplementations& gameClassImplementations;
+    GameDependencies& _gameDependencies;
     FeatureHelpers& featureHelpers;
 
     cs2::CCSPlayerController* localPlayerController;
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};
     float fovScale;
-    float curTime;
     cs2::CPlantedC4* plantedC4;
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;
     ConVarAccessorState conVarAccessorState;
     HookDependenciesMask presentDependencies;
+    HudCache hudCache;
+    GlobalVarsCache globalVarsCache;
 };

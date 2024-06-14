@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include "Implementation/PanoramaLabelImpl.h"
+#include <GameDependencies/PanoramaLabelDeps.h>
 
 struct PanoramaLabel {
     explicit PanoramaLabel(cs2::CLabel* thisptr) noexcept
@@ -11,8 +11,8 @@ struct PanoramaLabel {
 
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (PanoramaLabelImpl::instance().setTextInternal)
-            PanoramaLabelImpl::instance().setTextInternal(thisptr, value, textType, trustedSource);
+        if (PanoramaLabelDeps::instance().setTextInternal)
+            PanoramaLabelDeps::instance().setTextInternal(thisptr, value, textType, trustedSource);
     }
 
 private:

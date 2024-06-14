@@ -9,7 +9,7 @@ class LoopModeGameHook;
 struct VisualFeatures {
     [[nodiscard]] PlayerInformationThroughWallsToggle playerInformationThroughWalls() const noexcept
     {
-        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, helpers.hudInWorldPanelContainer, viewRenderHook, helpers.panelConfigurator(), helpers.hudProvider};
+        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, hookDependencies, helpers.hudInWorldPanelContainer, viewRenderHook};
     }
 
     [[nodiscard]] PlayerPositionToggle playerPositionToggle() const noexcept
@@ -62,6 +62,7 @@ struct VisualFeatures {
         return BlindedIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
     }
 
+    HookDependencies& hookDependencies;
     VisualFeaturesStates& states;
     FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;

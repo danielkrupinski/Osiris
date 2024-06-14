@@ -2,15 +2,15 @@
 
 #include <GameClasses/OffsetTypes/GameRulesOffset.h>
 
-struct GameRulesImpl {
+struct GameRulesDeps {
     template <typename GameRulesPatterns>
-    explicit GameRulesImpl(const GameRulesPatterns& gameRulesPatterns) noexcept
+    explicit GameRulesDeps(const GameRulesPatterns& gameRulesPatterns) noexcept
         : gameRules{gameRulesPatterns.gameRules()}
         , roundStartTimeOffset{gameRulesPatterns.roundStartTimeOffset()}
     {
     }
 
-    [[nodiscard]] static const GameRulesImpl& instance() noexcept;
+    [[nodiscard]] static const GameRulesDeps& instance() noexcept;
 
     cs2::C_CSGameRules** gameRules;
     RoundStartTimeOffset roundStartTimeOffset;

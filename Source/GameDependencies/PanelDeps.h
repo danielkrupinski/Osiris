@@ -2,14 +2,14 @@
 
 #include <CS2/Classes/Panorama.h>
 
-struct PanelImpl {
+struct PanelDeps {
     template <typename PanelPatterns>
-    explicit PanelImpl(const PanelPatterns& panelPatterns) noexcept
+    explicit PanelDeps(const PanelPatterns& panelPatterns) noexcept
         : create{panelPatterns.create()}
     {
     }
 
-    [[nodiscard]] static const PanelImpl& instance() noexcept;
+    [[nodiscard]] static const PanelDeps& instance() noexcept;
 
     cs2::CPanel2D::Create* create;
 };

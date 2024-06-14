@@ -4,16 +4,16 @@
 
 #include <CS2/Classes/Panorama.h>
 
-struct PanoramaLabelImpl {
+struct PanoramaLabelDeps {
     template <typename PanoramaLabelPatterns>
-    explicit PanoramaLabelImpl(const PanoramaLabelPatterns& panoramaLabelPatterns) noexcept
+    explicit PanoramaLabelDeps(const PanoramaLabelPatterns& panoramaLabelPatterns) noexcept
         : setTextInternal{panoramaLabelPatterns.setTextInternal()}
         , constructor{panoramaLabelPatterns.constructor()}
         , size{panoramaLabelPatterns.size()}
     {
     }
 
-    [[nodiscard]] static const PanoramaLabelImpl& instance() noexcept;
+    [[nodiscard]] static const PanoramaLabelDeps& instance() noexcept;
 
     cs2::CLabel::setTextInternal setTextInternal;
     cs2::CLabel::Constructor* constructor;

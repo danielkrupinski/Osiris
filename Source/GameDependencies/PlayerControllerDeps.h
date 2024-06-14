@@ -2,9 +2,9 @@
 
 #include <GameClasses/OffsetTypes/PlayerControllerOffset.h>
 
-struct PlayerControllerImpl {
+struct PlayerControllerDeps {
     template <typename PlayerControllerPatterns>
-    explicit PlayerControllerImpl(const PlayerControllerPatterns& playerControllerPatterns) noexcept
+    explicit PlayerControllerDeps(const PlayerControllerPatterns& playerControllerPatterns) noexcept
         : offsetToPlayerPawnHandle{playerControllerPatterns.offsetToPlayerPawnHandle()}
         , offsetToPlayerColor{playerControllerPatterns.offsetToPlayerColor()}
     {

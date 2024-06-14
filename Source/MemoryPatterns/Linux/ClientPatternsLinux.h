@@ -35,11 +35,6 @@ struct ClientPatterns {
         return patternFinders.clientPatternFinder("48 89 35 ? ? ? ? 48 89 46"_pat).add(3).abs().template as<cs2::GlobalVars**>();
     }
 
-    [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept
-    {
-        return patternFinders.clientPatternFinder("0F 85 ? ? ? ? 48 8D 05 ? ? ? ? 8B 10"_pat).add(9).abs().template as<cs2::CUtlVector<cs2::CPlantedC4*>*>();
-    }
-
     [[nodiscard]] cs2::ClientModeCSNormal* clientMode() const noexcept
     {
         return patternFinders.clientPatternFinder("48 8D 05 ? ? ? ? 4C 89 E7 48 89 05"_pat).add(3).abs().template as<cs2::ClientModeCSNormal*>();
