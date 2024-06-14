@@ -15,24 +15,6 @@ struct HookDependencies {
     {
         presentDependencies |= HookDependenciesMask{}.set<EntitiesVMTs>();
 
-        if (gameDependencies.playerControllerDeps.offsetToPlayerPawnHandle)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToPlayerPawnHandle>();
-
-        if (gameDependencies.entityDeps.offsetToGameSceneNode)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToGameSceneNode>();
-
-        if (gameDependencies.entityDeps.offsetToHealth)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToHealth>();
-
-        if (gameDependencies.entityDeps.offsetToTeamNumber)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToTeamNumber>();
-
-        if (gameDependencies.gameSceneNodeDeps.offsetToAbsOrigin)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToAbsOrigin>();
-
-        if (gameDependencies.playerPawnDeps.offsetToPlayerPawnImmunity)
-            presentDependencies |= HookDependenciesMask{}.set<OffsetToPlayerPawnImmunity>();
-
         if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
 
@@ -71,16 +53,6 @@ struct HookDependencies {
             return localPlayerController;
         } else if constexpr (std::is_same_v<Dependency, EntityFromHandleFinder>) {
             return EntityFromHandleFinder{*entityList};
-        } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnHandle>) {
-            return _gameDependencies.playerControllerDeps.offsetToPlayerPawnHandle;
-        } else if constexpr (std::is_same_v<Dependency, OffsetToGameSceneNode>) {
-            return _gameDependencies.entityDeps.offsetToGameSceneNode;
-        } else if constexpr (std::is_same_v<Dependency, OffsetToHealth>) {
-            return _gameDependencies.entityDeps.offsetToHealth;
-        } else if constexpr (std::is_same_v<Dependency, OffsetToTeamNumber>) {
-            return _gameDependencies.entityDeps.offsetToTeamNumber;
-        } else if constexpr (std::is_same_v<Dependency, OffsetToAbsOrigin>) {
-            return _gameDependencies.gameSceneNodeDeps.offsetToAbsOrigin;
         } else if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
             return WorldToClipSpaceConverter{_gameDependencies.worldToProjectionMatrix};
         } else if constexpr (std::is_same_v<Dependency, HudInWorldPanelContainer>) {
@@ -99,8 +71,6 @@ struct HookDependencies {
             return FileSystem{*fileSystem, _gameDependencies.fileSystemDeps};
         } else if constexpr (std::is_same_v<Dependency, PanoramaLabelFactory>) {
             return PanoramaLabelFactory{_gameDependencies.panoramaLabelDeps.constructor, _gameDependencies.panoramaLabelDeps.size};
-        } else if constexpr (std::is_same_v<Dependency, OffsetToPlayerPawnImmunity>) {
-            return _gameDependencies.playerPawnDeps.offsetToPlayerPawnImmunity;
         } else if constexpr (std::is_same_v<Dependency, ConVarAccessor>) {
             return ConVarAccessor{*_gameDependencies.conVars, _gameDependencies.conVarDeps, conVarAccessorState};
         } else {
@@ -118,7 +88,7 @@ struct HookDependencies {
         return HudOptional{_gameDependencies.hud, hudCache};
     }
 
-    [[nodiscard]] auto globalVars() noexcept
+    [[nodiscard]] GlobalVarsOptional globalVars() noexcept
     {
         return GlobalVarsOptional{_gameDependencies.globalVars, globalVarsCache};
     }

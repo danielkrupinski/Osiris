@@ -228,16 +228,15 @@ public:
         if (!playerController || isLocalPlayerController(playerController))
             return;
 
-        const auto hasHealth = dependencies.requestDependency<OffsetToHealth>();
-        const auto health = hasHealth ? *dependencies.getDependency<OffsetToHealth>().of(&playerPawn).get() : 100;
-        if (health <= 0)
+        const auto health = dependencies.gameDependencies().entityDeps.offsetToHealth.of(&playerPawn);
+        if (!health.get() || *health.get() <= 0)
             return;
 
-        const auto gameSceneNode = *dependencies.getDependency<OffsetToGameSceneNode>().of(&playerPawn).get();
+        const auto gameSceneNode = *dependencies.gameDependencies().entityDeps.offsetToGameSceneNode.of(&playerPawn).get();
         if (!gameSceneNode)
             return;
 
-        const auto absOrigin = *dependencies.getDependency<OffsetToAbsOrigin>().of(gameSceneNode).get();
+        const auto absOrigin = *dependencies.gameDependencies().gameSceneNodeDeps.offsetToAbsOrigin.of(gameSceneNode).get();
 
         const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin);
         if (!positionInClipSpace.onScreen())
@@ -267,8 +266,7 @@ public:
             return;
 
         setArrowColor(PanoramaUiPanel{playerInformationPanel.positionArrowPanel}, *playerController, teamNumber);
-        if (hasHealth)
-            setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, health);
+        setHealth(PanoramaUiPanel{playerInformationPanel.healthPanel}, *health.get());
         setActiveWeapon(PanoramaUiPanel{playerInformationPanel.weaponIconPanel}, playerPawn);
         setActiveWeaponAmmo(PanoramaUiPanel{playerInformationPanel.weaponAmmoPanel}, playerPawn);
         setPlayerStateIcons(PanoramaUiPanel{playerInformationPanel.playerStateIconsPanel}, playerPawn);
@@ -609,9 +607,7 @@ private:
 
     [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept
     {
-        if (dependencies.requestDependency<OffsetToTeamNumber>())
-            return TeamNumber{*dependencies.getDependency<OffsetToTeamNumber>().of(&entity).get()};
-        return {};
+        return TeamNumber{dependencies.gameDependencies().entityDeps.offsetToTeamNumber.of(&entity).valueOr({})};
     }
 
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
@@ -621,9 +617,7 @@ private:
 
     [[nodiscard]] bool hasImmunity(cs2::C_CSPlayerPawn& playerPawn) const noexcept
     {
-        if (dependencies.requestDependency<OffsetToPlayerPawnImmunity>())
-            return *dependencies.getDependency<OffsetToPlayerPawnImmunity>().of(&playerPawn).get();
-        return false;
+        return dependencies.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(&playerPawn).valueOr(false);
     }
 
     [[nodiscard]] float getFovScale() const noexcept
@@ -649,8 +643,6 @@ private:
 
     static constexpr auto kCrucialDependencies{
         HookDependenciesMask{}
-            .set<OffsetToGameSceneNode>()
-            .set<OffsetToAbsOrigin>()
             .set<WorldToClipSpaceConverter>()
             .set<HudInWorldPanelContainer>()
             .set<PanelConfigurator>()
