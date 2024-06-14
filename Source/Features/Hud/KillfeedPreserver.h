@@ -82,8 +82,8 @@ private:
             return deathNoticesPanel;
 
         if (hud) {
-            if (const auto hudDeathNotice = hud->findChildInLayoutFile(cs2::HudDeathNotice))
-            state.deathNoticesPointer = hudDeathNotice.findChildInLayoutFile(cs2::VisibleNotices);
+            if (const auto hudDeathNotice = hud->hudDeathNotice())
+                state.deathNoticesPointer = hudDeathNotice.findChildInLayoutFile(cs2::VisibleNotices);
         }
 
         return state.deathNoticesPointer.get();

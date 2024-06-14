@@ -95,7 +95,7 @@ private:
         if (!hud)
             return;
 
-        const auto hudTeamCounter = hud->findChildInLayoutFile(cs2::HudTeamCounter);
+        const auto hudTeamCounter = hud->hudTeamCounter();
         if (!hudTeamCounter)
             return;
 

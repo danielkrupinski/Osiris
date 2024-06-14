@@ -12,14 +12,25 @@ struct HudCache {
 struct Hud {
     HudCache& cache;
 
-    [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
-    {
-        return PanoramaUiPanel{cache.hudPanel->uiPanel}.findChildInLayoutFile(childId);
-    }
-
     [[nodiscard]] cs2::CUIPanel* getHudReticle() const noexcept
     {
         return findChildInLayoutFile(cs2::HudReticle);
+    }
+
+    [[nodiscard]] PanoramaUiPanel hudTeamCounter() const noexcept
+    {
+        return findChildInLayoutFile(cs2::HudTeamCounter);
+    }
+
+    [[nodiscard]] PanoramaUiPanel hudDeathNotice() const noexcept
+    {
+        return findChildInLayoutFile(cs2::HudDeathNotice);
+    }
+
+private:
+    [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
+    {
+        return PanoramaUiPanel{cache.hudPanel->uiPanel}.findChildInLayoutFile(childId);
     }
 };
 
