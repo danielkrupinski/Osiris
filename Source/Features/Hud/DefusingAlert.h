@@ -64,25 +64,13 @@ public:
             return;
         }
 
-        const auto globalVars = hookDependencies.globalVars();
-        if (!globalVars) {
-            state.hideDefusingAlert();
-            return;
-        }
-
-        const auto curtime = globalVars->curtime();
-        if (!curtime) {
-            state.hideDefusingAlert();
-            return;
-        }
-
-        const auto timeToEnd = bomb.getTimeToDefuseEnd(*curtime);
-        if (timeToEnd > 0.0f) {
+        const auto timeToEnd = bomb.getTimeToDefuseEnd();
+        if (timeToEnd && *timeToEnd > 0.0f) {
             if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
 
             if (const auto defusingTimer = state.defusingTimerPanel.get()) {
-                PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(timeToEnd), 0, true);
+                PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(*timeToEnd), 0, true);
                 if (const auto style = defusingTimer.getStyle())
                     hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
             }

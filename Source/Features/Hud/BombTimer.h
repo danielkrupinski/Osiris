@@ -54,21 +54,14 @@ public:
         updatePanelHandles();
         hideBombStatusPanel();
 
-        const auto globalVars = hookDependencies.globalVars();
-        if (!globalVars || !hookDependencies.requestDependency<PlantedC4>()) {
-            state.hideBombTimerPanel();
-            return;
-        }
-
-        const auto curtime = globalVars->curtime();
-        if (!curtime) {
+        if (!hookDependencies.requestDependency<PlantedC4>()) {
             state.hideBombTimerPanel();
             return;
         }
 
         const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
 
-        if (const auto timeToExplosion = bomb.getTimeToExplosion(*curtime); timeToExplosion > 0.0f) {
+        if (const auto timeToExplosion = bomb.getTimeToExplosion(); timeToExplosion > 0.0f) {
             showBombTimerPanel(bomb.getBombSiteIconUrl(), timeToExplosion);
         } else {
             state.restorePanels();

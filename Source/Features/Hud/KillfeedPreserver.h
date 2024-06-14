@@ -41,14 +41,6 @@ public:
         if (!gameRules || !*gameRules)
             return;
 
-        const auto globalVars = hookDependencies.globalVars();
-        if (!globalVars)
-            return;
-
-        const auto curtime = globalVars->curtime();
-        if (!curtime)
-            return;
-
         const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
 
         initSymbols();
@@ -70,12 +62,20 @@ public:
             StringParser{ spawnTimeString }.parseFloat(spawnTime);
 
             if (spawnTime > roundStartTime) {
-                panel.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(*curtime), '.', '0').cstring());
+                markAsJustSpawned(panel);
             }
         }
     }
 
 private:
+    void markAsJustSpawned(PanoramaUiPanel deathNotice) noexcept
+    {
+        if (const auto globalVars = hookDependencies.globalVars()) {
+            if (const auto curtime = globalVars->curtime())
+                deathNotice.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(*curtime), '.', '0').cstring());
+        }
+    }
+
     [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel() noexcept
     {
         if (const auto deathNoticesPanel = state.deathNoticesPointer.get())

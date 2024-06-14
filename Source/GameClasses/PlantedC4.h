@@ -5,18 +5,22 @@
 #include <CS2/Constants/BombSiteIndex.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <GameDependencies/PlantedC4Deps.h>
+#include "GlobalVars/GlobalVarsOptional.h"
 
 struct PlantedC4 {
-    explicit PlantedC4(cs2::CPlantedC4& thisptr, const PlantedC4Deps& deps) noexcept
+    explicit PlantedC4(cs2::CPlantedC4& thisptr, const PlantedC4Deps& deps, GlobalVarsOptional globalVars) noexcept
         : thisptr{thisptr}
         , deps{deps}
+        , globalVars{globalVars}
     {
     }
 
-    [[nodiscard]] float getTimeToExplosion(float curtime) const noexcept
+    [[nodiscard]] float getTimeToExplosion() const noexcept
     {
-        if (ticking())
-            return deps.blowTime.of(&thisptr).valueOr(0.0f) - curtime;
+        if (ticking() && globalVars) {
+            if (const auto curtime = globalVars->curtime())
+                return deps.blowTime.of(&thisptr).valueOr(0.0f) - *curtime;
+        }
         return -1.0f;
     }
 
@@ -34,9 +38,13 @@ struct PlantedC4 {
         return {};
     }
 
-    [[nodiscard]] float getTimeToDefuseEnd(float curtime) const noexcept
+    [[nodiscard]] std::optional<float> getTimeToDefuseEnd() const noexcept
     {
-        return deps.defuseEndTime.of(&thisptr).valueOr(0.0f) - curtime;
+        if (globalVars) {
+            if (const auto curtime = globalVars->curtime())
+                return deps.defuseEndTime.of(&thisptr).valueOr(0.0f) - *curtime;
+        }
+        return {};
     }
 
     [[nodiscard]] const char* getBombSiteIconUrl() const noexcept
@@ -57,4 +65,5 @@ private:
 
     cs2::CPlantedC4& thisptr;
     const PlantedC4Deps& deps;
+    GlobalVarsOptional globalVars;
 };

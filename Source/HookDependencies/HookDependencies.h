@@ -92,7 +92,7 @@ struct HookDependencies {
         } else if constexpr (std::is_same_v<Dependency, FovScale>) {
             return fovScale;
         } else if constexpr (std::is_same_v<Dependency, PlantedC4>) {
-            return PlantedC4{*plantedC4, _gameDependencies.plantedC4Deps};
+            return PlantedC4{*plantedC4, _gameDependencies.plantedC4Deps, globalVars()};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
