@@ -6,7 +6,8 @@
 #include <FeatureHelpers/EntityListWalker.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/PlantedC4.h>
-#include <GameClasses/GlobalVars/GlobalVarsOptional.h>
+#include <GameClasses/GlobalVars/GlobalVars.h>
+#include <GameClasses/GameRules/GameRulesOptional.h>
 
 struct HookDependencies {
     HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers) noexcept
@@ -63,8 +64,6 @@ struct HookDependencies {
             return PanoramaTransformFactory{_gameDependencies.transformTranslate3dVmt, _gameDependencies.transformScale3dVmt};
         } else if constexpr (std::is_same_v<Dependency, FovScale>) {
             return fovScale;
-        } else if constexpr (std::is_same_v<Dependency, PlantedC4>) {
-            return PlantedC4{*plantedC4, _gameDependencies.plantedC4Deps, globalVars()};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
@@ -85,15 +84,38 @@ struct HookDependencies {
 
     [[nodiscard]] auto hud() noexcept
     {
-        return HudOptional{_gameDependencies.hud, hudCache};
+        return Hud{*this};
     }
 
-    [[nodiscard]] GlobalVarsOptional globalVars() noexcept
+    [[nodiscard]] GlobalVars globalVars() noexcept
     {
-        return GlobalVarsOptional{_gameDependencies.globalVars, globalVarsCache};
+        if (_gameDependencies.globalVarsDeps.globalVars)
+            return GlobalVars{*_gameDependencies.globalVarsDeps.globalVars};
+        return GlobalVars{nullptr};
+    }
+
+    [[nodiscard]] GameRulesOptional gameRules() noexcept
+    {
+        return GameRulesOptional{_gameDependencies.gameRulesDeps.gameRules, gameRulesCache};
+    }
+
+    [[nodiscard]] auto plantedC4() noexcept
+    {
+        const auto base = PlantedC4Base{getPlantedC4()};
+        if (base.thisptr)
+            return std::optional<PlantedC4<HookDependencies&>>{PlantedC4<HookDependencies&>{base, *this}};
+        return std::optional<PlantedC4<HookDependencies&>>{};
     }
 
 private:
+    [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
+    {
+        const auto* const plantedC4s = _gameDependencies.plantedC4Deps.plantedC4s;
+        if (plantedC4s && plantedC4s->size > 0)
+            return plantedC4s->memory[0];
+        return nullptr;
+    }
+
     template <typename Dependency>
     [[nodiscard]] bool hasDependency() const noexcept
     {
@@ -107,7 +129,6 @@ private:
         presentDependencies |= builder.getLocalPlayerController(&localPlayerController);
         presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
         presentDependencies |= builder.getFovScale(&fovScale);
-        presentDependencies |= builder.getPlantedC4(&plantedC4);
         presentDependencies |= builder.getSoundChannels(&soundChannels);
         presentDependencies |= builder.getFileSystem(&fileSystem);
         presentDependencies |= builder.getConVarAccessor();
@@ -120,11 +141,9 @@ private:
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};
     float fovScale;
-    cs2::CPlantedC4* plantedC4;
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;
     ConVarAccessorState conVarAccessorState;
     HookDependenciesMask presentDependencies;
-    HudCache hudCache;
-    GlobalVarsCache globalVarsCache;
+    GameRulesCache gameRulesCache;
 };

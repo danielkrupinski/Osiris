@@ -3,7 +3,6 @@
 #include <CS2/Constants/PanelIDs.h>
 
 #include <FeatureHelpers/FeatureToggle.h>
-#include <Helpers/HudProvider.h>
 #include <FeatureHelpers/PanelConfigurator.h>
 
 #include "States/DefusingAlertState.h"
@@ -41,10 +40,9 @@ struct DefusingAlertToggle : FeatureToggleOff<DefusingAlertToggle> {
 
 class DefusingAlert {
 public:
-    DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies, HudOptional hud) noexcept
+    DefusingAlert(DefusingAlertState& state, HookDependencies& hookDependencies) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
-        , hud{hud}
     {
     }
 
@@ -54,17 +52,14 @@ public:
             return;
 
         updatePanelHandles();
-      
-        if (!hookDependencies.requestDependencies(HookDependenciesMask{}.set<PlantedC4>()))
-            return;
 
-        const PlantedC4 bomb{hookDependencies.getDependency<PlantedC4>()};
-        if (!bomb.isBeingDefused()) {
+        const auto bomb{hookDependencies.plantedC4()};
+        if (!bomb || !bomb->isBeingDefused()) {
             state.hideDefusingAlert();
             return;
         }
 
-        const auto timeToEnd = bomb.getTimeToDefuseEnd();
+        const auto timeToEnd = bomb->getTimeToDefuseEnd();
         if (timeToEnd && *timeToEnd > 0.0f) {
             if (const auto defusingAlertContainer = state.defusingAlertContainerPanel.get())
                 defusingAlertContainer.setVisible(true);
@@ -72,7 +67,7 @@ public:
             if (const auto defusingTimer = state.defusingTimerPanel.get()) {
                 PanoramaLabel{ static_cast<cs2::CLabel*>(defusingTimer.getClientPanel()) }.setTextInternal(DefusingCountdownStringBuilder{}(*timeToEnd), 0, true);
                 if (const auto style = defusingTimer.getStyle())
-                    hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style).setSimpleForegroundColor(getTimerColor(bomb));
+                    hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style).setSimpleForegroundColor(getTimerColor(*bomb));
             }
         } else {
             state.hideDefusingAlert();
@@ -80,7 +75,7 @@ public:
     }
 
 private:
-    [[nodiscard]] static cs2::Color getTimerColor(PlantedC4 bomb) noexcept
+    [[nodiscard]] static cs2::Color getTimerColor(auto bomb) noexcept
     {
         if (const auto canDefuse = bomb.canBeDefused(); canDefuse.has_value())
             return *canDefuse ? cs2::kColorGreen : cs2::kColorRed;
@@ -92,10 +87,7 @@ private:
         if (state.defusingTimerPanel.get())
             return;
 
-        if (!hud)
-            return;
-
-        const auto hudTeamCounter = hud->hudTeamCounter();
+        const auto hudTeamCounter = hookDependencies.hud().hudTeamCounter();
         if (!hudTeamCounter)
             return;
 
@@ -134,5 +126,4 @@ R"(
 
     DefusingAlertState& state;
     HookDependencies& hookDependencies;
-    HudOptional hud;
 };

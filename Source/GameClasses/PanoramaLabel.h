@@ -9,9 +9,14 @@ struct PanoramaLabel {
     {
     }
 
+    void setText(const char* value) const noexcept
+    {
+        setTextInternal(value, 0, true);
+    }
+
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (PanoramaLabelDeps::instance().setTextInternal)
+        if (thisptr && PanoramaLabelDeps::instance().setTextInternal)
             PanoramaLabelDeps::instance().setTextInternal(thisptr, value, textType, trustedSource);
     }
 

@@ -176,7 +176,7 @@ struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformatio
         viewRenderHook.decrementReferenceCount();
 
         if (const auto containerPanel{hudInWorldPanelContainer.get(dependencies.hud(), dependencies.getDependency<PanelConfigurator>())}) {
-            if (const auto containerPanelChildren{containerPanel.children()})
+            if (const auto containerPanelChildren{containerPanel.children().vector})
                 hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
         }
     }
@@ -246,7 +246,7 @@ public:
         if (!containerPanel)
             return;
 
-        const auto containerPanelChildren{containerPanel.children()};
+        const auto containerPanelChildren{containerPanel.children().vector};
         if (!containerPanelChildren)
             return;
 
@@ -301,7 +301,7 @@ public:
         if (!containerPanel)
             return;
 
-        const auto containerPanelChildren{containerPanel.children()};
+        const auto containerPanelChildren{containerPanel.children().vector};
         if (!containerPanelChildren)
             return;
 
@@ -438,7 +438,7 @@ private:
         }
 
         healthPanel.setVisible(true);
-        const auto healthPanelChildren = healthPanel.children();
+        const auto healthPanelChildren = healthPanel.children().vector;
         if (!healthPanelChildren || healthPanelChildren->size < 2)
             return;
 
@@ -474,7 +474,7 @@ private:
 
         playerStateIconsPanel.setVisible(true);
         
-        const auto playerStateChildren = playerStateIconsPanel.children();
+        const auto playerStateChildren = playerStateIconsPanel.children().vector;
         if (!playerStateChildren || playerStateChildren->size != 4)
             return;
 
@@ -510,14 +510,10 @@ private:
 
     [[nodiscard]] float getRemainingFlashBangTime(cs2::C_CSPlayerPawn& playerPawn) const noexcept
     {
-        const auto globalVars = dependencies.globalVars();
-        if (!globalVars)
-            return 0.0f;
-
         if (!dependencies.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime)
             return 0.0f;
 
-        const auto curTime = globalVars->curtime();
+        const auto curTime = dependencies.globalVars().curtime();
         if (!curTime)
             return 0.0f;
         const auto flashBangEndTime = *dependencies.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime.of(&playerPawn).get();
@@ -561,7 +557,7 @@ private:
             return;
         }
 
-        const auto children = weaponAmmoPanel.children();
+        const auto children = weaponAmmoPanel.children().vector;
         if (!children || children->size < 1)
             return;
 

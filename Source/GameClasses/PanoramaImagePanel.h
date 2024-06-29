@@ -27,6 +27,9 @@ struct PanoramaImagePanel {
 
     void setImageSvg(const char* imageUrl, int textureHeight = -1) const noexcept
     {
+        if (thisptr == nullptr)
+            return;
+
         const auto properties{getImageProperties()};
         if (!properties)
             return;

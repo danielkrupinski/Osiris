@@ -5,34 +5,66 @@
 #include <CS2/Constants/BombSiteIndex.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <GameDependencies/PlantedC4Deps.h>
-#include "GlobalVars/GlobalVarsOptional.h"
+#include <GameClasses/GlobalVars/GlobalVars.h>
 
+struct PlantedC4Base {
+    [[nodiscard]] auto blowTime() const noexcept
+    {
+        return PlantedC4Deps::instance().blowTime.of(thisptr);
+    }
+
+    [[nodiscard]] auto defuser() const noexcept
+    {
+        return PlantedC4Deps::instance().defuser.of(thisptr);
+    }
+
+    [[nodiscard]] auto defuseEndTime() const noexcept
+    {
+        return PlantedC4Deps::instance().defuseEndTime.of(thisptr);
+    }
+
+    [[nodiscard]] auto bombSite() const noexcept
+    {
+        return PlantedC4Deps::instance().bombSite.of(thisptr);
+    }
+
+    [[nodiscard]] auto ticking() const noexcept
+    {
+        return PlantedC4Deps::instance().ticking.of(thisptr);
+    }
+
+    cs2::CPlantedC4* thisptr;
+};
+
+template <typename Dependencies>
 struct PlantedC4 {
-    explicit PlantedC4(cs2::CPlantedC4& thisptr, const PlantedC4Deps& deps, GlobalVarsOptional globalVars) noexcept
-        : thisptr{thisptr}
-        , deps{deps}
-        , globalVars{globalVars}
+    explicit PlantedC4(PlantedC4Base base, Dependencies dependencies) noexcept
+        : base{base}
+        , dependencies{dependencies}
     {
     }
 
     [[nodiscard]] float getTimeToExplosion() const noexcept
     {
-        if (ticking() && globalVars) {
-            if (const auto curtime = globalVars->curtime())
-                return deps.blowTime.of(&thisptr).valueOr(0.0f) - *curtime;
-        }
+        if (const auto curtime = dependencies.globalVars().curtime())
+            return base.blowTime().valueOr(0.0f) - *curtime;
         return -1.0f;
+    }
+
+    [[nodiscard]] bool isTicking() const noexcept
+    {
+        return base.ticking().valueOr(true) && getTimeToExplosion() > 0.0f;
     }
 
     [[nodiscard]] bool isBeingDefused() const noexcept
     {
-        return deps.defuser.of(&thisptr).valueOr(cs2::INVALID_EHANDLE_INDEX) != cs2::INVALID_EHANDLE_INDEX;
+        return base.defuser().valueOr(cs2::INVALID_EHANDLE_INDEX) != cs2::INVALID_EHANDLE_INDEX;
     }
 
     [[nodiscard]] std::optional<bool> canBeDefused() const noexcept
     {
-        const auto defuseEndTime = deps.defuseEndTime.of(&thisptr);
-        const auto blowTime = deps.blowTime.of(&thisptr);
+        const auto defuseEndTime = base.defuseEndTime();
+        const auto blowTime = base.blowTime();
         if (defuseEndTime.get() && blowTime.get())
             return *defuseEndTime.get() < *blowTime.get();
         return {};
@@ -40,17 +72,15 @@ struct PlantedC4 {
 
     [[nodiscard]] std::optional<float> getTimeToDefuseEnd() const noexcept
     {
-        if (globalVars) {
-            if (const auto curtime = globalVars->curtime())
-                return deps.defuseEndTime.of(&thisptr).valueOr(0.0f) - *curtime;
-        }
+        if (const auto curtime = dependencies.globalVars().curtime())
+            return base.defuseEndTime().valueOr(0.0f) - *curtime;
         return {};
     }
 
     [[nodiscard]] const char* getBombSiteIconUrl() const noexcept
     {
         constexpr auto INVALID_BOMBSITE_INDEX = -1;
-        switch (deps.bombSite.of(&thisptr).valueOr(INVALID_BOMBSITE_INDEX)) {
+        switch (base.bombSite().valueOr(INVALID_BOMBSITE_INDEX)) {
         case cs2::BOMBSITE_A_INDEX: return "s2r://panorama/images/icons/ui/map_bombzone_a.vsvg";
         case cs2::BOMBSITE_B_INDEX: return "s2r://panorama/images/icons/ui/map_bombzone_b.vsvg";
         default: return nullptr;
@@ -58,12 +88,6 @@ struct PlantedC4 {
     }
 
 private:
-    [[nodiscard]] bool ticking() const noexcept
-    {
-        return deps.ticking.of(&thisptr).valueOr(true);
-    }
-
-    cs2::CPlantedC4& thisptr;
-    const PlantedC4Deps& deps;
-    GlobalVarsOptional globalVars;
+    PlantedC4Base base;
+    Dependencies dependencies;
 };

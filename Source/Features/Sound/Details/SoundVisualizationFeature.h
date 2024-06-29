@@ -57,7 +57,7 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
         if (const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.getDependency<PanelConfigurator>())}) {
-            if (const auto containerPanelChildren{containerPanel.children()})
+            if (const auto containerPanelChildren{containerPanel.children().vector})
                 state.hideRemainingPanels(hookDependencies.getDependency<PanelConfigurator>(), HudInWorldPanels{*containerPanelChildren}, 0);
         }
     }
@@ -96,11 +96,7 @@ public:
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
-        const auto globalVars = hookDependencies.globalVars();
-        if (!globalVars)
-            return;
-
-        const auto curtime = globalVars->curtime();
+        const auto curtime = hookDependencies.globalVars().curtime();
         if (!curtime)
             return;
 
@@ -108,7 +104,7 @@ public:
         if (!containerPanel)
             return;
 
-        const auto containerPanelChildren{containerPanel.children()};
+        const auto containerPanelChildren{containerPanel.children().vector};
         if (!containerPanelChildren)
             return;
 

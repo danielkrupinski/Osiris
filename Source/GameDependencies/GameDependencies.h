@@ -10,12 +10,15 @@
 #include "FileSystemDeps.h"
 #include "GameRulesDeps.h"
 #include "GameSceneNodeDeps.h"
+#include "GlobalVarsDeps.h"
 #include "HostageServicesDeps.h"
+#include "HudDeps.h"
 #include "MemAllocDeps.h"
 #include "PanelDeps.h"
 #include "PanelStyleDeps.h"
 #include "PanoramaImagePanelDeps.h"
 #include "PanoramaLabelDeps.h"
+#include "PanoramaSymbols.h"
 #include "PanoramaUiEngineDeps.h"
 #include "PanoramaUiPanelDeps.h"
 #include "PlantedC4Deps.h"
@@ -43,7 +46,9 @@ struct GameDependencies {
         , fileSystemDeps{memoryPatterns.fileSystemPatterns()}
         , gameRulesDeps{memoryPatterns.gameRulesPatterns()}
         , gameSceneNodeDeps{memoryPatterns.gameSceneNodePatterns()}
+        , globalVarsDeps{memoryPatterns.clientPatterns()}
         , hostageServicesDeps{memoryPatterns.hostageServicesPatterns()}
+        , hudDeps{memoryPatterns.clientPatterns()}
         , memAllocDeps{tier0Dll, memoryPatterns.memAllocPatterns()}
         , panelDeps{memoryPatterns.panelPatterns()}
         , panelStyleDeps{memoryPatterns.panelStylePatterns()}
@@ -60,7 +65,6 @@ struct GameDependencies {
         , weaponVDataDeps{memoryPatterns.weaponVDataPatterns()}
         , loopModeGame{memoryPatterns.clientPatterns().loopModeGame()}
         , viewRender{memoryPatterns.clientPatterns().viewRender()}
-        , globalVars{memoryPatterns.clientPatterns().globalVars()}
         , transformTranslate3dVmt{memoryPatterns.clientPatterns().transformTranslate3dVMT()}
         , transformScale3dVmt{memoryPatterns.clientPatterns().transformScale3dVMT()}
         , worldToProjectionMatrix{memoryPatterns.clientPatterns().worldToProjectionMatrix()}
@@ -87,7 +91,9 @@ struct GameDependencies {
     FileSystemDeps fileSystemDeps;
     GameRulesDeps gameRulesDeps;
     GameSceneNodeDeps gameSceneNodeDeps;
+    GlobalVarsDeps globalVarsDeps;
     HostageServicesDeps hostageServicesDeps;
+    HudDeps hudDeps;
     MemAllocDeps memAllocDeps;
     PanelDeps panelDeps;
     PanelStyleDeps panelStyleDeps;
@@ -105,8 +111,6 @@ struct GameDependencies {
 
     cs2::CLoopModeGame** loopModeGame;
     cs2::CViewRender** viewRender;
-    cs2::CPanel2D** hud;
-    cs2::GlobalVars** globalVars;
     const void* transformTranslate3dVmt; // todo: create struct for transform VMTs
     const void* transformScale3dVmt;
     const cs2::VMatrix* worldToProjectionMatrix;
@@ -118,4 +122,5 @@ struct GameDependencies {
     cs2::SoundChannels** soundChannels;
     cs2::CBaseFileSystem** fileSystem;
     std::optional<ConVars> conVars;
+    std::optional<PanoramaSymbols> panoramaSymbols;
 };

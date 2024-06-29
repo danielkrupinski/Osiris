@@ -130,6 +130,12 @@
     <Filter Include="GameDependencies">
       <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameClasses\Hud">
+      <UniqueIdentifier>{2e222bab-92a1-4491-8c17-1d29525d2a51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Hud\BombTimer">
+      <UniqueIdentifier>{bbb4bb7f-d544-416a-96ea-1699bcd868de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -171,9 +177,6 @@
     <ClInclude Include="Features\Features.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer.h">
-      <Filter>Features\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\DefusingAlert.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
@@ -185,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\GameRules.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\PanoramaImagePanel.h">
       <Filter>GameClasses</Filter>
@@ -214,9 +214,6 @@
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\Bits.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\HudProvider.h">
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\PanoramaPanelPointer.h">
@@ -686,9 +683,6 @@
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\States\BombTimerState.h">
-      <Filter>Features\Hud\States</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\States\DefusingAlertState.h">
       <Filter>Features\Hud\States</Filter>
     </ClInclude>
@@ -983,12 +977,6 @@
     <ClInclude Include="GameClasses\GlobalVars\GlobalVars.h">
       <Filter>GameClasses\GlobalVars</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\GlobalVars\GlobalVarsCache.h">
-      <Filter>GameClasses\GlobalVars</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\GlobalVars\GlobalVarsOptional.h">
-      <Filter>GameClasses\GlobalVars</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\ConVarDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -1072,6 +1060,39 @@
     </ClInclude>
     <ClInclude Include="GameDependencies\WeaponVDataDeps.h">
       <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\HudOptional.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\HudCache.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\Hud.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\GameBombStatusPanel.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerToggle.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerContext.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimer.h">
+      <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

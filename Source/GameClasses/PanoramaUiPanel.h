@@ -17,14 +17,28 @@ struct PanoramaUiPanel {
     
     void setParent(cs2::CUIPanel* parent) const noexcept
     {
-        if (const auto fn = impl().setParent.of(thisptr->vmt).get())
-            (*fn)(thisptr, parent);
+        if (thisptr && parent) {
+            if (const auto fn = impl().setParent.of(thisptr->vmt).get())
+                (*fn)(thisptr, parent);
+        }
+    }
+
+    void show() const noexcept
+    {
+        setVisible(true);
+    }
+
+    void hide() const noexcept
+    {
+        setVisible(false);
     }
 
     void setVisible(bool visible) const noexcept
     {
-        if (const auto fn = impl().setVisible.of(thisptr->vmt).get())
-            (*fn)(thisptr, visible);
+        if (thisptr) {
+            if (const auto fn = impl().setVisible.of(thisptr->vmt).get())
+                (*fn)(thisptr, visible);
+        }
     }
 
     [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
@@ -47,9 +61,24 @@ struct PanoramaUiPanel {
             (*fn)(thisptr, attributeName, value);
     }
 
-    [[nodiscard]] cs2::CUIPanel::childrenVector* children() const noexcept
+    template <typename T>
+    struct UtlVector {
+        template <typename F>
+        void forEach(F&& f) noexcept
+        {
+            if (!vector)
+                return;
+
+            for (int i = 0; i < vector->size; ++i)
+                f(vector->memory[i]);
+        }
+
+        cs2::CUtlVector<T>* vector;
+    };
+
+    [[nodiscard]] auto children() const noexcept
     {
-        return impl().childPanels.of(thisptr).get();
+        return UtlVector{impl().childPanels.of(thisptr).get()};
     }
 
     [[nodiscard]] bool hasClass(cs2::CPanoramaSymbol className) const noexcept

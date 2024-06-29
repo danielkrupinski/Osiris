@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BombTimerState.h"
+#include "../BombTimer/BombTimerState.h"
 #include "DefusingAlertState.h"
 #include "KillfeedPreserverState.h"
 

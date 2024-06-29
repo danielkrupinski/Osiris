@@ -3,28 +3,29 @@
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <HookDependencies/HookDependencies.h>
 
-#include "BombTimer.h"
+#include "BombTimer/BombTimer.h"
+#include "BombTimer/BombTimerContext.h"
+#include "BombTimer/BombTimerToggle.h"
 #include "DefusingAlert.h"
 #include "KillfeedPreserver.h"
 #include "States/HudFeaturesStates.h"
 
 struct HudFeatures {
-    [[nodiscard]] BombTimer bombTimer() const noexcept
+    [[nodiscard]] auto bombTimer() const noexcept
     {
-        return BombTimer{states.bombTimerState, hookDependencies, hookDependencies.hud()};
+        return BombTimer{BombTimerContext{states.bombTimerState, hookDependencies}};
     }
 
-    [[nodiscard]] BombTimerToggle bombTimerToggle() const noexcept
+    [[nodiscard]] auto bombTimerToggle() const noexcept
     {
-        return BombTimerToggle{states.bombTimerState};
+        return BombTimerToggle{BombTimerContext{states.bombTimerState, hookDependencies}};
     }
 
     [[nodiscard]] DefusingAlert defusingAlert() const noexcept
     {
         return DefusingAlert{
             states.defusingAlertState,
-            hookDependencies,
-            hookDependencies.hud()
+            hookDependencies
         };
     }
 
@@ -35,7 +36,7 @@ struct HudFeatures {
     
     [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies, hookDependencies.hud()};
+        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies};
     }
 
     [[nodiscard]] KillfeedPreserveToggle killfeedPreserveToggle() const noexcept

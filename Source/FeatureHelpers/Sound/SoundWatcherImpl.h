@@ -53,11 +53,7 @@ public:
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
-        const auto globalVars = hookDependencies.globalVars();
-        if (!globalVars)
-            return;
-
-        const auto curtime = globalVars->curtime();
+        const auto curtime = hookDependencies.globalVars().curtime();
         if (!curtime)
             return;
 

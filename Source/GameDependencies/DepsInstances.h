@@ -13,6 +13,24 @@
 
 #include <GlobalContext/GlobalContext.h>
 
+inline const PanoramaSymbols& PanoramaSymbols::instance() noexcept
+{
+    auto& panoramaSymbols = GlobalContext::instance().fullContext().gameDependencies().panoramaSymbols;
+    if (!panoramaSymbols.has_value())
+        panoramaSymbols.emplace();
+    return *panoramaSymbols;
+}
+
+inline HudDeps& HudDeps::instance() noexcept
+{
+    return GlobalContext::instance().fullContext().gameDependencies().hudDeps;
+}
+
+inline const PlantedC4Deps& PlantedC4Deps::instance() noexcept
+{
+    return GlobalContext::instance().fullContext().gameDependencies().plantedC4Deps;
+}
+
 inline const FileNameSymbolTableDeps& FileNameSymbolTableDeps::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameDependencies().fileNameSymbolTableDeps;

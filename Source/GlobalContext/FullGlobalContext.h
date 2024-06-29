@@ -37,7 +37,7 @@ struct FullGlobalContext {
     {
     }
 
-    [[nodiscard]] const GameDependencies& gameDependencies() const noexcept
+    [[nodiscard]] GameDependencies& gameDependencies() noexcept
     {
         return _gameDependencies;
     }

@@ -1,13 +1,11 @@
 #pragma once
 
 #include <GameClasses/PanoramaUiEngine.h>
+#include <GameDependencies/HudDeps.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
 struct BombTimerState {
     bool enabled{false};
-
-    PanoramaPanelPointer scoreAndTimeAndBombPanel;
-    PanoramaPanelPointer bombStatusPanel;
 
     PanoramaPanelPointer invisiblePanel;
     PanoramaPanelPointer bombTimerContainerPanel;
@@ -16,7 +14,7 @@ struct BombTimerState {
 
     ~BombTimerState() noexcept
     {
-        restoreBombStatusPanel();
+        HudDeps::instance().bombStatusPanel.get().setParent(HudDeps::instance().scoreAndTimeAndBombPanel.get());
 
         if (invisiblePanel.getHandle().isValid())
             PanoramaUiEngine::onDeletePanel(invisiblePanel.getHandle());
@@ -26,25 +24,5 @@ struct BombTimerState {
 
         if (bombTimerContainerPanel.getHandle().isValid())
             PanoramaUiEngine::onDeletePanel(bombTimerContainerPanel.getHandle());
-    }
-
-    void restoreBombStatusPanel() const noexcept
-    {
-        if (const auto bombStatus = bombStatusPanel.get()) {
-            if (const auto scoreAndTimeAndBomb = scoreAndTimeAndBombPanel.get())
-                bombStatus.setParent(scoreAndTimeAndBomb);
-        }
-    }
-
-    void restorePanels() const noexcept
-    {
-        hideBombTimerPanel();
-        restoreBombStatusPanel();
-    }
-
-    void hideBombTimerPanel() const noexcept
-    {
-        if (const auto bombTimerContainer = bombTimerContainerPanel.get())
-            bombTimerContainer.setVisible(false);
     }
 };

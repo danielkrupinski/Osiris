@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaTransformFactory.h>
 #include "HudInWorldPanelContainer.h"
 #include "PanelConfigurator.h"

@@ -13,7 +13,6 @@ struct LocalPlayerController;
 struct PanelConfigurator;
 struct PanoramaLabelFactory;
 struct PanoramaTransformFactory;
-struct PlantedC4;
 struct SoundChannels;
 struct WorldToClipSpaceConverter;
 
@@ -27,7 +26,6 @@ using HookDependenciesMask = TypeBitFlags<
     PanelConfigurator,
     PanoramaTransformFactory,
     FovScale,
-    PlantedC4,
     SoundChannels,
     FileSystem,
     PanoramaLabelFactory,

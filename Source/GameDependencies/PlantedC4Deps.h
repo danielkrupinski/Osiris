@@ -14,6 +14,8 @@ struct PlantedC4Deps {
     {
     }
 
+    [[nodiscard]] static const PlantedC4Deps& instance() noexcept;
+
     cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s;
 
     BombSiteOffset bombSite;

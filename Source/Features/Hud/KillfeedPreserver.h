@@ -1,11 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/C_CSGameRules.h>
-#include <CS2/Constants/PanelIDs.h>
 #include <FeatureHelpers/FeatureToggle.h>
-#include <Helpers/PanoramaPanelPointer.h>
-#include <Utils/StringParser.h>
-#include <GameClasses/GameRules.h>
 
 #include "States/KillfeedPreserverState.h"
 
@@ -25,10 +20,9 @@ struct KillfeedPreserveToggle : FeatureToggle<KillfeedPreserveToggle> {
 
 class KillfeedPreserver {
 public:
-    KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& hookDependencies, HudOptional hud) noexcept
+    KillfeedPreserver(KillfeedPreserverState& state, HookDependencies& dependencies) noexcept
         : state{state}
-        , hookDependencies{hookDependencies}
-        , hud{hud}
+        , dependencies{dependencies}
     {
     }
 
@@ -37,75 +31,13 @@ public:
         if (!state.enabled)
             return;
 
-        const auto gameRules = hookDependencies.gameDependencies().gameRulesDeps.gameRules;
-        if (!gameRules || !*gameRules)
-            return;
-
-        const auto roundStartTime = GameRules{(*gameRules)}.getRoundStartTime();
-
-        initSymbols();
-
-        const auto deathNotices = getDeathNotices();
-        if (!deathNotices)
-            return;
-
-        for (int i = 0; i < deathNotices->size; ++i) {
-            const PanoramaUiPanel panel{ deathNotices->memory[i] };
-            if (!panel.hasClass(state.deathNoticeKillerSymbol))
-                continue;
-
-            const auto spawnTimeString = panel.getAttributeString(state.spawnTimeSymbol, "");
-            if (!spawnTimeString)
-                continue;
-
-            float spawnTime = 0.0f;
-            StringParser{ spawnTimeString }.parseFloat(spawnTime);
-
-            if (spawnTime > roundStartTime) {
-                markAsJustSpawned(panel);
-            }
-        }
+        dependencies.hud().deathNotices().forEach([](const auto& deathNotice) {
+            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound())
+                deathNotice.markAsJustSpawned();
+        });
     }
 
 private:
-    void markAsJustSpawned(PanoramaUiPanel deathNotice) noexcept
-    {
-        if (const auto globalVars = hookDependencies.globalVars()) {
-            if (const auto curtime = globalVars->curtime())
-                deathNotice.setAttributeString(state.spawnTimeSymbol, StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(*curtime), '.', '0').cstring());
-        }
-    }
-
-    [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel() noexcept
-    {
-        if (const auto deathNoticesPanel = state.deathNoticesPointer.get())
-            return deathNoticesPanel;
-
-        if (hud) {
-            if (const auto hudDeathNotice = hud->hudDeathNotice())
-                state.deathNoticesPointer = hudDeathNotice.findChildInLayoutFile(cs2::VisibleNotices);
-        }
-
-        return state.deathNoticesPointer.get();
-    }
-
-    [[nodiscard]] cs2::CUIPanel::childrenVector* getDeathNotices() noexcept
-    {
-        if (const auto visibleDeathNoticesPanel = getDeathNoticesPanel())
-            return visibleDeathNoticesPanel.children();
-        return nullptr;
-    }
-
-    void initSymbols() noexcept
-    { 
-        if (state.deathNoticeKillerSymbol == -1)
-            state.deathNoticeKillerSymbol = PanoramaUiEngine::makeSymbol(0, "DeathNotice_Killer");
-
-        if (state.spawnTimeSymbol == -1)
-            state.spawnTimeSymbol = PanoramaUiEngine::makeSymbol(0, "SpawnTime");
-    }
-
     KillfeedPreserverState& state;
-    HookDependencies& hookDependencies;
-    HudOptional hud;
+    HookDependencies& dependencies;
 };

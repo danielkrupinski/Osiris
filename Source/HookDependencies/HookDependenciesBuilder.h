@@ -40,15 +40,6 @@ struct HookDependenciesBuilder {
         return {};
     }
 
-    [[nodiscard]] HookDependenciesMask getPlantedC4(cs2::CPlantedC4** plantedC4) const noexcept
-    {
-        if (requiredDependencies.has<PlantedC4>() && gameDependencies.plantedC4Deps.plantedC4s && gameDependencies.plantedC4Deps.plantedC4s->size > 0) {
-            if ((*plantedC4 = gameDependencies.plantedC4Deps.plantedC4s->memory[0]) != nullptr)
-                return HookDependenciesMask{}.set<PlantedC4>();
-        }
-        return {};
-    }
-
     [[nodiscard]] HookDependenciesMask getFovScale(float* fovScale) const noexcept
     {
         if (requiredDependencies.has<FovScale>()) {
