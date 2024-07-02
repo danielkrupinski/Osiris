@@ -19,15 +19,9 @@ struct WorldToClipSpaceConverter;
 using HookDependenciesMask = TypeBitFlags<
     EntityListWalker,
     EntityFromHandleFinder,
-    LocalPlayerController,
-    EntitiesVMTs,
     WorldToClipSpaceConverter,
-    HudInWorldPanelContainer,
-    PanelConfigurator,
     PanoramaTransformFactory,
-    FovScale,
     SoundChannels,
     FileSystem,
-    PanoramaLabelFactory,
-    ConVarAccessor
+    PanoramaLabelFactory
 >;

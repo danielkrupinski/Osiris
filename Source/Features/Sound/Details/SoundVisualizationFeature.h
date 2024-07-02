@@ -56,9 +56,9 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
     {
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
-        if (const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.getDependency<PanelConfigurator>())}) {
+        if (const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.gameDependencies().panelConfigurator())}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
-                state.hideRemainingPanels(hookDependencies.getDependency<PanelConfigurator>(), HudInWorldPanels{*containerPanelChildren}, 0);
+                state.hideRemainingPanels(hookDependencies.gameDependencies().panelConfigurator(), HudInWorldPanels{*containerPanelChildren}, 0);
         }
     }
 
@@ -92,7 +92,7 @@ public:
         if (!state.enabled)
             return;
 
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<WorldToClipSpaceConverter>().set<FovScale>()};
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<WorldToClipSpaceConverter>()};
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
@@ -100,7 +100,7 @@ public:
         if (!curtime)
             return;
 
-        const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.getDependency<PanelConfigurator>())};
+        const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies.gameDependencies().panelConfigurator())};
         if (!containerPanel)
             return;
 
@@ -133,7 +133,7 @@ public:
             if (!style)
                 return;
 
-            const auto styleSetter{hookDependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+            const auto styleSetter{hookDependencies.gameDependencies().panelConfigurator().panelStyle(*style)};
             styleSetter.setOpacity(opacity);
             styleSetter.setZIndex(-soundInClipSpace.z);
 
@@ -141,14 +141,14 @@ public:
 
             const auto& transformFactory = hookDependencies.getDependency<PanoramaTransformFactory>();
             PanoramaTransformations{
-                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, hookDependencies.getDependency<FovScale>())),
+                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, ViewToProjectionMatrix{hookDependencies.gameDependencies().viewToProjectionMatrix}.getFovScale())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(styleSetter);
 
             ++currentIndex;
         });
 
-        state.hideRemainingPanels(hookDependencies.getDependency<PanelConfigurator>(), panels, currentIndex);
+        state.hideRemainingPanels(hookDependencies.gameDependencies().panelConfigurator(), panels, currentIndex);
     }
 
 private:
@@ -159,7 +159,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(index);
         }
-        if (const auto panel{SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), hookDependencies.getDependency<PanelConfigurator>()}.createSoundVisualizationPanel(PanelsType::soundVisualizationPanelProperties())}) {
+        if (const auto panel{SoundVisualizationPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), hookDependencies.gameDependencies().panelConfigurator()}.createSoundVisualizationPanel(PanelsType::soundVisualizationPanelProperties())}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }

@@ -3,7 +3,7 @@
 template <typename Context>
 class BombTimer {
 public:
-    BombTimer(Context context) noexcept
+    explicit BombTimer(Context context) noexcept
         : context{context}
     {
     }

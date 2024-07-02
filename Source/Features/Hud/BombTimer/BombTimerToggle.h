@@ -9,12 +9,12 @@ struct BombTimerToggle : FeatureToggleOff<BombTimerToggle<Context>> {
     {
     }
 
-    [[nodiscard]] auto& enabledVariable(FeatureToggleOff<BombTimerToggle<Context>>::ToggleMethod) const noexcept
+    [[nodiscard]] auto& enabledVariable(typename BombTimerToggle::ToggleMethod) const noexcept
     {
         return context.state().enabled;
     }
 
-    void onDisable(FeatureToggleOff<BombTimerToggle<Context>>::ToggleMethod) const noexcept
+    void onDisable(typename BombTimerToggle::ToggleMethod) const noexcept
     {
         context.gameBombStatusPanel().restore();
         context.bombTimerPanel().hide();

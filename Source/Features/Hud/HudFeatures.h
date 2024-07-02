@@ -6,9 +6,14 @@
 #include "BombTimer/BombTimer.h"
 #include "BombTimer/BombTimerContext.h"
 #include "BombTimer/BombTimerToggle.h"
-#include "DefusingAlert.h"
-#include "KillfeedPreserver.h"
-#include "States/HudFeaturesStates.h"
+#include "DefusingAlert/DefusingAlert.h"
+#include "DefusingAlert/DefusingAlertContext.h"
+#include "DefusingAlert/DefusingAlertToggle.h"
+#include "KillfeedPreserver/KillfeedPreserver.h"
+#include "KillfeedPreserver/KillfeedPreserverContext.h"
+#include "KillfeedPreserver/KillfeedPreserveToggle.h"
+
+#include "HudFeaturesStates.h"
 
 struct HudFeatures {
     [[nodiscard]] auto bombTimer() const noexcept
@@ -21,27 +26,24 @@ struct HudFeatures {
         return BombTimerToggle{BombTimerContext{states.bombTimerState, hookDependencies}};
     }
 
-    [[nodiscard]] DefusingAlert defusingAlert() const noexcept
+    [[nodiscard]] auto defusingAlert() const noexcept
     {
-        return DefusingAlert{
-            states.defusingAlertState,
-            hookDependencies
-        };
+        return DefusingAlert{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
     }
 
-    [[nodiscard]] DefusingAlertToggle defusingAlertToggle() const noexcept
+    [[nodiscard]] auto defusingAlertToggle() const noexcept
     {
-        return DefusingAlertToggle{states.defusingAlertState};
+        return DefusingAlertToggle{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
     }
     
-    [[nodiscard]] KillfeedPreserver killfeedPreserver() const noexcept
+    [[nodiscard]] auto killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{states.killfeedPreserverState, hookDependencies};
+        return KillfeedPreserver{KillfeedPreserverContext{states.killfeedPreserverState, hookDependencies}};
     }
 
-    [[nodiscard]] KillfeedPreserveToggle killfeedPreserveToggle() const noexcept
+    [[nodiscard]] auto killfeedPreserveToggle() const noexcept
     {
-        return KillfeedPreserveToggle{states.killfeedPreserverState};
+        return KillfeedPreserveToggle{KillfeedPreserverContext{states.killfeedPreserverState, hookDependencies}};
     }
 
     HudFeaturesStates& states;

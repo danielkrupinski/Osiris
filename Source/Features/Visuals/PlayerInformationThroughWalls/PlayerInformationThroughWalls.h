@@ -175,7 +175,7 @@ struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformatio
     {
         viewRenderHook.decrementReferenceCount();
 
-        if (const auto containerPanel{hudInWorldPanelContainer.get(dependencies.hud(), dependencies.getDependency<PanelConfigurator>())}) {
+        if (const auto containerPanel{hudInWorldPanelContainer.get(dependencies.hud(), dependencies.gameDependencies().panelConfigurator())}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
                 hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
         }
@@ -187,7 +187,7 @@ private:
         for (std::size_t i = firstIndexToHide; i < state.panelIndices.getSize(); ++i) {
             if (const auto panel{inWorldPanels.getPanel(state.panelIndices[i])}) {
                 if (const auto style{panel.getStyle()})
-                    dependencies.getDependency<PanelConfigurator>().panelStyle(*style).setOpacity(0.0f);
+                    dependencies.gameDependencies().panelConfigurator().panelStyle(*style).setOpacity(0.0f);
             }
         }
     }
@@ -242,7 +242,7 @@ public:
         if (!positionInClipSpace.onScreen())
             return;
 
-        const auto containerPanel{dependencies.getDependency<HudInWorldPanelContainer>().get(dependencies.hud(), dependencies.getDependency<PanelConfigurator>())};
+        const auto containerPanel{dependencies.getFeatureHelpers().hudInWorldPanelContainer.get(dependencies.hud(), dependencies.gameDependencies().panelConfigurator())};
         if (!containerPanel)
             return;
 
@@ -257,7 +257,7 @@ public:
             state.containerPanelHandle = PanoramaUiEngine::getPanelHandle(containerPanel);
         }
 
-        const auto panel = getPanel(containerPanel, panels, dependencies.getDependency<PanelConfigurator>());
+        const auto panel = getPanel(containerPanel, panels, dependencies.gameDependencies().panelConfigurator());
         if (!panel)
             return;
 
@@ -275,7 +275,7 @@ public:
         if (!style)
             return;
 
-        const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+        const auto styleSetter{dependencies.gameDependencies().panelConfigurator().panelStyle(*style)};
         styleSetter.setOpacity(hasImmunity(playerPawn) ? 0.5f : 1.0f);
         styleSetter.setZIndex(-positionInClipSpace.z);
 
@@ -297,7 +297,7 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        const auto containerPanel{dependencies.getDependency<HudInWorldPanelContainer>().get(dependencies.hud(), dependencies.getDependency<PanelConfigurator>())};
+        const auto containerPanel{dependencies.getFeatureHelpers().hudInWorldPanelContainer.get(dependencies.hud(), dependencies.gameDependencies().panelConfigurator())};
         if (!containerPanel)
             return;
 
@@ -310,7 +310,7 @@ public:
         for (std::size_t i = currentIndex; i < state.panelIndices.getSize(); ++i) {
             if (const auto panel{panels.getPanel(state.panelIndices[i])}) {
                 if (const auto style{panel.getStyle()})
-                    dependencies.getDependency<PanelConfigurator>().panelStyle(*style).setOpacity(0.0f);
+                    dependencies.gameDependencies().panelConfigurator().panelStyle(*style).setOpacity(0.0f);
             }
         }
     }
@@ -329,7 +329,7 @@ private:
 
     [[nodiscard]] bool isLocalPlayerController(cs2::CCSPlayerController* playerController) const noexcept
     {
-        return dependencies.requestDependency<LocalPlayerController>() && dependencies.getDependency<LocalPlayerController>() == playerController;
+        return dependencies.localPlayerController() == playerController;
     }
 
     [[nodiscard]] bool isAlive(cs2::C_BaseEntity& entity) const noexcept
@@ -346,10 +346,7 @@ private:
 
     [[nodiscard]] bool teammatesAreEnemies() const noexcept
     {
-        if (!dependencies.requestDependency<ConVarAccessor>())
-            return true;
-
-        auto conVarAccessor = dependencies.getDependency<ConVarAccessor>();
+        auto conVarAccessor = dependencies.getConVarAccessor();
         if (!conVarAccessor.requestConVar<cs2::mp_teammates_are_enemies>())
             return true;
         return conVarAccessor.getConVarValue<cs2::mp_teammates_are_enemies>();
@@ -360,10 +357,10 @@ private:
         if (!dependencies.gameDependencies().entityDeps.offsetToTeamNumber)
             return {};
 
-        if (!dependencies.requestDependency<LocalPlayerController>())
+        if (!dependencies.localPlayerController())
             return {};
 
-        return TeamNumber{*dependencies.gameDependencies().entityDeps.offsetToTeamNumber.of(dependencies.getDependency<LocalPlayerController>()).get()};
+        return TeamNumber{*dependencies.gameDependencies().entityDeps.offsetToTeamNumber.of(dependencies.localPlayerController()).get()};
     }
 
     [[nodiscard]] auto getPlayerColorCalculator(cs2::CCSPlayerController& playerController) const noexcept
@@ -388,7 +385,7 @@ private:
         if (!style)
             return;
 
-        const auto styleSetter{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+        const auto styleSetter{dependencies.gameDependencies().panelConfigurator().panelStyle(*style)};
         styleSetter.setWashColor(getPlayerPositionArrowColorCalculator(playerController, teamNumber).getArrowColor(state.playerPositionArrowColor));
     }
 
@@ -445,7 +442,7 @@ private:
         const auto healthText = static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel);
 
         if (const auto style{PanoramaUiPanel{healthText->uiPanel}.getStyle()}) {
-            const auto styler{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+            const auto styler{dependencies.gameDependencies().panelConfigurator().panelStyle(*style)};
             if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
                 styler.setSimpleForegroundColor(getHealthBasedColor(health));
             else
@@ -503,7 +500,7 @@ private:
         blindedIconPanel.setVisible(true);
         const auto opacity = remainingFlashBangTime >= kFullBlindEnd ? 1.0f : (remainingFlashBangTime - kBlindEnd) / kPartiallyBlindDuration;
         if (const auto style{blindedIconPanel.getStyle()}) {
-            const auto styler{dependencies.getDependency<PanelConfigurator>().panelStyle(*style)};
+            const auto styler{dependencies.gameDependencies().panelConfigurator().panelStyle(*style)};
             styler.setOpacity(opacity);
         }
     }
@@ -618,9 +615,7 @@ private:
 
     [[nodiscard]] float getFovScale() const noexcept
     {
-        if (dependencies.requestDependency<FovScale>())
-            return dependencies.getDependency<FovScale>();
-        return 1.0f;
+        return ViewToProjectionMatrix{dependencies.gameDependencies().viewToProjectionMatrix}.getFovScale();
     }
 
     [[nodiscard]] PanoramaUiPanel getPanel(PanoramaUiPanel containerPanel, HudInWorldPanels inWorldPanels, PanelConfigurator panelConfigurator) const noexcept
@@ -640,8 +635,6 @@ private:
     static constexpr auto kCrucialDependencies{
         HookDependenciesMask{}
             .set<WorldToClipSpaceConverter>()
-            .set<HudInWorldPanelContainer>()
-            .set<PanelConfigurator>()
             .set<PanoramaTransformFactory>()};
 
     PlayerInformationThroughWallsState& state;

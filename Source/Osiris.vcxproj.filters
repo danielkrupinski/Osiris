@@ -136,6 +136,9 @@
     <Filter Include="Features\Hud\BombTimer">
       <UniqueIdentifier>{bbb4bb7f-d544-416a-96ea-1699bcd868de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Hud\DefusingAlert">
+      <UniqueIdentifier>{723cc05a-4e0a-4dc5-98cb-37955a0c998d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1061,12 +1064,6 @@
     <ClInclude Include="GameDependencies\WeaponVDataDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Hud\HudOptional.h">
-      <Filter>GameClasses\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Hud\HudCache.h">
-      <Filter>GameClasses\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\Hud\Hud.h">
       <Filter>GameClasses\Hud</Filter>
     </ClInclude>
@@ -1093,6 +1090,18 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h">
       <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\DeathNotice.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\DeathNotices.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

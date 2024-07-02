@@ -26,13 +26,12 @@ public:
 private:
     static constexpr auto kCrucialDependencies{
         HookDependenciesMask{}
-        .set<EntitiesVMTs>()
         .set<EntityListWalker>()
     };
 
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
-        if (dependencies.getDependency<EntitiesVMTs>().isPlayerPawn(entity.vmt)) {
+        if (dependencies.gameDependencies().entitiesVMTs.isPlayerPawn(entity.vmt)) {
             auto& playerPawn = static_cast<cs2::C_CSPlayerPawn&>(entity);
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
         }

@@ -5,7 +5,13 @@
 
 struct PanoramaLabel {
     explicit PanoramaLabel(cs2::CLabel* thisptr) noexcept
-        : thisptr{ thisptr }
+        : thisptr{thisptr}
+    {
+    }
+
+    explicit PanoramaLabel(cs2::CLabel* thisptr, GameDependencies* gameDependencies) noexcept
+        : thisptr{thisptr}
+        , gameDependencies{gameDependencies}
     {
     }
 
@@ -20,6 +26,15 @@ struct PanoramaLabel {
             PanoramaLabelDeps::instance().setTextInternal(thisptr, value, textType, trustedSource);
     }
 
+    void setColor(cs2::Color color) const noexcept
+    {
+        if (thisptr) {
+            if (const auto style{PanoramaUiPanel{thisptr->uiPanel}.getStyle()})
+                gameDependencies->panelConfigurator().panelStyle(*style).setSimpleForegroundColor(color);
+        }
+    }
+
 private:
     cs2::CLabel* thisptr;
+    GameDependencies* gameDependencies{nullptr};
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hud/States/HudFeaturesStates.h"
+#include "Hud/HudFeaturesStates.h"
 #include "Sound/SoundFeaturesStates.h"
 #include "Visuals/VisualFeaturesStates.h"
 

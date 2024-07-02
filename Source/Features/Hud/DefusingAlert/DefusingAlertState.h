@@ -14,10 +14,4 @@ struct DefusingAlertState {
         if (defusingAlertContainerPanel.getHandle().isValid())
             PanoramaUiEngine::onDeletePanel(defusingAlertContainerPanel.getHandle());
     }
-
-    void hideDefusingAlert() const noexcept
-    {
-        if (const auto defusingAlertContainer = defusingAlertContainerPanel.get())
-            defusingAlertContainer.setVisible(false);
-    }
 };

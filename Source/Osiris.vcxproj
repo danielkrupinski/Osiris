@@ -104,6 +104,8 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerToggle.h" />
     <ClInclude Include="Features\Hud\BombTimer\GameBombStatusPanel.h" />
     <ClInclude Include="Features\Hud\DefusingAlert.h" />
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h" />
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h" />
     <ClInclude Include="Features\Hud\HudFeatures.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver.h" />
     <ClInclude Include="Features\Hud\States\DefusingAlertState.h" />
@@ -143,9 +145,9 @@
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GlobalVars\GlobalVars.h" />
+    <ClInclude Include="GameClasses\Hud\DeathNotice.h" />
+    <ClInclude Include="GameClasses\Hud\DeathNotices.h" />
     <ClInclude Include="GameClasses\Hud\Hud.h" />
-    <ClInclude Include="GameClasses\Hud\HudCache.h" />
-    <ClInclude Include="GameClasses\Hud\HudOptional.h" />
     <ClInclude Include="GameClasses\MemAlloc.h" />
     <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\CvarOffset.h" />
