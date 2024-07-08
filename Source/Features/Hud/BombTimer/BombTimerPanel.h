@@ -2,11 +2,12 @@
 
 template <typename Context>
 struct BombTimerPanel {
-    void showAndUpdate(const auto bomb) const noexcept
+    void showAndUpdate() const noexcept
     {
+        const auto tickingC4{context.tickingC4()};
         context.bombTimerContainerPanel().show();
-        context.bombSiteIconPanel().setIcon(bomb.getBombSiteIconUrl());
-        context.bombTimerTextPanel().setTimeToExplosion(bomb.getTimeToExplosion());
+        context.bombSiteIconPanel().setIcon(tickingC4.getBombSiteIconUrl());
+        context.bombTimerTextPanel().setTimeToExplosion(tickingC4.getTimeToExplosion());
     }
 
     void hide() const noexcept

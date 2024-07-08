@@ -10,12 +10,13 @@ public:
 
     void run() const noexcept
     {
-        if (!context.state().enabled)
+        decltype(auto) condition{context.bombTimerCondition()};
+        if (!condition.shouldRun())
             return;
 
-        if (const auto plantedC4{context.plantedC4()}; plantedC4 && plantedC4->isTicking()) {
+        if (condition.shouldShowBombTimer()) {
             context.gameBombStatusPanel().hide();
-            context.bombTimerPanel().showAndUpdate(*plantedC4);
+            context.bombTimerPanel().showAndUpdate();
         } else {
             context.gameBombStatusPanel().restore();
             context.bombTimerPanel().hide();

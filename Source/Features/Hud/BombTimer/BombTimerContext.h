@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BombSiteIconPanel.h"
+#include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
 #include "BombTimerState.h"
 #include "BombTimerTextPanel.h"
@@ -12,6 +13,16 @@ struct BombTimerContext {
     [[nodiscard]] decltype(auto) plantedC4() const noexcept
     {
         return dependencies.plantedC4();
+    }
+
+    [[nodiscard]] auto tickingC4() const noexcept
+    {
+        return *dependencies.plantedC4();
+    }
+
+    [[nodiscard]] auto bombTimerCondition() const noexcept
+    {
+        return BombTimerCondition{*this};
     }
 
     [[nodiscard]] auto gameBombStatusPanel() const noexcept
