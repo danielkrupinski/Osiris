@@ -13,6 +13,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(Tests
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTextPanelTests.cpp
 )
 
 add_subdirectory(HelpersTests)
