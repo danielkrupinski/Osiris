@@ -4,6 +4,11 @@
 
 template <typename LabelPanel>
 struct BombTimerTextPanel {
+    explicit BombTimerTextPanel(LabelPanel panel) noexcept
+        : panel{panel}
+    {
+    }
+
     void setTimeToExplosion(float timeToExplosion) const noexcept
     {
         StringBuilderStorage<10> storage;

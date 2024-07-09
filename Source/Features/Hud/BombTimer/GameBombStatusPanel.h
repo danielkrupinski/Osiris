@@ -2,6 +2,11 @@
 
 template <typename Context>
 struct GameBombStatusPanel {
+    explicit GameBombStatusPanel(Context context) noexcept
+        : context{context}
+    {
+    }
+
     void hide() const noexcept
     {
         context.bombStatusPanel().setParent(context.invisiblePanel());
@@ -12,5 +17,6 @@ struct GameBombStatusPanel {
         context.bombStatusPanel().setParent(context.scoreAndTimeAndBombPanel());
     }
 
+private:
     Context context;
 };

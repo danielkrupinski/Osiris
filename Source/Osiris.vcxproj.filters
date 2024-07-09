@@ -97,9 +97,6 @@
     <Filter Include="Features\Sound\Details">
       <UniqueIdentifier>{9420a2f8-4f10-4cfc-9196-5f3290dd58eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\Hud\States">
-      <UniqueIdentifier>{8e2aed33-7890-4e79-82f4-cbfe0db9b418}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\Windows\FileSystem">
       <UniqueIdentifier>{a12f576a-08be-49f6-9ed7-10f1fe8a4737}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,9 @@
     </Filter>
     <Filter Include="Features\Hud\DefusingAlert">
       <UniqueIdentifier>{723cc05a-4e0a-4dc5-98cb-37955a0c998d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Hud\KillfeedPreserver">
+      <UniqueIdentifier>{f7a2da12-9a16-4ded-af46-6bfc1d06d05a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,13 +180,7 @@
     <ClInclude Include="Features\Features.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\DefusingAlert.h">
-      <Filter>Features\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\HudFeatures.h">
-      <Filter>Features\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\KillfeedPreserver.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
@@ -686,15 +680,6 @@
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\States\DefusingAlertState.h">
-      <Filter>Features\Hud\States</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\States\HudFeaturesStates.h">
-      <Filter>Features\Hud\States</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\States\KillfeedPreserverState.h">
-      <Filter>Features\Hud\States</Filter>
-    </ClInclude>
     <ClInclude Include="FeatureHelpers\PanelShadowParams.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -1105,6 +1090,30 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h">
       <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertState.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertToggle.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingCountdownTextPanel.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserver.h">
+      <Filter>Features\Hud\KillfeedPreserver</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h">
+      <Filter>Features\Hud\KillfeedPreserver</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverState.h">
+      <Filter>Features\Hud\KillfeedPreserver</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserveToggle.h">
+      <Filter>Features\Hud\KillfeedPreserver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

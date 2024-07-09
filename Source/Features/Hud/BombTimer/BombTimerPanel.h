@@ -2,6 +2,11 @@
 
 template <typename Context>
 struct BombTimerPanel {
+    explicit BombTimerPanel(Context context) noexcept
+        : context{context}
+    {
+    }
+
     void showAndUpdate() const noexcept
     {
         const auto tickingC4{context.tickingC4()};
@@ -15,5 +20,6 @@ struct BombTimerPanel {
         context.bombTimerContainerPanel().hide();
     }
 
+private:
     Context context;
 };

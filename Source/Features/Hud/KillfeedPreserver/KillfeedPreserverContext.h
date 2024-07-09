@@ -4,6 +4,11 @@
 
 template <typename Dependencies>
 struct KillfeedPreserverContext {
+    KillfeedPreserverContext(KillfeedPreserverState& state, Dependencies& dependencies) noexcept
+        : _state{state}, _dependencies{dependencies}
+    {
+    }
+
     [[nodiscard]] decltype(auto) deathNotices() const noexcept
     {
         return _dependencies.hud().deathNotices();

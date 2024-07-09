@@ -65,6 +65,11 @@ struct PanoramaUiPanel {
 
     template <typename T>
     struct UtlVector {
+        explicit UtlVector(cs2::CUtlVector<T>* vector) noexcept
+            : vector{vector}
+        {
+        }
+
         template <typename F>
         void forEach(F&& f) noexcept
         {

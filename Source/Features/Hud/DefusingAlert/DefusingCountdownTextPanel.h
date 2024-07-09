@@ -8,6 +8,11 @@
 
 template <typename LabelPanel>
 struct DefusingCountdownTextPanel {
+    explicit DefusingCountdownTextPanel(LabelPanel panel) noexcept
+        : panel{panel}
+    {
+    }
+
     auto& setTimeToDefuseEnd(std::optional<float> timeToDefuseEnd) const noexcept
     {
         if (timeToDefuseEnd.has_value()) {
@@ -23,8 +28,6 @@ struct DefusingCountdownTextPanel {
         return *this;
     }
 
-    LabelPanel panel;
-
 private:
     [[nodiscard]] static cs2::Color getDefusingCountdownColor(std::optional<bool> canBeDefused) noexcept
     {
@@ -32,4 +35,6 @@ private:
             return *canBeDefused ? cs2::kColorGreen : cs2::kColorRed;
         return cs2::kColorWhite;
     }
+
+    LabelPanel panel;
 };
