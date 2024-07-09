@@ -11,7 +11,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests "")
+add_executable(Tests
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
+)
+
 add_subdirectory(HelpersTests)
 add_subdirectory(MemoryAllocation)
 add_subdirectory(MemorySearchTests)
