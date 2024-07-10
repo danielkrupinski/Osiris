@@ -10,9 +10,10 @@
 #include <GameClasses/PanoramaUiPanel.h>
 
 struct BombTimerContext {
-    [[nodiscard]] decltype(auto) plantedC4() const noexcept
+    [[nodiscard]] bool hasTickingC4() const noexcept
     {
-        return dependencies.plantedC4();
+        const auto plantedC4{dependencies.plantedC4()};
+        return plantedC4 && plantedC4->isTicking();
     }
 
     [[nodiscard]] auto tickingC4() const noexcept

@@ -14,8 +14,7 @@ struct BombTimerCondition {
 
     [[nodiscard]] bool shouldShowBombTimer() const noexcept
     {
-        const auto plantedC4{context.plantedC4()};
-        return plantedC4 && plantedC4->isTicking();
+        return context.hasTickingC4();
     }
 
 private:
