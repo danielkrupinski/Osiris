@@ -12,7 +12,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(Tests
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombSiteIconPanelTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerConditionTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerPanelTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTextPanelTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/GameBombStatusPanelTests.cpp

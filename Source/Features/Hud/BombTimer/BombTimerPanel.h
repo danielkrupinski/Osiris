@@ -9,8 +9,9 @@ struct BombTimerPanel {
 
     void showAndUpdate() const noexcept
     {
-        const auto tickingC4{context.tickingC4()};
         context.bombTimerContainerPanel().show();
+
+        decltype(auto) tickingC4{context.tickingC4()};
         context.bombSiteIconPanel().setIcon(tickingC4.getBombSiteIconUrl());
         context.bombTimerTextPanel().setTimeToExplosion(tickingC4.getTimeToExplosion());
     }

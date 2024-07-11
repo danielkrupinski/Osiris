@@ -4,6 +4,7 @@
 
 #include <CS2/Constants/BombSiteIndex.h>
 #include <CS2/Constants/EntityHandle.h>
+#include <CS2/Constants/IconURLs.h>
 #include <GameDependencies/PlantedC4Deps.h>
 #include <GameClasses/GlobalVars/GlobalVars.h>
 
@@ -81,8 +82,8 @@ struct PlantedC4 {
     {
         constexpr auto INVALID_BOMBSITE_INDEX = -1;
         switch (base.bombSite().valueOr(INVALID_BOMBSITE_INDEX)) {
-        case cs2::BOMBSITE_A_INDEX: return "s2r://panorama/images/icons/ui/map_bombzone_a.vsvg";
-        case cs2::BOMBSITE_B_INDEX: return "s2r://panorama/images/icons/ui/map_bombzone_b.vsvg";
+        case cs2::BOMBSITE_A_INDEX: return cs2::kBombSiteAIconUrl;
+        case cs2::BOMBSITE_B_INDEX: return cs2::kBombSiteBIconUrl;
         default: return nullptr;
         }
     }
