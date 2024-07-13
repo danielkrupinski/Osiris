@@ -20,7 +20,7 @@ protected:
     BombTimerPanel<MockBombTimerContext&> bombTimerPanel{mockBombTimerContext};
 };
 
-TEST_F(BombTimerPanelTest, HideMethodHidesContainerPanel) {
+TEST_F(BombTimerPanelTest, HidesContainerPanel) {
     EXPECT_CALL(mockBombTimerContext, bombTimerContainerPanel()).WillOnce(testing::ReturnRef(mockBombTimerContainerPanel));
     EXPECT_CALL(mockBombTimerContainerPanel, hide());
 
@@ -35,7 +35,7 @@ struct BombTimerPanelTestParam {
 class BombTimerPanelTestWithParam : public BombTimerPanelTest, public testing::WithParamInterface<BombTimerPanelTestParam> {
 };
 
-TEST_P(BombTimerPanelTestWithParam, aaa) {
+TEST_P(BombTimerPanelTestWithParam, ShowsContainerPanelAndSetsBombSiteIconAndTimeToExplosion) {
     EXPECT_CALL(mockBombTimerContext, bombTimerContainerPanel()).WillOnce(testing::ReturnRef(mockBombTimerContainerPanel));
     EXPECT_CALL(mockBombTimerContext, tickingC4()).WillOnce(testing::ReturnRef(mockPlantedC4));
     EXPECT_CALL(mockBombTimerContext, bombSiteIconPanel()).WillOnce(testing::ReturnRef(mockBombSiteIconPanel));

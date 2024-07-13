@@ -23,11 +23,6 @@ public:
         }
     }
 
-    [[nodiscard]] bool isEnabled() const noexcept
-    {
-        return static_cast<Feature&>(*this).enabledVariable(ToggleMethod{});
-    }
-
 private:
     void callOnEnable() noexcept
     {

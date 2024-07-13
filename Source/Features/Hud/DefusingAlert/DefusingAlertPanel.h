@@ -7,7 +7,7 @@ struct DefusingAlertPanel {
     {
     }
 
-    void showAndUpdate(const auto bomb) const noexcept
+    void showAndUpdate(auto&& bomb) const noexcept
     {
         context.defusingAlertContainerPanel().show();
         context.defusingCountdownTextPanel()

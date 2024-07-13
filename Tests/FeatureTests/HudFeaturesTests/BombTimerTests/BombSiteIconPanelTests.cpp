@@ -24,5 +24,5 @@ TEST_P(BombSiteIconPanelTestWithParam, SetsCorrectImageUrl) {
     bombSiteIconPanel.setIcon(GetParam());
 }
 
-INSTANTIATE_TEST_CASE_P(, BombSiteIconPanelTestWithParam,
+INSTANTIATE_TEST_SUITE_P(, BombSiteIconPanelTestWithParam,
     testing::Values(cs2::kBombSiteAIconUrl, cs2::kBombSiteBIconUrl));

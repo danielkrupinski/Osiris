@@ -17,7 +17,9 @@ add_executable(Tests
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerPanelTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTextPanelTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerToggleTests.cpp
   FeatureTests/HudFeaturesTests/BombTimerTests/GameBombStatusPanelTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertPanelTests.cpp
 )
 
 add_subdirectory(HelpersTests)
