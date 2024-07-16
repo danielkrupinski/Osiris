@@ -6,7 +6,7 @@
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/IconURLs.h>
 #include <GameDependencies/PlantedC4Deps.h>
-#include <GameClasses/GlobalVars/GlobalVars.h>
+#include <GameClasses/GlobalVars.h>
 
 struct PlantedC4Base {
     [[nodiscard]] auto blowTime() const noexcept

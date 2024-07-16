@@ -6,8 +6,8 @@
 #include <FeatureHelpers/EntityListWalker.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/PlantedC4.h>
-#include <GameClasses/GlobalVars/GlobalVars.h>
-#include <GameClasses/GameRules/GameRulesOptional.h>
+#include <GameClasses/GlobalVars.h>
+#include <GameClasses/GameRules.h>
 
 struct HookDependencies {
     HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers) noexcept
@@ -90,9 +90,11 @@ struct HookDependencies {
         return GlobalVars{nullptr};
     }
 
-    [[nodiscard]] GameRulesOptional gameRules() noexcept
+    [[nodiscard]] GameRules gameRules() noexcept
     {
-        return GameRulesOptional{_gameDependencies.gameRulesDeps.gameRules, gameRulesCache};
+        if (_gameDependencies.gameRulesDeps.gameRules)
+            return GameRules{*_gameDependencies.gameRulesDeps.gameRules};
+        return GameRules{nullptr};
     }
 
     [[nodiscard]] auto plantedC4() noexcept
@@ -147,5 +149,4 @@ private:
     cs2::CBaseFileSystem* fileSystem;
     ConVarAccessorState conVarAccessorState;
     HookDependenciesMask presentDependencies;
-    GameRulesCache gameRulesCache;
 };
