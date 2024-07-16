@@ -11,6 +11,8 @@ struct Color {
     {
     }
 
+    constexpr bool operator==(const Color&) const = default;
+
     [[nodiscard]] std::uint8_t r() const noexcept
     {
         return rgba[0];

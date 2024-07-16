@@ -10,13 +10,8 @@ public:
 
     void run() noexcept
     {
-        if (!context.state().enabled)
-            return;
-
-        context.deathNotices().forEach([](const auto& deathNotice) {
-            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound())
-                deathNotice.markAsJustSpawned();
-        });
+        if (context.state().enabled)
+            context.deathNotices().forEach(context.preserveDeathNotice());
     }
 
 private:

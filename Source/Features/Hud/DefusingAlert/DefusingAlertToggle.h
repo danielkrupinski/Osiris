@@ -9,8 +9,6 @@ struct DefusingAlertToggle : FeatureToggleOff<DefusingAlertToggle<Context>> {
     {
     }
 
-    Context context;
-
     [[nodiscard]] auto& enabledVariable(typename DefusingAlertToggle::ToggleMethod) const noexcept
     {
         return context.state().enabled;
@@ -20,4 +18,7 @@ struct DefusingAlertToggle : FeatureToggleOff<DefusingAlertToggle<Context>> {
     {
         context.defusingAlertPanel().hide();
     }
+
+private:
+    Context context;
 };

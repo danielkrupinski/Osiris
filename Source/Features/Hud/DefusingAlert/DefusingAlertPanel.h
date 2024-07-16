@@ -7,12 +7,13 @@ struct DefusingAlertPanel {
     {
     }
 
-    void showAndUpdate(auto&& bomb) const noexcept
+    void showAndUpdate() const noexcept
     {
         context.defusingAlertContainerPanel().show();
+        decltype(auto) c4BeingDefused{context.c4BeingDefused()};
         context.defusingCountdownTextPanel()
-            .setTimeToDefuseEnd(bomb.getTimeToDefuseEnd())
-            .setCanBeDefused(bomb.canBeDefused());
+            .setTimeToDefuseEnd(c4BeingDefused.getTimeToDefuseEnd())
+            .setCanBeDefused(c4BeingDefused.canBeDefused());
     }
 
     void hide() const noexcept

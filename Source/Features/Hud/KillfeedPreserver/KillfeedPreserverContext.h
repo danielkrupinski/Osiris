@@ -2,16 +2,25 @@
 
 #include "KillfeedPreserverState.h"
 
-template <typename Dependencies>
+template <typename Context>
 struct KillfeedPreserverContext {
-    KillfeedPreserverContext(KillfeedPreserverState& state, Dependencies& dependencies) noexcept
-        : _state{state}, _dependencies{dependencies}
+    KillfeedPreserverContext(KillfeedPreserverState& state, Context& context) noexcept
+        : _state{state}, _context{context}
     {
     }
 
     [[nodiscard]] decltype(auto) deathNotices() const noexcept
     {
-        return _dependencies.hud().deathNotices();
+        return _context.hud().deathNotices();
+    }
+
+    [[nodiscard]] auto preserveDeathNotice() const noexcept
+    {
+        return [](auto&& deathNotice)
+        {
+            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound())
+                deathNotice.markAsJustSpawned();
+        };
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -19,6 +28,7 @@ struct KillfeedPreserverContext {
         return _state;
     }
     
+private:
     KillfeedPreserverState& _state;
-    Dependencies& _dependencies;
+    Context& _context;
 };

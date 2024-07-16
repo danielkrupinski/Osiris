@@ -42,10 +42,11 @@ TEST_P(DefusingAlertPanelTestWithParam, ShowsDefusingAlertContainerPanelAndUpdat
     EXPECT_CALL(mockDefusingCountdownTextPanel, setTimeToDefuseEnd(GetParam().timeToDefuseEnd)).WillOnce(testing::ReturnRef(mockDefusingCountdownTextPanel));
     EXPECT_CALL(mockDefusingCountdownTextPanel, setCanBeDefused(GetParam().canBeDefused)).WillOnce(testing::ReturnRef(mockDefusingCountdownTextPanel));
 
+    EXPECT_CALL(mockDefusingAlertContext, c4BeingDefused()).WillOnce(testing::ReturnRef(mockPlantedC4));
     EXPECT_CALL(mockPlantedC4, getTimeToDefuseEnd()).WillOnce(testing::Return(GetParam().timeToDefuseEnd));
     EXPECT_CALL(mockPlantedC4, canBeDefused()).WillOnce(testing::Return(GetParam().canBeDefused));
 
-    defusingAlertPanel.showAndUpdate(mockPlantedC4);
+    defusingAlertPanel.showAndUpdate();
 }
 
 INSTANTIATE_TEST_SUITE_P(, DefusingAlertPanelTestWithParam, testing::Values(

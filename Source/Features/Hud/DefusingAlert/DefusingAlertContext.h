@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DefusingAlertCondition.h"
 #include "DefusingAlertPanel.h"
 #include "DefusingAlertState.h"
 #include "DefusingCountdownTextPanel.h"
@@ -15,14 +16,25 @@ public:
         return _state.defusingAlertContainerPanel.get();
     }
 
+    [[nodiscard]] auto defusingAlertCondition() const noexcept
+    {
+        return DefusingAlertCondition{*this};
+    }
+
     [[nodiscard]] auto defusingAlertPanel() const noexcept
     {
         return DefusingAlertPanel{*this};
     }
 
-    [[nodiscard]] decltype(auto) plantedC4() const noexcept
+    [[nodiscard]] auto c4BeingDefused() const noexcept
     {
-        return dependencies.plantedC4();
+        return *dependencies.plantedC4();
+    }
+
+    [[nodiscard]] bool hasC4BeingDefused() const noexcept
+    {
+        const auto plantedC4{dependencies.plantedC4()};
+        return plantedC4 && plantedC4->isBeingDefused();
     }
 
     [[nodiscard]] DefusingAlertState& state() const noexcept

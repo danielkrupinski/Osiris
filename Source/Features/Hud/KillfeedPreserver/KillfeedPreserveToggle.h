@@ -14,5 +14,6 @@ struct KillfeedPreserveToggle : FeatureToggle<KillfeedPreserveToggle<Context>> {
         return context.state().enabled;
     }
 
+private:
     Context context;
 };

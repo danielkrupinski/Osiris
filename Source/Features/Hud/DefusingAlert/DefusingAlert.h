@@ -10,11 +10,12 @@ public:
 
     void run() const noexcept
     {
-        if (!context.state().enabled)
+        decltype(auto) condition{context.defusingAlertCondition()};
+        if (!condition.shouldRun())
             return;
 
-        if (const auto plantedC4{context.plantedC4()}; plantedC4 && plantedC4->isBeingDefused())
-            context.defusingAlertPanel().showAndUpdate(*plantedC4);
+        if (condition.shouldShowDefuseAlert())
+            context.defusingAlertPanel().showAndUpdate();
         else
             context.defusingAlertPanel().hide();
     }
