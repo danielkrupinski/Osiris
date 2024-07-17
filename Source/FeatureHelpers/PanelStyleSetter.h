@@ -2,7 +2,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Panorama.h>
-#include "GameClasses/Implementation/PanelStyleImpl.h"
+#include <GameDependencies/PanelStyleDeps.h>
 #include "PanelStylePropertyFactory.h"
 
 struct ImageShadowParams;
@@ -20,7 +20,7 @@ public:
         if (!styleProperty)
             return;
 
-        if (const auto setPropertyFn{PanelStyleImpl::instance().setProperty})
+        if (const auto setPropertyFn{PanelStyleDeps::instance().setProperty})
             setPropertyFn(thisptr, styleProperty, true);
     }
 

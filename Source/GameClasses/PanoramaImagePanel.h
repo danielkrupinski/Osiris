@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include "Implementation/PanoramaImagePanelImpl.h"
+#include <GameDependencies/PanoramaImagePanelDeps.h>
 
 struct PanoramaImagePanel {
     explicit PanoramaImagePanel(cs2::CImagePanel* thisptr) noexcept
@@ -11,30 +11,33 @@ struct PanoramaImagePanel {
 
     [[nodiscard]] static cs2::CImagePanel* create(const char* id, cs2::CUIPanel* parent) noexcept
     {
-        if (!PanoramaImagePanelImpl::instance().constructor || !PanoramaImagePanelImpl::instance().size)
+        if (!PanoramaImagePanelDeps::instance().constructor || !PanoramaImagePanelDeps::instance().size)
             return nullptr;
 
-        const auto memory{static_cast<cs2::CImagePanel*>(MemAlloc::allocate(*PanoramaImagePanelImpl::instance().size))};
+        const auto memory{static_cast<cs2::CImagePanel*>(MemAlloc::allocate(*PanoramaImagePanelDeps::instance().size))};
         if (memory)
-            PanoramaImagePanelImpl::instance().constructor(memory, parent->clientPanel, id);
+            PanoramaImagePanelDeps::instance().constructor(memory, parent->clientPanel, id);
         return memory;
     }
 
     [[nodiscard]] cs2::ImageProperties* getImageProperties() const noexcept
     {
-        return PanoramaImagePanelImpl::instance().imagePropertiesOffset.of(thisptr).get();
+        return PanoramaImagePanelDeps::instance().imagePropertiesOffset.of(thisptr).get();
     }
 
     void setImageSvg(const char* imageUrl, int textureHeight = -1) const noexcept
     {
+        if (thisptr == nullptr)
+            return;
+
         const auto properties{getImageProperties()};
         if (!properties)
             return;
 
         properties->scale = getUiScaleFactor();
         properties->textureHeight = textureHeight;
-        if (PanoramaImagePanelImpl::instance().setImage)
-            PanoramaImagePanelImpl::instance().setImage(thisptr, imageUrl, nullptr, properties);
+        if (PanoramaImagePanelDeps::instance().setImage)
+            PanoramaImagePanelDeps::instance().setImage(thisptr, imageUrl, nullptr, properties);
     }
 
 private:

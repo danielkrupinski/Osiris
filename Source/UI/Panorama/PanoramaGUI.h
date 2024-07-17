@@ -4,7 +4,7 @@
 #include <FeatureHelpers/MainMenuProvider.h>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 
 #include "PanoramaCommandDispatcher.h"
 

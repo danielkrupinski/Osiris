@@ -1,8 +1,12 @@
 #pragma once
 
+#include <cstring>
+
 #include <CS2/Classes/Panorama.h>
-#include <GameClasses/Implementation/PanoramaUiPanelImpl.h>
+#include <GameDependencies/PanoramaUiPanelDeps.h>
 #include <GameClasses/TopLevelWindow.h>
+
+#include "UtlVector.h"
 
 struct PanoramaUiPanel {
     explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
@@ -17,14 +21,28 @@ struct PanoramaUiPanel {
     
     void setParent(cs2::CUIPanel* parent) const noexcept
     {
-        if (const auto fn = impl().setParent.of(thisptr->vmt).get())
-            (*fn)(thisptr, parent);
+        if (thisptr && parent) {
+            if (const auto fn = impl().setParent.of(thisptr->vmt).get())
+                (*fn)(thisptr, parent);
+        }
+    }
+
+    void show() const noexcept
+    {
+        setVisible(true);
+    }
+
+    void hide() const noexcept
+    {
+        setVisible(false);
     }
 
     void setVisible(bool visible) const noexcept
     {
-        if (const auto fn = impl().setVisible.of(thisptr->vmt).get())
-            (*fn)(thisptr, visible);
+        if (thisptr) {
+            if (const auto fn = impl().setVisible.of(thisptr->vmt).get())
+                (*fn)(thisptr, visible);
+        }
     }
 
     [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
@@ -47,9 +65,9 @@ struct PanoramaUiPanel {
             (*fn)(thisptr, attributeName, value);
     }
 
-    [[nodiscard]] cs2::CUIPanel::childrenVector* children() const noexcept
+    [[nodiscard]] auto children() const noexcept
     {
-        return impl().childPanels.of(thisptr).get();
+        return UtlVector{impl().childPanels.of(thisptr).get()};
     }
 
     [[nodiscard]] bool hasClass(cs2::CPanoramaSymbol className) const noexcept
@@ -111,9 +129,9 @@ private:
         return nullptr;
     }
 
-    [[nodiscard]] static const PanoramaUiPanelImpl& impl() noexcept
+    [[nodiscard]] static const PanoramaUiPanelDeps& impl() noexcept
     {
-        return PanoramaUiPanelImpl::instance();
+        return PanoramaUiPanelDeps::instance();
     }
     
     cs2::CUIPanel* thisptr;

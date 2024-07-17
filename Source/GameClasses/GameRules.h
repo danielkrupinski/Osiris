@@ -1,21 +1,16 @@
 #pragma once
 
-#include <cstddef>
+#include <optional>
 
-#include <CS2/Classes/C_CSGameRules.h>
-#include "Implementation/GameRulesImpl.h"
+#include <GameDependencies/GameRulesDeps.h>
 
 struct GameRules {
-    explicit GameRules(cs2::C_CSGameRules* thisptr) noexcept
-        : thisptr{ thisptr }
+    [[nodiscard]] std::optional<float> roundStartTime() const noexcept
     {
+        if (gameRules && GameRulesDeps::instance().roundStartTimeOffset)
+            return *GameRulesDeps::instance().roundStartTimeOffset.of(gameRules).get();
+        return {};
     }
 
-    [[nodiscard]] float getRoundStartTime() const noexcept
-    {
-        return GameRulesImpl::instance().roundStartTimeOffset.of(thisptr).valueOr(0.0f);
-    }
-
-private:
-    cs2::C_CSGameRules* thisptr;
+    cs2::C_CSGameRules* gameRules;
 };

@@ -2,17 +2,17 @@
 
 #include <optional>
 
-#include <GameClasses/Implementation/ConVarImpl.h>
-#include "ConVars.h"
+#include <GameDependencies/ConVarDeps.h>
+#include <GameDependencies/ConVars.h>
 
 struct ConVarAccessorState {
     std::optional<bool> mp_teammates_are_enemies;
 };
 
 struct ConVarAccessor {
-    explicit ConVarAccessor(const ConVars& conVars, const ConVarImpl& conVarImpl, ConVarAccessorState& state) noexcept
+    explicit ConVarAccessor(const ConVars& conVars, const ConVarDeps& conVarDeps, ConVarAccessorState& state) noexcept
         : conVars{conVars}
-        , conVarImpl{conVarImpl}
+        , conVarDeps{conVarDeps}
         , state{state}
     {
     }
@@ -29,7 +29,7 @@ struct ConVarAccessor {
         if (!conVar)
             return false;
 
-        if (!conVarImpl.offsetToConVarValue || !conVarIsBool(conVar))
+        if (!conVarDeps.offsetToConVarValue || !conVarIsBool(conVar))
             return false;
 
         state.mp_teammates_are_enemies = readConVarValue<bool>(conVar);
@@ -49,19 +49,19 @@ private:
     [[nodiscard]] T readConVarValue(cs2::ConVar* conVar) const noexcept
     {
         T value;
-        std::memcpy(&value, conVarImpl.offsetToConVarValue.of(conVar).get(), sizeof(value));
+        std::memcpy(&value, conVarDeps.offsetToConVarValue.of(conVar).get(), sizeof(value));
         return value;
     }
 
     [[nodiscard]] bool conVarIsBool(cs2::ConVar* conVar) const noexcept
     {
-        if (!conVarImpl.offsetToConVarValueType)
+        if (!conVarDeps.offsetToConVarValueType)
             return true;
 
-        return cs2::ConVarValueType{*conVarImpl.offsetToConVarValueType.of(conVar).get()} == cs2::ConVarValueType::boolean;
+        return cs2::ConVarValueType{*conVarDeps.offsetToConVarValueType.of(conVar).get()} == cs2::ConVarValueType::boolean;
     }
 
     const ConVars& conVars;
-    const ConVarImpl& conVarImpl;
+    const ConVarDeps& conVarDeps;
     ConVarAccessorState& state;
 };

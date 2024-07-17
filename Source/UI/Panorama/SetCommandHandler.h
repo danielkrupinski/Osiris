@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Features/Features.h>
-#include <FeatureHelpers/TogglableFeature.h>
+#include <FeatureHelpers/FeatureToggle.h>
 #include <Utils/StringParser.h>
 
 struct SetCommandHandler {
@@ -26,28 +26,28 @@ private:
     void handleHudSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "bomb_timer") {
-            handleTogglableFeature(features.hudFeatures().bombTimer());
+            handleTogglableFeature(features.hudFeatures().bombTimerToggle());
         } else if (feature == "defusing_alert") {
-            handleTogglableFeature(features.hudFeatures().defusingAlert());
+            handleTogglableFeature(features.hudFeatures().defusingAlertToggle());
         } else if (feature == "preserve_killfeed") {
-            handleTogglableFeature(features.hudFeatures().killfeedPreserver());
+            handleTogglableFeature(features.hudFeatures().killfeedPreserveToggle());
         }
     }
 
     void handleSoundSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "visualize_player_footsteps") {
-            handleTogglableFeature(features.soundFeatures().footstepVisualizer());
+            handleTogglableFeature(features.soundFeatures().footstepVisualizerToggle());
         } else if (feature == "visualize_bomb_plant") {
-            handleTogglableFeature(features.soundFeatures().bombPlantVisualizer());
+            handleTogglableFeature(features.soundFeatures().bombPlantVisualizerToggle());
         } else if (feature == "visualize_bomb_beep") {
-            handleTogglableFeature(features.soundFeatures().bombBeepVisualizer());
+            handleTogglableFeature(features.soundFeatures().bombBeepVisualizerToggle());
         } else if (feature == "visualize_bomb_defuse") {
-            handleTogglableFeature(features.soundFeatures().bombDefuseVisualizer());
+            handleTogglableFeature(features.soundFeatures().bombDefuseVisualizerToggle());
         } else if (feature == "visualize_scope_sound") {
-            handleTogglableFeature(features.soundFeatures().weaponScopeVisualizer());
+            handleTogglableFeature(features.soundFeatures().weaponScopeVisualizerToggle());
         } else if (feature == "visualize_reload_sound") {
-            handleTogglableFeature(features.soundFeatures().weaponReloadVisualizer());
+            handleTogglableFeature(features.soundFeatures().weaponReloadVisualizerToggle());
         }
     }
 
@@ -84,8 +84,7 @@ private:
         feature.update(parser.getChar());
     }
 
-    template <typename Feature>
-    void handleTogglableFeature(TogglableFeature<Feature>&& feature) const noexcept
+    void handleTogglableFeature(auto&& feature) const noexcept
     {
         switch (parser.getChar()) {
         case '1':

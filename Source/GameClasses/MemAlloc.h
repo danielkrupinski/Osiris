@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/IMemAlloc.h>
-#include "Implementation/MemAllocImpl.h"
+#include <GameDependencies/MemAllocDeps.h>
 
 class MemAlloc {
 public:
@@ -17,8 +17,8 @@ public:
     }
 
 private:
-    [[nodiscard]] static const MemAllocImpl& impl() noexcept
+    [[nodiscard]] static const MemAllocDeps& impl() noexcept
     {
-        return MemAllocImpl::instance();
+        return MemAllocDeps::instance();
     }
 };

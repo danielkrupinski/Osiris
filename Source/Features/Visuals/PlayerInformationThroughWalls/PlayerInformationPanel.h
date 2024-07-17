@@ -24,13 +24,13 @@ private:
     void retrieveChildren(PanoramaUiPanel parentPanel) noexcept
     {
         const auto children = parentPanel.children();
-        if (!children || children->size != 5)
+        if (!children.vector || children.vector->size != 5)
             return;
 
-        positionArrowPanel = children->memory[0];
-        healthPanel = children->memory[1];
-        weaponIconPanel = children->memory[2];
-        weaponAmmoPanel = children->memory[3];
-        playerStateIconsPanel = children->memory[4];
+        positionArrowPanel = children.vector->memory[0];
+        healthPanel = children.vector->memory[1];
+        weaponIconPanel = children.vector->memory[2];
+        weaponAmmoPanel = children.vector->memory[3];
+        playerStateIconsPanel = children.vector->memory[4];
     }
 };

@@ -7,7 +7,7 @@
 constinit ManuallyDestructible<GlobalContext> GlobalContext::globalContext;
 
 #include "Endpoints.h"
-#include "GameClasses/Implementation/GameClassImplementationInstances.h"
+#include "GameDependencies/DepsInstances.h"
 
 #if IS_WIN64()
 #include "BuildConfig.h"

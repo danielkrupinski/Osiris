@@ -49,14 +49,17 @@ public:
 
     void update() noexcept
     {
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<CurTime>().set<SoundChannels>()};
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<SoundChannels>()};
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
-        const auto curtime = hookDependencies.getDependency<CurTime>();
+        const auto curtime = hookDependencies.globalVars().curtime();
+        if (!curtime)
+            return;
+
         auto& soundChannels = hookDependencies.getDependency<SoundChannels>();
-        (removeExpiredSounds<Sounds>(soundChannels, curtime), ...);
-        collectNewSounds(soundChannels, curtime);
+        (removeExpiredSounds<Sounds>(soundChannels, *curtime), ...);
+        collectNewSounds(soundChannels, *curtime);
     }
 
     template <typename Sound>

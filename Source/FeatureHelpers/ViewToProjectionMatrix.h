@@ -4,9 +4,8 @@
 #include <CS2/Constants/AspectRatio.h>
 
 struct ViewToProjectionMatrix {
-    template <typename ClientPatterns>
-    explicit ViewToProjectionMatrix(const ClientPatterns& clientPatterns) noexcept
-        : viewToProjectionMatrix{clientPatterns.viewToProjectionMatrix()}
+    explicit ViewToProjectionMatrix(const cs2::VMatrix* viewToProjectionMatrix) noexcept
+        : viewToProjectionMatrix{viewToProjectionMatrix}
     {
     }
 

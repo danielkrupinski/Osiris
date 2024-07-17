@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
-#include "Implementation/TopLevelWindowImpl.h"
+#include <GameDependencies/TopLevelWindowDeps.h>
 
 class TopLevelWindow {
 public:
@@ -17,7 +17,7 @@ public:
 
     [[nodiscard]] float getUiScaleFactor() const noexcept
     {
-        return TopLevelWindowImpl::instance().uiScaleFactorOffset.of(thisptr).valueOr(1.0f);
+        return TopLevelWindowDeps::instance().uiScaleFactorOffset.of(thisptr).valueOr(1.0f);
     }
 
 private:

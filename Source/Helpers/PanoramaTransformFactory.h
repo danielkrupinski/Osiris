@@ -7,10 +7,9 @@
 #include <GameClasses/MemAlloc.h>
 
 struct PanoramaTransformFactory {
-    template <typename ClientPatterns>
-    explicit PanoramaTransformFactory(const ClientPatterns& clientPatterns) noexcept
-        : transformTranslate3dVmt{clientPatterns.transformTranslate3dVMT()}
-        , transformScale3dVmt{clientPatterns.transformScale3dVMT()}
+    explicit PanoramaTransformFactory(const void* transformTranslate3dVmt, const void* transformScale3dVmt) noexcept
+        : transformTranslate3dVmt{transformTranslate3dVmt}
+        , transformScale3dVmt{transformScale3dVmt}
     {
     }
 

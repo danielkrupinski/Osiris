@@ -11,7 +11,24 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests "")
+add_executable(Tests
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombSiteIconPanelTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerConditionTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerPanelTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTextPanelTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerToggleTests.cpp
+  FeatureTests/HudFeaturesTests/BombTimerTests/GameBombStatusPanelTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertPanelTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertConditionTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertToggleTests.cpp
+  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingCountdownTextPanelTests.cpp
+  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserverContextTests.cpp
+  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserverTests.cpp
+  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserveToggleTests.cpp
+)
+
 add_subdirectory(HelpersTests)
 add_subdirectory(MemoryAllocation)
 add_subdirectory(MemorySearchTests)

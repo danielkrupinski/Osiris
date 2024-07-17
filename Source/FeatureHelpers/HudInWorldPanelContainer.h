@@ -1,8 +1,8 @@
 #pragma once
 
+#include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <Helpers/HudProvider.h>
 #include <Helpers/PanoramaPanelPointer.h>
 #include "PanelConfigurator.h"
 
@@ -20,17 +20,19 @@ public:
             PanoramaUiEngine::onDeletePanel(containerPanel.getHandle());
     }
 
-    [[nodiscard]] PanoramaUiPanel get(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
+    template <typename Dependencies>
+    [[nodiscard]] PanoramaUiPanel get(Hud<Dependencies> hud, PanelConfigurator panelConfigurator) noexcept
     {
         if (const auto container = containerPanel.get())
             return container;
-        return createPanel(hudProvider, panelConfigurator);
+        return createPanel(hud, panelConfigurator);
     }
 
 private:
-    [[nodiscard]] PanoramaUiPanel createPanel(HudProvider hudProvider, PanelConfigurator panelConfigurator) noexcept
+    template <typename Dependencies>
+    [[nodiscard]] PanoramaUiPanel createPanel(Hud<Dependencies> hud, PanelConfigurator panelConfigurator) noexcept
     {
-        if (const auto hudReticle = hudProvider.getHudReticle()) {
+        if (const auto hudReticle = hud.getHudReticle()) {
             if (const auto panel = Panel::create("", hudReticle)) {
                 if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()})
                     panelConfigurator.panelStyle(*style).fitParent();
