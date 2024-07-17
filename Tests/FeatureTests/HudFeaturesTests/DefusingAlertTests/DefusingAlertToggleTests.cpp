@@ -3,8 +3,8 @@
 
 #include <Fakes/FakeDefusingAlertState.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertToggle.h>
-#include <Mocks/MockDefusingAlertContext.h>
-#include <Mocks/MockDefusingAlertPanel.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertPanel.h>
 
 class DefusingAlertToggleTest : public testing::Test {
 protected:

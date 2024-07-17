@@ -2,9 +2,9 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
-#include <Mocks/MockDefusingAlertCondition.h>
-#include <Mocks/MockDefusingAlertContext.h>
-#include <Mocks/MockDefusingAlertPanel.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertCondition.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertPanel.h>
 
 class DefusingAlertTest : public testing::Test {
 protected:

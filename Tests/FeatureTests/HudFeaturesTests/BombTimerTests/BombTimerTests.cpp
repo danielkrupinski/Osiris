@@ -2,9 +2,9 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/BombTimer/BombTimer.h>
-#include <Mocks/MockBombTimerCondition.h>
-#include <Mocks/MockBombTimerContext.h>
-#include <Mocks/MockBombTimerPanel.h>
+#include <Mocks/BombTimerMocks/MockBombTimerCondition.h>
+#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
 #include <Mocks/MockGameBombStatusPanel.h>
 
 class BombTimerTest : public testing::Test {

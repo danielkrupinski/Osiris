@@ -3,8 +3,8 @@
 
 #include <Fakes/FakeBombTimerState.h>
 #include <Features/Hud/BombTimer/BombTimerToggle.h>
-#include <Mocks/MockBombTimerContext.h>
-#include <Mocks/MockBombTimerPanel.h>
+#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
 #include <Mocks/MockGameBombStatusPanel.h>
 
 class BombTimerToggleTest : public testing::Test {

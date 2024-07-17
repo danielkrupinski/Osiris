@@ -4,7 +4,7 @@
 #include <Fakes/FakeBombTimerState.h>
 #include <Features/Hud/BombTimer/BombTimerCondition.h>
 #include <Features/Hud/BombTimer/BombTimerState.h>
-#include <Mocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 
 class BombTimerConditionTest : public testing::Test {
 protected:

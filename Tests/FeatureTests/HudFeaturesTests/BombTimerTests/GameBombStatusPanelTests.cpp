@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/BombTimer/GameBombStatusPanel.h>
-#include <Mocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/MockPanel.h>
 
 class GameBombStatusPanelTest : public testing::Test {

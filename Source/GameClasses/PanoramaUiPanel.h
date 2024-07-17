@@ -6,6 +6,8 @@
 #include <GameDependencies/PanoramaUiPanelDeps.h>
 #include <GameClasses/TopLevelWindow.h>
 
+#include "UtlVector.h"
+
 struct PanoramaUiPanel {
     explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
         : thisptr{ thisptr }
@@ -62,26 +64,6 @@ struct PanoramaUiPanel {
         if (const auto fn = impl().setAttributeString.of(thisptr->vmt).get())
             (*fn)(thisptr, attributeName, value);
     }
-
-    template <typename T>
-    struct UtlVector {
-        explicit UtlVector(cs2::CUtlVector<T>* vector) noexcept
-            : vector{vector}
-        {
-        }
-
-        template <typename F>
-        void forEach(F&& f) noexcept
-        {
-            if (!vector)
-                return;
-
-            for (int i = 0; i < vector->size; ++i)
-                f(vector->memory[i]);
-        }
-
-        cs2::CUtlVector<T>* vector;
-    };
 
     [[nodiscard]] auto children() const noexcept
     {

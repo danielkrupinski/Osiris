@@ -3,7 +3,7 @@
 
 #include <Fakes/FakeDefusingAlertState.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertCondition.h>
-#include <Mocks/MockDefusingAlertContext.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
 
 class DefusingAlertConditionTest : public testing::Test {
 protected:

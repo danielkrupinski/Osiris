@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/DefusingAlert/DefusingAlertPanel.h>
-#include <Mocks/MockDefusingAlertContext.h>
-#include <Mocks/MockDefusingCountdownTextPanel.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
+#include <Mocks/DefusingAlertMocks/MockDefusingCountdownTextPanel.h>
 #include <Mocks/MockPanel.h>
 #include <Mocks/MockPlantedC4.h>
 

@@ -121,9 +121,6 @@
     <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons">
       <UniqueIdentifier>{0298df1f-2c8f-45a5-b252-88eb2bdabc58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameClasses\GlobalVars">
-      <UniqueIdentifier>{8c159c05-e8c8-4299-8007-989109d14751}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameDependencies">
       <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
     </Filter>
@@ -779,9 +776,6 @@
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\EntitiesVMTs.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="HookDependencies\HookDependencies.h">
       <Filter>HookDependencies</Filter>
     </ClInclude>
@@ -875,12 +869,6 @@
     <ClInclude Include="FeatureHelpers\ConVarFinder.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\ConVars.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\ConVarsBase.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\ConVarOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
@@ -961,9 +949,6 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\FeatureToggle.h">
       <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\GlobalVars\GlobalVars.h">
-      <Filter>GameClasses\GlobalVars</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\ConVarDeps.h">
       <Filter>GameDependencies</Filter>
@@ -1114,6 +1099,39 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserveToggle.h">
       <Filter>Features\Hud\KillfeedPreserver</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\IconURLs.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\HudFeaturesStates.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\EntityOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\GameSceneNodeOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GameRules.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GlobalVars.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\UtlVector.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GlobalVarsDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\HudDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
+      <Filter>MemoryAllocation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

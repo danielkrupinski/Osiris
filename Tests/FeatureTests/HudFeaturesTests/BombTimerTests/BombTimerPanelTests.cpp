@@ -3,11 +3,11 @@
 
 #include <CS2/Constants/IconURLs.h>
 #include <Features/Hud/BombTimer/BombTimerPanel.h>
-#include <Mocks/MockBombSiteIconPanel.h>
-#include <Mocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombSiteIconPanel.h>
+#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
+#include <Mocks/BombTimerMocks/MockBombTimerTextPanel.h>
 #include <Mocks/MockPanel.h>
 #include <Mocks/MockPlantedC4.h>
-#include <Mocks/MockBombTimerTextPanel.h>
 
 class BombTimerPanelTest : public testing::Test {
 protected:

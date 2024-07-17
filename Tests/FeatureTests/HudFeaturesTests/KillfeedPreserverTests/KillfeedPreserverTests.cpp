@@ -3,8 +3,8 @@
 
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserverState.h>
-#include <Mocks/MockDeathNotices.h>
-#include <Mocks/MockKillfeedPreserverContext.h>
+#include <Mocks/KillfeedPreserverMocks/MockKillfeedPreserverContext.h>
+#include <Mocks/HudMocks/MockDeathNotices.h>
 
 class KillfeedPreserverTest : public testing::Test {
 protected:
