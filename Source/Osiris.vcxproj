@@ -146,6 +146,7 @@
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
+    <ClInclude Include="GameClasses\ClientPanel.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
@@ -172,10 +173,15 @@
     <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h" />
     <ClInclude Include="GameClasses\Panel.h" />
+    <ClInclude Include="GameClasses\PanelHandle.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaLabel.h" />
     <ClInclude Include="GameClasses\PanoramaUiEngine.h" />
     <ClInclude Include="GameClasses\PanoramaUiPanel.h" />
+    <ClInclude Include="GameClasses\PanoramaUiPanelChildPanels.h" />
+    <ClInclude Include="GameClasses\PanoramaUiPanelClasses.h" />
+    <ClInclude Include="GameClasses\PanoramaUiPanelContext.h" />
+    <ClInclude Include="GameClasses\PanoramaUiPanelIterator.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameClasses\UtlVector.h" />

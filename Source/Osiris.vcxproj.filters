@@ -1133,6 +1133,24 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\ClientPanel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelHandle.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelChildPanels.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelClasses.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelContext.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelIterator.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

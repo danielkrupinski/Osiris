@@ -8,6 +8,7 @@ constexpr auto HudScope = "HudScope";
 constexpr auto ScopeCircle = "ScopeCircle";
 constexpr auto ScopeDust = "ScopeDust";
 constexpr auto ScoreAndTimeAndBomb = "ScoreAndTimeAndBomb";
+constexpr auto BombStatus = "BombStatus";
 constexpr auto HudDeathNotice = "HudDeathNotice";
 constexpr auto VisibleNotices = "VisibleNotices";
 constexpr auto HudReticle = "HudReticle";

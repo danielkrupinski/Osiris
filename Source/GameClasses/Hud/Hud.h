@@ -1,86 +1,67 @@
 #pragma once
 
-#include <cassert>
-
-#include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/PanelIDs.h>
 
 #include "DeathNotices.h"
 
-template <typename Dependencies>
+template <typename Context>
 struct Hud {
-    Hud(Dependencies dependencies) noexcept
-        : dependencies{dependencies}
+    explicit Hud(Context context) noexcept
+        : context{context}
     {
     }
 
-    [[nodiscard]] auto deathNotices() const noexcept
+    [[nodiscard]] decltype(auto) deathNotices() noexcept
     {
-        return DeathNotices{getDeathNoticesPanel(), dependencies};
+        return context.deathNoticesPanelHandle().getOrInit(findVisibleDeathNoticesPanel()).template as<DeathNotices>();
     }
 
-    [[nodiscard]] cs2::CUIPanel* getHudReticle() const noexcept
+    [[nodiscard]] decltype(auto) getHudReticle() noexcept
     {
-        return findChildInLayoutFile(cs2::HudReticle);
+        return context.panel().findChildInLayoutFile(cs2::HudReticle);
     }
 
-    [[nodiscard]] PanoramaUiPanel hudDeathNotice() const noexcept
+    [[nodiscard]] decltype(auto) scoreAndTimeAndBomb() noexcept
     {
-        return findChildInLayoutFile(cs2::HudDeathNotice);
+        return context.scoreAndTimeAndBombPanelHandle().getOrInit(findScoreAndTimeAndBombPanel());
     }
 
-    [[nodiscard]] PanoramaUiPanel getDeathNoticesPanel() const noexcept
+    [[nodiscard]] decltype(auto) bombStatus() noexcept
     {
-        auto& deps = HudDeps::instance();
-
-        if (const auto deathNoticesPanel = deps.deathNoticesPointer.get())
-            return deathNoticesPanel;
-
-        if (const auto hudDeathNotice_ = hudDeathNotice())
-            deps.deathNoticesPointer = hudDeathNotice_.findChildInLayoutFile(cs2::VisibleNotices);
-
-        return deps.deathNoticesPointer.get();
+        return context.bombStatusPanelHandle().getOrInit(findBombStatusPanel());
     }
 
-    [[nodiscard]] PanoramaUiPanel scoreAndTimeAndBomb() const noexcept
+    [[nodiscard]] decltype(auto) hudTeamCounter() noexcept
     {
-        auto& deps = HudDeps::instance();
-
-        if (const auto scoreAndTimeAndBombPanel = deps.scoreAndTimeAndBombPanel.get())
-            return scoreAndTimeAndBombPanel;
-
-        if (const auto hudTeamCounter_ = hudTeamCounter())
-            deps.scoreAndTimeAndBombPanel = hudTeamCounter_.findChildInLayoutFile(cs2::ScoreAndTimeAndBomb);
-
-        return deps.scoreAndTimeAndBombPanel.get();
-    }
-
-    [[nodiscard]] PanoramaUiPanel bombStatus() const noexcept
-    {
-        auto& deps = HudDeps::instance();
-
-        if (const auto bombStatusPanel = deps.bombStatusPanel.get())
-            return bombStatusPanel;
-
-        if (const auto scoreAndTimeAndBomb_ = scoreAndTimeAndBomb())
-            deps.bombStatusPanel = scoreAndTimeAndBomb_.findChildInLayoutFile("BombStatus");
-
-        return deps.bombStatusPanel.get();
-    }
-
-    [[nodiscard]] PanoramaUiPanel hudTeamCounter() const noexcept
-    {
-        return findChildInLayoutFile(cs2::HudTeamCounter);
+        return context.panel().findChildInLayoutFile(cs2::HudTeamCounter);
     }
 
 private:
-    [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
+    [[nodiscard]] decltype(auto) hudDeathNotice() noexcept
     {
-        const auto hud = HudDeps::instance().hud;
-        if (hud && *hud)
-            return PanoramaUiPanel{(*hud)->uiPanel}.findChildInLayoutFile(childId);
-        return PanoramaUiPanel{nullptr};
+        return context.panel().findChildInLayoutFile(cs2::HudDeathNotice);
     }
 
-    Dependencies dependencies;
+    [[nodiscard]] auto findVisibleDeathNoticesPanel() noexcept
+    {
+        return [this] { 
+            return hudDeathNotice().findChildInLayoutFile(cs2::VisibleNotices);
+        };
+    }
+
+    [[nodiscard]] auto findBombStatusPanel() noexcept
+    {
+        return [this] {
+            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::BombStatus);
+        };
+    }
+
+    [[nodiscard]] auto findScoreAndTimeAndBombPanel() noexcept
+    {
+        return [this] {
+            return hudTeamCounter().findChildInLayoutFile(cs2::ScoreAndTimeAndBomb);
+        };
+    }
+
+    Context context;
 };

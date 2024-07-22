@@ -14,7 +14,7 @@ struct BombTimerState {
 
     ~BombTimerState() noexcept
     {
-        HudDeps::instance().bombStatusPanel.get().setParent(HudDeps::instance().scoreAndTimeAndBombPanel.get());
+       // HudDeps::instance().bombStatusPanel.get().setParent(HudDeps::instance().scoreAndTimeAndBombPanel.get());
 
         if (invisiblePanel.getHandle().isValid())
             PanoramaUiEngine::onDeletePanel(invisiblePanel.getHandle());

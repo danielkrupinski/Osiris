@@ -1,19 +1,22 @@
 #pragma once
 
+#include <Utils/Lvalue.h>
+
 #include "DefusingAlertCondition.h"
 #include "DefusingAlertPanel.h"
 #include "DefusingAlertState.h"
 #include "DefusingCountdownTextPanel.h"
 
+template <typename HookContext>
 class DefusingAlertContext {
 public:
-    [[nodiscard]] PanoramaUiPanel defusingAlertContainerPanel() const noexcept
+    [[nodiscard]] decltype(auto) defusingAlertContainerPanel() const noexcept
     {
-        if (const auto panel{_state.defusingAlertContainerPanel.get()})
-            return panel;
+        if (auto&& panel = context.panels().getPanelFromHandle(_state.defusingAlertContainerPanel.handle))
+            return utils::lvalue<decltype(panel)>(panel);
 
         updatePanelHandles();
-        return _state.defusingAlertContainerPanel.get();
+        return context.panels().getPanelFromHandle(_state.defusingAlertContainerPanel.handle);
     }
 
     [[nodiscard]] auto defusingAlertCondition() const noexcept
@@ -28,12 +31,12 @@ public:
 
     [[nodiscard]] auto c4BeingDefused() const noexcept
     {
-        return *dependencies.plantedC4();
+        return *context.plantedC4();
     }
 
     [[nodiscard]] bool hasC4BeingDefused() const noexcept
     {
-        const auto plantedC4{dependencies.plantedC4()};
+        const auto plantedC4{context.plantedC4()};
         return plantedC4 && plantedC4->isBeingDefused();
     }
 
@@ -44,13 +47,11 @@ public:
 
     [[nodiscard]] auto defusingCountdownTextPanel() const noexcept
     {
-        if (const auto countdownPanel = _state.defusingTimerPanel.get())
-            return DefusingCountdownTextPanel{PanoramaLabel{static_cast<cs2::CLabel*>(countdownPanel.getClientPanel())}};
-        return DefusingCountdownTextPanel{PanoramaLabel{nullptr}};
+        return DefusingCountdownTextPanel{context.panels().getPanelFromHandle(_state.defusingTimerPanel.handle).clientPanel().template as<PanoramaLabel>()};
     }
 
+    HookContext& context;
     DefusingAlertState& _state;
-    HookDependencies& dependencies;
 
 private:
     void updatePanelHandles() const noexcept
@@ -58,7 +59,7 @@ private:
         if (_state.defusingTimerPanel.get())
             return;
 
-        const auto hudTeamCounter = dependencies.hud().hudTeamCounter();
+        auto&& hudTeamCounter = context.hud().hudTeamCounter();
         if (!hudTeamCounter)
             return;
 
@@ -91,7 +92,7 @@ private:
             return;
 
         defusingAlertContainer.setVisible(false);
-        _state.defusingAlertContainerPanel = defusingAlertContainer;
-        _state.defusingTimerPanel = defusingTimer;
+        _state.defusingAlertContainerPanel.handle = defusingAlertContainer.getHandle();
+        _state.defusingTimerPanel.handle = defusingTimer.getHandle();
     }
 };

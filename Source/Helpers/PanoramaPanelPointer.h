@@ -13,11 +13,6 @@ struct PanoramaPanelPointer {
         assert(!panel || handle.isValid());
     }
 
-    explicit(false) PanoramaPanelPointer(PanoramaUiPanel panel) noexcept
-        : PanoramaPanelPointer{ static_cast<cs2::CUIPanel*>(panel) }
-    {
-    }
-
     PanoramaPanelPointer() = default;
 
     [[nodiscard]] cs2::PanelHandle getHandle() const noexcept
@@ -25,11 +20,10 @@ struct PanoramaPanelPointer {
         return handle;
     }
 
-    [[nodiscard]] PanoramaUiPanel get() const noexcept
+    [[nodiscard]] cs2::CUIPanel* get() const noexcept
     {
-        return PanoramaUiPanel{ PanoramaUiEngine::getPanelPointer(handle) };
+        return PanoramaUiEngine::getPanelPointer(handle);
     }
 
-private:
     cs2::PanelHandle handle;
 };

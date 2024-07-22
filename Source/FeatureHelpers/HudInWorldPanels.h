@@ -10,11 +10,11 @@
 #include "HudInWorldPanelIndex.h"
 
 struct HudInWorldPanels {
-    [[nodiscard]] PanoramaUiPanel getPanel(HudInWorldPanelIndex index) const noexcept
+    [[nodiscard]] auto getPanel(HudInWorldPanelIndex index, auto& hookContext) const noexcept
     {
         if (std::cmp_less(index, containerPanelChildren.size))
-            return PanoramaUiPanel{containerPanelChildren.memory[index]};
-        return PanoramaUiPanel{nullptr};
+            return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, containerPanelChildren.memory[index]}};
+        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
     }
 
     [[nodiscard]] HudInWorldPanelIndex getIndexOfLastPanel() const noexcept

@@ -28,12 +28,12 @@ struct HudFeatures {
 
     [[nodiscard]] auto defusingAlert() const noexcept
     {
-        return DefusingAlert{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
+        return DefusingAlert{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
     }
 
     [[nodiscard]] auto defusingAlertToggle() const noexcept
     {
-        return DefusingAlertToggle{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
+        return DefusingAlertToggle{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
     }
     
     [[nodiscard]] auto killfeedPreserver() const noexcept

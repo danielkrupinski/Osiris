@@ -24,7 +24,7 @@ struct DefusingCountdownTextPanel {
 
     auto& setCanBeDefused(std::optional<bool> canBeDefused) const noexcept
     {
-        panel.setColor(getDefusingCountdownColor(canBeDefused));
+        panel.uiPanel().setColor(getDefusingCountdownColor(canBeDefused));
         return *this;
     }
 

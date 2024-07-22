@@ -12,7 +12,7 @@ struct HudDeps {
     [[nodiscard]] static HudDeps& instance() noexcept;
 
     cs2::CPanel2D** hud;
-    PanoramaPanelPointer deathNoticesPointer;
+    cs2::PanelHandle deathNoticesPanelHandle;
     PanoramaPanelPointer scoreAndTimeAndBombPanel;
     PanoramaPanelPointer bombStatusPanel;
 };

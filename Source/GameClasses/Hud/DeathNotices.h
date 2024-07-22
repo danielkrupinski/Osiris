@@ -2,20 +2,26 @@
 
 #include "DeathNotice.h"
 
-template <typename Panel, typename Dependencies>
+template <typename HookContext>
 struct DeathNotices {
-    DeathNotices(Panel panel, Dependencies dependencies) noexcept
-        : panel{panel}
-        , dependencies{dependencies}
+    DeathNotices(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+        : _hookContext{hookContext}
+        , _panel{panel}
     {
     }
 
     template <typename F>
     void forEach(F&& f) noexcept
     {
-        panel.children().forEach([&f, this](const auto& panel) { f(DeathNotice<PanoramaUiPanel, Dependencies&>{PanoramaUiPanel{panel}, dependencies}); });
+        panel().children().forEach([&f, this](auto&& panel) { f(panel.template as<DeathNotice>()); });
     }
 
-    Panel panel;
-    Dependencies dependencies;
+private:
+    [[nodiscard]] decltype(auto) panel() noexcept
+    {
+        return _hookContext.template make<PanoramaUiPanel>(_panel);
+    }
+
+    HookContext& _hookContext;
+    cs2::CUIPanel* _panel;
 };

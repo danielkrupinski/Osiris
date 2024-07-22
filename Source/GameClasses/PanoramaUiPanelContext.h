@@ -1,0 +1,163 @@
+#pragma once
+
+#include <CS2/Classes/Panorama.h>
+#include <GameDependencies/PanelStyleDeps.h>
+
+#include "ClientPanel.h"
+#include "PanoramaUiPanelChildPanels.h"
+#include "PanoramaUiPanelClasses.h"
+
+template <typename OffsetType>
+struct PanoramaUiPanelMethodInvoker {
+    PanoramaUiPanelMethodInvoker(cs2::CUIPanel* panel, OffsetType offsetToFunction)
+        : panel{panel}
+        , function{panel ? offsetToFunction.of(panel->vmt).get() : nullptr}
+    {
+    }
+
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return panel != nullptr && function != nullptr;
+    }
+
+    template <typename... Args>
+    decltype(auto) operator()(Args&&... args) const noexcept
+    {
+        return (*function)(panel, std::forward<Args>(args)...);
+    }
+
+    cs2::CUIPanel* panel;
+    typename OffsetType::FieldType* function;
+};
+
+template <typename HookContext>
+struct PanoramaUiPanelContext {
+    PanoramaUiPanelContext(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+        : hookContext{hookContext}
+        , panel{panel}
+    {
+    }
+
+    [[nodiscard]] decltype(auto) clientPanel() const noexcept
+    {
+        return hookContext.template make<ClientPanel>(panel->clientPanel);
+    }
+
+    template <template <typename> typename T>
+    [[nodiscard]] decltype(auto) as() const noexcept
+    {
+        return hookContext.template make<T>(panel);
+    }
+
+    [[nodiscard]] decltype(auto) getHandle() const noexcept
+    {
+        return hookContext.panels().getPanelHandle(panel);
+    }
+
+    void setSimpleForegroundColor(cs2::Color color) const noexcept
+    {
+        if (const auto style = getStyle()) {
+            // FIXME: hardcoded virtual method index
+            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[54])(style, &color);
+        }
+    }
+
+    void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
+    {
+        if (const auto style = getStyle()) {
+            // FIXME: hardcoded virtual method index
+            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::CUtlVector<cs2::CTransform3D*>* transforms)>((*reinterpret_cast<void(***)()>(style))[17])(style, &transforms);
+        }
+    }
+
+    void setProperty(cs2::CStyleProperty* styleProperty) const noexcept
+    {
+        if (!styleProperty)
+            return;
+
+        const auto style = getStyle();
+        if (!style)
+            return;
+
+        if (const auto setPropertyFn{PanelStyleDeps::instance().setProperty})
+            setPropertyFn(style, styleProperty, true);
+    }
+
+    [[nodiscard]] PanoramaUiPanelClasses classes() const noexcept
+    {
+        return PanoramaUiPanelClasses{impl().classes.of(panel).get()};
+    }
+
+    [[nodiscard]] auto childPanels() const noexcept
+    {
+        return PanoramaUiPanelChildPanels{hookContext, impl().childPanels.of(panel).get()};
+    }
+
+    [[nodiscard]] auto getParentWindow() const noexcept
+    {
+        return TopLevelWindow{impl().parentWindowOffset.of(panel).valueOr(nullptr)};
+    }
+
+    [[nodiscard]] const char* getId() const noexcept
+    {
+        if (const auto id = impl().offsetToPanelId.of(panel).get())
+            return id->m_pString;
+        return nullptr;
+    }
+
+    [[nodiscard]] std::optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
+    {
+        if (const auto flags = impl().offsetToPanelFlags.of(panel).get())
+            return (*flags & flag) != 0;
+        return {};
+    }
+
+    [[nodiscard]] auto setParent() const noexcept
+    {
+        return PanoramaUiPanelMethodInvoker{panel, impl().setParent};
+    }
+
+    [[nodiscard]] auto setVisible() const noexcept
+    {
+        return PanoramaUiPanelMethodInvoker{panel, impl().setVisible};
+    }
+
+    [[nodiscard]] auto getAttributeString() const noexcept
+    {
+        return PanoramaUiPanelMethodInvoker{panel, impl().getAttributeString};
+    }
+
+    [[nodiscard]] auto setAttributeString() const noexcept
+    {
+        return PanoramaUiPanelMethodInvoker{panel, impl().setAttributeString};
+    }
+
+    [[nodiscard]] auto propertyFactory() const noexcept
+    {
+        return PanelStylePropertyFactory{hookContext.gameDependencies().stylePropertiesSymbolsAndVMTs};
+    }
+
+    [[nodiscard]] decltype(auto) nullPanel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(nullptr);
+    }
+
+    [[nodiscard]] cs2::CUIPanel* getRawPointer() const noexcept
+    {
+        return panel;
+    }
+
+private:
+    [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
+    {
+        return impl().panelStyle.of(panel).get();
+    }
+
+    [[nodiscard]] static const PanoramaUiPanelDeps& impl() noexcept
+    {
+        return PanoramaUiPanelDeps::instance();
+    }
+    
+    HookContext& hookContext;
+    cs2::CUIPanel* panel;
+};

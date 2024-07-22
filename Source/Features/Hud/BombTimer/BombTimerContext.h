@@ -1,5 +1,8 @@
 #pragma once
 
+#include <GameClasses/PanoramaUiPanel.h>
+#include <Utils/Lvalue.h>
+
 #include "BombSiteIconPanel.h"
 #include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
@@ -7,18 +10,17 @@
 #include "BombTimerTextPanel.h"
 #include "GameBombStatusPanel.h"
 
-#include <GameClasses/PanoramaUiPanel.h>
-
+template <typename HookContext>
 struct BombTimerContext {
     [[nodiscard]] bool hasTickingC4() const noexcept
     {
-        const auto plantedC4{dependencies.plantedC4()};
+        const auto plantedC4{context.plantedC4()};
         return plantedC4 && plantedC4->isTicking();
     }
 
     [[nodiscard]] auto tickingC4() const noexcept
     {
-        return *dependencies.plantedC4();
+        return *context.plantedC4();
     }
 
     [[nodiscard]] auto bombTimerCondition() const noexcept
@@ -36,17 +38,17 @@ struct BombTimerContext {
         return BombTimerPanel{*this};
     }
 
-    [[nodiscard]] PanoramaUiPanel bombStatusPanel() const noexcept
+    [[nodiscard]] decltype(auto) bombStatusPanel() const noexcept
     {
-        return dependencies.hud().bombStatus();
+        return context.hud().bombStatus();
     }
 
-    [[nodiscard]] PanoramaUiPanel scoreAndTimeAndBombPanel() const noexcept
+    [[nodiscard]] decltype(auto) scoreAndTimeAndBombPanel() const noexcept
     {
-        return dependencies.hud().scoreAndTimeAndBomb();
+        return context.hud().scoreAndTimeAndBomb();
     }
 
-    [[nodiscard]] PanoramaUiPanel invisiblePanel() const noexcept
+    [[nodiscard]] auto invisiblePanel() const noexcept
     {
         if (const auto invisiblePanel{state_.invisiblePanel.get()})
             return invisiblePanel;
@@ -55,38 +57,34 @@ struct BombTimerContext {
             "$.CreatePanel('Panel', $.GetContextPanel().FindChildTraverse('ScoreAndTimeAndBomb'), 'InvisiblePanel');", "", 0);
         if (const auto invisiblePanelPtr = scoreAndTimeAndBombPanel().findChildInLayoutFile("InvisiblePanel")) {
             invisiblePanelPtr.setVisible(false);
-            state_.invisiblePanel = invisiblePanelPtr;
+            state_.invisiblePanel.handle = invisiblePanelPtr.getHandle();
         }
 
         return state_.invisiblePanel.get();
     }
 
-    [[nodiscard]] PanoramaUiPanel bombTimerContainerPanel() const noexcept
+    [[nodiscard]] decltype(auto) bombTimerContainerPanel() const noexcept
     {
-        if (const auto bombTimerContainer{state_.bombTimerContainerPanel.get()})
-            return bombTimerContainer;
+        if (auto&& bombTimerContainer = context.panels().getPanelFromHandle(state_.bombTimerContainerPanel.handle))
+            return utils::lvalue<decltype(bombTimerContainer)>(bombTimerContainer);
 
         updatePanelHandles();
-        return state_.bombTimerContainerPanel.get();
+        return context.panels().getPanelFromHandle(state_.bombTimerContainerPanel.handle);
     }
 
-    [[nodiscard]] BombSiteIconPanel<PanoramaImagePanel> bombSiteIconPanel() const noexcept
+    [[nodiscard]] auto bombSiteIconPanel() const noexcept
     {
-        if (const auto bombSiteIcon = state_.bombSiteIconPanel.get())
-            return BombSiteIconPanel{PanoramaImagePanel{static_cast<cs2::CImagePanel*>(bombSiteIcon.getClientPanel())}};
-        return BombSiteIconPanel{PanoramaImagePanel{nullptr}};
+        return BombSiteIconPanel{context.panels().getPanelFromHandle(state_.bombSiteIconPanel.handle).clientPanel().template as<PanoramaImagePanel>()};
     }
 
-    [[nodiscard]] BombTimerTextPanel<PanoramaLabel> bombTimerTextPanel() const noexcept
+    [[nodiscard]] auto bombTimerTextPanel() const noexcept
     {
-        if (const auto bombTimer = state_.bombTimerPanel.get())
-            return BombTimerTextPanel{PanoramaLabel{static_cast<cs2::CLabel*>(bombTimer.getClientPanel())}};
-        return BombTimerTextPanel{PanoramaLabel{nullptr}};
+        return BombTimerTextPanel{context.panels().getPanelFromHandle(state_.bombTimerPanel.handle).clientPanel().template as<PanoramaLabel>()};
     }
 
     void updatePanelHandles() const noexcept
     {
-        const auto scoreAndTimeAndBomb = dependencies.hud().scoreAndTimeAndBomb();
+        auto&& scoreAndTimeAndBomb = context.hud().scoreAndTimeAndBomb();
         if (!scoreAndTimeAndBomb)
             return;
 
@@ -113,14 +111,14 @@ struct BombTimerContext {
         if (!bombTimerContainer)
             return;
 
-        state_.bombTimerContainerPanel = bombTimerContainer;
+        state_.bombTimerContainerPanel.handle = bombTimerContainer.getHandle();
         bombTimerContainer.setVisible(false);
 
         if (const auto bombSiteIcon = bombTimerContainer.findChildInLayoutFile("BombSiteIcon"))
-            state_.bombSiteIconPanel = bombSiteIcon;
+            state_.bombSiteIconPanel.handle = bombSiteIcon.getHandle();
 
         if (const auto bombTimer = bombTimerContainer.findChildInLayoutFile("BombTimer"))
-            state_.bombTimerPanel = bombTimer;
+            state_.bombTimerPanel.handle = bombTimer.getHandle();
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -129,5 +127,5 @@ struct BombTimerContext {
     }
 
     BombTimerState& state_;
-    HookDependencies& dependencies;
+    HookContext& context;
 };

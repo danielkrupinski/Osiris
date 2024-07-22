@@ -41,6 +41,11 @@ struct FullGlobalContext {
     {
         return _gameDependencies;
     }
+
+    [[nodiscard]] FeatureHelpers& getFeatureHelpers() noexcept
+    {
+        return featureHelpers;
+    }
     
     void onRenderStart(cs2::CViewRender* thisptr) noexcept
     {
@@ -65,7 +70,7 @@ struct FullGlobalContext {
         features(dependencies).hudFeatures().killfeedPreserver().run();
 
         UnloadFlag unloadFlag;
-        panoramaGUI.run(features(dependencies), unloadFlag);
+        panoramaGUI.run(dependencies, features(dependencies), unloadFlag);
         hooks.update();
 
         if (unloadFlag)

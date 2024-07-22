@@ -29,8 +29,6 @@
 #include "WeaponServicesDeps.h"
 #include "WeaponVDataDeps.h"
 
-#include <FeatureHelpers/MainMenuProvider.h>
-#include <FeatureHelpers/PanelConfigurator.h>
 #include <FeatureHelpers/StylePropertiesSymbolsAndVMTs.h>
 
 #include <MemoryPatterns/MemoryPatterns.h>
@@ -70,17 +68,12 @@ struct GameDependencies {
         , worldToProjectionMatrix{memoryPatterns.clientPatterns().worldToProjectionMatrix()}
         , viewToProjectionMatrix{memoryPatterns.clientPatterns().viewToProjectionMatrix()}
         , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, panoramaVmtFinder}
-        , mainMenuProvider{memoryPatterns.clientPatterns()}
+        , mainMenu{memoryPatterns.clientPatterns().mainMenuPanel()}
         , localPlayerController{memoryPatterns.clientPatterns().localPlayerController()}
         , entitiesVMTs{clientVmtFinder}
         , soundChannels{memoryPatterns.soundSystemPatterns().soundChannels()}
         , fileSystem{memoryPatterns.fileSystemPatterns().fileSystem()}
     {
-    }
-
-    [[nodiscard]] PanelConfigurator panelConfigurator() const noexcept
-    {
-        return PanelConfigurator{PanelStylePropertyFactory{stylePropertiesSymbolsAndVMTs}};    
     }
 
     ConVarDeps conVarDeps;
@@ -116,7 +109,7 @@ struct GameDependencies {
     const cs2::VMatrix* worldToProjectionMatrix;
     const cs2::VMatrix* viewToProjectionMatrix;
     StylePropertiesSymbolsAndVMTs stylePropertiesSymbolsAndVMTs;
-    MainMenuProvider mainMenuProvider; // only needed for GUI initialization
+    cs2::CPanel2D** mainMenu;
     cs2::CCSPlayerController** localPlayerController;
     EntitiesVMTs entitiesVMTs;
     cs2::SoundChannels** soundChannels;
