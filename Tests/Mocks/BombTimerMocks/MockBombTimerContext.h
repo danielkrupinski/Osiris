@@ -2,7 +2,7 @@
 
 #include <gmock/gmock.h>
 
-struct FakeBombTimerState;
+struct BombTimerState;
 struct MockBombSiteIconPanel;
 struct MockBombTimerCondition;
 struct MockBombTimerPanel;
@@ -20,7 +20,7 @@ struct MockBombTimerContext {
     MOCK_METHOD(MockPanel&, scoreAndTimeAndBombPanel, ());
     MOCK_METHOD(MockPanel&, bombTimerContainerPanel, ());
     MOCK_METHOD(bool, hasTickingC4, ());
-    MOCK_METHOD(FakeBombTimerState&, state, ());
+    MOCK_METHOD(BombTimerState&, state, ());
     MOCK_METHOD(MockPlantedC4&, tickingC4, ());
     MOCK_METHOD(MockBombTimerTextPanel&, bombTimerTextPanel, ());
     MOCK_METHOD(MockBombSiteIconPanel&, bombSiteIconPanel, ());

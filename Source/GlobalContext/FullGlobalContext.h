@@ -8,6 +8,7 @@
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
+#include <Features/FeaturesUnloadHandler.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <Helpers/UnloadFlag.h>
 #include <Hooks/Hooks.h>
@@ -73,8 +74,10 @@ struct FullGlobalContext {
         panoramaGUI.run(dependencies, features(dependencies), unloadFlag);
         hooks.update();
 
-        if (unloadFlag)
+        if (unloadFlag) {
+            FeaturesUnloadHandler{dependencies, featuresStates}.handleUnload();
             hooks.forceUninstall();
+        }
 
         return PeepEventsHookResult{hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
     }

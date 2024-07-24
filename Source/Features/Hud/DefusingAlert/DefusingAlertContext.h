@@ -10,6 +10,12 @@
 template <typename HookContext>
 class DefusingAlertContext {
 public:
+    DefusingAlertContext(HookContext& context, DefusingAlertState& state) noexcept
+        : context{context}
+        , _state{state}
+    {
+    }
+
     [[nodiscard]] decltype(auto) defusingAlertContainerPanel() const noexcept
     {
         if (auto&& panel = context.panels().getPanelFromHandle(_state.defusingAlertContainerPanel.handle))
@@ -49,9 +55,6 @@ public:
     {
         return DefusingCountdownTextPanel{context.panels().getPanelFromHandle(_state.defusingTimerPanel.handle).clientPanel().template as<PanoramaLabel>()};
     }
-
-    HookContext& context;
-    DefusingAlertState& _state;
 
 private:
     void updatePanelHandles() const noexcept
@@ -95,4 +98,7 @@ private:
         _state.defusingAlertContainerPanel.handle = defusingAlertContainer.getHandle();
         _state.defusingTimerPanel.handle = defusingTimer.getHandle();
     }
+
+    HookContext& context;
+    DefusingAlertState& _state;
 };

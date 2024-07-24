@@ -10,6 +10,12 @@
 
 template <typename HookContext>
 struct PanoramaUiPanelChildPanels {
+    PanoramaUiPanelChildPanels(HookContext& hookContext, cs2::CUtlVector<cs2::CUIPanel*>* vector) noexcept
+        : hookContext{hookContext}
+        , vector{vector}
+    {
+    }
+
     [[nodiscard]] decltype(auto) begin() noexcept
     {
         if (vector && vector->memory)

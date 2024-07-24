@@ -18,7 +18,7 @@ struct Panels {
     {
     }
 
-    [[nodiscard]] decltype(auto) getPanelHandle(cs2::CUIPanel* panel) noexcept
+    [[nodiscard]] cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
     {
         return PanoramaUiEngine::getPanelHandle(panel);
     }
@@ -26,6 +26,12 @@ struct Panels {
     [[nodiscard]] decltype(auto) getPanelFromHandle(cs2::PanelHandle handle) noexcept
     {
         return hookContext.template make<PanoramaUiPanel>(PanoramaUiEngine::getPanelPointer(handle));
+    }
+
+    void deletePanelByHandle(cs2::PanelHandle handle) noexcept
+    {
+        if (handle.isValid())
+            PanoramaUiEngine::onDeletePanel(handle);
     }
 
     HookContext& hookContext;

@@ -4,6 +4,11 @@
 
 template <typename HookContext>
 struct HudContext {
+    explicit HudContext(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
+    {
+    }
+
     [[nodiscard]] auto panel() noexcept
     {
         auto&& hud = hookContext.gameDependencies().hudDeps.hud;
@@ -19,13 +24,14 @@ struct HudContext {
 
     [[nodiscard]] auto scoreAndTimeAndBombPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.scoreAndTimeAndBombPanel.handle);
+        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.scoreAndTimeAndBombPanelHandle);
     }
 
     [[nodiscard]] auto bombStatusPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.bombStatusPanel.handle);
+        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.bombStatusPanelHandle);
     }
     
+private:
     HookContext& hookContext;
 };

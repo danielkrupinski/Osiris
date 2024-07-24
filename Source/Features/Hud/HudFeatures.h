@@ -18,12 +18,12 @@
 struct HudFeatures {
     [[nodiscard]] auto bombTimer() const noexcept
     {
-        return BombTimer{BombTimerContext{states.bombTimerState, hookDependencies}};
+        return BombTimer{BombTimerContext{hookDependencies, states.bombTimerState}};
     }
 
     [[nodiscard]] auto bombTimerToggle() const noexcept
     {
-        return BombTimerToggle{BombTimerContext{states.bombTimerState, hookDependencies}};
+        return BombTimerToggle{BombTimerContext{hookDependencies, states.bombTimerState}};
     }
 
     [[nodiscard]] auto defusingAlert() const noexcept

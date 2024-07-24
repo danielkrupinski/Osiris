@@ -31,8 +31,7 @@ public:
         if (properties.position == SoundVisualizationPosition::AboveOrigin) {
             panel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight));
             panel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
-        }
-        else {
+        } else {
             assert(properties.position == SoundVisualizationPosition::AtOrigin);
             panel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight * 0.5f));
         }
