@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
+#include <GameClasses/PanoramaImagePanelFactory.h>
 #include <HookDependencies/HookDependencies.h>
 
 class PlayerInformationThroughWallsPanelFactory {
