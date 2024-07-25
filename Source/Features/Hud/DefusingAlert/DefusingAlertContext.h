@@ -18,11 +18,11 @@ public:
 
     [[nodiscard]] decltype(auto) defusingAlertContainerPanel() const noexcept
     {
-        if (auto&& panel = context.panels().getPanelFromHandle(_state.defusingAlertContainerPanel.handle))
+        if (auto&& panel = context.panels().getPanelFromHandle(_state.defusingAlertContainerPanelHandle))
             return utils::lvalue<decltype(panel)>(panel);
 
         updatePanelHandles();
-        return context.panels().getPanelFromHandle(_state.defusingAlertContainerPanel.handle);
+        return context.panels().getPanelFromHandle(_state.defusingAlertContainerPanelHandle);
     }
 
     [[nodiscard]] auto defusingAlertCondition() const noexcept
@@ -53,13 +53,13 @@ public:
 
     [[nodiscard]] auto defusingCountdownTextPanel() const noexcept
     {
-        return DefusingCountdownTextPanel{context.panels().getPanelFromHandle(_state.defusingTimerPanel.handle).clientPanel().template as<PanoramaLabel>()};
+        return DefusingCountdownTextPanel{context.panels().getPanelFromHandle(_state.defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
 private:
     void updatePanelHandles() const noexcept
     {
-        if (_state.defusingTimerPanel.get())
+        if (context.panels().getPanelFromHandle(_state.defusingTimerPanelHandle))
             return;
 
         auto&& hudTeamCounter = context.hud().hudTeamCounter();
@@ -95,8 +95,8 @@ private:
             return;
 
         defusingAlertContainer.setVisible(false);
-        _state.defusingAlertContainerPanel.handle = defusingAlertContainer.getHandle();
-        _state.defusingTimerPanel.handle = defusingTimer.getHandle();
+        _state.defusingAlertContainerPanelHandle = defusingAlertContainer.getHandle();
+        _state.defusingTimerPanelHandle = defusingTimer.getHandle();
     }
 
     HookContext& context;

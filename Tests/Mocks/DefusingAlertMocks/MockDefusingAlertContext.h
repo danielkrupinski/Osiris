@@ -1,6 +1,6 @@
 #pragma once
 
-struct FakeDefusingAlertState;
+struct DefusingAlertState;
 struct MockDefusingAlertCondition;
 struct MockDefusingAlertPanel;
 struct MockDefusingCountdownTextPanel;
@@ -14,5 +14,5 @@ struct MockDefusingAlertContext {
     MOCK_METHOD(bool, hasC4BeingDefused, ());
     MOCK_METHOD(MockDefusingAlertCondition&, defusingAlertCondition, ());
     MOCK_METHOD(MockDefusingAlertPanel&, defusingAlertPanel, ());
-    MOCK_METHOD(FakeDefusingAlertState&, state, ());
+    MOCK_METHOD(DefusingAlertState&, state, ());
 };

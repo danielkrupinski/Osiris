@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BombTimer/BombTimerUnloadHandler.h"
+#include "DefusingAlert/DefusingAlertUnloadHandler.h"
 #include "HudFeaturesStates.h"
 
 template <typename HookContext>
@@ -14,8 +15,10 @@ struct HudFeaturesUnloadHandler {
     void handleUnload() const noexcept
     {
         hookContext.template make<BombTimerUnloadHandler>(states.bombTimerState).handleUnload();
+        hookContext.template make<DefusingAlertUnloadHandler>(states.defusingAlertState).handleUnload();
     }
 
+private:
     HookContext& hookContext;
     HudFeaturesStates& states;
 };

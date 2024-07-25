@@ -13,7 +13,7 @@ struct DeathNotices {
     template <typename F>
     void forEach(F&& f) noexcept
     {
-        panel().children().forEach([&f, this](auto&& panel) { f(panel.template as<DeathNotice>()); });
+        panel().children().forEach([&f](auto&& panel) { f(panel.template as<DeathNotice>()); });
     }
 
 private:
