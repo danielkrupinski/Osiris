@@ -2,7 +2,6 @@
 
 #include <Helpers/PanoramaTransformFactory.h>
 #include "HudInWorldPanelContainer.h"
-#include "PanelConfigurator.h"
 #include "Sound/SoundWatcherState.h"
 #include "StylePropertiesSymbolsAndVMTs.h"
 #include "StylePropertySymbolMap.h"

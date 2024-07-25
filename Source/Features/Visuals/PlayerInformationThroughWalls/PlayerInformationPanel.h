@@ -4,7 +4,7 @@
 #include <GameClasses/PanoramaUiPanel.h>
 
 struct PlayerInformationPanel {
-    explicit PlayerInformationPanel(PanoramaUiPanel parentPanel) noexcept
+    explicit PlayerInformationPanel(auto parentPanel) noexcept
     {
         retrieveChildren(parentPanel);
     }
@@ -21,7 +21,7 @@ struct PlayerInformationPanel {
     cs2::CUIPanel* playerStateIconsPanel;
 
 private:
-    void retrieveChildren(PanoramaUiPanel parentPanel) noexcept
+    void retrieveChildren(auto parentPanel) noexcept
     {
         const auto children = parentPanel.children();
         if (!children.vector || children.vector->size != 5)

@@ -18,22 +18,22 @@
 struct HudFeatures {
     [[nodiscard]] auto bombTimer() const noexcept
     {
-        return BombTimer{BombTimerContext{states.bombTimerState, hookDependencies}};
+        return BombTimer{BombTimerContext{hookDependencies, states.bombTimerState}};
     }
 
     [[nodiscard]] auto bombTimerToggle() const noexcept
     {
-        return BombTimerToggle{BombTimerContext{states.bombTimerState, hookDependencies}};
+        return BombTimerToggle{BombTimerContext{hookDependencies, states.bombTimerState}};
     }
 
     [[nodiscard]] auto defusingAlert() const noexcept
     {
-        return DefusingAlert{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
+        return DefusingAlert{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
     }
 
     [[nodiscard]] auto defusingAlertToggle() const noexcept
     {
-        return DefusingAlertToggle{DefusingAlertContext{states.defusingAlertState, hookDependencies}};
+        return DefusingAlertToggle{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
     }
     
     [[nodiscard]] auto killfeedPreserver() const noexcept

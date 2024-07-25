@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <Fakes/FakeBombTimerState.h>
+#include <Features/Hud/BombTimer/BombTimerState.h>
 #include <Features/Hud/BombTimer/BombTimerToggle.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
@@ -19,7 +19,7 @@ protected:
     testing::StrictMock<MockBombTimerPanel> mockBombTimerPanel;
 
     BombTimerToggle<MockBombTimerContext&> bombTimerToggle{mockBombTimerContext};
-    FakeBombTimerState state;
+    BombTimerState state;
 };
 
 TEST_F(BombTimerToggleTest, EnablingSetsEnabledVariableToTrue) {

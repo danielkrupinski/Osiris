@@ -1,8 +1,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <Fakes/FakeDefusingAlertState.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertCondition.h>
+#include <Features/Hud/DefusingAlert/DefusingAlertState.h>
 #include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
 
 class DefusingAlertConditionTest : public testing::Test {
@@ -14,7 +14,7 @@ protected:
 
     testing::StrictMock<MockDefusingAlertContext> mockDefusingAlertContext;
     DefusingAlertCondition<MockDefusingAlertContext&> defusingAlertCondition{mockDefusingAlertContext};
-    FakeDefusingAlertState defusingAlertState;
+    DefusingAlertState defusingAlertState;
 };
 
 TEST_F(DefusingAlertConditionTest, ShouldRunIfEnabled) {

@@ -47,9 +47,10 @@ private:
     void* field;
 };
 
-template <typename ClassType, typename FieldType, std::integral TOffset>
+template <typename ClassType, typename TField, std::integral TOffset>
 struct FieldOffset {
     using OffsetType = TOffset;
+    using FieldType = TField;
 
     FieldOffset() = default;
 
@@ -72,7 +73,7 @@ struct FieldOffset {
     {
         using BytePointer = std::byte*;
         using FieldPointer = FieldType*;
-        if (offset != OffsetType{})
+        if (thisptr != nullptr && offset != OffsetType{})
             return FieldValueProxy{ FieldPointer(BytePointer(thisptr) + offset) };
         return FieldValueProxy<FieldType>{ nullptr };
     }

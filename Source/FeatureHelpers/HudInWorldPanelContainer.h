@@ -4,7 +4,6 @@
 #include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Helpers/PanoramaPanelPointer.h>
-#include "PanelConfigurator.h"
 
 class HudInWorldPanelContainer {
 public:
@@ -21,26 +20,26 @@ public:
     }
 
     template <typename Dependencies>
-    [[nodiscard]] PanoramaUiPanel get(Hud<Dependencies> hud, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] auto get(Hud<Dependencies> hud, auto& hookContext) noexcept
     {
         if (const auto container = containerPanel.get())
-            return container;
-        return createPanel(hud, panelConfigurator);
+            return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, container}};
+        return createPanel(hud, hookContext);
     }
 
 private:
     template <typename Dependencies>
-    [[nodiscard]] PanoramaUiPanel createPanel(Hud<Dependencies> hud, PanelConfigurator panelConfigurator) noexcept
+    [[nodiscard]] auto createPanel(Hud<Dependencies> hud, auto& hookContext) noexcept
     {
         if (const auto hudReticle = hud.getHudReticle()) {
-            if (const auto panel = Panel::create("", hudReticle)) {
-                if (const auto style{PanoramaUiPanel{panel->uiPanel}.getStyle()})
-                    panelConfigurator.panelStyle(*style).fitParent();
-                containerPanel = panel->uiPanel;
-                return PanoramaUiPanel{ panel->uiPanel };
+            if (const auto clientPanel = Panel::create("", hudReticle)) {
+                PanoramaUiPanel panel{PanoramaUiPanelContext{hookContext, clientPanel->uiPanel}};
+                panel.fitParent();
+                containerPanel = clientPanel->uiPanel;
+                return panel;
             }
         }
-        return PanoramaUiPanel{ nullptr };
+        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
     }
 
     PanoramaPanelPointer containerPanel;

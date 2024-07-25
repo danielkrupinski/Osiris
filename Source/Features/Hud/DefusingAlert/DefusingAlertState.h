@@ -1,17 +1,10 @@
 #pragma once
 
-#include <GameClasses/PanoramaUiEngine.h>
-#include <Helpers/PanoramaPanelPointer.h>
+#include <CS2/Classes/Panorama.h>
 
 struct DefusingAlertState {
     bool enabled{false};
 
-    PanoramaPanelPointer defusingAlertContainerPanel;
-    PanoramaPanelPointer defusingTimerPanel;
-
-    ~DefusingAlertState() noexcept
-    {
-        if (defusingAlertContainerPanel.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(defusingAlertContainerPanel.getHandle());
-    }
+    cs2::PanelHandle defusingAlertContainerPanelHandle;
+    cs2::PanelHandle defusingTimerPanelHandle;
 };

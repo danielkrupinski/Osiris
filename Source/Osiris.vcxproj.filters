@@ -668,12 +668,6 @@
     <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h">
       <Filter>Features\Sound\Details</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanelConfigurator.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanelStyleSetter.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -697,9 +691,6 @@
     </ClInclude>
     <ClInclude Include="FileUtils\FileSlice.h">
       <Filter>FileUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\MainMenuProvider.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="MemorySearch\PatternSearchResult.h">
       <Filter>MemorySearch</Filter>
@@ -1121,9 +1112,6 @@
     <ClInclude Include="GameClasses\GlobalVars.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\UtlVector.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\GlobalVarsDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -1132,6 +1120,54 @@
     </ClInclude>
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
       <Filter>MemoryAllocation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\ClientPanel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelHandle.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelChildPanels.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelClasses.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelContext.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelIterator.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\FeaturesUnloadHandler.h">
+      <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerUnloadHandler.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertUnloadHandler.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\HudFeaturesUnloadHandler.h">
+      <Filter>Features\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\DeathNoticeContext.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Panels.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaImagePanelContext.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaImagePanelFactory.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Lvalue.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Helpers/PanoramaPanelPointer.h>
+#include <CS2/Classes/Panorama.h>
 
 struct HudDeps {
     template <typename ClientPatterns>
@@ -12,7 +12,7 @@ struct HudDeps {
     [[nodiscard]] static HudDeps& instance() noexcept;
 
     cs2::CPanel2D** hud;
-    PanoramaPanelPointer deathNoticesPointer;
-    PanoramaPanelPointer scoreAndTimeAndBombPanel;
-    PanoramaPanelPointer bombStatusPanel;
+    cs2::PanelHandle deathNoticesPanelHandle;
+    cs2::PanelHandle scoreAndTimeAndBombPanelHandle;
+    cs2::PanelHandle bombStatusPanelHandle;
 };

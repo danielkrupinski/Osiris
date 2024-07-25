@@ -5,6 +5,9 @@
 #include <FeatureHelpers/EntityFromHandleFinder.h>
 #include <FeatureHelpers/EntityListWalker.h>
 #include <GameClasses/FileSystem.h>
+#include <GameClasses/Hud/Hud.h>
+#include <GameClasses/Hud/HudContext.h>
+#include <GameClasses/Panels.h>
 #include <GameClasses/PlantedC4.h>
 #include <GameClasses/GlobalVars.h>
 #include <GameClasses/GameRules.h>
@@ -61,7 +64,7 @@ struct HookDependencies {
         }
     }
 
-    [[nodiscard]] const GameDependencies& gameDependencies() const noexcept
+    [[nodiscard]] GameDependencies& gameDependencies() const noexcept
     {
         return _gameDependencies;
     }
@@ -73,7 +76,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto hud() noexcept
     {
-        return Hud{*this};
+        return Hud{HudContext{*this}};
     }
 
     [[nodiscard]] cs2::CCSPlayerController* localPlayerController() const noexcept
@@ -114,6 +117,23 @@ struct HookDependencies {
             }
         }
         return ConVarAccessor{*_gameDependencies.conVars, _gameDependencies.conVarDeps, conVarAccessorState};
+    }
+
+    template <typename T, typename... Args>
+    [[nodiscard]] auto make(Args&&... args) noexcept
+    {
+        return T{*this, std::forward<Args>(args)...};
+    }
+
+    template <template <typename> typename T, typename... Args>
+    [[nodiscard]] auto make(Args&&... args) noexcept
+    {
+        return T{*this, std::forward<Args>(args)...};
+    }
+
+    [[nodiscard]] auto panels() noexcept
+    {
+        return Panels{*this};
     }
 
 private:

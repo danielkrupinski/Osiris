@@ -5,26 +5,59 @@
 #include <CS2/Classes/Panorama.h>
 #include <GameDependencies/PanoramaUiPanelDeps.h>
 #include <GameClasses/TopLevelWindow.h>
+#include <FeatureHelpers/PanelStylePropertyFactory.h>
+#include <Utils/Lvalue.h>
 
-#include "UtlVector.h"
+#include "PanoramaUiPanelContext.h"
 
+template <typename Context>
 struct PanoramaUiPanel {
-    explicit PanoramaUiPanel(cs2::CUIPanel* thisptr) noexcept
-        : thisptr{ thisptr }
+    explicit PanoramaUiPanel(Context context) noexcept
+        : context{context}
     {
     }
 
-    [[nodiscard]] cs2::CPanel2D* getClientPanel() const noexcept
+    template <typename HookContext>
+    PanoramaUiPanel(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+        : context{hookContext, panel}
     {
-        return thisptr->clientPanel;
+    }
+
+    template <template <typename> typename T>
+    [[nodiscard]] decltype(auto) as() const noexcept
+    {
+        return context.template as<T>();
+    }
+
+    [[nodiscard]] decltype(auto) getHandle() const noexcept
+    {
+        return context.getHandle();
+    }
+
+    [[nodiscard]] decltype(auto) clientPanel() const noexcept
+    {
+        return context.clientPanel();
+    }
+
+    [[nodiscard]] std::string_view getId() const noexcept
+    {
+        if (auto&& id = context.getId())
+            return id;
+        return {};
     }
     
     void setParent(cs2::CUIPanel* parent) const noexcept
     {
-        if (thisptr && parent) {
-            if (const auto fn = impl().setParent.of(thisptr->vmt).get())
-                (*fn)(thisptr, parent);
+        if (parent) {
+            if (auto&& setParentFn = context.setParent())
+                setParentFn(parent);
         }
+    }
+
+    void fitParent() const noexcept
+    {
+        setWidth(cs2::CUILength{100.0f, cs2::CUILength::k_EUILengthPercent});
+        setHeight(cs2::CUILength{100.0f, cs2::CUILength::k_EUILengthPercent});
     }
 
     void show() const noexcept
@@ -39,100 +72,152 @@ struct PanoramaUiPanel {
 
     void setVisible(bool visible) const noexcept
     {
-        if (thisptr) {
-            if (const auto fn = impl().setVisible.of(thisptr->vmt).get())
-                (*fn)(thisptr, visible);
-        }
+        if (auto&& setVisibleFn = context.setVisible())
+            setVisibleFn(visible);
     }
 
-    [[nodiscard]] PanoramaUiPanel findChildInLayoutFile(const char* childId) const noexcept
+    [[nodiscard]] decltype(auto) findChildInLayoutFile(const char* childId) const noexcept
     {
-        if (!impl().offsetToPanelFlags || !impl().offsetToPanelId)
-            return PanoramaUiPanel{nullptr};
-        return PanoramaUiPanel{findChildInLayoutFileInternal(thisptr, childId)};
+        auto&& childPanels = context.childPanels();
+
+        for (auto&& childPanel : childPanels) {
+            if (childPanel.getId() == childId)
+                return utils::lvalue<decltype(childPanel)>(childPanel);
+        }
+
+        for (auto&& childPanel : childPanels) {
+            if (!childPanel.hasOwnLayoutFile().value_or(true)) {
+                if (auto&& foundPanel = childPanel.findChildInLayoutFile(childId))
+                    return utils::lvalue<decltype(foundPanel)>(foundPanel);
+            }
+        }
+
+        return context.nullPanel();
     }
 
     [[nodiscard]] const char* getAttributeString(cs2::CPanoramaSymbol attributeName, const char* defaultValue) const noexcept
     {
-        if (const auto fn = impl().getAttributeString.of(thisptr->vmt).get())
-            return (*fn)(thisptr, attributeName, defaultValue);
-        return nullptr;
+        if (auto&& getAttributeStringFn = context.getAttributeString())
+            return getAttributeStringFn(attributeName, defaultValue);
+        return defaultValue;
     }
 
     void setAttributeString(cs2::CPanoramaSymbol attributeName, const char* value) const noexcept
     {
-        if (const auto fn = impl().setAttributeString.of(thisptr->vmt).get())
-            (*fn)(thisptr, attributeName, value);
-    }
-
-    [[nodiscard]] auto children() const noexcept
-    {
-        return UtlVector{impl().childPanels.of(thisptr).get()};
+        if (auto&& setAttributeStringFn = context.setAttributeString())
+            return setAttributeStringFn(attributeName, value);
     }
 
     [[nodiscard]] bool hasClass(cs2::CPanoramaSymbol className) const noexcept
     {
-        const cs2::CUIPanel::classesVector* classes = impl().classes.of(thisptr).get();
-        if (!classes)
-            return false;
-
-        for (int i = 0; i < classes->size; ++i) {
-            if (classes->memory[i] == className)
-                return true;
-        }
-        return false;
+        return context.classes().hasClass(className);
     }
 
-    [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
+    [[nodiscard]] std::optional<bool> hasOwnLayoutFile() const noexcept
     {
-        return impl().panelStyle.of(thisptr).get();
+        return context.hasFlag(cs2::k_EPanelFlag_HasOwnLayoutFile);
     }
 
-    [[nodiscard]] auto getParentWindow() const noexcept
+    [[nodiscard]] decltype(auto) children() const noexcept
     {
-        return TopLevelWindow{impl().parentWindowOffset.of(thisptr).valueOr(nullptr)};
+        return context.childPanels();
     }
 
     explicit(false) operator cs2::CUIPanel*() const noexcept
     {
-        return thisptr;
+        return context.getRawPointer();
     }
 
     explicit operator bool() const noexcept
     {
-        return thisptr != nullptr;
+        return context.getRawPointer() != nullptr;
+    }
+
+    void setOpacity(float opacity) const noexcept
+    {
+        context.setProperty(context.propertyFactory().opacity(opacity));
+    }
+
+    void setWidth(cs2::CUILength width) const noexcept
+    {
+        context.setProperty(context.propertyFactory().width(width));
+    }
+
+    void setHeight(cs2::CUILength height) const noexcept
+    {
+        context.setProperty(context.propertyFactory().height(height));
+    }
+
+    void setZIndex(float zIndex) const noexcept
+    {
+        context.setProperty(context.propertyFactory().zIndex(zIndex));
+    }
+
+    void setImageShadow(const PanelShadowParams& params) const noexcept
+    {
+        context.setProperty(context.propertyFactory().imageShadow(params));
+    }
+
+    void setPosition(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        context.setProperty(context.propertyFactory().position(x, y));
+    }
+
+    void setTransformOrigin(cs2::CUILength x, cs2::CUILength y) const noexcept
+    {
+        context.setProperty(context.propertyFactory().transformOrigin(x, y));
+    }
+
+    void setAlign(cs2::EHorizontalAlignment horizontalAlignment, cs2::EVerticalAlignment verticalAlignment) const noexcept
+    {
+        context.setProperty(context.propertyFactory().align(horizontalAlignment, verticalAlignment));
+    }
+
+    void setWashColor(cs2::Color color) const noexcept
+    {
+        context.setProperty(context.propertyFactory().washColor(color));
+    }
+
+    void setFlowChildren(cs2::EFlowDirection flowDirection) const noexcept
+    {
+        context.setProperty(context.propertyFactory().flowChildren(flowDirection));
+    }
+
+    void setFont(std::string_view fontFamily, float fontSize, cs2::EFontWeight fontWeight) const noexcept
+    {
+        context.setProperty(context.propertyFactory().font(fontFamily, fontSize, fontWeight));
+    }
+
+    void setTextShadow(const PanelShadowParams& params) const noexcept
+    {
+        context.setProperty(context.propertyFactory().textShadow(params));
+    }
+
+    void setMargin(cs2::CUILength left, cs2::CUILength top, cs2::CUILength right, cs2::CUILength bottom) const noexcept
+    {
+        context.setProperty(context.propertyFactory().margin(left, top, right, bottom));
+    }
+
+    void setColor(cs2::Color color) const noexcept
+    {
+        context.setSimpleForegroundColor(color);
+    }
+
+    void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
+    {
+        context.setTransform3D(transforms);
+    }
+
+    [[nodiscard]] float getUiScaleFactor() const noexcept
+    {
+        if (auto&& parentWindow = context.getParentWindow())
+            return parentWindow.getUiScaleFactor();
+        return 1.0f;
     }
 
 private:
-    [[nodiscard]] cs2::CUIPanel* findChildInLayoutFileInternal(cs2::CUIPanel* parentPanel, const char* idToFind) const noexcept
-    {
-        const auto children = impl().childPanels.of(parentPanel).get();
-        if (!children)
-            return nullptr;
-
-        for (int i = 0; i < children->size; ++i) {
-            const auto panel = children->memory[i];
-            const auto panelId = impl().offsetToPanelId.of(panel).get()->m_pString;
-            if (panelId && std::strcmp(panelId, idToFind) == 0)
-                return panel;
-        }
-
-        for (int i = 0; i < children->size; ++i) {
-            const auto panel = children->memory[i];
-            const auto panelFlags = *impl().offsetToPanelFlags.of(panel).get();
-            if ((panelFlags & cs2::k_EPanelFlag_HasOwnLayoutFile) == 0) {
-                if (const auto found = findChildInLayoutFileInternal(panel, idToFind))
-                    return found;
-            }
-        }
-
-        return nullptr;
-    }
-
-    [[nodiscard]] static const PanoramaUiPanelDeps& impl() noexcept
-    {
-        return PanoramaUiPanelDeps::instance();
-    }
-    
-    cs2::CUIPanel* thisptr;
+    Context context;
 };
+
+template <typename HookContext>
+PanoramaUiPanel(HookContext&, cs2::CUIPanel*) -> PanoramaUiPanel<PanoramaUiPanelContext<HookContext>>;

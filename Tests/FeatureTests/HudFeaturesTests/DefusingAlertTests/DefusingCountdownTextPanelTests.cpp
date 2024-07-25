@@ -11,6 +11,7 @@
 class DefusingCountdownTextPanelTest : public testing::Test {
 protected:
     testing::StrictMock<MockLabelPanel> mockLabelPanel;
+    testing::StrictMock<MockUiPanel> mockUiPanel;
     DefusingCountdownTextPanel<MockLabelPanel&> defusingCountdownTextPanel{mockLabelPanel};
 };
 
@@ -43,7 +44,8 @@ class DefusingCountdownTextPanelTestWithCanBeDefusedParam : public DefusingCount
 };
 
 TEST_P(DefusingCountdownTextPanelTestWithCanBeDefusedParam, PanelColorIsSetDependingOnWhetherDefuseCanSucceed) {
-    EXPECT_CALL(mockLabelPanel, setColor(GetParam().expectedColor));
+    EXPECT_CALL(mockLabelPanel, uiPanel()).WillOnce(testing::ReturnRef(mockUiPanel));
+    EXPECT_CALL(mockUiPanel, setColor(GetParam().expectedColor));
     EXPECT_THAT(defusingCountdownTextPanel.setCanBeDefused(GetParam().canBeDefused), testing::Ref(defusingCountdownTextPanel));
 }
 

@@ -3,16 +3,17 @@
 #include <CS2/Classes/Panorama.h>
 #include <GameDependencies/PanoramaLabelDeps.h>
 
+template <typename HookContext>
 struct PanoramaLabel {
-    explicit PanoramaLabel(cs2::CLabel* thisptr) noexcept
-        : thisptr{thisptr}
+    PanoramaLabel(HookContext& hookContext, cs2::CPanel2D* panel) noexcept
+        : hookContext{hookContext}
+        , panel{static_cast<cs2::CLabel*>(panel)}
     {
     }
 
-    explicit PanoramaLabel(cs2::CLabel* thisptr, GameDependencies* gameDependencies) noexcept
-        : thisptr{thisptr}
-        , gameDependencies{gameDependencies}
+    [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
+        return hookContext.template make<PanoramaUiPanel>(panel->uiPanel);
     }
 
     void setText(const char* value) const noexcept
@@ -22,19 +23,11 @@ struct PanoramaLabel {
 
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (thisptr && PanoramaLabelDeps::instance().setTextInternal)
-            PanoramaLabelDeps::instance().setTextInternal(thisptr, value, textType, trustedSource);
-    }
-
-    void setColor(cs2::Color color) const noexcept
-    {
-        if (thisptr) {
-            if (const auto style{PanoramaUiPanel{thisptr->uiPanel}.getStyle()})
-                gameDependencies->panelConfigurator().panelStyle(*style).setSimpleForegroundColor(color);
-        }
+        if (panel && PanoramaLabelDeps::instance().setTextInternal)
+            PanoramaLabelDeps::instance().setTextInternal(panel, value, textType, trustedSource);
     }
 
 private:
-    cs2::CLabel* thisptr;
-    GameDependencies* gameDependencies{nullptr};
+    HookContext& hookContext;
+    cs2::CLabel* panel;
 };

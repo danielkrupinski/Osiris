@@ -73,7 +73,9 @@ private:
             MemoryPatterns{partialContext.patternFinders}
         );
 
-        fullContext().panoramaGUI.init(fullContext().gameDependencies().mainMenuProvider);
+        HookDependencies hookDependencies{fullContext().gameDependencies(), fullContext().getFeatureHelpers()};
+        if (const auto mainMenu{fullContext().gameDependencies().mainMenu}; mainMenu && *mainMenu)
+            fullContext().panoramaGUI.init(PanoramaUiPanel{PanoramaUiPanelContext{hookDependencies, (*mainMenu)->uiPanel}});
     }
 
     FreeMemoryRegionList _freeRegionList;

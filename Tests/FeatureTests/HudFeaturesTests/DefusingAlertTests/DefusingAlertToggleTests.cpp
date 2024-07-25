@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <Fakes/FakeDefusingAlertState.h>
+#include <Features/Hud/DefusingAlert/DefusingAlertState.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertToggle.h>
 #include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
 #include <Mocks/DefusingAlertMocks/MockDefusingAlertPanel.h>
@@ -17,7 +17,7 @@ protected:
     testing::StrictMock<MockDefusingAlertPanel> mockDefusingAlertPanel;
 
     DefusingAlertToggle<MockDefusingAlertContext&> defusingAlertToggle{mockDefusingAlertContext};
-    FakeDefusingAlertState state;
+    DefusingAlertState state;
 };
 
 TEST_F(DefusingAlertToggleTest, EnablingSetsEnabledVariableToTrue) {
