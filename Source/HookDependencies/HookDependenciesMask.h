@@ -11,8 +11,6 @@ struct FovScale;
 class HudInWorldPanelContainer;
 struct LocalPlayerController;
 struct PanelConfigurator;
-struct PanoramaLabelFactory;
-struct PanoramaTransformFactory;
 struct SoundChannels;
 struct WorldToClipSpaceConverter;
 
@@ -20,8 +18,6 @@ using HookDependenciesMask = TypeBitFlags<
     EntityListWalker,
     EntityFromHandleFinder,
     WorldToClipSpaceConverter,
-    PanoramaTransformFactory,
     SoundChannels,
-    FileSystem,
-    PanoramaLabelFactory
+    FileSystem
 >;

@@ -91,7 +91,7 @@ public:
         if (!state.enabled)
             return;
 
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<PanoramaTransformFactory>().set<WorldToClipSpaceConverter>()};
+        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<WorldToClipSpaceConverter>()};
         if (!hookDependencies.requestDependencies(kCrucialDependencies))
             return;
 
@@ -133,7 +133,7 @@ public:
 
             const auto deviceCoordinates = soundInClipSpace.toNormalizedDeviceCoordinates();
 
-            const auto& transformFactory = hookDependencies.getDependency<PanoramaTransformFactory>();
+            auto&& transformFactory = hookDependencies.panoramaTransformFactory();
             PanoramaTransformations{
                 transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, ViewToProjectionMatrix{hookDependencies.gameDependencies().viewToProjectionMatrix}.getFovScale())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())

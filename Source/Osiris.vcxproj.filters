@@ -515,9 +515,6 @@
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h">
       <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Panel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -790,9 +787,6 @@
     </ClInclude>
     <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h">
       <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanoramaLabelFactory.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -1160,14 +1154,14 @@
     <ClInclude Include="GameClasses\PanoramaImagePanelContext.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaImagePanelFactory.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Lvalue.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelFactory.h">
+      <Filter>GameClasses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

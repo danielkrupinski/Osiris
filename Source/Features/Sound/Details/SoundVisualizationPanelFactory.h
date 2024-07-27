@@ -4,8 +4,8 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/ColorConstants.h>
-#include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiPanel.h>
+#include <Utils/Lvalue.h>
 
 #include "SoundVisualizationPanelProperties.h"
 
@@ -18,38 +18,32 @@ public:
     {
     }
 
-    [[nodiscard]] auto createSoundVisualizationPanel(const SoundVisualizationPanelProperties& properties) const noexcept
+    [[nodiscard]] decltype(auto) createSoundVisualizationPanel(const SoundVisualizationPanelProperties& properties) const noexcept
     {
-        const auto containerPanel{Panel::create("", &parentPanel)};
-        if (!containerPanel)
-            return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
+        auto&& panelFactory = hookContext.panelFactory();
+        auto&& containerPanel = panelFactory.createPanel(&parentPanel).uiPanel();
 
-        PanoramaUiPanel panel{PanoramaUiPanelContext{hookContext, containerPanel->uiPanel}};
-
-        panel.setWidth(cs2::CUILength::pixels(kWidth));
-        panel.setHeight(cs2::CUILength::pixels(kHeight));
+        containerPanel.setWidth(cs2::CUILength::pixels(kWidth));
+        containerPanel.setHeight(cs2::CUILength::pixels(kHeight));
         if (properties.position == SoundVisualizationPosition::AboveOrigin) {
-            panel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight));
-            panel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
+            containerPanel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight));
+            containerPanel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(100));
         } else {
             assert(properties.position == SoundVisualizationPosition::AtOrigin);
-            panel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight * 0.5f));
+            containerPanel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(-kHeight * 0.5f));
         }
 
-        applyStyleToImagePanel(PanoramaImagePanelFactory::create("", containerPanel->uiPanel), properties);
-        return panel;
+        applyStyleToImagePanel(panelFactory.createImagePanel(containerPanel), properties);
+        return utils::lvalue<decltype(containerPanel)>(containerPanel);
     }
 
 private:
-    void applyStyleToImagePanel(cs2::CImagePanel* imagePanel, const SoundVisualizationPanelProperties& properties) const noexcept
+    void applyStyleToImagePanel(auto&& imagePanel, const SoundVisualizationPanelProperties& properties) const noexcept
     {
-        if (!imagePanel)
-            return;
-
-        PanoramaImagePanel{PanoramaImagePanelContext{hookContext, imagePanel}}.setImageSvg(properties.svgImagePath, properties.svgTextureHeight);
-        PanoramaUiPanel panel{PanoramaUiPanelContext{hookContext, imagePanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentCenter, imageVerticalAlignment(properties.position));
-        panel.setImageShadow(imageShadowParams());
+        imagePanel.setImageSvg(properties.svgImagePath, properties.svgTextureHeight);
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, imageVerticalAlignment(properties.position));
+        uiPanel.setImageShadow(imageShadowParams());
     }
 
     [[nodiscard]] static PanelShadowParams imageShadowParams() noexcept

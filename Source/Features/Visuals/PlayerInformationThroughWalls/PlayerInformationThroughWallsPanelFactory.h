@@ -1,111 +1,89 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
-#include <GameClasses/PanoramaImagePanelFactory.h>
+#include <GameClasses/PanelFactory.h>
 #include <HookDependencies/HookDependencies.h>
 
+template <typename HookContext>
 class PlayerInformationThroughWallsPanelFactory {
 public:
-    PlayerInformationThroughWallsPanelFactory(cs2::CUIPanel& parentPanel, HookDependencies& dependencies) noexcept
-        : parentPanel{parentPanel}
-        , dependencies{dependencies}
+    PlayerInformationThroughWallsPanelFactory(HookContext& hookContext, cs2::CUIPanel& parentPanel) noexcept
+        : hookContext{hookContext}
+        , parentPanel{parentPanel}
     {
     }
 
-    [[nodiscard]] auto createPlayerInformationPanel(PanoramaTransformFactory panoramaTransformFactory) const noexcept
+    [[nodiscard]] auto createPlayerInformationPanel() const noexcept
     {
-        const auto containerPanel{Panel::create("", &parentPanel)};
-        if (!containerPanel)
-            return PanoramaUiPanel{PanoramaUiPanelContext{dependencies, nullptr}};
+        auto&& uiPanel = hookContext.panelFactory().createPanel(&parentPanel).uiPanel();
+        uiPanel.setWidth(cs2::CUILength::pixels(kWidth));
+        uiPanel.setHeight(cs2::CUILength::pixels(kHeight));
+        uiPanel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(0.0f));
+        uiPanel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(0));
+        uiPanel.setFlowChildren(cs2::k_EFlowDown);
 
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, containerPanel->uiPanel}};
-        panel.setWidth(cs2::CUILength::pixels(kWidth));
-        panel.setHeight(cs2::CUILength::pixels(kHeight));
-        panel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(0.0f));
-        panel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(0));
-        panel.setFlowChildren(cs2::k_EFlowDown);
-
-        createPositionArrowPanel(containerPanel->uiPanel, panoramaTransformFactory);
-        createHealthPanel(containerPanel->uiPanel);
-        createActiveWeaponIconPanel(containerPanel->uiPanel);
-        createActiveWeaponAmmoPanel(containerPanel->uiPanel);
-        createStateIconsPanel(containerPanel->uiPanel);
-        return panel;
+        createPositionArrowPanel(uiPanel);
+        createHealthPanel(uiPanel);
+        createActiveWeaponIconPanel(uiPanel);
+        createActiveWeaponAmmoPanel(uiPanel);
+        createStateIconsPanel(uiPanel);
+        return uiPanel;
     }
 
 private:
-    void createActiveWeaponAmmoPanel(cs2::CUIPanel* containerPanel) const noexcept
+    void createActiveWeaponAmmoPanel(auto&& containerPanel) const noexcept
     {
-        const auto ammoPanel{Panel::create("", containerPanel)};
-        if (!ammoPanel)
-            return;
+        auto&& ammoPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
+        ammoPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+        ammoPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+        ammoPanel.setFlowChildren(cs2::k_EFlowRight);
 
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, ammoPanel->uiPanel}};
+        createActiveWeaponAmmoTextPanel(ammoPanel);
+        createActiveWeaponAmmoIconPanel(ammoPanel);
+    }
+
+    void createActiveWeaponAmmoTextPanel(auto&& containerPanel) const
+    {
+        auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        label.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
+        label.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        label.setTextShadow(shadowParams());
+        label.setColor(cs2::kColorWhite);
+    }
+
+    void createActiveWeaponAmmoIconPanel(auto&& containerPanel) const
+    {
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg("s2r://panorama/images/hud/bullet_single.vsvg", 20);
+        
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        uiPanel.setMargin(cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+        uiPanel.setImageShadow(shadowParams());
+    }
+
+    void createStateIconsPanel(auto&& containerPanel) const noexcept
+    {
+        auto&& panel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
         panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
         panel.setFlowChildren(cs2::k_EFlowRight);
 
-        createActiveWeaponAmmoTextPanel(ammoPanel->uiPanel);
-        createActiveWeaponAmmoIconPanel(ammoPanel->uiPanel);
+        createDefuseIconPanel(panel);
+        createHostagePickupPanel(panel);
+        createHostageRescuePanel(panel);
+        createBlindedIconPanel(panel);
     }
 
-    void createActiveWeaponAmmoTextPanel(cs2::CUIPanel* containerPanel) const
+    void createDefuseIconPanel(auto&& containerPanel) const noexcept
     {
-        if (!dependencies.requestDependency<PanoramaLabelFactory>())
-            return;
-
-        const auto label = dependencies.getDependency<PanoramaLabelFactory>().createLabelPanel(containerPanel);
-        if (!label)
-            return;
-
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, label->uiPanel}};
-        panel.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setTextShadow(shadowParams());
-        panel.setColor(cs2::kColorWhite);
-    }
-
-    void createActiveWeaponAmmoIconPanel(cs2::CUIPanel* containerPanel) const
-    {
-        const auto activeWeaponAmmoIconPanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!activeWeaponAmmoIconPanel)
-            return;
-
-        PanoramaImagePanel{PanoramaImagePanelContext{dependencies, activeWeaponAmmoIconPanel}}.setImageSvg("s2r://panorama/images/hud/bullet_single.vsvg", 20);
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, activeWeaponAmmoIconPanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setMargin(cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        panel.setImageShadow(shadowParams());
-    }
-
-    void createStateIconsPanel(cs2::CUIPanel* containerPanel) const noexcept
-    {
-        const auto panel{Panel::create("", containerPanel)};
-        if (!panel)
-            return;
-
-        PanoramaUiPanel _panel{PanoramaUiPanelContext{dependencies, panel->uiPanel}};
-        _panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        _panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        _panel.setFlowChildren(cs2::k_EFlowRight);
-
-        createDefuseIconPanel(panel->uiPanel);
-        createHostagePickupPanel(panel->uiPanel);
-        createHostageRescuePanel(panel->uiPanel);
-        createBlindedIconPanel(panel->uiPanel);
-    }
-
-    void createDefuseIconPanel(cs2::CUIPanel* containerPanel) const noexcept
-    {
-        const auto imagePanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!imagePanel)
-            return;
-
-        PanoramaImagePanel{PanoramaImagePanelContext{dependencies, imagePanel}}.setImageSvg("s2r://panorama/images/icons/equipment/defuser.vsvg", 24);
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, imagePanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setImageShadow(shadowParams());
-        panel.setWashColor(cs2::kColorDefuseKit);
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg("s2r://panorama/images/icons/equipment/defuser.vsvg", 24);
+    
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setWashColor(cs2::kColorDefuseKit);
     }
 
     void createHostagePickupPanel(cs2::CUIPanel* containerPanel) const noexcept
@@ -120,36 +98,28 @@ private:
 
     void createHostageIconPanel(cs2::CUIPanel* containerPanel, cs2::Color color) const noexcept
     {
-        const auto imagePanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!imagePanel)
-            return;
-
-        PanoramaImagePanel{PanoramaImagePanelContext{dependencies, imagePanel}}.setImageSvg("s2r://panorama/images/icons/ui/hostage_transit.svg", 32);
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, imagePanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setImageShadow(shadowParams());
-        panel.setWashColor(color);
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg("s2r://panorama/images/icons/ui/hostage_transit.svg", 32);
+    
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setWashColor(color);
     }
 
     void createBlindedIconPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
-        const auto imagePanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!imagePanel)
-            return;
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg("s2r://panorama/images/hud/deathnotice/blind_kill.svg", 26);
 
-        PanoramaImagePanel{PanoramaImagePanelContext{dependencies, imagePanel}}.setImageSvg("s2r://panorama/images/hud/deathnotice/blind_kill.svg", 26);
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, imagePanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setImageShadow(shadowParams());
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        uiPanel.setImageShadow(shadowParams());
     }
 
     void createActiveWeaponIconPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
-        const auto weaponIconPanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!weaponIconPanel)
-            return;
-
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, weaponIconPanel->uiPanel}};
+        auto&& panel = hookContext.panelFactory().createImagePanel(containerPanel).uiPanel();
         panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
         panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
         panel.setImageShadow(shadowParams());
@@ -157,62 +127,44 @@ private:
 
     void createHealthPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
-        const auto healthPanel{Panel::create("", containerPanel)};
-        if (!healthPanel)
-            return;
+        auto&& healthPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
+        healthPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
+        healthPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
+        healthPanel.setFlowChildren(cs2::k_EFlowRight);
 
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, healthPanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        panel.setFlowChildren(cs2::k_EFlowRight);
-
-        createHealthIconPanel(healthPanel->uiPanel);
-        createHealthTextPanel(healthPanel->uiPanel);
+        createHealthIconPanel(healthPanel);
+        createHealthTextPanel(healthPanel);
     }
 
     void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
     {
-        const auto healthIconPanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!healthIconPanel)
-            return;
+        auto&& healthIconPanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        healthIconPanel.setImageSvg("s2r://panorama/images/hud/health_cross.vsvg", 24);
 
-        PanoramaImagePanel{PanoramaImagePanelContext{dependencies, healthIconPanel}}.setImageSvg("s2r://panorama/images/hud/health_cross.vsvg", 24);
-
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, healthIconPanel->uiPanel}};
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
-        panel.setImageShadow(shadowParams());
+        auto&& uiPanel = healthIconPanel.uiPanel();
+        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        uiPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
+        uiPanel.setImageShadow(shadowParams());
     }
 
     void createHealthTextPanel(cs2::CUIPanel* containerPanel) const
     {
-        if (!dependencies.requestDependency<PanoramaLabelFactory>())
-            return;
-
-        const auto label = dependencies.getDependency<PanoramaLabelFactory>().createLabelPanel(containerPanel);
-        if (!label)
-            return;
-
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies, label->uiPanel}};
-        panel.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
-        panel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        panel.setTextShadow(shadowParams());
+        auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        label.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
+        label.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
+        label.setTextShadow(shadowParams());
     }
 
-    void createPositionArrowPanel(cs2::CUIPanel* containerPanel, PanoramaTransformFactory panoramaTransformFactory) const noexcept
+    void createPositionArrowPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
-        const auto imagePanel = PanoramaImagePanelFactory::create("", containerPanel);
-        if (!imagePanel)
-            return;
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 24);
 
-        PanoramaImagePanel panel{PanoramaImagePanelContext{dependencies, imagePanel}};
-        panel.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 24);
-
-        auto&& uiPanel = panel.uiPanel();
+        auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
         uiPanel.setImageShadow(shadowParams());
         PanoramaTransformations{
-            panoramaTransformFactory.scale(1.0f, -1.0f),
+            hookContext.panoramaTransformFactory().scale(1.0f, -1.0f),
         }.applyTo(uiPanel);
     }
 
@@ -230,6 +182,6 @@ private:
     static constexpr auto kWidth{256};
     static constexpr auto kHeight{256};
 
+    HookContext& hookContext;
     cs2::CUIPanel& parentPanel;
-    HookDependencies& dependencies;
 };

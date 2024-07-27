@@ -7,7 +7,6 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
-#include <FeatureHelpers/PanoramaLabelFactory.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/FeatureToggle.h>
 #include <FeatureHelpers/TeamNumber.h>
@@ -279,8 +278,8 @@ public:
         const auto scale = std::clamp(500.0f / (positionInClipSpace.z / getFovScale() + 400.0f), 0.4f, kMaxScale);
 
         PanoramaTransformations{
-            dependencies.getDependency<PanoramaTransformFactory>().scale(scale),
-            dependencies.getDependency<PanoramaTransformFactory>().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
+            dependencies.panoramaTransformFactory().scale(scale),
+            dependencies.panoramaTransformFactory().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
         }.applyTo(panel);
 
         ++currentIndex;
@@ -600,7 +599,7 @@ private:
                 return panel;
             state.panelIndices.fastRemoveAt(currentIndex);
         }
-        if (const auto panel{PlayerInformationThroughWallsPanelFactory{*static_cast<cs2::CUIPanel*>(containerPanel), dependencies}.createPlayerInformationPanel(dependencies.getDependency<PanoramaTransformFactory>())}) {
+        if (const auto panel{PlayerInformationThroughWallsPanelFactory{dependencies, *static_cast<cs2::CUIPanel*>(containerPanel)}.createPlayerInformationPanel()}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
@@ -609,8 +608,7 @@ private:
 
     static constexpr auto kCrucialDependencies{
         HookDependenciesMask{}
-            .set<WorldToClipSpaceConverter>()
-            .set<PanoramaTransformFactory>()};
+            .set<WorldToClipSpaceConverter>()};
 
     PlayerInformationThroughWallsState& state;
     HookDependencies& dependencies;

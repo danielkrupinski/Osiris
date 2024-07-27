@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GameClasses/Hud/Hud.h>
-#include <GameClasses/Panel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
@@ -32,12 +31,10 @@ private:
     [[nodiscard]] auto createPanel(Hud<Dependencies> hud, auto& hookContext) noexcept
     {
         if (const auto hudReticle = hud.getHudReticle()) {
-            if (const auto clientPanel = Panel::create("", hudReticle)) {
-                PanoramaUiPanel panel{PanoramaUiPanelContext{hookContext, clientPanel->uiPanel}};
-                panel.fitParent();
-                containerPanel = clientPanel->uiPanel;
-                return panel;
-            }
+            auto&& panel = hookContext.panelFactory().createPanel(hudReticle).uiPanel();
+            panel.fitParent();
+            containerPanel.handle = panel.getHandle();
+            return panel;
         }
         return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
     }

@@ -7,6 +7,7 @@
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
+#include <GameClasses/PanelFactory.h>
 #include <GameClasses/Panels.h>
 #include <GameClasses/PlantedC4.h>
 #include <GameClasses/GlobalVars.h>
@@ -19,11 +20,6 @@ struct HookDependencies {
     {
         if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
-
-        presentDependencies |= HookDependenciesMask{}.set<PanoramaTransformFactory>();
-
-        if (gameDependencies.panoramaLabelDeps.constructor && gameDependencies.panoramaLabelDeps.size)
-            presentDependencies |= HookDependenciesMask{}.set<PanoramaLabelFactory>();
     }
 
     [[nodiscard]] bool requestDependencies(HookDependenciesMask requiredDependencies) noexcept
@@ -51,14 +47,10 @@ struct HookDependencies {
             return EntityFromHandleFinder{*entityList};
         } else if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
             return WorldToClipSpaceConverter{_gameDependencies.worldToProjectionMatrix};
-        } else if constexpr (std::is_same_v<Dependency, PanoramaTransformFactory>) {
-            return PanoramaTransformFactory{_gameDependencies.transformTranslate3dVmt, _gameDependencies.transformScale3dVmt};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
             return FileSystem{*fileSystem, _gameDependencies.fileSystemDeps};
-        } else if constexpr (std::is_same_v<Dependency, PanoramaLabelFactory>) {
-            return PanoramaLabelFactory{_gameDependencies.panoramaLabelDeps.constructor, _gameDependencies.panoramaLabelDeps.size};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -134,6 +126,16 @@ struct HookDependencies {
     [[nodiscard]] auto panels() noexcept
     {
         return Panels{*this};
+    }
+
+    [[nodiscard]] auto panelFactory() noexcept
+    {
+        return PanelFactory{*this};
+    }
+
+    [[nodiscard]] auto panoramaTransformFactory() noexcept
+    {
+        return PanoramaTransformFactory{_gameDependencies.transformTranslate3dVmt, _gameDependencies.transformScale3dVmt};
     }
 
 private:

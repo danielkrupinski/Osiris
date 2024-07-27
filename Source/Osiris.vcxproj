@@ -73,7 +73,6 @@
     <ClInclude Include="FeatureHelpers\PanelShadowParams.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h" />
-    <ClInclude Include="FeatureHelpers\PanoramaLabelFactory.h" />
     <ClInclude Include="FeatureHelpers\PanoramaTransformations.h" />
     <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h" />
     <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
@@ -174,12 +173,11 @@
     <ClInclude Include="GameClasses\OffsetTypes\WeaponOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h" />
-    <ClInclude Include="GameClasses\Panel.h" />
+    <ClInclude Include="GameClasses\PanelFactory.h" />
     <ClInclude Include="GameClasses\PanelHandle.h" />
     <ClInclude Include="GameClasses\Panels.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanelContext.h" />
-    <ClInclude Include="GameClasses\PanoramaImagePanelFactory.h" />
     <ClInclude Include="GameClasses\PanoramaLabel.h" />
     <ClInclude Include="GameClasses\PanoramaUiEngine.h" />
     <ClInclude Include="GameClasses\PanoramaUiPanel.h" />
