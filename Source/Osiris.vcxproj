@@ -133,6 +133,10 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth\PlayerHealthPanelParams.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInfoContainerPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWalls.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsPanelFactory.h" />
@@ -141,7 +145,9 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorIndexAccessor.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorCalculator.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorType.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\TeamColorCalculator.h" />
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />

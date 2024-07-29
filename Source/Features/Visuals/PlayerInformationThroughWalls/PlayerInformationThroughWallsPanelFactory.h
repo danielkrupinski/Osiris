@@ -4,6 +4,13 @@
 #include <GameClasses/PanelFactory.h>
 #include <HookDependencies/HookDependencies.h>
 
+#include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"
+#include "ActiveWeaponIcon/ActiveWeaponIconPanelParams.h"
+#include "PlayerHealth/PlayerHealthPanelParams.h"
+#include "PlayerInfoContainerPanelParams.h"
+#include "PlayerPositionArrow/PlayerPositionArrowPanelParams.h"
+#include "PlayerStateIcons/PlayerStateIconsPanelParams.h"
+
 template <typename HookContext>
 class PlayerInformationThroughWallsPanelFactory {
 public:
@@ -15,59 +22,80 @@ public:
 
     [[nodiscard]] auto createPlayerInformationPanel() const noexcept
     {
-        auto&& uiPanel = hookContext.panelFactory().createPanel(&parentPanel).uiPanel();
-        uiPanel.setWidth(cs2::CUILength::pixels(kWidth));
-        uiPanel.setHeight(cs2::CUILength::pixels(kHeight));
-        uiPanel.setPosition(cs2::CUILength::pixels(-kWidth * 0.5f), cs2::CUILength::pixels(0.0f));
-        uiPanel.setTransformOrigin(cs2::CUILength::percent(50), cs2::CUILength::percent(0));
-        uiPanel.setFlowChildren(cs2::k_EFlowDown);
+        auto&& containerPanel = createPlayerInfoContainerPanel();
 
-        createPositionArrowPanel(uiPanel);
-        createHealthPanel(uiPanel);
-        createActiveWeaponIconPanel(uiPanel);
-        createActiveWeaponAmmoPanel(uiPanel);
-        createStateIconsPanel(uiPanel);
-        return uiPanel;
+        createPositionArrowPanel(containerPanel);
+        createHealthPanel(containerPanel);
+        createActiveWeaponIconPanel(containerPanel);
+        createActiveWeaponAmmoPanel(containerPanel);
+        createStateIconsPanel(containerPanel);
+        return containerPanel;
     }
 
 private:
+    [[nodiscard]] decltype(auto) createPlayerInfoContainerPanel() const noexcept
+    {
+        using namespace player_info_container_panel_params;
+
+        auto&& uiPanel = hookContext.panelFactory().createPanel(&parentPanel).uiPanel();
+        uiPanel.setWidth(kWidth);
+        uiPanel.setHeight(kHeight);
+        uiPanel.setPosition(kPositionX, kPositionY);
+        uiPanel.setTransformOrigin(kTransformOriginX, kTransformOriginY);
+        uiPanel.setFlowChildren(kChildrenFlow);
+        return utils::lvalue<decltype(uiPanel)>(uiPanel);
+    }
+
     void createActiveWeaponAmmoPanel(auto&& containerPanel) const noexcept
     {
-        auto&& ammoPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        ammoPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        ammoPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        ammoPanel.setFlowChildren(cs2::k_EFlowRight);
-
+        auto&& ammoPanel = createActiveWeaponAmmoContainerPanel(containerPanel);
         createActiveWeaponAmmoTextPanel(ammoPanel);
         createActiveWeaponAmmoIconPanel(ammoPanel);
     }
 
+    [[nodiscard]] decltype(auto) createActiveWeaponAmmoContainerPanel(auto&& containerPanel) const noexcept
+    {
+        using namespace active_weapon_ammo_panel_params::container_panel_params;
+
+        auto&& uiPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setFlowChildren(kChildrenFlow);
+        return utils::lvalue<decltype(uiPanel)>(uiPanel);
+    }
+
     void createActiveWeaponAmmoTextPanel(auto&& containerPanel) const
     {
+        using namespace active_weapon_ammo_panel_params::ammo_text_panel_params;
+
         auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
-        label.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
-        label.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        label.setTextShadow(shadowParams());
-        label.setColor(cs2::kColorWhite);
+        label.setFont(kFontFamily, kFontSize, kFontWeight);
+        label.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        label.setTextShadow(kShadowParams);
+        label.setColor(kColor);
     }
 
     void createActiveWeaponAmmoIconPanel(auto&& containerPanel) const
     {
+        using namespace active_weapon_ammo_panel_params::ammo_icon_panel_params;
+
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg("s2r://panorama/images/hud/bullet_single.vsvg", 20);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
         
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        uiPanel.setMargin(cs2::CUILength::pixels(5), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setImageShadow(kShadowParams);
     }
 
     void createStateIconsPanel(auto&& containerPanel) const noexcept
     {
+        using namespace player_state_icons_panel_params::container_panel_params;
+
         auto&& panel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        panel.setFlowChildren(cs2::k_EFlowRight);
+        panel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        panel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        panel.setFlowChildren(kChildrenFlow);
 
         createDefuseIconPanel(panel);
         createHostagePickupPanel(panel);
@@ -77,13 +105,15 @@ private:
 
     void createDefuseIconPanel(auto&& containerPanel) const noexcept
     {
+        using namespace player_state_icons_panel_params::defuse_icon_panel_params;
+
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg("s2r://panorama/images/icons/equipment/defuser.vsvg", 24);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
     
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        uiPanel.setImageShadow(shadowParams());
-        uiPanel.setWashColor(cs2::kColorDefuseKit);
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setImageShadow(kShadowParams);
+        uiPanel.setWashColor(kWashColor);
     }
 
     void createHostagePickupPanel(cs2::CUIPanel* containerPanel) const noexcept
@@ -98,39 +128,47 @@ private:
 
     void createHostageIconPanel(cs2::CUIPanel* containerPanel, cs2::Color color) const noexcept
     {
+        using namespace player_state_icons_panel_params::hostage_icon_panel_params;
+
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg("s2r://panorama/images/icons/ui/hostage_transit.svg", 32);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
     
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setImageShadow(kShadowParams);
         uiPanel.setWashColor(color);
     }
 
     void createBlindedIconPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
+        using namespace player_state_icons_panel_params::blinded_icon_panel_params;
+
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg("s2r://panorama/images/hud/deathnotice/blind_kill.svg", 26);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setImageShadow(kShadowParams);
     }
 
     void createActiveWeaponIconPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
+        using namespace active_weapon_icon_panel_params;
+
         auto&& panel = hookContext.panelFactory().createImagePanel(containerPanel).uiPanel();
-        panel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        panel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(3), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        panel.setImageShadow(shadowParams());
+        panel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        panel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        panel.setImageShadow(kShadowParams);
     }
 
     void createHealthPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
+        using namespace player_health_panel_params::container_panel_params;
+
         auto&& healthPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        healthPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        healthPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(1), cs2::CUILength::pixels(0), cs2::CUILength::pixels(0));
-        healthPanel.setFlowChildren(cs2::k_EFlowRight);
+        healthPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        healthPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        healthPanel.setFlowChildren(kChildrenFlow);
 
         createHealthIconPanel(healthPanel);
         createHealthTextPanel(healthPanel);
@@ -138,49 +176,41 @@ private:
 
     void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
     {
+        using namespace player_health_panel_params::health_icon_panel_params;
+
         auto&& healthIconPanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        healthIconPanel.setImageSvg("s2r://panorama/images/hud/health_cross.vsvg", 24);
+        healthIconPanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = healthIconPanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        uiPanel.setMargin(cs2::CUILength::pixels(0), cs2::CUILength::pixels(0), cs2::CUILength::pixels(5), cs2::CUILength::pixels(0));
-        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setImageShadow(kShadowParams);
     }
 
     void createHealthTextPanel(cs2::CUIPanel* containerPanel) const
     {
+        using namespace player_health_panel_params::health_text_panel_params;
+
         auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
-        label.setFont("Stratum2, 'Arial Unicode MS'", 24.0f, cs2::k_EFontWeightBlack);
-        label.setAlign(cs2::k_EHorizontalAlignmentUnset, cs2::k_EVerticalAlignmentCenter);
-        label.setTextShadow(shadowParams());
+        label.setFont(kFontFamily, kFontSize, kFontWeight);
+        label.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        label.setTextShadow(kShadowParams);
     }
 
     void createPositionArrowPanel(cs2::CUIPanel* containerPanel) const noexcept
     {
+        using namespace player_position_arrow_panel_params;
+
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg("s2r://panorama/images/hud/reticle/playerid_arrow.vsvg", 24);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentTop);
-        uiPanel.setImageShadow(shadowParams());
+        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setImageShadow(kShadowParams);
         PanoramaTransformations{
             hookContext.panoramaTransformFactory().scale(1.0f, -1.0f),
         }.applyTo(uiPanel);
     }
-
-    [[nodiscard]] static PanelShadowParams shadowParams() noexcept
-    {
-        return PanelShadowParams{
-            .horizontalOffset{cs2::CUILength::pixels(0)},
-            .verticalOffset{cs2::CUILength::pixels(0)},
-            .blurRadius{cs2::CUILength::pixels(3)},
-            .strength = 3,
-            .color{cs2::kColorBlack}
-        };
-    }
-
-    static constexpr auto kWidth{256};
-    static constexpr auto kHeight{256};
 
     HookContext& hookContext;
     cs2::CUIPanel& parentPanel;

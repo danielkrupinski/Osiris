@@ -136,6 +136,15 @@
     <Filter Include="Features\Hud\KillfeedPreserver">
       <UniqueIdentifier>{f7a2da12-9a16-4ded-af46-6bfc1d06d05a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo">
+      <UniqueIdentifier>{a009ea0f-0df7-4907-ac6a-cb60eebfb14d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon">
+      <UniqueIdentifier>{1cbdc8c8-aad9-4625-816e-b2955bd17ee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth">
+      <UniqueIdentifier>{29c3a600-7656-4b23-abe9-af3971e0d780}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1162,6 +1171,24 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PanelFactory.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth\PlayerHealthPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerHealth</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInfoContainerPanelParams.h">
+      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
