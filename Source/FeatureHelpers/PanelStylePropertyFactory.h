@@ -2,6 +2,10 @@
 
 #include <CS2/Classes/Panorama.h>
 #include <GameClasses/MemAlloc.h>
+#include <GameClasses/PanelAlignmentParams.h>
+#include <GameClasses/PanelFontParams.h>
+#include <GameClasses/PanelMarginParams.h>
+
 #include "PanelShadowParams.h"
 #include "StylePropertiesSymbolsAndVMTs.h"
 
@@ -46,9 +50,9 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyTransformOrigin>(x, y, false);
     }
 
-    [[nodiscard]] cs2::CStylePropertyAlign* align(cs2::EHorizontalAlignment horizontalAlignment, cs2::EVerticalAlignment verticalAlignment) const noexcept
+    [[nodiscard]] cs2::CStylePropertyAlign* align(const PanelAlignmentParams& params) const noexcept
     {
-        return create<cs2::CStylePropertyAlign>(horizontalAlignment, verticalAlignment);
+        return create<cs2::CStylePropertyAlign>(params.horizontalAlignment, params.verticalAlignment);
     }
 
     [[nodiscard]] cs2::CStylePropertyWashColor* washColor(cs2::Color color) const noexcept
@@ -61,16 +65,16 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyFlowChildren>(flowDirection);
     }
 
-    [[nodiscard]] cs2::CStylePropertyFont* font(std::string_view fontFamily, float fontSize, cs2::EFontWeight fontWeight) const noexcept
+    [[nodiscard]] cs2::CStylePropertyFont* font(const PanelFontParams& params) const noexcept
     {
         cs2::CUtlString fontFamilyString{nullptr};
-        if (fontFamily.length() > 0) {
-            if ((fontFamilyString.m_pString = static_cast<char*>(MemAlloc::allocate(fontFamily.length() + 1))) != nullptr) {
-                std::memcpy(fontFamilyString.m_pString, fontFamily.data(), fontFamily.length());
-                fontFamilyString.m_pString[fontFamily.length()] = '\0';
+        if (params.fontFamily.length() > 0) {
+            if ((fontFamilyString.m_pString = static_cast<char*>(MemAlloc::allocate(params.fontFamily.length() + 1))) != nullptr) {
+                std::memcpy(fontFamilyString.m_pString, params.fontFamily.data(), params.fontFamily.length());
+                fontFamilyString.m_pString[params.fontFamily.length()] = '\0';
             }
         }
-        return create<cs2::CStylePropertyFont>(fontFamilyString, fontSize, cs2::k_EFontStyleUnset, fontWeight, cs2::k_EFontStretchUnset);
+        return create<cs2::CStylePropertyFont>(fontFamilyString, params.fontSize, cs2::k_EFontStyleUnset, params.fontWeight, cs2::k_EFontStretchUnset);
     }
 
     [[nodiscard]] cs2::CStylePropertyTextShadow* textShadow(const PanelShadowParams& params) const noexcept
@@ -78,9 +82,9 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyTextShadow>(true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color);
     }
 
-    [[nodiscard]] cs2::CStylePropertyMargin* margin(cs2::CUILength left, cs2::CUILength top, cs2::CUILength right, cs2::CUILength bottom) const noexcept
+    [[nodiscard]] cs2::CStylePropertyMargin* margin(const PanelMarginParams& params) const noexcept
     {
-        return create<cs2::CStylePropertyMargin>(left, top, right, bottom);
+        return create<cs2::CStylePropertyMargin>(params.marginLeft, params.marginTop, params.marginRight, params.marginBottom);
     }
 
 private:

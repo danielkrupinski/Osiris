@@ -42,7 +42,7 @@ private:
     {
         imagePanel.setImageSvg(properties.svgImagePath, properties.svgTextureHeight);
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(cs2::k_EHorizontalAlignmentCenter, imageVerticalAlignment(properties.position));
+        uiPanel.setAlign(PanelAlignmentParams{cs2::k_EHorizontalAlignmentCenter, imageVerticalAlignment(properties.position)});
         uiPanel.setImageShadow(imageShadowParams());
     }
 

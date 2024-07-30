@@ -58,8 +58,8 @@ private:
         using namespace active_weapon_ammo_panel_params::container_panel_params;
 
         auto&& uiPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setAlign(kAlignment);
+        uiPanel.setMargin(kMargin);
         uiPanel.setFlowChildren(kChildrenFlow);
         return utils::lvalue<decltype(uiPanel)>(uiPanel);
     }
@@ -69,8 +69,8 @@ private:
         using namespace active_weapon_ammo_panel_params::ammo_text_panel_params;
 
         auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
-        label.setFont(kFontFamily, kFontSize, kFontWeight);
-        label.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        label.setFont(kFont);
+        label.setAlign(kAlignment);
         label.setTextShadow(kShadowParams);
         label.setColor(kColor);
     }
@@ -83,8 +83,8 @@ private:
         imagePanel.setImageSvg(kImageUrl, kTextureHeight);
         
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setAlign(kAlignment);
+        uiPanel.setMargin(kMargin);
         uiPanel.setImageShadow(kShadowParams);
     }
 
@@ -93,8 +93,8 @@ private:
         using namespace player_state_icons_panel_params::container_panel_params;
 
         auto&& panel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        panel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        panel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        panel.setAlign(kAlignment);
+        panel.setMargin(kMargin);
         panel.setFlowChildren(kChildrenFlow);
 
         createDefuseIconPanel(panel);
@@ -111,7 +111,7 @@ private:
         imagePanel.setImageSvg(kImageUrl, kTextureHeight);
     
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
         uiPanel.setWashColor(kWashColor);
     }
@@ -134,7 +134,7 @@ private:
         imagePanel.setImageSvg(kImageUrl, kTextureHeight);
     
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
         uiPanel.setWashColor(color);
     }
@@ -147,7 +147,7 @@ private:
         imagePanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
     }
 
@@ -156,8 +156,8 @@ private:
         using namespace active_weapon_icon_panel_params;
 
         auto&& panel = hookContext.panelFactory().createImagePanel(containerPanel).uiPanel();
-        panel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        panel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        panel.setAlign(kAlignment);
+        panel.setMargin(kMargin);
         panel.setImageShadow(kShadowParams);
     }
 
@@ -166,8 +166,8 @@ private:
         using namespace player_health_panel_params::container_panel_params;
 
         auto&& healthPanel = hookContext.panelFactory().createPanel(containerPanel).uiPanel();
-        healthPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        healthPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        healthPanel.setAlign(kAlignment);
+        healthPanel.setMargin(kMargin);
         healthPanel.setFlowChildren(kChildrenFlow);
 
         createHealthIconPanel(healthPanel);
@@ -182,8 +182,8 @@ private:
         healthIconPanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = healthIconPanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
-        uiPanel.setMargin(kMarginLeft, kMarginTop, kMarginRight, kMarginBottom);
+        uiPanel.setAlign(kAlignment);
+        uiPanel.setMargin(kMargin);
         uiPanel.setImageShadow(kShadowParams);
     }
 
@@ -192,8 +192,8 @@ private:
         using namespace player_health_panel_params::health_text_panel_params;
 
         auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
-        label.setFont(kFontFamily, kFontSize, kFontWeight);
-        label.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        label.setFont(kFont);
+        label.setAlign(kAlignment);
         label.setTextShadow(kShadowParams);
     }
 
@@ -205,7 +205,7 @@ private:
         imagePanel.setImageSvg(kImageUrl, kTextureHeight);
 
         auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kHorizontalAlignment, kVerticalAlignment);
+        uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
         PanoramaTransformations{
             hookContext.panoramaTransformFactory().scale(1.0f, -1.0f),

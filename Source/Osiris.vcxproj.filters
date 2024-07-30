@@ -1190,6 +1190,15 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInfoContainerPanelParams.h">
       <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\PanelAlignmentParams.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelFontParams.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PanelMarginParams.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

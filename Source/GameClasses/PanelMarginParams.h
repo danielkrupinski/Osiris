@@ -1,0 +1,10 @@
+#pragma once
+
+#include <CS2/Classes/Panorama.h>
+
+struct PanelMarginParams {
+    cs2::CUILength marginLeft{cs2::CUILength::pixels(0)};
+    cs2::CUILength marginTop{cs2::CUILength::pixels(0)};
+    cs2::CUILength marginRight{cs2::CUILength::pixels(0)};
+    cs2::CUILength marginBottom{cs2::CUILength::pixels(0)};
+};

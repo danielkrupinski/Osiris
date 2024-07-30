@@ -179,8 +179,11 @@
     <ClInclude Include="GameClasses\OffsetTypes\WeaponOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponServicesOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\WeaponVDataOffset.h" />
+    <ClInclude Include="GameClasses\PanelAlignmentParams.h" />
     <ClInclude Include="GameClasses\PanelFactory.h" />
+    <ClInclude Include="GameClasses\PanelFontParams.h" />
     <ClInclude Include="GameClasses\PanelHandle.h" />
+    <ClInclude Include="GameClasses\PanelMarginParams.h" />
     <ClInclude Include="GameClasses\Panels.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanelContext.h" />
