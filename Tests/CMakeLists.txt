@@ -11,29 +11,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombSiteIconPanelTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerConditionTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerPanelTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerTextPanelTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/BombTimerToggleTests.cpp
-  FeatureTests/HudFeaturesTests/BombTimerTests/GameBombStatusPanelTests.cpp
-  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertPanelTests.cpp
-  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertTests.cpp
-  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertConditionTests.cpp
-  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingAlertToggleTests.cpp
-  FeatureTests/HudFeaturesTests/DefusingAlertTests/DefusingCountdownTextPanelTests.cpp
-  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserverContextTests.cpp
-  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserverTests.cpp
-  FeatureTests/HudFeaturesTests/KillfeedPreserverTests/KillfeedPreserveToggleTests.cpp
-)
+add_executable(Tests UnitTests.cpp)
 
-add_subdirectory(HelpersTests)
+if(MSVC)
+  target_compile_options(Tests PRIVATE /bigobj)
+endif()
+
 add_subdirectory(MemoryAllocation)
-add_subdirectory(MemorySearchTests)
 add_subdirectory(Platform)
-add_subdirectory(UtilsTests)
 target_link_libraries(Tests gtest_main gmock Threads::Threads)
 target_include_directories(Tests PRIVATE . "${CMAKE_SOURCE_DIR}/Source")
 
