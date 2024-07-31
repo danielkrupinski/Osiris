@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        compiler: [g++-11, g++-12, g++-13, clang++-15, clang++-16, clang++-17, clang++-18]
+        compiler: [g++-11, g++-12, g++-13, clang++-15, clang++-16, clang++-17, clang++-18, clang++-19]
         configuration: [Debug, Release]
         include:
           - os: ubuntu-24.04
@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: install g++-13
-      if: matrix.compiler == 'g++-13' || matrix.compiler == 'clang++-18'
+      if: matrix.compiler == 'g++-13' || matrix.compiler == 'clang++-18' || matrix.compiler == 'clang++-19'
       run: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update && sudo apt-get install -y g++-13
@@ -42,6 +42,12 @@ jobs:
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 18
+    - name: install clang++-19
+      if: matrix.compiler == 'clang++-19'
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 19
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
     - name: build
