@@ -36,6 +36,11 @@ struct Hud {
         return context.panel().findChildInLayoutFile(cs2::HudTeamCounter);
     }
 
+    [[nodiscard]] decltype(auto) bombPlantedPanel() noexcept
+    {
+        return context.bombPlantedPanelHandle().getOrInit(findBombPlantedPanel());
+    }
+
 private:
     [[nodiscard]] decltype(auto) hudDeathNotice() noexcept
     {
@@ -53,6 +58,13 @@ private:
     {
         return [this] {
             return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::BombStatus);
+        };
+    }
+
+    [[nodiscard]] auto findBombPlantedPanel() noexcept
+    {
+        return [this] {
+            return bombStatus().findChildInLayoutFile(cs2::BombPlanted);
         };
     }
 

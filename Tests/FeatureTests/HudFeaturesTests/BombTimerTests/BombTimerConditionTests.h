@@ -1,32 +1,20 @@
 #pragma once
 
+#include <optional>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include <Features/Hud/BombTimer/BombTimerCondition.h>
 #include <Features/Hud/BombTimer/BombTimerState.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
+#include <Mocks/MockPanel.h>
 
 class BombTimerConditionTest : public testing::Test {
 protected:
-    void hasTickingC4(bool b)
-    {
-        EXPECT_CALL(mockBombTimerContext, hasTickingC4()).WillOnce(testing::Return(b));
-    }
-
     testing::StrictMock<MockBombTimerContext> mockBombTimerContext;
     BombTimerCondition<MockBombTimerContext&> bombTimerCondition{mockBombTimerContext};
 };
-
-TEST_F(BombTimerConditionTest, ShouldShowBombTimerIfHasTickingC4) {
-    hasTickingC4(true);
-    EXPECT_EQ(bombTimerCondition.shouldShowBombTimer(), true);
-}
-
-TEST_F(BombTimerConditionTest, ShouldNotShowBombTimerIfDoesNotHaveTickingC4) {
-    hasTickingC4(false);
-    EXPECT_EQ(bombTimerCondition.shouldShowBombTimer(), false);
-}
 
 TEST_F(BombTimerConditionTest, ShouldRunIfEnabled) {
     BombTimerState bombTimerState;
@@ -43,3 +31,32 @@ TEST_F(BombTimerConditionTest, ShouldNotRunIfNotEnabled) {
 
     EXPECT_EQ(bombTimerCondition.shouldRun(), false);
 }
+
+struct BombTimerConditionTestParam {
+    std::optional<bool> bombPlantedPanelVisible{};
+    bool hasTickingC4{};
+    bool expectedShouldShow{};
+};
+
+class BombTimerConditionTestWithParam : public BombTimerConditionTest, public testing::WithParamInterface<BombTimerConditionTestParam> {
+protected:
+    testing::StrictMock<MockPanel> mockBombPlantedPanel;
+};
+
+TEST_P(BombTimerConditionTestWithParam, ShouldShowBombTimer) {
+    EXPECT_CALL(mockBombTimerContext, bombPlantedPanel()).Times(testing::AtMost(1)).WillRepeatedly(testing::ReturnRef(mockBombPlantedPanel));
+
+    EXPECT_CALL(mockBombTimerContext, hasTickingC4()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().hasTickingC4));
+    EXPECT_CALL(mockBombPlantedPanel, isVisible()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().bombPlantedPanelVisible));
+
+    EXPECT_EQ(bombTimerCondition.shouldShowBombTimer(), GetParam().expectedShouldShow);
+}
+
+INSTANTIATE_TEST_SUITE_P(, BombTimerConditionTestWithParam, testing::Values(
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = std::nullopt, .hasTickingC4 = true, .expectedShouldShow = true},
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = true, .hasTickingC4 = true, .expectedShouldShow = true},
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = false, .hasTickingC4 = true, .expectedShouldShow = false},
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = std::nullopt, .hasTickingC4 = false, .expectedShouldShow = false},
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = true, .hasTickingC4 = false, .expectedShouldShow = false},
+    BombTimerConditionTestParam{.bombPlantedPanelVisible = false, .hasTickingC4 = false, .expectedShouldShow = false}
+));

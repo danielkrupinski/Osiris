@@ -16,6 +16,7 @@ struct MockBombTimerContext {
     MOCK_METHOD(MockBombTimerPanel&, bombTimerPanel, ());
     MOCK_METHOD(MockGameBombStatusPanel&, gameBombStatusPanel, ());
     MOCK_METHOD(MockPanel&, bombStatusPanel, ());
+    MOCK_METHOD(MockPanel&, bombPlantedPanel, ());
     MOCK_METHOD(MockPanel&, invisiblePanel, ());
     MOCK_METHOD(MockPanel&, scoreAndTimeAndBombPanel, ());
     MOCK_METHOD(MockPanel&, bombTimerContainerPanel, ());

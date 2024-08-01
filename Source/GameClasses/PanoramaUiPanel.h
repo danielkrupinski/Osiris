@@ -121,6 +121,11 @@ struct PanoramaUiPanel {
         return context.hasFlag(cs2::k_EPanelFlag_HasOwnLayoutFile);
     }
 
+    [[nodiscard]] std::optional<bool> isVisible() const noexcept
+    {
+        return context.hasFlag(cs2::k_EPanelFlag_IsVisible);
+    }
+
     [[nodiscard]] decltype(auto) children() const noexcept
     {
         return context.childPanels();

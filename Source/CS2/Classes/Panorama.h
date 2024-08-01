@@ -275,6 +275,7 @@ struct CUIPanel {
 };
 
 enum EPanelFlag {
+    k_EPanelFlag_IsVisible = 0x01,
     k_EPanelFlag_HasOwnLayoutFile = 0x40
 };
 

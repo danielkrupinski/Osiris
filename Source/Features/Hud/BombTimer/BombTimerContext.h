@@ -49,6 +49,11 @@ struct BombTimerContext {
         return _context.hud().bombStatus();
     }
 
+    [[nodiscard]] decltype(auto) bombPlantedPanel() const noexcept
+    {
+        return _context.hud().bombPlantedPanel();
+    }
+
     [[nodiscard]] decltype(auto) scoreAndTimeAndBombPanel() const noexcept
     {
         return _context.hud().scoreAndTimeAndBomb();
