@@ -50,7 +50,9 @@ jobs:
         sudo ./llvm.sh 19
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
-    - name: build
-      run: cmake --build build -j $(nproc --all)
+    - name: build source
+      run: cmake --build build --target Osiris -j $(nproc --all)
+    - name: build unit tests
+      run: cmake --build build --target Tests -j $(nproc --all)
     - name: run unit tests
       run: ctest --test-dir build --output-on-failure --schedule-random -j $(nproc --all)

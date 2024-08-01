@@ -33,7 +33,9 @@ jobs:
       run: echo "toolset=-T ${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: configure
       run: cmake -Werror=dev -D BUILD_TESTS=1 -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -A x64 ${{ env.toolset }} -B build
-    - name: build
-      run: cmake --build build --config ${{ matrix.configuration }}
+    - name: build source
+      run: cmake --build build --target Osiris --config ${{ matrix.configuration }}
+    - name: build unit tests
+      run: cmake --build build --target Tests --config ${{ matrix.configuration }}
     - name: run unit tests
       run: ctest --test-dir build --output-on-failure --schedule-random -j $env:NUMBER_OF_PROCESSORS
