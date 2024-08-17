@@ -185,12 +185,19 @@ $.Osiris = (function () {
   };
 
   var hud = createTab('hud');
+  
   var bomb = createSection(hud, 'Bomb');
   createYesNoDropDown(bomb, "Show Bomb Explosion Countdown And Site", 'hud', 'bomb_timer');
   $.CreatePanel('Panel', bomb, '', { class: "horizontal-separator" });
   createYesNoDropDown(bomb, "Show Bomb Defuse Countdown", 'hud', 'defusing_alert');
+  
   var killfeed = createSection(hud, 'Killfeed');
+  $.CreatePanel('Panel', killfeed, '', { class: "horizontal-separator" });
   createYesNoDropDown(killfeed, "Preserve My Killfeed During The Round", 'hud', 'preserve_killfeed');
+
+  var time = createSection(hud, 'Time');
+  $.CreatePanel('Panel', time, '', { class: "horizontal-separator" });
+  createYesNoDropDown(time, "Show Post-round Timer", 'hud', 'postround_timer');
 
   var visuals = createTab('visuals');
 

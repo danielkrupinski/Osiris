@@ -47,4 +47,6 @@ using StylePropertiesSymbolsAndVMTs =
         cs2::CStylePropertyFlowChildren,
         cs2::CStylePropertyFont,
         cs2::CStylePropertyTextShadow,
-        cs2::CStylePropertyMargin>;
+        cs2::CStylePropertyMargin,
+        cs2::CStylePropertyMixBlendMode,
+        cs2::CStylePropertyTextAlign>;

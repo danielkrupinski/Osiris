@@ -13,6 +13,10 @@
 #include <Helpers/UnloadFlag.h>
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
+#include <Hud/BombStatus/BombStatusPanelManager.h>
+#include <Hud/BombStatus/BombStatusPanelManagerContext.h>
+#include <Hud/BombStatus/BombStatusPanelState.h>
+#include <Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <Platform/DynamicLibrary.h>
@@ -52,7 +56,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameDependencies, featureHelpers};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, featuresStates};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -64,11 +68,11 @@ struct FullGlobalContext {
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
     {
-        HookDependencies dependencies{_gameDependencies, featureHelpers};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, featuresStates};
 
-        features(dependencies).hudFeatures().bombTimer().run();
         features(dependencies).hudFeatures().defusingAlert().run();
         features(dependencies).hudFeatures().killfeedPreserver().run();
+        BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
 
         UnloadFlag unloadFlag;
         panoramaGUI.run(dependencies, features(dependencies), unloadFlag);
@@ -76,6 +80,7 @@ struct FullGlobalContext {
 
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, featuresStates}.handleUnload();
+            BombStatusPanelUnloadHandler{dependencies}.handleUnload();
             hooks.forceUninstall();
         }
 
@@ -96,7 +101,8 @@ private:
     GameDependencies _gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;
-    FeaturesStates featuresStates;
 public:
+    FeaturesStates featuresStates;
     PanoramaGUI panoramaGUI;
+    BombStatusPanelState bombStatusPanelState;
 };

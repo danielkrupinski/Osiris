@@ -17,4 +17,9 @@ struct GameRulesPatterns {
     {
         return patternFinders.clientPatternFinder("F3 0F 10 43 ? F3 0F 5C C1 66 0F EF C9 F3 0F 2A"_pat).add(4).template readOffset<RoundStartTimeOffset>();
     }
+
+    [[nodiscard]] OffsetToRoundRestartTime offsetToRoundRestartTime() const noexcept
+    {
+        return patternFinders.clientPatternFinder("44 8B 6F ? 48 8B 80 ? ? ? ? 48"_pat).add(3).template readOffset<OffsetToRoundRestartTime>();
+    }
 };

@@ -12,18 +12,16 @@
 #include "KillfeedPreserver/KillfeedPreserver.h"
 #include "KillfeedPreserver/KillfeedPreserverContext.h"
 #include "KillfeedPreserver/KillfeedPreserveToggle.h"
+#include "PostRoundTimer/PostRoundTimer.h"
+#include "PostRoundTimer/PostRoundTimerContext.h"
+#include "PostRoundTimer/PostRoundTimerToggle.h"
 
 #include "HudFeaturesStates.h"
 
 struct HudFeatures {
-    [[nodiscard]] auto bombTimer() const noexcept
-    {
-        return BombTimer{BombTimerContext{hookDependencies, states.bombTimerState}};
-    }
-
     [[nodiscard]] auto bombTimerToggle() const noexcept
     {
-        return BombTimerToggle{BombTimerContext{hookDependencies, states.bombTimerState}};
+        return BombTimerToggle{BombTimerContext{hookDependencies}};
     }
 
     [[nodiscard]] auto defusingAlert() const noexcept
@@ -46,7 +44,11 @@ struct HudFeatures {
         return KillfeedPreserveToggle{KillfeedPreserverContext{states.killfeedPreserverState, hookDependencies}};
     }
 
+    [[nodiscard]] decltype(auto) postRoundTimerToggle() const noexcept
+    {
+        return hookDependencies.make<PostRoundTimerToggle>();
+    }
+
     HudFeaturesStates& states;
-    FeatureHelpers& helpers;
     HookDependencies& hookDependencies;
 };

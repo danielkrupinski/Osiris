@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Panorama.h>
+#include <GameClasses/PanoramaUiPanel.h>
 #include <GameDependencies/PanoramaImagePanelDeps.h>
 
 template <typename HookContext>

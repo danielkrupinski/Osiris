@@ -10,13 +10,19 @@
 #include <GameClasses/PanelFactory.h>
 #include <GameClasses/Panels.h>
 #include <GameClasses/PlantedC4.h>
+#include <GameClasses/PlayerController.h>
 #include <GameClasses/GlobalVars.h>
 #include <GameClasses/GameRules.h>
 
+struct BombStatusPanelState;
+struct FeaturesStates;
+
 struct HookDependencies {
-    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers) noexcept
+    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, FeaturesStates& featuresStates) noexcept
         : _gameDependencies{gameDependencies}
         , featureHelpers{featureHelpers}
+        , _bombStatusPanelState{bombStatusPanelState}
+        , _featuresStates{featuresStates}
     {
         if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
@@ -66,6 +72,16 @@ struct HookDependencies {
         return featureHelpers;
     }
 
+    [[nodiscard]] BombStatusPanelState& bombStatusPanelState() const noexcept
+    {
+        return _bombStatusPanelState;
+    }
+
+    [[nodiscard]] FeaturesStates& featuresStates() const noexcept
+    {
+        return _featuresStates;
+    }
+
     [[nodiscard]] auto hud() noexcept
     {
         return Hud{HudContext{*this}};
@@ -78,6 +94,13 @@ struct HookDependencies {
         return nullptr;
     }
 
+    [[nodiscard]] auto localPlayerController2() const noexcept
+    {
+        if (_gameDependencies.localPlayerController)
+            return PlayerController{*this, *_gameDependencies.localPlayerController};
+        return PlayerController{*this, nullptr};
+    }
+
     [[nodiscard]] GlobalVars globalVars() noexcept
     {
         if (_gameDependencies.globalVarsDeps.globalVars)
@@ -85,11 +108,11 @@ struct HookDependencies {
         return GlobalVars{nullptr};
     }
 
-    [[nodiscard]] GameRules gameRules() noexcept
+    [[nodiscard]] auto gameRules() noexcept
     {
         if (_gameDependencies.gameRulesDeps.gameRules)
-            return GameRules{*_gameDependencies.gameRulesDeps.gameRules};
-        return GameRules{nullptr};
+            return GameRules{*this, *_gameDependencies.gameRulesDeps.gameRules};
+        return GameRules{*this, nullptr};
     }
 
     [[nodiscard]] auto plantedC4() noexcept
@@ -164,6 +187,8 @@ private:
 
     GameDependencies& _gameDependencies;
     FeatureHelpers& featureHelpers;
+    BombStatusPanelState& _bombStatusPanelState;
+    FeaturesStates& _featuresStates;
 
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};

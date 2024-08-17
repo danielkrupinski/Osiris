@@ -1,5 +1,8 @@
 #pragma once
 
+#include <GameClasses/PanoramaImagePanel.h>
+#include <GameClasses/PanoramaLabel.h>
+#include <GameClasses/PanoramaUiEngine.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
 
@@ -8,13 +11,11 @@
 #include "BombTimerPanel.h"
 #include "BombTimerState.h"
 #include "BombTimerTextPanel.h"
-#include "GameBombStatusPanel.h"
 
 template <typename HookContext>
 struct BombTimerContext {
-    BombTimerContext(HookContext& context, BombTimerState& state) noexcept
+    BombTimerContext(HookContext& context) noexcept
         : _context{context}
-        , _state{state}
     {
     }
 
@@ -34,19 +35,9 @@ struct BombTimerContext {
         return BombTimerCondition{*this};
     }
 
-    [[nodiscard]] auto gameBombStatusPanel() const noexcept
-    {
-        return GameBombStatusPanel{*this};
-    }
-
     [[nodiscard]] auto bombTimerPanel() const noexcept
     {
         return BombTimerPanel{*this};
-    }
-
-    [[nodiscard]] decltype(auto) bombStatusPanel() const noexcept
-    {
-        return _context.hud().bombStatus();
     }
 
     [[nodiscard]] decltype(auto) bombPlantedPanel() const noexcept
@@ -54,43 +45,23 @@ struct BombTimerContext {
         return _context.hud().bombPlantedPanel();
     }
 
-    [[nodiscard]] decltype(auto) scoreAndTimeAndBombPanel() const noexcept
-    {
-        return _context.hud().scoreAndTimeAndBomb();
-    }
-
-    [[nodiscard]] decltype(auto) invisiblePanel() const noexcept
-    {
-        if (auto&& invisiblePanel = _context.panels().getPanelFromHandle(_state.invisiblePanelHandle))
-            return utils::lvalue<decltype(invisiblePanel)>(invisiblePanel);
-
-        PanoramaUiEngine::runScript(scoreAndTimeAndBombPanel(),
-            "$.CreatePanel('Panel', $.GetContextPanel().FindChildTraverse('ScoreAndTimeAndBomb'), 'InvisiblePanel');", "", 0);
-
-        auto&& invisiblePanel = scoreAndTimeAndBombPanel().findChildInLayoutFile("InvisiblePanel");
-        invisiblePanel.setVisible(false);
-        _state.invisiblePanelHandle = invisiblePanel.getHandle();
-
-        return utils::lvalue<decltype(invisiblePanel)>(invisiblePanel);
-    }
-
     [[nodiscard]] decltype(auto) bombTimerContainerPanel() const noexcept
     {
-        if (auto&& bombTimerContainer = _context.panels().getPanelFromHandle(_state.bombTimerContainerPanelHandle))
+        if (auto&& bombTimerContainer = _context.panels().getPanelFromHandle(state().bombTimerContainerPanelHandle))
             return utils::lvalue<decltype(bombTimerContainer)>(bombTimerContainer);
 
         updatePanelHandles();
-        return _context.panels().getPanelFromHandle(_state.bombTimerContainerPanelHandle);
+        return _context.panels().getPanelFromHandle(state().bombTimerContainerPanelHandle);
     }
 
     [[nodiscard]] auto bombSiteIconPanel() const noexcept
     {
-        return BombSiteIconPanel{_context.panels().getPanelFromHandle(_state.bombSiteIconPanelHandle).clientPanel().template as<PanoramaImagePanel>()};
+        return BombSiteIconPanel{_context.panels().getPanelFromHandle(state().bombSiteIconPanelHandle).clientPanel().template as<PanoramaImagePanel>()};
     }
 
     [[nodiscard]] auto bombTimerTextPanel() const noexcept
     {
-        return BombTimerTextPanel{_context.panels().getPanelFromHandle(_state.bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return BombTimerTextPanel{_context.panels().getPanelFromHandle(state().bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
     void updatePanelHandles() const noexcept
@@ -122,22 +93,21 @@ struct BombTimerContext {
         if (!bombTimerContainer)
             return;
 
-        _state.bombTimerContainerPanelHandle = bombTimerContainer.getHandle();
+        state().bombTimerContainerPanelHandle = bombTimerContainer.getHandle();
         bombTimerContainer.setVisible(false);
 
         if (const auto bombSiteIcon = bombTimerContainer.findChildInLayoutFile("BombSiteIcon"))
-            _state.bombSiteIconPanelHandle = bombSiteIcon.getHandle();
+            state().bombSiteIconPanelHandle = bombSiteIcon.getHandle();
 
         if (const auto bombTimer = bombTimerContainer.findChildInLayoutFile("BombTimer"))
-            _state.bombTimerPanelHandle = bombTimer.getHandle();
+            state().bombTimerPanelHandle = bombTimer.getHandle();
     }
 
     [[nodiscard]] auto& state() const noexcept
     {
-        return _state;
+        return _context.featuresStates().hudFeaturesStates.bombTimerState;
     }
 
 private:
     HookContext& _context;
-    BombTimerState& _state;
 };

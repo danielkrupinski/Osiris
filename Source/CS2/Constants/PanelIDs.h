@@ -13,5 +13,6 @@ constexpr auto BombPlanted = "BombPlanted";
 constexpr auto HudDeathNotice = "HudDeathNotice";
 constexpr auto VisibleNotices = "VisibleNotices";
 constexpr auto HudReticle = "HudReticle";
+constexpr auto TimerText = "TimerText";
 
 }

@@ -7,7 +7,6 @@
 #include <Features/Hud/BombTimer/BombTimerToggle.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
-#include <Mocks/MockGameBombStatusPanel.h>
 
 class BombTimerToggleTest : public testing::Test {
 protected:
@@ -17,7 +16,6 @@ protected:
     }
 
     testing::StrictMock<MockBombTimerContext> mockBombTimerContext;
-    testing::StrictMock<MockGameBombStatusPanel> mockGameBombStatusPanel;
     testing::StrictMock<MockBombTimerPanel> mockBombTimerPanel;
 
     BombTimerToggle<MockBombTimerContext&> bombTimerToggle{mockBombTimerContext};
@@ -44,9 +42,6 @@ TEST_F(BombTimerToggleTest, DisablingDoesNothingIfAlreadyDisabled) {
 
 TEST_F(BombTimerToggleTest, DisablingRestoresBombStatusPanelAndHidesBombTimerPanel) {
     state.enabled = true;
-
-    EXPECT_CALL(mockBombTimerContext, gameBombStatusPanel()).WillOnce(testing::ReturnRef(mockGameBombStatusPanel));
-    EXPECT_CALL(mockGameBombStatusPanel, restore());
 
     EXPECT_CALL(mockBombTimerContext, bombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
     EXPECT_CALL(mockBombTimerPanel, hide());

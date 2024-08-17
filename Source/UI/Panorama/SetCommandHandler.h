@@ -31,6 +31,8 @@ private:
             handleTogglableFeature(features.hudFeatures().defusingAlertToggle());
         } else if (feature == "preserve_killfeed") {
             handleTogglableFeature(features.hudFeatures().killfeedPreserveToggle());
+        } else if (feature == "postround_timer") {
+            handleTogglableFeature(features.hudFeatures().postRoundTimerToggle());
         }
     }
 

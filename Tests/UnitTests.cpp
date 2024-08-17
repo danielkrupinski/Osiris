@@ -3,3 +3,6 @@
 #include "MemorySearchTests/Tests.h"
 #include "Platform/Tests.h"
 #include "UtilsTests/Tests.h"
+
+#include "HudTests/BombStatusTests/BombStatusPanelTests.h"
+#include "HudTests/BombStatusTests/BombStatusPanelManagerTests.h"

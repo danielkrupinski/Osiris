@@ -87,6 +87,16 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyMargin>(params.marginLeft, params.marginTop, params.marginRight, params.marginBottom);
     }
 
+    [[nodiscard]] cs2::CStylePropertyMixBlendMode* mixBlendMode(cs2::EMixBlendMode mode) const noexcept
+    {
+        return create<cs2::CStylePropertyMixBlendMode>(mode, true);
+    }
+
+    [[nodiscard]] cs2::CStylePropertyTextAlign* textAlign(cs2::ETextAlign textAlign) const noexcept
+    {
+        return create<cs2::CStylePropertyTextAlign>(textAlign);
+    }
+
 private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept

@@ -73,7 +73,7 @@ private:
             MemoryPatterns{partialContext.patternFinders}
         );
 
-        HookDependencies hookDependencies{fullContext().gameDependencies(), fullContext().getFeatureHelpers()};
+        HookDependencies hookDependencies{fullContext().gameDependencies(), fullContext().getFeatureHelpers(), fullContext().bombStatusPanelState, fullContext().featuresStates};
         if (const auto mainMenu{fullContext().gameDependencies().mainMenu}; mainMenu && *mainMenu)
             fullContext().panoramaGUI.init(PanoramaUiPanel{PanoramaUiPanelContext{hookDependencies, (*mainMenu)->uiPanel}});
     }

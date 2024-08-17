@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildConfig.h" />
+    <ClInclude Include="Common\Visibility.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
@@ -99,7 +100,6 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerToggle.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerUnloadHandler.h" />
-    <ClInclude Include="Features\Hud\BombTimer\GameBombStatusPanel.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h" />
@@ -115,6 +115,14 @@
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverState.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserveToggle.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerCondition.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanel.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelFactory.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerState.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerToggle.h" />
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h" />
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h" />
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h" />
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h" />
@@ -153,6 +161,8 @@
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
     <ClInclude Include="GameClasses\ClientPanel.h" />
+    <ClInclude Include="GameClasses\Hud\HudContext.h" />
+    <ClInclude Include="GameClasses\PlayerController.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
     <ClInclude Include="GameClasses\GameRules.h" />
@@ -245,6 +255,12 @@
     <ClInclude Include="Hooks\LoopModeGameHook.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
     <ClInclude Include="Hooks\ViewRenderHook.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanel.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelContext.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelManager.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelManagerContext.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelState.h" />
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelUnloadHandler.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegion.h" />
     <ClInclude Include="MemoryAllocation\FreeMemoryRegionList.h" />
     <ClInclude Include="MemoryAllocation\MemoryAllocator.h" />
