@@ -7,25 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
-* 20 May 2024 - Implemented showing players' active weapon ammo
+* 17 August 2024 - new HUD feature: "Post-round timer"
 
-![Player active weapon ammo](https://github.com/danielkrupinski/Osiris/assets/34515229/9a6dfc37-ee9f-4b70-9b1f-0e4465bf58fb)
-
-* 15 May 2024 - Implemented showing an icon on player blinded by a flashbang
-
-![Player blinded by flashbang](https://github.com/danielkrupinski/Osiris/assets/34515229/18b10e66-545a-449f-8783-691d5c1b2003)
-
-* 14 May 2024 - Implemented showing an icon on player rescuing a hostage
-
-![Player rescuing hostage](https://github.com/danielkrupinski/Osiris/assets/34515229/057b6dc7-1b54-44c0-9443-6917d2394335)
-
-* 7 May 2024 - Implemented showing an icon on player picking up a hostage
-
-![Player picking up hostage](https://github.com/danielkrupinski/Osiris/assets/34515229/d3a27f1a-dd79-4d18-bfbb-d8bb8c47ae2d)
-
-* 6 May 2024 - Adjusted "Bomb timer" appearance. Implemented showing an icon on player defusing the bomb
-
-![Player defusing icon](https://github.com/danielkrupinski/Osiris/assets/34515229/4addfc99-27d8-4f9d-a1b7-eb2b7c7565bd)
+![Post-round timer](https://github.com/user-attachments/assets/3ec7261b-e119-4972-b9bf-f85ac5646110)
 
 ## Technical features
 
