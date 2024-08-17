@@ -11,7 +11,7 @@
 struct Features {
     [[nodiscard]] HudFeatures hudFeatures() const noexcept
     {
-        return HudFeatures{states.hudFeaturesStates, helpers, hookDependencies};
+        return HudFeatures{states.hudFeaturesStates, hookDependencies};
     }
 
     [[nodiscard]] SoundFeatures soundFeatures() const noexcept

@@ -16,7 +16,6 @@ struct BombTimerToggle : FeatureToggleOff<BombTimerToggle<Context>> {
 
     void onDisable(typename BombTimerToggle::ToggleMethod) const noexcept
     {
-        context.gameBombStatusPanel().restore();
         context.bombTimerPanel().hide();
     }
 

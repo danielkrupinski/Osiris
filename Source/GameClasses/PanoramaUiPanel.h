@@ -206,6 +206,16 @@ struct PanoramaUiPanel {
         context.setProperty(context.propertyFactory().margin(params));
     }
 
+    void setMixBlendMode(cs2::EMixBlendMode mode) const noexcept
+    {
+        context.setProperty(context.propertyFactory().mixBlendMode(mode));
+    }
+
+    void setTextAlign(cs2::ETextAlign textAlign) const noexcept
+    {
+        context.setProperty(context.propertyFactory().textAlign(textAlign));
+    }
+
     void setColor(cs2::Color color) const noexcept
     {
         context.setSimpleForegroundColor(color);

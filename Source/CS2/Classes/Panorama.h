@@ -89,6 +89,8 @@ struct CUILength {
         return CUILength{value, k_EUILengthPercent};
     }
 
+    constexpr bool operator==(const CUILength&) const = default;
+
     float m_flValue;
     EUILengthTypes m_eType;
 };
@@ -239,6 +241,38 @@ struct CStylePropertyTextShadow : CStyleProperty {
     CUILength blurRadius;
     float strength;
     Color color;
+};
+
+enum EMixBlendMode : std::uint8_t {
+    k_EMixBlendModeNormal,
+    k_EMixBlendModeMultiply,
+    k_EMixBlendModeScreen,
+    k_EMixBlendModeAdditive,
+    k_EMixBlendModeOpaque
+};
+
+struct CStylePropertyMixBlendMode : CStyleProperty {
+    static constexpr auto kName{"-s2-mix-blend-mode"};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyMixBlendMode@panorama@@", "N8panorama26CStylePropertyMixBlendModeE")};
+
+    EMixBlendMode m_eMixBlendMode;
+    bool m_bSet;
+};
+
+enum ETextAlign : std::int8_t {
+    k_ETextAlignUnset = -1,
+    k_ETextAlignLeft = 0,
+    k_ETextAlignCenter = 1,
+    k_ETextAlignRight = 2,
+    k_ETextAlignJustify = 3,
+    k_ETextAlignJustifyLetterSpacing = 4
+};
+
+struct CStylePropertyTextAlign : CStyleProperty {
+    static constexpr auto kName{"text-align"};
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCStylePropertyTextAlign@panorama@@", "N8panorama23CStylePropertyTextAlignE")};
+
+    ETextAlign m_eAlign;
 };
 
 struct CStylePropertyDimensionsBase : CStyleProperty {

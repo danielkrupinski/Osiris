@@ -6,4 +6,3 @@
 #include "BombTimerTests.h"
 #include "BombTimerTextPanelTests.h"
 #include "BombTimerToggleTests.h"
-#include "GameBombStatusPanelTests.h"

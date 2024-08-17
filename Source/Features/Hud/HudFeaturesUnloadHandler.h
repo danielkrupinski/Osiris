@@ -3,6 +3,7 @@
 #include "BombTimer/BombTimerUnloadHandler.h"
 #include "DefusingAlert/DefusingAlertUnloadHandler.h"
 #include "HudFeaturesStates.h"
+#include "PostRoundTimer/PostRoundTimerUnloadHandler.h"
 
 template <typename HookContext>
 struct HudFeaturesUnloadHandler {
@@ -16,6 +17,7 @@ struct HudFeaturesUnloadHandler {
     {
         hookContext.template make<BombTimerUnloadHandler>(states.bombTimerState).handleUnload();
         hookContext.template make<DefusingAlertUnloadHandler>(states.defusingAlertState).handleUnload();
+        hookContext.template make<PostRoundTimerUnloadHandler>().handleUnload();
     }
 
 private:

@@ -16,4 +16,5 @@ struct HudDeps {
     cs2::PanelHandle scoreAndTimeAndBombPanelHandle;
     cs2::PanelHandle bombStatusPanelHandle;
     cs2::PanelHandle bombPlantedPanelHandle;
+    cs2::PanelHandle timerTextPanelHandle;
 };

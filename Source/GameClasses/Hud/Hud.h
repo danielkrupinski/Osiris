@@ -16,6 +16,11 @@ struct Hud {
         return context.deathNoticesPanelHandle().getOrInit(findVisibleDeathNoticesPanel()).template as<DeathNotices>();
     }
 
+    [[nodiscard]] decltype(auto) timerTextPanel() noexcept
+    {
+        return context.timerTextPanelHandle().getOrInit(findTimerTextPanel());
+    }
+
     [[nodiscard]] decltype(auto) getHudReticle() noexcept
     {
         return context.panel().findChildInLayoutFile(cs2::HudReticle);
@@ -57,6 +62,7 @@ private:
     [[nodiscard]] auto findBombStatusPanel() noexcept
     {
         return [this] {
+            context.resetBombStatusVisibility();
             return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::BombStatus);
         };
     }
@@ -72,6 +78,13 @@ private:
     {
         return [this] {
             return hudTeamCounter().findChildInLayoutFile(cs2::ScoreAndTimeAndBomb);
+        };
+    }
+
+    [[nodiscard]] auto findTimerTextPanel() noexcept
+    {
+        return [this] {
+            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::TimerText);
         };
     }
 

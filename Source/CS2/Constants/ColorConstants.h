@@ -13,6 +13,7 @@ constexpr Color kColorGreen{0, 180, 0};
 constexpr Color kColorLightGreen{144, 238, 144};
 constexpr Color kColorRed{255, 0, 0};
 constexpr Color kColorYellow{255, 255, 0};
+constexpr Color kColorSilver{192, 192, 192};
 
 constexpr Color kColorTeamTT{234, 190, 84};
 constexpr Color kColorTeamCT{150, 200, 250};

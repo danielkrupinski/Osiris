@@ -145,6 +145,18 @@
     <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth">
       <UniqueIdentifier>{29c3a600-7656-4b23-abe9-af3971e0d780}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hud">
+      <UniqueIdentifier>{a8c17a78-a87c-41b1-92c7-fe7d9e31dffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hud\BombStatus">
+      <UniqueIdentifier>{afa1001a-8b4d-4392-881c-834b37ced23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{deb809e0-b2a4-445d-a8a8-bc33739388a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Hud\PostRoundTimer">
+      <UniqueIdentifier>{d23198a3-b135-45ab-b465-650de2aca753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1034,9 +1046,6 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\GameBombStatusPanel.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
@@ -1198,6 +1207,57 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PanelMarginParams.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\PlayerController.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\Hud\HudContext.h">
+      <Filter>GameClasses\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelUnloadHandler.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanel.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelContext.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelState.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Visibility.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelManager.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\BombStatus\BombStatusPanelManagerContext.h">
+      <Filter>Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerCondition.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanel.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelFactory.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerState.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerToggle.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,11 +12,7 @@ struct BombTimerUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        auto&& hud = hookContext.hud();
-        hud.bombStatus().setParent(hud.scoreAndTimeAndBomb());
-
         auto&& panels = hookContext.panels();
-        panels.deletePanelByHandle(state.invisiblePanelHandle);
         panels.deletePanelByHandle(state.bombTimerPanelHandle);
         panels.deletePanelByHandle(state.bombTimerContainerPanelHandle);
     }

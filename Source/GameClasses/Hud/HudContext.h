@@ -36,6 +36,16 @@ struct HudContext {
     {
         return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.bombPlantedPanelHandle);
     }
+
+    [[nodiscard]] auto timerTextPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.timerTextPanelHandle);
+    }
+
+    void resetBombStatusVisibility() noexcept
+    {
+        hookContext.bombStatusPanelState().resetVisibility();
+    }
     
 private:
     HookContext& hookContext;
