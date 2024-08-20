@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstring>
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CPanelStyle.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 struct StylePropertySymbolMap {

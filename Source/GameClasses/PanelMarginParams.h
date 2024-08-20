@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUILength.h>
 
 struct PanelMarginParams {
     cs2::CUILength marginLeft{cs2::CUILength::pixels(0)};

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <GameClasses/PanoramaUiEngine.h>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
 #include <FeatureHelpers/FeatureToggle.h>

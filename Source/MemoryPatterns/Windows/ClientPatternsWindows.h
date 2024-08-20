@@ -7,7 +7,6 @@
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
-#include <CS2/Classes/Panorama.h>
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/VMatrix.h>
 #include <MemorySearch/BytePatternLiteral.h>

@@ -2,7 +2,8 @@
 
 #include <cassert>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <CS2/Panorama/PanelHandle.h>
 #include <GameClasses/PanoramaUiEngine.h>
 #include <GameClasses/PanoramaUiPanel.h>
 

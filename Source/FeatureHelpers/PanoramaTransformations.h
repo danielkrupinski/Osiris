@@ -4,7 +4,7 @@
 #include <cstddef>
 
 #include <CS2/Classes/CUtlVector.h>
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/Transform3D.h>
 
 template <std::size_t N>
 struct PanoramaTransformations {

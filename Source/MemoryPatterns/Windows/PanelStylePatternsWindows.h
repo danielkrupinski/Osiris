@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CPanelStyle.h>
 #include <MemorySearch/BytePatternLiteral.h>
 
 template <typename PatternFinders>

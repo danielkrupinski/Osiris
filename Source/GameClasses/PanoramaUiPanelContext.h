@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/Transform3D.h>
 #include <GameDependencies/PanelStyleDeps.h>
 
 #include "ClientPanel.h"

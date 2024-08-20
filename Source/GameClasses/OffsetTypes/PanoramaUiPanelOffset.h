@@ -2,7 +2,9 @@
 
 #include <cstdint>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CPanelStyle.h>
+#include <CS2/Panorama/CTopLevelWindow.h>
+#include <CS2/Panorama/CUIPanel.h>
 #include <Utils/FieldOffset.h>
 
 template <typename FieldType, typename OffsetType>

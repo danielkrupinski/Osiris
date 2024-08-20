@@ -1,6 +1,7 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
 
 namespace player_info_container_panel_params
 {

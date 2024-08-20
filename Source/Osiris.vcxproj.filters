@@ -157,6 +157,9 @@
     <Filter Include="Features\Hud\PostRoundTimer">
       <UniqueIdentifier>{d23198a3-b135-45ab-b465-650de2aca753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CS2\Panorama">
+      <UniqueIdentifier>{48fe0d05-e9dd-4f7e-af70-ea21d217fc88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -178,9 +181,6 @@
       <Filter>CS2\Classes</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\GlobalVars.h">
-      <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CS2\Classes\Panorama.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\BombSiteIndex.h">
@@ -1258,6 +1258,48 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CImagePanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CLabel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CPanel2D.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CPanelStyle.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CPanoramaSymbol.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CStyleSymbol.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CTopLevelWindow.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUIEngine.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUILength.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUIPanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\PanelHandle.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\StyleEnums.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\StyleProperties.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\Transform3D.h">
+      <Filter>CS2\Panorama</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,8 @@
 
 #include <optional>
 #include <gmock/gmock.h>
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
 
 struct PanelFontParams;
 

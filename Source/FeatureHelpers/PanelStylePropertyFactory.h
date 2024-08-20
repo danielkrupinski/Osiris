@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/StyleProperties.h>
 #include <GameClasses/MemAlloc.h>
 #include <GameClasses/PanelAlignmentParams.h>
 #include <GameClasses/PanelFontParams.h>

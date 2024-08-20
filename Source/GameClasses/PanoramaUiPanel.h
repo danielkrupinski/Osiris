@@ -2,7 +2,6 @@
 
 #include <cstring>
 
-#include <CS2/Classes/Panorama.h>
 #include <GameDependencies/PanoramaUiPanelDeps.h>
 #include <GameClasses/TopLevelWindow.h>
 #include <FeatureHelpers/PanelStylePropertyFactory.h>

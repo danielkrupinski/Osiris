@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUIPanel.h>
 
 template <typename OffsetType>
 struct PanoramaUiPanelMethodInvoker {

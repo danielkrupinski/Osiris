@@ -1,6 +1,7 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CPanoramaSymbol.h>
+#include <CS2/Panorama/CUIPanel.h>
 
 struct PanoramaUiPanelClasses {
     [[nodiscard]] bool hasClass(cs2::CPanoramaSymbol className) const noexcept

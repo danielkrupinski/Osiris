@@ -1,6 +1,5 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
 #include <GameClasses/OffsetTypes/TopLevelWindowOffset.h>
 
 struct TopLevelWindowDeps {

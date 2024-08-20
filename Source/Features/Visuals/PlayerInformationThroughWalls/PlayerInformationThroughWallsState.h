@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/PanelHandle.h>
 #include <FeatureHelpers/HudInWorldPanelIndex.h>
 #include <Utils/DynamicArray.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Color.h>
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUILength.h>
 
 struct PanelShadowParams {
     cs2::CUILength horizontalOffset;

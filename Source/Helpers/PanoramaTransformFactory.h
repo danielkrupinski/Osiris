@@ -3,7 +3,7 @@
 #include <utility>
 #include <type_traits>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/Transform3D.h>
 #include <GameClasses/MemAlloc.h>
 
 struct PanoramaTransformFactory {

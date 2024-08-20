@@ -4,7 +4,7 @@
 #include <utility>
 
 #include <CS2/Classes/CUtlVector.h>
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUIPanel.h>
 
 #include "PanoramaUiPanelIterator.h"
 

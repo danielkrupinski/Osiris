@@ -5,7 +5,6 @@
 #include <CS2/Classes/CViewRender.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
-#include <CS2/Classes/Panorama.h>
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/VMatrix.h>
 #include <MemorySearch/BytePatternLiteral.h>

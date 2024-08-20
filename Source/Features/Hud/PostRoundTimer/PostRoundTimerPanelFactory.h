@@ -1,7 +1,5 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
-#include <GameClasses/PanelFontParams.h>
 #include <Utils/Lvalue.h>
 
 #include "PostRoundTimerPanelParams.h"

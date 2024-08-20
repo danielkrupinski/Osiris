@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUIPanel.h>
 #include <GameClasses/OffsetTypes/PanoramaUiPanelOffset.h>
 #include <Utils/FieldOffset.h>
 

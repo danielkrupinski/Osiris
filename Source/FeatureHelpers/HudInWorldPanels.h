@@ -4,7 +4,7 @@
 #include <limits>
 #include <utility>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUIPanel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 
 #include "HudInWorldPanelIndex.h"

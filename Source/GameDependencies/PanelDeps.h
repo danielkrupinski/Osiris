@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CPanel2D.h>
 
 struct PanelDeps {
     template <typename PanelPatterns>

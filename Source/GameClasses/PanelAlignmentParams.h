@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/StyleEnums.h>
 
 struct PanelAlignmentParams {
     cs2::EHorizontalAlignment horizontalAlignment{cs2::k_EHorizontalAlignmentUnset};

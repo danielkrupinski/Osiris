@@ -2,8 +2,9 @@
 
 #include <cassert>
 
-#include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/CUIPanel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
 

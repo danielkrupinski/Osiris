@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CLabel.h>
 
 struct PanoramaLabelDeps {
     template <typename PanoramaLabelPatterns>

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
 #include <FeatureHelpers/PanelShadowParams.h>
 #include <GameClasses/PanelAlignmentParams.h>
 #include <GameClasses/PanelMarginParams.h>

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CImagePanel.h>
 #include <GameClasses/OffsetTypes/PanoramaImagePanelOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
 

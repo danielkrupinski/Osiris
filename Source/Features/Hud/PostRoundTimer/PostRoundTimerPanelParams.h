@@ -1,6 +1,7 @@
 #pragma once
 
-#include <CS2/Classes/Panorama.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
 #include <GameClasses/PanelFontParams.h>
 
 namespace post_round_timer_panel_params::container_panel_params
