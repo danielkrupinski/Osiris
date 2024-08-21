@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Constants/ColorConstants.h>
 #include <GameClasses/PanoramaImagePanel.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaUiEngine.h>
@@ -9,6 +10,7 @@
 #include "BombSiteIconPanel.h"
 #include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
+#include "BombTimerPanelFactory.h"
 #include "BombTimerState.h"
 #include "BombTimerTextPanel.h"
 
@@ -66,41 +68,15 @@ struct BombTimerContext {
 
     void updatePanelHandles() const noexcept
     {
-        auto&& scoreAndTimeAndBomb = _context.hud().scoreAndTimeAndBomb();
-        if (!scoreAndTimeAndBomb)
-            return;
+        auto&& factory = _context.template make<BombTimerPanelFactory>();
+        auto&& containerPanel = factory.createContainerPanel(_context.hud().scoreAndTimeAndBomb());
+        state().bombTimerContainerPanelHandle = containerPanel.getHandle();
 
-        PanoramaUiEngine::runScript(scoreAndTimeAndBomb,
-            R"(
-(function() {
-  var bombTimerContainer = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile('ScoreAndTimeAndBomb'), 'BombTimerContainer', {
-    style: 'flow-children: right; height: 32px; width: 100%;'
-  });
+        auto&& bombSiteIconPanel = factory.createBombSiteIconPanel(containerPanel);
+        state().bombSiteIconPanelHandle = bombSiteIconPanel.getHandle();
 
-  $.CreatePanel('Image', bombTimerContainer, 'BombSiteIcon', {
-    style: "width: 26px; height: 26px; vertical-align: center; margin-left: 5px;"
-  });
-
-  $.CreatePanel('Label', bombTimerContainer, 'BombTimer', {
-    class: 'additive stratum-bold-tf',
-    style: 'width: fill-parent-flow(1.0); font-size: 22px; color: white; vertical-align: center; text-align: center;'
-  });
-})();
-)"
-, "", 0);
-
-        const auto bombTimerContainer = scoreAndTimeAndBomb.findChildInLayoutFile("BombTimerContainer");
-        if (!bombTimerContainer)
-            return;
-
-        state().bombTimerContainerPanelHandle = bombTimerContainer.getHandle();
-        bombTimerContainer.setVisible(false);
-
-        if (const auto bombSiteIcon = bombTimerContainer.findChildInLayoutFile("BombSiteIcon"))
-            state().bombSiteIconPanelHandle = bombSiteIcon.getHandle();
-
-        if (const auto bombTimer = bombTimerContainer.findChildInLayoutFile("BombTimer"))
-            state().bombTimerPanelHandle = bombTimer.getHandle();
+        auto&& timerTextPanel = factory.createTimerTextPanel(containerPanel);
+        state().bombTimerPanelHandle = timerTextPanel.getHandle();
     }
 
     [[nodiscard]] auto& state() const noexcept

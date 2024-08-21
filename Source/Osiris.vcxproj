@@ -109,6 +109,8 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerContext.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h" />
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelFactory.h" />
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelParams.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerToggle.h" />

@@ -7,7 +7,11 @@ struct CUILength {
     enum EUILengthTypes {
         k_EUILengthUnset,
         k_EUILengthLength,
-        k_EUILengthPercent
+        k_EUILengthPercent,
+        k_EUILengthFitChildren,
+        k_EUILengthFillParentFlow,
+        k_EUILengthHeightPercentage,
+        k_EUILengthWidthPercentage
     };
 
     [[nodiscard]] static constexpr CUILength pixels(float value) noexcept
@@ -18,6 +22,11 @@ struct CUILength {
     [[nodiscard]] static constexpr CUILength percent(float value) noexcept
     {
         return CUILength{value, k_EUILengthPercent};
+    }
+
+    [[nodiscard]] static constexpr CUILength fillParentFlow(float value) noexcept
+    {
+        return CUILength{value, k_EUILengthFillParentFlow};
     }
 
     constexpr bool operator==(const CUILength&) const = default;

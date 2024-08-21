@@ -1301,6 +1301,12 @@
     <ClInclude Include="CS2\Panorama\Transform3D.h">
       <Filter>CS2\Panorama</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelFactory.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelParams.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
