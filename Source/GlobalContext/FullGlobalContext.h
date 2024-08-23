@@ -56,7 +56,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, featuresStates};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -68,7 +68,7 @@ struct FullGlobalContext {
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
     {
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, featuresStates};
 
         features(dependencies).hudFeatures().defusingAlert().run();
         features(dependencies).hudFeatures().killfeedPreserver().run();
@@ -81,6 +81,7 @@ struct FullGlobalContext {
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{dependencies}.handleUnload();
+            InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
             hooks.forceUninstall();
         }
 
@@ -105,4 +106,5 @@ public:
     FeaturesStates featuresStates;
     PanoramaGUI panoramaGUI;
     BombStatusPanelState bombStatusPanelState;
+    InWorldPanelContainerState inWorldPanelContainerState;
 };

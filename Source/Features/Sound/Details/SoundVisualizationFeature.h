@@ -30,13 +30,11 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
     SoundVisualizationFeatureToggle(SoundVisualizationFeatureState& state,
         HookDependencies& hookDependencies,
         SoundWatcher soundWatcher,
-        ViewRenderHook& viewRenderHook,
-        HudInWorldPanelContainer& hudInWorldPanelContainer)
+        ViewRenderHook& viewRenderHook)
         : state{state}
         , hookDependencies{hookDependencies}
         , soundWatcher{soundWatcher}
         , viewRenderHook{viewRenderHook}
-        , hudInWorldPanelContainer{hudInWorldPanelContainer}
     {
     }
 
@@ -55,7 +53,7 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
     {
         viewRenderHook.decrementReferenceCount();
         soundWatcher.stopWatching<SoundType>();
-        if (const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies)}) {
+        if (const auto containerPanel{hookDependencies.make<InWorldPanelContainer>().get()}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
                 state.hideRemainingPanels(hookDependencies, HudInWorldPanels{*containerPanelChildren}, 0);
         }
@@ -66,7 +64,6 @@ private:
     HookDependencies& hookDependencies;
     SoundWatcher soundWatcher;
     ViewRenderHook& viewRenderHook;
-    HudInWorldPanelContainer& hudInWorldPanelContainer;
 };
 
 template <typename PanelsType, typename SoundType>
@@ -76,13 +73,11 @@ public:
         SoundVisualizationFeatureState& state,
         HookDependencies& hookDependencies,
         ViewRenderHook& viewRenderHook,
-        SoundWatcher soundWatcher,
-        HudInWorldPanelContainer& hudInWorldPanelContainer) noexcept
+        SoundWatcher soundWatcher) noexcept
         : state{state}
         , hookDependencies{hookDependencies}
         , viewRenderHook{viewRenderHook}
         , soundWatcher{soundWatcher}
-        , hudInWorldPanelContainer{hudInWorldPanelContainer}
     {
     }
 
@@ -99,7 +94,7 @@ public:
         if (!curtime)
             return;
 
-        const auto containerPanel{hudInWorldPanelContainer.get(hookDependencies.hud(), hookDependencies)};
+        const auto containerPanel{hookDependencies.make<InWorldPanelContainer>().get()};
         if (!containerPanel)
             return;
 
@@ -164,5 +159,4 @@ private:
     HookDependencies& hookDependencies;
     ViewRenderHook& viewRenderHook;
     SoundWatcher soundWatcher;
-    HudInWorldPanelContainer& hudInWorldPanelContainer;
 };

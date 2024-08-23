@@ -143,10 +143,9 @@ using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
 struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformationThroughWallsToggle> {
-    PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HookDependencies& dependencies, HudInWorldPanelContainer& hudInWorldPanelContainer, ViewRenderHook& viewRenderHook) noexcept
+    PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HookDependencies& dependencies, ViewRenderHook& viewRenderHook) noexcept
         : state{state}
         , dependencies{dependencies}
-        , hudInWorldPanelContainer{hudInWorldPanelContainer}
         , viewRenderHook{viewRenderHook}
     {
     }
@@ -174,7 +173,7 @@ struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformatio
     {
         viewRenderHook.decrementReferenceCount();
 
-        if (const auto containerPanel{hudInWorldPanelContainer.get(dependencies.hud(), dependencies)}) {
+        if (const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
                 hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
         }
@@ -192,7 +191,6 @@ private:
 
     PlayerInformationThroughWallsState& state;
     HookDependencies& dependencies;
-    HudInWorldPanelContainer& hudInWorldPanelContainer;
     ViewRenderHook& viewRenderHook;
 };
 
@@ -240,7 +238,7 @@ public:
         if (!positionInClipSpace.onScreen())
             return;
 
-        const auto containerPanel{dependencies.getFeatureHelpers().hudInWorldPanelContainer.get(dependencies.hud(), dependencies)};
+        const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()};
         if (!containerPanel)
             return;
 
@@ -290,7 +288,7 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        const auto containerPanel{dependencies.getFeatureHelpers().hudInWorldPanelContainer.get(dependencies.hud(), dependencies)};
+        const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()};
         if (!containerPanel)
             return;
 

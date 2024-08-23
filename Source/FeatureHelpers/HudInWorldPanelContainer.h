@@ -1,43 +1,57 @@
 #pragma once
 
 #include <GameClasses/Hud/Hud.h>
+#include <GameClasses/PanelHandle.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include <Helpers/PanoramaPanelPointer.h>
 
-class HudInWorldPanelContainer {
-public:
-    HudInWorldPanelContainer() = default;
-    HudInWorldPanelContainer(const HudInWorldPanelContainer&) = delete;
-    HudInWorldPanelContainer(HudInWorldPanelContainer&&) = delete;
-    HudInWorldPanelContainer& operator=(const HudInWorldPanelContainer&) = delete;
-    HudInWorldPanelContainer& operator=(HudInWorldPanelContainer&&) = delete;
+struct InWorldPanelContainerState {
+    cs2::PanelHandle containerPanelHandle;
+};
 
-    ~HudInWorldPanelContainer() noexcept
+template <typename HookContext>
+struct InWorldPanelContainerUnloadHandler {
+    explicit InWorldPanelContainerUnloadHandler(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
-        if (containerPanel.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(containerPanel.getHandle());
     }
 
-    template <typename Dependencies>
-    [[nodiscard]] auto get(Hud<Dependencies> hud, auto& hookContext) noexcept
+    void handleUnload() const noexcept
     {
-        if (const auto container = containerPanel.get())
-            return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, container}};
-        return createPanel(hud, hookContext);
+        hookContext.panels().deletePanelByHandle(hookContext.inWorldPanelContainerState().containerPanelHandle);
     }
 
 private:
-    template <typename Dependencies>
-    [[nodiscard]] auto createPanel(Hud<Dependencies> hud, auto& hookContext) noexcept
+    HookContext& hookContext;
+};
+
+template <typename HookContext>
+class InWorldPanelContainer {
+public:
+    explicit InWorldPanelContainer(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
-        if (const auto hudReticle = hud.getHudReticle()) {
-            auto&& panel = hookContext.panelFactory().createPanel(hudReticle).uiPanel();
-            panel.fitParent();
-            containerPanel.handle = panel.getHandle();
-            return panel;
-        }
-        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
     }
 
-    PanoramaPanelPointer containerPanel;
+    [[nodiscard]] auto get() noexcept
+    {
+        return handle().getOrInit(createContainerPanel());
+    }
+
+private:
+    [[nodiscard]] decltype(auto) handle() const noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.inWorldPanelContainerState().containerPanelHandle);
+    }
+
+    [[nodiscard]] auto createContainerPanel() const noexcept
+    {
+        return [this] {
+            auto&& panel = hookContext.panelFactory().createPanel(hookContext.hud().getHudReticle()).uiPanel();
+            panel.fitParent();
+            return panel;
+        };
+    }
+
+    HookContext& hookContext;
 };

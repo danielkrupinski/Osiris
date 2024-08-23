@@ -9,6 +9,5 @@
 #include "WorldToClipSpaceConverter.h"
 
 struct FeatureHelpers {
-    HudInWorldPanelContainer hudInWorldPanelContainer;
     SoundWatcherState soundWatcherState;
 };

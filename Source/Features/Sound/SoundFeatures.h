@@ -94,7 +94,6 @@ private:
             hookDependencies,
             viewRenderHook,
             SoundWatcher{helpers.soundWatcherState, hookDependencies},
-            helpers.hudInWorldPanelContainer
         };
     }
 
@@ -106,7 +105,6 @@ private:
             hookDependencies,
             SoundWatcher{helpers.soundWatcherState, hookDependencies},
             viewRenderHook,
-            helpers.hudInWorldPanelContainer
         };
     }
 };
