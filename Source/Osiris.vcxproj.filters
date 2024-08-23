@@ -1307,6 +1307,12 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelParams.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Panorama\PanoramaGuiState.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

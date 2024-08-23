@@ -7,8 +7,14 @@
 
 #include "PanoramaCommandDispatcher.h"
 
+template <typename HookContext>
 class PanoramaGUI {
 public:
+    explicit PanoramaGUI(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
+    {
+    }
+
     void init(auto&& mainMenu) noexcept
     {
         if (!mainMenu)
@@ -20,7 +26,7 @@ public:
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");
         if (settings)
-            settingsPanelPtr.handle = settings.getHandle();
+            state().settingsPanelHandle = settings.getHandle();
 
         PanoramaUiEngine::runScript(settings, reinterpret_cast<const char*>(
 #include "CreateGUI.js"
@@ -46,27 +52,15 @@ public:
 )", "", 0);
 
         if (const auto guiButtonPanel = mainMenu.findChildInLayoutFile("OsirisOpenMenuButton"))
-            guiButtonPointer.handle = guiButtonPanel.getHandle();
+            state().guiButtonHandle = guiButtonPanel.getHandle();
 
         if (const auto guiPanel = mainMenu.findChildInLayoutFile("OsirisMenuTab"))
-            guiPanelPointer.handle = guiPanel.getHandle();
+            state().guiPanelHandle = guiPanel.getHandle();
     }
 
-    ~PanoramaGUI() noexcept
+    void run(Features features, UnloadFlag& unloadFlag) const noexcept
     {
-        if (guiButtonPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(guiButtonPointer.getHandle());
-
-        if (guiPanelPointer.getHandle().isValid())
-            PanoramaUiEngine::onDeletePanel(guiPanelPointer.getHandle());
-
-        if (const auto settingsPanel = settingsPanelPtr.get())
-            PanoramaUiEngine::runScript(settingsPanel, "delete $.Osiris", "", 0);
-    }
-
-    void run(HookDependencies& hookDependencies, Features features, UnloadFlag& unloadFlag) const noexcept
-    {
-        const auto guiPanel = PanoramaUiPanel{PanoramaUiPanelContext{hookDependencies, guiPanelPointer.get()}};
+        auto&& guiPanel = hookContext.panels().getPanelFromHandle(state().guiPanelHandle);
         if (!guiPanel)
             return;
 
@@ -77,7 +71,10 @@ public:
     }
 
 private:
-    PanoramaPanelPointer guiPanelPointer;
-    PanoramaPanelPointer guiButtonPointer;
-    PanoramaPanelPointer settingsPanelPtr;
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.panoramaGuiState();
+    }
+
+    HookContext& hookContext;
 };

@@ -16,13 +16,15 @@
 
 struct BombStatusPanelState;
 struct FeaturesStates;
+struct PanoramaGuiState;
 
 struct HookDependencies {
-    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, FeaturesStates& featuresStates) noexcept
+    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates) noexcept
         : _gameDependencies{gameDependencies}
         , featureHelpers{featureHelpers}
         , _bombStatusPanelState{bombStatusPanelState}
         , _inWorldPanelContainerState{inWorldPanelContainerState}
+        , _panoramaGuiState{panoramaGuiState}
         , _featuresStates{featuresStates}
     {
         if (gameDependencies.worldToProjectionMatrix)
@@ -81,6 +83,11 @@ struct HookDependencies {
     [[nodiscard]] InWorldPanelContainerState& inWorldPanelContainerState() const noexcept
     {
         return _inWorldPanelContainerState;
+    }
+
+    [[nodiscard]] PanoramaGuiState& panoramaGuiState() const noexcept
+    {
+        return _panoramaGuiState;
     }
 
     [[nodiscard]] FeaturesStates& featuresStates() const noexcept
@@ -195,6 +202,7 @@ private:
     FeatureHelpers& featureHelpers;
     BombStatusPanelState& _bombStatusPanelState;
     InWorldPanelContainerState& _inWorldPanelContainerState;
+    PanoramaGuiState& _panoramaGuiState;
     FeaturesStates& _featuresStates;
 
     const cs2::CConcreteEntityList* entityList;

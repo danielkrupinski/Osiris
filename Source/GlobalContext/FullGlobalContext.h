@@ -19,6 +19,8 @@
 #include <Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
 #include <UI/Panorama/PanoramaGUI.h>
+#include <UI/Panorama/PanoramaGuiState.h>
+#include <UI/Panorama/PanoramaGuiUnloadHandler.h>
 #include <Platform/DynamicLibrary.h>
 #include <Platform/VmtFinder.h>
 #include <Vmt/VmtLengthCalculator.h>
@@ -56,7 +58,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -66,22 +68,28 @@ struct FullGlobalContext {
         playerInformationThroughWalls.hideUnusedPanels();
     }
 
-    [[nodiscard]] PeepEventsHookResult onPeepEventsHook() noexcept
+    [[nodiscard]] PeepEventsHookResult onPeepEventsHook(bool fullContextJustInitialized) noexcept
     {
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates};
+
+        if (fullContextJustInitialized) {
+            if (const auto mainMenu{_gameDependencies.mainMenu}; mainMenu && *mainMenu)
+                dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
+        }
 
         features(dependencies).hudFeatures().defusingAlert().run();
         features(dependencies).hudFeatures().killfeedPreserver().run();
         BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
 
         UnloadFlag unloadFlag;
-        panoramaGUI.run(dependencies, features(dependencies), unloadFlag);
+        dependencies.make<PanoramaGUI>().run(features(dependencies), unloadFlag);
         hooks.update();
 
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{dependencies}.handleUnload();
             InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
+            PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             hooks.forceUninstall();
         }
 
@@ -104,7 +112,7 @@ private:
     FeatureHelpers featureHelpers;
 public:
     FeaturesStates featuresStates;
-    PanoramaGUI panoramaGUI;
+    PanoramaGuiState panoramaGuiState;
     BombStatusPanelState bombStatusPanelState;
     InWorldPanelContainerState inWorldPanelContainerState;
 };

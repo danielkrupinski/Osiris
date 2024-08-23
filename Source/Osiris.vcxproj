@@ -362,6 +362,8 @@
     <ClInclude Include="SDL\SdlFunctions.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
+    <ClInclude Include="UI\Panorama\PanoramaGuiState.h" />
+    <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h" />
     <ClInclude Include="UI\Panorama\SetCommandHandler.h" />
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\BitFlags.h" />

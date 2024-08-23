@@ -54,15 +54,14 @@ public:
 
     [[nodiscard]] PeepEventsHookResult peepEventsHook() noexcept
     {
-        initializeCompleteContextFromGameThread();
-        return fullContext().onPeepEventsHook();
+        return fullContext().onPeepEventsHook(initializeCompleteContextFromGameThread());
     }
 
 private:
-    void initializeCompleteContextFromGameThread() noexcept
+    bool initializeCompleteContextFromGameThread() noexcept
     {
         if (deferredCompleteContext.isComplete())
-            return;
+            return false;
 
         const auto partialContext = deferredCompleteContext.partial();
 
@@ -73,9 +72,7 @@ private:
             MemoryPatterns{partialContext.patternFinders}
         );
 
-        HookDependencies hookDependencies{fullContext().gameDependencies(), fullContext().getFeatureHelpers(), fullContext().bombStatusPanelState, fullContext().inWorldPanelContainerState, fullContext().featuresStates};
-        if (const auto mainMenu{fullContext().gameDependencies().mainMenu}; mainMenu && *mainMenu)
-            fullContext().panoramaGUI.init(PanoramaUiPanel{PanoramaUiPanelContext{hookDependencies, (*mainMenu)->uiPanel}});
+        return true;
     }
 
     FreeMemoryRegionList _freeRegionList;
