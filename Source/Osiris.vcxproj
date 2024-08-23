@@ -259,7 +259,6 @@
     <ClInclude Include="GlobalContext\PartialGlobalContext.h" />
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h" />
     <ClInclude Include="Helpers\Bits.h" />
-    <ClInclude Include="Helpers\PanoramaPanelPointer.h" />
     <ClInclude Include="Helpers\PanoramaTransformFactory.h" />
     <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
     <ClInclude Include="Helpers\UnloadFlag.h" />

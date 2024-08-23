@@ -3,7 +3,6 @@
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/PanelHandle.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <Helpers/PanoramaPanelPointer.h>
 
 struct InWorldPanelContainerState {
     cs2::PanelHandle containerPanelHandle;

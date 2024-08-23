@@ -231,9 +231,6 @@
     <ClInclude Include="Helpers\Bits.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\PanoramaPanelPointer.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Helpers\PatternNotFoundLogger.h">
       <Filter>Helpers</Filter>
     </ClInclude>
