@@ -54,7 +54,8 @@ public:
 
     [[nodiscard]] PeepEventsHookResult peepEventsHook() noexcept
     {
-        return fullContext().onPeepEventsHook(initializeCompleteContextFromGameThread());
+        const auto justInitialized = initializeCompleteContextFromGameThread();
+        return fullContext().onPeepEventsHook(justInitialized);
     }
 
 private:
