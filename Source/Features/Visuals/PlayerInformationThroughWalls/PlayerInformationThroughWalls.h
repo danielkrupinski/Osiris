@@ -12,6 +12,7 @@
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaImagePanel.h>
+#include <GameClasses/PlayerPawn.h>
 #include <Hooks/ViewRenderHook.h>
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
@@ -210,31 +211,19 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        const auto teamNumber = getTeamNumber(playerPawn);
-        if (teamNumber != TeamNumber::TT && teamNumber != TeamNumber::CT)
+        PlayerPawn pawn{dependencies, &playerPawn};
+        if (!shouldDrawOnPawn(pawn))
             return;
 
-        if (state.showOnlyEnemies && !isEnemyTeam(teamNumber))
+        const auto playerController = pawn.playerController();
+        if (!playerController)
             return;
 
-        if (!isAlive(playerPawn))
+        const auto absOrigin = pawn.absOrigin();
+        if (!absOrigin)
             return;
 
-        const auto playerController = getPlayerController(playerPawn);
-        if (!playerController || isLocalPlayerController(playerController))
-            return;
-
-        const auto health = dependencies.gameDependencies().entityDeps.offsetToHealth.of(&playerPawn);
-        if (!health.get() || *health.get() <= 0)
-            return;
-
-        const auto gameSceneNode = *dependencies.gameDependencies().entityDeps.offsetToGameSceneNode.of(&playerPawn).get();
-        if (!gameSceneNode)
-            return;
-
-        const auto absOrigin = *dependencies.gameDependencies().gameSceneNodeDeps.offsetToAbsOrigin.of(gameSceneNode).get();
-
-        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin);
+        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(*absOrigin);
         if (!positionInClipSpace.onScreen())
             return;
 
@@ -261,13 +250,13 @@ public:
         if (!playerInformationPanel.isValid())
             return;
 
-        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, *playerController, teamNumber);
-        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, *health.get());
-        setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, playerPawn);
-        setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, playerPawn);
-        setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, playerPawn);
+        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, *playerController, pawn.teamNumber());
+        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, pawn.health().value_or(0));
+        setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, pawn);
+        setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, pawn);
+        setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, pawn);
 
-        panel.setOpacity(hasImmunity(playerPawn) ? 0.5f : 1.0f);
+        panel.setOpacity(pawn.hasImmunity().value_or(false) ? 0.5f : 1.0f);
         panel.setZIndex(-positionInClipSpace.z);
 
         const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
@@ -306,51 +295,13 @@ public:
     }
 
 private:
-    [[nodiscard]] cs2::CCSPlayerController* getPlayerController(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    [[nodiscard]] bool shouldDrawOnPawn(auto&& playerPawn) noexcept
     {
-        if (!dependencies.gameDependencies().playerPawnDeps.offsetToPlayerController)
-            return nullptr;
-
-        if (!dependencies.requestDependency<EntityFromHandleFinder>())
-            return nullptr;
-
-        return static_cast<cs2::CCSPlayerController*>(dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(*dependencies.gameDependencies().playerPawnDeps.offsetToPlayerController.of(&playerPawn).get()));
-    }
-
-    [[nodiscard]] bool isLocalPlayerController(cs2::CCSPlayerController* playerController) const noexcept
-    {
-        return dependencies.localPlayerController() == playerController;
-    }
-
-    [[nodiscard]] bool isAlive(cs2::C_BaseEntity& entity) const noexcept
-    {
-        if (!dependencies.gameDependencies().entityDeps.offsetToLifeState)
-            return true;
-        return LifeState{*dependencies.gameDependencies().entityDeps.offsetToLifeState.of(&entity).get()} == LifeState::Alive;
-    }
-
-    [[nodiscard]] bool isEnemyTeam(TeamNumber team) const noexcept
-    {
-        return team != getLocalPlayerTeam() || teammatesAreEnemies();
-    }
-
-    [[nodiscard]] bool teammatesAreEnemies() const noexcept
-    {
-        auto conVarAccessor = dependencies.getConVarAccessor();
-        if (!conVarAccessor.requestConVar<cs2::mp_teammates_are_enemies>())
-            return true;
-        return conVarAccessor.getConVarValue<cs2::mp_teammates_are_enemies>();
-    }
-
-    [[nodiscard]] TeamNumber getLocalPlayerTeam() const noexcept
-    {
-        if (!dependencies.gameDependencies().entityDeps.offsetToTeamNumber)
-            return {};
-
-        if (!dependencies.localPlayerController())
-            return {};
-
-        return TeamNumber{*dependencies.gameDependencies().entityDeps.offsetToTeamNumber.of(dependencies.localPlayerController()).get()};
+        return playerPawn.isAlive().value_or(true)
+            && !(playerPawn.health() <= 0)
+            && !playerPawn.isControlledByLocalPlayer()
+            && playerPawn.isTTorCT()
+            && (!state.showOnlyEnemies || playerPawn.isEnemy().value_or(true));
     }
 
     [[nodiscard]] PlayerColorCalculator<PlayerColorIndexAccessor> getPlayerColorCalculator(cs2::CCSPlayerController& playerController) const noexcept
@@ -374,34 +325,22 @@ private:
         arrowPanel.setWashColor(getPlayerPositionArrowColorCalculator(playerController, teamNumber).getArrowColor(state.playerPositionArrowColor));
     }
 
-    [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    [[nodiscard]] cs2::C_CSWeaponBase::m_iClip1 getActiveWeaponClip(auto&& playerPawn) const noexcept
     {
-        if (!dependencies.requestDependency<EntityFromHandleFinder>())
-            return nullptr;
-
-        const auto weaponServices = dependencies.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(&playerPawn).valueOr(nullptr);
-        if (!weaponServices)
-            return nullptr;
-
-        return static_cast<cs2::C_CSWeaponBase*>(dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(dependencies.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
-    }
-
-    [[nodiscard]] cs2::C_CSWeaponBase::m_iClip1 getActiveWeaponClip(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        const auto activeWeapon = getActiveWeapon(playerPawn);
+        const auto activeWeapon = playerPawn.getActiveWeapon();
         if (!activeWeapon)
             return -1;
 
         return dependencies.gameDependencies().weaponDeps.offsetToClipAmmo.of(activeWeapon).valueOr(-1);
     }
 
-    [[nodiscard]] const char* getActiveWeaponName(cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    [[nodiscard]] const char* getActiveWeaponName(auto&& playerPawn) const noexcept
     {
         if (!dependencies.gameDependencies().entityDeps.offsetToVData
          || !dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName)
             return nullptr;
 
-        const auto activeWeapon = getActiveWeapon(playerPawn);
+        const auto activeWeapon = playerPawn.getActiveWeapon();
         if (!activeWeapon)
             return nullptr;
 
@@ -445,7 +384,7 @@ private:
         return getColorOfHealthFraction(std::clamp(health, 0, 100) / 100.0f);
     }
 
-    void setPlayerStateIcons(auto&& playerStateIconsPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    void setPlayerStateIcons(auto&& playerStateIconsPanel, auto&& playerPawn) const noexcept
     {
         if (!state.playerStateIconsToShow) {
             playerStateIconsPanel.setVisible(false);
@@ -455,20 +394,20 @@ private:
         playerStateIconsPanel.setVisible(true);
         
         auto&& playerStateChildren = playerStateIconsPanel.children();
-        playerStateChildren[0].setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && isDefusing(playerPawn));
-        playerStateChildren[1].setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && isPickingUpHostage(playerPawn));
-        playerStateChildren[2].setVisible(state.playerStateIconsToShow.has<HostageRescuePanel>() && isRescuingHostage(playerPawn));
+        playerStateChildren[0].setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && playerPawn.isDefusing().value_or(false));
+        playerStateChildren[1].setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().value_or(false));
+        playerStateChildren[2].setVisible(state.playerStateIconsToShow.has<HostageRescuePanel>() && playerPawn.isRescuingHostage());
         updateBlindedIconPanel(playerStateChildren[3], playerPawn);
     }
 
-    void updateBlindedIconPanel(auto&& blindedIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    void updateBlindedIconPanel(auto&& blindedIconPanel,auto&& playerPawn) const noexcept
     {
         if (!state.playerStateIconsToShow.has<BlindedIconPanel>()) {
             blindedIconPanel.setVisible(false);
             return;
         }
 
-        const auto remainingFlashBangTime = getRemainingFlashBangTime(playerPawn);
+        const auto remainingFlashBangTime = playerPawn.getRemainingFlashBangTime();
         constexpr auto kFullBlindEnd{3.0f};
         constexpr auto kBlindEnd{1.0f};
         constexpr auto kPartiallyBlindDuration{kFullBlindEnd - kBlindEnd};
@@ -482,43 +421,7 @@ private:
         blindedIconPanel.setOpacity(opacity);
     }
 
-    [[nodiscard]] float getRemainingFlashBangTime(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        if (!dependencies.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime)
-            return 0.0f;
-
-        const auto curTime = dependencies.globalVars().curtime();
-        if (!curTime)
-            return 0.0f;
-        const auto flashBangEndTime = *dependencies.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime.of(&playerPawn).get();
-        if (flashBangEndTime <= *curTime)
-            return 0.0f;
-        return flashBangEndTime - *curTime;
-    }
-
-    [[nodiscard]] bool isRescuingHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        const auto hostageServices = dependencies.gameDependencies().playerPawnDeps.offsetToHostageServices.of(&playerPawn).valueOr(nullptr);
-        if (!hostageServices)
-            return false;
-
-        if (!dependencies.requestDependency<EntityFromHandleFinder>())
-            return false;
-
-        return dependencies.getDependency<EntityFromHandleFinder>().getEntityFromHandle(dependencies.gameDependencies().hostageServicesDeps.offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
-    }
-
-    [[nodiscard]] bool isPickingUpHostage(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        return dependencies.gameDependencies().playerPawnDeps.offsetToIsPickingUpHostage.of(&playerPawn).valueOr(false);
-    }
-
-    [[nodiscard]] bool isDefusing(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        return dependencies.gameDependencies().playerPawnDeps.offsetToIsDefusing.of(&playerPawn).valueOr(false);
-    }
-
-    void setActiveWeaponAmmo(auto&& weaponAmmoPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    void setActiveWeaponAmmo(auto&& weaponAmmoPanel, auto&& playerPawn) const noexcept
     {
         if (!state.showPlayerActiveWeaponAmmo) {
             weaponAmmoPanel.setVisible(false);
@@ -541,7 +444,7 @@ private:
         PanoramaLabel{dependencies, ammoText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(ammo).cstring(), 0, true);
     }
 
-    void setActiveWeapon(auto&& weaponIconPanel, cs2::C_CSPlayerPawn& playerPawn) const noexcept
+    void setActiveWeapon(auto&& weaponIconPanel, auto&& playerPawn) const noexcept
     {
         if (!state.showPlayerActiveWeapon) {
             weaponIconPanel.setVisible(false);
@@ -578,11 +481,6 @@ private:
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
         return dependencies.requestDependencies(kCrucialDependencies);
-    }
-
-    [[nodiscard]] bool hasImmunity(cs2::C_CSPlayerPawn& playerPawn) const noexcept
-    {
-        return dependencies.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(&playerPawn).valueOr(false);
     }
 
     [[nodiscard]] float getFovScale() const noexcept

@@ -221,6 +221,7 @@
     <ClInclude Include="GameClasses\PanoramaUiPanelIterator.h" />
     <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
+    <ClInclude Include="GameClasses\PlayerPawn.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDependencies\ConVarDeps.h" />
     <ClInclude Include="GameDependencies\ConVars.h" />

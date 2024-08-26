@@ -1310,6 +1310,9 @@
     <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\PlayerPawn.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
