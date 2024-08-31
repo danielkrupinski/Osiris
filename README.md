@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 31 August 2024
+    * Added player outline glow feature
+
+    ![Player outline glow](https://github.com/user-attachments/assets/667d1f58-bc3b-490b-b2d0-c0b9acd517b0)
+
 * 17 August 2024 - new HUD feature: "Post-round timer"
 
 ![Post-round timer](https://github.com/user-attachments/assets/3ec7261b-e119-4972-b9bf-f85ac5646110)
