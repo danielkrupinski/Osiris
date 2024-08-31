@@ -16,7 +16,8 @@ struct PartialGlobalContext {
             PatternFinder<PatternNotFoundLogger>{DynamicLibrary{cs2::SOUNDSYSTEM_DLL}.getCodeSection().raw()},
             PatternFinder<PatternNotFoundLogger>{DynamicLibrary{cs2::FILESYSTEM_DLL}.getCodeSection().raw()},
             PatternFinder<PatternNotFoundLogger>{panoramaDLL.getCodeSection().raw()},
-            PatternFinder<PatternNotFoundLogger>{sdlDLL.getCodeSection().raw()}}
+            PatternFinder<PatternNotFoundLogger>{sdlDLL.getCodeSection().raw()},
+            PatternFinder<PatternNotFoundLogger>{DynamicLibrary{cs2::SCENESYSTEM_DLL}.getCodeSection().raw()}}
         , clientDLL{clientDLL}
         , panoramaDLL{panoramaDLL}
         , peepEventsHook{MemoryPatterns{patternFinders}.sdlPatterns().peepEventsPointer(sdlDLL.peepEvents())}

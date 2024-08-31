@@ -25,6 +25,9 @@
     <ClInclude Include="CS2\Classes\ConVar.h" />
     <ClInclude Include="CS2\Classes\ConVarTypes.h" />
     <ClInclude Include="CS2\Classes\CPlantedC4.h" />
+    <ClInclude Include="CS2\Classes\CRenderComponent.h" />
+    <ClInclude Include="CS2\Classes\CSceneObject.h" />
+    <ClInclude Include="CS2\Classes\CSceneSystem.h" />
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h" />
     <ClInclude Include="CS2\Classes\CUtlLinkedList.h" />
     <ClInclude Include="CS2\Classes\CUtlMap.h" />
@@ -44,7 +47,9 @@
     <ClInclude Include="CS2\Classes\EntitySystem\CGameEntitySystem.h" />
     <ClInclude Include="CS2\Classes\FileSystem.h" />
     <ClInclude Include="CS2\Classes\GlobalVars.h" />
+    <ClInclude Include="CS2\Classes\Glow.h" />
     <ClInclude Include="CS2\Classes\IMemAlloc.h" />
+    <ClInclude Include="CS2\Classes\SceneObjectUpdaterHandle_t.h" />
     <ClInclude Include="CS2\Classes\Sound.h" />
     <ClInclude Include="CS2\Classes\Vector.h" />
     <ClInclude Include="CS2\Classes\VMatrix.h" />
@@ -172,6 +177,11 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\TeamColorCalculator.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlow.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowCondition.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowState.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowToggle.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowUnloadHandler.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
@@ -222,6 +232,8 @@
     <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameClasses\PlayerPawn.h" />
+    <ClInclude Include="GameClasses\RenderComponent.h" />
+    <ClInclude Include="GameClasses\SceneSystem.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDependencies\ConVarDeps.h" />
     <ClInclude Include="GameDependencies\ConVars.h" />
@@ -249,6 +261,7 @@
     <ClInclude Include="GameDependencies\PlantedC4Deps.h" />
     <ClInclude Include="GameDependencies\PlayerControllerDeps.h" />
     <ClInclude Include="GameDependencies\PlayerPawnDeps.h" />
+    <ClInclude Include="GameDependencies\RenderComponentDeps.h" />
     <ClInclude Include="GameDependencies\TopLevelWindowDeps.h" />
     <ClInclude Include="GameDependencies\WeaponDeps.h" />
     <ClInclude Include="GameDependencies\WeaponServicesDeps.h" />
@@ -304,6 +317,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PlantedC4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
@@ -322,6 +336,10 @@
     <ClInclude Include="MemorySearch\PatternSearchResult.h" />
     <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
     <ClInclude Include="MemorySearch\BytePatternView.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObject.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObjects.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />

@@ -2,6 +2,7 @@
 
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
+#include "PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
 #include "VisualFeaturesStates.h"
 
 class LoopModeGameHook;
@@ -60,6 +61,11 @@ struct VisualFeatures {
     [[nodiscard]] BlindedIconToggle blindedIconToggle() const noexcept
     {
         return BlindedIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+    }
+
+    [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept
+    {
+        return hookDependencies.make<PlayerOutlineGlowToggle>();
     }
 
     HookDependencies& hookDependencies;

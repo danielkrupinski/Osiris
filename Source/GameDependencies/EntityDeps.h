@@ -10,6 +10,7 @@ struct EntityDeps {
         , offsetToLifeState{entityPatterns.offsetToLifeState()}
         , offsetToTeamNumber{entityPatterns.offsetToTeamNumber()}
         , offsetToVData{entityPatterns.offsetToVData()}
+        , offsetToRenderComponent{entityPatterns.offsetToRenderComponent()}
     {
     }
 
@@ -18,4 +19,5 @@ struct EntityDeps {
     OffsetToLifeState offsetToLifeState;
     OffsetToTeamNumber offsetToTeamNumber;
     OffsetToVData offsetToVData;
+    OffsetToRenderComponent offsetToRenderComponent;
 };

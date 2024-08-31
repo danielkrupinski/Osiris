@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/CEntityInstance.h>
 #include <Features/Visuals/PlayerInformationThroughWalls/PlayerInformationThroughWalls.h>
+#include <Features/Visuals/PlayerOutlineGlow/PlayerOutlineGlow.h>
 
 #include "EntityFromHandleFinder.h"
 
@@ -34,6 +35,7 @@ private:
         if (dependencies.gameDependencies().entitiesVMTs.isPlayerPawn(entity.vmt)) {
             auto& playerPawn = static_cast<cs2::C_CSPlayerPawn&>(entity);
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
+            dependencies.make<PlayerOutlineGlow>().applyGlowToPlayer(dependencies.make<PlayerPawn>(&playerPawn));
         }
     }
 

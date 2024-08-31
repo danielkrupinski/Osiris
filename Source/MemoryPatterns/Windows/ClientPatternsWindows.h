@@ -7,6 +7,7 @@
 #include <CS2/Classes/C_CSGameRules.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/GlobalVars.h>
+#include <CS2/Classes/Glow.h>
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/VMatrix.h>
 #include <MemorySearch/BytePatternLiteral.h>
@@ -74,5 +75,10 @@ struct ClientPatterns {
     [[nodiscard]] cs2::CCSPlayerController** localPlayerController() const noexcept
     {
         return patternFinders.clientPatternFinder("48 63 C1 48 8D 0D ? ? ? ? 48 8B 0C"_pat).add(6).abs().template as<cs2::CCSPlayerController**>();
+    }
+
+    [[nodiscard]] cs2::ManageGlowSceneObject* manageGlowSceneObject() const noexcept
+    {
+        return patternFinders.clientPatternFinder("C8 E8 ? ? ? ? 49 83 C7"_pat).add(2).abs().template as<cs2::ManageGlowSceneObject*>();
     }
 };
