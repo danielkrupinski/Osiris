@@ -5,7 +5,9 @@
 
 namespace cs2
 {
-    struct CRenderComponent {
-        using sceneObjectUpdaters = cs2::CUtlVector<SceneObjectUpdaterHandle_t*>;
-    };
+
+struct CRenderComponent {
+    using sceneObjectUpdaters = cs2::CUtlVector<SceneObjectUpdaterHandle_t*>;
+};
+
 }

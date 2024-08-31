@@ -1373,6 +1373,48 @@
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowUnloadHandler.h">
       <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowContext.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\BaseEntity.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\SceneObjectUpdaterOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneObjectUpdater.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneObjectUpdaters.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SceneSystemDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

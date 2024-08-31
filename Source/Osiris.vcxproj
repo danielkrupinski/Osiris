@@ -179,14 +179,19 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowCondition.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowState.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowUnloadHandler.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
+    <ClInclude Include="GameClasses\BaseEntity.h" />
     <ClInclude Include="GameClasses\ClientPanel.h" />
     <ClInclude Include="GameClasses\Hud\HudContext.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\SceneObjectUpdaterOffset.h" />
     <ClInclude Include="GameClasses\PlayerController.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
@@ -233,6 +238,8 @@
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameClasses\PlayerPawn.h" />
     <ClInclude Include="GameClasses\RenderComponent.h" />
+    <ClInclude Include="GameClasses\SceneObjectUpdater.h" />
+    <ClInclude Include="GameClasses\SceneObjectUpdaters.h" />
     <ClInclude Include="GameClasses\SceneSystem.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDependencies\ConVarDeps.h" />
@@ -249,6 +256,7 @@
     <ClInclude Include="GameDependencies\GameRulesDeps.h" />
     <ClInclude Include="GameDependencies\GameSceneNodeDeps.h" />
     <ClInclude Include="GameDependencies\GlobalVarsDeps.h" />
+    <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h" />
     <ClInclude Include="GameDependencies\HostageServicesDeps.h" />
     <ClInclude Include="GameDependencies\HudDeps.h" />
     <ClInclude Include="GameDependencies\MemAllocDeps.h" />
@@ -262,6 +270,8 @@
     <ClInclude Include="GameDependencies\PlayerControllerDeps.h" />
     <ClInclude Include="GameDependencies\PlayerPawnDeps.h" />
     <ClInclude Include="GameDependencies\RenderComponentDeps.h" />
+    <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h" />
+    <ClInclude Include="GameDependencies\SceneSystemDeps.h" />
     <ClInclude Include="GameDependencies\TopLevelWindowDeps.h" />
     <ClInclude Include="GameDependencies\WeaponDeps.h" />
     <ClInclude Include="GameDependencies\WeaponServicesDeps.h" />
@@ -306,6 +316,7 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
@@ -318,6 +329,8 @@
     <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
@@ -337,6 +350,7 @@
     <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
     <ClInclude Include="MemorySearch\BytePatternView.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObject.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjects.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h" />
