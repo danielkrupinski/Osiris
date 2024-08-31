@@ -33,6 +33,11 @@ struct Color {
         return rgba[3];
     }
 
+    [[nodiscard]] auto setAlpha(std::uint8_t newAlpha) const noexcept
+    {
+        return Color{r(), g(), b(), newAlpha};
+    }
+
 private:
     std::uint8_t rgba[4];
 };

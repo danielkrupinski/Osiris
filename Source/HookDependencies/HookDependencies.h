@@ -17,15 +17,19 @@
 struct BombStatusPanelState;
 struct FeaturesStates;
 struct PanoramaGuiState;
+struct GlowSceneObjectsState;
+struct Hooks;
 
 struct HookDependencies {
-    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates) noexcept
+    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates, GlowSceneObjectsState& glowSceneObjectsState, Hooks& hooks) noexcept
         : _gameDependencies{gameDependencies}
         , featureHelpers{featureHelpers}
         , _bombStatusPanelState{bombStatusPanelState}
         , _inWorldPanelContainerState{inWorldPanelContainerState}
         , _panoramaGuiState{panoramaGuiState}
         , _featuresStates{featuresStates}
+        , _glowSceneObjectsState{glowSceneObjectsState}
+        , _hooks{hooks}
     {
         if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
@@ -95,6 +99,16 @@ struct HookDependencies {
         return _featuresStates;
     }
 
+    [[nodiscard]] GlowSceneObjectsState& glowSceneObjectsState() const noexcept
+    {
+        return _glowSceneObjectsState;
+    }
+
+    [[nodiscard]] Hooks& hooks() const noexcept
+    {
+        return _hooks;
+    }
+
     [[nodiscard]] auto hud() noexcept
     {
         return Hud{HudContext{*this}};
@@ -107,7 +121,7 @@ struct HookDependencies {
         return nullptr;
     }
 
-    [[nodiscard]] auto localPlayerController2() const noexcept
+    [[nodiscard]] auto localPlayerController2() noexcept
     {
         if (_gameDependencies.localPlayerController)
             return PlayerController{*this, *_gameDependencies.localPlayerController};
@@ -204,6 +218,8 @@ private:
     InWorldPanelContainerState& _inWorldPanelContainerState;
     PanoramaGuiState& _panoramaGuiState;
     FeaturesStates& _featuresStates;
+    GlowSceneObjectsState& _glowSceneObjectsState;
+    Hooks& _hooks;
 
     const cs2::CConcreteEntityList* entityList;
     cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};

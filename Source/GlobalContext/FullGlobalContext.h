@@ -21,6 +21,7 @@
 #include <UI/Panorama/PanoramaGUI.h>
 #include <UI/Panorama/PanoramaGuiState.h>
 #include <UI/Panorama/PanoramaGuiUnloadHandler.h>
+#include <OutlineGlow/GlowSceneObjectsState.h>
 #include <Platform/DynamicLibrary.h>
 #include <Platform/VmtFinder.h>
 #include <Vmt/VmtLengthCalculator.h>
@@ -58,7 +59,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -66,11 +67,12 @@ struct FullGlobalContext {
         PlayerInformationThroughWalls playerInformationThroughWalls{featuresStates.visualFeaturesStates.playerInformationThroughWallsState, dependencies};
         RenderingHookEntityLoop{dependencies, playerInformationThroughWalls}.run();
         playerInformationThroughWalls.hideUnusedPanels();
+        dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
     }
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook(bool fullContextJustInitialized) noexcept
     {
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks};
 
         if (fullContextJustInitialized) {
             if (const auto mainMenu{_gameDependencies.mainMenu}; mainMenu && *mainMenu)
@@ -115,4 +117,5 @@ public:
     PanoramaGuiState panoramaGuiState;
     BombStatusPanelState bombStatusPanelState;
     InWorldPanelContainerState inWorldPanelContainerState;
+    GlowSceneObjectsState glowSceneObjectsState;
 };

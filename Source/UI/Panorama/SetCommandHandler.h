@@ -77,6 +77,8 @@ private:
             handleFeature(features.visualFeatures().hostageRescueIconToggle());
         } else if (feature == "player_info_blinded") {
             handleFeature(features.visualFeatures().blindedIconToggle());
+        } else if (feature == "player_outline_glow") {
+            handleFeature(features.visualFeatures().playerOutlineGlowToggle());
         }
     }
 

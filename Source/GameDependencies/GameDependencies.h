@@ -11,6 +11,7 @@
 #include "GameRulesDeps.h"
 #include "GameSceneNodeDeps.h"
 #include "GlobalVarsDeps.h"
+#include "GlowSceneObjectDeps.h"
 #include "HostageServicesDeps.h"
 #include "HudDeps.h"
 #include "MemAllocDeps.h"
@@ -24,6 +25,9 @@
 #include "PlantedC4Deps.h"
 #include "PlayerControllerDeps.h"
 #include "PlayerPawnDeps.h"
+#include "RenderComponentDeps.h"
+#include "SceneObjectUpdaterDeps.h"
+#include "SceneSystemDeps.h"
 #include "TopLevelWindowDeps.h"
 #include "WeaponDeps.h"
 #include "WeaponServicesDeps.h"
@@ -45,6 +49,7 @@ struct GameDependencies {
         , gameRulesDeps{memoryPatterns.gameRulesPatterns()}
         , gameSceneNodeDeps{memoryPatterns.gameSceneNodePatterns()}
         , globalVarsDeps{memoryPatterns.clientPatterns()}
+        , glowSceneObjectDeps{memoryPatterns.glowSceneObjectPatterns()}
         , hostageServicesDeps{memoryPatterns.hostageServicesPatterns()}
         , hudDeps{memoryPatterns.clientPatterns()}
         , memAllocDeps{tier0Dll, memoryPatterns.memAllocPatterns()}
@@ -57,6 +62,9 @@ struct GameDependencies {
         , plantedC4Deps{memoryPatterns.plantedC4Patterns()}
         , playerControllerDeps{memoryPatterns.playerControllerPatterns()}
         , playerPawnDeps{memoryPatterns.playerPawnPatterns()}
+        , renderComponentDeps{memoryPatterns.renderComponentPatterns()}
+        , sceneObjectUpdaterDeps{memoryPatterns.sceneObjectUpdaterPatterns()}
+        , sceneSystemDeps{memoryPatterns.sceneSystemPatterns()}
         , topLevelWindowDeps{memoryPatterns.topLevelWindowPatterns()}
         , weaponDeps{memoryPatterns.weaponPatterns()}
         , weaponServicesDeps{memoryPatterns.weaponServicesPatterns()}
@@ -73,6 +81,7 @@ struct GameDependencies {
         , entitiesVMTs{clientVmtFinder}
         , soundChannels{memoryPatterns.soundSystemPatterns().soundChannels()}
         , fileSystem{memoryPatterns.fileSystemPatterns().fileSystem()}
+        , manageGlowSceneObject{memoryPatterns.clientPatterns().manageGlowSceneObject()}
     {
     }
 
@@ -85,6 +94,7 @@ struct GameDependencies {
     GameRulesDeps gameRulesDeps;
     GameSceneNodeDeps gameSceneNodeDeps;
     GlobalVarsDeps globalVarsDeps;
+    GlowSceneObjectDeps glowSceneObjectDeps;
     HostageServicesDeps hostageServicesDeps;
     HudDeps hudDeps;
     MemAllocDeps memAllocDeps;
@@ -97,6 +107,9 @@ struct GameDependencies {
     PlantedC4Deps plantedC4Deps;
     PlayerControllerDeps playerControllerDeps;
     PlayerPawnDeps playerPawnDeps;
+    RenderComponentDeps renderComponentDeps;
+    SceneObjectUpdaterDeps sceneObjectUpdaterDeps;
+    SceneSystemDeps sceneSystemDeps;
     TopLevelWindowDeps topLevelWindowDeps;
     WeaponDeps weaponDeps;
     WeaponServicesDeps weaponServicesDeps;
@@ -116,4 +129,5 @@ struct GameDependencies {
     cs2::CBaseFileSystem** fileSystem;
     std::optional<ConVars> conVars;
     std::optional<PanoramaSymbols> panoramaSymbols;
+    cs2::ManageGlowSceneObject* manageGlowSceneObject;
 };

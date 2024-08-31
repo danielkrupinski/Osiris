@@ -10,4 +10,5 @@ struct PatternFinders {
     PatternFinder<PatternNotFoundLogger> fileSystemPatternFinder;
     PatternFinder<PatternNotFoundLogger> panoramaPatternFinder;
     PatternFinder<PatternNotFoundLogger> sdlPatternFinder;
+    PatternFinder<PatternNotFoundLogger> sceneSystemPatternFinder;
 };

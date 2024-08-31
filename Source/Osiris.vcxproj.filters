@@ -160,6 +160,12 @@
     <Filter Include="CS2\Panorama">
       <UniqueIdentifier>{48fe0d05-e9dd-4f7e-af70-ea21d217fc88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OutlineGlow">
+      <UniqueIdentifier>{f481aa89-278f-4f75-84c3-d31cf67e6e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerOutlineGlow">
+      <UniqueIdentifier>{b9c3025e-f3d5-4d46-b2ca-447c6264b9b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1312,6 +1318,102 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PlayerPawn.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObject.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjects.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneSystem.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\RenderComponent.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\RenderComponentDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CRenderComponent.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CSceneObject.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CSceneSystem.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Glow.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\SceneObjectUpdaterHandle_t.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlow.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowCondition.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowState.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowToggle.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowUnloadHandler.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowContext.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\BaseEntity.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\SceneObjectUpdaterOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneObjectUpdater.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneObjectUpdaters.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SceneSystemDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h">
+      <Filter>OutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,8 @@
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
 
+#include "BaseEntity.h"
+
 class EntityFromHandleFinder;
 
 template <typename HookContext>
@@ -16,6 +18,11 @@ public:
         : hookContext{hookContext}
         , playerPawn{playerPawn}
     {
+    }
+
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return hookContext.template make<BaseEntity>(playerPawn);
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept

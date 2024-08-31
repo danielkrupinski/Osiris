@@ -224,6 +224,10 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
 
+  var playerOutlineGlow = createSection(visuals, 'Player Outline Glow');
+  $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
+  createDropDown(playerOutlineGlow, "Enabled", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 2);
+
   var sound = createTab('sound');
   
   var playerSoundVisualization = createSection(sound, 'Player Sound Visualization');
