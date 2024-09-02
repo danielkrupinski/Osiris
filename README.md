@@ -9,6 +9,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 2 September 2024
     * Player outline glow now includes weapons carried by the player
+    * Player outline glow can now use the color assigned to the player in competitive game mode
+
+    ![Player competitive color glow](https://github.com/user-attachments/assets/c396147b-7943-4a27-8878-1efa3c64be62)
 
 * 31 August 2024
     * Added player outline glow feature
