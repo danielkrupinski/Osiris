@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 2 September 2024
+    * Player outline glow now includes weapons carried by the player
+
 * 31 August 2024
     * Added player outline glow feature
 
