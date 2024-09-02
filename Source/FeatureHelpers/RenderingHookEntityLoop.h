@@ -33,9 +33,9 @@ private:
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
         if (dependencies.gameDependencies().entitiesVMTs.isPlayerPawn(entity.vmt)) {
-            auto& playerPawn = static_cast<cs2::C_CSPlayerPawn&>(entity);
+            auto&& playerPawn = dependencies.make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
-            dependencies.make<PlayerOutlineGlow>().applyGlowToPlayer(dependencies.make<PlayerPawn>(&playerPawn));
+            dependencies.make<PlayerOutlineGlow>().applyGlowToPlayer(playerPawn);
         }
     }
 

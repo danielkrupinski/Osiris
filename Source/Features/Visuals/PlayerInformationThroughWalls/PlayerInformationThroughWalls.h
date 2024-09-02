@@ -201,7 +201,7 @@ public:
     {
     }
 
-    void drawPlayerInformation(cs2::C_CSPlayerPawn& playerPawn) noexcept
+    void drawPlayerInformation(auto&& playerPawn) noexcept
     {
         if (!state.enabled)
             return;
@@ -209,11 +209,10 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        PlayerPawn pawn{dependencies, &playerPawn};
-        if (!shouldDrawOnPawn(pawn))
+        if (!shouldDrawOnPawn(playerPawn))
             return;
 
-        const auto absOrigin = pawn.absOrigin();
+        const auto absOrigin = playerPawn.absOrigin();
         if (!absOrigin)
             return;
 
@@ -244,13 +243,13 @@ public:
         if (!playerInformationPanel.isValid())
             return;
 
-        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, pawn.playerController(), pawn.teamNumber());
-        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, pawn.health().value_or(0));
-        setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, pawn);
-        setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, pawn);
-        setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, pawn);
+        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, playerPawn.playerController(), playerPawn.teamNumber());
+        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, playerPawn.health().value_or(0));
+        setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, playerPawn);
+        setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, playerPawn);
+        setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, playerPawn);
 
-        panel.setOpacity(pawn.hasImmunity().value_or(false) ? 0.5f : 1.0f);
+        panel.setOpacity(playerPawn.hasImmunity().value_or(false) ? 0.5f : 1.0f);
         panel.setZIndex(-positionInClipSpace.z);
 
         const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
