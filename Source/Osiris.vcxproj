@@ -237,6 +237,7 @@
     <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h" />
     <ClInclude Include="GameClasses\PlantedC4.h" />
     <ClInclude Include="GameClasses\PlayerPawn.h" />
+    <ClInclude Include="GameClasses\PlayerWeapons.h" />
     <ClInclude Include="GameClasses\RenderComponent.h" />
     <ClInclude Include="GameClasses\SceneObjectUpdater.h" />
     <ClInclude Include="GameClasses\SceneObjectUpdaters.h" />

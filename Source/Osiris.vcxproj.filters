@@ -1415,6 +1415,9 @@
     <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h">
       <Filter>OutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\PlayerWeapons.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -21,13 +21,25 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowPlayer(playerPawn))
             return;
 
-        applyGlow(playerPawn.baseEntity(), getColor(playerPawn));
+        const auto glowColor = getColor(playerPawn).setAlpha(102);
+        glowPlayer(playerPawn, glowColor);
+        glowPlayerWeapons(playerPawn, glowColor);
     }
 
 private:
+    void glowPlayer(auto&& playerPawn, cs2::Color glowColor) const noexcept
+    {
+        applyGlow(playerPawn.baseEntity(), glowColor);
+    }
+
+    void glowPlayerWeapons(auto&& playerPawn, cs2::Color glowColor) const noexcept
+    {
+        playerPawn.weapons().forEach([this, glowColor](auto&& weapon) { this->applyGlow(weapon, glowColor); });
+    }
+
     void applyGlow(auto&& baseEntity, cs2::Color color) const noexcept
     {
-        context.getGlowSceneObjectFor(baseEntity).apply(baseEntity, color.setAlpha(102));
+        context.getGlowSceneObjectFor(baseEntity).apply(baseEntity, color);
     }
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept

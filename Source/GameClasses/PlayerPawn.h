@@ -8,6 +8,7 @@
 #include <FeatureHelpers/TeamNumber.h>
 
 #include "BaseEntity.h"
+#include "PlayerWeapons.h"
 
 class EntityFromHandleFinder;
 
@@ -23,6 +24,14 @@ public:
     [[nodiscard]] decltype(auto) baseEntity() const noexcept
     {
         return hookContext.template make<BaseEntity>(playerPawn);
+    }
+
+    [[nodiscard]] decltype(auto) weapons() const noexcept
+    {
+        const auto weaponServices = hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr);
+        if (!weaponServices)
+            return hookContext.template make<PlayerWeapons>(nullptr);
+        return hookContext.template make<PlayerWeapons>(hookContext.gameDependencies().weaponServicesDeps.offsetToWeapons.of(weaponServices).get());
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
