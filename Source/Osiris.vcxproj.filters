@@ -908,12 +908,6 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsState.h">
       <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorCalculator.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorIndexAccessor.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorCalculator.h">
       <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
     </ClInclude>
@@ -1417,6 +1411,9 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PlayerWeapons.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowColorType.h">
+      <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

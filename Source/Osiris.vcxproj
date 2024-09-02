@@ -169,8 +169,6 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWalls.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsPanelFactory.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsState.h" />
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorCalculator.h" />
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerColorIndexAccessor.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorCalculator.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorType.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowPanelParams.h" />
@@ -178,6 +176,7 @@
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlow.h" />
+    <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowColorType.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowCondition.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowState.h" />

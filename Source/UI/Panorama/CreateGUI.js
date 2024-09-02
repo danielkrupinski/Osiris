@@ -225,8 +225,9 @@ $.Osiris = (function () {
   createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
 
   var playerOutlineGlow = createSection(visuals, 'Player Outline Glow');
-  $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
   createDropDown(playerOutlineGlow, "Enabled", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 2);
+  $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
+  createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color'], 0);
 
   var sound = createTab('sound');
   

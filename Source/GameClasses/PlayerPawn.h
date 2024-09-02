@@ -13,6 +13,9 @@
 class EntityFromHandleFinder;
 
 template <typename HookContext>
+class PlayerController;
+
+template <typename HookContext>
 class PlayerPawn {
 public:
     PlayerPawn(HookContext& hookContext, cs2::C_CSPlayerPawn* playerPawn) noexcept
@@ -47,15 +50,15 @@ public:
         return {};
     }
 
-    [[nodiscard]] cs2::CCSPlayerController* playerController() const noexcept
+    [[nodiscard]] decltype(auto) playerController() const noexcept
     {
         if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return nullptr;
+            return hookContext.template make<PlayerController>(nullptr);
 
         const auto playerControllerHandle = hookContext.gameDependencies().playerPawnDeps.offsetToPlayerController.of(playerPawn).get();
         if (!playerControllerHandle)
-            return nullptr;
-        return static_cast<cs2::CCSPlayerController*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerControllerHandle));
+            return hookContext.template make<PlayerController>(nullptr);
+        return hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerControllerHandle)));
     }
 
     [[nodiscard]] std::optional<int> health() const noexcept
@@ -88,12 +91,12 @@ public:
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
     {
-        return playerController() && playerController() == hookContext.localPlayerController();
+        return playerController() == hookContext.localPlayerController();
     }
 
     [[nodiscard]] std::optional<bool> isEnemy() const noexcept
     {
-        return teamNumber() != hookContext.localPlayerController2().teamNumber() || teammatesAreEnemies();
+        return teamNumber() != hookContext.localPlayerController().teamNumber() || teammatesAreEnemies();
     }
 
     [[nodiscard]] bool isTTorCT() const noexcept

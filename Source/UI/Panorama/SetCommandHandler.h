@@ -79,6 +79,8 @@ private:
             handleFeature(features.visualFeatures().blindedIconToggle());
         } else if (feature == "player_outline_glow") {
             handleFeature(features.visualFeatures().playerOutlineGlowToggle());
+        } else if (feature == "player_outline_glow_color") {
+            features.visualFeatures().playerOutlineGlowToggle().updateColor(parser.getChar());
         }
     }
 
