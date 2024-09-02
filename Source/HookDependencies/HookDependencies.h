@@ -114,14 +114,7 @@ struct HookDependencies {
         return Hud{HudContext{*this}};
     }
 
-    [[nodiscard]] cs2::CCSPlayerController* localPlayerController() const noexcept
-    {
-        if (_gameDependencies.localPlayerController)
-            return *_gameDependencies.localPlayerController;
-        return nullptr;
-    }
-
-    [[nodiscard]] auto localPlayerController2() noexcept
+    [[nodiscard]] auto localPlayerController() noexcept
     {
         if (_gameDependencies.localPlayerController)
             return PlayerController{*this, *_gameDependencies.localPlayerController};

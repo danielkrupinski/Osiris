@@ -17,8 +17,6 @@
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
 
-#include "PlayerPositionArrow/PlayerColorCalculator.h"
-#include "PlayerPositionArrow/PlayerColorIndexAccessor.h"
 #include "PlayerInformationPanel.h"
 #include "PlayerPositionArrow/PlayerPositionArrowColorCalculator.h"
 #include "PlayerPositionArrow/TeamColorCalculator.h"
@@ -215,10 +213,6 @@ public:
         if (!shouldDrawOnPawn(pawn))
             return;
 
-        const auto playerController = pawn.playerController();
-        if (!playerController)
-            return;
-
         const auto absOrigin = pawn.absOrigin();
         if (!absOrigin)
             return;
@@ -250,7 +244,7 @@ public:
         if (!playerInformationPanel.isValid())
             return;
 
-        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, *playerController, pawn.teamNumber());
+        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, pawn.playerController(), pawn.teamNumber());
         setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, pawn.health().value_or(0));
         setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, pawn);
         setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, pawn);
@@ -304,17 +298,12 @@ private:
             && (!state.showOnlyEnemies || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] PlayerColorCalculator<PlayerColorIndexAccessor> getPlayerColorCalculator(cs2::CCSPlayerController& playerController) const noexcept
+    [[nodiscard]] auto getPlayerPositionArrowColorCalculator(TeamNumber teamNumber) const noexcept
     {
-        return PlayerColorCalculator{PlayerColorIndexAccessor{playerController, dependencies.gameDependencies().playerControllerDeps.offsetToPlayerColor}};
+        return PlayerPositionArrowColorCalculator{TeamColorCalculator{teamNumber}};
     }
 
-    [[nodiscard]] auto getPlayerPositionArrowColorCalculator(cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
-    {
-        return PlayerPositionArrowColorCalculator{getPlayerColorCalculator(playerController), TeamColorCalculator{teamNumber}};
-    }
-
-    void setArrowColor(auto arrowPanel, cs2::CCSPlayerController& playerController, TeamNumber teamNumber) const noexcept
+    void setArrowColor(auto arrowPanel, auto&& playerController, TeamNumber teamNumber) const noexcept
     {
         if (!state.showPlayerPosition) {
             arrowPanel.setVisible(false);
@@ -322,7 +311,7 @@ private:
         }
 
         arrowPanel.setVisible(true);
-        arrowPanel.setWashColor(getPlayerPositionArrowColorCalculator(playerController, teamNumber).getArrowColor(state.playerPositionArrowColor));
+        arrowPanel.setWashColor(getPlayerPositionArrowColorCalculator(teamNumber).getArrowColor(playerController, state.playerPositionArrowColor));
     }
 
     [[nodiscard]] cs2::C_CSWeaponBase::m_iClip1 getActiveWeaponClip(auto&& playerPawn) const noexcept

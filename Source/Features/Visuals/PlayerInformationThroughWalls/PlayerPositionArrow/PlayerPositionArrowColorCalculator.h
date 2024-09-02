@@ -5,19 +5,21 @@
 
 #include "PlayerPositionArrowColorType.h"
 
-template <typename PlayerColorCalculator, typename TeamColorCalculator>
+template <typename TeamColorCalculator>
 struct PlayerPositionArrowColorCalculator {
-    [[nodiscard]] cs2::Color getArrowColor(PlayerPositionArrowColorType colorType) const noexcept
+    [[nodiscard]] cs2::Color getArrowColor(auto&& playerController, PlayerPositionArrowColorType colorType) const noexcept
     {
-        if (cs2::Color color{cs2::kColorWhite}; colorType == PlayerPositionArrowColorType::PlayerOrTeamColor && playerColorCalculator.getPlayerColor(&color))
-            return color;
+        if (colorType == PlayerPositionArrowColorType::PlayerOrTeamColor) {
+            const auto playerColor = playerController.getPlayerColor();
+            if (playerColor.has_value())
+                return *playerColor;
+        }
         return teamColorCalculator.getTeamColor();
     }
 
-    PlayerColorCalculator playerColorCalculator;
     TeamColorCalculator teamColorCalculator;
 };
 
-template <typename PlayerColorCalculator, typename TeamColorCalculator>
-PlayerPositionArrowColorCalculator(PlayerColorCalculator, TeamColorCalculator) ->
-    PlayerPositionArrowColorCalculator<PlayerColorCalculator, TeamColorCalculator>;
+template <typename TeamColorCalculator>
+PlayerPositionArrowColorCalculator(TeamColorCalculator) ->
+    PlayerPositionArrowColorCalculator<TeamColorCalculator>;

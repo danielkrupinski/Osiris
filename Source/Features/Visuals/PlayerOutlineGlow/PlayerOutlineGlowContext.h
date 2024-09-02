@@ -38,7 +38,7 @@ public:
 
     [[nodiscard]] bool isLocalPlayerAlive() const noexcept
     {
-        return hookContext.localPlayerController2().playerPawn().isAlive().value_or(true);
+        return hookContext.localPlayerController().playerPawn().isAlive().value_or(true);
     }
 
 private:

@@ -13,6 +13,11 @@ public:
     {
     }
 
+    [[nodiscard]] bool operator==(const PlayerController& other) const noexcept
+    {
+        return playerControllerPointer != nullptr && playerControllerPointer == other.playerControllerPointer;
+    }
+
     [[nodiscard]] TeamNumber teamNumber() const noexcept
     {
         return TeamNumber{entityDeps().offsetToTeamNumber.of(playerControllerPointer).valueOr({})};
@@ -27,6 +32,14 @@ public:
         if (!playerPawnHandle)
             return hookContext.template make<PlayerPawn>(nullptr);
         return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerPawnHandle)));
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColor() const noexcept
+    {
+        const auto playerColorIndex = hookContext.gameDependencies().playerControllerDeps.offsetToPlayerColor.of(playerControllerPointer).get();
+        if (playerColorIndex && *playerColorIndex >= 0 && std::cmp_less(*playerColorIndex, cs2::kPlayerColors.size()))
+            return cs2::kPlayerColors[*playerColorIndex];
+        return {};
     }
 
 private:

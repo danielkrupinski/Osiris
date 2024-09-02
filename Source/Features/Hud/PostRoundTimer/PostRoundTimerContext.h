@@ -51,7 +51,7 @@ struct PostRoundTimerContext {
 
     [[nodiscard]] decltype(auto) localPlayerTeamNumber() const noexcept
     {
-        return _hookContext.localPlayerController2().teamNumber();
+        return _hookContext.localPlayerController().teamNumber();
     }
 
 private:

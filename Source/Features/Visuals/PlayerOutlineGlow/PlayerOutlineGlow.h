@@ -5,6 +5,7 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include "PlayerOutlineGlowContext.h"
+#include "PlayerOutlineGlowColorType.h"
 
 template <typename Context>
 class PlayerOutlineGlow {
@@ -44,6 +45,11 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
+        if (context.state().colorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
+            if (const auto playerColor = playerPawn.playerController().getPlayerColor(); playerColor.has_value())
+                return *playerColor;
+        }
+
         switch (playerPawn.teamNumber()) {
         case TeamNumber::TT: return cs2::kColorTeamTT;
         case TeamNumber::CT: return cs2::kColorTeamCT;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureToggle.h>
+#include "PlayerOutlineGlowColorType.h"
 
 template <typename Context>
 struct PlayerOutlineGlowToggle : FeatureToggleOnOff<PlayerOutlineGlowToggle<Context>> {
@@ -16,6 +17,14 @@ struct PlayerOutlineGlowToggle : FeatureToggleOnOff<PlayerOutlineGlowToggle<Cont
         case '0': this->enable(); context.state().showOnlyEnemies = true; break;
         case '1': this->enable(); context.state().showOnlyEnemies = false; break;
         case '2': this->disable(); break;
+        }
+    }
+
+    void updateColor(char option) noexcept
+    {
+        switch (option) {
+        case '0': context.state().colorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
+        case '1': context.state().colorType = PlayerOutlineGlowColorType::TeamColor; break;
         }
     }
 
