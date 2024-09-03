@@ -6,6 +6,7 @@
 #include <CS2/Constants/EntityHandle.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
 #include "PlayerWeapons.h"
@@ -66,6 +67,13 @@ public:
         const auto health = hookContext.gameDependencies().entityDeps.offsetToHealth.of(playerPawn).get();
         if (health)
             return *health;
+        return {};
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> healthColor() const noexcept
+    {
+        if (const auto healthValue = health(); healthValue.has_value())
+            return getColorOfHealthFraction(std::clamp(*healthValue, 0, 100) / 100.0f);
         return {};
     }
 
@@ -158,7 +166,12 @@ public:
         return static_cast<cs2::C_CSWeaponBase*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(hookContext.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
     }
 
-private:
+private:    
+    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
+    {
+        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);
+    }
+
     [[nodiscard]] bool teammatesAreEnemies() const noexcept
     {
         auto conVarAccessor = hookContext.getConVarAccessor();

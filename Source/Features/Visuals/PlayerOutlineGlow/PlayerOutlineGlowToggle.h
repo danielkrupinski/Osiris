@@ -25,6 +25,7 @@ struct PlayerOutlineGlowToggle : FeatureToggleOnOff<PlayerOutlineGlowToggle<Cont
         switch (option) {
         case '0': context.state().colorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
         case '1': context.state().colorType = PlayerOutlineGlowColorType::TeamColor; break;
+        case '2': context.state().colorType = PlayerOutlineGlowColorType::HealthBased; break;
         }
     }
 
