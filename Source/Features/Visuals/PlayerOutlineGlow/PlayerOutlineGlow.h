@@ -40,7 +40,10 @@ private:
 
     void applyGlow(auto&& baseEntity, cs2::Color color) const noexcept
     {
-        context.getGlowSceneObjectFor(baseEntity).apply(baseEntity, color);
+        auto&& sceneObject = baseEntity.renderComponent().sceneObjectUpdaters()[0].sceneObject();
+        auto&& glowSceneObject = context.getGlowSceneObjectFor(sceneObject);
+        glowSceneObject.apply(sceneObject, color);
+        glowSceneObject.setGlowEntity(baseEntity);
     }
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept

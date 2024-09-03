@@ -16,4 +16,9 @@ struct GlowSceneObjectPatterns {
     {
         return patternFinders.sceneSystemPatternFinder("06 ? ? ? ? ? 0F 85 ? ? ? ? 41 F6 44 24 ?"_pat).add(16).template readOffset<OffsetToSceneObjectFlags>();
     }
+
+    [[nodiscard]] OffsetToGlowSceneObjectAttachedSceneObject offsetToGlowSceneObjectAttachedSceneObject() const noexcept
+    {
+        return patternFinders.clientPatternFinder("89 98 ? ? ? ? 49 8B ? 48"_pat).add(2).template readOffset<OffsetToGlowSceneObjectAttachedSceneObject>();
+    }
 };

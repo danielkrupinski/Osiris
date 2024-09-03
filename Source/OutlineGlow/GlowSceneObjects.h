@@ -12,9 +12,9 @@ public:
     {
     }
 
-    [[nodiscard]] decltype(auto) getGlowSceneObject(cs2::CEntityHandle entityHandle) const noexcept
+    [[nodiscard]] decltype(auto) getGlowSceneObject(cs2::CSceneObject* sceneObject) const noexcept
     {
-        return hookContext.template make<GlowSceneObject>(glowSceneObjectByIndex(findOrInsertEntityHandle(entityHandle)));
+        return hookContext.template make<GlowSceneObject>(glowSceneObjectByIndex(findOrInsertGlowSceneObject(sceneObject)));
     }
 
     void removeUnreferencedObjects() const noexcept
@@ -26,7 +26,6 @@ public:
                 deleteSceneObject(sceneObjectPointer.value());
             } else {
                 sceneObjectPointer.clearReferenced();
-                state().entityHandles[writeIndex] = state().entityHandles[readIndex];
                 state().glowSceneObjects[writeIndex] = sceneObjectPointer;
                 ++writeIndex;
             }
@@ -44,7 +43,6 @@ public:
         state().size = 0;
 
         if (state().capacity > 0) {
-            MemoryAllocator<cs2::CEntityHandle[]>::deallocate(state().entityHandles, state().capacity);
             MemoryAllocator<GlowSceneObjectPointer[]>::deallocate(state().glowSceneObjects, state().capacity);
             state().capacity = 0;
         }
@@ -66,57 +64,45 @@ private:
         return nullptr;
     }
 
-    [[nodiscard]] auto findOrInsertEntityHandle(cs2::CEntityHandle handle) const noexcept
+    [[nodiscard]] auto findOrInsertGlowSceneObject(cs2::CSceneObject* sceneObject) const noexcept
     {
-        if (const auto index = findEntityHandle(handle); index != GlowSceneObjectsState::kInvalidIndex)
+        if (const auto index = findAttachedSceneObject(sceneObject); index != GlowSceneObjectsState::kInvalidIndex)
             return index;
-        return insertEntityHandle(handle);
+        return insertGlowSceneObject();
     }
 
-    [[nodiscard]] auto findEntityHandle(cs2::CEntityHandle handle) const noexcept
+    [[nodiscard]] auto findAttachedSceneObject(cs2::CSceneObject* sceneObject) const noexcept
     {
         for (GlowSceneObjectsState::SizeType i = 0; i < state().size; ++i) {
-            if (state().entityHandles[i] == handle)
+            if (hookContext.template make<GlowSceneObject>(&state().glowSceneObjects[i]).getAttachedSceneObject() == sceneObject)
                 return i;
         }
         return GlowSceneObjectsState::kInvalidIndex;
     }
 
-    [[nodiscard]] auto insertEntityHandle(cs2::CEntityHandle handle) const noexcept
+    [[nodiscard]] auto insertGlowSceneObject() const noexcept
     {
         if (state().size < state().capacity) {
             const auto index = state().size;
-            state().entityHandles[index] = handle;
             state().glowSceneObjects[index] = nullptr;
             ++state().size;
             return index;
         } else {
             const auto newCapacity = static_cast<GlowSceneObjectsState::SizeType>(state().capacity + 10);
-            const auto newEntityHandles = reinterpret_cast<cs2::CEntityHandle*>(MemoryAllocator<cs2::CEntityHandle[]>::allocate(newCapacity));
             const auto newGlowSceneObjects = reinterpret_cast<GlowSceneObjectPointer*>(MemoryAllocator<GlowSceneObjectPointer[]>::allocate(newCapacity));
-            if (newEntityHandles && newGlowSceneObjects) {
-                if (state().size > 0) {
-                    std::memcpy(newEntityHandles, state().entityHandles, state().size * sizeof(cs2::CEntityHandle));
+            if (newGlowSceneObjects) {
+                if (state().size > 0)
                     std::memcpy(newGlowSceneObjects, state().glowSceneObjects, state().size * sizeof(GlowSceneObjectPointer));
-                }
 
-                if (state().capacity > 0) {
-                    MemoryAllocator<cs2::CEntityHandle[]>::deallocate(state().entityHandles, state().capacity);
+                if (state().capacity > 0)
                     MemoryAllocator<GlowSceneObjectPointer[]>::deallocate(state().glowSceneObjects, state().capacity);
-                }
 
                 state().capacity = newCapacity;
-                state().entityHandles = newEntityHandles;
                 state().glowSceneObjects = newGlowSceneObjects;
                 const auto index = state().size;
-                state().entityHandles[index] = handle;
                 state().glowSceneObjects[index] = nullptr;
                 ++state().size;
                 return index;
-            } else if (newEntityHandles) {
-                MemoryAllocator<cs2::CEntityHandle[]>::deallocate(newEntityHandles, newCapacity);
-            } else if (newGlowSceneObjects) {
-                MemoryAllocator<GlowSceneObjectPointer[]>::deallocate(newGlowSceneObjects, newCapacity);
             }
         }
         return GlowSceneObjectsState::kInvalidIndex;

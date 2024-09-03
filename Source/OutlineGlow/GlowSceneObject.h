@@ -13,18 +13,22 @@ public:
     {
     }
 
-    void apply(auto&& entity, cs2::Color color) const noexcept
+    void apply(auto&& sceneObject, cs2::Color color) const noexcept
     {
-        context.applyGlow(entitySceneObject(entity), color);
-        context.setGlowEntity(entity);
+        context.applyGlow(sceneObject, color);
+    }
+
+    void setGlowEntity(auto&& entity) const noexcept
+    {
+        context.glowEntity() = entity;
+    }
+
+    [[nodiscard]] decltype(auto) getAttachedSceneObject() const noexcept
+    {
+        return context.attachedSceneObject().valueOr(nullptr);
     }
 
 private:
-    [[nodiscard]] decltype(auto) entitySceneObject(auto&& entity) const noexcept
-    {
-        return entity.renderComponent().sceneObjectUpdaters()[0].sceneObject();
-    }
-
     Context context;
 };
 

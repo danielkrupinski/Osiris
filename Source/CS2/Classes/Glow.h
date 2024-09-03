@@ -16,6 +16,7 @@ enum SceneObjectFlags {
 struct CGlowHelperSceneObject : CSceneObject {
     using entity = C_BaseEntity*;
     using flags = std::uint8_t;
+    using attachedSceneObject = CSceneObject*;
 };
 
 #if IS_WIN64()

@@ -21,9 +21,9 @@ public:
         return hookContext.template make<PlayerOutlineGlowCondition>();
     }
 
-    [[nodiscard]] decltype(auto) getGlowSceneObjectFor(auto&& baseEntity) const noexcept
+    [[nodiscard]] decltype(auto) getGlowSceneObjectFor(auto&& sceneObject) const noexcept
     {
-        return hookContext.template make<GlowSceneObjects>().getGlowSceneObject(baseEntity.handle());
+        return hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
     }
 
     [[nodiscard]] auto& viewRenderHook() const noexcept

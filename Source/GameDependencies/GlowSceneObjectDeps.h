@@ -7,9 +7,11 @@ struct GlowSceneObjectDeps {
     explicit GlowSceneObjectDeps(const GlowSceneObjectPatterns& glowSceneObjectPatterns) noexcept
         : offsetToGlowSceneObjectEntity{glowSceneObjectPatterns.offsetToGlowSceneObjectEntity()}
         , offsetToSceneObjectFlags{glowSceneObjectPatterns.offsetToSceneObjectFlags()}
+        , offsetToGlowSceneObjectAttachedSceneObject{glowSceneObjectPatterns.offsetToGlowSceneObjectAttachedSceneObject()}
     {
     }
 
     OffsetToGlowSceneObjectEntity offsetToGlowSceneObjectEntity;
     OffsetToSceneObjectFlags offsetToSceneObjectFlags;
+    OffsetToGlowSceneObjectAttachedSceneObject offsetToGlowSceneObjectAttachedSceneObject;
 };
