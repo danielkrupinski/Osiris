@@ -244,7 +244,7 @@ public:
             return;
 
         setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, playerPawn.playerController(), playerPawn.teamNumber());
-        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, playerPawn.health().value_or(0));
+        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, playerPawn);
         setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, playerPawn);
         setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, playerPawn);
         setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, playerPawn);
@@ -339,7 +339,7 @@ private:
         return *dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).get();
     }
 
-    void setHealth(auto&& healthPanel, int health) const noexcept
+    void setHealth(auto&& healthPanel, auto&& playerPawn) const noexcept
     {
         if (!state.showPlayerHealth) {
             healthPanel.setVisible(false);
@@ -355,21 +355,11 @@ private:
 
         PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies.gameDependencies(), healthText->uiPanel}};
         if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
-            panel.setColor(getHealthBasedColor(health));
+            panel.setColor(playerPawn.healthColor().value_or(cs2::kColorWhite));
         else
             panel.setColor(cs2::kColorWhite);
 
-        PanoramaLabel{dependencies, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(health).cstring(), 0, true);
-    }
-
-    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
-    {
-        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);
-    }
-
-    [[nodiscard]] static cs2::Color getHealthBasedColor(int health) noexcept
-    {
-        return getColorOfHealthFraction(std::clamp(health, 0, 100) / 100.0f);
+        PanoramaLabel{dependencies, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(playerPawn.health().value_or(0)).cstring(), 0, true);
     }
 
     void setPlayerStateIcons(auto&& playerStateIconsPanel, auto&& playerPawn) const noexcept

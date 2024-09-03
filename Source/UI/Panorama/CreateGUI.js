@@ -227,7 +227,7 @@ $.Osiris = (function () {
   var playerOutlineGlow = createSection(visuals, 'Player Outline Glow');
   createDropDown(playerOutlineGlow, "Enabled", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 2);
   $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
-  createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color'], 0);
+  createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
   var sound = createTab('sound');
   
