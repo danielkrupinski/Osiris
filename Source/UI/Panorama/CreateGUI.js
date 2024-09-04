@@ -201,7 +201,7 @@ $.Osiris = (function () {
 
   var visuals = createTab('visuals');
 
-  var playerInfo = createSection(visuals, 'Player Information Through Walls');
+  var playerInfo = createSection(visuals, 'Player Info In World');
   createDropDown(playerInfo, "Enabled", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position', 0);
