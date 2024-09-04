@@ -7,6 +7,10 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 4 September 2024
+    * Renamed "Player Information Through Walls" to "Player Info In World"
+    * Player outline glow has now lower opacity on players with deathmatch immunity
+
 * 3 September 2024
     * Player outline glow can now use color based on player health
 
