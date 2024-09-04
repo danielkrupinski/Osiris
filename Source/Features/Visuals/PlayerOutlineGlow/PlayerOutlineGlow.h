@@ -22,28 +22,21 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowPlayer(playerPawn))
             return;
 
-        const auto glowColor = getColor(playerPawn).setAlpha(102);
-        glowPlayer(playerPawn, glowColor);
-        glowPlayerWeapons(playerPawn, glowColor);
+        auto&& applyGlow = applyGlowOp(getColor(playerPawn).setAlpha(102));
+        applyGlow(playerPawn.baseEntity());
+        playerPawn.weapons().forEach(applyGlow);
     }
 
 private:
-    void glowPlayer(auto&& playerPawn, cs2::Color glowColor) const noexcept
+    [[nodiscard]] auto applyGlowOp(cs2::Color color) const noexcept
     {
-        applyGlow(playerPawn.baseEntity(), glowColor);
-    }
-
-    void glowPlayerWeapons(auto&& playerPawn, cs2::Color glowColor) const noexcept
-    {
-        playerPawn.weapons().forEach([this, glowColor](auto&& weapon) { this->applyGlow(weapon, glowColor); });
-    }
-
-    void applyGlow(auto&& baseEntity, cs2::Color color) const noexcept
-    {
-        auto&& sceneObject = baseEntity.renderComponent().sceneObjectUpdaters()[0].sceneObject();
-        auto&& glowSceneObject = context.getGlowSceneObjectFor(sceneObject);
-        glowSceneObject.apply(sceneObject, color);
-        glowSceneObject.setGlowEntity(baseEntity);
+        return [this, color](auto&& baseEntity){
+            baseEntity.renderComponent().sceneObjectUpdaters().forEachSceneObject([this, &baseEntity, color](auto&& sceneObject){
+                auto&& glowSceneObject = context.getGlowSceneObjectFor(sceneObject);
+                glowSceneObject.apply(sceneObject, color);
+                glowSceneObject.setGlowEntity(baseEntity);
+            });
+        };
     }
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept

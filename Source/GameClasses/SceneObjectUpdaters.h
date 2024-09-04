@@ -16,6 +16,19 @@ public:
         return hookContext.template make<SceneObjectUpdater>(get(index));
     }
 
+    template <typename F>
+    void forEachSceneObject(F f) const noexcept
+    {
+        if (!updaters)
+            return;
+
+        for (int i = 0; i < updaters->size; ++i) {
+            auto&& sceneObject = hookContext.template make<SceneObjectUpdater>(updaters->memory[i]).sceneObject();
+            if (sceneObject)
+                f(sceneObject);
+        }
+    }
+
 private:
     [[nodiscard]] cs2::SceneObjectUpdaterHandle_t* get(std::size_t index) const noexcept
     {
