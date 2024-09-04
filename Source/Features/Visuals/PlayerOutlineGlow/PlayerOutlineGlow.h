@@ -22,7 +22,7 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowPlayer(playerPawn))
             return;
 
-        auto&& applyGlow = applyGlowOp(getColor(playerPawn).setAlpha(102));
+        auto&& applyGlow = applyGlowOp(correctAlpha(playerPawn, getColor(playerPawn)));
         applyGlow(playerPawn.baseEntity());
         playerPawn.weapons().forEach(applyGlow);
     }
@@ -37,6 +37,13 @@ private:
                 glowSceneObject.setGlowEntity(baseEntity);
             });
         };
+    }
+
+    [[nodiscard]] cs2::Color correctAlpha(auto&& playerPawn, cs2::Color color) const noexcept
+    {
+        constexpr auto kNormalAlpha = 102;
+        constexpr auto kImmuneAlpha = 40;
+        return color.setAlpha(playerPawn.hasImmunity().value_or(false) ? kImmuneAlpha : kNormalAlpha);
     }
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
