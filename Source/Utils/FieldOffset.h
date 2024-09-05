@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <optional>
 
 template <typename FieldType>
 struct FieldValueProxy {
@@ -12,6 +13,13 @@ struct FieldValueProxy {
     [[nodiscard]] FieldType* get() const noexcept
     {
         return field;
+    }
+
+    [[nodiscard]] std::optional<FieldType> toOptional() const noexcept
+    {
+        if (field)
+            return *field;
+        return {};
     }
 
     [[nodiscard]] FieldType valueOr(const FieldType& defaultValue) const noexcept

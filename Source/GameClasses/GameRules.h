@@ -14,16 +14,12 @@ struct GameRules {
 
     [[nodiscard]] std::optional<float> roundStartTime() const noexcept
     {
-        if (gameRules && GameRulesDeps::instance().roundStartTimeOffset)
-            return *GameRulesDeps::instance().roundStartTimeOffset.of(gameRules).get();
-        return {};
+        return GameRulesDeps::instance().roundStartTimeOffset.of(gameRules).toOptional();
     }
 
     [[nodiscard]] std::optional<float> roundRestartTime() const noexcept
     {
-        if (gameRules && GameRulesDeps::instance().offsetToRoundRestartTime)
-            return *GameRulesDeps::instance().offsetToRoundRestartTime.of(gameRules).get();
-        return {};
+        return GameRulesDeps::instance().offsetToRoundRestartTime.of(gameRules).toOptional();
     }
 
     [[nodiscard]] bool hasScheduledRoundRestart() const noexcept

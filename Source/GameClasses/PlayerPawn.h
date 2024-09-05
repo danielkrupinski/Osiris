@@ -64,10 +64,7 @@ public:
 
     [[nodiscard]] std::optional<int> health() const noexcept
     {
-        const auto health = hookContext.gameDependencies().entityDeps.offsetToHealth.of(playerPawn).get();
-        if (health)
-            return *health;
-        return {};
+        return hookContext.gameDependencies().entityDeps.offsetToHealth.of(playerPawn).toOptional();
     }
 
     [[nodiscard]] std::optional<cs2::Color> healthColor() const noexcept
@@ -79,10 +76,7 @@ public:
 
     [[nodiscard]] std::optional<bool> hasImmunity() const noexcept
     {
-        const auto immunity = hookContext.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(playerPawn).get();
-        if (immunity)
-            return *immunity;
-        return {};
+        return hookContext.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(playerPawn).toOptional();
     }
 
     [[nodiscard]] std::optional<cs2::Vector> absOrigin() const noexcept
@@ -90,11 +84,7 @@ public:
         const auto gameSceneNode = hookContext.gameDependencies().entityDeps.offsetToGameSceneNode.of(playerPawn).get();
         if (!gameSceneNode || !*gameSceneNode)
             return {};
-
-        const auto absOrigin = hookContext.gameDependencies().gameSceneNodeDeps.offsetToAbsOrigin.of(*gameSceneNode).get();
-        if (absOrigin)
-            return *absOrigin;
-        return {};
+        return hookContext.gameDependencies().gameSceneNodeDeps.offsetToAbsOrigin.of(*gameSceneNode).toOptional();
     }
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
@@ -115,18 +105,12 @@ public:
 
     [[nodiscard]] std::optional<bool> isPickingUpHostage() const noexcept
     {
-        const auto pickingUpHostage = hookContext.gameDependencies().playerPawnDeps.offsetToIsPickingUpHostage.of(playerPawn).get();
-        if (pickingUpHostage)
-            return *pickingUpHostage;
-        return {};
+        return hookContext.gameDependencies().playerPawnDeps.offsetToIsPickingUpHostage.of(playerPawn).toOptional();
     }
 
     [[nodiscard]] std::optional<bool> isDefusing() const noexcept
     {
-        const auto defusing = hookContext.gameDependencies().playerPawnDeps.offsetToIsDefusing.of(playerPawn).get();
-        if (defusing)
-            return *defusing;
-        return {};
+        return hookContext.gameDependencies().playerPawnDeps.offsetToIsDefusing.of(playerPawn).toOptional();
     }
 
     [[nodiscard]] bool isRescuingHostage() const noexcept
