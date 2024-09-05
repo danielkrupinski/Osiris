@@ -1,6 +1,7 @@
 u8R"(
 $.Osiris = (function () {
   var activeTab;
+  var activeSubTab = {};
 
   return {
     rootPanel: (function () {
@@ -47,6 +48,23 @@ $.Osiris = (function () {
 
       activeTab = tabID;
       var activePanel = this.rootPanel.FindChildInLayoutFile(tabID);
+      activePanel.AddClass('Active');
+      activePanel.visible = true;
+      activePanel.SetReadyForDisplay(true);
+    },
+    navigateToSubTab: function (tabID, subTabID) {
+      if (activeSubTab[tabID] === subTabID)
+        return;
+
+      if (activeSubTab[tabID]) {
+        var panelToHide = this.rootPanel.FindChildInLayoutFile(activeSubTab[tabID]);
+        panelToHide.RemoveClass('Active');
+      }
+
+      this.rootPanel.FindChildInLayoutFile(subTabID + '_button').checked = true;
+
+      activeSubTab[tabID] = subTabID;
+      var activePanel = this.rootPanel.FindChildInLayoutFile(subTabID);
       activePanel.AddClass('Active');
       activePanel.visible = true;
       activePanel.SetReadyForDisplay(true);
@@ -110,6 +128,32 @@ $.Osiris = (function () {
     $.CreatePanel('Label', soundTabButton, '', { text: "Sound" });
   };
 
+  var createVisualsNavbar = function () {
+    var navbar = $.CreatePanel('Panel', $.Osiris.rootPanel.FindChildInLayoutFile('visuals'), '', {
+      class: "content-navbar__tabs content-navbar__tabs--dark content-navbar__tabs--noflow"
+    });
+
+    var centerContainer = $.CreatePanel('Panel', navbar, '', {
+      class: "content-navbar__tabs__center-container",
+    });
+
+    var playerInfoTabButton = $.CreatePanel('RadioButton', centerContainer, 'player_info_button', {
+      group: "VisualsNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('visuals', 'player_info');"
+    });
+
+    $.CreatePanel('Label', playerInfoTabButton, '', { text: "Player Info In World" });
+
+    var outlineGlowTabButton = $.CreatePanel('RadioButton', centerContainer, 'outline_glow_button', {
+      group: "VisualsNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('visuals', 'outline_glow');"
+    });
+
+    $.CreatePanel('Label', outlineGlowTabButton, '', { text: "Outline Glow" });
+  };
+
   createNavbar();
 
   var settingContent = $.CreatePanel('Panel', $.Osiris.rootPanel, 'SettingsMenuContent', {
@@ -126,6 +170,33 @@ $.Osiris = (function () {
       class: "SettingsMenuTabContent vscroll"
     });
   
+    return content;
+  };
+
+  var createVisualsTab = function() {
+    var tab = $.CreatePanel('Panel', settingContent, 'visuals', {
+      useglobalcontext: "true",
+      class: "SettingsMenuTab"
+    });
+
+    createVisualsNavbar();
+
+    var content = $.CreatePanel('Panel', tab, '', {
+      class: "full-width full-height"
+    });
+  
+    return content;
+  };
+
+  var createSubTab = function(tab, subTabName) {
+    var subTab = $.CreatePanel('Panel', tab, subTabName, {
+      useglobalcontext: "true",
+      class: "SettingsMenuTab"
+    });
+
+    var content = $.CreatePanel('Panel', subTab, '', {
+      class: "SettingsMenuTabContent vscroll"
+    });
     return content;
   };
 
@@ -199,9 +270,11 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', time, '', { class: "horizontal-separator" });
   createYesNoDropDown(time, "Show Post-round Timer", 'hud', 'postround_timer');
 
-  var visuals = createTab('visuals');
+  var visuals = createVisualsTab();
 
-  var playerInfo = createSection(visuals, 'Player Info In World');
+  var playerInfoTab = createSubTab(visuals, 'player_info');
+
+  var playerInfo = createSection(playerInfoTab, 'Player Info In World');
   createDropDown(playerInfo, "Enabled", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position', 0);
@@ -224,10 +297,13 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
 
-  var playerOutlineGlow = createSection(visuals, 'Player Outline Glow');
+  var outlineGlowTab = createSubTab(visuals, 'outline_glow');
+  var playerOutlineGlow = createSection(outlineGlowTab, 'Player Outline Glow');
   createDropDown(playerOutlineGlow, "Enabled", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 2);
   $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
   createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
+
+  $.Osiris.navigateToSubTab('visuals', 'player_info');
 
   var sound = createTab('sound');
   
