@@ -24,28 +24,6 @@ struct HookDependenciesBuilder {
         return {};
     }
 
-    [[nodiscard]] HookDependenciesMask getEntityList(const cs2::CConcreteEntityList** entityList, cs2::CEntityIndex* highestEntityIndex) const noexcept
-    {
-        if (!requiredDependencies.has<EntityListWalker>() && !requiredDependencies.has<EntityFromHandleFinder>())
-            return {};
-
-        if (!gameDependencies.entitySystemDeps.entitySystem || !gameDependencies.entitySystemDeps.entityListOffset)
-            return {};
-
-        const auto entitySystem = *gameDependencies.entitySystemDeps.entitySystem;
-        if (!entitySystem)
-            return {};
-
-        if (requiredDependencies.has<EntityListWalker>() && gameDependencies.entitySystemDeps.highestEntityIndexOffset) {
-            *highestEntityIndex = *gameDependencies.entitySystemDeps.highestEntityIndexOffset.of(entitySystem).get();
-            if (!highestEntityIndex->isValid())
-                *highestEntityIndex = cs2::kMaxValidEntityIndex;
-        }
-
-        *entityList = gameDependencies.entitySystemDeps.entityListOffset.of(entitySystem).get();
-        return HookDependenciesMask{}.set<EntityListWalker>().set<EntityFromHandleFinder>();
-    }
-
     HookDependenciesMask requiredDependencies;
     GameDependencies& gameDependencies;
 };

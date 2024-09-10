@@ -3,6 +3,7 @@
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include "PlayerPawn.h"
+#include "EntitySystem.h"
 
 template <typename HookContext>
 class PlayerController {
@@ -25,13 +26,10 @@ public:
 
     [[nodiscard]] decltype(auto) playerPawn() const noexcept
     {
-        if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return hookContext.template make<PlayerPawn>(nullptr);
-
         const auto playerPawnHandle = hookContext.gameDependencies().playerControllerDeps.offsetToPlayerPawnHandle.of(playerControllerPointer).get();
         if (!playerPawnHandle)
             return hookContext.template make<PlayerPawn>(nullptr);
-        return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerPawnHandle)));
+        return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerPawnHandle)));
     }
 
     [[nodiscard]] std::optional<cs2::Color> getPlayerColor() const noexcept

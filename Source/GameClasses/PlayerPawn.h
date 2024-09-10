@@ -53,13 +53,10 @@ public:
 
     [[nodiscard]] decltype(auto) playerController() const noexcept
     {
-        if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return hookContext.template make<PlayerController>(nullptr);
-
         const auto playerControllerHandle = hookContext.gameDependencies().playerPawnDeps.offsetToPlayerController.of(playerPawn).get();
         if (!playerControllerHandle)
             return hookContext.template make<PlayerController>(nullptr);
-        return hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerControllerHandle)));
+        return hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerControllerHandle)));
     }
 
     [[nodiscard]] auto health() const noexcept
@@ -118,11 +115,7 @@ public:
         const auto hostageServices = hookContext.gameDependencies().playerPawnDeps.offsetToHostageServices.of(playerPawn).valueOr(nullptr);
         if (!hostageServices)
             return false;
-
-        if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return false;
-
-        return hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(hookContext.gameDependencies().hostageServicesDeps.offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
+        return hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.gameDependencies().hostageServicesDeps.offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
@@ -140,14 +133,11 @@ public:
 
     [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon() const noexcept
     {
-        if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return nullptr;
-
         const auto weaponServices = hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr);
         if (!weaponServices)
             return nullptr;
 
-        return static_cast<cs2::C_CSWeaponBase*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(hookContext.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
+        return static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
     }
 
 private:    

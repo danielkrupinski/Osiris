@@ -770,12 +770,6 @@
     <ClInclude Include="CS2\Classes\CGameSceneNode.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\EntityFromHandleFinder.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\EntityListWalker.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -1417,6 +1411,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Optional.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\EntitySystem.h">
+      <Filter>GameClasses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

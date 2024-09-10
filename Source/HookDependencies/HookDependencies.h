@@ -2,8 +2,7 @@
 
 #include "HookDependenciesBuilder.h"
 #include "HookDependenciesMask.h"
-#include <FeatureHelpers/EntityFromHandleFinder.h>
-#include <FeatureHelpers/EntityListWalker.h>
+#include <FeatureHelpers/ConVarAccessor.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
@@ -54,11 +53,7 @@ struct HookDependencies {
     {
         assert(hasDependency<Dependency>());
 
-        if constexpr (std::is_same_v<Dependency, EntityListWalker>) {
-            return EntityListWalker{*entityList, highestEntityIndex};
-        } else if constexpr (std::is_same_v<Dependency, EntityFromHandleFinder>) {
-            return EntityFromHandleFinder{*entityList};
-        } else if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
+        if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
             return WorldToClipSpaceConverter{_gameDependencies.worldToProjectionMatrix};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
@@ -200,7 +195,6 @@ private:
     {
         const HookDependenciesBuilder builder{requiredDependencies, _gameDependencies};
 
-        presentDependencies |= builder.getEntityList(&entityList, &highestEntityIndex);
         presentDependencies |= builder.getSoundChannels(&soundChannels);
         presentDependencies |= builder.getFileSystem(&fileSystem);
     }
@@ -214,8 +208,6 @@ private:
     GlowSceneObjectsState& _glowSceneObjectsState;
     Hooks& _hooks;
 
-    const cs2::CConcreteEntityList* entityList;
-    cs2::CEntityIndex highestEntityIndex{cs2::kMaxValidEntityIndex};
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;
     ConVarAccessorState conVarAccessorState;

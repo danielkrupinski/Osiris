@@ -4,6 +4,7 @@
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 
 #include "BaseEntity.h"
+#include "EntitySystem.h"
 
 class EntityFromHandleFinder;
 
@@ -22,11 +23,8 @@ public:
         if (!weaponHandles)
             return;
 
-        if (!hookContext.template requestDependency<EntityFromHandleFinder>())
-            return;
-
         for (int i = 0; i < weaponHandles->size; ++i) {
-            auto&& weaponEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(weaponHandles->memory[i])));
+            auto&& weaponEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext.template make<EntitySystem>().getEntityFromHandle(weaponHandles->memory[i])));
             if (weaponEntity)
                 f(weaponEntity);
         }

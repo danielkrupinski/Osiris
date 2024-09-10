@@ -4,8 +4,6 @@
 #include <Features/Visuals/PlayerInformationThroughWalls/PlayerInformationThroughWalls.h>
 #include <Features/Visuals/PlayerOutlineGlow/PlayerOutlineGlow.h>
 
-#include "EntityFromHandleFinder.h"
-
 #include <HookDependencies/HookDependenciesMask.h>
 
 class RenderingHookEntityLoop {
@@ -18,18 +16,10 @@ public:
 
     void run() const noexcept
     {
-        if (!dependencies.requestDependencies(kCrucialDependencies))
-            return;
-
-        dependencies.getDependency<EntityListWalker>().iterateEntities([this](auto& entity) { handleEntity(entity); });
+        dependencies.make<EntitySystem>().iterateEntities([this](auto& entity) { handleEntity(entity); });
     }
 
 private:
-    static constexpr auto kCrucialDependencies{
-        HookDependenciesMask{}
-        .set<EntityListWalker>()
-    };
-
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
         if (dependencies.gameDependencies().entitiesVMTs.isPlayerPawn(entity.vmt)) {
