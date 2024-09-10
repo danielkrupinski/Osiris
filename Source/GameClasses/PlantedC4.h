@@ -45,16 +45,14 @@ struct PlantedC4 {
     {
     }
 
-    [[nodiscard]] float getTimeToExplosion() const noexcept
+    [[nodiscard]] auto getTimeToExplosion() const noexcept
     {
-        if (const auto curtime = dependencies.globalVars().curtime())
-            return base.blowTime().valueOr(0.0f) - *curtime;
-        return -1.0f;
+        return base.blowTime().toOptional() - dependencies.globalVars().curtime();
     }
 
     [[nodiscard]] bool isTicking() const noexcept
     {
-        return base.ticking().valueOr(true) && getTimeToExplosion() > 0.0f;
+        return base.ticking().valueOr(true) && getTimeToExplosion().greaterThan(0.0f).valueOr(false);
     }
 
     [[nodiscard]] bool isBeingDefused() const noexcept
@@ -62,20 +60,14 @@ struct PlantedC4 {
         return base.defuser().valueOr(cs2::INVALID_EHANDLE_INDEX) != cs2::INVALID_EHANDLE_INDEX;
     }
 
-    [[nodiscard]] std::optional<bool> canBeDefused() const noexcept
+    [[nodiscard]] auto canBeDefused() const noexcept
     {
-        const auto defuseEndTime = base.defuseEndTime();
-        const auto blowTime = base.blowTime();
-        if (defuseEndTime.get() && blowTime.get())
-            return *defuseEndTime.get() < *blowTime.get();
-        return {};
+        return base.defuseEndTime().toOptional().lessThan(base.blowTime().toOptional());
     }
 
-    [[nodiscard]] std::optional<float> getTimeToDefuseEnd() const noexcept
+    [[nodiscard]] auto getTimeToDefuseEnd() const noexcept
     {
-        if (const auto curtime = dependencies.globalVars().curtime())
-            return base.defuseEndTime().valueOr(0.0f) - *curtime;
-        return {};
+        return base.defuseEndTime().toOptional() - dependencies.globalVars().curtime();
     }
 
     [[nodiscard]] const char* getBombSiteIconUrl() const noexcept

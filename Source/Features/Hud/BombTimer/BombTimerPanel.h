@@ -13,7 +13,7 @@ struct BombTimerPanel {
 
         decltype(auto) tickingC4{context.tickingC4()};
         context.bombSiteIconPanel().setIcon(tickingC4.getBombSiteIconUrl());
-        context.bombTimerTextPanel().setTimeToExplosion(tickingC4.getTimeToExplosion());
+        context.bombTimerTextPanel().setTimeToExplosion(tickingC4.getTimeToExplosion().valueOr(0.0f));
     }
 
     void hide() const noexcept

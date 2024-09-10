@@ -1,9 +1,9 @@
 #pragma once
 
-#include <optional>
+#include <Utils/Optional.h>
 
 struct GlobalVars {
-    [[nodiscard]] std::optional<float> curtime() const noexcept
+    [[nodiscard]] Optional<float> curtime() const noexcept
     {
         if (globalVars)
             return globalVars->curtime;

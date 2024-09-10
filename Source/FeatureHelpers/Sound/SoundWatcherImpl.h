@@ -54,12 +54,12 @@ public:
             return;
 
         const auto curtime = hookDependencies.globalVars().curtime();
-        if (!curtime)
+        if (!curtime.hasValue())
             return;
 
         auto& soundChannels = hookDependencies.getDependency<SoundChannels>();
-        (removeExpiredSounds<Sounds>(soundChannels, *curtime), ...);
-        collectNewSounds(soundChannels, *curtime);
+        (removeExpiredSounds<Sounds>(soundChannels, curtime.value()), ...);
+        collectNewSounds(soundChannels, curtime.value());
     }
 
     template <typename Sound>

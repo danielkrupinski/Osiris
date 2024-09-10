@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <optional>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -11,6 +10,7 @@
 #include <Mocks/HudMocks/MockHud.h>
 #include <Mocks/MockHookContext.h>
 #include <Mocks/MockPanel.h>
+#include <Utils/Optional.h>
 
 class PostRoundTimerContextTest : public testing::Test {
 protected:
@@ -26,7 +26,7 @@ TEST_F(PostRoundTimerContextTest, ReturnsGameRulesFromHookContext) {
 }
 
 struct PostRoundTimerContextGameRoundTimeVisibleTestParam {
-    std::optional<bool> isVisible{};
+    Optional<bool> isVisible{};
     bool expectedIsVisible{};
 };
 

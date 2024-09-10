@@ -42,8 +42,8 @@ private:
 
     [[nodiscard]] float getTimeToRoundRestart() const noexcept
     {
-        if (auto&& timeToRoundRestart = context.gameRules().timeToRoundRestart(); timeToRoundRestart.has_value() && *timeToRoundRestart >= 0.0f)
-            return *timeToRoundRestart;
+        if (auto&& timeToRoundRestart = context.gameRules().timeToRoundRestart(); timeToRoundRestart.hasValue() && timeToRoundRestart.value() >= 0.0f)
+            return timeToRoundRestart.value();
         return 0.0f;
     }
 

@@ -213,10 +213,10 @@ public:
             return;
 
         const auto absOrigin = playerPawn.absOrigin();
-        if (!absOrigin)
+        if (!absOrigin.hasValue())
             return;
 
-        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(*absOrigin);
+        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin.value());
         if (!positionInClipSpace.onScreen())
             return;
 
@@ -249,7 +249,7 @@ public:
         setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, playerPawn);
         setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, playerPawn);
 
-        panel.setOpacity(playerPawn.hasImmunity().value_or(false) ? 0.5f : 1.0f);
+        panel.setOpacity(playerPawn.hasImmunity().valueOr(false) ? 0.5f : 1.0f);
         panel.setZIndex(-positionInClipSpace.z);
 
         const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
@@ -291,7 +291,7 @@ private:
     [[nodiscard]] bool shouldDrawOnPawn(auto&& playerPawn) noexcept
     {
         return playerPawn.isAlive().value_or(true)
-            && !(playerPawn.health() <= 0)
+            && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
             && (!state.showOnlyEnemies || playerPawn.isEnemy().value_or(true));
@@ -359,7 +359,7 @@ private:
         else
             panel.setColor(cs2::kColorWhite);
 
-        PanoramaLabel{dependencies, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(playerPawn.health().value_or(0)).cstring(), 0, true);
+        PanoramaLabel{dependencies, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(playerPawn.health().valueOr(0)).cstring(), 0, true);
     }
 
     void setPlayerStateIcons(auto&& playerStateIconsPanel, auto&& playerPawn) const noexcept
@@ -372,8 +372,8 @@ private:
         playerStateIconsPanel.setVisible(true);
         
         auto&& playerStateChildren = playerStateIconsPanel.children();
-        playerStateChildren[0].setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && playerPawn.isDefusing().value_or(false));
-        playerStateChildren[1].setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().value_or(false));
+        playerStateChildren[0].setVisible(state.playerStateIconsToShow.has<DefuseIconPanel>() && playerPawn.isDefusing().valueOr(false));
+        playerStateChildren[1].setVisible(state.playerStateIconsToShow.has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().valueOr(false));
         playerStateChildren[2].setVisible(state.playerStateIconsToShow.has<HostageRescuePanel>() && playerPawn.isRescuingHostage());
         updateBlindedIconPanel(playerStateChildren[3], playerPawn);
     }

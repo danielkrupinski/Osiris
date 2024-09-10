@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -10,6 +8,7 @@
 #include <Mocks/DefusingAlertMocks/MockDefusingCountdownTextPanel.h>
 #include <Mocks/MockPanel.h>
 #include <Mocks/MockPlantedC4.h>
+#include <Utils/Optional.h>
 
 class DefusingAlertPanelTest : public testing::Test {
 protected:
@@ -29,8 +28,8 @@ TEST_F(DefusingAlertPanelTest, HidesDefusingAlertContainerPanel) {
 }
 
 struct DefusingAlertPanelTestParam {
-    std::optional<float> timeToDefuseEnd{3.34f};
-    std::optional<bool> canBeDefused{true};
+    Optional<float> timeToDefuseEnd{3.34f};
+    Optional<bool> canBeDefused{true};
 };
 
 class DefusingAlertPanelTestWithParam : public DefusingAlertPanelTest, public testing::WithParamInterface<DefusingAlertPanelTestParam> {

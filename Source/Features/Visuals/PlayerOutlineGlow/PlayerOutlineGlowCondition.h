@@ -20,7 +20,7 @@ public:
     {
         return context.isLocalPlayerAlive()
             && playerPawn.isAlive().value_or(true)
-            && !(playerPawn.health() <= 0)
+            && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
             && (!context.state().showOnlyEnemies || playerPawn.isEnemy().value_or(true));

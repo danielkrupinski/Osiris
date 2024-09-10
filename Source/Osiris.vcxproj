@@ -413,6 +413,7 @@
     <ClInclude Include="Utils\Lvalue.h" />
     <ClInclude Include="Utils\ManuallyDestructible.h" />
     <ClInclude Include="Utils\MemorySection.h" />
+    <ClInclude Include="Utils\Optional.h" />
     <ClInclude Include="Utils\Pad.h" />
     <ClInclude Include="Utils\PrivateTag.h" />
     <ClInclude Include="Utils\RefCountedHook.h" />

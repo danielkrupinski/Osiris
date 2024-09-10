@@ -14,7 +14,7 @@ struct BombTimerCondition {
 
     [[nodiscard]] bool shouldShowBombTimer() const noexcept
     {
-        return context.bombPlantedPanel().isVisible().value_or(true) && context.hasTickingC4();
+        return context.bombPlantedPanel().isVisible().valueOr(true) && context.hasTickingC4();
     }
 
 private:

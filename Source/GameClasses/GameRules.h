@@ -12,29 +12,24 @@ struct GameRules {
     {
     }
 
-    [[nodiscard]] std::optional<float> roundStartTime() const noexcept
+    [[nodiscard]] auto roundStartTime() const noexcept
     {
         return GameRulesDeps::instance().roundStartTimeOffset.of(gameRules).toOptional();
     }
 
-    [[nodiscard]] std::optional<float> roundRestartTime() const noexcept
+    [[nodiscard]] auto roundRestartTime() const noexcept
     {
         return GameRulesDeps::instance().offsetToRoundRestartTime.of(gameRules).toOptional();
     }
 
     [[nodiscard]] bool hasScheduledRoundRestart() const noexcept
     {
-        return roundRestartTime() > 0.0f;
+        return roundRestartTime().greaterThan(0.0f).valueOr(false);
     }
 
-    [[nodiscard]] std::optional<float> timeToRoundRestart() const noexcept
+    [[nodiscard]] auto timeToRoundRestart() const noexcept
     {
-        const auto _roundRestartTime = roundRestartTime();
-        const auto _curtime = hookContext.globalVars().curtime();
-
-        if (_roundRestartTime && _curtime)
-            return *_roundRestartTime - *_curtime;
-        return {};
+        return roundRestartTime() - hookContext.globalVars().curtime();
     }
 
     HookContext& hookContext;

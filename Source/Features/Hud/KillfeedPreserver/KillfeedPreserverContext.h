@@ -18,7 +18,7 @@ struct KillfeedPreserverContext {
     {
         return [](auto&& deathNotice)
         {
-            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound())
+            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound().valueOr(false))
                 deathNotice.markAsJustSpawned();
         };
     }

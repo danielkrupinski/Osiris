@@ -1415,6 +1415,9 @@
     <ClInclude Include="Features\Visuals\PlayerOutlineGlow\PlayerOutlineGlowColorType.h">
       <Filter>Features\Visuals\PlayerOutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Optional.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

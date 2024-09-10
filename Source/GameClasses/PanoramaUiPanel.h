@@ -88,7 +88,7 @@ struct PanoramaUiPanel {
         }
 
         for (auto&& childPanel : childPanels) {
-            if (!childPanel.hasOwnLayoutFile().value_or(true)) {
+            if (!childPanel.hasOwnLayoutFile().valueOr(true)) {
                 if (auto&& foundPanel = childPanel.findChildInLayoutFile(childId))
                     return utils::lvalue<decltype(foundPanel)>(foundPanel);
             }
@@ -115,12 +115,12 @@ struct PanoramaUiPanel {
         return context.classes().hasClass(className);
     }
 
-    [[nodiscard]] std::optional<bool> hasOwnLayoutFile() const noexcept
+    [[nodiscard]] auto hasOwnLayoutFile() const noexcept
     {
         return context.hasFlag(cs2::k_EPanelFlag_HasOwnLayoutFile);
     }
 
-    [[nodiscard]] std::optional<bool> isVisible() const noexcept
+    [[nodiscard]] auto isVisible() const noexcept
     {
         return context.hasFlag(cs2::k_EPanelFlag_IsVisible);
     }

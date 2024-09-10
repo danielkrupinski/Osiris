@@ -23,10 +23,9 @@ public:
         return context.panel().hasClass(PanoramaSymbols::instance().deathNoticeKillerSymbol);
     }
 
-    [[nodiscard]] bool wasSpawnedThisRound() const noexcept
+    [[nodiscard]] auto wasSpawnedThisRound() const noexcept
     {
-        const auto roundStartTime = context.gameRules().roundStartTime();
-        return roundStartTime && getSpawnTime() >= *roundStartTime;
+        return context.gameRules().roundStartTime().lessEqual(getSpawnTime());
     }
 
     [[nodiscard]] float getSpawnTime() const noexcept
@@ -39,8 +38,8 @@ public:
 
     void markAsJustSpawned() const noexcept
     {
-        if (const auto curtime = context.globalVars().curtime())
-            setSpawnTime(*curtime);
+        if (const auto curtime = context.globalVars().curtime(); curtime.hasValue())
+            setSpawnTime(curtime.value());
     }
 
     void setSpawnTime(float spawnTime) const noexcept

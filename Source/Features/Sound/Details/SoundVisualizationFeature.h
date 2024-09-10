@@ -91,7 +91,7 @@ public:
             return;
 
         const auto curtime = hookDependencies.globalVars().curtime();
-        if (!curtime)
+        if (!curtime.hasValue())
             return;
 
         const auto containerPanel{hookDependencies.make<InWorldPanelContainer>().get()};
@@ -115,7 +115,7 @@ public:
             if (!soundInClipSpace.onScreen())
                 return;
 
-            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(*curtime));
+            const auto opacity = SoundVisualization<SoundType>::getOpacity(sound.getTimeAlive(curtime.value()));
             if (opacity <= 0.0f)
                 return;
 

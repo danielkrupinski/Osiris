@@ -10,17 +10,14 @@ public:
 
     void deleteSceneObject(auto&& sceneObject) const noexcept
     {
-        if (sceneObject && !isSceneObjectDeleted(sceneObject) && sceneSystem() && deleteSceneObjectFn())
+        if (sceneObject && !isSceneObjectDeleted(sceneObject).valueOr(false) && sceneSystem() && deleteSceneObjectFn())
             deleteSceneObjectFn()(sceneSystem(), sceneObject);
     }
 
 private:
-    [[nodiscard]] bool isSceneObjectDeleted(auto&& sceneObject) const noexcept
+    [[nodiscard]] auto isSceneObjectDeleted(auto&& sceneObject) const noexcept
     {
-        const auto sceneObjectFlags = hookContext.gameDependencies().glowSceneObjectDeps.offsetToSceneObjectFlags.of(sceneObject).get();
-        if (sceneObjectFlags)
-            return (*sceneObjectFlags & cs2::SceneObjectFlag_IsDeleted) != 0;
-        return false;
+        return (hookContext.gameDependencies().glowSceneObjectDeps.offsetToSceneObjectFlags.of(sceneObject).toOptional() & cs2::SceneObjectFlag_IsDeleted).notEqual(0);
     }
 
     [[nodiscard]] auto sceneSystem() const noexcept

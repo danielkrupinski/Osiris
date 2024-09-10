@@ -43,7 +43,7 @@ private:
     {
         constexpr auto kNormalAlpha = 102;
         constexpr auto kImmuneAlpha = 40;
-        return color.setAlpha(playerPawn.hasImmunity().value_or(false) ? kImmuneAlpha : kNormalAlpha);
+        return color.setAlpha(playerPawn.hasImmunity().valueOr(false) ? kImmuneAlpha : kNormalAlpha);
     }
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept

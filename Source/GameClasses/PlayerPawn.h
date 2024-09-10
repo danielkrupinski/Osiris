@@ -62,24 +62,24 @@ public:
         return hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(hookContext.template getDependency<EntityFromHandleFinder>().getEntityFromHandle(*playerControllerHandle)));
     }
 
-    [[nodiscard]] std::optional<int> health() const noexcept
+    [[nodiscard]] auto health() const noexcept
     {
         return hookContext.gameDependencies().entityDeps.offsetToHealth.of(playerPawn).toOptional();
     }
 
     [[nodiscard]] std::optional<cs2::Color> healthColor() const noexcept
     {
-        if (const auto healthValue = health(); healthValue.has_value())
-            return getColorOfHealthFraction(std::clamp(*healthValue, 0, 100) / 100.0f);
+        if (const auto healthValue = health(); healthValue.hasValue())
+            return getColorOfHealthFraction(std::clamp(healthValue.value(), 0, 100) / 100.0f);
         return {};
     }
 
-    [[nodiscard]] std::optional<bool> hasImmunity() const noexcept
+    [[nodiscard]] auto hasImmunity() const noexcept
     {
         return hookContext.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(playerPawn).toOptional();
     }
 
-    [[nodiscard]] std::optional<cs2::Vector> absOrigin() const noexcept
+    [[nodiscard]] Optional<cs2::Vector> absOrigin() const noexcept
     {
         const auto gameSceneNode = hookContext.gameDependencies().entityDeps.offsetToGameSceneNode.of(playerPawn).get();
         if (!gameSceneNode || !*gameSceneNode)
@@ -103,12 +103,12 @@ public:
         return _teamNumber == TeamNumber::TT || _teamNumber == TeamNumber::CT;
     }
 
-    [[nodiscard]] std::optional<bool> isPickingUpHostage() const noexcept
+    [[nodiscard]] auto isPickingUpHostage() const noexcept
     {
         return hookContext.gameDependencies().playerPawnDeps.offsetToIsPickingUpHostage.of(playerPawn).toOptional();
     }
 
-    [[nodiscard]] std::optional<bool> isDefusing() const noexcept
+    [[nodiscard]] auto isDefusing() const noexcept
     {
         return hookContext.gameDependencies().playerPawnDeps.offsetToIsDefusing.of(playerPawn).toOptional();
     }
@@ -128,14 +128,14 @@ public:
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
     {
         const auto curTime = hookContext.globalVars().curtime();
-        if (!curTime)
+        if (!curTime.hasValue())
             return 0.0f;
         const auto flashBangEndTime = hookContext.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime.of(playerPawn).get();
         if (!flashBangEndTime)
             return 0.0f;
-        if (*flashBangEndTime <= *curTime)
+        if (*flashBangEndTime <= curTime.value())
             return 0.0f;
-        return *flashBangEndTime - *curTime;
+        return *flashBangEndTime - curTime.value();
     }
 
     [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon() const noexcept

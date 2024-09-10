@@ -3,10 +3,11 @@
 #include <optional>
 
 #include <gmock/gmock.h>
+#include <Utils/Optional.h>
 
 struct MockPlantedC4 {
     MOCK_METHOD(const char*, getBombSiteIconUrl, ());
-    MOCK_METHOD(float, getTimeToExplosion, ());
-    MOCK_METHOD(std::optional<float>, getTimeToDefuseEnd, ());
-    MOCK_METHOD(std::optional<bool>, canBeDefused, ());
+    MOCK_METHOD(Optional<float>, getTimeToExplosion, ());
+    MOCK_METHOD(Optional<float>, getTimeToDefuseEnd, ());
+    MOCK_METHOD(Optional<bool>, canBeDefused, ());
 };

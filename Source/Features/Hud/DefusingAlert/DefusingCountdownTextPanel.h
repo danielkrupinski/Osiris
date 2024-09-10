@@ -1,9 +1,8 @@
 #pragma once
 
-#include <optional>
-
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <Utils/Optional.h>
 #include <Utils/StringBuilder.h>
 
 template <typename LabelPanel>
@@ -13,26 +12,26 @@ struct DefusingCountdownTextPanel {
     {
     }
 
-    auto& setTimeToDefuseEnd(std::optional<float> timeToDefuseEnd) const noexcept
+    auto& setTimeToDefuseEnd(Optional<float> timeToDefuseEnd) const noexcept
     {
-        if (timeToDefuseEnd.has_value()) {
+        if (timeToDefuseEnd.hasValue()) {
             panel.setText(StringBuilderStorage<10>{}.builder().put(
-                static_cast<int>(*timeToDefuseEnd), '.', static_cast<int>(*timeToDefuseEnd * 10) % 10).cstring());
+                static_cast<int>(timeToDefuseEnd.value()), '.', static_cast<int>(timeToDefuseEnd.value() * 10) % 10).cstring());
         }
         return *this;
     }
 
-    auto& setCanBeDefused(std::optional<bool> canBeDefused) const noexcept
+    auto& setCanBeDefused(Optional<bool> canBeDefused) const noexcept
     {
         panel.uiPanel().setColor(getDefusingCountdownColor(canBeDefused));
         return *this;
     }
 
 private:
-    [[nodiscard]] static cs2::Color getDefusingCountdownColor(std::optional<bool> canBeDefused) noexcept
+    [[nodiscard]] static cs2::Color getDefusingCountdownColor(Optional<bool> canBeDefused) noexcept
     {
-        if (canBeDefused.has_value())
-            return *canBeDefused ? cs2::kColorGreen : cs2::kColorRed;
+        if (canBeDefused.hasValue())
+            return canBeDefused.value() ? cs2::kColorGreen : cs2::kColorRed;
         return cs2::kColorWhite;
     }
 

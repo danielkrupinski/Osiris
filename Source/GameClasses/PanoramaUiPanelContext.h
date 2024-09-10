@@ -83,11 +83,9 @@ struct PanoramaUiPanelContext {
         return nullptr;
     }
 
-    [[nodiscard]] std::optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
+    [[nodiscard]] Optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
     {
-        if (const auto flags = impl().offsetToPanelFlags.of(panel).get())
-            return (*flags & flag) != 0;
-        return {};
+        return (impl().offsetToPanelFlags.of(panel).toOptional() & flag) != 0;
     }
 
     [[nodiscard]] auto setParent() const noexcept

@@ -16,7 +16,7 @@ struct PostRoundTimerContext {
 
     [[nodiscard]] bool isGameRoundTimeVisible() const noexcept
     {
-        return _hookContext.hud().timerTextPanel().isVisible().value_or(false);
+        return _hookContext.hud().timerTextPanel().isVisible().valueOr(false);
     }
 
     [[nodiscard]] decltype(auto) gameRules() const noexcept

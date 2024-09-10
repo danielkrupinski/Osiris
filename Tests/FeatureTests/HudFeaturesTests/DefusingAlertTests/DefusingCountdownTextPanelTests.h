@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -9,6 +7,7 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <Features/Hud/DefusingAlert/DefusingCountdownTextPanel.h>
 #include <Mocks/MockLabelPanel.h>
+#include <Utils/Optional.h>
 
 class DefusingCountdownTextPanelTest : public testing::Test {
 protected:
@@ -38,7 +37,7 @@ INSTANTIATE_TEST_SUITE_P(, DefusingCountdownTextPanelTestWithTimeToDefuseEndPara
 ));
 
 struct DefusingCountdownTextPanelTestCanBeDefusedParam {
-    std::optional<bool> canBeDefused{};
+    Optional<bool> canBeDefused{};
     cs2::Color expectedColor{cs2::kColorBlack};
 };
 

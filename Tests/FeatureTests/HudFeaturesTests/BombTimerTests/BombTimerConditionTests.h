@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -9,6 +7,7 @@
 #include <Features/Hud/BombTimer/BombTimerState.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/MockPanel.h>
+#include <Utils/Optional.h>
 
 class BombTimerConditionTest : public testing::Test {
 protected:
@@ -33,7 +32,7 @@ TEST_F(BombTimerConditionTest, ShouldNotRunIfNotEnabled) {
 }
 
 struct BombTimerConditionTestParam {
-    std::optional<bool> bombPlantedPanelVisible{};
+    Optional<bool> bombPlantedPanelVisible{};
     bool hasTickingC4{};
     bool expectedShouldShow{};
 };
