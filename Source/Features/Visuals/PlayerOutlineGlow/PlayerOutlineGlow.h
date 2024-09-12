@@ -24,7 +24,7 @@ public:
 
         auto&& applyGlow = applyGlowOp(correctAlpha(playerPawn, getColor(playerPawn)));
         applyGlow(playerPawn.baseEntity());
-        playerPawn.weapons().forEach(applyGlow);
+        playerPawn.baseEntity().forEachChild(applyGlow);
     }
 
 private:

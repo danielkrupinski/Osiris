@@ -9,6 +9,7 @@
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
+#include "GameSceneNode.h"
 #include "PlayerWeapons.h"
 
 class EntityFromHandleFinder;
@@ -76,12 +77,9 @@ public:
         return hookContext.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(playerPawn).toOptional();
     }
 
-    [[nodiscard]] Optional<cs2::Vector> absOrigin() const noexcept
+    [[nodiscard]] decltype(auto) absOrigin() const noexcept
     {
-        const auto gameSceneNode = hookContext.gameDependencies().entityDeps.offsetToGameSceneNode.of(playerPawn).get();
-        if (!gameSceneNode || !*gameSceneNode)
-            return {};
-        return hookContext.gameDependencies().gameSceneNodeDeps.offsetToAbsOrigin.of(*gameSceneNode).toOptional();
+        return baseEntity().gameSceneNode().absOrigin();
     }
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
@@ -140,7 +138,7 @@ public:
         return static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
     }
 
-private:    
+private:
     [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
     {
         return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);

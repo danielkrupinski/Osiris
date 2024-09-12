@@ -1415,6 +1415,9 @@
     <ClInclude Include="GameClasses\EntitySystem.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\GameSceneNode.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
