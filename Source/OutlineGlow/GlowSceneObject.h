@@ -13,9 +13,9 @@ public:
     {
     }
 
-    void apply(auto&& sceneObject, cs2::Color color) const noexcept
+    void apply(auto&& sceneObject, cs2::Color color, int glowRange = 0) const noexcept
     {
-        context.applyGlow(sceneObject, color);
+        context.applyGlow(sceneObject, color, glowRange);
     }
 
     void setGlowEntity(auto&& entity) const noexcept

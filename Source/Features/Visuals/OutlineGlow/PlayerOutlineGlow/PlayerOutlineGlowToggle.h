@@ -4,7 +4,7 @@
 #include "PlayerOutlineGlowColorType.h"
 
 template <typename Context>
-struct PlayerOutlineGlowToggle : FeatureToggleOnOff<PlayerOutlineGlowToggle<Context>> {
+struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<Context>> {
     template <typename... Args>
     PlayerOutlineGlowToggle(Args&&... args) noexcept
         : context{std::forward<Args>(args)...}
@@ -32,17 +32,6 @@ struct PlayerOutlineGlowToggle : FeatureToggleOnOff<PlayerOutlineGlowToggle<Cont
     [[nodiscard]] auto& enabledVariable(typename PlayerOutlineGlowToggle::ToggleMethod) const noexcept
     {
         return context.state().enabled;
-    }
-
-    void onEnable(typename PlayerOutlineGlowToggle::ToggleMethod) noexcept
-    {
-        context.viewRenderHook().incrementReferenceCount();
-    }
-
-    void onDisable(typename PlayerOutlineGlowToggle::ToggleMethod) noexcept
-    {
-        context.viewRenderHook().decrementReferenceCount();
-        context.clearGlowSceneObjects();
     }
 
 private:

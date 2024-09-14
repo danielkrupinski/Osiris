@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void applyGlow(auto&& sceneObject, cs2::Color color) const noexcept
+    void applyGlow(auto&& sceneObject, cs2::Color color, int glowRange) const noexcept
     {
         if (!sceneObject || !glowSceneObjectPointer)
             return;
@@ -26,12 +26,12 @@ public:
             float colorFloat[4]{color.r() / 255.0f, color.g() / 255.0f, color.b() / 255.0f, color.a() / 255.0f};
 
 #if IS_WIN64()
-            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, colorFloat, 0, 0, 3, 1.0f);
+            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, colorFloat, 0, static_cast<float>(glowRange), 3, 1.0f);
 #elif IS_LINUX()
             double colorDouble[2];
             static_assert(sizeof(colorFloat) == sizeof(colorDouble));
             std::memcpy(colorDouble, colorFloat, sizeof(colorFloat));
-            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, 3, colorDouble[0], colorDouble[1], 0.0f, 0.0f, 1.0f);
+            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, 3, colorDouble[0], colorDouble[1], 0.0f, static_cast<float>(glowRange), 1.0f);
 #endif
 
             glowSceneObjectPointer->setValue(tempGlowSceneObject);

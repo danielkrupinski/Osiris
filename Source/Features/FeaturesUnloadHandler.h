@@ -2,7 +2,7 @@
 
 #include "FeaturesStates.h"
 #include "Hud/HudFeaturesUnloadHandler.h"
-#include "Visuals/PlayerOutlineGlow/PlayerOutlineGlowUnloadHandler.h"
+#include "Visuals/OutlineGlow/OutlineGlowUnloadHandler.h"
 
 template <typename HookContext>
 struct FeaturesUnloadHandler {
@@ -15,7 +15,7 @@ struct FeaturesUnloadHandler {
     void handleUnload() const noexcept
     {
         hookContext.template make<HudFeaturesUnloadHandler>(states.hudFeaturesStates).handleUnload();
-        hookContext.template make<PlayerOutlineGlowUnloadHandler>().handleUnload();
+        hookContext.template make<OutlineGlowUnloadHandler>().handleUnload();
     }
 
     HookContext& hookContext;

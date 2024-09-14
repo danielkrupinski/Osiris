@@ -13,27 +13,27 @@ struct Color {
 
     constexpr bool operator==(const Color&) const = default;
 
-    [[nodiscard]] std::uint8_t r() const noexcept
+    [[nodiscard]] constexpr std::uint8_t r() const noexcept
     {
         return rgba[0];
     }
 
-    [[nodiscard]] std::uint8_t g() const noexcept
+    [[nodiscard]] constexpr std::uint8_t g() const noexcept
     {
         return rgba[1];
     }
 
-    [[nodiscard]] std::uint8_t b() const noexcept
+    [[nodiscard]] constexpr std::uint8_t b() const noexcept
     {
         return rgba[2];
     }
 
-    [[nodiscard]] std::uint8_t a() const noexcept
+    [[nodiscard]] constexpr std::uint8_t a() const noexcept
     {
         return rgba[3];
     }
 
-    [[nodiscard]] auto setAlpha(std::uint8_t newAlpha) const noexcept
+    [[nodiscard]] constexpr auto setAlpha(std::uint8_t newAlpha) const noexcept
     {
         return Color{r(), g(), b(), newAlpha};
     }

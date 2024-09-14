@@ -21,7 +21,7 @@ struct Features {
 
     [[nodiscard]] VisualFeatures visualFeatures() const noexcept
     {
-        return VisualFeatures{hookDependencies, states.visualFeaturesStates, helpers, hooks.viewRenderHook};
+        return VisualFeatures{hookDependencies, states.visualFeaturesStates, hooks.viewRenderHook};
     }
 
     FeaturesStates& states;

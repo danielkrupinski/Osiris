@@ -3,6 +3,7 @@
 #include <CS2/Classes/CLoopModeGame.h>
 #include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
+#include <FeatureHelpers/EntityClassifier.h>
 #include <FeatureHelpers/FeatureHelpers.h>
 #include <FeatureHelpers/RenderingHookEntityLoop.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
@@ -42,6 +43,7 @@ struct FullGlobalContext {
             _gameDependencies.loopModeGame,
             _gameDependencies.viewRender,
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
+        , entityClassifier{_gameDependencies.entitiesVMTs}
     {
     }
 
@@ -59,7 +61,7 @@ struct FullGlobalContext {
     {
         hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks, entityClassifier};
         SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
         soundWatcher.update();
         features(dependencies).soundFeatures().runOnViewMatrixUpdate();
@@ -72,7 +74,7 @@ struct FullGlobalContext {
 
     [[nodiscard]] PeepEventsHookResult onPeepEventsHook(bool fullContextJustInitialized) noexcept
     {
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks};
+        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks, entityClassifier};
 
         if (fullContextJustInitialized) {
             if (const auto mainMenu{_gameDependencies.mainMenu}; mainMenu && *mainMenu)
@@ -118,4 +120,5 @@ public:
     BombStatusPanelState bombStatusPanelState;
     InWorldPanelContainerState inWorldPanelContainerState;
     GlowSceneObjectsState glowSceneObjectsState;
+    EntityClassifier entityClassifier;
 };

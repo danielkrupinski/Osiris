@@ -2,13 +2,13 @@
 
 #include <utility>
 
-#include "PlayerOutlineGlow.h"
+#include "OutlineGlowContext.h"
 
 template <typename Context>
-class PlayerOutlineGlowUnloadHandler {
+class OutlineGlowUnloadHandler {
 public:
     template <typename... Args>
-    PlayerOutlineGlowUnloadHandler(Args&&... args) noexcept
+    OutlineGlowUnloadHandler(Args&&... args) noexcept
         : context{std::forward<Args>(args)...}
     {
     }
@@ -23,4 +23,4 @@ private:
 };
 
 template <typename HookContext>
-PlayerOutlineGlowUnloadHandler(HookContext&) -> PlayerOutlineGlowUnloadHandler<PlayerOutlineGlowContext<HookContext>>;
+OutlineGlowUnloadHandler(HookContext&) -> OutlineGlowUnloadHandler<OutlineGlowContext<HookContext>>;
