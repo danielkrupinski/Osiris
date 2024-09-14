@@ -3,7 +3,7 @@
 #include "PlayerOutlineGlowColorType.h"
 
 struct PlayerOutlineGlowState {
-    bool enabled{false};
-    bool showOnlyEnemies{false};
+    bool enabled{true};
+    bool showOnlyEnemies{true};
     PlayerOutlineGlowColorType colorType{PlayerOutlineGlowColorType::PlayerOrTeamColor};
 };

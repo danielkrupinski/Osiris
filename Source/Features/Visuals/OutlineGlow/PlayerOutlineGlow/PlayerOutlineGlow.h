@@ -22,23 +22,12 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowPlayer(playerPawn))
             return;
 
-        auto&& applyGlow = applyGlowOp(correctAlpha(playerPawn, getColor(playerPawn)));
-        applyGlow(playerPawn.baseEntity());
-        playerPawn.baseEntity().forEachChild(applyGlow);
+        const auto color = correctAlpha(playerPawn, getColor(playerPawn));
+        playerPawn.baseEntity().applyGlow(color);
+        playerPawn.baseEntity().forEachChild([color](auto&& entity) { entity.applyGlow(color); });
     }
 
 private:
-    [[nodiscard]] auto applyGlowOp(cs2::Color color) const noexcept
-    {
-        return [this, color](auto&& baseEntity){
-            baseEntity.renderComponent().sceneObjectUpdaters().forEachSceneObject([this, &baseEntity, color](auto&& sceneObject){
-                auto&& glowSceneObject = context.getGlowSceneObjectFor(sceneObject);
-                glowSceneObject.apply(sceneObject, color);
-                glowSceneObject.setGlowEntity(baseEntity);
-            });
-        };
-    }
-
     [[nodiscard]] cs2::Color correctAlpha(auto&& playerPawn, cs2::Color color) const noexcept
     {
         constexpr auto kNormalAlpha = 102;

@@ -81,6 +81,10 @@ private:
             handleFeature(features.visualFeatures().playerOutlineGlowToggle());
         } else if (feature == "player_outline_glow_color") {
             features.visualFeatures().playerOutlineGlowToggle().updateColor(parser.getChar());
+        } else if (feature == "outline_glow_enable") {
+            handleTogglableFeature(features.visualFeatures().outlineGlowToggle());
+        } else if (feature == "weapon_outline_glow") {
+            handleTogglableFeature(features.visualFeatures().weaponOutlineGlowToggle());
         }
     }
 

@@ -14,3 +14,4 @@ using OffsetToLifeState = EntityOffset<cs2::C_BaseEntity::m_lifeState, std::int3
 using OffsetToTeamNumber = EntityOffset<cs2::C_BaseEntity::m_iTeamNum, std::int32_t>;
 using OffsetToVData = EntityOffset<cs2::C_BaseEntity::m_pSubclassVData, std::int32_t>;
 using OffsetToRenderComponent = EntityOffset<cs2::C_BaseEntity::m_pRenderComponent, std::int32_t>;
+using OffsetToOwnerEntity = EntityOffset<cs2::C_BaseEntity::m_hOwnerEntity, std::int32_t>;

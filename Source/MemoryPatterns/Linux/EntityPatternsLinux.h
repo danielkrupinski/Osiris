@@ -36,4 +36,9 @@ struct EntityPatterns {
     {
         return patternFinders.clientPatternFinder("49 8B BC 24 ? ? ? ? 48 85 FF 74 ? 8B 47"_pat).add(4).template readOffset<OffsetToRenderComponent>();
     }
+
+    [[nodiscard]] OffsetToOwnerEntity offsetToOwnerEntity() const noexcept
+    {
+        return patternFinders.clientPatternFinder("BF ? ? ? ? 8B 8F ? ? ? ?"_pat).add(7).template readOffset<OffsetToOwnerEntity>();
+    }
 };

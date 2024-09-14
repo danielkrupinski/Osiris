@@ -18,9 +18,10 @@ struct FeaturesStates;
 struct PanoramaGuiState;
 struct GlowSceneObjectsState;
 struct Hooks;
+class EntityClassifier;
 
 struct HookDependencies {
-    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates, GlowSceneObjectsState& glowSceneObjectsState, Hooks& hooks) noexcept
+    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates, GlowSceneObjectsState& glowSceneObjectsState, Hooks& hooks, EntityClassifier& entityClassifier) noexcept
         : _gameDependencies{gameDependencies}
         , featureHelpers{featureHelpers}
         , _bombStatusPanelState{bombStatusPanelState}
@@ -29,6 +30,7 @@ struct HookDependencies {
         , _featuresStates{featuresStates}
         , _glowSceneObjectsState{glowSceneObjectsState}
         , _hooks{hooks}
+        , _entityClassifier{entityClassifier}
     {
         if (gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
@@ -97,6 +99,11 @@ struct HookDependencies {
     [[nodiscard]] GlowSceneObjectsState& glowSceneObjectsState() const noexcept
     {
         return _glowSceneObjectsState;
+    }
+
+    [[nodiscard]] EntityClassifier& entityClassifier() const noexcept
+    {
+        return _entityClassifier;
     }
 
     [[nodiscard]] Hooks& hooks() const noexcept
@@ -207,6 +214,7 @@ private:
     FeaturesStates& _featuresStates;
     GlowSceneObjectsState& _glowSceneObjectsState;
     Hooks& _hooks;
+    EntityClassifier& _entityClassifier;
 
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;

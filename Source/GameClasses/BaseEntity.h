@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <OutlineGlow/GlowSceneObjects.h>
 
 #include "GameSceneNode.h"
 #include "RenderComponent.h"
@@ -35,6 +36,20 @@ public:
         if (entity)
             return entity->identity->handle;
         return cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX};
+    }
+
+    void applyGlow(cs2::Color color, int glowRange = 0) const noexcept
+    {
+        renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject){
+            auto&& glowSceneObject = hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
+            glowSceneObject.apply(sceneObject, color, glowRange);
+            glowSceneObject.setGlowEntity(*this);
+        });
+    }
+
+    [[nodiscard]] auto hasOwner() const noexcept
+    {
+        return hookContext.gameDependencies().entityDeps.offsetToOwnerEntity.of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
     }
 
     operator cs2::C_BaseEntity*() const noexcept

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <CS2/Classes/Entities/CEntityInstance.h>
+#include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInformationThroughWalls/PlayerInformationThroughWalls.h>
-#include <Features/Visuals/PlayerOutlineGlow/PlayerOutlineGlow.h>
 
 #include <HookDependencies/HookDependenciesMask.h>
 
@@ -22,11 +22,13 @@ public:
 private:
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
-        if (dependencies.gameDependencies().entitiesVMTs.isPlayerPawn(entity.vmt)) {
+        const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
+
+        if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>()) {
             auto&& playerPawn = dependencies.make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
-            dependencies.make<PlayerOutlineGlow>().applyGlowToPlayer(playerPawn);
         }
+        dependencies.make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, entity);
     }
 
     HookDependencies& dependencies;

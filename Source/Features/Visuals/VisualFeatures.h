@@ -2,7 +2,9 @@
 
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
-#include "PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
+#include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
+#include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
+#include "OutlineGlow/OutlineGlowToggle.h"
 #include "VisualFeaturesStates.h"
 
 class LoopModeGameHook;
@@ -68,8 +70,17 @@ struct VisualFeatures {
         return hookDependencies.make<PlayerOutlineGlowToggle>();
     }
 
+    [[nodiscard]] decltype(auto) outlineGlowToggle() const noexcept
+    {
+        return hookDependencies.make<OutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) weaponOutlineGlowToggle() const noexcept
+    {
+        return hookDependencies.make<WeaponOutlineGlowToggle>();
+    }
+
     HookDependencies& hookDependencies;
     VisualFeaturesStates& states;
-    FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;
 };

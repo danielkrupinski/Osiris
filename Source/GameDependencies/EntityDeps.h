@@ -11,6 +11,7 @@ struct EntityDeps {
         , offsetToTeamNumber{entityPatterns.offsetToTeamNumber()}
         , offsetToVData{entityPatterns.offsetToVData()}
         , offsetToRenderComponent{entityPatterns.offsetToRenderComponent()}
+        , offsetToOwnerEntity{entityPatterns.offsetToOwnerEntity()}
     {
     }
 
@@ -20,4 +21,5 @@ struct EntityDeps {
     OffsetToTeamNumber offsetToTeamNumber;
     OffsetToVData offsetToVData;
     OffsetToRenderComponent offsetToRenderComponent;
+    OffsetToOwnerEntity offsetToOwnerEntity;
 };
