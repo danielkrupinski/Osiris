@@ -15,7 +15,7 @@ struct ClientPanel {
 
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(panel->uiPanel);
+        return hookContext.template make<PanoramaUiPanel>(uiPanelPointer());
     }
 
     template <template <typename> typename T>
@@ -25,6 +25,13 @@ struct ClientPanel {
     }
 
 private:
+    [[nodiscard]] cs2::CUIPanel* uiPanelPointer() const noexcept
+    {
+        if (panel)
+            return panel->uiPanel;
+        return nullptr;
+    }
+
     HookContext& hookContext;
     cs2::CPanel2D* panel;
 };

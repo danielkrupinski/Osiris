@@ -18,7 +18,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] decltype(auto) clientPanel() const noexcept
     {
-        return hookContext.template make<ClientPanel>(panel->clientPanel);
+        return hookContext.template make<ClientPanel>(clientPanelPointer());
     }
 
     template <template <typename> typename T>
@@ -124,6 +124,13 @@ struct PanoramaUiPanelContext {
     }
 
 private:
+    [[nodiscard]] cs2::CPanel2D* clientPanelPointer() const noexcept
+    {
+        if (panel)
+            return panel->clientPanel;
+        return nullptr;
+    }
+
     [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
     {
         return impl().panelStyle.of(panel).get();
