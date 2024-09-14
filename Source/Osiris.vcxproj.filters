@@ -1403,7 +1403,6 @@
     <ClInclude Include="GameClasses\GameSceneNode.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h" />
     <ClInclude Include="FeatureHelpers\EntityClassifier.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
@@ -1454,6 +1453,9 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h">
+      <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
