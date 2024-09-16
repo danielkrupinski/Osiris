@@ -175,6 +175,7 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowCondition.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowContext.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowState.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h" />
