@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cs2
+namespace cs2::panel_id
 {
 
 constexpr auto HudTeamCounter = "HudTeamCounter";

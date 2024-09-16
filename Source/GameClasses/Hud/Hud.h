@@ -23,7 +23,7 @@ struct Hud {
 
     [[nodiscard]] decltype(auto) getHudReticle() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::HudReticle);
+        return context.panel().findChildInLayoutFile(cs2::panel_id::HudReticle);
     }
 
     [[nodiscard]] decltype(auto) scoreAndTimeAndBomb() noexcept
@@ -38,7 +38,7 @@ struct Hud {
 
     [[nodiscard]] decltype(auto) hudTeamCounter() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::HudTeamCounter);
+        return context.panel().findChildInLayoutFile(cs2::panel_id::HudTeamCounter);
     }
 
     [[nodiscard]] decltype(auto) bombPlantedPanel() noexcept
@@ -49,13 +49,13 @@ struct Hud {
 private:
     [[nodiscard]] decltype(auto) hudDeathNotice() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::HudDeathNotice);
+        return context.panel().findChildInLayoutFile(cs2::panel_id::HudDeathNotice);
     }
 
     [[nodiscard]] auto findVisibleDeathNoticesPanel() noexcept
     {
         return [this] { 
-            return hudDeathNotice().findChildInLayoutFile(cs2::VisibleNotices);
+            return hudDeathNotice().findChildInLayoutFile(cs2::panel_id::VisibleNotices);
         };
     }
 
@@ -63,28 +63,28 @@ private:
     {
         return [this] {
             context.resetBombStatusVisibility();
-            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::BombStatus);
+            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::panel_id::BombStatus);
         };
     }
 
     [[nodiscard]] auto findBombPlantedPanel() noexcept
     {
         return [this] {
-            return bombStatus().findChildInLayoutFile(cs2::BombPlanted);
+            return bombStatus().findChildInLayoutFile(cs2::panel_id::BombPlanted);
         };
     }
 
     [[nodiscard]] auto findScoreAndTimeAndBombPanel() noexcept
     {
         return [this] {
-            return hudTeamCounter().findChildInLayoutFile(cs2::ScoreAndTimeAndBomb);
+            return hudTeamCounter().findChildInLayoutFile(cs2::panel_id::ScoreAndTimeAndBomb);
         };
     }
 
     [[nodiscard]] auto findTimerTextPanel() noexcept
     {
         return [this] {
-            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::TimerText);
+            return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::panel_id::TimerText);
         };
     }
 
