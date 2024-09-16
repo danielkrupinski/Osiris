@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 16 September 2024
+    * Different grenades have now different outline glow color
+
+    ![Grenade glow colors](https://github.com/user-attachments/assets/89601db4-1254-44fe-985e-9387c75b08c5)
+
 * 14 September 2024
     * Added weapon outline glow feature showing weapons on the ground nearby
 
@@ -21,11 +26,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 * 4 September 2024
     * Renamed "Player Information Through Walls" to "Player Info In World"
     * Player outline glow has now lower opacity on players with deathmatch immunity
-
-* 3 September 2024
-    * Player outline glow can now use color based on player health
-
-    ![Player glow health-based](https://github.com/user-attachments/assets/5d2c6712-a219-4263-ad87-9a8c5bb275e0)
 
 ## Technical features
 
