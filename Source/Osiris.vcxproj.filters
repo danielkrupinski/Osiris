@@ -1457,6 +1457,9 @@
     <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

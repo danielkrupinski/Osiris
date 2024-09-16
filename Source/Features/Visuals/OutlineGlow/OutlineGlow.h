@@ -20,7 +20,7 @@ public:
         if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>())
             context.applyGlowToPlayer(entity);
         else if (entityTypeInfo.isWeapon())
-            context.applyGlowToWeapon(entity);
+            context.applyGlowToWeapon(entityTypeInfo, entity);
     }
 
 private:
