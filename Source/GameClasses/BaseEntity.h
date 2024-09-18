@@ -38,6 +38,12 @@ public:
         return cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX};
     }
 
+    void applyGlowRecursively(cs2::Color color, int glowRange = 0) const noexcept
+    {
+        applyGlow(color, glowRange);
+        forEachChild([color, glowRange](auto&& entity) { entity.applyGlow(color, glowRange); });
+    }
+
     void applyGlow(cs2::Color color, int glowRange = 0) const noexcept
     {
         renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject){

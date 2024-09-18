@@ -35,6 +35,7 @@
     <ClInclude Include="CS2\Classes\CUtlVector.h" />
     <ClInclude Include="CS2\Classes\CViewRender.h" />
     <ClInclude Include="CS2\Classes\C_CSGameRules.h" />
+    <ClInclude Include="CS2\Classes\Entities\CBaseAnimGraph.h" />
     <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h" />
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h" />
     <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h" />
@@ -161,6 +162,11 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowParams.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowState.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowState.h" />

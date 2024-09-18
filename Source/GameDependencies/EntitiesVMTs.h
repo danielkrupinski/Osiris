@@ -4,6 +4,7 @@
 #include <tuple>
 #include <type_traits>
 
+#include <CS2/Classes/Entities/CBaseAnimGraph.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
@@ -53,7 +54,9 @@ using KnownEntityTypes = std::tuple<
     cs2::C_SmokeGrenade,
     cs2::C_MolotovGrenade,
     cs2::C_IncendiaryGrenade,
-    cs2::C_DecoyGrenade
+    cs2::C_DecoyGrenade,
+
+    cs2::CBaseAnimGraph
 >;
 
 struct EntitiesVMTs {
