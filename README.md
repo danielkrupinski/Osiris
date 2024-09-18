@@ -7,6 +7,12 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 18 September 2024
+    * Added outline glow for defuse kits on the ground nearby
+
+    ![Defuse kit glow](https://github.com/user-attachments/assets/1e212425-9ef1-4273-9052-1510409e5c9b)
+
+
 * 16 September 2024
     * Different grenades have now different outline glow color
 
@@ -22,10 +28,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 5 September 2024
     * "Player Info In World" and "Outline Glow" have now separate tabs in settings GUI
-
-* 4 September 2024
-    * Renamed "Player Information Through Walls" to "Player Info In World"
-    * Player outline glow has now lower opacity on players with deathmatch immunity
 
 ## Technical features
 
