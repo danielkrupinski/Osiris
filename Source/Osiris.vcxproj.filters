@@ -172,6 +172,9 @@
     <Filter Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow">
       <UniqueIdentifier>{8c999ef8-d7ae-4f2b-bc29-f9ed28e806db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow">
+      <UniqueIdentifier>{ab8f4d2e-4353-44f9-ac25-425ae8cbe905}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1459,6 +1462,24 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowParams.h">
       <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\CBaseAnimGraph.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h">
+      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h">
+      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowState.h">
+      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h">
+      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

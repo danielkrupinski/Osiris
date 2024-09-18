@@ -19,6 +19,8 @@ public:
 
         if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>())
             context.applyGlowToPlayer(entity);
+        else if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::CBaseAnimGraph, KnownEntityTypes>())
+            context.applyGlowToDefuseKit(entity);
         else if (entityTypeInfo.isWeapon())
             context.applyGlowToWeapon(entityTypeInfo, entity);
     }

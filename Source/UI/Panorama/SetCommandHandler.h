@@ -85,6 +85,8 @@ private:
             handleTogglableFeature(features.visualFeatures().outlineGlowToggle());
         } else if (feature == "weapon_outline_glow") {
             handleTogglableFeature(features.visualFeatures().weaponOutlineGlowToggle());
+        } else if (feature == "defuse_kit_outline_glow") {
+            handleTogglableFeature(features.visualFeatures().defuseKitOutlineGlowToggle());
         }
     }
 

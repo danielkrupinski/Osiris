@@ -2,6 +2,7 @@
 
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
+#include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
 #include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
 #include "OutlineGlow/OutlineGlowToggle.h"
@@ -78,6 +79,11 @@ struct VisualFeatures {
     [[nodiscard]] decltype(auto) weaponOutlineGlowToggle() const noexcept
     {
         return hookDependencies.make<WeaponOutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) defuseKitOutlineGlowToggle() const noexcept
+    {
+        return hookDependencies.make<DefuseKitOutlineGlowToggle>();
     }
 
     HookDependencies& hookDependencies;
