@@ -41,15 +41,12 @@ public:
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
     {
-        return TeamNumber{hookContext.gameDependencies().entityDeps.offsetToTeamNumber.of(playerPawn).valueOr({})};
+        return baseEntity().teamNumber();
     }
 
     [[nodiscard]] std::optional<bool> isAlive() const noexcept
     {
-        const auto lifestate = hookContext.gameDependencies().entityDeps.offsetToLifeState.of(playerPawn).get();
-        if (lifestate)
-            return LifeState{*lifestate} == LifeState::Alive;
-        return {};
+        return baseEntity().isAlive();
     }
 
     [[nodiscard]] decltype(auto) playerController() const noexcept
@@ -62,7 +59,7 @@ public:
 
     [[nodiscard]] auto health() const noexcept
     {
-        return hookContext.gameDependencies().entityDeps.offsetToHealth.of(playerPawn).toOptional();
+        return baseEntity().health();
     }
 
     [[nodiscard]] std::optional<cs2::Color> healthColor() const noexcept

@@ -324,19 +324,12 @@ private:
 
     [[nodiscard]] const char* getActiveWeaponName(auto&& playerPawn) const noexcept
     {
-        if (!dependencies.gameDependencies().entityDeps.offsetToVData
-         || !dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName)
-            return nullptr;
-
         const auto activeWeapon = playerPawn.getActiveWeapon();
         if (!activeWeapon)
             return nullptr;
 
-        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(*dependencies.gameDependencies().entityDeps.offsetToVData.of(static_cast<cs2::C_BaseEntity*>(activeWeapon)).get());
-        if (!vData)
-            return nullptr;
-
-        return *dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).get();
+        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(dependencies.make<BaseEntity>(activeWeapon).vData().valueOr(nullptr));
+        return dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).valueOr(nullptr);
     }
 
     void setHealth(auto&& healthPanel, auto&& playerPawn) const noexcept
@@ -449,11 +442,6 @@ private:
     [[nodiscard]] bool shouldUpdateImagePanel(auto&& imagePanel, const char* newImagePath) const noexcept
     {
         return imagePanel.getImagePath() != newImagePath;
-    }
-
-    [[nodiscard]] TeamNumber getTeamNumber(cs2::C_BaseEntity& entity) const noexcept
-    {
-        return TeamNumber{dependencies.gameDependencies().entityDeps.offsetToTeamNumber.of(&entity).valueOr({})};
     }
 
     [[nodiscard]] bool requestCrucialDependencies() const noexcept

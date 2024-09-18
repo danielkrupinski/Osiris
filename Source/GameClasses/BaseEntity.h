@@ -17,12 +17,12 @@ public:
 
     [[nodiscard]] decltype(auto) renderComponent() const noexcept
     {
-        return hookContext.template make<RenderComponent>(hookContext.gameDependencies().entityDeps.offsetToRenderComponent.of(entity).valueOr(nullptr));
+        return hookContext.template make<RenderComponent>(deps().offsetToRenderComponent.of(entity).valueOr(nullptr));
     }
 
     [[nodiscard]] decltype(auto) gameSceneNode() const noexcept
     {
-        return hookContext.template make<GameSceneNode>(hookContext.gameDependencies().entityDeps.offsetToGameSceneNode.of(entity).valueOr(nullptr));
+        return hookContext.template make<GameSceneNode>(deps().offsetToGameSceneNode.of(entity).valueOr(nullptr));
     }
 
     template <typename F>
@@ -55,7 +55,30 @@ public:
 
     [[nodiscard]] auto hasOwner() const noexcept
     {
-        return hookContext.gameDependencies().entityDeps.offsetToOwnerEntity.of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
+        return deps().offsetToOwnerEntity.of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
+    }
+
+    [[nodiscard]] TeamNumber teamNumber() const noexcept
+    {
+        return TeamNumber{deps().offsetToTeamNumber.of(entity).valueOr({})};
+    }
+    
+    [[nodiscard]] auto vData() const noexcept
+    {
+        return deps().offsetToVData.of(entity).toOptional();
+    }
+
+    [[nodiscard]] auto health() const noexcept
+    {
+        return deps().offsetToHealth.of(entity).toOptional();
+    }
+
+    [[nodiscard]] std::optional<bool> isAlive() const noexcept
+    {
+        const auto lifestate = deps().offsetToLifeState.of(entity).get();
+        if (lifestate)
+            return LifeState{*lifestate} == LifeState::Alive;
+        return {};
     }
 
     operator cs2::C_BaseEntity*() const noexcept
@@ -64,6 +87,11 @@ public:
     }
 
 private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().entityDeps;
+    }
+
     [[nodiscard]] auto invokeWithGameSceneNodeOwner(auto& f) const noexcept
     {
         return [&f](auto&& gameSceneNode) { f(gameSceneNode.owner()); };

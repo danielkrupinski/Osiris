@@ -14,6 +14,11 @@ public:
     {
     }
 
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return hookContext.template make<BaseEntity>(playerControllerPointer);
+    }
+
     [[nodiscard]] bool operator==(const PlayerController& other) const noexcept
     {
         return playerControllerPointer != nullptr && playerControllerPointer == other.playerControllerPointer;
@@ -21,7 +26,7 @@ public:
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
     {
-        return TeamNumber{entityDeps().offsetToTeamNumber.of(playerControllerPointer).valueOr({})};
+        return baseEntity().teamNumber();
     }
 
     [[nodiscard]] decltype(auto) playerPawn() const noexcept
@@ -41,11 +46,6 @@ public:
     }
 
 private:
-    [[nodiscard]] const auto& entityDeps() const noexcept
-    {
-        return hookContext.gameDependencies().entityDeps;
-    }
-
     HookContext& hookContext;
     cs2::CCSPlayerController* playerControllerPointer;
 };
