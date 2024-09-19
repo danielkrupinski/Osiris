@@ -208,6 +208,7 @@
     <ClInclude Include="GameClasses\Hud\HudContext.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\SceneObjectOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\SceneObjectUpdaterOffset.h" />
     <ClInclude Include="GameClasses\PlayerController.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="GameClasses\PlayerPawn.h" />
     <ClInclude Include="GameClasses\PlayerWeapons.h" />
     <ClInclude Include="GameClasses\RenderComponent.h" />
+    <ClInclude Include="GameClasses\SceneObject.h" />
     <ClInclude Include="GameClasses\SceneObjectUpdater.h" />
     <ClInclude Include="GameClasses\SceneObjectUpdaters.h" />
     <ClInclude Include="GameClasses\SceneSystem.h" />
@@ -288,6 +290,7 @@
     <ClInclude Include="GameDependencies\PlayerControllerDeps.h" />
     <ClInclude Include="GameDependencies\PlayerPawnDeps.h" />
     <ClInclude Include="GameDependencies\RenderComponentDeps.h" />
+    <ClInclude Include="GameDependencies\SceneObjectDeps.h" />
     <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h" />
     <ClInclude Include="GameDependencies\SceneSystemDeps.h" />
     <ClInclude Include="GameDependencies\TopLevelWindowDeps.h" />

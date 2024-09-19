@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Classes/Color.h>
+#include <GameClasses/SceneObject.h>
 #include <Platform/Macros/IsPlatform.h>
 
 #include "GlowSceneObjectPointer.h"
@@ -13,6 +14,11 @@ public:
         : hookContext{hookContext}
         , glowSceneObjectPointer{glowSceneObjectPointer}
     {
+    }
+
+    [[nodiscard]] decltype(auto) baseSceneObject() const noexcept
+    {
+        return hookContext.template make<SceneObject>(glowSceneObject());
     }
 
     void applyGlow(auto&& sceneObject, cs2::Color color, int glowRange) const noexcept
@@ -33,7 +39,6 @@ public:
             std::memcpy(colorDouble, colorFloat, sizeof(colorFloat));
             manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, 3, colorDouble[0], colorDouble[1], 0.0f, static_cast<float>(glowRange), 1.0f);
 #endif
-
             glowSceneObjectPointer->setValue(tempGlowSceneObject);
         }
     }
@@ -46,6 +51,11 @@ public:
     [[nodiscard]] decltype(auto) attachedSceneObject() const noexcept
     {
         return hookContext.gameDependencies().glowSceneObjectDeps.offsetToGlowSceneObjectAttachedSceneObject.of(glowSceneObject());
+    }
+
+    [[nodiscard]] auto& storedGlowSceneObjectClass() const noexcept
+    {
+        return hookContext.gameDependencies().glowSceneObjectDeps.glowSceneObjectClass;
     }
 
 private:

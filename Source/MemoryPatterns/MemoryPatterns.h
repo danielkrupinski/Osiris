@@ -38,6 +38,7 @@ struct MemoryPatterns {
     MEMORY_PATTERNS(PlayerControllerPatterns, playerControllerPatterns)
     MEMORY_PATTERNS(PlayerPawnPatterns, playerPawnPatterns)
     MEMORY_PATTERNS(RenderComponentPatterns, renderComponentPatterns)
+    MEMORY_PATTERNS(SceneObjectPatterns, sceneObjectPatterns)
     MEMORY_PATTERNS(SceneObjectUpdaterPatterns, sceneObjectUpdaterPatterns)
     MEMORY_PATTERNS(SceneSystemPatterns, sceneSystemPatterns)
     MEMORY_PATTERNS(SdlPatterns, sdlPatterns)

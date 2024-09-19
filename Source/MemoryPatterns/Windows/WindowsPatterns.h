@@ -21,6 +21,7 @@
 #include "PlayerControllerPatternsWindows.h"
 #include "PlayerPawnPatternsWindows.h"
 #include "RenderComponentPatternsWindows.h"
+#include "SceneObjectPatternsWindows.h"
 #include "SceneObjectUpdaterPatternsWindows.h"
 #include "SceneSystemPatternsWindows.h"
 #include "SdlPatternWindows.h"

@@ -21,6 +21,7 @@
 #include "PlayerControllerPatternsLinux.h"
 #include "PlayerPawnPatternsLinux.h"
 #include "RenderComponentPatternsLinux.h"
+#include "SceneObjectPatternsLinux.h"
 #include "SceneObjectUpdaterPatternsLinux.h"
 #include "SceneSystemPatternsLinux.h"
 #include "SdlPatternsLinux.h"

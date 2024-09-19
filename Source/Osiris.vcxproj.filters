@@ -1481,6 +1481,15 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\SceneObjectOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SceneObject.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SceneObjectDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

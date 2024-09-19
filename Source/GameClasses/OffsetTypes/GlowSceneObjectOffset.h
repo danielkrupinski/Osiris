@@ -11,4 +11,3 @@ using GlowSceneObjectOffset = FieldOffset<cs2::CGlowHelperSceneObject, FieldType
 
 using OffsetToGlowSceneObjectEntity = GlowSceneObjectOffset<cs2::CGlowHelperSceneObject::entity, std::int32_t>;
 using OffsetToGlowSceneObjectAttachedSceneObject = GlowSceneObjectOffset<cs2::CGlowHelperSceneObject::attachedSceneObject, std::int32_t>;
-using OffsetToSceneObjectFlags = GlowSceneObjectOffset<cs2::CGlowHelperSceneObject::flags, WIN64_LINUX(std::int32_t, std::int8_t)>;

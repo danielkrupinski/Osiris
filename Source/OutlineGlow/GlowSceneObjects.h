@@ -23,7 +23,7 @@ public:
         for (auto readIndex = writeIndex; readIndex < state().size; ++readIndex) {
             auto sceneObjectPointer = state().glowSceneObjects[readIndex];
             if (!sceneObjectPointer.isReferenced()) {
-                deleteSceneObject(sceneObjectPointer.value());
+                deleteSceneObject(hookContext.template make<GlowSceneObject>(&sceneObjectPointer));
             } else {
                 sceneObjectPointer.clearReferenced();
                 state().glowSceneObjects[writeIndex] = sceneObjectPointer;
@@ -38,7 +38,7 @@ public:
     void clearObjects() const noexcept
     {
         for (GlowSceneObjectsState::SizeType i = 0; i < state().size; ++i)
-            deleteSceneObject(state().glowSceneObjects[i].value());
+            deleteSceneObject(hookContext.template make<GlowSceneObject>(&state().glowSceneObjects[i]));
 
         state().size = 0;
 
@@ -119,9 +119,10 @@ private:
         return GlowSceneObjectsState::kInvalidIndex;
     }
 
-    void deleteSceneObject(auto&& sceneObject) const noexcept
+    void deleteSceneObject(auto&& glowSceneObject) const noexcept
     {
-        hookContext.template make<SceneSystem>().deleteSceneObject(sceneObject);
+        if (glowSceneObject.isValidGlowSceneObject().valueOr(true))
+            hookContext.template make<SceneSystem>().deleteSceneObject(glowSceneObject.baseSceneObject());
     }
 
     HookContext& hookContext;

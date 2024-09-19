@@ -6,12 +6,11 @@ struct GlowSceneObjectDeps {
     template <typename GlowSceneObjectPatterns>
     explicit GlowSceneObjectDeps(const GlowSceneObjectPatterns& glowSceneObjectPatterns) noexcept
         : offsetToGlowSceneObjectEntity{glowSceneObjectPatterns.offsetToGlowSceneObjectEntity()}
-        , offsetToSceneObjectFlags{glowSceneObjectPatterns.offsetToSceneObjectFlags()}
         , offsetToGlowSceneObjectAttachedSceneObject{glowSceneObjectPatterns.offsetToGlowSceneObjectAttachedSceneObject()}
     {
     }
 
     OffsetToGlowSceneObjectEntity offsetToGlowSceneObjectEntity;
-    OffsetToSceneObjectFlags offsetToSceneObjectFlags;
     OffsetToGlowSceneObjectAttachedSceneObject offsetToGlowSceneObjectAttachedSceneObject;
+    cs2::CSceneObject::m_nObjectClass glowSceneObjectClass{0xFF};
 };

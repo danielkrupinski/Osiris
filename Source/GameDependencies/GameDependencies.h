@@ -26,6 +26,7 @@
 #include "PlayerControllerDeps.h"
 #include "PlayerPawnDeps.h"
 #include "RenderComponentDeps.h"
+#include "SceneObjectDeps.h"
 #include "SceneObjectUpdaterDeps.h"
 #include "SceneSystemDeps.h"
 #include "TopLevelWindowDeps.h"
@@ -63,6 +64,7 @@ struct GameDependencies {
         , playerControllerDeps{memoryPatterns.playerControllerPatterns()}
         , playerPawnDeps{memoryPatterns.playerPawnPatterns()}
         , renderComponentDeps{memoryPatterns.renderComponentPatterns()}
+        , sceneObjectDeps{memoryPatterns.sceneObjectPatterns()}
         , sceneObjectUpdaterDeps{memoryPatterns.sceneObjectUpdaterPatterns()}
         , sceneSystemDeps{memoryPatterns.sceneSystemPatterns()}
         , topLevelWindowDeps{memoryPatterns.topLevelWindowPatterns()}
@@ -108,6 +110,7 @@ struct GameDependencies {
     PlayerControllerDeps playerControllerDeps;
     PlayerPawnDeps playerPawnDeps;
     RenderComponentDeps renderComponentDeps;
+    SceneObjectDeps sceneObjectDeps;
     SceneObjectUpdaterDeps sceneObjectUpdaterDeps;
     SceneSystemDeps sceneSystemDeps;
     TopLevelWindowDeps topLevelWindowDeps;
