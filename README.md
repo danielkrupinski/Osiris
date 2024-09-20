@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 20 September 2024
+    * Added outline glow for grenade projectiles
+
 * 18 September 2024
     * Added outline glow for defuse kits on the ground nearby
 
@@ -25,9 +28,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 12 September 2024
     * Player outline glow now includes all objects attached to the player (carried hostage, bomb defuse multimeter etc.)
-
-* 5 September 2024
-    * "Player Info In World" and "Outline Glow" have now separate tabs in settings GUI
 
 ## Technical features
 
