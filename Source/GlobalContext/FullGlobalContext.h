@@ -33,88 +33,33 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
-        : _gameDependencies{
+        : gameDependencies{
             memoryPatterns,
             VmtFinder{clientDLL.getVmtFinderParams()},
             VmtFinder{panoramaDLL.getVmtFinderParams()},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            _gameDependencies.loopModeGame,
-            _gameDependencies.viewRender,
+            gameDependencies.loopModeGame,
+            gameDependencies.viewRender,
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
-        , entityClassifier{_gameDependencies.entitiesVMTs}
+        , entityClassifier{gameDependencies.entitiesVMTs}
     {
-    }
-
-    [[nodiscard]] GameDependencies& gameDependencies() noexcept
-    {
-        return _gameDependencies;
-    }
-
-    [[nodiscard]] FeatureHelpers& getFeatureHelpers() noexcept
-    {
-        return featureHelpers;
     }
     
-    void onRenderStart(cs2::CViewRender* thisptr) noexcept
-    {
-        hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
-
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks, entityClassifier};
-        SoundWatcher soundWatcher{featureHelpers.soundWatcherState, dependencies};
-        soundWatcher.update();
-        features(dependencies).soundFeatures().runOnViewMatrixUpdate();
-
-        PlayerInformationThroughWalls playerInformationThroughWalls{featuresStates.visualFeaturesStates.playerInformationThroughWallsState, dependencies};
-        RenderingHookEntityLoop{dependencies, playerInformationThroughWalls}.run();
-        playerInformationThroughWalls.hideUnusedPanels();
-        dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
-    }
-
-    [[nodiscard]] PeepEventsHookResult onPeepEventsHook(bool fullContextJustInitialized) noexcept
-    {
-        HookDependencies dependencies{_gameDependencies, featureHelpers, bombStatusPanelState, inWorldPanelContainerState, panoramaGuiState, featuresStates, glowSceneObjectsState, hooks, entityClassifier};
-
-        if (fullContextJustInitialized) {
-            if (const auto mainMenu{_gameDependencies.mainMenu}; mainMenu && *mainMenu)
-                dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
-        }
-
-        features(dependencies).hudFeatures().defusingAlert().run();
-        features(dependencies).hudFeatures().killfeedPreserver().run();
-        BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
-
-        UnloadFlag unloadFlag;
-        dependencies.make<PanoramaGUI>().run(features(dependencies), unloadFlag);
-        hooks.update();
-
-        if (unloadFlag) {
-            FeaturesUnloadHandler{dependencies, featuresStates}.handleUnload();
-            BombStatusPanelUnloadHandler{dependencies}.handleUnload();
-            InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
-            PanoramaGuiUnloadHandler{dependencies}.handleUnload();
-            hooks.forceUninstall();
-        }
-
-        return PeepEventsHookResult{hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
-    }
-
     [[nodiscard]] cs2::CLoopModeGame::getWorldSession getWorldSessionHook(ReturnAddress) noexcept
     {
         return hooks.loopModeGameHook.originalGetWorldSession;
     }
 
-private:
-    [[nodiscard]] Features features(HookDependencies& dependencies) noexcept
+    [[nodiscard]] auto features(auto& dependencies) noexcept
     {
         return Features{featuresStates, featureHelpers, hooks, dependencies};
     }
 
-    GameDependencies _gameDependencies;
+    GameDependencies gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;
-public:
     FeaturesStates featuresStates;
     PanoramaGuiState panoramaGuiState;
     BombStatusPanelState bombStatusPanelState;

@@ -12,4 +12,5 @@ struct WeaponScopePanels {
     }
 };
 
-using WeaponScopeVisualizer = SoundVisualizationFeature<WeaponScopePanels, WeaponScopeSound>;
+template <typename HookContext>
+using WeaponScopeVisualizer = SoundVisualizationFeature<HookContext, WeaponScopePanels, WeaponScopeSound>;

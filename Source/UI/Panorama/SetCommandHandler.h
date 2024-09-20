@@ -4,8 +4,9 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include <Utils/StringParser.h>
 
+template <typename HookContext>
 struct SetCommandHandler {
-    SetCommandHandler(StringParser& parser, Features features) noexcept
+    SetCommandHandler(StringParser& parser, Features<HookContext> features) noexcept
         : parser{parser}
         , features{features}
     {
@@ -113,5 +114,5 @@ private:
     }
 
     StringParser& parser;
-    Features features;
+    Features<HookContext> features;
 };

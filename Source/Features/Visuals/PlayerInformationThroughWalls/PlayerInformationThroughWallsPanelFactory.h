@@ -2,7 +2,6 @@
 
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClasses/PanelFactory.h>
-#include <HookDependencies/HookDependencies.h>
 
 #include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"
 #include "ActiveWeaponIcon/ActiveWeaponIconPanelParams.h"

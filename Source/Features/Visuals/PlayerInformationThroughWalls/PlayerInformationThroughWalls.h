@@ -23,7 +23,6 @@
 #include "PlayerInformationThroughWallsPanelFactory.h"
 #include "PlayerInformationThroughWallsState.h"
 
-#include <HookDependencies/HookDependencies.h>
 #include <HookDependencies/HookDependenciesMask.h>
 
 struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
@@ -141,10 +140,11 @@ using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
 using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
-struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformationThroughWallsToggle> {
-    PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HookDependencies& dependencies, ViewRenderHook& viewRenderHook) noexcept
+template <typename HookContext>
+struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformationThroughWallsToggle<HookContext>> {
+    PlayerInformationThroughWallsToggle(PlayerInformationThroughWallsState& state, HookContext& hookContext, ViewRenderHook& viewRenderHook) noexcept
         : state{state}
-        , dependencies{dependencies}
+        , hookContext{hookContext}
         , viewRenderHook{viewRenderHook}
     {
     }
@@ -152,27 +152,27 @@ struct PlayerInformationThroughWallsToggle : FeatureToggleOnOff<PlayerInformatio
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': enable(); state.showOnlyEnemies = true; break;
-        case '1': enable(); state.showOnlyEnemies = false; break;
-        case '2': disable(); break;
+        case '0': this->enable(); state.showOnlyEnemies = true; break;
+        case '1': this->enable(); state.showOnlyEnemies = false; break;
+        case '2': this->disable(); break;
         }
     }
 
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    [[nodiscard]] auto& enabledVariable(typename PlayerInformationThroughWallsToggle::ToggleMethod) const noexcept
     {
         return state.enabled;
     }
 
-    void onEnable(ToggleMethod) noexcept
+    void onEnable(typename PlayerInformationThroughWallsToggle::ToggleMethod) noexcept
     {
         viewRenderHook.incrementReferenceCount();
     }
 
-    void onDisable(ToggleMethod) noexcept
+    void onDisable(typename PlayerInformationThroughWallsToggle::ToggleMethod) noexcept
     {
         viewRenderHook.decrementReferenceCount();
 
-        if (const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()}) {
+        if (const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
                 hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
         }
@@ -182,22 +182,23 @@ private:
     void hideRemainingPanels(HudInWorldPanels inWorldPanels, std::size_t firstIndexToHide) const noexcept
     {
         for (std::size_t i = firstIndexToHide; i < state.panelIndices.getSize(); ++i) {
-            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[i], dependencies)}) {
+            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[i], hookContext)}) {
                 panel.setOpacity(0.0f);
             }
         }
     }
 
     PlayerInformationThroughWallsState& state;
-    HookDependencies& dependencies;
+    HookContext& hookContext;
     ViewRenderHook& viewRenderHook;
 };
 
+template <typename HookContext>
 class PlayerInformationThroughWalls {
 public:
-    PlayerInformationThroughWalls(PlayerInformationThroughWallsState& state, HookDependencies& dependencies) noexcept
+    PlayerInformationThroughWalls(PlayerInformationThroughWallsState& state, HookContext& hookContext) noexcept
         : state{state}
-        , dependencies{dependencies}
+        , hookContext{hookContext}
     {
     }
 
@@ -216,11 +217,11 @@ public:
         if (!absOrigin.hasValue())
             return;
 
-        const auto positionInClipSpace = dependencies.getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin.value());
+        const auto positionInClipSpace = hookContext.template getDependency<WorldToClipSpaceConverter>().toClipSpace(absOrigin.value());
         if (!positionInClipSpace.onScreen())
             return;
 
-        const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()};
+        const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()};
         if (!containerPanel)
             return;
 
@@ -243,11 +244,11 @@ public:
         if (!playerInformationPanel.isValid())
             return;
 
-        setArrowColor(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.positionArrowPanel}}, playerPawn.playerController(), playerPawn.teamNumber());
-        setHealth(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.healthPanel}}, playerPawn);
-        setActiveWeapon(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponIconPanel}}, playerPawn);
-        setActiveWeaponAmmo(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.weaponAmmoPanel}}, playerPawn);
-        setPlayerStateIcons(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, playerInformationPanel.playerStateIconsPanel}}, playerPawn);
+        setArrowColor(hookContext.template make<PanoramaUiPanel>(playerInformationPanel.positionArrowPanel), playerPawn.playerController(), playerPawn.teamNumber());
+        setHealth(hookContext.template make<PanoramaUiPanel>(playerInformationPanel.healthPanel), playerPawn);
+        setActiveWeapon(hookContext.template make<PanoramaUiPanel>(playerInformationPanel.weaponIconPanel), playerPawn);
+        setActiveWeaponAmmo(hookContext.template make<PanoramaUiPanel>(playerInformationPanel.weaponAmmoPanel), playerPawn);
+        setPlayerStateIcons(hookContext.template make<PanoramaUiPanel>(playerInformationPanel.playerStateIconsPanel), playerPawn);
 
         panel.setOpacity(playerPawn.hasImmunity().valueOr(false) ? 0.5f : 1.0f);
         panel.setZIndex(-positionInClipSpace.z);
@@ -258,8 +259,8 @@ public:
         const auto scale = std::clamp(500.0f / (positionInClipSpace.z / getFovScale() + 400.0f), 0.4f, kMaxScale);
 
         PanoramaTransformations{
-            dependencies.panoramaTransformFactory().scale(scale),
-            dependencies.panoramaTransformFactory().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
+            hookContext.panoramaTransformFactory().scale(scale),
+            hookContext.panoramaTransformFactory().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
         }.applyTo(panel);
 
         ++currentIndex;
@@ -270,7 +271,7 @@ public:
         if (!requestCrucialDependencies())
             return;
 
-        const auto containerPanel{dependencies.make<InWorldPanelContainer>().get()};
+        const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()};
         if (!containerPanel)
             return;
 
@@ -281,7 +282,7 @@ public:
         const HudInWorldPanels panels{*containerPanelChildren};
 
         for (std::size_t i = currentIndex; i < state.panelIndices.getSize(); ++i) {
-            if (const auto panel{panels.getPanel(state.panelIndices[i], dependencies)}) {
+            if (const auto panel{panels.getPanel(state.panelIndices[i], hookContext)}) {
                 panel.setOpacity(0.0f);
             }
         }
@@ -319,7 +320,7 @@ private:
         if (!activeWeapon)
             return -1;
 
-        return dependencies.gameDependencies().weaponDeps.offsetToClipAmmo.of(activeWeapon).valueOr(-1);
+        return hookContext.gameDependencies().weaponDeps.offsetToClipAmmo.of(activeWeapon).valueOr(-1);
     }
 
     [[nodiscard]] const char* getActiveWeaponName(auto&& playerPawn) const noexcept
@@ -328,8 +329,8 @@ private:
         if (!activeWeapon)
             return nullptr;
 
-        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(dependencies.make<BaseEntity>(activeWeapon).vData().valueOr(nullptr));
-        return dependencies.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).valueOr(nullptr);
+        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(activeWeapon).vData().valueOr(nullptr));
+        return hookContext.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).valueOr(nullptr);
     }
 
     void setHealth(auto&& healthPanel, auto&& playerPawn) const noexcept
@@ -346,13 +347,13 @@ private:
 
         const auto healthText = static_cast<cs2::CLabel*>(healthPanelChildren->memory[1]->clientPanel);
 
-        PanoramaUiPanel panel{PanoramaUiPanelContext{dependencies.gameDependencies(), healthText->uiPanel}};
+        PanoramaUiPanel panel{PanoramaUiPanelContext{hookContext.gameDependencies(), healthText->uiPanel}};
         if (state.playerHealthTextColor == PlayerHealthTextColor::HealthBased)
             panel.setColor(playerPawn.healthColor().value_or(cs2::kColorWhite));
         else
             panel.setColor(cs2::kColorWhite);
 
-        PanoramaLabel{dependencies, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(playerPawn.health().valueOr(0)).cstring(), 0, true);
+        PanoramaLabel{hookContext, healthText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(playerPawn.health().valueOr(0)).cstring(), 0, true);
     }
 
     void setPlayerStateIcons(auto&& playerStateIconsPanel, auto&& playerPawn) const noexcept
@@ -412,7 +413,7 @@ private:
         weaponAmmoPanel.setVisible(true);
 
         const auto ammoText = static_cast<cs2::CLabel*>(children->memory[0]->clientPanel);
-        PanoramaLabel{dependencies, ammoText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(ammo).cstring(), 0, true);
+        PanoramaLabel{hookContext, ammoText}.setTextInternal(StringBuilderStorage<10>{}.builder().put(ammo).cstring(), 0, true);
     }
 
     void setActiveWeapon(auto&& weaponIconPanel, auto&& playerPawn) const noexcept
@@ -446,26 +447,26 @@ private:
 
     [[nodiscard]] bool requestCrucialDependencies() const noexcept
     {
-        return dependencies.requestDependencies(kCrucialDependencies);
+        return hookContext.requestDependencies(kCrucialDependencies);
     }
 
     [[nodiscard]] float getFovScale() const noexcept
     {
-        return ViewToProjectionMatrix{dependencies.gameDependencies().viewToProjectionMatrix}.getFovScale();
+        return ViewToProjectionMatrix{hookContext.gameDependencies().viewToProjectionMatrix}.getFovScale();
     }
 
-    [[nodiscard]] PanoramaUiPanel<PanoramaUiPanelContext<HookDependencies>> getPanel(auto&& containerPanel, HudInWorldPanels inWorldPanels) const noexcept
+    [[nodiscard]] PanoramaUiPanel<PanoramaUiPanelContext<HookContext>> getPanel(auto&& containerPanel, HudInWorldPanels inWorldPanels) const noexcept
     {
         if (currentIndex < state.panelIndices.getSize()) {
-            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[currentIndex], dependencies)})
+            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[currentIndex], hookContext)})
                 return panel;
             state.panelIndices.fastRemoveAt(currentIndex);
         }
-        if (const auto panel{PlayerInformationThroughWallsPanelFactory{dependencies, *static_cast<cs2::CUIPanel*>(containerPanel)}.createPlayerInformationPanel()}) {
+        if (const auto panel{PlayerInformationThroughWallsPanelFactory{hookContext, *static_cast<cs2::CUIPanel*>(containerPanel)}.createPlayerInformationPanel()}) {
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
-        return PanoramaUiPanel{PanoramaUiPanelContext{dependencies, nullptr}};
+        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
     }
 
     static constexpr auto kCrucialDependencies{
@@ -473,6 +474,6 @@ private:
             .set<WorldToClipSpaceConverter>()};
 
     PlayerInformationThroughWallsState& state;
-    HookDependencies& dependencies;
+    HookContext& hookContext;
     std::size_t currentIndex{0};
 };

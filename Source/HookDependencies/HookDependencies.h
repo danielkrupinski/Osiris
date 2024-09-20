@@ -20,19 +20,12 @@ struct GlowSceneObjectsState;
 struct Hooks;
 class EntityClassifier;
 
+template <typename FullGlobalContext>
 struct HookDependencies {
-    HookDependencies(GameDependencies& gameDependencies, FeatureHelpers& featureHelpers, BombStatusPanelState& bombStatusPanelState, InWorldPanelContainerState& inWorldPanelContainerState, PanoramaGuiState& panoramaGuiState, FeaturesStates& featuresStates, GlowSceneObjectsState& glowSceneObjectsState, Hooks& hooks, EntityClassifier& entityClassifier) noexcept
-        : _gameDependencies{gameDependencies}
-        , featureHelpers{featureHelpers}
-        , _bombStatusPanelState{bombStatusPanelState}
-        , _inWorldPanelContainerState{inWorldPanelContainerState}
-        , _panoramaGuiState{panoramaGuiState}
-        , _featuresStates{featuresStates}
-        , _glowSceneObjectsState{glowSceneObjectsState}
-        , _hooks{hooks}
-        , _entityClassifier{entityClassifier}
+    HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
+        : fullGlobalContext{fullGlobalContext}
     {
-        if (gameDependencies.worldToProjectionMatrix)
+        if (fullGlobalContext.gameDependencies.worldToProjectionMatrix)
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
     }
 
@@ -56,11 +49,11 @@ struct HookDependencies {
         assert(hasDependency<Dependency>());
 
         if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
-            return WorldToClipSpaceConverter{_gameDependencies.worldToProjectionMatrix};
+            return WorldToClipSpaceConverter{fullGlobalContext.gameDependencies.worldToProjectionMatrix};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
-            return FileSystem{*fileSystem, _gameDependencies.fileSystemDeps};
+            return FileSystem{*fileSystem, fullGlobalContext.gameDependencies.fileSystemDeps};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -68,47 +61,47 @@ struct HookDependencies {
 
     [[nodiscard]] GameDependencies& gameDependencies() const noexcept
     {
-        return _gameDependencies;
+        return fullGlobalContext.gameDependencies;
     }
 
     [[nodiscard]] FeatureHelpers& getFeatureHelpers() const noexcept
     {
-        return featureHelpers;
+        return fullGlobalContext.featureHelpers;
     }
 
     [[nodiscard]] BombStatusPanelState& bombStatusPanelState() const noexcept
     {
-        return _bombStatusPanelState;
+        return fullGlobalContext.bombStatusPanelState;
     }
 
     [[nodiscard]] InWorldPanelContainerState& inWorldPanelContainerState() const noexcept
     {
-        return _inWorldPanelContainerState;
+        return fullGlobalContext.inWorldPanelContainerState;
     }
 
     [[nodiscard]] PanoramaGuiState& panoramaGuiState() const noexcept
     {
-        return _panoramaGuiState;
+        return fullGlobalContext.panoramaGuiState;
     }
 
     [[nodiscard]] FeaturesStates& featuresStates() const noexcept
     {
-        return _featuresStates;
+        return fullGlobalContext.featuresStates;
     }
 
     [[nodiscard]] GlowSceneObjectsState& glowSceneObjectsState() const noexcept
     {
-        return _glowSceneObjectsState;
+        return fullGlobalContext.glowSceneObjectsState;
     }
 
     [[nodiscard]] EntityClassifier& entityClassifier() const noexcept
     {
-        return _entityClassifier;
+        return fullGlobalContext.entityClassifier;
     }
 
     [[nodiscard]] Hooks& hooks() const noexcept
     {
-        return _hooks;
+        return fullGlobalContext.hooks;
     }
 
     [[nodiscard]] auto hud() noexcept
@@ -118,22 +111,22 @@ struct HookDependencies {
 
     [[nodiscard]] auto localPlayerController() noexcept
     {
-        if (_gameDependencies.localPlayerController)
-            return PlayerController{*this, *_gameDependencies.localPlayerController};
+        if (fullGlobalContext.gameDependencies.localPlayerController)
+            return PlayerController{*this, *fullGlobalContext.gameDependencies.localPlayerController};
         return PlayerController{*this, nullptr};
     }
 
     [[nodiscard]] GlobalVars globalVars() noexcept
     {
-        if (_gameDependencies.globalVarsDeps.globalVars)
-            return GlobalVars{*_gameDependencies.globalVarsDeps.globalVars};
+        if (fullGlobalContext.gameDependencies.globalVarsDeps.globalVars)
+            return GlobalVars{*fullGlobalContext.gameDependencies.globalVarsDeps.globalVars};
         return GlobalVars{nullptr};
     }
 
     [[nodiscard]] auto gameRules() noexcept
     {
-        if (_gameDependencies.gameRulesDeps.gameRules)
-            return GameRules{*this, *_gameDependencies.gameRulesDeps.gameRules};
+        if (fullGlobalContext.gameDependencies.gameRulesDeps.gameRules)
+            return GameRules{*this, *fullGlobalContext.gameDependencies.gameRulesDeps.gameRules};
         return GameRules{*this, nullptr};
     }
 
@@ -147,13 +140,13 @@ struct HookDependencies {
 
     [[nodiscard]] ConVarAccessor getConVarAccessor() noexcept
     {
-        if (!_gameDependencies.conVars.has_value()) {
-            if (_gameDependencies.cvarDeps.cvar && _gameDependencies.cvarDeps.offsetToConVarList) {
-                if (const auto cvar = *_gameDependencies.cvarDeps.cvar)
-                    _gameDependencies.conVars.emplace(ConVarFinder{*_gameDependencies.cvarDeps.offsetToConVarList.of(cvar).get()});
+        if (!fullGlobalContext.gameDependencies.conVars.has_value()) {
+            if (fullGlobalContext.gameDependencies.cvarDeps.cvar && fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList) {
+                if (const auto cvar = *fullGlobalContext.gameDependencies.cvarDeps.cvar)
+                    fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList.of(cvar).get()});
             }
         }
-        return ConVarAccessor{*_gameDependencies.conVars, _gameDependencies.conVarDeps, conVarAccessorState};
+        return ConVarAccessor{*fullGlobalContext.gameDependencies.conVars, fullGlobalContext.gameDependencies.conVarDeps, conVarAccessorState};
     }
 
     template <typename T, typename... Args>
@@ -180,13 +173,13 @@ struct HookDependencies {
 
     [[nodiscard]] auto panoramaTransformFactory() noexcept
     {
-        return PanoramaTransformFactory{_gameDependencies.transformTranslate3dVmt, _gameDependencies.transformScale3dVmt};
+        return PanoramaTransformFactory{fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
     }
 
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
-        const auto* const plantedC4s = _gameDependencies.plantedC4Deps.plantedC4s;
+        const auto* const plantedC4s = fullGlobalContext.gameDependencies.plantedC4Deps.plantedC4s;
         if (plantedC4s && plantedC4s->size > 0)
             return plantedC4s->memory[0];
         return nullptr;
@@ -200,21 +193,13 @@ private:
 
     void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
-        const HookDependenciesBuilder builder{requiredDependencies, _gameDependencies};
+        const HookDependenciesBuilder builder{requiredDependencies, fullGlobalContext.gameDependencies};
 
         presentDependencies |= builder.getSoundChannels(&soundChannels);
         presentDependencies |= builder.getFileSystem(&fileSystem);
     }
 
-    GameDependencies& _gameDependencies;
-    FeatureHelpers& featureHelpers;
-    BombStatusPanelState& _bombStatusPanelState;
-    InWorldPanelContainerState& _inWorldPanelContainerState;
-    PanoramaGuiState& _panoramaGuiState;
-    FeaturesStates& _featuresStates;
-    GlowSceneObjectsState& _glowSceneObjectsState;
-    Hooks& _hooks;
-    EntityClassifier& _entityClassifier;
+    FullGlobalContext& fullGlobalContext;
 
     cs2::SoundChannels* soundChannels;
     cs2::CBaseFileSystem* fileSystem;

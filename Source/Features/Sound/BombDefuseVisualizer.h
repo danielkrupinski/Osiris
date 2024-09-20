@@ -13,4 +13,5 @@ struct BombDefusePanels {
     }
 };
 
-using BombDefuseVisualizer = SoundVisualizationFeature<BombDefusePanels, BombDefuseSound>;
+template <typename HookContext>
+using BombDefuseVisualizer = SoundVisualizationFeature<HookContext, BombDefusePanels, BombDefuseSound>;

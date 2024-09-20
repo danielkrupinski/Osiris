@@ -1,7 +1,6 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
-#include <HookDependencies/HookDependencies.h>
 
 #include "BombTimer/BombTimer.h"
 #include "BombTimer/BombTimerContext.h"
@@ -18,37 +17,44 @@
 
 #include "HudFeaturesStates.h"
 
+template <typename HookContext>
 struct HudFeatures {
+    HudFeatures(HudFeaturesStates& states, HookContext& hookContext) noexcept
+        : states{states}
+        , hookContext{hookContext}
+    {
+    }
+
     [[nodiscard]] auto bombTimerToggle() const noexcept
     {
-        return BombTimerToggle{BombTimerContext{hookDependencies}};
+        return BombTimerToggle{BombTimerContext{hookContext}};
     }
 
     [[nodiscard]] auto defusingAlert() const noexcept
     {
-        return DefusingAlert{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
+        return DefusingAlert{DefusingAlertContext{hookContext, states.defusingAlertState}};
     }
 
     [[nodiscard]] auto defusingAlertToggle() const noexcept
     {
-        return DefusingAlertToggle{DefusingAlertContext{hookDependencies, states.defusingAlertState}};
+        return DefusingAlertToggle{DefusingAlertContext{hookContext, states.defusingAlertState}};
     }
     
     [[nodiscard]] auto killfeedPreserver() const noexcept
     {
-        return KillfeedPreserver{KillfeedPreserverContext{states.killfeedPreserverState, hookDependencies}};
+        return KillfeedPreserver{KillfeedPreserverContext{states.killfeedPreserverState, hookContext}};
     }
 
     [[nodiscard]] auto killfeedPreserveToggle() const noexcept
     {
-        return KillfeedPreserveToggle{KillfeedPreserverContext{states.killfeedPreserverState, hookDependencies}};
+        return KillfeedPreserveToggle{KillfeedPreserverContext{states.killfeedPreserverState, hookContext}};
     }
 
     [[nodiscard]] decltype(auto) postRoundTimerToggle() const noexcept
     {
-        return hookDependencies.make<PostRoundTimerToggle>();
+        return hookContext.template make<PostRoundTimerToggle>();
     }
 
     HudFeaturesStates& states;
-    HookDependencies& hookDependencies;
+    HookContext& hookContext;
 };

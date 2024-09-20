@@ -12,4 +12,5 @@ struct FootstepPanels {
     }
 };
 
-using FootstepVisualizer = SoundVisualizationFeature<FootstepPanels, FootstepSound>;
+template <typename HookContext>
+using FootstepVisualizer = SoundVisualizationFeature<HookContext, FootstepPanels, FootstepSound>;

@@ -13,4 +13,5 @@ struct BombPlantPanels {
     }
 };
 
-using BombPlantVisualizer = SoundVisualizationFeature<BombPlantPanels, BombPlantSound>;
+template <typename HookContext>
+using BombPlantVisualizer = SoundVisualizationFeature<HookContext, BombPlantPanels, BombPlantSound>;

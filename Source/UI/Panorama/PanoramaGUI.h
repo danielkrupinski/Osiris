@@ -58,7 +58,7 @@ public:
             state().guiPanelHandle = guiPanel.getHandle();
     }
 
-    void run(Features features, UnloadFlag& unloadFlag) const noexcept
+    void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
     {
         auto&& guiPanel = hookContext.panels().getPanelFromHandle(state().guiPanelHandle);
         if (!guiPanel)

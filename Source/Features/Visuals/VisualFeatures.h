@@ -11,10 +11,18 @@
 
 class LoopModeGameHook;
 
+template <typename HookContext>
 struct VisualFeatures {
-    [[nodiscard]] PlayerInformationThroughWallsToggle playerInformationThroughWalls() const noexcept
+    VisualFeatures(HookContext& hookContext, VisualFeaturesStates& states, ViewRenderHook& viewRenderHook) noexcept
+        : hookContext{hookContext}
+        , states{states}
+        , viewRenderHook{viewRenderHook}
     {
-        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, hookDependencies, viewRenderHook};
+    }
+
+    [[nodiscard]] auto playerInformationThroughWalls() const noexcept
+    {
+        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, hookContext, viewRenderHook};
     }
 
     [[nodiscard]] PlayerPositionToggle playerPositionToggle() const noexcept
@@ -69,30 +77,30 @@ struct VisualFeatures {
 
     [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept
     {
-        return hookDependencies.make<PlayerOutlineGlowToggle>();
+        return hookContext.template make<PlayerOutlineGlowToggle>();
     }
 
     [[nodiscard]] decltype(auto) outlineGlowToggle() const noexcept
     {
-        return hookDependencies.make<OutlineGlowToggle>();
+        return hookContext.template make<OutlineGlowToggle>();
     }
 
     [[nodiscard]] decltype(auto) weaponOutlineGlowToggle() const noexcept
     {
-        return hookDependencies.make<WeaponOutlineGlowToggle>();
+        return hookContext.template make<WeaponOutlineGlowToggle>();
     }
 
     [[nodiscard]] decltype(auto) defuseKitOutlineGlowToggle() const noexcept
     {
-        return hookDependencies.make<DefuseKitOutlineGlowToggle>();
+        return hookContext.template make<DefuseKitOutlineGlowToggle>();
     }
 
     [[nodiscard]] decltype(auto) grenadeProjectileOutlineGlowToggle() const noexcept
     {
-        return hookDependencies.make<GrenadeProjectileOutlineGlowToggle>();
+        return hookContext.template make<GrenadeProjectileOutlineGlowToggle>();
     }
 
-    HookDependencies& hookDependencies;
+    HookContext& hookContext;
     VisualFeaturesStates& states;
     ViewRenderHook& viewRenderHook;
 };

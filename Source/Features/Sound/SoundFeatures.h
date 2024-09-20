@@ -9,33 +9,42 @@
 #include "WeaponScopeVisualizer.h"
 #include <Hooks/ViewRenderHook.h>
 
+template <typename HookContext>
 struct SoundFeatures {
-    [[nodiscard]] FootstepVisualizer footstepVisualizer() const noexcept
+    SoundFeatures(SoundFeaturesStates& states, FeatureHelpers& helpers, ViewRenderHook& viewRenderHook, HookContext& hookContext) noexcept
+        : states{states}
+        , helpers{helpers}
+        , viewRenderHook{viewRenderHook}
+        , hookContext{hookContext}
+    {
+    }
+
+    [[nodiscard]] auto footstepVisualizer() const noexcept
     {
         return soundVisualizationFeature<FootstepVisualizer>(states.footstepVisualizerState);
     }
 
-    [[nodiscard]] BombPlantVisualizer bombPlantVisualizer() const noexcept
+    [[nodiscard]] auto bombPlantVisualizer() const noexcept
     {
         return soundVisualizationFeature<BombPlantVisualizer>(states.bombPlantVisualizerState);
     }
 
-    [[nodiscard]] BombBeepVisualizer bombBeepVisualizer() const noexcept
+    [[nodiscard]] auto bombBeepVisualizer() const noexcept
     {
         return soundVisualizationFeature<BombBeepVisualizer>(states.bombBeepVisualizerState);
     }
 
-    [[nodiscard]] BombDefuseVisualizer bombDefuseVisualizer() const noexcept
+    [[nodiscard]] auto bombDefuseVisualizer() const noexcept
     {
         return soundVisualizationFeature<BombDefuseVisualizer>(states.bombDefuseVisualizerState);
     }
 
-    [[nodiscard]] WeaponScopeVisualizer weaponScopeVisualizer() const noexcept
+    [[nodiscard]] auto weaponScopeVisualizer() const noexcept
     {
         return soundVisualizationFeature<WeaponScopeVisualizer>(states.weaponScopeVisualizerState);
     }
 
-    [[nodiscard]] WeaponReloadVisualizer weaponReloadVisualizer() const noexcept
+    [[nodiscard]] auto weaponReloadVisualizer() const noexcept
     {
         return soundVisualizationFeature<WeaponReloadVisualizer>(states.weaponReloadVisualizerState);
     }
@@ -83,27 +92,27 @@ struct SoundFeatures {
     SoundFeaturesStates& states;
     FeatureHelpers& helpers;
     ViewRenderHook& viewRenderHook;
-    HookDependencies& hookDependencies;
+    HookContext& hookContext;
 
 private:
-    template <typename SoundVisualizationFeature>
-    [[nodiscard]] SoundVisualizationFeature soundVisualizationFeature(auto& state) const noexcept
+    template <template <typename> typename SoundVisualizationFeature>
+    [[nodiscard]] auto soundVisualizationFeature(auto& state) const noexcept
     {
-        return SoundVisualizationFeature{
+        return SoundVisualizationFeature<HookContext>{
             state,
-            hookDependencies,
+            hookContext,
             viewRenderHook,
-            SoundWatcher{helpers.soundWatcherState, hookDependencies},
+            SoundWatcher<HookContext>{helpers.soundWatcherState, hookContext},
         };
     }
 
     template <typename SoundType>
-    [[nodiscard]] SoundVisualizationFeatureToggle<SoundType> soundVisualizationFeatureToggle(auto& state) const noexcept
+    [[nodiscard]] SoundVisualizationFeatureToggle<HookContext, SoundType> soundVisualizationFeatureToggle(auto& state) const noexcept
     {
-        return SoundVisualizationFeatureToggle<SoundType>{
+        return SoundVisualizationFeatureToggle<HookContext, SoundType>{
             state,
-            hookDependencies,
-            SoundWatcher{helpers.soundWatcherState, hookDependencies},
+            hookContext,
+            SoundWatcher<HookContext>{helpers.soundWatcherState, hookContext},
             viewRenderHook,
         };
     }

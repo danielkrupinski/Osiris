@@ -22,7 +22,19 @@ cs2::CLoopModeGame::getWorldSession LoopModeGameHook_getWorldSession_cpp(const v
 
 void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
 {
-    GlobalContext::instance().fullContext().onRenderStart(thisptr);
+    auto& fullContext = GlobalContext::instance().fullContext();
+
+    fullContext.hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
+
+    HookDependencies dependencies{fullContext};
+    SoundWatcher<decltype(dependencies)> soundWatcher{fullContext.featureHelpers.soundWatcherState, dependencies};
+    soundWatcher.update();
+    fullContext.features(dependencies).soundFeatures().runOnViewMatrixUpdate();
+
+    PlayerInformationThroughWalls playerInformationThroughWalls{fullContext.featuresStates.visualFeaturesStates.playerInformationThroughWallsState, dependencies};
+    RenderingHookEntityLoop{dependencies, playerInformationThroughWalls}.run();
+    playerInformationThroughWalls.hideUnusedPanels();
+    dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
 }
 
 }

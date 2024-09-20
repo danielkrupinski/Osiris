@@ -3,4 +3,5 @@
 #include "SoundWatcherImpl.h"
 #include "SoundWatcherState.h"
 
-using SoundWatcher = SoundWatcherImpl<SoundWatcherState>;
+template <typename HookContext>
+using SoundWatcher = SoundWatcherImpl<HookContext, SoundWatcherState>;

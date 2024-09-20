@@ -8,8 +8,9 @@
 
 #include "SetCommandHandler.h"
 
+template <typename HookContext>
 struct PanoramaCommandDispatcher {
-    PanoramaCommandDispatcher(const char* commandline, Features features, UnloadFlag& unloadFlag) noexcept
+    PanoramaCommandDispatcher(const char* commandline, Features<HookContext> features, UnloadFlag& unloadFlag) noexcept
         : parser{commandline}
         , features{features}
         , unloadFlag{unloadFlag}
@@ -41,6 +42,6 @@ private:
     }
 
     StringParser parser;
-    Features features;
+    Features<HookContext> features;
     UnloadFlag& unloadFlag;
 };

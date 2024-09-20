@@ -14,6 +14,7 @@
 #include "DeferredCompleteObject.h"
 #include "FullGlobalContext.h"
 #include "PartialGlobalContext.h"
+#include "HookDependencies/HookDependencies.h"
 
 class GlobalContext {
 public:
@@ -55,7 +56,32 @@ public:
     [[nodiscard]] PeepEventsHookResult peepEventsHook() noexcept
     {
         const auto justInitialized = initializeCompleteContextFromGameThread();
-        return fullContext().onPeepEventsHook(justInitialized);
+
+        auto& fullCtx = fullContext();
+        HookDependencies dependencies{fullCtx};
+
+        if (justInitialized) {
+            if (const auto mainMenu{fullCtx.gameDependencies.mainMenu}; mainMenu && *mainMenu)
+                dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
+        }
+
+        fullCtx.features(dependencies).hudFeatures().defusingAlert().run();
+        fullCtx.features(dependencies).hudFeatures().killfeedPreserver().run();
+        BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
+
+        UnloadFlag unloadFlag;
+        dependencies.make<PanoramaGUI>().run(fullCtx.features(dependencies), unloadFlag);
+        fullCtx.hooks.update();
+
+        if (unloadFlag) {
+            FeaturesUnloadHandler{dependencies, fullCtx.featuresStates}.handleUnload();
+            BombStatusPanelUnloadHandler{dependencies}.handleUnload();
+            InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
+            PanoramaGuiUnloadHandler{dependencies}.handleUnload();
+            fullCtx.hooks.forceUninstall();
+        }
+
+        return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
     }
 
 private:

@@ -8,24 +8,33 @@
 
 #include "FeaturesStates.h"
 
+template <typename HookContext>
 struct Features {
-    [[nodiscard]] HudFeatures hudFeatures() const noexcept
+    Features(FeaturesStates& states, FeatureHelpers& helpers, Hooks& hooks, HookContext& hookContext) noexcept
+        : states{states}
+        , helpers{helpers}
+        , hooks{hooks}
+        , hookContext{hookContext}
     {
-        return HudFeatures{states.hudFeaturesStates, hookDependencies};
     }
 
-    [[nodiscard]] SoundFeatures soundFeatures() const noexcept
+    [[nodiscard]] auto hudFeatures() const noexcept
     {
-        return SoundFeatures{states.soundFeaturesStates, helpers, hooks.viewRenderHook, hookDependencies};
+        return HudFeatures{states.hudFeaturesStates, hookContext};
     }
 
-    [[nodiscard]] VisualFeatures visualFeatures() const noexcept
+    [[nodiscard]] auto soundFeatures() const noexcept
     {
-        return VisualFeatures{hookDependencies, states.visualFeaturesStates, hooks.viewRenderHook};
+        return SoundFeatures{states.soundFeaturesStates, helpers, hooks.viewRenderHook, hookContext};
+    }
+
+    [[nodiscard]] auto visualFeatures() const noexcept
+    {
+        return VisualFeatures{hookContext, states.visualFeaturesStates, hooks.viewRenderHook};
     }
 
     FeaturesStates& states;
     FeatureHelpers& helpers;
     Hooks& hooks;
-    HookDependencies& hookDependencies;
+    HookContext& hookContext;
 };

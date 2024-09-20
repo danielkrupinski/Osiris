@@ -4,33 +4,32 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInformationThroughWalls/PlayerInformationThroughWalls.h>
 
-#include <HookDependencies/HookDependenciesMask.h>
-
+template <typename HookContext>
 class RenderingHookEntityLoop {
 public:
-    explicit RenderingHookEntityLoop(HookDependencies& dependencies, PlayerInformationThroughWalls& playerInformationThroughWalls) noexcept
-        : dependencies{dependencies}
+    explicit RenderingHookEntityLoop(HookContext& hookContext, PlayerInformationThroughWalls<HookContext>& playerInformationThroughWalls) noexcept
+        : hookContext{hookContext}
         , playerInformationThroughWalls{playerInformationThroughWalls}
     {
     }
 
     void run() const noexcept
     {
-        dependencies.make<EntitySystem>().iterateEntities([this](auto& entity) { handleEntity(entity); });
+        hookContext.template make<EntitySystem>().iterateEntities([this](auto& entity) { handleEntity(entity); });
     }
 
 private:
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
-        const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
+        const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity.vmt);
 
         if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>()) {
-            auto&& playerPawn = dependencies.make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
+            auto&& playerPawn = hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
         }
-        dependencies.make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, entity);
+        hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, entity);
     }
 
-    HookDependencies& dependencies;
-    PlayerInformationThroughWalls& playerInformationThroughWalls;
+    HookContext& hookContext;
+    PlayerInformationThroughWalls<HookContext>& playerInformationThroughWalls;
 };
