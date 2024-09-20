@@ -38,9 +38,11 @@
     <ClInclude Include="CS2\Classes\Entities\CBaseAnimGraph.h" />
     <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h" />
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h" />
     <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h" />
+    <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h" />
     <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h" />
@@ -167,6 +169,11 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowState.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowParams.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowState.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowState.h" />

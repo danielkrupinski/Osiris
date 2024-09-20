@@ -175,6 +175,9 @@
     <Filter Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow">
       <UniqueIdentifier>{ab8f4d2e-4353-44f9-ac25-425ae8cbe905}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow">
+      <UniqueIdentifier>{88aa3de7-03b7-49bc-a280-76714e28a62a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1489,6 +1492,27 @@
     </ClInclude>
     <ClInclude Include="GameDependencies\SceneObjectDeps.h">
       <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowState.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowToggle.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@
 #include <CS2/Classes/Entities/CBaseAnimGraph.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <CS2/Classes/Entities/GrenadeProjectiles.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <Platform/VmtFinder.h>
 #include <Utils/TypeIndex.h>
@@ -56,18 +57,18 @@ using KnownEntityTypes = std::tuple<
     cs2::C_IncendiaryGrenade,
     cs2::C_DecoyGrenade,
 
-    cs2::CBaseAnimGraph
+    cs2::CBaseAnimGraph,
+
+    cs2::C_HEGrenadeProjectile,
+    cs2::C_SmokeGrenadeProjectile,
+    cs2::C_MolotovProjectile,
+    cs2::C_FlashbangProjectile
 >;
 
 struct EntitiesVMTs {
     explicit EntitiesVMTs(const VmtFinder& clientVmtFinder) noexcept
     {
         initVmts(clientVmtFinder, std::type_identity<KnownEntityTypes>{});
-    }
-
-    [[nodiscard]] bool isPlayerPawn(const void* vmt) const noexcept
-    {
-        return vmt && vmt == getVmt<cs2::C_CSPlayerPawn>();
     }
 
     std::array<const void*, std::tuple_size_v<KnownEntityTypes>> vmts{};

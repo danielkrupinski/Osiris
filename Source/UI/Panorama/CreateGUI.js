@@ -313,6 +313,9 @@ $.Osiris = (function () {
   var defuseKitOutlineGlow = createSection(outlineGlowTab, 'Defuse Kit Outline Glow');
   createYesNoDropDown(defuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
 
+  var grenadeProjectileOutlineGlow = createSection(outlineGlowTab, 'Grenade Projectile Outline Glow');
+  createYesNoDropDown(grenadeProjectileOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow', 0);
+
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 
   var sound = createTab('sound');

@@ -21,6 +21,8 @@ public:
             context.applyGlowToPlayer(entity);
         else if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::CBaseAnimGraph, KnownEntityTypes>())
             context.applyGlowToDefuseKit(entity);
+        else if (entityTypeInfo.isGrenadeProjectile())
+            context.applyGlowToGrenadeProjectile(entityTypeInfo, entity);
         else if (entityTypeInfo.isWeapon())
             context.applyGlowToWeapon(entityTypeInfo, entity);
     }

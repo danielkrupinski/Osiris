@@ -6,24 +6,44 @@
 #include <tuple>
 
 #include <GameDependencies/EntitiesVMTs.h>
+#include <Utils/TypeIndex.h>
 
 struct EntityTypeInfo {
     std::uint8_t typeIndex;
 
-    [[nodiscard]] bool isWeapon() const noexcept
+    [[nodiscard]] constexpr bool isWeapon() const noexcept
     {
-        if (typeIndex < kIsWeapon.size())
-            return kIsWeapon[typeIndex];
-        return false;
+        return EntityBaseTypeInfo<cs2::C_CSWeaponBase>::isBaseOf(typeIndex);
+    }
+
+    [[nodiscard]] constexpr bool isGrenadeProjectile() const noexcept
+    {
+        return EntityBaseTypeInfo<cs2::C_BaseCSGrenadeProjectile>::isBaseOf(typeIndex);
+    }
+
+    template <typename EntityType>
+    [[nodiscard]] static constexpr auto indexOf() noexcept
+    {
+        return utils::typeIndex<EntityType, KnownEntityTypes>();
     }
 
 private:
-    static constexpr auto kIsWeapon{
-        []<typename... EntityTypes>(std::type_identity<std::tuple<EntityTypes...>>) {
-            return std::array<bool, sizeof...(EntityTypes)>{
-                std::is_base_of_v<cs2::C_CSWeaponBase, EntityTypes>...
-            };
-        }(std::type_identity<KnownEntityTypes>{})
+    template <typename BaseEntityType>
+    struct EntityBaseTypeInfo {
+        [[nodiscard]] static constexpr bool isBaseOf(std::uint8_t typeIndex) noexcept
+        {
+            if (typeIndex < kIsBase.size())
+                return kIsBase[typeIndex];
+            return false;
+        }
+
+        static constexpr auto kIsBase{
+            []<typename... EntityTypes>(std::type_identity<std::tuple<EntityTypes...>>) {
+                return std::array<bool, sizeof...(EntityTypes)>{
+                    std::is_base_of_v<BaseEntityType, EntityTypes>...
+                };
+            }(std::type_identity<KnownEntityTypes>{})
+        };
     };
 };
 
