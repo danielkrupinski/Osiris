@@ -1514,6 +1514,21 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\OffsetTypes\SmokeGrenadeProjectileOffset.h">
+      <Filter>GameClasses\OffsetTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDependencies\SmokeGrenadeProjectileDeps.h">
+      <Filter>GameDependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\SmokeGrenadeProjectile.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h">
+      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

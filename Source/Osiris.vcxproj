@@ -170,6 +170,7 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowState.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h" />
+    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowState.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\SceneObjectOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\SceneObjectUpdaterOffset.h" />
+    <ClInclude Include="GameClasses\OffsetTypes\SmokeGrenadeProjectileOffset.h" />
     <ClInclude Include="GameClasses\PlayerController.h" />
     <ClInclude Include="GameClasses\FileNameSymbolTable.h" />
     <ClInclude Include="GameClasses\FileSystem.h" />
@@ -268,6 +270,7 @@
     <ClInclude Include="GameClasses\SceneObjectUpdater.h" />
     <ClInclude Include="GameClasses\SceneObjectUpdaters.h" />
     <ClInclude Include="GameClasses\SceneSystem.h" />
+    <ClInclude Include="GameClasses\SmokeGrenadeProjectile.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDependencies\ConVarDeps.h" />
     <ClInclude Include="GameDependencies\ConVars.h" />
@@ -300,6 +303,7 @@
     <ClInclude Include="GameDependencies\SceneObjectDeps.h" />
     <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h" />
     <ClInclude Include="GameDependencies\SceneSystemDeps.h" />
+    <ClInclude Include="GameDependencies\SmokeGrenadeProjectileDeps.h" />
     <ClInclude Include="GameDependencies\TopLevelWindowDeps.h" />
     <ClInclude Include="GameDependencies\WeaponDeps.h" />
     <ClInclude Include="GameDependencies\WeaponServicesDeps.h" />
@@ -360,6 +364,7 @@
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h" />

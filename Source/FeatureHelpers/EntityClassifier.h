@@ -22,6 +22,12 @@ struct EntityTypeInfo {
     }
 
     template <typename EntityType>
+    [[nodiscard]] constexpr bool is() const noexcept
+    {
+        return typeIndex == indexOf<EntityType>();
+    }
+
+    template <typename EntityType>
     [[nodiscard]] static constexpr auto indexOf() noexcept
     {
         return utils::typeIndex<EntityType, KnownEntityTypes>();

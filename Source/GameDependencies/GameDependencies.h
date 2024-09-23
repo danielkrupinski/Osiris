@@ -29,6 +29,7 @@
 #include "SceneObjectDeps.h"
 #include "SceneObjectUpdaterDeps.h"
 #include "SceneSystemDeps.h"
+#include "SmokeGrenadeProjectileDeps.h"
 #include "TopLevelWindowDeps.h"
 #include "WeaponDeps.h"
 #include "WeaponServicesDeps.h"
@@ -67,6 +68,7 @@ struct GameDependencies {
         , sceneObjectDeps{memoryPatterns.sceneObjectPatterns()}
         , sceneObjectUpdaterDeps{memoryPatterns.sceneObjectUpdaterPatterns()}
         , sceneSystemDeps{memoryPatterns.sceneSystemPatterns()}
+        , smokeGrenadeProjectileDeps{memoryPatterns.smokeGrenadeProjectilePatterns()}
         , topLevelWindowDeps{memoryPatterns.topLevelWindowPatterns()}
         , weaponDeps{memoryPatterns.weaponPatterns()}
         , weaponServicesDeps{memoryPatterns.weaponServicesPatterns()}
@@ -113,6 +115,7 @@ struct GameDependencies {
     SceneObjectDeps sceneObjectDeps;
     SceneObjectUpdaterDeps sceneObjectUpdaterDeps;
     SceneSystemDeps sceneSystemDeps;
+    SmokeGrenadeProjectileDeps smokeGrenadeProjectileDeps;
     TopLevelWindowDeps topLevelWindowDeps;
     WeaponDeps weaponDeps;
     WeaponServicesDeps weaponServicesDeps;

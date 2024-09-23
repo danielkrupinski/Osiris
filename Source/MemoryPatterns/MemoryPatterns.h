@@ -42,6 +42,7 @@ struct MemoryPatterns {
     MEMORY_PATTERNS(SceneObjectUpdaterPatterns, sceneObjectUpdaterPatterns)
     MEMORY_PATTERNS(SceneSystemPatterns, sceneSystemPatterns)
     MEMORY_PATTERNS(SdlPatterns, sdlPatterns)
+    MEMORY_PATTERNS(SmokeGrenadeProjectilePatterns, smokeGrenadeProjectilePatterns)
     MEMORY_PATTERNS(SoundSystemPatterns, soundSystemPatterns)
     MEMORY_PATTERNS(TopLevelWindowPatterns, topLevelWindowPatterns)
     MEMORY_PATTERNS(WeaponPatterns, weaponPatterns)

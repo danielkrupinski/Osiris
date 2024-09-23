@@ -25,6 +25,7 @@
 #include "SceneObjectUpdaterPatternsLinux.h"
 #include "SceneSystemPatternsLinux.h"
 #include "SdlPatternsLinux.h"
+#include "SmokeGrenadeProjectilePatternsLinux.h"
 #include "SoundSystemPatternsLinux.h"
 #include "TopLevelWindowPatternsLinux.h"
 #include "WeaponPatternsLinux.h"

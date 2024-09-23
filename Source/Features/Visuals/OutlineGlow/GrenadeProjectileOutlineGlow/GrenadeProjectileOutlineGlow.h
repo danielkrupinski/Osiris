@@ -18,10 +18,12 @@ public:
 
     void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
-        if (context.state().enabled) {
-            using namespace grenade_projectile_outline_glow_params;
-            grenadeProjectile.applyGlowRecursively(getColor(entityTypeInfo).setAlpha(kColorAlpha));
-        }
+        auto&& condition = context.condition();
+        if (!condition.shouldRun() || !condition.shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile))
+            return;
+
+        using namespace grenade_projectile_outline_glow_params;
+        grenadeProjectile.applyGlowRecursively(getColor(entityTypeInfo).setAlpha(kColorAlpha));
     }
 
 private:

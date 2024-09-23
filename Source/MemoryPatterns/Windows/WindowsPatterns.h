@@ -25,6 +25,7 @@
 #include "SceneObjectUpdaterPatternsWindows.h"
 #include "SceneSystemPatternsWindows.h"
 #include "SdlPatternWindows.h"
+#include "SmokeGrenadeProjectilePatternsWindows.h"
 #include "SoundSystemPatternsWindows.h"
 #include "TopLevelWindowPatternsWindows.h"
 #include "WeaponPatternsWindows.h"

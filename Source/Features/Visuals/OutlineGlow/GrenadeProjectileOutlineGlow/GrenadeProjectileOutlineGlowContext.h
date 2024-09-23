@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GrenadeProjectileOutlineGlowCondition.h"
+
 template <typename HookContext>
 class GrenadeProjectileOutlineGlowContext {
 public:
@@ -11,6 +13,11 @@ public:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.grenadeProjectileOutlineGlowState;
+    }
+
+    [[nodiscard]] decltype(auto) condition() const noexcept
+    {
+        return hookContext.template make<GrenadeProjectileOutlineGlowCondition<GrenadeProjectileOutlineGlowContext>>();
     }
 
 private:

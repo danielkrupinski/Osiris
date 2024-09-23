@@ -15,6 +15,12 @@ public:
     {
     }
 
+    template <template <typename> typename T>
+    [[nodiscard]] decltype(auto) as() const noexcept
+    {
+        return hookContext.template make<T>(static_cast<typename T<HookContext>::RawType*>(entity));
+    }
+
     [[nodiscard]] decltype(auto) renderComponent() const noexcept
     {
         return hookContext.template make<RenderComponent>(deps().offsetToRenderComponent.of(entity).valueOr(nullptr));
