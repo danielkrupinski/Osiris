@@ -154,4 +154,8 @@ struct C_DecoyGrenade : C_CSWeaponBase {
     static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVC_DecoyGrenade@@", "14C_DecoyGrenade")};
 };
 
+struct C_C4 : C_CSWeaponBase {
+    static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVC_C4@@", "4C_C4")};
+};
+
 }

@@ -4,6 +4,7 @@
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "DefuseKitOutlineGlow/DefuseKitOutlineGlow.h"
+#include "DroppedBombOutlineGlow/DroppedBombOutlineGlow.h"
 #include "GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlow.h"
 #include "PlayerOutlineGlow/PlayerOutlineGlow.h"
 #include "WeaponOutlineGlow/WeaponOutlineGlow.h"
@@ -39,6 +40,11 @@ public:
     void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto& entity) const noexcept
     {
         hookContext.template make<GrenadeProjectileOutlineGlow>().applyGlowToGrenadeProjectile(entityTypeInfo, hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseCSGrenadeProjectile*>(&entity)));
+    }
+    
+    void applyGlowToBomb(auto& entity) const noexcept
+    {
+        hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(hookContext.template make<BaseEntity>(static_cast<cs2::C_C4*>(&entity)));
     }
 
     [[nodiscard]] auto& viewRenderHook() const noexcept

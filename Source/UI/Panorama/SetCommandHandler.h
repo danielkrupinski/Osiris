@@ -90,6 +90,8 @@ private:
             handleTogglableFeature(features.visualFeatures().defuseKitOutlineGlowToggle());
         } else if (feature == "grenade_proj_outline_glow") {
             handleTogglableFeature(features.visualFeatures().grenadeProjectileOutlineGlowToggle());
+        } else if (feature == "dropped_bomb_outline_glow") {
+            handleTogglableFeature(features.visualFeatures().droppedBombOutlineGlowToggle());
         }
     }
 

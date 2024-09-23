@@ -178,6 +178,9 @@
     <Filter Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow">
       <UniqueIdentifier>{88aa3de7-03b7-49bc-a280-76714e28a62a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow">
+      <UniqueIdentifier>{4cacd578-512d-4917-912c-c98f07a6d19b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1528,6 +1531,24 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h">
       <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlow.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowCondition.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowContext.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowState.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowToggle.h">
+      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

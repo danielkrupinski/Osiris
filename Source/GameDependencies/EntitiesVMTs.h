@@ -62,7 +62,9 @@ using KnownEntityTypes = std::tuple<
     cs2::C_HEGrenadeProjectile,
     cs2::C_SmokeGrenadeProjectile,
     cs2::C_MolotovProjectile,
-    cs2::C_FlashbangProjectile
+    cs2::C_FlashbangProjectile,
+
+    cs2::C_C4
 >;
 
 struct EntitiesVMTs {

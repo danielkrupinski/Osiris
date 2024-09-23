@@ -2,6 +2,7 @@
 
 #include "PlayerInformationThroughWalls/PlayerInformationThroughWallsState.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowState.h"
+#include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowState.h"
 #include "OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowState.h"
 #include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowState.h"
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowState.h"
@@ -14,4 +15,5 @@ struct VisualFeaturesStates {
     WeaponOutlineGlowState weaponOutlineGlowState;
     DefuseKitOutlineGlowState defuseKitOutlineGlowState;
     GrenadeProjectileOutlineGlowState grenadeProjectileOutlineGlowState;
+    DroppedBombOutlineGlowState droppedBombOutlineGlowState;
 };

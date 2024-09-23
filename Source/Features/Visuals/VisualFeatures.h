@@ -3,6 +3,7 @@
 #include <FeatureHelpers/FeatureHelpers.h>
 #include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
+#include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowToggle.h"
 #include "OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowToggle.h"
 #include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
@@ -98,6 +99,11 @@ struct VisualFeatures {
     [[nodiscard]] decltype(auto) grenadeProjectileOutlineGlowToggle() const noexcept
     {
         return hookContext.template make<GrenadeProjectileOutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) droppedBombOutlineGlowToggle() const noexcept
+    {
+        return hookContext.template make<DroppedBombOutlineGlowToggle>();
     }
 
     HookContext& hookContext;
