@@ -4,6 +4,8 @@
 #include <CS2/Panorama/PanelHandle.h>
 
 struct HudDeps {
+    HudDeps() = default;
+
     template <typename ClientPatterns>
     explicit HudDeps(const ClientPatterns& clientPatterns) noexcept
         : hud{clientPatterns.hudPanel()}

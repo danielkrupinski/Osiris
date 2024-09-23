@@ -5,6 +5,8 @@
 #include <Utils/FieldOffset.h>
 
 struct PanoramaUiPanelDeps {
+    PanoramaUiPanelDeps() = default;
+
     template <typename PanoramaUiPanelPatterns>
     explicit PanoramaUiPanelDeps(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
         : setParent{panoramaUiPanelPatterns.setParent()}

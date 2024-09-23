@@ -3,6 +3,8 @@
 #include <GameClasses/OffsetTypes/GameRulesOffset.h>
 
 struct GameRulesDeps {
+    GameRulesDeps() = default;
+
     template <typename GameRulesPatterns>
     explicit GameRulesDeps(const GameRulesPatterns& gameRulesPatterns) noexcept
         : gameRules{gameRulesPatterns.gameRules()}

@@ -10,6 +10,8 @@
 
 template <typename... StyleProperties>
 struct StylePropertiesSymbolsAndVMTsBase {
+    StylePropertiesSymbolsAndVMTsBase() = default;
+
     StylePropertiesSymbolsAndVMTsBase(StylePropertySymbolMap symbolMap, const VmtFinder& panoramaVmtFinder) noexcept
         : symbols{symbolMap.findSymbol(StyleProperties::kName)...}
         , vmts{panoramaVmtFinder.findVmt(StyleProperties::kMangledTypeName)...}

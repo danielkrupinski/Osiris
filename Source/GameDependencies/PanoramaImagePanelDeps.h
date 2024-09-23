@@ -4,6 +4,8 @@
 #include <GameClasses/OffsetTypes/PanoramaImagePanelOffset.h>
 
 struct PanoramaImagePanelDeps {
+    PanoramaImagePanelDeps() = default;
+
     template <typename PanoramaImagePanelPatterns>
     explicit PanoramaImagePanelDeps(const PanoramaImagePanelPatterns& panoramaImagePanelPatterns) noexcept
         : setImage{panoramaImagePanelPatterns.setImage()}

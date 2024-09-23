@@ -3,6 +3,8 @@
 #include <GameClasses/OffsetTypes/PlayerPawnOffset.h>
 
 struct PlayerPawnDeps {
+    PlayerPawnDeps() = default;
+
     template <typename PlayerPawnPatterns>
     explicit PlayerPawnDeps(const PlayerPawnPatterns& playerPawnPatterns) noexcept
         : offsetToPlayerPawnImmunity{playerPawnPatterns.offsetToPlayerPawnImmunity()}

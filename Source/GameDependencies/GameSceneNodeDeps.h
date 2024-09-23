@@ -3,6 +3,8 @@
 #include <GameClasses/OffsetTypes/GameSceneNodeOffset.h>
 
 struct GameSceneNodeDeps {
+    GameSceneNodeDeps() = default;
+
     template <typename GameSceneNodePatterns>
     explicit GameSceneNodeDeps(const GameSceneNodePatterns& gameSceneNodePatterns) noexcept
         : offsetToAbsOrigin{gameSceneNodePatterns.offsetToAbsOrigin()}

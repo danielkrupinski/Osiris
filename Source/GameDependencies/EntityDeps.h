@@ -3,6 +3,8 @@
 #include <GameClasses/OffsetTypes/EntityOffset.h>
 
 struct EntityDeps {
+    EntityDeps() = default;
+
     template <typename EntityPatterns>
     explicit EntityDeps(const EntityPatterns& entityPatterns) noexcept
         : offsetToGameSceneNode{entityPatterns.offsetToGameSceneNode()}

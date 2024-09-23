@@ -8,6 +8,8 @@
 #include <Utils/FieldOffset.h>
 
 struct MemAllocDeps {
+    MemAllocDeps() = default;
+
     template <typename MemAllocPatterns>
     MemAllocDeps(Tier0Dll tier0Dll, const MemAllocPatterns& memAllocPatterns) noexcept
         : thisptr{tier0Dll.memAlloc()}

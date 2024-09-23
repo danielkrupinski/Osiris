@@ -41,6 +41,8 @@
 #include <Platform/VmtFinder.h>
 
 struct GameDependencies {
+    GameDependencies() = default;
+
     GameDependencies(const MemoryPatterns& memoryPatterns, const VmtFinder& clientVmtFinder, const VmtFinder& panoramaVmtFinder, Tier0Dll tier0Dll) noexcept
         : conVarDeps{memoryPatterns.conVarPatterns()}
         , cvarDeps{memoryPatterns.cvarPatterns()}

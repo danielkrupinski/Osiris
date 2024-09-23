@@ -3,6 +3,8 @@
 #include <CS2/Panorama/CUIEngine.h>
 
 struct PanoramaUiEngineDeps {
+    PanoramaUiEngineDeps() = default;
+
     template <typename PanoramaUiEnginePatterns>
     explicit PanoramaUiEngineDeps(const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
         : thisptr{panoramaUiEnginePatterns.uiEngine()}

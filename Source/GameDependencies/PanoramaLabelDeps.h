@@ -5,6 +5,8 @@
 #include <CS2/Panorama/CLabel.h>
 
 struct PanoramaLabelDeps {
+    PanoramaLabelDeps() = default;
+
     template <typename PanoramaLabelPatterns>
     explicit PanoramaLabelDeps(const PanoramaLabelPatterns& panoramaLabelPatterns) noexcept
         : setTextInternal{panoramaLabelPatterns.setTextInternal()}

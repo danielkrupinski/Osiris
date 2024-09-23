@@ -68,6 +68,8 @@ using KnownEntityTypes = std::tuple<
 >;
 
 struct EntitiesVMTs {
+    EntitiesVMTs() = default;
+
     explicit EntitiesVMTs(const VmtFinder& clientVmtFinder) noexcept
     {
         initVmts(clientVmtFinder, std::type_identity<KnownEntityTypes>{});

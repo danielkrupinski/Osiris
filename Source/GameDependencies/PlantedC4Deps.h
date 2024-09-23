@@ -3,6 +3,8 @@
 #include <GameClasses/OffsetTypes/PlantedC4Offset.h>
 
 struct PlantedC4Deps {
+    PlantedC4Deps() = default;
+
     template <typename PlantedC4Patterns>
     explicit PlantedC4Deps(const PlantedC4Patterns& plantedC4Patterns) noexcept
         : plantedC4s{plantedC4Patterns.plantedC4s()}

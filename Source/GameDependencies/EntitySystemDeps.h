@@ -4,6 +4,8 @@
 #include <GameClasses/OffsetTypes/EntitySystemOffset.h>
 
 struct EntitySystemDeps {
+    EntitySystemDeps() = default;
+
     template <typename EntitySystemPatterns>
     explicit EntitySystemDeps(const EntitySystemPatterns& entitySystemPatterns) noexcept
         : entitySystem{entitySystemPatterns.entitySystem()}

@@ -4,6 +4,8 @@
 #include <GameDLLs/Tier0Dll.h>
 
 struct FileNameSymbolTableDeps {
+    FileNameSymbolTableDeps() = default;
+
     explicit FileNameSymbolTableDeps(Tier0Dll tier0Dll) noexcept
         : string{ tier0Dll.filenameSymbolTableString() }
     {
