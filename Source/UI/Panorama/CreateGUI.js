@@ -307,17 +307,15 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
   createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
-  var weaponOutlineGlow = createSection(outlineGlowTab, 'Weapon Outline Glow');
+  var weaponOutlineGlow = createSection(outlineGlowTab, 'Weapons');
   createYesNoDropDown(weaponOutlineGlow, "Glow Weapons on Ground Nearby", 'visuals', 'weapon_outline_glow', 0);
+  $.CreatePanel('Panel', weaponOutlineGlow, '', { class: "horizontal-separator" });
+  createYesNoDropDown(weaponOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow', 0);
 
-  var grenadeProjectileOutlineGlow = createSection(outlineGlowTab, 'Grenade Projectile Outline Glow');
-  createYesNoDropDown(grenadeProjectileOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow', 0);
-
-  var bombOutlineGlow = createSection(outlineGlowTab, 'Bomb Outline Glow');
-  createYesNoDropDown(bombOutlineGlow, "Glow Dropped Bomb", 'visuals', 'dropped_bomb_outline_glow', 0);
-
-  var defuseKitOutlineGlow = createSection(outlineGlowTab, 'Defuse Kit Outline Glow');
-  createYesNoDropDown(defuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
+  var bombAndDefuseKitOutlineGlow = createSection(outlineGlowTab, 'Bomb & Defuse Kit');
+  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Dropped Bomb", 'visuals', 'dropped_bomb_outline_glow', 0);
+  $.CreatePanel('Panel', bombAndDefuseKitOutlineGlow, '', { class: "horizontal-separator" });
+  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 
