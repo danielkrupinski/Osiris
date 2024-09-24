@@ -62,10 +62,13 @@
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
+    <ClInclude Include="CS2\Constants\EntityTypeNames.h" />
     <ClInclude Include="CS2\Constants\IconURLs.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
     <ClInclude Include="CS2\Constants\SoundNames.h" />
+    <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
+    <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h" />
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
     <ClInclude Include="CS2\Panorama\CImagePanel.h" />
     <ClInclude Include="CS2\Panorama\CLabel.h" />
@@ -461,6 +464,7 @@
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />
     <ClInclude Include="Utils\TypeBitFlags.h" />
+    <ClInclude Include="Utils\TypedStaticStringPool.h" />
     <ClInclude Include="Utils\TypeIndex.h" />
     <ClInclude Include="Verification\Verifier.h" />
     <ClInclude Include="Verification\VerifyMacros.h" />

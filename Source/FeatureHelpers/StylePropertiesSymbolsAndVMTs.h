@@ -2,53 +2,38 @@
 
 #include <array>
 
+#include <CS2/Constants/StylePropertySymbolNames.h>
+#include <CS2/Constants/StylePropertyTypeNames.h>
 #include <CS2/Panorama/StyleProperties.h>
 #include <Platform/VmtFinder.h>
 #include <Utils/TypeIndex.h>
 
 #include "StylePropertySymbolMap.h"
 
-template <typename... StyleProperties>
-struct StylePropertiesSymbolsAndVMTsBase {
-    StylePropertiesSymbolsAndVMTsBase() = default;
+struct StylePropertiesSymbolsAndVMTs {
+    StylePropertiesSymbolsAndVMTs() = default;
 
-    StylePropertiesSymbolsAndVMTsBase(StylePropertySymbolMap symbolMap, const VmtFinder& panoramaVmtFinder) noexcept
-        : symbols{symbolMap.findSymbol(StyleProperties::kName)...}
-        , vmts{panoramaVmtFinder.findVmt(StyleProperties::kMangledTypeName)...}
+    StylePropertiesSymbolsAndVMTs(StylePropertySymbolMap symbolMap, const VmtFinder& panoramaVmtFinder) noexcept
     {
+        cs2::kStylePropertySymbolNames.forEach([i = 0u, &symbolMap, this](const auto typeName) mutable { symbols[i++] = symbolMap.findSymbol(typeName); });
+        cs2::kStylePropertyTypeNames.forEach([i = 0u, &panoramaVmtFinder, this](const auto typeName) mutable { vmts[i++] = panoramaVmtFinder.findVmt(typeName); });
     }
 
     template <typename StyleProperty>
     [[nodiscard]] cs2::CStyleSymbol getSymbol() const noexcept
     {
-        return symbols[utils::typeIndex<StyleProperty, std::tuple<StyleProperties...>>()];
+        return symbols[utils::typeIndex<StyleProperty, StyleProperties>()];
     }
 
     template <typename StyleProperty>
     [[nodiscard]] const void* getVmt() const noexcept
     {
-        return vmts[utils::typeIndex<StyleProperty, std::tuple<StyleProperties...>>()];
+        return vmts[utils::typeIndex<StyleProperty, StyleProperties>()];
     }
 
 private:
-    std::array<cs2::CStyleSymbol, sizeof...(StyleProperties)> symbols;
-    std::array<const void*, sizeof...(StyleProperties)> vmts;
-};
+    using StyleProperties = decltype(cs2::kStylePropertySymbolNames)::TypeList;
 
-using StylePropertiesSymbolsAndVMTs =
-    StylePropertiesSymbolsAndVMTsBase<
-        cs2::CStylePropertyWidth,
-        cs2::CStylePropertyOpacity,
-        cs2::CStylePropertyZIndex,
-        cs2::CStylePropertyHeight,
-        cs2::CStylePropertyImageShadow,
-        cs2::CStylePropertyPosition,
-        cs2::CStylePropertyTransformOrigin,
-        cs2::CStylePropertyAlign,
-        cs2::CStylePropertyWashColor,
-        cs2::CStylePropertyFlowChildren,
-        cs2::CStylePropertyFont,
-        cs2::CStylePropertyTextShadow,
-        cs2::CStylePropertyMargin,
-        cs2::CStylePropertyMixBlendMode,
-        cs2::CStylePropertyTextAlign>;
+    std::array<cs2::CStyleSymbol, std::tuple_size_v<StyleProperties>> symbols;
+    std::array<const void*, std::tuple_size_v<StyleProperties>> vmts;
+};

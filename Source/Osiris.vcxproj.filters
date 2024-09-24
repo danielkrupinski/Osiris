@@ -1550,6 +1550,18 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\TypedStaticStringPool.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\EntityTypeNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
