@@ -1565,6 +1565,9 @@
     <ClInclude Include="GameClasses\WeaponServices.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\BaseWeapon.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

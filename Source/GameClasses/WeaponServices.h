@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/CCSPlayer_WeaponServices.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include "BaseWeapon.h"
 #include "PlayerWeapons.h"
 
 template <typename HookContext>
@@ -18,9 +19,9 @@ public:
         return hookContext.template make<PlayerWeapons>(deps().offsetToWeapons.of(weaponServices).valueOr(nullptr));
     }
 
-    [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon() const noexcept
+    [[nodiscard]] auto getActiveWeapon() const noexcept
     {
-        return static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(deps().offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
+        return hookContext.template make<BaseWeapon>(static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(deps().offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX}))));
     }
 
 private:

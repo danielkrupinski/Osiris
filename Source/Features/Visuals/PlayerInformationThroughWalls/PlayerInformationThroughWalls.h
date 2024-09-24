@@ -314,23 +314,14 @@ private:
         arrowPanel.setWashColor(getPlayerPositionArrowColorCalculator(teamNumber).getArrowColor(playerController, state.playerPositionArrowColor));
     }
 
-    [[nodiscard]] cs2::C_CSWeaponBase::m_iClip1 getActiveWeaponClip(auto&& playerPawn) const noexcept
+    [[nodiscard]] auto getActiveWeaponClip(auto&& playerPawn) const noexcept
     {
-        const auto activeWeapon = playerPawn.getActiveWeapon();
-        if (!activeWeapon)
-            return -1;
-
-        return hookContext.gameDependencies().weaponDeps.offsetToClipAmmo.of(activeWeapon).valueOr(-1);
+        return playerPawn.getActiveWeapon().clipAmmo().valueOr(-1);
     }
 
-    [[nodiscard]] const char* getActiveWeaponName(auto&& playerPawn) const noexcept
+    [[nodiscard]] auto getActiveWeaponName(auto&& playerPawn) const noexcept
     {
-        const auto activeWeapon = playerPawn.getActiveWeapon();
-        if (!activeWeapon)
-            return nullptr;
-
-        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(activeWeapon).vData().valueOr(nullptr));
-        return hookContext.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).valueOr(nullptr);
+        return playerPawn.getActiveWeapon().getName();
     }
 
     void setHealth(auto&& healthPanel, auto&& playerPawn) const noexcept

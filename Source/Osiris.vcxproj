@@ -219,6 +219,7 @@
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
     <ClInclude Include="GameClasses\BaseEntity.h" />
+    <ClInclude Include="GameClasses\BaseWeapon.h" />
     <ClInclude Include="GameClasses\ClientPanel.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\GameSceneNode.h" />

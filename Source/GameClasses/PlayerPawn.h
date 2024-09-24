@@ -129,7 +129,7 @@ public:
         return *flashBangEndTime - curTime.value();
     }
 
-    [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon() const noexcept
+    [[nodiscard]] decltype(auto) getActiveWeapon() const noexcept
     {
         return weaponServices().getActiveWeapon();
     }
