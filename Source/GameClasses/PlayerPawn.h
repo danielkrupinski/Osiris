@@ -11,6 +11,7 @@
 #include "BaseEntity.h"
 #include "GameSceneNode.h"
 #include "PlayerWeapons.h"
+#include "WeaponServices.h"
 
 class EntityFromHandleFinder;
 
@@ -31,12 +32,14 @@ public:
         return hookContext.template make<BaseEntity>(playerPawn);
     }
 
+    [[nodiscard]] decltype(auto) weaponServices() const noexcept
+    {
+        return hookContext.template make<WeaponServices>(hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr));
+    }
+
     [[nodiscard]] decltype(auto) weapons() const noexcept
     {
-        const auto weaponServices = hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr);
-        if (!weaponServices)
-            return hookContext.template make<PlayerWeapons>(nullptr);
-        return hookContext.template make<PlayerWeapons>(hookContext.gameDependencies().weaponServicesDeps.offsetToWeapons.of(weaponServices).get());
+        return weaponServices().weapons();
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
@@ -128,11 +131,7 @@ public:
 
     [[nodiscard]] cs2::C_CSWeaponBase* getActiveWeapon() const noexcept
     {
-        const auto weaponServices = hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr);
-        if (!weaponServices)
-            return nullptr;
-
-        return static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.gameDependencies().weaponServicesDeps.offsetToActiveWeapon.of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})));
+        return weaponServices().getActiveWeapon();
     }
 
 private:

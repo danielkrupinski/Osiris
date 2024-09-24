@@ -281,6 +281,7 @@
     <ClInclude Include="GameClasses\SceneSystem.h" />
     <ClInclude Include="GameClasses\SmokeGrenadeProjectile.h" />
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
+    <ClInclude Include="GameClasses\WeaponServices.h" />
     <ClInclude Include="GameDependencies\ConVarDeps.h" />
     <ClInclude Include="GameDependencies\ConVars.h" />
     <ClInclude Include="GameDependencies\ConVarsBase.h" />

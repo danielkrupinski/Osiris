@@ -1562,6 +1562,9 @@
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\WeaponServices.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
