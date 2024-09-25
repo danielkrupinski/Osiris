@@ -6,6 +6,7 @@
 #include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowToggle.h"
 #include "OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowToggle.h"
 #include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
+#include "OutlineGlow/TickingBombOutlineGlow/TickingBombOutlineGlowToggle.h"
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
 #include "OutlineGlow/OutlineGlowToggle.h"
 #include "VisualFeaturesStates.h"
@@ -104,6 +105,11 @@ struct VisualFeatures {
     [[nodiscard]] decltype(auto) droppedBombOutlineGlowToggle() const noexcept
     {
         return hookContext.template make<DroppedBombOutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) tickingBombOutlineGlowToggle() const noexcept
+    {
+        return hookContext.template make<TickingBombOutlineGlowToggle>();
     }
 
     HookContext& hookContext;

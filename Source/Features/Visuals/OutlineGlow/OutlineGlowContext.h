@@ -1,12 +1,14 @@
 #pragma once
 
 #include <GameClasses/PlayerPawn.h>
+#include <GameClasses/PlantedC4.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "DefuseKitOutlineGlow/DefuseKitOutlineGlow.h"
 #include "DroppedBombOutlineGlow/DroppedBombOutlineGlow.h"
 #include "GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlow.h"
 #include "PlayerOutlineGlow/PlayerOutlineGlow.h"
+#include "TickingBombOutlineGlow/TickingBombOutlineGlow.h"
 #include "WeaponOutlineGlow/WeaponOutlineGlow.h"
 
 template <typename HookContext>
@@ -45,6 +47,11 @@ public:
     void applyGlowToBomb(auto& entity) const noexcept
     {
         hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(hookContext.template make<BaseEntity>(static_cast<cs2::C_C4*>(&entity)));
+    }
+
+    void applyGlowToPlantedBomb(auto& entity) const noexcept
+    {
+        hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(PlantedC4{PlantedC4Base{static_cast<cs2::CPlantedC4*>(&entity)}, hookContext});
     }
 
     [[nodiscard]] auto& viewRenderHook() const noexcept

@@ -181,6 +181,9 @@
     <Filter Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow">
       <UniqueIdentifier>{4cacd578-512d-4917-912c-c98f07a6d19b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow">
+      <UniqueIdentifier>{845ab4cc-9e82-4b6d-8e55-170788a073b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1564,6 +1567,24 @@
     </ClInclude>
     <ClInclude Include="GameClasses\BaseWeapon.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlow.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowCondition.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowContext.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowState.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowToggle.h">
+      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

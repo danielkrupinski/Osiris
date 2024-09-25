@@ -39,10 +39,15 @@ struct PlantedC4Base {
 
 template <typename Dependencies>
 struct PlantedC4 {
-    explicit PlantedC4(PlantedC4Base base, Dependencies dependencies) noexcept
+    explicit PlantedC4(PlantedC4Base base, Dependencies& dependencies) noexcept
         : base{base}
         , dependencies{dependencies}
     {
+    }
+
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return dependencies.template make<BaseEntity>(base.thisptr);
     }
 
     [[nodiscard]] auto getTimeToExplosion() const noexcept
@@ -50,9 +55,9 @@ struct PlantedC4 {
         return base.blowTime().toOptional() - dependencies.globalVars().curtime();
     }
 
-    [[nodiscard]] bool isTicking() const noexcept
+    [[nodiscard]] auto isTicking() const noexcept
     {
-        return base.ticking().valueOr(true) && getTimeToExplosion().greaterThan(0.0f).valueOr(false);
+        return base.ticking().toOptional();
     }
 
     [[nodiscard]] bool isBeingDefused() const noexcept
@@ -82,5 +87,5 @@ struct PlantedC4 {
 
 private:
     PlantedC4Base base;
-    Dependencies dependencies;
+    Dependencies& dependencies;
 };
