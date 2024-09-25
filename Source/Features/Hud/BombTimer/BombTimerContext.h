@@ -24,7 +24,7 @@ struct BombTimerContext {
     [[nodiscard]] bool hasTickingC4() const noexcept
     {
         const auto plantedC4{_context.plantedC4()};
-        return plantedC4 && plantedC4->isTicking();
+        return plantedC4 && plantedC4->isTicking().valueOr(true) && plantedC4->getTimeToExplosion().greaterThan(0.0f).valueOr(false);
     }
 
     [[nodiscard]] auto tickingC4() const noexcept

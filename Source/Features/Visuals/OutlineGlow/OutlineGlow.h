@@ -21,6 +21,8 @@ public:
             context.applyGlowToPlayer(entity);
         else if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::CBaseAnimGraph, KnownEntityTypes>())
             context.applyGlowToDefuseKit(entity);
+        else if (entityTypeInfo.is<cs2::CPlantedC4>())
+            context.applyGlowToPlantedBomb(entity);
         else if (entityTypeInfo.is<cs2::C_C4>())
             context.applyGlowToBomb(entity);
         else if (entityTypeInfo.isGrenadeProjectile())

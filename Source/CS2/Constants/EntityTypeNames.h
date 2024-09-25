@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/WeaponEntities.h>
+#include <CS2/Classes/CPlantedC4.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <Utils/TypedStaticStringPool.h>
 
@@ -51,6 +52,7 @@ constexpr auto kEntityTypeNames = TypedStaticStringPool{}
     .add<C_SmokeGrenadeProjectile>(WIN64_LINUX(".?AVC_SmokeGrenadeProjectile@@", "24C_SmokeGrenadeProjectile"))
     .add<C_MolotovProjectile>(WIN64_LINUX(".?AVC_MolotovProjectile@@", "19C_MolotovProjectile"))
     .add<C_FlashbangProjectile>(WIN64_LINUX(".?AVC_FlashbangProjectile@@", "21C_FlashbangProjectile"))
-    .add<C_C4>(WIN64_LINUX(".?AVC_C4@@", "4C_C4"));
+    .add<C_C4>(WIN64_LINUX(".?AVC_C4@@", "4C_C4"))
+    .add<CPlantedC4>(WIN64_LINUX(".?AVC_PlantedC4@@", "11C_PlantedC4"));
 
 }
