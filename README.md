@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 25 September 2024
+    * Added outline glow for ticking bomb
+
+    ![Ticking bomb glow](https://github.com/user-attachments/assets/ddc4063e-accb-44e8-b202-05a0bf2c49ae)
+
 * 23 September 2024
     * Added outline glow for dropped bomb
 
@@ -20,16 +25,10 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
     ![Defuse kit glow](https://github.com/user-attachments/assets/1e212425-9ef1-4273-9052-1510409e5c9b)
 
-
 * 16 September 2024
     * Different grenades have now different outline glow color
 
     ![Grenade glow colors](https://github.com/user-attachments/assets/89601db4-1254-44fe-985e-9387c75b08c5)
-
-* 14 September 2024
-    * Added weapon outline glow feature showing weapons on the ground nearby
-
-    ![Weapon glow](https://github.com/user-attachments/assets/64120e97-f3e1-4ff2-94cf-846a6d8a5f03)
 
 ## Technical features
 
