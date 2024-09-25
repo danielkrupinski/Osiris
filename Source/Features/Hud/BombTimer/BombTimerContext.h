@@ -49,21 +49,21 @@ struct BombTimerContext {
 
     [[nodiscard]] decltype(auto) bombTimerContainerPanel() const noexcept
     {
-        if (auto&& bombTimerContainer = _context.panels().getPanelFromHandle(state().bombTimerContainerPanelHandle))
+        if (auto&& bombTimerContainer = uiEngine().getPanelFromHandle(state().bombTimerContainerPanelHandle))
             return utils::lvalue<decltype(bombTimerContainer)>(bombTimerContainer);
 
         updatePanelHandles();
-        return _context.panels().getPanelFromHandle(state().bombTimerContainerPanelHandle);
+        return uiEngine().getPanelFromHandle(state().bombTimerContainerPanelHandle);
     }
 
     [[nodiscard]] auto bombSiteIconPanel() const noexcept
     {
-        return BombSiteIconPanel{_context.panels().getPanelFromHandle(state().bombSiteIconPanelHandle).clientPanel().template as<PanoramaImagePanel>()};
+        return BombSiteIconPanel{uiEngine().getPanelFromHandle(state().bombSiteIconPanelHandle).clientPanel().template as<PanoramaImagePanel>()};
     }
 
     [[nodiscard]] auto bombTimerTextPanel() const noexcept
     {
-        return BombTimerTextPanel{_context.panels().getPanelFromHandle(state().bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return BombTimerTextPanel{uiEngine().getPanelFromHandle(state().bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
     void updatePanelHandles() const noexcept
@@ -85,5 +85,10 @@ struct BombTimerContext {
     }
 
 private:
+    [[nodiscard]] decltype(auto) uiEngine() const noexcept
+    {
+        return _context.template make<PanoramaUiEngine>();
+    }
+
     HookContext& _context;
 };

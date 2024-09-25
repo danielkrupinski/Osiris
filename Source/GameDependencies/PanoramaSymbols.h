@@ -4,8 +4,13 @@
 #include <GameClasses/PanoramaUiEngine.h>
 
 struct PanoramaSymbols {
-    [[nodiscard]] static const PanoramaSymbols& instance() noexcept;
+    template <typename HookContext>
+    PanoramaSymbols(HookContext& hookContext) noexcept
+        : deathNoticeKillerSymbol{hookContext.template make<PanoramaUiEngine>().makeSymbol(0, "DeathNotice_Killer")}
+        , spawnTimeSymbol{hookContext.template make<PanoramaUiEngine>().makeSymbol(0, "SpawnTime")}
+    {
+    }
 
-    cs2::CPanoramaSymbol deathNoticeKillerSymbol{PanoramaUiEngine::makeSymbol(0, "DeathNotice_Killer")};
-    cs2::CPanoramaSymbol spawnTimeSymbol{PanoramaUiEngine::makeSymbol(0, "SpawnTime")};
+    cs2::CPanoramaSymbol deathNoticeKillerSymbol;
+    cs2::CPanoramaSymbol spawnTimeSymbol;
 };

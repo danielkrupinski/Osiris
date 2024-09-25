@@ -231,9 +231,9 @@ public:
 
         const HudInWorldPanels panels{*containerPanelChildren};
 
-        if (state.containerPanelHandle != PanoramaUiEngine::getPanelHandle(containerPanel)) {
+        if (state.containerPanelHandle != hookContext.template make<PanoramaUiEngine>().getPanelHandle(containerPanel)) {
             state.panelIndices.clear();
-            state.containerPanelHandle = PanoramaUiEngine::getPanelHandle(containerPanel);
+            state.containerPanelHandle = hookContext.template make<PanoramaUiEngine>().getPanelHandle(containerPanel);
         }
 
         const auto panel = getPanel(containerPanel, panels);

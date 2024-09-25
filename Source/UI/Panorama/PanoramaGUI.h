@@ -22,17 +22,17 @@ public:
 
         // ensure settings tab is loaded because we use CSS classes from settings
         // TODO: replace use of settings CSS classes with raw style properties
-        PanoramaUiEngine::runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');", "", 0);
+        uiEngine().runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');", "", 0);
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");
         if (settings)
             state().settingsPanelHandle = settings.getHandle();
 
-        PanoramaUiEngine::runScript(settings, reinterpret_cast<const char*>(
+        uiEngine().runScript(settings, reinterpret_cast<const char*>(
 #include "CreateGUI.js"
 ), "", 0);
 
-        PanoramaUiEngine::runScript(mainMenu, R"(
+        uiEngine().runScript(mainMenu, R"(
 (function () {
   $('#JsSettings').FindChildInLayoutFile('OsirisMenuTab').SetParent($('#JsMainMenuContent'));
 
@@ -60,17 +60,22 @@ public:
 
     void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
     {
-        auto&& guiPanel = hookContext.panels().getPanelFromHandle(state().guiPanelHandle);
+        auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
         if (!guiPanel)
             return;
 
-        const auto cmdSymbol = PanoramaUiEngine::makeSymbol(0, "cmd");
+        const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
         PanoramaCommandDispatcher{cmd, features, unloadFlag}();
         guiPanel.setAttributeString(cmdSymbol, "");
     }
 
 private:
+    [[nodiscard]] decltype(auto) uiEngine() const noexcept
+    {
+        return hookContext.template make<PanoramaUiEngine>();
+    }
+
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.panoramaGuiState();

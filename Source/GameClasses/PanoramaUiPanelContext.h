@@ -4,6 +4,7 @@
 #include <GameDependencies/PanelStyleDeps.h>
 
 #include "ClientPanel.h"
+#include "PanoramaUiEngine.h"
 #include "PanoramaUiPanelChildPanels.h"
 #include "PanoramaUiPanelClasses.h"
 #include "PanoramaUiPanelMethodInvoker.h"
@@ -29,7 +30,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] decltype(auto) getHandle() const noexcept
     {
-        return hookContext.panels().getPanelHandle(panel);
+        return hookContext.template make<PanoramaUiEngine>().getPanelHandle(panel);
     }
 
     void setSimpleForegroundColor(cs2::Color color) const noexcept

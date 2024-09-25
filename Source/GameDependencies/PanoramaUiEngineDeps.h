@@ -16,8 +16,6 @@ struct PanoramaUiEngineDeps {
     {
     }
 
-    [[nodiscard]] static const PanoramaUiEngineDeps& instance() noexcept;
-
     cs2::CUIEngine** thisptr;
 
     cs2::CUIEngine::getPanelHandle getPanelHandle;

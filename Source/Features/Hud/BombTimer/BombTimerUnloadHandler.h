@@ -12,9 +12,9 @@ struct BombTimerUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        auto&& panels = hookContext.panels();
-        panels.deletePanelByHandle(state.bombTimerPanelHandle);
-        panels.deletePanelByHandle(state.bombTimerContainerPanelHandle);
+        auto&& uiEngine = hookContext.template make<PanoramaUiEngine>();
+        uiEngine.deletePanelByHandle(state.bombTimerPanelHandle);
+        uiEngine.deletePanelByHandle(state.bombTimerContainerPanelHandle);
     }
 
     HookContext& hookContext;

@@ -12,7 +12,7 @@ struct BombStatusPanelUnloadHandler {
     void handleUnload() const noexcept
     {
         hookContext.template make<BombStatusPanel>().restore();
-        hookContext.panels().deletePanelByHandle(hookContext.bombStatusPanelState().invisiblePanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(hookContext.bombStatusPanelState().invisiblePanelHandle);
     }
 
 private:

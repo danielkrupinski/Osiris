@@ -12,7 +12,7 @@ struct DefusingAlertUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        hookContext.panels().deletePanelByHandle(state.defusingAlertContainerPanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state.defusingAlertContainerPanelHandle);
     }
 
 private:

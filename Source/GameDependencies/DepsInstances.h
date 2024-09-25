@@ -13,14 +13,6 @@
 
 #include <GlobalContext/GlobalContext.h>
 
-inline const PanoramaSymbols& PanoramaSymbols::instance() noexcept
-{
-    auto& panoramaSymbols = GlobalContext::instance().fullContext().gameDependencies.panoramaSymbols;
-    if (!panoramaSymbols.has_value())
-        panoramaSymbols.emplace();
-    return *panoramaSymbols;
-}
-
 inline HudDeps& HudDeps::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameDependencies.hudDeps;
@@ -64,11 +56,6 @@ inline const PanoramaImagePanelDeps& PanoramaImagePanelDeps::instance() noexcept
 inline const PanoramaLabelDeps& PanoramaLabelDeps::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameDependencies.panoramaLabelDeps;
-}
-
-inline const PanoramaUiEngineDeps& PanoramaUiEngineDeps::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameDependencies.uiEngineDeps;
 }
 
 inline const PanoramaUiPanelDeps& PanoramaUiPanelDeps::instance() noexcept

@@ -7,7 +7,6 @@
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
 #include <GameClasses/PanelFactory.h>
-#include <GameClasses/Panels.h>
 #include <GameClasses/PlantedC4.h>
 #include <GameClasses/PlayerController.h>
 #include <GameClasses/GlobalVars.h>
@@ -161,11 +160,6 @@ struct HookDependencies {
         return T{*this, std::forward<Args>(args)...};
     }
 
-    [[nodiscard]] auto panels() noexcept
-    {
-        return Panels{*this};
-    }
-
     [[nodiscard]] auto panelFactory() noexcept
     {
         return PanelFactory{*this};
@@ -174,6 +168,14 @@ struct HookDependencies {
     [[nodiscard]] auto panoramaTransformFactory() noexcept
     {
         return PanoramaTransformFactory{fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
+    }
+
+    [[nodiscard]] const auto& panoramaSymbols() noexcept
+    {
+        auto& symbols = fullGlobalContext.gameDependencies.panoramaSymbols;
+        if (!symbols.has_value())
+            symbols.emplace(*this);
+        return *symbols;
     }
 
 private:

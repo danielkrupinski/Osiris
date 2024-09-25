@@ -16,6 +16,11 @@ struct DeathNoticeContext {
         return _hookContext.template make<PanoramaUiPanel>(_panel);
     }
 
+    [[nodiscard]] decltype(auto) panoramaSymbols() const noexcept
+    {
+        return _hookContext.panoramaSymbols();
+    }
+
     [[nodiscard]] decltype(auto) gameRules() const noexcept
     {
         return _hookContext.gameRules();
@@ -26,6 +31,7 @@ struct DeathNoticeContext {
         return _hookContext.globalVars();
     }
 
+private:
     HookContext& _hookContext;
     cs2::CUIPanel* _panel;
 };

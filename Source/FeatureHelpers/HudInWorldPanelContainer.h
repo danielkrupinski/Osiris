@@ -17,7 +17,7 @@ struct InWorldPanelContainerUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        hookContext.panels().deletePanelByHandle(hookContext.inWorldPanelContainerState().containerPanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(hookContext.inWorldPanelContainerState().containerPanelHandle);
     }
 
 private:

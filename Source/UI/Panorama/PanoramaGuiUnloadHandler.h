@@ -11,11 +11,12 @@ struct PanoramaGuiUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        hookContext.panels().deletePanelByHandle(state().guiButtonHandle);
-        hookContext.panels().deletePanelByHandle(state().guiPanelHandle);
+        auto&& uiEngine = hookContext.template make<PanoramaUiEngine>();
+        uiEngine.deletePanelByHandle(state().guiButtonHandle);
+        uiEngine.deletePanelByHandle(state().guiPanelHandle);
 
-        if (auto&& settingsPanel = hookContext.panels().getPanelFromHandle(state().settingsPanelHandle))
-            PanoramaUiEngine::runScript(settingsPanel, "delete $.Osiris", "", 0);
+        if (auto&& settingsPanel = uiEngine.getPanelFromHandle(state().settingsPanelHandle))
+            uiEngine.runScript(settingsPanel, "delete $.Osiris", "", 0);
     }
 
 private:

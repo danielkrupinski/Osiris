@@ -20,7 +20,7 @@ public:
 
     [[nodiscard]] bool isLocalPlayerKiller() const noexcept
     {
-        return context.panel().hasClass(PanoramaSymbols::instance().deathNoticeKillerSymbol);
+        return context.panel().hasClass(context.panoramaSymbols().deathNoticeKillerSymbol);
     }
 
     [[nodiscard]] auto wasSpawnedThisRound() const noexcept
@@ -31,7 +31,7 @@ public:
     [[nodiscard]] float getSpawnTime() const noexcept
     {
         float spawnTime = 0.0f;
-        if (const auto spawnTimeString = context.panel().getAttributeString(PanoramaSymbols::instance().spawnTimeSymbol, ""))
+        if (const auto spawnTimeString = context.panel().getAttributeString(context.panoramaSymbols().spawnTimeSymbol, ""))
             StringParser{spawnTimeString}.parseFloat(spawnTime);
         return spawnTime;
     }
@@ -44,7 +44,7 @@ public:
 
     void setSpawnTime(float spawnTime) const noexcept
     {
-        context.panel().setAttributeString(PanoramaSymbols::instance().spawnTimeSymbol,
+        context.panel().setAttributeString(context.panoramaSymbols().spawnTimeSymbol,
             StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(spawnTime), '.', '0').cstring());
     }
 

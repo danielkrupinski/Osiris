@@ -18,11 +18,11 @@ public:
 
     [[nodiscard]] decltype(auto) defusingAlertContainerPanel() const noexcept
     {
-        if (auto&& panel = context.panels().getPanelFromHandle(_state.defusingAlertContainerPanelHandle))
+        if (auto&& panel = uiEngine().getPanelFromHandle(_state.defusingAlertContainerPanelHandle))
             return utils::lvalue<decltype(panel)>(panel);
 
         updatePanelHandles();
-        return context.panels().getPanelFromHandle(_state.defusingAlertContainerPanelHandle);
+        return uiEngine().getPanelFromHandle(_state.defusingAlertContainerPanelHandle);
     }
 
     [[nodiscard]] auto defusingAlertCondition() const noexcept
@@ -53,20 +53,25 @@ public:
 
     [[nodiscard]] auto defusingCountdownTextPanel() const noexcept
     {
-        return DefusingCountdownTextPanel{context.panels().getPanelFromHandle(_state.defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(_state.defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
 private:
+    [[nodiscard]] decltype(auto) uiEngine() const noexcept
+    {
+        return context.template make<PanoramaUiEngine>();
+    }
+
     void updatePanelHandles() const noexcept
     {
-        if (context.panels().getPanelFromHandle(_state.defusingTimerPanelHandle))
+        if (uiEngine().getPanelFromHandle(_state.defusingTimerPanelHandle))
             return;
 
         auto&& hudTeamCounter = context.hud().hudTeamCounter();
         if (!hudTeamCounter)
             return;
 
-        PanoramaUiEngine::runScript(hudTeamCounter,
+        uiEngine().runScript(hudTeamCounter,
             R"(
 (function() {
   var defusingAlertContainer = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile('ScoreAndTimeAndBomb'), 'DefusingAlertContainer', {

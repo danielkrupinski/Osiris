@@ -11,7 +11,7 @@ struct PostRoundTimerUnloadHandler {
 
     void handleUnload() const noexcept
     {
-        hookContext.panels().deletePanelByHandle(state().countdownContainerPanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state().countdownContainerPanelHandle);
     }
 
 private:

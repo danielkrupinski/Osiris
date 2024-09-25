@@ -4,49 +4,67 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <GameDependencies/PanoramaUiEngineDeps.h>
 
-struct PanoramaUiEngine {
-    static void runScript(cs2::CUIPanel* contextPanel, const char* scriptSource, const char* originFile, std::uint64_t line) noexcept
+template <typename Context>
+struct PanoramaUiPanel;
+
+template <typename HookContext>
+class PanoramaUiEngine {
+public:
+    explicit PanoramaUiEngine(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
-        if (impl().runScript && impl().thisptr)
-            impl().runScript(*impl().thisptr, contextPanel, scriptSource, originFile, line);
     }
 
-    static cs2::CUIPanel* getPanelPointer(cs2::PanelHandle handle) noexcept
+    void runScript(cs2::CUIPanel* contextPanel, const char* scriptSource, const char* originFile, std::uint64_t line) noexcept
     {
-        if (impl().getPanelPointer && impl().thisptr)
-            return impl().getPanelPointer(*impl().thisptr, &handle);
-        return nullptr;
+        if (deps().runScript && deps().thisptr)
+            deps().runScript(*deps().thisptr, contextPanel, scriptSource, originFile, line);
     }
 
-    static cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
+    [[nodiscard]] decltype(auto) getPanelFromHandle(cs2::PanelHandle handle) noexcept
+    {
+        if (deps().getPanelPointer && deps().thisptr)
+            return hookContext.template make<PanoramaUiPanel>(deps().getPanelPointer(*deps().thisptr, &handle));
+        return hookContext.template make<PanoramaUiPanel>(nullptr);
+    }
+
+    [[nodiscard]] cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
     {
         cs2::PanelHandle handle{};
-        if (impl().getPanelHandle && impl().thisptr) {
+        if (deps().getPanelHandle && deps().thisptr) {
 #if IS_WIN64()
-            impl().getPanelHandle(*impl().thisptr, &handle, panel);
+            deps().getPanelHandle(*deps().thisptr, &handle, panel);
 #elif IS_LINUX()
-            handle = impl().getPanelHandle(*impl().thisptr, panel);
+            handle = deps().getPanelHandle(*deps().thisptr, panel);
 #endif
         }
         return handle;
     }
 
-    static void onDeletePanel(cs2::PanelHandle panelHandle) noexcept
+    void deletePanelByHandle(cs2::PanelHandle handle) noexcept
     {
-        if (impl().onDeletePanel && impl().thisptr)
-            impl().onDeletePanel(*impl().thisptr, &panelHandle);
+        if (handle.isValid())
+            onDeletePanel(handle);
     }
 
-    static cs2::CPanoramaSymbol makeSymbol(int type, const char* text) noexcept
+    [[nodiscard]] cs2::CPanoramaSymbol makeSymbol(int type, const char* text) noexcept
     {
-        if (impl().makeSymbol && impl().thisptr)
-            return impl().makeSymbol(*impl().thisptr, type, text);
+        if (deps().makeSymbol && deps().thisptr)
+            return deps().makeSymbol(*deps().thisptr, type, text);
         return -1;
     }
 
 private:
-    [[nodiscard]] static const PanoramaUiEngineDeps& impl() noexcept
+    void onDeletePanel(cs2::PanelHandle panelHandle) noexcept
     {
-        return PanoramaUiEngineDeps::instance();
+        if (deps().onDeletePanel && deps().thisptr)
+            deps().onDeletePanel(*deps().thisptr, &panelHandle);
     }
+
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().uiEngineDeps;
+    }
+
+    HookContext& hookContext;
 };

@@ -1172,9 +1172,6 @@
     <ClInclude Include="GameClasses\Hud\DeathNoticeContext.h">
       <Filter>GameClasses\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Panels.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\PanoramaImagePanelContext.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
