@@ -184,6 +184,9 @@
     <Filter Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow">
       <UniqueIdentifier>{845ab4cc-9e82-4b6d-8e55-170788a073b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\OutlineGlow\HostageOutlineGlow">
+      <UniqueIdentifier>{ae772213-696b-492e-be38-31b9e68b96f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1585,6 +1588,24 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlow.h">
+      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowContext.h">
+      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowParams.h">
+      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowState.h">
+      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowToggle.h">
+      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_Hostage.h">
+      <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
