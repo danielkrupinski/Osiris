@@ -319,6 +319,9 @@ $.Osiris = (function () {
   $.CreatePanel('Panel', bombAndDefuseKitOutlineGlow, '', { class: "horizontal-separator" });
   createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
 
+  var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
+  createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow', 0);
+
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 
   var sound = createTab('sound');

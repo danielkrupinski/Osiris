@@ -1,5 +1,7 @@
 #pragma once
 
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/C_Hostage.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <CS2/Classes/CPlantedC4.h>
 #include <Platform/Macros/PlatformSpecific.h>
@@ -53,6 +55,7 @@ constexpr auto kEntityTypeNames = TypedStaticStringPool{}
     .add<C_MolotovProjectile>(WIN64_LINUX(".?AVC_MolotovProjectile@@", "19C_MolotovProjectile"))
     .add<C_FlashbangProjectile>(WIN64_LINUX(".?AVC_FlashbangProjectile@@", "21C_FlashbangProjectile"))
     .add<C_C4>(WIN64_LINUX(".?AVC_C4@@", "4C_C4"))
-    .add<CPlantedC4>(WIN64_LINUX(".?AVC_PlantedC4@@", "11C_PlantedC4"));
+    .add<CPlantedC4>(WIN64_LINUX(".?AVC_PlantedC4@@", "11C_PlantedC4"))
+    .add<C_Hostage>(WIN64_LINUX(".?AVC_Hostage@@", "9C_Hostage"));
 
 }

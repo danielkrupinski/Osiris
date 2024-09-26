@@ -17,14 +17,16 @@ public:
         if (!context.state().enabled)
             return;
 
-        if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>())
+        if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
             context.applyGlowToPlayer(entity);
-        else if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::CBaseAnimGraph, KnownEntityTypes>())
+        else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
             context.applyGlowToDefuseKit(entity);
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
             context.applyGlowToPlantedBomb(entity);
         else if (entityTypeInfo.is<cs2::C_C4>())
             context.applyGlowToBomb(entity);
+        else if (entityTypeInfo.is<cs2::C_Hostage>())
+            context.applyGlowToHostage(entity);
         else if (entityTypeInfo.isGrenadeProjectile())
             context.applyGlowToGrenadeProjectile(entityTypeInfo, entity);
         else if (entityTypeInfo.isWeapon())

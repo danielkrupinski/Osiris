@@ -94,6 +94,8 @@ private:
             handleTogglableFeature(features.visualFeatures().droppedBombOutlineGlowToggle());
         } else if (feature == "ticking_bomb_outline_glow") {
             handleTogglableFeature(features.visualFeatures().tickingBombOutlineGlowToggle());
+        } else if (feature == "hostage_outline_glow") {
+            handleTogglableFeature(features.visualFeatures().hostageOutlineGlowToggle());
         }
     }
 
