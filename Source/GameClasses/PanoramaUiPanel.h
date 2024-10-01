@@ -225,11 +225,9 @@ struct PanoramaUiPanel {
         context.setTransform3D(transforms);
     }
 
-    [[nodiscard]] float getUiScaleFactor() const noexcept
+    [[nodiscard]] decltype(auto) getUiScaleFactor() const noexcept
     {
-        if (auto&& parentWindow = context.getParentWindow())
-            return parentWindow.getUiScaleFactor();
-        return 1.0f;
+        return context.getParentWindow().getUiScaleFactor();
     }
 
 private:

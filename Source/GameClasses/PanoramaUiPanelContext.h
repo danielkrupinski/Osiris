@@ -72,9 +72,9 @@ struct PanoramaUiPanelContext {
         return PanoramaUiPanelChildPanels{hookContext, impl().childPanels.of(panel).get()};
     }
 
-    [[nodiscard]] auto getParentWindow() const noexcept
+    [[nodiscard]] decltype(auto) getParentWindow() const noexcept
     {
-        return TopLevelWindow{impl().parentWindowOffset.of(panel).valueOr(nullptr)};
+        return hookContext.template make<TopLevelWindow>(impl().parentWindowOffset.of(panel).valueOr(nullptr));
     }
 
     [[nodiscard]] const char* getId() const noexcept

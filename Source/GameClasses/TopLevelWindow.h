@@ -1,25 +1,27 @@
 #pragma once
 
 #include <CS2/Panorama/CTopLevelWindow.h>
-#include <GameDependencies/TopLevelWindowDeps.h>
 
+template <typename HookContext>
 class TopLevelWindow {
 public:
-    explicit TopLevelWindow(cs2::CTopLevelWindow* thisptr) noexcept
-        : thisptr{thisptr}
+    explicit TopLevelWindow(HookContext& hookContext, cs2::CTopLevelWindow* topLevelWindow) noexcept
+        : hookContext{hookContext}
+        , topLevelWindow{topLevelWindow}
     {
     }
 
     [[nodiscard]] explicit operator bool() const noexcept
     {
-        return thisptr != nullptr;
+        return topLevelWindow != nullptr;
     }
 
-    [[nodiscard]] float getUiScaleFactor() const noexcept
+    [[nodiscard]] auto getUiScaleFactor() const noexcept
     {
-        return TopLevelWindowDeps::instance().uiScaleFactorOffset.of(thisptr).valueOr(1.0f);
+        return hookContext.gameDependencies().topLevelWindowDeps.uiScaleFactorOffset.of(topLevelWindow).toOptional();
     }
 
 private:
-    cs2::CTopLevelWindow* thisptr;
+    HookContext& hookContext;
+    cs2::CTopLevelWindow* topLevelWindow;
 };

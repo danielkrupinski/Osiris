@@ -11,7 +11,5 @@ struct TopLevelWindowDeps {
     {
     }
 
-    [[nodiscard]] static const TopLevelWindowDeps& instance() noexcept;
-
     UiScaleFactorOffset uiScaleFactorOffset;
 };

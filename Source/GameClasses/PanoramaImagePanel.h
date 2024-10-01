@@ -44,7 +44,7 @@ struct PanoramaImagePanel {
         if (!properties)
             return;
 
-        properties->scale = context.uiPanel().getUiScaleFactor();
+        properties->scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
         properties->textureHeight = textureHeight;
         if (PanoramaImagePanelDeps::instance().setImage)
             PanoramaImagePanelDeps::instance().setImage(context.panel, imageUrl, nullptr, properties);

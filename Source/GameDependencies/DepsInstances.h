@@ -57,8 +57,3 @@ inline const PanoramaUiPanelDeps& PanoramaUiPanelDeps::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameDependencies.panoramaUiPanelDeps;
 }
-
-inline const TopLevelWindowDeps& TopLevelWindowDeps::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameDependencies.topLevelWindowDeps;
-}
