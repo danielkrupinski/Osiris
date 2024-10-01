@@ -8,77 +8,103 @@
 #include <GameDependencies/PlantedC4Deps.h>
 #include <GameClasses/GlobalVars.h>
 
-struct PlantedC4Base {
+template <typename HookContext>
+class PlantedC4Context {
+public:
+    PlantedC4Context(HookContext& hookContext, cs2::CPlantedC4* plantedC4) noexcept
+        : hookContext{hookContext}
+        , plantedC4{plantedC4}
+    {
+    }
+
     [[nodiscard]] auto blowTime() const noexcept
     {
-        return PlantedC4Deps::instance().blowTime.of(thisptr);
+        return deps().blowTime.of(plantedC4);
     }
 
     [[nodiscard]] auto defuser() const noexcept
     {
-        return PlantedC4Deps::instance().defuser.of(thisptr);
+        return deps().defuser.of(plantedC4);
     }
 
     [[nodiscard]] auto defuseEndTime() const noexcept
     {
-        return PlantedC4Deps::instance().defuseEndTime.of(thisptr);
+        return deps().defuseEndTime.of(plantedC4);
     }
 
     [[nodiscard]] auto bombSite() const noexcept
     {
-        return PlantedC4Deps::instance().bombSite.of(thisptr);
+        return deps().bombSite.of(plantedC4);
     }
 
     [[nodiscard]] auto ticking() const noexcept
     {
-        return PlantedC4Deps::instance().ticking.of(thisptr);
+        return deps().ticking.of(plantedC4);
     }
 
-    cs2::CPlantedC4* thisptr;
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return hookContext.template make<BaseEntity>(plantedC4);
+    }
+
+    [[nodiscard]] decltype(auto) curtime() const noexcept
+    {
+        return hookContext.globalVars().curtime();
+    }
+
+private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().plantedC4Deps;
+    }
+
+    HookContext& hookContext;
+    cs2::CPlantedC4* plantedC4;
 };
 
-template <typename Dependencies>
-struct PlantedC4 {
-    explicit PlantedC4(PlantedC4Base base, Dependencies& dependencies) noexcept
-        : base{base}
-        , dependencies{dependencies}
+template <typename HookContext, typename Context = PlantedC4Context<HookContext>>
+class PlantedC4 {
+public:
+    template <typename... Args>
+    explicit PlantedC4(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 
     [[nodiscard]] decltype(auto) baseEntity() const noexcept
     {
-        return dependencies.template make<BaseEntity>(base.thisptr);
+        return context.baseEntity();
     }
 
     [[nodiscard]] auto getTimeToExplosion() const noexcept
     {
-        return base.blowTime().toOptional() - dependencies.globalVars().curtime();
+        return context.blowTime().toOptional() - context.curtime();
     }
 
     [[nodiscard]] auto isTicking() const noexcept
     {
-        return base.ticking().toOptional();
+        return context.ticking().toOptional();
     }
 
     [[nodiscard]] bool isBeingDefused() const noexcept
     {
-        return base.defuser().valueOr(cs2::INVALID_EHANDLE_INDEX) != cs2::INVALID_EHANDLE_INDEX;
+        return context.defuser().valueOr(cs2::INVALID_EHANDLE_INDEX) != cs2::INVALID_EHANDLE_INDEX;
     }
 
     [[nodiscard]] auto canBeDefused() const noexcept
     {
-        return base.defuseEndTime().toOptional().lessThan(base.blowTime().toOptional());
+        return context.defuseEndTime().toOptional().lessThan(context.blowTime().toOptional());
     }
 
     [[nodiscard]] auto getTimeToDefuseEnd() const noexcept
     {
-        return base.defuseEndTime().toOptional() - dependencies.globalVars().curtime();
+        return context.defuseEndTime().toOptional() - context.curtime();
     }
 
     [[nodiscard]] const char* getBombSiteIconUrl() const noexcept
     {
         constexpr auto INVALID_BOMBSITE_INDEX = -1;
-        switch (base.bombSite().valueOr(INVALID_BOMBSITE_INDEX)) {
+        switch (context.bombSite().valueOr(INVALID_BOMBSITE_INDEX)) {
         case cs2::BOMBSITE_A_INDEX: return cs2::kBombSiteAIconUrl;
         case cs2::BOMBSITE_B_INDEX: return cs2::kBombSiteBIconUrl;
         default: return nullptr;
@@ -86,6 +112,5 @@ struct PlantedC4 {
     }
 
 private:
-    PlantedC4Base base;
-    Dependencies& dependencies;
+    Context context;
 };

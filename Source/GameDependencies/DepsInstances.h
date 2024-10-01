@@ -18,11 +18,6 @@ inline HudDeps& HudDeps::instance() noexcept
     return GlobalContext::instance().fullContext().gameDependencies.hudDeps;
 }
 
-inline const PlantedC4Deps& PlantedC4Deps::instance() noexcept
-{
-    return GlobalContext::instance().fullContext().gameDependencies.plantedC4Deps;
-}
-
 inline const FileNameSymbolTableDeps& FileNameSymbolTableDeps::instance() noexcept
 {
     return GlobalContext::instance().fullContext().gameDependencies.fileNameSymbolTableDeps;

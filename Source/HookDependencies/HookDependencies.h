@@ -131,10 +131,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto plantedC4() noexcept
     {
-        const auto base = PlantedC4Base{getPlantedC4()};
-        if (base.thisptr)
-            return std::optional<PlantedC4<HookDependencies&>>{PlantedC4<HookDependencies&>{base, *this}};
-        return std::optional<PlantedC4<HookDependencies&>>{};
+        return std::optional{make<PlantedC4<HookDependencies>>(getPlantedC4())};
     }
 
     [[nodiscard]] ConVarAccessor getConVarAccessor() noexcept

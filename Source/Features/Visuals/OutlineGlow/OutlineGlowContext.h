@@ -52,7 +52,7 @@ public:
 
     void applyGlowToPlantedBomb(auto& entity) const noexcept
     {
-        hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(PlantedC4{PlantedC4Base{static_cast<cs2::CPlantedC4*>(&entity)}, hookContext});
+        hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(hookContext.template make<PlantedC4<HookContext>>(static_cast<cs2::CPlantedC4*>(&entity)));
     }
 
     void applyGlowToHostage(auto& entity) const noexcept
