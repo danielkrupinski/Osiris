@@ -1,7 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
-#include "PlayerInformationThroughWalls/PlayerInformationThroughWalls.h"
+#include "PlayerInfoInWorld/PlayerInfoInWorld.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
 #include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowToggle.h"
 #include "OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowToggle.h"
@@ -23,59 +23,59 @@ struct VisualFeatures {
     {
     }
 
-    [[nodiscard]] auto playerInformationThroughWalls() const noexcept
+    [[nodiscard]] auto playerInfoInWorld() const noexcept
     {
-        return PlayerInformationThroughWallsToggle{states.playerInformationThroughWallsState, hookContext, viewRenderHook};
+        return PlayerInfoInWorldToggle{states.playerInfoInWorldState, hookContext, viewRenderHook};
     }
 
     [[nodiscard]] PlayerPositionToggle playerPositionToggle() const noexcept
     {
-        return PlayerPositionToggle{states.playerInformationThroughWallsState};
+        return PlayerPositionToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] PlayerPositionArrowColorToggle playerPositionArrowColorToggle() const noexcept
     {
-        return PlayerPositionArrowColorToggle{states.playerInformationThroughWallsState.playerPositionArrowColor};
+        return PlayerPositionArrowColorToggle{states.playerInfoInWorldState.playerPositionArrowColor};
     }
 
     [[nodiscard]] PlayerHealthToggle playerHealthToggle() const noexcept
     {
-        return PlayerHealthToggle{states.playerInformationThroughWallsState};
+        return PlayerHealthToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] PlayerHealthTextColorToggle playerHealthTextColorToggle() const noexcept
     {
-        return PlayerHealthTextColorToggle{states.playerInformationThroughWallsState.playerHealthTextColor};
+        return PlayerHealthTextColorToggle{states.playerInfoInWorldState.playerHealthTextColor};
     }
 
     [[nodiscard]] PlayerActiveWeaponToggle playerActiveWeaponToggle() const noexcept
     {
-        return PlayerActiveWeaponToggle{states.playerInformationThroughWallsState};
+        return PlayerActiveWeaponToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] PlayerActiveWeaponAmmoToggle playerActiveWeaponAmmoToggle() const noexcept
     {
-        return PlayerActiveWeaponAmmoToggle{states.playerInformationThroughWallsState};
+        return PlayerActiveWeaponAmmoToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] PlayerDefuseIconToggle playerDefuseIconToggle() const noexcept
     {
-        return PlayerDefuseIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+        return PlayerDefuseIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
     [[nodiscard]] HostagePickupIconToggle hostagePickupIconToggle() const noexcept
     {
-        return HostagePickupIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+        return HostagePickupIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
     [[nodiscard]] HostageRescueIconToggle hostageRescueIconToggle() const noexcept
     {
-        return HostageRescueIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+        return HostageRescueIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
     [[nodiscard]] BlindedIconToggle blindedIconToggle() const noexcept
     {
-        return BlindedIconToggle{states.playerInformationThroughWallsState.playerStateIconsToShow};
+        return BlindedIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
     [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept

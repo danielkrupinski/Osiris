@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerInformationThroughWalls/PlayerInformationThroughWallsState.h"
+#include "PlayerInfoInWorld/PlayerInfoInWorldState.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowState.h"
 #include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowState.h"
 #include "OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowState.h"
@@ -11,7 +11,7 @@
 #include "OutlineGlow/OutlineGlowState.h"
 
 struct VisualFeaturesStates {
-    PlayerInformationThroughWallsState playerInformationThroughWallsState;
+    PlayerInfoInWorldState playerInfoInWorldState;
     OutlineGlowState outlineGlowState;
     PlayerOutlineGlowState playerOutlineGlowState;
     WeaponOutlineGlowState weaponOutlineGlowState;

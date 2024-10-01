@@ -31,9 +31,9 @@ void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
     soundWatcher.update();
     fullContext.features(dependencies).soundFeatures().runOnViewMatrixUpdate();
 
-    PlayerInformationThroughWalls playerInformationThroughWalls{fullContext.featuresStates.visualFeaturesStates.playerInformationThroughWallsState, dependencies};
-    RenderingHookEntityLoop{dependencies, playerInformationThroughWalls}.run();
-    playerInformationThroughWalls.hideUnusedPanels();
+    auto&& playerInfoInWorld = dependencies.make<PlayerInfoInWorld>();
+    RenderingHookEntityLoop{dependencies, playerInfoInWorld}.run();
+    playerInfoInWorld.hideUnusedPanels();
     dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
 }
 

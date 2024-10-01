@@ -57,7 +57,7 @@ private:
     void handleVisualsSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "player_information_through_walls") {
-            handleFeature(features.visualFeatures().playerInformationThroughWalls());
+            handleFeature(features.visualFeatures().playerInfoInWorld());
         } else if (feature == "player_info_position") {
             handleTogglableFeature(features.visualFeatures().playerPositionToggle());
         } else if (feature == "player_info_position_color") {

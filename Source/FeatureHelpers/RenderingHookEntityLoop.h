@@ -2,12 +2,12 @@
 
 #include <CS2/Classes/Entities/CEntityInstance.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
-#include <Features/Visuals/PlayerInformationThroughWalls/PlayerInformationThroughWalls.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {
 public:
-    explicit RenderingHookEntityLoop(HookContext& hookContext, PlayerInformationThroughWalls<HookContext>& playerInformationThroughWalls) noexcept
+    explicit RenderingHookEntityLoop(HookContext& hookContext, PlayerInfoInWorld<HookContext>& playerInformationThroughWalls) noexcept
         : hookContext{hookContext}
         , playerInformationThroughWalls{playerInformationThroughWalls}
     {
@@ -31,5 +31,5 @@ private:
     }
 
     HookContext& hookContext;
-    PlayerInformationThroughWalls<HookContext>& playerInformationThroughWalls;
+    PlayerInfoInWorld<HookContext>& playerInformationThroughWalls;
 };

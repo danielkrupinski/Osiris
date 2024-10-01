@@ -112,15 +112,6 @@
     <Filter Include="HookDependencies">
       <UniqueIdentifier>{29bbfcc9-029d-4d7d-947f-8bd7bee5b36a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls">
-      <UniqueIdentifier>{ba484b80-1889-45a7-bb1d-7c08bcb458dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow">
-      <UniqueIdentifier>{8aa2f864-29ba-4c27-bcc1-575eda8edcbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons">
-      <UniqueIdentifier>{0298df1f-2c8f-45a5-b252-88eb2bdabc58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameDependencies">
       <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
     </Filter>
@@ -135,15 +126,6 @@
     </Filter>
     <Filter Include="Features\Hud\KillfeedPreserver">
       <UniqueIdentifier>{f7a2da12-9a16-4ded-af46-6bfc1d06d05a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo">
-      <UniqueIdentifier>{a009ea0f-0df7-4907-ac6a-cb60eebfb14d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon">
-      <UniqueIdentifier>{1cbdc8c8-aad9-4625-816e-b2955bd17ee7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth">
-      <UniqueIdentifier>{29c3a600-7656-4b23-abe9-af3971e0d780}</UniqueIdentifier>
     </Filter>
     <Filter Include="Hud">
       <UniqueIdentifier>{a8c17a78-a87c-41b1-92c7-fe7d9e31dffd}</UniqueIdentifier>
@@ -186,6 +168,24 @@
     </Filter>
     <Filter Include="Features\Visuals\OutlineGlow\HostageOutlineGlow">
       <UniqueIdentifier>{ae772213-696b-492e-be38-31b9e68b96f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld">
+      <UniqueIdentifier>{69cf9e50-a22f-4806-9442-b42a9d93477f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo">
+      <UniqueIdentifier>{53821f70-6dfc-4015-8258-43d6e569aa85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon">
+      <UniqueIdentifier>{67b6993c-25af-4674-8bc9-45fe53452952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth">
+      <UniqueIdentifier>{aaa54ab8-0b96-4aea-ac80-1c6d8b99db33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow">
+      <UniqueIdentifier>{493cc1c2-cf19-4f01-ba45-f67ce322f2a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons">
+      <UniqueIdentifier>{1f051e0c-294a-4e2a-ada8-ba670238c925}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -911,32 +911,8 @@
     <ClInclude Include="CS2\Constants\ColorConstants.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationPanel.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWalls.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsPanelFactory.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInformationThroughWallsState.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorCalculator.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowColorType.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\TeamColorCalculator.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h">
       <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsToShow.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h">
       <Filter>CS2\Classes</Filter>
@@ -1189,24 +1165,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PanelFactory.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponAmmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow\PlayerPositionArrowPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerPositionArrow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons\PlayerStateIconsPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerStateIcons</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\ActiveWeaponIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerHealth\PlayerHealthPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls\PlayerHealth</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInformationThroughWalls\PlayerInfoContainerPanelParams.h">
-      <Filter>Features\Visuals\PlayerInformationThroughWalls</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\PanelAlignmentParams.h">
       <Filter>GameClasses</Filter>
@@ -1606,6 +1564,81 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h">
       <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoContainerPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldCondition.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldState.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\PlayerActiveWeaponIconPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\PlayerActiveWeaponIconPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowColorType.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsToShow.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelTypes.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
