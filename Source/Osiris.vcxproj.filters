@@ -1640,6 +1640,9 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelTypes.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\HostageServices.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

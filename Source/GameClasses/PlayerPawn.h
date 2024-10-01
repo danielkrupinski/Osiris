@@ -10,6 +10,7 @@
 
 #include "BaseEntity.h"
 #include "GameSceneNode.h"
+#include "HostageServices.h"
 #include "PlayerWeapons.h"
 #include "WeaponServices.h"
 
@@ -110,10 +111,7 @@ public:
 
     [[nodiscard]] bool isRescuingHostage() const noexcept
     {
-        const auto hostageServices = hookContext.gameDependencies().playerPawnDeps.offsetToHostageServices.of(playerPawn).valueOr(nullptr);
-        if (!hostageServices)
-            return false;
-        return hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.gameDependencies().hostageServicesDeps.offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
+        return hostageServices().hasCarriedHostage();
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
@@ -135,6 +133,16 @@ public:
     }
 
 private:
+    [[nodiscard]] decltype(auto) hostageServices() const noexcept
+    {
+        return hookContext.template make<HostageServices>(deps().offsetToHostageServices.of(playerPawn).valueOr(nullptr));
+    }
+
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().playerPawnDeps;
+    }
+
     [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
     {
         return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);

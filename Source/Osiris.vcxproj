@@ -246,6 +246,7 @@
     <ClInclude Include="GameClasses\ClientPanel.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\GameSceneNode.h" />
+    <ClInclude Include="GameClasses\HostageServices.h" />
     <ClInclude Include="GameClasses\Hud\HudContext.h" />
     <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h" />
     <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h" />
