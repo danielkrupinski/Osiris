@@ -66,6 +66,7 @@ public:
         createHostagePickupPanel(panel);
         createHostageRescuePanel(panel);
         createBlindedIconPanel(panel);
+        createBombIconPanel(panel);
     }
 
     void createPanel(std::type_identity<PlayerActiveWeaponIconPanel<HookContext>>, cs2::CUIPanel* containerPanel) const noexcept
@@ -173,6 +174,19 @@ private:
         auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
+    }
+
+    void createBombIconPanel(cs2::CUIPanel* containerPanel) const noexcept
+    {
+        using namespace player_state_icons_panel_params::bomb_icon_panel_params;
+
+        auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
+
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(kAlignment);
+        uiPanel.setImageShadow(kShadowParams);
+        uiPanel.setWashColor(kWashColorCarryingC4);
     }
 
     void createHealthIconPanel(cs2::CUIPanel* containerPanel) const

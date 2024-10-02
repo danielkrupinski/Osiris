@@ -21,6 +21,15 @@ public:
         return hookContext.template make<T>(static_cast<typename T<HookContext>::RawType*>(entity));
     }
 
+    template <typename EntityType>
+    [[nodiscard]] decltype(auto) cast() const noexcept
+    {
+        if (entity && entity->vmt && entity->vmt == hookContext.gameDependencies().entitiesVMTs.vmts[utils::typeIndex<typename EntityType::RawType, KnownEntityTypes>()]) {
+            return hookContext.template make<EntityType>(static_cast<EntityType::RawType*>(entity));
+        }
+        return hookContext.template make<EntityType>(nullptr);
+    }
+
     [[nodiscard]] decltype(auto) renderComponent() const noexcept
     {
         return hookContext.template make<RenderComponent>(deps().offsetToRenderComponent.of(entity).valueOr(nullptr));

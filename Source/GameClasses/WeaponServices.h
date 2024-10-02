@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] decltype(auto) weapons() const noexcept
     {
-        return hookContext.template make<PlayerWeapons>(deps().offsetToWeapons.of(weaponServices).valueOr(nullptr));
+        return hookContext.template make<PlayerWeapons>(deps().offsetToWeapons.of(weaponServices).get());
     }
 
     [[nodiscard]] auto getActiveWeapon() const noexcept

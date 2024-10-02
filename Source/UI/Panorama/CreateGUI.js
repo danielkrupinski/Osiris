@@ -296,6 +296,8 @@ $.Osiris = (function () {
   createYesNoDropDown(playerInfo, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
   $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
   createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
+  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerInfo, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
 

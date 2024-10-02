@@ -64,3 +64,20 @@ namespace player_state_icons_panel_params::blinded_icon_panel_params
         .color{cs2::kColorBlack}
     };
 }
+
+namespace player_state_icons_panel_params::bomb_icon_panel_params
+{
+    static constexpr auto kImageUrl = "s2r://panorama/images/icons/equipment/c4.svg";
+    static constexpr auto kTextureHeight = 26;
+    static constexpr auto kAlignment = PanelAlignmentParams{
+        .verticalAlignment = cs2::k_EVerticalAlignmentCenter
+    };
+    static constexpr auto kWashColorCarryingC4 = cs2::Color{255, 255, 77};
+    static constexpr auto kShadowParams = PanelShadowParams{
+        .horizontalOffset{cs2::CUILength::pixels(0)},
+        .verticalOffset{cs2::CUILength::pixels(0)},
+        .blurRadius{cs2::CUILength::pixels(3)},
+        .strength = 3,
+        .color{cs2::kColorBlack}
+    };
+}

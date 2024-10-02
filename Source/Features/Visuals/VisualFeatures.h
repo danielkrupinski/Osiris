@@ -78,6 +78,11 @@ struct VisualFeatures {
         return BlindedIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
+    [[nodiscard]] BombIconToggle bombIconToggle() const noexcept
+    {
+        return BombIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
+    }
+
     [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept
     {
         return hookContext.template make<PlayerOutlineGlowToggle>();

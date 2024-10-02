@@ -9,6 +9,7 @@
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
+#include "C4.h"
 #include "GameSceneNode.h"
 #include "HostageServices.h"
 #include "PlayerWeapons.h"
@@ -112,6 +113,11 @@ public:
     [[nodiscard]] bool isRescuingHostage() const noexcept
     {
         return hostageServices().hasCarriedHostage();
+    }
+
+    [[nodiscard]] bool isCarryingC4() const noexcept
+    {
+        return weapons().template has<C4<HookContext>>();
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
