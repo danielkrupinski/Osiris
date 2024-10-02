@@ -1643,6 +1643,9 @@
     <ClInclude Include="GameClasses\HostageServices.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
+    <ClInclude Include="GameClasses\C4.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
