@@ -25,7 +25,7 @@ public:
     [[nodiscard]] decltype(auto) cast() const noexcept
     {
         if (entity && entity->vmt && entity->vmt == hookContext.gameDependencies().entitiesVMTs.vmts[utils::typeIndex<typename EntityType::RawType, KnownEntityTypes>()]) {
-            return hookContext.template make<EntityType>(static_cast<EntityType::RawType*>(entity));
+            return hookContext.template make<EntityType>(static_cast<typename EntityType::RawType*>(entity));
         }
         return hookContext.template make<EntityType>(nullptr);
     }
