@@ -15,8 +15,6 @@ struct PanoramaLabelDeps {
     {
     }
 
-    [[nodiscard]] static const PanoramaLabelDeps& instance() noexcept;
-
     cs2::CLabel::setTextInternal setTextInternal;
     cs2::CLabel::Constructor* constructor;
     std::uint32_t* size;

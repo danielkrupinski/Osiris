@@ -23,11 +23,16 @@ struct PanoramaLabel {
 
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (panel && PanoramaLabelDeps::instance().setTextInternal)
-            PanoramaLabelDeps::instance().setTextInternal(panel, value, textType, trustedSource);
+        if (panel && deps().setTextInternal)
+            deps().setTextInternal(panel, value, textType, trustedSource);
     }
 
 private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().panoramaLabelDeps;
+    }
+
     HookContext& hookContext;
     cs2::CLabel* panel;
 };

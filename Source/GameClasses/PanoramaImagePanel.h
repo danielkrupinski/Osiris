@@ -25,7 +25,7 @@ struct PanoramaImagePanel {
 
     [[nodiscard]] cs2::ImageProperties* getImageProperties() const noexcept
     {
-        return PanoramaImagePanelDeps::instance().imagePropertiesOffset.of(context.panel).get();
+        return deps().imagePropertiesOffset.of(context.panel).get();
     }
 
     [[nodiscard]] std::string_view getImagePath() const noexcept
@@ -46,11 +46,16 @@ struct PanoramaImagePanel {
 
         properties->scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
         properties->textureHeight = textureHeight;
-        if (PanoramaImagePanelDeps::instance().setImage)
-            PanoramaImagePanelDeps::instance().setImage(context.panel, imageUrl, nullptr, properties);
+        if (deps().setImage)
+            deps().setImage(context.panel, imageUrl, nullptr, properties);
     }
 
 private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return context.deps();
+    }
+
     Context context;
 };
 

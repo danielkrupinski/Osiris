@@ -9,9 +9,11 @@
 #include "PanelShadowParams.h"
 #include "StylePropertiesSymbolsAndVMTs.h"
 
+template <typename HookContext>
 struct PanelStylePropertyFactory {
-    PanelStylePropertyFactory(const StylePropertiesSymbolsAndVMTs& symbolsAndVMTs) noexcept
-        : symbolsAndVMTs{symbolsAndVMTs}
+    PanelStylePropertyFactory(HookContext& hookContext, const StylePropertiesSymbolsAndVMTs& symbolsAndVMTs) noexcept
+        : hookContext{hookContext}
+        , symbolsAndVMTs{symbolsAndVMTs}
     {
     }
 
@@ -69,7 +71,7 @@ struct PanelStylePropertyFactory {
     {
         cs2::CUtlString fontFamilyString{nullptr};
         if (params.fontFamily.length() > 0) {
-            if ((fontFamilyString.m_pString = static_cast<char*>(MemAlloc::allocate(params.fontFamily.length() + 1))) != nullptr) {
+            if ((fontFamilyString.m_pString = static_cast<char*>(hookContext.template make<MemAlloc>().allocate(params.fontFamily.length() + 1))) != nullptr) {
                 std::memcpy(fontFamilyString.m_pString, params.fontFamily.data(), params.fontFamily.length());
                 fontFamilyString.m_pString[params.fontFamily.length()] = '\0';
             }
@@ -105,11 +107,12 @@ private:
         const auto symbol = symbolsAndVMTs.getSymbol<T>();
 
         if (vmt && symbol.isValid()) {
-            if (const auto memory{MemAlloc::allocate(sizeof(T))})
+            if (const auto memory{hookContext.template make<MemAlloc>().allocate(sizeof(T))})
                 return new (memory) T{cs2::CStyleProperty{vmt, symbol, false}, std::forward<Args>(args)...};
         }
         return nullptr;
     }
 
+    HookContext& hookContext;
     const StylePropertiesSymbolsAndVMTs& symbolsAndVMTs;
 };

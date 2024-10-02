@@ -19,9 +19,14 @@ struct PanoramaImagePanelContext {
 
     [[nodiscard]] const char* getImagePath() const noexcept
     {
-        if (auto&& imagePath = PanoramaImagePanelDeps::instance().offsetToImagePath.of(panel).get())
+        if (auto&& imagePath = deps().offsetToImagePath.of(panel).get())
             return imagePath->m_pString;
         return nullptr;
+    }
+
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().imagePanelDeps;
     }
 
     HookContext& hookContext;

@@ -92,10 +92,7 @@ private:
         if (!state.soundsToWatch)
             return;
 
-        if (!hookContext.template requestDependency<FileSystem>())
-            return;
-
-        const auto fileNames = hookContext.template getDependency<FileSystem>().fileNames();
+        const auto fileNames = hookContext.template make<FileSystem<HookContext>>().fileNames();
         if (!fileNames)
             return;
 

@@ -51,8 +51,6 @@ struct HookDependencies {
             return WorldToClipSpaceConverter{fullGlobalContext.gameDependencies.worldToProjectionMatrix};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
-        } else if constexpr (std::is_same_v<Dependency, FileSystem>) {
-            return FileSystem{*fileSystem, fullGlobalContext.gameDependencies.fileSystemDeps};
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
         }
@@ -164,7 +162,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto panoramaTransformFactory() noexcept
     {
-        return PanoramaTransformFactory{fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
+        return PanoramaTransformFactory{*this, fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
     }
 
     [[nodiscard]] const auto& panoramaSymbols() noexcept
@@ -195,7 +193,6 @@ private:
         const HookDependenciesBuilder builder{requiredDependencies, fullGlobalContext.gameDependencies};
 
         presentDependencies |= builder.getSoundChannels(&soundChannels);
-        presentDependencies |= builder.getFileSystem(&fileSystem);
     }
 
     FullGlobalContext& fullGlobalContext;

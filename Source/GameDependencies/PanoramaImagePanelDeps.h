@@ -16,8 +16,6 @@ struct PanoramaImagePanelDeps {
     {
     }
 
-    [[nodiscard]] static const PanoramaImagePanelDeps& instance() noexcept;
-
     cs2::CImagePanel::SetImage* setImage;
     cs2::CImagePanel::Constructor* constructor;
     std::uint32_t* size;

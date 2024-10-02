@@ -5,7 +5,8 @@
 #include <GameDependencies/GameRulesDeps.h>
 
 template <typename HookContext>
-struct GameRules {
+class GameRules {
+public:
     GameRules(HookContext& hookContext, cs2::C_CSGameRules* gameRules) noexcept
         : hookContext{hookContext}
         , gameRules{gameRules}
@@ -14,12 +15,12 @@ struct GameRules {
 
     [[nodiscard]] auto roundStartTime() const noexcept
     {
-        return GameRulesDeps::instance().roundStartTimeOffset.of(gameRules).toOptional();
+        return deps().roundStartTimeOffset.of(gameRules).toOptional();
     }
 
     [[nodiscard]] auto roundRestartTime() const noexcept
     {
-        return GameRulesDeps::instance().offsetToRoundRestartTime.of(gameRules).toOptional();
+        return deps().offsetToRoundRestartTime.of(gameRules).toOptional();
     }
 
     [[nodiscard]] bool hasScheduledRoundRestart() const noexcept
@@ -30,6 +31,12 @@ struct GameRules {
     [[nodiscard]] auto timeToRoundRestart() const noexcept
     {
         return roundRestartTime() - hookContext.globalVars().curtime();
+    }
+
+private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().gameRulesDeps;
     }
 
     HookContext& hookContext;

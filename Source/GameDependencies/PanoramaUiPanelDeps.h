@@ -22,8 +22,6 @@ struct PanoramaUiPanelDeps {
     {
     }
 
-    [[nodiscard]] static const PanoramaUiPanelDeps& instance() noexcept;
-
     template <typename T>
     using Offset = FieldOffset<const void, T, std::int32_t>;
 

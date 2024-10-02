@@ -13,8 +13,6 @@ struct GameRulesDeps {
     {
     }
 
-    [[nodiscard]] static const GameRulesDeps& instance() noexcept;
-
     cs2::C_CSGameRules** gameRules;
     RoundStartTimeOffset roundStartTimeOffset;
     OffsetToRoundRestartTime offsetToRoundRestartTime;

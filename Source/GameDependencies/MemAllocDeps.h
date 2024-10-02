@@ -17,8 +17,6 @@ struct MemAllocDeps {
     {
     }
 
-    [[nodiscard]] static const MemAllocDeps& instance() noexcept;
-
     cs2::IMemAlloc** thisptr;
     FieldOffset<const void, cs2::IMemAlloc::Alloc*, std::int8_t> alloc;
 };

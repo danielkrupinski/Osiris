@@ -6,15 +6,6 @@
 #include "HookDependenciesMask.h"
 
 struct HookDependenciesBuilder {
-    [[nodiscard]] HookDependenciesMask getFileSystem(cs2::CBaseFileSystem** fileSystem) const noexcept
-    {
-        if (requiredDependencies.has<FileSystem>() && gameDependencies.fileSystem) {
-            if ((*fileSystem = *gameDependencies.fileSystem) != nullptr)
-                return HookDependenciesMask{}.set<FileSystem>();
-        }
-        return {};
-    }
-
     [[nodiscard]] HookDependenciesMask getSoundChannels(cs2::SoundChannels** soundChannels) const noexcept
     {
         if (requiredDependencies.has<SoundChannels>() && gameDependencies.soundChannels) {

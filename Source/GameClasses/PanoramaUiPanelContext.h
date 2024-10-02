@@ -58,7 +58,7 @@ struct PanoramaUiPanelContext {
         if (!style)
             return;
 
-        if (const auto setPropertyFn{PanelStyleDeps::instance().setProperty})
+        if (const auto setPropertyFn{panelStyleDeps().setProperty})
             setPropertyFn(style, styleProperty, true);
     }
 
@@ -111,7 +111,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] auto propertyFactory() const noexcept
     {
-        return PanelStylePropertyFactory{hookContext.gameDependencies().stylePropertiesSymbolsAndVMTs};
+        return hookContext.template make<PanelStylePropertyFactory>(hookContext.gameDependencies().stylePropertiesSymbolsAndVMTs);
     }
 
     [[nodiscard]] decltype(auto) nullPanel() const noexcept
@@ -137,9 +137,14 @@ private:
         return impl().panelStyle.of(panel).get();
     }
 
-    [[nodiscard]] static const PanoramaUiPanelDeps& impl() noexcept
+    [[nodiscard]] const auto& panelStyleDeps() const noexcept
     {
-        return PanoramaUiPanelDeps::instance();
+        return hookContext.gameDependencies().panelStyleDeps;
+    }
+
+    [[nodiscard]] const auto& impl() const noexcept
+    {
+        return hookContext.gameDependencies().panoramaUiPanelDeps;
     }
     
     HookContext& hookContext;

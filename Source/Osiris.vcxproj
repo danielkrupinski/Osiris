@@ -311,7 +311,6 @@
     <ClInclude Include="GameDependencies\ConVars.h" />
     <ClInclude Include="GameDependencies\ConVarsBase.h" />
     <ClInclude Include="GameDependencies\CvarDeps.h" />
-    <ClInclude Include="GameDependencies\DepsInstances.h" />
     <ClInclude Include="GameDependencies\EntitiesVMTs.h" />
     <ClInclude Include="GameDependencies\EntityDeps.h" />
     <ClInclude Include="GameDependencies\EntitySystemDeps.h" />

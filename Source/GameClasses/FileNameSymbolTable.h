@@ -5,9 +5,12 @@
 #include <CS2/Classes/CUtlFilenameSymbolTable.h>
 #include <GameDependencies/FileNameSymbolTableDeps.h>
 
-struct FileNameSymbolTable {
-    explicit FileNameSymbolTable(cs2::CUtlFilenameSymbolTable* thisptr) noexcept
-        : thisptr{ thisptr }
+template <typename HookContext>
+class FileNameSymbolTable {
+public:
+    explicit FileNameSymbolTable(HookContext& hookContext, cs2::CUtlFilenameSymbolTable* thisptr) noexcept
+        : hookContext{hookContext}
+        , thisptr{thisptr}
     {
     }
 
@@ -18,10 +21,16 @@ struct FileNameSymbolTable {
 
     void getString(cs2::FileNameHandle_t handle, std::span<char> buffer) const noexcept
     {
-        if (FileNameSymbolTableDeps::instance().string)
-            FileNameSymbolTableDeps::instance().string(thisptr, &handle, buffer.data(), static_cast<int>(buffer.size()));
+        if (thisptr && deps().string)
+            deps().string(thisptr, &handle, buffer.data(), static_cast<int>(buffer.size()));
     }
 
 private:
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().fileNameSymbolTableDeps;
+    }
+
+    HookContext& hookContext;
     cs2::CUtlFilenameSymbolTable* thisptr;
 };

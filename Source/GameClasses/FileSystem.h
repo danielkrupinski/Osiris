@@ -4,19 +4,31 @@
 #include "FileNameSymbolTable.h"
 #include <GameDependencies/FileSystemDeps.h>
 
-struct FileSystem {
-    explicit FileSystem(cs2::CBaseFileSystem& thisptr, const FileSystemDeps& deps) noexcept
-        : thisptr{thisptr}
-        , deps{deps}
+template <typename HookContext>
+class FileSystem {
+public:
+    explicit FileSystem(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
-    [[nodiscard]] FileNameSymbolTable fileNames() const noexcept
+    [[nodiscard]] decltype(auto) fileNames() const noexcept
     {
-        return FileNameSymbolTable{deps.fileNamesOffset.of(&thisptr).get()};
+        return hookContext.template make<FileNameSymbolTable>(deps().fileNamesOffset.of(fileSystem()).get());
     }
 
 private:
-    cs2::CBaseFileSystem& thisptr;
-    const FileSystemDeps& deps;
+    [[nodiscard]] cs2::CBaseFileSystem* fileSystem() const noexcept
+    {
+        if (const auto fileSystemPointer = hookContext.gameDependencies().fileSystem)
+            return *fileSystemPointer;
+        return nullptr;
+    }
+
+    [[nodiscard]] const auto& deps() const noexcept
+    {
+        return hookContext.gameDependencies().fileSystemDeps;
+    }
+
+    HookContext& hookContext;
 };

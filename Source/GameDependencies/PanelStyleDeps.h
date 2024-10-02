@@ -11,7 +11,5 @@ struct PanelStyleDeps {
     {
     }
 
-    [[nodiscard]] static const PanelStyleDeps& instance() noexcept;
-
     cs2::CPanelStyle::SetProperty* setProperty;
 };

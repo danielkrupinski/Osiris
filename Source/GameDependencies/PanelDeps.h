@@ -11,7 +11,5 @@ struct PanelDeps {
     {
     }
 
-    [[nodiscard]] static const PanelDeps& instance() noexcept;
-
     cs2::CPanel2D::Create* create;
 };

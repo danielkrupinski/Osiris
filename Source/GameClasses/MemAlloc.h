@@ -1,24 +1,32 @@
 #pragma once
 
 #include <CS2/Classes/IMemAlloc.h>
-#include <GameDependencies/MemAllocDeps.h>
+#include <Platform/Macros/FunctionAttributes.h>
 
+template <typename HookContext>
 class MemAlloc {
 public:
-    [[nodiscard]] static void* allocate(std::size_t size) noexcept
+    explicit MemAlloc(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
-        if (!impl().thisptr || !*impl().thisptr)
+    }
+    
+    [[nodiscard]] [[NOINLINE]] void* allocate(std::size_t size) const noexcept
+    {
+        if (!deps().thisptr || !*deps().thisptr)
             return nullptr;
 
-        if (const auto fn = impl().alloc.of((*impl().thisptr)->vmt).get())
-            return (*fn)(*impl().thisptr, size);
+        if (const auto fn = deps().alloc.of((*deps().thisptr)->vmt).get())
+            return (*fn)(*deps().thisptr, size);
         
         return nullptr;
     }
 
 private:
-    [[nodiscard]] static const MemAllocDeps& impl() noexcept
+    [[nodiscard]] const auto& deps() const noexcept
     {
-        return MemAllocDeps::instance();
+        return hookContext.gameDependencies().memAllocDeps;
     }
+
+    HookContext& hookContext;
 };

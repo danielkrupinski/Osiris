@@ -6,9 +6,11 @@
 #include <CS2/Panorama/Transform3D.h>
 #include <GameClasses/MemAlloc.h>
 
+template <typename HookContext>
 struct PanoramaTransformFactory {
-    explicit PanoramaTransformFactory(const void* transformTranslate3dVmt, const void* transformScale3dVmt) noexcept
-        : transformTranslate3dVmt{transformTranslate3dVmt}
+    explicit PanoramaTransformFactory(HookContext& hookContext, const void* transformTranslate3dVmt, const void* transformScale3dVmt) noexcept
+        : hookContext{hookContext}
+        , transformTranslate3dVmt{transformTranslate3dVmt}
         , transformScale3dVmt{transformScale3dVmt}
     {
     }
@@ -33,7 +35,7 @@ private:
     [[nodiscard]] T* create(Args&&... args) const noexcept
     {
         if (const auto vmt = getVmt<T>()) {
-            if (const auto memory = MemAlloc::allocate(sizeof(T)))
+            if (const auto memory = hookContext.template make<MemAlloc>().allocate(sizeof(T)))
                 return new (memory) T{ vmt, std::forward<Args>(args)... };
         }
         return nullptr;
@@ -50,6 +52,7 @@ private:
             static_assert(!std::is_same_v<T, T>, "Unsupported type");
     }
 
+    HookContext& hookContext;
     const void* transformTranslate3dVmt;
     const void* transformScale3dVmt;
 };
