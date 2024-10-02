@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 2 October 2024
+    * Added bomb carrier icon to "Player Info in World" feature
+
+    ![Bomb carrier icon](https://github.com/user-attachments/assets/ef903af4-20e7-4fa8-805f-fd825c672e66)
+
 * 26 September 2024
     * Added outline glow for hostages
 
@@ -24,11 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 20 September 2024
     * Added outline glow for grenade projectiles
-
-* 18 September 2024
-    * Added outline glow for defuse kits on the ground nearby
-
-    ![Defuse kit glow](https://github.com/user-attachments/assets/1e212425-9ef1-4273-9052-1510409e5c9b)
 
 ## Technical features
 
