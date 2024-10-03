@@ -89,7 +89,7 @@ private:
   });
 })();
 )"
-, "", 0);
+, "", 1);
 
         const auto defusingAlertContainer = hudTeamCounter.findChildInLayoutFile("DefusingAlertContainer");
         if (!defusingAlertContainer)

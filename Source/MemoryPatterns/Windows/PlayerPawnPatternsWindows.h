@@ -39,6 +39,6 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToFlashBangEndTime offsetToFlashBangEndTime() const noexcept
     {
-        return patternFinders.clientPatternFinder("0F 2F 86 ? ? ? ? 48 8B 7C 24"_pat).add(3).template readOffset<OffsetToFlashBangEndTime>();
+        return patternFinders.clientPatternFinder("? ? ? ? 0F 2F 43 ? 0F 86 ? ? ? ? 48"_pat).template readOffset<OffsetToFlashBangEndTime>();
     }
 };

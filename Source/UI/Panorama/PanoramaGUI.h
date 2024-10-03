@@ -22,7 +22,7 @@ public:
 
         // ensure settings tab is loaded because we use CSS classes from settings
         // TODO: replace use of settings CSS classes with raw style properties
-        uiEngine().runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');", "", 0);
+        uiEngine().runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');", "", 1);
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");
         if (settings)
@@ -30,7 +30,7 @@ public:
 
         uiEngine().runScript(settings, reinterpret_cast<const char*>(
 #include "CreateGUI.js"
-), "", 0);
+), "", 1);
 
         uiEngine().runScript(mainMenu, R"(
 (function () {
@@ -49,7 +49,7 @@ public:
 
   $.DispatchEvent('Activated', $.GetContextPanel().FindChildTraverse("MainMenuNavBarHome"), 'mouse');
 })();
-)", "", 0);
+)", "", 1);
 
         if (const auto guiButtonPanel = mainMenu.findChildInLayoutFile("OsirisOpenMenuButton"))
             state().guiButtonHandle = guiButtonPanel.getHandle();

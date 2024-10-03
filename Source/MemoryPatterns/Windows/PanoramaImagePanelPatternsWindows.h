@@ -17,12 +17,12 @@ struct PanoramaImagePanelPatterns {
 
     [[nodiscard]] cs2::CImagePanel::Constructor* constructor() const noexcept
     {
-        return patternFinders.clientPatternFinder("E8 ? ? ? ? 48 8B F0 45 33 ED"_pat).add(1).abs().template as<cs2::CImagePanel::Constructor*>();
+        return patternFinders.clientPatternFinder("E8 ? ? ? ? EB 03 48 8B ? BA"_pat).add(1).abs().template as<cs2::CImagePanel::Constructor*>();
     }
 
     [[nodiscard]] std::uint32_t* size() const noexcept
     {
-        return patternFinders.clientPatternFinder("FF 90 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 4C 8B E8"_pat).add(7).template as<std::uint32_t*>();
+        return patternFinders.clientPatternFinder("01 FF 90 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48"_pat).add(8).template as<std::uint32_t*>();
     }
 
     [[nodiscard]] ImagePropertiesOffset imagePropertiesOffset() const noexcept

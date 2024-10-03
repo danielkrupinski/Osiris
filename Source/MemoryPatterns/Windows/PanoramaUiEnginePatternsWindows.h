@@ -24,7 +24,7 @@ struct PanoramaUiEnginePatterns {
 
     [[nodiscard]] cs2::CUIEngine::runScript runScript() const noexcept
     {
-        return patternFinders.panoramaPatternFinder("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 4C 8B"_pat).template as<cs2::CUIEngine::runScript>();
+        return patternFinders.panoramaPatternFinder("4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 55"_pat).template as<cs2::CUIEngine::runScript>();
     }
 
     [[nodiscard]] cs2::CUIEngine::makeSymbol makeSymbol() const noexcept

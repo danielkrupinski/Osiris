@@ -24,7 +24,7 @@ struct PlantedC4Patterns {
 
     [[nodiscard]] BombBlowTimeOffset m_flC4Blow() const noexcept
     {
-        return patternFinders.clientPatternFinder("F3 0F 10 ? ? ? ? ? BB FF"_pat).add(4).template readOffset<BombBlowTimeOffset>();
+        return patternFinders.clientPatternFinder("F3 0F 10 ? ? ? ? ? BB FF FF"_pat).add(4).template readOffset<BombBlowTimeOffset>();
     }
 
     [[nodiscard]] BombDefuserOffset m_hBombDefuser() const noexcept

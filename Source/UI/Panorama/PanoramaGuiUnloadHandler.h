@@ -16,7 +16,7 @@ struct PanoramaGuiUnloadHandler {
         uiEngine.deletePanelByHandle(state().guiPanelHandle);
 
         if (auto&& settingsPanel = uiEngine.getPanelFromHandle(state().settingsPanelHandle))
-            uiEngine.runScript(settingsPanel, "delete $.Osiris", "", 0);
+            uiEngine.runScript(settingsPanel, "delete $.Osiris", "", 1);
     }
 
 private:

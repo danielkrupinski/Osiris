@@ -29,7 +29,7 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::CLoopModeGame** loopModeGame() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 89 35 ? ? ? ? 49 8B 73"_pat).add(3).abs().template as<cs2::CLoopModeGame**>();
+        return patternFinders.clientPatternFinder("48 8B 0D ? ? ? ? 44 0F 28 ? 24"_pat).add(3).abs().template as<cs2::CLoopModeGame**>();
     }
 
     [[nodiscard]] cs2::GlobalVars** globalVars() const noexcept
