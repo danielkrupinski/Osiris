@@ -29,7 +29,7 @@ struct PanoramaUiEnginePatterns {
 
     [[nodiscard]] cs2::CUIEngine::makeSymbol makeSymbol() const noexcept
     {
-        return patternFinders.panoramaPatternFinder("8B CA 49 8B D0"_pat).template as<cs2::CUIEngine::makeSymbol>();
+        return patternFinders.panoramaPatternFinder("C9 E8 ? ? ? ? 4C 63 2E"_pat).add(2).abs().template as<cs2::CUIEngine::makeSymbol>();
     }
 
     [[nodiscard]] cs2::CUIEngine::onDeletePanel onDeletePanel() const noexcept

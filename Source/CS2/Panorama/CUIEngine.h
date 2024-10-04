@@ -13,7 +13,11 @@ struct CUIEngine {
 #endif
     using getPanelPointer = CUIPanel* (*)(CUIEngine* thisptr, const PanelHandle* handle);
     using runScript = void (*)(CUIEngine* thisptr, CUIPanel* contextPanel, const char* scriptSource, const char* originFile, std::uint64_t line);
-    using makeSymbol = CPanoramaSymbol (*)(CUIEngine* thisptr, int type, const char* text);
+#if IS_WIN64()
+    using makeSymbol = CPanoramaSymbol (*)(int type, const char* text);
+#elif IS_LINUX()
+    using makeSymbol = CPanoramaSymbol(*)(CUIEngine* thisptr, int type, const char* text);
+#endif
     using onDeletePanel = void (*)(CUIEngine* thisptr, PanelHandle* panelHandle);
 };
 

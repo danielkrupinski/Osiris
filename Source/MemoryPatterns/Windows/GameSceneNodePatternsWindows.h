@@ -14,7 +14,7 @@ struct GameSceneNodePatterns {
 
     [[nodiscard]] OffsetToGameSceneNodeOwner offsetToOwner() const noexcept
     {
-        return patternFinders.clientPatternFinder("39 B9 ? ? ? ? 75 ? 48 8B ? ?"_pat).add(11).template readOffset<OffsetToGameSceneNodeOwner>();
+        return patternFinders.clientPatternFinder("44 39 B9 ? ? ? ? 75 ? 48 8B ? ?"_pat).add(12).template readOffset<OffsetToGameSceneNodeOwner>();
     }
 
     [[nodiscard]] OffsetToChildGameSceneNode offsetToChild() const noexcept
