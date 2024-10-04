@@ -14,7 +14,7 @@ struct EntityPatterns {
 
     [[nodiscard]] OffsetToHealth offsetToHealth() const noexcept
     {
-        return patternFinders.clientPatternFinder("8B 87 ? ? ? ? 85 C0 7E ? C7"_pat).add(2).template readOffset<OffsetToHealth>();
+        return patternFinders.clientPatternFinder("C7 87 ? ? ? ? 00 00 00 00 48 8D 35"_pat).add(2).template readOffset<OffsetToHealth>();
     }
 
     [[nodiscard]] OffsetToLifeState offsetToLifeState() const noexcept
@@ -39,6 +39,6 @@ struct EntityPatterns {
 
     [[nodiscard]] OffsetToOwnerEntity offsetToOwnerEntity() const noexcept
     {
-        return patternFinders.clientPatternFinder("BF ? ? ? ? 8B 8F ? ? ? ?"_pat).add(7).template readOffset<OffsetToOwnerEntity>();
+        return patternFinders.clientPatternFinder("8B BF ? ? ? ? 8B 8F ? ? ? ?"_pat).add(8).template readOffset<OffsetToOwnerEntity>();
     }
 };

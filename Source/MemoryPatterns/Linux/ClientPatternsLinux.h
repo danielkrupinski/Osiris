@@ -32,7 +32,7 @@ struct ClientPatterns {
 
     [[nodiscard]] cs2::GlobalVars** globalVars() const noexcept
     {
-        return patternFinders.clientPatternFinder("48 89 35 ? ? ? ? 48 89 46"_pat).add(3).abs().template as<cs2::GlobalVars**>();
+        return patternFinders.clientPatternFinder("8D ? ? ? ? ? 48 89 35 ? ? ? ? 48 89 ? ? C3"_pat).add(9).abs().template as<cs2::GlobalVars**>();
     }
 
     [[nodiscard]] cs2::ClientModeCSNormal* clientMode() const noexcept

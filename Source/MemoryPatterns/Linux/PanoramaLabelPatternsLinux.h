@@ -16,7 +16,7 @@ struct PanoramaLabelPatterns {
 
     [[nodiscard]] cs2::CLabel::setTextInternal setTextInternal() const noexcept
     {
-        return patternFinders.clientPatternFinder("31 C9 E8 ? ? ? ? E9"_pat).add(3).abs().template as<cs2::CLabel::setTextInternal>();
+        return patternFinders.clientPatternFinder("85 ? ? ? ? 31 C9 E8 ? ? ? ?"_pat).add(8).abs().template as<cs2::CLabel::setTextInternal>();
     }
 
     [[nodiscard]] std::uint32_t* size() const noexcept

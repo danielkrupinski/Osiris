@@ -10,7 +10,7 @@ struct GameRulesPatterns {
 
     [[nodiscard]] cs2::C_CSGameRules** gameRules() const noexcept
     {
-        return patternFinders.clientPatternFinder("4C 8D ? ? ? ? ? 49 8B ? 48 85 FF 0F 84 ? ? ? ? 41 80 BC 24"_pat).add(3).abs().template as<cs2::C_CSGameRules**>();
+        return patternFinders.clientPatternFinder("83 3D ? ? ? ? 00 74 ? 48 83 C4"_pat).add(2).abs(5).template as<cs2::C_CSGameRules**>();
     }
 
     [[nodiscard]] RoundStartTimeOffset roundStartTimeOffset() const noexcept

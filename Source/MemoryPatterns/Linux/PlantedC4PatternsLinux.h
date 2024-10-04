@@ -9,7 +9,7 @@ struct PlantedC4Patterns {
 
     [[nodiscard]] cs2::CUtlVector<cs2::CPlantedC4*>* plantedC4s() const noexcept
     {
-        return patternFinders.clientPatternFinder("0F 85 ? ? ? ? 48 8D 05 ? ? ? ? 8B 10"_pat).add(9).abs().template as<cs2::CUtlVector<cs2::CPlantedC4*>*>();
+        return patternFinders.clientPatternFinder("? ? ? ? 8B 10 85 D2 0F 8F"_pat).abs().template as<cs2::CUtlVector<cs2::CPlantedC4*>*>();
     }
 
     [[nodiscard]] BombSiteOffset m_nBombSite() const noexcept

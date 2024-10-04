@@ -9,6 +9,6 @@ struct HostageServicesPatterns {
 
     [[nodiscard]] OffsetToCarriedHostage offsetToCarriedHostage() const noexcept
     {
-        return patternFinders.clientPatternFinder("44 8B 4E ? 89 C7"_pat).add(3).template readOffset<OffsetToCarriedHostage>();
+        return patternFinders.clientPatternFinder("07 C7 47 ? FF FF FF FF C3"_pat).add(3).template readOffset<OffsetToCarriedHostage>();
     }
 };

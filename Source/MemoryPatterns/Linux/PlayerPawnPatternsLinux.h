@@ -9,7 +9,7 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToPlayerPawnImmunity offsetToPlayerPawnImmunity() const noexcept
     {
-        return patternFinders.clientPatternFinder("75 ? 0F B6 83 ? ? ? ? 5B"_pat).add(5).template readOffset<OffsetToPlayerPawnImmunity>();
+        return patternFinders.clientPatternFinder("75 ? 0F B6 83 ? ? ? ? 5B 41"_pat).add(5).template readOffset<OffsetToPlayerPawnImmunity>();
     }
 
     [[nodiscard]] OffsetToWeaponServices offsetToWeaponServices() const noexcept
@@ -29,12 +29,12 @@ struct PlayerPawnPatterns {
 
     [[nodiscard]] OffsetToIsPickingUpHostage offsetToIsPickingUpHostage() const noexcept
     {
-        return patternFinders.clientPatternFinder("45 0F B6 AE ? ? ? ? 45 84 ED"_pat).add(4).template readOffset<OffsetToIsPickingUpHostage>();
+        return patternFinders.clientPatternFinder("45 0F B6 AE ? ? ? ? 45 84 ED 0F"_pat).add(4).template readOffset<OffsetToIsPickingUpHostage>();
     }
 
     [[nodiscard]] OffsetToHostageServices offsetToHostageServices() const noexcept
     {
-        return patternFinders.clientPatternFinder("E8 ? ? ? ? 49 8B B5 ? ? ? ? 48 85 F6 0F 84 ? ? ? ? 0F"_pat).add(8).template readOffset<OffsetToHostageServices>();
+        return patternFinders.clientPatternFinder("C6 4C 89 C7 E8 ? ? ? ? 49 8B ? ? ? ? ?"_pat).add(12).template readOffset<OffsetToHostageServices>();
     }
 
     [[nodiscard]] OffsetToFlashBangEndTime offsetToFlashBangEndTime() const noexcept
