@@ -275,29 +275,33 @@ $.Osiris = (function () {
   var playerInfoTab = createSubTab(visuals, 'player_info');
 
   var playerInfo = createSection(playerInfoTab, 'Player Info In World');
-  createDropDown(playerInfo, "Enabled", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Position", 'visuals', 'player_info_position', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createDropDown(playerInfo, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color'], 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Health", 'visuals', 'player_info_health', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createDropDown(playerInfo, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
-  $.CreatePanel('Panel', playerInfo, '', { class: "horizontal-separator" });
-  createYesNoDropDown(playerInfo, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
+  createDropDown(playerInfo, "Master Switch", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
+
+  var playerPosition = createSection(playerInfoTab, 'Player Position');
+  createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position', 0);
+  $.CreatePanel('Panel', playerPosition, '', { class: "horizontal-separator" });
+  createDropDown(playerPosition, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color'], 0);
+
+  var playerHealth = createSection(playerInfoTab, 'Player Health');
+  createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health', 0);
+  $.CreatePanel('Panel', playerHealth, '', { class: "horizontal-separator" });
+  createDropDown(playerHealth, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
+
+  var playerWeapon = createSection(playerInfoTab, 'Player Weapon');
+  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
+  $.CreatePanel('Panel', playerWeapon, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
+
+  var playerIcons = createSection(playerInfoTab, 'Icons');
+  createYesNoDropDown(playerIcons, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
+  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerIcons, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup', 0);
+  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerIcons, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
+  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerIcons, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
+  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  createYesNoDropDown(playerIcons, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
 
