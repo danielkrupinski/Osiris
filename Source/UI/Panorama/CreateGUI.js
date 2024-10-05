@@ -304,10 +304,10 @@ $.Osiris = (function () {
   var outlineGlow = createSection(outlineGlowTab, 'Outline Glow');
   createOnOffDropDown(outlineGlow, "Master Switch", 'visuals', 'outline_glow_enable');
 
-  var playerOutlineGlow = createSection(outlineGlowTab, 'Player Outline Glow');
-  createDropDown(playerOutlineGlow, "Enabled", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 0);
+  var playerOutlineGlow = createSection(outlineGlowTab, 'Players');
+  createDropDown(playerOutlineGlow, "Glow Players", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 0);
   $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
-  createDropDown(playerOutlineGlow, "Player Outline Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
+  createDropDown(playerOutlineGlow, "Player Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
   var weaponOutlineGlow = createSection(outlineGlowTab, 'Weapons');
   createYesNoDropDown(weaponOutlineGlow, "Glow Weapons on Ground Nearby", 'visuals', 'weapon_outline_glow', 0);
