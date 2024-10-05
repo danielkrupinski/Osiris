@@ -33,7 +33,9 @@ public:
 
     [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern) const noexcept
     {
-        const auto found = HybridPatternFinder{bytes, pattern}.findNextOccurrence();
+        auto patternFinder = HybridPatternFinder{bytes, pattern};
+        const auto found = patternFinder.findNextOccurrence();
+        assert(patternFinder.findNextOccurrence() == nullptr && "Pattern should be unique!");
         if (!found)
             NotFoundHandler::onPatternNotFound(pattern);
         return makeResult(found, pattern.length());
