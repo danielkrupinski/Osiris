@@ -11,7 +11,7 @@ struct HudContext {
 
     [[nodiscard]] auto panel() noexcept
     {
-        auto&& hud = hookContext.gameDependencies().hudDeps.hud;
+        auto&& hud = hookContext.clientPatternSearchResults().template get<HudPanelPointer>();
         if (hud && *hud)
             return hookContext.template make<PanoramaUiPanel>((*hud)->uiPanel);
         return hookContext.template make<PanoramaUiPanel>(nullptr);

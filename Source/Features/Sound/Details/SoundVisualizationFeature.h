@@ -130,7 +130,7 @@ public:
 
             auto&& transformFactory = hookContext.panoramaTransformFactory();
             PanoramaTransformations{
-                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, ViewToProjectionMatrix{hookContext.gameDependencies().viewToProjectionMatrix}.getFovScale())),
+                transformFactory.scale(SoundVisualization<SoundType>::getScale(soundInClipSpace.z, ViewToProjectionMatrix{hookContext.clientPatternSearchResults().template get<ViewToProjectionMatrixPointer>()}.getFovScale())),
                 transformFactory.translate(deviceCoordinates.getX(), deviceCoordinates.getY())
             }.applyTo(panel);
 

@@ -21,12 +21,12 @@ public:
 
     [[nodiscard]] auto absOrigin() const noexcept
     {
-        return deps().offsetToAbsOrigin.of(gameSceneNode).toOptional();
+        return hookContext->clientPatternSearchResults().template get<OffsetToAbsOrigin>().of(gameSceneNode).toOptional();
     }
 
     [[nodiscard]] decltype(auto) owner() const noexcept
     {
-        return hookContext->template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(deps().offsetToOwner.of(gameSceneNode).valueOr(nullptr)));
+        return hookContext->template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext->clientPatternSearchResults().template get<OffsetToGameSceneNodeOwner>().of(gameSceneNode).valueOr(nullptr)));
     }
 
     template <typename F>
@@ -39,17 +39,12 @@ public:
 private:
     [[nodiscard]] decltype(auto) child() const noexcept
     {
-        return hookContext->template make<GameSceneNode<HookContext>>(deps().offsetToChild.of(gameSceneNode).valueOr(nullptr));
+        return hookContext->template make<GameSceneNode<HookContext>>(hookContext->clientPatternSearchResults().template get<OffsetToChildGameSceneNode>().of(gameSceneNode).valueOr(nullptr));
     }
 
     [[nodiscard]] decltype(auto) nextSibling() const noexcept
     {
-        return hookContext->template make<GameSceneNode<HookContext>>(deps().offsetToNextSibling.of(gameSceneNode).valueOr(nullptr));
-    }
-
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext->gameDependencies().gameSceneNodeDeps;
+        return hookContext->template make<GameSceneNode<HookContext>>(hookContext->clientPatternSearchResults().template get<OffsetToNextSiblingGameSceneNode>().of(gameSceneNode).valueOr(nullptr));
     }
 
     HookContext* hookContext;

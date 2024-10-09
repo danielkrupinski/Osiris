@@ -2,7 +2,6 @@
 
 #include <CS2/Panorama/CImagePanel.h>
 #include <GameClasses/PanoramaUiPanel.h>
-#include <GameDependencies/PanoramaImagePanelDeps.h>
 
 template <typename HookContext>
 struct PanoramaImagePanelContext {
@@ -19,14 +18,9 @@ struct PanoramaImagePanelContext {
 
     [[nodiscard]] const char* getImagePath() const noexcept
     {
-        if (auto&& imagePath = deps().offsetToImagePath.of(panel).get())
+        if (auto&& imagePath = hookContext.clientPatternSearchResults().template get<OffsetToImagePath>().of(panel).get())
             return imagePath->m_pString;
         return nullptr;
-    }
-
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().imagePanelDeps;
     }
 
     HookContext& hookContext;

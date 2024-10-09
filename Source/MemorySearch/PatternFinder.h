@@ -14,6 +14,7 @@
 
 #include <Platform/Macros/FunctionAttributes.h>
 #include "PatternStringWildcard.h"
+#include "CodePatternOperation.h"
 
 enum class OffsetHint : std::size_t {};
 
@@ -29,6 +30,22 @@ public:
     [[nodiscard]] PatternSearchResult operator()(BytePatternView<PatternLength> patternView) const noexcept
     {
         return operator()(patternView.data(), PatternLength);
+    }
+
+    [[NOINLINE]] void findPatterns(const auto& patterns, auto& results) const noexcept
+    {
+        patterns.forEach([patternIndex = std::size_t{0}, &results, this](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation, std::uint8_t offsetToNextInstruction) mutable {
+            auto result = operator()(pattern);
+            result.add(offset);
+            if (operation == CodePatternOperation::None) {
+                results.store(patternIndex, result.get());
+            } else if (operation == CodePatternOperation::Abs) {
+                results.store(patternIndex, result.abs2(offsetToNextInstruction));
+            } else if (operation == CodePatternOperation::Read) {
+                results.store(patternIndex, result.read());
+            }
+            ++patternIndex;
+        });
     }
 
     [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern) const noexcept
