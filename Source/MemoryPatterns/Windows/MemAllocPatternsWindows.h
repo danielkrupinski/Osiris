@@ -1,15 +1,12 @@
 #pragma once
 
-#include <cstdint>
+#include <MemoryPatterns/PatternTypes/MemAllocPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-#include <MemorySearch/BytePatternLiteral.h>
-
-template <typename PatternFinders>
 struct MemAllocPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] std::int8_t* allocOffset() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("FF 50 ? 48 89 43 ? 4C 8D"_pat).add(2).template as<std::int8_t*>();
+        return clientPatterns
+            .template addPattern<OffsetAllocVirtualMethod, CodePattern{"FF 50 ? 48 89 43 ? 4C 8D"}.add(2).read()>();
     }
 };

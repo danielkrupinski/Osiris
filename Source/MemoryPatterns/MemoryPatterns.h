@@ -8,6 +8,8 @@
 
 #include "PatternFinders.h"
 
+#include <MemorySearch/PatternPool.h>
+
 struct MemoryPatterns {
     const PatternFinders& patternFinders;
 
@@ -17,21 +19,10 @@ struct MemoryPatterns {
     return type<PatternFinders>{patternFinders}; \
 }
 
-    MEMORY_PATTERNS(ClientPatterns, clientPatterns)
     MEMORY_PATTERNS(ConVarPatterns, conVarPatterns)
     MEMORY_PATTERNS(CvarPatterns, cvarPatterns)
-    MEMORY_PATTERNS(EntityPatterns, entityPatterns)
-    MEMORY_PATTERNS(EntitySystemPatterns, entitySystemPatterns)
     MEMORY_PATTERNS(FileSystemPatterns, fileSystemPatterns)
-    MEMORY_PATTERNS(GameRulesPatterns, gameRulesPatterns)
-    MEMORY_PATTERNS(GameSceneNodePatterns, gameSceneNodePatterns)
-    MEMORY_PATTERNS(GlowSceneObjectPatterns, glowSceneObjectPatterns)
-    MEMORY_PATTERNS(HostageServicesPatterns, hostageServicesPatterns)
-    MEMORY_PATTERNS(MemAllocPatterns, memAllocPatterns)
-    MEMORY_PATTERNS(PanelPatterns, panelPatterns)
     MEMORY_PATTERNS(PanelStylePatterns, panelStylePatterns)
-    MEMORY_PATTERNS(PanoramaImagePanelPatterns, panoramaImagePanelPatterns)
-    MEMORY_PATTERNS(PanoramaLabelPatterns, panoramaLabelPatterns)
     MEMORY_PATTERNS(PanoramaUiEnginePatterns, panoramaUiEnginePatterns)
     MEMORY_PATTERNS(PanoramaUiPanelPatterns, panoramaUiPanelPatterns)
     MEMORY_PATTERNS(PlantedC4Patterns, plantedC4Patterns)
@@ -51,3 +42,26 @@ struct MemoryPatterns {
 
 #undef MEMORY_PATTERNS
 };
+
+template <typename T>
+struct ClientPatternsAdder {
+    [[nodiscard]] consteval auto operator()(auto patternPool) const noexcept
+    {
+        return T::addClientPatterns(patternPool);
+    }
+};
+
+constexpr auto kClientPatterns = []{
+    return PatternPool{}
+        .addPatterns(ClientPatternsAdder<ClientPatterns>{})
+        .addPatterns(ClientPatternsAdder<EntityPatterns>{})
+        .addPatterns(ClientPatternsAdder<EntitySystemPatterns>{})
+        .addPatterns(ClientPatternsAdder<GameRulesPatterns>{})
+        .addPatterns(ClientPatternsAdder<GameSceneNodePatterns>{})
+        .addPatterns(ClientPatternsAdder<HostageServicesPatterns>{})
+        .addPatterns(ClientPatternsAdder<GlowSceneObjectPatterns>{})
+        .addPatterns(ClientPatternsAdder<MemAllocPatterns>{})
+        .addPatterns(ClientPatternsAdder<PanelPatterns>{})
+        .addPatterns(ClientPatternsAdder<PanoramaImagePanelPatterns>{})
+        .addPatterns(ClientPatternsAdder<PanoramaLabelPatterns>{});
+}();

@@ -187,6 +187,9 @@
     <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons">
       <UniqueIdentifier>{1f051e0c-294a-4e2a-ada8-ba670238c925}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemoryPatterns\PatternTypes">
+      <UniqueIdentifier>{0ebb425e-7ad9-482e-87e1-b2752da9f4a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -245,9 +248,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\PlantedC4.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\GameRulesOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\PanoramaUiPanelOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -677,9 +677,6 @@
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIndex.h">
       <Filter>CS2\Classes\EntitySystem</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\EntitySystemOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\EntitySystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -751,9 +748,6 @@
     </ClInclude>
     <ClInclude Include="Utils\GenericPointer.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\PanoramaImagePanelOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\TopLevelWindowOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -917,9 +911,6 @@
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\HostageServicesOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -956,16 +947,7 @@
     <ClInclude Include="GameDependencies\CvarDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\DepsInstances.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\EntitiesVMTs.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\EntityDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\EntitySystemDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h">
@@ -977,28 +959,10 @@
     <ClInclude Include="GameDependencies\GameDependencies.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\GameRulesDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\GameSceneNodeDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\HostageServicesDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\MemAllocDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\PanelDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\PanelStyleDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\PanoramaImagePanelDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\PanoramaLabelDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\PanoramaUiEngineDeps.h">
@@ -1100,20 +1064,11 @@
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\EntityOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\GameSceneNodeOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\GameRules.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\GlobalVars.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\GlobalVarsDeps.h">
-      <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\HudDeps.h">
       <Filter>GameDependencies</Filter>
@@ -1324,9 +1279,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\BaseEntity.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\OffsetTypes\GlowSceneObjectOffset.h">
-      <Filter>GameClasses\OffsetTypes</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\RenderComponentOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
@@ -1645,6 +1597,48 @@
     </ClInclude>
     <ClInclude Include="GameClasses\C4.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\ClientPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\EntityPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\StrongType.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\EntitySystemPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\GameRulesPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\GameSceneNodePatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\GlowSceneObjectPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\MemAllocPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TypeList.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternPool.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternSearchResults.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\CodePattern.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\CodePatternOperation.h">
+      <Filter>MemorySearch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

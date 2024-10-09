@@ -1,19 +1,13 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/GlowSceneObjectOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/GlowSceneObjectPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct GlowSceneObjectPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToGlowSceneObjectEntity offsetToGlowSceneObjectEntity() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("4C 89 B0 ? ? ? ? 49 8B 44 24"_pat).add(3).template readOffset<OffsetToGlowSceneObjectEntity>();
-    }
-
-    [[nodiscard]] OffsetToGlowSceneObjectAttachedSceneObject offsetToGlowSceneObjectAttachedSceneObject() const noexcept
-    {
-        return patternFinders.clientPatternFinder("89 98 ? ? ? ? 49 8B ? 48"_pat).add(2).template readOffset<OffsetToGlowSceneObjectAttachedSceneObject>();
+        return clientPatterns
+            .template addPattern<OffsetToGlowSceneObjectEntity, CodePattern{"4C 89 B0 ? ? ? ? 49 8B 44 24"}.add(3).read()>()
+            .template addPattern<OffsetToGlowSceneObjectAttachedSceneObject, CodePattern{"89 98 ? ? ? ? 49 8B ? 48"}.add(2).read()>();
     }
 };

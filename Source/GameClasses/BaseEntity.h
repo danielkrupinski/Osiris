@@ -32,12 +32,12 @@ public:
 
     [[nodiscard]] decltype(auto) renderComponent() const noexcept
     {
-        return hookContext.template make<RenderComponent>(deps().offsetToRenderComponent.of(entity).valueOr(nullptr));
+        return hookContext.template make<RenderComponent>(hookContext.clientPatternSearchResults().template get<OffsetToRenderComponent>().of(entity).valueOr(nullptr));
     }
 
     [[nodiscard]] decltype(auto) gameSceneNode() const noexcept
     {
-        return hookContext.template make<GameSceneNode>(deps().offsetToGameSceneNode.of(entity).valueOr(nullptr));
+        return hookContext.template make<GameSceneNode>(hookContext.clientPatternSearchResults().template get<OffsetToGameSceneNode>().of(entity).valueOr(nullptr));
     }
 
     template <typename F>
@@ -70,27 +70,27 @@ public:
 
     [[nodiscard]] auto hasOwner() const noexcept
     {
-        return deps().offsetToOwnerEntity.of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
+        return hookContext.clientPatternSearchResults().template get<OffsetToOwnerEntity>().of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
     {
-        return TeamNumber{deps().offsetToTeamNumber.of(entity).valueOr({})};
+        return TeamNumber{hookContext.clientPatternSearchResults().template get<OffsetToTeamNumber>().of(entity).valueOr({})};
     }
     
     [[nodiscard]] auto vData() const noexcept
     {
-        return deps().offsetToVData.of(entity).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToVData>().of(entity).toOptional();
     }
 
     [[nodiscard]] auto health() const noexcept
     {
-        return deps().offsetToHealth.of(entity).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToHealth>().of(entity).toOptional();
     }
 
     [[nodiscard]] std::optional<bool> isAlive() const noexcept
     {
-        const auto lifestate = deps().offsetToLifeState.of(entity).get();
+        const auto lifestate = hookContext.clientPatternSearchResults().template get<OffsetToLifeState>().of(entity).get();
         if (lifestate)
             return LifeState{*lifestate} == LifeState::Alive;
         return {};
@@ -102,11 +102,6 @@ public:
     }
 
 private:
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().entityDeps;
-    }
-
     [[nodiscard]] auto invokeWithGameSceneNodeOwner(auto& f) const noexcept
     {
         return [&f](auto&& gameSceneNode) { f(gameSceneNode.owner()); };

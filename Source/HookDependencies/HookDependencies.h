@@ -24,7 +24,7 @@ struct HookDependencies {
     HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
         : fullGlobalContext{fullGlobalContext}
     {
-        if (fullGlobalContext.gameDependencies.worldToProjectionMatrix)
+        if (fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>())
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
     }
 
@@ -48,7 +48,7 @@ struct HookDependencies {
         assert(hasDependency<Dependency>());
 
         if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
-            return WorldToClipSpaceConverter{fullGlobalContext.gameDependencies.worldToProjectionMatrix};
+            return WorldToClipSpaceConverter{fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>()};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else {
@@ -108,22 +108,22 @@ struct HookDependencies {
 
     [[nodiscard]] auto localPlayerController() noexcept
     {
-        if (fullGlobalContext.gameDependencies.localPlayerController)
-            return PlayerController{*this, *fullGlobalContext.gameDependencies.localPlayerController};
+        if (fullGlobalContext.clientPatternSearchResults.template get<LocalPlayerControllerPointer>())
+            return PlayerController{*this, *fullGlobalContext.clientPatternSearchResults.template get<LocalPlayerControllerPointer>()};
         return PlayerController{*this, nullptr};
     }
 
     [[nodiscard]] GlobalVars globalVars() noexcept
     {
-        if (fullGlobalContext.gameDependencies.globalVarsDeps.globalVars)
-            return GlobalVars{*fullGlobalContext.gameDependencies.globalVarsDeps.globalVars};
+        if (fullGlobalContext.clientPatternSearchResults.template get<GlobalVarsPointer>())
+            return GlobalVars{*fullGlobalContext.clientPatternSearchResults.template get<GlobalVarsPointer>()};
         return GlobalVars{nullptr};
     }
 
     [[nodiscard]] auto gameRules() noexcept
     {
-        if (fullGlobalContext.gameDependencies.gameRulesDeps.gameRules)
-            return GameRules{*this, *fullGlobalContext.gameDependencies.gameRulesDeps.gameRules};
+        if (fullGlobalContext.clientPatternSearchResults.template get<GameRulesPointer>())
+            return GameRules{*this, *fullGlobalContext.clientPatternSearchResults.template get<GameRulesPointer>()};
         return GameRules{*this, nullptr};
     }
 
@@ -162,7 +162,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto panoramaTransformFactory() noexcept
     {
-        return PanoramaTransformFactory{*this, fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
+        return PanoramaTransformFactory{*this, fullGlobalContext.clientPatternSearchResults.template get<TransformTranslate3dVMT>(), fullGlobalContext.clientPatternSearchResults.template get<TransformScale3dVMT>()};
     }
 
     [[nodiscard]] const auto& panoramaSymbols() noexcept
@@ -171,6 +171,11 @@ struct HookDependencies {
         if (!symbols.has_value())
             symbols.emplace(*this);
         return *symbols;
+    }
+
+    [[nodiscard]] const auto& clientPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.clientPatternSearchResults;
     }
 
 private:

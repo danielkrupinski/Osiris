@@ -14,15 +14,10 @@ public:
 
     [[nodiscard]] bool hasCarriedHostage() const noexcept
     {
-        return hookContext.template make<EntitySystem>().getEntityFromHandle(deps().offsetToCarriedHostage.of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
+        return hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.clientPatternSearchResults().template get<OffsetToCarriedHostage>().of(hostageServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX})) != nullptr;
     }
 
 private:
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().hostageServicesDeps;
-    }
-
     HookContext& hookContext;
     cs2::CCSPlayer_HostageServices* hostageServices;
 };

@@ -6,13 +6,6 @@
 struct HudDeps {
     HudDeps() = default;
 
-    template <typename ClientPatterns>
-    explicit HudDeps(const ClientPatterns& clientPatterns) noexcept
-        : hud{clientPatterns.hudPanel()}
-    {
-    }
-
-    cs2::CPanel2D** hud;
     cs2::PanelHandle deathNoticesPanelHandle;
     cs2::PanelHandle scoreAndTimeAndBombPanelHandle;
     cs2::PanelHandle bombStatusPanelHandle;

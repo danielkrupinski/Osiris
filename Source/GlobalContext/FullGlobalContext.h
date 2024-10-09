@@ -19,6 +19,7 @@
 #include <Hud/BombStatus/BombStatusPanelState.h>
 #include <Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
+#include <MemorySearch/PatternSearchResults.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <UI/Panorama/PanoramaGuiState.h>
 #include <UI/Panorama/PanoramaGuiUnloadHandler.h>
@@ -33,15 +34,16 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
-        : gameDependencies{
+        : dummy{findPatterns(memoryPatterns)}
+        , gameDependencies{
             memoryPatterns,
             VmtFinder{clientDLL.getVmtFinderParams()},
             VmtFinder{panoramaDLL.getVmtFinderParams()},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            gameDependencies.loopModeGame,
-            gameDependencies.viewRender,
+            clientPatternSearchResults.get<LoopModeGamePointer>(),
+            clientPatternSearchResults.get<ViewRenderPointer>(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
         , entityClassifier{gameDependencies.entitiesVMTs}
     {
@@ -57,6 +59,8 @@ struct FullGlobalContext {
         return Features{featuresStates, featureHelpers, hooks, dependencies};
     }
 
+    PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
+    bool dummy{};
     GameDependencies gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;
@@ -66,4 +70,11 @@ struct FullGlobalContext {
     InWorldPanelContainerState inWorldPanelContainerState;
     GlowSceneObjectsState glowSceneObjectsState;
     EntityClassifier entityClassifier;
+
+private:
+    bool findPatterns(const MemoryPatterns& memoryPatterns) noexcept
+    {
+        memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns, clientPatternSearchResults);
+        return true;
+    }
 };
