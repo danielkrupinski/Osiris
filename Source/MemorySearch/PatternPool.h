@@ -54,7 +54,6 @@ public:
         std::rotate(newPool.patternLengths.begin() + LeadingTypes::size(), newPool.patternLengths.end() - 1, newPool.patternLengths.end());
         std::rotate(newPool.patternOffsets.begin() + LeadingTypes::size(), newPool.patternOffsets.end() - 1, newPool.patternOffsets.end());
         std::rotate(newPool.operations.begin() + LeadingTypes::size(), newPool.operations.end() - 1, newPool.operations.end());
-        std::rotate(newPool.offsetsToNextInstruction.begin() + LeadingTypes::size(), newPool.offsetsToNextInstruction.end() - 1, newPool.offsetsToNextInstruction.end());
 
         const auto index = std::accumulate(patternLengths.begin(), patternLengths.begin() + LeadingTypes::size(), 0);
         std::rotate(newPool.buffer.begin() + index, newPool.buffer.end() - Pattern.storage.size, newPool.buffer.end());
@@ -66,7 +65,7 @@ public:
     {
         std::size_t patternStartIndex = 0;
         for (std::size_t i = 0; i < NumberOfPatterns; ++i) {
-            f(BytePattern{{buffer.data() + patternStartIndex, patternLengths[i]}, kPatternStringWildcard}, patternOffsets[i], operations[i], offsetsToNextInstruction[i]);
+            f(BytePattern{{buffer.data() + patternStartIndex, patternLengths[i]}, kPatternStringWildcard}, patternOffsets[i], operations[i]);
             patternStartIndex += patternLengths[i];
         }
     }
@@ -78,7 +77,6 @@ private:
         patternLengths.back() = static_cast<std::uint8_t>(pattern.storage.size);
         patternOffsets.back() = pattern.offset;
         operations.back() = pattern.operation;
-        offsetsToNextInstruction.back() = pattern.offsetToNextInstruction;
     }
 
     consteval void copyCurrentPool(auto& newPool) const noexcept
@@ -87,7 +85,6 @@ private:
         std::ranges::copy(patternLengths, newPool.patternLengths.begin());
         std::ranges::copy(patternOffsets, newPool.patternOffsets.begin());
         std::ranges::copy(operations, newPool.operations.begin());
-        std::ranges::copy(offsetsToNextInstruction, newPool.offsetsToNextInstruction.begin());
     }
 
     template <std::size_t, std::size_t, typename>
@@ -97,5 +94,4 @@ private:
     std::array<std::uint8_t, NumberOfPatterns> patternLengths{};
     std::array<std::uint8_t, NumberOfPatterns> patternOffsets{};
     std::array<CodePatternOperation, NumberOfPatterns> operations{};
-    std::array<std::uint8_t, NumberOfPatterns> offsetsToNextInstruction{};
 };

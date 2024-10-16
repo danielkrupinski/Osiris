@@ -4,6 +4,7 @@
 
 enum class CodePatternOperation : std::uint8_t {
     None,
-    Abs,
+    Abs4,
+    Abs5,
     Read
 };
