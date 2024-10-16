@@ -7,7 +7,7 @@
 
 template <typename StrongTypeAlias>
 struct UnpackStrongTypeAlias {
-    using type = StrongTypeAlias::Type;
+    using type = typename StrongTypeAlias::Type;
 };
 
 template <std::size_t N>
