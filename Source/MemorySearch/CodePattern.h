@@ -16,10 +16,13 @@ struct CodePattern {
         return *this;
     }
 
-    [[nodiscard]] consteval auto abs(std::uint8_t offsetToTheNextInstruction = 4) noexcept
+    [[nodiscard]] consteval auto abs(std::uint8_t offsetToNextInstruction = 4) noexcept
     {
-        operation = CodePatternOperation::Abs;
-        offsetToNextInstruction = offsetToTheNextInstruction;
+        switch (offsetToNextInstruction) {
+        case 4: operation = CodePatternOperation::Abs4; break;
+        case 5: operation = CodePatternOperation::Abs5; break;
+        default: error("unsupported offset");
+        }
         return *this;
     }
 
@@ -32,5 +35,7 @@ struct CodePattern {
     BytePatternStorage<N> storage;
     std::uint8_t offset{};
     CodePatternOperation operation{CodePatternOperation::None};
-    std::uint8_t offsetToNextInstruction{};
+
+private:
+    void error(const char*);
 };

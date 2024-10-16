@@ -34,13 +34,13 @@ public:
 
     [[NOINLINE]] void findPatterns(const auto& patterns, auto& results) const noexcept
     {
-        patterns.forEach([patternIndex = std::size_t{0}, &results, this](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation, std::uint8_t offsetToNextInstruction) mutable {
+        patterns.forEach([patternIndex = std::size_t{0}, &results, this](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
             auto result = operator()(pattern);
             result.add(offset);
             if (operation == CodePatternOperation::None) {
                 results.store(patternIndex, result.get());
-            } else if (operation == CodePatternOperation::Abs) {
-                results.store(patternIndex, result.abs2(offsetToNextInstruction));
+            } else if (operation == CodePatternOperation::Abs4 || operation == CodePatternOperation::Abs5) {
+                results.store(patternIndex, result.abs2(operation == CodePatternOperation::Abs4 ? 4 : 5));
             } else if (operation == CodePatternOperation::Read) {
                 results.store(patternIndex, result.read());
             }
