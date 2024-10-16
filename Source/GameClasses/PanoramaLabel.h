@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CLabel.h>
-#include <MemoryPatterns/PatternTypes/PanoramalabelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
 
 template <typename HookContext>
 struct PanoramaLabel {
