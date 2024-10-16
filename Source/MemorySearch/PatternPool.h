@@ -43,8 +43,8 @@ public:
     {
         static_assert(Pattern.storage.size <= (std::numeric_limits<std::uint8_t>::max)());
 
-        using LeadingTypes = PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template LowerEqual>;
-        using TrailingTypes = PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template Greater>;
+        using LeadingTypes = typename PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template LowerEqual>;
+        using TrailingTypes = typename PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template Greater>;
 
         PatternPool<BufferSize + Pattern.storage.size, NumberOfPatterns + 1, typename LeadingTypes::template add<PatternType>::template concat<TrailingTypes>> newPool;
 
