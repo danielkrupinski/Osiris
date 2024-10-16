@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CImagePanel.h>
+#include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
 
 #include "PanoramaImagePanelContext.h"
 
