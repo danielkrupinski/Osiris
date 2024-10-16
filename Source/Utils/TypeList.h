@@ -6,11 +6,9 @@
 
 template <typename... Types>
 struct TypeList {
-private:
     template <typename... OtherTypes>
     static TypeList<OtherTypes...> typeListFromTuple(std::tuple<OtherTypes...>);
 
-public:
     using TypesTuple = std::tuple<Types...>;
 
     static constexpr std::size_t size() noexcept
