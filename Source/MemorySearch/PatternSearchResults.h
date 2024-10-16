@@ -3,9 +3,9 @@
 template <typename PatternPool>
 class PatternSearchResults {
 private:
-    using OneBytePatternTypes = PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<1>::Equal>;
-    using FourBytePatternTypes = PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<4>::Equal>;
-    using EightBytePatternTypes = PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<8>::Equal>;
+    using OneBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<1>::Equal>;
+    using FourBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<4>::Equal>;
+    using EightBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<8>::Equal>;
 
     static_assert(OneBytePatternTypes::size() + FourBytePatternTypes::size() + EightBytePatternTypes::size() == PatternPool::PatternTypes::size());
 public:
