@@ -63,5 +63,6 @@ constexpr auto kClientPatterns = []{
         .addPatterns(ClientPatternsAdder<MemAllocPatterns>{})
         .addPatterns(ClientPatternsAdder<PanelPatterns>{})
         .addPatterns(ClientPatternsAdder<PanoramaImagePanelPatterns>{})
-        .addPatterns(ClientPatternsAdder<PanoramaLabelPatterns>{});
+        .addPatterns(ClientPatternsAdder<PanoramaLabelPatterns>{})
+        .finalize();
 }();
