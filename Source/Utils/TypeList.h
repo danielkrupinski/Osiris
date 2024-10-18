@@ -4,6 +4,24 @@
 
 #include "TypeIndex.h"
 
+template <template <typename> typename Predicate, auto Value>
+struct WithValue {
+    template <typename T>
+    struct Equal {
+        static constexpr auto value = (Predicate<T>::value == Value);
+    };
+
+    template <typename T>
+    struct LowerEqual {
+        static constexpr auto value = (Predicate<T>::value <= Value);
+    };
+
+    template <typename T>
+    struct Greater {
+        static constexpr auto value = (Predicate<T>::value > Value);
+    };
+};
+
 template <typename... Types>
 struct TypeList {
     template <typename... OtherTypes>
@@ -28,6 +46,18 @@ struct TypeList {
         return (std::is_same_v<T, Types> || ...);
     }
 
+    template <template <typename> typename ValueOfType>
+    static constexpr auto (min)() noexcept
+    {
+        return (std::min)({ValueOfType<Types>::value...});
+    }
+
+    template <template <typename> typename ValueOfType>
+    static constexpr auto (max)() noexcept
+    {
+        return (std::max)({ValueOfType<Types>::value...});
+    }
+
     template <template <typename> typename Predicate>
     using filter = decltype(typeListFromTuple(std::tuple_cat(std::declval<std::conditional_t<Predicate<Types>::value, std::tuple<Types>, std::tuple<>>>()...)));
 
@@ -39,4 +69,13 @@ struct TypeList {
 
     template <typename OtherTypeList>
     using concat = decltype(typeListFromTuple(std::tuple_cat(std::declval<std::tuple<Types...>>(), std::declval<typename OtherTypeList::TypesTuple>())));
+
+    template <template <typename> typename ValueOfType>
+    struct Sorter {
+        template <decltype(min<ValueOfType>())... Values>
+        static auto sorted(std::integer_sequence<decltype(min<ValueOfType>()), Values...>) -> decltype(std::tuple_cat(std::declval<typename filter<WithValue<ValueOfType, Values + min<ValueOfType>()>::template Equal>::TypesTuple>()...));
+    };
+
+    template <template <typename> typename ValueOfType>
+    using sortBy = decltype(typeListFromTuple(std::declval<decltype(Sorter<ValueOfType>::template sorted(std::make_integer_sequence<decltype(min<ValueOfType>()), max<ValueOfType>() - min<ValueOfType>() + 1>{}))>()));
 };

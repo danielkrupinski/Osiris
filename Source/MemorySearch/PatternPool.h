@@ -10,6 +10,16 @@ struct UnpackStrongTypeAlias {
     using type = typename StrongTypeAlias::Type;
 };
 
+template <typename T>
+struct SizeOf {
+    static constexpr auto value = sizeof(T);
+};
+
+template <typename StrongTypeAlias>
+struct UnpackedStrongTypeAliasSizeOf {
+    static constexpr auto value = sizeof(typename StrongTypeAlias::Type);
+};
+
 template <std::size_t N>
 struct WithSizeOf {
     template <typename T>
@@ -43,21 +53,18 @@ public:
     {
         static_assert(Pattern.storage.size <= (std::numeric_limits<std::uint8_t>::max)());
 
-        using LeadingTypes = typename PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template LowerEqual>;
-        using TrailingTypes = typename PatternTypesList::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<sizeof(typename PatternType::Type)>::template Greater>;
-
-        PatternPool<BufferSize + Pattern.storage.size, NumberOfPatterns + 1, typename LeadingTypes::template add<PatternType>::template concat<TrailingTypes>> newPool;
-
+        PatternPool<BufferSize + Pattern.storage.size, NumberOfPatterns + 1, typename PatternTypesList::template add<PatternType>> newPool;
         copyCurrentPool(newPool);
         newPool.appendPattern(Pattern);
-
-        std::rotate(newPool.patternLengths.begin() + LeadingTypes::size(), newPool.patternLengths.end() - 1, newPool.patternLengths.end());
-        std::rotate(newPool.patternOffsets.begin() + LeadingTypes::size(), newPool.patternOffsets.end() - 1, newPool.patternOffsets.end());
-        std::rotate(newPool.operations.begin() + LeadingTypes::size(), newPool.operations.end() - 1, newPool.operations.end());
-
-        const auto index = std::accumulate(patternLengths.begin(), patternLengths.begin() + LeadingTypes::size(), 0);
-        std::rotate(newPool.buffer.begin() + index, newPool.buffer.end() - Pattern.storage.size, newPool.buffer.end());
         return newPool;
+    }
+
+    [[nodiscard]] consteval auto finalize() const noexcept
+    {
+        using SortedPatternTypes = typename PatternTypesList::template sortBy<UnpackedStrongTypeAliasSizeOf>;
+        PatternPool<BufferSize, NumberOfPatterns, SortedPatternTypes> finalPool;
+        copyPatterns(finalPool);
+        return finalPool;
     }
 
     template <typename F>
@@ -71,6 +78,26 @@ public:
     }
 
 private:
+    template <typename... Types>
+    consteval void copyPatterns(PatternPool<BufferSize, NumberOfPatterns, TypeList<Types...>>& pool) const noexcept
+    {
+        std::size_t outPatternIndex{0}, outBufferIndex{0};
+        (copyPattern<Types>(outPatternIndex, outBufferIndex, pool), ...);
+    }
+
+    template <typename PatternType>
+    consteval void copyPattern(std::size_t& outIndex, std::size_t& outBuffer, auto& pool) const noexcept
+    {
+        constexpr auto patternIndex = PatternTypesList::template indexOf<PatternType>();
+        const auto patternBufferIndex = std::accumulate(patternLengths.begin(), patternLengths.begin() + patternIndex, 0);
+        std::ranges::copy_n(buffer.begin() + patternBufferIndex, patternLengths[patternIndex], pool.buffer.begin() + outBuffer);
+        outBuffer += patternLengths[patternIndex];
+        pool.patternLengths[outIndex] = patternLengths[patternIndex];
+        pool.patternOffsets[outIndex] = patternOffsets[patternIndex];
+        pool.operations[outIndex] = operations[patternIndex];
+        ++outIndex;
+    }
+
     consteval void appendPattern(auto pattern) noexcept
     {
         std::ranges::copy_n(pattern.storage.pattern.begin(), pattern.storage.size, buffer.end() - pattern.storage.size);
