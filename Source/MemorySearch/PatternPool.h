@@ -52,6 +52,7 @@ public:
     [[nodiscard]] consteval auto addPattern() const noexcept
     {
         static_assert(Pattern.storage.size <= (std::numeric_limits<std::uint8_t>::max)());
+        static_assert(sizeof(typename PatternType::Type) == 8 || Pattern.operation == CodePatternOperation::Read, "Incorrect result size, missing .read() in pattern declaration?");
 
         PatternPool<BufferSize + Pattern.storage.size, NumberOfPatterns + 1, typename PatternTypesList::template add<PatternType>> newPool;
         copyCurrentPool(newPool);
