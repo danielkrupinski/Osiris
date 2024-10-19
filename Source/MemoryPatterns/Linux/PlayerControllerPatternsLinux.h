@@ -9,7 +9,7 @@ struct PlayerControllerPatterns {
 
     [[nodiscard]] OffsetToPlayerPawnHandle offsetToPlayerPawnHandle() const noexcept
     {
-        return patternFinders.clientPatternFinder("8B 97 ? ? ? ? 48 89 FB 83 FA FF"_pat).add(2).template readOffset<OffsetToPlayerPawnHandle>();
+        return patternFinders.clientPatternFinder("84 C0 75 ? 8B 8F ? ? ? ?"_pat).add(6).template readOffset<OffsetToPlayerPawnHandle>();
     }
 
     [[nodiscard]] OffsetToPlayerColor offsetToPlayerColor() const noexcept
