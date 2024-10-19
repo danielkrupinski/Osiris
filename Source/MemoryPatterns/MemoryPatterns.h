@@ -9,6 +9,7 @@
 #include "PatternFinders.h"
 
 #include <MemorySearch/PatternPool.h>
+#include <MemorySearch/TempPatternPool.h>
 
 struct MemoryPatterns {
     const PatternFinders& patternFinders;
@@ -48,8 +49,8 @@ struct ClientPatternsAdder {
     }
 };
 
-constexpr auto kClientPatterns = []{
-    return PatternPool{}
+constexpr auto kClientPatterns = []() consteval {
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
         .addPatterns(ClientPatternsAdder<ClientPatterns>{})
         .addPatterns(ClientPatternsAdder<CvarPatterns2>{})
         .addPatterns(ClientPatternsAdder<EntityPatterns>{})
@@ -66,6 +67,6 @@ constexpr auto kClientPatterns = []{
         .addPatterns(ClientPatternsAdder<PanoramaUiPanelPatterns2>{})
         .addPatterns(ClientPatternsAdder<PlantedC4Patterns>{})
         .addPatterns(ClientPatternsAdder<PlayerControllerPatterns>{})
-        .addPatterns(ClientPatternsAdder<PlayerPawnPatterns>{})
-        .finalize();
+        .addPatterns(ClientPatternsAdder<PlayerPawnPatterns>{});
+    return PatternPool<>::from<builder>();
 }();
